@@ -20,14 +20,14 @@
 
 ## Don’t
 
-- For a config file or handler beside the claim → use `media-split-section` with `codeTabs`.
+- For a config file or handler beside the claim → use `feature-scroll-section` with a `code` step.
 - For several capabilities, each with its own file → use `feature-scroll-section` with code items.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [code-block](code-block.md) — the terminal session the band shows.
-- [media-split-section](media-split-section.md) — the sibling band with the sample (`codeTabs`) beside the copy.
+- [feature-scroll-section](feature-scroll-section.md) — the walkthrough whose steps can each pin a code sample (`code`).
 
 ## Props
 

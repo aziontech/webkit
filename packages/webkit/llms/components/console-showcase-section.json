@@ -17,7 +17,7 @@
  ],
  "avoidWhen": [
   "For a screenshot with copy beside it — use `MediaSplitSection`.",
-  "For code — use `MediaSplitSection` with `codeTabs`, or `CliTerminalSection`."
+  "For code — use `FeatureScrollSection` (a step with `code`) or `CliTerminalSection`."
  ],
  "related": [
   "`ConsoleMockup` — the console scenes it frames.",

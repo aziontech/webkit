@@ -24224,9 +24224,9 @@
     {
      "name": "variant",
      "type": "ClosingCallToActionSectionVariant",
-     "default": "'split'",
+     "default": "'panel'",
      "required": "false",
-     "doc": "Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone."
+     "doc": "Layout of the band: `panel` is one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone."
     },
     {
      "name": "anchor",
@@ -24250,39 +24250,32 @@
      "doc": "Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty."
     },
     {
-     "name": "titleMuted",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Second line of the headline in muted ink; drawn in `split` only."
-    },
-    {
      "name": "description",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Supporting sentence: in the aside cell in `split`, under the headline in `panel`."
+     "doc": "Supporting sentence under the headline."
     },
     {
      "name": "primaryAction",
      "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
-     "doc": "The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+     "doc": "The white button of the band, under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
     },
     {
      "name": "secondaryAction",
      "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
-     "doc": "The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent."
+     "doc": "The outlined button of the band, beside the primary one; `{ label, href, trailing? }`. Omitted when absent."
     },
     {
      "name": "command",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Shell command on a copyable line before the actions, copied as written; drawn in `split`, `panel` and `primary`."
+     "doc": "Shell command on a copyable line before the actions, copied as written; drawn in `panel` and `primary`."
     },
     {
      "name": "hatch",
@@ -24985,7 +24978,7 @@
      "type": "HeroSectionVariant",
      "default": "'title-band'",
      "required": "false",
-     "doc": "Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot."
+     "doc": "Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot."
     },
     {
      "name": "size",
@@ -26071,49 +26064,21 @@
      "type": "MediaSplitSectionScene",
      "default": "undefined",
      "required": "false",
-     "doc": "Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media."
-    },
-    {
-     "name": "codeTabs",
-     "type": "MediaSplitSectionCodeTab[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Files of the code sample drawn in the media cell when no scene is set, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark beside the tab label. A tab without `code` is skipped."
-    },
-    {
-     "name": "defaultFile",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "`value` of the code tab open first; empty, or a value no tab carries, opens the first tab."
-    },
-    {
-     "name": "copyAriaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the code sample's copy button; empty keeps the code block's own."
+     "doc": "Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset other than `Diagram` and the props bound onto it; wins over every other media."
     },
     {
      "name": "widget",
      "type": "ConsoleMockupName",
      "default": "undefined",
      "required": "false",
-     "doc": "Name of the product console widget drawn in the media cell when neither a scene nor code is set."
-    },
-    {
-     "name": "diagram",
-     "type": "DiagramName",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set."
+     "doc": "Name of the product console widget drawn in the media cell when no scene is set."
     },
     {
      "name": "image",
      "type": "MediaSplitSectionImage",
      "default": "undefined",
      "required": "false",
-     "doc": "Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell."
+     "doc": "Picture drawn in the media cell when neither a scene nor a widget is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell."
     },
     {
      "name": "illustration",
@@ -26134,7 +26099,7 @@
      "type": "MediaSplitSectionAction",
      "default": "undefined",
      "required": "false",
-     "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `variant` overrides the drawn variant."
+     "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it; `variant` overrides the drawn variant."
     },
     {
      "name": "secondaryAction",
@@ -26156,13 +26121,6 @@
    "category": "section",
    "structure": "monolithic",
    "props": [
-    {
-     "name": "variant",
-     "type": "MediaSplitStackSectionVariant",
-     "default": "'media-end'",
-     "required": "false",
-     "doc": "Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band."
-    },
     {
      "name": "anchor",
      "type": "string",
@@ -26196,7 +26154,7 @@
      "type": "MediaSplitStackSectionBand[]",
      "default": "[]",
      "required": "false",
-     "doc": "The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a `{ component, props? }` webkit scene asset, `widget` a `ConsoleMockup` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button."
+     "doc": "The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget`, `illustration` (with `illustrationLabel?`) or `image` (with `imageAlt?`, `imageFramed?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button."
     }
    ],
    "surface": "site",
@@ -26265,7 +26223,7 @@
      "type": "NetworkSectionBenefit[]",
      "default": "[]",
      "required": "false",
-     "doc": "Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`."
+     "doc": "Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon }`, rendered as a topic led by its glyph whose title is an `h3`."
     },
     {
      "name": "stats",

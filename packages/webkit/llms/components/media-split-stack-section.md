@@ -1,6 +1,6 @@
 # Media Split Stack Section
 
-> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup`, `diagram` and `button`. A band's picture is one of four things: a `ConsoleMockup` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. `variant` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
+> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup` and `button`. Every band has a picture, and it is a drawn asset: a registered `scene`, a `ConsoleMockup` console mock (`widget`, itself a registered scene), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. The band type is a union that requires one of them; request-flow diagrams and code do not go in a media band. Every band sets its picture at the closing end, so the run reads down one edge.
 
 - Import: `import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -13,14 +13,14 @@
 
 ## Do
 
-- Give a band one picture: `widget` (a `ConsoleMockup` name — the product's console screen), `diagram` (a `Diagram` name — its request flow), `illustration` (a registry name, with `illustrationLabel`) or `image` (a URL, with `imageAlt` when it says something). When several are set the first in that order wins; a band with none renders without its media cell.
-- Prefer `widget` or `diagram` on a product page: they show the product itself, where an illustration only evokes it. Do not drop to `media-split` and its `media` slot to place one.
+- Give every band one picture: `scene`, `widget` (a `ConsoleMockup` name — the product's console screen), `illustration` (a registry name, with `illustrationLabel`) or `image` (a URL, with `imageAlt` when it says something). The type requires one; when several are set the first in that order wins. Page JSON is untyped, so a band with none renders without its media cell, logs a development warning, and fails the site-composition check (`test/standards/site-composition.test.mjs`). A `Diagram` scene counts as none.
 - Set `imageFramed` for a picture that is an object rather than a scene — a badge, a logo, a screenshot: it sits whole on a rounded, bordered plate inset in the cell. A plain `image` is scaled to fit the cell and never overflows it.
 - Give every band an `action`; it is both the button and the link the whole band follows.
 
 ## Don’t
 
-- For a single claim beside its picture, scene or code → use `media-split-section`.
+- For a single claim beside its picture or scene → use `media-split-section`.
+- For a request-flow diagram → use `console-showcase-section` with `variant: 'diagram'`; for code → use `feature-scroll-section`.
 - For small reasons in a grid → use `feature-tiles-section`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -33,12 +33,11 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `MediaSplitStackSectionVariant` | `'media-end'` | false | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. |
 | `anchor` | `string` | `''` | false | In-page id set on the run so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`. |
 | `description` | `string` | `''` | false | Supporting sentence under the section title. |
-| `bands` | `MediaSplitStackSectionBand[]` | `[]` | false | The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a `{ component, props? }` webkit scene asset, `widget` a `ConsoleMockup` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. |
+| `bands` | `MediaSplitStackSectionBand[]` | `[]` | false | The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget`, `illustration` (with `illustrationLabel?`) or `image` (with `imageAlt?`, `imageFramed?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. |
 
 ## Assets
 
@@ -48,39 +47,38 @@
 ## States
 
 - Visual states: `default`; hovering a linked band reveals its link affordance (owned by `media-split`)
-- `data-variant` mirrors the `variant` prop
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
 - The header renders only when `title` is set; a band renders its button only when it has an `action`, links as a whole to its `href` (or its action's when it has none), and renders its media cell only when it has a picture; a band's `eyebrow` sits above its headline
 - Band headlines are `h2` when the run has no header and `h3` under the section title, so the outline never repeats a level
-- Media precedence per band: `scene`, then `widget`, then `diagram`, then `illustration`, then `image`. A widget or a diagram is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
+- Media precedence per band: `scene`, then `widget`, then `illustration`, then `image`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
 - A widget plays its beat while the pointer is over its band (`hover`), and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
-- Widget and diagram load on demand (`defineAsyncComponent`): a run that uses neither never downloads them
+- The widget loads on demand (`defineAsyncComponent`): a run that uses none never downloads it
 
 ## Accessibility
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.
 
 ## Right-to-left
 
-- Layout: logical utilities only; `alternating` swaps the media side with the reading direction (owned by `media-split`).
+- Layout: logical utilities only; the closing end follows the reading direction (owned by `media-split`).
 - Icons: the button's trailing chevron mirrors (owned by `button`).
 - Keyboard: unchanged.
 - User data: none.
 
 ## Internationalization
 
-- No built-in strings: every visible string arrives through props in the page's language. Widget and diagram text is product UI copy owned by `console-mockup` and `diagram`.
+- No built-in strings: every visible string arrives through props in the page's language. Widget text is product UI copy owned by `console-mockup`.
 - Formatting: none.
 
 ## Responsive
 
 - Container queries: none; `media-split` stacks the media under the copy below `lg`.
-- Narrow (≤ 640 px): one column per band; a widget, a diagram and a framed image scale down with the cell.
+- Narrow (≤ 640 px): one column per band; a widget and a framed image scale down with the cell.
 - Touch: a widget shows its finished state instead of the hover beat; the whole band stays one link.
 - Reflow: no horizontal scroll at 320 px.
 
@@ -153,135 +151,11 @@
 
 <template>
   <MediaSplitStackSection
-    variant="media-end"
     eyebrow="Solutions"
     title="One platform for every workload you run"
     description="Pick the outcome you need; the same distributed platform serves it."
     :bands="bands"
   />
-</template>
-```
-
-### Variants
-
-```vue
-<script setup>
-  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
-  import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
-
-  const solutionBands = [
-    {
-      image: quickStartWithTemplates,
-      title: 'Modern applications',
-      description: 'Build static sites, run serverless applications, or modernize legacy systems.',
-      action: {
-        label: 'Learn more',
-        href: '/en/solutions/web-apps/'
-      }
-    },
-    {
-      illustration: 'improve-application-performance-and-reliability',
-      title: 'Optimized workloads',
-      description:
-        'Speed up applications, deliver content through the CDN, and process images on demand.',
-      action: {
-        label: 'Learn more',
-        href: '/en/solutions/performance/'
-      }
-    },
-    {
-      illustration: 'ai-applications',
-      title: 'AI applications',
-      description:
-        'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
-      action: {
-        label: 'Learn more',
-        href: '/en/solutions/ai/'
-      }
-    },
-    {
-      illustration: 'automate-threat-mitigation',
-      title: 'Protected applications and APIs',
-      description:
-        'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',
-      action: {
-        label: 'Learn more',
-        href: '/en/solutions/security/'
-      }
-    },
-    {
-      illustration: 'content-and-media-delivery',
-      title: 'Media and streaming content',
-      description:
-        'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',
-      action: {
-        label: 'Learn more',
-        href: '/en/solutions/streaming/'
-      }
-    }
-  ]
-
-  const networkBands = [
-    {
-      title: 'Run closer to users',
-      description:
-        'Handle requests close to users instead of sending everything back to a few central regions. That cuts latency, absorbs spikes automatically, and reduces backhaul.',
-      illustration: 'fastest-path-to-live-website',
-      illustrationLabel: 'Requests served from the data center nearest the user',
-      action: {
-        label: 'Learn more',
-        href: '/en/products/application-accelerator/'
-      }
-    },
-    {
-      title: 'Keep delivery, logic, and data in one place',
-      description:
-        'Run delivery, execution, and data on one platform. APIs and dynamic applications get real-time request handling, origin protection, and state kept next to the code with KV Store.',
-      illustration: 'runtime',
-      illustrationLabel: 'Delivery, execution and data served from one platform',
-      action: {
-        label: 'Learn more',
-        href: '/en/products/kv-store/'
-      }
-    },
-    {
-      title: 'Get better routes and more stable delivery',
-      description:
-        'Traffic enters inside ISP last-mile networks and connects through IXPs, peering, and Tier 1 transit. Fewer hops mean better routes and stable delivery during traffic spikes, upstream issues, and regional incidents.',
-      illustration: 'distributed-apis',
-      illustrationLabel: 'Entry points inside ISP networks, connected through IXPs and transit',
-      action: {
-        label: 'Learn more',
-        href: '/en/products/load-balancer/'
-      }
-    },
-    {
-      title: 'Stop attack traffic earlier',
-      description:
-        'Block attack traffic in the delivery path, before it reaches your origin. Deploy code and policies and let the platform handle scaling, execution, and traffic steering. Your team manages fewer regions, less capacity, and fewer scaling rules.',
-      illustration: 'automate-threat-mitigation',
-      illustrationLabel: 'Attack traffic stopped in the delivery path, before the origin',
-      action: {
-        label: 'Learn more',
-        href: '/en/products/ddos-protection/'
-      }
-    }
-  ]
-</script>
-
-<template>
-  <div class="flex flex-col gap-(--spacing-xl)">
-    <MediaSplitStackSection
-      variant="media-end"
-      :bands="solutionBands"
-    />
-    <MediaSplitStackSection
-      variant="alternating"
-      eyebrow="Managed Infrastructure"
-      title="Stop managing regions and capacity by hand"
-      :bands="networkBands"
-    />
-  </div>
 </template>
 ```
 
@@ -301,13 +175,6 @@
       action: { label: 'Learn more', href: '/en/products/data-stream/' }
     },
     {
-      diagram: 'load-balancer',
-      title: 'Failover and error handling',
-      description:
-        'Route around an unhealthy origin in real time, and retry on the next one before the request fails.',
-      action: { label: 'Learn more', href: '/en/products/load-balancer/' }
-    },
-    {
       image: g2Symbol,
       imageAlt: 'G2',
       imageFramed: true,
@@ -319,9 +186,6 @@
 </script>
 
 <template>
-  <MediaSplitStackSection
-    variant="alternating"
-    :bands="bands"
-  />
+  <MediaSplitStackSection :bands="bands" />
 </template>
 ```

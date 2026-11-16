@@ -2,12 +2,12 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The `split` close the solution pages end with: the headline and the white button in the lead cell, the sentence and the outlined button in the aside cell, over the tall closing frame. Edit the props in the Controls panel — a band with no title renders nothing.",
+   "summary": "The `panel` close a solution page ends with: the overline, the headline and the sentence on one surface, the white and the outlined button side by side, over the short closing frame. Edit the props in the Controls panel — a band with no title renders nothing.",
    "file": "examples/closing-call-to-action-section/default.vue"
   },
   {
    "name": "Variants",
-   "summary": "The three layouts stacked: the `split` close with two actions over the tall closing frame, the `panel` close with one action over the short closing frame, then the loud `primary` close under its pixelated texture.",
+   "summary": "The layouts stacked: the `panel` close with two actions, then the single-action `panel` close, over the short closing frame, then the loud `primary` close under its pixelated texture.",
    "file": "examples/closing-call-to-action-section/variants.vue"
   },
   {

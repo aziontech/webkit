@@ -1,6 +1,6 @@
 # Capability Grid Section
 
-> A framed grid of claims or links under an optional section title: each cell is a `FeatureItem` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGridSection`. Use CapabilityGridSection for any grid of claims or links on a marketing page; icons and per-item links are optional.
+> A framed grid of claims or links under an optional section title: each cell is a `FeatureItem` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGridSection`. Use CapabilityGridSection for any grid of claims or links on a marketing page. It has three layouts, set by the items rather than a prop: benefits (every item has an `icon`), resources (every item has an `href` and no icon) and text columns (no icon, no link). Per-item links are optional; icons are all or none.
 
 - Import: `import CapabilityGridSection from '@aziontech/webkit/capability-grid-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -16,6 +16,7 @@
 
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
+- A benefits grid gives every item an `icon`; a resource list or text columns give none. A grid where only some items have an icon is a benefits grid with a gap: it logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON.
 - Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
 - Set `titleAlign: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
@@ -51,6 +52,7 @@
 - Renders nothing without items.
 - Heading level drops to `h3` under a title and rises to `h2` without one.
 - An item with `href` renders its heading as a link that covers the cell.
+- Items that mix an `icon` with none log one development warning naming how many lack it; nothing changes in the render.
 - `titleAlign` is passed to the section title as its `align`; it has no effect on a bare grid.
 
 ## Accessibility

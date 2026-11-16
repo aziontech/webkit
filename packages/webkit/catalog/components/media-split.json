@@ -12,7 +12,7 @@
  ],
  "avoidWhen": [
   "For copy with no media → use `section-title`, which is the header band.",
-  "For one claim beside its picture, scene or code placed from page JSON → use `media-split-section`.",
+  "For one claim beside its picture or scene placed from page JSON → use `media-split-section`.",
   "For the closing ask → use `call-to-action`; for a mid-page announcement → use `call-to-action` with `variant=\"announcement\"`.",
   "For several short claims side by side → use `feature-item` in a `card-grid`.",
   "For a picture with no explanation → use `illustration` directly."

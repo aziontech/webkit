@@ -13,11 +13,10 @@
  "useWhen": [
   "Use FeatureScrollSection for the product-page walkthrough, one pinned screen (scene or code) per feature.",
   "To walk through four to six capabilities of one product, each with a picture of its own.",
-  "To walk through capabilities each shown by the file you would write: give each item a `code` sample. It is the only code slot of a product page."
+  "To walk through capabilities each shown by the file you would write: give each item a `code` sample. It is the code slot of a marketing page: media bands show no code."
  ],
  "avoidWhen": [
   "For three reasons with no scroll story → use `feature-tiles-section`.",
-  "For one claim beside one code sample → use `media-split-section` with `codeTabs`, but not on product pages, where code goes here.",
   "In a hand-built SFC that needs its own media slot → use `sticky-stack` directly."
  ],
  "related": [

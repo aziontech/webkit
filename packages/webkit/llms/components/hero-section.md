@@ -1,6 +1,6 @@
 # Hero Section
 
-> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-section', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow-diagram` and `tag` for the topology and `section-container`, `section-module`, `registration-frame`, `card-grid`, `feature-item` and `section-gap` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `FlowDiagram` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `FeatureItem`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
+> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-section', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow-diagram` and `tag` for the topology and `section-container`, `section-module`, `registration-frame`, `card-grid`, `feature-item` and `section-gap` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `FlowDiagram` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `FeatureItem`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
 
 - Import: `import HeroSection from '@aziontech/webkit/hero-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -45,7 +45,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `HeroSectionVariant` | `'title-band'` | false | Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. |
+| `variant` | `HeroSectionVariant` | `'title-band'` | false | Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. |
 | `size` | `HeroSectionSize` | `'medium'` | false | Vertical rhythm of the band; `large` is the opening a product page leads with. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
 | `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
@@ -96,7 +96,7 @@
 - Keyboard map: `Tab` moves through the actions; the client strip is not focusable.
 - ARIA: the hero `<section>` is named by the full headline (`aria-label`); the headline is the page `h1`; the illustration is named by `illustrationAriaLabel`, decorative when empty; an `image` carries its `alt`. The topology cards are static text (eyebrow, title, status tag), not focusable; each argument heading is an `h2` under the page `h1`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `hero-title` and `button`.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the pixel floor and the client strip stop under reduced motion in `texture` and `marquee`.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the client strip stops under reduced motion in `marquee`.
 - Touch target ≥40×40 px — the large buttons meet it.
 
 ## Right-to-left
@@ -175,16 +175,6 @@
       description="Serve cached content close to users."
       :primary-action="{ label: 'Start for free', href: '/signup' }"
       :secondary-action="{ label: 'Docs', href: '/docs', trailing: true }"
-    />
-    <HeroSection
-      variant="pixel-floor"
-      eyebrow="AI Inference"
-      title="Build and deploy AI agents and applications in seconds"
-      description="Run AI inference close to users on Azion’s distributed infrastructure."
-      :primary-action="{ label: 'Start for free', href: '/signup' }"
-      :secondary-action="{ label: 'Talk to sales', href: '/contact' }"
-      marquee-label="Trusted by teams running critical workloads"
-      :marquee-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroSection
       variant="copy-beside-art"

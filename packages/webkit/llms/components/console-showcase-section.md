@@ -20,7 +20,7 @@
 ## Don’t
 
 - For a screenshot with copy beside it — use `MediaSplitSection`.
-- For code — use `MediaSplitSection` with `codeTabs`, or `CliTerminalSection`.
+- For code — use `FeatureScrollSection` (a step with `code`) or `CliTerminalSection`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

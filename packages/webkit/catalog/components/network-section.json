@@ -15,7 +15,7 @@
  "bestPractices": [
   "Four short `claims`; they are chips, not sentences. Give a claim as `{ label, mobile: false }` to keep it to the medium breakpoint and up when the phone band has room for fewer chips.",
   "Two to four `outcomes`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.",
-  "Three `benefits` (or six), each a short `title`, a `description` and an optional `icon`; each renders as a topic with its title as an `h3`.",
+  "Three `benefits` (or six), each a short `title`, a `description` and a required `icon` (an Azion icon class) that leads the topic; each renders as a topic with its title as an `h3`.",
   "Four `stats` on the `stats` floor, each a `value` and a `label`, with an optional `prefix` and `suffix`.",
   "Give the band an `anchor` when a page links to it with a `#hash`.",
   "Leave `logo` out of an outcome when the site shows the figure alone; the cell then renders no mark row.",

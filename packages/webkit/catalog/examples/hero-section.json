@@ -7,7 +7,7 @@
   },
   {
    "name": "Variants",
-   "summary": "Every layout stacked: `center` over the dot field with the client strip, the large `title-band`, `pixel-floor` with its copy at the start over the animated floor, and `copy-beside-art` with the illustration beside the copy, then `copy-on-top-art` with its copy centered over a scene in the window under it.",
+   "summary": "Every layout stacked: `center` over the dot field with the client strip, the large `title-band`, `copy-beside-art` with the illustration beside the copy, then `copy-on-top-art` with its copy centered over a scene in the window under it.",
    "file": "examples/hero-section/variants.vue"
   },
   {
