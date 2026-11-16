@@ -6,6 +6,9 @@
 // transition is settled to its end state first, so contrast is read on the final colours: a new finding fails, and so does a known one that
 // no longer fires (delete its entry). Set VITE_A11Y_RECORD=1 to print the current findings as
 // `A11Y_KNOWN {...}` lines instead of asserting, to rebuild the file.
+// Owner-accepted contrast exceptions (one rule, one theme, one selector each, every one a row of
+// rules/webkit-tokens.md § "Contrast: APCA and WCAG 2") live in a11y-accepted.json; only those
+// nodes are dropped, every other finding still counts.
 // Each case imports its SFC lazily, so the first case to reach a module graph compiles it
 // (the Table graph alone takes about 1.1 s on an idle machine and several times that under CPU
 // steal or parallel lanes), while render and axe stay under a second. A filtered run puts that
@@ -20,6 +23,7 @@ import { commands } from 'vitest/browser'
 import type { Component, ComponentInternalInstance, VNode } from 'vue'
 import { defineComponent, getCurrentInstance, h, nextTick } from 'vue'
 
+import ACCEPTED from './a11y-accepted.json'
 import KNOWN from './a11y-known.json'
 import { mountToastRegion } from './toast-region'
 
@@ -38,6 +42,26 @@ const CASE_TIMEOUT = 60_000
 const WCAG_21_AA = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
 
 const known = KNOWN as Record<A11yPass, Record<string, string[]>>
+
+type AcceptedException = { rule: string; themes: string[]; selector: string }
+
+const accepted = ACCEPTED.exceptions as AcceptedException[]
+
+function withoutAccepted(violations: axe.Result[], pass: A11yPass): axe.Result[] {
+  return violations
+    .map((violation) => {
+      const entries = accepted.filter(
+        (entry) => entry.rule === violation.id && entry.themes.includes(pass)
+      )
+      if (!entries.length) return violation
+      const nodes = violation.nodes.filter((node) => {
+        const element = document.querySelector(node.target.join(' '))
+        return !entries.some((entry) => element?.closest(entry.selector))
+      })
+      return { ...violation, nodes }
+    })
+    .filter((violation) => violation.nodes.length > 0)
+}
 
 const SETTLED_MOTION =
   '*,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important;transition-delay:0s!important}'
@@ -126,7 +150,8 @@ export function runA11ySuite(scope: A11yScope, pass: A11yPass): void {
         await settle()
 
         const results = await axe.run(document.body, axeOptions(pass))
-        const findings = new Set(results.violations.map((violation) => violation.id))
+        const violations = withoutAccepted(results.violations, pass)
+        const findings = new Set(violations.map((violation) => violation.id))
         const animations = pass === 'media' ? runningInfiniteAnimations(document.body) : []
         if (animations.length) findings.add('reduced-motion-infinite-animation')
 
@@ -139,7 +164,7 @@ export function runA11ySuite(scope: A11yScope, pass: A11yPass): void {
         }
 
         const allowed = new Set(known[pass]?.[file] ?? [])
-        const fresh = results.violations.filter((violation) => !allowed.has(violation.id))
+        const fresh = violations.filter((violation) => !allowed.has(violation.id))
         const freshAnimations = allowed.has('reduced-motion-infinite-animation') ? [] : animations
         const stale = [...allowed].filter((rule) => !findings.has(rule))
 
@@ -275,6 +300,7 @@ export function runA11yOpenSuite(scope: A11yScope, theme: 'light' | 'dark'): voi
           if (!ctx.isOpen.value) continue
           opened += 1
           const results = await axe.run(document.body, axeOptions(theme))
+          results.violations = withoutAccepted(results.violations, theme)
           if (RECORD && results.violations.length) {
             console.warn(
               `A11Y_OPEN ${JSON.stringify({ theme, file, overlay: label, rules: results.violations.map((v) => v.id) })}`

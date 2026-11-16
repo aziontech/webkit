@@ -14,6 +14,15 @@ const KNOWN_FILE = resolve(
   '../../../packages/webkit/src/test/a11y-known.json'
 )
 const KNOWN = existsSync(KNOWN_FILE) ? JSON.parse(readFileSync(KNOWN_FILE, 'utf8')) : {}
+const ACCEPTED = JSON.parse(
+  readFileSync(
+    resolve(
+      dirname(fileURLToPath(import.meta.url)),
+      '../../../packages/webkit/src/test/a11y-accepted.json'
+    ),
+    'utf8'
+  )
+).exceptions
 const COMPONENT_KNOWN = [
   {
     rule: 'aria-required-children',
@@ -83,7 +92,7 @@ async function visit(route) {
     if (axeRoutes.has(route)) {
       await page.addScriptTag({ path: AXE })
       const result = await page.evaluate(
-        async ({ known, chrome }) => {
+        async ({ known, chrome, accepted }) => {
           const style = document.createElement('style')
           style.textContent =
             '*,*::before,*::after{transition:none!important;animation:none!important}'
@@ -101,6 +110,15 @@ async function visit(route) {
             for (const violation of run.violations) {
               const nodes = violation.nodes.filter((node) => {
                 const element = document.querySelector(node.target.join(' '))
+                if (
+                  accepted.some(
+                    (entry) =>
+                      entry.rule === violation.id &&
+                      entry.themes.includes(theme) &&
+                      element?.closest(entry.selector)
+                  )
+                )
+                  return false
                 const host = element?.closest('[data-example], [data-source]')
                 const source = host?.dataset.example
                   ? `examples/${host.dataset.example}`
@@ -129,7 +147,7 @@ async function visit(route) {
           style.remove()
           return { violations: out, known: skipped }
         },
-        { known: KNOWN, chrome: COMPONENT_KNOWN }
+        { known: KNOWN, chrome: COMPONENT_KNOWN, accepted: ACCEPTED }
       )
       knownWebkit += result.known
       axeChecked++

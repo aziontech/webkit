@@ -22,6 +22,17 @@ describe('Eyebrow', () => {
     expect(queryByText('//')).not.toBeInTheDocument()
   })
 
+  it('marks the label with a test id derived from the root, including an override', () => {
+    const view = render(Eyebrow, { slots: { default: 'DERIVED' } })
+    expect(view.getByTestId('eyebrow__label').textContent).toBe('DERIVED')
+
+    const custom = render(Eyebrow, {
+      attrs: { 'data-testid': 'hero-eyebrow' },
+      slots: { default: 'CUSTOM' }
+    })
+    expect(custom.getByTestId('hero-eyebrow__label').textContent).toBe('CUSTOM')
+  })
+
   it('renders the prefix text when a prefix is provided', () => {
     const { getByText } = render(Eyebrow, {
       props: { prefix: '//' },

@@ -6,7 +6,7 @@ export const text = {
     'text-muted': tokenRef('primitives.gray.650'),
     'text-disabled': tokenRef('primitives.gray.400'),
     'text-primary': tokenRef('brand.primary.primary-700'),
-    'text-brand': tokenRef('brand.primary.primary-700'),
+    'text-brand': tokenRef('brand.primary.primary-500'),
     'text-link': tokenRef('primitives.blue.600'),
     'text-link-hover': tokenRef('primitives.blue.700'),
     'text-contrast': tokenRef('primitives.gray.50')

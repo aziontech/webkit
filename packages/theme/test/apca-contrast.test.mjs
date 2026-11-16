@@ -82,11 +82,11 @@ const EXCEPTIONS = [
   },
   {
     status: 'accepted',
-    themes: ['dark'],
+    themes: ['light', 'dark'],
     fg: '--text-brand',
     bg: SURFACES,
     reason:
-      'Eyebrow label in the logo orange #F3652B in dark, about Lc 44; the owner wants the logo orange'
+      'brand: the eyebrow matches the logo orange #F3652B in light and dark (light also under WCAG 4.5:1); owner decision 2026-11-16'
   },
   {
     status: 'accepted',

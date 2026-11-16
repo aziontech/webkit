@@ -44,7 +44,10 @@
     >
       {{ prefix }}
     </span>
-    <span class="min-w-0 text-pretty text-(--text-brand) font-medium uppercase text-overline-md">
+    <span
+      :data-testid="`${testId}__label`"
+      class="min-w-0 text-pretty text-(--text-brand) font-medium uppercase text-overline-md"
+    >
       <slot />
     </span>
     <span
