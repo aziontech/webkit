@@ -160,9 +160,12 @@
 
   const bandHref = (band: MediaSplitStackSectionBandFields) => band.href || band.action?.href || ''
 
+  const isMockup = (band: MediaSplitStackSectionBandFields, index: number) =>
+    scenes.value[index] ? band.scene?.component === 'ConsoleMockup' : Boolean(band.widget)
+
   const mediaPadded = (band: MediaSplitStackSectionBandFields, index: number) =>
-    !scenes.value[index] &&
-    Boolean(band.widget || (band.imageFramed && band.image && !band.illustration))
+    isMockup(band, index) ||
+    (!scenes.value[index] && Boolean(band.imageFramed && band.image && !band.illustration))
 </script>
 
 <template>
@@ -212,22 +215,30 @@
             @pointerleave="hovered = null"
           >
             <template
-              v-if="scenes[index]"
+              v-if="isMockup(band, index)"
+              #media
+            >
+              <div class="flex w-full self-stretch max-lg:min-h-(--size-80)">
+                <component
+                  :is="scenes[index]"
+                  v-if="scenes[index]"
+                  v-bind="band.scene?.props ?? {}"
+                />
+                <ConsoleMockup
+                  v-else-if="band.widget"
+                  :name="band.widget"
+                  :hover="hovered === index"
+                  :cursor="false"
+                />
+              </div>
+            </template>
+            <template
+              v-else-if="scenes[index]"
               #media
             >
               <component
                 :is="scenes[index]"
                 v-bind="band.scene?.props ?? {}"
-              />
-            </template>
-            <template
-              v-else-if="band.widget"
-              #media
-            >
-              <ConsoleMockup
-                :name="band.widget"
-                :hover="hovered === index"
-                :cursor="false"
               />
             </template>
             <template

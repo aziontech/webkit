@@ -154,7 +154,7 @@ describe('MediaSplitStackSection', () => {
   })
 
   it('draws a band scene ahead of its other media', async () => {
-    const { findByTestId } = run({
+    const { findByTestId, getByTestId } = run({
       bands: [
         {
           ...bands[1],
@@ -164,6 +164,7 @@ describe('MediaSplitStackSection', () => {
     })
 
     expect(await findByTestId('console-mockup')).toHaveAttribute('data-name', 'kv-store-key')
+    expect(getByTestId(BAND_TESTID).hasAttribute('data-media-padded')).toBe(true)
   })
 
   it('sets the anchor as the run id', () => {
