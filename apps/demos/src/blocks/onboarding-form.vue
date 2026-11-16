@@ -278,7 +278,7 @@
   const pendingPlanId = ref('')
   const upgradeOpen = ref(false)
   const planSubmitted = ref(false)
-  const period = ref<OnboardingFormBillingPeriod>('yearly')
+  const period = ref<OnboardingFormBillingPeriod>('monthly')
   const editing = ref(false)
   const card = reactive({ last4: account.value.cardLast4, ...blankCard })
   const address = reactive({ useAccountInformation: true, ...account.value.address })
@@ -302,7 +302,7 @@
       return
     }
     pendingPlanId.value = value
-    period.value = 'yearly'
+    period.value = 'monthly'
     editing.value = false
     Object.assign(address, { useAccountInformation: true, ...account.value.address })
     upgradeOpen.value = true
@@ -620,7 +620,7 @@
                                   >
                                     <aside
                                       v-if="upgrade"
-                                      class="flex flex-col gap-(--spacing-md)"
+                                      class="order-last flex flex-col gap-(--spacing-md) lg:order-none"
                                     >
                                       <div class="flex flex-col gap-(--spacing-xs)">
                                         <h3

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -13,7 +14,9 @@
   import Tabs from '@aziontech/webkit/tabs'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+  import { onBeforeRouteLeave } from 'vue-router'
 
   import { sampleProject } from './edit-resource.sample'
 
@@ -51,12 +54,9 @@
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
+    { value: 'versions', label: 'Versions' },
     { value: 'build', label: 'Build' },
     { value: 'deployments', label: 'Deployments' },
-    { value: 'variables', label: 'Variables' },
-    { value: 'caching', label: 'Caching' },
-    { value: 'integrations', label: 'Integrations' },
-    { value: 'rules', label: 'Rules' },
     { value: 'main-settings', label: 'Settings' }
   ]
 
@@ -95,7 +95,7 @@
       key: 'web_socket_proxy',
       title: 'WebSocket Proxy',
       description:
-        'Enhance real-time data exchange between your project and its backends using the WebSocket protocol.'
+        'Enhance real-time data exchange between your resource and its backends using the WebSocket protocol.'
     }
   ]
 
@@ -104,15 +104,21 @@
   const record = computed<EditResourceProject>(() => props.resource ?? sampleProject)
   const form = reactive<EditResourceProject>(copyOf(record.value))
   const saving = computed(() => props.loading)
-  const baseline = ref(JSON.stringify(record.value))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+  const guard = useUnsavedChanges(() => form, {
+    onDiscard: (saved) => Object.assign(form, saved)
+  })
+  const dirty = guard.isDirty
+  const leaveDialog = guard.dialogProps
+  const leaveLabels = guard.labels
+
+  onBeforeRouteLeave(() => guard.confirmLeave())
   const SAVE_TOAST = 'resource-save'
 
   watch(
     () => JSON.stringify(record.value),
-    (next) => {
+    () => {
       Object.assign(form, copyOf(record.value))
-      baseline.value = next
+      guard.commit()
     }
   )
 
@@ -134,11 +140,11 @@
     toast.dismiss(SAVE_TOAST)
     emit('submit', event, copyOf(form))
     await nextTick()
-    if (!props.loading && !props.error) baseline.value = JSON.stringify(form)
+    if (!props.loading && !props.error) guard.commit()
   }
 
   const showFailure = () => {
-    toast.error("The project settings weren't saved.", {
+    toast.error("The resource settings weren't saved.", {
       id: SAVE_TOAST,
       description: props.error,
       action: { label: 'Retry', onClick: (event: MouseEvent) => save(event) }
@@ -157,12 +163,12 @@
         showFailure()
         return
       }
-      baseline.value = JSON.stringify(form)
+      guard.commit()
     }
   )
 
   const discard = (event: MouseEvent) => {
-    Object.assign(form, JSON.parse(baseline.value) as EditResourceProject)
+    guard.discard()
     emit('discard', event)
   }
 </script>
@@ -176,6 +182,7 @@
           :key="tab.value"
           :value="tab.value"
           :label="tab.label"
+          :dirty="tab.value === 'main-settings' && dirty"
         />
       </PageTabs>
     </div>
@@ -194,7 +201,7 @@
             >
               <PageHeader
                 title="Settings"
-                description="Core configuration for this project."
+                description="Core configuration for this resource."
                 size="small"
               />
 
@@ -206,7 +213,7 @@
 
                 <SettingsSection
                   title="General"
-                  hint="How this project is identified across the platform, and whether it is serving traffic."
+                  hint="How this resource is identified across the platform, and whether it is serving traffic."
                   anchor="general"
                 >
                   <Card :padded="false">
@@ -214,7 +221,7 @@
                       <Item.List>
                         <SettingsRow
                           title="Name"
-                          description="A unique and descriptive name to identify the project."
+                          description="A unique and descriptive name to identify the resource."
                         >
                           <div class="flex w-full flex-col gap-(--spacing-xs)">
                             <Input
@@ -236,7 +243,7 @@
                         </SettingsRow>
                         <SettingsRow
                           title="Active"
-                          description="When disabled, the project stops serving traffic."
+                          description="When disabled, the resource stops serving traffic."
                           variant="compact"
                         >
                           <Switch
@@ -252,7 +259,7 @@
 
                 <SettingsSection
                   title="Modules"
-                  hint="The capabilities this project runs with, each of which can be toggled here."
+                  hint="The capabilities this resource runs with, each of which can be toggled here."
                   anchor="modules"
                 >
                   <Card :padded="false">
@@ -322,7 +329,7 @@
               leave-to-class="translate-y-2 opacity-0"
             >
               <SaveBar v-if="dirty || saving">
-                Project settings changed.
+                Resource settings changed.
                 <span class="text-(--text-muted)"
                   >Saving publishes them on the next deployment.</span
                 >
@@ -346,6 +353,23 @@
               </SaveBar>
             </Transition>
           </form>
+
+          <ConfirmDialog v-bind="leaveDialog">
+            <template #actions>
+              <Button
+                :label="leaveLabels.keepEditing"
+                variant="ghost"
+                size="medium"
+                @click="guard.keepEditing"
+              />
+              <Button
+                :label="leaveLabels.discard"
+                variant="outline"
+                size="medium"
+                @click="guard.discardAndLeave"
+              />
+            </template>
+          </ConfirmDialog>
         </div>
       </section>
     </div>

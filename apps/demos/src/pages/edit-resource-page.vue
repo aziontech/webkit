@@ -19,6 +19,14 @@
     active: record ? record.status === 'Live' : sampleProject.active
   })
 
+  const tab = computed({
+    get: () => 'main-settings',
+    set: (value: string) => {
+      if (value === 'main-settings' || !record) return
+      router.push({ path: `/resources/${record.id}`, state: { tab: value } })
+    }
+  })
+
   const breadcrumb = computed(() => [
     { label: 'Resources', href: '/resources' },
     {
@@ -46,6 +54,7 @@
 <template>
   <ConsoleLayout.Breadcrumb :items="breadcrumb" />
   <EditResource
+    v-model:tab="tab"
     :resource="project"
     :loading="saving"
     @submit="onSubmit"
