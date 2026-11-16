@@ -2,9 +2,9 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
 
-import { type UseLazyChunks, useLazyChunks } from './index'
+import { useLazyChunks, type UseLazyChunksReturn } from './index'
 
-function withChunks(run: (api: UseLazyChunks) => void) {
+function withChunks(run: (api: UseLazyChunksReturn) => void) {
   render(
     defineComponent({
       setup() {
@@ -36,11 +36,11 @@ describe('useLazyChunks', () => {
   })
 
   it('mounts every chunk after revealAll', async () => {
-    let api: UseLazyChunks | null = null
+    let api: UseLazyChunksReturn | null = null
     withChunks((value) => {
       api = value
     })
-    const ready = api as unknown as UseLazyChunks
+    const ready = api as unknown as UseLazyChunksReturn
     ready.revealAll()
     await nextTick()
     expect(ready.split([1, 2, 3, 4, 5, 6, 7, 8, 9]).every((c) => c.mounted)).toBe(true)

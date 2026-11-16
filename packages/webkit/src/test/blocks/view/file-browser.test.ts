@@ -15,8 +15,8 @@ describe('view/file-browser block', () => {
       th.textContent?.includes('Size')
     )
     await fireEvent.click(head!.querySelector('button')!)
-    await waitFor(() => expect(firstCells(view.container)[0]).toBe('..'))
-    const cells = firstCells(view.container)
+    await waitFor(() => expect(firstCells(view.container as HTMLElement)[0]).toBe('..'))
+    const cells = firstCells(view.container as HTMLElement)
     expect(cells.slice(1, 5)).toEqual(['assets/', 'css/', 'images/', 'js/'])
     const files = cells.slice(5)
     const ascending = ['project.json', 'favicon.svg', 'index.html', '404.html']
@@ -26,9 +26,9 @@ describe('view/file-browser block', () => {
   it('opens a folder from its name button and goes back up from the parent row', async () => {
     const view = render(FileBrowser)
     await fireEvent.click(view.getByRole('button', { name: 'logs/' }))
-    await waitFor(() => expect(firstCells(view.container)).toContain('access.log'))
+    await waitFor(() => expect(firstCells(view.container as HTMLElement)).toContain('access.log'))
     await fireEvent.click(view.getByRole('button', { name: 'Go up to the parent folder' }))
-    await waitFor(() => expect(firstCells(view.container)).toContain('robots.txt'))
+    await waitFor(() => expect(firstCells(view.container as HTMLElement)).toContain('robots.txt'))
   })
 
   it('tells a search miss apart from an empty folder and clears it', async () => {
@@ -38,6 +38,6 @@ describe('view/file-browser block', () => {
     await waitFor(() => expect(view.getByText('No matching files')).toBeTruthy())
     expect(view.queryByText('This folder is empty')).toBeNull()
     await fireEvent.click(view.getByRole('button', { name: 'Clear search' }))
-    await waitFor(() => expect(firstCells(view.container)).toContain('robots.txt'))
+    await waitFor(() => expect(firstCells(view.container as HTMLElement)).toContain('robots.txt'))
   })
 })

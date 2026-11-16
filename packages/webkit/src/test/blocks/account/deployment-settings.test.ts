@@ -23,7 +23,7 @@ describe('account/deployment-settings', () => {
   it('shows the SaveBar after a default changes, and Discard restores it', async () => {
     const view = render(UnsavedChanges)
     expect(view.container.textContent).toContain('You have unsaved changes.')
-    await fireEvent.click(buttonByText('Discard', view.container)!)
+    await fireEvent.click(buttonByText('Discard', view.container as HTMLElement)!)
     await waitFor(() =>
       expect(view.container.textContent).not.toContain('You have unsaved changes.')
     )
@@ -31,7 +31,7 @@ describe('account/deployment-settings', () => {
 
   it('saves the defaults and hides the SaveBar', async () => {
     const view = render(UnsavedChanges)
-    await fireEvent.click(buttonByText('Save', view.container)!)
+    await fireEvent.click(buttonByText('Save', view.container as HTMLElement)!)
     await waitFor(
       () => expect(view.container.textContent).not.toContain('You have unsaved changes.'),
       { timeout: 3000 }
@@ -65,14 +65,14 @@ describe('account/deployment-settings', () => {
     await fireEvent.update(search, 'no-such-service')
     await waitFor(() => expect(view.getByText('No matching services')).toBeTruthy())
     expect(view.queryByRole('list', { name: 'Services' })).toBeNull()
-    await fireEvent.click(buttonByText('Clear search', view.container)!)
+    await fireEvent.click(buttonByText('Clear search', view.container as HTMLElement)!)
     await waitFor(() => expect(view.getByRole('list', { name: 'Services' })).toBeTruthy())
     expect(view.queryByRole('navigation', { name: 'Services pages' })).toBeNull()
   })
 
   it('creates a Deployment Setting from the drawer after the name is filled', async () => {
     const view = render(BuildDeployment)
-    await fireEvent.click(buttonByText('Create Deployment Setting', view.container)!)
+    await fireEvent.click(buttonByText('Create Deployment Setting', view.container as HTMLElement)!)
     await waitFor(() => expect(dialog()).not.toBeNull())
     expect(dialog()!.textContent).toContain('Create Deployment Setting')
     const submit = Array.from(dialog()!.querySelectorAll('button[type="submit"]'))[0] as HTMLElement

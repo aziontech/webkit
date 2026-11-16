@@ -68,18 +68,18 @@ describe('forced colors (Windows high contrast)', () => {
   )
 
   it('the Input and the Switch track keep a visible border', async () => {
-    const input = render(Input, { props: { 'aria-label': 'Name' } })
+    const input = render(Input, { attrs: { 'aria-label': 'Name' } })
     const field = input.container.querySelector('input')!
     const bordered = [field, field.parentElement!, field.parentElement!.parentElement!].some(
       hasVisibleBorder
     )
     expect(bordered).toBe(true)
-    const toggle = render(Switch, { props: { 'aria-label': 'Notifications' } })
+    const toggle = render(Switch, { attrs: { 'aria-label': 'Notifications' } })
     expect(hasVisibleBorder(toggle.container.querySelector('button')!)).toBe(true)
   })
 
   it('the Switch handle stays distinct from the track, on and off', async () => {
-    const view = render(Switch, { props: { 'aria-label': 'Notifications' } })
+    const view = render(Switch, { attrs: { 'aria-label': 'Notifications' } })
     const track = view.container.querySelector('button')!
     const handle = view.getByTestId('switch__handle')
     expect(style(handle).backgroundColor).not.toBe(style(track).backgroundColor)

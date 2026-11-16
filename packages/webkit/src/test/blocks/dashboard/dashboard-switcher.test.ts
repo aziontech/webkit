@@ -21,24 +21,26 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
 describe('dashboard/dashboard-switcher', () => {
   it('sets the shared period with FilterMenu and shows it as a removable chip', async () => {
     const view = render(Switcher)
-    const trigger = byTestId('filter-menu', view.container)
+    const trigger = byTestId('filter-menu', view.container as HTMLElement)
     expect(trigger).not.toBeNull()
     expect(view.container.querySelector('[aria-label="Filter, 1 applied"]')).not.toBeNull()
-    const chip = byTestId('filter-menu-chip-group__chip-period', view.container)!
+    const chip = byTestId('filter-menu-chip-group__chip-period', view.container as HTMLElement)!
     expect(chip.textContent).toContain('Last 24 hours')
     const remove =
       chip.querySelector<HTMLElement>('[data-testid$="__remove"]') ??
       [...chip.querySelectorAll<HTMLElement>('button')].at(-1)!
     await fireEvent.click(remove)
     await waitFor(() =>
-      expect(byTestId('filter-menu-chip-group__chip-period', view.container)).toBeNull()
+      expect(
+        byTestId('filter-menu-chip-group__chip-period', view.container as HTMLElement)
+      ).toBeNull()
     )
     expect(view.container.textContent).toContain('vs previous 24 hours')
   })
 
   it('hides the shared filter for a dashboard that owns its period', () => {
     const view = render(SwitcherOwnPeriod)
-    expect(byTestId('filter-menu', view.container)).toBeNull()
+    expect(byTestId('filter-menu', view.container as HTMLElement)).toBeNull()
     expect(view.getByRole('radiogroup', { name: 'Quarter' })).toBeTruthy()
   })
 
@@ -54,6 +56,6 @@ describe('dashboard/dashboard-switcher', () => {
   it('shows the empty state of the period when there is no data', () => {
     const view = render(SwitcherEmpty)
     expect(view.container.textContent).toContain('No data in this period')
-    expect(buttonByText('Retry', view.container)).toBeUndefined()
+    expect(buttonByText('Retry', view.container as HTMLElement)).toBeUndefined()
   })
 })

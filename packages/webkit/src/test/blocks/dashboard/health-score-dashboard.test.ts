@@ -15,7 +15,7 @@ const byTestId = (id: string, root: Document | HTMLElement = document) =>
 describe('dashboard/health-score-dashboard', () => {
   it('renders the overall score as a StatTile out of 100', () => {
     const view = render(Health)
-    const tile = byTestId('stat-tile', view.container)!
+    const tile = byTestId('stat-tile', view.container as HTMLElement)!
     expect(tile.textContent).toContain('Overall score')
     expect(tile.textContent).toContain('79')
     expect(tile.textContent).toContain('/ 100')
@@ -31,7 +31,7 @@ describe('dashboard/health-score-dashboard', () => {
 
   it('prints a dash for the overall score when the period is empty', () => {
     const view = render(HealthEmpty)
-    const tile = byTestId('stat-tile', view.container)!
+    const tile = byTestId('stat-tile', view.container as HTMLElement)!
     expect(tile.textContent).toContain('No value')
   })
 

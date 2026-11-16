@@ -21,7 +21,7 @@ const host = (enabled: () => boolean, sink: { row?: UsePinnedRowReturn }) =>
     }
   })
 
-const scrollListeners = (spy: ReturnType<typeof vi.spyOn>) =>
+const scrollListeners = (spy: { mock: { calls: unknown[][] } }) =>
   spy.mock.calls.filter(([type]) => type === 'scroll').length
 
 afterEach(() => {

@@ -14,7 +14,7 @@ const byTestId = (id: string, root: Document | HTMLElement = document) =>
 describe('dashboard/security-dashboard#ByActor', () => {
   it('narrows the log by destination and offers Clear filters when nothing matches', async () => {
     const view = render(SecurityByActor)
-    const table = () => byTestId('data-table', view.container)
+    const table = () => byTestId('data-table', view.container as HTMLElement)
     expect(table()?.textContent).toContain('storage.example.com')
     const input = view.getByRole('textbox', { name: 'Destination host' })
     await userEvent.fill(input, 'storage.example.com')
@@ -33,7 +33,7 @@ describe('dashboard/security-dashboard#ByActor', () => {
 
   it('moves the time range to the header and the closed-set filters into FilterMenu', async () => {
     const view = render(SecurityByActor)
-    expect(byTestId('filter-menu', view.container)).not.toBeNull()
+    expect(byTestId('filter-menu', view.container as HTMLElement)).not.toBeNull()
     expect(view.getByRole('combobox', { name: 'Time range' })).toBeTruthy()
   })
 
