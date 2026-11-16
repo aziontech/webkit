@@ -45,6 +45,7 @@
     "name": "Code",
     "file": "function-editor.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Arguments",

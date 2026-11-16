@@ -2,7 +2,9 @@ import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import QueryEditor from '../../../../blocks/view/query-editor/query-editor.vue'
+import QueryEditor, {
+  type QueryEditorTable
+} from '../../../../blocks/view/query-editor/query-editor.vue'
 import ImportCsv from '../../../../blocks/view/query-editor/variants/import-csv.vue'
 import QueryEditorQuery from '../../../../blocks/view/query-editor/variants/query.vue'
 import { useToastRegion } from '../../toast-region'
@@ -91,5 +93,73 @@ describe('view/query-editor block', () => {
     )
     expect(view.queryByRole('button', { name: 'Insert' })).toBeNull()
     expect(view.queryByRole('navigation', { name: 'Results pagination' })).toBeNull()
+  })
+})
+
+describe('view/query-editor data contract', () => {
+  const ledger: QueryEditorTable = {
+    id: 'tbl-ledger',
+    name: 'ledger',
+    columns: [
+      { id: 'c-1', name: 'id', type: 'int8', primaryKey: true, notNull: true },
+      { id: 'c-2', name: 'memo', type: 'text', primaryKey: false, notNull: false }
+    ],
+    rows: [
+      { __k: 'l-1', id: 7, memo: 'Acme invoice' },
+      { __k: 'l-2', id: 8, memo: 'Refund' }
+    ]
+  }
+
+  it('renders the tables it is given instead of the sample', () => {
+    const view = render(QueryEditor, { props: { tables: [ledger] } })
+    expect(view.container.querySelector('[aria-label="Actions for ledger"]')).not.toBeNull()
+    expect(view.container.querySelector('[aria-label="Actions for customers"]')).toBeNull()
+    expect(view.container.textContent).toContain('Acme invoice')
+  })
+
+  it('shows the empty database for an empty list and never the sample while loading', () => {
+    const empty = render(QueryEditor, { props: { tables: [] } })
+    expect(empty.container.textContent).toContain('No tables yet')
+    empty.unmount()
+    const loading = render(QueryEditor, { props: { loading: true } })
+    expect(loading.container.textContent).not.toContain('customers')
+    expect(loading.container.querySelector('[aria-label="Loading tables"]')).not.toBeNull()
+  })
+
+  it('emits delete-rows with the row and drops it from the table', async () => {
+    const view = render(QueryEditor, { props: { tables: [ledger] } })
+    await userEvent.click(view.getByRole('button', { name: 'Delete row 7' }))
+    const [[event, payload]] = view.emitted('delete-rows') as [
+      [Event, { table: QueryEditorTable; rows: QueryEditorTable['rows'] }]
+    ]
+    expect(event).toBeInstanceOf(Event)
+    expect(payload.table.id).toBe('tbl-ledger')
+    expect(payload.rows.map((row) => row.__k)).toEqual(['l-1'])
+    await waitFor(() => expect(view.container.textContent).not.toContain('Acme invoice'))
+    expect(ledger.rows).toHaveLength(2)
+  })
+
+  it('emits run with the statement and shows the result it is given', async () => {
+    const view = render(QueryEditor, {
+      props: {
+        tab: 'editor',
+        sql: 'SELECT 1;',
+        result: { type: 'message', text: 'Statement executed.' }
+      }
+    })
+    expect(view.container.textContent).toContain('Statement executed.')
+    await userEvent.click(view.getByRole('button', { name: 'Run query' }))
+    const [[event, sql]] = view.emitted('run') as [[Event, string]]
+    expect(event).toBeInstanceOf(Event)
+    expect(sql).toBe('SELECT 1;')
+  })
+
+  it('shows the error with Retry and emits retry', async () => {
+    const view = render(QueryEditor, {
+      props: { tables: [ledger], error: "Couldn't load the rows of ledger." }
+    })
+    expect(view.container.textContent).toContain("Couldn't load the rows of ledger.")
+    await userEvent.click(view.getByRole('button', { name: 'Retry' }))
+    expect(view.emitted('retry')).toHaveLength(1)
   })
 })

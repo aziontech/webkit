@@ -40,7 +40,7 @@ The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow 
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 
-Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save shows its loading state and the dialog cannot be dismissed while saving. On success the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save emits `save` with every rule in its new order, shows its loading state while `saving` is set, and the dialog cannot be dismissed while saving. On success (`saving` turns off with no `saveError`) the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure (`saveError` set) the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
 ### G. States — `EmptyState`, `Alert` (required)
 
@@ -49,6 +49,59 @@ Loading: triggers read Loading, the search and Add Rule are disabled and each `D
 A rule's name is a `Button variant="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/rule-builder` from it, as EditRule shows.
 
 Each phase renders every rule, unpaged: paging an ordered list would hide the neighbours a move lands between. A phase is sized for the tens of rules people manage by hand; past about 200 rules, split them across phases or rule sets rather than paging one phase.
+
+## Data
+
+The block takes its rules through props and emits every action; it fetches nothing. `RuleListRule`, `RuleListEdit` and `RuleListProps` are exported from `rule-list.vue`, and `sample.ts` holds the sample application and firewall rules the block renders when `rules` is left out (and never while `loading` or `error` is set). Moves and switches stay a local draft until Save.
+
+| Prop                | Type                          | What it does                                                                                                 |
+| ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `subject`           | `'application' \| 'firewall'` | What runs the rules: an application has Request and Response phases, a firewall only Request. Sets the copy. |
+| `rules`             | `RuleListRule[]`              | The saved rules, each phase in run order. Pass `[]` for none.                                                |
+| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add Rule disable.    |
+| `error`             | `string`                      | Why the rules failed to load, shown in the danger `Alert` with Retry that replaces the phases.               |
+| `saving`            | `boolean`                     | The save is in flight. When it turns off with no `saveError`, the draft becomes the saved order.             |
+| `saveError`         | `string`                      | Why the save failed, shown at the top of the review dialog; Save reads Save again.                           |
+| `defaultEdits`      | `RuleListEdit[]`              | Unsaved moves and switches the list opens with.                                                              |
+| `defaultSearch`     | `string`                      | The search the list opens with.                                                                              |
+| `defaultReviewOpen` | `boolean`                     | Opens the Review changes dialog.                                                                             |
+
+| Event    | Payload           | When                                                            |
+| -------- | ----------------- | --------------------------------------------------------------- |
+| `edit`   | `(event, rule)`   | A rule's name.                                                  |
+| `create` | `(event, phase?)` | Add Rule in the heading, or in an empty phase (with its phase). |
+| `retry`  | `(event)`         | Retry in the load error alert.                                  |
+| `save`   | `(event, rules)`  | Save in the review dialog; every rule of every phase, in order. |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import RuleList, { type RuleListRule } from './rule-list.vue'
+
+  const { data, pending, error, refresh } = useRules()
+  const { run: saveOrder, pending: saving, error: saveFailed } = useSaveRuleOrder()
+  const save = (_event: MouseEvent, rules: RuleListRule[]) => saveOrder(rules)
+</script>
+
+<template>
+  <RuleList
+    :rules="data ?? []"
+    :loading="pending"
+    :error="error ? 'Couldn\'t load the rules. Check your connection and retry.' : ''"
+    :saving="saving"
+    :save-error="
+      saveFailed
+        ? 'The new order wasn\'t saved. The rules still run in the saved order; save again to apply it.'
+        : ''
+    "
+    @retry="refresh"
+    @save="save"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -91,14 +144,14 @@ Each phase renders every rule, unpaged: paging an ordered list would hide the ne
 
 ## States
 
-- Application: Request and Response phases, a locked Default rule first in Request, one inactive rule per phase.
-- Firewall: one Request phase, every rule movable.
-- ReviewChanges: two moves and one status change, the save bar and the review dialog open.
-- SaveError: the review dialog open with the failure `Alert` and Save again.
-- Searching: "cache" typed, reordering off with its `Alert`, phases reading "n of total".
-- Empty: a firewall with no rules, the Request phase showing its `EmptyState`.
-- Loading: skeleton rows in each phase, the search and Add Rule disabled.
-- LoadError: the rules did not load; a danger `Alert` with Retry replaces the phases.
+- Application: the default `subject`; Request and Response phases, a locked Default rule first in Request, one inactive rule per phase.
+- Firewall: `subject="firewall"`; one Request phase, every rule movable.
+- ReviewChanges: `defaultEdits` (two moves and one status change) and `defaultReviewOpen`: the save bar and the review dialog open.
+- SaveError: the same with `saveError` set: the failure `Alert` and Save again.
+- Searching: `defaultSearch` "cache": reordering off with its `Alert`, phases reading "n of total".
+- Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
+- Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
+- LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
 - EditRule: the list composed with `edit/rule-builder`. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related

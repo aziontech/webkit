@@ -43,7 +43,45 @@ A flush `Card` with an `Item.List` holding one `SettingsRow` titled Active with 
 
 ### G. Footer — `PanelFooter`, `Button`, `Alert` (required)
 
-`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. A save that fails keeps the drawer open with every field and a danger `Alert` at the top of `PanelBody` ("Rule not saved. You are offline; check your connection and save again."); Save retries.
+`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. Save emits `submit` with the values. A save that fails (`error` set) keeps the drawer open with every field and a danger `Alert` at the top of `PanelBody` holding that message ("Rule not saved. You are offline; check your connection and save again."); Save retries.
+
+## Data
+
+The block takes the rule it edits through props and emits the values on Save; it fetches nothing and saves nothing. `RuleBuilderRule`, `RuleBuilderCondition`, `RuleBuilderBehavior` and `RuleBuilderProps` are exported from `rule-builder.vue`, and `sample.ts` holds the sample rule the Composed state edits.
+
+| Prop          | Type                      | What it does                                                                                                |
+| ------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `rule`        | `RuleBuilderRule \| null` | The rule to edit: the drawer becomes Edit Rule with the phase locked. Left out, the drawer adds a new rule. |
+| `loading`     | `boolean`                 | The save is in flight: the form locks and Save spins. When it turns off with no `error`, the drawer closes. |
+| `error`       | `string`                  | Why the save failed, in the danger `Alert` at the top of the drawer; the form is kept so Save retries.      |
+| `defaultOpen` | `boolean`                 | The drawer starts open.                                                                                     |
+
+| Event    | Payload           | When                                                                      |
+| -------- | ----------------- | ------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Save passed validation; `values` is the whole rule, without internal ids. |
+
+To go live, render the block from a page that owns the save request:
+
+```vue
+<script setup lang="ts">
+  import RuleBuilder, { type RuleBuilderRule } from './rule-builder.vue'
+
+  const { rule } = useRule()
+  const { pending, error, run } = useSaveRule()
+  const save = (_event: Event, values: RuleBuilderRule) => run(values)
+</script>
+
+<template>
+  <RuleBuilder
+    :rule="rule"
+    :loading="pending"
+    :error="error ? 'Rule not saved. Check your connection and save again.' : ''"
+    @submit="save"
+  />
+</template>
+```
+
+With no `loading` set during the `submit` handler the block treats the save as done at once and closes the drawer.
 
 ## Do
 
@@ -83,8 +121,8 @@ A flush `Card` with an `Item.List` holding one `SettingsRow` titled Active with 
 
 ## States
 
-- Default: Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
-- Composed: Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
+- Default: `rule` left out; Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
+- Composed: `rule` set to the sample; Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
 - In a list: `view/rule-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add Rule) and writes the saved rule back to its row.
 
 ## Related

@@ -51,7 +51,67 @@ A medium `ConfirmDialog` titled `Truncate <table>`, following `edit/delete-dialo
 
 ### Outcome toasts — through `toast`
 
-Raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create Table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. A request that never reached the database is a danger toast with Retry that keeps the form. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+Raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create Table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. The toasts show when `loading` turns off with no `error`. A failed Add column, Insert row, Change type or Truncate is a danger toast with the `error` text and Retry that keeps the form; a refused Create Table is the General `Alert` and the Name field error. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its tables through props and emits every change; it runs no SQL and fakes no request. `SchemaEditorTable`, `SchemaEditorProps` and the payload types are exported from `schema-editor.vue`, and `sample.ts` holds the sample database the block renders when `tables` is left out.
+
+| Prop                 | Type                              | What it does                                                                                                                                               |
+| -------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tables`             | `SchemaEditorTable[]`             | The database's tables; the selected one fills the definition table, every one feeds the foreign key selects.                                               |
+| `database`           | `string`                          | The database name the drawers and messages name.                                                                                                           |
+| `loading`            | `boolean`                         | A change is in flight: the open drawer or dialog locks and its submit spins. When it turns off with no `error`, the change is applied and its toast shows. |
+| `error`              | `string`                          | Why the change failed: on the Name field and in an `Alert` for Create Table, in a danger toast with Retry for the others.                                  |
+| `v-model:dialog`     | `SchemaEditorDialog`              | The open drawer or dialog (`create`, `column`, `row`, `alter`, `truncate` or `none`); defaults to `create`.                                                |
+| `v-model:table`      | `string`                          | The selected table's name; empty picks the first table.                                                                                                    |
+| `defaultDraft`       | `{ name?, relations? }`           | The Create Table name and foreign keys the drawer opens with.                                                                                              |
+| `defaultCsv`         | `SchemaEditorCsv`                 | A CSV file the Create Table drawer opens with, already read.                                                                                               |
+| `defaultColumn`      | `Partial<SchemaEditorColumnForm>` | The Add column values the drawer opens with.                                                                                                               |
+| `defaultRow`         | `Record<string, string>`          | The Insert row values the drawer opens with.                                                                                                               |
+| `defaultAlterColumn` | `string`                          | The column the Change type dialog opens on.                                                                                                                |
+| `defaultSubmitted`   | `boolean`                         | The open drawer starts as if submitted, so its validation messages show.                                                                                   |
+
+| Event          | Payload                            | When                                                               |
+| -------------- | ---------------------------------- | ------------------------------------------------------------------ |
+| `create-table` | `(event, table)`                   | Create Table, valid: name, columns, foreign keys and the CSV rows. |
+| `add-column`   | `(event, { table, column })`       | Add column, valid.                                                 |
+| `insert-row`   | `(event, { table, values })`       | Insert row, valid; values keyed by column name.                    |
+| `change-type`  | `(event, { table, column, type })` | Change type in the dialog.                                         |
+| `truncate`     | `(event, table)`                   | Truncate table, once the typed name matches.                       |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+  import SchemaEditor, {
+    type SchemaEditorDialog,
+    type SchemaEditorNewTable
+  } from './schema-editor.vue'
+
+  const { data, refresh } = useTables('acme-store')
+  const { run, pending, error } = useSchemaChange()
+  const dialog = ref<SchemaEditorDialog>('none')
+
+  const create = (_event: Event, table: SchemaEditorNewTable) =>
+    run.createTable(table).then(refresh)
+</script>
+
+<template>
+  <SchemaEditor
+    v-model:dialog="dialog"
+    database="acme-store"
+    :tables="data ?? []"
+    :loading="pending"
+    :error="error?.message ?? ''"
+    @create-table="create"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -90,13 +150,13 @@ Raised through `toast` with one id, so each change replaces the last toast. Sche
 
 ## States
 
-- CreateTable: the Create Table drawer open on a new table, with the default id and created_at columns.
-- AddColumn: the Add column drawer with phone as varchar.
-- InsertRow: the Insert row drawer after a submit with email empty, showing the NOT NULL error.
-- ChangeType: the Change type dialog for email with the statements that will run.
-- TruncateTable: the Truncate customers dialog waiting for the typed name.
-- ImportCsv: Create Table with subscribers.csv read (six columns, six rows, a quoted comma) and one foreign key, customer_id to customers.id on delete cascade.
-- Error: Create Table refused by the server because customers already exists; Alert in General and the Name field invalid.
+- CreateTable: `dialog` left at `create`: the Create Table drawer open on a new table, with the default id and created_at columns.
+- AddColumn: `dialog="column"` with `defaultColumn` phone as varchar, in the Add column drawer.
+- InsertRow: `dialog="row"` with `defaultRow` and `defaultSubmitted`: the Insert row drawer after a submit with email empty, showing the NOT NULL error.
+- ChangeType: `dialog="alter"` with `defaultAlterColumn` email: the Change type dialog with the statements that will run.
+- TruncateTable: `dialog="truncate"`: the Truncate customers dialog waiting for the typed name.
+- ImportCsv: `defaultCsv` and `defaultDraft.relations`: Create Table with subscribers.csv read (six columns, six rows, a quoted comma) and one foreign key, customer_id to customers.id on delete cascade.
+- Error: `error` with `defaultDraft.name` customers: Create Table refused by the server because customers already exists; Alert in General and the Name field invalid.
 
 ## Related
 

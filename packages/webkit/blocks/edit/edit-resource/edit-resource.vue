@@ -11,8 +11,43 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+
+  import { sampleProject } from './sample'
+
+  /** The saved project settings, and the values a save sends. */
+  export interface EditResourceProject {
+    /** The project name. */
+    name: string
+    /** Whether the project serves traffic. */
+    active: boolean
+    /** Which modules are on, by module key. */
+    modules: Record<string, boolean>
+  }
+
+  export interface EditResourceProps {
+    /** The saved settings; the form opens on them and Discard returns to them. Left out, the sample renders. */
+    resource?: EditResourceProject
+    /** The save is in flight: the fieldset and Discard lock and Save spins. */
+    loading?: boolean
+    /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<EditResourceProps>(), {
+    resource: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: EditResourceProject]
+    discard: [event: MouseEvent]
+  }>()
+
+  const activeTab = defineModel<string>('tab', { default: 'main-settings' })
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
@@ -24,8 +59,6 @@
     { value: 'rules', label: 'Rules' },
     { value: 'main-settings', label: 'Settings' }
   ]
-
-  const activeTab = ref('main-settings')
 
   const defaultModules = [
     {
@@ -66,30 +99,22 @@
     }
   ]
 
-  type ResourceRecord = {
-    name: string
-    active: boolean
-    modules: Record<string, boolean>
-  }
-
-  const record: ResourceRecord = {
-    name: 'web-app',
-    active: true,
-    modules: {
-      compression: true,
-      caching: true,
-      device_detection: false,
-      custom_code: true,
-      image_optimization: false,
-      load_balancing: false,
-      web_socket_proxy: false
-    }
-  }
-
-  const form = reactive(structuredClone(record))
-  const saving = ref(false)
-  const baseline = ref(JSON.stringify(record))
+  const copyOf = (project: EditResourceProject) =>
+    JSON.parse(JSON.stringify(project)) as EditResourceProject
+  const record = computed<EditResourceProject>(() => props.resource ?? sampleProject)
+  const form = reactive<EditResourceProject>(copyOf(record.value))
+  const saving = computed(() => props.loading)
+  const baseline = ref(JSON.stringify(record.value))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+  const SAVE_TOAST = 'resource-save'
+
+  watch(
+    () => JSON.stringify(record.value),
+    (next) => {
+      Object.assign(form, copyOf(record.value))
+      baseline.value = next
+    }
+  )
 
   const nameError = ref(false)
   watch(
@@ -99,20 +124,47 @@
     }
   )
 
-  const save = () => {
+  const save = async (event: Event) => {
+    if (saving.value) return
     if (!form.name.trim()) {
       nameError.value = true
       nextTick(() => document.getElementById('resource-name')?.focus())
       return
     }
-    saving.value = true
-    setTimeout(() => {
-      baseline.value = JSON.stringify(form)
-      saving.value = false
-    }, 900)
+    toast.dismiss(SAVE_TOAST)
+    emit('submit', event, copyOf(form))
+    await nextTick()
+    if (!props.loading && !props.error) baseline.value = JSON.stringify(form)
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value) as ResourceRecord)
+  const showFailure = () => {
+    toast.error("The project settings weren't saved.", {
+      id: SAVE_TOAST,
+      description: props.error,
+      action: { label: 'Retry', onClick: (event: MouseEvent) => save(event) }
+    })
+  }
+
+  onMounted(() => {
+    if (props.error) showFailure()
+  })
+
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (!before || now) return
+      if (props.error) {
+        showFailure()
+        return
+      }
+      baseline.value = JSON.stringify(form)
+    }
+  )
+
+  const discard = (event: MouseEvent) => {
+    Object.assign(form, JSON.parse(baseline.value) as EditResourceProject)
+    emit('discard', event)
+  }
 </script>
 
 <template>

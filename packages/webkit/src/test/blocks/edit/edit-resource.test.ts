@@ -116,3 +116,44 @@ describe('edit-resource#Protocols', () => {
     await expectNoA11yViolations(document.body)
   })
 })
+
+describe('edit-resource data contract', () => {
+  const given = {
+    name: 'acme-store',
+    active: false,
+    modules: {
+      compression: false,
+      caching: true,
+      device_detection: false,
+      custom_code: false,
+      image_optimization: true,
+      load_balancing: false,
+      web_socket_proxy: false
+    }
+  }
+
+  it('opens on the resource it is given instead of the sample', () => {
+    render(EditResource, { props: { resource: given } })
+    expect((document.getElementById('resource-name') as HTMLInputElement).value).toBe('acme-store')
+  })
+
+  it('emits submit with the edited values and discard', async () => {
+    const { emitted } = render(EditResource, { props: { resource: given, loading: false } })
+    const name = document.getElementById('resource-name') as HTMLInputElement
+    await fireEvent.update(name, 'acme-shop')
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeTruthy())
+    await fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+    const [[event, values]] = emitted().submit as [[Event, typeof given]]
+    expect(event).toBeInstanceOf(Event)
+    expect(values).toEqual({ ...given, name: 'acme-shop' })
+  })
+
+  it('raises the error toast with Retry when the save ends with an error', async () => {
+    const { rerender } = render(EditResource, { props: { resource: given, loading: true } })
+    await rerender({ resource: given, loading: false, error: 'Check your connection.' })
+    await waitFor(
+      () => expect(document.body.textContent).toContain("The project settings weren't saved."),
+      wait
+    )
+  })
+})

@@ -9,7 +9,9 @@
   import { toast } from '@aziontech/webkit/toast'
   import { computed, onScopeDispose, ref, useId, watch } from 'vue'
 
-  const resource = { name: 'resource-01' }
+  import { sampleResourceName } from '../sample'
+
+  const resource = { name: sampleResourceName }
 
   const open = ref(false)
   const confirmation = ref('')
@@ -42,7 +44,7 @@
   <div class="layout-boundary flex min-h-0 flex-1 flex-col gap-(--layout-group-gap)">
     <PageHeader
       title="Settings"
-      description="General settings of resource-01."
+      :description="`General settings of ${resource.name}.`"
       size="small"
     />
 

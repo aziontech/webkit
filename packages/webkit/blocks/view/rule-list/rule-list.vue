@@ -23,39 +23,93 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  const SUBJECT: string = 'application'
-  const PAGE_DESCRIPTION =
-    'Rules run top to bottom within each phase, so their order is their behavior. Turn a rule off to skip it without losing its place.'
-  const PHASES = [
-    { value: 'request', label: 'Request' },
-    { value: 'response', label: 'Response' }
-  ] as const
+  import { sampleApplicationRules, sampleFirewallRules } from './sample'
 
-  type Phase = (typeof PHASES)[number]['value']
-  type Control = 'up' | 'down' | 'position'
+  /** What runs the rules: an application has Request and Response phases, a firewall only Request. */
+  export type RuleListSubject = 'application' | 'firewall'
+  /** The phase a rule runs in. */
+  export type RuleListPhase = 'request' | 'response'
 
-  interface Rule {
+  /** One rule, in the order it runs within its phase. */
+  export interface RuleListRule {
+    /** Stable key. */
     id: string
+    /** Display name; it opens the rule. */
     name: string
+    /** What the rule does, in one line. */
     description: string
-    phase: Phase
+    /** The phase it runs in. */
+    phase: RuleListPhase
+    /** Who changed it last. */
     author: string
+    /** When it changed last, as shown. */
     modified: string
+    /** Whether it runs; an inactive rule keeps its place. */
     active: boolean
+    /** Pinned first in its phase: it cannot move or turn off. */
     locked: boolean
   }
 
-  interface RuleOptions {
+  /** An unsaved change the list opens with. */
+  export interface RuleListEdit {
+    /** The rule's phase. */
+    phase: RuleListPhase
+    /** The rule's id. */
+    id: string
+    /** The zero-based position it moves to. */
+    to?: number
+    /** The status it switches to. */
     active?: boolean
-    locked?: boolean
   }
 
-  interface RuleEdit {
-    phase: Phase
-    id: string
-    to?: number
-    active?: boolean
+  export interface RuleListProps {
+    /** What runs the rules; it sets the phases and the copy. */
+    subject?: RuleListSubject
+    /** The saved rules of every phase, each phase in run order. Pass an empty list for none. Left out, the sample renders. */
+    rules?: RuleListRule[]
+    /** The rules are loading: each phase shows skeleton rows and the search and Add Rule disable. */
+    loading?: boolean
+    /** Why the rules could not load; a danger alert with Retry takes the phases' place. */
+    error?: string
+    /** Unsaved moves and switches the list opens with, so the save bar shows. */
+    defaultEdits?: RuleListEdit[]
+    /** The search the list opens with. */
+    defaultSearch?: string
+    /** Opens the Review changes dialog when the block opens. */
+    defaultReviewOpen?: boolean
+    /** The save is in flight: the dialog locks and Save spins. When it turns off with no saveError, the order is saved. */
+    saving?: boolean
+    /** Why the save failed, shown at the top of the review dialog; Save reads Save again. */
+    saveError?: string
   }
+
+  const props = withDefaults(defineProps<RuleListProps>(), {
+    subject: 'application',
+    rules: undefined,
+    loading: false,
+    error: '',
+    defaultEdits: () => [],
+    defaultSearch: '',
+    defaultReviewOpen: false,
+    saving: false,
+    saveError: ''
+  })
+
+  const emit = defineEmits<{
+    edit: [event: MouseEvent, rule: RuleListRule]
+    create: [event: MouseEvent, phase?: RuleListPhase]
+    retry: [event: MouseEvent]
+    save: [event: MouseEvent, rules: RuleListRule[]]
+  }>()
+
+  const ALL_PHASES: { value: RuleListPhase; label: string }[] = [
+    { value: 'request', label: 'Request' },
+    { value: 'response', label: 'Response' }
+  ]
+
+  type Phase = RuleListPhase
+  type Rule = RuleListRule
+  type Control = 'up' | 'down' | 'position'
 
   interface Snapshot {
     order: Record<string, string[]>
@@ -68,130 +122,70 @@
     text: string
   }
 
-  const emit = defineEmits<{ edit: [event: MouseEvent, rule: Rule] }>()
+  const SUBJECT = computed(() => props.subject)
+  const PAGE_DESCRIPTION = computed(() =>
+    props.subject === 'firewall'
+      ? 'Rules run top to bottom on every request this firewall sees, until one of them refuses it. Turn a rule off to skip it without losing its place.'
+      : 'Rules run top to bottom within each phase, so their order is their behavior. Turn a rule off to skip it without losing its place.'
+  )
+  const PHASES = computed(() =>
+    props.subject === 'firewall' ? ALL_PHASES.slice(0, 1) : ALL_PHASES
+  )
 
-  const rule = (
-    id: string,
-    name: string,
-    description: string,
-    phase: Phase,
-    author: string,
-    modified: string,
-    options: RuleOptions = {}
-  ): Rule => ({
-    id,
-    name,
-    description,
-    phase,
-    author,
-    modified,
-    active: options.active ?? true,
-    locked: options.locked ?? false
-  })
+  const source = computed<Rule[]>(
+    () =>
+      props.rules ??
+      (props.loading || props.error
+        ? []
+        : props.subject === 'firewall'
+          ? sampleFirewallRules
+          : sampleApplicationRules)
+  )
+  const loadFailed = computed(() => props.error !== '')
 
-  const seed = (): Record<Phase, Rule[]> => ({
-    request: [
-      rule(
-        're-default',
-        'Default rule',
-        'Sends every request to the origin when no other rule matches first.',
-        'request',
-        'Maya Chen',
-        '3 months ago',
-        { locked: true }
-      ),
-      rule(
-        're-maintenance',
-        'Maintenance page',
-        'Serves the maintenance page while the maintenance header is set.',
-        'request',
-        'Leo Park',
-        '1 month ago',
-        { active: false }
-      ),
-      rule(
-        're-www',
-        'Redirect www',
-        'Sends the www host to the apex domain.',
-        'request',
-        'Emily Clark',
-        '12 days ago'
-      ),
-      rule(
-        're-gateway',
-        'API gateway',
-        'Sends API traffic to the gateway service, through the auth check.',
-        'request',
-        'Maya Chen',
-        '2 days ago'
-      ),
-      rule(
-        're-docs',
-        'Docs rewrite',
-        'Rewrites the docs path and caches it as a static asset.',
-        'request',
-        'Sam Okafor',
-        '3 weeks ago'
-      )
-    ],
-    response: [
-      rule(
-        're-cache-bypass',
-        'Cache bypass',
-        'Keeps API responses out of the cache.',
-        'response',
-        'Leo Park',
-        '5 days ago'
-      ),
-      rule(
-        're-security-headers',
-        'Security headers',
-        'Adds the security header set to successful responses.',
-        'response',
-        'Emily Clark',
-        '9 days ago'
-      ),
-      rule(
-        're-compress',
-        'Compress assets',
-        'Compresses script bundles on the way out.',
-        'response',
-        'Sam Okafor',
-        '7 weeks ago',
-        { active: false }
-      )
-    ]
-  })
-
-  const INITIAL_EDITS: RuleEdit[] = []
-  const INITIAL_SEARCH = ''
-  const INITIAL_LOADING = false
-  const REVIEW_ON_START = false
-  const FAILED_ON_START = false
-  const SAVE_FAILURES = 0
-
-  const rules = reactive(seed())
-  const phaseLabel = (phase: Phase) => PHASES.find((item) => item.value === phase)?.label ?? phase
+  const draft = reactive<Record<Phase, Rule[]>>({ request: [], response: [] })
+  const phaseLabel = (phase: Phase) =>
+    ALL_PHASES.find((item) => item.value === phase)?.label ?? phase
 
   const snapshot = (): Snapshot => ({
-    order: Object.fromEntries(PHASES.map(({ value }) => [value, rules[value].map((r) => r.id)])),
+    order: Object.fromEntries(
+      PHASES.value.map(({ value }) => [value, draft[value].map((r) => r.id)])
+    ),
     active: Object.fromEntries(
-      PHASES.flatMap(({ value }) => rules[value].map((r) => [r.id, r.active]))
+      PHASES.value.flatMap(({ value }) => draft[value].map((r) => [r.id, r.active]))
     )
   })
   const saved = ref(snapshot())
 
-  for (const edit of INITIAL_EDITS) {
-    const list = rules[edit.phase]
-    const from = list.findIndex((item) => item.id === edit.id)
-    if (from < 0) continue
-    if (edit.to !== undefined) list.splice(edit.to, 0, ...list.splice(from, 1))
-    if (edit.active !== undefined)
-      list[list.findIndex((item) => item.id === edit.id)].active = edit.active
+  const applyEdits = (edits: RuleListEdit[]) => {
+    for (const edit of edits) {
+      const list = draft[edit.phase]
+      const from = list.findIndex((item) => item.id === edit.id)
+      if (from < 0) continue
+      if (edit.to !== undefined) list.splice(edit.to, 0, ...list.splice(from, 1))
+      if (edit.active !== undefined)
+        list[list.findIndex((item) => item.id === edit.id)].active = edit.active
+    }
   }
 
-  const loading = ref(INITIAL_LOADING)
-  const search = ref(INITIAL_SEARCH)
+  let seeded = false
+  watch(
+    source,
+    (next) => {
+      for (const { value } of ALL_PHASES) {
+        draft[value] = next.filter((item) => item.phase === value).map((item) => ({ ...item }))
+      }
+      saved.value = snapshot()
+      if (!seeded && next.length) {
+        seeded = true
+        applyEdits(props.defaultEdits)
+      }
+    },
+    { immediate: true }
+  )
+
+  const loading = computed(() => props.loading)
+  const search = ref(props.defaultSearch)
   const searching = computed(() => search.value.trim().length > 0)
   const matches = (item: Rule) => {
     const term = search.value.trim().toLowerCase()
@@ -201,16 +195,18 @@
     )
   }
 
-  const openPhases = ref<string[]>(PHASES.map((item) => item.value))
+  const openPhases = ref<string[]>(PHASES.value.map((item) => item.value))
   watch(search, () => {
     if (!searching.value) return
-    const hits = PHASES.filter(({ value }) => rules[value].some(matches)).map(({ value }) => value)
+    const hits = PHASES.value
+      .filter(({ value }) => draft[value].some(matches))
+      .map(({ value }) => value)
     openPhases.value = [...new Set([...openPhases.value, ...hits])]
   })
 
   const groups = computed(() =>
-    PHASES.map((phase) => {
-      const list = rules[phase.value]
+    PHASES.value.map((phase) => {
+      const list = draft[phase.value]
       return {
         ...phase,
         total: list.length,
@@ -219,19 +215,19 @@
     })
   )
 
-  const saving = ref(false)
+  const saving = computed(() => props.saving)
   const pinned = (phase: Phase) => {
-    const list = rules[phase]
+    const list = draft[phase]
     let count = 0
     while (count < list.length && list[count].locked) count += 1
     return count
   }
   const canReorder = (phase: Phase) =>
-    !searching.value && !saving.value && rules[phase].length - pinned(phase) > 1
+    !searching.value && !saving.value && draft[phase].length - pinned(phase) > 1
   const canMove = (phase: Phase, index: number, direction: number) => {
     if (!canReorder(phase) || index < pinned(phase)) return false
     const to = index + direction
-    return to >= pinned(phase) && to < rules[phase].length
+    return to >= pinned(phase) && to < draft[phase].length
   }
   const lockReason = (phase: Phase, item: Rule) => {
     if (item.locked) return 'The default rule runs first and stays first.'
@@ -263,7 +259,7 @@
     })
 
   const moveTo = (phase: Phase, from: number, to: number, control?: Control) => {
-    const list = rules[phase]
+    const list = draft[phase]
     const head = pinned(phase)
     const target = Math.min(Math.max(to, head), list.length - 1)
     if (from < head || target === from || !canReorder(phase)) return
@@ -279,14 +275,14 @@
     moveTo(phase, index, index + direction, control)
   }
 
-  const position = (phase: Phase, item: Rule) => rules[phase].indexOf(item)
-  const positionDraft = ref<{ id: string; value: string } | null>(null)
+  const position = (phase: Phase, item: Rule) => draft[phase].indexOf(item)
+  const positionDraft = ref<{ value: string; id: string } | null>(null)
   const positionValue = (phase: Phase, item: Rule) =>
     positionDraft.value?.id === item.id
       ? positionDraft.value.value
       : String(position(phase, item) + 1)
   const onPositionInput = (item: Rule, value: string) => {
-    positionDraft.value = { id: item.id, value }
+    positionDraft.value = { value, id: item.id }
   }
   const commitPosition = (phase: Phase, item: Rule, refocus: boolean) => {
     const draft = positionDraft.value
@@ -301,7 +297,7 @@
   }
   const reorderRows = (phase: Phase, next: Rule[]) => {
     if (searching.value) return
-    rules[phase] = next
+    draft[phase] = next
   }
   const reorderable = (phase: Phase) => (row: Rule) => !lockReason(phase, row)
 
@@ -319,57 +315,72 @@
 
   const dirty = computed(() => JSON.stringify(snapshot()) !== JSON.stringify(saved.value))
   const changes = computed(() =>
-    PHASES.map((phase) => ({
-      ...phase,
-      items: rules[phase.value].flatMap((item, index) => {
-        const lines: ChangeLine[] = []
-        const before = saved.value.order[phase.value].indexOf(item.id)
-        if (before !== index) {
-          lines.push({
-            key: `${item.id}-order`,
-            name: item.name,
-            text: `moves from position ${before + 1} to ${index + 1}`
-          })
-        }
-        if (saved.value.active[item.id] !== item.active) {
-          lines.push({
-            key: `${item.id}-status`,
-            name: item.name,
-            text: item.active ? 'is turned on' : 'is turned off'
-          })
-        }
-        return lines
-      })
-    })).filter((phase) => phase.items.length)
+    PHASES.value
+      .map((phase) => ({
+        ...phase,
+        items: draft[phase.value].flatMap((item, index) => {
+          const lines: ChangeLine[] = []
+          const before = saved.value.order[phase.value].indexOf(item.id)
+          if (before !== index) {
+            lines.push({
+              key: `${item.id}-order`,
+              name: item.name,
+              text: `moves from position ${before + 1} to ${index + 1}`
+            })
+          }
+          if (saved.value.active[item.id] !== item.active) {
+            lines.push({
+              key: `${item.id}-status`,
+              name: item.name,
+              text: item.active ? 'is turned on' : 'is turned off'
+            })
+          }
+          return lines
+        })
+      }))
+      .filter((phase) => phase.items.length)
   )
   const changeCount = computed(() =>
     changes.value.reduce((sum, phase) => sum + phase.items.length, 0)
   )
 
   const discard = () => {
-    for (const { value } of PHASES) {
-      const byId = Object.fromEntries(rules[value].map((item) => [item.id, item]))
-      rules[value] = saved.value.order[value].map((id) => byId[id]).filter(Boolean)
-      for (const item of rules[value]) item.active = saved.value.active[item.id]
+    for (const { value } of PHASES.value) {
+      const byId = Object.fromEntries(draft[value].map((item) => [item.id, item]))
+      draft[value] = saved.value.order[value].map((id) => byId[id]).filter(Boolean)
+      for (const item of draft[value]) item.active = saved.value.active[item.id]
     }
     announce('Changes discarded. The rules are back in their saved order.')
   }
 
-  const reviewOpen = ref(REVIEW_ON_START)
-  const saveFailed = ref(FAILED_ON_START)
-  let failuresLeft = SAVE_FAILURES
+  const reviewOpen = ref(props.defaultReviewOpen)
+  const saveFailed = ref(props.saveError !== '')
   const openReview = () => {
     saveFailed.value = false
     reviewOpen.value = true
   }
-  const save = () => {
+  const save = (event: MouseEvent) => {
     if (saving.value) return
-    saving.value = true
     saveFailed.value = false
-    setTimeout(() => {
-      saving.value = false
-      if (failuresLeft > 0) {
-        failuresLeft -= 1
+    emit(
+      'save',
+      event,
+      PHASES.value.flatMap(({ value }) => draft[value].map((item) => ({ ...item })))
+    )
+  }
+
+  watch(
+    () => props.saveError,
+    (next) => {
+      saveFailed.value = next !== ''
+    }
+  )
+
+  watch(
+    () => props.saving,
+    (now, before) => {
+      if (!before || now) return
+      if (props.saveError) {
         saveFailed.value = true
         return
       }
@@ -377,10 +388,10 @@
       reviewOpen.value = false
       setTimeout(() => listEl.value?.focus(), 0)
       toast.success('Rule order saved.', {
-        description: `The ${SUBJECT} runs its rules in the new order.`
+        description: `The ${SUBJECT.value} runs its rules in the new order.`
       })
-    }, 900)
-  }
+    }
+  )
 </script>
 
 <template>
@@ -405,7 +416,8 @@
             icon="ai ai-plus"
             variant="outline"
             size="medium"
-            :disabled="loading"
+            :disabled="loading || loadFailed"
+            @click="(event: MouseEvent) => emit('create', event)"
           />
         </template>
       </PageHeader>
@@ -424,7 +436,7 @@
               placeholder="Search rules"
               aria-label="Search rules"
               class="w-full"
-              :disabled="loading"
+              :disabled="loading || loadFailed"
             >
               <template #leading>
                 <i
@@ -437,12 +449,24 @@
         </div>
 
         <Alert
-          v-if="searching"
+          v-if="loadFailed"
+          key="load-error"
+          severity="danger"
+          :label="error"
+          action-label="Retry"
+          @action="(event: MouseEvent) => emit('retry', event)"
+        />
+        <Alert
+          v-else-if="searching"
+          key="searching"
           severity="info"
           label="Reordering is off while a search narrows the list. Clear the search to change the order rules run in."
         />
 
-        <Card :padded="false">
+        <Card
+          v-if="!loadFailed"
+          :padded="false"
+        >
           <template #default>
             <Accordion
               v-model="openPhases"
@@ -629,6 +653,7 @@
                           icon="ai ai-plus"
                           variant="outline"
                           size="medium"
+                          @click="(event: MouseEvent) => emit('create', event, group.value)"
                         />
                       </template>
                     </EmptyState>
@@ -688,7 +713,7 @@
             <Alert
               v-if="saveFailed"
               severity="danger"
-              label="The new order wasn't saved. The rules still run in the saved order; save again to apply it."
+              :label="saveError"
             />
             <DialogDescription>
               Rules run top to bottom within each phase. Saving applies this order to every

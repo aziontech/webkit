@@ -37,7 +37,7 @@ A setting the user cannot change here (a paid module, a module that is always on
 
 ### E. Save bar — `SaveBar`, `Button` (required)
 
-Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record.
+Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record. In ProjectSettings a failed save (`error`) keeps the edits and raises a `toast` error, "The project settings weren't saved.", with Retry.
 
 ### F. Conditional fields — `SettingsRow`, `Input`, `FieldError` (optional)
 
@@ -62,6 +62,46 @@ When the record was saved by someone else after the form opened, a warning `Aler
 ### K. Danger zone — `SettingsSection`, `Card`, `SettingsRow`, `Button`, `Input` (optional)
 
 The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingsRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link (a plain anchor with the `text-link` class, since it sits inside the sentence), then "To confirm, type" the name in a `text-label-code-sm` chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `edit/delete-dialog`.
+
+## Data
+
+ProjectSettings takes the saved settings through props and emits the values on Save; it fetches nothing and saves nothing. `EditResourceProject` and `EditResourceProps` are exported from `edit-resource.vue`, and `sample.ts` holds the sample project the block renders when `resource` is left out. The other states are separate screens with their own fields.
+
+| Prop          | Type                  | What it does                                                                                                               |
+| ------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `resource`    | `EditResourceProject` | The saved settings; the form opens on them and Discard returns to them. A new value resets the form.                       |
+| `loading`     | `boolean`             | The save is in flight: the fieldset and Discard disable and Save spins. When it turns off with no `error`, the bar leaves. |
+| `error`       | `string`              | Why the save failed, the description of the error toast with Retry; the edits stay.                                        |
+| `v-model:tab` | `string`              | The active page tab, `main-settings` by default; bind it to the route.                                                     |
+
+| Event     | Payload           | When                                                    |
+| --------- | ----------------- | ------------------------------------------------------- |
+| `submit`  | `(event, values)` | Save with a valid Name; `values` is the whole settings. |
+| `discard` | `(event)`         | Discard; the form is already back on the saved values.  |
+
+To go live, render the block from a page that owns the request:
+
+```vue
+<script setup lang="ts">
+  import EditResource, { type EditResourceProject } from './edit-resource.vue'
+
+  const { data } = useProject()
+  const { pending, error, run } = useSaveProject()
+  const save = (_event: Event, values: EditResourceProject) => run(values)
+</script>
+
+<template>
+  <EditResource
+    v-if="data"
+    :resource="data"
+    :loading="pending"
+    :error="error ? 'Check your connection and save again.' : ''"
+    @submit="save"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -124,7 +164,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 
 ## States
 
-- ProjectSettings: a project's Settings tab with General, Modules and Subscription modules; the save bar is hidden until an edit.
+- ProjectSettings: a project's Settings tab with General, Modules and Subscription modules from `resource` (the sample when left out); the save bar is hidden until an edit. Save emits `submit`; `loading` locks the fieldset and spins Save, and `error` set when it ends raises the error toast with Retry.
 - DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced settings and the Danger zone, whose Delete resource opens the type-to-confirm `ConfirmDialog` of `edit/delete-dialog`.
 - PolicySettings: a security policy's Settings tab with General, Modules with one locked on, Debug rules and Status.
 - WafSettings: a WAF rule set's Main Settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.

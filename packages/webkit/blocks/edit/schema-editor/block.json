@@ -37,6 +37,7 @@
     "name": "CreateTable",
     "file": "schema-editor.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "AddColumn",

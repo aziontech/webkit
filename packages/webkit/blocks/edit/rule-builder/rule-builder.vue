@@ -33,18 +33,64 @@
     phases: string[]
     argument: BehaviorArgument | null
   }
-  type Condition = { id: string; variable: string; operator: string; argument: string }
-  type RuleBehavior = { id: string; type: string; [field: string]: string }
-  type RuleSeed = {
-    name: string
-    description: string
-    phase: string
-    criteria: {
-      conditions: { join: string | null; variable: string; operator: string; argument: string }[]
-    }[]
-    behaviors: { type: string; [field: string]: string }[]
-    status: string
+  type Condition = { variable: string; id: string; operator: string; argument: string }
+  type RuleBehavior = { type: string; id: string; [field: string]: string }
+
+  /** One condition: a variable compared with an argument. */
+  export interface RuleBuilderCondition {
+    /** The variable to compare, such as the request URI. */
+    variable: string
+    /** The comparison, such as is-equal or matches. */
+    operator: string
+    /** The value compared with; empty for exists and does-not-exist. */
+    argument: string
   }
+
+  /** One behavior: its type and the argument fields that type takes. */
+  export interface RuleBuilderBehavior {
+    /** The behavior, such as rewrite-request or set-cache-policy. */
+    type: string
+    /** The argument fields, such as target or cacheId. */
+    [field: string]: string
+  }
+
+  /** A rule as the drawer opens on it, and the values Save sends. */
+  export interface RuleBuilderRule {
+    /** Names the rule in the list. */
+    name: string
+    /** A note for whoever reads the rule next. */
+    description: string
+    /** request or response. */
+    phase: string
+    /** Groups of conditions: every condition in a group must match, any one group is enough. */
+    criteria: RuleBuilderCondition[][]
+    /** What the rule does, top to bottom. */
+    behaviors: RuleBuilderBehavior[]
+    /** Whether the rule runs. */
+    active: boolean
+  }
+
+  export interface RuleBuilderProps {
+    /** The rule to edit: the drawer becomes Edit Rule with the phase locked. Left out, it adds a new rule. */
+    rule?: RuleBuilderRule | null
+    /** The save is in flight: the form locks and Save spins; when it ends with no error the drawer closes. */
+    loading?: boolean
+    /** Why the save failed, shown in the danger alert at the top of the drawer; the form is kept. */
+    error?: string
+    /** The drawer starts open. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<RuleBuilderProps>(), {
+    rule: null,
+    loading: false,
+    error: '',
+    defaultOpen: false
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: RuleBuilderRule]
+  }>()
   type RuleForm = {
     name: string
     description: string
@@ -54,9 +100,8 @@
     active: boolean
   }
 
-  const open = ref(false)
-  const editing = false
-  const rule = null
+  const open = ref(props.defaultOpen)
+  const editing = computed(() => props.rule !== null)
 
   const PHASES = [
     {
@@ -358,8 +403,8 @@
   let nextId = 0
   const uid = () => String((nextId += 1))
   const newCondition = (): Condition => ({
-    id: uid(),
     variable: '',
+    id: uid(),
     operator: 'is-equal',
     argument: ''
   })
@@ -368,7 +413,7 @@
     { key: 'operator', label: 'Operator' },
     { key: 'argument', label: 'Argument' }
   ]
-  const newBehavior = (): RuleBehavior => ({ id: uid(), type: 'deliver' })
+  const newBehavior = (): RuleBehavior => ({ type: 'deliver', id: uid() })
   const blankForm = (): RuleForm => ({
     name: '',
     description: '',
@@ -377,7 +422,7 @@
     behaviors: [newBehavior()],
     active: true
   })
-  const formFor = (seed: RuleSeed | null): RuleForm =>
+  const formFor = (seed: RuleBuilderRule | null): RuleForm =>
     !seed
       ? blankForm()
       : {
@@ -385,20 +430,27 @@
           description: seed.description,
           phase: seed.phase,
           criteria: seed.criteria.map((group) =>
-            group.conditions.map(({ variable, operator, argument }) => ({
-              id: uid(),
-              variable,
-              operator,
-              argument
-            }))
+            group.map((condition) => ({ ...condition, id: uid() }))
           ),
           behaviors: seed.behaviors.map((behavior) => ({ ...behavior, id: uid() })),
-          active: seed.status === 'Active'
+          active: seed.active
         }
+  const valuesOf = (): RuleBuilderRule => ({
+    name: form.name.trim(),
+    description: form.description,
+    phase: form.phase,
+    criteria: form.criteria.map((group) =>
+      group.map(({ variable, operator, argument }) => ({ variable, operator, argument }))
+    ),
+    behaviors: form.behaviors.map(({ id: _id, ...behavior }) => behavior),
+    active: form.active
+  })
 
   const form = reactive(blankForm())
   const submitted = ref(false)
-  const submitting = ref(false)
+  const submitting = computed(() => props.loading)
+  const pending = ref(false)
+  const saveError = ref('')
   const nameError = computed(() => submitted.value && !form.name.trim())
   const criteriaErrors = computed(() =>
     submitted.value
@@ -414,12 +466,15 @@
     open,
     (isOpen) => {
       if (!isOpen) return
-      Object.assign(form, formFor(rule))
+      Object.assign(form, formFor(props.rule))
       submitted.value = false
+      pending.value = false
       saveError.value = ''
     },
     { immediate: true }
   )
+
+  const title = computed(() => (editing.value ? 'Edit Rule' : 'Add Rule'))
 
   const behaviorsForPhase = computed(() =>
     behaviorsFor(form.phase).map(({ value, label }) => ({ value, label }))
@@ -446,7 +501,7 @@
 
   const setBehaviorType = (index: number, type: string) => {
     if (form.behaviors[index].type === type) return
-    form.behaviors[index] = { id: form.behaviors[index].id, type }
+    form.behaviors[index] = { type, id: form.behaviors[index].id }
   }
   const argumentMissing = (behavior: RuleBehavior, field: string) =>
     submitted.value && !String(behavior[field] ?? '').trim()
@@ -459,7 +514,7 @@
     (phase) => {
       form.behaviors.forEach((behavior, index) => {
         if (!behaviorAllowedIn(behavior.type, phase)) {
-          form.behaviors[index] = { id: behavior.id, type: 'deliver' }
+          form.behaviors[index] = { type: 'deliver', id: behavior.id }
           return
         }
         const argument = behaviorArgument(behavior.type)
@@ -484,12 +539,28 @@
     form.behaviors.length > 0 &&
     form.behaviors.every(behaviorFilled)
   const formEl = ref<HTMLFormElement | null>(null)
-  const saveError = ref('')
-  const saveRequest = () =>
-    new Promise<boolean>((resolve) => {
-      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
-    })
-  const submit = async () => {
+
+  watch(
+    () => props.error,
+    (message) => {
+      if (open.value) saveError.value = message
+    }
+  )
+
+  watch(
+    () => props.loading,
+    (now, was) => {
+      if (!was || now || !pending.value) return
+      pending.value = false
+      if (props.error) {
+        saveError.value = props.error
+        return
+      }
+      open.value = false
+    }
+  )
+
+  const submit = async (event: Event) => {
     submitted.value = true
     if (submitting.value) return
     if (!isValid()) {
@@ -502,12 +573,15 @@
       )
       return
     }
-    submitting.value = true
     saveError.value = ''
-    const saved = await saveRequest()
-    submitting.value = false
-    if (!saved) {
-      saveError.value = 'Rule not saved. You are offline; check your connection and save again.'
+    emit('submit', event, valuesOf())
+    await nextTick()
+    if (props.loading) {
+      pending.value = true
+      return
+    }
+    if (props.error) {
+      saveError.value = props.error
       return
     }
     open.value = false
@@ -521,7 +595,17 @@
     side="end"
   >
     <DrawerTrigger>
-      <div class="w-full md:w-fit">
+      <Button
+        v-if="editing"
+        label="Edit Rule"
+        icon="ai ai-pencil"
+        variant="outline"
+        size="medium"
+      />
+      <div
+        v-else
+        class="w-full md:w-fit"
+      >
         <Button
           label="Add Rule"
           icon="ai ai-plus"
@@ -535,13 +619,13 @@
       <form
         ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
-        aria-label="Add Rule"
+        :aria-label="title"
         novalidate
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>Add Rule</DrawerTitle>
+            <DrawerTitle>{{ title }}</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Handle the conditional execution of behaviors through logical operators.
             </p>
@@ -563,7 +647,7 @@
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
-            <legend class="sr-only">Add Rule</legend>
+            <legend class="sr-only">{{ title }}</legend>
             <SettingsSection
               title="General"
               hint="Names the rule in the list and in the deployment log."

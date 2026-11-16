@@ -75,6 +75,7 @@
     "name": "ProjectSettings",
     "file": "edit-resource.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "DeployableSettings",

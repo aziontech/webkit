@@ -2,7 +2,10 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import RuleBuilder from '../../../../blocks/edit/rule-builder/rule-builder.vue'
+import RuleBuilder, {
+  type RuleBuilderRule
+} from '../../../../blocks/edit/rule-builder/rule-builder.vue'
+import { sampleRule } from '../../../../blocks/edit/rule-builder/sample'
 import RuleBuilderComposed from '../../../../blocks/edit/rule-builder/variants/composed.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -17,11 +20,7 @@ const buttonIn = (root: Document | HTMLElement, text: string) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement
 
-const restoreOnline = () =>
-  Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: true })
-
 afterEach(() => {
-  restoreOnline()
   document.documentElement.style.overflow = ''
   document.body.style.overflow = ''
 })
@@ -60,8 +59,7 @@ describe('rule-builder behaviors', () => {
   })
 
   it('keeps the drawer open with a danger alert when the save fails', async () => {
-    Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: false })
-    render(RuleBuilderComposed)
+    render(RuleBuilder, { props: { rule: sampleRule, error: 'Rule not saved. You are offline.' } })
     const panel = await openRuleDrawer('Edit Rule')
     await fireEvent.click(buttonIn(panel, 'Save'))
     await waitFor(
@@ -72,5 +70,44 @@ describe('rule-builder behaviors', () => {
       wait
     )
     expect(dialog()).not.toBeNull()
+  })
+})
+
+describe('rule-builder data contract', () => {
+  const given: RuleBuilderRule = {
+    name: 'Block admin',
+    description: '',
+    phase: 'request',
+    criteria: [[{ variable: '${uri}', operator: 'starts-with', argument: '/admin' }]],
+    behaviors: [{ type: 'deny' }],
+    active: false
+  }
+
+  it('opens on the rule it is given', async () => {
+    render(RuleBuilder, { props: { rule: given, defaultOpen: true } })
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    const panel = dialog() as HTMLElement
+    expect((panel.querySelector('#rule-name') as HTMLInputElement).value).toBe('Block admin')
+    expect(panel.textContent).toContain('Edit Rule')
+  })
+
+  it('emits submit with the values and closes once loading ends', async () => {
+    const { emitted, rerender } = render(RuleBuilder, {
+      props: {
+        rule: given,
+        onSubmit: () => {
+          void rerender({ rule: given, loading: true })
+        }
+      }
+    })
+    const panel = await openRuleDrawer('Edit Rule')
+    await fireEvent.click(buttonIn(panel, 'Save'))
+    await waitFor(() => expect(emitted().submit).toHaveLength(1))
+    const [[event, values]] = emitted().submit as [[Event, RuleBuilderRule]]
+    expect(event).toBeInstanceOf(Event)
+    expect(values).toEqual(given)
+    expect(dialog()).not.toBeNull()
+    await rerender({ rule: given, loading: false })
+    await waitFor(() => expect(dialog()).toBeNull(), wait)
   })
 })

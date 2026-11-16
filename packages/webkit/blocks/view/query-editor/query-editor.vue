@@ -24,137 +24,160 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onMounted, ref, watch } from 'vue'
 
-  interface DatabaseColumn {
+  import { sampleHistory, sampleSql, sampleTables } from './sample'
+
+  /** Which tab the page shows. */
+  export type QueryEditorTab = 'tables' | 'editor'
+
+  /** Which view of the selected table the pane shows. */
+  export type QueryEditorTableView = 'data' | 'definition'
+
+  /** One column of a table's definition. */
+  export interface QueryEditorColumn {
+    /** Stable key. */
     id: string
+    /** Column name, also the row field it reads. */
     name: string
+    /** SQL type, shown beside the name. */
     type: string
+    /** Part of the primary key; the header shows a key. */
     primaryKey: boolean
+    /** The column rejects NULL. */
     notNull: boolean
   }
 
-  interface DatabaseRow {
+  /** One stored row: the stable key and one value per column name. */
+  export interface QueryEditorRow {
+    /** Stable row key. */
     __k: string
     [column: string]: string | number | null
   }
 
-  interface DatabaseTable {
+  /** One table of the database, with its rows. */
+  export interface QueryEditorTable {
+    /** Stable key. */
     id: string
+    /** Table name, listed in the side panel. */
     name: string
-    columns: DatabaseColumn[]
-    rows: DatabaseRow[]
+    /** The table definition. */
+    columns: QueryEditorColumn[]
+    /** The rows shown in the Data view. */
+    rows: QueryEditorRow[]
   }
 
-  interface ResultRow {
+  /** One row of a query result: the stable key and one value per result column. */
+  export interface QueryEditorResultRow {
+    /** Stable row key. */
     __k: number
     [column: string]: string | number | null
   }
 
-  type QueryResult =
-    | { type: 'rows'; columns: string[]; rows: ResultRow[] }
+  /** What the last query returned: rows, a failure on a line, or a message. */
+  export type QueryEditorResult =
+    | { type: 'rows'; columns: string[]; rows: QueryEditorResultRow[] }
     | { type: 'error'; line: number; text: string }
     | { type: 'message'; text: string }
 
-  interface HistoryEntry {
+  /** One past query in the history panel. */
+  export interface QueryEditorHistoryEntry {
+    /** Stable key. */
     id: string
+    /** The statement that ran. */
     sql: string
   }
 
+  export interface QueryEditorProps {
+    /** The database tables with their rows. Left out, the sample renders; pass an empty list for a database with none. */
+    tables?: QueryEditorTable[]
+    /** Past queries, newest first. Left out, the sample renders. */
+    history?: QueryEditorHistoryEntry[]
+    /** What the last query returned; left out, Results is ready to execute. */
+    result?: QueryEditorResult | null
+    /** The tables and the selected table's rows are loading: skeleton lines hold the side panel and the rows table shows its loading state. */
+    loading?: boolean
+    /** A query is in flight: Run query spins, the editor locks and Results shows skeleton lines. */
+    running?: boolean
+    /** Why the selected table's rows could not load; a danger alert with Retry replaces the rows. */
+    error?: string
+    /** The view of the selected table the pane opens on. */
+    defaultTableView?: QueryEditorTableView
+    /** Rows selected when the page opens, by row key. */
+    defaultRowSelection?: Record<string, boolean>
+    /** The SQL quick templates drawer starts open. */
+    defaultTemplatesOpen?: boolean
+  }
+
   interface QueryTemplate {
-    id: string
     title: string
     description: string
     icon: string
     sql: string
   }
 
+  const props = withDefaults(defineProps<QueryEditorProps>(), {
+    tables: undefined,
+    history: undefined,
+    result: undefined,
+    loading: false,
+    running: false,
+    error: '',
+    defaultTableView: 'data',
+    defaultRowSelection: () => ({}),
+    defaultTemplatesOpen: false
+  })
+
+  const emit = defineEmits<{
+    run: [event: Event, sql: string]
+    'refresh-tables': [event: MouseEvent]
+    'create-table': [event: MouseEvent]
+    'delete-table': [event: Event, table: QueryEditorTable]
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'insert-row': [event: MouseEvent, table: QueryEditorTable]
+    'import-csv': [event: MouseEvent, table: QueryEditorTable]
+    'add-column': [event: MouseEvent, table: QueryEditorTable]
+    'delete-rows': [event: Event, payload: { table: QueryEditorTable; rows: QueryEditorRow[] }]
+    'delete-query': [event: Event, entry: QueryEditorHistoryEntry]
+    'download-results': [event: MouseEvent, result: QueryEditorResult]
+  }>()
+
+  const activeTab = defineModel<QueryEditorTab>('tab', { default: 'tables' })
+  const selectedTableId = defineModel<string | null>('table', { default: null })
+  const editorSql = defineModel<string>('sql', { default: sampleSql })
+
   const tabs = [
     { value: 'tables', label: 'Tables' },
     { value: 'editor', label: 'Editor' }
   ]
-  const activeTab = ref('tables')
 
-  const tables = ref<DatabaseTable[]>([
-    {
-      id: 'tbl-customers',
-      name: 'customers',
-      columns: [
-        { id: 'col-1', name: 'id', type: 'int8', primaryKey: true, notNull: true },
-        { id: 'col-2', name: 'name', type: 'text', primaryKey: false, notNull: true },
-        { id: 'col-3', name: 'email', type: 'text', primaryKey: false, notNull: true },
-        {
-          id: 'col-4',
-          name: 'created_at',
-          type: 'timestamptz',
-          primaryKey: false,
-          notNull: false
-        }
-      ],
-      rows: [
-        {
-          __k: 'row-1',
-          id: 1,
-          name: 'Jane Doe',
-          email: 'jane.doe@example.com',
-          created_at: '2026-07-21 08:15:00'
-        },
-        {
-          __k: 'row-2',
-          id: 2,
-          name: 'John Smith',
-          email: 'john.smith@example.com',
-          created_at: '2026-07-21 08:15:01'
-        },
-        {
-          __k: 'row-3',
-          id: 3,
-          name: 'Alex Morgan',
-          email: 'alex.morgan@example.com',
-          created_at: null
-        }
-      ]
+  const tableSource = computed<QueryEditorTable[]>(
+    () => props.tables ?? (props.loading || props.error ? [] : sampleTables)
+  )
+  const tableList = ref<QueryEditorTable[]>([])
+  watch(
+    tableSource,
+    (next) => {
+      tableList.value = next.map((table) => ({ ...table, rows: [...table.rows] }))
     },
-    {
-      id: 'tbl-orders',
-      name: 'orders',
-      columns: [
-        { id: 'col-5', name: 'id', type: 'int8', primaryKey: true, notNull: true },
-        { id: 'col-6', name: 'customer_id', type: 'int8', primaryKey: false, notNull: true },
-        { id: 'col-7', name: 'total', type: 'numeric', primaryKey: false, notNull: true }
-      ],
-      rows: [
-        { __k: 'row-4', id: 1001, customer_id: 1, total: '42.50' },
-        { __k: 'row-5', id: 1002, customer_id: 3, total: '18.00' }
-      ]
-    },
-    {
-      id: 'tbl-invoices',
-      name: 'invoices',
-      columns: [
-        { id: 'col-8', name: 'id', type: 'int8', primaryKey: true, notNull: true },
-        {
-          id: 'col-9',
-          name: 'created_at',
-          type: 'timestamptz',
-          primaryKey: false,
-          notNull: false
-        }
-      ],
-      rows: []
-    }
-  ])
+    { immediate: true }
+  )
   const tableSearch = ref('')
-  const selectedTableId = ref<string | null>(null)
   const filteredTables = computed(() => {
     const term = tableSearch.value.trim().toLowerCase()
-    if (!term) return tables.value
-    return tables.value.filter((table) => table.name.toLowerCase().includes(term))
+    if (!term) return tableList.value
+    return tableList.value.filter((table) => table.name.toLowerCase().includes(term))
   })
   const selectedTable = computed(
     () =>
-      tables.value.find((table) => table.id === selectedTableId.value) ?? tables.value[0] ?? null
+      tableList.value.find((table) => table.id === selectedTableId.value) ??
+      tableList.value[0] ??
+      null
   )
   const selectTable = (id: string) => {
     selectedTableId.value = id
+  }
+  const onTableAction = (event: Event, value: unknown, table: QueryEditorTable) => {
+    if (value === 'delete') emit('delete-table', event, table)
   }
 
   const schemaColumns: TableColumn[] = [
@@ -165,8 +188,8 @@
   const schemaRows = computed(() => {
     if (!selectedTable.value) return []
     return selectedTable.value.columns.map((column) => ({
-      id: column.id,
       name: column.name,
+      id: column.id,
       type: column.type,
       constraints: [column.primaryKey ? 'PRIMARY KEY' : '', column.notNull ? 'NOT NULL' : '']
         .filter(Boolean)
@@ -180,7 +203,7 @@
     if (globalThis.matchMedia?.('(width < 48rem)').matches) leftOpen.value = false
   })
 
-  const tableView = ref('data')
+  const tableView = ref<QueryEditorTableView>(props.defaultTableView)
   const tableViewOptions = [
     { label: 'Data', value: 'data' },
     { label: 'Definition', value: 'definition' }
@@ -205,11 +228,14 @@
         )
     )
   })
-  const rowSelection = ref<Record<string, boolean>>({})
+  const rowSelection = ref<Record<string, boolean>>({ ...props.defaultRowSelection })
+  const selectedKeys = computed(() =>
+    Object.keys(rowSelection.value).filter((key) => rowSelection.value[key])
+  )
   const dataColumns = computed<TableColumn[]>(() => [
     ...(selectedTable.value?.columns ?? []).map((column) => ({
-      id: column.name,
       accessorKey: column.name,
+      id: column.name,
       header: column.name,
       sortable: true,
       minWidth: 160
@@ -226,75 +252,47 @@
   )
   const isNull = (value: unknown) => value === null || value === undefined || value === ''
   const displayCell = (value: unknown) => (isNull(value) ? 'NULL' : String(value))
-  const deleteRow = (row: DatabaseRow) => {
-    const table = tables.value.find((item) => item.id === selectedTable.value?.id)
-    if (!table) return
-    table.rows = table.rows.filter((item) => item.__k !== row.__k)
+  const removeRows = (event: Event, table: QueryEditorTable, keys: Set<string>) => {
+    const rows = table.rows.filter((row) => keys.has(row.__k))
+    if (!rows.length) return
+    table.rows = table.rows.filter((row) => !keys.has(row.__k))
+    emit('delete-rows', event, { table, rows })
+  }
+  const deleteRow = (event: MouseEvent, row: QueryEditorRow) => {
+    const table = tableList.value.find((item) => item.id === selectedTable.value?.id)
+    if (table) removeRows(event, table, new Set([row.__k]))
+  }
+  const deleteSelected = (event: MouseEvent) => {
+    const table = tableList.value.find((item) => item.id === selectedTable.value?.id)
+    if (!table || !selectedKeys.value.length) return
+    removeRows(event, table, new Set(selectedKeys.value))
+    rowSelection.value = {}
   }
 
-  const editorSql = ref(`CREATE TABLE IF NOT EXISTS customers (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);`)
-  const history = ref<HistoryEntry[]>([
-    {
-      id: 'q-0',
-      sql: `CREATE TABLE IF NOT EXISTS customers (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);`
+  const historySource = computed<QueryEditorHistoryEntry[]>(
+    () => props.history ?? (props.loading || props.error ? [] : sampleHistory)
+  )
+  const historyList = ref<QueryEditorHistoryEntry[]>([])
+  watch(
+    historySource,
+    (next) => {
+      historyList.value = [...next]
     },
-    {
-      id: 'q-1',
-      sql: `CREATE TABLE IF NOT EXISTS orders (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  customer_id INTEGER NOT NULL REFERENCES customers (id),
-  total NUMERIC NOT NULL
-);`
-    }
-  ])
+    { immediate: true }
+  )
   const historySearch = ref('')
   const filteredHistory = computed(() => {
     const term = historySearch.value.trim().toLowerCase()
-    if (!term) return history.value
-    return history.value.filter((item) => item.sql.toLowerCase().includes(term))
+    if (!term) return historyList.value
+    return historyList.value.filter((item) => item.sql.toLowerCase().includes(term))
   })
   const oneLine = (sql: string) => sql.replace(/\s+/g, ' ').trim()
 
-  const running = ref(false)
-  const templatesOpen = ref(false)
-  const selectResult: QueryResult = {
-    type: 'rows',
-    columns: ['id', 'name', 'email', 'created_at'],
-    rows: [
-      {
-        __k: 1,
-        id: 1,
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
-        created_at: '2026-07-21 08:15:00'
-      },
-      {
-        __k: 2,
-        id: 2,
-        name: 'John Smith',
-        email: 'john.smith@example.com',
-        created_at: '2026-07-21 08:15:01'
-      },
-      {
-        __k: 3,
-        id: 3,
-        name: 'Alex Morgan',
-        email: 'alex.morgan@example.com',
-        created_at: '2026-07-21 08:15:02'
-      }
-    ]
-  }
-  const results = ref<QueryResult | null>(null)
+  const running = computed(() => props.running)
+  const templatesOpen = ref(props.defaultTemplatesOpen)
+  const results = computed<QueryEditorResult | null>(() =>
+    props.running ? null : (props.result ?? null)
+  )
   const resultColumns = computed<TableColumn[]>(() => {
     if (results.value?.type !== 'rows') return []
     return results.value.columns.map((key, index) => ({
@@ -309,7 +307,7 @@
     { label: 'JSON', value: 'json' }
   ]
   const resultSearch = ref('')
-  const resultRows = computed<ResultRow[]>(() =>
+  const resultRows = computed<QueryEditorResultRow[]>(() =>
     results.value?.type === 'rows' ? results.value.rows : []
   )
   const filteredResultRows = computed(() => {
@@ -332,24 +330,14 @@
   const applyTemplate = (sql: string) => {
     editorSql.value = sql
   }
-  const loadFromHistory = (item: HistoryEntry) => {
+  const loadFromHistory = (item: QueryEditorHistoryEntry) => {
     editorSql.value = item.sql
     activeTab.value = 'editor'
   }
-  const deleteHistory = (_event: MouseEvent | KeyboardEvent, item: HistoryEntry) => {
-    history.value = history.value.filter((entry) => entry.id !== item.id)
+  const deleteHistory = (event: Event, item: QueryEditorHistoryEntry) => {
+    historyList.value = historyList.value.filter((entry) => entry.id !== item.id)
+    emit('delete-query', event, item)
   }
-  const SQL_VERBS = [
-    'SELECT',
-    'INSERT',
-    'UPDATE',
-    'DELETE',
-    'CREATE',
-    'ALTER',
-    'DROP',
-    'WITH',
-    'PRAGMA'
-  ]
 
   const resultStatus = computed(() => {
     if (running.value) return 'Running the query.'
@@ -359,38 +347,25 @@
     return `${count} ${count === 1 ? 'row' : 'rows'} returned.`
   })
 
-  const runQuery = () => {
+  const runQuery = (event: Event) => {
     const sql = editorSql.value.trim()
     if (!sql || running.value) return
-    running.value = true
-    results.value = null
-    setTimeout(() => {
-      if (history.value[0]?.sql !== sql) {
-        history.value = [{ id: `q-${history.value.length + 1}`, sql }, ...history.value]
-      }
-      const verb = sql.split(/\s+/)[0].toUpperCase()
-      const text =
-        verb === 'CREATE'
-          ? 'Table created.'
-          : verb === 'INSERT'
-            ? 'Rows inserted.'
-            : 'Statement executed.'
-      results.value = !SQL_VERBS.includes(verb)
-        ? {
-            type: 'error',
-            line: 1,
-            text: `The statement wasn't executed: near "${verb}", a syntax error. Check the statement and run it again.`
-          }
-        : verb === 'SELECT'
-          ? structuredClone(selectResult)
-          : { type: 'message', text }
-      running.value = false
-    }, 700)
+    emit('run', event, sql)
+  }
+  const onHistoryAction = (event: Event, value: unknown, item: QueryEditorHistoryEntry) => {
+    if (value === 'run') {
+      applyTemplate(item.sql)
+      runQuery(event)
+      return
+    }
+    deleteHistory(event, item)
+  }
+  const downloadResults = (event: MouseEvent) => {
+    if (results.value) emit('download-results', event, results.value)
   }
 
   const templates: QueryTemplate[] = [
     {
-      id: 'create-table',
       title: 'Create table',
       description: 'Create a basic customers table with auto-increment ID and timestamp',
       icon: 'ai ai-table',
@@ -402,7 +377,6 @@
 );`
     },
     {
-      id: 'insert-data',
       title: 'Insert data',
       description: 'Insert sample customer records into the customers table',
       icon: 'ai ai-circle-plus',
@@ -412,7 +386,6 @@
   ('Alex Morgan', 'alex.morgan@example.com');`
     },
     {
-      id: 'select-all',
       title: 'Select all',
       description: 'Retrieve all records from customers table with limit',
       icon: 'ai ai-list',
@@ -422,14 +395,12 @@ ORDER BY created_at DESC
 LIMIT 100;`
     },
     {
-      id: 'count-records',
       title: 'Count records',
       description: 'Count total number of records in customers table',
       icon: 'ai ai-hash',
       sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
     },
     {
-      id: 'related-table',
       title: 'Related table',
       description: 'Create an orders table that references the customers table',
       icon: 'ai ai-box',
@@ -440,7 +411,6 @@ LIMIT 100;`
 );`
     },
     {
-      id: 'insert-related',
       title: 'Insert related rows',
       description: 'Insert sample orders for existing customers',
       icon: 'ai ai-arrow-right-left',
@@ -449,7 +419,6 @@ LIMIT 100;`
   (3, 18.00);`
     },
     {
-      id: 'join-tables',
       title: 'Join tables',
       description: 'List every order with the name of the customer who placed it',
       icon: 'ai ai-search',
@@ -459,7 +428,6 @@ JOIN customers ON customers.id = orders.customer_id
 ORDER BY orders.id DESC;`
     },
     {
-      id: 'create-index',
       title: 'Create index',
       description: 'Create an index to speed up lookups of orders by customer',
       icon: 'ai ai-sitemap',
@@ -467,7 +435,6 @@ ORDER BY orders.id DESC;`
 ON orders (customer_id);`
     },
     {
-      id: 'top-customers',
       title: 'Top customers',
       description: 'Find the 3 customers with the highest order totals',
       icon: 'ai ai-arrow-down-wide-narrow',
@@ -538,6 +505,7 @@ LIMIT 3;`
                       variant="outline"
                       size="small"
                       aria-label="Refresh tables"
+                      @click="(event: MouseEvent) => emit('refresh-tables', event)"
                     />
                   </Tooltip>
                   <Tooltip content="Create Table">
@@ -546,6 +514,7 @@ LIMIT 3;`
                       variant="outline"
                       size="small"
                       aria-label="Create Table"
+                      @click="(event: MouseEvent) => emit('create-table', event)"
                     />
                   </Tooltip>
                 </div>
@@ -567,8 +536,20 @@ LIMIT 3;`
             </div>
           </template>
           <div>
+            <div
+              v-if="loading"
+              class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) py-(--spacing-sm)"
+              aria-busy="true"
+              aria-label="Loading tables"
+            >
+              <Skeleton
+                v-for="line in 4"
+                :key="line"
+                height="1.5rem"
+              />
+            </div>
             <p
-              v-if="!tables.length"
+              v-else-if="!tableList.length"
               class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
             >
               No tables created yet
@@ -612,7 +593,10 @@ LIMIT 3;`
                     <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
                   </span>
                 </Item>
-                <DropdownMenu placement="bottom-end">
+                <DropdownMenu
+                  placement="bottom-end"
+                  @select="(event, value) => onTableAction(event, value, table)"
+                >
                   <DropdownMenu.Trigger>
                     <Tooltip :content="`Actions for ${table.name}`">
                       <IconButton
@@ -663,6 +647,7 @@ LIMIT 3;`
                   variant="secondary"
                   size="medium"
                   class="w-full"
+                  @click="(event: MouseEvent) => emit('create-table', event)"
                 />
               </div>
             </template>
@@ -717,6 +702,17 @@ LIMIT 3;`
               </div>
               <div class="ms-auto flex items-center gap-(--spacing-xs)">
                 <Button
+                  v-if="selectedKeys.length"
+                  key="delete-rows"
+                  :label="`Delete ${selectedKeys.length} ${selectedKeys.length === 1 ? 'row' : 'rows'}`"
+                  variant="danger"
+                  size="medium"
+                  icon="ai ai-trash"
+                  @click="deleteSelected"
+                />
+                <Button
+                  v-else
+                  key="sort"
                   label="Sort"
                   variant="outline"
                   size="medium"
@@ -728,6 +724,7 @@ LIMIT 3;`
                     variant="outline"
                     size="medium"
                     aria-label="Refresh"
+                    @click="(event: MouseEvent) => emit('refresh', event)"
                   />
                 </Tooltip>
                 <Button
@@ -735,11 +732,26 @@ LIMIT 3;`
                   variant="primary"
                   size="medium"
                   icon="ai ai-plus"
+                  @click="(event: MouseEvent) => emit('insert-row', event, selectedTable!)"
                 />
               </div>
             </div>
 
-            <div class="min-h-0 flex-1 overflow-auto">
+            <div
+              v-if="error"
+              class="p-(--spacing-md)"
+            >
+              <Alert
+                severity="danger"
+                :label="error"
+                action-label="Retry"
+                @action="(event: MouseEvent) => emit('retry', event)"
+              />
+            </div>
+            <div
+              v-else
+              class="min-h-0 flex-1 overflow-auto"
+            >
               <DataTable
                 v-model:row-selection="rowSelection"
                 :data="filteredRows"
@@ -751,6 +763,7 @@ LIMIT 3;`
                 :page-size="25"
                 :page-size-options="[25, 50, 100]"
                 density="compact"
+                :loading="loading"
                 :bordered="false"
                 :aria-label="`Rows of ${selectedTable.name}`"
               >
@@ -788,7 +801,7 @@ LIMIT 3;`
                       variant="ghost"
                       size="small"
                       :aria-label="`Delete row ${row['id'] ?? row.__k}`"
-                      @click="deleteRow(row)"
+                      @click="(event: MouseEvent) => deleteRow(event, row)"
                     />
                   </Tooltip>
                 </template>
@@ -808,12 +821,14 @@ LIMIT 3;`
                           variant="secondary"
                           size="medium"
                           icon="ai ai-plus"
+                          @click="(event: MouseEvent) => emit('insert-row', event, selectedTable!)"
                         />
                         <Button
                           label="Import data from CSV"
                           variant="outline"
                           size="medium"
                           icon="ai ai-upload"
+                          @click="(event: MouseEvent) => emit('import-csv', event, selectedTable!)"
                         />
                       </div>
                     </template>
@@ -851,6 +866,7 @@ LIMIT 3;`
                 variant="outline"
                 size="medium"
                 icon="ai ai-plus"
+                @click="(event: MouseEvent) => emit('add-column', event, selectedTable!)"
               />
             </div>
             <Card :padded="false">
@@ -947,12 +963,7 @@ LIMIT 3;`
                 </Item>
                 <DropdownMenu
                   placement="bottom-end"
-                  @select="
-                    (event, value) =>
-                      value === 'run'
-                        ? (applyTemplate(item.sql), runQuery())
-                        : deleteHistory(event, item)
-                  "
+                  @select="(event, value) => onHistoryAction(event, value, item)"
                 >
                   <DropdownMenu.Trigger>
                     <Tooltip :content="`Actions for ${oneLine(item.sql)}`">
@@ -1081,6 +1092,7 @@ LIMIT 3;`
                   size="medium"
                   aria-label="Download results"
                   :disabled="!resultRows.length"
+                  @click="downloadResults"
                 />
               </Tooltip>
               <Tooltip content="Toggle columns">
@@ -1191,7 +1203,7 @@ LIMIT 3;`
             >
               <Item
                 v-for="template in filteredTemplates"
-                :key="template.id"
+                :key="template.title"
                 variant="outline"
                 clickable
                 @click="chooseTemplate(template)"

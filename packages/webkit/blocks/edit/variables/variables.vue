@@ -38,20 +38,91 @@
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
-  type ScopeRef = { type: string; id: string; name: string }
-  type VariableSeed = {
+  import { sampleVariables } from './sample'
+
+  /** Where a variable applies: the whole account, or one environment, project, service or policy. */
+  export interface VariablesScope {
+    /** global, environment, project, service or policy. */
+    type: string
+    /** The resource ID; empty for global. */
     id: string
+    /** The resource name shown in the Scope column; empty for global. */
+    name: string
+  }
+
+  /** One saved variable, a row of the table. */
+  export interface VariablesVariable {
+    /** Stable key, shown in the hidden ID column. */
+    id: string
+    /** The variable name, uppercase letters, numbers and underscores. */
     key: string
+    /** The value; a secret's value is shown masked. */
     value: string
+    /** Whether the value is hidden and write-only. */
     secret: boolean
-    scope: ScopeRef[]
+    /** Where the variable applies. */
+    scope: VariablesScope[]
+    /** Who changed it last. */
     lastEditor: string
+    /** That person's avatar URL; empty shows the initials. */
     lastEditorAvatar: string
+    /** When it changed last, as relative text. */
     lastModified: string
   }
+
+  /** One pair the drawer saves, with the scope chosen for every pair. */
+  export interface VariablesDraft {
+    /** The variable name. */
+    key: string
+    /** The value; empty when an edited secret keeps its saved value. */
+    value: string
+    /** Whether the value is a secret. */
+    secret: boolean
+    /** Where the variable applies. */
+    scope: VariablesScope[]
+  }
+
+  /** What Save sends. */
+  export interface VariablesSavePayload {
+    /** The variable being edited, or null when the drawer creates new ones. */
+    variable: VariablesVariable | null
+    /** The pairs in the drawer. */
+    values: VariablesDraft[]
+  }
+
+  export interface VariablesProps {
+    /** The variables to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    variables?: VariablesVariable[]
+    /** The list is loading or refreshing: Refresh spins and the table shows its loading state. */
+    loading?: boolean
+    /** The save is in flight: the drawer locks and Save spins; when it ends with no saveError the drawer closes. */
+    saving?: boolean
+    /** Why the save failed, shown in the danger alert at the top of the drawer; the pairs are kept. */
+    saveError?: string
+    /** The create drawer starts open. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<VariablesProps>(), {
+    variables: undefined,
+    loading: false,
+    saving: false,
+    saveError: '',
+    defaultOpen: false
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    save: [event: Event, payload: VariablesSavePayload]
+    clone: [event: Event, variable: VariablesVariable]
+    delete: [event: Event, variable: VariablesVariable]
+  }>()
+
+  type ScopeRef = VariablesScope
+  type VariableSeed = VariablesVariable
   type Variable = VariableSeed & { type: string }
-  type VariableDraft = { key: string; value: string; secret: boolean; scope: ScopeRef[] }
-  type Entry = { id: number; key: string; value: string; secret: boolean; visible: boolean }
+  type VariableDraft = VariablesDraft
+  type Entry = { key: string; id: number; value: string; secret: boolean; visible: boolean }
   type EntryProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
   type Pair = { key: string; value: string }
   type ScopeOption = { value: string; label: string }
@@ -74,74 +145,37 @@
     { accessorKey: 'lastModified', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', type: 'action', hideable: false }
   ]
-  const seed: VariableSeed[] = [
-    {
-      id: 'v-001',
-      key: 'API_BASE_URL',
-      value: 'https://api.example.com',
-      secret: false,
-      scope: [{ type: 'global', id: '', name: '' }],
-      lastEditor: 'Ethan Brooks',
-      lastEditorAvatar: '',
-      lastModified: '1 month ago'
-    },
-    {
-      id: 'v-002',
-      key: 'PAYMENT_SECRET_KEY',
-      value: 'sk_example_4f8a2c9e',
-      secret: true,
-      scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
-      lastEditor: 'Jordan Kim',
-      lastEditorAvatar: '',
-      lastModified: '2 months ago'
-    },
-    {
-      id: 'v-003',
-      key: 'FEATURE_FLAGS',
-      value: 'checkout_v2,dark_mode',
-      secret: false,
-      scope: [{ type: 'service', id: '3344556677', name: 'storefront' }],
-      lastEditor: 'Taylor Reed',
-      lastEditorAvatar: '',
-      lastModified: '2 months ago'
-    },
-    {
-      id: 'v-004',
-      key: 'DATABASE_PASSWORD',
-      value: 'p4ssw0rd-r0t4t3d',
-      secret: true,
-      scope: [{ type: 'policy', id: '5540117', name: 'production-policy' }],
-      lastEditor: 'John Smith',
-      lastEditorAvatar: '',
-      lastModified: '2 months ago'
-    },
-    {
-      id: 'v-005',
-      key: 'MAX_UPLOAD_MB',
-      value: '25',
-      secret: false,
-      scope: [{ type: 'global', id: '', name: '' }],
-      lastEditor: 'Sam Lee',
-      lastEditorAvatar: '',
-      lastModified: '3 months ago'
-    }
-  ]
 
-  const authors = ['Ethan Brooks', 'Jordan Kim', 'Taylor Reed', 'John Smith', 'Sam Lee', 'Jane Doe']
-  const properties = [
-    { key: 'key', label: 'Key' },
-    { key: 'lastEditor', label: 'Author', options: authors.map((value) => ({ value })) },
-    { key: 'type', label: 'Type', options: [{ value: 'Plain' }, { value: 'Secret' }] }
-  ]
   const withType = (variable: VariableSeed): Variable => ({
     ...variable,
     type: variable.secret ? 'Secret' : 'Plain'
   })
 
-  const variables = ref(seed.map(withType))
+  const source = computed<VariableSeed[]>(
+    () => props.variables ?? (props.loading ? [] : sampleVariables)
+  )
+  const rows = ref<Variable[]>([])
+  watch(
+    source,
+    (next) => {
+      rows.value = next.map(withType)
+    },
+    { immediate: true }
+  )
+  const properties = computed(() => [
+    { key: 'key', label: 'Key' },
+    {
+      key: 'lastEditor',
+      label: 'Author',
+      options: [...new Set(rows.value.map((variable) => variable.lastEditor))].map((value) => ({
+        value
+      }))
+    },
+    { key: 'type', label: 'Type', options: [{ value: 'Plain' }, { value: 'Secret' }] }
+  ])
   const editing = ref<Variable | null>(null)
   const existingKeys = computed(() =>
-    variables.value
+    rows.value
       .filter((variable) => variable.id !== editing.value?.id)
       .map((variable) => variable.key)
   )
@@ -155,7 +189,7 @@
     clearFilters,
     loading: fetching
   } = useCollection({
-    items: variables,
+    items: rows,
     columns,
     filtering: { fields: ['key', 'id', 'lastEditor', 'type'] },
     propertyFiltering: { properties },
@@ -167,16 +201,13 @@
     url: true
   })
 
-  const loading = ref(false)
+  const loading = computed(() => props.loading)
   const tableEl = ref<TableExposed<Variable> | null>(null)
   const exportCsv = () => tableEl.value?.exportCsv({ filename: 'variables.csv' })
 
-  const refresh = () => {
+  const refresh = (event: MouseEvent) => {
     if (loading.value) return
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 600)
+    emit('refresh', event)
   }
 
   const displayValue = (row: Variable) => (row.secret ? SECRET_MASK : row.value)
@@ -198,7 +229,7 @@
               : `${group.names.length} ${group.plural}`
       }))
 
-  let nextVariableId = seed.length
+  let nextVariableId = rows.value.length
   const newVariableId = () => `v-${String((nextVariableId += 1)).padStart(3, '0')}`
   const touched = (
     variable: Omit<VariableSeed, 'lastEditor' | 'lastEditorAvatar' | 'lastModified'>
@@ -211,14 +242,14 @@
     })
 
   const onCreated = (created: VariableDraft[]) => {
-    variables.value = [
+    rows.value = [
       ...created.map((variable) => touched({ ...variable, id: newVariableId() })),
-      ...variables.value
+      ...rows.value
     ]
   }
 
   const onUpdated = (id: string, [changed]: VariableDraft[]) => {
-    variables.value = variables.value.map((variable) =>
+    rows.value = rows.value.map((variable) =>
       variable.id === id
         ? touched({
             ...variable,
@@ -230,7 +261,7 @@
   }
 
   const cloneKey = (key: string) => {
-    const taken = new Set(variables.value.map((variable) => variable.key))
+    const taken = new Set(rows.value.map((variable) => variable.key))
     let candidate = `${key}_COPY`
     let n = 1
     while (taken.has(candidate)) candidate = `${key}_COPY_${(n += 1)}`
@@ -249,28 +280,26 @@
   const canDelete = computed(
     () => Boolean(pending.value) && confirmation.value.trim() === pending.value?.key
   )
-  const confirmDelete = () => {
-    if (!canDelete.value) return
-    const key = pending.value?.key
-    variables.value = variables.value.filter((variable) => variable.id !== pending.value?.id)
+  const confirmDelete = (event: Event) => {
+    if (!canDelete.value || !pending.value) return
+    const key = pending.value.key
+    emit('delete', event, pending.value)
+    rows.value = rows.value.filter((variable) => variable.id !== pending.value?.id)
     deleteOpen.value = false
     toast.success(`${key} deleted.`)
   }
 
-  const onRowAction = (value: DropdownMenuItemValue, row: Variable) => {
+  const onRowAction = (event: Event, value: DropdownMenuItemValue, row: Variable) => {
     if (value === 'edit') {
       editing.value = row
       drawerOpen.value = true
       return
     }
     if (value === 'duplicate') {
-      const index = variables.value.findIndex((variable) => variable.id === row.id)
+      const index = rows.value.findIndex((variable) => variable.id === row.id)
       const copy = touched({ ...row, id: newVariableId(), key: cloneKey(row.key) })
-      variables.value = [
-        ...variables.value.slice(0, index + 1),
-        copy,
-        ...variables.value.slice(index + 1)
-      ]
+      emit('clone', event, row)
+      rows.value = [...rows.value.slice(0, index + 1), copy, ...rows.value.slice(index + 1)]
       toast.success(`${row.key} cloned as ${copy.key}.`)
       return
     }
@@ -295,8 +324,8 @@
 
   let nextEntryId = 0
   const createEntry = (key = '', value = '', secret = false): Entry => ({
-    id: (nextEntryId += 1),
     key,
+    id: (nextEntryId += 1),
     value,
     secret,
     visible: false
@@ -304,9 +333,10 @@
   const isEmptyEntry = (entry: Entry) => !entry.key.trim() && !entry.value.trim()
   const formatKey = (value: string) => value.replace(/\s/g, '_').toUpperCase()
 
-  const drawerOpen = ref(false)
-  const submitting = ref(false)
-  const saveError = ref('')
+  const drawerOpen = ref(props.defaultOpen)
+  const submitting = computed(() => props.saving)
+  const saveError = ref(props.defaultOpen ? props.saveError : '')
+  const pendingSave = ref<VariablesSavePayload | null>(null)
   const submitted = ref(false)
   const entries = ref([createEntry()])
   const view = ref('Form')
@@ -572,16 +602,47 @@
     jsonError.value = ''
     submitted.value = false
     Object.assign(scopes, current ? scopesFor(current.scope) : createScopes())
-    submitting.value = false
+    pendingSave.value = null
     saveError.value = ''
   })
 
   const formEl = ref<HTMLFormElement | null>(null)
-  const saveRequest = () =>
-    new Promise<boolean>((resolve) => {
-      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
-    })
-  const submit = async () => {
+  const finishSave = ({ variable, values }: VariablesSavePayload) => {
+    if (variable) {
+      onUpdated(variable.id, values)
+      toast.success(`${values[0].key} updated.`)
+    } else {
+      onCreated(values)
+      toast.success(
+        values.length === 1 ? `${values[0].key} created.` : `${values.length} variables created.`
+      )
+    }
+    editing.value = null
+    drawerOpen.value = false
+  }
+
+  watch(
+    () => props.saveError,
+    (message) => {
+      if (drawerOpen.value) saveError.value = message
+    }
+  )
+
+  watch(
+    () => props.saving,
+    (now, was) => {
+      const payload = pendingSave.value
+      if (!was || now || !payload) return
+      pendingSave.value = null
+      if (props.saveError) {
+        saveError.value = props.saveError
+        return
+      }
+      finishSave(payload)
+    }
+  )
+
+  const submit = async (event: Event) => {
     if (submitting.value) return
     if (view.value === 'JSON') {
       if (jsonError.value) return
@@ -598,34 +659,28 @@
         ?.focus()
       return
     }
-    submitting.value = true
     saveError.value = ''
-    const saved = await saveRequest()
-    if (!saved) {
-      submitting.value = false
-      saveError.value =
-        'Variables not saved. You are offline; check your connection and save again.'
+    const scope = scopePayload()
+    const payload: VariablesSavePayload = {
+      variable: editing.value,
+      values: filledEntries.value.map((entry) => ({
+        key: entry.key.trim(),
+        value: entry.value,
+        secret: entry.secret,
+        scope
+      }))
+    }
+    emit('save', event, payload)
+    await nextTick()
+    if (props.saving) {
+      pendingSave.value = payload
       return
     }
-    const scope = scopePayload()
-    const created = filledEntries.value.map((entry) => ({
-      key: entry.key.trim(),
-      value: entry.value,
-      secret: entry.secret,
-      scope
-    }))
-    if (editing.value) {
-      onUpdated(editing.value.id, created)
-      toast.success(`${created[0].key} updated.`)
-    } else {
-      onCreated(created)
-      toast.success(
-        created.length === 1 ? `${created[0].key} created.` : `${created.length} variables created.`
-      )
+    if (props.saveError) {
+      saveError.value = props.saveError
+      return
     }
-    editing.value = null
-    submitting.value = false
-    drawerOpen.value = false
+    finishSave(payload)
   }
 </script>
 
@@ -700,7 +755,7 @@
 
         <section class="flex min-h-0 flex-col">
           <Card
-            v-if="status === 'empty'"
+            v-if="status === 'empty' && !loading"
             key="first-use"
             :padded="false"
           >
@@ -812,7 +867,7 @@
                 <template #cell-actions="{ row }">
                   <Table.CellActions
                     :name="row.key"
-                    @select="(_event, value) => onRowAction(value, row)"
+                    @select="(event, value) => onRowAction(event, value, row)"
                   >
                     <DropdownMenu.Group>
                       <DropdownMenu.Item

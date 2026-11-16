@@ -3,8 +3,6 @@ import { describe, expect, it } from 'vitest'
 
 import RulesList from '../../../../blocks/view/rule-list/rule-list.vue'
 import EditRule from '../../../../blocks/view/rule-list/variants/edit-rule.vue'
-import LoadError from '../../../../blocks/view/rule-list/variants/load-error.vue'
-import ReviewChanges from '../../../../blocks/view/rule-list/variants/review-changes.vue'
 import Searching from '../../../../blocks/view/rule-list/variants/searching.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -93,8 +91,17 @@ describe('view/rule-list block', () => {
     )
   })
 
-  it('lists every moved and toggled rule per phase in the review dialog, then saves', async () => {
-    render(ReviewChanges)
+  it('lists every moved and toggled rule per phase in the review dialog, emits save, then closes when saving ends', async () => {
+    const view = render(RulesList, {
+      props: {
+        defaultEdits: [
+          { phase: 'request', id: 're-docs', to: 2 },
+          { phase: 'request', id: 're-maintenance', active: true },
+          { phase: 'response', id: 're-security-headers', to: 0 }
+        ],
+        defaultReviewOpen: true
+      }
+    })
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     const dialog = document.querySelector('[role="dialog"]') as HTMLElement
     expect(dialog.textContent).toContain('Request phase')
@@ -107,12 +114,81 @@ describe('view/rule-list block', () => {
       (button) => button.textContent?.trim() === 'Save'
     ) as HTMLButtonElement
     await fireEvent.click(save)
+    const [event, rules] = view.emitted('save')![0] as [
+      MouseEvent,
+      { id: string; active: boolean }[]
+    ]
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(rules.map((rule) => rule.id).slice(0, 5)).toEqual([
+      're-default',
+      're-maintenance',
+      're-docs',
+      're-www',
+      're-gateway'
+    ])
+    expect(rules.find((rule) => rule.id === 're-maintenance')?.active).toBe(true)
+    expect(document.querySelector('[role="dialog"]')).not.toBeNull()
+    await view.rerender({ saving: true })
+    await view.rerender({ saving: false })
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), {
       timeout: 3000
     })
     await waitFor(() =>
       expect(document.activeElement?.getAttribute('aria-label')).toBe('Rules by phase')
     )
+  })
+
+  it('keeps the review dialog open with Save again when the save fails', async () => {
+    const view = render(RulesList, {
+      props: {
+        defaultEdits: [{ phase: 'request', id: 're-docs', to: 2 }],
+        defaultReviewOpen: true,
+        saving: true
+      }
+    })
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
+    await view.rerender({ saving: false, saveError: "The new order wasn't saved." })
+    const dialog = document.querySelector('[role="dialog"]') as HTMLElement
+    await waitFor(() => expect(dialog.textContent).toContain("The new order wasn't saved."))
+    expect(
+      Array.from(dialog.querySelectorAll('button')).some(
+        (button) => button.textContent?.trim() === 'Save again'
+      )
+    ).toBe(true)
+  })
+
+  it('renders the rules it is given instead of the sample, and an empty phase for none', () => {
+    const view = render(RulesList, {
+      props: {
+        rules: [
+          {
+            id: 'r-1',
+            name: 'Block bots',
+            description: 'Refuses known bots.',
+            phase: 'request',
+            author: 'Jane Doe',
+            modified: 'today',
+            active: true,
+            locked: false
+          }
+        ]
+      }
+    })
+    expect(requestNames(view.container)).toEqual(['Block bots'])
+    expect(view.queryByText('Docs rewrite')).toBeNull()
+    expect(view.getByText('No response rules yet')).toBeTruthy()
+  })
+
+  it('emits create from Add Rule in the heading and with the phase from an empty phase', async () => {
+    const view = render(RulesList, { props: { subject: 'firewall', rules: [] } })
+    const adds = view.getAllByRole('button', { name: 'Add Rule' })
+    await fireEvent.click(adds[0])
+    await fireEvent.click(adds[1])
+    const calls = view.emitted('create') as [MouseEvent, string?][]
+    expect(calls).toHaveLength(2)
+    expect(calls[0][0]).toBeInstanceOf(MouseEvent)
+    expect(calls[0][1]).toBeUndefined()
+    expect(calls[1][1]).toBe('request')
   })
 
   it('moves a rule to the position typed in its Order cell and keeps focus in the field', async () => {
@@ -222,7 +298,11 @@ describe('view/rule-list block', () => {
   })
 
   it('replaces the phases with a danger alert whose Retry emits retry when the rules fail to load', async () => {
-    const view = render(LoadError)
+    const view = render(RulesList, {
+      props: { error: "Couldn't load the rules. Check your connection and retry." }
+    })
+    expect(view.getByText("Couldn't load the rules. Check your connection and retry.")).toBeTruthy()
+    expect(view.queryByText('Docs rewrite')).toBeNull()
     expect(view.getByRole('button', { name: 'Add Rule' }).hasAttribute('disabled')).toBe(true)
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
     expect(view.emitted('retry')).toHaveLength(1)
