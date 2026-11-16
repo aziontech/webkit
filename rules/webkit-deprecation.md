@@ -43,6 +43,8 @@ least one major, then removed, and `webkit/no-deprecated-component` tells you be
 
 <!-- prettier-ignore -->
 ```ts
+import type { ButtonVariant } from '@aziontech/webkit/button'
+
 interface Props {
   /**
    * @deprecated since 4.2 — use `variant` instead. Removed in 5.0.

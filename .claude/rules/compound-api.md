@@ -26,7 +26,7 @@ export default Object.assign(Table, {
 })
 ```
 
-`Object.assign` returns `typeof Table & { Row: ..., Cell: ... }`, so the generated `index.d.ts` types `<Table.Row>` / `<Table.Cell>` with no manual annotation. **Do not hand-write `index.d.ts`** — `.d.ts` is gitignored (a build artifact); a hand-written one is never committed, and `vue-tsc` cannot derive types from a plain `index.js` (the package does not enable `allowJs`). The index must be `.ts`.
+`Object.assign` returns `typeof Table & { Row: ..., Cell: ... }`, so the generated `index.d.ts` types `<Table.Row>` / `<Table.Cell>` with no manual annotation. **Do not hand-write `index.d.ts`** — `.d.ts` is gitignored (a build artifact); a hand-written one is never committed, and a consumer's `vue-tsc` reads no types from a plain `index.js` unless the consumer enables `allowJs`, which a create-vue app does not (this repo's `tsconfig.base.json` enabling it does not reach the consumer). The index must be `.ts`.
 
 All forms stay available to the consumer:
 
@@ -100,7 +100,7 @@ Interactivity alone does not justify a sub-component. A clickable row is `@click
 
 - Do not export composition sub-components without also attaching them to the root compound (`index.ts` via `Object.assign`).
 - Do not ship the compound `index.ts` root export without **also** adding the standalone `<name>-root` export pointing at the root `.vue`. The compound path retains every sub-component (`Object.assign`), so a root-only consumer has no tree-shakeable way in without the `-root` key.
-- Do not make the index a plain `index.js` — `vue-tsc` cannot derive types from it (no `allowJs`), so `<Root.Part>` ends up untyped. It must be `index.ts`.
+- Do not make the index a plain `index.js` — a consumer's `vue-tsc` derives no types from it without `allowJs` (off in a create-vue app), so `<Root.Part>` ends up untyped. It must be `index.ts`.
 - Do not hand-write `index.d.ts` — it is gitignored and generated at publish time (by the publish workflow's `vue-tsc --declaration --emitDeclarationOnly` step) from `index.ts`, not committed or built in dev.
 - Do not invent a `Trigger` (or any overlay part name) on a component that has no `data-state="open|closed"`.
 - Do not turn a slot-shaped concern into a prop (config arrays of UI). Anatomy is elements; props are data + scalar config.

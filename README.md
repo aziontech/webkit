@@ -144,7 +144,7 @@ Once the project is wired, import components by path:
 
 ### Live previews
 
-- **Docs site** — `apps/docs` (`pnpm dev:docs`) — every component's API and examples beside their source, every block in every state, the foundations. It replaces the Storybook that <https://webkit.azion.app/> served; publishing it there is pending (ROADMAP M2.10).
+- **Docs site** — `apps/docs` (`pnpm dev:docs`) — every component's API and examples beside their source, every block in every state, the foundations. Publishing it at <https://webkit.azion.app/> is pending (ROADMAP M2.10).
 - **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the icon sets of `@aziontech/icons`.
 
 Run them locally with `pnpm dev:docs`, `pnpm dev:demos` and `pnpm dev:icons-gallery`.

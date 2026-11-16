@@ -31,7 +31,7 @@ fails the build when the two mix.
    3. write the spec as `draft` (`spec-create`, template 2) or the block brief;
    4. spec review by a second agent ([`spec-reviewer`](./.claude/agents/spec-reviewer.md)); on
       approval `spec-validate` flips it to `approved` with a checksum;
-   5. build (`/component-create`: component, test, examples, story — or `block.json`, `.vue`,
+   5. build (`/component-create`: component, test, examples — or `block.json`, `.vue`,
       `variants/`);
    6. machine gates (`pnpm --filter @aziontech/webkit run gates`, lint, types, size, Vitest);
    7. `ui-craft` review ([`.claude/skills/ui-craft/SKILL.md`](./.claude/skills/ui-craft/SKILL.md)),

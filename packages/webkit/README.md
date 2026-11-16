@@ -19,8 +19,9 @@ Pick the path by what you are about to do.
    rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
 2. The app's chrome is one layout, composed once in `App.vue` around `RouterView`: `ConsoleLayout`
    (console), `SiteLayout` (marketing site) or `DocLayout` (docs). Start it from its shell block
-   (`npx @aziontech/webkit add shell/console`, `shell/site`, `shell/docs`) and
-   replace the stand-in body with `<RouterView />`. Every screen below is only a page body in that
+   (`npx @aziontech/webkit add shell/console`, `shell/site`, `shell/docs`): `add` writes the block
+   into your views folder and prints the path, so move that file to `src/App.vue` and replace the
+   stand-in body with `<RouterView />`. Every screen below is only a page body in that
    layout's slot: no `<main>`, sidebar, header, footer or ⌘K palette of its own (a page opens the
    console palette with `useConsoleLayout().openSearch()`). Only a screen with no rail (a create,
    edit or deploy flow, sign-in) is routed outside the layout and keeps its own bar and `<main>`.
@@ -131,17 +132,18 @@ out of the scan: their examples are not your UI. Tailwind has to run in your bui
 WebKit does not depend on `vee-validate`. An app that uses `vee-validate` puts
 `optimizeDeps: { include: ['vee-validate'] }` in its own Vite config.
 
-**Dark mode.** The theme is **light by default**. For an app that is always dark, set the attribute
-in `index.html`, so the first paint is already dark:
+**Dark mode.** With no `data-theme` the theme **follows the device** (`prefers-color-scheme`): light
+on a light device, dark on a dark one. To pin it, set the attribute in `index.html`, so the first
+paint is already right; an app that is always dark sets:
 
 <!-- prettier-ignore -->
 ```html
 <html lang="en" data-theme="dark">
 ```
 
-To switch at runtime, write the same attribute
-(`document.documentElement.dataset.theme = 'dark'` or `'light'`); a `.dark` class on an ancestor
-works too. Every token changes with it, so nothing else needs a dark variant.
+and an app that is always light sets `data-theme="light"`. To switch at runtime, write the same
+attribute (`document.documentElement.dataset.theme = 'dark'` or `'light'`); a `.dark` class on an
+ancestor works too. Every token changes with it, so nothing else needs a dark variant.
 
 ### 3 · Add your first component
 
@@ -212,7 +214,7 @@ npx -y @aziontech/webkit-mcp   # the MCP server your AI tools connect to (its ow
 
 This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webkit) monorepo. Read
 [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md) and [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md) (its
-"What to update when WebKit changes" section) before changing a component, a story or a skill.
+"What to update when WebKit changes" section) before changing a component, an example or a skill.
 
 A new or moved export is written as a plain path and then typed by `pnpm --filter @aziontech/webkit build:exports`
 (`check:exports` fails until it is). `pnpm pack` builds `types/` (`build:types`) and removes it afterwards;

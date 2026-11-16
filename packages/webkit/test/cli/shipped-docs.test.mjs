@@ -3,7 +3,10 @@ import assert from 'node:assert/strict'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
-import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../../src/eslint-plugin/lib/layout-classes.js'
+import {
+  LAYOUT_CLASS_FAMILIES,
+  nonLayoutClasses
+} from '../../src/eslint-plugin/lib/layout-classes.js'
 import { PKG_ROOT } from './lib/cli-project.mjs'
 
 const REPO_ROOT = join(PKG_ROOT, '..', '..')
@@ -105,7 +108,7 @@ test('every @aziontech/theme subpath the shipped docs import is a real theme exp
   assert.deepEqual(missing, [])
 })
 
-test('the README and the webkit-usage skill say how to force the dark theme', () => {
+test('the README and the webkit-usage skill say the theme follows the device and how to pin it', () => {
   for (const file of [
     join(PKG_ROOT, 'README.md'),
     join(REPO_ROOT, 'skills/webkit-usage/SKILL.md')
@@ -118,8 +121,13 @@ test('the README and the webkit-usage skill say how to force the dark theme', ()
     )
     assert.match(
       text,
+      /follows the device/i,
+      `${relative(REPO_ROOT, file)} does not say the theme follows the device`
+    )
+    assert.doesNotMatch(
+      text,
       /light by default/i,
-      `${relative(REPO_ROOT, file)} does not say light is the default`
+      `${relative(REPO_ROOT, file)} says light is the default`
     )
   }
 })

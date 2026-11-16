@@ -4,7 +4,7 @@
 
 ## How to test
 
-<!-- Numbered, concrete steps to verify THIS PR: the command to run, where to look (story / page / component), and the expected result. -->
+<!-- Numbered, concrete steps to verify THIS PR: the command to run, where to look (example / docs page / component), and the expected result. -->
 
 ## Notes
 

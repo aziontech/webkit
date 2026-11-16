@@ -17,21 +17,29 @@ jsdom returns no-ops for `focus`, `document.activeElement`, layout/`getBoundingC
 - **No mocks for layout / positioning / focus / `<Teleport>`.** If a test "needs" one of those mocks, the test is wrong. Real browser makes them real.
 - Teleported overlay content escapes the render container — query it from `document.body`, not the `render()` result.
 
-### What a real browser does NOT give this suite: CSS
+### Two modes: unstyled by default, styled when the suite asks for it
 
-**This env runs no Tailwind, and [`setup.ts`](../../packages/webkit/src/test/setup.ts) deliberately loads no theme CSS.** The DOM is real but _unstyled_: a component's utility classes emit nothing here, so every computed style is the UA default. That is a boundary, not a gap to fix — and it decides what a test may assert:
+`vitest.config.ts` runs the Tailwind Vite plugin, but Tailwind only compiles a stylesheet a suite imports, and [`setup.ts`](../../packages/webkit/src/test/setup.ts) imports none. So a suite runs in one of two modes, chosen by its own first line:
 
-- **Never assert a computed style, a color, or a utility-derived dimension.** `getComputedStyle(el).backgroundColor` reads `rgba(0, 0, 0, 0)` whether the class is correct, misspelled, or missing entirely, so such an assertion passes in the broken _and_ fixed states — the exact false positive browser mode exists to kill. Same for a height that comes from `h-8`.
-- **`expectNoA11yViolations` therefore checks semantics, not pixels** — role, name, ARIA relationships, focus order. It does **not** validate color contrast here, because there are no colors. Contrast is real only where the stylesheet is: the docs site and the styled visual suite (`apps/visual`).
-- **Pixels, contrast and token correctness belong to visual regression.** A dead utility class (a token that emits no CSS) is invisible to this suite by construction; it is caught by [`styling.md`](./styling.md)'s token checks at write time and by the visual gate at review time.
+| Mode                   | How                                                                                                                       | What a computed style reads                          | Used by                                                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Unstyled** (default) | import nothing                                                                                                            | the UA default: utility classes emit no CSS          | almost every component suite                                                                                    |
+| **Styled**             | `import '<relative>/test/reflow.css'` first (the theme's `globals.css` plus `@source` on components, blocks and examples) | the real theme: tokens, utilities, container queries | `reflow`, `forced-colors`, `screen-reader`, the `*-rtl` suites, and the few component suites that assert layout |
 
-Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring the Tailwind pipeline — the tokens alone would load and nothing would read them, which buys a slower suite and no new signal.
+What that decides:
+
+- **A computed style, a color or a geometry is asserted only where it is real**: in a styled suite, or when the style reaches the element without the stylesheet (an inline `style` or a custom property the component writes, CSS the suite injects itself). In an unstyled suite `getComputedStyle(el).backgroundColor` reads `rgba(0, 0, 0, 0)` whether the class is right, misspelled or missing, so the assertion passes in the broken _and_ fixed states. A suite that needs a utility-derived value imports `reflow.css`; it does not assert against the UA default.
+- **A class assertion is a pin, not a style check.** It may assert that one exact utility is on one element (`toContain('ms-auto')`, `classList.contains('w-full')`) when that utility is the decision under test: a token choice, a logical-side utility, an `rtl:` or `motion-reduce:` pairing, a container query, a consumer `class` merged onto the root. That is the documented exception, because the unstyled DOM has no other signal for it. Never compare a whole class attribute, never assert a class to prove a rendered result (a size, a position, a colour): render the styled suite for that. When the state is also exposed as `data-*` or ARIA, assert that instead.
+- **`expectNoA11yViolations` checks semantics, not pixels**: role, name, ARIA relationships, focus order. Contrast is checked where the colours are: the styled visual suite (`apps/visual`) and the docs site.
+- **Pixels, contrast and token correctness belong to visual regression.** A dead utility class (a token that emits no CSS) is invisible to an unstyled suite by construction; it is caught by [`styling.md`](./styling.md)'s token checks at write time and by the visual gate at review time.
+
+Do not add theme CSS to `setup.ts`: every suite would compile the full stylesheet, which slows the whole run for the handful that read it.
 
 ## The stack (already wired — do not reinvent)
 
-- `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. Story imports of `@aziontech/webkit/*` resolve through the workspace package itself (no alias needed).
-- `packages/webkit/src/test/setup.ts` — `cleanup()` + an anchor-navigation guard (a real click on an `<a href>` would navigate and tear down the test iframe). It loads **no** CSS, on purpose — see the CSS boundary above.
-- `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`; semantics only, no contrast (unstyled DOM).
+- `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. `tailwindcss()` compiles only the stylesheet a suite imports (see the two modes above). Example imports of `@aziontech/webkit/*` resolve through the package's own `exports` (no alias needed).
+- `packages/webkit/src/test/setup.ts` — `cleanup()` + an anchor-navigation guard (a real click on an `<a href>` would navigate and tear down the test iframe). It loads **no** CSS, on purpose — see the two modes above.
+- `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`; semantics only, no contrast.
 - `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when `packages/webkit` changes; the `toolkit` job runs `check:tests` (existence).
 - Publish-safety: `packages/webkit/package.json#files` negates `*.test.ts` and `src/test/**` (verified with `pnpm --filter @aziontech/webkit check:pack`, which fails when the dry-run pack lists a test file). Test files never ship to npm.
 
@@ -45,25 +53,25 @@ Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring t
 
 ## What every `<name>.test.ts` must cover
 
-| #   | Surface          | Assertion                                                                                                                                                        |
-| --- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Render           | mounts without throwing; the `data-testid` fallback is present; consumer `data-testid` override wins                                                             |
-| 2   | Props / variants | each variant prop (`variant`, `size`, …) maps to its `data-*` / attribute / rendered state                                                                       |
-| 3   | Events           | every event in the spec's Events table fires with the right payload on the real user action                                                                      |
-| 4   | Suppression      | when `disabled` / `loading` / `readonly`, the action is **not** emitted                                                                                          |
-| 5   | v-model          | drive the input, assert `update:modelValue` (and `update:open` / `update:*`) with the exact value                                                                |
-| 6   | ARIA             | `role`, `aria-expanded`, `aria-busy`, `aria-disabled`, `aria-selected`… as the template declares                                                                 |
-| 7   | a11y             | `expectNoA11yViolations(container)` on the default render + any variant whose semantics differ (semantics only — contrast needs CSS, which this env has none of) |
-| 8   | Composition      | a context-aware sub-component reflects/drives the root's `provide`/`inject` state with no manual wiring                                                          |
-| 9   | Overlay          | open/close (trigger + second click), `Escape` closes and returns focus, panel Teleports to `body`, scroll-lock while open                                        |
-| 10  | Recursive        | nested instances ≥2 levels deep render and propagate context (active item, open submenu, orientation)                                                            |
+| #   | Surface          | Assertion                                                                                                                                        |
+| --- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Render           | mounts without throwing; the `data-testid` fallback is present; consumer `data-testid` override wins                                             |
+| 2   | Props / variants | each variant prop (`variant`, `size`, …) maps to its `data-*` / attribute / rendered state                                                       |
+| 3   | Events           | every event in the spec's Events table fires with the right payload on the real user action                                                      |
+| 4   | Suppression      | when `disabled` / `loading` / `readonly`, the action is **not** emitted                                                                          |
+| 5   | v-model          | drive the input, assert `update:modelValue` (and `update:open` / `update:*`) with the exact value                                                |
+| 6   | ARIA             | `role`, `aria-expanded`, `aria-busy`, `aria-disabled`, `aria-selected`… as the template declares                                                 |
+| 7   | a11y             | `expectNoA11yViolations(container)` on the default render + any variant whose semantics differ (semantics only — contrast is the visual suite's) |
+| 8   | Composition      | a context-aware sub-component reflects/drives the root's `provide`/`inject` state with no manual wiring                                          |
+| 9   | Overlay          | open/close (trigger + second click), `Escape` closes and returns focus, panel Teleports to `body`, scroll-lock while open                        |
+| 10  | Recursive        | nested instances ≥2 levels deep render and propagate context (active item, open submenu, orientation)                                            |
 
 A tiny `it.each` smoke over enum variants ("mounts without throwing") is a **floor**, never the substance.
 
 ## The functional bar — no false positives, no filler
 
 - Assert **only what you read** in the source. Never invent props/events/testids/aria/sub-components.
-- **Forbidden:** assertions on Tailwind/class strings, computed styles/colors, pixel positions, animation timing, or internal component state. A computed-style assertion is not a stricter version of a class assertion — it is a _weaker_ one here, because the unstyled DOM returns the same value whether the style is right or absent.
+- **Forbidden:** a computed style, colour, pixel position or geometry asserted in an unstyled suite; a whole class attribute compared or snapshotted; a class used as proof of a rendered result; animation timing; internal component state. In an unstyled suite a computed-style assertion is _weaker_ than a class pin, because the UA default reads the same whether the style is right or absent.
 - **If a test only passes when the implementation is written one specific way, delete it.** It traps refactors and adds no signal.
 - If a test reveals a real component defect you cannot satisfy without changing the `.vue`, **`it.skip` it with a one-line reason** — never fake a pass or weaken an assertion into meaninglessness. Record the gap in the PR.
 
@@ -77,7 +85,7 @@ A tiny `it.each` smoke over enum variants ("mounts without throwing") is a **flo
 
 - No jsdom; no mocking layout/positioning/focus/`<Teleport>`.
 - No vite alias in a test import — use a relative path (the reference hook blocks the alias).
-- No class-string / pixel / animation-timing / internal-state assertions.
+- No computed-style, pixel or geometry assertion outside a styled suite; no whole-class-string comparison; no animation-timing or internal-state assertion.
 - No test file outside the co-located `<name>.test.ts` convention; sub-components do not get their own test unless the root cannot reach the behavior.
 - Do not edit a `.vue` to make a test pass — fix the test, or `it.skip` + document.
 

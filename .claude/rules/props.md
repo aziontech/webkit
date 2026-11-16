@@ -49,7 +49,7 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
 
 ### Exported variant unions
 
-Every variant axis (`variant`, `size`, `severity`) is a **named type exported** from the component, so a consumer can type a variable that holds it and the story `argTypes` can reference it. Derive the union from one place; do not repeat the literal set in JSDoc and in the type.
+Every variant axis (`variant`, `size`, `severity`) is a **named type exported** from the component, so a consumer can type a variable that holds it and the examples and the catalog can name it. Derive the union from one place; do not repeat the literal set in JSDoc and in the type.
 
 ## JSDoc
 
@@ -73,4 +73,4 @@ Every public prop gets a one-line JSDoc `/** ... */`. It is the source of the do
 
 ## Why this rule exists
 
-Prop typing was described across `COMPONENT_REQUIREMENTS.md` (§2 Props, §2.1 JSDoc, §2.8 exported variant props) as prose, so it held only where the author remembered it — some components used the runtime object form, some skipped JSDoc, some inlined variant unions the consumer then could not name. Fixing the shape (named interface + `withDefaults` + JSDoc + exported unions) makes the prop table, the type hover, and the story controls all derive from one honest source.
+Prop typing was described across `COMPONENT_REQUIREMENTS.md` (§2 Props, §2.1 JSDoc, §2.8 exported variant props) as prose, so it held only where the author remembered it — some components used the runtime object form, some skipped JSDoc, some inlined variant unions the consumer then could not name. Fixing the shape (named interface + `withDefaults` + JSDoc + exported unions) makes the prop table, the type hover, and the examples all derive from one honest source.

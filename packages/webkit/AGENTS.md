@@ -7,10 +7,9 @@ You are working inside the `@aziontech/webkit` package. Universal monorepo guida
 ```
 packages/webkit/src/
 ├── components/          ← the design-system components (spec-driven; see .claude/)
-│   ├── actions/  content/  data/  feedback/  inputs/  layout/
-│   ├── navigation/  overlay/  code/  utils/
-│   └── avatar/, tag/, overline/   (legacy flat folders — migrate into a category when touched)
-├── composables/         use-controllable, use-direction, use-focus-trap, use-placement
+│   ├── action/  ai/  chart/  code/  content/  data/  docs/  feedback/
+│   └── input/  layout/  marketing/  navigation/  overlay/  provider/  section/
+├── composables/         use-controllable, use-direction, use-focus-trap, use-placement, use-collection, …
 ├── utils/               cn (clsx + tailwind-merge), csv
 ├── cli/                 `webkit` bin — init / doctor / plan / apply
 ├── catalog/             catalog query engine (`@aziontech/webkit/catalog-queries`) — used by the CLI and `@aziontech/webkit-mcp`
@@ -53,7 +52,7 @@ Type coverage threshold: **95%**.
 ## 6) Common pitfalls
 
 - **Tokenizing manually:** if Figma exposes a variable that has no equivalent token (check `list_tokens` in the webkit MCP), register a theme gap in the spec and use the closest primitive temporarily. Do not invent a HEX or hardcode a Tailwind palette.
-- **Slots in the wrong layer:** monolithic components (button, icon-button, tag) do not expose slots. Card-pricing exposes `default` + named `actions` because the layout positions are fixed configuration points — not Composition Pattern.
+- **Slots in the wrong layer:** a monolithic component exposes only the slots its spec lists, at fixed configuration points: `Button` has `default` (the label) and `leading`, `Tag` has `default`, `IconButton` has none, and `PricingCard` has `default` + `actions`. None of that is the Composition Pattern; a part the consumer reorders or omits is a sub-component.
 - **Typography raw classes leaking in:** `text-[length:var(--text-button-lg-font-size)]` and similar are legacy. New components always use the generated class (`text-button-lg`). `validate-tokens.mjs` only blocks **new** violations; the remaining legacy debt is frozen in [`scripts/authoring-baseline.json`](./scripts/authoring-baseline.json) and blocked from growing by the CI ratchet.
 - **Hook blocking a legitimate edit:** read the stderr message — it states the rule that fired and how to fix it. The hooks fail open on unexpected errors and never silently break workflows.
 

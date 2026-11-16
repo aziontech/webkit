@@ -1,7 +1,6 @@
 # WebKit docs site
 
-`@aziontech/webkit-docs` is the documentation site for `@aziontech/webkit`. It replaces Storybook
-for people: every component, block and foundation page is rendered from the files in this
+`@aziontech/webkit-docs` is the documentation site for `@aziontech/webkit`. Every component, block and foundation page is rendered from the files in this
 repository, with the code beside it. It is built with WebKit itself (`AppHeader`, `Sidebar`,
 `Menu`, `Command`, `DocPageHeader`, `DocProse`, `DocOnThisPage`, `CodeBlock`, `Table`,
 `ThemeSwitcher`…), the theme from `@aziontech/theme` and the Rubik font, in light and dark, with a

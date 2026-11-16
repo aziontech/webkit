@@ -99,7 +99,7 @@ export function ensureThemeTypes() {
 
 // Runs vue-tsc over absolute file paths with the consumer options (and no vueCompilerOptions,
 // as create-vue writes none) and returns the `error TS` lines, paths relative to the package.
-export function consumerTypeErrors(files) {
+export function consumerTypeErrors(files, overrides = {}) {
   ensureThemeTypes()
   const dir = mkdtempSync(join(tmpdir(), 'webkit-consumer-ts-'))
   try {
@@ -107,7 +107,7 @@ export function consumerTypeErrors(files) {
     writeFileSync(
       tsconfig,
       JSON.stringify({
-        compilerOptions: CONSUMER_COMPILER_OPTIONS,
+        compilerOptions: { ...CONSUMER_COMPILER_OPTIONS, ...overrides },
         files: [...CONSUMER_ENV_FILES, ...files]
       })
     )

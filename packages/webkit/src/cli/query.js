@@ -1,4 +1,10 @@
-import { getBlock, getComponent, searchBlocks, searchComponents } from '../catalog/queries.js'
+import {
+  getBlock,
+  getComponent,
+  pascalCase,
+  searchBlocks,
+  searchComponents
+} from '../catalog/queries.js'
 import { PACKAGE_NAME } from './source.js'
 
 const words = (s) =>
@@ -142,7 +148,12 @@ export function formatView(result) {
     `${result.name} — ${result.binding} (${result.kind}, ${result.category || 'uncategorised'})`
   )
   if (result.note) out.push(`NOTE ${result.note}`)
-  out.push(`import ${result.binding} from '${result.treeShakeableImport}'`, '')
+  out.push(`import ${result.binding} from '${result.import}'`)
+  if (result.treeShakeableImport !== result.import) {
+    const root = result.treeShakeableImport
+    out.push(`Root only, no dot-notation parts: import ${pascalCase(root)} from '${root}'`)
+  }
+  out.push('')
   if (result.purpose) out.push(result.purpose, '')
   if (result.setup) out.push(`Setup: ${result.setup}`, '')
   if (result.useWhen.length) out.push('Use when:', ...result.useWhen.map((u) => `  - ${u}`), '')

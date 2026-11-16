@@ -122,6 +122,15 @@ The state-matrix render — Skeleton (data in), then Alert / EmptyState / data:
   const loading = ref(true)
   const error = ref('')
 
+  const fetchRows = async (): Promise<Row[]> => {
+    const response = await fetch('/api/workloads')
+    if (!response.ok) throw new Error('The workloads could not be loaded.')
+    return response.json()
+  }
+  const onCreate = () => {
+    /* open the create flow */
+  }
+
   const load = async () => {
     loading.value = true
     error.value = ''

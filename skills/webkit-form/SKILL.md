@@ -334,7 +334,7 @@ Canonical pattern:
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogRoot from '@aziontech/webkit/dialog-root'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import Input from '@aziontech/webkit/input'
@@ -357,7 +357,7 @@ Canonical pattern:
 </script>
 
 <template>
-  <Dialog
+  <DialogRoot
     v-model:open="open"
     size="medium"
   >
@@ -414,7 +414,7 @@ Canonical pattern:
         </div>
       </PanelFooter>
     </DialogContent>
-  </Dialog>
+  </DialogRoot>
 </template>
 ```
 

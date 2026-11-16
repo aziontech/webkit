@@ -23,7 +23,7 @@ You are the `spec-creator` sub-agent. The orchestrator spawned you to draft `.sp
 ## What you may NOT do
 
 - Do not invent props/events/slots the user did not state.
-- Do not write the `.vue`, `package.json`, story, or `.figma.ts`. Those live in other phases.
+- Do not write the `.vue`, `package.json`, test, examples, or `.figma.ts`. Those live in other phases.
 - Do not edit an existing spec whose `status ∈ {approved, implemented, locked}`.
 - Do not skip the Constraints — DO NOT block; copy it verbatim from the template.
 

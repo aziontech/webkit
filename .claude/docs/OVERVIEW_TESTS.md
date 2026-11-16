@@ -1,6 +1,6 @@
 # Test Architecture — Overview
 
-> **@aziontech/webkit monorepo** · snapshot of July 2026, visual layer updated November 2026 (M2.5: Storybook removed)
+> **@aziontech/webkit monorepo** · snapshot of July 2026, visual layer updated November 2026
 > Companion doc: [`OVERVIEW_LINT.md`](./OVERVIEW_LINT.md) (static-quality layers)
 
 ## TL;DR
@@ -9,7 +9,7 @@ Webkit ships **two complementary test layers**, both running in **real Chromium*
 
 | Layer                    | Tooling                                                                          | DOM                                          | Owns                                                                                   | CI workflow                                                                                    |
 | ------------------------ | -------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| **1. Functional / unit** | Vitest 4 browser mode + Playwright                                               | Unstyled (tokens load, no Tailwind pipeline) | Behavior, structure, events, v-model, ARIA, structural a11y                            | `package-webkit-test.yml` (4 shards)                                                           |
+| **1. Functional / unit** | Vitest 4 browser mode + Playwright                                               | Unstyled by default; styled when a suite imports `src/test/reflow.css` | Behavior, structure, events, v-model, ARIA, structural a11y                            | `package-webkit-test.yml` (4 shards)                                                           |
 | **2. Visual regression** | Playwright `toHaveScreenshot` (`apps/visual`) over the built docs site and demos | Fully styled (theme + Tailwind)              | Pixels, layout, color, typography — light/dark at 1280 and 390 px (sampled matrix, §3) | `governance.yml` → `visual` (4 shards, Playwright image); baselines via `visual-baselines.yml` |
 
 Current numbers: **67 component test suites · 1362 tests passing · 1 skipped · ~97% of in-scope component roots covered** — over a library of ~150 components (roots + sub-components).
@@ -141,9 +141,9 @@ Fixed by [`.claude/rules/testing.md`](../rules/testing.md); this is the **floor*
 | 9   | Overlay          | open/close, `Escape` closes + returns focus, Teleport to body, scroll-lock  |
 | 10  | Recursive        | ≥2-level nesting renders and propagates context                             |
 
-### 2.5 The unstyled-DOM decision (and what axe checks)
+### 2.5 Unstyled by default, styled on request (and what axe checks)
 
-The unit environment **does not run the Tailwind pipeline** — components mount with token variables loaded but no utility CSS generated. This is intentional (audit §2.0, "Path B"):
+`setup.ts` loads no CSS, so a suite mounts components **unstyled** by default: utility classes emit nothing and a computed style reads the UA default. A suite that asserts layout, geometry or a computed style imports `src/test/reflow.css` first; the Tailwind plugin in `vitest.config.ts` then compiles the theme and the component classes for that suite only (`reflow`, `forced-colors`, `screen-reader`, the `*-rtl` suites and a few component suites). The rule is `.claude/rules/testing.md` § "Two modes".
 
 - Unit assertions are about **behavior, structure, and ARIA** — none of them need pixels.
 - axe-core therefore runs **structural rules only**. Five visual/layout rules are explicitly disabled because they'd be meaningless without real styling: `color-contrast`, `color-contrast-enhanced`, `target-size`, `link-in-text-block`, `scrollable-region-focusable`.
@@ -153,7 +153,7 @@ The unit environment **does not run the Tailwind pipeline** — components mount
 ### 2.6 The quality bar — no false positives, no filler
 
 - Assert **only what you read in the source**. Never invent props, events, testids, or ARIA.
-- **Forbidden assertions:** Tailwind class strings, pixel positions, animation timing, internal component state. (If a test only passes when the implementation is written one specific way, it's a refactor trap — delete it.)
+- **Forbidden assertions:** a computed style, pixel position or geometry in an unstyled suite, a whole class attribute compared or snapshotted, animation timing, internal component state. A class pin (one exact utility on one element, when that utility is the decision under test) is the documented exception. (If a test only passes when the implementation is written one specific way, it's a refactor trap — delete it.)
 - A real component defect a test exposes → `it.skip` with a one-line reason and a note in the PR. Never fake a pass.
 
 ---
