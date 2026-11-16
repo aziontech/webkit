@@ -243,3 +243,18 @@ test('add renames the data files after a --dest name', () => {
     cleanup(dir)
   }
 })
+
+test('add copies a shared SFC from the block files with a variant that renders it', () => {
+  const dir = makeProject()
+  try {
+    const r = cli(dir, 'add', 'auth/sign-in', '--variant', 'RejectedToken')
+    assert.equal(r.code, 0, r.stderr)
+    const card = join(dir, 'src/views/sign-in.token-sign-in.vue')
+    assert.ok(existsSync(card))
+    const variant = readFileSync(join(dir, 'src/views/sign-in-rejected-token.vue'), 'utf8')
+    assert.match(variant, /from '\.\/sign-in\.token-sign-in\.vue'/)
+    assert.match(variant, /error="rejected"/)
+  } finally {
+    cleanup(dir)
+  }
+})
