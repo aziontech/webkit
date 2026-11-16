@@ -3,14 +3,14 @@ name: date-picker
 category: input
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: cd2705716f12e7dbf291027b92ab612b2ef18eb78435d71416feb4779f44bbbf
+checksum: 82b4b61991749df99e92b8fc1967a91f83ab70ab45636094394ad155303caff2
 created: 2026-06-25
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # DatePicker — Component Spec
@@ -148,6 +148,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`'s) on the root and the trigger shell, with `aria-invalid` on the trigger and the danger border
 - Reflow: the root is capped at the width of its container (`max-w-full`), so the trigger never overflows a 320 px box.
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the calendar panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Motion & Animations
 
