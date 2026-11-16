@@ -3,7 +3,6 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import Billing from '../../../../blocks/account/billing/billing.vue'
 import NoMatch from '../../../../blocks/account/billing/variants/no-match.vue'
-import PaymentMethods from '../../../../blocks/account/billing/variants/payment-methods.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
@@ -43,7 +42,7 @@ describe('account/billing', () => {
   })
 
   it('sets another card as the default', async () => {
-    const view = render(PaymentMethods)
+    const view = render(Billing, { props: { tab: 'payment-methods' } })
     await fireEvent.click(view.getByRole('button', { name: /Actions for Visa •••• 4431/ }))
     const option = await waitFor(() => view.getByRole('menuitem', { name: 'Set as default' }))
     await fireEvent.click(option)
@@ -52,10 +51,11 @@ describe('account/billing', () => {
     )
     const visaRow = view.getByText('Acme Inc.').closest('tr, [role="row"]') as HTMLElement
     expect(visaRow.textContent).toContain('Default')
+    expect(view.emitted('set-default')?.[0]?.[1]).toMatchObject({ id: 'pm-2' })
   })
 
   it('removes a card only after confirmation', async () => {
-    const view = render(PaymentMethods)
+    const view = render(Billing, { props: { tab: 'payment-methods' } })
     expect(view.container.textContent).toContain('John Smith')
     await fireEvent.click(
       view.getByRole('button', { name: /Actions for American Express •••• 9008/ })
@@ -69,5 +69,46 @@ describe('account/billing', () => {
     expect(view.container.textContent).toContain('John Smith')
     await fireEvent.click(buttonByText('Remove', confirm))
     await waitFor(() => expect(view.container.textContent).not.toContain('John Smith'))
+    expect(view.emitted('remove')?.[0]?.[1]).toMatchObject({ id: 'pm-3' })
+  })
+
+  it('renders the invoices it is given, the empty card for none, and the error message', async () => {
+    const view = render(Billing, {
+      props: {
+        invoices: [
+          {
+            id: 'INV-B100',
+            number: 1,
+            plan: 'Pro',
+            cycle: 'Yearly',
+            seats: 3,
+            billedAt: new Date(Date.UTC(2026, 9, 1)),
+            amount: 240,
+            brand: 'Visa',
+            paymentMethod: 'Visa •••• 4242',
+            status: 'Overdue'
+          }
+        ]
+      }
+    })
+    await waitFor(() => expect(view.container.textContent).toContain('INV-B100'))
+    expect(view.container.textContent).not.toContain('INV-A12401')
+    view.unmount()
+    const empty = render(Billing, { props: { invoices: [] } })
+    expect(empty.container.textContent).toContain('No invoices yet')
+    empty.unmount()
+    const failed = render(Billing, { props: { error: 'The billing API answered 503.' } })
+    expect(failed.container.textContent).toContain('The billing API answered 503.')
+    expect(failed.queryByRole('table', { name: 'Invoices' })).toBeNull()
+    await fireEvent.click(failed.getByRole('button', { name: 'Retry' }))
+    expect(failed.emitted('retry')).toHaveLength(1)
+  })
+
+  it('emits refresh instead of faking a reload', async () => {
+    const view = render(Billing)
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh billing data' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh invoices' }))
+    expect(view.emitted('refresh')).toHaveLength(2)
+    expect(view.container.textContent).toContain('INV-A12401')
   })
 })

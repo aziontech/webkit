@@ -6,7 +6,55 @@
   import Input from '@aziontech/webkit/input'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import { nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, watch } from 'vue'
+
+  import { sampleCard } from './sample'
+
+  /** The card on file, as the payment API returns it. */
+  export interface PaymentMethodCardCard {
+    /** Card brand id, drawn by PaymentBrand (visa, mastercard, amex...). */
+    brand: string
+    /** The last four digits of the card number. */
+    last4: string
+  }
+
+  /** What Update sends: the new card as the person typed it. */
+  export interface PaymentMethodCardValues {
+    /** Cardholder name. */
+    holder: string
+    /** Country or region; undefined until the person picks one. */
+    country: string | undefined
+    /** Card number, digits only. */
+    number: string
+    /** Expiration date as MM/YY. */
+    expiry: string
+    /** Security code. */
+    code: string
+  }
+
+  export interface PaymentMethodCardProps {
+    /** The card on file. Left out, the sample renders. */
+    card?: PaymentMethodCardCard
+    /** Disables Change and the form, for example while the hosting drawer submits. */
+    disabled?: boolean
+    /** The new card is being saved: Update spins and the form is locked. */
+    loading?: boolean
+    /** Why the card was not changed (a decline), shown in a danger alert at the top of the form. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<PaymentMethodCardProps>(), {
+    card: undefined,
+    disabled: false,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: PaymentMethodCardValues]
+  }>()
+
+  const editingCard = defineModel<boolean>('editing', { default: false })
 
   const countryOptions: SelectOptionItem[] = [
     { value: 'Brazil', label: 'Brazil' },
@@ -22,8 +70,8 @@
     expiry: 'card-expiry',
     code: 'card-code'
   }
-  const editingCard = ref(false)
-  const cardLast4 = ref('8888')
+  const cardOnFile = computed<PaymentMethodCardCard>(() => props.card ?? sampleCard)
+  const locked = computed(() => props.disabled || props.loading)
   const blankCard = () => ({
     holder: '',
     country: undefined as string | undefined,
@@ -38,13 +86,11 @@
     expiry: '',
     code: ''
   })
-  const cardDeclined = ref(false)
 
   const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const clearCardErrors = () => {
     Object.assign(cardErrors, { holder: '', number: '', expiry: '', code: '' })
-    cardDeclined.value = false
   }
 
   const validateCard = () => {
@@ -81,22 +127,21 @@
   const cancelEditingCard = () => {
     clearCardErrors()
     editingCard.value = false
-    focusById('card-change')
   }
 
-  const updateCard = () => {
-    cardDeclined.value = false
+  watch(editingCard, (editing, wasEditing) => {
+    if (!editing && wasEditing) focusById('card-change')
+  })
+
+  const updateCard = (event: Event) => {
     if (!validateCard()) return
-    const digits = cardForm.number.replace(/\D/g, '')
-    if (digits.endsWith('0002')) {
-      cardDeclined.value = true
-      cardErrors.number = 'The issuer declined this card.'
-      focusById(cardFieldIds.number)
-      return
-    }
-    cardLast4.value = digits.slice(-4)
-    editingCard.value = false
-    focusById('card-change')
+    emit('submit', event, {
+      holder: cardForm.holder.trim(),
+      country: cardForm.country,
+      number: cardForm.number.replace(/\D/g, ''),
+      expiry: cardForm.expiry.trim(),
+      code: cardForm.code.trim()
+    })
   }
 
   const fieldState = (field: 'holder' | 'number' | 'expiry' | 'code') => ({
@@ -116,15 +161,16 @@
           v-if="!editingCard"
           class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
         >
-          <PaymentBrand brand="visa" />
+          <PaymentBrand :brand="cardOnFile.brand" />
           <p class="min-w-0 flex-1 text-label-md text-(--text-default)">
-            Ending in {{ cardLast4 }}
+            Ending in {{ cardOnFile.last4 }}
           </p>
           <Button
             id="card-change"
             label="Change"
             variant="outline"
             size="small"
+            :disabled="disabled"
             @click="startEditingCard"
           />
         </div>
@@ -136,12 +182,15 @@
           @submit.prevent="updateCard"
         >
           <Alert
-            v-if="cardDeclined"
+            v-if="error"
             severity="danger"
             size="small"
-            label="The card was declined, so the payment method was not changed. Check the number or use another card."
+            :label="error"
           />
-          <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
+          <fieldset
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+            :disabled="locked"
+          >
             <legend class="sr-only">Payment method</legend>
             <Field v-bind="fieldState('holder')">
               <Field.Label :for="cardFieldIds.holder">Cardholder name</Field.Label>
@@ -242,6 +291,7 @@
                 label="Cancel"
                 variant="outline"
                 size="medium"
+                :disabled="locked"
                 @click="cancelEditingCard"
               />
             </div>
@@ -252,6 +302,8 @@
                 label="Update"
                 variant="primary"
                 size="medium"
+                :disabled="disabled"
+                :loading="loading"
               />
             </div>
           </div>

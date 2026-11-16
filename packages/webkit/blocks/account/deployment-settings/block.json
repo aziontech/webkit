@@ -34,6 +34,7 @@
     "name": "Default",
     "file": "deployment-settings.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "UnsavedChanges",

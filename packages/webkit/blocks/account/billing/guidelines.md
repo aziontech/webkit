@@ -60,6 +60,59 @@ A `SectionHeader` with Add payment method over a flush `Card` and a `DataTable` 
 
 Set as default and Remove end in a success toast that names the card. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root), so the page never renders a `Toaster`.
 
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `BillingProps`, `BillingInvoice`, `BillingPaymentMethod`, `BillingSubscription` and `BillingPaymentInformation` are exported from `billing.vue`, and `sample.ts` holds the sample plan, invoices, cards and payment information the block renders when a prop is left out (and never while `loading` or `error` is set).
+
+| Prop                 | Type                         | What it does                                                                                         |
+| -------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `invoices`           | `BillingInvoice[]`           | The invoices; the filter, the sort and the pages run on them in the browser. `[]` shows No invoices. |
+| `paymentMethods`     | `BillingPaymentMethod[]`     | The cards on file; the one with `default` is charged and named in the plan card.                     |
+| `subscription`       | `BillingSubscription`        | The plan name, its start date and the next charge's date and amount.                                 |
+| `paymentInformation` | `BillingPaymentInformation`  | Billing email, auto-renewal, billing address and Tax ID.                                             |
+| `updatedAt`          | `Date`                       | When the data was fetched, shown beside Refresh.                                                     |
+| `defaultQuery`       | `PropertyFilterQuery`        | The filter the invoices open with.                                                                   |
+| `tab`                | `BillingTab` (`v-model:tab`) | The active tab, `bills` or `payment-methods`.                                                        |
+| `loading`            | `boolean`                    | A request is in flight: skeletons in the plan card and the tables' loading rows.                     |
+| `error`              | `string`                     | Why the billing data failed to load, shown in the danger `Alert` with Retry that replaces the tab.   |
+
+| Event         | Payload           | When                                                                                  |
+| ------------- | ----------------- | ------------------------------------------------------------------------------------- |
+| `refresh`     | `(event)`         | Refresh, in the heading or the invoices controls.                                     |
+| `retry`       | `(event)`         | Retry in the error alert.                                                             |
+| `set-default` | `(event, method)` | Set as default in a card's menu; the table and the plan card already show the change. |
+| `remove`      | `(event, method)` | The remove dialog was confirmed; the card is already gone from the table.             |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import Billing from './billing.vue'
+
+  const { data, pending, error, refresh } = useBilling()
+  const loadError =
+    'Your billing data could not be loaded. Nothing was charged or changed; try again.'
+</script>
+
+<template>
+  <Billing
+    :invoices="data?.invoices ?? []"
+    :payment-methods="data?.paymentMethods ?? []"
+    :subscription="data?.subscription"
+    :payment-information="data?.paymentInformation"
+    :updated-at="data?.fetchedAt"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+    @set-default="(event, method) => setDefaultCard(method.id)"
+    @remove="(event, method) => removeCard(method.id)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Show the next charge date and value next to the plan, in the account's currency.
@@ -91,12 +144,12 @@ Set as default and Remove end in a success toast that names the card. This page 
 
 ## States
 
-- Default: the Bills tab with the Pro plan, the Enterprise upgrade card and twelve monthly invoices, with filter, refresh, export, preferences, sorting and paging wired.
-- Loading: the first load; skeletons in the plan card and the invoices table's loading rows.
-- Error: the billing data did not load; a danger Alert with Retry.
-- NoInvoices: no invoice yet; a flush empty state says when the first one appears.
-- NoMatch: a filter that matches no invoice; No matching invoices with Clear filters.
-- PaymentMethods: the Payment methods tab with payment information and three cards.
+- Default: the Bills tab (`tab` is `bills`) with the Pro plan, the Enterprise upgrade card and twelve monthly invoices, with filter, refresh, export, preferences, sorting and paging wired.
+- Loading: the first load (`loading`); skeletons in the plan card and the invoices table's loading rows.
+- Error: the billing data did not load (`error` is set); a danger Alert with the message and Retry.
+- NoInvoices: no invoice yet (`invoices` is `[]`); a flush empty state says when the first one appears.
+- NoMatch: a filter that matches no invoice (`defaultQuery` is Status = Overdue); No matching invoices with Clear filters.
+- PaymentMethods: the Payment methods tab (`tab` is `payment-methods`) with payment information and three cards.
 
 ## Related
 

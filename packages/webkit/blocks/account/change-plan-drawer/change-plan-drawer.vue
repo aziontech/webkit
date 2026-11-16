@@ -22,173 +22,198 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  type BillingPeriod = 'monthly' | 'yearly'
+  import {
+    sampleAccountAddress,
+    sampleCardLast4,
+    sampleCharges,
+    samplePlans,
+    sampleUpgradeFeatures
+  } from './sample'
 
-  interface BillingAddress {
+  /** How often the plan bills. */
+  export type ChangePlanDrawerPeriod = 'monthly' | 'yearly'
+
+  /** What a plan's button does. */
+  export type ChangePlanDrawerPlanAction = 'current' | 'upgrade' | 'contact'
+
+  /** One line of a feature list. */
+  export interface ChangePlanDrawerFeature {
+    /** What is included. */
+    label: string
+    /** The overage price or a detail, under the label. */
+    description?: string
+  }
+
+  /** A plan's price for one billing period. */
+  export interface ChangePlanDrawerPrice {
+    /** The amount, or a word such as Free or Custom. */
+    value: string
+    /** Currency symbol before the amount. */
+    prefix: string
+    /** Unit after the amount. */
+    suffix: string
+    /** Whether the currency symbol shows. */
+    showPrefix: boolean
+    /** Whether the unit shows. */
+    showSuffix: boolean
+    /** One line under the price. */
+    details: string
+  }
+
+  /** One tier in the plan drawer. */
+  export interface ChangePlanDrawerPlan {
+    /** Stable key. */
+    id: string
+    /** Tier name. */
+    name: string
+    /** Whether the account is on it. */
+    current: boolean
+    /** What its button does. */
+    action: ChangePlanDrawerPlanAction
+    /** Its button label. */
+    actionLabel: string
+    /** The line over its features. */
+    featuresTitle: string
+    /** What it includes. */
+    features: ChangePlanDrawerFeature[]
+    /** Its price per billing period. */
+    card: Record<ChangePlanDrawerPeriod, ChangePlanDrawerPrice>
+  }
+
+  /** One line of the charge card. */
+  export interface ChangePlanDrawerChargeRow {
+    /** What is charged. */
+    label: string
+    /** The formatted amount. */
+    value: string
+    /** Unit after the amount, or empty. */
+    suffix: string
+  }
+
+  /** The charge card for one billing period. */
+  export interface ChangePlanDrawerCharges {
+    /** The lines over the total. */
+    rows: ChangePlanDrawerChargeRow[]
+    /** The total and its unit. */
+    total: { value: string; suffix: string }
+    /** What the checkout charges today. */
+    dueToday: string
+  }
+
+  /** A billing address. */
+  export interface ChangePlanDrawerAddress {
+    /** Country, or none chosen. */
     country: string | undefined
+    /** Postal code. */
     postalCode: string
+    /** State, or none chosen. */
     state: string | undefined
+    /** City, or none chosen. */
     city: string | undefined
+    /** Street and number. */
     line1: string
+    /** Suite, floor or unit. */
     line2: string
   }
 
-  const changePlanOpen = ref(false)
+  /** A new card typed in the upgrade drawer. */
+  export interface ChangePlanDrawerCard {
+    /** Name on the card. */
+    holder: string
+    /** Country of the card. */
+    country: string | undefined
+    /** Card number as typed. */
+    number: string
+    /** Expiration as MM/YY. */
+    expiry: string
+    /** Security code. */
+    code: string
+  }
+
+  /** What Upgrade submits. */
+  export interface ChangePlanDrawerUpgrade {
+    /** The billing period chosen. */
+    period: ChangePlanDrawerPeriod
+    /** The new card, or null to charge the card on file. */
+    card: ChangePlanDrawerCard | null
+    /** The billing address. */
+    address: ChangePlanDrawerAddress
+  }
+
+  export interface ChangePlanDrawerProps {
+    /** The tiers to compare. Left out, the sample renders. */
+    plans?: ChangePlanDrawerPlan[]
+    /** What the Pro upgrade includes. Left out, the sample renders. */
+    upgradeFeatures?: ChangePlanDrawerFeature[]
+    /** The charge card per billing period. Left out, the sample renders. */
+    charges?: Record<ChangePlanDrawerPeriod, ChangePlanDrawerCharges>
+    /** The account address the billing address starts from. Left out, the sample renders. */
+    accountAddress?: ChangePlanDrawerAddress
+    /** Last four digits of the card on file. Left out, the sample renders. */
+    cardLast4?: string
+    /** Checkout step: the charge card adds Due today and Upgrade requires the terms. */
+    terms?: boolean
+    /** The upgrade request is in flight; when it ends with no error or decline, both drawers close. */
+    loading?: boolean
+    /** The card was declined; the card fields open with the number invalid. */
+    declined?: boolean
+    /** Why the upgrade failed; shown in an error toast with Retry. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<ChangePlanDrawerProps>(), {
+    plans: undefined,
+    upgradeFeatures: undefined,
+    charges: undefined,
+    accountAddress: undefined,
+    cardLast4: undefined,
+    terms: false,
+    loading: false,
+    declined: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    'plan-select': [event: MouseEvent, plan: ChangePlanDrawerPlan]
+    upgrade: [event: Event, values: ChangePlanDrawerUpgrade]
+  }>()
+
+  const changePlanOpen = defineModel<boolean>('open', { default: false })
+  const upgradeOpen = defineModel<boolean>('upgradeOpen', { default: false })
+
+  type BillingPeriod = ChangePlanDrawerPeriod
+  type BillingAddress = ChangePlanDrawerAddress
+
+  const planCards = computed(() => props.plans ?? samplePlans)
+  const includedFeatures = computed(() => props.upgradeFeatures ?? sampleUpgradeFeatures)
+  const chargeCards = computed(() => props.charges ?? sampleCharges)
+  const startAddress = computed(() => props.accountAddress ?? sampleAccountAddress)
+  const submitting = computed(() => props.loading)
+
   const changePlanPeriod = ref<BillingPeriod>('yearly')
-  const planCards = [
-    {
-      id: 'free',
-      name: 'Free',
-      current: true,
-      action: 'current',
-      actionLabel: 'Current plan',
-      featuresTitle: 'All features included',
-      features: [
-        { label: 'Global infrastructure' },
-        { label: 'Serverless compute' },
-        { label: 'Storage and database' },
-        { label: 'Image optimization' },
-        { label: 'DDoS mitigation and firewall' }
-      ],
-      card: {
-        monthly: {
-          value: 'Free',
-          prefix: '$',
-          suffix: '',
-          showPrefix: false,
-          showSuffix: false,
-          details: 'Start free for personal projects and experimentation'
-        },
-        yearly: {
-          value: 'Free',
-          prefix: '$',
-          suffix: '',
-          showPrefix: false,
-          showSuffix: false,
-          details: 'Start free for personal projects and experimentation'
-        }
-      }
-    },
-    {
-      id: 'pro',
-      name: 'Pro',
-      current: false,
-      action: 'upgrade',
-      actionLabel: 'Continue with Pro',
-      featuresTitle: 'All Free features, plus:',
-      features: [
-        { label: 'Additional resources' },
-        { label: 'Higher request limits' },
-        { label: 'More storage capacity' },
-        { label: 'Broader security coverage' },
-        { label: 'Configurable spend limit' }
-      ],
-      card: {
-        monthly: {
-          value: '25',
-          prefix: '$',
-          suffix: '/ mon',
-          showPrefix: true,
-          showSuffix: true,
-          details: 'Billed monthly, cancel anytime'
-        },
-        yearly: {
-          value: '20',
-          prefix: '$',
-          suffix: '/ mon',
-          showPrefix: true,
-          showSuffix: true,
-          details: 'Billed annually, save 20%'
-        }
-      }
-    },
-    {
-      id: 'enterprise',
-      name: 'Enterprise',
-      current: false,
-      action: 'contact',
-      actionLabel: 'Contact sales',
-      featuresTitle: 'All Pro features, plus:',
-      features: [
-        { label: 'On-demand pricing' },
-        { label: 'Cut costs with commitments' },
-        { label: 'Capacity Reservation available' },
-        { label: 'Savings Plan available' },
-        { label: 'Advanced support available' }
-      ],
-      card: {
-        monthly: {
-          value: 'Custom',
-          prefix: '$',
-          suffix: '',
-          showPrefix: false,
-          showSuffix: false,
-          details: 'Tailored to your usage requirements and payment terms'
-        },
-        yearly: {
-          value: 'Custom',
-          prefix: '$',
-          suffix: '',
-          showPrefix: false,
-          showSuffix: false,
-          details: 'Tailored to your usage requirements and payment terms'
-        }
-      }
-    }
-  ]
   const pricedPlans = computed(() =>
-    planCards.map((plan) => ({ ...plan, ...plan.card[changePlanPeriod.value] }))
+    planCards.value.map((plan) => ({ ...plan, ...plan.card[changePlanPeriod.value] }))
   )
   watch(changePlanOpen, (isOpen) => {
     if (isOpen) changePlanPeriod.value = 'yearly'
   })
-  const choosePlan = (plan: (typeof planCards)[number]) => {
+  const choosePlan = (event: MouseEvent, plan: ChangePlanDrawerPlan) => {
+    emit('plan-select', event, plan)
     if (plan.action === 'upgrade') upgradeOpen.value = true
     else if (plan.action === 'contact') changePlanOpen.value = false
   }
 
-  const upgradeOpen = ref(false)
   const upgradePeriod = ref<BillingPeriod>('yearly')
-  const submitting = ref(false)
+  const termsAccepted = ref(false)
+  const termsError = ref('')
   const billingPeriods: { value: BillingPeriod; label: string }[] = [
     { value: 'monthly', label: 'Monthly' },
     { value: 'yearly', label: 'Yearly' }
-  ]
-  const upgradeFeatures = [
-    { label: '100 resources', description: 'then $0.10 per resource per month' },
-    { label: '10M requests', description: 'then as low as $0.90 per 1M' },
-    { label: '50 hours of compute time', description: 'then $0.18 per hour' },
-    { label: '10 GB of event log storage', description: 'then $0.10 per GB-month' },
-    { label: '100 GB of file storage', description: 'then as low as $0.021 per GB-month' },
-    { label: '1 GB of database storage', description: 'then $0.75 per GB-month' },
-    { label: '100M security rule evaluations', description: 'then as low as $0.30 per 1M' },
-    { label: 'DDoS protection included' },
-    { label: 'PCI DSS 4.0.1 Level 1' },
-    { label: 'SOC 2 Type 2 / SOC 3' },
-    { label: 'Data migration assistance' }
   ]
   const pricingLinks = [
     { label: 'Learn more about pricing', href: 'https://example.com/pricing' },
     { label: 'Compare plans', href: 'https://example.com/pricing#comparison' }
   ]
-  const charges = {
-    monthly: {
-      rows: [
-        { label: 'Next charge', value: '$200', suffix: '' },
-        { label: 'Subtotal', value: '$3,000', suffix: 'per month' }
-      ],
-      total: { value: '$3,000', suffix: 'per year' }
-    },
-    yearly: {
-      rows: [
-        { label: 'Next charge', value: '$200', suffix: '' },
-        { label: 'Subtotal', value: '$3,000', suffix: 'per month' },
-        { label: 'Yearly discount', value: '$2,200', suffix: 'per month' }
-      ],
-      total: { value: '$2,200', suffix: 'per year' }
-    }
-  }
-
   const countryOptions: SelectOptionItem[] = [
     { value: 'Brazil', label: 'Brazil' },
     { value: 'Canada', label: 'Canada' },
@@ -204,7 +229,14 @@
     code: 'card-code'
   }
   const editingCard = ref(false)
-  const cardLast4 = ref('8888')
+  const cardOnFile = ref(sampleCardLast4)
+  watch(
+    () => props.cardLast4,
+    (next) => {
+      cardOnFile.value = next ?? sampleCardLast4
+    },
+    { immediate: true }
+  )
   const blankCard = () => ({
     holder: '',
     country: undefined as string | undefined,
@@ -275,11 +307,7 @@
     cardDeclined.value = false
     if (!validateCard()) return
     const digits = cardForm.number.replace(/\D/g, '')
-    if (digits.endsWith('0002')) {
-      declineCard()
-      return
-    }
-    cardLast4.value = digits.slice(-4)
+    cardOnFile.value = digits.slice(-4)
     editingCard.value = false
     focusById('card-change')
   }
@@ -289,14 +317,6 @@
     invalid: !!cardErrors[field] && !!String(cardForm[field]).trim()
   })
 
-  const accountAddress: BillingAddress = {
-    country: 'United States',
-    postalCode: '94105',
-    state: 'California',
-    city: 'San Francisco',
-    line1: '100 Market Street',
-    line2: 'Suite 400'
-  }
   const blankAddress = (): BillingAddress => ({
     country: undefined,
     postalCode: '',
@@ -305,10 +325,10 @@
     line1: '',
     line2: ''
   })
-  const address = reactive({ useAccountInformation: true, ...accountAddress })
+  const address = reactive({ useAccountInformation: true, ...startAddress.value })
   watch(
     () => address.useAccountInformation,
-    (useAccount) => Object.assign(address, useAccount ? accountAddress : blankAddress())
+    (useAccount) => Object.assign(address, useAccount ? startAddress.value : blankAddress())
   )
   const stateOptions: SelectOptionItem[] = [
     { value: 'California', label: 'California' },
@@ -325,44 +345,76 @@
     if (!isOpen) return
     upgradePeriod.value = 'yearly'
     address.useAccountInformation = true
-    Object.assign(address, accountAddress)
-    submitting.value = false
+    Object.assign(address, startAddress.value)
+    termsAccepted.value = false
+    termsError.value = ''
     editingCard.value = false
     clearCardErrors()
   })
 
   const UPGRADE_TOAST = 'upgrade-result'
 
-  const submitUpgrade = () => {
+  const submitUpgrade = (event: Event) => {
     if (submitting.value) return
     cardDeclined.value = false
     if (editingCard.value && !validateCard()) return
-    const digits = editingCard.value ? cardForm.number.replace(/\D/g, '') : cardLast4.value
-    submitting.value = true
+    if (props.terms && !termsAccepted.value) {
+      termsError.value = 'Accept the Terms of Service and the Privacy Policy to upgrade.'
+      nextTick(() => document.getElementById('checkout-terms')?.focus())
+      return
+    }
     toast.dismiss(UPGRADE_TOAST)
-    setTimeout(() => {
-      submitting.value = false
-      if (digits.endsWith('0002')) {
-        declineCard()
-        return
+    emit('upgrade', event, {
+      period: upgradePeriod.value,
+      card: editingCard.value ? { ...cardForm } : null,
+      address: {
+        country: address.country,
+        postalCode: address.postalCode,
+        state: address.state,
+        city: address.city,
+        line1: address.line1,
+        line2: address.line2
       }
-      if (digits.endsWith('0119')) {
-        toast.error('The upgrade failed. The account is still on Free.', {
-          id: UPGRADE_TOAST,
-          description: 'The payment service did not answer. Your entries are kept.',
-          action: { label: 'Retry', onClick: () => submitUpgrade() }
-        })
-        return
+    })
+  }
+
+  watch(
+    () => props.declined,
+    (declined) => {
+      if (!declined) return
+      if (!editingCard.value) {
+        Object.assign(cardForm, blankCard())
+        editingCard.value = true
       }
+      declineCard()
+    }
+  )
+
+  watch(
+    () => props.error,
+    (message) => {
+      if (!message) return
+      toast.error('The upgrade failed. The account is still on Free.', {
+        id: UPGRADE_TOAST,
+        description: message,
+        action: { label: 'Retry', onClick: (event: MouseEvent) => submitUpgrade(event) }
+      })
+    }
+  )
+
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (now || !before || props.error || props.declined) return
       if (editingCard.value) {
-        cardLast4.value = digits.slice(-4)
+        cardOnFile.value = cardForm.number.replace(/\D/g, '').slice(-4)
         editingCard.value = false
       }
       upgradeOpen.value = false
       changePlanOpen.value = false
       toast.success('The account was upgraded to Pro.', { id: UPGRADE_TOAST })
-    }, 900)
-  }
+    }
+  )
 </script>
 
 <template>
@@ -432,7 +484,7 @@
                     :disabled="plan.current"
                     size="large"
                     class="w-full"
-                    @click="choosePlan(plan)"
+                    @click="(event: MouseEvent) => choosePlan(event, plan)"
                   />
                 </template>
               </PricingCard>
@@ -470,7 +522,7 @@
                   What's included
                 </h3>
                 <div class="px-(--spacing-xs)">
-                  <PlanFeatureList :items="upgradeFeatures" />
+                  <PlanFeatureList :items="includedFeatures" />
                 </div>
               </div>
               <div class="flex flex-col gap-(--spacing-xs)">
@@ -506,7 +558,7 @@
                       class="flex flex-col gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-lg)"
                     >
                       <div
-                        v-for="row in charges[upgradePeriod].rows"
+                        v-for="row in chargeCards[upgradePeriod].rows"
                         :key="row.label"
                         class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)"
                       >
@@ -528,13 +580,34 @@
                       <span class="text-heading-xs text-(--text-default)">Total</span>
                       <span class="flex items-baseline gap-(--spacing-xs)">
                         <span class="text-heading-xs text-(--text-default)">{{
-                          charges[upgradePeriod].total.value
+                          chargeCards[upgradePeriod].total.value
                         }}</span>
                         <span class="text-body-sm text-(--text-muted)">{{
-                          charges[upgradePeriod].total.suffix
+                          chargeCards[upgradePeriod].total.suffix
                         }}</span>
                       </span>
                     </div>
+                    <template v-if="terms">
+                      <Separator />
+                      <div
+                        class="flex flex-col gap-(--spacing-2xs) px-(--spacing-lg) py-(--spacing-md)"
+                      >
+                        <div
+                          class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)"
+                        >
+                          <span class="text-label-md text-(--text-default)">Due today</span>
+                          <span class="text-label-md text-(--text-default)">{{
+                            chargeCards[upgradePeriod].dueToday
+                          }}</span>
+                        </div>
+                        <p class="text-body-xs text-(--text-muted)">
+                          Taxes are calculated from the address below and shown on the invoice. The
+                          plan renews
+                          {{ upgradePeriod === 'yearly' ? 'every year' : 'every month' }}
+                          on the day you upgrade; cancel any time from Billing.
+                        </p>
+                      </div>
+                    </template>
                   </div>
                 </template>
               </Card>
@@ -550,7 +623,7 @@
                     >
                       <PaymentBrand brand="visa" />
                       <p class="min-w-0 flex-1 text-label-md text-(--text-default)">
-                        Ending in {{ cardLast4 }}
+                        Ending in {{ cardOnFile }}
                       </p>
                       <Button
                         id="card-change"
@@ -808,6 +881,40 @@
                   </fieldset>
                 </template>
               </Card>
+              <Field
+                v-if="terms"
+                orientation="horizontal"
+                :invalid="!!termsError"
+              >
+                <Checkbox
+                  v-model="termsAccepted"
+                  id="checkout-terms"
+                  name="terms"
+                  :disabled="submitting"
+                  @update:model-value="termsError = ''"
+                />
+                <Field.Content>
+                  <Field.Label for="checkout-terms">
+                    I accept the
+                    <a
+                      href="https://example.com/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-link"
+                      >Terms of Service<span class="sr-only"> (opens in a new tab)</span></a
+                    >
+                    and the
+                    <a
+                      href="https://example.com/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-link"
+                      >Privacy Policy<span class="sr-only"> (opens in a new tab)</span></a
+                    >
+                  </Field.Label>
+                  <Field.Description v-if="termsError">{{ termsError }}</Field.Description>
+                </Field.Content>
+              </Field>
             </div>
           </div>
         </PanelBody>

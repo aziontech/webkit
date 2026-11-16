@@ -23,6 +23,57 @@ describe('account/mfa-settings', () => {
     await fireEvent.click(button(dialog()!, 'Require MFA'))
     await waitFor(() => expect(dialog()).toBeNull())
     expect(view.container.textContent).not.toMatch(/sign in with a password only/)
+    expect(view.emitted('update:required')).toEqual([[true]])
+  })
+
+  it('renders the people it is given instead of the sample and emits the row actions', async () => {
+    const view = render(MfaManagement, {
+      props: {
+        members: [
+          {
+            id: 'u-1',
+            name: 'Jane Doe',
+            email: 'jane.doe@example.com',
+            method: 'Authenticator app',
+            enabled: true,
+            since: new Date(Date.UTC(2026, 9, 1))
+          },
+          {
+            id: 'u-2',
+            name: 'John Smith',
+            email: 'john.smith@example.com',
+            method: '',
+            enabled: false,
+            since: null
+          }
+        ]
+      }
+    })
+    await waitFor(() => expect(view.container.textContent).toContain('Jane Doe'))
+    expect(view.container.textContent).not.toContain('Avery Stone')
+    expect(view.container.textContent).toMatch(/1 of 2 people sign in with a password only/)
+    await fireEvent.click(view.getByRole('button', { name: /Actions for John Smith/ }))
+    await fireEvent.click(
+      await waitFor(() => view.getByRole('menuitem', { name: 'Send setup reminder' }))
+    )
+    expect(view.emitted('remind')![0][1]).toMatchObject({ id: 'u-2' })
+    await fireEvent.click(view.getByRole('button', { name: /Actions for Jane Doe/ }))
+    await fireEvent.click(await waitFor(() => view.getByRole('menuitem', { name: 'Reset MFA' })))
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    await fireEvent.click(button(dialog()!, 'Reset MFA'))
+    expect(view.emitted('reset')![0][1]).toMatchObject({ id: 'u-1' })
+    await waitFor(() =>
+      expect(view.container.textContent).toMatch(/2 of 2 people sign in with a password only/)
+    )
+  })
+
+  it('disables the Switch and shows the error with Retry when the load failed', async () => {
+    const view = render(MfaManagement, { props: { error: 'The API answered 503.' } })
+    expect(view.container.textContent).toContain('The API answered 503.')
+    expect(view.getByRole('switch', { name: 'Require MFA' })).toBeDisabled()
+    expect(view.container.textContent).not.toContain('Avery Stone')
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    expect(view.emitted('retry')).toHaveLength(1)
   })
 
   it('filters people by MFA status under the table-view controls row', async () => {

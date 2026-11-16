@@ -30,31 +30,91 @@
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  interface Token {
+  import { sampleNow, sampleTokens } from './sample'
+
+  /** One personal token of the signed-in person. */
+  export interface PersonalTokensToken {
+    /** Stable key. */
     id: string
+    /** Display name. */
     name: string
+    /** What the token is for; empty reads No description. */
     description: string
+    /** When it was created. */
     createdAt: Date
+    /** Who created it, shown under the creation time. */
     createdBy: string
+    /** When it stops working. */
     expiresAt: Date
+    /** The last request it signed, or null when it was never used. */
     lastUsedAt: Date | null
+    /** Whether it was revoked. */
     revoked: boolean
   }
-  type TokenRow = Token & { status: string; expires: string }
+
+  /** What Create Personal Token sends: the name, the description and the lifetime in days. */
+  export interface PersonalTokensCreateValues {
+    /** Trimmed name, unique in the list. */
+    name: string
+    /** Trimmed description, may be empty. */
+    description: string
+    /** Days until the token expires. */
+    expiresInDays: number
+  }
+
+  /** The token the create request returned, shown once in the reveal dialog. */
+  export interface PersonalTokensSecret {
+    /** The token's name. */
+    name: string
+    /** The secret value. */
+    secret: string
+  }
+
+  export interface PersonalTokensProps {
+    /** The tokens to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    tokens?: PersonalTokensToken[]
+    /** A request is in flight: with no tokens it is the first load, with tokens a refresh. */
+    loading?: boolean
+    /** Why the tokens could not load; a danger alert with Retry replaces the table. */
+    error?: string
+    /** The create request is in flight; the drawer's fields lock and its submit spins. */
+    creating?: boolean
+    /** The moment statuses and the expiry hint count from. Left out, the sample clock. */
+    now?: Date
+  }
+
+  const props = withDefaults(defineProps<PersonalTokensProps>(), {
+    tokens: undefined,
+    loading: false,
+    error: '',
+    creating: false,
+    now: undefined
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    create: [event: Event, values: PersonalTokensCreateValues]
+    revoke: [event: MouseEvent, token: PersonalTokensToken]
+    delete: [event: MouseEvent, token: PersonalTokensToken]
+  }>()
+
+  const secretModel = defineModel<PersonalTokensSecret | null>('secret', { default: null })
+
+  type TokenRow = PersonalTokensToken & { status: string; expires: string }
   interface TokenStatus {
     label: string
     severity: TagSeverity
   }
 
   const DAY = 86_400_000
-  const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const daysFrom = (days: number) => new Date(referenceTime + days * DAY)
+  const referenceTime = computed(() => (props.now ?? sampleNow).getTime())
+  const daysFrom = (days: number) => new Date(referenceTime.value + days * DAY)
 
   const { formatDate: formatLocaleDate } = useLocale()
 
@@ -66,54 +126,21 @@
       timeZone: 'UTC'
     })
 
-  const seedTokens: Token[] = [
-    {
-      id: 'tok-7c1e',
-      name: 'Local CLI',
-      description: 'Development laptop',
-      createdAt: daysFrom(-40),
-      createdBy: 'grace.hall@example.com',
-      expiresAt: daysFrom(50),
-      lastUsedAt: daysFrom(-0.1),
-      revoked: false
+  const source = computed<PersonalTokensToken[]>(
+    () => props.tokens ?? (props.loading || props.error ? [] : sampleTokens)
+  )
+  const items = ref<PersonalTokensToken[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
     },
-    {
-      id: 'tok-3a90',
-      name: 'Deploy pipeline',
-      description: 'CI job that publishes the storefront',
-      createdAt: daysFrom(-85),
-      createdBy: 'grace.hall@example.com',
-      expiresAt: daysFrom(5),
-      lastUsedAt: daysFrom(-1),
-      revoked: false
-    },
-    {
-      id: 'tok-b412',
-      name: 'Infrastructure as code',
-      description: 'Provider for the staging stack',
-      createdAt: daysFrom(-120),
-      createdBy: 'grace.hall@example.com',
-      expiresAt: daysFrom(-30),
-      lastUsedAt: daysFrom(-31),
-      revoked: false
-    },
-    {
-      id: 'tok-55d2',
-      name: 'Nightly export',
-      description: 'Retired reporting script',
-      createdAt: daysFrom(-200),
-      createdBy: 'grace.hall@example.com',
-      expiresAt: daysFrom(160),
-      lastUsedAt: null,
-      revoked: true
-    }
-  ]
+    { immediate: true }
+  )
 
-  const tokens = ref<Token[]>(seedTokens)
-
-  const statusOf = (token: Token): TokenStatus => {
+  const statusOf = (token: PersonalTokensToken): TokenStatus => {
     if (token.revoked) return { label: 'Revoked', severity: 'neutral' }
-    const left = Math.ceil((token.expiresAt.getTime() - referenceTime) / DAY)
+    const left = Math.ceil((token.expiresAt.getTime() - referenceTime.value) / DAY)
     if (left <= 0) return { label: 'Expired', severity: 'danger' }
     if (left <= 7)
       return { label: `Expires in ${left} ${left === 1 ? 'day' : 'days'}`, severity: 'warning' }
@@ -121,7 +148,7 @@
   }
 
   const rows = computed<TokenRow[]>(() =>
-    tokens.value.map((token) => ({
+    items.value.map((token) => ({
       ...token,
       status: statusOf(token).label,
       expires: formatDate(token.expiresAt)
@@ -138,15 +165,15 @@
     { id: 'actions', type: 'action', hideable: false }
   ]
 
-  const statusOptions = [...new Set(rows.value.map((row) => row.status))]
-    .sort()
-    .map((value) => ({ value }))
-
-  const properties: FilteringProperty[] = [
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
-    { key: 'status', label: 'Status', options: statusOptions }
-  ]
+    {
+      key: 'status',
+      label: 'Status',
+      options: [...new Set(rows.value.map((row) => row.status))].sort().map((value) => ({ value }))
+    }
+  ])
 
   const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
     useCollection({
@@ -161,24 +188,8 @@
   const tokensTableEl = ref<TableExposed<TokenRow> | null>(null)
   const exportCsv = () => tokensTableEl.value?.exportCsv({ filename: 'personal-tokens.csv' })
 
-  const loading = ref(false)
-  const loadFailed = ref(false)
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
-
-  const refreshing = ref(false)
-  const refresh = () => {
-    if (refreshing.value) return
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
+  const loadFailed = computed(() => props.error !== '')
+  const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const expiryOptions = [
     { value: '7', label: '7 days' },
@@ -191,7 +202,7 @@
     expiryOptions.find((option) => option.value === value)?.label ?? ''
 
   const createOpen = ref(false)
-  const submitting = ref(false)
+  const submitting = computed(() => props.creating)
   const form = reactive({ name: '', description: '', expiresIn: '30' })
   const errors = reactive({ name: '' })
   const expiryHint = computed(
@@ -207,46 +218,28 @@
 
   const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
-  const revealOpen = ref(false)
-  const revealed = reactive({ name: '', secret: '' })
+  const revealOpen = computed(() => secretModel.value !== null)
+  const revealed = computed(() => secretModel.value ?? { name: '', secret: '' })
+  watch(secretModel, (next) => {
+    if (next) createOpen.value = false
+  })
 
-  const makeSecret = () => {
-    const bytes = new Uint8Array(24)
-    globalThis.crypto?.getRandomValues?.(bytes)
-    return `pat_${Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')}`
-  }
-
-  const submit = () => {
+  const submit = (event: Event) => {
     if (submitting.value) return
     const name = form.name.trim()
     if (!name) errors.name = 'This field is required.'
-    else if (tokens.value.some((token) => token.name.toLowerCase() === name.toLowerCase())) {
+    else if (items.value.some((token) => token.name.toLowerCase() === name.toLowerCase())) {
       errors.name = 'A token with this name already exists. Use another name.'
     } else errors.name = ''
     if (errors.name) {
       focusById('token-name')
       return
     }
-    submitting.value = true
-    setTimeout(() => {
-      submitting.value = false
-      tokens.value = [
-        {
-          id: `tok-${Math.random().toString(16).slice(2, 6)}`,
-          name,
-          description: form.description.trim(),
-          createdAt: new Date(),
-          createdBy: 'grace.hall@example.com',
-          expiresAt: daysFrom(Number(form.expiresIn)),
-          lastUsedAt: null,
-          revoked: false
-        },
-        ...tokens.value
-      ]
-      Object.assign(revealed, { name, secret: makeSecret() })
-      createOpen.value = false
-      revealOpen.value = true
-    }, 700)
+    emit('create', event, {
+      name,
+      description: form.description.trim(),
+      expiresInDays: Number(form.expiresIn)
+    })
   }
 
   const copied = ref(false)
@@ -254,42 +247,36 @@
     copied.value = true
   }
   const closeReveal = () => {
-    revealOpen.value = false
+    secretModel.value = null
     copied.value = false
-    revealed.secret = ''
   }
 
-  const pending = ref<Token | null>(null)
+  const pending = ref<PersonalTokensToken | null>(null)
   const revokeOpen = ref(false)
   const deleteOpen = ref(false)
-  const working = ref(false)
 
-  const onAction = (value: DropdownMenuItemValue, row: Token) => {
-    pending.value = row
+  const onAction = (value: DropdownMenuItemValue, row: TokenRow) => {
+    pending.value = items.value.find((token) => token.id === row.id) ?? null
     if (value === 'revoke') revokeOpen.value = true
     if (value === 'delete') deleteOpen.value = true
   }
 
-  const revoke = () => {
-    const row = pending.value
-    if (!row || working.value) return
-    working.value = true
-    setTimeout(() => {
-      working.value = false
-      tokens.value = tokens.value.map((token) =>
-        token.id === row.id ? { ...token, revoked: true } : token
-      )
-      revokeOpen.value = false
-      toast.success(`Token "${row.name}" revoked. Requests that use it are now refused.`)
-    }, 600)
+  const revoke = (event: MouseEvent) => {
+    const token = pending.value
+    if (!token) return
+    items.value = items.value.map((item) =>
+      item.id === token.id ? { ...item, revoked: true } : item
+    )
+    revokeOpen.value = false
+    emit('revoke', event, token)
   }
 
-  const remove = () => {
-    const row = pending.value
-    if (!row) return
-    tokens.value = tokens.value.filter((token) => token.id !== row.id)
+  const remove = (event: MouseEvent) => {
+    const token = pending.value
+    if (!token) return
+    items.value = items.value.filter((item) => item.id !== token.id)
     deleteOpen.value = false
-    toast.success(`Token "${row.name}" deleted.`)
+    emit('delete', event, token)
   }
 </script>
 
@@ -342,7 +329,7 @@
                 size="medium"
                 :loading="refreshing"
                 aria-label="Refresh"
-                @click="refresh"
+                @click="emit('refresh', $event)"
               />
             </Tooltip>
             <Tooltip
@@ -369,13 +356,13 @@
           v-if="loadFailed"
           severity="danger"
         >
-          The tokens could not be loaded. Nothing was changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="retryLoad"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -414,7 +401,7 @@
             <DataTable
               ref="tokensTableEl"
               v-bind="tableProps"
-              :loading="loading || refreshing"
+              :loading="loading"
               sortable
               :bordered="false"
               aria-label="Personal tokens"
@@ -689,7 +676,6 @@
       title="Revoke token"
       :description="`Scripts and tools that use “${pending?.name ?? ''}” stop working right away. You cannot undo this.`"
       confirm-label="Revoke token"
-      :loading="working"
       size="small"
       @confirm="revoke"
     />

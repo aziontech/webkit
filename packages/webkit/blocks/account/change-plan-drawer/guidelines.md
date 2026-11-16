@@ -99,6 +99,57 @@ What's included in the upgrade drawer, under its visible heading: one check per 
 
 A failure no section owns (the payment service did not answer) is `toast.error` with Retry, and the drawer stays open with the entries kept; a successful upgrade closes both drawers and toasts `The account was upgraded to Pro.` This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
+## Data
+
+The block takes its plans and prices through props and emits the upgrade; it fetches nothing and charges nothing. `ChangePlanDrawerProps`, `ChangePlanDrawerPlan`, `ChangePlanDrawerCharges`, `ChangePlanDrawerAddress` and `ChangePlanDrawerUpgrade` are exported from `change-plan-drawer.vue`, and `sample.ts` holds the sample tiers, the Pro allowance, the charges, the account address and the card on file the block renders when a prop is left out.
+
+| Prop              | Type                                                      | What it does                                                                                                                      |
+| ----------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `plans`           | `ChangePlanDrawerPlan[]`                                  | The tiers in the plan drawer, each with its price per billing period, its features and what its button does.                      |
+| `upgradeFeatures` | `ChangePlanDrawerFeature[]`                               | What's included in the upgrade drawer.                                                                                            |
+| `charges`         | `Record<ChangePlanDrawerPeriod, ChangePlanDrawerCharges>` | The Charged rows, the Total and Due today per billing period.                                                                     |
+| `accountAddress`  | `ChangePlanDrawerAddress`                                 | The account address the billing address starts from.                                                                              |
+| `cardLast4`       | `string`                                                  | The last four digits of the card on file.                                                                                         |
+| `open`            | `boolean` (`v-model:open`)                                | The plan drawer.                                                                                                                  |
+| `upgradeOpen`     | `boolean` (`v-model:upgrade-open`)                        | The upgrade drawer.                                                                                                               |
+| `terms`           | `boolean`                                                 | The checkout step: the charge card adds Due today and Upgrade requires the terms checkbox.                                        |
+| `loading`         | `boolean`                                                 | The upgrade request is in flight; when it ends with no `error` and no `declined`, both drawers close and the success toast shows. |
+| `declined`        | `boolean`                                                 | The issuer declined the card: the danger alert, and the number field invalid and focused.                                         |
+| `error`           | `string`                                                  | Why the upgrade failed, in an error toast with Retry; the drawer stays open with the entries kept.                                |
+
+| Event         | Payload           | When                                                                                                                                    |
+| ------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `plan-select` | `(event, plan)`   | A pricing card's action; Continue with Pro also opens the upgrade drawer.                                                               |
+| `upgrade`     | `(event, values)` | Upgrade passed validation: `{ period, card, address }`, `card` is `null` for the card on file. Retry in the error toast sends it again. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import ChangePlanDrawer, { type ChangePlanDrawerUpgrade } from './change-plan-drawer.vue'
+
+  const { data } = usePlans()
+  const { pending, declined, error, execute } = useUpgrade()
+  const upgrade = (event: Event, values: ChangePlanDrawerUpgrade) => execute(values)
+</script>
+
+<template>
+  <ChangePlanDrawer
+    :plans="data?.plans"
+    :upgrade-features="data?.proFeatures"
+    :charges="data?.charges"
+    :account-address="data?.address"
+    :card-last4="data?.cardLast4"
+    :loading="pending"
+    :declined="declined"
+    :error="error ? 'The payment service did not answer. Your entries are kept.' : ''"
+    @upgrade="upgrade"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Disable every field and secondary action while the upgrade submits, and release the lock when it ends, on success and on failure.
@@ -131,8 +182,8 @@ A failure no section owns (the payment service did not answer) is `toast.error` 
 
 ## States
 
-- Default: the plan drawer open on an account that is on Free, Yearly selected. In the upgrade drawer, a new card ending in 0002 is declined and one ending in 0119 makes the payment service fail, so both failure paths can be walked.
-- Checkout: the Upgrade to Pro drawer open on its own, as the checkout step: the charge card adds Due today and a note that taxes come from the billing address and the plan renews on the upgrade day; under the address a required `Checkbox` accepts the Terms of Service and the Privacy Policy (each a `Link` in a new tab). Upgrade without it shows `Accept the Terms of Service and the Privacy Policy to upgrade.` on the field and focuses the checkbox; the card and service failures work as in the primary.
+- Default: the Change plan button; it opens the plan drawer on an account that is on Free, Yearly selected. Continue with Pro opens the upgrade drawer, and Upgrade emits `upgrade`; `declined` shows the declined card and `error` the payment service failure.
+- Checkout: the Upgrade to Pro drawer open on its own (`upgradeOpen` and `terms`), as the checkout step: the charge card adds Due today and a note that taxes come from the billing address and the plan renews on the upgrade day; under the address a required `Checkbox` accepts the Terms of Service and the Privacy Policy (each a `Link` in a new tab). Upgrade without it shows `Accept the Terms of Service and the Privacy Policy to upgrade.` on the field and focuses the checkbox; the card and service failures come from `declined` and `error` as in the primary.
 
 ## Related
 

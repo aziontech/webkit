@@ -29,7 +29,7 @@ The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `
 
 ### D. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
-`Table.CellActions` named after the team: Edit and Duplicate, then Delete in its own group. Duplicate copies the permissions with no members and toasts. Delete asks in a `ConfirmDialog` that says how many members lose what the team grants.
+`Table.CellActions` named after the team: Edit and Duplicate, then Delete in its own group. Edit and Duplicate emit `row-action` for the page to open the team or copy it. Delete asks in a `ConfirmDialog` that says how many members lose what the team grants, then removes the row and emits `delete`.
 
 ### E. No match and empty — `EmptyState` (required)
 
@@ -61,7 +61,47 @@ The matrix is the `Table` compound composed by hand, `bordered`: `aria-label="Pe
 
 ### Outcomes — through `toast`
 
-Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+The list emits Duplicate and Delete; the page that runs the request ends it in a success toast (Team changes are not deploys, so the toast has no Edit or Redeploy). The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The list takes its teams through props and emits every action; it fetches nothing. `TeamPermissionsTeam` and `TeamPermissionsProps` are exported from `team-permissions.vue`, and `sample.ts` holds the sample teams the block renders when `teams` is left out (and never while `loading` or `error` is set). CreateTeam and EditTeam are separate pages with their own form state.
+
+| Prop      | Type                    | What it does                                                                                                             |
+| --------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `teams`   | `TeamPermissionsTeam[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.             |
+| `loading` | `boolean`               | A request is in flight. With no teams it is the first load (the table shows its loading rows); with teams Refresh spins. |
+| `error`   | `string`                | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table.                    |
+
+| Event        | Payload                    | When                                                                     |
+| ------------ | -------------------------- | ------------------------------------------------------------------------ |
+| `refresh`    | `(event)`                  | Refresh.                                                                 |
+| `retry`      | `(event)`                  | Retry in the error alert.                                                |
+| `row-action` | `(event, { value, team })` | Edit or Duplicate in the row menu.                                       |
+| `delete`     | `(event, team)`            | The delete dialog was confirmed; the row is already gone from the table. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import TeamPermissions from './team-permissions.vue'
+
+  const { data, pending, error, refresh } = useTeams()
+  const loadError = 'The teams could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <TeamPermissions
+    :teams="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -100,12 +140,12 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 ## States
 
-- Default: five teams (one with every permission, one inactive with no members) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, duplicate and delete wired.
+- Default: `teams` holds five teams (one with every permission, one inactive with no members) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, duplicate and delete wired.
 - CreateTeam: the create page in the creation frame (Back to Teams and permissions, no rail) with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar variant="centered"`, a raised card centred over the bottom of the scroll region, as on Edit Team. A filter with no match shows a small `EmptyState` with Clear filter.
 - EditTeam: in the same creation frame, a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
-- Empty: no team yet; the heading and an empty state with Create Team.
-- Loading: the first load; the controls row and the table's loading rows.
-- Error: the teams did not load; a danger Alert with Retry.
+- Empty: no team yet (`teams` is `[]`); the heading and an empty state with Create Team.
+- Loading: the first load (`loading` with no `teams`); the controls row and the table's loading rows.
+- Error: the teams did not load (`error` is set); a danger Alert with the message and Retry.
 
 ## Related
 

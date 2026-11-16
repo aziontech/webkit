@@ -21,109 +21,64 @@
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
+  import { sampleEvents, sampleNow } from './sample'
+
   const MINUTE = 60_000
   const HOUR = 60 * MINUTE
   const DAY = 24 * HOUR
-  const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const ago = (ms: number) => new Date(referenceTime - ms)
 
-  type ActivityCategory = 'Sign-in' | 'Security' | 'Deploy' | 'Users' | 'Billing'
+  /** What kind of change an event records. */
+  export type ActivityHistoryCategory = 'Sign-in' | 'Security' | 'Deploy' | 'Users' | 'Billing'
 
-  interface ActivityEvent {
+  /** One entry of the audit log. */
+  export interface ActivityHistoryEvent {
+    /** Stable key. */
     id: string
+    /** A past-tense sentence naming the object. */
     event: string
-    category: ActivityCategory
+    /** What kind of change it records. */
+    category: ActivityHistoryCategory
+    /** Email of the person who did it. */
     user: string
+    /** The address it came from. */
     ip: string
+    /** When it happened. */
     at: Date
   }
 
-  const seedEvents: ActivityEvent[] = [
-    {
-      id: 'evt-1048',
-      event: 'Signed in',
-      category: 'Sign-in',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(25 * MINUTE)
-    },
-    {
-      id: 'evt-1047',
-      event: 'Revoked personal token “Nightly export”',
-      category: 'Security',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(3 * HOUR)
-    },
-    {
-      id: 'evt-1046',
-      event: 'Deployed storefront to Production',
-      category: 'Deploy',
-      user: 'jonas.weber@example.com',
-      ip: '198.51.100.7',
-      at: ago(9 * HOUR)
-    },
-    {
-      id: 'evt-1045',
-      event: 'Changed the role of henry.young@example.com to Admin',
-      category: 'Users',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(1 * DAY + 2 * HOUR)
-    },
-    {
-      id: 'evt-1044',
-      event: 'Turned on multi-factor authentication',
-      category: 'Security',
-      user: 'henry.young@example.com',
-      ip: '192.0.2.61',
-      at: ago(2 * DAY)
-    },
-    {
-      id: 'evt-1043',
-      event: 'Updated the billing email',
-      category: 'Billing',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(3 * DAY)
-    },
-    {
-      id: 'evt-1042',
-      event: 'Failed sign-in: wrong authentication code',
-      category: 'Sign-in',
-      user: 'jonas.weber@example.com',
-      ip: '198.51.100.90',
-      at: ago(4 * DAY + 5 * HOUR)
-    },
-    {
-      id: 'evt-1041',
-      event: 'Invited lee.park@example.com to the team Developers',
-      category: 'Users',
-      user: 'henry.young@example.com',
-      ip: '192.0.2.61',
-      at: ago(6 * DAY)
-    },
-    {
-      id: 'evt-1040',
-      event: 'Created personal token “Deploy pipeline”',
-      category: 'Security',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(12 * DAY)
-    },
-    {
-      id: 'evt-1039',
-      event: 'Changed the plan from Free to Pro',
-      category: 'Billing',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(21 * DAY)
-    }
-  ]
+  export interface ActivityHistoryProps {
+    /** The events to list; the period, the filter, the sort and the pages run in the browser. Left out, the sample renders. */
+    events?: ActivityHistoryEvent[]
+    /** The moment relative periods count back from. Left out, the sample clock is used. */
+    now?: Date
+    /** A request is in flight: with no events it is the first load, with events a refresh. */
+    loading?: boolean
+    /** Why the events could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
 
-  const events = ref(seedEvents)
+  const props = withDefaults(defineProps<ActivityHistoryProps>(), {
+    events: undefined,
+    now: undefined,
+    loading: false,
+    error: ''
+  })
 
-  const categorySeverity = (category: ActivityCategory): TagSeverity | undefined =>
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+  }>()
+
+  const range = defineModel<DateRangeValue>('range', {
+    default: () => ({ type: 'relative', amount: 30, unit: 'day', key: 'last-30-days' })
+  })
+
+  const entries = computed<ActivityHistoryEvent[]>(
+    () => props.events ?? (props.loading || props.error ? [] : sampleEvents)
+  )
+  const referenceTime = computed(() => (props.now ?? sampleNow).getTime())
+
+  const categorySeverity = (category: ActivityHistoryCategory): TagSeverity | undefined =>
     category === 'Billing'
       ? undefined
       : ((
@@ -135,15 +90,9 @@
           } as const
         )[category] ?? 'neutral')
 
-  const categoryVariant = (category: ActivityCategory): TagVariant | undefined =>
+  const categoryVariant = (category: ActivityHistoryCategory): TagVariant | undefined =>
     category === 'Billing' ? 'primary' : undefined
 
-  const range = ref<DateRangeValue>({
-    type: 'relative',
-    amount: 30,
-    unit: 'day',
-    key: 'last-30-days'
-  })
   const relativeOptions: RelativeOption[] = [
     { key: 'last-15-minutes', amount: 15, unit: 'minute' },
     { key: 'last-1-hour', amount: 1, unit: 'hour' },
@@ -164,24 +113,24 @@
       return { start: new Date(value.start).getTime(), end: new Date(value.end).getTime() }
     }
     const span = (value?.amount ?? 30) * (UNIT_MS[value?.unit] ?? DAY)
-    return { start: referenceTime - span, end: Number.POSITIVE_INFINITY }
+    return { start: referenceTime.value - span, end: Number.POSITIVE_INFINITY }
   })
   const inRange = computed(() =>
-    events.value.filter((entry) => {
+    entries.value.filter((entry) => {
       const time = entry.at.getTime()
       return time >= period.value.start && time <= period.value.end
     })
   )
 
   const optionsOf = (key: 'category' | 'user') =>
-    [...new Set(seedEvents.map((entry) => entry[key]))].sort().map((value) => ({ value }))
+    [...new Set(entries.value.map((entry) => entry[key]))].sort().map((value) => ({ value }))
 
-  const properties: FilteringProperty[] = [
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'event', label: 'Event' },
     { key: 'category', label: 'Category', options: optionsOf('category') },
     { key: 'user', label: 'User', options: optionsOf('user') },
     { key: 'ip', label: 'IP address' }
-  ]
+  ])
 
   const columns: TableColumn[] = [
     { accessorKey: 'event', header: 'Event', principal: true, hideable: false, grow: 2 },
@@ -202,24 +151,14 @@
       preferences: { storageKey: 'activity-history' }
     })
 
-  const loading = ref(false)
-  const loadFailed = ref(false)
-  const load = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
-
-  const activityTableEl = ref<TableExposed<ActivityEvent> | null>(null)
+  const activityTableEl = ref<TableExposed<ActivityHistoryEvent> | null>(null)
   const exportCsv = () => activityTableEl.value?.exportCsv({ filename: 'activity-history.csv' })
 
   const RETENTION_DAYS = 90
   const widerRange = computed<RelativeOption | null>(() => {
     const span =
       period.value.end === Number.POSITIVE_INFINITY
-        ? referenceTime - period.value.start
+        ? referenceTime.value - period.value.start
         : period.value.end - period.value.start
     if (span >= RETENTION_DAYS * DAY) return null
     return (
@@ -285,7 +224,7 @@
                 size="medium"
                 :loading="loading"
                 aria-label="Refresh"
-                @click="load"
+                @click="emit('refresh', $event)"
               />
             </Tooltip>
             <Tooltip
@@ -309,16 +248,16 @@
         </header>
 
         <Alert
-          v-if="loadFailed"
+          v-if="error"
           severity="danger"
         >
-          The activity could not be loaded. Nothing was changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="load"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>

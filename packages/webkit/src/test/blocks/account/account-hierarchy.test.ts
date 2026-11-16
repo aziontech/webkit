@@ -107,6 +107,13 @@ describe('account/account-hierarchy', () => {
     await userEvent.click(confirm())
     await waitFor(() => expect(row('grp-2101').getAttribute('aria-level')).toBe('2'))
     expect(rowNames().indexOf('grp-2101')).toBeGreaterThan(rowNames().indexOf('org-1002'))
+    const [event, payload] = view.emitted('move')![0] as [
+      Event,
+      { resources: { id: string }[]; destination: { id: string } }
+    ]
+    expect(event).toBeInstanceOf(Event)
+    expect(payload.destination.id).toBe('org-1002')
+    expect(payload.resources.map((item) => item.id)).toEqual(['grp-2101'])
   })
 
   it('counts what is inside before deleting a branch', async () => {
@@ -115,6 +122,49 @@ describe('account/account-hierarchy', () => {
     await userEvent.click(view.getByRole('button', { name: 'Delete' }))
     const dialog = await view.findByRole('alertdialog', { name: 'Delete Retail and marketplace' })
     expect(dialog.textContent).toContain('This also deletes the 3 resources inside.')
+    await userEvent.click(
+      Array.from(dialog.querySelectorAll<HTMLElement>('button')).find(
+        (button) => button.textContent?.trim() === 'Delete'
+      ) as HTMLElement
+    )
+    await waitFor(() => expect(view.emitted('delete')).toHaveLength(1))
+    const [, removed] = view.emitted('delete')![0] as [Event, { id: string }[]]
+    expect(removed.map((item) => item.id).sort()).toEqual(
+      ['grp-2101', 'ws-30418', 'ws-30422', 'ws-30437'].sort()
+    )
+    await waitFor(() => expect(rowNames()).not.toContain('grp-2101'))
+  })
+
+  it('renders the resources it is given instead of the sample, and the empty card for none', async () => {
+    const view = render(ManageResources, {
+      props: {
+        resources: [
+          { id: 'org-9', name: 'Acme Labs', type: 'organization', parentId: null },
+          {
+            id: 'ws-9',
+            name: 'acme-store',
+            type: 'workspace',
+            parentId: 'org-9',
+            status: 'Active'
+          }
+        ]
+      }
+    })
+    expect(rowNames()).toEqual(['org-9'])
+    expect(view.container.textContent).toContain('Acme Labs')
+    expect(view.container.textContent).not.toContain('Storefront')
+    await view.rerender({ resources: [] })
+    await waitFor(() => expect(view.getByText('No resources yet')).toBeTruthy())
+  })
+
+  it('emits refresh and retry instead of faking a reload', async () => {
+    const view = render(ManageResources, { props: { error: 'The API answered 503.' } })
+    expect(view.container.textContent).toContain('The API answered 503.')
+    expect(view.container.textContent).not.toContain('Storefront')
+    await userEvent.click(view.getByRole('button', { name: 'Retry' }))
+    await userEvent.click(view.getByRole('button', { name: 'Refresh resources' }))
+    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted('refresh')).toHaveLength(1)
   })
 
   it('starts the Selected variant with the details panel filled', () => {

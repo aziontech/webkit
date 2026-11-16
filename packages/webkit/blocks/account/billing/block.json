@@ -37,6 +37,7 @@
     "name": "Default",
     "file": "billing.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Loading",

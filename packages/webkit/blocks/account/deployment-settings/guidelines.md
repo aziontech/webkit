@@ -26,7 +26,7 @@ A small info `Alert`, closable, that explains the binding policy, the deployment
 
 ### C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
 
-A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingsRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save spins, keeps the values, turns Apply off again and toasts what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
+A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingsRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save emits `save` with the values and spins while `saving` is set; when the save ends without `error` the values are kept, Apply turns off again and a toast says what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
 
 ### D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination` (required)
 
@@ -42,15 +42,68 @@ The table-view controls row (`view/table-view`): a `PropertyFilter` over name, r
 
 ### G. Create and edit drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Textarea`, `RadioGroup` (required)
 
-This page owns the Deployment Setting form, in a large right `Drawer` (`create/create-drawer#DeploymentSettings` should match it field for field): General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioGroup`s with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Setting`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Setting` or `Save changes`, which spins; the drawer cannot be dismissed while it saves. A missing or taken name shows on the field after submit and focus moves to it.
+This page owns the Deployment Setting form, in a large right `Drawer` (`create/create-drawer#DeploymentSettings` should match it field for field): General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioGroup`s with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Setting`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Setting` or `Save changes`, which applies the setting to the table at once, closes the drawer and emits `create` or `update`. A missing or taken name shows on the field after submit and focus moves to it.
 
 ### H. Loading and no services — `Skeleton` (conditional)
 
-On the first load, `Skeleton`s take the place of the two default `Select`s and of the services card, and the table shows its loading rows. An account with no service shows a small `EmptyState` in All services that says each new environment is linked automatically.
+On the first load (`loading` with no `settings`), `Skeleton`s take the place of the two default `Select`s and of the services card, and the table shows its loading rows. An account with no service shows a small `EmptyState` in All services that says each new environment is linked automatically.
 
 ### Outcomes — through `toast`
 
 Saving defaults, rebinding, creating, editing, cloning and deleting end in a toast; a rebind onto a shared setting is a warning. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `DeploymentSettingsProps`, `DeploymentSettingsSetting`, `DeploymentSettingsService` and the other types are exported from `deployment-settings.vue`, and `sample.ts` holds the sample settings, services and defaults the block renders when those props are left out (and never while `loading` is set).
+
+| Prop           | Type                                        | What it does                                                                                                                        |
+| -------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `settings`     | `DeploymentSettingsSetting[]`               | Every Deployment Setting; the one with `system: true` is Default. Rebinds, creates, edits, clones and deletes apply to it locally.  |
+| `services`     | `DeploymentSettingsService[]`               | Every service with its environments and the setting each publishes with. Pass `[]` for an account with none.                        |
+| `defaults`     | `DeploymentSettingsDefaults`                | The saved new service defaults; Discard returns to them.                                                                            |
+| `defaultDraft` | `Partial<DeploymentSettingsDefaultsValues>` | Unsaved edits the defaults open with, so the SaveBar shows at once.                                                                 |
+| `currentUser`  | `string`                                    | Who local edits are stamped with in Last modified.                                                                                  |
+| `loading`      | `boolean`                                   | The page data is loading. With no settings it is the first load (Skeletons, table loading rows); with settings Refresh spins.       |
+| `saving`       | `boolean`                                   | The defaults save is in flight: Save spins and Discard locks. When it turns off without `error`, the defaults are kept and toasted. |
+| `error`        | `string`                                    | Why the defaults save failed, shown in a danger toast with Retry; the edits are kept.                                               |
+
+| Event     | Payload                                   | When                                                                                        |
+| --------- | ----------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `save`    | `(event, values)`                         | Save in the SaveBar; `values` are the defaults and `applyToExisting`.                       |
+| `discard` | `(event)`                                 | Discard in the SaveBar; the defaults are already back to the saved ones.                    |
+| `refresh` | `(event)`                                 | Refresh in the table controls.                                                              |
+| `bind`    | `({ serviceId, environment, settingId })` | An environment was pointed at another setting; the list already shows it.                   |
+| `create`  | `(event, setting)`                        | The drawer created a setting; it is already in the table.                                   |
+| `update`  | `(event, setting)`                        | The drawer saved an edited setting; the table already shows the change.                     |
+| `clone`   | `(event, { source, copy })`               | Clone in the row menu; the copy is already in the table.                                    |
+| `delete`  | `(event, setting)`                        | The delete dialog was confirmed; the row is gone and its environments fell back to Default. |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import DeploymentSettings from './deployment-settings.vue'
+
+  const { data, pending, refresh } = useDeploymentSettings()
+  const { run: saveDefaults, pending: saving, error } = useSaveDeploymentDefaults()
+  const saveError = "The request didn't reach the server. Your changes are kept."
+</script>
+
+<template>
+  <DeploymentSettings
+    :settings="data?.settings ?? []"
+    :services="data?.services ?? []"
+    :defaults="data?.defaults"
+    :loading="pending"
+    :saving="saving"
+    :error="error ? saveError : ''"
+    @refresh="refresh"
+    @save="(event, values) => saveDefaults(values)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import, and persist `bind`, `create`, `update`, `clone` and `delete` the same way.
 
 ## Do
 
@@ -87,10 +140,10 @@ Saving defaults, rebinding, creating, editing, cloning and deleting end in a toa
 
 ## States
 
-- Default: four services and five settings (Default, one shared by two services, one versioned, one dedicated, one inactive) with defaults, rebinding, the property filter, Refresh, Download CSV, preferences, create, edit, clone and delete wired.
-- UnsavedChanges: the binding policy default changed; the SaveBar with Discard and Save.
-- Empty: no service yet; All services shows an EmptyState and the table holds only Default.
-- Loading: the first load; Skeletons and the table's loading rows.
+- Default: the `settings`, `services` and `defaults` props (the sample when left out): four services and five settings (Default, one shared by two services, one versioned, one dedicated, one inactive) with defaults, rebinding, the property filter, Refresh, Download CSV, preferences, create, edit, clone and delete wired.
+- UnsavedChanges: the binding policy default changed (`defaultDraft`); the SaveBar with Discard and Save.
+- Empty: no service yet (`services` is `[]` and `settings` holds only Default); All services shows an EmptyState and the table holds only Default.
+- Loading: the first load (`loading` with no `settings`); Skeletons and the table's loading rows.
 
 ## Related
 

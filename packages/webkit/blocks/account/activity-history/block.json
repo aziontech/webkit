@@ -27,6 +27,7 @@
     "name": "Default",
     "file": "activity-history.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Empty",

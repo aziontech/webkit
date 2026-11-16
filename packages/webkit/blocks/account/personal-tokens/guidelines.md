@@ -41,7 +41,7 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 ### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `PanelFooter` (required)
 
-A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
+A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. Create emits `create` with the values; the fields lock while `creating` is set.
 
 ### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldDescription` (required)
 
@@ -49,11 +49,72 @@ Name is required and unique; the error sits under the field (`This field is requ
 
 ### I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 
-After Create the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. Closing clears the secret from memory.
+When the page sets `v-model:secret` to what the create request returned, the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. Closing sets `secret` back to `null`, which clears it from memory.
 
 ### J. Confirmations and outcomes — `ConfirmDialog` (required)
 
-Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone; the confirm button spins while the request runs. Delete asks the same way. Both end in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone, then marks the row revoked and emits `revoke`. Delete asks the same way, removes the row and emits `delete`. The page that runs the request ends both in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its tokens through props and emits every action; it fetches nothing and never makes a secret. `PersonalTokensToken`, `PersonalTokensCreateValues`, `PersonalTokensSecret` and `PersonalTokensProps` are exported from `personal-tokens.vue`, and `sample.ts` holds the sample tokens and clock the block renders when `tokens` and `now` are left out (the tokens never while `loading` or `error` is set).
+
+| Prop       | Type                           | What it does                                                                                                               |
+| ---------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| `tokens`   | `PersonalTokensToken[]`        | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.               |
+| `loading`  | `boolean`                      | A request is in flight. With no tokens it is the first load (the table shows its loading rows); with tokens Refresh spins. |
+| `error`    | `string`                       | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table.                      |
+| `creating` | `boolean`                      | The create request is in flight; the drawer's fields lock and its submit spins.                                            |
+| `now`      | `Date`                         | The moment Status and the expiry hint count from.                                                                          |
+| `secret`   | `PersonalTokensSecret \| null` | `v-model:secret`: the token the create request returned; set, the reveal dialog opens; closing it sets `null`.             |
+
+| Event     | Payload                                         | When                                                                     |
+| --------- | ----------------------------------------------- | ------------------------------------------------------------------------ |
+| `refresh` | `(event)`                                       | Refresh.                                                                 |
+| `retry`   | `(event)`                                       | Retry in the error alert.                                                |
+| `create`  | `(event, { name, description, expiresInDays })` | The drawer passed validation and was submitted.                          |
+| `revoke`  | `(event, token)`                                | The revoke dialog was confirmed; the row already reads Revoked.          |
+| `delete`  | `(event, token)`                                | The delete dialog was confirmed; the row is already gone from the table. |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import PersonalTokens, {
+    type PersonalTokensCreateValues,
+    type PersonalTokensSecret
+  } from './personal-tokens.vue'
+
+  const { data, pending, error, refresh } = usePersonalTokens()
+  const loadError = 'The tokens could not be loaded. Nothing was changed; try again.'
+  const creating = ref(false)
+  const secret = ref<PersonalTokensSecret | null>(null)
+
+  const create = async (_event: Event, values: PersonalTokensCreateValues) => {
+    creating.value = true
+    secret.value = await createPersonalToken(values)
+    creating.value = false
+    refresh()
+  }
+</script>
+
+<template>
+  <PersonalTokens
+    v-model:secret="secret"
+    :tokens="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    :creating="creating"
+    :now="new Date()"
+    @refresh="refresh"
+    @retry="refresh"
+    @create="create"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -86,11 +147,11 @@ Revoke asks in a danger `ConfirmDialog` that says what stops working and that it
 
 ## States
 
-- Default: four tokens (active, expiring in 5 days, expired, revoked) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, the create drawer, the reveal, revoke and delete wired.
-- Empty: no token; the heading and a flush empty state with Create Personal Token.
-- Loading: the first load; controls row and the table's loading rows.
-- Error: the list did not load; a danger Alert with Retry replaces the table.
-- Created: the one-time reveal dialog open after Create.
+- Default: `tokens` holds four tokens (active, expiring in 5 days, expired, revoked) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, the create drawer, the reveal, revoke and delete wired.
+- Empty: no token (`tokens` is `[]`); the heading and a flush empty state with Create Personal Token.
+- Loading: the first load (`loading` with no `tokens`); controls row and the table's loading rows.
+- Error: the list did not load (`error` is set); a danger Alert with the message and Retry replaces the table.
+- Created: the one-time reveal dialog open after Create (`secret` holds the returned token).
 
 ## Related
 

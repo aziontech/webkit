@@ -27,6 +27,63 @@ describe('change-plan-drawer', () => {
     })
     expect(panel.querySelectorAll('[data-testid="plan-feature-list"]').length).toBe(3)
   })
+
+  it('renders the plans it is given and emits plan-select and upgrade', async () => {
+    const view = render(ChangePlanDrawer, {
+      props: {
+        plans: [
+          {
+            id: 'team',
+            name: 'Team',
+            current: false,
+            action: 'upgrade',
+            actionLabel: 'Continue with Team',
+            featuresTitle: 'Everything for a team',
+            features: [{ label: 'Shared projects' }],
+            card: {
+              monthly: {
+                value: '40',
+                prefix: '$',
+                suffix: '/ mon',
+                showPrefix: true,
+                showSuffix: true,
+                details: 'Billed monthly'
+              },
+              yearly: {
+                value: '32',
+                prefix: '$',
+                suffix: '/ mon',
+                showPrefix: true,
+                showSuffix: true,
+                details: 'Billed annually'
+              }
+            }
+          }
+        ],
+        cardLast4: '4242'
+      }
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Change plan' }))
+    const panel = await waitFor(() => {
+      expect(dialog()?.textContent).toContain('Continue with Team')
+      return dialog() as HTMLElement
+    })
+    expect(panel.textContent).not.toContain('Enterprise')
+    await fireEvent.click(buttonByText('Continue with Team', panel))
+    expect(view.emitted('plan-select')?.[0]?.[1]).toMatchObject({ id: 'team' })
+    await waitFor(() => expect(document.body.textContent).toContain('Ending in 4242'))
+    const upgrade = Array.from(document.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === 'Upgrade'
+    ) as HTMLButtonElement
+    await fireEvent.click(upgrade)
+    await waitFor(() => expect(view.emitted('upgrade')).toHaveLength(1))
+    expect(view.emitted('upgrade')?.[0]?.[1]).toMatchObject({
+      period: 'yearly',
+      card: null,
+      address: { city: 'San Francisco' }
+    })
+    expect(document.body.textContent).toContain('Upgrade to Pro')
+  })
 })
 
 describe('change-plan-drawer#Checkout', () => {

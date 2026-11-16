@@ -28,29 +28,88 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref, useId } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
 
-  type ResourceType = 'organization' | 'group' | 'workspace'
-  type ResourceStatus = 'Active' | 'Suspended' | 'Pending'
+  import { sampleCurrentId, sampleResources, sampleRoleBindings } from './sample'
+
+  /** The level of a resource in the hierarchy. */
+  export type AccountHierarchyResourceType = 'organization' | 'group' | 'workspace'
+  /** The state of a workspace. */
+  export type AccountHierarchyResourceStatus = 'Active' | 'Suspended' | 'Pending'
+
   interface ResourceTypeMeta {
     label: string
     icon: string
     severity?: TagSeverity
     variant?: TagVariant
   }
-  interface Resource {
+
+  /** One organization, group or workspace; the tree is built from parentId. */
+  export interface AccountHierarchyResource {
+    /** Stable key, shown in the ID column. */
     id: string
+    /** Display name. */
     name: string
-    type: ResourceType
+    /** Organization, group or workspace. */
+    type: AccountHierarchyResourceType
+    /** The id of the parent, or null at the top level. */
     parentId: string | null
+    /** Labels used for search, billing reports and policies. */
     labels?: string[]
+    /** When it was last accessed, as display text. */
     lastAccessed?: string
-    status?: ResourceStatus
+    /** Workspace state. */
+    status?: AccountHierarchyResourceStatus
+    /** Estimated month-to-date charges in USD. */
     charges?: number
   }
-  interface ResourceNode extends Resource {
+
+  /** One role and how many members hold it on the selected resource. */
+  export interface AccountHierarchyRoleBinding {
+    /** Role name. */
+    role: string
+    /** Members bound to the role. */
+    members: number
+  }
+
+  export interface AccountHierarchyProps {
+    /** Every resource of the account, flat. Left out, the sample renders. */
+    resources?: AccountHierarchyResource[]
+    /** The id of the workspace the person is in, marked with a check. */
+    currentId?: string
+    /** Role bindings of the single selected resource, shown in the details panel. */
+    roleBindings?: AccountHierarchyRoleBinding[]
+    /** A request is in flight: with no resources it is the first load, with resources a refresh. */
+    loading?: boolean
+    /** Why the resources could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
+
+  interface ResourceNode extends AccountHierarchyResource {
     children?: ResourceNode[]
   }
+  type Resource = AccountHierarchyResource
+  type ResourceStatus = AccountHierarchyResourceStatus
+  type ResourceType = AccountHierarchyResourceType
+
+  const props = withDefaults(defineProps<AccountHierarchyProps>(), {
+    resources: undefined,
+    currentId: undefined,
+    roleBindings: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    move: [event: Event, payload: { resources: Resource[]; destination: Resource }]
+    labels: [event: Event, payload: { resources: Resource[]; add: string[]; remove: string[] }]
+    delete: [event: MouseEvent, resources: Resource[]]
+    undo: [event: MouseEvent, payload: { action: 'move' | 'delete'; resources: Resource[] }]
+  }>()
+
+  const selected = defineModel<string[]>('selected', { default: () => [] })
 
   const types: Record<ResourceType, ResourceTypeMeta> = {
     organization: { label: 'Organization', icon: 'ai ai-building', variant: 'accent' },
@@ -58,83 +117,26 @@
     workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
   }
 
-  const seedResources: Resource[] = [
-    {
-      id: 'org-1001',
-      name: 'Acme Inc.',
-      type: 'organization',
-      parentId: null,
-      labels: ['primary']
-    },
-    { id: 'org-1002', name: 'Acme Partners', type: 'organization', parentId: null },
-    { id: 'grp-2101', name: 'Retail and marketplace', type: 'group', parentId: 'org-1001' },
-    { id: 'grp-2102', name: 'Digital services', type: 'group', parentId: 'org-1001' },
-    { id: 'grp-2201', name: 'Resellers', type: 'group', parentId: 'org-1002' },
-    {
-      id: 'ws-30418',
-      name: 'Storefront',
-      type: 'workspace',
-      parentId: 'grp-2101',
-      lastAccessed: '2 hours ago',
-      status: 'Active',
-      charges: 1284,
-      labels: ['retail', 'production']
-    },
-    {
-      id: 'ws-30422',
-      name: 'Checkout',
-      type: 'workspace',
-      parentId: 'grp-2101',
-      lastAccessed: 'Yesterday',
-      status: 'Active',
-      charges: 612.4,
-      labels: ['production']
-    },
-    {
-      id: 'ws-30437',
-      name: 'Loyalty program',
-      type: 'workspace',
-      parentId: 'grp-2101',
-      lastAccessed: '3 days ago',
-      status: 'Pending',
-      charges: 42.1
-    },
-    {
-      id: 'ws-30455',
-      name: 'Media library',
-      type: 'workspace',
-      parentId: 'grp-2102',
-      lastAccessed: '1 week ago',
-      status: 'Active',
-      charges: 3910.75,
-      labels: ['media']
-    },
-    {
-      id: 'ws-30461',
-      name: 'Status page',
-      type: 'workspace',
-      parentId: 'grp-2102',
-      status: 'Suspended',
-      labels: ['staging']
-    },
-    {
-      id: 'ws-30470',
-      name: 'Partner portal',
-      type: 'workspace',
-      parentId: 'grp-2201',
-      lastAccessed: '1 month ago',
-      status: 'Active',
-      charges: 220
-    }
-  ]
-
   const uid = useId()
-  const currentId = 'ws-30418'
-  const resources = ref<Resource[]>(seedResources)
+  const blank = computed(() => props.loading || props.error !== '')
+  const source = computed<Resource[]>(() => props.resources ?? (blank.value ? [] : sampleResources))
+  const items = ref<Resource[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+  const currentId = computed(() => props.currentId ?? (props.resources ? '' : sampleCurrentId))
+  const roleBindings = computed(
+    () => props.roleBindings ?? (props.resources ? [] : sampleRoleBindings)
+  )
+  const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const tree = computed<ResourceNode[]>(() => {
     const byParent = new Map<string | null, Resource[]>()
-    for (const item of resources.value) {
+    for (const item of items.value) {
       const list = byParent.get(item.parentId) ?? []
       list.push(item)
       byParent.set(item.parentId, list)
@@ -185,11 +187,16 @@
       if (value !== true) expanded.value = value
     }
   })
-  const selection = ref<Record<string, boolean>>({})
+  const selection = computed<Record<string, boolean>>({
+    get: () => Object.fromEntries(selected.value.map((id) => [id, true])),
+    set: (value) => {
+      selected.value = Object.keys(value).filter((id) => value[id])
+    }
+  })
 
-  const selected = computed(() => resources.value.filter((item) => selection.value[item.id]))
-  const selectedCount = computed(() => selected.value.length)
-  const focused = computed(() => (selectedCount.value === 1 ? selected.value[0] : null))
+  const selectedResources = computed(() => items.value.filter((item) => selection.value[item.id]))
+  const selectedCount = computed(() => selectedResources.value.length)
+  const focused = computed(() => (selectedCount.value === 1 ? selectedResources.value[0] : null))
   const clearSelection = () => {
     selection.value = {}
   }
@@ -197,7 +204,7 @@
   const descendantsOf = (id: string): Resource[] => {
     const out: Resource[] = []
     const walk = (parentId: string) => {
-      for (const item of resources.value)
+      for (const item of items.value)
         if (item.parentId === parentId) {
           out.push(item)
           walk(item.id)
@@ -234,32 +241,6 @@
       ? 'No resource selected'
       : `${plural(selectedCount.value, 'resource', 'resources')} selected`
   )
-  const roleBindings = [
-    { role: 'Owner', members: 2 },
-    { role: 'Editor', members: 5 },
-    { role: 'Viewer', members: 11 }
-  ]
-
-  const loading = ref(false)
-  const loadFailed = ref(false)
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      resources.value = seedResources
-      loading.value = false
-    }, 700)
-  }
-
-  const refreshing = ref(false)
-  const refresh = () => {
-    if (refreshing.value) return
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
-
   const moveOpen = ref(false)
   const moving = ref<Resource[]>([])
   const destination = ref('')
@@ -268,7 +249,7 @@
     const blocked = new Set(
       moving.value.flatMap((item) => [item.id, ...descendantsOf(item.id).map((child) => child.id)])
     )
-    return resources.value
+    return items.value
       .filter((item) => item.type !== 'workspace' && !blocked.has(item.id))
       .map((item) => ({ value: item.id, label: item.name, type: item.type }))
   })
@@ -278,22 +259,32 @@
     destinationError.value = ''
     moveOpen.value = true
   }
-  const confirmMove = () => {
-    const target = resources.value.find((item) => item.id === destination.value)
+  const confirmMove = (event: Event) => {
+    const target = items.value.find((item) => item.id === destination.value)
     if (!target) {
       destinationError.value = 'Choose where to move the resources.'
       return
     }
     const ids = new Set(moving.value.map((item) => item.id))
-    const before = resources.value
-    resources.value = resources.value.map((item) =>
+    const before = items.value
+    const moved = moving.value
+    items.value = items.value.map((item) =>
       ids.has(item.id) ? { ...item, parentId: target.id } : item
     )
     expanded.value = { ...expanded.value, [target.id]: true }
     moveOpen.value = false
+    emit('move', event, { resources: moved, destination: target })
     toast.success(`${plural(ids.size, 'resource', 'resources')} moved to ${target.name}.`, {
       description: 'Role bindings inherited from the old parent no longer apply.',
-      actions: [{ label: 'Undo', onClick: () => (resources.value = before) }]
+      actions: [
+        {
+          label: 'Undo',
+          onClick: (undoEvent) => {
+            items.value = before
+            emit('undo', undoEvent, { action: 'move', resources: moved })
+          }
+        }
+      ]
     })
   }
 
@@ -310,20 +301,35 @@
     deleting.value = items
     deleteOpen.value = true
   }
-  const confirmDelete = () => {
+  const confirmDelete = (event: MouseEvent) => {
+    const removed = items.value.filter((item) =>
+      deleting.value.some(
+        (target) =>
+          target.id === item.id || descendantsOf(target.id).some((child) => child.id === item.id)
+      )
+    )
     const ids = new Set(
       deleting.value.flatMap((item) => [
         item.id,
         ...descendantsOf(item.id).map((child) => child.id)
       ])
     )
-    const before = resources.value
-    resources.value = resources.value.filter((item) => !ids.has(item.id))
+    const before = items.value
+    items.value = items.value.filter((item) => !ids.has(item.id))
     selection.value = {}
     deleteOpen.value = false
+    emit('delete', event, removed)
     toast.success(`${plural(ids.size, 'resource', 'resources')} scheduled for deletion.`, {
       description: 'They stay in Resources pending deletion for 30 days.',
-      actions: [{ label: 'Undo', onClick: () => (resources.value = before) }]
+      actions: [
+        {
+          label: 'Undo',
+          onClick: (undoEvent) => {
+            items.value = before
+            emit('undo', undoEvent, { action: 'delete', resources: removed })
+          }
+        }
+      ]
     })
   }
 
@@ -332,7 +338,7 @@
   const addLabels = ref<string[]>([])
   const removeLabels = ref<string[]>([])
   const knownLabels = computed(() =>
-    [...new Set(resources.value.flatMap((item) => item.labels ?? []))].sort()
+    [...new Set(items.value.flatMap((item) => item.labels ?? []))].sort()
   )
   const presentLabels = computed(() =>
     [...new Set(labelling.value.flatMap((item) => item.labels ?? []))].sort()
@@ -343,9 +349,14 @@
     removeLabels.value = []
     labelsOpen.value = true
   }
-  const confirmLabels = () => {
+  const confirmLabels = (event: Event) => {
     const ids = new Set(labelling.value.map((item) => item.id))
-    resources.value = resources.value.map((item) => {
+    emit('labels', event, {
+      resources: labelling.value,
+      add: [...addLabels.value],
+      remove: [...removeLabels.value]
+    })
+    items.value = items.value.map((item) => {
       if (!ids.has(item.id)) return item
       const next = new Set(item.labels ?? [])
       addLabels.value.forEach((label) => next.add(label))
@@ -357,7 +368,7 @@
   }
 
   const onRowAction = (value: DropdownMenuItemValue, row: Resource) => {
-    const item = resources.value.find((entry) => entry.id === row.id)
+    const item = items.value.find((entry) => entry.id === row.id)
     if (!item) return
     if (value === 'details') {
       selection.value = { [item.id]: true }
@@ -409,7 +420,7 @@
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
-          @click="openMove(selected)"
+          @click="openMove(selectedResources)"
         />
         <Button
           label="Labels"
@@ -417,7 +428,7 @@
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
-          @click="openLabels(selected)"
+          @click="openLabels(selectedResources)"
         />
         <Button
           label="Delete"
@@ -425,7 +436,7 @@
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
-          @click="openDelete(selected)"
+          @click="openDelete(selectedResources)"
         />
         <div class="ms-auto flex items-center gap-(--spacing-xs)">
           <Tooltip content="Refresh">
@@ -435,7 +446,7 @@
               size="medium"
               :loading="refreshing"
               aria-label="Refresh resources"
-              @click="refresh"
+              @click="emit('refresh', $event)"
             />
           </Tooltip>
           <Button
@@ -472,23 +483,23 @@
           </div>
 
           <Alert
-            v-if="loadFailed"
+            v-if="error"
             severity="danger"
           >
-            The resources could not be loaded. Nothing was changed; try again.
+            {{ error }}
             <template #actions>
               <Button
                 label="Retry"
                 variant="secondary"
                 size="small"
-                @click="retryLoad"
+                @click="emit('retry', $event)"
               />
             </template>
           </Alert>
 
           <Card
             key="card-1"
-            v-else-if="!loading && !resources.length"
+            v-else-if="!loading && !items.length"
             :padded="false"
           >
             <template #default>
@@ -564,7 +575,7 @@
                   :page-size="25"
                   :columns="columns"
                   :get-sub-rows="(row) => row.children"
-                  :loading="loading || refreshing"
+                  :loading="loading"
                   row-key="id"
                   selectable
                   :bordered="false"

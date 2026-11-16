@@ -39,6 +39,7 @@
     "name": "Default",
     "file": "team-permissions.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "CreateTeam",
