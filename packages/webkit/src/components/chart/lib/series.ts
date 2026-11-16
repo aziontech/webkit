@@ -8,7 +8,7 @@ import type {
 
 export const OTHER_SERIES_ID = '__other'
 
-const MAX_SLOTS = 6
+const MAX_SLOTS = 8
 
 export function colorToken(color: ChartColor): string {
   if (color === 'other') return 'var(--chart-series-other)'

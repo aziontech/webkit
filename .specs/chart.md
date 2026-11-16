@@ -3,8 +3,8 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 54833e47d994d37e50d543224ad12205a78d8e892305872b6a87418ee09efa0e
-spec_version: 12
+checksum: b9dfbe3d7e4720475ec43de861c7eae51ddc4fe6b3e1a4c9398a6a8cf15c1021
+spec_version: 13
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-16
@@ -31,7 +31,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 
 - A single headline number with a delta → use `stat-tile`.
 - Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.
-- More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.
+- More than about seven classes that all carry meaning → use `table`; color stops separating past the eight series slots.
 - Two measures on different scales → two charts side by side; this component never draws a second value axis.
 - One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.
 - Values by country or location → use `map-chart`.
@@ -189,13 +189,13 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 | Prop               | Type                            | Default         | Required | JSDoc                                                                                                                                                  |
 | ------------------ | ------------------------------- | --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `series`           | `ChartSeries[]`                 | `[]`            | false    | Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other.                                                     |
+| `series`           | `ChartSeries[]`                 | `[]`            | false    | Series to plot. The first eight take the fixed categorical slots in order; the rest fold into Other.                                                     |
 | `labels`           | `ChartLabel[]`                  | `[]`            | false    | One category label per index: a string, a number, or a Date.                                                                                           |
 | `orientation`      | `'vertical' \| 'horizontal'`    | `'vertical'`    | false    | Value axis direction. Horizontal lays categories down the side, for ordered bars.                                                                      |
 | `labelScale`       | `'category' \| 'linear'`        | `'category'`    | false    | How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets.                       |
 | `min`              | `number`                        | `0`             | false    | Floor of the value axis. Marks grow from one baseline.                                                                                                 |
 | `max`              | `number`                        | `undefined`     | false    | Ceiling of the value axis. When absent, the nice ceiling of the visible data.                                                                          |
-| `cap`              | `number`                        | `6`             | false    | Series kept before the rest fold into Other.                                                                                                           |
+| `cap`              | `number`                        | `8`             | false    | Series kept before the rest fold into Other.                                                                                                           |
 | `otherLabel`       | `string`                        | `''`            | false    | Name of the folded series. Empty uses the locale catalog (`Other`).                                                                                    |
 | `formatValue`      | `(value: number) => string`     | `formatCompact` | false    | Formats ticks, tooltip values and legend totals.                                                                                                       |
 | `formatLabel`      | `(label: ChartLabel) => string` | `formatLabel`   | false    | Formats category labels on the axis and in the tooltip.                                                                                                |
@@ -262,7 +262,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 
 | Region                         | Token (DESIGN.md)                                                                                                             |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| series 1 to 6                  | `var(--chart-series-1)` … `var(--chart-series-6)`                                                                             |
+| series 1 to 8                  | `var(--chart-series-1)` … `var(--chart-series-8)`                                                                             |
 | folded series                  | `var(--chart-series-other)`                                                                                                   |
 | status series                  | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)`        |
 | severity series                | `var(--severity-critical)`, `var(--severity-high)`, `var(--severity-medium)`, `var(--severity-low)`, `var(--severity-info)`   |
@@ -348,7 +348,7 @@ The stories share one WAF fixture so every canvas tells the same story.
 - Default — the Threats vs requests chart: area plus two lines, grid, axes, crosshair, tooltip, legend.
 - Forms — composite: the same series as lines, as areas, as bars.
 - Stacked — stacked areas and stacked bars of allowed / blocked / logged.
-- MultiSeries — seven hosts, so the seventh folds into Other; legend with totals.
+- MultiSeries — ten hosts, so the ninth and tenth fold into Other; legend with totals.
 - Horizontal — ordered horizontal bars with value labels (top countries).
 - Mixed — requests as bars and cached requests as a line on one axis.
 - Scatter — response time by object size on a linear label scale.

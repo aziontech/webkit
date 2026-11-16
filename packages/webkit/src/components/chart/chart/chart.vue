@@ -51,7 +51,7 @@
   defineOptions({ name: 'Chart', inheritAttrs: false })
 
   export interface ChartProps {
-    /** Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other. */
+    /** Series to plot. The first eight take the fixed categorical slots in order; the rest fold into Other. */
     series?: ChartSeries[]
     /** One category label per index: a string, a number, or a Date. */
     labels?: ChartLabel[]
@@ -98,7 +98,7 @@
     labelScale: 'category',
     min: 0,
     max: undefined,
-    cap: 6,
+    cap: 8,
     otherLabel: '',
     formatValue: formatCompact,
     formatLabel: formatCategoryLabel,

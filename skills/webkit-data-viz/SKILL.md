@@ -2,7 +2,7 @@
 name: webkit-data-viz
 description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with webkit components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in a webkit app.
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-16
 scope: general
 enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
 ---
@@ -56,12 +56,13 @@ Never guess an import path or a hex value. Resolve both from the contract:
 The generic `dataviz` skill decides the palette **kind**; the role already realizes each one,
 validated for color-vision separation and 3:1 contrast in both themes:
 
-- **Categorical** (distinct series, no order): `--chart-series-1` … `--chart-series-6`, in a fixed
-  order that is the same in both themes. A seventh series folds into `--chart-series-other`; never
-  generate or reuse a hue.
+- **Categorical** (distinct series, no order): `--chart-series-1` … `--chart-series-8`, in a fixed
+  order that is the same in both themes. A ninth series folds into `--chart-series-other`; never
+  generate or reuse a hue. Series 4 is an orange hue: when a view also shows severity, color the
+  severity with `--severity-*` / `--chart-status-*`, never with a series slot.
 - **Sequential** (magnitude, e.g. a heatmap): `--chart-sequential-1` (lowest) … `--chart-sequential-7`.
-- **Diverging** (+/- around a midpoint): `--chart-diverging-negative`, `--chart-diverging-neutral`,
-  `--chart-diverging-positive`.
+- **Diverging** (+/- around a midpoint): `--chart-diverging-negative` (orange), `--chart-diverging-neutral`,
+  `--chart-diverging-positive` (blue).
 - **Status** (`--chart-status-success` / `-warning` / `-danger` / `-info`): only for a series whose
   color MEANS a state — blocked requests, an error rate. Never borrow one as a categorical accent, or a
   green series reads as "healthy" when it just means "series 3".
@@ -71,7 +72,7 @@ validated for color-vision separation and 3:1 contrast in both themes:
 ```ts
 // The webkit components assign these for you. A custom SVG mark passes the var() straight to
 // fill / stroke — it re-themes for free.
-const SERIES = [1, 2, 3, 4, 5, 6].map((slot) => `var(--chart-series-${slot})`)
+const SERIES = [1, 2, 3, 4, 5, 6, 7, 8].map((slot) => `var(--chart-series-${slot})`)
 
 // Canvas libraries can't read CSS vars — resolve computed values, and RE-READ on data-theme
 // change so the canvas repaints in the new theme (see /webkit-theming-dark-mode).

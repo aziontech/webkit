@@ -118,7 +118,7 @@
                   <svg
                     :viewBox="`0 0 ${WIDTH} ${HEIGHT}`"
                     preserveAspectRatio="none"
-                    class="h-16 w-full text-(--primary)"
+                    class="h-16 w-full text-(--chart-series-1)"
                     aria-hidden="true"
                   >
                     <polygon

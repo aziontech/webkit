@@ -178,7 +178,7 @@
                     />
                     <polygon
                       :points="area"
-                      class="fill-[color-mix(in_srgb,var(--primary)_16%,transparent)]"
+                      class="fill-[color-mix(in_srgb,var(--chart-series-1)_16%,transparent)]"
                     />
                     <polyline
                       :points="line"
@@ -186,7 +186,7 @@
                       stroke-width="2"
                       stroke-linejoin="round"
                       vector-effect="non-scaling-stroke"
-                      class="stroke-(--primary)"
+                      class="stroke-(--chart-series-1)"
                     />
                     <line
                       :x1="x(PEAK)"
@@ -214,7 +214,7 @@
                       Oct 16, 2026, 02:02:40 PM
                     </span>
                     <span class="flex items-center gap-(--spacing-xs)">
-                      <span class="size-2 rounded-full bg-(--primary)" />
+                      <span class="size-2 rounded-full bg-(--chart-series-1)" />
                       <span class="text-body-xs text-(--text-muted)">
                         Edge Requests Total Per Second
                       </span>
@@ -235,7 +235,7 @@
               </span>
 
               <span class="flex items-center justify-center gap-(--spacing-xs)">
-                <span class="size-2 rounded-full bg-(--primary)" />
+                <span class="size-2 rounded-full bg-(--chart-series-1)" />
                 <span class="text-body-xs text-(--text-muted)">
                   Edge Requests Total Per Second
                 </span>

@@ -2,7 +2,7 @@ import type { Severity } from '../../../utils/severity'
 
 export type ChartLabel = string | number | Date
 
-export type ChartSlot = 1 | 2 | 3 | 4 | 5 | 6
+export type ChartSlot = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
 export type ChartStatus = Exclude<Severity, 'neutral'>
 

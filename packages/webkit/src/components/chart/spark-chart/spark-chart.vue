@@ -27,7 +27,7 @@
     values?: (number | null)[]
     /** Mark drawn for the series. */
     type?: SparkChartType
-    /** Hue of the mark: a categorical slot (1–6), other, or a status. */
+    /** Hue of the mark: a categorical slot (1–8), other, or a status. */
     color?: ChartColor
     /** Height: 32, 48 or 64 pixels. Width follows the container. */
     size?: SparkChartSize
