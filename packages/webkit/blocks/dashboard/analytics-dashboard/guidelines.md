@@ -144,6 +144,68 @@ or Bar `ToggleGroup`; `Data transferred by project` is a labeled horizontal bar 
 transferred per project. The empty copy is `No usage yet` /
 `Usage appears here once a project serves requests.`
 
+### R. Failure — `Alert` (required)
+
+When the period cannot load (`error`), every card keeps its header and shows a danger `Alert` with
+Retry in place of its chart or table, naming what did not load
+(`Couldn't load top hosts. Check your connection and retry.`); Expand and Export CSV disable.
+
+## Data
+
+The block takes its figures through props and emits its actions; it fetches nothing. `AnalyticsDashboardProps` and the record types (`AnalyticsDashboardKpis`, `AnalyticsDashboardCountry`, `AnalyticsDashboardHost`, `AnalyticsDashboardChanges`, `AnalyticsDashboardRange`) are exported from `analytics-dashboard.vue`, and `sample.ts` holds the sample figures the block renders when a data prop is left out (and never while `loading` or `error` is set). The tile labels, hints and formats, the card titles and the period options stay in the SFC.
+
+| Prop              | Type                             | What it does                                                                                                   |
+| ----------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `v-model:period`  | `string`                         | The selected period (`1h`, `24h`, `7d`, `30d`); defaults to `24h`. Refetch when it changes.                    |
+| `kpis`            | `AnalyticsDashboardKpis`         | The value, delta and sparkline of each tile, keyed by tile id; a tile left out reads as a dash. `{}` is empty. |
+| `intervals`       | `ChartLabel[]`                   | One label per interval of the two time series (a string, a number or a `Date`).                                |
+| `requestSeries`   | `ChartSeries[]`                  | The Requests over time series.                                                                                 |
+| `statusSeries`    | `ChartSeries[]`                  | The Status codes series, one per status class.                                                                 |
+| `countries`       | `AnalyticsDashboardCountry[]`    | The Requests by country bars, top countries first.                                                             |
+| `hosts`           | `AnalyticsDashboardHost[]`       | The Top hosts rows; searched, sorted and paged in the browser.                                                 |
+| `changes`         | `AnalyticsDashboardChanges`      | The change tags of the two time-series cards, in percent; `null` hides a tag.                                  |
+| `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                           |
+| `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                        |
+| `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.       |
+| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.    |
+
+| Event           | Payload   | When                             |
+| --------------- | --------- | -------------------------------- |
+| `update:period` | `(value)` | The Period `Select` changed.     |
+| `retry`         | `(event)` | Retry in any card's error alert. |
+
+Copy query and Export CSV run in the browser on the figures the block holds. To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+  import AnalyticsDashboard from './analytics-dashboard.vue'
+
+  const period = ref('24h')
+  const { data, pending, error, refresh } = useHttpMetrics(period)
+</script>
+
+<template>
+  <AnalyticsDashboard
+    v-model:period="period"
+    :kpis="data?.kpis ?? {}"
+    :intervals="data?.intervals ?? []"
+    :request-series="data?.requests ?? []"
+    :status-series="data?.statusCodes ?? []"
+    :countries="data?.countries ?? []"
+    :hosts="data?.hosts ?? []"
+    :changes="data?.changes"
+    :range="data?.range"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the KPI row to the four numbers the reader checks first; put the rest in cards.
@@ -189,14 +251,14 @@ transferred per project. The empty copy is `No usage yet` /
 
 ## States
 
-- Default: the populated dashboard for the period.
-- Loading: every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
-- Empty: no traffic in the period; tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
+- Default: the populated dashboard for the period (`kpis`, `intervals`, `requestSeries`, `statusSeries`, `countries`, `hosts`, `changes`).
+- Loading: `loading`; every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
+- Empty: `kpis` is `{}` and the series and rows are `[]`; no traffic in the period, tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
 - Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards, and products with sub-dashboards switch them with a `ToggleGroup`, adding breakdown table cards.
-- Expanded: the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
+- Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
 - Usage: the Data usage page, consumption per meter and per project against the previous period.
-- Error: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` holds the message; the request for the period failed, tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

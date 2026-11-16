@@ -4,164 +4,170 @@
   import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
+  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Illustration from '@aziontech/webkit/illustration'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import Logo from '@aziontech/webkit/logo'
+  import Popover from '@aziontech/webkit/popover'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Spinner from '@aziontech/webkit/spinner'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+  import { computed, onScopeDispose, reactive, ref, watch } from 'vue'
 
-  const metrics = [
+  import {
+    sampleDomains,
+    sampleMetrics,
+    sampleProjects,
+    sampleRecents,
+    sampleRegisteredDomains,
+    sampleResources,
+    sampleUserName
+  } from './sample'
+
+  /** The four tiles of the usage band, in the order they render. */
+  export type HomeDashboardMetricId =
+    'data-transferred' | 'requests-per-second' | 'bandwidth-saving' | 'data-offload'
+
+  /** The measured part of one usage tile. */
+  export interface HomeDashboardMetric {
+    /** The figure in the tile's unit; null reads as a dash. */
+    value: number | null
+    /** Change against the previous window, in percent; null hides the delta. */
+    delta: number | null
+  }
+
+  /** The usage figures by tile; a tile left out reads as a dash. */
+  export type HomeDashboardMetrics = Partial<Record<HomeDashboardMetricId, HomeDashboardMetric>>
+
+  /** One row of a resource panel. */
+  export interface HomeDashboardResource {
+    /** Stable key. */
+    id: string
+    /** Display name. */
+    name: string
+    /** The resource page the whole row links to. */
+    href: string
+    /** The kind of resource, shown before the name in Recents. */
+    typeLabel?: string
+    /** Icon class of the project preset, shown before the name in Projects. */
+    presetIcon?: string
+    /** Name of the project preset, the icon's title. */
+    presetLabel?: string
+  }
+
+  /** The availability answer for a domain the reader typed. */
+  export interface HomeDashboardDomainAvailability {
+    /** The domain the answer is for. */
+    name: string
+    /** True when the domain is taken. */
+    registered: boolean
+  }
+
+  export interface HomeDashboardProps {
+    /** First name in the greeting. Left out, the sample name renders. */
+    userName?: string
+    /** Time-of-day greeting before the name. */
+    greeting?: string
+    /** The usage band figures. Left out, the sample renders. */
+    metrics?: HomeDashboardMetrics
+    /** Rows of the Projects panel. */
+    projects?: HomeDashboardResource[]
+    /** Rows of the Resources panel. */
+    resources?: HomeDashboardResource[]
+    /** Rows of the Domains panel. */
+    domains?: HomeDashboardResource[]
+    /** Rows of the Recents panel, most recent first. */
+    recents?: HomeDashboardResource[]
+    /** Answer to the last check-domain event; the first-access screen shows it once its name matches the field. */
+    domainAvailability?: HomeDashboardDomainAvailability
+    /** Home's data is loading; the tiles and the panels hold a skeleton. */
+    loading?: boolean
+    /** Why Home's data could not load; the usage band and every panel show it in a danger alert with Retry. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<HomeDashboardProps>(), {
+    userName: undefined,
+    greeting: 'Good morning',
+    metrics: undefined,
+    projects: undefined,
+    resources: undefined,
+    domains: undefined,
+    recents: undefined,
+    domainAvailability: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+    'create-project': [event: MouseEvent]
+    'check-domain': [name: string]
+    'register-domain': [event: MouseEvent, name: string]
+    'copy-prompt': [event: MouseEvent]
+  }>()
+
+  const agentSetup = defineModel<boolean>('agentSetup', { default: true })
+
+  const layout = useConsoleLayout({ optional: true })
+
+  const openSearch = () => layout?.openSearch()
+
+  type PanelKey = 'projects' | 'resources' | 'domains' | 'recents'
+
+  const metricDefinitions: {
+    id: HomeDashboardMetricId
+    label: string
+    unit: string
+    hint: string
+  }[] = [
     {
       label: 'Data transferred',
-      value: 842,
+      id: 'data-transferred',
       unit: 'GB',
-      delta: 12.4,
       hint: 'Total bytes delivered across all your resources.'
     },
     {
       label: 'Requests per second',
-      value: 1240,
+      id: 'requests-per-second',
       unit: '/s',
-      delta: 3.8,
       hint: 'Average requests handled per second in the selected window.'
     },
     {
       label: 'Bandwidth saving',
-      value: 588,
+      id: 'bandwidth-saving',
       unit: 'GB',
-      delta: 6.2,
       hint: 'Bytes served from cache instead of your origin.'
     },
     {
       label: 'Data offload',
-      value: 70,
+      id: 'data-offload',
       unit: '%',
-      delta: -1.5,
       hint: 'Share of traffic served from cache instead of your origin.'
     }
   ]
 
-  const panels = [
-    {
-      key: 'projects',
-      label: 'Projects',
-      path: '/projects',
-      recent: false,
-      marked: true,
-      resources: [
-        {
-          id: '4410203040',
-          type: 'projects',
-          typeLabel: 'Project',
-          name: 'marketing-site',
-          presetIcon: 'ai-color ai-astro',
-          presetLabel: 'Astro'
-        },
-        {
-          id: '6630405070',
-          type: 'projects',
-          typeLabel: 'Project',
-          name: 'docs-site',
-          presetIcon: 'ai-color ai-nextjs',
-          presetLabel: 'Next.js'
-        },
-        {
-          id: '5520304060',
-          type: 'projects',
-          typeLabel: 'Project',
-          name: 'black-friday-2026',
-          presetIcon: 'ai-color ai-nextjs',
-          presetLabel: 'Next.js'
-        },
-        {
-          id: '2041778390',
-          type: 'projects',
-          typeLabel: 'Project',
-          name: 'hello-world',
-          presetIcon: 'ai-color ai-javascript',
-          presetLabel: 'JavaScript'
-        },
-        {
-          id: '1784552864',
-          type: 'projects',
-          typeLabel: 'Project',
-          name: 'web-app',
-          presetIcon: 'ai-color ai-vue',
-          presetLabel: 'Vue'
-        }
-      ]
-    },
-    {
-      key: 'resources',
-      label: 'Resources',
-      path: '/resources',
-      recent: false,
-      marked: false,
-      resources: [
-        { id: '1020655', type: 'resources', typeLabel: 'Resource', name: 'resource-01' },
-        { id: '1031410003', type: 'resources', typeLabel: 'Resource', name: 'resource-02' },
-        { id: '1031410001', type: 'resources', typeLabel: 'Resource', name: 'resource-03' }
-      ]
-    },
-    {
-      key: 'domains',
-      label: 'Domains',
-      path: '',
-      recent: false,
-      marked: false,
-      resources: [
-        { id: 'domain-1020655', type: 'domains', typeLabel: 'Domain', name: 'app.example.com' },
-        {
-          id: 'domain-1031410003',
-          type: 'domains',
-          typeLabel: 'Domain',
-          name: '*.preview.example.com'
-        },
-        { id: 'domain-1031410001', type: 'domains', typeLabel: 'Domain', name: 'www.example.com' },
-        { id: 'domain-1031410002', type: 'domains', typeLabel: 'Domain', name: 'api.example.com' }
-      ]
-    },
-    {
-      key: 'recents',
-      label: 'Recents',
-      path: '',
-      recent: true,
-      marked: false,
-      resources: [
-        { id: '1020655', type: 'resources', typeLabel: 'Resource', name: 'resource-01' },
-        { id: 'domain-1020655', type: 'domains', typeLabel: 'Domain', name: 'app.example.com' },
-        {
-          id: '4410203040',
-          type: 'projects',
-          typeLabel: 'Project',
-          name: 'marketing-site',
-          presetIcon: 'ai-color ai-astro',
-          presetLabel: 'Astro'
-        },
-        {
-          id: '6630405070',
-          type: 'projects',
-          typeLabel: 'Project',
-          name: 'docs-site',
-          presetIcon: 'ai-color ai-nextjs',
-          presetLabel: 'Next.js'
-        },
-        {
-          id: '5520304060',
-          type: 'projects',
-          typeLabel: 'Project',
-          name: 'black-friday-2026',
-          presetIcon: 'ai-color ai-nextjs',
-          presetLabel: 'Next.js'
-        }
-      ]
-    }
+  const panelDefinitions: {
+    key: PanelKey
+    label: string
+    path: string
+    recent: boolean
+    marked: boolean
+  }[] = [
+    { key: 'projects', label: 'Projects', path: '/projects', recent: false, marked: true },
+    { key: 'resources', label: 'Resources', path: '/resources', recent: false, marked: false },
+    { key: 'domains', label: 'Domains', path: '', recent: false, marked: false },
+    { key: 'recents', label: 'Recents', path: '', recent: true, marked: false }
   ]
 
   const agentMarks = [
@@ -171,24 +177,90 @@
     { name: 'Cursor', src: cursorMark, mono: true }
   ]
 
-  const resourcePath = (resource: { type: string; id: string }) =>
-    `/${resource.type}/${resource.id}`
+  const failed = computed(() => props.error !== '')
+  const blank = computed(() => props.loading || failed.value)
+  const fallback = <T,>(value: T | undefined, sample: T, empty: T): T =>
+    value ?? (blank.value ? empty : sample)
 
-  const agentOnboardingVisible = ref(true)
-  const failed = false
+  const name = computed(() => props.userName ?? sampleUserName)
+  const metricValues = computed(() => fallback(props.metrics, sampleMetrics, {}))
+  const tiles = computed(() =>
+    metricDefinitions.map((definition) => ({
+      ...definition,
+      ...(metricValues.value[definition.id] ?? { value: null, delta: null })
+    }))
+  )
 
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
+  const lists = computed<Record<PanelKey, HomeDashboardResource[]>>(() => ({
+    projects: fallback(props.projects, sampleProjects, []),
+    resources: fallback(props.resources, sampleResources, []),
+    domains: fallback(props.domains, sampleDomains, []),
+    recents: fallback(props.recents, sampleRecents, [])
+  }))
+  const panels = computed(() =>
+    panelDefinitions.map((definition) => ({
+      ...definition,
+      resources: lists.value[definition.key]
+    }))
+  )
+  const firstAccess = computed(
+    () => !blank.value && Object.values(lists.value).every((list) => list.length === 0)
+  )
+
+  const DOMAIN_SHAPE = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)*\.[a-z]{2,}$/i
+  const CHECK_DEBOUNCE_MS = 900
+
+  const domain = ref('')
+  const check = reactive({ open: false, pending: false, name: '' })
+  const sampleVerdict = ref<HomeDashboardDomainAvailability | null>(null)
+  const verdict = computed(() => {
+    const answer = props.domainAvailability ?? sampleVerdict.value
+    return !check.pending && answer?.name === check.name ? answer : null
+  })
+  const fieldWidth = ref(0)
+  let checkTimer: ReturnType<typeof globalThis.setTimeout> | undefined
+
+  const measureField = (event: Event) => {
+    const form = (event.target as Element | null)?.closest?.('form')
+    if (form) fieldWidth.value = Math.round(form.offsetWidth)
+  }
+
+  watch(domain, (value) => {
+    globalThis.clearTimeout(checkTimer)
+    const next = value.trim().toLowerCase()
+    if (!DOMAIN_SHAPE.test(next)) {
+      check.open = false
+      check.pending = false
+      return
+    }
+    check.open = true
+    check.pending = true
+    check.name = next
+    checkTimer = globalThis.setTimeout(() => {
+      check.pending = false
+      if (props.domainAvailability === undefined)
+        sampleVerdict.value = { name: next, registered: sampleRegisteredDomains.includes(next) }
+      emit('check-domain', next)
+    }, CHECK_DEBOUNCE_MS)
+  })
+
+  onScopeDispose(() => globalThis.clearTimeout(checkTimer))
+
+  const onCheckOpen = (value: boolean) => {
+    if (!value) check.open = false
+  }
 </script>
 
 <template>
   <div
+    v-if="!firstAccess"
     data-layout-fill
     class="layout-column layout-boundary relative flex h-dvh flex-col justify-center-safe overflow-y-auto xl:justify-start"
   >
     <header class="flex items-center">
       <h1 class="text-heading-sm text-(--text-muted)">
-        Good morning,
-        <span class="text-(--text-default)">Alex</span>
+        {{ greeting }},
+        <span class="text-(--text-default)">{{ name }}</span>
       </h1>
     </header>
 
@@ -203,18 +275,19 @@
           <Alert
             v-if="failed"
             severity="danger"
-            label="Couldn't load usage. Check your connection and retry."
+            :label="`Couldn't load usage. ${error}`"
             action-label="Retry"
             @action="(event) => emit('retry', event)"
           />
           <StatTileGroup v-else>
             <StatTile
-              v-for="metric in metrics"
+              v-for="metric in tiles"
               :key="metric.label"
               :label="metric.label"
               :value="metric.value"
               :unit="metric.unit"
               :delta="metric.delta"
+              :loading="loading"
             >
               <template #aside>
                 <Hint :content="metric.hint" />
@@ -228,7 +301,7 @@
           leave-to-class="scale-95 translate-y-(--spacing-xs) opacity-0"
         >
           <div
-            v-if="agentOnboardingVisible"
+            v-if="agentSetup"
             class="relative w-full shrink-0 xl:w-[30%] xl:max-w-(--container-xs)"
           >
             <Card
@@ -282,7 +355,7 @@
                   variant="ghost"
                   size="small"
                   aria-label="Dismiss agent setup"
-                  @click="agentOnboardingVisible = false"
+                  @click="agentSetup = false"
                 />
               </Tooltip>
             </div>
@@ -322,18 +395,29 @@
             <Alert
               v-if="failed"
               severity="danger"
-              :label="`Couldn't load ${panel.label.toLowerCase()}. Check your connection and retry.`"
+              :label="`Couldn't load ${panel.label.toLowerCase()}. ${error}`"
               action-label="Retry"
               @action="(event) => emit('retry', event)"
             />
+            <div
+              v-else-if="loading"
+              key="panel-loading"
+              class="flex flex-col gap-(--spacing-xs)"
+            >
+              <Skeleton
+                v-for="line in 3"
+                :key="line"
+                height="2rem"
+              />
+            </div>
             <Item.List
               v-else-if="panel.resources.length"
               key="panel-rows"
             >
               <Item
                 v-for="resource in panel.resources"
-                :key="resource.type + '-' + resource.id"
-                :href="resourcePath(resource)"
+                :key="resource.href"
+                :href="resource.href"
                 size="small"
               >
                 <Item.Content>
@@ -390,6 +474,195 @@
           </div>
         </div>
       </section>
+    </div>
+  </div>
+
+  <div
+    v-else
+    class="layout-column layout-boundary relative flex min-h-full flex-1 flex-col"
+  >
+    <div class="my-auto flex w-full flex-col gap-(--layout-section-gap) py-(--spacing-xl)">
+      <div
+        class="animate-content-enter motion-reduce:animate-none flex flex-col items-center gap-(--spacing-lg)"
+      >
+        <div class="flex flex-col items-center gap-(--spacing-xs)">
+          <p class="text-center text-body-md text-(--text-muted)">{{ greeting }}, {{ name }}</p>
+          <h1 class="text-balance text-center text-heading-lg text-(--text-default)">
+            Let's build something new.
+          </h1>
+        </div>
+
+        <div class="flex w-full max-w-(--container-2xl) flex-col items-stretch">
+          <SearchTrigger
+            class="w-full"
+            label="Search resources, pages and commands"
+            @open="openSearch"
+          />
+        </div>
+      </div>
+
+      <div
+        class="animate-content-enter motion-reduce:animate-none grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-3 [--content-enter-delay:var(--transition-duration-fast-01)]"
+      >
+        <Card :padded="false">
+          <template #default>
+            <div class="flex h-full flex-col p-(--spacing-sm)">
+              <div
+                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+              >
+                <Illustration name="modern-frontends" />
+              </div>
+
+              <div
+                class="flex flex-1 flex-col gap-(--spacing-md) px-(--spacing-sm) pb-(--spacing-sm) pt-(--spacing-md)"
+              >
+                <div class="flex flex-1 flex-col gap-(--spacing-xs)">
+                  <h3 class="text-label-md text-(--text-default)">Ship something new</h3>
+                  <p class="text-pretty text-body-sm text-(--text-muted)">
+                    Deploy a static site or a full-stack app, with compute, AI, storage and media on
+                    the same build.
+                  </p>
+                </div>
+                <div class="flex items-center gap-(--spacing-xs)">
+                  <Button
+                    label="Create Project"
+                    variant="outline"
+                    size="medium"
+                    @click="(event) => emit('create-project', event)"
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+        </Card>
+        <Card :padded="false">
+          <template #default>
+            <div class="flex h-full flex-col p-(--spacing-sm)">
+              <div
+                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+              >
+                <Illustration name="dns-protection" />
+              </div>
+
+              <div
+                class="flex flex-1 flex-col gap-(--spacing-md) px-(--spacing-sm) pb-(--spacing-sm) pt-(--spacing-md)"
+              >
+                <div class="flex flex-1 flex-col gap-(--spacing-xs)">
+                  <h3 class="text-label-md text-(--text-default)">Add a domain</h3>
+                  <p class="text-pretty text-body-sm text-(--text-muted)">
+                    Register a new one or bring your own. DNS, automatic HTTPS and DDoS protection
+                    come with it.
+                  </p>
+                </div>
+                <div class="flex items-center gap-(--spacing-xs)">
+                  <Popover
+                    :open="check.open"
+                    placement="bottom-start"
+                    :offset="8"
+                    class="w-full"
+                    @update:open="onCheckOpen"
+                  >
+                    <Popover.Trigger class="w-full">
+                      <form
+                        class="w-full"
+                        @submit.prevent
+                      >
+                        <Input
+                          v-model="domain"
+                          placeholder="Type in your domain"
+                          size="medium"
+                          aria-label="Domain to add"
+                          @input="measureField"
+                        />
+                      </form>
+                    </Popover.Trigger>
+
+                    <Popover.Content>
+                      <div
+                        class="overflow-hidden transition-[height] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+                        :style="fieldWidth ? { width: fieldWidth + 'px' } : {}"
+                      >
+                        <Transition
+                          mode="out-in"
+                          enter-active-class="animate-fade-in motion-reduce:animate-none"
+                          leave-active-class="animate-fade-out motion-reduce:animate-none"
+                        >
+                          <div
+                            v-if="!verdict"
+                            key="checking"
+                            class="flex items-center justify-center gap-(--spacing-xs) p-(--spacing-sm) text-center text-body-sm text-(--text-muted)"
+                          >
+                            <div class="contents text-(--text-muted)">
+                              <Spinner class="shrink-0" />
+                            </div>
+                            Checking {{ check.name }}...
+                          </div>
+
+                          <div
+                            v-else
+                            key="verdict"
+                            class="flex flex-col gap-(--spacing-sm) p-(--spacing-sm)"
+                          >
+                            <p class="text-body-sm text-(--text-default)">
+                              <template v-if="verdict.registered">
+                                {{ check.name }} is already registered. Try another name.
+                              </template>
+                              <template v-else>
+                                {{ check.name }} is available. We register it and issue the
+                                certificate.
+                              </template>
+                            </p>
+                            <Button
+                              v-if="!verdict.registered"
+                              label="Register"
+                              variant="secondary"
+                              size="medium"
+                              class="w-full"
+                              @click="(event) => emit('register-domain', event, check.name)"
+                            />
+                          </div>
+                        </Transition>
+                      </div>
+                    </Popover.Content>
+                  </Popover>
+                </div>
+              </div>
+            </div>
+          </template>
+        </Card>
+        <Card :padded="false">
+          <template #default>
+            <div class="flex h-full flex-col p-(--spacing-sm)">
+              <div
+                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+              >
+                <Illustration name="ai-applications" />
+              </div>
+
+              <div
+                class="flex flex-1 flex-col gap-(--spacing-md) px-(--spacing-sm) pb-(--spacing-sm) pt-(--spacing-md)"
+              >
+                <div class="flex flex-1 flex-col gap-(--spacing-xs)">
+                  <h3 class="text-label-md text-(--text-default)">Onboard your agent</h3>
+                  <p class="text-pretty text-body-sm text-(--text-muted)">
+                    Give Claude, Cursor, Windsurf, Codex or OpenCode a prompt that sets your project
+                    up to deploy here.
+                  </p>
+                </div>
+                <div class="flex items-center gap-(--spacing-xs)">
+                  <Button
+                    label="Copy prompt"
+                    variant="outline"
+                    size="medium"
+                    icon="ai ai-copy"
+                    @click="(event) => emit('copy-prompt', event)"
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+        </Card>
+      </div>
     </div>
   </div>
 </template>

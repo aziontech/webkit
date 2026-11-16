@@ -94,3 +94,51 @@ describe('dashboard exports', () => {
     )
   })
 })
+
+describe('dashboard/analytics-dashboard data', () => {
+  it('renders the hosts and figures it is given instead of the sample', async () => {
+    const view = render(Analytics, {
+      props: {
+        kpis: { requests: { value: 1234, delta: null, trend: [] } },
+        hosts: [{ id: 'store', host: 'store.example.com', service: 'Acme Store', requests: 42 }]
+      }
+    })
+    await waitFor(() => expect(view.container.textContent).toContain('store.example.com'))
+    expect(view.container.textContent).not.toContain('www.example.com')
+    expect(view.container.textContent).toContain('Acme Store')
+  })
+
+  it('disables Export CSV on a card with no data and keeps the sample out while loading', async () => {
+    const empty = render(Analytics, { props: { hosts: [] } })
+    expect(empty.container.textContent).toContain('No traffic yet')
+    empty.unmount()
+    const loading = render(Analytics, { props: { loading: true } })
+    expect(loading.container.textContent).not.toContain('www.example.com')
+    expect(
+      (loading.getByRole('button', { name: 'Expand Top hosts' }) as HTMLButtonElement).disabled
+    ).toBe(true)
+  })
+
+  it('shows the error in every card and emits retry', async () => {
+    const view = render(Analytics, { props: { error: 'The API answered 503.' } })
+    expect(view.container.textContent).toContain("Couldn't load top hosts. The API answered 503.")
+    const retries = view.getAllByRole('button', { name: 'Retry' })
+    expect(retries).toHaveLength(4)
+    await fireEvent.click(retries[0])
+    expect(view.emitted('retry')).toHaveLength(1)
+  })
+
+  it('emits update:period when the Period Select changes', async () => {
+    const view = render(Analytics, { props: { period: '24h' } })
+    await userEvent.click(view.getByRole('combobox', { name: 'Period' }))
+    const option = await waitFor(() => {
+      const found = Array.from(document.querySelectorAll('[role="option"]')).find(
+        (node) => node.textContent?.trim() === 'Last 7 days'
+      )
+      if (!found) throw new Error('no option')
+      return found as HTMLElement
+    })
+    await userEvent.click(option)
+    await waitFor(() => expect(view.emitted('update:period')).toEqual([['7d']]))
+  })
+})

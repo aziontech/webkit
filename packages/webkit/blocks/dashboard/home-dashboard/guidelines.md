@@ -83,6 +83,84 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
   version) with Previous and Next `IconButton`s and position dots in the footer; the position is
   announced politely (`Template 2 of 3: Image optimizer`).
 
+### H. Loading — `Skeleton` (required)
+
+While Home's data loads (`loading`), each usage tile holds a skeleton figure and each panel keeps its
+heading over three `Skeleton` rows, so the grid does not reflow when the rows arrive.
+
+### I. First access — `SearchTrigger`, `Card`, `Illustration`, `Button`, `Input`, `Popover`, `Spinner` (required)
+
+When the account owns nothing (every panel list is `[]`), the page becomes the first-access screen:
+the greeting over `Let's build something new.`, a `SearchTrigger` that opens the layout's command
+palette, and three `Card` doors, each an `Illustration` over a title, one sentence and one action.
+`Create Project` is an outlined medium `Button`; `Add a domain` is an `Input` whose valid domain
+opens a `Popover` under it with a `Spinner` and `Checking <domain>...` until the answer arrives, then
+`is already registered` or `is available` with a secondary `Register` `Button`; `Onboard your agent`
+is an outlined `Copy prompt` `Button`.
+
+## Data
+
+The block takes its figures and rows through props and emits every action; it fetches nothing. `HomeDashboardProps` and the record types (`HomeDashboardMetrics`, `HomeDashboardResource`, `HomeDashboardDomainAvailability`) are exported from `home-dashboard.vue`, and `sample.ts` holds the sample name, figures and rows the block renders when a prop is left out (the figures and rows never while `loading` or `error` is set). The tile labels, units and hints and the panel headings stay in the SFC.
+
+| Prop                  | Type                              | What it does                                                                                                 |
+| --------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `userName`            | `string`                          | The first name in the greeting.                                                                              |
+| `greeting`            | `string`                          | The time-of-day greeting before it; defaults to `Good morning`.                                              |
+| `metrics`             | `HomeDashboardMetrics`            | The value and delta of each usage tile, keyed by tile id; a tile left out reads as a dash.                   |
+| `projects`            | `HomeDashboardResource[]`         | The Projects panel rows, each with its `href` and preset icon.                                               |
+| `resources`           | `HomeDashboardResource[]`         | The Resources panel rows.                                                                                    |
+| `domains`             | `HomeDashboardResource[]`         | The Domains panel rows.                                                                                      |
+| `recents`             | `HomeDashboardResource[]`         | The Recents panel rows, most recent first, each with its `typeLabel`.                                        |
+| `domainAvailability`  | `HomeDashboardDomainAvailability` | The answer to the last `check-domain`; the popover shows `Checking` until its `name` matches the field.      |
+| `v-model:agent-setup` | `boolean`                         | Whether the agent card shows; Dismiss sets it to `false`, so persist it to dismiss the card for good.        |
+| `loading`             | `boolean`                         | Home's data is loading: the tiles and the panels hold a `Skeleton`.                                          |
+| `error`               | `string`                          | Why Home's data could not load, shown after `Couldn't load <thing>.` in the band's and each panel's `Alert`. |
+
+Pass `[]` for all four lists on an account that owns nothing: the page becomes the first-access screen.
+
+| Event               | Payload         | When                                                                             |
+| ------------------- | --------------- | -------------------------------------------------------------------------------- |
+| `retry`             | `(event)`       | Retry in the usage band's or a panel's error alert.                              |
+| `update:agentSetup` | `(value)`       | Dismiss on the agent card.                                                       |
+| `create-project`    | `(event)`       | Create Project on the first-access screen.                                       |
+| `check-domain`      | `(name)`        | A valid domain stayed in the field for 900 ms; answer with `domainAvailability`. |
+| `register-domain`   | `(event, name)` | Register under an available domain.                                              |
+| `copy-prompt`       | `(event)`       | Copy prompt on the agent door.                                                   |
+
+Every row, panel heading and the agent card are links (`href`), so navigation needs no event. To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+  import HomeDashboard, { type HomeDashboardDomainAvailability } from './home-dashboard.vue'
+
+  const { data, pending, error, refresh } = useHome()
+  const availability = ref<HomeDashboardDomainAvailability>()
+  const checkDomain = async (name: string) => {
+    availability.value = { name, registered: await isRegistered(name) }
+  }
+</script>
+
+<template>
+  <HomeDashboard
+    :user-name="data?.user.firstName"
+    :metrics="data?.usage"
+    :projects="data?.projects ?? []"
+    :resources="data?.resources ?? []"
+    :domains="data?.domains ?? []"
+    :recents="data?.recents ?? []"
+    :domain-availability="availability"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+    @check-domain="checkDomain"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Greet by first name in a muted heading; it is the only personal line on the page.
@@ -123,9 +201,9 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
 
 ## States
 
-- Default: populated Home for an account that owns resources (usage band, agent card, resource panels).
-- Error: Home's data could not load; the usage band and every panel show a danger `Alert` with Retry.
-- Empty: a brand-new account; the first-access screen with the greeting, the command prompt that opens the palette, and the three doors (create a project, add a domain with an availability check, set up an agent).
+- Default: populated Home for an account that owns resources (`metrics`, `projects`, `resources`, `domains`, `recents`): usage band, agent card, resource panels.
+- Error: `error` holds the message; Home's data could not load, and the usage band and every panel show a danger `Alert` with Retry.
+- Empty: `projects`, `resources`, `domains` and `recents` are all `[]`; a brand-new account gets the first-access screen with the greeting, the command prompt that opens the palette, and the three doors (create a project, add a domain with an availability check, set up an agent).
 - Summary: the classic overview; metric tiles with the window caption, the resources and recent activity tables, and the aside with monthly usage and a featured marketplace template.
 
 ## Related
