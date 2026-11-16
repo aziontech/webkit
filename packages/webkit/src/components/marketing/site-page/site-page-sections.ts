@@ -288,7 +288,11 @@ const legacyProps: Record<string, Record<string, LegacyProp>> = {
     carouselMarks: 'marqueeMarks',
     carouselLabel: 'marqueeLabel',
     highlight: 'titleHighlight',
-    kind: { to: 'variant', values: { centered: 'center', 'centered-band': 'center-band' } },
+    kind: {
+      to: 'variant',
+      values: { centered: 'center', 'centered-band': 'center-band', 'pixel-floor': 'title-band' }
+    },
+    variant: { to: 'variant', values: { 'pixel-floor': 'title-band' } },
     tickerLabel: 'marqueeLabel',
     tickerMarks: 'marqueeMarks',
     illustration: {

@@ -339,7 +339,6 @@ export const VARIANT_EXTRAS = {
     'title-band',
     'center-band',
     'compact-band',
-    'pixel-floor',
     'copy-beside-art',
     'copy-on-top-art'
   ],

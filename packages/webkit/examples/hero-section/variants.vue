@@ -25,16 +25,6 @@
       :secondary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     />
     <HeroSection
-      variant="pixel-floor"
-      eyebrow="AI Inference"
-      title="Build and deploy AI agents and applications in seconds"
-      description="Run AI inference close to users on Azion’s distributed infrastructure."
-      :primary-action="{ label: 'Start for free', href: '/signup' }"
-      :secondary-action="{ label: 'Talk to sales', href: '/contact' }"
-      marquee-label="Trusted by teams running critical workloads"
-      :marquee-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
-    />
-    <HeroSection
       variant="copy-beside-art"
       eyebrow="AWS Alternative Comparison"
       title="AWS sells services. Your team becomes the integrator."

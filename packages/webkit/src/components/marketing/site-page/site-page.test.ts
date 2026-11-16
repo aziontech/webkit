@@ -375,6 +375,16 @@ describe('SitePage', () => {
     expect(band.hasAttribute('kind')).toBe(false)
   })
 
+  it.each([
+    ['hero-section', { variant: 'pixel-floor', title: 'T' }],
+    ['hero-band', { kind: 'pixel-floor', title: 'T' }]
+  ])('renders a removed pixel-floor hero (%s) as the title band', (id, props) => {
+    expect(resolveSectionEntry(id, props)).toEqual({
+      id: 'hero-section',
+      props: { variant: 'title-band', title: 'T' }
+    })
+  })
+
   it('translates old props on a current _id and keeps a new prop that is already set', () => {
     expect(resolveSectionEntry('hero-section', { kind: 'centered-band', title: 'T' })).toEqual({
       id: 'hero-section',
