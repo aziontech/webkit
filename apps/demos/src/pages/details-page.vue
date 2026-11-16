@@ -225,7 +225,8 @@ jobs:
                       />
 
                       <DropdownMenu
-                        placement="bottom-end"
+                        side="bottom"
+                        align="end"
                         @select="onResourceAction"
                       >
                         <DropdownMenu.Trigger>

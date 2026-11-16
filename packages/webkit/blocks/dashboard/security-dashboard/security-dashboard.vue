@@ -524,7 +524,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('matched', value)"
               >
                 <DropdownMenu.Trigger>
@@ -656,7 +657,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('categories', value)"
               >
                 <DropdownMenu.Trigger>
@@ -722,7 +724,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('countries', value)"
               >
                 <DropdownMenu.Trigger>
@@ -791,7 +794,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('ips', value)"
               >
                 <DropdownMenu.Trigger>

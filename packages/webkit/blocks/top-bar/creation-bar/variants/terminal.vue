@@ -26,7 +26,10 @@
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <DropdownMenu placement="bottom-end">
+        <DropdownMenu
+          side="bottom"
+          align="end"
+        >
           <DropdownMenu.Trigger>
             <button
               type="button"

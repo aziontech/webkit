@@ -369,7 +369,8 @@
                       <Item.Actions v-if="!row.note">
                         <DropdownMenu
                           v-model:open="versionOpen[row.key]"
-                          placement="bottom-end"
+                          side="bottom"
+                          align="end"
                           @select="(_event, id) => pickVersion(row, String(id))"
                         >
                           <DropdownMenu.Trigger>
@@ -517,7 +518,8 @@
                                   <Item.Actions v-if="!dependency.note">
                                     <DropdownMenu
                                       v-model:open="versionOpen[dependency.key]"
-                                      placement="bottom-end"
+                                      side="bottom"
+                                      align="end"
                                       @select="(_event, id) => pickVersion(dependency, String(id))"
                                     >
                                       <DropdownMenu.Trigger>
@@ -669,7 +671,8 @@
                       <Item.Actions v-if="projectMode === 'existing'">
                         <Popover
                           v-model:open="projectOpen"
-                          placement="bottom-end"
+                          side="bottom"
+                          align="end"
                           size="small"
                         >
                           <Popover.Trigger>

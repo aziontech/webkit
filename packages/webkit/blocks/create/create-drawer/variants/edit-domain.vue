@@ -190,7 +190,8 @@
 
 <template>
   <DropdownMenuRoot
-    placement="bottom-end"
+    side="bottom"
+    align="end"
     @select="(_event, value) => onRowAction(value)"
   >
     <DropdownMenuTrigger>

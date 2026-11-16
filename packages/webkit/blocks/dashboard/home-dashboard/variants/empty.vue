@@ -126,8 +126,9 @@
                 <div class="flex items-center gap-(--spacing-xs)">
                   <Popover
                     :open="check.open"
-                    placement="bottom-start"
-                    :offset="8"
+                    side="bottom"
+                    align="start"
+                    :side-offset="8"
                     class="w-full"
                     @update:open="onCheckOpen"
                   >

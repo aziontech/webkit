@@ -53,7 +53,10 @@
           </div>
 
           <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              side="bottom"
+              align="end"
+            >
               <DropdownMenu.Trigger>
                 <Tooltip content="Resource actions">
                   <IconButton
@@ -220,7 +223,10 @@
               target="_blank"
             />
 
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              side="bottom"
+              align="end"
+            >
               <DropdownMenu.Trigger>
                 <Tooltip content="Service actions">
                   <IconButton

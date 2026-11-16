@@ -324,7 +324,10 @@
               />
             </Tooltip>
 
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              side="bottom"
+              align="end"
+            >
               <DropdownMenu.Trigger>
                 <Tooltip content="Deployment actions">
                   <IconButton

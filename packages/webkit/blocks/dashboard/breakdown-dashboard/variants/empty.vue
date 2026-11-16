@@ -272,7 +272,10 @@
                 size="small"
                 aria-label="Chart form for Spend by category"
               />
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                side="bottom"
+                align="end"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
@@ -325,7 +328,10 @@
               <Hint content="This month’s spend by category, with the total in the center." />
             </span>
             <ChartCard.Action>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                side="bottom"
+                align="end"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
@@ -366,7 +372,10 @@
               />
             </span>
             <ChartCard.Action>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                side="bottom"
+                align="end"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"

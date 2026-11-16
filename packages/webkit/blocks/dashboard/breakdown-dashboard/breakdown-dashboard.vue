@@ -489,7 +489,8 @@
                 aria-label="Chart form for Spend by category"
               />
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('spend-by-category', value)"
               >
                 <DropdownMenu.Trigger>
@@ -545,7 +546,8 @@
             </span>
             <ChartCard.Action>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('current-split', value)"
               >
                 <DropdownMenu.Trigger>
@@ -589,7 +591,8 @@
             </span>
             <ChartCard.Action>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('top-contributors', value)"
               >
                 <DropdownMenu.Trigger>

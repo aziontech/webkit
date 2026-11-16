@@ -938,7 +938,10 @@ LIMIT 3;`
                     <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
                   </span>
                 </Item>
-                <DropdownMenu placement="bottom-end">
+                <DropdownMenu
+                  side="bottom"
+                  align="end"
+                >
                   <DropdownMenu.Trigger>
                     <Tooltip :content="`Actions for ${table.name}`">
                       <IconButton
@@ -1279,7 +1282,8 @@ LIMIT 3;`
                   </span>
                 </Item>
                 <DropdownMenu
-                  placement="bottom-end"
+                  side="bottom"
+                  align="end"
                   @select="
                     (event, value) =>
                       value === 'run'

@@ -376,7 +376,7 @@
         <Tooltip
           v-if="!compact"
           :content="`Switch account (${shortcut})`"
-          placement="right"
+          side="end"
           class="w-full"
         >
           <button
@@ -407,7 +407,7 @@
         <Tooltip
           v-if="compact"
           :content="`Switch account (${shortcut})`"
-          placement="bottom"
+          side="bottom"
         >
           <button
             type="button"
@@ -434,7 +434,7 @@
         <template v-if="compact">
           <Tooltip
             content="Create"
-            placement="bottom"
+            side="bottom"
           >
             <IconButton
               icon="ai ai-circle-plus"
@@ -445,7 +445,7 @@
           </Tooltip>
           <Tooltip
             content="Agent"
-            placement="bottom"
+            side="bottom"
           >
             <IconButton
               icon="ai ai-ask-azion"

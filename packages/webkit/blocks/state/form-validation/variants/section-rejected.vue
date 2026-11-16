@@ -153,7 +153,7 @@
       <AppHeader.Start>
         <Tooltip
           content="Back to Services"
-          placement="bottom"
+          side="bottom"
         >
           <IconButton
             icon="ai ai-chevron-left"
@@ -179,7 +179,10 @@
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <DropdownMenu placement="bottom-end">
+        <DropdownMenu
+          side="bottom"
+          align="end"
+        >
           <DropdownMenu.Trigger>
             <button
               type="button"

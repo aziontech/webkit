@@ -62,7 +62,8 @@
             </Tooltip>
           </div>
           <Popover
-            placement="bottom-start"
+            side="bottom"
+            align="start"
             size="small"
           >
             <Popover.Trigger>
@@ -125,7 +126,8 @@
               content="Select an environment to see its deployment and settings, or add another one"
             >
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="
                   (_event, value) => {
                     if (value !== '__add-environment__') environment = String(value)
@@ -175,7 +177,10 @@
             </Tooltip>
           </div>
 
-          <DropdownMenu placement="bottom-end">
+          <DropdownMenu
+            side="bottom"
+            align="end"
+          >
             <DropdownMenu.Trigger>
               <Tooltip content="Service actions">
                 <IconButton

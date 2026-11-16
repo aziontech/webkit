@@ -543,7 +543,10 @@
                     :href="`https://${APP.host}`"
                     target="_blank"
                   />
-                  <DropdownMenu placement="bottom-end">
+                  <DropdownMenu
+                    side="bottom"
+                    align="end"
+                  >
                     <DropdownMenu.Trigger>
                       <Tooltip content="Application actions">
                         <IconButton

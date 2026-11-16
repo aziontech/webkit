@@ -467,7 +467,8 @@
                         <template #cell-actions="{ row }">
                           <DropdownMenu
                             v-if="!row.generated"
-                            placement="bottom-end"
+                            side="bottom"
+                            align="end"
                           >
                             <DropdownMenu.Trigger>
                               <Tooltip content="Row actions">

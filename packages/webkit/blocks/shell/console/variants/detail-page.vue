@@ -241,7 +241,7 @@
       <template v-if="compact">
         <Tooltip
           content="Create"
-          placement="bottom"
+          side="bottom"
         >
           <IconButton
             icon="ai ai-circle-plus"
@@ -252,7 +252,7 @@
         </Tooltip>
         <Tooltip
           content="Agent"
-          placement="bottom"
+          side="bottom"
         >
           <IconButton
             icon="ai ai-ask-azion"

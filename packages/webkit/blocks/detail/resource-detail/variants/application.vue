@@ -380,7 +380,10 @@
                     size="medium"
                     icon="ai ai-external-link"
                   />
-                  <DropdownMenu placement="bottom-end">
+                  <DropdownMenu
+                    side="bottom"
+                    align="end"
+                  >
                     <DropdownMenu.Trigger>
                       <Tooltip content="Application actions">
                         <IconButton
