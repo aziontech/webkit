@@ -97,6 +97,7 @@ CLAUDE.md
 .claude/stats-cache.json
 .claude/mcp-needs-auth-cache.json
 .claude/.last-cleanup
+.claude/worktrees/
 
 # packages folder to ignore
 packages/icons/tmp/
