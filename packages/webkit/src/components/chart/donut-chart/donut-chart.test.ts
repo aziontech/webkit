@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/vue'
+import { fireEvent, render, type RenderOptions } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
@@ -12,7 +12,10 @@ const countries: ChartSeries[] = [
   { id: 'de', name: 'Germany', values: [18900] }
 ]
 
-const mount = (props: Record<string, unknown> = {}, slots: Record<string, () => unknown> = {}) =>
+const mount = (
+  props: Record<string, unknown> = {},
+  slots: RenderOptions<typeof DonutChart>['slots'] = {}
+) =>
   render(DonutChart, {
     props: { series: countries, ariaLabel: 'Top WAF threat requests by country', ...props },
     slots
@@ -72,10 +75,8 @@ describe('DonutChart', () => {
     const view = mount(
       {},
       {
-        center: (scope: unknown) => {
-          const { total } = scope as { total: number }
-          return h('span', { 'data-testid': 'custom-center' }, `sum ${total}`)
-        }
+        center: ({ total }: { total: number }) =>
+          h('span', { 'data-testid': 'custom-center' }, `sum ${total}`)
       }
     )
     expect(view.getByTestId('custom-center').textContent).toBe('sum 98700')
