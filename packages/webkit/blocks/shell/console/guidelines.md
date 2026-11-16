@@ -15,9 +15,9 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ## Building blocks
 
-### A. Shell — `ConsoleLayout` (required)
+### A. Shell — `ConsoleLayoutRoot` (required)
 
-Composed once in `App.vue` around `RouterView` (imported from `console-layout-root`; a page that renders `ConsoleLayout.Breadcrumb`, as DetailPage does, imports the compound `console-layout` instead). `navigation` is the console tree as data: groups of rows `{ id, label, icon, href }` (an in-app `href` is followed with the app's router, an external one loads normally; `type: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes a static trail from the route meta (`{ label, href? }`, the last crumb, the current page, without `href`; empty on a first-level page); a page that owns its trail renders `ConsoleLayout.Breadcrumb` instead, and a workspace page puts `data-layout-fill` on its root. `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
+Composed once in `App.vue` around `RouterView` (imported from `console-layout-root` and bound as `ConsoleLayoutRoot`, the PascalCase of the path, since the root has no dot-notation parts; a page that renders `ConsoleLayout.Breadcrumb`, as DetailPage does, imports the compound `console-layout` instead). `navigation` is the console tree as data: groups of rows `{ id, label, icon, href }` (an in-app `href` is followed with the app's router, an external one loads normally; `type: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes a static trail from the route meta (`{ label, href? }`, the last crumb, the current page, without `href`; empty on a first-level page); a page that owns its trail renders `ConsoleLayout.Breadcrumb` instead, and a workspace page puts `data-layout-fill` on its root. `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
 
 ### B. Actions — `Button` (required)
 
@@ -41,7 +41,7 @@ In the `search` slot: Recents (only while the query is empty) and Actions, as `C
 
 ### G. Account menu — `DropdownMenu` (required)
 
-In the `account-menu` slot, as `DropdownMenu.Group`s: identity, Account settings and Personal tokens, the theme, Docs, Log out, and the Upgrade to Pro and system status foot. The layout opens it from the rail footer and from the header avatar.
+In the `account-menu` slot, as `DropdownMenu.Group`s: identity, Account settings and Personal tokens, the theme, Docs, Log out, and the Upgrade to Pro and system status foot. The layout opens it from the rail footer and from the header avatar. The layout emits `account-select` `(event, value)` for each item; the block answers `logout` by emitting `sign-out` `(event)` and clears nothing itself.
 
 ### H. Theme — `ThemeSwitcher` (required)
 
@@ -59,9 +59,19 @@ The list page's title and description, with Documentation and the create action 
 
 Flush (`:padded="false"`), standing in for the page body; the list page's controls row and table come from `view/table-view` (Table toolbar parts), never a hand-built row of buttons in the shell.
 
+## Data
+
+The shell takes no props: `navigation`, `account` and the recents are its own constants, which the app replaces with its navigation file and signed-in user. It emits one event:
+
+| Event      | Payload   | When                                    |
+| ---------- | --------- | --------------------------------------- |
+| `sign-out` | `(event)` | Log out in the account menu was chosen. |
+
+Handle it where the session lives: clear the token (`sessionStorage.removeItem`, the in-memory ref) and route to sign-in (`router.push('/login')`). When this block is the app's `App.vue`, there is no parent to listen, so either mount it with the handler (`createApp(App, { onSignOut })`) or render it from a thin `App.vue` (`<ConsoleShell @sign-out="signOut" />`). Never leave Log out as a menu item that does nothing.
+
 ## Do
 
-- Compose `ConsoleLayout` once in `App.vue` and render every browse page through its default slot; replace this block's stand-in body with `<RouterView />`.
+- Compose `ConsoleLayoutRoot` once in `App.vue` and render every browse page through its default slot; replace this block's stand-in body with `<RouterView />`.
 - Keep the navigation in one data file shared by the app; the rail and the palette both read it.
 - Give every row an `href` (never `to` or `path`); derive a static `breadcrumbs` trail from the route.
 - Let a detail page set its own trail, control crumb included, with `ConsoleLayout.Breadcrumb`.

@@ -17,6 +17,8 @@
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { computed, ref } from 'vue'
 
+  const emit = defineEmits<{ 'sign-out': [event: MouseEvent | KeyboardEvent] }>()
+
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
@@ -228,6 +230,10 @@
   const onEnvironmentOpen = (open: boolean) => {
     if (!open) environmentQuery.value = ''
   }
+
+  const onAccountSelect = (event: MouseEvent | KeyboardEvent, value: string | number) => {
+    if (value === 'logout') emit('sign-out', event)
+  }
 </script>
 
 <template>
@@ -236,6 +242,7 @@
     :account="account"
     active-id="applications"
     @search-select="onSearchSelect"
+    @account-select="onAccountSelect"
   >
     <template #actions="{ compact }">
       <template v-if="compact">

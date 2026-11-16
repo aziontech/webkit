@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import HighlightButton from '@aziontech/webkit/highlight-button'
@@ -72,7 +74,7 @@
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     :navigation="navigation"
     :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
     :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
@@ -149,5 +151,5 @@
         />
       </div>
     </div>
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
 </template>

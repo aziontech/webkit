@@ -3,12 +3,14 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import Login from '../../../../blocks/auth/sign-in/sign-in.vue'
+import TokenSignIn from '../../../../blocks/auth/sign-in/token-sign-in.vue'
 import CheckInbox from '../../../../blocks/auth/sign-in/variants/check-inbox.vue'
 import DeviceAuthorization from '../../../../blocks/auth/sign-in/variants/device-authorization.vue'
 import EmailAlreadyRegistered from '../../../../blocks/auth/sign-in/variants/email-already-registered.vue'
 import IncorrectCredentials from '../../../../blocks/auth/sign-in/variants/incorrect-credentials.vue'
 import MfaCode from '../../../../blocks/auth/sign-in/variants/mfa-code.vue'
 import MfaSetup from '../../../../blocks/auth/sign-in/variants/mfa-setup.vue'
+import NoAccessToken from '../../../../blocks/auth/sign-in/variants/no-access-token.vue'
 import OauthConsent from '../../../../blocks/auth/sign-in/variants/oauth-consent.vue'
 import PersonalToken from '../../../../blocks/auth/sign-in/variants/personal-token.vue'
 import ProvidersLoading from '../../../../blocks/auth/sign-in/variants/providers-loading.vue'
@@ -357,34 +359,74 @@ describe('auth/sign-in#PersonalToken', () => {
     expect(view.emitted()['sign-in']).toBeUndefined()
   })
 
-  it('shows a rejected token in the notice, clears the field and emits nothing', async () => {
-    const view = render(PersonalToken)
+  it('emits any well-formed token, short or all nines, and fakes no answer', async () => {
+    const view = render(TokenSignIn)
 
-    await fireEvent.update(view.getByLabelText('Personal token'), 'short-token')
+    await fireEvent.update(view.getByLabelText('Personal token'), '  short-token  ')
+    await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
+    await fireEvent.update(view.getByLabelText('Personal token'), '999999')
     await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
 
-    await waitFor(() => expect(view.getByText(/Azion did not accept this token/)).toBeTruthy())
-    expect((view.getByLabelText('Personal token') as HTMLInputElement).value).toBe('')
-    expect(view.emitted()['sign-in']).toBeUndefined()
+    const calls = view.emitted()['sign-in'] as [Event, string][]
+    expect(calls).toHaveLength(2)
+    expect(calls[0][0]).toBeInstanceOf(Event)
+    expect(calls.map(([, token]) => token)).toEqual(['short-token', '999999'])
+    expect(view.container.textContent).not.toMatch(/did not accept|could not reach/)
   })
 
-  it('emits the event and the trimmed token once Azion accepts it', async () => {
-    const view = render(PersonalToken)
+  it('locks the field and spins Sign in while loading, then shows the rejection the app answers', async () => {
+    const view = render(TokenSignIn, { props: { loading: true } })
+    expect(view.getByRole('form').getAttribute('aria-busy')).toBe('true')
+    expect(view.getByLabelText('Personal token').matches(':disabled')).toBe(true)
 
-    await fireEvent.update(view.getByLabelText('Personal token'), `  ${VALID}  `)
-    await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
-
-    await waitFor(() => expect(view.emitted()['sign-in']).toHaveLength(1))
-    const [event, token] = view.emitted()['sign-in']![0] as [Event, string]
-    expect(event).toBeInstanceOf(Event)
-    expect(token).toBe(VALID)
+    await view.rerender({ loading: false, error: 'rejected' })
+    await waitFor(() => expect(view.getByText(/Azion did not accept this token/)).toBeTruthy())
     expect((view.getByLabelText('Personal token') as HTMLInputElement).value).toBe('')
+    expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
+  })
+
+  it.each([
+    ['rate-limited', /limiting requests/],
+    ['unreachable', /could not reach Azion/],
+    ['The API answered 502.', /The API answered 502\./]
+  ])('keeps the entry and re-sends it from Retry on %s', async (error, copy) => {
+    const view = render(TokenSignIn)
+    await fireEvent.update(view.getByLabelText('Personal token'), VALID)
+    await view.rerender({ error })
+
+    expect(view.getByText(copy)).toBeTruthy()
+    expect((view.getByLabelText('Personal token') as HTMLInputElement).value).toBe(VALID)
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    const calls = view.emitted()['sign-in'] as [Event, string][]
+    expect(calls.at(-1)?.[1]).toBe(VALID)
+  })
+
+  it('Remember for this tab is off by default and only reports the choice', async () => {
+    const view = render(TokenSignIn)
+    const remember = view.getByRole('checkbox', { name: 'Remember for this tab' })
+
+    expect(
+      (remember as HTMLInputElement).checked ?? remember.getAttribute('aria-checked')
+    ).toBeFalsy()
+    await fireEvent.click(remember)
+    expect(view.emitted()['update:remember']).toEqual([[true]])
+    expect(sessionStorage.length).toBe(0)
+    expect(localStorage.getItem('token')).toBeNull()
   })
 
   it('RejectedToken: opens on the rejection with the field focused', async () => {
     const view = render(RejectedToken)
 
     expect(view.getByText(/Azion did not accept this token/)).toBeTruthy()
+    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText('Personal token')))
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('NoAccessToken: asks for a token with access and focuses the empty field', async () => {
+    const view = render(NoAccessToken)
+
+    expect(view.getByText(/valid but cannot read what this app needs/)).toBeTruthy()
+    expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
     await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText('Personal token')))
     await expectNoA11yViolations(view.container)
   })

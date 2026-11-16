@@ -47,6 +47,13 @@ describe('StatTile', () => {
     expect(view.queryByTestId('stat-tile__sparkline')).toBeNull()
   })
 
+  it('draws no placeholder curve in the no-data band', () => {
+    const view = mount({ value: null, trend: [1, 2, 3] })
+    const band = view.getByTestId('stat-tile__empty')
+    expect(band.querySelector('svg, [data-testid="spark-chart"]')).toBeNull()
+    expect(band.textContent?.trim()).toBe('No data')
+  })
+
   it('reads a rise as good, and as bad when inverse', () => {
     const good = mount({ delta: 12.4, deltaLabel: 'vs previous 24 hours' })
     const rise = good.getByTestId('stat-tile__delta')

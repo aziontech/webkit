@@ -70,7 +70,6 @@
   const uid = useId()
   const { display } = useCountUp(() => props.value)
 
-  const PLACEHOLDER_TREND = [5, 4, 6, 5, 8, 6, 5, 10, 7, 6, 8, 11, 7, 6, 9, 5, 7]
   const TREND_SEVERITY: Record<StatTileTrend, TagSeverity> = {
     good: 'success',
     bad: 'danger',
@@ -200,14 +199,8 @@
     <div
       v-else-if="!loading && !hasValue"
       :data-testid="`${testId}__empty`"
-      class="relative pt-(--spacing-xs)"
+      class="relative mt-(--spacing-xs) h-12"
     >
-      <SparkChart
-        :values="PLACEHOLDER_TREND"
-        color="other"
-        size="medium"
-        class="opacity-30"
-      />
       <Separator class="absolute inset-x-0 top-0" />
       <Tag
         severity="neutral"

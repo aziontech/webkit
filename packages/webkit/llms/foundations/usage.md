@@ -71,7 +71,8 @@ confirmation"), or the `webkit` MCP `search_blocks`. Read the best one with
 `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state): it copies the SFC
 into the views directory, checks its imports, records it in `webkit.blocks.json` and prints the
 route entry. `npx @aziontech/webkit diff <block-id>` later shows what you changed against the
-canonical block. Before adapting it, read the guidelines (`view`, or the `guidelines` field
+canonical block, and `npx @aziontech/webkit remove <block-id>` (`--dry-run` first) deletes a copy you
+no longer need with its `webkit.blocks.json` entry, then lists the imports left to remove. Before adapting it, read the guidelines (`view`, or the `guidelines` field
 `get_block` returns): when to use the screen and when another block fits better, what each building block (A,
 B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
 matches your case, switch to the block it names. Then change only the content of the copy,
@@ -129,9 +130,14 @@ Structure and states first, polish last:
 
 Do not guess a component name or import path. Look it up.
 
-1. Ask the webkit MCP. The server exposes tools grounded in the exact webkit version this project installed:
-   - `suggest_component` — describe what you need in plain words; it returns the matching component(s).
-   - Import/validation tools — confirm a subpath is real and get the canonical path.
+1. Ask the webkit MCP. The server exposes tools grounded in the exact webkit version this project installed. Arguments are JSON fields of the call; required ones are in bold, and `surface` is `app`, `site` or `docs` (console screens: `app`):
+   - `search_blocks` — **`query`** (the screen in plain words), `surface`, `fragments` (boolean). Start every screen here.
+   - `get_block` — **`id`**, `variant`, `sections` (`["guidelines"]` or `["sfc"]`).
+   - `suggest_component` — **`need`** (what you are building, e.g. `"a ranked top list"`), `surface`; the block, section or component that fits, with alternatives.
+   - `search_components` — **`query`**, `surface`.
+   - `get_component`, `get_import`, `get_usage_example`, `get_best_practices` — **`name`** (kebab-case, e.g. `"bar-list"`).
+   - `list_components` — `category`, `surface`, `cursor`, `limit`; `list_categories` — none; `list_tokens` — `category`; `list_assets` — `kind`, `query`.
+   - `validate_usage` — `import`, `classes`, `component`: confirm a subpath is real and a class string is allowed.
 2. No MCP? Read `node_modules/@aziontech/webkit/llms/llms.txt`. It links one Markdown page per block (`llms/blocks/<id>.md`: guidelines, variants, the primary SFC), per component (`llms/components/<name>.md`: props, events, slots, examples, accessibility, do and don't, with the same data as JSON in `<name>.json`) and per foundation (`llms/foundations/`: tokens, color, typography, spacing, motion, i18n, RTL, devices). `llms-full.txt` is every page in one file.
 3. Read the catalog directly. `node_modules/@aziontech/webkit/catalog.json` has an `imports` object; every key is a real published subpath (`button`, `empty-state`, `table`, ...). If a subpath is not a key there, it does not exist.
 
@@ -187,7 +193,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ Barrel import: `import { Button } from '@aziontech/webkit'` (no barrel exists).
 - ❌ Binding that disagrees with the path: `import Chip from '@aziontech/webkit/chips'`.
 - ❌ Hardcoded color: `#fff`, `rgb(...)`, `hsl(...)`, `text-[#1e40af]`, or raw Tailwind palette (`bg-blue-600`).
-- ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only layout utilities may sit on the tag: `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
+- ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only layout utilities (size, flex and grid placement, order, logical margins) may sit on the tag, each optionally behind a breakpoint prefix (`sm:` to `2xl:`): `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `shrink-0`, `self-*`, `justify-self-*`, `place-self-*`, `order-*`, `col-span-*`, `col-start-*`, `col-end-*`, `row-span-*`, `row-start-*`, `row-end-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mb-*`, `ms-*`, `me-*`.
 - ❌ An illustration, diagram, figure or mark name guessed from a file in `src/` or from the page title: an unknown illustration renders a "PLACE DESIGN ASSET" placeholder, an unknown diagram or figure draws nothing.
 - ❌ `ai-cor ai-<name>`, `ai-<name>-cor` or `ai ai-<name>-cor` for a colour icon: none is a class in WebKit 6. Use `ai-color ai-<name>`.
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.

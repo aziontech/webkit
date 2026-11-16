@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
   import { defineComponent, h } from 'vue'
@@ -32,7 +34,7 @@
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     :navigation="navigation"
     active-id="workloads"
   >
@@ -48,5 +50,5 @@
         </PageHeader>
       </div>
     </div>
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
 </template>

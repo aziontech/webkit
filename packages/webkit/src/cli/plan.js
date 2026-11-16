@@ -740,6 +740,21 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
+  const existingPrettier = firstExisting(projectDir, PRETTIER_CONFIG_CANDIDATES)
+  if (existingPrettier || packageHasKey(projectDir, 'prettier')) {
+    actions.push({
+      type: 'advise',
+      message: `${PRETTIER_SNIPPET_HEADER}\n${PRETTIER_CONTENT}`
+    })
+  } else {
+    actions.push({
+      type: 'write',
+      path: '.prettierrc.json',
+      content: PRETTIER_CONTENT,
+      skipIfExists: true
+    })
+  }
+
   const upgradedMcp = upgradeLegacyMcp(projectDir)
   if (upgradedMcp) {
     actions.push({
@@ -877,6 +892,48 @@ export const ESLINT_CONFIG_CANDIDATES = [
   '.eslintrc.yml',
   '.eslintrc.yaml'
 ]
+export const PRETTIER_CONFIG_CANDIDATES = [
+  '.prettierrc',
+  '.prettierrc.json',
+  '.prettierrc.json5',
+  '.prettierrc.yml',
+  '.prettierrc.yaml',
+  '.prettierrc.toml',
+  '.prettierrc.js',
+  '.prettierrc.cjs',
+  '.prettierrc.mjs',
+  '.prettierrc.ts',
+  'prettier.config.js',
+  'prettier.config.cjs',
+  'prettier.config.mjs',
+  'prettier.config.ts'
+]
+export const PRETTIER_CONTENT = `${JSON.stringify(
+  {
+    semi: false,
+    tabWidth: 2,
+    singleQuote: true,
+    printWidth: 100,
+    trailingComma: 'none',
+    singleAttributePerLine: true,
+    vueIndentScriptAndStyle: true
+  },
+  null,
+  2
+)}\n`
+const PRETTIER_SNIPPET_HEADER =
+  'A Prettier config already exists, so none is written. The copied WebKit blocks are formatted with these options; use them, or expect the first format run to restyle every copied block (and `webkit diff` to report it):'
+
+function packageHasKey(projectDir, key) {
+  const raw = read(join(projectDir, 'package.json'))
+  if (!raw) return false
+  try {
+    return Object.hasOwn(JSON.parse(raw), key)
+  } catch {
+    return false
+  }
+}
+
 export const STYLELINT_CONFIG_CANDIDATES = [
   '.stylelintrc',
   '.stylelintrc.json',

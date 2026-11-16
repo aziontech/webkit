@@ -1,11 +1,11 @@
 # AnalyticsDashboard (`dashboard/analytics-dashboard`)
 
-> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A StatTileGroup of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTileGroup`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/analytics-dashboard")`
-- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -46,11 +46,13 @@ Title `Analytics` and one sentence on what the page shows, over the rest of the 
 delta (`vs previous 7 days`) and the period in the exported CSV file name
 (`requests-last-7-days.csv`). No card has a period control of its own.
 
-### B. KPI row — `StatTile` (required)
+### B. KPI row — `StatTileGroup`, `StatTile` (required)
 
-Four tiles: `Requests`, `Data transferred`, `Success rate`, `Status 5xx`. Each shows the period total,
-a sparkline and the change against the previous period. `Status 5xx` passes `inverse`, because a rise
-is a regression.
+Four tiles: `Requests`, `Data transferred`, `Success rate`, `Status 5xx`, the cells of one
+`StatTileGroup` (`aria-label="Key figures"`): it draws the card and the dividers, stacks the cells in a
+narrow box and keeps every cell of a row the same height, whether or not a tile has a change figure or a
+sparkline. Each shows the period total, a sparkline (a `null` point is a gap) and the change against the
+previous period. `Status 5xx` passes `inverse`, because a rise is a regression.
 
 ### C. Metric definitions — `Hint` (required)
 
@@ -90,8 +92,9 @@ after it failed there is nothing to enlarge, so Expand is disabled.
 ### I. More options — `DropdownMenu`, `toast` (optional)
 
 `Copy query` and `Export CSV`. Secondary actions go here so the header stays one line. Copy query
-writes the GraphQL query behind the card (dataset, sum aggregation, the period as `tsRange`, the
-order and the fields) to the clipboard and confirms with a success toast (`Query copied.`), or an
+writes the Real-Time Metrics GraphQL query behind the card (dataset `workloadMetrics`, the period
+as `tsRange`, `aggregate: { sum: requests }`, the `groupBy` dimensions, the order and the fields) to
+the clipboard and confirms with a success toast (`Query copied.`), or an
 error toast when the clipboard is not available. Export CSV serializes the card's rows with
 `toCsv` and saves them with `downloadCsv` from `@aziontech/webkit/utils/csv` as
 `<card>-last-24-hours.csv`, then confirms with `CSV exported.` and the file name. Export CSV is
@@ -166,25 +169,42 @@ Retry in place of its chart or table, naming what did not load
 
 The block takes its figures through props and emits its actions; it fetches nothing. `AnalyticsDashboardProps` and the record types (`AnalyticsDashboardKpis`, `AnalyticsDashboardCountry`, `AnalyticsDashboardHost`, `AnalyticsDashboardChanges`, `AnalyticsDashboardRange`) are exported from `analytics-dashboard.vue`, and `sample.ts` holds the sample figures the block renders when a data prop is left out (and never while `loading` or `error` is set). The tile labels, hints and formats, the card titles and the period options stay in the SFC.
 
-| Prop              | Type                             | What it does                                                                                                   |
-| ----------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `v-model:period`  | `string`                         | The selected period (`1h`, `24h`, `7d`, `30d`); defaults to `24h`. Refetch when it changes.                    |
-| `kpis`            | `AnalyticsDashboardKpis`         | The value, delta and sparkline of each tile, keyed by tile id; a tile left out reads as a dash. `{}` is empty. |
-| `intervals`       | `ChartLabel[]`                   | One label per interval of the two time series (a string, a number or a `Date`).                                |
-| `requestSeries`   | `ChartSeries[]`                  | The Requests over time series.                                                                                 |
-| `statusSeries`    | `ChartSeries[]`                  | The Status codes series, one per status class.                                                                 |
-| `countries`       | `AnalyticsDashboardCountry[]`    | The Requests by country bars, top countries first.                                                             |
-| `hosts`           | `AnalyticsDashboardHost[]`       | The Top hosts rows; searched, sorted and paged in the browser.                                                 |
-| `changes`         | `AnalyticsDashboardChanges`      | The change tags of the two time-series cards, in percent; `null` hides a tag.                                  |
-| `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                           |
-| `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                        |
-| `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.       |
-| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.    |
+| Prop              | Type                             | What it does                                                                                                                                           |
+| ----------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model:period`  | `string`                         | The selected period (`1h`, `24h`, `7d`, `30d`); defaults to `24h`. Refetch when it changes.                                                            |
+| `kpis`            | `AnalyticsDashboardKpis`         | The value, delta and sparkline (`(number \| null)[]`, `null` is a gap) of each tile, keyed by tile id; a tile left out reads as a dash. `{}` is empty. |
+| `intervals`       | `ChartLabel[]`                   | One label per interval of the two time series (a string, a number or a `Date`).                                                                        |
+| `requestSeries`   | `ChartSeries[]`                  | The Requests over time series.                                                                                                                         |
+| `statusSeries`    | `ChartSeries[]`                  | The Status codes series, one per status class.                                                                                                         |
+| `countries`       | `AnalyticsDashboardCountry[]`    | The Requests by country bars, top countries first.                                                                                                     |
+| `hosts`           | `AnalyticsDashboardHost[]`       | The Top hosts rows; searched, sorted and paged in the browser.                                                                                         |
+| `changes`         | `AnalyticsDashboardChanges`      | The change tags of the two time-series cards, in percent; `null` hides a tag.                                                                          |
+| `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                                                                   |
+| `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                                                                |
+| `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.                                               |
+| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.                                            |
+| `refetching`      | `boolean`                        | The period is reloading over figures already shown: the data stays and every chart holds its previous render at reduced opacity.                       |
 
 | Event           | Payload   | When                             |
 | --------------- | --------- | -------------------------------- |
 | `update:period` | `(value)` | The Period `Select` changed.     |
 | `retry`         | `(event)` | Retry in any card's error alert. |
+
+The queries the card menus copy run as-is against the Azion Real-Time Metrics API
+(`POST /v4/metrics/graphql`). What the API expects, so a live page asks for the right shapes:
+
+| Card                | Query                                                                                                                               | Maps to                                                          |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Requests over time  | `workloadMetrics(aggregate: { sum: requests }, groupBy: [ts], orderBy: [ts_ASC]) { ts sum }`                                        | `requestSeries`                                                  |
+| Status codes        | `workloadMetrics(aggregate: { sum: requests }, groupBy: [ts, status], orderBy: [ts_ASC]) { ts status sum }`                         | `statusSeries`                                                   |
+| Requests by country | `workloadMetrics(aggregate: { sum: requests }, groupBy: [geolocCountryName], orderBy: [sum_DESC]) { geolocCountryName sum }`        | `countries.country`                                              |
+| Top hosts           | `workloadMetrics(aggregate: { sum: requests }, groupBy: [host, configurationId], orderBy: [sum_DESC]) { host configurationId sum }` | `hosts`: `host`, `service` (the configuration's name, or its id) |
+
+- Every query takes `limit` and `filter: { tsRange: { begin, end } }`; an aggregate needs `groupBy`, and a ranked list orders by the aggregate (`sum_DESC`), never by the measured field (`requests_DESC` is rejected).
+- Timestamps are ISO 8601 in UTC **without** the trailing `Z` (`2026-11-13T11:00:00`); the block strips a `Z` and milliseconds from `range` before it writes the query.
+- `resample: { function: sum, points: 96 }` returns a fixed number of points for a time series, so a long period does not come back as thousands of rows.
+- One query returns at most 10,000 rows (`limit: 10000`).
+- Data transferred is `aggregate: { sum: bytesSent }`; the Functions product reads `functionsMetrics` (`sum: invocations`) and Edge DNS reads `idnsQueriesMetrics`.
 
 Copy query and Export CSV run in the browser on the figures the block holds. To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -195,7 +215,7 @@ Copy query and Export CSV run in the browser on the figures the block holds. To 
   import AnalyticsDashboard from './analytics-dashboard.vue'
 
   const period = ref('24h')
-  const { data, pending, error, refresh } = useHttpMetrics(period)
+  const { data, pending, error, refresh } = useWorkloadMetrics(period)
 </script>
 
 <template>
@@ -209,7 +229,8 @@ Copy query and Export CSV run in the browser on the figures the block holds. To 
     :hosts="data?.hosts ?? []"
     :changes="data?.changes"
     :range="data?.range"
-    :loading="pending"
+    :loading="pending && !data"
+    :refetching="pending && !!data"
     :error="error ? 'Check your connection and retry.' : ''"
     @retry="refresh"
   />
@@ -265,6 +286,7 @@ Then delete `sample.ts` and its import.
 
 - Default: the populated dashboard for the period (`kpis`, `intervals`, `requestSeries`, `statusSeries`, `countries`, `hosts`, `changes`).
 - Loading: `loading`; every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
+- Refetching: `refetching`; the period reloads (a new period, a Refresh) over figures already shown: the tiles, charts and table keep their data and every chart holds its previous render at reduced opacity until the new figures arrive. Use `loading` only for the first response.
 - Empty: `kpis` is `{}` and the series and rows are `[]`; no traffic in the period, tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
 - Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards, and products with sub-dashboards switch them with a `ToggleGroup`, adding breakdown table cards.
 - Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
@@ -287,6 +309,7 @@ Then delete `sample.ts` and its import.
 
 - `Default` — primary (the code below)
 - `Loading` — While the first response loads, every tile, chart and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.
+- `Refetching` — The period reloads over figures already shown (a new period, a Refresh): the tiles, charts and table keep their data and every chart holds its previous render at reduced opacity, so nothing jumps to a Skeleton.
 - `Empty` — No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded.
 - `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
 - `Metrics` — Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair. Products with more than one dashboard add a ToggleGroup under the tabs: Applications switches between Overview, Status codes (the status card over a status and upstream status table with search and an All, 2xx, 3xx, 4xx, 5xx status-class filter) and Request breakdown (an IP address table with search); Firewall adds Denied sources. Every card menu copies its GraphQL query and exports its rows as CSV.
@@ -318,6 +341,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
@@ -347,8 +371,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     value: number | null
     /** Change against the previous period, in percent; null hides the delta. */
     delta: number | null
-    /** The sparkline, one value per interval; empty hides it. */
-    trend: number[]
+    /** The sparkline, one value per interval, null for an interval with no data; empty hides it. */
+    trend: (number | null)[]
   }
 
   /** The KPI figures by tile; a tile left out reads as a dash. */
@@ -418,6 +442,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     loading?: boolean
     /** Why the period could not load; each card shows it in a danger alert with Retry. */
     error?: string
+    /** The period is reloading over figures already shown: the data stays and every chart holds its previous render at reduced opacity. */
+    refetching?: boolean
   }
 
   const props = withDefaults(defineProps<AnalyticsDashboardProps>(), {
@@ -431,7 +457,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     range: undefined,
     defaultExpanded: '',
     loading: false,
-    error: ''
+    error: '',
+    refetching: false
   })
 
   const emit = defineEmits<{ retry: [event: MouseEvent] }>()
@@ -611,20 +638,24 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
 
   interface CardQuery {
     dataset: string
-    fields: string[]
+    limit: number
+    groupBy: string[]
     orderBy: string
   }
+
+  const apiTime = (iso: string) => iso.replace(/(\.\d+)?Z$/, '')
 
   const cardQuery = (report: CardQuery) =>
     [
       'query {',
       `  ${report.dataset}(`,
-      '    limit: 5000',
+      `    limit: ${report.limit}`,
+      `    filter: { tsRange: { begin: "${apiTime(range.value.begin)}", end: "${apiTime(range.value.end)}" } }`,
       '    aggregate: { sum: requests }',
-      `    filter: { tsRange: { begin: "${range.value.begin}", end: "${range.value.end}" } }`,
+      `    groupBy: [${report.groupBy.join(', ')}]`,
       `    orderBy: [${report.orderBy}]`,
       '  ) {',
-      ...report.fields.map((field) => `    ${field}`),
+      ...[...report.groupBy, 'sum'].map((field) => `    ${field}`),
       '  }',
       '}'
     ].join('\n')
@@ -641,21 +672,24 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
   }
 
   const queries: Record<AnalyticsDashboardCardId, CardQuery> = {
-    requests: { dataset: 'httpMetrics', fields: ['ts', 'requests'], orderBy: 'ts_ASC' },
+    requests: { dataset: 'workloadMetrics', limit: 10000, groupBy: ['ts'], orderBy: 'ts_ASC' },
     'status-codes': {
-      dataset: 'httpMetrics',
-      fields: ['ts', 'status', 'requests'],
+      dataset: 'workloadMetrics',
+      limit: 10000,
+      groupBy: ['ts', 'status'],
       orderBy: 'ts_ASC'
     },
     countries: {
-      dataset: 'httpMetrics',
-      fields: ['country', 'requests'],
-      orderBy: 'requests_DESC'
+      dataset: 'workloadMetrics',
+      limit: 10,
+      groupBy: ['geolocCountryName'],
+      orderBy: 'sum_DESC'
     },
     hosts: {
-      dataset: 'httpMetrics',
-      fields: ['host', 'service', 'requests'],
-      orderBy: 'requests_DESC'
+      dataset: 'workloadMetrics',
+      limit: 1000,
+      groupBy: ['host', 'configurationId'],
+      orderBy: 'sum_DESC'
     }
   }
 
@@ -781,28 +815,24 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
           </Select>
         </template>
       </PageHeader>
-      <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
-        <li
+      <StatTileGroup aria-label="Key figures">
+        <StatTile
           v-for="figure in figures"
           :key="figure.id"
-          class="flex min-w-0 flex-col"
+          :label="figure.label"
+          :value="figure.value"
+          :format-value="formatters[figure.format]"
+          :delta="figure.delta"
+          :delta-label="periodComparison"
+          :inverse="figure.inverse"
+          :trend="figure.trend"
+          :loading="loading"
         >
-          <StatTile
-            :label="figure.label"
-            :value="figure.value"
-            :format-value="formatters[figure.format]"
-            :delta="figure.delta"
-            :delta-label="periodComparison"
-            :inverse="figure.inverse"
-            :trend="figure.trend"
-            :loading="loading"
-          >
-            <template #aside>
-              <Hint :content="figure.description" />
-            </template>
-          </StatTile>
-        </li>
-      </ul>
+          <template #aside>
+            <Hint :content="figure.description" />
+          </template>
+        </StatTile>
+      </StatTileGroup>
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
@@ -892,6 +922,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :loading="loading"
+              :refetching="refetching"
             >
               <Chart.Grid />
               <Chart.Axis type="y" />
@@ -991,6 +1022,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :loading="loading"
+              :refetching="refetching"
             >
               <Chart.Grid />
               <Chart.Axis type="y" />
@@ -1079,6 +1111,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :loading="loading"
+              :refetching="refetching"
             >
               <Chart.Grid />
               <Chart.Axis type="y" />
@@ -1245,6 +1278,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               :labels="labels"
               :format-value="formatters.count"
               :height="420"
+              :refetching="refetching"
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :aria-label="expandedReport.label"
@@ -1265,6 +1299,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               :labels="labels"
               :format-value="formatters.count"
               :height="420"
+              :refetching="refetching"
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :aria-label="expandedReport.label"
@@ -1289,6 +1324,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               orientation="horizontal"
               :format-value="formatters.count"
               :height="420"
+              :refetching="refetching"
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :aria-label="expandedReport.label"

@@ -288,10 +288,15 @@ test('validateUsage with a component flags classes outside the layout utilities'
     classes: 'w-full max-w-(--container-sm)'
   })
   assert.equal(ok.ok, true)
-  const bad = validateUsage(catalog, { component: 'button', classes: 'w-full mt-4' })
+  const placed = validateUsage(catalog, {
+    component: 'field',
+    classes: 'mt-(--spacing-md) col-span-2 lg:col-span-4'
+  })
+  assert.equal(placed.ok, true)
+  const bad = validateUsage(catalog, { component: 'button', classes: 'w-full mt-4 p-4' })
   assert.equal(bad.ok, false)
   const problem = bad.problems.find((p) => p.kind === 'style-override')
-  assert.deepEqual(problem.classes, ['mt-4'])
+  assert.deepEqual(problem.classes, ['p-4'])
 })
 
 test('searchBlocks ranks auth/sign-in first for login and sign-up intents in EN and PT', () => {

@@ -4,7 +4,9 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
@@ -29,6 +31,8 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { computed, nextTick, onMounted, onUnmounted, ref, useId } from 'vue'
+
+  const emit = defineEmits<{ 'sign-out': [event: MouseEvent | KeyboardEvent] }>()
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -354,15 +358,20 @@
   })
 
   onUnmounted(() => document.removeEventListener('keydown', onShortcut))
+
+  const onAccountSelect = (event: MouseEvent | KeyboardEvent, value: string | number) => {
+    if (value === 'logout') emit('sign-out', event)
+  }
 </script>
 
 <template>
   <div>
-    <ConsoleLayout
+    <ConsoleLayoutRoot
       :navigation="navigation"
       :account="account"
       active-id="applications"
       @search-select="onSearchSelect"
+      @account-select="onAccountSelect"
     >
       <template #sidebar-header="{ compact }">
         <Tooltip
@@ -627,7 +636,7 @@
           </Card>
         </div>
       </div>
-    </ConsoleLayout>
+    </ConsoleLayoutRoot>
 
     <Dialog
       v-model:open="switchOpen"

@@ -58,6 +58,7 @@
     product: string
     href: string
     dataset: string
+    measure: string
     format: MetricFormat
     form: HighlightForm
     series: HighlightSeries[]
@@ -155,7 +156,8 @@
       hint: 'Requests your applications served, per interval.',
       product: 'Applications',
       href: '/metrics/applications?view=overview',
-      dataset: 'httpMetrics',
+      dataset: 'workloadMetrics',
+      measure: 'requests',
       format: 'count',
       form: 'area',
       series: [{ id: 'requests', name: 'Requests', base: 2040000 }]
@@ -166,7 +168,8 @@
       hint: 'Requests answered from the cache and requests sent to the origin, per interval.',
       product: 'Applications',
       href: '/metrics/applications?view=overview',
-      dataset: 'httpMetrics',
+      dataset: 'workloadMetrics',
+      measure: 'requests',
       format: 'count',
       form: 'stacked',
       series: [
@@ -180,7 +183,8 @@
       hint: 'Requests the firewall let through and requests it denied, per interval.',
       product: 'Firewall',
       href: '/metrics/firewall?view=overview',
-      dataset: 'firewallMetrics',
+      dataset: 'workloadMetrics',
+      measure: 'requests',
       format: 'count',
       form: 'stacked',
       series: [
@@ -194,7 +198,8 @@
       hint: 'Requests per status class, per interval.',
       product: 'Applications',
       href: '/metrics/applications?view=status-codes',
-      dataset: 'httpMetrics',
+      dataset: 'workloadMetrics',
+      measure: 'requests',
       format: 'count',
       form: 'line',
       series: [
@@ -210,7 +215,8 @@
       hint: 'Requests that ended in a server error, per interval. A rise is a regression.',
       product: 'Applications',
       href: '/metrics/applications?view=status-codes',
-      dataset: 'httpMetrics',
+      dataset: 'workloadMetrics',
+      measure: 'requests',
       format: 'count',
       form: 'area',
       series: [{ id: '5xx', name: 'Status 5xx', base: 6600, color: 'danger' }]
@@ -221,7 +227,8 @@
       hint: 'Times your functions ran, per interval.',
       product: 'Functions',
       href: '/metrics/functions?view=overview',
-      dataset: 'functionMetrics',
+      dataset: 'functionsMetrics',
+      measure: 'invocations',
       format: 'count',
       form: 'area',
       series: [{ id: 'invocations', name: 'Invocations', base: 610000 }]
@@ -350,16 +357,20 @@
 
   onBeforeUnmount(() => clearTimeout(refreshTimer))
 
+  const apiTime = (iso: string) => iso.replace(/(\.\d+)?Z$/, '')
+
   const cardQuery = (card: HighlightCard) =>
     [
       'query {',
       `  ${card.dataset}(`,
-      '    limit: 5000',
-      '    aggregate: { sum: requests }',
-      `    filter: { tsRange: { begin: "${currentPeriod.value.begin}", end: "${currentPeriod.value.end}" } }`,
+      '    limit: 10000',
+      `    filter: { tsRange: { begin: "${apiTime(currentPeriod.value.begin)}", end: "${apiTime(currentPeriod.value.end)}" } }`,
+      `    aggregate: { sum: ${card.measure} }`,
+      '    groupBy: [ts]',
       '    orderBy: [ts_ASC]',
       '  ) {',
-      ...['ts', ...card.series.map((entry) => entry.id)].map((field) => `    ${field}`),
+      '    ts',
+      '    sum',
       '  }',
       '}'
     ].join('\n')

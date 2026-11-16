@@ -451,6 +451,19 @@ export const COMPONENT_TERMS = {
   ],
   'log-viewer': ['logs', 'show logs', 'build output', 'deploy logs', 'terminal output'],
   item: ['list', 'list of items', 'row list'],
+  'bar-list': [
+    'top list',
+    'top n',
+    'top 10',
+    'top hosts',
+    'top countries',
+    'ranked list',
+    'ranking',
+    'leaderboard',
+    'lista ranqueada',
+    'lista de principais',
+    'lista de los principales'
+  ],
   'key-value-list': ['description list', 'details', 'properties', 'metadata'],
   'file-preview': [
     'file preview',

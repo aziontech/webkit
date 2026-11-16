@@ -17,6 +17,7 @@ On a TTY (and without `--yes`), `init` first asks about the optional pieces — 
 1. **Dependencies** recorded in `package.json` — `@aziontech/webkit`, `@aziontech/theme`, `@aziontech/icons` (unless `--no-icons`), plus dev tooling peers (`eslint`, `stylelint`, `vue-eslint-parser`, `@typescript-eslint/parser`, `postcss-html`, `postcss-scss`, and `husky` in a git repository). A dependency you already declare (in `dependencies` or `devDependencies`) is compared by semver: one at a compatible or newer range (`eslint@^10`, `tailwindcss@^4.9.0`, `workspace:*`) is kept and printed as `kept`; only one older than WebKit needs (`tailwindcss@^3`) is raised, printed with the version it replaced. `init` never downgrades. The ESLint plugin and Stylelint config ship inside `@aziontech/webkit` (subpaths); the MCP server is its own package, `@aziontech/webkit-mcp`, which the `.mcp.json` entry runs through `npx`, so nothing else is added to `package.json`. It does not run an install — do that with your package manager.
 2. **`eslint.config.mjs`** (flat, ESM) wiring the webkit preset — or a merge snippet if an ESLint config already exists. It starts with a global `ignores` for build output (`node_modules/`, `dist/`, `dist-ssr/`, `coverage/`, `.vite/`, `.nuxt/`, `.output/`, `.next/`, `.svelte-kit/`, `storybook-static/`), so `eslint .` and `report` never lint the compiled bundle, and it turns `webkit/require-authoring-standards` off for root tool configs (`*.config.{js,cjs,mjs,ts,cts,mts}`): the comment and construction standards govern your app code, not the `vite.config.ts` a scaffolder wrote. A fresh project lints clean.
 3. **`.stylelintrc.json`** extending the webkit config, with the `.vue` / `.scss` custom syntaxes wired — or a merge snippet if a Stylelint config already exists — and **`.stylelintignore`** with the same build-output folders (advised, not overwritten, when you already have one).
+   Next to it, **`.prettierrc.json`**: the options the copied blocks are formatted with (`semi: false`, `singleQuote`, `printWidth: 100`, `trailingComma: "none"`, `singleAttributePerLine`, `vueIndentScriptAndStyle`), so a format run does not restyle every block you `add`. Written only when the app has no Prettier config (no `.prettierrc*`, `prettier.config.*` or `prettier` key in `package.json`); otherwise `init` prints the options and keeps yours.
 4. **`src/webkit.css`** — the one CSS entry: `@import '@aziontech/theme'` (tokens + Tailwind v4 + fonts) and `@import '@aziontech/webkit/styles'`, which registers webkit's source with Tailwind so its component classes compile. Both resolve by package name — no `../node_modules` path in your CSS (the `@source` ships inside the package and resolves relative to it, so hoisting/workspace layouts can't break it).
 5. **`.mcp.json`** — the `webkit` MCP server (`npx -y @aziontech/webkit-mcp`) merged in (other servers untouched); a v5 entry that still runs the removed `webkit-mcp` bin of `@aziontech/webkit` is pointed at `@aziontech/webkit-mcp`.
 6. **`prepare` script + `.husky/pre-commit`** — lint on commit, added only in a git repository (or where `.husky/pre-commit` already exists). Outside one, `init` adds no hook at all (no `husky` dependency, no `prepare`, no `.husky/`) and prints one line: after `git init`, run `init` again to add it. The hook lints the source only (`npx eslint src`, `npx stylelint "src/**/*.{css,scss,vue}" --allow-empty-input`), so a build never breaks the next commit; a whole-tree hook written by an older `init` is rewritten in place, keeping your own lines. Activation depends on git:
@@ -29,7 +30,7 @@ On a TTY (and without `--yes`), `init` first asks about the optional pieces — 
 
 7. **`.claude/` bundle** — every `rules/*.md`, `skills/*/SKILL.md` and `agents/*.md` template, derived from the templates directory itself (so a new template ships automatically instead of needing a hand-maintained list; anything outside that shape, such as a skill's `references/`, is not shipped, and a test fails if one appears so shipping it is a deliberate decision), copied via the same policy as `sync` (see below): on a fresh project every file is missing, so `init` copies all of them — each stamped with a provenance marker so a later `sync` can tell a pristine copy from one you have edited.
 8. **`CLAUDE.md` fragment** — kept in a fenced block (`<!-- @aziontech/webkit:start -->` … `<!-- @aziontech/webkit:end -->`) that is replaced in place on every `init` run, so template updates reach a project that already ran `init` once. A pre-fence legacy marker (`<!-- @aziontech/webkit -->`) from an older `init` is migrated into the fence automatically; a fragment duplicated at more than one position (however it got that way) is repaired down to a single fenced block.
-9. **CSS scan list** — `src/webkit.sources.css`, one `@source` per WebKit file the app imports (the components plus what they import), so the app's stylesheet holds only their classes; `src/webkit.css` imports it. An existing `vite.config` gets `webkit()` from `@aziontech/webkit/vite-plugin`, which rewrites the list on every dev start, build and import change; with no Vite config, `init` says to run `npx @aziontech/webkit css` after changing imports.
+9. **CSS scan list** — `src/webkit.sources.css`, one `@source` per WebKit file the app imports (the components plus what they import), so the app's stylesheet holds only their classes; `src/webkit.css` imports it. An existing `vite.config` gets `webkit()` from `@aziontech/webkit/vite-plugin`, which rewrites the list on every dev start, build and import change (a changed file is read again once it settles, so a half-written file never shrinks the list); with no Vite config, `init` says to run `npx @aziontech/webkit css` after changing imports.
 10. **Entry wiring** — `import './webkit.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file. The starter stylesheet of a `create-vite` app (`src/style.css`, `import './style.css'`) or a `create-vue` app (`src/assets/main.css` + `base.css`, `import './assets/main.css'`) is removed when it is byte-for-byte the template's, and its import line becomes `import './webkit.css'`: its global rules (body margin and colours, `#app` width) fight the theme. A starter you edited, or one another file imports (a Cypress support file), is left in place with a note.
 
 Feature-scoped setup is deliberately **not** part of `init`. A component that needs one-time app wiring (e.g. toast: `.use(ToastPlugin)` on `createApp()` — the plugin mounts the region automatically) declares it in its catalog entry's `setup` field, surfaced by the MCP's `get_component` / `get_best_practices` — so it is wired **just-in-time at first use**, by you or your AI, instead of preloading unused code for everyone. `doctor` backstops it mechanically (see below).
@@ -47,13 +48,14 @@ Feature-scoped setup is deliberately **not** part of `init`. A component that ne
 
 Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write run).
 
-## `add`, `diff`, `search`, `view` — start a screen from a block
+## `add`, `diff`, `remove`, `search`, `view` — start a screen from a block
 
 ```bash
 npx @aziontech/webkit search delete confirmation          # blocks, components, examples
 npx @aziontech/webkit view edit/delete-dialog   # guidelines, variants, SFC
 npx @aziontech/webkit add edit/delete-dialog [--variant SettingsRow]
 npx @aziontech/webkit diff delete-dialog       # your copy vs the canonical block
+npx @aziontech/webkit remove delete-dialog [--dry-run]   # delete the copy and its record
 ```
 
 - **`search <query>`** runs the MCP queries (`search_blocks`, `search_components`, plus the
@@ -78,6 +80,13 @@ npx @aziontech/webkit diff delete-dialog       # your copy vs the canonical bloc
   from the canonical block of the installed version to your file (coloured on a TTY, `NO_COLOR`
   respected; `--json` for tools). It also says when the canonical block changed since the copy was
   made. Exit 0 when identical, 1 when different, 2 when the target is not recorded.
+- **`remove <block-id|path>`** finds the copy through `webkit.blocks.json` and deletes its files
+  (the primary, every copied variant, the data files such as `<block>.sample.ts` and the
+  `<block>.guidelines.md` sidecar) and its entry, edited or not; a path removes that one file and
+  keeps the rest of the block recorded. It then refreshes `src/webkit.sources.css` and lists the app
+  files that still import a deleted file (the route entry, a parent view): remove those imports by
+  hand. `--dry-run` deletes nothing and prints what it would; `--json` for tools. Exit 1 when the
+  target is not recorded.
 
 The blocks, `catalog.json` and `catalog/` ship in the npm package, so these commands work offline
 from the installed version. Without webkit installed (a bare `npx`), they read the package `npx`

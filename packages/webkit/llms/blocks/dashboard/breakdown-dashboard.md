@@ -245,8 +245,8 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
     value: number | null
     /** Percent change against last month; null hides the delta. */
     delta: number | null
-    /** Monthly spend over the range, drawn as the tile sparkline. */
-    trend: number[]
+    /** Monthly spend over the range, drawn as the tile sparkline, null for an interval with no data. */
+    trend: (number | null)[]
   }
 
   /** The figures of the summary tiles, by metric; a metric left out reads as a dash. */

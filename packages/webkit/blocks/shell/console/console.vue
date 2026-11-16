@@ -2,7 +2,9 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import HighlightButton from '@aziontech/webkit/highlight-button'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -11,6 +13,8 @@
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
+
+  const emit = defineEmits<{ 'sign-out': [event: MouseEvent | KeyboardEvent] }>()
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -187,14 +191,19 @@
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
+
+  const onAccountSelect = (event: MouseEvent | KeyboardEvent, value: string | number) => {
+    if (value === 'logout') emit('sign-out', event)
+  }
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     :navigation="navigation"
     :account="account"
     active-id="applications"
     @search-select="onSearchSelect"
+    @account-select="onAccountSelect"
   >
     <template #actions="{ compact }">
       <template v-if="compact">
@@ -399,5 +408,5 @@
         </Card>
       </div>
     </div>
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
 </template>

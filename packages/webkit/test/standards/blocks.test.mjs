@@ -646,8 +646,17 @@ test('every block with "files" ships them and reads them into the catalog entry'
   for (const [id, block] of Object.entries(blocks)) {
     for (const [file, text] of Object.entries(block.files || {})) {
       assert.ok(text.length > 0, `${id}: ${file} is empty`)
-      assert.ok(!file.endsWith('.vue'), `${id}: ${file} is an SFC; list it as a variant instead`)
+      if (!file.endsWith('.vue')) continue
+      const shared = block.variants.filter((variant) =>
+        new RegExp(`from '\\.\\./${file.replaceAll('.', '\\.')}'`).test(variant.sfc)
+      )
+      assert.ok(
+        shared.length > 0,
+        `${id}: ${file} is an SFC no variant renders; list it as a variant instead`
+      )
     }
   }
   assert.ok(blocks['view/table-view'].files['sample.ts'].includes('sampleResources'))
+  assert.ok(blocks['auth/sign-in'].files['token-sign-in.vue'].includes("'sign-in'"))
+  assert.ok(blocks['auth/sign-in'].components.includes('Checkbox'))
 })

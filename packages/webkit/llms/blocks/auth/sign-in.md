@@ -1,11 +1,11 @@
 # SignIn (`auth/sign-in`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant: one masked `PasswordInput` for the token, a link to where tokens are created, and a `sign-in` event that hands the token to the app. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/auth/sign-in/sign-in.vue` in `@aziontech/webkit`
 - MCP: `get_block("auth/sign-in")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Skeleton](../../components/skeleton.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Skeleton](../../components/skeleton.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -114,15 +114,15 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 Two bars of the provider buttons' height (`height="2.5rem"`) in a `role="status"` region named `Preparing sign-in providers`, in place of Google and GitHub over the `or` divider. The email field stays usable.
 
-### R. Personal token — `PasswordInput` (PersonalToken and RejectedToken)
+### R. Personal token — `PasswordInput` (PersonalToken, RejectedToken and NoAccessToken)
 
-For an app that signs in with an Azion personal token instead of an account. One `Field` labelled `Personal token` over a `PasswordInput` with `monospace`, `autocomplete="off"`, `spellcheck="false"` and the show and hide toggle it ships, a `Field.Description` that links to how a token is created (a real Azion documentation link, `target="_blank"`), and a `Field.Error` for the client checks: empty (`Paste your personal token.`) and inner spaces (`A token has no spaces. Copy it again from Personal tokens.`). The card has no Google or GitHub buttons and no steps.
+For an app that signs in with an Azion personal token instead of an account. The card is its own file, `token-sign-in.vue`, and the three variants render it with props. One `Field` labelled `Personal token` over a `PasswordInput` with `monospace`, `autocomplete="off"`, `spellcheck="false"` and the show and hide toggle it ships, a `Field.Description` that links to how a token is created (a real Azion documentation link, `target="_blank"`), and a `Field.Error` for the client checks: empty (`Paste your personal token.`) and inner spaces (`A token has no spaces. Copy it again from Personal tokens.`). Under it a `Checkbox` `Remember for this tab`, off by default. The card has no Google or GitHub buttons and no steps.
 
-The block checks the token once against the API (the demo's `checkToken` stub: a token under 32 characters is rejected, `9…9` does not answer) and then emits `sign-in` with `(event, token)`, the token trimmed. It stores nothing: keeping the token for the session (memory or `sessionStorage`, never `localStorage` or a cookie the app's server can read) and attaching it to requests is the app's job; see `skills/webkit-azion-api`. A 401 or 403 is a danger notice with no action, the field cleared and focused (RejectedToken); no answer is a warning notice with Retry and the entry kept.
+The card checks nothing against the API itself: it emits `sign-in` with `(event, token)`, the token trimmed, and the app answers with `loading` and then `error`. It stores nothing: the `remember` model only tells the app where to keep the token (on: `sessionStorage`, which lasts while the tab is open; off: memory, gone on reload; never `localStorage` or a cookie the app's server can read). Attaching it to requests is the app's job; see `skills/webkit-azion-api`. `rejected` (401) and `no-access` (403) are danger notices with no action, the field cleared and focused (RejectedToken, NoAccessToken); `rate-limited` (429) and `unreachable` (no answer) are warning notices with Retry and the entry kept; any other text is a danger notice with Retry.
 
 ## Data
 
-The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInFailure` and `SignInNoticeKind` are exported from `sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken and RejectedToken are their own card, not the primary with props: they take no account fields and emit `sign-in` with `(event, token)`.
+The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInFailure` and `SignInNoticeKind` are exported from `sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken, RejectedToken and NoAccessToken render their own card, `token-sign-in.vue` (listed in `files`), not the primary: it takes no account fields, and its contract is below the primary's.
 
 | Prop                                                             | Type                    | What it does                                                                                                                                                                                                   |
 | ---------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -142,6 +142,55 @@ The block takes its starting values and the request state through props and emit
 | `reset-request`  | `(event, email)`                | Send reset link passed validation; the card moves to Check your inbox.                                       |
 | `resend`         | `(event, email)`                | Resend email on the sent step; the card confirms the new link.                                               |
 | `password-reset` | `(event, password)`             | Reset password passed validation; set `step` to `password` and `notice` to `password-updated` when it lands. |
+
+The token card, `token-sign-in.vue` (`TokenSignInProps` and `TokenSignInFailure` are exported from it):
+
+| Prop                            | Type      | What it does                                                                                                                                                                              |
+| ------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `loading`                       | `boolean` | The token is being checked: the fieldset disables, the form is `aria-busy` and Sign in spins.                                                                                             |
+| `error`                         | `string`  | Why the check failed. `rejected` (401), `no-access` (403), `rate-limited` (429) and `unreachable` carry their own copy, severity and Retry; any other text is a danger notice with Retry. |
+| `remember` (`v-model:remember`) | `boolean` | Remember for this tab, `false` by default. The block stores nothing; the app reads it to choose `sessionStorage` over memory.                                                             |
+| `homeHref`, `docsHref`          | `string`  | Where the product mark and Documentation lead.                                                                                                                                            |
+
+| Event             | Payload          | When                                                                              |
+| ----------------- | ---------------- | --------------------------------------------------------------------------------- |
+| `sign-in`         | `(event, token)` | Sign in passed the client checks, or Retry in the notice re-sends the kept token. |
+| `update:remember` | `(value)`        | Remember for this tab changed.                                                    |
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import TokenSignIn from './sign-in.token-sign-in.vue'
+
+  const loading = ref(false)
+  const error = ref('')
+  const remember = ref(false)
+
+  const signIn = async (_event: Event, token: string) => {
+    loading.value = true
+    error.value = ''
+    const response = await fetch('/azion-api/v4/workspace/applications?page_size=1', {
+      headers: { Authorization: `Token ${token}` }
+    }).catch(() => null)
+    loading.value = false
+    if (!response) error.value = 'unreachable'
+    else if (response.status === 401) error.value = 'rejected'
+    else if (response.status === 403) error.value = 'no-access'
+    else if (response.status === 429) error.value = 'rate-limited'
+    else if (response.ok) session.start(token, remember.value ? sessionStorage : null)
+    else error.value = 'Azion answered with an error. Retry in a moment.'
+  }
+</script>
+
+<template>
+  <TokenSignIn
+    v-model:remember="remember"
+    :loading="loading"
+    :error="error"
+    @sign-in="signIn"
+  />
+</template>
+```
 
 To go live, render the block from the route that owns the session and pass what the request returns. Clear `error` when a new request starts, so the same failure shows again:
 
@@ -233,7 +282,7 @@ To go live, render the block from the route that owns the session and pass what 
 - **Scope rows:** title starts with a verb (`Read your workloads`, `Deploy your applications`), the description says what is in and, when it matters, what is not: `Names, domains and status. Not their settings or secrets.`
 - **Consent actions:** `Deny` and `Allow`. Outcomes: `Access granted. Returning to Acme Deploy.` / `Access denied. Returning to Acme Deploy with no access to your account.`
 - **Device actions:** `Cancel` and `Confirm`. Outcomes: `Device connected. Go back to your terminal; you can close this tab.` / `Request cancelled. The device was not connected.`
-- **Personal token:** heading `Sign in with a personal token`; lead `Paste a personal token from your Azion account. It is sent only to the Azion API.`; rejected `Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.`; unreachable `We could not reach Azion to check the token. Your entry is kept.`
+- **Personal token:** heading `Sign in with a personal token`; lead `Paste a personal token from your Azion account. It is sent only to the Azion API.`; rejected `Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.`; no access `This token is valid but cannot read what this app needs. Create a token with access to the account and paste it here.`; rate limited `Azion is limiting requests from this token. Wait a moment and retry.`; unreachable `We could not reach Azion to check the token. Your entry is kept.`; option `Remember for this tab` / `Closing the tab signs you out.`
 - **Device code errors:** `Enter the code your terminal shows.`, `Enter all 8 characters of the code.`, `That code is not valid or has expired. Check your terminal, or start the sign-in again there.`
 
 ## Accessibility
@@ -270,8 +319,9 @@ To go live, render the block from the route that owns the session and pass what 
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
 - DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValueList`, the account and the two scopes, Cancel / Confirm. `The code does not match? Enter the code from your terminal` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
 
-- PersonalToken: sign in with an Azion personal token. One masked, monospace field with show and hide, a link to how tokens are made, required and no-spaces checks, then a check against the API: rejected is a danger notice with the field cleared, no answer a warning with Retry, accepted emits `sign-in` `(event, token)`.
-- RejectedToken: the PersonalToken card after a 401, the danger notice under the heading and the empty field focused.
+- PersonalToken: sign in with an Azion personal token. One masked, monospace field with show and hide, a link to how tokens are made, required and no-spaces checks, Remember for this tab (off), then `sign-in` `(event, token)`; the app answers with `loading` and `error`.
+- RejectedToken: `error="rejected"`, the card after a 401, the danger notice under the heading and the empty field focused.
+- NoAccessToken: `error="no-access"`, the card after a 403, a danger notice that asks for a token with access, the empty field focused.
 
 ## Related
 
@@ -306,8 +356,9 @@ To go live, render the block from the route that owns the session and pass what 
 - `MfaCode` — The sign-in MFA challenge: a 6-digit OtpInput, focused when the challenge opens, that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
 - `OauthConsent` — The OAuth authorize screen: the requesting app with its publisher and site, the signed-in account with Switch account, the scopes it asks for as a list, where Allow sends you, and Deny / Allow, each settling in the card's notice.
 - `DeviceAuthorization` — Device or CLI authorization: the code the terminal printed, shown large to compare, the request details (application, device, IP address, time), the account and scopes, Cancel / Confirm, and a typed code entry (8 characters, grouped by 4) when the codes do not match.
-- `PersonalToken` — Sign in with an Azion personal token, for an app with no accounts of its own: one masked, monospace `PasswordInput` with show and hide, a link to how tokens are created, required and no-spaces checks on the field, a danger notice when Azion rejects the token (the field is cleared), a warning with Retry when Azion cannot be reached, and a `sign-in` event `(event, token)` once the token is accepted. The block stores nothing; the app keeps the token for the session.
-- `RejectedToken` — 401 on the personal token: the same card with the danger notice under the heading, the field cleared and focused for another paste.
+- `PersonalToken` — Sign in with an Azion personal token, for an app with no accounts of its own. The card is `token-sign-in.vue`, driven by props: one masked, monospace `PasswordInput` with show and hide, a link to how tokens are created, required and no-spaces checks on the field, a Remember for this tab `Checkbox` (`v-model:remember`, off by default; the block stores nothing), and a `sign-in` event `(event, token)`. The app checks the token and answers with `loading`, then `error` (`rejected`, `no-access`, `rate-limited`, `unreachable` or a message).
+- `RejectedToken` — `error="rejected"` (a 401 on the personal token): the same card with the danger notice under the heading, the field cleared and focused for another paste.
+- `NoAccessToken` — `error="no-access"` (a 403: the token is valid but lacks the permissions the app reads): a danger notice that says to create a token with access, the field cleared and focused.
 
 Each variant is the same screen in another state: `get_block("auth/sign-in", { variant })`, or the file under `blocks/auth/sign-in/variants/`.
 
@@ -1022,6 +1073,269 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                 </p>
               </template>
             </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</template>
+```
+
+## `token-sign-in.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
+  import Brand from '@aziontech/webkit/brand'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import Checkbox from '@aziontech/webkit/checkbox'
+  import Field from '@aziontech/webkit/field'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PasswordInput from '@aziontech/webkit/password-input'
+  import { computed, nextTick, onMounted, ref, watch } from 'vue'
+
+  /** Why the API did not let the token in, each with its own copy, severity and Retry rule. */
+  export type TokenSignInFailure = 'rejected' | 'no-access' | 'rate-limited' | 'unreachable'
+
+  export interface TokenSignInProps {
+    /** The token is being checked against the API: the field locks and Sign in spins. */
+    loading?: boolean
+    /** Why the last check failed: a failure kind with its own copy, or a message shown as a danger notice with Retry. */
+    error?: TokenSignInFailure | (string & {})
+    /** Where the product mark leads. */
+    homeHref?: string
+    /** Where the Documentation button leads. */
+    docsHref?: string
+  }
+
+  interface CardNotice {
+    severity: AlertSeverity
+    label: string
+    retry: boolean
+  }
+
+  const props = withDefaults(defineProps<TokenSignInProps>(), {
+    loading: false,
+    error: '',
+    homeHref: '/home',
+    docsHref: '/docs'
+  })
+
+  const emit = defineEmits<{ 'sign-in': [event: Event, token: string] }>()
+
+  const remember = defineModel<boolean>('remember', { default: false })
+
+  const TOKEN_DOCS = 'https://www.azion.com/en/documentation/products/accounts/personal-tokens/'
+
+  const failures: Record<TokenSignInFailure, CardNotice> = {
+    rejected: {
+      severity: 'danger',
+      label:
+        'Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.',
+      retry: false
+    },
+    'no-access': {
+      severity: 'danger',
+      label:
+        'This token is valid but cannot read what this app needs. Create a token with access to the account and paste it here.',
+      retry: false
+    },
+    'rate-limited': {
+      severity: 'warning',
+      label: 'Azion is limiting requests from this token. Wait a moment and retry.',
+      retry: true
+    },
+    unreachable: {
+      severity: 'warning',
+      label: 'We could not reach Azion to check the token. Your entry is kept.',
+      retry: true
+    }
+  }
+
+  const token = ref('')
+  const tokenError = ref('')
+
+  const notice = computed<CardNotice | null>(() => {
+    if (!props.error || props.loading) return null
+    return (
+      failures[props.error as TokenSignInFailure] ?? {
+        severity: 'danger',
+        label: props.error,
+        retry: true
+      }
+    )
+  })
+
+  const focusToken = () => nextTick(() => document.getElementById('personal-token')?.focus())
+
+  const clearsEntry = (error: string) => error === 'rejected' || error === 'no-access'
+
+  onMounted(() => {
+    if (clearsEntry(props.error)) focusToken()
+  })
+
+  watch(
+    () => [props.error, props.loading] as const,
+    ([error, loading]) => {
+      if (loading || !clearsEntry(error)) return
+      token.value = ''
+      focusToken()
+    }
+  )
+
+  const signIn = (event: Event) => {
+    if (props.loading) return
+    const candidate = token.value.trim()
+    if (!candidate) tokenError.value = 'Paste your personal token.'
+    else if (/\s/.test(candidate))
+      tokenError.value = 'A token has no spaces. Copy it again from Personal tokens.'
+    else tokenError.value = ''
+    if (tokenError.value) {
+      focusToken()
+      return
+    }
+    emit('sign-in', event, candidate)
+  }
+</script>
+
+<template>
+  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
+    <AppHeader
+      aria-label="Console"
+      class="shrink-0"
+    >
+      <AppHeader.Brand>
+        <a
+          :href="homeHref"
+          aria-label="Azion home"
+          class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+        >
+          <Brand
+            variant="default"
+            size="small"
+          />
+        </a>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
+        <Button
+          label="Documentation"
+          variant="outline"
+          size="medium"
+          icon="ai ai-book"
+          :href="docsHref"
+        />
+      </AppHeader.End>
+    </AppHeader>
+
+    <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
+      <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
+        <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
+          <div
+            class="m-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none"
+          >
+            <Card
+              class="w-full max-w-(--container-sm)"
+              :padded="false"
+            >
+              <template #default>
+                <div class="p-(--spacing-lg)">
+                  <form
+                    class="flex flex-col gap-(--spacing-lg)"
+                    aria-label="Sign in with a personal token"
+                    :aria-busy="loading || undefined"
+                    novalidate
+                    @submit.prevent="signIn"
+                  >
+                    <PageHeader
+                      title="Sign in with a personal token"
+                      description="Paste a personal token from your Azion account. It is sent only to the Azion API."
+                      size="small"
+                    />
+
+                    <Alert
+                      v-if="notice"
+                      :key="notice.label"
+                      :severity="notice.severity"
+                      size="small"
+                      :label="notice.label"
+                    >
+                      <template
+                        v-if="notice.retry"
+                        #actions
+                      >
+                        <Button
+                          label="Retry"
+                          variant="secondary"
+                          size="small"
+                          @click="signIn"
+                        />
+                      </template>
+                    </Alert>
+
+                    <fieldset
+                      class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
+                      :disabled="loading"
+                    >
+                      <legend class="sr-only">Personal token</legend>
+                      <Field
+                        :required="!!tokenError"
+                        :invalid="!!tokenError"
+                      >
+                        <Field.Label for="personal-token">Personal token</Field.Label>
+                        <PasswordInput
+                          id="personal-token"
+                          v-model="token"
+                          name="token"
+                          autocomplete="off"
+                          spellcheck="false"
+                          monospace
+                          placeholder="Paste your token"
+                          @update:model-value="tokenError = ''"
+                        />
+                        <Field.Description>
+                          Create one in Account settings, Personal tokens.
+                          <a
+                            class="text-link"
+                            :href="TOKEN_DOCS"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >How to create a personal token</a
+                          >
+                        </Field.Description>
+                        <Field.Error v-if="tokenError">{{ tokenError }}</Field.Error>
+                      </Field>
+                      <Field orientation="horizontal">
+                        <Checkbox
+                          v-model="remember"
+                          name="remember"
+                        />
+                        <Field.Content>
+                          <Field.Label>Remember for this tab</Field.Label>
+                          <Field.Description>Closing the tab signs you out.</Field.Description>
+                        </Field.Content>
+                      </Field>
+                    </fieldset>
+
+                    <Button
+                      type="submit"
+                      label="Sign in"
+                      variant="primary"
+                      size="large"
+                      class="w-full"
+                      :loading="loading"
+                    />
+                  </form>
+                </div>
+              </template>
+            </Card>
+
+            <p class="max-w-(--container-sm) text-center text-body-xs text-(--text-muted)">
+              Use a token with only the permissions this app needs, and revoke it in Personal tokens
+              when you are done.
+            </p>
           </div>
         </div>
       </div>

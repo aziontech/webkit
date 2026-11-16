@@ -12,9 +12,27 @@ export const LAYOUT_CLASS_FAMILIES = Object.freeze([
   'grow',
   'grow-*',
   'basis-*',
+  'shrink-0',
   'self-*',
-  'shrink-0'
+  'justify-self-*',
+  'place-self-*',
+  'order-*',
+  'col-span-*',
+  'col-start-*',
+  'col-end-*',
+  'row-span-*',
+  'row-start-*',
+  'row-end-*',
+  'm-*',
+  'mx-*',
+  'my-*',
+  'mt-*',
+  'mb-*',
+  'ms-*',
+  'me-*'
 ])
+
+export const LAYOUT_BREAKPOINTS = Object.freeze(['sm', 'md', 'lg', 'xl', '2xl'])
 
 const MATCHERS = LAYOUT_CLASS_FAMILIES.map((family) =>
   family.endsWith('*')
@@ -22,8 +40,12 @@ const MATCHERS = LAYOUT_CLASS_FAMILIES.map((family) =>
     : (cls) => cls === family
 )
 
+const BREAKPOINT = new RegExp(`^(?:${LAYOUT_BREAKPOINTS.join('|')}):`)
+
 export function isLayoutClass(cls) {
-  const token = String(cls || '').trim()
+  const token = String(cls || '')
+    .trim()
+    .replace(BREAKPOINT, '')
   return token.length > 0 && MATCHERS.some((match) => match(token))
 }
 

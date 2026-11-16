@@ -122,7 +122,8 @@ export default defineConfig({ plugins: [webkit(), vue()] })
 classes of the files it scans, so `src/webkit.sources.css` lists the WebKit files your app imports
 (each component plus what it imports itself), one `@source` per file. The Vite plugin
 `@aziontech/webkit/vite-plugin` writes it on every dev start and build and rewrites it when you
-add or remove a WebKit import; without Vite, run `npx @aziontech/webkit css` after the change
+add or remove a WebKit import (it waits for a changed file to settle, so a formatter rewriting the
+file never drops its components, and re-scans the whole app when a build starts); without Vite, run `npx @aziontech/webkit css` after the change
 (`webkit doctor` and `webkit check` fail while the list is stale). Your stylesheet then holds only
 the classes of what you use: about 10 KB gzipped for a Button-only app, about 23 KB for a console
 screen with a table, dialog, select, tabs and chart, instead of 77 KB for the whole library. An app
@@ -207,6 +208,7 @@ npx @aziontech/webkit search delete confirmation   # blocks, components and exam
 npx @aziontech/webkit view button                   # a component's API, or a block's guidelines + SFC
 npx @aziontech/webkit add edit/delete-dialog   # copy a block into src/views
 npx @aziontech/webkit diff delete-dialog # your copy vs the canonical block
+npx @aziontech/webkit remove delete-dialog # delete the copy and its webkit.blocks.json entry
 npx @aziontech/webkit check    # CI gate: doctor + v5 names + imports + lint + block drift
 npx @aziontech/webkit doctor   # verify the wiring is healthy (lint, MCP, theme)
 npx -y @aziontech/webkit-mcp   # the MCP server your AI tools connect to (its own package)
