@@ -35,6 +35,15 @@ function subpathOf(catalog, importPath) {
   return s.startsWith(prefix) ? s.slice(prefix.length) : s
 }
 
+function deprecationOf(entry) {
+  if (!entry?.deprecated) return {}
+  return {
+    deprecated: true,
+    ...(entry.deprecation ? { deprecation: entry.deprecation } : {}),
+    ...(entry.replacedBy ? { replacedBy: entry.replacedBy } : {})
+  }
+}
+
 function componentCard(catalog, name) {
   const e = catalog.getEntry(name)
   if (!e) return null
@@ -45,7 +54,8 @@ function componentCard(catalog, name) {
     structure: e.structure ?? null,
     import: e.import,
     treeShakeableImport: e.treeShakeableImport ?? e.import,
-    binding: pascalCase(name)
+    binding: pascalCase(name),
+    ...deprecationOf(e)
   }
 }
 
@@ -310,6 +320,7 @@ export function getComponent(catalog, name) {
     found: true,
     name: key,
     binding: pascalCase(key),
+    ...deprecationOf(e),
     kind: e.kind,
     category: e.category ?? null,
     surface: e.surface ?? null,

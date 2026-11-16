@@ -163,7 +163,8 @@ async function main() {
       description:
         'Full API for one component: purpose, when to use / when not to use, props, events, ' +
         'slots, sub-components, structure, compound-root info, runnable examples taken from its ' +
-        'examples and the classes allowed on its tag. Returns fuzzy suggestions when the name is unknown.',
+        'examples and the classes allowed on its tag. A deprecated part carries deprecated: true, its note ' +
+        'and replacedBy; use the replacement. Returns fuzzy suggestions when the name is unknown.',
       inputSchema: {
         name: z.string().describe('Component name (kebab-case), e.g. "button" or "table".')
       }
