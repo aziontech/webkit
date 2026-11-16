@@ -9,8 +9,8 @@ export const border = {
     'border-selected': tokenRef('theme.primary.primary')
   },
   dark: {
-    'border-default': tokenRef('primitives.gray.650'),
-    'border-muted': tokenRef('primitives.gray.650'),
+    'border-default': tokenRef('primitives.gray.750'),
+    'border-muted': tokenRef('primitives.gray.775'),
     'border-input': tokenRef('primitives.gray.650'),
     'border-strong': tokenRef('primitives.base.white'),
     'border-selected': tokenRef('theme.primary.primary')

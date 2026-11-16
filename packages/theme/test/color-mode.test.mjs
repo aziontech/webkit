@@ -84,6 +84,8 @@ test('dark mode carries its own elevation shadows, deeper and with a light edge'
 test('form fields have their own outline token in both themes', () => {
   const { light, dark } = compileThemeVars()
   assert.equal(light['--border-input'], light['--border-default'])
-  assert.equal(dark['--border-input'], dark['--border-default'])
+  assert.equal(dark['--border-input'], '#535353')
+  assert.equal(dark['--border-default'], '#2B2B2B')
+  assert.equal(dark['--border-muted'], '#242424')
   assert.match(globals, /@utility border-input \{ border-color: var\(--border-input\); \}/)
 })
