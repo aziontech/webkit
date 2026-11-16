@@ -32,7 +32,7 @@ describe('edit-resource locked modules', () => {
     ['primary', EditResource],
     ['StaleRecord', StaleRecord],
     ['DangerZone', DangerZone]
-  ])('%s links Contact sales as an in-sentence text-link in a new tab', (_name, block) => {
+  ])('%s links Contact sales beside the locked switch in a new tab', (_name, block) => {
     const view = render(block)
     const links = Array.from(
       view.container.querySelectorAll<HTMLAnchorElement>(
