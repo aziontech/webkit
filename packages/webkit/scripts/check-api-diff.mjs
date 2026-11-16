@@ -13,6 +13,7 @@ const MIGRATION_DOC = /^MIGRATION_V\d+\.md$/
 
 const norm = (value) =>
   String(value ?? '')
+    .replace(/`/g, '')
     .replace(/\\\s*\|/g, '|')
     .replace(/\s+/g, ' ')
     .trim()

@@ -257,3 +257,13 @@ test('a union escaped for a Markdown table is the same type as the plain one', (
   )
   assert.deepEqual(changes, [])
 })
+
+test('diffSurface ignores a type that only gained or lost Markdown backticks', () => {
+  const before = catalog({
+    props: [prop('variant', "ProgressVariant` (`'rounded' | 'flat'`)", "'flat'")]
+  })
+  const after = catalog({
+    props: [prop('variant', "`ProgressVariant` (`'rounded' | 'flat'`)", "'flat'")]
+  })
+  assert.deepEqual(diffSurface(surfaceFromCatalog(before), surfaceFromCatalog(after)), [])
+})
