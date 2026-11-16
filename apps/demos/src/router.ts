@@ -13,13 +13,13 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/onboarding/plan',
     name: 'onboarding-plan',
-    component: () => import('./pages/onboarding-form-plan-page.vue'),
+    component: () => import('./pages/onboarding-form-page.vue'),
     meta: focused
   },
   {
     path: '/onboarding/profile',
     name: 'onboarding-profile',
-    component: () => import('./pages/onboarding-form-profile-page.vue'),
+    component: () => import('./pages/onboarding-form-page.vue'),
     meta: focused
   },
   { path: '/resources', name: 'resources', component: () => import('./pages/table-view-page.vue') },

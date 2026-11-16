@@ -95,11 +95,11 @@ test.describe('demo flows', () => {
 
   test('onboarding → plan', async ({ page }) => {
     await page.goto(`${DEMOS}/onboarding`)
-    await page.getByRole('button', { name: 'Continue' }).click()
+    await page.getByRole('button', { name: 'Next', exact: true }).click()
     await expect(page).toHaveURL(/\/onboarding$/)
     await page.getByRole('textbox').nth(0).fill('Alex Doe')
     await page.getByRole('textbox').nth(1).fill('Acme')
-    await page.getByRole('button', { name: 'Continue' }).click()
+    await page.getByRole('button', { name: 'Next', exact: true }).click()
     await expect(page).toHaveURL(/\/onboarding\/plan$/)
   })
 
