@@ -274,6 +274,7 @@
                           v-if="row.kind !== 'file'"
                           variant="link"
                           class="min-w-0 max-w-full"
+                          :title="row.name"
                           :aria-label="row.kind === 'parent' ? 'Up one folder' : `Open ${row.name}`"
                           @click="openRow(row)"
                         >
@@ -282,6 +283,7 @@
                         <span
                           v-else
                           class="truncate text-body-sm text-(--text-default)"
+                          :title="row.name"
                           >{{ row.name }}</span
                         >
                       </div>

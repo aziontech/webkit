@@ -221,6 +221,7 @@
                       <Button
                         variant="link"
                         class="min-w-0 max-w-full"
+                        :title="row.name"
                         @click="openGroup(row)"
                       >
                         <span class="truncate">{{ row.name }}</span>

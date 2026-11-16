@@ -323,11 +323,13 @@
                   >
                     <template #cell-name="{ row }">
                       <Button
-                        :label="row.name"
                         variant="link"
-                        class="max-w-full"
+                        class="min-w-0 max-w-full"
+                        :title="row.name"
                         @click="openSetting(row)"
-                      />
+                      >
+                        <span class="truncate">{{ row.name }}</span>
+                      </Button>
                     </template>
                     <template #cell-tieredCache="{ value }">
                       <Tag

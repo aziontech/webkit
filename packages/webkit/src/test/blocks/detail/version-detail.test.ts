@@ -99,6 +99,25 @@ describe('version-detail#CacheSettings', () => {
   })
 })
 
+describe('version-detail resource names', () => {
+  it.each(['source', 'device-groups', 'cache-settings', 'functions-instances'])(
+    'keeps the full name of every linked row in a title in %s',
+    async (variant) => {
+      const { default: Variant } = (await import(
+        `../../../../blocks/detail/version-detail/variants/${variant}.vue`
+      )) as { default: Component }
+      const { container } = render(Variant)
+      const links = Array.from(
+        container.querySelectorAll<HTMLElement>('[role="cell"] [data-variant="link"]')
+      )
+      expect(links.length).toBeGreaterThan(0)
+      for (const link of links) {
+        expect(link.getAttribute('title')).toBe(link.textContent?.trim())
+      }
+    }
+  )
+})
+
 describe('version-detail data', () => {
   const versions: VersionDetailVersion[] = [
     {
