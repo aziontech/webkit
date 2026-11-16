@@ -111,7 +111,9 @@
 </script>
 
 <template>
-  <div class="grid grid-cols-12 gap-(--spacing-md)">
+  <div
+    class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] md:grid-cols-12 md:[--chart-grid-columns:12]"
+  >
     <ChartCard
       v-for="(card, index) in cards"
       :key="card.id"

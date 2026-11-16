@@ -1,11 +1,11 @@
 <script setup>
-  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
+  import Logo from '@aziontech/webkit/logo'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import Quote from '@aziontech/webkit/quote'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
@@ -41,12 +41,17 @@
       <template #aside>
         <Quote
           variant="signed"
-          :logo="herosparkLogo"
-          logo-alt="HeroSpark"
-          text="Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development."
-          name="Mateus Leonardi"
-          job-title="CTO at HeroSpark"
-        />
+          text="Moving to the edge cut our infrastructure costs, made every page faster and freed more than 200 engineering hours a month for product work."
+          name="Priya Patel"
+          job-title="CTO at Acme Inc."
+        >
+          <template #mark>
+            <Logo
+              name="Acme Inc."
+              size="large"
+            />
+          </template>
+        </Quote>
       </template>
     </LogoWall>
   </RegistrationFrame>

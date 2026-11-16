@@ -236,7 +236,7 @@
               class="flex flex-col gap-(--spacing-md) p-(--spacing-xl) group-data-[orientation=horizontal]/media-tabs:lg:gap-(--spacing-xs) group-data-[orientation=horizontal]/media-tabs:lg:p-(--spacing-md) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:gap-(--spacing-2xs)"
             >
               <h3
-                class="m-0 text-heading-md text-(--text-default) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-heading-xs"
+                class="m-0 text-heading-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/row:text-(--text-default) group-data-[active]/row:text-(--text-default) motion-reduce:transition-none group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-heading-xs"
               >
                 <button
                   type="button"
@@ -274,6 +274,12 @@
                 />
               </slot>
             </div>
+
+            <span
+              v-if="isActive(index)"
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-x-0 top-0 h-(--border-width-2) bg-(--primary)"
+            />
 
             <span
               v-if="isActive(index) && showProgress && autoplayEnabled"

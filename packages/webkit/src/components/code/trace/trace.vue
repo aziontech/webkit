@@ -250,6 +250,7 @@
     [0, 0.25, 0.5, 0.75, 1].map((at) => ({
       at,
       edge: at === 0 ? 'start' : at === 1 ? 'end' : null,
+      density: at === 0.5 ? 'mid' : at === 0.25 || at === 0.75 ? 'quarter' : null,
       label: formatDuration(view.value[0] + (view.value[1] - view.value[0]) * at)
     }))
   )
@@ -565,8 +566,9 @@
             v-for="tick in ticks"
             :key="tick.at"
             :data-edge="tick.edge"
+            :data-density="tick.density"
             :style="{ '--trace-tick-at': `${tick.at * 100}%` }"
-            class="absolute inset-y-0 start-(--trace-tick-at) flex w-0 items-center justify-center data-[edge=end]:justify-end data-[edge=start]:justify-start"
+            class="absolute inset-y-0 start-(--trace-tick-at) flex w-0 items-center justify-center data-[edge=end]:justify-end data-[edge=start]:justify-start @max-xs/trace:data-[density=mid]:hidden @max-xl/trace:data-[density=quarter]:hidden"
           >
             <span class="text-label-sm whitespace-nowrap text-(--text-muted) tabular-nums">{{
               tick.label

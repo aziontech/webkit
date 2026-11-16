@@ -246,6 +246,22 @@ describe('DocLayout', () => {
     expect(within(dialog).getByText('Overview')).toBeTruthy()
   })
 
+  it('lists the sections in the navigation drawer and follows one from there', async () => {
+    const router = fakeRouter('/docs')
+    const { getByRole } = mount({}, {}, router)
+    await userEvent.click(
+      within(getByRole('banner')).getByRole('button', { name: 'Open documentation navigation' })
+    )
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await fireEvent.click(
+      within(within(dialog).getByRole('navigation', { name: 'Documentation sections' })).getByRole(
+        'link',
+        { name: 'Guides' }
+      )
+    )
+    expect(router.push).toHaveBeenCalledWith('/docs/guides')
+  })
+
   it('has no axe violations', async () => {
     const { container } = mount()
     await expectNoA11yViolations(container)
