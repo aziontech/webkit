@@ -54,6 +54,8 @@ const state = ref({
 
 ## 3. Turn the state into a query
 
+<!-- snippet: partial -->
+
 ```ts
 const iso = (date: Date) => date.toISOString().slice(0, 19)
 
@@ -87,6 +89,8 @@ function buildQuery(dataset: string, filters: string[]): string {
 Each `PropertyFilter` token (`{ propertyKey, operator, value }`) becomes one clause: `{ ${propertyKey}${SUFFIX[operator]}: ${JSON.stringify(value)} }`, numbers unquoted, `Ilike` values wrapped in `%…%`, and only when the schema lists that suffix for the field. Drop a token the dataset cannot express instead of sending an invalid query, and say so under the filter. Values come from the person: always `JSON.stringify` a string, never paste it raw into the query.
 
 ## 4. Run it and render every state
+
+<!-- snippet: partial -->
 
 ```ts
 const result = ref<Record<string, unknown>[]>([])

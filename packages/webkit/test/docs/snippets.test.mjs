@@ -28,6 +28,8 @@ import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { buildDeclarations } from '../../scripts/build-js-dts.mjs'
+import { exportTarget } from '../../scripts/lib/exports.mjs'
 import { consumerTypeErrors } from '../copyable/consumer-app.mjs'
 
 const PKG_DIR = fileURLToPath(new URL('../..', import.meta.url))
@@ -212,6 +214,34 @@ const require = createRequire(join(REPO_ROOT, 'apps', 'docs', 'package.json'))
 const VUE_ROUTER = dirname(require.resolve('vue-router/package.json'))
 const ICONS_TYPES = join(REPO_ROOT, 'packages', 'icons', 'dist', 'index.d.ts')
 const APP_ENV = []
+const JS_ENTRY_PATHS = {}
+
+// A JS entry (`@aziontech/webkit/vite-plugin`) gets its declarations at pack time, from its
+// JSDoc; emit them for the entries the snippets import so the checkout resolves them typed.
+function declareJsEntries(dir) {
+  const exportsMap = JSON.parse(readFileSync(join(PKG_DIR, 'package.json'), 'utf8')).exports
+  const used = new Set(
+    all.flatMap(({ code }) =>
+      [...code.matchAll(/['"]@aziontech\/webkit\/([\w/-]+)['"]/g)].map((m) => m[1])
+    )
+  )
+  const entries = [...used]
+    .map((sub) => [sub, exportTarget(exportsMap[`./${sub}`] ?? '')])
+    .filter(([, target]) => target.startsWith('./src/') && target.endsWith('.js'))
+  if (!entries.length) return
+  const { out } = buildDeclarations(entries.map(([, target]) => join(PKG_DIR, target)))
+  const typesDir = join(dir, 'js-types')
+  for (const [file, text] of out) {
+    const dest = join(typesDir, relative(join(PKG_DIR, 'src'), file))
+    mkdirSync(dirname(dest), { recursive: true })
+    writeFileSync(dest, text)
+  }
+  for (const [sub, target] of entries) {
+    JS_ENTRY_PATHS[`@aziontech/webkit/${sub}`] = [
+      join(typesDir, relative('./src', target).replace(/\.js$/, '.d.ts'))
+    ]
+  }
+}
 
 const FREE_NAME = [
   /error TS(?:2304|2552): Cannot find name '(\w+)'/,
@@ -266,7 +296,7 @@ function runGroup(group, dir, prefix) {
   const errors = consumerTypeErrors([...files, ...APP_ENV], {
     noUnusedLocals: false,
     noUnusedParameters: false,
-    paths: { 'vue-router': [VUE_ROUTER], '@/*': [join(dir, 'app', '*')] }
+    paths: { ...JS_ENTRY_PATHS, 'vue-router': [VUE_ROUTER], '@/*': [join(dir, 'app', '*')] }
   })
   return errors.map((line) => {
     const name = line.match(new RegExp(`${prefix}-\\d+\\.(?:vue|ts)`))?.[0]
@@ -317,6 +347,7 @@ test('every Vue and TypeScript snippet in the shipped docs type-checks in a cons
       writeFileSync(join(dir, 'icons.d.ts'), "declare module '@aziontech/icons' {}\n")
       APP_ENV.push(join(dir, 'icons.d.ts'))
     }
+    declareJsEntries(dir)
     const strictDir = join(dir, 'strict')
     const looseDir = join(dir, 'loose')
     mkdirSync(strictDir)

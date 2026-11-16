@@ -152,7 +152,10 @@ WebKit is consumed as source and Tailwind compiles the classes of the files it s
 start and build, and again when a file adds or drops a WebKit import:
 
 ```ts
+import vue from '@vitejs/plugin-vue'
 import webkit from '@aziontech/webkit/vite-plugin'
+import { defineConfig } from 'vite'
+
 export default defineConfig({ plugins: [webkit(), vue()] })
 ```
 
