@@ -796,6 +796,11 @@ The theme that ships with WebKit 6 changes three things your app can see:
   the `.azion.azion-light` / `.azion.azion-dark` theme classes (set `data-theme` on `<html>`; `.dark`
   still works). The stylesheet moved from `dist/v4/` to `dist/`: import `@aziontech/theme` and
   `@aziontech/theme/fonts.css`, never a `dist/` path.
+- **Chart colors.** `--chart-series-1` is blue, no longer the brand orange, and every series,
+  sequential (now indigo) and diverging (orange to blue) value changes. There are eight series
+  slots (`--chart-series-7`, `-8` are new): a `Chart` keeps eight series before folding the rest
+  into Other (`cap` defaults to `8`), and `ChartSlot` takes `1` to `8`. `DonutChart` still keeps six
+  slices. Pass `:cap="6"` to a `Chart` to keep the old fold.
 
 Two additions need nothing from you: `--border-input` is the outline token of every form field (same
 value as `--border-default`), and dark mode has its own, visible elevation shadows (`--shadow-*`).
