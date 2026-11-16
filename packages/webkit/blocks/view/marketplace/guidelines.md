@@ -23,7 +23,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 `PageHeader` at its medium size: "Marketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
 
-### B. Featured — `Card` (required)
+### B. Featured — `IntegrationCard` (required)
 
 While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `IntegrationCard featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
 
