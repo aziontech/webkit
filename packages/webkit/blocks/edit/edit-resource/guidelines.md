@@ -33,7 +33,7 @@ One `form` with a disabled-while-saving `fieldset` and a visually hidden legend.
 
 ### D. Locked settings — `Tooltip`, `Switch` (optional)
 
-A setting the user cannot change here (a paid module, a module that is always on) keeps its row with a disabled `Switch` inside a `Tooltip` that says why, and an in-sentence link in the description to where it can be changed, e.g. Contact sales: a plain anchor with the `text-link` class that opens in a new tab, never a hand-styled anchor or a `Link`, which is for standalone navigation.
+A setting the user cannot change here (a paid module, a module that is always on) keeps its row with a disabled `Switch` inside a `Tooltip` that says why, and a small `Link` beside the switch, in the control cell, to where it can be changed, e.g. Contact sales, opening in a new tab and named for the module ("Contact sales about WebSocket Proxy"). Keep the way out out of the description: `SettingsRow` clamps its description to two lines, so on a phone a link at the end of the sentence is cut off and the disabled switch is left with no way to turn it on.
 
 ### E. Save bar — `SaveBar`, `Button` (required)
 

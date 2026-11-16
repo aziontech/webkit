@@ -18,10 +18,16 @@ describe('deploy-progress-dialog', () => {
     expect(within(dialog).getByRole('list', { name: 'Deployment Settings' })).toBeTruthy()
     const hide = within(dialog).getByRole('button', { name: 'Hide' })
     expect(hide.hasAttribute('disabled')).toBe(false)
+    expect(screen.queryByText(/It keeps running if you leave/)).toBeNull()
     await fireEvent.click(hide)
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull(), wait)
+    expect(await screen.findByText(/It keeps running if you leave/, {}, wait)).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Show progress' }))
     expect(await screen.findByRole('dialog')).toBeTruthy()
+    await waitFor(
+      () => expect(screen.queryByText(/It keeps running if you leave/)).toBeNull(),
+      wait
+    )
   })
   it('renders the run it is given and emits retry with the failed rows', async () => {
     const view = render(DeployProgressDialog, { props: { items: samplePartialItems } })

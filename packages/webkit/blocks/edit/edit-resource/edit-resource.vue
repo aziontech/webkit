@@ -4,6 +4,7 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -288,25 +289,25 @@
                           v-for="mod in subscriptionModules"
                           :key="mod.key"
                           :title="mod.title"
+                          :description="mod.description"
                           variant="compact"
                         >
-                          <template #description>
-                            {{ mod.description }}
-                            <a
+                          <div class="flex items-center gap-(--spacing-sm)">
+                            <Link
+                              label="Contact sales"
                               href="https://example.com/contact-sales"
                               target="_blank"
-                              rel="noopener noreferrer"
-                              class="text-link"
-                              >Contact sales</a
-                            >
-                          </template>
-                          <Tooltip content="Contact sales to activate this module.">
-                            <Switch
-                              v-model="form.modules[mod.key]"
-                              disabled
-                              :aria-label="mod.title"
+                              size="small"
+                              :aria-label="`Contact sales about ${mod.title}`"
                             />
-                          </Tooltip>
+                            <Tooltip content="Contact sales to activate this module.">
+                              <Switch
+                                v-model="form.modules[mod.key]"
+                                disabled
+                                :aria-label="mod.title"
+                              />
+                            </Tooltip>
+                          </div>
                         </SettingsRow>
                       </Item.List>
                     </template>
