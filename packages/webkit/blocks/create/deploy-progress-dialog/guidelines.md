@@ -43,7 +43,7 @@ Retry failed (outlined) appears only when the run settled with failures; the pri
 
 ### Outcome toast — through `toast`
 
-One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+One toast id for the run, raised only while the dialog is hidden, so it never covers the dialog's own footer: `toast.loading` with "It keeps running if you leave." while the run goes on, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy** when it settles. Opening the dialog dismisses the toast; a run that settled while the dialog was open already showed its outcome there, so closing it raises no toast. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -86,7 +86,7 @@ Then delete `sample.ts` and its import.
 - Let each Deployment Setting settle on its own and keep the ones that succeeded live.
 - Say why a row failed on the row itself.
 - Offer Retry failed for the failed rows only.
-- Report the outcome through the toast as well, so the user can close the dialog.
+- Report the run through the toast while the dialog is hidden, so the user can hide it and leave; never raise the toast over the open dialog.
 
 ## Don't
 
@@ -114,8 +114,8 @@ Then delete `sample.ts` and its import.
 
 - Running: `items` has two settled, one deploying and two queued; it advances as the page updates their `status`.
 - Drop: the confirm that starts a drop-to-deploy run.
-- PartialError: `items` settled with one failed row and its `message`; Retry failed, error toast.
-- Success: every row in `items` is done; success toast.
+- PartialError: `items` settled with one failed row and its `message`; Retry failed. The dialog shows the outcome, so no toast covers it; the error toast appears only for a run that settles while the dialog is hidden.
+- Success: every row in `items` is done; the dialog shows the outcome, and the success toast appears only for a run that settles while the dialog is hidden.
 
 ## Related
 
