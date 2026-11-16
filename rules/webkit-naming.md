@@ -110,6 +110,10 @@ npx @aziontech/webkit add create/create-hub#repositories-loading
 - Never use a pre-6.0 name; run `npx @aziontech/webkit migrate` instead of fixing call sites
   by hand.
 - Never write `left` / `right` for a position, side or alignment — it breaks in right-to-left.
+  The one exception is an edge of a picture that does not mirror (`NetworkMap` `fade` and
+  `position`, `Texture` and `ConsoleMockupShell` fades, the `RegistrationFrame` sides and
+  corners): those keep `left` / `right` because they name the picture's own edges, not the
+  reading direction.
 - Never prefix a boolean with `is` / `has`, and never name one negatively.
 - Never pass a `pi pi-*` icon class or `ai-cor`.
 

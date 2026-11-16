@@ -175,7 +175,16 @@ The full dictionary (concept → canonical name, banned aliases, values) is
   1-based number with `pageSize`, and a seed is always `default<Model>` (never `initial<X>`). The
   table is in [`prop-vocabulary.md`](./prop-vocabulary.md) § Two-way models.
 - **`<part>Position`** takes `leading | trailing` (`iconPosition`); sides and alignment take
-  `start | end` (`align: 'start' | 'center' | 'end'`) (N7).
+  `start | end` (`align: 'start' | 'center' | 'end'`) (N7). No public prop union holds a
+  physical side (`left`, `right`, `top-left`, `bottom-right`, …), whatever the prop is called.
+- **Picture edges are the one exception.** A prop that names an edge of a picture keeps
+  `left` / `right`, because the picture does not mirror in right-to-left: its left edge is still
+  its left edge. The allowlist is closed — `NetworkMapFade`, `ConsoleMockupShellFade` and
+  `RegistrationFrameSide` (owner decision, 2026-11-16), plus the unions that describe the same
+  pictures: `NetworkMapPosition` (where the map parks, paired with its fade), `TextureFade` (the
+  texture `ConsoleMockupShell` fades), and the frame's corners `RegistrationFrameCorner` /
+  `RegistrationFrameMarks`. A new type joins it only with an owner decision. The list is
+  `PHYSICAL_EDGE_TYPES` in [`naming-rules.mjs`](../../packages/webkit/scripts/lib/naming-rules.mjs).
 - **Booleans are positive and unprefixed**: no `is`/`has`, no `hide*` (→ `show<Part>`), no
   `enable*` (→ the `-able` adjective: `sortable`), no `disable*` except `disabled`.
 - **camelCase** in `defineProps`; consumers write kebab attributes (`aria-label`, `icon-position`).
@@ -505,7 +514,7 @@ One engine checks every rule that a machine can decide, and every rule blocks: t
 | `section-suffix`   | a page section that wraps a primitive (or says band/stack) ends in `-section`          | N12            |
 | `example-file`     | first example is `default.vue`; no banned example file names                           | N13            |
 | `prop-name`        | prop names against the vocabulary (specs and `.vue`)                                   | N1, N5, N6     |
-| `prop-value`       | union members against the shared and closed value sets, `Severity`-derived types       | N2, N3, N5, N7 |
+| `prop-value`       | value sets, `Severity`-derived types, `left`/`right` only in `PHYSICAL_EDGE_TYPES`     | N2, N3, N5, N7 |
 | `model-shape`      | `defineModel` names and types per concept, `default<Model>` seeds, template `v-model:` | N6             |
 | `event-name`       | kebab events, no echo, the shared event words                                          | N5             |
 | `slot-name`        | kebab slots; `leading`/`trailing`, never `prefix`/`suffix`/`left`/`right`              | N7             |
