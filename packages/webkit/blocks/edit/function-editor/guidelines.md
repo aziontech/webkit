@@ -170,7 +170,7 @@ Then delete `sample.ts` and its import.
 - `shell/console` — the `ConsoleLayout` this page body renders in.
 - `edit/edit-resource` — the settings form and save bar pattern the Settings tab follows.
 - `view/query-editor` — an editor page that runs queries and shows results.
-- `view/split-view` — the events explorer, where the logs of every run land.
+- `view/events-explorer` — the events explorer, where the logs of every run land.
 - `Trace` — the span waterfall of the test run.
 - `detail/version-detail` — reading a deployed version of the code.
 - `ResizableRoot` — the split between schema and fields; see `skills/webkit-layout`.

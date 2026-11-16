@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: 5e2fa211e19bb8bba5978ea6ef92e637924c69fae31b78b918ea318574bc27fd
+checksum: ae337c3d4c73d8a4fa883cb52f57693667d2a1072a30085f683b07de3474c8b2
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Carousel — Component Spec
@@ -47,7 +47,7 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 - Size the cards with `size` on `Carousel.Item` (`small` `var(--container-2xs)`, `medium` `var(--container-sm)`, `large` `var(--container-md)`; each capped at 85% of the viewport on phones). Never put width classes on the item: they fight its own width and the `no-style-override` lint rejects them.
 - Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.
 - Pick the layout with `variant`: `strip` for a ruled row of quotes or figures that reads as one surface, `cards` for standalone cards with a gutter (use-case cards, articles). Never add margins to the items to fake a gutter.
-- Put the band's title in the `header` slot when the controls belong on the title row; the controls then sit at the row's end. For a whole titled band of overline/title/text cards use the `card-carousel` section instead of composing one.
+- Put the band's title in the `header` slot when the controls belong on the title row; the controls then sit at the row's end. For a whole titled band of overline/title/text cards use the `card-carousel-section` section instead of composing one.
 - Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.
 - The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.
 - Always name the carousel with `ariaLabel`. "Customer stories" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.

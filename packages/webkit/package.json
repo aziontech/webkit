@@ -471,6 +471,10 @@
       "types": "./types/components/content/card/card.vue.d.ts",
       "default": "./src/components/content/card/card.vue"
     },
+    "./integration-card": {
+      "types": "./types/components/content/integration-card/integration-card.vue.d.ts",
+      "default": "./src/components/content/integration-card/integration-card.vue"
+    },
     "./pricing-card": {
       "types": "./types/components/content/pricing-card/pricing-card.vue.d.ts",
       "default": "./src/components/content/pricing-card/pricing-card.vue"
@@ -891,11 +895,11 @@
       "types": "./types/components/docs/doc-prose/doc-prose.vue.d.ts",
       "default": "./src/components/docs/doc-prose/doc-prose.vue"
     },
-    "./doc-step": {
-      "types": "./types/components/docs/doc-step/doc-step.vue.d.ts",
-      "default": "./src/components/docs/doc-step/doc-step.vue"
-    },
     "./doc-steps": {
+      "types": "./types/components/docs/doc-steps/index.d.ts",
+      "default": "./src/components/docs/doc-steps/index.ts"
+    },
+    "./doc-steps-root": {
       "types": "./types/components/docs/doc-steps/doc-steps.vue.d.ts",
       "default": "./src/components/docs/doc-steps/doc-steps.vue"
     },
@@ -2225,125 +2229,125 @@
     "./assets/windsurf-symbol-mono.svg": "./src/assets/logos/agents/windsurf-symbol-mono.svg",
     "./assets/workers-cf-symbol-color.svg": "./src/assets/logos/frameworks/workers-cf-symbol-color.svg",
     "./assets/zoop-extended-color.svg": "./src/assets/logos/clients/zoop-extended-color.svg",
-    "./architecture-tabs": {
-      "types": "./types/components/section/architecture-tabs/architecture-tabs.vue.d.ts",
-      "default": "./src/components/section/architecture-tabs/architecture-tabs.vue"
+    "./architecture-tabs-section": {
+      "types": "./types/components/section/architecture-tabs-section/architecture-tabs-section.vue.d.ts",
+      "default": "./src/components/section/architecture-tabs-section/architecture-tabs-section.vue"
     },
-    "./article-body": {
-      "types": "./types/components/section/article-body/article-body.vue.d.ts",
-      "default": "./src/components/section/article-body/article-body.vue"
+    "./article-body-section": {
+      "types": "./types/components/section/article-body-section/article-body-section.vue.d.ts",
+      "default": "./src/components/section/article-body-section/article-body-section.vue"
     },
-    "./article-cards": {
-      "types": "./types/components/section/article-cards/article-cards.vue.d.ts",
-      "default": "./src/components/section/article-cards/article-cards.vue"
+    "./article-cards-section": {
+      "types": "./types/components/section/article-cards-section/article-cards-section.vue.d.ts",
+      "default": "./src/components/section/article-cards-section/article-cards-section.vue"
     },
-    "./article-highlight": {
-      "types": "./types/components/section/article-highlight/article-highlight.vue.d.ts",
-      "default": "./src/components/section/article-highlight/article-highlight.vue"
+    "./article-highlight-section": {
+      "types": "./types/components/section/article-highlight-section/article-highlight-section.vue.d.ts",
+      "default": "./src/components/section/article-highlight-section/article-highlight-section.vue"
     },
-    "./article-index": {
-      "types": "./types/components/section/article-index/article-index.vue.d.ts",
-      "default": "./src/components/section/article-index/article-index.vue"
+    "./article-index-section": {
+      "types": "./types/components/section/article-index-section/article-index-section.vue.d.ts",
+      "default": "./src/components/section/article-index-section/article-index-section.vue"
     },
-    "./cli-terminal": {
-      "types": "./types/components/section/cli-terminal/cli-terminal.vue.d.ts",
-      "default": "./src/components/section/cli-terminal/cli-terminal.vue"
+    "./cli-terminal-section": {
+      "types": "./types/components/section/cli-terminal-section/cli-terminal-section.vue.d.ts",
+      "default": "./src/components/section/cli-terminal-section/cli-terminal-section.vue"
     },
-    "./client-mosaic": {
-      "types": "./types/components/section/client-mosaic/client-mosaic.vue.d.ts",
-      "default": "./src/components/section/client-mosaic/client-mosaic.vue"
+    "./client-mosaic-section": {
+      "types": "./types/components/section/client-mosaic-section/client-mosaic-section.vue.d.ts",
+      "default": "./src/components/section/client-mosaic-section/client-mosaic-section.vue"
     },
-    "./client-story-columns": {
-      "types": "./types/components/section/client-story-columns/client-story-columns.vue.d.ts",
-      "default": "./src/components/section/client-story-columns/client-story-columns.vue"
+    "./client-story-columns-section": {
+      "types": "./types/components/section/client-story-columns-section/client-story-columns-section.vue.d.ts",
+      "default": "./src/components/section/client-story-columns-section/client-story-columns-section.vue"
     },
-    "./client-quotes": {
-      "types": "./types/components/section/client-quotes/client-quotes.vue.d.ts",
-      "default": "./src/components/section/client-quotes/client-quotes.vue"
+    "./client-quotes-section": {
+      "types": "./types/components/section/client-quotes-section/client-quotes-section.vue.d.ts",
+      "default": "./src/components/section/client-quotes-section/client-quotes-section.vue"
     },
-    "./closing-call-to-action": {
-      "types": "./types/components/section/closing-call-to-action/closing-call-to-action.vue.d.ts",
-      "default": "./src/components/section/closing-call-to-action/closing-call-to-action.vue"
+    "./closing-call-to-action-section": {
+      "types": "./types/components/section/closing-call-to-action-section/closing-call-to-action-section.vue.d.ts",
+      "default": "./src/components/section/closing-call-to-action-section/closing-call-to-action-section.vue"
     },
     "./newsletter-section": {
       "types": "./types/components/section/newsletter-section/newsletter-section.vue.d.ts",
       "default": "./src/components/section/newsletter-section/newsletter-section.vue"
     },
-    "./plan-comparison": {
-      "types": "./types/components/section/plan-comparison/plan-comparison.vue.d.ts",
-      "default": "./src/components/section/plan-comparison/plan-comparison.vue"
+    "./plan-comparison-section": {
+      "types": "./types/components/section/plan-comparison-section/plan-comparison-section.vue.d.ts",
+      "default": "./src/components/section/plan-comparison-section/plan-comparison-section.vue"
     },
-    "./competitor-comparison": {
-      "types": "./types/components/section/competitor-comparison/competitor-comparison.vue.d.ts",
-      "default": "./src/components/section/competitor-comparison/competitor-comparison.vue"
+    "./competitor-comparison-section": {
+      "types": "./types/components/section/competitor-comparison-section/competitor-comparison-section.vue.d.ts",
+      "default": "./src/components/section/competitor-comparison-section/competitor-comparison-section.vue"
     },
-    "./compliance-logos": {
-      "types": "./types/components/section/compliance-logos/compliance-logos.vue.d.ts",
-      "default": "./src/components/section/compliance-logos/compliance-logos.vue"
+    "./compliance-logos-section": {
+      "types": "./types/components/section/compliance-logos-section/compliance-logos-section.vue.d.ts",
+      "default": "./src/components/section/compliance-logos-section/compliance-logos-section.vue"
     },
-    "./contact-hub": {
-      "types": "./types/components/section/contact-hub/contact-hub.vue.d.ts",
-      "default": "./src/components/section/contact-hub/contact-hub.vue"
+    "./contact-hub-section": {
+      "types": "./types/components/section/contact-hub-section/contact-hub-section.vue.d.ts",
+      "default": "./src/components/section/contact-hub-section/contact-hub-section.vue"
     },
     "./faq-section": {
       "types": "./types/components/section/faq-section/faq-section.vue.d.ts",
       "default": "./src/components/section/faq-section/faq-section.vue"
     },
-    "./feature-scroll": {
-      "types": "./types/components/section/feature-scroll/feature-scroll.vue.d.ts",
-      "default": "./src/components/section/feature-scroll/feature-scroll.vue"
+    "./feature-scroll-section": {
+      "types": "./types/components/section/feature-scroll-section/feature-scroll-section.vue.d.ts",
+      "default": "./src/components/section/feature-scroll-section/feature-scroll-section.vue"
     },
-    "./feature-tabs": {
-      "types": "./types/components/section/feature-tabs/feature-tabs.vue.d.ts",
-      "default": "./src/components/section/feature-tabs/feature-tabs.vue"
+    "./feature-tabs-section": {
+      "types": "./types/components/section/feature-tabs-section/feature-tabs-section.vue.d.ts",
+      "default": "./src/components/section/feature-tabs-section/feature-tabs-section.vue"
     },
-    "./feature-tiles": {
-      "types": "./types/components/section/feature-tiles/feature-tiles.vue.d.ts",
-      "default": "./src/components/section/feature-tiles/feature-tiles.vue"
+    "./feature-tiles-section": {
+      "types": "./types/components/section/feature-tiles-section/feature-tiles-section.vue.d.ts",
+      "default": "./src/components/section/feature-tiles-section/feature-tiles-section.vue"
     },
-    "./feature-widgets": {
-      "types": "./types/components/section/feature-widgets/feature-widgets.vue.d.ts",
-      "default": "./src/components/section/feature-widgets/feature-widgets.vue"
+    "./feature-widgets-section": {
+      "types": "./types/components/section/feature-widgets-section/feature-widgets-section.vue.d.ts",
+      "default": "./src/components/section/feature-widgets-section/feature-widgets-section.vue"
     },
     "./hero-section": {
       "types": "./types/components/section/hero-section/hero-section.vue.d.ts",
       "default": "./src/components/section/hero-section/hero-section.vue"
     },
-    "./capability-grid": {
-      "types": "./types/components/section/capability-grid/capability-grid.vue.d.ts",
-      "default": "./src/components/section/capability-grid/capability-grid.vue"
+    "./capability-grid-section": {
+      "types": "./types/components/section/capability-grid-section/capability-grid-section.vue.d.ts",
+      "default": "./src/components/section/capability-grid-section/capability-grid-section.vue"
     },
-    "./console-showcase": {
-      "types": "./types/components/section/console-showcase/console-showcase.vue.d.ts",
-      "default": "./src/components/section/console-showcase/console-showcase.vue"
+    "./console-showcase-section": {
+      "types": "./types/components/section/console-showcase-section/console-showcase-section.vue.d.ts",
+      "default": "./src/components/section/console-showcase-section/console-showcase-section.vue"
     },
-    "./process-scroll": {
-      "types": "./types/components/section/process-scroll/process-scroll.vue.d.ts",
-      "default": "./src/components/section/process-scroll/process-scroll.vue"
+    "./process-scroll-section": {
+      "types": "./types/components/section/process-scroll-section/process-scroll-section.vue.d.ts",
+      "default": "./src/components/section/process-scroll-section/process-scroll-section.vue"
     },
-    "./copy-command": {
-      "types": "./types/components/section/copy-command/copy-command.vue.d.ts",
-      "default": "./src/components/section/copy-command/copy-command.vue"
+    "./copy-command-section": {
+      "types": "./types/components/section/copy-command-section/copy-command-section.vue.d.ts",
+      "default": "./src/components/section/copy-command-section/copy-command-section.vue"
     },
     "./hero-form-section": {
       "types": "./types/components/section/hero-form-section/hero-form-section.vue.d.ts",
       "default": "./src/components/section/hero-form-section/hero-form-section.vue"
     },
-    "./investor-marks": {
-      "types": "./types/components/section/investor-marks/investor-marks.vue.d.ts",
-      "default": "./src/components/section/investor-marks/investor-marks.vue"
+    "./investor-marks-section": {
+      "types": "./types/components/section/investor-marks-section/investor-marks-section.vue.d.ts",
+      "default": "./src/components/section/investor-marks-section/investor-marks-section.vue"
     },
-    "./job-posting": {
-      "types": "./types/components/section/job-posting/job-posting.vue.d.ts",
-      "default": "./src/components/section/job-posting/job-posting.vue"
+    "./job-posting-section": {
+      "types": "./types/components/section/job-posting-section/job-posting-section.vue.d.ts",
+      "default": "./src/components/section/job-posting-section/job-posting-section.vue"
     },
-    "./listing-index": {
-      "types": "./types/components/section/listing-index/listing-index.vue.d.ts",
-      "default": "./src/components/section/listing-index/listing-index.vue"
+    "./listing-index-section": {
+      "types": "./types/components/section/listing-index-section/listing-index-section.vue.d.ts",
+      "default": "./src/components/section/listing-index-section/listing-index-section.vue"
     },
-    "./listing-table": {
-      "types": "./types/components/section/listing-table/listing-table.vue.d.ts",
-      "default": "./src/components/section/listing-table/listing-table.vue"
+    "./listing-table-section": {
+      "types": "./types/components/section/listing-table-section/listing-table-section.vue.d.ts",
+      "default": "./src/components/section/listing-table-section/listing-table-section.vue"
     },
     "./logo-wall-section": {
       "types": "./types/components/section/logo-wall-section/logo-wall-section.vue.d.ts",
@@ -2361,49 +2365,49 @@
       "types": "./types/components/section/network-section/network-section.vue.d.ts",
       "default": "./src/components/section/network-section/network-section.vue"
     },
-    "./photo-marquee": {
-      "types": "./types/components/section/photo-marquee/photo-marquee.vue.d.ts",
-      "default": "./src/components/section/photo-marquee/photo-marquee.vue"
+    "./photo-marquee-section": {
+      "types": "./types/components/section/photo-marquee-section/photo-marquee-section.vue.d.ts",
+      "default": "./src/components/section/photo-marquee-section/photo-marquee-section.vue"
     },
-    "./platform-directory": {
-      "types": "./types/components/section/platform-directory/platform-directory.vue.d.ts",
-      "default": "./src/components/section/platform-directory/platform-directory.vue"
+    "./platform-directory-section": {
+      "types": "./types/components/section/platform-directory-section/platform-directory-section.vue.d.ts",
+      "default": "./src/components/section/platform-directory-section/platform-directory-section.vue"
     },
-    "./pricing-plans": {
-      "types": "./types/components/section/pricing-plans/pricing-plans.vue.d.ts",
-      "default": "./src/components/section/pricing-plans/pricing-plans.vue"
+    "./pricing-plans-section": {
+      "types": "./types/components/section/pricing-plans-section/pricing-plans-section.vue.d.ts",
+      "default": "./src/components/section/pricing-plans-section/pricing-plans-section.vue"
     },
-    "./recognition-marquee": {
-      "types": "./types/components/section/recognition-marquee/recognition-marquee.vue.d.ts",
-      "default": "./src/components/section/recognition-marquee/recognition-marquee.vue"
+    "./recognition-marquee-section": {
+      "types": "./types/components/section/recognition-marquee-section/recognition-marquee-section.vue.d.ts",
+      "default": "./src/components/section/recognition-marquee-section/recognition-marquee-section.vue"
     },
-    "./site-footer": {
-      "types": "./types/components/section/site-footer/site-footer.vue.d.ts",
-      "default": "./src/components/section/site-footer/site-footer.vue"
+    "./site-footer-section": {
+      "types": "./types/components/section/site-footer-section/site-footer-section.vue.d.ts",
+      "default": "./src/components/section/site-footer-section/site-footer-section.vue"
     },
-    "./site-header": {
-      "types": "./types/components/section/site-header/site-header.vue.d.ts",
-      "default": "./src/components/section/site-header/site-header.vue"
+    "./site-header-section": {
+      "types": "./types/components/section/site-header-section/site-header-section.vue.d.ts",
+      "default": "./src/components/section/site-header-section/site-header-section.vue"
     },
     "./stats-section": {
       "types": "./types/components/section/stats-section/stats-section.vue.d.ts",
       "default": "./src/components/section/stats-section/stats-section.vue"
     },
-    "./story-index": {
-      "types": "./types/components/section/story-index/story-index.vue.d.ts",
-      "default": "./src/components/section/story-index/story-index.vue"
+    "./story-index-section": {
+      "types": "./types/components/section/story-index-section/story-index-section.vue.d.ts",
+      "default": "./src/components/section/story-index-section/story-index-section.vue"
     },
-    "./subject-grid": {
-      "types": "./types/components/section/subject-grid/subject-grid.vue.d.ts",
-      "default": "./src/components/section/subject-grid/subject-grid.vue"
+    "./subject-grid-section": {
+      "types": "./types/components/section/subject-grid-section/subject-grid-section.vue.d.ts",
+      "default": "./src/components/section/subject-grid-section/subject-grid-section.vue"
     },
-    "./template-gallery": {
-      "types": "./types/components/section/template-gallery/template-gallery.vue.d.ts",
-      "default": "./src/components/section/template-gallery/template-gallery.vue"
+    "./template-gallery-section": {
+      "types": "./types/components/section/template-gallery-section/template-gallery-section.vue.d.ts",
+      "default": "./src/components/section/template-gallery-section/template-gallery-section.vue"
     },
-    "./customer-use-cases": {
-      "types": "./types/components/section/customer-use-cases/customer-use-cases.vue.d.ts",
-      "default": "./src/components/section/customer-use-cases/customer-use-cases.vue"
+    "./customer-use-cases-section": {
+      "types": "./types/components/section/customer-use-cases-section/customer-use-cases-section.vue.d.ts",
+      "default": "./src/components/section/customer-use-cases-section/customer-use-cases-section.vue"
     },
     "./svg/illustration-layers": {
       "types": "./types/svg/illustration-layers/illustration-layers.vue.d.ts",
@@ -2545,9 +2549,9 @@
       "types": "./types/components/content/plan-feature-list/plan-feature-list.vue.d.ts",
       "default": "./src/components/content/plan-feature-list/plan-feature-list.vue"
     },
-    "./card-carousel": {
-      "types": "./types/components/section/card-carousel/card-carousel.vue.d.ts",
-      "default": "./src/components/section/card-carousel/card-carousel.vue"
+    "./card-carousel-section": {
+      "types": "./types/components/section/card-carousel-section/card-carousel-section.vue.d.ts",
+      "default": "./src/components/section/card-carousel-section/card-carousel-section.vue"
     }
   },
   "typesVersions": {
@@ -2788,6 +2792,9 @@
       ],
       "card": [
         "./types/components/content/card/card.vue.d.ts"
+      ],
+      "integration-card": [
+        "./types/components/content/integration-card/integration-card.vue.d.ts"
       ],
       "pricing-card": [
         "./types/components/content/pricing-card/pricing-card.vue.d.ts"
@@ -3104,10 +3111,10 @@
       "doc-prose": [
         "./types/components/docs/doc-prose/doc-prose.vue.d.ts"
       ],
-      "doc-step": [
-        "./types/components/docs/doc-step/doc-step.vue.d.ts"
-      ],
       "doc-steps": [
+        "./types/components/docs/doc-steps/index.d.ts"
+      ],
+      "doc-steps-root": [
         "./types/components/docs/doc-steps/doc-steps.vue.d.ts"
       ],
       "doc-changelog-entry": [
@@ -3836,95 +3843,95 @@
       "assets/spinning-globe": [
         "./types/assets/globe/spinning-globe.vue.d.ts"
       ],
-      "architecture-tabs": [
-        "./types/components/section/architecture-tabs/architecture-tabs.vue.d.ts"
+      "architecture-tabs-section": [
+        "./types/components/section/architecture-tabs-section/architecture-tabs-section.vue.d.ts"
       ],
-      "article-body": [
-        "./types/components/section/article-body/article-body.vue.d.ts"
+      "article-body-section": [
+        "./types/components/section/article-body-section/article-body-section.vue.d.ts"
       ],
-      "article-cards": [
-        "./types/components/section/article-cards/article-cards.vue.d.ts"
+      "article-cards-section": [
+        "./types/components/section/article-cards-section/article-cards-section.vue.d.ts"
       ],
-      "article-highlight": [
-        "./types/components/section/article-highlight/article-highlight.vue.d.ts"
+      "article-highlight-section": [
+        "./types/components/section/article-highlight-section/article-highlight-section.vue.d.ts"
       ],
-      "article-index": [
-        "./types/components/section/article-index/article-index.vue.d.ts"
+      "article-index-section": [
+        "./types/components/section/article-index-section/article-index-section.vue.d.ts"
       ],
-      "cli-terminal": [
-        "./types/components/section/cli-terminal/cli-terminal.vue.d.ts"
+      "cli-terminal-section": [
+        "./types/components/section/cli-terminal-section/cli-terminal-section.vue.d.ts"
       ],
-      "client-mosaic": [
-        "./types/components/section/client-mosaic/client-mosaic.vue.d.ts"
+      "client-mosaic-section": [
+        "./types/components/section/client-mosaic-section/client-mosaic-section.vue.d.ts"
       ],
-      "client-story-columns": [
-        "./types/components/section/client-story-columns/client-story-columns.vue.d.ts"
+      "client-story-columns-section": [
+        "./types/components/section/client-story-columns-section/client-story-columns-section.vue.d.ts"
       ],
-      "client-quotes": [
-        "./types/components/section/client-quotes/client-quotes.vue.d.ts"
+      "client-quotes-section": [
+        "./types/components/section/client-quotes-section/client-quotes-section.vue.d.ts"
       ],
-      "closing-call-to-action": [
-        "./types/components/section/closing-call-to-action/closing-call-to-action.vue.d.ts"
+      "closing-call-to-action-section": [
+        "./types/components/section/closing-call-to-action-section/closing-call-to-action-section.vue.d.ts"
       ],
       "newsletter-section": [
         "./types/components/section/newsletter-section/newsletter-section.vue.d.ts"
       ],
-      "plan-comparison": [
-        "./types/components/section/plan-comparison/plan-comparison.vue.d.ts"
+      "plan-comparison-section": [
+        "./types/components/section/plan-comparison-section/plan-comparison-section.vue.d.ts"
       ],
-      "competitor-comparison": [
-        "./types/components/section/competitor-comparison/competitor-comparison.vue.d.ts"
+      "competitor-comparison-section": [
+        "./types/components/section/competitor-comparison-section/competitor-comparison-section.vue.d.ts"
       ],
-      "compliance-logos": [
-        "./types/components/section/compliance-logos/compliance-logos.vue.d.ts"
+      "compliance-logos-section": [
+        "./types/components/section/compliance-logos-section/compliance-logos-section.vue.d.ts"
       ],
-      "contact-hub": [
-        "./types/components/section/contact-hub/contact-hub.vue.d.ts"
+      "contact-hub-section": [
+        "./types/components/section/contact-hub-section/contact-hub-section.vue.d.ts"
       ],
       "faq-section": [
         "./types/components/section/faq-section/faq-section.vue.d.ts"
       ],
-      "feature-scroll": [
-        "./types/components/section/feature-scroll/feature-scroll.vue.d.ts"
+      "feature-scroll-section": [
+        "./types/components/section/feature-scroll-section/feature-scroll-section.vue.d.ts"
       ],
-      "feature-tabs": [
-        "./types/components/section/feature-tabs/feature-tabs.vue.d.ts"
+      "feature-tabs-section": [
+        "./types/components/section/feature-tabs-section/feature-tabs-section.vue.d.ts"
       ],
-      "feature-tiles": [
-        "./types/components/section/feature-tiles/feature-tiles.vue.d.ts"
+      "feature-tiles-section": [
+        "./types/components/section/feature-tiles-section/feature-tiles-section.vue.d.ts"
       ],
-      "feature-widgets": [
-        "./types/components/section/feature-widgets/feature-widgets.vue.d.ts"
+      "feature-widgets-section": [
+        "./types/components/section/feature-widgets-section/feature-widgets-section.vue.d.ts"
       ],
       "hero-section": [
         "./types/components/section/hero-section/hero-section.vue.d.ts"
       ],
-      "capability-grid": [
-        "./types/components/section/capability-grid/capability-grid.vue.d.ts"
+      "capability-grid-section": [
+        "./types/components/section/capability-grid-section/capability-grid-section.vue.d.ts"
       ],
-      "console-showcase": [
-        "./types/components/section/console-showcase/console-showcase.vue.d.ts"
+      "console-showcase-section": [
+        "./types/components/section/console-showcase-section/console-showcase-section.vue.d.ts"
       ],
-      "process-scroll": [
-        "./types/components/section/process-scroll/process-scroll.vue.d.ts"
+      "process-scroll-section": [
+        "./types/components/section/process-scroll-section/process-scroll-section.vue.d.ts"
       ],
-      "copy-command": [
-        "./types/components/section/copy-command/copy-command.vue.d.ts"
+      "copy-command-section": [
+        "./types/components/section/copy-command-section/copy-command-section.vue.d.ts"
       ],
       "hero-form-section": [
         "./types/components/section/hero-form-section/hero-form-section.vue.d.ts"
       ],
-      "investor-marks": [
-        "./types/components/section/investor-marks/investor-marks.vue.d.ts"
+      "investor-marks-section": [
+        "./types/components/section/investor-marks-section/investor-marks-section.vue.d.ts"
       ],
-      "job-posting": [
-        "./types/components/section/job-posting/job-posting.vue.d.ts"
+      "job-posting-section": [
+        "./types/components/section/job-posting-section/job-posting-section.vue.d.ts"
       ],
-      "listing-index": [
-        "./types/components/section/listing-index/listing-index.vue.d.ts"
+      "listing-index-section": [
+        "./types/components/section/listing-index-section/listing-index-section.vue.d.ts"
       ],
-      "listing-table": [
-        "./types/components/section/listing-table/listing-table.vue.d.ts"
+      "listing-table-section": [
+        "./types/components/section/listing-table-section/listing-table-section.vue.d.ts"
       ],
       "logo-wall-section": [
         "./types/components/section/logo-wall-section/logo-wall-section.vue.d.ts"
@@ -3938,38 +3945,38 @@
       "network-section": [
         "./types/components/section/network-section/network-section.vue.d.ts"
       ],
-      "photo-marquee": [
-        "./types/components/section/photo-marquee/photo-marquee.vue.d.ts"
+      "photo-marquee-section": [
+        "./types/components/section/photo-marquee-section/photo-marquee-section.vue.d.ts"
       ],
-      "platform-directory": [
-        "./types/components/section/platform-directory/platform-directory.vue.d.ts"
+      "platform-directory-section": [
+        "./types/components/section/platform-directory-section/platform-directory-section.vue.d.ts"
       ],
-      "pricing-plans": [
-        "./types/components/section/pricing-plans/pricing-plans.vue.d.ts"
+      "pricing-plans-section": [
+        "./types/components/section/pricing-plans-section/pricing-plans-section.vue.d.ts"
       ],
-      "recognition-marquee": [
-        "./types/components/section/recognition-marquee/recognition-marquee.vue.d.ts"
+      "recognition-marquee-section": [
+        "./types/components/section/recognition-marquee-section/recognition-marquee-section.vue.d.ts"
       ],
-      "site-footer": [
-        "./types/components/section/site-footer/site-footer.vue.d.ts"
+      "site-footer-section": [
+        "./types/components/section/site-footer-section/site-footer-section.vue.d.ts"
       ],
-      "site-header": [
-        "./types/components/section/site-header/site-header.vue.d.ts"
+      "site-header-section": [
+        "./types/components/section/site-header-section/site-header-section.vue.d.ts"
       ],
       "stats-section": [
         "./types/components/section/stats-section/stats-section.vue.d.ts"
       ],
-      "story-index": [
-        "./types/components/section/story-index/story-index.vue.d.ts"
+      "story-index-section": [
+        "./types/components/section/story-index-section/story-index-section.vue.d.ts"
       ],
-      "subject-grid": [
-        "./types/components/section/subject-grid/subject-grid.vue.d.ts"
+      "subject-grid-section": [
+        "./types/components/section/subject-grid-section/subject-grid-section.vue.d.ts"
       ],
-      "template-gallery": [
-        "./types/components/section/template-gallery/template-gallery.vue.d.ts"
+      "template-gallery-section": [
+        "./types/components/section/template-gallery-section/template-gallery-section.vue.d.ts"
       ],
-      "customer-use-cases": [
-        "./types/components/section/customer-use-cases/customer-use-cases.vue.d.ts"
+      "customer-use-cases-section": [
+        "./types/components/section/customer-use-cases-section/customer-use-cases-section.vue.d.ts"
       ],
       "svg/illustration-layers": [
         "./types/svg/illustration-layers/illustration-layers.vue.d.ts"
@@ -4076,8 +4083,8 @@
       "plan-feature-list": [
         "./types/components/content/plan-feature-list/plan-feature-list.vue.d.ts"
       ],
-      "card-carousel": [
-        "./types/components/section/card-carousel/card-carousel.vue.d.ts"
+      "card-carousel-section": [
+        "./types/components/section/card-carousel-section/card-carousel-section.vue.d.ts"
       ]
     }
   }

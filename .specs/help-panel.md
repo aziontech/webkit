@@ -3,10 +3,10 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: f5a66994ee29a9a2ef8db8e185e2c31079466f4aaa069d293d4468b84e3329e4
+checksum: f9a4d527f9a5b5122e8b51c6e46a53f600872fa1428116b832f77d75b3346dcf
 spec_version: 5
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # HelpPanel — Component Spec
@@ -34,7 +34,7 @@ the links or carry one section or five.
 - A guided tutorial with tasks, progress and hotspots on the real controls → use `tutorial-panel`.
 - The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.
 - Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.
-- Numbered instructions inside a documentation page, read all at once → use `doc-steps` + `doc-step`.
+- Numbered instructions inside a documentation page, read all at once → use `doc-steps` (`DocSteps.Step`).
 - A page with nothing configured yet, which needs one call to action → use `empty-state`.
 
 ## Related
@@ -204,9 +204,9 @@ name.
 
 ## Theme gaps
 
-| Figma variable                         | Temporary primitive                                                                                      | Follow-up                                                                                          |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| — (documentation gap, not a token gap) | `var(--radius-full)` — ships in the theme and is what `stepper` and `doc-step` already use for their dot | `TODO: document --radius-full in DESIGN.md § Shape; there is no --shape-* alias for a full circle` |
+| Figma variable                         | Temporary primitive                                                                                           | Follow-up                                                                                          |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| — (documentation gap, not a token gap) | `var(--radius-full)` — ships in the theme and is what `stepper` and `DocSteps.Step` already use for their dot | `TODO: document --radius-full in DESIGN.md § Shape; there is no --shape-* alias for a full circle` |
 
 ## Accessibility (WCAG 2.1 AA)
 

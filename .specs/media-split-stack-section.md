@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 719b777269a7258de384c3e285346a1d269c3299c3367234282497a32fadfcba
+checksum: 121f0137af0f3522f335447bd89fb475d194e3f088f5798e6efc797184710cd8
 ---
 
 # MediaSplitStackSection — Component Spec
@@ -24,7 +24,7 @@ A run of large media-split bands that pile up under the site header as the page 
 ## When NOT to use
 
 - For a single claim beside its picture, scene or code → use `media-split-section`.
-- For small reasons in a grid → use `feature-tiles`.
+- For small reasons in a grid → use `feature-tiles-section`.
 
 ## Related
 

@@ -104,7 +104,7 @@ export const ptBR: Messages = {
     showAtSide: 'Mostrar ao lado do conteúdo',
     showAtBottom: 'Mostrar abaixo do conteúdo'
   },
-  articleBody: {
+  articleBodySection: {
     linkCopied: 'Link copiado',
     copiedFeed: 'Link do feed copiado',
     copiedPage: 'Página copiada como markdown',
@@ -112,7 +112,7 @@ export const ptBR: Messages = {
     copyFailedHint: 'Seu navegador bloqueou o acesso à área de transferência.',
     assistantPrompt: 'Leia {url} para que eu possa fazer perguntas sobre ele.'
   },
-  articleIndex: {
+  articleIndexSection: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
     noMatch: 'Nenhum resultado encontrado.'
@@ -175,7 +175,7 @@ export const ptBR: Messages = {
     moreActions: 'Mais ações',
     pressed: 'Ativado'
   },
-  card: {
+  integrationCard: {
     byVendor: 'por {vendor}',
     installed: 'Instalado'
   },
@@ -282,7 +282,7 @@ export const ptBR: Messages = {
     placeholder: 'Buscar em tudo',
     title: 'Menu de comandos'
   },
-  planComparison: {
+  planComparisonSection: {
     about: 'Sobre {label}',
     search: 'Buscar',
     searchPicker: 'Buscar {picker}',
@@ -290,7 +290,7 @@ export const ptBR: Messages = {
     included: 'Incluído',
     excluded: 'Não incluído'
   },
-  competitorComparison: {
+  competitorComparisonSection: {
     about: 'Sobre {capability}'
   },
   confirmDialog: {
@@ -643,7 +643,7 @@ export const ptBR: Messages = {
   link: {
     label: 'Saiba mais'
   },
-  listingIndex: {
+  listingIndexSection: {
     filters: 'Filtros',
     filtersApplied: '{label} ({count})',
     search: 'Buscar',
@@ -877,7 +877,7 @@ export const ptBR: Messages = {
     resize: 'Redimensionar barra lateral',
     expandByDragging: '{label} arrastando'
   },
-  siteFooter: {
+  siteFooterSection: {
     label: 'Rodapé',
     home: 'Página inicial da Azion',
     language: 'Idioma'
@@ -887,7 +887,7 @@ export const ptBR: Messages = {
     noMatch: 'Nenhuma página corresponde à busca.',
     pages: 'Páginas'
   },
-  siteHeader: {
+  siteHeaderSection: {
     open: 'Abrir navegação',
     home: 'Página inicial da Azion',
     search: 'Buscar',
@@ -915,7 +915,7 @@ export const ptBR: Messages = {
     complete: 'Concluída',
     upcoming: 'Não iniciada'
   },
-  storyIndex: {
+  storyIndexSection: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
     noMatch: 'Nenhum resultado encontrado.',
@@ -1136,20 +1136,20 @@ export const ptBR: Messages = {
   otpInput: {
     label: 'Código de uso único'
   },
-  consoleShowcase: {
+  consoleShowcaseSection: {
     views: 'Visões do console'
   },
   runtimeApiCloud: {
     label: 'Globais disponíveis no Azion Runtime'
   },
-  clientStoryColumns: {
+  clientStoryColumnsSection: {
     list: 'Histórias de clientes',
     story: 'Ler a história'
   },
-  copyCommand: {
+  copyCommandSection: {
     command: 'Comando',
     prompt: 'Prompt',
-    copyCommand: 'Copiar comando',
+    copyCommandSection: 'Copiar comando',
     copyPrompt: 'Copiar prompt'
   },
   searchTrigger: {

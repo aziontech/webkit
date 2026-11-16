@@ -1,19 +1,19 @@
 ---
 name: doc-steps
 category: docs
-structure: monolithic
+structure: composition
 status: implemented
-spec_version: 2
-checksum: 3f276f0d2ae4424a17e35a1a1a74fa26645c4c55d8162b5a933a35427797b41e
+spec_version: 3
+checksum: c8d5eb5113ab0e331420fff39f3ce829004a542ebd023527642a67e2609b2be3
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # DocSteps — Component Spec
 
 ## Purpose
 
-The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.
+The ordered walkthrough from the docs frame: a column of `DocSteps.Step` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.
 
 ## When to use
 
@@ -29,7 +29,6 @@ The ordered walkthrough from the docs frame: a column of `DocStep` children join
 
 ## Related
 
-- `DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.
 - `Stepper` — the app's interactive step rail. Both number their steps with the same shared step registry (`useStepRegistry`), which reads the order from the page, so a step inserted between two others takes its place in the count.
 - `DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder.
 
@@ -43,18 +42,27 @@ The ordered walkthrough from the docs frame: a column of `DocStep` children join
 
 ```vue
 <script setup>
-  import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
 </script>
 
 <template>
   <DocSteps>
-    <DocStep title="Install the Azion CLI"> Homebrew is the shortest path on macOS. </DocStep>
-    <DocStep title="Link the project" />
-    <DocStep title="Deploy" />
+    <DocSteps.Step title="Install the Azion CLI">
+      Homebrew is the shortest path on macOS.
+    </DocSteps.Step>
+    <DocSteps.Step title="Link the project" />
+    <DocSteps.Step title="Deploy" />
   </DocSteps>
 </template>
 ```
+
+`@aziontech/webkit/doc-steps-root` is the root alone, without `Step` attached, for an app that
+only renders steps through `DocMarkdown`.
+
+## Sub-components
+
+- `doc-steps.vue` — the root column; provides the numbering context.
+- `doc-steps-step.vue` — `DocSteps.Step`, one numbered step: the circled index, the rail that continues to the next step, the step heading (`title` prop, `''` default) and an optional body in its default slot. It registers with the root's context during setup and reads its index back, so an author writes a title and never a number; rendered outside `DocSteps` it throws (`useDocStepsContext must be used within DocSteps.`). The circle and the rail are `aria-hidden`; the heading carries `data-doc-chrome`, the rail `data-step-connector`, the body `data-step-body`; the final step drops its rail through a last-child CSS variant. Test id `doc-steps-step`. It has no standalone export: it only renders inside `DocSteps`, so it ships attached to the compound.
 
 ## Props
 
@@ -66,14 +74,14 @@ The ordered walkthrough from the docs frame: a column of `DocStep` children join
 
 ## Slots
 
-| Slot      | Scope | Notes                                                         |
-| --------- | ----- | ------------------------------------------------------------- |
-| `default` | —     | The `DocStep` children, in the order they should be numbered. |
+| Slot      | Scope | Notes                                                               |
+| --------- | ----- | ------------------------------------------------------------------- |
+| `default` | —     | The `DocSteps.Step` children, in the order they should be numbered. |
 
 ## States
 
 - Visual states: `default` (the column is not interactive and holds no visual state of its own)
-- Provides the numbering context (the shared step registry): each `DocStep` registers in setup, hands over its element on mount and deregisters on unmount; `index` is the 1-based position on the page; the final step's connector is suppressed by a last-child CSS variant
+- Provides the numbering context (the shared step registry): each `DocSteps.Step` registers in setup, hands over its element on mount and deregisters on unmount; `index` is the 1-based position on the page; the final step's connector is suppressed by a last-child CSS variant
 - `data-doc-block` is the `DocProse` contract (the column takes the block rung of the ladder)
 
 ## Motion & Animations
@@ -96,8 +104,8 @@ _none_
 
 - Visible focus: the column is not focusable; `Tab` reaches only interactive content nested inside a step's body.
 - Keyboard map: none of its own.
-- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocStep`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
-- Contrast: inherited from `DocStep`; the column paints nothing.
+- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
+- Contrast: inherited from `DocSteps.Step`; the column paints nothing.
 - Touch target: not applicable; the component is not interactive.
 
 ## Examples

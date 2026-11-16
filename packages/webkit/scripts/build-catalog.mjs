@@ -539,7 +539,7 @@ const ASSET_KINDS = {
   brandMarks: {
     title: 'Brand marks',
     summary:
-      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`); the label is the accessible name.',
+      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name.',
     markers: ['assets/brands/registry.ts'],
     registry: 'src/assets/brands/registry.ts',
     unknown:
@@ -636,20 +636,12 @@ function iconItems() {
 
 export function buildAssets(imports) {
   const items = {
-    illustrations: [
-      ...objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssets').map(({ name }) => ({
+    illustrations: objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssets')
+      .map(({ name }) => ({
         name,
         canvas: viewBoxOf(resolve(SRC, 'assets/illustrations', `${name}.svg`))
-      })),
-      ...objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssetAliases').map(
-        ({ name, value }) => ({
-          name,
-          canvas: viewBoxOf(resolve(SRC, 'assets/illustrations', `${value}.svg`)),
-          deprecated: true,
-          replacedBy: value
-        })
-      )
-    ].sort((a, b) => a.name.localeCompare(b.name)),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
     diagrams: objectKeys(ASSET_KINDS.diagrams.registry, 'diagrams')
       .map(({ name }) => ({
         name,

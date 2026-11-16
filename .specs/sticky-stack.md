@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 1c6090a015c768587d2eb6ea868f44cd1e2d983124b3e7e12bdfaa19ca257655
+checksum: af408c18a72aeed1e1a4056952889a55ea8ff13bcc2586cac85d551e40cc3ea9
 created: 2026-09-25
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Sticky Stack — Component Spec
@@ -28,7 +28,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 - For one claim beside one picture → use `media-split`.
 - For questions and answers, or any run longer than about six items → use `faq`. A pinned band holds the page for its whole run, and a long run holds it too long.
 - On a page that is already a single short screen: there is no scroll to spend.
-- For the product-page walkthrough placed from page JSON → use `feature-scroll`.
+- For the product-page walkthrough placed from page JSON → use `feature-scroll-section`.
 
 ## Related
 

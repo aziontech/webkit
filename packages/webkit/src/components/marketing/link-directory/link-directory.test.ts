@@ -80,9 +80,11 @@ describe('LinkDirectory', () => {
     })
 
     it('lets a consumer data-testid win over the fallback', () => {
-      const { getByTestId, queryByTestId } = render(host({ 'data-testid': 'platform-directory' }))
+      const { getByTestId, queryByTestId } = render(
+        host({ 'data-testid': 'platform-directory-section' })
+      )
 
-      expect(getByTestId('platform-directory')).toBeInTheDocument()
+      expect(getByTestId('platform-directory-section')).toBeInTheDocument()
       expect(queryByTestId(TESTID)).toBeNull()
     })
 

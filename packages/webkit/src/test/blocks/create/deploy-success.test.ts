@@ -8,7 +8,7 @@ import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
 describe('deploy-success', () => {
-  it('links the domain and repository with Link and the next steps with integration Cards', async () => {
+  it('links the domain and repository with Link and the next steps with `IntegrationCard`s', async () => {
     const view = render(DeploySuccess)
     const domain = screen.getByRole('link', { name: /web-app-k3x9q2\.example\.com/ })
     expect(domain.getAttribute('target')).toBe('_blank')

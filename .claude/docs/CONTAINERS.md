@@ -48,7 +48,7 @@ Two consequences you have to actively remember:
 ## The three-layer skeleton
 
 The page renders inside `SiteLayout` (or `DocLayout`), composed once in `App.vue`: the layout owns
-`SiteHeader`, the `<main>` and `SiteFooter`, so the page is only the hero and the framed column.
+`SiteHeaderSection`, the `<main>` and `SiteFooterSection`, so the page is only the hero and the framed column.
 
 ```vue
 <Hero variant="screen" max-width="7xl">     <!-- 1. fluid hero band, full-bleed, owns border-b -->
@@ -63,7 +63,7 @@ The page renders inside `SiteLayout` (or `DocLayout`), composed once in `App.vue
     <CardGrid variant="divider" :columns="3">…</CardGrid>
   </SectionModule>
 </SectionContainer>
-<!-- SiteLayout renders SiteFooter after the page; it owns border-t -->
+<!-- SiteLayout renders SiteFooterSection after the page; it owns border-t -->
 ```
 
 Live: [`website.vue:450-511`](../../packages/webkit/blocks/shell/site/site.vue#L450-L511) (the hero band and the framed
@@ -315,7 +315,7 @@ Both containers key into [`container.js`](../../packages/theme/src/tokens/primit
 Found while documenting; **not fixed** — each changes rendered output.
 
 1. **`RegistrationFrame` is used but never imported** (design sample only; fixed in WebKit, where
-   [`closing-call-to-action.vue:146`](../../packages/webkit/src/components/section/closing-call-to-action/closing-call-to-action.vue#L146)
+   [`closing-call-to-action-section.vue:146`](../../packages/webkit/src/components/section/closing-call-to-action-section/closing-call-to-action-section.vue#L146)
    imports it) — the sample's `AzionHome.vue:550` wraps the
    final CTA in `<RegistrationFrame hatch>`, but the script block imports only `Button`, `Card`,
    `PricingCard`, `CodeBlock`, `PlatformIllustrations`, `PlatformShowcase`, and

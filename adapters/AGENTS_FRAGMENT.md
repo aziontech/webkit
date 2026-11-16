@@ -22,7 +22,7 @@ The chrome of an app is one layout component, composed once in the app's root (`
 | Surface                     | Layout                                               | What it gives the pages                                                                                                                                                                                                                                                                                                                                  |
 | --------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Console (signed-in product) | `ConsoleLayout` (`@aziontech/webkit/console-layout`) | navigation rail from `navigation` data (`href` on every row: an in-app path is followed with the router; the active row follows the route), header with breadcrumbs + `SearchTrigger` + the ⌘K `Command` palette, account menu, `actions` slot; a page opens the palette with `useConsoleLayout().openSearch()` (`@aziontech/webkit/use-console-layout`) |
-| Marketing site              | `SiteLayout` (`@aziontech/webkit/site-layout`)       | `SiteHeader` + `SiteFooter` from data, the ⌘K palette, the dark canvas painted to the end                                                                                                                                                                                                                                                                |
+| Marketing site              | `SiteLayout` (`@aziontech/webkit/site-layout`)       | `SiteHeaderSection` + `SiteFooterSection` from data, the ⌘K palette, the dark canvas painted to the end                                                                                                                                                                                                                                                  |
 | Documentation               | `DocLayout` (`@aziontech/webkit/doc-layout`)         | sticky header, docs rail (drawer on phones), the "On this page" rail tracking the reading position; the document scrolls                                                                                                                                                                                                                                 |
 
 Start the layout from its shell block (`npx @aziontech/webkit add shell/console`,
@@ -30,7 +30,7 @@ Start the layout from its shell block (`npx @aziontech/webkit add shell/console`
 writes it into your views folder and prints the path; move that file to `src/App.vue` (no route)
 and replace its stand-in body with `<RouterView />`. Every other block is then **only the page body**
 that renders inside the layout's default slot: it renders no `<main>`, `AppLayout`, `Sidebar`,
-`AppHeader`, `SiteHeader`, `SiteFooter`, `Command` or navigation data of its own. If a block you
+`AppHeader`, `SiteHeaderSection`, `SiteFooterSection`, `Command` or navigation data of its own. If a block you
 copied still carries an inline shell (some platform blocks wrap their body in a `AppHeader` and a
 rail), keep only what is inside its `<main>` and drop the rest. The one exception is a screen with
 no rail — a create flow (`create/*`, headed by `top-bar/creation-bar`) or
@@ -77,7 +77,7 @@ product components in one file (`llms-full-site.txt` for the site and docs compo
   (`suggest_component`), `node_modules/@aziontech/webkit/llms/llms.txt` or
   `node_modules/@aziontech/webkit/catalog.json`.
 - **Flat imports.** `import Button from '@aziontech/webkit/button'` (PascalCase binding = the subpath);
-  page sections too (`@aziontech/webkit/pricing-plans`). Never category-prefixed, `/src/`,
+  page sections too (`@aziontech/webkit/pricing-plans-section`). Never category-prefixed, `/src/`,
   deep-internal, or a bare-package barrel.
 - **Tokens only.** Color, typography, shape, spacing come from `@aziontech/theme`
   (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`) — never hex, `rgb`, `hsl`, or Tailwind palette.

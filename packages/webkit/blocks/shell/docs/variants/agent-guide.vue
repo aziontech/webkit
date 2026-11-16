@@ -18,7 +18,6 @@
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocPrompt from '@aziontech/webkit/doc-prompt'
   import DocProse from '@aziontech/webkit/doc-prose'
-  import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
   import ItemList from '@aziontech/webkit/item-list'
   import Logo from '@aziontech/webkit/logo'
@@ -349,7 +348,7 @@
         >Quick start</DocHeading
       >
       <DocSteps>
-        <DocStep
+        <DocSteps.Step
           v-for="step in steps"
           :key="step.title"
           :title="step.title"
@@ -371,7 +370,7 @@
             title="Try it"
             >{{ step.prompt }}</DocPrompt
           >
-        </DocStep>
+        </DocSteps.Step>
       </DocSteps>
 
       <DocHeading

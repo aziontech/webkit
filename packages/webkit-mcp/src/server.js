@@ -137,7 +137,7 @@ async function main() {
       description:
         'The names a component accepts for its artwork, which live in registries and nowhere else: ' +
         'illustration scenes (Illustration name, section illustration), Diagram names, LineFigure ' +
-        'names, brand marks (Marquee marks, QuoteTabs / ClientQuotes mark) and icon classes with ' +
+        'names, brand marks (Marquee marks, QuoteTabs / ClientQuotesSection mark) and icon classes with ' +
         'keywords. Without a kind, returns each kind with its count and the components that use it; ' +
         'with a kind, every valid name (filtered by query over name, label and keywords).',
       inputSchema: {

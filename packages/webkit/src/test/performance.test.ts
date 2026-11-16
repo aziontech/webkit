@@ -66,8 +66,8 @@ import Command, {
   CommandList
 } from '../components/overlay/command'
 import WebkitProvider from '../components/provider/webkit-provider/webkit-provider.vue'
-import ListingIndex from '../components/section/listing-index/listing-index.vue'
-import ListingTable from '../components/section/listing-table/listing-table.vue'
+import ListingIndexSection from '../components/section/listing-index-section/listing-index-section.vue'
+import ListingTableSection from '../components/section/listing-table-section/listing-table-section.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
 import { hostable } from './hostable'
 
@@ -990,7 +990,7 @@ function listingTableCase(): Case {
     }))
   const rows = ref(make('Acme'))
   const Host = defineComponent({
-    setup: () => () => h(ListingTable, { title: 'Customers', columns, rows: rows.value })
+    setup: () => () => h(ListingTableSection, { title: 'Customers', columns, rows: rows.value })
   })
   return {
     mount: () => Host,
@@ -1025,7 +1025,7 @@ function listingIndexCase(): Case {
   ]
   const Host = defineComponent({
     setup: () => () =>
-      h(ListingIndex, {
+      h(ListingIndexSection, {
         title: 'Customers',
         columns,
         data: rows,
@@ -1039,7 +1039,7 @@ function listingIndexCase(): Case {
     mount: () => Host,
     update: async () => {
       const field = document.querySelector<HTMLInputElement>('input[type="text"]')
-      if (!field) throw new Error('listing-index search field not found')
+      if (!field) throw new Error('listing-index-section search field not found')
       field.value = 'acme 12'
       field.dispatchEvent(new Event('input', { bubbles: true }))
     }
@@ -1489,10 +1489,10 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('KeyValueList with 1k pairs: mount and update values', async () => {
     check('key-value-list-1k', await measure(keyValueListCase))
   })
-  it('ListingTable with 1k rows: mount and replace', async () => {
+  it('ListingTableSection with 1k rows: mount and replace', async () => {
     check('listing-table-1k', await measure(listingTableCase))
   })
-  it('ListingIndex with 1k rows: mount and search', async () => {
+  it('ListingIndexSection with 1k rows: mount and search', async () => {
     check('listing-index-1k', await measure(listingIndexCase))
   })
   it('Select with 1k options and a preselected value: mount names it by label', async () => {

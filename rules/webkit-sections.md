@@ -11,8 +11,8 @@ JSON. Never rebuild a band from primitives when a section exists.
   "newsletter sign-up") returns it with `recommendation: "section"`; `list_components` with category
   `sections` lists all of them.
 - Import it from its flat path and name the binding after it:
-  `import PricingPlans from '@aziontech/webkit/pricing-plans'`.
-- Pass the site JSON entry's props as the whole API: `<PricingPlans v-bind="section.props" />`. The
+  `import PricingPlansSection from '@aziontech/webkit/pricing-plans-section'`.
+- Pass the site JSON entry's props as the whole API: `<PricingPlansSection v-bind="section.props" />`. The
   `_id` in the JSON is the section's name.
 - Place sections inside the page column: `SectionContainer` (`max-width="site"`) with a
   `SectionGap` between sections. The section's own root is the band; it never sets its own width.
@@ -20,30 +20,30 @@ JSON. Never rebuild a band from primitives when a section exists.
   from the site. The section never posts. Feed the outcome back through its `loading`, `submitted`
   and `error` props; the messages come from the JSON.
 - Compose the site chrome once: `SiteLayout` (`@aziontech/webkit/site-layout`) in `App.vue`, with
-  the `SiteHeader` data as `navigation` and the `SiteFooter` data as `footer`, around `RouterView`. It
-  places `SiteHeader` first and `SiteFooter` last, unwrapped, and opens the ⌘K palette from the bar's
+  the `SiteHeaderSection` data as `navigation` and the `SiteFooterSection` data as `footer`, around `RouterView`. It
+  places `SiteHeaderSection` first and `SiteFooterSection` last, unwrapped, and opens the ⌘K palette from the bar's
   search. A page is only its sections, in the layout's slot. The `shell/site` block is this
   layout with the azion.com data: copy it as the app shell, never per page.
-  `SiteHeader` drops Login from the bar on a phone, as azion.com does; leave
-  `secondaryActionOnPhones` off. `SiteFooter` draws its own top rule, frame and closing bottom rule.
-- Size a screen-filling hero under `SiteHeader` with the `--layout-header-height` token: `HeroSection`
+  `SiteHeaderSection` drops Login from the bar on a phone, as azion.com does; leave
+  `secondaryActionOnPhones` off. `SiteFooterSection` draws its own top rule, frame and closing bottom rule.
+- Size a screen-filling hero under `SiteHeaderSection` with the `--layout-header-height` token: `HeroSection`
   takes it out of the screen by default, and a bare `Hero variant="screen"` takes
   `offset="var(--layout-header-height)"`. Never a literal (`56px`, `3.5rem`).
-- End the page column on a closing section (`ClosingCallToAction` and its `-newsletter`,
+- End the page column on a closing section (`ClosingCallToActionSection` and its `-newsletter`,
   `-agents`, `-templates` variants) with nothing after it: it draws the hatched closing frame
   itself. A page that ends on any other band closes with `SectionGap hatch` + the closing
   `RegistrationFrame` of `shell/site`.
-- Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
-  `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleAlign`,
-  `MediaSplitSection` action `variant` (`ghost` for a "Learn more" text button beside `codeTabs`), `SiteFooter` link
-  `external`, `CapabilityGrid` items with `href` for a linked grid, `ProcessScroll` `pinned`
+- Reach for the section's own switches before anything else: `ClientQuotesSection` `autoplay` /
+  `autoplayInterval` / `v-model`, `ArticleHighlightSection` `v-model`, `CapabilityGridSection` `titleAlign`,
+  `MediaSplitSection` action `variant` (`ghost` for a "Learn more" text button beside `codeTabs`), `SiteFooterSection` link
+  `external`, `CapabilityGridSection` items with `href` for a linked grid, `ProcessScrollSection` `pinned`
   (a band that pins while its tall cards slide sideways), a `HeroFormSection` field's
   `visuallyHiddenLabel` (a field labelled by its placeholder), `NetworkSection` benefits without
   `icon` (the bold run-in lead-in) and outcomes without `logo`.
 - A header that opens a run of bands inside a page (`MediaSplitStackSection`, a `SectionTitle` over
   a `SectionStack`) is the medium `SectionTitle`; `size="large"` is for a page's opening title only.
 - A titled row of cards that scrolls sideways, with the previous/next arrows on the title row ("See
-  how to use", "Industries"), is `CardCarousel` (`card-carousel`): each card takes `eyebrow`,
+  how to use", "Industries"), is `CardCarouselSection` (`card-carousel-section`): each card takes `eyebrow`,
   `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Eyebrow`.
 - A media split whose picture is a product console widget or a request-flow diagram stays a
   `MediaSplitStackSection` band or a `MediaSplitSection`: set the band's `widget` (a `ConsoleMockup` name) or
@@ -62,15 +62,15 @@ JSON. Never rebuild a band from primitives when a section exists.
 
 ## Do not
 
-- Do not import a section from `/src/` or with a category prefix (`@aziontech/webkit/sections/pricing-plans`
+- Do not import a section from `/src/` or with a category prefix (`@aziontech/webkit/sections/pricing-plans-section`
   no longer exists).
 - Do not pass slots or extra props a section does not declare. If the JSON needs a new field, the
   section changes in webkit first.
 - Do not wrap a section in your own `max-w-*`, padding or border to change its look. Spacing between
   bands is `SectionGap`.
 - Do not build the site header or footer from `AppHeader`, `NavigationMenu` or `Footer`, and do
-  not place `SiteHeader` / `SiteFooter` in a page: `SiteLayout` owns them, once.
-- Do not wrap `SiteFooter` or `SiteHeader` in a `div` with `border-t`, `border-b` or padding: the
+  not place `SiteHeaderSection` / `SiteFooterSection` in a page: `SiteLayout` owns them, once.
+- Do not wrap `SiteFooterSection` or `SiteHeaderSection` in a `div` with `border-t`, `border-b` or padding: the
   rules double and the frame drifts off the page column.
 - Do not pad an item list with placeholders, drop an item, or pick `columns` from the item count to
   make a grid "fit"; and do not compose a fixed `grid-cols-3` of cards yourself — `CardGrid` with its
@@ -81,7 +81,7 @@ JSON. Never rebuild a band from primitives when a section exists.
   `webkit/no-root-relative-asset`).
 - Do not put a `SectionGap` or a closing `RegistrationFrame` after a closing section: the hatch doubles
   (`webkit/no-gap-after-closing-section`).
-- Do not wrap a bare `CapabilityGrid` in a `SectionModule` to move its title: set `titleAlign`, or
+- Do not wrap a bare `CapabilityGridSection` in a `SectionModule` to move its title: set `titleAlign`, or
   its capability headings rise to `h2`.
 
 ## Correct
@@ -90,7 +90,9 @@ JSON. Never rebuild a band from primitives when a section exists.
 <script setup lang="ts">
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import PricingPlans, { type PricingPlansProps } from '@aziontech/webkit/pricing-plans'
+  import PricingPlansSection, {
+    type PricingPlansSectionProps
+  } from '@aziontech/webkit/pricing-plans-section'
   import NewsletterSection, {
     type NewsletterSectionProps
   } from '@aziontech/webkit/newsletter-section'
@@ -98,7 +100,7 @@ JSON. Never rebuild a band from primitives when a section exists.
   interface Props {
     /** The page JSON, one entry per section, each holding that section's props. */
     page: {
-      pricing: { props: PricingPlansProps }
+      pricing: { props: PricingPlansSectionProps }
       newsletter: { props: NewsletterSectionProps }
     }
   }
@@ -112,7 +114,7 @@ JSON. Never rebuild a band from primitives when a section exists.
 <template>
   <SectionContainer max-width="site">
     <SectionGap hatch />
-    <PricingPlans v-bind="page.pricing.props" />
+    <PricingPlansSection v-bind="page.pricing.props" />
     <SectionGap hatch />
     <NewsletterSection
       v-bind="page.newsletter.props"

@@ -7,9 +7,9 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 5f4326c73a2bb9d3ba2f5c2b1d4d0d05ec30b541dba5425515f4153e60270d88
+checksum: 6911702b1fdb2fb0e748fc778d95d49df1bf7af627d54293c3a2216b445316b6
 created: 2026-05-23
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Global Header — Component Spec
@@ -35,13 +35,13 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 
 ## When NOT to use
 
-- The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-header`, which composes this header.
+- The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-header-section`, which composes this header.
 - The navigation column at the side of the app → use `sidebar`.
 - An action row above a list of records → use the `toolbar` slot of `table`.
 
 ## Related
 
-- `site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
+- `site-header-section` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
 - `navigation-menu` — the dropdown navigation that usually goes in `AppHeader.Center`.
 - `brand` — the Azion lockup to place inside `AppHeader.Brand`.
 - `console-layout` — the console layout template that composes the header with the sidebar and the page.
@@ -146,7 +146,7 @@ _none_
 
 | Region                                | Token (DESIGN.md)                                                                                                          |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| shell height                          | `h-(--layout-header-height)` (56px, the token `SiteHeader`, `HeroSection` and the sticky bands offset by)                  |
+| shell height                          | `h-(--layout-header-height)` (56px, the token `SiteHeaderSection`, `HeroSection` and the sticky bands offset by)           |
 | shell padding-x (`variant="content"`) | `var(--layout-boundary-inline)`                                                                                            |
 | shell padding-x (`variant="site"`)    | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
 | shell region gap                      | `var(--spacing-md)`                                                                                                        |

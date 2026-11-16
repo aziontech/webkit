@@ -23,17 +23,17 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 `PageHeader` at its medium size: "Marketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
 
-### B. Featured — `Card` (required)
+### B. Featured — `IntegrationCard` (required)
 
-While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `Card variant="integration" featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
+While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `IntegrationCard featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
 
 ### C. Search and filter — `PropertyFilter` (required)
 
 Under the "All integrations" `h2`, one `PropertyFilter` bound with `v-bind="propertyFilterProps"`. Free text searches the name, the publisher and the description; Publisher and Category list the values in the catalog, Context is Application or Firewall, and Status is Installed or Available. Every token lives in the URL (`url: true`).
 
-### D. Integration tiles — `Card`, `Button` (required)
+### D. Integration tiles — `IntegrationCard`, `Button` (required)
 
-A `ul` grid, one to three tiles a row by width, of `Card variant="integration"`: the logo, the name (the stretched target that emits `select`), "by" the publisher, two lines of description, the category as a secondary badge, the Installed tag from `installed`, and in the `action` slot an outlined small `Button`, Install for an available integration and Configure for an installed one, named with the integration (`Install Rate Guard`). Both the tile and its action open the drawer.
+A `ul` grid, one to three tiles a row by width, of `IntegrationCard`: the logo, the name (the stretched target that emits `select`), "by" the publisher, two lines of description, the category as a secondary badge, the Installed tag from `installed`, and in the `action` slot an outlined small `Button`, Install for an available integration and Configure for an installed one, named with the integration (`Install Rate Guard`). Both the tile and its action open the drawer.
 
 ### E. No matching integrations — `EmptyState`, `Button` (required)
 
@@ -141,7 +141,7 @@ Then delete `sample.ts` and its import.
 ## Do
 
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
-- Use `Card variant="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
+- Use `IntegrationCard` for every integration tile, with the installed state as the `installed` prop and one action in the `actions` slot.
 - Hide the Featured row while any filter is set.
 - Keep templates out of this page: a template starts a project, so it lives in `view/template-browser`.
 - Open the detail in a drawer so the catalog, the filter and the scroll stay put.
@@ -200,4 +200,4 @@ Then delete `sample.ts` and its import.
 - `create/deploy-template` — where a template's Deploy leads.
 - `state/async-submit` — the toast and inline outcome every install follows.
 - `state/form-validation` (SectionRejected) — the field, section and toast placement of a form error.
-- `Card` (`variant="integration"`) and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.

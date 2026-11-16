@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 2c8c24edb28a1328a8e51caf6fa9071bcba532509a4604a7eb24e521c167a49b
+checksum: 9ebc2de3273c99eb8f765a5c1f220dbefdb912dc0ef6f9c5dd40f69ddd807158
 created: 2026-11-12
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # PlanFeatureList — Component Spec
@@ -27,10 +27,10 @@ The features a plan, product or upgrade includes, each behind a check mark, in o
 ## When NOT to use
 
 - Steps or tasks with a done/not-done state (a production checklist, a setup guide) → use `outcome-icon` per row, or the `stepper`.
-- A comparison of features across plans → use `plan-comparison` or `table`.
+- A comparison of features across plans → use `plan-comparison-section` or `table`.
 - Label and value facts → use `key-value-list`.
 - Rows that navigate or carry actions → use `item`.
-- Marketing pricing cards on the site → use `pricing-card` / `pricing-plans`, which carry their own feature lists.
+- Marketing pricing cards on the site → use `pricing-card` / `pricing-plans-section`, which carry their own feature lists.
 
 ## Related
 
@@ -156,7 +156,7 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 Self-review by the lane agent acting as `spec-reviewer` (`.claude/agents/spec-reviewer.md`), 2026-11-12:
 
 1. Naming — `plan-feature-list`, kebab, singular concept, flat export `./plan-feature-list`; no collision in `catalog.json` (the marketing `feature-*` sections are page bands, not lists). Pass.
-2. Reuse — `item` rows carry padding and a media slot for navigable rows; `key-value-list` is label/value; `outcome-icon` states an outcome; `pricing-card` / `pricing-plans` are site sections with their own lists. No export draws an included-feature list; the design sample (`console/pages/account/panels/Billing.vue`, `components/billing/PlanUpgradeDrawer.vue`) and WebKit's own `account/change-plan-drawer` block hand-write it three times. Pass.
+2. Reuse — `item` rows carry padding and a media slot for navigable rows; `key-value-list` is label/value; `outcome-icon` states an outcome; `pricing-card` / `pricing-plans-section` are site sections with their own lists. No export draws an included-feature list; the design sample (`console/pages/account/panels/Billing.vue`, `components/billing/PlanUpgradeDrawer.vue`) and WebKit's own `account/change-plan-drawer` block hand-write it three times. Pass.
 3. Prop vocabulary — `items` (data), `columns` (same name and meaning as `key-value-list`), `ariaLabel`. No banned alias. Pass.
 4. States — static list; empty renders nothing, stated. Pass.
 5. Internationalization — no built-in strings. Pass.

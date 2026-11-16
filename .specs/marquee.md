@@ -4,16 +4,16 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 26f97b870892701e067fd08ddef13e788870d2bdf1dba8198b9e5753fb0f69bb
+checksum: 3496d095ec8ac6c710159a6426524a4efcd0a452d3c9fb01bdef8b38565a8660
 created: 2026-09-23
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Marquee — Component Spec
 
 ## Purpose
 
-An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band. Its loop (the travelling track, the duplicate copy hidden from assistive technology, hover/focus pause and the pause control) is an internal part shared with `recognition-marquee` and `photo-marquee`.
+An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band. Its loop (the travelling track, the duplicate copy hidden from assistive technology, hover/focus pause and the pause control) is an internal part shared with `recognition-marquee-section` and `photo-marquee-section`.
 
 ## When to use
 

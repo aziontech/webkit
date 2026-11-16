@@ -27,7 +27,7 @@ const faq: SitePageSection = {
 }
 
 const uses: SitePageSection = {
-  _id: 'customer-use-cases',
+  _id: 'customer-use-cases-section',
   props: {
     title: USES_TITLE,
     items: [{ icon: 'ai ai-bolt', title: 'Fast pages', description: 'Served close to the reader.' }]
@@ -107,12 +107,12 @@ describe('SitePage', () => {
 
   it('closes a page that ends on a closing band with its frame, not a trailing gap', async () => {
     const closing: SitePageSection = {
-      _id: 'closing-call-to-action',
+      _id: 'closing-call-to-action-section',
       props: { variant: 'panel', title: 'Ready to start?' }
     }
     const { findByTestId, getAllByTestId } = page({ sections: [uses, closing] })
 
-    const band = await findByTestId('closing-call-to-action')
+    const band = await findByTestId('closing-call-to-action-section')
     expect(band.querySelector('[data-hatch="true"]')).not.toBeNull()
     expect(getAllByTestId('section-gap')).toHaveLength(2)
   })
@@ -120,13 +120,16 @@ describe('SitePage', () => {
   it('binds hatch off on a closing band stacked over another, so the page closes once', async () => {
     const { findAllByRole, findAllByTestId, getAllByTestId } = page({
       sections: [
-        { _id: 'closing-call-to-action', props: { variant: 'panel', title: 'Join us' } },
-        { _id: 'closing-call-to-action', props: { variant: 'primary', title: 'Start for free' } }
+        { _id: 'closing-call-to-action-section', props: { variant: 'panel', title: 'Join us' } },
+        {
+          _id: 'closing-call-to-action-section',
+          props: { variant: 'primary', title: 'Start for free' }
+        }
       ]
     })
 
     await waitFor(async () => expect(await findAllByRole('heading', { level: 2 })).toHaveLength(2))
-    const bands = await findAllByTestId('closing-call-to-action')
+    const bands = await findAllByTestId('closing-call-to-action-section')
     expect(bands).toHaveLength(2)
     expect(bands[0].querySelector('[data-hatch="true"]')).toBeNull()
     expect(bands[1].querySelector('[data-hatch="true"]')).not.toBeNull()
@@ -135,20 +138,22 @@ describe('SitePage', () => {
 
   it('draws no gap before a frame close, and no trailing gap after it', async () => {
     const { findByTestId, getAllByTestId } = page({
-      sections: [uses, { _id: 'closing-call-to-action', props: { variant: 'frame' } }]
+      sections: [uses, { _id: 'closing-call-to-action-section', props: { variant: 'frame' } }]
     })
 
-    const frame = await findByTestId('closing-call-to-action')
+    const frame = await findByTestId('closing-call-to-action-section')
     expect(frame.getAttribute('data-variant')).toBe('frame')
     expect(getAllByTestId('section-gap')).toHaveLength(1)
   })
 
   it('keeps the trailing gap after a closing band whose page data turns hatch off', async () => {
     const { findByTestId, getAllByTestId } = page({
-      sections: [{ _id: 'closing-call-to-action', props: { title: 'Ready?', hatch: false } }]
+      sections: [
+        { _id: 'closing-call-to-action-section', props: { title: 'Ready?', hatch: false } }
+      ]
     })
 
-    await findByTestId('closing-call-to-action')
+    await findByTestId('closing-call-to-action-section')
     expect(getAllByTestId('section-gap')).toHaveLength(2)
   })
 
@@ -175,7 +180,7 @@ describe('SitePage', () => {
       hero: [],
       sections: [
         {
-          _id: 'console-showcase',
+          _id: 'console-showcase-section',
           props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: {
             scene: {
@@ -203,7 +208,7 @@ describe('SitePage', () => {
       hero: [],
       sections: [
         {
-          _id: 'console-showcase',
+          _id: 'console-showcase-section',
           props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: { scene: { component, props: { animated: false } } }
         }
@@ -219,7 +224,7 @@ describe('SitePage', () => {
       hero: [],
       sections: [
         {
-          _id: 'console-showcase',
+          _id: 'console-showcase-section',
           props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: { scene: { component: 'NotASceneForTheTest' } }
         }
@@ -272,7 +277,7 @@ describe('SitePage', () => {
     const folders = Object.keys(import.meta.glob('../../section/*/*.vue'))
       .map((path) => path.split('/')[3])
       .filter((name, index, all) => all.indexOf(name) === index)
-      .filter((name) => name !== 'site-header' && name !== 'site-footer')
+      .filter((name) => name !== 'site-header-section' && name !== 'site-footer-section')
       .sort()
 
     expect(Object.keys(sitePageSections).sort()).toEqual(folders)
@@ -291,30 +296,35 @@ describe('SitePage', () => {
     [
       'closing-call-to-action-agents',
       { title: 'T' },
-      'closing-call-to-action',
+      'closing-call-to-action-section',
       { variant: 'primary' }
     ],
-    ['closing-call-to-action-templates', { title: 'T' }, 'template-gallery', { closing: true }],
+    [
+      'closing-call-to-action-templates',
+      { title: 'T' },
+      'template-gallery-section',
+      { closing: true }
+    ],
     [
       'sticky-carousel',
       { items: [{ title: 'Plan' }] },
-      'process-scroll',
+      'process-scroll-section',
       { steps: [{ title: 'Plan' }], pinned: true }
     ],
-    ['sticky-scroll-code', { title: 'T' }, 'feature-scroll', { title: 'T' }],
+    ['sticky-scroll-code', { title: 'T' }, 'feature-scroll-section', { title: 'T' }],
     [
       'compare-support-tiers',
       { tiers: [{ name: 'Pro' }] },
-      'plan-comparison',
+      'plan-comparison-section',
       { plans: [{ name: 'Pro' }] }
     ],
-    ['article-index-blog', {}, 'article-index', { filters: 'category-search' }],
-    ['article-index-resource-hub', {}, 'article-index', { filters: 'facets' }],
-    ['use-case-links', { items: [] }, 'capability-grid', { titleAlign: 'start' }],
+    ['article-index-blog', {}, 'article-index-section', { filters: 'category-search' }],
+    ['article-index-resource-hub', {}, 'article-index-section', { filters: 'facets' }],
+    ['use-case-links', { items: [] }, 'capability-grid-section', { titleAlign: 'start' }],
     [
       'resource-grid',
       { items: [{ title: 'A' }, {}] },
-      'capability-grid',
+      'capability-grid-section',
       { items: [{ title: 'A' }] }
     ],
     [
@@ -326,7 +336,7 @@ describe('SitePage', () => {
     [
       'customer-spotlight',
       { items: [{ name: 'Acme', description: 'Story' }] },
-      'client-story-columns',
+      'client-story-columns-section',
       { reveal: 'hover', cells: [{ name: 'Acme', story: 'Story' }] }
     ]
   ])('renders the retired _id %s with its successor', (id, props, target, expected) => {
@@ -364,7 +374,7 @@ describe('SitePage', () => {
       ]
     })
 
-    const band = await findByTestId('template-gallery')
+    const band = await findByTestId('template-gallery-section')
     expect(band.querySelector('[data-hatch="true"]')).not.toBeNull()
     expect(getAllByTestId('section-gap')).toHaveLength(2)
   })

@@ -91,7 +91,7 @@ describe('DocMarkdown', () => {
       ].join('\n')
     )
     expect(getByTestId('doc-callout').getAttribute('data-variant')).toBe('warning')
-    expect(getAllByTestId('doc-step')).toHaveLength(2)
+    expect(getAllByTestId('doc-steps-step')).toHaveLength(2)
     expect(getByText('Domains')).toBeTruthy()
     expect(await findByText('Store relational data.')).toBeTruthy()
     expect(await findByText('Is there a free tier?')).toBeTruthy()

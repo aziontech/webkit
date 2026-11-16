@@ -18,7 +18,7 @@ export const CREATE_VITE = 'create-vite@9.3.4'
 export const APP_VUE = `<script setup lang="ts">
   import Button, { type ButtonVariant, type ButtonProps } from '@aziontech/webkit/button'
   import HeroSection from '@aziontech/webkit/hero-section'
-  import SiteHeader from '@aziontech/webkit/site-header'
+  import SiteHeaderSection from '@aziontech/webkit/site-header-section'
   import Table from '@aziontech/webkit/table'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { toast } from '@aziontech/webkit/toast'
@@ -44,9 +44,9 @@ export const APP_VUE = `<script setup lang="ts">
 
 <template>
   <WebkitProvider>
-    <SiteHeader :menus="[]" />
+    <SiteHeaderSection :menus="[]" />
     <!-- @vue-expect-error -->
-    <SiteHeader />
+    <SiteHeaderSection />
     <HeroSection title="Ship" eyebrow="https://www.azion.com" :class="heroClass" />
     <Table>
       <Table.Body>

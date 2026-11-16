@@ -3,10 +3,10 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 5e01863b9ebe8ce34c3016560c33ed45cd39e1cf1b239c561da7b6d964349f9b
+checksum: bf244a64d6d3fc3906544224a3d7a2605e138102ead2afff0ed01174aea952a6
 spec_version: 7
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Wizard — Component Spec
@@ -39,7 +39,7 @@ completion.
 - Peer views with no order and no completion → use `tabs`.
 - A custom multi-step layout where the caller needs its own actions or a different arrangement → compose
   `stepper` + `stepper-step` directly.
-- Numbered instructions inside documentation → use `doc-steps` + `doc-step`.
+- Numbered instructions inside documentation → use `doc-steps` (`DocSteps.Step`).
 
 ## Related
 

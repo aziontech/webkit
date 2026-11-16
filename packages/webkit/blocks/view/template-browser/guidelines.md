@@ -30,9 +30,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 One `PropertyFilter` bound with `v-bind="propertyFilterProps"` from `useCollection`, at full width above the sections. Free text searches the name and the description; Category and Framework are properties with `options`, in catalog order. Every token lives in the URL (`url: true`), so a filtered catalog survives a reload and can be shared. There is no second search field and no filter popover.
 
-### C. Category sections — `Card` (required)
+### C. Category sections — `IntegrationCard` (required)
 
-One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by the width of the content (container queries on the `@container/templates` section, so an open rail does not overstate the room). A tile is a `Card variant="integration"`: the framework mark as its `logo` (colour marks use `ai-color`, and the black Next.js mark inverts in dark), the name as an `h3` holding a button that emits `select` and opens the preview, two lines of description and the framework as a secondary badge. The title's stretched target makes the whole tile one target with the hover wash and the focus ring inside the tile; the markup lives in `Card`, not in the block. Tiles in a row share a height.
+One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by the width of the content (container queries on the `@container/templates` section, so an open rail does not overstate the room). A tile is an `IntegrationCard`: the framework mark as its `logo` (colour marks use `ai-color`, and the black Next.js mark inverts in dark), the name as an `h3` holding a button that emits `select` and opens the preview, two lines of description and the framework as a secondary badge. The title's stretched target makes the whole tile one target with the hover wash and the focus ring inside the tile; the markup lives in `IntegrationCard`, not in the block. Tiles in a row share a height.
 
 ### D. No matching templates — `EmptyState`, `Button` (required)
 
@@ -151,4 +151,4 @@ Then delete `sample.ts` and its import.
 - `state/async-submit` — the toast and inline outcome every deploy follows.
 - `view/marketplace` — installable integrations into an existing resource; it lists no templates.
 - `create/create-hub` — the creation hub that links here for "Start from a template".
-- `Card` and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.

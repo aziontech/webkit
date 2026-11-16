@@ -7,7 +7,7 @@
   defineOptions({ name: 'DocSteps', inheritAttrs: false })
 
   defineSlots<{
-    /** The DocStep children, in the order they should be numbered. */
+    /** The DocSteps.Step children, in the order they should be numbered. */
     default(): unknown
   }>()
 

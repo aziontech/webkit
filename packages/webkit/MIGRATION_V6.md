@@ -93,56 +93,99 @@ component binding, its parts (`Flow.Node` → `FlowDiagram.Node`, `@aziontech/we
 → `@aziontech/webkit/log-viewer-header`) and its exported types (`LogViewLine` → `LogViewerLine`,
 `BoardLayoutItem` → `DashboardGridLayoutItem`).
 
-| Old import                                            | New import                                    | Old component                        | New component                                      |
-| ----------------------------------------------------- | --------------------------------------------- | ------------------------------------ | -------------------------------------------------- |
-| `@aziontech/webkit/global-header`                     | `@aziontech/webkit/app-header`                | `GlobalHeader`                       | `AppHeader`                                        |
-| `@aziontech/webkit/table-export`                      | `@aziontech/webkit/table-export-button`       | `TableExport`                        | `TableExportButton`                                |
-| `@aziontech/webkit/overline`                          | `@aziontech/webkit/eyebrow`                   | `Overline`                           | `Eyebrow`                                          |
-| `@aziontech/webkit/card-pricing`                      | `@aziontech/webkit/pricing-card`              | `CardPricing`                        | `PricingCard`                                      |
-| `@aziontech/webkit/button-highlight`                  | `@aziontech/webkit/highlight-button`          | `ButtonHighlight`                    | `HighlightButton`                                  |
-| `@aziontech/webkit/site-nav`                          | `@aziontech/webkit/site-header`               | `SiteNav`                            | `SiteHeader`                                       |
-| `@aziontech/webkit/setting-row`                       | `@aziontech/webkit/settings-row`              | `SettingRow`                         | `SettingsRow`                                      |
-| `@aziontech/webkit/hero-band`                         | `@aziontech/webkit/hero-section`              | `HeroBand`                           | `HeroSection`                                      |
-| `@aziontech/webkit/stats-band`                        | `@aziontech/webkit/stats-section`             | `StatsBand`                          | `StatsSection`                                     |
-| `@aziontech/webkit/media-split-band`                  | `@aziontech/webkit/media-split-section`       | `MediaSplitBand`                     | `MediaSplitSection`                                |
-| `@aziontech/webkit/logo-wall-quote`                   | `@aziontech/webkit/logo-wall-section`         | `LogoWallQuote`                      | `LogoWallSection`                                  |
-| `@aziontech/webkit/band-stack`                        | `@aziontech/webkit/section-stack`             | `BandStack`                          | `SectionStack`                                     |
-| `@aziontech/webkit/big-numbers`                       | `@aziontech/webkit/stats`                     | `BigNumbers`                         | `Stats`                                            |
-| `@aziontech/webkit/closing-call-to-action-newsletter` | `@aziontech/webkit/newsletter-section`        | `ClosingCallToActionNewsletter`      | `NewsletterSection`                                |
-| `@aziontech/webkit/ticker`                            | `@aziontech/webkit/marquee`                   | `Ticker`                             | `Marquee`                                          |
-| `@aziontech/webkit/texture-material`                  | `@aziontech/webkit/texture`                   | `TextureMaterial`                    | `Texture`                                          |
-| `@aziontech/webkit/banner-art`                        | `@aziontech/webkit/backdrop`                  | `BannerArt`                          | `Backdrop`                                         |
-| `@aziontech/webkit/frame-box`                         | `@aziontech/webkit/registration-frame`        | `FrameBox`                           | `RegistrationFrame`                                |
-| `@aziontech/webkit/board`                             | `@aziontech/webkit/dashboard-grid`            | `Board`                              | `DashboardGrid`                                    |
-| `@aziontech/webkit/flow`                              | `@aziontech/webkit/flow-diagram`              | `Flow`                               | `FlowDiagram`                                      |
-| `@aziontech/webkit/currency`                          | `@aziontech/webkit/currency-amount`           | `Currency`                           | `CurrencyAmount`                                   |
-| `@aziontech/webkit/doc-update`                        | `@aziontech/webkit/doc-changelog-entry`       | `DocUpdate`                          | `DocChangelogEntry`                                |
-| `@aziontech/webkit/doc-accordion-item`                | `@aziontech/webkit/doc-accordion`             | `DocAccordionItem`                   | `DocAccordion`                                     |
-| `@aziontech/webkit/console-panel`                     | `@aziontech/webkit/console-showcase`          | `ConsolePanel`                       | `ConsoleShowcase`                                  |
-| `@aziontech/webkit/compare-plans`                     | `@aziontech/webkit/plan-comparison`           | `ComparePlans`                       | `PlanComparison`                                   |
-| `@aziontech/webkit/comparison-table`                  | `@aziontech/webkit/competitor-comparison`     | `ComparisonTable`                    | `CompetitorComparison`                             |
-| `@aziontech/webkit/compliance-badges`                 | `@aziontech/webkit/compliance-logos`          | `ComplianceBadges`                   | `ComplianceLogos`                                  |
-| `@aziontech/webkit/section-command`                   | `@aziontech/webkit/copy-command`              | `SectionCommand`                     | `CopyCommand`                                      |
-| `@aziontech/webkit/client-mosaic-columns`             | `@aziontech/webkit/client-story-columns`      | `ClientMosaicColumns`                | `ClientStoryColumns`                               |
-| `@aziontech/webkit/story-library`                     | `@aziontech/webkit/story-index`               | `StoryLibrary`                       | `StoryIndex`                                       |
-| `@aziontech/webkit/listing-browser`                   | `@aziontech/webkit/listing-index`             | `ListingBrowser`                     | `ListingIndex`                                     |
-| `@aziontech/webkit/subject-library`                   | `@aziontech/webkit/subject-grid`              | `SubjectLibrary`                     | `SubjectGrid`                                      |
-| `@aziontech/webkit/feature-list`                      | `@aziontech/webkit/plan-feature-list`         | `FeatureList`                        | `PlanFeatureList`                                  |
-| `@aziontech/webkit/topic`                             | `@aziontech/webkit/feature-item`              | `Topic`                              | `FeatureItem`                                      |
-| `@aziontech/webkit/column-navigation`                 | `@aziontech/webkit/link-directory`            | `ColumnNavigation`                   | `LinkDirectory`                                    |
-| `@aziontech/webkit/product-widget`                    | `@aziontech/webkit/console-mockup`            | `ProductWidget`                      | `ConsoleMockup`                                    |
-| `@aziontech/webkit/log-view`                          | `@aziontech/webkit/log-viewer`                | `LogView`                            | `LogViewer`                                        |
-| `@aziontech/webkit/ai-loading`                        | `@aziontech/webkit/response-loading`          | `AiLoading`                          | `ResponseLoading`                                  |
-| `@aziontech/webkit/outcome-mark`                      | `@aziontech/webkit/outcome-icon`              | `OutcomeMark`                        | `OutcomeIcon`                                      |
-| `@aziontech/webkit/use-cases`                         | `@aziontech/webkit/customer-use-cases`        | `UseCases`                           | `CustomerUseCases`                                 |
-| `@aziontech/webkit/hero-form`                         | `@aziontech/webkit/hero-form-section`         | `HeroForm`                           | `HeroFormSection`                                  |
-| `@aziontech/webkit/media-split-stack`                 | `@aziontech/webkit/media-split-stack-section` | `MediaSplitStack`                    | `MediaSplitStackSection`                           |
-| `@aziontech/webkit/doc-prev-next`                     | `@aziontech/webkit/doc-previous-next`         | `DocPrevNext`                        | `DocPreviousNext`                                  |
-| `@aziontech/webkit/use-heading-nav`                   | `@aziontech/webkit/use-heading-navigation`    | `useHeadingNav`, `provideHeadingNav` | `useHeadingNavigation`, `provideHeadingNavigation` |
+| Old import                                            | New import                                         | Old component                        | New component                                      |
+| ----------------------------------------------------- | -------------------------------------------------- | ------------------------------------ | -------------------------------------------------- |
+| `@aziontech/webkit/global-header`                     | `@aziontech/webkit/app-header`                     | `GlobalHeader`                       | `AppHeader`                                        |
+| `@aziontech/webkit/table-export`                      | `@aziontech/webkit/table-export-button`            | `TableExport`                        | `TableExportButton`                                |
+| `@aziontech/webkit/overline`                          | `@aziontech/webkit/eyebrow`                        | `Overline`                           | `Eyebrow`                                          |
+| `@aziontech/webkit/card-pricing`                      | `@aziontech/webkit/pricing-card`                   | `CardPricing`                        | `PricingCard`                                      |
+| `@aziontech/webkit/button-highlight`                  | `@aziontech/webkit/highlight-button`               | `ButtonHighlight`                    | `HighlightButton`                                  |
+| `@aziontech/webkit/site-nav`                          | `@aziontech/webkit/site-header-section`            | `SiteNav`                            | `SiteHeaderSection`                                |
+| `@aziontech/webkit/setting-row`                       | `@aziontech/webkit/settings-row`                   | `SettingRow`                         | `SettingsRow`                                      |
+| `@aziontech/webkit/hero-band`                         | `@aziontech/webkit/hero-section`                   | `HeroBand`                           | `HeroSection`                                      |
+| `@aziontech/webkit/stats-band`                        | `@aziontech/webkit/stats-section`                  | `StatsBand`                          | `StatsSection`                                     |
+| `@aziontech/webkit/media-split-band`                  | `@aziontech/webkit/media-split-section`            | `MediaSplitBand`                     | `MediaSplitSection`                                |
+| `@aziontech/webkit/logo-wall-quote`                   | `@aziontech/webkit/logo-wall-section`              | `LogoWallQuote`                      | `LogoWallSection`                                  |
+| `@aziontech/webkit/band-stack`                        | `@aziontech/webkit/section-stack`                  | `BandStack`                          | `SectionStack`                                     |
+| `@aziontech/webkit/big-numbers`                       | `@aziontech/webkit/stats`                          | `BigNumbers`                         | `Stats`                                            |
+| `@aziontech/webkit/closing-call-to-action-newsletter` | `@aziontech/webkit/newsletter-section`             | `ClosingCallToActionNewsletter`      | `NewsletterSection`                                |
+| `@aziontech/webkit/ticker`                            | `@aziontech/webkit/marquee`                        | `Ticker`                             | `Marquee`                                          |
+| `@aziontech/webkit/texture-material`                  | `@aziontech/webkit/texture`                        | `TextureMaterial`                    | `Texture`                                          |
+| `@aziontech/webkit/banner-art`                        | `@aziontech/webkit/backdrop`                       | `BannerArt`                          | `Backdrop`                                         |
+| `@aziontech/webkit/frame-box`                         | `@aziontech/webkit/registration-frame`             | `FrameBox`                           | `RegistrationFrame`                                |
+| `@aziontech/webkit/board`                             | `@aziontech/webkit/dashboard-grid`                 | `Board`                              | `DashboardGrid`                                    |
+| `@aziontech/webkit/flow`                              | `@aziontech/webkit/flow-diagram`                   | `Flow`                               | `FlowDiagram`                                      |
+| `@aziontech/webkit/currency`                          | `@aziontech/webkit/currency-amount`                | `Currency`                           | `CurrencyAmount`                                   |
+| `@aziontech/webkit/doc-update`                        | `@aziontech/webkit/doc-changelog-entry`            | `DocUpdate`                          | `DocChangelogEntry`                                |
+| `@aziontech/webkit/doc-accordion-item`                | `@aziontech/webkit/doc-accordion`                  | `DocAccordionItem`                   | `DocAccordion`                                     |
+| `@aziontech/webkit/console-panel`                     | `@aziontech/webkit/console-showcase-section`       | `ConsolePanel`                       | `ConsoleShowcaseSection`                           |
+| `@aziontech/webkit/compare-plans`                     | `@aziontech/webkit/plan-comparison-section`        | `ComparePlans`                       | `PlanComparisonSection`                            |
+| `@aziontech/webkit/comparison-table`                  | `@aziontech/webkit/competitor-comparison-section`  | `ComparisonTable`                    | `CompetitorComparisonSection`                      |
+| `@aziontech/webkit/compliance-badges`                 | `@aziontech/webkit/compliance-logos-section`       | `ComplianceBadges`                   | `ComplianceLogosSection`                           |
+| `@aziontech/webkit/section-command`                   | `@aziontech/webkit/copy-command-section`           | `SectionCommand`                     | `CopyCommandSection`                               |
+| `@aziontech/webkit/client-mosaic-columns`             | `@aziontech/webkit/client-story-columns-section`   | `ClientMosaicColumns`                | `ClientStoryColumnsSection`                        |
+| `@aziontech/webkit/story-library`                     | `@aziontech/webkit/story-index-section`            | `StoryLibrary`                       | `StoryIndexSection`                                |
+| `@aziontech/webkit/listing-browser`                   | `@aziontech/webkit/listing-index-section`          | `ListingBrowser`                     | `ListingIndexSection`                              |
+| `@aziontech/webkit/subject-library`                   | `@aziontech/webkit/subject-grid-section`           | `SubjectLibrary`                     | `SubjectGridSection`                               |
+| `@aziontech/webkit/feature-list`                      | `@aziontech/webkit/plan-feature-list`              | `FeatureList`                        | `PlanFeatureList`                                  |
+| `@aziontech/webkit/topic`                             | `@aziontech/webkit/feature-item`                   | `Topic`                              | `FeatureItem`                                      |
+| `@aziontech/webkit/column-navigation`                 | `@aziontech/webkit/link-directory`                 | `ColumnNavigation`                   | `LinkDirectory`                                    |
+| `@aziontech/webkit/product-widget`                    | `@aziontech/webkit/console-mockup`                 | `ProductWidget`                      | `ConsoleMockup`                                    |
+| `@aziontech/webkit/log-view`                          | `@aziontech/webkit/log-viewer`                     | `LogView`                            | `LogViewer`                                        |
+| `@aziontech/webkit/ai-loading`                        | `@aziontech/webkit/response-loading`               | `AiLoading`                          | `ResponseLoading`                                  |
+| `@aziontech/webkit/outcome-mark`                      | `@aziontech/webkit/outcome-icon`                   | `OutcomeMark`                        | `OutcomeIcon`                                      |
+| `@aziontech/webkit/use-cases`                         | `@aziontech/webkit/customer-use-cases-section`     | `UseCases`                           | `CustomerUseCasesSection`                          |
+| `@aziontech/webkit/hero-form`                         | `@aziontech/webkit/hero-form-section`              | `HeroForm`                           | `HeroFormSection`                                  |
+| `@aziontech/webkit/media-split-stack`                 | `@aziontech/webkit/media-split-stack-section`      | `MediaSplitStack`                    | `MediaSplitStackSection`                           |
+| `@aziontech/webkit/doc-prev-next`                     | `@aziontech/webkit/doc-previous-next`              | `DocPrevNext`                        | `DocPreviousNext`                                  |
+| `@aziontech/webkit/use-heading-nav`                   | `@aziontech/webkit/use-heading-navigation`         | `useHeadingNav`, `provideHeadingNav` | `useHeadingNavigation`, `provideHeadingNavigation` |
+| `@aziontech/webkit/architecture-tabs`                 | `@aziontech/webkit/architecture-tabs-section`      | `ArchitectureTabs`                   | `ArchitectureTabsSection`                          |
+| `@aziontech/webkit/article-body`                      | `@aziontech/webkit/article-body-section`           | `ArticleBody`                        | `ArticleBodySection`                               |
+| `@aziontech/webkit/article-cards`                     | `@aziontech/webkit/article-cards-section`          | `ArticleCards`                       | `ArticleCardsSection`                              |
+| `@aziontech/webkit/article-highlight`                 | `@aziontech/webkit/article-highlight-section`      | `ArticleHighlight`                   | `ArticleHighlightSection`                          |
+| `@aziontech/webkit/article-index`                     | `@aziontech/webkit/article-index-section`          | `ArticleIndex`                       | `ArticleIndexSection`                              |
+| `@aziontech/webkit/capability-grid`                   | `@aziontech/webkit/capability-grid-section`        | `CapabilityGrid`                     | `CapabilityGridSection`                            |
+| `@aziontech/webkit/card-carousel`                     | `@aziontech/webkit/card-carousel-section`          | `CardCarousel`                       | `CardCarouselSection`                              |
+| `@aziontech/webkit/cli-terminal`                      | `@aziontech/webkit/cli-terminal-section`           | `CliTerminal`                        | `CliTerminalSection`                               |
+| `@aziontech/webkit/client-mosaic`                     | `@aziontech/webkit/client-mosaic-section`          | `ClientMosaic`                       | `ClientMosaicSection`                              |
+| `@aziontech/webkit/client-quotes`                     | `@aziontech/webkit/client-quotes-section`          | `ClientQuotes`                       | `ClientQuotesSection`                              |
+| `@aziontech/webkit/client-story-columns`              | `@aziontech/webkit/client-story-columns-section`   | `ClientStoryColumns`                 | `ClientStoryColumnsSection`                        |
+| `@aziontech/webkit/closing-call-to-action`            | `@aziontech/webkit/closing-call-to-action-section` | `ClosingCallToAction`                | `ClosingCallToActionSection`                       |
+| `@aziontech/webkit/competitor-comparison`             | `@aziontech/webkit/competitor-comparison-section`  | `CompetitorComparison`               | `CompetitorComparisonSection`                      |
+| `@aziontech/webkit/compliance-logos`                  | `@aziontech/webkit/compliance-logos-section`       | `ComplianceLogos`                    | `ComplianceLogosSection`                           |
+| `@aziontech/webkit/console-showcase`                  | `@aziontech/webkit/console-showcase-section`       | `ConsoleShowcase`                    | `ConsoleShowcaseSection`                           |
+| `@aziontech/webkit/contact-hub`                       | `@aziontech/webkit/contact-hub-section`            | `ContactHub`                         | `ContactHubSection`                                |
+| `@aziontech/webkit/copy-command`                      | `@aziontech/webkit/copy-command-section`           | `CopyCommand`                        | `CopyCommandSection`                               |
+| `@aziontech/webkit/customer-use-cases`                | `@aziontech/webkit/customer-use-cases-section`     | `CustomerUseCases`                   | `CustomerUseCasesSection`                          |
+| `@aziontech/webkit/feature-scroll`                    | `@aziontech/webkit/feature-scroll-section`         | `FeatureScroll`                      | `FeatureScrollSection`                             |
+| `@aziontech/webkit/feature-tabs`                      | `@aziontech/webkit/feature-tabs-section`           | `FeatureTabs`                        | `FeatureTabsSection`                               |
+| `@aziontech/webkit/feature-tiles`                     | `@aziontech/webkit/feature-tiles-section`          | `FeatureTiles`                       | `FeatureTilesSection`                              |
+| `@aziontech/webkit/feature-widgets`                   | `@aziontech/webkit/feature-widgets-section`        | `FeatureWidgets`                     | `FeatureWidgetsSection`                            |
+| `@aziontech/webkit/investor-marks`                    | `@aziontech/webkit/investor-marks-section`         | `InvestorMarks`                      | `InvestorMarksSection`                             |
+| `@aziontech/webkit/job-posting`                       | `@aziontech/webkit/job-posting-section`            | `JobPosting`                         | `JobPostingSection`                                |
+| `@aziontech/webkit/listing-index`                     | `@aziontech/webkit/listing-index-section`          | `ListingIndex`                       | `ListingIndexSection`                              |
+| `@aziontech/webkit/listing-table`                     | `@aziontech/webkit/listing-table-section`          | `ListingTable`                       | `ListingTableSection`                              |
+| `@aziontech/webkit/photo-marquee`                     | `@aziontech/webkit/photo-marquee-section`          | `PhotoMarquee`                       | `PhotoMarqueeSection`                              |
+| `@aziontech/webkit/plan-comparison`                   | `@aziontech/webkit/plan-comparison-section`        | `PlanComparison`                     | `PlanComparisonSection`                            |
+| `@aziontech/webkit/platform-directory`                | `@aziontech/webkit/platform-directory-section`     | `PlatformDirectory`                  | `PlatformDirectorySection`                         |
+| `@aziontech/webkit/pricing-plans`                     | `@aziontech/webkit/pricing-plans-section`          | `PricingPlans`                       | `PricingPlansSection`                              |
+| `@aziontech/webkit/process-scroll`                    | `@aziontech/webkit/process-scroll-section`         | `ProcessScroll`                      | `ProcessScrollSection`                             |
+| `@aziontech/webkit/recognition-marquee`               | `@aziontech/webkit/recognition-marquee-section`    | `RecognitionMarquee`                 | `RecognitionMarqueeSection`                        |
+| `@aziontech/webkit/site-footer`                       | `@aziontech/webkit/site-footer-section`            | `SiteFooter`                         | `SiteFooterSection`                                |
+| `@aziontech/webkit/site-header`                       | `@aziontech/webkit/site-header-section`            | `SiteHeader`                         | `SiteHeaderSection`                                |
+| `@aziontech/webkit/story-index`                       | `@aziontech/webkit/story-index-section`            | `StoryIndex`                         | `StoryIndexSection`                                |
+| `@aziontech/webkit/subject-grid`                      | `@aziontech/webkit/subject-grid-section`           | `SubjectGrid`                        | `SubjectGridSection`                               |
+| `@aziontech/webkit/template-gallery`                  | `@aziontech/webkit/template-gallery-section`       | `TemplateGallery`                    | `TemplateGallerySection`                           |
 
-Page sections that wrap a primitive of the same job end in `-section` (`hero-band` →
-`hero-section`, `stats-band` → `stats-section`, …). Site page JSON that still names an old `_id`
-keeps rendering: `SitePage` maps every old section id in the table to its new one. Hero, hero-section
+Every marketing page section ends in `-section` (`hero-band` → `hero-section`, `client-quotes` →
+`client-quotes-section`, `site-header` → `site-header-section`, …). The section's exported types
+move with it (`ClientQuotesItem` → `ClientQuotesSectionItem`; the codemod rewrites them; rename
+`JobPostingSection` → `JobPostingSectionSection` and `PlanComparisonSection` →
+`PlanComparisonSectionSection` by hand, as those old type names are now the component names), its
+test id is the new name, and its locale namespace follows (`siteHeader.*` → `siteHeaderSection.*`,
+`listingIndex.*` → `listingIndexSection.*`, … in a `WebkitProvider` `messages` override). Site page
+JSON that still names an old `_id` keeps rendering: `SitePage` maps every old section id in the
+table to its new one; write the new `_id` in new pages. Hero, hero-section
 and hero-form-section call their client strip `marquee` (`marquee`, `marqueeMarks`,
 `marqueeLabel`), after the component.
 
@@ -259,10 +302,10 @@ and Supabase words, and each component keeps only the ones it draws:
 `table-filter`, `dropdown-menu-option`, `chart-axis`, `chart-bar`, `field-legend`,
 `donut-chart`, `spark-chart`, `code-block`, `doc-code-group`, `artifact-canvas`,
 `sidebar-menu-sub-trigger` and `item-media`; every other `kind` becomes `variant`. Section props
-follow suit: `titleKind` → `titleAlign` (`capability-grid`, `console-showcase`, `process-scroll`,
-`feature-widgets`; it only ever aligned the title, so it is not a look), `kind` → `align` on
-`section-title`, `section-module` and `article-cards`, `quoteKind` → `quoteVariant` (`logo-wall-section`), `rowKind` → `rowVariant`
-(`article-index`). The codemod rewrites the attributes, their static values and a bound single literal
+follow suit: `titleKind` → `titleAlign` (`capability-grid-section`, `console-showcase-section`, `process-scroll-section`,
+`feature-widgets-section`; it only ever aligned the title, so it is not a look), `kind` → `align` on
+`section-title`, `section-module` and `article-cards-section`, `quoteKind` → `quoteVariant` (`logo-wall-section`), `rowKind` → `rowVariant`
+(`article-index-section`). The codemod rewrites the attributes, their static values and a bound single literal
 (`:kind="'text'"`; other bound expressions are listed as `MANUAL`), and every `*Kind` type you import (`ButtonKind` →
 `ButtonVariant`, `TableCellKind` → `TableCellType`).
 
@@ -273,7 +316,7 @@ The codemod cannot see data objects, so rename the field by hand where you build
 | `DataTable` / `useCollection` column                                  | `kind: 'action'`                  | `type: 'action'`                     |
 | `SidebarMenu` / `ConsoleLayout` / `DocLayout` navigation node         | `kind: 'drill'`                   | `type: 'drill'`                      |
 | `FilterMenu` field                                                    | `kind: 'multiple'`                | `type: 'multiple'`                   |
-| `HeroFormSection` / `JobPosting` field                                | `kind: 'email'`                   | `type: 'email'`                      |
+| `HeroFormSection` / `JobPostingSection` field                         | `kind: 'email'`                   | `type: 'email'`                      |
 | `Diagram` node / group                                                | `kind: 'pill'` / `kind: 'dashed'` | `type: 'pill'` / `variant: 'dashed'` |
 | section action (`primaryAction`, `secondaryAction`, audience actions) | `kind: 'outlined'`                | `variant: 'outline'`                 |
 | `SiteLayout` `footer`                                                 | `kind: 'site'`                    | `variant: 'site'`                    |
@@ -289,127 +332,127 @@ Props and events whose type is only renamed keep their shape: `Sources` `items` 
 `sources` take `SourcesItem[]` (was `AiSource[]`); `DocOnThisPage` `items`, `groups` and the `select`
 payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `DocTocGroup`);
 `ContextMenu` and `ContextMenuRoot` `select` pass a `DropdownMenuItemValue` (was
-`DropdownMenuOptionValue`); `CliTerminal` `primaryAction` is a `SectionTitleAction` (was
+`DropdownMenuOptionValue`); `CliTerminalSection` `primaryAction` is a `SectionTitleAction` (was
 `CliTerminalAction`).
 
-| v5 type                                | v6 type                                 |
-| -------------------------------------- | --------------------------------------- |
-| `AppliedFilter`                        | `TableAppliedFilter`                    |
-| `ArchitectureTabsAction`               | `SectionTitleAction`                    |
-| `ArticleBodyCrumb`                     | `BreadcrumbItemData`                    |
-| `ArticleCardsMark`                     | `LogoMark`                              |
-| `ArticleIndexBlogAuthor`               | `ArticleIndexAuthor`                    |
-| `ArticleIndexBlogEmpty`                | `ArticleIndexEmpty`                     |
-| `ArticleIndexBlogMark`                 | `LogoMark`                              |
-| `ArticleIndexBlogRowKind`              | `ArticleIndexRowKind`                   |
-| `ArticleIndexBlogSearch`               | `ArticleIndexSearch`                    |
-| `ArticleIndexResourceHubEmpty`         | `ArticleIndexEmpty`                     |
-| `ArticleIndexResourceHubFacet`         | `ArticleIndexFacet`                     |
-| `ArticleIndexResourceHubItem`          | `ArticleIndexItem`                      |
-| `ArticleIndexResourceHubMark`          | `LogoMark`                              |
-| `ArticleIndexResourceHubRowKind`       | `ArticleIndexRowKind`                   |
-| `BoxGridSelectionItem`                 | `RadioGroupOption`                      |
-| `CalendarMonth`                        | `DatePickerMonth`                       |
-| `CalendarOrientation`                  | `DatePickerOrientation`                 |
-| `CalendarProps`                        | `DatePickerProps`                       |
-| `CalendarSize`                         | `DatePickerSize`                        |
-| `CalendarValue`                        | `DatePickerValue`                       |
-| `CardsItemSlotProps`                   | `CardListItemSlotProps`                 |
-| `CardsSelectionMode`                   | `CardListSelectionMode`                 |
-| `ClientMosaicColumnsLogoTreatment`     | `LogoTreatment`                         |
-| `ClientMosaicLogoTreatment`            | `LogoTreatment`                         |
-| `ClientQuotesAction`                   | `SectionTitleAction`                    |
-| `CliTerminalAction`                    | `SectionTitleAction`                    |
-| `ClosingCallToActionAction`            | `SectionTitleAction`                    |
-| `ClosingCallToActionAgentsAction`      | `ClosingCallToActionAudienceAction`     |
-| `ClosingCallToActionAgentsActionKind`  | `ClosingCallToActionAudienceActionKind` |
-| `ClosingCallToActionAgentsAudience`    | `ClosingCallToActionAudience`           |
-| `ClosingCallToActionAgentsCopy`        | `ClosingCallToActionAudienceCopy`       |
-| `ClosingCallToActionTemplatesAction`   | `SectionTitleAction`                    |
-| `ClosingCallToActionTemplatesTemplate` | `TemplateGalleryTemplate`               |
-| `CodeSplitAction`                      | `MediaSplitSectionAction`               |
-| `CodeSplitActionKind`                  | `MediaSplitSectionActionKind`           |
-| `CollectionCardsProps`                 | `CollectionCardListProps`               |
-| `CommandMenuContext`                   | `CommandContext`                        |
-| `CommandMenuItemValue`                 | `CommandItemValue`                      |
-| `CommandMenuRegisteredItem`            | `CommandRegisteredItem`                 |
-| `ComparePlansAction`                   | `SectionTitleAction`                    |
-| `CompareSupportTiersAction`            | `SectionTitleAction`                    |
-| `CompareSupportTiersRow`               | `PlanComparisonRow`                     |
-| `CompareSupportTiersSection`           | `PlanComparisonSection`                 |
-| `CompareSupportTiersTier`              | `PlanComparisonPlan`                    |
-| `CompareSupportTiersValue`             | `PlanComparisonValue`                   |
-| `ComplianceBadgesAction`               | `SectionTitleAction`                    |
-| `ContactHubAction`                     | `SectionTitleAction`                    |
-| `ContentColumnsItem`                   | `CapabilityGridItem`                    |
-| `Country`                              | `PhoneInputCountry`                     |
-| `DocCardGroupCols`                     | `DocCardGroupColumns`                   |
-| `DocCrumb`                             | `BreadcrumbItemData`                    |
-| `DocPageAction`                        | `DocPageHeaderAction`                   |
-| `DocPageLink`                          | `DocPreviousNextLink`                   |
-| `DocTocGroup`                          | `DocOnThisPageGroup`                    |
-| `DocTocItem`                           | `DocOnThisPageItem`                     |
-| `DocTocLink`                           | `DocOnThisPageLink`                     |
-| `DropdownContext`                      | `DropdownMenuContext`                   |
-| `DropdownOptionValue`                  | `DropdownMenuOptionValue`               |
-| `DropdownPlacement`                    | `DropdownMenuSide`                      |
-| `DropdownPlacementInput`               | `DropdownMenuSide`                      |
-| `FeatureTabsAction`                    | `SectionTitleAction`                    |
-| `FeatureWidgetsAction`                 | `SectionTitleAction`                    |
-| `FilterField`                          | `TableFilterField`                      |
-| `FilterOperator`                       | `TableFilterOperator`                   |
-| `FilterValue`                          | `TableFilterValue`                      |
-| `HeroBandAction`                       | `SectionTitleAction`                    |
-| `HeroCopyOnTopArtAction`               | `SectionTitleAction`                    |
-| `HeroCopyOnTopArtLevel`                | `HeroSectionLevel`                      |
-| `HeroCopyOnTopArtNode`                 | `HeroSectionNode`                       |
-| `HeroWithOpeningAction`                | `SectionTitleAction`                    |
-| `HeroWithOpeningItem`                  | `HeroSectionItem`                       |
-| `HeroWithOpeningTitleLength`           | `HeroSectionTitleLength`                |
-| `InputNumberSize`                      | `NumberInputSize`                       |
-| `InputPasswordAutocomplete`            | `PasswordInputAutocomplete`             |
-| `InputTextSize`                        | `InputSize`                             |
-| `InputTextType`                        | `InputType`                             |
-| `ListingTableAction`                   | `SectionTitleAction`                    |
-| `LogoWallQuoteAction`                  | `SectionTitleAction`                    |
-| `LogoWallQuoteLogoTreatment`           | `LogoTreatment`                         |
-| `MediaSplitStackAction`                | `SectionTitleAction`                    |
-| `MessageSeverity`                      | `AlertSeverity`                         |
-| `MessageSize`                          | `AlertSize`                             |
-| `MoveDirection`                        | `TransferListMoveDirection`             |
-| `NetworkSectionLogoTreatment`          | `LogoTreatment`                         |
-| `PaginatorContext`                     | `PaginationContext`                     |
-| `PasswordRequirement`                  | `PasswordRequirementsRule`              |
-| `PhoneNumber`                          | `PhoneInputValue`                       |
-| `PickListContext`                      | `TransferListContext`                   |
-| `PickListItems`                        | `TransferListItems`                     |
-| `PickListSide`                         | `TransferListSide`                      |
-| `PickListValue`                        | `TransferListValue`                     |
-| `PopoverPlacementInput`                | `PopoverSide`                           |
-| `PricingPlansAction`                   | `SectionTitleAction`                    |
-| `ProgressBarShape`                     | `ProgressKind`                          |
-| `ProgressBarSize`                      | `ProgressSize`                          |
-| `ResizablePanelContext`                | `ResizableContext`                      |
-| `ResizablePanelOrientation`            | `ResizableOrientation`                  |
-| `ResizablePanelPaneApi`                | `ResizablePaneApi`                      |
-| `ResourceGridAction`                   | `CapabilityGridAction`                  |
-| `ResourceGridItem`                     | `CapabilityGridItem`                    |
-| `SegmentedButtonSize`                  | `ToggleGroupSize`                       |
-| `SortDirection`                        | `TableSortDirection`                    |
-| `StickyScrollCodeAction`               | `FeatureScrollAction`                   |
-| `StickyScrollCodeActionKind`           | `FeatureScrollActionKind`               |
-| `StickyScrollCodeItem`                 | `FeatureScrollItem`                     |
-| `StickyScrollCodeSample`               | `FeatureScrollCode`                     |
-| `StoryLibraryClient`                   | `LogoMark`                              |
-| `SubjectLibraryAction`                 | `SectionTitleAction`                    |
-| `TabViewContext`                       | `TabsContext`                           |
-| `TabViewSlideDirection`                | `TabsSlideDirection`                    |
-| `TabViewTabRegistration`               | `TabsTabRegistration`                   |
-| `TabViewValue`                         | `TabsValue`                             |
-| `TemplateGalleryAction`                | `SectionTitleAction`                    |
-| `TooltipPlacementInput`                | `TooltipSide`                           |
-| `UseCaseLinksItem`                     | `CapabilityGridItem`                    |
-| `UseCasesAction`                       | `SectionTitleAction`                    |
+| v5 type                                | v6 type                                        |
+| -------------------------------------- | ---------------------------------------------- |
+| `AppliedFilter`                        | `TableAppliedFilter`                           |
+| `ArchitectureTabsAction`               | `SectionTitleAction`                           |
+| `ArticleBodyCrumb`                     | `BreadcrumbItemData`                           |
+| `ArticleCardsMark`                     | `LogoMark`                                     |
+| `ArticleIndexBlogAuthor`               | `ArticleIndexSectionAuthor`                    |
+| `ArticleIndexBlogEmpty`                | `ArticleIndexSectionEmpty`                     |
+| `ArticleIndexBlogMark`                 | `LogoMark`                                     |
+| `ArticleIndexBlogRowKind`              | `ArticleIndexSectionRowKind`                   |
+| `ArticleIndexBlogSearch`               | `ArticleIndexSectionSearch`                    |
+| `ArticleIndexResourceHubEmpty`         | `ArticleIndexSectionEmpty`                     |
+| `ArticleIndexResourceHubFacet`         | `ArticleIndexSectionFacet`                     |
+| `ArticleIndexResourceHubItem`          | `ArticleIndexSectionItem`                      |
+| `ArticleIndexResourceHubMark`          | `LogoMark`                                     |
+| `ArticleIndexResourceHubRowKind`       | `ArticleIndexSectionRowKind`                   |
+| `BoxGridSelectionItem`                 | `RadioGroupOption`                             |
+| `CalendarMonth`                        | `DatePickerMonth`                              |
+| `CalendarOrientation`                  | `DatePickerOrientation`                        |
+| `CalendarProps`                        | `DatePickerProps`                              |
+| `CalendarSize`                         | `DatePickerSize`                               |
+| `CalendarValue`                        | `DatePickerValue`                              |
+| `CardsItemSlotProps`                   | `CardListItemSlotProps`                        |
+| `CardsSelectionMode`                   | `CardListSelectionMode`                        |
+| `ClientMosaicColumnsLogoTreatment`     | `LogoTreatment`                                |
+| `ClientMosaicLogoTreatment`            | `LogoTreatment`                                |
+| `ClientQuotesAction`                   | `SectionTitleAction`                           |
+| `CliTerminalAction`                    | `SectionTitleAction`                           |
+| `ClosingCallToActionAction`            | `SectionTitleAction`                           |
+| `ClosingCallToActionAgentsAction`      | `ClosingCallToActionSectionAudienceAction`     |
+| `ClosingCallToActionAgentsActionKind`  | `ClosingCallToActionSectionAudienceActionKind` |
+| `ClosingCallToActionAgentsAudience`    | `ClosingCallToActionSectionAudience`           |
+| `ClosingCallToActionAgentsCopy`        | `ClosingCallToActionSectionAudienceCopy`       |
+| `ClosingCallToActionTemplatesAction`   | `SectionTitleAction`                           |
+| `ClosingCallToActionTemplatesTemplate` | `TemplateGallerySectionTemplate`               |
+| `CodeSplitAction`                      | `MediaSplitSectionAction`                      |
+| `CodeSplitActionKind`                  | `MediaSplitSectionActionKind`                  |
+| `CollectionCardsProps`                 | `CollectionCardListProps`                      |
+| `CommandMenuContext`                   | `CommandContext`                               |
+| `CommandMenuItemValue`                 | `CommandItemValue`                             |
+| `CommandMenuRegisteredItem`            | `CommandRegisteredItem`                        |
+| `ComparePlansAction`                   | `SectionTitleAction`                           |
+| `CompareSupportTiersAction`            | `SectionTitleAction`                           |
+| `CompareSupportTiersRow`               | `PlanComparisonSectionRow`                     |
+| `CompareSupportTiersSection`           | `PlanComparisonSectionSection`                 |
+| `CompareSupportTiersTier`              | `PlanComparisonSectionPlan`                    |
+| `CompareSupportTiersValue`             | `PlanComparisonSectionValue`                   |
+| `ComplianceBadgesAction`               | `SectionTitleAction`                           |
+| `ContactHubAction`                     | `SectionTitleAction`                           |
+| `ContentColumnsItem`                   | `CapabilityGridSectionItem`                    |
+| `Country`                              | `PhoneInputCountry`                            |
+| `DocCardGroupCols`                     | `DocCardGroupColumns`                          |
+| `DocCrumb`                             | `BreadcrumbItemData`                           |
+| `DocPageAction`                        | `DocPageHeaderAction`                          |
+| `DocPageLink`                          | `DocPreviousNextLink`                          |
+| `DocTocGroup`                          | `DocOnThisPageGroup`                           |
+| `DocTocItem`                           | `DocOnThisPageItem`                            |
+| `DocTocLink`                           | `DocOnThisPageLink`                            |
+| `DropdownContext`                      | `DropdownMenuContext`                          |
+| `DropdownOptionValue`                  | `DropdownMenuOptionValue`                      |
+| `DropdownPlacement`                    | `DropdownMenuSide`                             |
+| `DropdownPlacementInput`               | `DropdownMenuSide`                             |
+| `FeatureTabsAction`                    | `SectionTitleAction`                           |
+| `FeatureWidgetsAction`                 | `SectionTitleAction`                           |
+| `FilterField`                          | `TableFilterField`                             |
+| `FilterOperator`                       | `TableFilterOperator`                          |
+| `FilterValue`                          | `TableFilterValue`                             |
+| `HeroBandAction`                       | `SectionTitleAction`                           |
+| `HeroCopyOnTopArtAction`               | `SectionTitleAction`                           |
+| `HeroCopyOnTopArtLevel`                | `HeroSectionLevel`                             |
+| `HeroCopyOnTopArtNode`                 | `HeroSectionNode`                              |
+| `HeroWithOpeningAction`                | `SectionTitleAction`                           |
+| `HeroWithOpeningItem`                  | `HeroSectionItem`                              |
+| `HeroWithOpeningTitleLength`           | `HeroSectionTitleLength`                       |
+| `InputNumberSize`                      | `NumberInputSize`                              |
+| `InputPasswordAutocomplete`            | `PasswordInputAutocomplete`                    |
+| `InputTextSize`                        | `InputSize`                                    |
+| `InputTextType`                        | `InputType`                                    |
+| `ListingTableAction`                   | `SectionTitleAction`                           |
+| `LogoWallQuoteAction`                  | `SectionTitleAction`                           |
+| `LogoWallQuoteLogoTreatment`           | `LogoTreatment`                                |
+| `MediaSplitStackAction`                | `SectionTitleAction`                           |
+| `MessageSeverity`                      | `AlertSeverity`                                |
+| `MessageSize`                          | `AlertSize`                                    |
+| `MoveDirection`                        | `TransferListMoveDirection`                    |
+| `NetworkSectionLogoTreatment`          | `LogoTreatment`                                |
+| `PaginatorContext`                     | `PaginationContext`                            |
+| `PasswordRequirement`                  | `PasswordRequirementsRule`                     |
+| `PhoneNumber`                          | `PhoneInputValue`                              |
+| `PickListContext`                      | `TransferListContext`                          |
+| `PickListItems`                        | `TransferListItems`                            |
+| `PickListSide`                         | `TransferListSide`                             |
+| `PickListValue`                        | `TransferListValue`                            |
+| `PopoverPlacementInput`                | `PopoverSide`                                  |
+| `PricingPlansAction`                   | `SectionTitleAction`                           |
+| `ProgressBarShape`                     | `ProgressKind`                                 |
+| `ProgressBarSize`                      | `ProgressSize`                                 |
+| `ResizablePanelContext`                | `ResizableContext`                             |
+| `ResizablePanelOrientation`            | `ResizableOrientation`                         |
+| `ResizablePanelPaneApi`                | `ResizablePaneApi`                             |
+| `ResourceGridAction`                   | `CapabilityGridSectionAction`                  |
+| `ResourceGridItem`                     | `CapabilityGridSectionItem`                    |
+| `SegmentedButtonSize`                  | `ToggleGroupSize`                              |
+| `SortDirection`                        | `TableSortDirection`                           |
+| `StickyScrollCodeAction`               | `FeatureScrollSectionAction`                   |
+| `StickyScrollCodeActionKind`           | `FeatureScrollSectionActionKind`               |
+| `StickyScrollCodeItem`                 | `FeatureScrollSectionItem`                     |
+| `StickyScrollCodeSample`               | `FeatureScrollSectionCode`                     |
+| `StoryLibraryClient`                   | `LogoMark`                                     |
+| `SubjectLibraryAction`                 | `SectionTitleAction`                           |
+| `TabViewContext`                       | `TabsContext`                                  |
+| `TabViewSlideDirection`                | `TabsSlideDirection`                           |
+| `TabViewTabRegistration`               | `TabsTabRegistration`                          |
+| `TabViewValue`                         | `TabsValue`                                    |
+| `TemplateGalleryAction`                | `SectionTitleAction`                           |
+| `TooltipPlacementInput`                | `TooltipSide`                                  |
+| `UseCaseLinksItem`                     | `CapabilityGridSectionItem`                    |
+| `UseCasesAction`                       | `SectionTitleAction`                           |
 
 Every exported type starts with its component's name, and a shape several components shared is one
 type now, exported by the component that owns it: a section's `primaryAction` / `secondaryAction`
@@ -426,8 +469,10 @@ there is no bare `Props` export.
 
 ### Old illustration names
 
-`Illustration` still resolves eight old scene names to the renamed scenes, so page data written
-before the rename keeps rendering. Write the new name in code:
+Eight scenes are renamed for what they draw, and the old names no longer resolve: an old name renders
+the placeholder frame and logs a warning. The codemod rewrites a static `name` on `Illustration` and
+`illustration` on `HeroSection` and `MediaSplitSection`; rename the value by hand in page data and in
+section item arrays (`items[].illustration`):
 
 | Old `name`                                              | Use instead                    |
 | ------------------------------------------------------- | ------------------------------ |
@@ -446,117 +491,117 @@ before the rename keeps rendering. Write the new name in code:
 
 #### Props and values
 
-| Component                                                                  | v5                                                                               | v6                                                                                                                                                                                                                           |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chat-message`                                                             | `state`                                                                          | `status` (`complete` → `success`)                                                                                                                                                                                            |
-| `prompt-input`                                                             | `state`                                                                          | `status` (`submitted` → `pending`)                                                                                                                                                                                           |
-| `tool-approval`                                                            | `state`                                                                          | `status`                                                                                                                                                                                                                     |
-| `tool-call`                                                                | `state`                                                                          | `status`                                                                                                                                                                                                                     |
-| `stepper-step`                                                             | `state`                                                                          | `status` (`upcoming` → `pending`, `complete` → `success`, `loading` → `running`; the step on screen is derived and renders `data-active`)                                                                                    |
-| `upload-progress`                                                          | `v-model:expanded`                                                               | `v-model:open`                                                                                                                                                                                                               |
-| `topology-diagram`                                                         | `v-model:expanded`                                                               | `v-model:open-keys` (`openKeys`, `string[]`)                                                                                                                                                                                 |
-| `toast-item`                                                               | `type` / `severity="default"`                                                    | `severity="neutral"`; `severity="loading"` → the `loading` boolean prop (manual)                                                                                                                                             |
-| `UploadProgressItem.status`                                                | `queued` / `done`                                                                | `pending` / `success` (manual, data)                                                                                                                                                                                         |
-| `LogViewerStep`                                                            | `key`, `status: 'done' \| 'failed'`                                              | `id`, `status: 'success' \| 'error'` (manual, data)                                                                                                                                                                          |
-| `TopologyNode`, `TopologyLevel`                                            | `key`                                                                            | `id` (manual, data); `bind` payload `{ key, value }` → `{ id, value }`                                                                                                                                                       |
-| `TraceSpan.status`                                                         | `ok`                                                                             | `success` (manual, data)                                                                                                                                                                                                     |
-| `toast()` store entry                                                      | `severity: 'default' \| 'loading'`                                               | `severity: 'neutral'` + `loading: true` (`toast.loading` and `toast.promise` set it)                                                                                                                                         |
-| `console-mockup`                                                           | `hover`                                                                          | `hovered`                                                                                                                                                                                                                    |
-| `console-mockup`                                                           | `interval`                                                                       | `autoplayInterval`                                                                                                                                                                                                           |
-| `breadcrumb-item`                                                          | `current`                                                                        | `active`                                                                                                                                                                                                                     |
-| `breadcrumb`                                                               | `items[].current`                                                                | `items[].active`                                                                                                                                                                                                             |
-| `sidebar-menu-item`                                                        | `selected`                                                                       | `active`                                                                                                                                                                                                                     |
-| `pagination-button`                                                        | `selected`                                                                       | `active`                                                                                                                                                                                                                     |
-| `navigation-menu-list`                                                     | `highlight`                                                                      | `showHighlight`                                                                                                                                                                                                              |
-| `navigation-menu-positioner`                                               | `disableAnchorTracking`                                                          | `trackAnchor` (inverted, default `true`)                                                                                                                                                                                     |
-| `navigation-menu-positioner`                                               | `side="left"` / `side="right"`                                                   | `side="start"` / `side="end"`                                                                                                                                                                                                |
-| `drawer`                                                                   | `side="left"` / `side="right"`                                                   | `side="start"` / `side="end"` (default `end`)                                                                                                                                                                                |
-| `doc-layout`                                                               | `v-model:navigation-expanded`                                                    | `v-model:navigation-open`                                                                                                                                                                                                    |
-| `app-layout`                                                               | `navigationLabel`                                                                | `navigationAriaLabel`                                                                                                                                                                                                        |
-| `resizable-pane`                                                           | `v-model:expanded`                                                               | `v-model:open`                                                                                                                                                                                                               |
-| `doc-page-header`                                                          | `breadcrumb`                                                                     | `breadcrumbs`                                                                                                                                                                                                                |
-| `doc-previous-next`                                                        | `previous.title` / `next.title`                                                  | `previous.label` / `next.label`                                                                                                                                                                                              |
-| `settings-row`                                                             | `level`                                                                          | `depth`                                                                                                                                                                                                                      |
-| `accordion`                                                                | `arrowPosition="left" \| "right"`                                                | `iconPosition="leading" \| "trailing"`                                                                                                                                                                                       |
-| `accordion-trigger`                                                        | `level`                                                                          | `headingLevel`                                                                                                                                                                                                               |
-| `code-block`                                                               | `lineNumbers`                                                                    | `showLineNumbers`                                                                                                                                                                                                            |
-| `code-editor`                                                              | `lineNumbers`                                                                    | `showLineNumbers`                                                                                                                                                                                                            |
-| `command-group`                                                            | `heading`                                                                        | `label`                                                                                                                                                                                                                      |
-| `help-panel-group`                                                         | `title`                                                                          | `label` (a group part names its header text `label`)                                                                                                                                                                         |
-| `key-value-list-group`                                                     | `title`                                                                          | `label` (a group part names its header text `label`)                                                                                                                                                                         |
-| `command-page`                                                             | `heading`                                                                        | `title`                                                                                                                                                                                                                      |
-| `hint`                                                                     | `text`                                                                           | `content`                                                                                                                                                                                                                    |
-| `tooltip`                                                                  | `text`                                                                           | `content`                                                                                                                                                                                                                    |
-| `badge`                                                                    | `severity="primary"`, `severity="secondary"`                                     | `variant="primary"`, `variant="secondary"` (manual: `severity` now takes only `neutral`, `info`, `success`, `warning`, `danger` and wins over `variant`)                                                                     |
-| `chart-bar`                                                                | `labeled`                                                                        | `show-labels`                                                                                                                                                                                                                |
-| `tree`                                                                     | `v-model:expanded`                                                               | `v-model:open-keys`                                                                                                                                                                                                          |
-| `sidebar-menu`                                                             | `v-model:expanded`                                                               | `v-model:open-keys` (`openKeys`, `string[]`)                                                                                                                                                                                 |
-| `tree`                                                                     | `v-model:selected-ids`                                                           | `v-model:selected-keys`                                                                                                                                                                                                      |
-| `card-list`                                                                | `track-by`                                                                       | `item-key`                                                                                                                                                                                                                   |
-| `card-list`                                                                | `selection-mode="multi"`                                                         | `selection-mode="multiple"`                                                                                                                                                                                                  |
-| `transfer-list`                                                            | `data-key` (v5 `PickList`)                                                       | `item-key`                                                                                                                                                                                                                   |
-| `property-filter`                                                          | `hide-operations`                                                                | `:show-operations="false"` (default `true`)                                                                                                                                                                                  |
-| `data-table`                                                               | `enable-sorting`                                                                 | `sortable`                                                                                                                                                                                                                   |
-| `data-table`                                                               | `enable-row-selection`                                                           | `selectable`                                                                                                                                                                                                                 |
-| `data-table`                                                               | column `enableSorting` (`TableColumn`)                                           | column `sortable`                                                                                                                                                                                                            |
-| `data-grid`                                                                | `enable-row-selection`                                                           | `selectable`                                                                                                                                                                                                                 |
-| `table-sort-button`                                                        | `direction`                                                                      | `sort-direction`                                                                                                                                                                                                             |
-| `table-sort-button`                                                        | `visible`                                                                        | removed: `class="invisible"` hides it and keeps its space                                                                                                                                                                    |
-| `use-collection`                                                           | `selection: { mode: 'multi' }`                                                   | `selection: { mode: 'multiple' }` (manual; `cardListProps` binds `itemKey`, `tableProps` binds `selectable`)                                                                                                                 |
-| `filter-menu`                                                              | field `kind: 'multi'`                                                            | field `type: 'multiple'` (manual)                                                                                                                                                                                            |
-| `tag`                                                                      | `severity="primary"`, `"accent"`, `"contrast"`, `"highlight"`                    | `variant="primary"` (and `accent`, `contrast`, `highlight`); `severity` now takes only `neutral`, `info`, `success`, `warning`, `danger` and wins over `variant`                                                             |
-| `tag`                                                                      | a bound `:severity` that can hold `primary`, `accent`, `contrast` or `highlight` | MANUAL: split the data into a `variant` field (brand look) and a `severity` field (status) and bind both (`:variant="x.variant" :severity="x.severity"`); `TagSeverity` is now only the status scale, `TagVariant` the looks |
-| `badge`                                                                    | a bound `:severity` that can hold `primary` or `secondary`                       | MANUAL: same split as `Tag`                                                                                                                                                                                                  |
-| `card`                                                                     | badge `{ label, severity: 'primary' }`                                           | MANUAL in data: `{ label, variant: 'primary' }`; `CardBadge` takes `variant?` and `severity?`                                                                                                                                |
-| `sidebar-menu-item`                                                        | `tag-severity="primary"`, `tag-severity="accent"`                                | `tag-variant="primary"`, `tag-variant="accent"`; `tagSeverity` takes the status scale and wins; with neither the tag is `info`                                                                                               |
-| `architecture-tabs`                                                        | `position="left" \| "right"`                                                     | `tabs-side="start" \| "end"`                                                                                                                                                                                                 |
-| `article-body`                                                             | `trail[].current`                                                                | `trail[].active`                                                                                                                                                                                                             |
-| `article-cards`                                                            | `kind="left" \| "centered"`                                                      | `variant="start" \| "center"`                                                                                                                                                                                                |
-| `article-cards`                                                            | `items[].key`, `items[].external`                                                | `items[].id`, `items[].target="_blank"`                                                                                                                                                                                      |
-| `article-index`                                                            | `categoryLabel`                                                                  | `categoryAriaLabel`                                                                                                                                                                                                          |
-| `article-index`                                                            | `search="{ placeholder, label }"`                                                | `searchPlaceholder`, `searchAriaLabel`                                                                                                                                                                                       |
-| `article-index`                                                            | `empty="{ title, description, action }"`                                         | `emptyTitle`, `emptyDescription`, `emptyActionLabel`                                                                                                                                                                         |
-| `article-index`                                                            | `rowKind="centered"`                                                             | `rowKind="center"`                                                                                                                                                                                                           |
-| `article-index`                                                            | `items[].key`, `facets[].key`, `items[].external`                                | `items[].id`, `facets[].id`, `items[].target="_blank"`                                                                                                                                                                       |
-| `capability-grid`, `console-showcase`, `feature-widgets`, `process-scroll` | `titleKind="centered" \| "left" \| "horizontal"`                                 | `titleAlign="center" \| "start" \| "split"`                                                                                                                                                                                  |
-| `pricing-card`                                                             | `slotPosition`                                                                   | `actionsPosition`                                                                                                                                                                                                            |
-| `pricing-card`                                                             | `aligned`                                                                        | `equalHeight`                                                                                                                                                                                                                |
-| `newsletter-section`                                                       | `error` (boolean)                                                                | `failed`                                                                                                                                                                                                                     |
-| `conversation`                                                             | `alignment`                                                                      | `layout`                                                                                                                                                                                                                     |
-| `hero`                                                                     | `align="top" \| "bottom"`                                                        | `align="start" \| "end"`                                                                                                                                                                                                     |
-| `hero-section`                                                             | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
-| `hero-section`                                                             | `kind="centered" \| "centered-band"`                                             | `variant="center" \| "center-band"`                                                                                                                                                                                          |
-| `hero-form-section`                                                        | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
-| `hero-form-section`                                                        | `error` (boolean)                                                                | `failed`                                                                                                                                                                                                                     |
-| `hero-title`                                                               | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
-| `hero-title`                                                               | `centered`                                                                       | `align="center"`                                                                                                                                                                                                             |
-| `hero-title`                                                               | `mobileCentered`                                                                 | `mobileAlign="center"`                                                                                                                                                                                                       |
-| `job-posting`                                                              | `error` (boolean)                                                                | `failed`                                                                                                                                                                                                                     |
-| `listing-index`                                                            | `rows`                                                                           | `data`                                                                                                                                                                                                                       |
-| `listing-index`                                                            | `search="{ placeholder, shortPlaceholder, label }"`                              | `searchPlaceholder`, `searchShortPlaceholder`, `searchAriaLabel`                                                                                                                                                             |
-| `listing-index`                                                            | `empty="{ title, description, clearLabel }"`                                     | `emptyTitle`, `emptyDescription`, `emptyActionLabel`                                                                                                                                                                         |
-| `listing-index`                                                            | `facets[].key`                                                                   | `facets[].id`                                                                                                                                                                                                                |
-| `listing-table`                                                            | `rows`                                                                           | `data`                                                                                                                                                                                                                       |
-| `media-split`                                                              | `align="top"`                                                                    | `align="start"`                                                                                                                                                                                                              |
-| `media-tabs`                                                               | `position="left" \| "right"`                                                     | `tabs-side="start" \| "end"`                                                                                                                                                                                                 |
-| `network-section`                                                          | `lead`                                                                           | `claimsEyebrow`                                                                                                                                                                                                              |
-| `section-module`                                                           | `kind="centered" \| "left" \| "horizontal"`                                      | `align="start" \| "center" \| "split"`                                                                                                                                                                                       |
-| `section-title`                                                            | `kind="centered" \| "left" \| "horizontal"`                                      | `align="start" \| "center" \| "split"`                                                                                                                                                                                       |
-| `article-cards`                                                            | `kind="left" \| "centered"`                                                      | `align="start" \| "center"`                                                                                                                                                                                                  |
-| `site-footer`                                                              | `columns[].links[].external`                                                     | `columns[].links[].target="_blank"`                                                                                                                                                                                          |
-| `story-index`                                                              | `search="{ placeholder, shortPlaceholder, label }"`                              | `searchPlaceholder`, `searchShortPlaceholder`, `searchAriaLabel`                                                                                                                                                             |
-| `story-index`                                                              | `empty="{ title, action }"`                                                      | `emptyTitle`, `emptyActionLabel`                                                                                                                                                                                             |
-| `story-index`                                                              | `items[].key`, `facets[].key`, `items[].external`                                | `items[].id`, `facets[].id`, `items[].target="_blank"`                                                                                                                                                                       |
-| `data-table`                                                               | `v-model:row-selection` (record)                                                 | `v-model:selected-keys` (`string[]` of row keys)                                                                                                                                                                             |
-| `data-grid`                                                                | `v-model:row-selection` (record)                                                 | `v-model:selected-keys` (`string[]` of row keys)                                                                                                                                                                             |
-| `data-table`                                                               | `v-model:expanded` (`ExpandedState`)                                             | `v-model:open-keys` (`string[]` of row ids)                                                                                                                                                                                  |
-| `data-table`                                                               | `v-model:pagination` (`{ pageIndex, pageSize }`, from 0)                         | `v-model:page` (from 1) + `v-model:page-size`                                                                                                                                                                                |
-| `data-table`                                                               | `v-model:state`, `initial-state`                                                 | `v-model:snapshot`, `default-snapshot`                                                                                                                                                                                       |
-| `map-chart`                                                                | `v-model:active-id`                                                              | `v-model:active-key`                                                                                                                                                                                                         |
-| `tutorial-panel-provider`                                                  | `v-model:active`                                                                 | `v-model:active-key`                                                                                                                                                                                                         |
-| `tree`, `trace`, `split-button`                                            | `v-model:selected` (an id)                                                       | `v-model:selected-key`                                                                                                                                                                                                       |
-| `command`                                                                  | `v-model:page` (a page name)                                                     | `v-model:page-key`                                                                                                                                                                                                           |
-| `tool-approval`                                                            | `kind="default"`                                                                 | `variant="primary"` (the default)                                                                                                                                                                                            |
+| Component                                                                                                  | v5                                                                               | v6                                                                                                                                                                                                                           |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chat-message`                                                                                             | `state`                                                                          | `status` (`complete` → `success`)                                                                                                                                                                                            |
+| `prompt-input`                                                                                             | `state`                                                                          | `status` (`submitted` → `pending`)                                                                                                                                                                                           |
+| `tool-approval`                                                                                            | `state`                                                                          | `status`                                                                                                                                                                                                                     |
+| `tool-call`                                                                                                | `state`                                                                          | `status`                                                                                                                                                                                                                     |
+| `stepper-step`                                                                                             | `state`                                                                          | `status` (`upcoming` → `pending`, `complete` → `success`, `loading` → `running`; the step on screen is derived and renders `data-active`)                                                                                    |
+| `upload-progress`                                                                                          | `v-model:expanded`                                                               | `v-model:open`                                                                                                                                                                                                               |
+| `topology-diagram`                                                                                         | `v-model:expanded`                                                               | `v-model:open-keys` (`openKeys`, `string[]`)                                                                                                                                                                                 |
+| `toast-item`                                                                                               | `type` / `severity="default"`                                                    | `severity="neutral"`; `severity="loading"` → the `loading` boolean prop (manual)                                                                                                                                             |
+| `UploadProgressItem.status`                                                                                | `queued` / `done`                                                                | `pending` / `success` (manual, data)                                                                                                                                                                                         |
+| `LogViewerStep`                                                                                            | `key`, `status: 'done' \| 'failed'`                                              | `id`, `status: 'success' \| 'error'` (manual, data)                                                                                                                                                                          |
+| `TopologyNode`, `TopologyLevel`                                                                            | `key`                                                                            | `id` (manual, data); `bind` payload `{ key, value }` → `{ id, value }`                                                                                                                                                       |
+| `TraceSpan.status`                                                                                         | `ok`                                                                             | `success` (manual, data)                                                                                                                                                                                                     |
+| `toast()` store entry                                                                                      | `severity: 'default' \| 'loading'`                                               | `severity: 'neutral'` + `loading: true` (`toast.loading` and `toast.promise` set it)                                                                                                                                         |
+| `console-mockup`                                                                                           | `hover`                                                                          | `hovered`                                                                                                                                                                                                                    |
+| `console-mockup`                                                                                           | `interval`                                                                       | `autoplayInterval`                                                                                                                                                                                                           |
+| `breadcrumb-item`                                                                                          | `current`                                                                        | `active`                                                                                                                                                                                                                     |
+| `breadcrumb`                                                                                               | `items[].current`                                                                | `items[].active`                                                                                                                                                                                                             |
+| `sidebar-menu-item`                                                                                        | `selected`                                                                       | `active`                                                                                                                                                                                                                     |
+| `pagination-button`                                                                                        | `selected`                                                                       | `active`                                                                                                                                                                                                                     |
+| `navigation-menu-list`                                                                                     | `highlight`                                                                      | `showHighlight`                                                                                                                                                                                                              |
+| `navigation-menu-positioner`                                                                               | `disableAnchorTracking`                                                          | `trackAnchor` (inverted, default `true`)                                                                                                                                                                                     |
+| `navigation-menu-positioner`                                                                               | `side="left"` / `side="right"`                                                   | `side="start"` / `side="end"`                                                                                                                                                                                                |
+| `drawer`                                                                                                   | `side="left"` / `side="right"`                                                   | `side="start"` / `side="end"` (default `end`)                                                                                                                                                                                |
+| `doc-layout`                                                                                               | `v-model:navigation-expanded`                                                    | `v-model:navigation-open`                                                                                                                                                                                                    |
+| `app-layout`                                                                                               | `navigationLabel`                                                                | `navigationAriaLabel`                                                                                                                                                                                                        |
+| `resizable-pane`                                                                                           | `v-model:expanded`                                                               | `v-model:open`                                                                                                                                                                                                               |
+| `doc-page-header`                                                                                          | `breadcrumb`                                                                     | `breadcrumbs`                                                                                                                                                                                                                |
+| `doc-previous-next`                                                                                        | `previous.title` / `next.title`                                                  | `previous.label` / `next.label`                                                                                                                                                                                              |
+| `settings-row`                                                                                             | `level`                                                                          | `depth`                                                                                                                                                                                                                      |
+| `accordion`                                                                                                | `arrowPosition="left" \| "right"`                                                | `iconPosition="leading" \| "trailing"`                                                                                                                                                                                       |
+| `accordion-trigger`                                                                                        | `level`                                                                          | `headingLevel`                                                                                                                                                                                                               |
+| `code-block`                                                                                               | `lineNumbers`                                                                    | `showLineNumbers`                                                                                                                                                                                                            |
+| `code-editor`                                                                                              | `lineNumbers`                                                                    | `showLineNumbers`                                                                                                                                                                                                            |
+| `command-group`                                                                                            | `heading`                                                                        | `label`                                                                                                                                                                                                                      |
+| `help-panel-group`                                                                                         | `title`                                                                          | `label` (a group part names its header text `label`)                                                                                                                                                                         |
+| `key-value-list-group`                                                                                     | `title`                                                                          | `label` (a group part names its header text `label`)                                                                                                                                                                         |
+| `command-page`                                                                                             | `heading`                                                                        | `title`                                                                                                                                                                                                                      |
+| `hint`                                                                                                     | `text`                                                                           | `content`                                                                                                                                                                                                                    |
+| `tooltip`                                                                                                  | `text`                                                                           | `content`                                                                                                                                                                                                                    |
+| `badge`                                                                                                    | `severity="primary"`, `severity="secondary"`                                     | `variant="primary"`, `variant="secondary"` (manual: `severity` now takes only `neutral`, `info`, `success`, `warning`, `danger` and wins over `variant`)                                                                     |
+| `chart-bar`                                                                                                | `labeled`                                                                        | `show-labels`                                                                                                                                                                                                                |
+| `tree`                                                                                                     | `v-model:expanded`                                                               | `v-model:open-keys`                                                                                                                                                                                                          |
+| `sidebar-menu`                                                                                             | `v-model:expanded`                                                               | `v-model:open-keys` (`openKeys`, `string[]`)                                                                                                                                                                                 |
+| `tree`                                                                                                     | `v-model:selected-ids`                                                           | `v-model:selected-keys`                                                                                                                                                                                                      |
+| `card-list`                                                                                                | `track-by`                                                                       | `item-key`                                                                                                                                                                                                                   |
+| `card-list`                                                                                                | `selection-mode="multi"`                                                         | `selection-mode="multiple"`                                                                                                                                                                                                  |
+| `transfer-list`                                                                                            | `data-key` (v5 `PickList`)                                                       | `item-key`                                                                                                                                                                                                                   |
+| `property-filter`                                                                                          | `hide-operations`                                                                | `:show-operations="false"` (default `true`)                                                                                                                                                                                  |
+| `data-table`                                                                                               | `enable-sorting`                                                                 | `sortable`                                                                                                                                                                                                                   |
+| `data-table`                                                                                               | `enable-row-selection`                                                           | `selectable`                                                                                                                                                                                                                 |
+| `data-table`                                                                                               | column `enableSorting` (`TableColumn`)                                           | column `sortable`                                                                                                                                                                                                            |
+| `data-grid`                                                                                                | `enable-row-selection`                                                           | `selectable`                                                                                                                                                                                                                 |
+| `table-sort-button`                                                                                        | `direction`                                                                      | `sort-direction`                                                                                                                                                                                                             |
+| `table-sort-button`                                                                                        | `visible`                                                                        | removed: `class="invisible"` hides it and keeps its space                                                                                                                                                                    |
+| `use-collection`                                                                                           | `selection: { mode: 'multi' }`                                                   | `selection: { mode: 'multiple' }` (manual; `cardListProps` binds `itemKey`, `tableProps` binds `selectable`)                                                                                                                 |
+| `filter-menu`                                                                                              | field `kind: 'multi'`                                                            | field `type: 'multiple'` (manual)                                                                                                                                                                                            |
+| `tag`                                                                                                      | `severity="primary"`, `"accent"`, `"contrast"`, `"highlight"`                    | `variant="primary"` (and `accent`, `contrast`, `highlight`); `severity` now takes only `neutral`, `info`, `success`, `warning`, `danger` and wins over `variant`                                                             |
+| `tag`                                                                                                      | a bound `:severity` that can hold `primary`, `accent`, `contrast` or `highlight` | MANUAL: split the data into a `variant` field (brand look) and a `severity` field (status) and bind both (`:variant="x.variant" :severity="x.severity"`); `TagSeverity` is now only the status scale, `TagVariant` the looks |
+| `badge`                                                                                                    | a bound `:severity` that can hold `primary` or `secondary`                       | MANUAL: same split as `Tag`                                                                                                                                                                                                  |
+| `integration-card`                                                                                         | badge `{ label, severity: 'primary' }`                                           | MANUAL in data: `{ label, variant: 'primary' }`; `IntegrationCardBadge` takes `variant?` and `severity?`                                                                                                                     |
+| `sidebar-menu-item`                                                                                        | `tag-severity="primary"`, `tag-severity="accent"`                                | `tag-variant="primary"`, `tag-variant="accent"`; `tagSeverity` takes the status scale and wins; with neither the tag is `info`                                                                                               |
+| `architecture-tabs-section`                                                                                | `position="left" \| "right"`                                                     | `tabs-side="start" \| "end"`                                                                                                                                                                                                 |
+| `article-body-section`                                                                                     | `trail[].current`                                                                | `trail[].active`                                                                                                                                                                                                             |
+| `article-cards-section`                                                                                    | `kind="left" \| "centered"`                                                      | `variant="start" \| "center"`                                                                                                                                                                                                |
+| `article-cards-section`                                                                                    | `items[].key`, `items[].external`                                                | `items[].id`, `items[].target="_blank"`                                                                                                                                                                                      |
+| `article-index-section`                                                                                    | `categoryLabel`                                                                  | `categoryAriaLabel`                                                                                                                                                                                                          |
+| `article-index-section`                                                                                    | `search="{ placeholder, label }"`                                                | `searchPlaceholder`, `searchAriaLabel`                                                                                                                                                                                       |
+| `article-index-section`                                                                                    | `empty="{ title, description, action }"`                                         | `emptyTitle`, `emptyDescription`, `emptyActionLabel`                                                                                                                                                                         |
+| `article-index-section`                                                                                    | `rowKind="centered"`                                                             | `rowKind="center"`                                                                                                                                                                                                           |
+| `article-index-section`                                                                                    | `items[].key`, `facets[].key`, `items[].external`                                | `items[].id`, `facets[].id`, `items[].target="_blank"`                                                                                                                                                                       |
+| `capability-grid-section`, `console-showcase-section`, `feature-widgets-section`, `process-scroll-section` | `titleKind="centered" \| "left" \| "horizontal"`                                 | `titleAlign="center" \| "start" \| "split"`                                                                                                                                                                                  |
+| `pricing-card`                                                                                             | `slotPosition`                                                                   | `actionsPosition`                                                                                                                                                                                                            |
+| `pricing-card`                                                                                             | `aligned`                                                                        | `equalHeight`                                                                                                                                                                                                                |
+| `newsletter-section`                                                                                       | `error` (boolean)                                                                | `failed`                                                                                                                                                                                                                     |
+| `conversation`                                                                                             | `alignment`                                                                      | `layout`                                                                                                                                                                                                                     |
+| `hero`                                                                                                     | `align="top" \| "bottom"`                                                        | `align="start" \| "end"`                                                                                                                                                                                                     |
+| `hero-section`                                                                                             | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
+| `hero-section`                                                                                             | `kind="centered" \| "centered-band"`                                             | `variant="center" \| "center-band"`                                                                                                                                                                                          |
+| `hero-form-section`                                                                                        | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
+| `hero-form-section`                                                                                        | `error` (boolean)                                                                | `failed`                                                                                                                                                                                                                     |
+| `hero-title`                                                                                               | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
+| `hero-title`                                                                                               | `centered`                                                                       | `align="center"`                                                                                                                                                                                                             |
+| `hero-title`                                                                                               | `mobileCentered`                                                                 | `mobileAlign="center"`                                                                                                                                                                                                       |
+| `job-posting-section`                                                                                      | `error` (boolean)                                                                | `failed`                                                                                                                                                                                                                     |
+| `listing-index-section`                                                                                    | `rows`                                                                           | `data`                                                                                                                                                                                                                       |
+| `listing-index-section`                                                                                    | `search="{ placeholder, shortPlaceholder, label }"`                              | `searchPlaceholder`, `searchShortPlaceholder`, `searchAriaLabel`                                                                                                                                                             |
+| `listing-index-section`                                                                                    | `empty="{ title, description, clearLabel }"`                                     | `emptyTitle`, `emptyDescription`, `emptyActionLabel`                                                                                                                                                                         |
+| `listing-index-section`                                                                                    | `facets[].key`                                                                   | `facets[].id`                                                                                                                                                                                                                |
+| `listing-table-section`                                                                                    | `rows`                                                                           | `data`                                                                                                                                                                                                                       |
+| `media-split`                                                                                              | `align="top"`                                                                    | `align="start"`                                                                                                                                                                                                              |
+| `media-tabs`                                                                                               | `position="left" \| "right"`                                                     | `tabs-side="start" \| "end"`                                                                                                                                                                                                 |
+| `network-section`                                                                                          | `lead`                                                                           | `claimsEyebrow`                                                                                                                                                                                                              |
+| `section-module`                                                                                           | `kind="centered" \| "left" \| "horizontal"`                                      | `align="start" \| "center" \| "split"`                                                                                                                                                                                       |
+| `section-title`                                                                                            | `kind="centered" \| "left" \| "horizontal"`                                      | `align="start" \| "center" \| "split"`                                                                                                                                                                                       |
+| `article-cards-section`                                                                                    | `kind="left" \| "centered"`                                                      | `align="start" \| "center"`                                                                                                                                                                                                  |
+| `site-footer-section`                                                                                      | `columns[].links[].external`                                                     | `columns[].links[].target="_blank"`                                                                                                                                                                                          |
+| `story-index-section`                                                                                      | `search="{ placeholder, shortPlaceholder, label }"`                              | `searchPlaceholder`, `searchShortPlaceholder`, `searchAriaLabel`                                                                                                                                                             |
+| `story-index-section`                                                                                      | `empty="{ title, action }"`                                                      | `emptyTitle`, `emptyActionLabel`                                                                                                                                                                                             |
+| `story-index-section`                                                                                      | `items[].key`, `facets[].key`, `items[].external`                                | `items[].id`, `facets[].id`, `items[].target="_blank"`                                                                                                                                                                       |
+| `data-table`                                                                                               | `v-model:row-selection` (record)                                                 | `v-model:selected-keys` (`string[]` of row keys)                                                                                                                                                                             |
+| `data-grid`                                                                                                | `v-model:row-selection` (record)                                                 | `v-model:selected-keys` (`string[]` of row keys)                                                                                                                                                                             |
+| `data-table`                                                                                               | `v-model:expanded` (`ExpandedState`)                                             | `v-model:open-keys` (`string[]` of row ids)                                                                                                                                                                                  |
+| `data-table`                                                                                               | `v-model:pagination` (`{ pageIndex, pageSize }`, from 0)                         | `v-model:page` (from 1) + `v-model:page-size`                                                                                                                                                                                |
+| `data-table`                                                                                               | `v-model:state`, `initial-state`                                                 | `v-model:snapshot`, `default-snapshot`                                                                                                                                                                                       |
+| `map-chart`                                                                                                | `v-model:active-id`                                                              | `v-model:active-key`                                                                                                                                                                                                         |
+| `tutorial-panel-provider`                                                                                  | `v-model:active`                                                                 | `v-model:active-key`                                                                                                                                                                                                         |
+| `tree`, `trace`, `split-button`                                                                            | `v-model:selected` (an id)                                                       | `v-model:selected-key`                                                                                                                                                                                                       |
+| `command`                                                                                                  | `v-model:page` (a page name)                                                     | `v-model:page-key`                                                                                                                                                                                                           |
+| `tool-approval`                                                                                            | `kind="default"`                                                                 | `variant="primary"` (the default)                                                                                                                                                                                            |
 
 #### Compound parts
 
@@ -636,46 +681,46 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 
 #### Types and data fields (a hand edit where the codemod cannot see the data)
 
-| Component                                                                                                                   | v5                                                                                       | v6                                                                                              |
-| --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `use-collection`                                                                                                            | option `trackBy`                                                                         | option `itemKey` (manual)                                                                       |
-| `ChatMessageState`                                                                                                          | `ChatMessageStatus`                                                                      |
-| `PromptInputState`                                                                                                          | `PromptInputStatus`                                                                      |
-| `ToolApprovalState`                                                                                                         | `ToolApprovalStatus`                                                                     |
-| `ToolCallState`                                                                                                             | `ToolCallStatus`                                                                         |
-| `StepperStepState`                                                                                                          | `StepperStepStatus`                                                                      |
-| `ToastSeverity`                                                                                                             | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` (no `default`, no `loading`) |
-| `UploadProgressStatus`                                                                                                      | `'pending' \| 'running' \| 'success' \| 'error' \| 'canceled'`                           |
-| `LogViewerStepStatus`                                                                                                       | `'success' \| 'running' \| 'error' \| 'skipped' \| 'pending'`                            |
-| `TraceSpanStatus`                                                                                                           | `'success' \| 'error' \| 'running'`                                                      |
-| `settings-row`                                                                                                              | `SettingsRowLevel`                                                                       | `SettingsRowDepth`                                                                              |
-| `navigation-menu`                                                                                                           | `NavigationMenuSide` `'top' \| 'right' \| 'bottom' \| 'left'`                            | `'top' \| 'end' \| 'bottom' \| 'start'`                                                         |
-| `drawer`                                                                                                                    | `DrawerSide` `'left' \| 'right'`                                                         | `'start' \| 'end'`                                                                              |
-| `doc-previous-next`                                                                                                         | `DocPageLink.title`                                                                      | `DocPageLink.label`                                                                             |
-| `AccordionArrowPosition`                                                                                                    | `AccordionIconPosition`                                                                  |
-| `tag`                                                                                                                       | `TagSeverity` (status scale plus looks)                                                  | `TagSeverity` (status scale only) + `TagVariant` (`primary`, `accent`, `contrast`, `highlight`) |
-| `card`                                                                                                                      | `CardBadgeSeverity` (with looks)                                                         | `CardBadgeSeverity` + `CardBadgeVariant`                                                        |
-| `sidebar-menu`                                                                                                              | `SidebarMenuItemTagSeverity` (with `primary`, `accent`)                                  | `SidebarMenuItemTagSeverity` (status) + `SidebarMenuItemTagVariant` (`primary`, `accent`)       |
-| `table`                                                                                                                     | `TableColumn.enableSorting`                                                              | `TableColumn.sortable`                                                                          |
-| `data-table`                                                                                                                | `sorting`, `columnVisibility`, `globalFilter`, `filters`, `data`                         | unchanged names, now `defineModel` (same `v-model:*` contract)                                  |
-| `data-table`                                                                                                                | `TableStateSnapshot.pagination`                                                          | `TableStateSnapshot.page` (from 1) + `pageSize`                                                 |
-| `data-table`                                                                                                                | `TableExposed.getState()` / `setState()`                                                 | `getSnapshot()` / `setSnapshot()`                                                               |
-| `use-collection`                                                                                                            | `tableProps.pagination` / `rowSelection`                                                 | `tableProps.page` / `pageSize` / `selectedKeys`                                                 |
-| `code-editor`                                                                                                               | `CodeEditorMarker.severity` `'error'`                                                    | `'danger'` (`data-severity="danger"`)                                                           |
-| `chart`                                                                                                                     | `ChartStatus`                                                                            | `ChartSemanticSeverity`                                                                         |
-| `PricingCardSlotPosition`                                                                                                   | `PricingCardActionsPosition`                                                             |
-| `ConversationAlignment`                                                                                                     | `ConversationLayout`                                                                     |
-| `MediaTabsPosition`                                                                                                         | `MediaTabsSide`                                                                          |
-| `ArchitectureTabsPosition`                                                                                                  | `ArchitectureTabsSide`                                                                   |
-| `HeroTitleAlign`                                                                                                            | new                                                                                      |
-| `ArticleIndexSearch`, `ArticleIndexEmpty`, `ListingIndexSearch`, `ListingIndexEmpty`, `StoryIndexSearch`, `StoryIndexEmpty` | removed (flat props)                                                                     |
+| Component                                                                                                                                                             | v5                                                                                       | v6                                                                                              |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `use-collection`                                                                                                                                                      | option `trackBy`                                                                         | option `itemKey` (manual)                                                                       |
+| `ChatMessageState`                                                                                                                                                    | `ChatMessageStatus`                                                                      |
+| `PromptInputState`                                                                                                                                                    | `PromptInputStatus`                                                                      |
+| `ToolApprovalState`                                                                                                                                                   | `ToolApprovalStatus`                                                                     |
+| `ToolCallState`                                                                                                                                                       | `ToolCallStatus`                                                                         |
+| `StepperStepState`                                                                                                                                                    | `StepperStepStatus`                                                                      |
+| `ToastSeverity`                                                                                                                                                       | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` (no `default`, no `loading`) |
+| `UploadProgressStatus`                                                                                                                                                | `'pending' \| 'running' \| 'success' \| 'error' \| 'canceled'`                           |
+| `LogViewerStepStatus`                                                                                                                                                 | `'success' \| 'running' \| 'error' \| 'skipped' \| 'pending'`                            |
+| `TraceSpanStatus`                                                                                                                                                     | `'success' \| 'error' \| 'running'`                                                      |
+| `settings-row`                                                                                                                                                        | `SettingsRowLevel`                                                                       | `SettingsRowDepth`                                                                              |
+| `navigation-menu`                                                                                                                                                     | `NavigationMenuSide` `'top' \| 'right' \| 'bottom' \| 'left'`                            | `'top' \| 'end' \| 'bottom' \| 'start'`                                                         |
+| `drawer`                                                                                                                                                              | `DrawerSide` `'left' \| 'right'`                                                         | `'start' \| 'end'`                                                                              |
+| `doc-previous-next`                                                                                                                                                   | `DocPageLink.title`                                                                      | `DocPageLink.label`                                                                             |
+| `AccordionArrowPosition`                                                                                                                                              | `AccordionIconPosition`                                                                  |
+| `tag`                                                                                                                                                                 | `TagSeverity` (status scale plus looks)                                                  | `TagSeverity` (status scale only) + `TagVariant` (`primary`, `accent`, `contrast`, `highlight`) |
+| `integration-card`                                                                                                                                                    | `CardBadgeSeverity` (with looks)                                                         | `IntegrationCardBadgeSeverity` + `IntegrationCardBadgeVariant`                                  |
+| `sidebar-menu`                                                                                                                                                        | `SidebarMenuItemTagSeverity` (with `primary`, `accent`)                                  | `SidebarMenuItemTagSeverity` (status) + `SidebarMenuItemTagVariant` (`primary`, `accent`)       |
+| `table`                                                                                                                                                               | `TableColumn.enableSorting`                                                              | `TableColumn.sortable`                                                                          |
+| `data-table`                                                                                                                                                          | `sorting`, `columnVisibility`, `globalFilter`, `filters`, `data`                         | unchanged names, now `defineModel` (same `v-model:*` contract)                                  |
+| `data-table`                                                                                                                                                          | `TableStateSnapshot.pagination`                                                          | `TableStateSnapshot.page` (from 1) + `pageSize`                                                 |
+| `data-table`                                                                                                                                                          | `TableExposed.getState()` / `setState()`                                                 | `getSnapshot()` / `setSnapshot()`                                                               |
+| `use-collection`                                                                                                                                                      | `tableProps.pagination` / `rowSelection`                                                 | `tableProps.page` / `pageSize` / `selectedKeys`                                                 |
+| `code-editor`                                                                                                                                                         | `CodeEditorMarker.severity` `'error'`                                                    | `'danger'` (`data-severity="danger"`)                                                           |
+| `chart`                                                                                                                                                               | `ChartStatus`                                                                            | `ChartSemanticSeverity`                                                                         |
+| `PricingCardSlotPosition`                                                                                                                                             | `PricingCardActionsPosition`                                                             |
+| `ConversationAlignment`                                                                                                                                               | `ConversationLayout`                                                                     |
+| `MediaTabsPosition`                                                                                                                                                   | `MediaTabsSide`                                                                          |
+| `ArchitectureTabsSectionPosition`                                                                                                                                     | `ArchitectureTabsSide`                                                                   |
+| `HeroTitleAlign`                                                                                                                                                      | new                                                                                      |
+| `ArticleIndexSectionSearch`, `ArticleIndexSectionEmpty`, `ListingIndexSectionSearch`, `ListingIndexSectionEmpty`, `StoryIndexSectionSearch`, `StoryIndexSectionEmpty` | removed (flat props)                                                                     |
 
 #### Data attributes and test ids (update CSS selectors and tests by hand)
 
 | Component                                                                                                       | v5                                                                                                  | v6                                                                                                                                     |
 | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `chat-message`, `prompt-input`, `tool-approval`, `tool-call`                                                    | `data-status` mirrors `state`                                                                       | `data-status` mirrors `status`                                                                                                         |
-| `section-title`, `section-module`, `article-cards`                                                              | `data-kind`                                                                                         | `data-align`                                                                                                                           |
+| `section-title`, `section-module`, `article-cards-section`                                                      | `data-kind`                                                                                         | `data-align`                                                                                                                           |
 | `stepper-step`                                                                                                  | `data-state="upcoming\|current\|complete\|error\|loading"`                                          | `data-status` + `data-active` (+ `data-completed`)                                                                                     |
 | `stepper`                                                                                                       | `data-current`                                                                                      | `data-active`                                                                                                                          |
 | `stepper-step`                                                                                                  | `data-step-dot`, `data-step-disc`, `data-step-description`, `data-step-connector`, `data-step-body` | `data-slot="step-dot"` … `data-slot="step-body"`                                                                                       |
@@ -725,10 +770,10 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 | `tracker`                                                                                                       | readout `data-visible`                                                                              | readout `data-state="open                                                                                                              | closed"` |
 | `table-sort-button`                                                                                             | `data-direction`, `data-visible`                                                                    | `data-sort`                                                                                                                            |
 | `pricing-card`                                                                                                  | `data-slot-position`, `data-aligned`                                                                | `data-actions-position`, `data-equal-height`                                                                                           |
-| `newsletter-section`, `hero-form-section`, `job-posting`                                                        | `data-error`                                                                                        | `data-failed`                                                                                                                          |
+| `newsletter-section`, `hero-form-section`, `job-posting-section`                                                | `data-error`                                                                                        | `data-failed`                                                                                                                          |
 | `conversation`                                                                                                  | `data-alignment` (root)                                                                             | `data-layout`                                                                                                                          |
 | `hero-title`                                                                                                    | `data-centered`, `data-mobile-centered`                                                             | `data-align`, `data-mobile-align`                                                                                                      |
-| `listing-index`, `story-index` (filter panel)                                                                   | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
+| `listing-index-section`, `story-index-section` (filter panel)                                                   | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
 | `media-tabs`                                                                                                    | `data-position`                                                                                     | `data-tabs-side`                                                                                                                       |
 | `quote` (highlighted phrase)                                                                                    | `data-highlight`                                                                                    | `data-slot="highlight"`                                                                                                                |
 | `sticky-stack`                                                                                                  | `data-complete`                                                                                     | `data-completed`                                                                                                                       |
@@ -778,7 +823,7 @@ The Azion glyphs take the [Lucide](https://lucide.dev/icons) names, and `migrate
   `ai-open`, `ai-next`, `ai-js`, `ai-ts`, `ai-azuredevops`, `ai-x` are `ai-openai`, `ai-nextjs`,
   `ai-javascript`, `ai-typescript`, `ai-azure-devops`, `ai-x-brand`.
 
-The brand mark `workers-cloudflare` (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`,
+The brand mark `workers-cloudflare` (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`,
 `HeroSection` `carouselMarks`) is `cloudflare-workers`; rename the string by hand.
 
 The RTL mirror of `@aziontech/webkit/styles` targets the `ai` names (`ai-chevron-left`,
@@ -965,7 +1010,7 @@ These shipped only in the 6.0 previews (`feat/webkit-ai-ready`), never in 5.x; t
 - `DocCta` (`@aziontech/webkit/doc-cta`) → `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`):
   `primary-label` / `primary-href` become `:primary-action="{ label, href }"`, `secondary-label` /
   `secondary-href` become `:secondary-action="{ label, href }"`. The codemod lists the import as `MANUAL`.
-- `CapabilityGrid` and `ConsoleShowcase`: `actions` → `primaryAction` and `secondaryAction` (one object
+- `CapabilityGridSection` and `ConsoleShowcaseSection`: `actions` → `primaryAction` and `secondaryAction` (one object
   each, same `{ label, href, trailing?, target?, variant? }` shape). The codemod lists it as `MANUAL`.
 - `UploadProgress`: `v-model:collapsed` → `v-model:open`, inverted (`open = !collapsed`).
 - `ConsoleLayout`: `v-model:navigation-expanded` → `v-model:navigation-open` (same value);
@@ -979,6 +1024,11 @@ These shipped only in the 6.0 previews (`feat/webkit-ai-ready`), never in 5.x; t
 renders the `<Tooltip tip title linkLabel href>` tag as one, so Markdown sources need no change. In
 an SFC, compose `<HoverCard><HoverCard.Trigger>…</HoverCard.Trigger><HoverCard.Content>…</HoverCard.Content></HoverCard>`.
 The codemod lists the import as `MANUAL`.
+
+`DocStep` is now `DocSteps.Step`: `@aziontech/webkit/doc-steps` is a compound and `doc-step` has
+no standalone export, since a step only renders inside `DocSteps`. Drop the `doc-step` import and
+write `<DocSteps.Step title>`; Markdown sources (`<Steps><Step>`) need no change. The step's test id
+is `doc-steps-step` (was `documentation-doc-step`). The codemod lists the import as `MANUAL`.
 
 `DocCardGroup` takes `columns` (was `cols`); in Markdown, `DocMarkdown` still reads
 `<CardGroup cols>` as `columns`, so existing docs sources render unchanged.
@@ -1239,6 +1289,19 @@ resource) or `Tag` (a category or outcome word). `CodeEditor`'s plain diff mode 
 removed lines in its gutters with the same line diff `CodeBlock` draws. `LogViewer.Steps`
 (`@aziontech/webkit/log-viewer-steps`) is the one pipeline of steps for a build or deploy run.
 
+### `Card` has one layout; the catalog tile is `IntegrationCard`
+
+`Card variant="integration"` is now its own component, `IntegrationCard`
+(`@aziontech/webkit/integration-card`), with the same props (`title`, `logo`, `vendor`,
+`description`, `badges`, `installed`, `href`, `featured`), the `select` event and the `logo`,
+`actions` and default slots. `Card` keeps `title`, `padded` and its `header`, `header-actions`,
+default and `footer` slots, and drops `variant`. Swap the tag and drop `variant="integration"`:
+`<IntegrationCard title="Request Signer" vendor="Acme Inc." @select="open" />`. The types are
+`IntegrationCardBadge`, `IntegrationCardBadgeSeverity` and `IntegrationCardBadgeVariant` (were
+`CardBadge*`), the test ids `integration-card__*` (were `card__*`) and the locale keys
+`integrationCard.byVendor` and `integrationCard.installed` (were `card.*`). The codemod lists the old
+props as `MANUAL`.
+
 ### Overlay and feedback behaviour
 
 `ConfirmDialog` opens with focus on Cancel and has no close button (an alert
@@ -1303,7 +1366,7 @@ Inner parts use one word per concept:
 | `StatusIndicator`                                                                             | `__spinner`                                          | `__loading`                                                      |
 | `TutorialPanel`, `CommandInput`, `FilterMenu`                                                 | `__back`                                             | `__previous`                                                     |
 | `SidebarMenu.SubTrigger`                                                                      | `__arrow`                                            | `__chevron`                                                      |
-| `ListingIndex`, `StoryIndex`                                                                  | `__filter-button`                                    | `__filter`                                                       |
+| `ListingIndexSection`, `StoryIndexSection`                                                    | `__filter-button`                                    | `__filter`                                                       |
 | `ChartReference` band, line, label                                                            | `-band`, `-line`, `-label`                           | `__band`, `__line`, `__label`                                    |
 | `ChartAxis`                                                                                   | `chart-chart__axis-x`                                | `chart-axis` with `data-type="x"`                                |
 | `Table` toolbar buttons                                                                       | `__refresh-button`, `__live-button`, `__sort-button` | `table-refresh-button`, `table-live-button`, `table-sort-button` |
@@ -1384,8 +1447,11 @@ also renamed:
 | `platform/delete/delete-with-confirmation` | `edit/delete-dialog`            |
 | `platform/detail/details-page`             | `detail/resource-detail`        |
 | `platform/detail/record-table`             | `detail/dns-zone-detail`        |
+| `platform/detail/attached-resources`       | `detail/domains-card`           |
+| `platform/states/not-found`                | `state/error-page`              |
 | `platform/states/page-wires`               | `state/page-skeleton`           |
 | `platform/view/rules-list`                 | `view/rule-list`                |
+| `platform/view/split-view`                 | `view/events-explorer`          |
 | `shells/documentation`                     | `shell/docs`                    |
 | `shells/website`                           | `shell/site`                    |
 
@@ -1432,13 +1498,13 @@ One block per job (6.0):
 - `data-dashboard` is analytics-dashboard's `Usage` (its RealUser page is health-score-dashboard's
   `RealUser`); `activity-outcomes-dashboard` is security-dashboard's `ByActor`;
   `project-status-dashboard` and `funnel-cohort-dashboard` are removed (off-domain for the console).
-- `headers/site-header`, `headers/docs-header` and `headers/resource-header` are removed: SiteLayout,
+- `headers/site-header-section`, `headers/docs-header` and `headers/resource-header` are removed: SiteLayout,
   DocLayout and ConsoleLayout already draw those bars (`shell/*`). The other two are renamed:
   `headers/auth-header` → `top-bar/auth-bar`, `headers/creation-header` → `top-bar/creation-bar`.
 - `platform/edit/attribute-editor` → `edit/variables` and `platform/edit/code-editor` →
   `edit/function-editor` (the names belonged to the components they compose).
 - `resource-picker`, `payment-method-card`, `get-started`, `production-checklist` and
-  `attached-resources` carry `kind: "fragment"`: cards placed inside a page, not screens.
+  `domains-card` carry `kind: "fragment"`: cards placed inside a page, not screens.
 
 Every old id, and every renamed state of a removed block, is in
 [`src/cli/migrations/v6-blocks.json`](./src/cli/migrations/v6-blocks.json); `get_block` still
@@ -1449,20 +1515,20 @@ answers an old id with the new block and a `note`. Code you already copied does 
 Some marketing sections render differently with the same props. Pass the old value where you need
 the old look.
 
-- `FeatureWidgets`: `columns` defaults to `2` (was `3`).
+- `FeatureWidgetsSection`: `columns` defaults to `2` (was `3`).
 - `NetworkSection`: a `claims` entry can be a string, as before, or a `NetworkSectionClaim`
   object; string claims render as they did.
-- `FeatureTabs`: the title sits beside the tabs on one row, the tabs are `medium`, and the action is
+- `FeatureTabsSection`: the title sits beside the tabs on one row, the tabs are `medium`, and the action is
   a `Button`.
 - `MediaSplitSection`: at the medium breakpoint the copy aligns to the top of the media, and a lone
   action is `outlined`.
 - `MediaSplitStackSection`: band headings are `h3` under the section title.
 - `SitePage`: no trailing gap after a closing band.
-- `ClientMosaic`: a cell mark on a `white` or `primary` fill defaults to `logoTreatment: 'knockout'`
+- `ClientMosaicSection`: a cell mark on a `white` or `primary` fill defaults to `logoTreatment: 'knockout'`
   (set `'as-is'` to keep its colours).
-- `ArticleBody`: the share group's copy link button copies the page URL (`location.href`, then
+- `ArticleBodySection`: the share group's copy link button copies the page URL (`location.href`, then
   `article.href`).
-- `ArticleIndex`, `StoryIndex`: with `moreLabel` set the list pages
+- `ArticleIndexSection`, `StoryIndexSection`: with `moreLabel` set the list pages
   by `pageSize` (default `12`), and the load-more button shows only while more remain.
 
 ### Marketing names removed in 6.0
@@ -1472,9 +1538,9 @@ renames marked with a codemod; move the rest by hand.
 
 | Component                           | Removed                                      | Use                                       | Codemod |
 | ----------------------------------- | -------------------------------------------- | ----------------------------------------- | ------- |
-| `architecture-tabs`                 | `interval`                                   | `autoplayInterval` (and `autoplay`)       | yes     |
-| `plan-comparison`                   | section `link`                               | section `action`                          | no      |
-| `feature-tabs`                      | `interval`                                   | `autoplayInterval` (and `autoplay`)       | yes     |
+| `architecture-tabs-section`         | `interval`                                   | `autoplayInterval` (and `autoplay`)       | yes     |
+| `plan-comparison-section`           | section `link`                               | section `action`                          | no      |
+| `feature-tabs-section`              | `interval`                                   | `autoplayInterval` (and `autoplay`)       | yes     |
 | `hero`                              | `carousel`, `carouselMarks`, `carouselLabel` | `marquee`, `marqueeMarks`, `marqueeLabel` | yes     |
 | `hero-section`, `hero-form-section` | `carouselMarks`, `carouselLabel`             | `marqueeMarks`, `marqueeLabel`            | yes     |
 | `media-tabs`                        | `@tab-change`                                | `v-model` (`update:modelValue`)           | no      |
@@ -1483,8 +1549,8 @@ renames marked with a codemod; move the rest by hand.
 
 Site JSON must use the new keys: an old key such as `carouselMarks` or `interval` is ignored now, so
 the band renders without its client strip or with the default hold. `media-tabs`, `quote-tabs`,
-`marquee`, `article-highlight` (with `autoplay`) and the sections that compose them draw a visible
-pause control while they move (WCAG 2.2.2); `recognition-marquee` and `photo-marquee` now draw it
+`marquee`, `article-highlight-section` (with `autoplay`) and the sections that compose them draw a visible
+pause control while they move (WCAG 2.2.2); `recognition-marquee-section` and `photo-marquee-section` now draw it
 too, through the marquee loop they share with `marquee`.
 
 ### Marketing sections merged
@@ -1493,27 +1559,27 @@ Sections that did the same job as another were folded into it. The old import is
 lists it as manual work); page JSON that still names the old `_id` keeps rendering, because
 `SitePage` maps it to its successor and rewrites its props.
 
-| Removed                               | Use                                                                                      |
-| ------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `hero-copy-on-top-art`                | `hero-section` with `variant="copy-on-top-art"` and the same `levels`                    |
-| `hero-with-opening`                   | `hero-section` with `size="large"` and the same `items`                                  |
-| `closing-call-to-action-agents`       | `closing-call-to-action` with `variant="primary"` and `audiences`                        |
-| `closing-call-to-action-templates`    | `template-gallery` with `closing`                                                        |
-| `banner`                              | `call-to-action` with `variant="announcement"`; the `aside` slot is the default slot     |
-| `customer-spotlight`                  | `client-story-columns` with `reveal="hover"`; `items` → `cells`, `description` → `story` |
-| `sticky-carousel`                     | `process-scroll` with `pinned` and `title-variant="centered"`; `items` → `steps`         |
-| `quote-carousel`                      | `client-quotes`, or `Quote` cards in a `CardCarousel`                                    |
-| `compare-support-tiers`               | `plan-comparison`; `tiers` → `plans`                                                     |
-| `article-index-blog`                  | `article-index` (`filters="category-search"`, the default)                               |
-| `article-index-resource-hub`          | `article-index` with `filters="facets"`                                                  |
-| `use-case-links`                      | `capability-grid` with `title-variant="left"`; items keep `href`                         |
-| `resource-grid`                       | `capability-grid` with `title-variant="horizontal"`; items keep `href`                   |
-| `content-columns`                     | `capability-grid`; `columns` is `3` or `4`                                               |
-| `code-split`                          | `media-split-section` with the same `codeTabs`, `defaultFile` and actions                |
-| `sticky-scroll-code`                  | `feature-scroll`; each item keeps its `code`                                             |
-| `shell-mockup` (and `-root`, `-part`) | internal to `console-mockup`; show a console screen with `ConsoleMockup`                 |
+| Removed                               | Use                                                                                              |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `hero-copy-on-top-art`                | `hero-section` with `variant="copy-on-top-art"` and the same `levels`                            |
+| `hero-with-opening`                   | `hero-section` with `size="large"` and the same `items`                                          |
+| `closing-call-to-action-agents`       | `closing-call-to-action-section` with `variant="primary"` and `audiences`                        |
+| `closing-call-to-action-templates`    | `template-gallery-section` with `closing`                                                        |
+| `banner`                              | `call-to-action` with `variant="announcement"`; the `aside` slot is the default slot             |
+| `customer-spotlight`                  | `client-story-columns-section` with `reveal="hover"`; `items` → `cells`, `description` → `story` |
+| `sticky-carousel`                     | `process-scroll-section` with `pinned` and `title-variant="centered"`; `items` → `steps`         |
+| `quote-carousel`                      | `client-quotes-section`, or `Quote` cards in a `CardCarouselSection`                             |
+| `compare-support-tiers`               | `plan-comparison-section`; `tiers` → `plans`                                                     |
+| `article-index-blog`                  | `article-index-section` (`filters="category-search"`, the default)                               |
+| `article-index-resource-hub`          | `article-index-section` with `filters="facets"`                                                  |
+| `use-case-links`                      | `capability-grid-section` with `title-variant="left"`; items keep `href`                         |
+| `resource-grid`                       | `capability-grid-section` with `title-variant="horizontal"`; items keep `href`                   |
+| `content-columns`                     | `capability-grid-section`; `columns` is `3` or `4`                                               |
+| `code-split`                          | `media-split-section` with the same `codeTabs`, `defaultFile` and actions                        |
+| `sticky-scroll-code`                  | `feature-scroll-section`; each item keeps its `code`                                             |
+| `shell-mockup` (and `-root`, `-part`) | internal to `console-mockup`; show a console screen with `ConsoleMockup`                         |
 
-Their exported types map to the survivor's (`ArticleIndexBlogItem` → `ArticleIndexItem`,
+Their exported types map to the survivor's (`ArticleIndexBlogItem` → `ArticleIndexSectionItem`,
 `CodeSplitTab` → `MediaSplitSectionCodeTab`, …); `webkit migrate` rewrites them.
 `sticky-carousel`'s header offset now follows `--layout-header-height` instead of a fixed `3.5rem`.
 
@@ -1822,7 +1888,8 @@ other `Hero` variables follow (`--banner-top-height`, `--banner-floor-bg`, `--ba
 mockup fades a host sets are `--console-mockup-fade-start` / `-end` / `-edge` / `-color` (was
 `--mockup-fade-*`), and the sidebar menu's focus-ring offsets are `--sidebar-menu-ring-offset` /
 `--sidebar-menu-item-ring-offset` (was `--menu-ring-offset` / `--menu-item-ring-offset`).
-`migrate v6` rewrites all of them.
+`migrate v6` rewrites all of them. A page section's own variables carry its `-section` name
+(`--process-scroll-section-offset`, `--console-showcase-section-crop`, …).
 
 ## 5. Field report: Azion Console
 

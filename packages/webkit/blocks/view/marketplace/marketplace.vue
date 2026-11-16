@@ -8,6 +8,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -381,9 +382,8 @@
                 :key="item.id"
                 class="flex min-w-0"
               >
-                <Card
+                <IntegrationCard
                   class="w-full"
-                  variant="integration"
                   featured
                   :title="item.name"
                   :vendor="item.vendor"
@@ -439,9 +439,8 @@
                 :key="item.id"
                 class="flex min-w-0"
               >
-                <Card
+                <IntegrationCard
                   class="w-full"
-                  variant="integration"
                   :title="item.name"
                   :vendor="item.vendor"
                   :logo="item.logo"
@@ -459,7 +458,7 @@
                       @click="(event: MouseEvent) => onSelect(event, item)"
                     />
                   </template>
-                </Card>
+                </IntegrationCard>
               </li>
             </ul>
           </section>

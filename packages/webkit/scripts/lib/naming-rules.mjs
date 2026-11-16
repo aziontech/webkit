@@ -289,7 +289,11 @@ export const SYNONYMS = {
   helper: 'description (Field.Description)'
 }
 
-export const NAME_WORD_EXEMPT = new Set(['template-gallery', 'deploy-template', 'template-browser'])
+export const NAME_WORD_EXEMPT = new Set([
+  'template-gallery-section',
+  'deploy-template',
+  'template-browser'
+])
 
 export const PLURAL_ROOTS_ALLOWED = new Set(['tabs', 'steps', 'settings', 'stats', 'news'])
 
@@ -501,7 +505,7 @@ export function checkComponentPath(rel, ctx = {}) {
   const stem = file.replace(/\.vue$/, '')
   const folder = segs[segs.length - 2]
   if (isRootFile && (category === 'sections' || category === 'section'))
-    out.push(...sectionSuffixProblems(rel, stem, ctx))
+    out.push(...sectionSuffixProblems(rel, stem))
   for (const problem of nameWordProblems(stem))
     out.push(v('near-duplicate', rel, 1, `component "${stem}" uses ${problem} (${RULE_DOC}).`))
   if (stem === root || folder !== stem || segs.length < 4) return out
@@ -562,21 +566,17 @@ export function checkComponentPath(rel, ctx = {}) {
 
 export const SECTION_WRAPPER_WORDS = ['band', 'stack', 'block', 'module', 'strip']
 
-export function sectionSuffixProblems(rel, stem, ctx = {}) {
+export function sectionSuffixProblems(rel, stem) {
   if (stem.endsWith('-section')) return []
   const ws = stem.split('-')
   const wrapper = ws.length > 1 && SECTION_WRAPPER_WORDS.includes(ws[ws.length - 1])
-  const primitive = [...(ctx.marketingPrimitives || [])]
-    .filter((p) => stem.startsWith(`${p}-`))
-    .sort((a, b) => b.length - a.length)[0]
-  if (!wrapper && !primitive) return []
-  const base = primitive || ws.slice(0, -1).join('-')
+  const base = wrapper ? ws.slice(0, -1).join('-') : stem
   return [
     v(
       'section-suffix',
       rel,
       1,
-      `page section "${stem}" wraps ${primitive ? `the primitive "${primitive}"` : `a "${ws[ws.length - 1]}"`} — name it "${base}-section" (${RULE_DOC}).`
+      `page section "${stem}" must end in "-section" — name it "${base}-section" (${RULE_DOC}).`
     )
   ]
 }
@@ -2129,7 +2129,6 @@ export function loadContext(root) {
   }
   const parts = []
   const componentNames = new Set()
-  const marketingPrimitives = new Set()
   const compRoot = join(root, 'packages/webkit/src/components')
   for (const rel of walk(compRoot, root, [])) {
     const cp = componentPath(rel)
@@ -2137,7 +2136,6 @@ export function loadContext(root) {
     const stem = cp.file.replace(/\.vue$/, '')
     if (cp.segs[cp.segs.length - 2] !== stem) continue
     componentNames.add(stem)
-    if (cp.category === 'marketing' && stem === cp.root) marketingPrimitives.add(stem)
     if (stem !== cp.root && cp.segs.length >= 4) parts.push({ name: stem, rel, root: cp.root })
   }
   const cssVarReaders = new Map()
@@ -2181,7 +2179,6 @@ export function loadContext(root) {
     retired,
     parts,
     componentNames,
-    marketingPrimitives,
     tokenKeys,
     specProps,
     cssVarReaders,

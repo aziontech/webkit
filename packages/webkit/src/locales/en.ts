@@ -13,7 +13,7 @@ export const appLayout = {
   showAtBottom: 'Show under the content'
 } as const
 
-export const articleBody = {
+export const articleBodySection = {
   linkCopied: 'Link copied',
   copiedFeed: 'Feed link copied',
   copiedPage: 'Page copied as markdown',
@@ -22,7 +22,7 @@ export const articleBody = {
   assistantPrompt: 'Read {url} so I can ask questions about it.'
 } as const
 
-export const articleIndex = {
+export const articleIndexSection = {
   search: 'Search',
   searchFacet: 'Search {facet}',
   noMatch: 'No results found.'
@@ -92,7 +92,7 @@ export const buttonGroup = {
   pressed: 'On'
 } as const
 
-export const card = {
+export const integrationCard = {
   byVendor: 'by {vendor}',
   installed: 'Installed'
 } as const
@@ -210,7 +210,7 @@ export const command = {
   title: 'Command menu'
 } as const
 
-export const planComparison = {
+export const planComparisonSection = {
   about: 'About {label}',
   search: 'Search',
   searchPicker: 'Search {picker}',
@@ -219,7 +219,7 @@ export const planComparison = {
   excluded: 'Not included'
 } as const
 
-export const competitorComparison = {
+export const competitorComparisonSection = {
   about: 'About {capability}'
 } as const
 
@@ -584,7 +584,7 @@ export const link = {
   label: 'Learn more'
 } as const
 
-export const listingIndex = {
+export const listingIndexSection = {
   filters: 'Filters',
   filtersApplied: '{label} ({count})',
   search: 'Search',
@@ -841,13 +841,13 @@ export const sidebar = {
   expandByDragging: '{label} by dragging'
 } as const
 
-export const siteFooter = {
+export const siteFooterSection = {
   label: 'Footer',
   home: 'Azion home',
   language: 'Language'
 } as const
 
-export const siteHeader = {
+export const siteHeaderSection = {
   open: 'Open navigation',
   home: 'Azion home',
   search: 'Search',
@@ -880,7 +880,7 @@ export const stepper = {
   upcoming: 'Not started'
 } as const
 
-export const storyIndex = {
+export const storyIndexSection = {
   search: 'Search',
   searchFacet: 'Search {facet}',
   noMatch: 'No results found.',
@@ -1228,7 +1228,7 @@ export const otpInput = {
   label: 'One-time code'
 } as const
 
-export const consoleShowcase = {
+export const consoleShowcaseSection = {
   views: 'Console views'
 } as const
 
@@ -1236,7 +1236,7 @@ export const runtimeApiCloud = {
   label: 'Globals available in the Azion Runtime'
 } as const
 
-export const clientStoryColumns = {
+export const clientStoryColumnsSection = {
   list: 'Customer stories',
   story: 'Read story'
 } as const
@@ -1255,10 +1255,10 @@ export const newsletterSection = {
   email: 'Email address'
 } as const
 
-export const copyCommand = {
+export const copyCommandSection = {
   command: 'Command',
   prompt: 'Prompt',
-  copyCommand: 'Copy command',
+  copyCommandSection: 'Copy command',
   copyPrompt: 'Copy prompt'
 } as const
 
@@ -1332,8 +1332,8 @@ export const en = {
   responseLoading,
   alert,
   appLayout,
-  articleBody,
-  articleIndex,
+  articleBodySection,
+  articleIndexSection,
   artifactCanvas,
   artifactPreview,
   attributeEditor,
@@ -1343,7 +1343,7 @@ export const en = {
   breadcrumb,
   browserFrame,
   buttonGroup,
-  card,
+  integrationCard,
   cardList,
   carousel,
   chart,
@@ -1357,8 +1357,8 @@ export const en = {
   combobox,
   command,
   consoleLayout,
-  planComparison,
-  competitorComparison,
+  planComparisonSection,
+  competitorComparisonSection,
   confirmDialog,
   conversation,
   copyButton,
@@ -1395,7 +1395,7 @@ export const en = {
   keyValueList,
   kbd,
   link,
-  listingIndex,
+  listingIndexSection,
   logoWall,
   logViewer,
   mapChart,
@@ -1421,15 +1421,15 @@ export const en = {
   settingsSection,
   severityTag,
   sidebar,
-  siteFooter,
+  siteFooterSection,
   siteLayout,
-  siteHeader,
+  siteHeaderSection,
   sources,
   splitButton,
   statTile,
   statusIndicator,
   stepper,
-  storyIndex,
+  storyIndexSection,
   suggestionGroup,
   dataGrid,
   table,
@@ -1460,10 +1460,10 @@ export const en = {
   wizard,
   paymentBrand,
   otpInput,
-  consoleShowcase,
+  consoleShowcaseSection,
   runtimeApiCloud,
-  clientStoryColumns,
-  copyCommand,
+  clientStoryColumnsSection,
+  copyCommandSection,
   searchTrigger,
   copyPromptButton,
   docAgentCard,

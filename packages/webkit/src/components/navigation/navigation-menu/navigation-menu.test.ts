@@ -742,10 +742,10 @@ describe('NavigationMenu', () => {
   describe('audit fixes', () => {
     it('forwards consumer attributes to the nav landmark', () => {
       const { getByTestId } = renderTree(
-        `<NavigationMenu id="site-header" aria-labelledby="nav-heading" data-track="nav"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+        `<NavigationMenu id="site-header-section" aria-labelledby="nav-heading" data-track="nav"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
       )
       const root = getByTestId('navigation-menu')
-      expect(root.id).toBe('site-header')
+      expect(root.id).toBe('site-header-section')
       expect(root).toHaveAttribute('aria-labelledby', 'nav-heading')
       expect(root).toHaveAttribute('data-track', 'nav')
     })

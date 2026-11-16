@@ -1,5 +1,5 @@
 <script setup>
-  import CopyCommand from '@aziontech/webkit/copy-command'
+  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
   import HeroSection from '@aziontech/webkit/hero-section'
 </script>
 
@@ -53,7 +53,7 @@
       :primary-action="{ label: 'Start for free', href: '/signup' }"
     >
       <template #bottom>
-        <CopyCommand value="npm create azion@latest" />
+        <CopyCommandSection value="npm create azion@latest" />
       </template>
     </HeroSection>
   </div>

@@ -13,6 +13,9 @@ them, and `npx @aziontech/webkit migrate` rewrites them for you.
 - The import path is the flat kebab name; the binding and the tag are its PascalCase form.
 - A part is used with dot notation on the compound (`Dialog.Header`) or imported on its own
   under its `<root>-<part>` name.
+- Every marketing page section ends in `-section` (`HeroSection`, `ClientQuotesSection`,
+  `SiteFooterSection`), and its kebab name is the `_id` in a site page's `sections[]`; the
+  building pieces it is made of keep the bare name (`Hero`, `Stats`, `Quote`).
 
 | ✅                                                       | ❌                                                                           |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------- |

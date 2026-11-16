@@ -6,8 +6,8 @@ client story photographs — because a section draws them the same way on every 
 screenshots and screen recordings. Those are the consumer's content, change with every page, and
 would put megabytes in every install.
 
-The components already take that media as data (`PhotoMarquee` `photos[].src`, `ArticleCards` and
-`ArticleHighlight` `items[].image`, `ArticleBody` `banner`, `DocFrame` `src`). So an example still
+The components already take that media as data (`PhotoMarqueeSection` `photos[].src`, `ArticleCardsSection` and
+`ArticleHighlightSection` `items[].image`, `ArticleBodySection` `banner`, `DocFrame` `src`). So an example still
 runs as pasted, it passes a neutral stand-in from this folder:
 
 ```
@@ -19,7 +19,7 @@ placeholder-clip.webm   any screen recording (2 s, loops)
   `h-auto` frame takes its ratio. Its translucent grey reads on both themes.
 - `placeholder-clip.webm` is a dark frame with a play mark and a progress bar, 10 KB.
 - Import them like any asset (`import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'`)
-  and replace them with the app's own media. A list that keys on the URL (`PhotoMarquee`) needs a
+  and replace them with the app's own media. A list that keys on the URL (`PhotoMarqueeSection`) needs a
   distinct URL per item: append a fragment (`placeholderImage + '#office-desks'`).
 
 Never point an example, block or consumer screen at `/marketing-components/…` or `/media/…`: only

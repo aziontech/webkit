@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 097f0b4a20efc6e11ea46d284ecbeef979a91965af9f891b204b12e37d47df2e
+checksum: 9c2a321a4fbae49ab8a412c112f2ac7eb1f889de3ad2e0093a3737f52d7cfdf9
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # ErrorBoundary — Component Spec
@@ -31,7 +31,7 @@ example).
 ## When NOT to use
 
 - A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.
-- A whole page that cannot be shown (missing route, no access, server failure) → use the `state/not-found` block.
+- A whole page that cannot be shown (missing route, no access, server failure) → use the `state/error-page` block.
 - A field that failed validation → use `field` with its error message.
 - Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`.
 

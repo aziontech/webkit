@@ -17,7 +17,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - A list nested inside one resource (a tab of a details page): use the table inside `detail/resource-detail` or `detail/dns-zone-detail`, with `Add <Module>` instead of `Create`.
 - People on the account: use `account/users`. Teams and their permissions: use `account/team-permissions`. API tokens: use `account/personal-tokens`. The audit log: use `account/activity-history`.
 - Files and folders of a storage resource: use `view/file-browser`.
-- Events or logs explored over time with a chart and a document pane: use `view/split-view`.
+- Events or logs explored over time with a chart and a document pane: use `view/events-explorer`.
 - An account that has never created the resource: use `state/first-use`, which teaches the module before any list exists.
 - Choosing one existing resource inside a form: use `create/resource-picker`.
 

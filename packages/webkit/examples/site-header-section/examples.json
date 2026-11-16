@@ -1,0 +1,25 @@
+{
+  "component": "site-header-section",
+  "title": "Components/Marketing/Sections/SiteHeaderSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The site's navigation with its four mega-menus, the Pricing link and the account actions. Widen past `xl` to see the menus in the bar; below it, open the sheet with the menu button.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Shell/SiteHeaderSection",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

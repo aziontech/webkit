@@ -56,8 +56,8 @@ groups go in their `search` slot; a page opens the console palette with
   header's other icon buttons; its 44 px touch area is built in. The site header keeps the folded
   form (no `@container` around it), as azion.com does.
 - Name the scope in `label` when it is narrow (`label="Search docs"`).
-- On the marketing site, `SiteHeader` already carries the folded trigger: listen to its `search` event
-  (`<SiteHeader @search="searchOpen = true" />`) and mount the `Command` beside it.
+- On the marketing site, `SiteHeaderSection` already carries the folded trigger: listen to its `search` event
+  (`<SiteHeaderSection @search="searchOpen = true" />`) and mount the `Command` beside it.
 - Without a `Command` on the page, `@open` still fires on `⌘K` / `Ctrl K`, so a custom search
   dialog gets the shortcut for free.
 - Start from a shell block (`shell/console`, `shell/docs`, `shell/site`): each

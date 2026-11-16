@@ -72,30 +72,12 @@ export const illustrationAssets = {
 /** Every registered scene name. */
 export type IllustrationAssetName = keyof typeof illustrationAssets
 
-export const illustrationAssetAliases = {
-  'build-databases-from-code': 'sql-sdk-code-cards',
-  'distributed-sql-for-resilient-global-reads': 'globe-with-sql-nodes',
-  'enable-owasp-protection-with-customizable-rules': 'waf-threat-families-panel',
-  'reputation-intelligence-for-enhanced-protection': 'reputation-rings-hub',
-  'saas-platforms': 'azion-to-commerce-tiles',
-  'stay-in-control': 'traffic-and-cost-bar-chart',
-  'stream-security-events-for-investigation-and-response': 'data-stream-destinations-map',
-  'white-gloves-when-it-matters': 'chat-and-headset-tiles'
-} as const satisfies Record<string, IllustrationAssetName>
-
-/** An old scene name kept so page data written before the rename still renders; it resolves to its renamed scene. */
-export type RetiredIllustrationAssetName = keyof typeof illustrationAssetAliases
-
 export const illustrationAssetNames = Object.keys(
   illustrationAssets
 ).sort() as IllustrationAssetName[]
 
 export function resolveIllustrationAssetName(name: string): IllustrationAssetName | null {
-  if (Object.hasOwn(illustrationAssets, name)) return name as IllustrationAssetName
-  if (Object.hasOwn(illustrationAssetAliases, name)) {
-    return illustrationAssetAliases[name as RetiredIllustrationAssetName]
-  }
-  return null
+  return Object.hasOwn(illustrationAssets, name) ? (name as IllustrationAssetName) : null
 }
 
 export function resolveIllustrationAsset(name: string): IllustrationAssetLoader | null {
