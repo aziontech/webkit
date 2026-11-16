@@ -1,14 +1,13 @@
 <script setup>
-  import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
 </script>
 
 <template>
   <DocSteps>
-    <DocStep title="Access Azion Console." />
-    <DocStep title="Click + Create on the homepage." />
-    <DocStep title="Select your preferred template to start your project." />
-    <DocStep title="Fill in the fields the template asks for." />
-    <DocStep title="Customize the elements using the sidebar tools." />
+    <DocSteps.Step title="Access Azion Console." />
+    <DocSteps.Step title="Click + Create on the homepage." />
+    <DocSteps.Step title="Select your preferred template to start your project." />
+    <DocSteps.Step title="Fill in the fields the template asks for." />
+    <DocSteps.Step title="Customize the elements using the sidebar tools." />
   </DocSteps>
 </template>

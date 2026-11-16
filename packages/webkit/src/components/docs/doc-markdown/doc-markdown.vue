@@ -24,8 +24,8 @@
   import DocChangelogEntry from '../doc-changelog-entry/doc-changelog-entry.vue'
   import type { DocCodeGroupSample } from '../doc-code-group/doc-code-group.vue'
   import DocHeading from '../doc-heading/doc-heading.vue'
-  import DocStep from '../doc-step/doc-step.vue'
   import DocSteps from '../doc-steps/doc-steps.vue'
+  import DocStepsStep from '../doc-steps/doc-steps-step.vue'
   import {
     type DocMarkdownAttributes,
     type DocMarkdownInline,
@@ -83,7 +83,7 @@
     Warning: DocCallout,
     Danger: DocCallout,
     Steps: DocSteps,
-    Step: DocStep,
+    Step: DocStepsStep,
     CardGroup: DocCardGroup,
     Columns: DocCardGroup,
     Card: DocCard,

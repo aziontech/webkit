@@ -9,7 +9,6 @@
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocPrompt from '@aziontech/webkit/doc-prompt'
   import DocProse from '@aziontech/webkit/doc-prose'
-  import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
   import ItemList from '@aziontech/webkit/item-list'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
@@ -133,10 +132,10 @@
         Templates create the workload, the application and the domain for you.
       </DocCallout>
       <DocSteps>
-        <DocStep title="Open Azion Console." />
-        <DocStep title="Select + Create on the home page." />
-        <DocStep title="Pick a template and fill in the fields it asks for." />
-        <DocStep title="Select Deploy and wait for the status to read Live." />
+        <DocSteps.Step title="Open Azion Console." />
+        <DocSteps.Step title="Select + Create on the home page." />
+        <DocSteps.Step title="Pick a template and fill in the fields it asks for." />
+        <DocSteps.Step title="Select Deploy and wait for the status to read Live." />
       </DocSteps>
       <DocHeading
         anchor="test-the-template"
@@ -158,20 +157,20 @@
         domain when it is live.
       </DocPrompt>
       <DocSteps>
-        <DocStep title="Set up the Azion CLI">
+        <DocSteps.Step title="Set up the Azion CLI">
           <CodeBlock
             :tabs="installTabs"
             default-value="shell"
             :show-line-numbers="false"
           />
-        </DocStep>
-        <DocStep title="Log in and deploy">
+        </DocSteps.Step>
+        <DocSteps.Step title="Log in and deploy">
           <CodeBlock
             :tabs="deployTabs"
             default-value="shell"
             :show-line-numbers="false"
           />
-        </DocStep>
+        </DocSteps.Step>
       </DocSteps>
 
       <DocHeading

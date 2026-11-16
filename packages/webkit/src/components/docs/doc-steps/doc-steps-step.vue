@@ -1,16 +1,16 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useDocStepsContext } from '../doc-steps/composables/use-doc-steps-context'
+  import { useDocStepsContext } from './composables/use-doc-steps-context'
 
-  defineOptions({ name: 'DocStep', inheritAttrs: false })
+  defineOptions({ name: 'DocStepsStep', inheritAttrs: false })
 
-  export interface DocStepProps {
+  export interface DocStepsStepProps {
     /** The step heading. */
     title?: string
   }
 
-  withDefaults(defineProps<DocStepProps>(), {
+  withDefaults(defineProps<DocStepsStepProps>(), {
     title: ''
   })
 
@@ -23,11 +23,11 @@
 
   const context = useDocStepsContext()
 
-  const id = Symbol('DocStep')
+  const id = Symbol('DocStepsStep')
   const { index } = context.register(id)
   const rootEl = ref<globalThis.HTMLElement | null>(null)
 
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-step')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-steps-step')
 
   onMounted(() => context.attach(id, rootEl.value))
   onBeforeUnmount(() => context.unregister(id))
