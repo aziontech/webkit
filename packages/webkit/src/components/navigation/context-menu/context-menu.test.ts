@@ -93,6 +93,45 @@ describe('ContextMenu', () => {
     expect(calls[0][1]).toBe('copy')
   })
 
+  it('renders the resolved side and align on the panel in both directions', async () => {
+    const Host = (dir: 'ltr' | 'rtl') =>
+      defineComponent({
+        components: {
+          Root: ContextMenu,
+          Area: ContextMenu.Trigger,
+          Group: ContextMenu.Group,
+          Item: ContextMenu.Item
+        },
+        template: `
+          <div dir="${dir}" style="position:fixed;top:40px;left:160px;width:120px">
+            <Root aria-label="Resource actions">
+              <Area><ul><li tabindex="0">production</li></ul></Area>
+              <Group><Item value="open" label="Open" /></Group>
+            </Root>
+          </div>
+        `
+      })
+    for (const dir of ['ltr', 'rtl'] as const) {
+      const view = render(Host(dir))
+      const row = rows()[0]
+      const rect = row.getBoundingClientRect()
+      const x = dir === 'rtl' ? rect.right - 10 : rect.left + 10
+      row.dispatchEvent(
+        new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: x,
+          clientY: rect.top + 5
+        })
+      )
+      await waitFor(() => expect(panel()?.style.translate ?? '').not.toMatch(/-9999|^$/))
+      expect(panel()?.dataset['side']).toBe('bottom')
+      expect(panel()?.dataset['align']).toBe('start')
+      view.unmount()
+      await nextTick()
+    }
+  })
+
   it('the ContextMenu key opens it; Escape closes and returns focus', async () => {
     render(Default)
     const row = rows()[2]

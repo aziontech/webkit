@@ -3,11 +3,11 @@ name: context-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: ac4f8d219eff4a8924996bb3750a904e1a16ba2dda1cee549cff8ae3434b659e
+checksum: 126d305cc92680ea925675f3f16dc3bb8fb3010b21fa9cdc483aae9c3b974df0
 created: 2026-11-14
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # ContextMenu — Component Spec
@@ -145,7 +145,7 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
 - Visual states of the items: as `dropdown-menu` (`default`, `hover`, `focus-visible`, `selected`, `disabled`, checked).
 - `data-state` values (root, trigger, panel): `open` | `closed`.
 - `data-disabled` on root and trigger mirrors `disabled`.
-- `data-placement` on the panel mirrors the resolved corner (`bottom-start` | `bottom-end` | `top-start` | `top-end`).
+- `data-side` / `data-align` on the panel mirror the resolved side (`bottom` | `top`) and alignment (`start`, or `end` once it flips to fit); `start` is the pointer's inline-start, so under `rtl` the panel's right edge sits on the pointer.
 - `loading`, `empty`, `error`, `readonly`, `invalid`: not states of this component; it renders the items the consumer passes.
 
 ## Motion & Animations

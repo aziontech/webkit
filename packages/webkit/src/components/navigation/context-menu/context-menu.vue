@@ -3,7 +3,7 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { resolveDirection } from '../../../composables/use-direction'
-  import { type MenuPlacement, useMenuRoot } from '../../../composables/use-menu-root'
+  import { useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale } from '../../../composables/use-translate'
   import type { DropdownMenuItemValue } from '../dropdown-menu/injection-key'
@@ -74,21 +74,15 @@
   const isOpenRef = computed(() => isOpenState.value)
   const disabledRef = computed(() => props.disabled)
 
-  const autoPlacements = computed<MenuPlacement[]>(() =>
-    resolveDirection(areaEl.value) === 'rtl'
-      ? ['bottom-end', 'bottom-start', 'top-end', 'top-start']
-      : ['bottom-start', 'bottom-end', 'top-start', 'top-end']
-  )
-
-  const { resolvedPlacement, panelStyle, updatePosition } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle, updatePosition } = usePlacement({
     triggerRef: anchorEl,
     panelRef: panelEl,
     isOpen: isOpenRef,
-    placement: () => autoPlacements.value[0],
-    offset: 2
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 2,
+    dir: () => resolveDirection(areaEl.value)
   })
-
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as MenuPlacement)
 
   const anchorStyle = computed(() =>
     point.value ? { left: `${point.value.x}px`, top: `${point.value.y}px` } : undefined
@@ -133,7 +127,8 @@
     testId: testId.value,
     isOpen: isOpenRef,
     disabled: disabledRef,
-    placement: resolvedPlacementRef,
+    side: resolvedSide,
+    align: resolvedAlign,
     triggerId: `${uid}-anchor`,
     panelId: `${uid}-panel`,
     triggerEl: anchorEl,
@@ -186,7 +181,8 @@
           :lang="portalLocale.lang"
           :data-testid="`${testId}__panel`"
           :data-state="isOpenRef ? 'open' : 'closed'"
-          :data-placement="resolvedPlacementRef"
+          :data-side="resolvedSide"
+          :data-align="resolvedAlign"
           :style="panelStyle"
           class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"
