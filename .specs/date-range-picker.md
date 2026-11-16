@@ -3,9 +3,9 @@ name: date-range-picker
 category: input
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: eac16bc6704f08ed66e8f625d16070989dcfdbe9e99eebdd2bb75298aee0f13b
+checksum: 9e34e8637df801d3c422de64fbd51c5c24f62590960731bc0e2ef1ae53ca5a3d
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -112,6 +112,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 - Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy.
 - `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-invalid` on the root and the trigger shell (own `invalid` or the enclosing `Field`'s, with `aria-invalid` on the trigger and the danger border); `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
 - The Next button is disabled while the range is relative (it already ends now) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the calendar panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Behaviour
 

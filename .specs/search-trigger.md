@@ -3,11 +3,11 @@ name: search-trigger
 category: action
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: ab25f33b993e1aaae6b730bad48b771823c8e128257ade5fb1a819dc71b00ace
+checksum: 2b254496c8804eff68ed7929a3e983d956c722546ab9bb5546cb7fc6c4997f7a
 created: 2026-11-12
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # SearchTrigger — Component Spec
@@ -86,7 +86,7 @@ _none_
 
 - Visual states: `default`, `hover` (border strengthens), `focus-visible` (ring), `disabled`.
 - `data-disabled` mirrors `disabled`; `data-collapsible` mirrors `collapsible`.
-- Folded (`collapsible` in a container narrower than 47rem): a `Tooltip` (`placement="bottom"`, test id `<testid>__tooltip`) shows the label on hover and focus. It is disabled while the trigger is unfolded or `disabled`; the trigger measures its own label with a `ResizeObserver` to know which form is drawn.
+- Folded (`collapsible` in a container narrower than 47rem): a `Tooltip` (`side="bottom"`, test id `<testid>__tooltip`) shows the label on hover and focus. It is disabled while the trigger is unfolded or `disabled`; the trigger measures its own label with a `ResizeObserver` to know which form is drawn.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the palette owns open state).
 
 ## Motion & Animations

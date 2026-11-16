@@ -13,5 +13,4 @@ HoverCard.Content = HoverCardContent
 
 export default HoverCard
 export { HoverCardContent, HoverCardTrigger }
-export type { HoverCardPlacement } from './hover-card.vue'
-export type { HoverCardPlacementSide, HoverCardProps } from './hover-card.vue'
+export type { HoverCardAlign, HoverCardProps, HoverCardSide } from './hover-card.vue'

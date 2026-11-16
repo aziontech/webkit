@@ -30,7 +30,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 <template>
   <Tooltip
     content="Delete"
-    placement="top"
+    side="top"
   >
     <IconButton
       icon="ai ai-trash"
@@ -42,14 +42,14 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ## Props
 
-| Prop          | Type                                     | Default     | Required | JSDoc                                           |
-| ------------- | ---------------------------------------- | ----------- | -------- | ----------------------------------------------- |
-| `text`        | `string`                                 | `''`        | yes      | Plain text shown inside the tooltip.            |
-| `placement`   | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'`     | no       | Anchor side relative to the trigger.            |
-| `delay`       | `number`                                 | `200`       | no       | Hover-open delay in milliseconds.               |
-| `disabled`    | `boolean`                                | `false`     | no       | Disables tooltip activation.                    |
-| `open`        | `boolean`                                | `undefined` | no       | Controlled open state. Use with `v-model:open`. |
-| `defaultOpen` | `boolean`                                | `false`     | no       | Initial open state when uncontrolled.           |
+| Prop          | Type                                    | Default     | Required | JSDoc                                           |
+| ------------- | --------------------------------------- | ----------- | -------- | ----------------------------------------------- |
+| `text`        | `string`                                | `''`        | yes      | Plain text shown inside the tooltip.            |
+| `side`        | `'top' \| 'bottom' \| 'start' \| 'end'` | `'top'`     | no       | Side of the trigger the tooltip opens on.       |
+| `delay`       | `number`                                | `200`       | no       | Hover-open delay in milliseconds.               |
+| `disabled`    | `boolean`                               | `false`     | no       | Disables tooltip activation.                    |
+| `open`        | `boolean`                               | `undefined` | no       | Controlled open state. Use with `v-model:open`. |
+| `defaultOpen` | `boolean`                               | `false`     | no       | Initial open state when uncontrolled.           |
 
 ## Events
 
@@ -70,7 +70,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `data-state` values: `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop
-- `data-placement`: `top` | `right` | `bottom` | `left`
+- `data-side`: `top` | `bottom` | `start` | `end`
 
 ## Motion & Animations
 
@@ -79,7 +79,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 | open    | `animate-popup-scale-in`  | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 | close   | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 
-`--popup-origin` is set per instance based on `placement` (e.g. `top` → `bottom center`).
+`--popup-origin` is set per instance based on `side` (e.g. `top` → `bottom center`).
 
 ## Tokens
 
@@ -111,10 +111,10 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ## Examples
 
-Canonical layout. Tooltip has no `variant` and no `size`, but it has a `placement` axis — we treat `Placements` as the composite story (one frame, all four placements side-by-side), mirroring how Button uses `Types`/`Sizes`.
+Canonical layout. Tooltip has no `variant` and no `size`, but it has a `side` axis — we treat `Placements` as the composite story (one frame, all four sides side-by-side), mirroring how Button uses `Types`/`Sizes`.
 
 - Default — tooltip rendered **closed**; viewer hovers/focuses the trigger to see it open.
-- Placements — composite story with all four placements (top/right/bottom/left) side-by-side; each instance defaults to **closed**.
+- Placements — composite story with all four sides (top/end/bottom/start) side-by-side; each instance defaults to **closed**.
 - Disabled — trigger present, tooltip activation no-op.
 
 ## Constraints — DO NOT

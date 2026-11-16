@@ -6,19 +6,19 @@
   <div class="flex items-center gap-(--spacing-lg)">
     <Hint
       content="Anchored above the glyph."
-      placement="top"
+      side="top"
     />
     <Hint
       content="Anchored to the right of the glyph."
-      placement="right"
+      side="end"
     />
     <Hint
       content="Anchored below the glyph."
-      placement="bottom"
+      side="bottom"
     />
     <Hint
       content="Anchored to the left of the glyph."
-      placement="left"
+      side="start"
     />
   </div>
 </template>

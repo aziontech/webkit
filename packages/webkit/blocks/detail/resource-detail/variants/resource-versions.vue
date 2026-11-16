@@ -354,7 +354,10 @@
                     </template>
 
                     <template #cell-actions="{ row }">
-                      <DropdownMenu placement="bottom-end">
+                      <DropdownMenu
+                        side="bottom"
+                        align="end"
+                      >
                         <DropdownMenu.Trigger>
                           <Tooltip content="Version actions">
                             <IconButton

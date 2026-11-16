@@ -223,7 +223,8 @@
     >
       <DropdownMenu
         v-if="isMenu(item)"
-        placement="bottom-end"
+        side="bottom"
+        align="end"
         :disabled="item.disabled"
         :data-testid="`${testId}__menu`"
         @select="onMenuSelect"
@@ -278,7 +279,8 @@
 
     <DropdownMenu
       v-if="overflowItems.length"
-      placement="bottom-end"
+      side="bottom"
+      align="end"
       :data-testid="`${testId}__overflow`"
       @select="onOverflowSelect"
     >

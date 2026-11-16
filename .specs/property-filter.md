@@ -3,11 +3,11 @@ name: property-filter
 category: data
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: f996e3f4c9f2a748fad7c195ce87eb4c76e68d260b39ec7b8b3d95714bcde5ca
+checksum: f28f73593b01497075e42f37a52942f8f15927ab97e2394ed5a97889c3ff5ed9
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # PropertyFilter — Component Spec
@@ -171,6 +171,7 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 - `data-disabled` mirrors the `disabled` prop; while disabled nothing is added, removed or submitted (no `update:query`, no `submit`)
 - `loading` (values): a `Loading values` row with a spinner in the suggestions while `loadValues` is pending, `aria-busy` on the listbox; `error`: a `Could not load values` row when it rejects. A newer call wins over a stale one.
 - Grouped (`grouped`): each group is a bordered `group` (`data-testid="…__group"`); a pending new group shows a dashed `New group` chip until its first token.
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the suggestion panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Motion & Animations
 

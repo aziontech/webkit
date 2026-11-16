@@ -618,7 +618,8 @@
                       <Item.Actions v-if="!row.note">
                         <DropdownMenu
                           v-model:open="versionOpen[row.key]"
-                          placement="bottom-end"
+                          side="bottom"
+                          align="end"
                           @select="(_event, id) => pickVersion(row, String(id))"
                         >
                           <DropdownMenu.Trigger>
@@ -766,7 +767,8 @@
                                   <Item.Actions v-if="!dependency.note">
                                     <DropdownMenu
                                       v-model:open="versionOpen[dependency.key]"
-                                      placement="bottom-end"
+                                      side="bottom"
+                                      align="end"
                                       @select="(_event, id) => pickVersion(dependency, String(id))"
                                     >
                                       <DropdownMenu.Trigger>
@@ -946,7 +948,8 @@
                             </div>
                             <Popover
                               v-if="domainGroup.total > 1"
-                              placement="bottom-start"
+                              side="bottom"
+                              align="start"
                               size="small"
                             >
                               <Popover.Trigger
@@ -1024,7 +1027,8 @@
                       </Item.Content>
                       <Item.Actions v-if="projectMode === 'existing'">
                         <DropdownMenu
-                          placement="bottom-end"
+                          side="bottom"
+                          align="end"
                           @select="(_event, id) => (projectId = String(id))"
                         >
                           <DropdownMenu.Trigger>
@@ -1165,7 +1169,8 @@
                               </div>
                               <Popover
                                 v-if="domainGroup.total > 1"
-                                placement="bottom-start"
+                                side="bottom"
+                                align="start"
                                 size="small"
                               >
                                 <Popover.Trigger

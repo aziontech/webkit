@@ -6,7 +6,7 @@
 <template>
   <Tooltip
     content="This is a Tooltip"
-    placement="top"
+    side="top"
   >
     <Button
       label="Hover me"

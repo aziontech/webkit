@@ -409,13 +409,13 @@
 
   const isOpenRef = computed(() => isOpen.value)
 
-  const { resolvedPlacement, panelStyle } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: triggerEl,
     panelRef: panelEl,
     isOpen: isOpenRef,
-    placement: 'bottom-start',
-    offset: 6,
-    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 6,
     onDismiss: () => setOpen(false)
   })
 
@@ -548,7 +548,8 @@
           :aria-label="t('dateRangePicker.dialog')"
           :data-testid="`${testId}__popover`"
           :data-state="isOpen ? 'open' : 'closed'"
-          :data-placement="resolvedPlacement"
+          :data-side="resolvedSide"
+          :data-align="resolvedAlign"
           :data-size="size"
           :style="panelStyle"
           class="flex max-w-[min(90vw,24rem)] flex-col overflow-x-hidden overflow-y-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)]"

@@ -324,7 +324,7 @@
                   }}<span class="whitespace-nowrap"
                     >{{ labelTail(row.label)
                     }}<span class="-my-(--spacing-2xs) ms-(--spacing-2xs) inline-flex align-middle"
-                      ><Popover placement="auto">
+                      ><Popover side="auto">
                         <PopoverTrigger>
                           <IconButton
                             variant="ghost"

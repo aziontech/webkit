@@ -3,14 +3,14 @@ name: dropdown-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: eca8c146860898784b27c3f27360a2ca8617f64d0fa646ec48072fcd9ad71435
+checksum: 7ae076b2b4c3e8aef3e6598581f99dc6534bde7a61d6bc8e1f8c01bade56fd4a
 created: 2026-06-26
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # DropdownMenu — Component Spec
@@ -188,19 +188,20 @@ Sub-menus and checkable options:
   - Props: `label: string` default `''` — plain-text label; falls back to the default slot. `disabled: boolean` default `false` — the row cannot open its sub-menu and applies disabled tokens.
   - Events: _none_.
   - Slots: `default` (rich label), `leading` (icon before the label).
-- `dropdown-menu-sub-content/dropdown-menu-sub-content.vue` — the nested panel. Teleported to `body` and positioned by the shared `usePlacement` against the sub-trigger at `right-start` (`left-start` under rtl), flipping to the other side when it does not fit; the same surface, border, shadow and motion as the top-level panel, `role="menu"` labelled by the sub-trigger. It is its own menu level: `Down` / `Up` / `Home` / `End` move inside it, `ArrowLeft` (`ArrowRight` under rtl) and `Esc` close it and return focus to the sub-trigger, `Tab` closes the whole menu. Clicks inside it never dismiss the menu.
+- `dropdown-menu-sub-content/dropdown-menu-sub-content.vue` — the nested panel. Teleported to `body` and positioned by the shared `usePlacement` against the sub-trigger at `side="end"` + `align="start"` (the right side in ltr, the left side under rtl), flipping to the other side when it does not fit; the same surface, border, shadow and motion as the top-level panel, `role="menu"` labelled by the sub-trigger. It is its own menu level: `Down` / `Up` / `Home` / `End` move inside it, `ArrowLeft` (`ArrowRight` under rtl) and `Esc` close it and return focus to the sub-trigger, `Tab` closes the whole menu. Clicks inside it never dismiss the menu.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Group>` (groups render into this panel exactly as they do at the top level), which may hold further `<DropdownMenu.Sub>`.
 
 ## Props
 
-| Prop          | Type                                                                   | Default          | Required | JSDoc                                                                                                                       |
-| ------------- | ---------------------------------------------------------------------- | ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `placement`   | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false    | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space. |
-| `offset`      | `number`                                                               | `4`              | false    | Pixel gap between the trigger and the panel.                                                                                |
-| `disabled`    | `boolean`                                                              | `false`          | false    | Prevents the trigger from opening the panel and applies disabled tokens.                                                    |
-| `defaultOpen` | `boolean`                                                              | `false`          | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                              |
+| Prop          | Type                                                                   | Default    | Required | JSDoc                                                                                                                          |
+| ------------- | ---------------------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `side`        | `DropdownMenuSide \| 'auto'` (`'top' \| 'bottom' \| 'start' \| 'end'`) | `'bottom'` | false    | Side of the trigger the panel opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. |
+| `align`       | `DropdownMenuAlign` (`'start' \| 'center' \| 'end'`)                   | `'start'`  | false    | Alignment along the trigger edge.                                                                                              |
+| `sideOffset`  | `number`                                                               | `4`        | false    | Pixel gap between the trigger and the panel.                                                                                   |
+| `disabled`    | `boolean`                                                              | `false`    | false    | Prevents the trigger from opening the panel and applies disabled tokens.                                                       |
+| `defaultOpen` | `boolean`                                                              | `false`    | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                 |
 
 ## v-model
 
@@ -210,11 +211,11 @@ Sub-menus and checkable options:
 
 ## Events
 
-| Event    | Payload                                                                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| -------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Event    | Payload                                                              | Notes                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuItemValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type="checkbox"` / `type="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
 
-**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuItemValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuPlacementSide` and `DropdownMenuPlacement` (the `placement` prop), so a `select` handler is typed without a local alias.
+**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuItemValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuSide` and `DropdownMenuAlign` (the `side` and `align` props), so a `select` handler is typed without a local alias.
 
 ## Slots
 
@@ -232,9 +233,10 @@ Sub-menus and checkable options:
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
-- `data-placement` on the sub-panel mirrors its resolved side (`right-start` | `right-end` | `left-start` | `left-end`)
-- `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
-- `data-placement` on the panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
+- `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
+- `data-side` / `data-align` on the panel mirror the resolved side and alignment after flipping
+- `start` and `end` follow the text direction: under `dir="rtl"`, `align="start"` lines the panel up with the trigger's right edge and `side="end"` opens on the left
 
 ## Motion & Animations
 
@@ -305,7 +307,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 
 - Layout: logical utilities only (`text-start`, `ps-`/`pe-`, `gap`); the panel and every sub-panel bind `dir` / `lang` from `WebkitProvider`, so they lay out in the provider's direction under `body`.
 - Icons: the sub-trigger chevron mirrors (`rtl:-scale-x-100`); the check and radio dot do not.
-- Keyboard: under rtl `ArrowLeft` opens a sub-menu and `ArrowRight` closes it; the sub-panel opens at `left-start` and flips to `right-start` when it does not fit. `Up` / `Down` are unchanged.
+- Keyboard: under rtl `ArrowLeft` opens a sub-menu and `ArrowRight` closes it; the sub-panel opens on the inline end (the left) and flips to the right when it does not fit. `Up` / `Down` are unchanged.
 - User data: none (labels are consumer text).
 
 ## Responsive
@@ -328,8 +330,8 @@ Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every 
 - Default — one trigger, one group, six options, no leading/trailing affordances.
 - Groups — composite story rendering two `<DropdownMenu.Group>` with labels and a divider between them; required because grouping is the central anatomy of this component and is not covered by `Default`.
 - States — composite story rendering one panel with options in each option state side-by-side: `default`, `hover` (simulated via `data-state`), `selected`, `disabled`. Required because `DropdownMenu.Item` has no `type` / `size` axis but a state axis that is the component's visual identity.
-- Placements — composite story rendering all four explicit `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
-- AutoPlacement — composite story demonstrating `placement="auto"`: four triggers anchored near each viewport corner so the resolver opens the panel toward the corner with the most available space. Required because `'auto'` is the only `placement` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
+- Placements — composite story rendering the four corners (`bottom` / `top` × `start` / `end`) side-by-side. Required because `side` × `align` is a multi-value prop axis with no other coverage; consumers need to see how each anchors against its trigger.
+- AutoPlacement — composite story demonstrating `side="auto"`: four triggers anchored near each viewport corner so the resolver opens the panel toward the side with the most available space. Required because `'auto'` is the only `side` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
 - OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `leading` + `trailing` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
 - WithHeaderAndFooter — single panel forced open showing the root `header` and `footer` named slots in use (e.g. a search input on top, a footer action on bottom). Required because both slots are public root API documented in the Slots table and have no other coverage.
 - GroupsWithHeaderAndFooter — panel forced open with two `<DropdownMenu.Group>` each using its own `header` (per-section caption) and `footer` (per-section action) slots. Required because the group-level `header`/`footer` are public API on `DropdownMenu.Group` and behave differently from the root slots (inline, per-section — not sticky).

@@ -130,7 +130,7 @@
     v-model:open="open"
     :data-testid="testId"
     :data-format="format"
-    placement="auto"
+    side="auto"
   >
     <PopoverTrigger>
       <button

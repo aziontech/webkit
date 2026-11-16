@@ -294,6 +294,11 @@ describe('MultiSelect', () => {
       expect(panel!.getAttribute('aria-multiselectable')).toBe('true')
       expect(trigger.getAttribute('aria-expanded')).toBe('true')
       expect(trigger.getAttribute('data-state')).toBe('open')
+      const content = document.body.querySelector<HTMLElement>(
+        '[data-testid="multi-select-content"]'
+      )
+      expect(content?.getAttribute('data-side')).toMatch(/^(bottom|top)$/)
+      expect(content?.getAttribute('data-align')).toBe('start')
 
       await fireEvent.click(trigger)
       expect(listbox()).toBeNull()

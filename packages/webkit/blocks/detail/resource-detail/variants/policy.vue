@@ -48,7 +48,10 @@
             icon="ai ai-list"
           />
 
-          <DropdownMenu placement="bottom-end">
+          <DropdownMenu
+            side="bottom"
+            align="end"
+          >
             <DropdownMenu.Trigger>
               <Tooltip content="Policy actions">
                 <IconButton

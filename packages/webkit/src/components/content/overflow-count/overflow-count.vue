@@ -116,7 +116,8 @@
   >
     <Popover
       v-model:open="open"
-      placement="bottom-start"
+      side="bottom"
+      align="start"
       size="small"
       :data-testid="`${testId}__popover`"
     >

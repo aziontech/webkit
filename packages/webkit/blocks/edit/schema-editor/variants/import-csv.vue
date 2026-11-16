@@ -685,7 +685,8 @@
                   @click="openRow"
                 />
                 <DropdownMenu
-                  placement="bottom-end"
+                  side="bottom"
+                  align="end"
                   @select="onTableAction"
                 >
                   <DropdownMenu.Trigger>

@@ -3,13 +3,13 @@ name: theme-switcher
 category: input
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: fb045b872791d8b6139a85fcf45144ceffa9402b780f826cdd0c506422f83343
+checksum: cacfd805814c105f1bfba62aa15296ae675dbb8f29c6b3b1396343c9005c2bcf
 created: 2026-07-13
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Theme Switcher — Component Spec
@@ -115,7 +115,7 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the focused segment.
 - Keyboard map: `Tab` moves focus into the group (roving tabindex lands on the selected segment); `ArrowLeft`/`ArrowRight` (and `ArrowUp`/`ArrowDown`) move selection between segments; `Space`/`Enter` selects the focused segment.
 - ARIA: root is `role="radiogroup"` with `aria-label` from `ariaLabel`; each segment is `role="radio"` with `aria-checked` and its own `aria-label` (`System` / `Dark` / `Light`); the glyph is `aria-hidden`. `aria-disabled` mirrors `disabled`.
-- Each segment is wrapped in `@aziontech/webkit/tooltip` (`placement="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
+- Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target: segments follow the compact Figma sizing (28px pill height, 28×20px segments) and are below the 40×40 px target; justified deviation for a dense global control, consistent with the design.

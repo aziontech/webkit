@@ -1,12 +1,10 @@
 <script setup lang="ts">
-  import Popover, {
-    type PopoverPlacement,
-    type PopoverPlacementSide
-  } from '@aziontech/webkit/popover'
+  import Popover, { type PopoverAlign, type PopoverSide } from '@aziontech/webkit/popover'
   import { ref } from 'vue'
 
-  const side: PopoverPlacementSide = 'right-start'
-  const placements: PopoverPlacement[] = ['auto', 'left-end', 'top', side]
+  const side: PopoverSide = 'end'
+  const sides: (PopoverSide | 'auto')[] = ['auto', 'start', 'top', side]
+  const align: PopoverAlign = 'end'
   const open = ref(false)
   const lastOpen = ref<boolean>(false)
   const record = (value: boolean): void => {
@@ -17,17 +15,18 @@
 
 <template>
   <Popover
-    v-for="placement in placements"
-    :key="placement"
+    v-for="item in sides"
+    :key="item"
     v-model:open="open"
-    :placement="placement"
+    :side="item"
+    :align="align"
   >
     <Popover.Trigger><button type="button">Open</button></Popover.Trigger>
-    <Popover.Content>{{ placement }}</Popover.Content>
+    <Popover.Content>{{ item }}</Popover.Content>
   </Popover>
 
   <Popover
-    placement="left"
+    side="start"
     @update:open="(value) => record(value)"
   >
     <Popover.Trigger><button type="button">Left</button></Popover.Trigger>
@@ -36,6 +35,6 @@
   <!-- @vue-expect-error update:open carries a boolean, not a string -->
   <Popover @update:open="(value) => label(value)" />
 
-  <!-- @vue-expect-error center is not a placement -->
-  <Popover placement="center" />
+  <!-- @vue-expect-error left is not a side: sides are logical -->
+  <Popover side="left" />
 </template>

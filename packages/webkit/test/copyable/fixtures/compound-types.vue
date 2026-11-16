@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Accordion, { type AccordionValue } from '@aziontech/webkit/accordion'
-  import type { PopoverPlacement } from '@aziontech/webkit/popover'
+  import type { PopoverSide } from '@aziontech/webkit/popover'
   import Stepper, { type StepperStepStatus } from '@aziontech/webkit/stepper'
   import type { TableSortDirection, TableStateSnapshot } from '@aziontech/webkit/table'
   import { ref } from 'vue'
@@ -9,7 +9,7 @@
   const step = ref<string>('domain')
   const statusOf = (value: string): StepperStepStatus =>
     value === 'domain' ? 'success' : 'pending'
-  const placement: PopoverPlacement = 'auto'
+  const placement: PopoverSide = 'end'
   const direction: TableSortDirection = 'ascending'
   const snapshot: TableStateSnapshot = { globalFilter: '' }
   // @ts-expect-error a step status is one of the four statuses

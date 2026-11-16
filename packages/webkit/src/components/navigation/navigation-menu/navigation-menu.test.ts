@@ -269,8 +269,8 @@ describe('NavigationMenu', () => {
       // the positioner's inline transform / CSS vars are what get asserted.
       const positioner = () => body().getByTestId('navigation-menu-positioner')
 
-      const TALL_PANEL = (rows: number, wrapperStyle: string) => `
-      <div style="${wrapperStyle}">
+      const TALL_PANEL = (rows: number, wrapperStyle: string, dir = 'ltr') => `
+      <div dir="${dir}" style="${wrapperStyle}">
         <NavigationMenu aria-label="Primary">
           <NavigationMenuList :show-highlight="false">
             <NavigationMenuItem value="solutions">
@@ -292,6 +292,20 @@ describe('NavigationMenu', () => {
         </NavigationMenu>
       </div>
     `
+
+      it('resolves side=start to the right under rtl, so a trigger on the right edge flips to end', async () => {
+        const { getByRole } = renderTree(
+          TALL_PANEL(2, 'position:fixed;top:120px;right:0', 'rtl').replace(
+            'side="bottom" align="start"',
+            'side="start" align="start"'
+          )
+        )
+        await userEvent.click(getByRole('button', { name: /Solutions/ }))
+        await waitFor(() => expect(positioner()).toHaveAttribute('data-side', 'end'), {
+          timeout: OPEN_TIMEOUT
+        })
+        expect(positioner()).toHaveAttribute('data-align', 'start')
+      })
 
       it('flips above the trigger when there is no room below', async () => {
         const { getByRole } = renderTree(

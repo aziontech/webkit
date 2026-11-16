@@ -275,7 +275,7 @@
             <div class="absolute end-(--spacing-xs) top-(--spacing-xs)">
               <Tooltip
                 content="Dismiss"
-                placement="top"
+                side="top"
               >
                 <IconButton
                   icon="ai ai-x"

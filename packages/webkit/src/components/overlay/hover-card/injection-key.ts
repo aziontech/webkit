@@ -1,12 +1,10 @@
 import { type InjectionKey, type Ref } from 'vue'
 
-import type { Placement } from '../../../composables/use-placement'
+/** Side of the trigger the card opens on; `start` and `end` follow the text direction. */
+export type HoverCardSide = 'top' | 'bottom' | 'start' | 'end'
 
-/** Side of the trigger the card opens on, optionally aligned to its start or end. */
-export type HoverCardPlacementSide = Placement
-
-/** Prop-level placement; `'auto'` picks the side with the most room at open time. */
-export type HoverCardPlacement = HoverCardPlacementSide | 'auto'
+/** Alignment of the card along the trigger edge. */
+export type HoverCardAlign = 'start' | 'center' | 'end'
 
 /** State the hover-card root shares with its trigger and card. */
 export interface HoverCardContext {
@@ -16,8 +14,10 @@ export interface HoverCardContext {
   contentId: string
   /** Current open state. */
   isOpen: Readonly<Ref<boolean>>
-  /** Resolved placement of the card. */
-  placement: Readonly<Ref<HoverCardPlacementSide>>
+  /** Side the card landed on, rendered as data-side. */
+  side: Readonly<Ref<HoverCardSide>>
+  /** Alignment the card landed on, rendered as data-align. */
+  align: Readonly<Ref<HoverCardAlign>>
   /** Inline position style computed by the shared placement engine. */
   panelStyle: Readonly<Ref<Record<string, string>>>
   /** Trigger wrapper element, the positioning anchor. */

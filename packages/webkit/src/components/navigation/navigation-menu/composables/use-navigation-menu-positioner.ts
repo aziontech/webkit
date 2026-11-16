@@ -12,11 +12,13 @@ import {
   watch
 } from 'vue'
 
+import type { Direction } from '../../../../composables/use-direction'
 import {
   type Align,
   type CollisionPadding,
   computePlacement,
   getClippingBoundary,
+  type PhysicalSide,
   type Side,
   type Size
 } from '../../../../composables/use-placement'
@@ -29,6 +31,7 @@ export interface NavigationMenuPositionerOptions {
   alignOffset?: number
   arrowPadding?: number
   collisionPadding?: CollisionPadding
+  dir?: Direction
 }
 
 export interface UseNavigationMenuPositionerReturn {
@@ -47,6 +50,7 @@ interface PlacementState {
   x: number
   y: number
   side: Side
+  physicalSide: PhysicalSide
   align: Align
   width: number
   height: number
@@ -55,7 +59,7 @@ interface PlacementState {
 }
 
 const ALIGN_VALUES: ReadonlySet<string> = new Set<Align>(['start', 'center', 'end'])
-const SIDE_VALUES: ReadonlySet<string> = new Set<Side>(['top', 'bottom', 'left', 'right'])
+const SIDE_VALUES: ReadonlySet<string> = new Set<Side>(['top', 'bottom', 'start', 'end'])
 const DEFAULT_COLLISION_PADDING = 8
 
 function normalizeCollisionPadding(raw: CollisionPadding | undefined): CollisionPadding {
@@ -102,6 +106,7 @@ export function useNavigationMenuPositioner(
     x: 0,
     y: 0,
     side: 'bottom',
+    physicalSide: 'bottom',
     align: 'center',
     width: 0,
     height: 0,
@@ -123,7 +128,8 @@ export function useNavigationMenuPositioner(
       sideOffset: typeof raw.sideOffset === 'number' ? raw.sideOffset : 8,
       alignOffset: typeof raw.alignOffset === 'number' ? raw.alignOffset : 0,
       arrowPadding: typeof raw.arrowPadding === 'number' ? raw.arrowPadding : 8,
-      collisionPadding: normalizeCollisionPadding(raw.collisionPadding)
+      collisionPadding: normalizeCollisionPadding(raw.collisionPadding),
+      dir: raw.dir === 'rtl' ? ('rtl' as const) : ('ltr' as const)
     }
   })
 
@@ -135,29 +141,30 @@ export function useNavigationMenuPositioner(
     const anchorRect = readRect(anchorElement)
     const naturalSize = readTargetSize() ?? readRect(floatingElement)
     if (!anchorElement || !anchorRect || !naturalSize) return
-    const { side, align, sideOffset, alignOffset, collisionPadding } = opts.value
+    const { side, align, sideOffset, alignOffset, collisionPadding, dir } = opts.value
     const viewport = { width: globalThis.innerWidth ?? 0, height: globalThis.innerHeight ?? 0 }
 
     const result = computePlacement({
       triggerRect: anchorRect,
       panelSize: { width: naturalSize.width, height: naturalSize.height },
       boundary: getClippingBoundary(anchorElement, viewport),
-      placement: align === 'center' ? side : `${side}-${align}`,
+      side,
+      align,
+      dir,
       flip: true,
-      offset: sideOffset,
+      sideOffset,
       alignOffset,
       collisionPadding
     })
-    const [sidePart, alignPart] = result.placement.split('-')
-    const resolvedSide: Side = isSide(sidePart) ? sidePart : side
-    const resolvedAlign: Align = isAlign(alignPart) ? alignPart : 'center'
+    const physicalSide = result.physicalSide
 
     const frame = getFixedFrame(floatingElement)
     state.value = {
       x: (result.left - frame.left) / frame.scaleX,
       y: (result.top - frame.top) / frame.scaleY,
-      side: resolvedSide,
-      align: resolvedAlign,
+      side: result.side,
+      physicalSide,
+      align: result.align,
       width: result.width,
       height: result.height,
       maxWidth: result.maxWidth === null ? null : result.maxWidth / frame.scaleX,
@@ -166,9 +173,9 @@ export function useNavigationMenuPositioner(
 
     const clamp = (value: number, max: number) => Math.min(Math.max(value, 0), Math.max(max, 0))
     popupOrigin.value =
-      resolvedSide === 'top' || resolvedSide === 'bottom'
-        ? `${clamp(anchorRect.left + anchorRect.width / 2 - result.left, result.width).toFixed(2)}px ${resolvedSide === 'bottom' ? 'top' : 'bottom'}`
-        : `${resolvedSide === 'right' ? 'left' : 'right'} ${clamp(anchorRect.top + anchorRect.height / 2 - result.top, result.height).toFixed(2)}px`
+      physicalSide === 'top' || physicalSide === 'bottom'
+        ? `${clamp(anchorRect.left + anchorRect.width / 2 - result.left, result.width).toFixed(2)}px ${physicalSide === 'bottom' ? 'top' : 'bottom'}`
+        : `${physicalSide === 'right' ? 'left' : 'right'} ${clamp(anchorRect.top + anchorRect.height / 2 - result.top, result.height).toFixed(2)}px`
 
     hasPlacement.value = true
   }
@@ -250,9 +257,9 @@ export function useNavigationMenuPositioner(
 
     const arrowSize = arrowEl ? arrowEl.offsetWidth || 8 : 8
     const padding = opts.value.arrowPadding
-    const { x, y, side, width, height } = state.value
+    const { x, y, physicalSide, width, height } = state.value
 
-    if (side === 'top' || side === 'bottom') {
+    if (physicalSide === 'top' || physicalSide === 'bottom') {
       const offsetX = anchorRect.left + anchorRect.width / 2 - x - arrowSize / 2
       return { left: `${Math.min(Math.max(offsetX, padding), width - arrowSize - padding)}px` }
     }

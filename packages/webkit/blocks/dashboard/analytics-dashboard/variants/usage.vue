@@ -537,7 +537,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('comparison', value)"
               >
                 <DropdownMenu.Trigger>
@@ -615,7 +616,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('projects', value)"
               >
                 <DropdownMenu.Trigger>
@@ -688,7 +690,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('usage', value)"
               >
                 <DropdownMenu.Trigger>

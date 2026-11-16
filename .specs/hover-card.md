@@ -3,11 +3,11 @@ name: hover-card
 category: overlay
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 8a9ccc38fa799fad5907270b842a8d6988bbb758e40af8d9c4c90130193482d9
+checksum: b3e55629f0faf392f28075bddf312a2e6c79acfc26f1bd3f1265ff7566149c26
 created: 2026-11-14
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # HoverCard — Component Spec
@@ -78,21 +78,22 @@ Tree-shaking alternative — the same sub-components as standalone imports:
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` with scope `{ isOpen: boolean }` — the previewed element.
-- `hover-card-content/hover-card-content.vue` — the floating card. Teleported to `body`, rendered only while open, positioned by the root, `data-testid` `hover-card-content`, `data-state`, `data-placement`. Entering it with the pointer cancels a pending close and leaving it schedules one, so the pointer can travel from the trigger to the card; focus entering it does the same and focus leaving it to anything but the trigger schedules the close. `Tab` past its last focusable element moves to the element after the trigger in the page, `Shift+Tab` from its first returns to the trigger. It has no role: it is description text for the trigger, not a dialog, and takes focus only when it holds a link or another focusable element.
+- `hover-card-content/hover-card-content.vue` — the floating card. Teleported to `body`, rendered only while open, positioned by the root, `data-testid` `hover-card-content`, `data-state`, `data-side`, `data-align`. Entering it with the pointer cancels a pending close and leaving it schedules one, so the pointer can travel from the trigger to the card; focus entering it does the same and focus leaving it to anything but the trigger schedules the close. `Tab` past its last focusable element moves to the element after the trigger in the page, `Shift+Tab` from its first returns to the trigger. It has no role: it is description text for the trigger, not a dialog, and takes focus only when it holds a link or another focusable element.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the card content.
 
 ## Props
 
-| Prop          | Type                                                                       | Default    | Required | JSDoc                                                                                                   |
-| ------------- | -------------------------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `placement`   | `HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`) | `'bottom'` | false    | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
-| `offset`      | `number`                                                                   | `8`        | false    | Pixel gap between the trigger and the card.                                                             |
-| `openDelay`   | `number`                                                                   | `500`      | false    | Milliseconds the pointer or focus must stay on the trigger before the card opens.                       |
-| `closeDelay`  | `number`                                                                   | `300`      | false    | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes.         |
-| `disabled`    | `boolean`                                                                  | `false`    | false    | Never opens the card.                                                                                   |
-| `defaultOpen` | `boolean`                                                                  | `false`    | false    | Initial open state while `v-model:open` is unbound.                                                     |
+| Prop          | Type                                                                | Default    | Required | JSDoc                                                                                                                         |
+| ------------- | ------------------------------------------------------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `side`        | `HoverCardSide \| 'auto'` (`'top' \| 'bottom' \| 'start' \| 'end'`) | `'bottom'` | false    | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. |
+| `align`       | `HoverCardAlign` (`'start' \| 'center' \| 'end'`)                   | `'center'` | false    | Alignment along the trigger edge.                                                                                             |
+| `sideOffset`  | `number`                                                            | `8`        | false    | Pixel gap between the trigger and the card.                                                                                   |
+| `openDelay`   | `number`                                                            | `500`      | false    | Milliseconds the pointer or focus must stay on the trigger before the card opens.                                             |
+| `closeDelay`  | `number`                                                            | `300`      | false    | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes.                               |
+| `disabled`    | `boolean`                                                           | `false`    | false    | Never opens the card.                                                                                                         |
+| `defaultOpen` | `boolean`                                                           | `false`    | false    | Initial open state while `v-model:open` is unbound.                                                                           |
 
 ## v-model
 
@@ -114,7 +115,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 
 - `data-state` (root, trigger, content): `open` | `closed`.
 - `data-disabled` on the root mirrors `disabled`; the card never opens.
-- `data-placement` on the content mirrors the resolved placement.
+- `data-side` / `data-align` on the content mirror the resolved side and alignment after flipping.
 - `loading`, `empty`, `error`, `readonly`, `invalid`: not states of this component; a preview that loads data shows a `Skeleton` inside `HoverCard.Content`, owned by the consumer.
 
 ## Motion & Animations
@@ -164,7 +165,7 @@ No built-in strings: the card shows only consumer content.
 - Icons: none.
 - Keyboard: no arrow keys.
 - User data: consumer content; wrap names and domains in `<bdi>` inside the card.
-- Placement: `-start` / `-end` align to the trigger's physical left / right edge, as in `Popover`.
+- Placement: `side="start"` / `"end"` and `align="start"` / `"end"` follow the text direction, as in `Popover`: under `rtl`, `start` is the right side and the right edge.
 
 ## Responsive
 

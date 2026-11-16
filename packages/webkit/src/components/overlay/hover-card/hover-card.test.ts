@@ -59,7 +59,30 @@ const inCard = (id: string) =>
     `[data-testid="hover-card-content"] [data-testid="${id}"]`
   ) as HTMLElement
 
+const EdgeHost = (dir: 'ltr' | 'rtl', edge: 'left' | 'right') =>
+  defineComponent({
+    setup: () => () =>
+      h('div', { dir, style: `position:fixed;top:200px;${edge}:0` }, [
+        h(HoverCard, { defaultOpen: true, side: 'start', align: 'start' }, () => [
+          h(HoverCard.Trigger, null, () => h('a', { href: '#jane' }, 'Jane Doe')),
+          h(HoverCard.Content, null, () => h('p', 'Owner of production'))
+        ])
+      ])
+  })
+
 describe('HoverCard', () => {
+  it('resolves side=start to the right under rtl, so a trigger on the right edge flips to end', async () => {
+    render(EdgeHost('rtl', 'right'))
+    await waitFor(() => expect(card()?.dataset['side']).toBe('end'))
+  })
+
+  it('keeps side=start under rtl when the trigger sits on the left edge', async () => {
+    render(EdgeHost('rtl', 'left'))
+    await waitFor(() => expect(card()?.style.translate ?? '').not.toMatch(/-9999|^$/))
+    expect(card()?.dataset['side']).toBe('start')
+    expect(card()?.dataset['align']).toBe('start')
+  })
+
   it('renders derived test ids, closed by default, and a consumer test id wins', () => {
     const { container } = render(Default)
     expect(container.querySelector('[data-testid="hover-card"]')).not.toBeNull()
@@ -183,11 +206,12 @@ describe('HoverCard', () => {
     expect(card()).toBeNull()
   })
 
-  it('default-open renders the card teleported to body with a resolved placement', async () => {
+  it('default-open renders the card teleported to body with a resolved side and align', async () => {
     const { container } = render(ResourcePreview)
     await waitFor(() => expect(card()).not.toBeNull())
     expect(container.contains(card())).toBe(false)
-    expect(card()?.dataset['placement']).toMatch(/^(top|bottom)/)
+    expect(card()?.dataset['side']).toMatch(/^(top|bottom)$/)
+    expect(card()?.dataset['align']).toBe('start')
     await nextTick()
     await expectNoA11yViolations(container)
     await expectNoA11yViolations(card() as HTMLElement)

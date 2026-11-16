@@ -192,7 +192,8 @@
 <template>
   <Tooltip content="Select an environment to see its deployment and settings, or add another one">
     <DropdownMenuRoot
-      placement="bottom-end"
+      side="bottom"
+      align="end"
       @select="(_event, value) => onSelect(value)"
     >
       <DropdownMenuTrigger>

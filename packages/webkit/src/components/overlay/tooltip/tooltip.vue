@@ -7,8 +7,10 @@
   import { usePortalLocale } from '../../../composables/use-translate'
   import { triggerControl } from '../../../utils/trigger-control'
 
-  export type TooltipPlacementSide = 'top' | 'right' | 'bottom' | 'left'
-  export type TooltipPlacement = TooltipPlacementSide | 'auto'
+  /** Side of the trigger the tooltip opens on; `start` and `end` follow the text direction. */
+  export type TooltipSide = 'top' | 'bottom' | 'start' | 'end'
+  /** Alignment of the tooltip along the trigger edge. */
+  export type TooltipAlign = 'start' | 'center' | 'end'
 
   defineOptions({
     name: 'Tooltip',
@@ -22,8 +24,12 @@
   export interface TooltipProps {
     /** Plain text shown inside the tooltip. */
     content: string
-    /** Anchor side relative to the trigger. `'auto'` picks the side with the most room at open time. */
-    placement?: TooltipPlacement
+    /** Side of the trigger the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. */
+    side?: TooltipSide | 'auto'
+    /** Alignment along the trigger edge. */
+    align?: TooltipAlign
+    /** Pixel gap between the trigger and the tooltip. */
+    sideOffset?: number
     /** Hover-open delay in milliseconds. */
     delay?: number
     /** Disables tooltip activation. */
@@ -33,7 +39,9 @@
   }
 
   const props = withDefaults(defineProps<TooltipProps>(), {
-    placement: 'top',
+    side: 'top',
+    align: 'center',
+    sideOffset: 8,
     delay: 200,
     disabled: false,
     defaultOpen: false
@@ -69,19 +77,16 @@
   })
 
   const isOpenRef = computed(() => isOpen.value)
-  const placementRef = computed(() => props.placement)
-
-  const { resolvedPlacement, panelStyle, anchored, updatePosition } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle, anchored, updatePosition } = usePlacement({
     triggerRef: triggerEl,
     panelRef: panelEl,
     isOpen: isOpenRef,
-    placement: placementRef,
-    offset: 8,
-    autoPlacements: ['top', 'bottom', 'right', 'left'],
+    side: () => props.side,
+    align: () => props.align,
+    sideOffset: () => props.sideOffset,
+    autoSides: ['top', 'bottom', 'end', 'start'],
     onDismiss: () => closeTooltip()
   })
-
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as TooltipPlacementSide)
 
   const { isTop } = useOverlayLayer(() => isOpen.value && Boolean(props.content), {
     element: panelEl,
@@ -214,7 +219,8 @@
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="disabled || null"
-    :data-placement="resolvedPlacementRef"
+    :data-side="resolvedSide"
+    :data-align="resolvedAlign"
     @mouseenter="scheduleOpen"
     @mouseleave="scheduleClose()"
     @pointerdown="onPointerdown"
@@ -240,7 +246,8 @@
         role="tooltip"
         :data-testid="`${testId}__panel`"
         :data-state="isOpen ? 'open' : 'closed'"
-        :data-placement="resolvedPlacementRef"
+        :data-side="resolvedSide"
+        :data-align="resolvedAlign"
         :data-anchored="anchored || null"
         :aria-hidden="!isOpen"
         @mouseenter="clearCloseTimer"

@@ -146,7 +146,8 @@
         <slot name="actions" />
         <template v-if="node.bindable">
           <DropdownMenu
-            placement="bottom-end"
+            side="bottom"
+            align="end"
             :data-testid="`${testId}__bind`"
             @select="onSelect"
           >

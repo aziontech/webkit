@@ -1068,4 +1068,70 @@ describe('Select', () => {
       expect(new FormData(disabled.getByTestId('form') as HTMLFormElement).has('plan')).toBe(false)
     })
   })
+
+  describe('panel side and text direction', () => {
+    const DirHost = (dir: 'ltr' | 'rtl') =>
+      defineComponent({
+        setup() {
+          const value = ref('a')
+          return () =>
+            h(
+              'div',
+              { dir, style: `position:fixed;top:40px;${dir === 'rtl' ? 'right' : 'left'}:24px` },
+              [
+                h(
+                  Select,
+                  {
+                    variant: 'ghost',
+                    open: true,
+                    modelValue: value.value,
+                    'onUpdate:modelValue': (v: unknown) => {
+                      value.value = v as string
+                    }
+                  },
+                  () => [
+                    h(SelectTrigger, { 'aria-label': 'Environment' }),
+                    h(SelectContent, null, () => [
+                      h(SelectItem, { value: 'a' }, () => 'A'),
+                      h(SelectItem, { value: 'b' }, () => 'A longer option')
+                    ])
+                  ]
+                )
+              ]
+            )
+        }
+      })
+
+    const trigger = () =>
+      document.body.querySelector('[data-testid="select-trigger"]') as HTMLElement
+
+    it('renders the resolved side and align on the panel', async () => {
+      render(DirHost('ltr'))
+      await nextTick()
+      await nextTick()
+      expect(getContent()!.getAttribute('data-side')).toBe('bottom')
+      expect(getContent()!.getAttribute('data-align')).toBe('start')
+    })
+
+    it('lines the panel up with the trigger start edge in ltr and its right edge in rtl', async () => {
+      const ltr = render(DirHost('ltr'))
+      await nextTick()
+      await nextTick()
+      expect(
+        Math.abs(
+          getContent()!.getBoundingClientRect().left - trigger().getBoundingClientRect().left
+        )
+      ).toBeLessThanOrEqual(1)
+      ltr.unmount()
+      document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
+
+      render(DirHost('rtl'))
+      await nextTick()
+      await nextTick()
+      const panel = getContent()!.getBoundingClientRect()
+      const anchor = trigger().getBoundingClientRect()
+      expect(panel.width).toBeGreaterThan(anchor.width)
+      expect(Math.abs(panel.right - anchor.right)).toBeLessThanOrEqual(1)
+    })
+  })
 })

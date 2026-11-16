@@ -454,7 +454,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('requests', value)"
               >
                 <DropdownMenu.Trigger>
@@ -543,7 +544,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('status-codes', value)"
               >
                 <DropdownMenu.Trigger>
@@ -620,7 +622,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('countries', value)"
               >
                 <DropdownMenu.Trigger>
@@ -695,7 +698,8 @@
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('hosts', value)"
               >
                 <DropdownMenu.Trigger>

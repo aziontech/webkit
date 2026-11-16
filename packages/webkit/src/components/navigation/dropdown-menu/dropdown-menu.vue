@@ -5,18 +5,14 @@
   import { useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale } from '../../../composables/use-translate'
-  import type {
-    DropdownMenuItemValue,
-    DropdownMenuPlacement,
-    DropdownMenuPlacementSide
-  } from './injection-key'
+  import type { DropdownMenuAlign, DropdownMenuItemValue, DropdownMenuSide } from './injection-key'
   import { DropdownMenuInjectionKey } from './injection-key'
 
   export type {
+    DropdownMenuAlign,
     DropdownMenuItemType,
     DropdownMenuItemValue,
-    DropdownMenuPlacement,
-    DropdownMenuPlacementSide
+    DropdownMenuSide
   } from './injection-key'
 
   defineOptions({
@@ -31,10 +27,12 @@
   }>()
 
   export interface DropdownMenuProps {
-    /** Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time. */
-    placement?: DropdownMenuPlacement
+    /** Side of the trigger the panel opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. */
+    side?: DropdownMenuSide | 'auto'
+    /** Alignment along the trigger edge. */
+    align?: DropdownMenuAlign
     /** Pixel gap between the trigger and the panel. */
-    offset?: number
+    sideOffset?: number
     /** Prevents the trigger from opening the panel and applies disabled tokens. */
     disabled?: boolean
     /** Initial open state when uncontrolled (v-model:open unbound). */
@@ -42,8 +40,9 @@
   }
 
   const props = withDefaults(defineProps<DropdownMenuProps>(), {
-    placement: 'bottom-start',
-    offset: 4,
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 4,
     disabled: false,
     defaultOpen: false
   })
@@ -88,20 +87,16 @@
 
   const isOpenRef = computed(() => isOpenState.value)
   const disabledRef = computed(() => props.disabled)
-  const placementRef = computed(() => props.placement)
-  const offsetRef = computed(() => props.offset)
-
-  const { resolvedPlacement, panelStyle } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: triggerEl,
     panelRef: panelEl,
     isOpen: isOpenRef,
-    placement: placementRef,
-    offset: offsetRef,
-    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
+    side: () => props.side,
+    align: () => props.align,
+    sideOffset: () => props.sideOffset,
+    autoSides: ['bottom', 'top'],
     onDismiss: () => setOpen(false)
   })
-
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as DropdownMenuPlacementSide)
 
   function setOpen(value: boolean) {
     if (value && props.disabled) return
@@ -116,7 +111,8 @@
     testId: testId.value,
     isOpen: isOpenRef,
     disabled: disabledRef,
-    placement: resolvedPlacementRef,
+    side: resolvedSide,
+    align: resolvedAlign,
     triggerId,
     panelId,
     triggerEl,
@@ -138,7 +134,8 @@
     :data-testid="testId"
     :data-state="isOpenRef ? 'open' : 'closed'"
     :data-disabled="disabled || null"
-    :data-placement="placement"
+    :data-side="side"
+    :data-align="align"
     class="inline-block"
   >
     <slot />
@@ -157,7 +154,8 @@
           :aria-hidden="!isOpenRef || undefined"
           :data-testid="`${testId}__panel`"
           :data-state="isOpenRef ? 'open' : 'closed'"
-          :data-placement="resolvedPlacementRef"
+          :data-side="resolvedSide"
+          :data-align="resolvedAlign"
           :style="panelStyle"
           class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"

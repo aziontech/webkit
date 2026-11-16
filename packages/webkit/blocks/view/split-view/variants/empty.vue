@@ -937,7 +937,8 @@
 
                     <Popover
                       v-if="canFilterField(field) && fieldCounts[field.id]"
-                      placement="right-start"
+                      side="end"
+                      align="start"
                     >
                       <div
                         class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
@@ -1056,7 +1057,8 @@
 
                             <Popover
                               v-if="canFilterField(field) && fieldCounts[field.id]"
-                              placement="right-start"
+                              side="end"
+                              align="start"
                             >
                               <div
                                 class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"

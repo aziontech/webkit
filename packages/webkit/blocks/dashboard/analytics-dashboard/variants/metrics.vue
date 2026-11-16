@@ -1043,7 +1043,8 @@
                   />
                 </span>
                 <DropdownMenu
-                  placement="bottom-end"
+                  side="bottom"
+                  align="end"
                   @select="(_event, value) => onPanelOption(panel, value)"
                 >
                   <DropdownMenu.Trigger>
@@ -1112,7 +1113,8 @@
                   />
                 </span>
                 <DropdownMenu
-                  placement="bottom-end"
+                  side="bottom"
+                  align="end"
                   @select="(_event, value) => onBreakdownOption(breakdown, value)"
                 >
                   <DropdownMenu.Trigger>

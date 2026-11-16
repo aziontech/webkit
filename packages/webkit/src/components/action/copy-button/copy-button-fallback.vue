@@ -59,7 +59,7 @@
 <template>
   <Popover
     v-model:open="open"
-    placement="auto"
+    side="auto"
     :data-testid="`${testId}__fallback`"
   >
     <Anchor :el="anchor" />

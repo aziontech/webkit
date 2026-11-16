@@ -454,7 +454,8 @@
                 />
 
                 <DropdownMenu
-                  placement="bottom-end"
+                  side="bottom"
+                  align="end"
                   @select="(_event, value) => pickRun(String(value))"
                 >
                   <DropdownMenu.Trigger>
@@ -485,7 +486,10 @@
                   </DropdownMenu.Group>
                 </DropdownMenu>
 
-                <DropdownMenu placement="bottom-end">
+                <DropdownMenu
+                  side="bottom"
+                  align="end"
+                >
                   <DropdownMenu.Trigger>
                     <Tooltip content="Invocation actions">
                       <IconButton

@@ -3,14 +3,14 @@ name: multi-select
 category: input
 structure: composition
 status: implemented
-spec_version: 13
+spec_version: 14
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: ecf92c9a272933a1c4bdb2716091814099f447c68ba56f6a414ba98e47389a9e
+checksum: 56baf1fa1462d8f22246246f1fd6d85d387e256aa1994d9a63d22c6653d46175
 created: 2026-06-25
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # MultiSelect — Component Spec
@@ -196,6 +196,7 @@ Chips, typed filter and a create row:
 - `data-variant="create"` on the `Add "…"` row
 - Typed filter: while the typed text is not empty, every chunk is mounted so the filter sees every option.
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the listbox panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Motion & Animations
 

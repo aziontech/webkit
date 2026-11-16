@@ -153,7 +153,7 @@
       <Tooltip
         v-if="removable"
         :content="removeLabel"
-        placement="top"
+        side="top"
       >
         <button
           type="button"

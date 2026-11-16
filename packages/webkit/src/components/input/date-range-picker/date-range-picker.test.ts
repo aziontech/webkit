@@ -408,6 +408,8 @@ describe('DateRangePicker', () => {
     expect(view.getByTestId(`${TEST_ID}__trigger`).textContent).toContain('Últimos 15 minutos')
     const popover = await open(view.getByTestId)
     expect(popover.getAttribute('dir')).toBe('rtl')
+    expect(popover.getAttribute('data-side')).toMatch(/^(bottom|top)$/)
+    expect(popover.getAttribute('data-align')).toBe('start')
     expect(popover.getAttribute('lang')).toBe('pt-BR')
     expect(within(popover).getByRole('button', { name: 'Aplicar' })).toBeTruthy()
     await expectNoA11yViolations(popover)

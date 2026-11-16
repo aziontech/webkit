@@ -355,19 +355,12 @@ describe('Tooltip', () => {
       })
     })
 
-    describe('placement is reflected on trigger and panel', () => {
-      // Floor smoke over the four sides: each opens a panel and both the trigger
-      // and panel carry the SAME resolved data-placement. We do not assert the
-      // resolved side equals the requested side: usePlacement is collision-aware
-      // and flips to the opposite side when the requested one overflows the
-      // viewport (the trigger renders near the top-left, so `top`/`left` legitimately
-      // resolve to `bottom`/`right`). The invariant under test is trigger↔panel
-      // agreement on a valid resolved side.
-      const SIDES = ['top', 'right', 'bottom', 'left']
-      it.each(['top', 'right', 'bottom', 'left'] as const)(
-        'requested placement=%s opens and reflects a consistent resolved data-placement',
-        async (placement) => {
-          const { getByTestId } = render(composed({ placement, defaultOpen: true }))
+    describe('side and align are reflected on trigger and panel', () => {
+      const SIDES = ['top', 'bottom', 'start', 'end']
+      it.each(['top', 'end', 'bottom', 'start'] as const)(
+        'requested side=%s opens and reflects a consistent resolved data-side',
+        async (side) => {
+          const { getByTestId } = render(composed({ side, defaultOpen: true }))
           await settle()
 
           const trigger = getByTestId('tooltip')
@@ -376,12 +369,61 @@ describe('Tooltip', () => {
           const tip = panel()
           expect(tip).not.toBeNull()
 
-          const resolved = trigger.getAttribute('data-placement')
+          const resolved = trigger.getAttribute('data-side')
           expect(SIDES).toContain(resolved)
-          // Trigger and panel always agree on the resolved side.
-          expect(tip!.getAttribute('data-placement')).toBe(resolved)
+          expect(tip!.getAttribute('data-side')).toBe(resolved)
+          expect(tip!.getAttribute('data-align')).toBe('center')
         }
       )
+
+      it('renders the requested align on the panel', async () => {
+        render(composed({ side: 'bottom', align: 'start', defaultOpen: true }))
+        await settle()
+        expect(panel()!.getAttribute('data-align')).toBe('start')
+      })
+    })
+
+    describe('text direction', () => {
+      const atInlineEdge = (dir: 'ltr' | 'rtl') =>
+        defineComponent({
+          components: { Tooltip },
+          template: `
+            <div dir="${dir}" style="position:fixed;inset-block-start:200px;inset-inline-end:0">
+              <Tooltip content="Delete domain" side="end" :default-open="true">
+                <button type="button">Trigger</button>
+              </Tooltip>
+            </div>
+          `
+        })
+
+      it('resolves side=end to the right in ltr, so a trigger on the right edge flips to start', async () => {
+        render(atInlineEdge('ltr'))
+        await settle()
+        expect(panel()!.getAttribute('data-side')).toBe('start')
+      })
+
+      it('resolves side=end to the left in rtl, so a trigger on the left edge flips to start', async () => {
+        render(atInlineEdge('rtl'))
+        await settle()
+        expect(panel()!.getAttribute('data-side')).toBe('start')
+      })
+
+      it('keeps side=start under rtl when the trigger sits on the left edge (start is the right side)', async () => {
+        render(
+          defineComponent({
+            components: { Tooltip },
+            template: `
+              <div dir="rtl" style="position:fixed;top:200px;left:0">
+                <Tooltip content="Delete domain" side="start" :default-open="true">
+                  <button type="button">Trigger</button>
+                </Tooltip>
+              </div>
+            `
+          })
+        )
+        await settle()
+        expect(panel()!.getAttribute('data-side')).toBe('start')
+      })
     })
 
     describe('defaultOpen (uncontrolled)', () => {

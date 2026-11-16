@@ -621,7 +621,8 @@
                   size="medium"
                 />
                 <DropdownMenu
-                  placement="bottom-end"
+                  side="bottom"
+                  align="end"
                   @select="openHistory"
                 >
                   <DropdownMenu.Trigger>

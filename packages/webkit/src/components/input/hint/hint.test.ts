@@ -71,11 +71,11 @@ describe('Hint', () => {
     expect(tip!.textContent).toContain(TEXT)
   })
 
-  it('forwards placement to the tooltip anchor', async () => {
-    const { getByTestId } = render(Hint, { props: { content: TEXT, placement: 'right' } })
+  it('forwards side to the tooltip anchor', async () => {
+    const { getByTestId } = render(Hint, { props: { content: TEXT, side: 'end' } })
     await settle()
 
-    expect(getByTestId('hint').getAttribute('data-placement')).toBe('right')
+    expect(getByTestId('hint').getAttribute('data-side')).toBe('end')
   })
 
   it('prevents the click default so a Hint inside a label never toggles its control', async () => {

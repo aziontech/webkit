@@ -3,10 +3,10 @@ name: hint
 category: input
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: 3088cea6db4abbec10db07a366440f2afcb3b4eb42b4d7b2063d3fb92f8c841a
+spec_version: 7
+checksum: f8eb6d3a6f1c250a5e602344bd671304eab1c6775de05efbad07eb1ad29f51c8
 created: 2026-08-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Hint — Component Spec
@@ -55,10 +55,10 @@ Small info affordance — a muted `ai ai-circle-info` glyph on a focusable butto
 
 ## Props
 
-| Prop        | Type                                               | Default | Required | JSDoc                                                                         |
-| ----------- | -------------------------------------------------- | ------- | -------- | ----------------------------------------------------------------------------- |
-| `content`   | `string`                                           | `''`    | true     | Guidance text revealed on hover or focus; also the trigger's accessible name. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false    | Anchor side of the tooltip relative to the glyph.                             |
+| Prop      | Type                                              | Default | Required | JSDoc                                                                                                                                                          |
+| --------- | ------------------------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `content` | `string`                                          | `''`    | true     | Guidance text revealed on hover or focus; also the trigger's accessible name.                                                                                  |
+| `side`    | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'` | false    | Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. `start` and `end` follow the text direction. |
 
 ## Events
 
@@ -72,7 +72,7 @@ Small info affordance — a muted `ai ai-circle-info` glyph on a focusable butto
 
 - Visual states: `default`, `hover`, `focus-visible`
 - `data-state` values (on the root, owned by `Tooltip`): `open` | `closed`
-- `data-placement` (on the root, owned by `Tooltip`): `top` | `right` | `bottom` | `left`
+- `data-side` (on the root, owned by `Tooltip`): `top` | `bottom` | `start` | `end`, the side the tooltip landed on
 
 ## Motion & Animations
 
@@ -110,7 +110,7 @@ The tooltip's own open/close motion belongs to `tooltip` and is specified there.
 ## Examples
 
 - Default
-- Placements — composite story over the `placement` axis, rendering the four anchors side by side (closed; each one opens on hover, never forced open). Justified because `placement` is the component's only variant axis and one canvas covering all four anchors is its primary documentation surface.
+- Placements — composite story over the `side` axis, rendering the four sides side by side (closed; each one opens on hover, never forced open). Justified because `side` is the component's only variant axis and one canvas covering all four anchors is its primary documentation surface.
 
 ## Constraints — DO NOT
 

@@ -12,7 +12,10 @@
 
 <template>
   <div class="flex flex-wrap items-start gap-(--spacing-2xl) p-(--spacing-2xl) min-h-[22rem]">
-    <PopoverRoot placement="bottom-start">
+    <PopoverRoot
+      side="bottom"
+      align="start"
+    >
       <PopoverTrigger>
         <Button
           variant="secondary"
@@ -38,7 +41,10 @@
       </PopoverContent>
     </PopoverRoot>
 
-    <PopoverRoot placement="bottom-start">
+    <PopoverRoot
+      side="bottom"
+      align="start"
+    >
       <PopoverTrigger>
         <Button
           variant="secondary"
@@ -54,7 +60,10 @@
       </PopoverContent>
     </PopoverRoot>
 
-    <PopoverRoot placement="bottom-start">
+    <PopoverRoot
+      side="bottom"
+      align="start"
+    >
       <PopoverTrigger>
         <Button
           variant="secondary"

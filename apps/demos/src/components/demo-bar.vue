@@ -84,7 +84,8 @@
     class="fixed bottom-(--spacing-md) start-(--spacing-md) z-40 flex items-center gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xs) shadow-(--shadow-lg)"
   >
     <DropdownMenu
-      placement="top-start"
+      side="top"
+      align="start"
       @select="onFlow"
     >
       <DropdownMenu.Trigger>

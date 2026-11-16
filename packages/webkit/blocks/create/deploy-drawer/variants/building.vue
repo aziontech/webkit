@@ -476,7 +476,8 @@
                             </div>
                             <Popover
                               v-if="domainGroup.total > 1"
-                              placement="bottom-start"
+                              side="bottom"
+                              align="start"
                               size="small"
                             >
                               <Popover.Trigger
@@ -554,7 +555,8 @@
                       </Item.Content>
                       <Item.Actions v-if="projectMode === 'existing'">
                         <DropdownMenu
-                          placement="bottom-end"
+                          side="bottom"
+                          align="end"
                           @select="(_event, id) => (projectId = String(id))"
                         >
                           <DropdownMenu.Trigger>
@@ -699,7 +701,8 @@
                               </div>
                               <Popover
                                 v-if="domainGroup.total > 1"
-                                placement="bottom-start"
+                                side="bottom"
+                                align="start"
                                 size="small"
                               >
                                 <Popover.Trigger

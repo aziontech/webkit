@@ -22,7 +22,7 @@ export interface NavigationMenuListHighlightContext {
 export interface NavigationMenuPositionerContext {
   arrowStyles: ComputedRef<CSSProperties>
   setArrowEl: (element: HTMLElement | null) => void
-  resolvedSide: ComputedRef<'top' | 'end' | 'bottom' | 'start'>
+  resolvedSide: ComputedRef<'top' | 'bottom' | 'start' | 'end'>
   resolvedAlign: ComputedRef<Align>
 }
 

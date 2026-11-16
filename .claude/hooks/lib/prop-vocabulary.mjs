@@ -94,6 +94,11 @@ export const CONCEPTS = [
     aliases: ['anchorId', 'sectionId', 'hash']
   },
   {
+    concept: 'side of the anchor an overlay opens on (with align and sideOffset)',
+    canonical: 'side',
+    aliases: ['placement']
+  },
+  {
     concept: 'validation state',
     canonical: 'invalid',
     aliases: ['hasError', 'isInvalid']

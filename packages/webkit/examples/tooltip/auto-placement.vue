@@ -8,14 +8,14 @@
     <p
       class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
     >
-      All four triggers use <code>placement="auto"</code>.<br />
+      All four triggers use <code>side="auto"</code>.<br />
       Each tooltip resolves to the side with the most available space.
     </p>
 
     <div class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
-        content="auto placement"
-        placement="auto"
+        content="auto side"
+        side="auto"
         :default-open="true"
       >
         <IconButton
@@ -29,8 +29,8 @@
 
     <div class="absolute bottom-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
-        content="auto placement"
-        placement="auto"
+        content="auto side"
+        side="auto"
         :default-open="true"
       >
         <IconButton
@@ -44,8 +44,8 @@
 
     <div class="absolute start-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
-        content="auto placement"
-        placement="auto"
+        content="auto side"
+        side="auto"
         :default-open="true"
       >
         <IconButton
@@ -59,8 +59,8 @@
 
     <div class="absolute end-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
-        content="auto placement"
-        placement="auto"
+        content="auto side"
+        side="auto"
         :default-open="true"
       >
         <IconButton

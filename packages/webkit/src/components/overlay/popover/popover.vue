@@ -4,7 +4,7 @@
   import { useControllable } from '../../../composables/use-controllable'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
-  import type { PopoverPlacement, PopoverPlacementSide, PopoverSize } from './injection-key'
+  import type { PopoverAlign, PopoverSide, PopoverSize } from './injection-key'
   import { PopoverInjectionKey } from './injection-key'
 
   defineOptions({
@@ -20,10 +20,12 @@
   }>()
 
   export interface PopoverProps {
-    /** Where the panel opens relative to the trigger: a side, optionally aligned to its start or end, or `'auto'` for the best-fitting vertical corner at open time. */
-    placement?: PopoverPlacement
+    /** Side of the trigger the panel opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. */
+    side?: PopoverSide | 'auto'
+    /** Alignment along the trigger edge. */
+    align?: PopoverAlign
     /** Pixel gap between the trigger and the panel. */
-    offset?: number
+    sideOffset?: number
     /** Prevents the trigger from opening the panel and applies disabled tokens. */
     disabled?: boolean
     /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
@@ -35,8 +37,9 @@
   }
 
   const props = withDefaults(defineProps<PopoverProps>(), {
-    placement: 'bottom-start',
-    offset: 4,
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 4,
     disabled: false,
     size: undefined,
     defaultOpen: false,
@@ -71,27 +74,24 @@
 
   const isOpenRef = computed(() => isOpenState.value)
   const disabledRef = computed(() => props.disabled)
-  const placementRef = computed(() => props.placement)
-  const offsetRef = computed(() => props.offset)
   const sizeRef = computed(() => props.size)
 
   const hasTitle = ref(false)
   const hasDescription = ref(false)
 
-  const { resolvedPlacement, panelStyle } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: triggerEl,
     panelRef: panelEl,
     isOpen: isOpenRef,
-    placement: placementRef,
-    offset: offsetRef,
-    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
+    side: () => props.side,
+    align: () => props.align,
+    sideOffset: () => props.sideOffset,
+    autoSides: ['bottom', 'top']
   })
 
   const { isTop, isFocusTop, isInsideHigherLayer, lowerLayerElement } = useOverlayLayer(isOpenRef, {
     element: panelEl
   })
-
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as PopoverPlacementSide)
 
   function setOpen(value: boolean) {
     if (value && props.disabled) return
@@ -219,7 +219,8 @@
     testId: testId.value,
     isOpen: isOpenRef,
     disabled: disabledRef,
-    placement: resolvedPlacementRef,
+    side: resolvedSide,
+    align: resolvedAlign,
     size: sizeRef,
     panelStyle,
     triggerId,
@@ -253,7 +254,8 @@
     :data-testid="testId"
     :data-state="isOpenRef ? 'open' : 'closed'"
     :data-disabled="disabled || null"
-    :data-placement="placement"
+    :data-side="side"
+    :data-align="align"
     class="inline-block"
   >
     <slot />

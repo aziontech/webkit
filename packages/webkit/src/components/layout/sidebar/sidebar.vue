@@ -125,8 +125,6 @@
 
   const rail = computed(() => iconMode.value && collapsed.value)
 
-  const railPlacement = computed(() => (dir.value === 'rtl' ? 'left' : 'right'))
-
   provide(SidebarInjectionKey, {
     testId: testId.value,
     get collapsible() {
@@ -136,9 +134,6 @@
       return rail.value
     },
     tooltip: markRaw(Tooltip),
-    get tooltipPlacement() {
-      return railPlacement.value
-    },
     expand: () => {
       collapsed.value = false
     }
@@ -366,7 +361,7 @@
           <Tooltip
             v-if="collapseMode !== null"
             :content="rail ? labels.expand : labels.collapse"
-            :placement="rail ? railPlacement : 'top'"
+            :side="rail ? 'end' : 'top'"
           >
             <IconButton
               :icon="rail ? 'ai ai-chevrons-right' : 'ai ai-chevrons-left'"
@@ -442,7 +437,7 @@
       >
         <Tooltip
           :content="labels.expand"
-          :placement="dir === 'rtl' ? 'left' : 'right'"
+          side="end"
         >
           <IconButton
             icon="ai ai-chevrons-right"

@@ -83,7 +83,7 @@
     rail.value && sidebar?.tooltip
       ? {
           is: sidebar.tooltip,
-          props: { content: props.label, placement: sidebar?.tooltipPlacement ?? 'right' }
+          props: { content: props.label, side: 'end' }
         }
       : { is: Passthrough, props: {} }
   )

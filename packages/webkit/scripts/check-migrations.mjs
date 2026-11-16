@@ -113,7 +113,7 @@ export function diffApi(before, after, migrations) {
       if (!values || !allowed) continue
       for (const value of values) {
         if (allowed.includes(value)) continue
-        const mapped = rule?.values?.[value] ?? rule?.moves?.[value]
+        const mapped = rule?.values?.[value] ?? rule?.moves?.[value] ?? rule?.expand?.[value]
         if (mapped !== undefined) continue
         uncovered.push(
           `${target}: ${prop}="${value}" is no longer allowed (add "values": { "${value}": … } to v<N>-props.json["${target}"].${prop})`

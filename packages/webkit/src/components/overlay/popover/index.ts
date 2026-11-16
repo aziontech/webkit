@@ -26,5 +26,5 @@ export {
   PopoverTitle,
   PopoverTrigger
 }
-export type { PopoverPlacement, PopoverPlacementSide, PopoverSize } from './injection-key'
+export type { PopoverAlign, PopoverSide, PopoverSize } from './injection-key'
 export type { PopoverProps } from './popover.vue'

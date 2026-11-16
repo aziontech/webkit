@@ -77,7 +77,7 @@
       collapsible
         ? {
             content: resolvedLabel,
-            placement: 'bottom',
+            side: 'bottom',
             disabled: disabled || !folded,
             'data-testid': `${testId}__tooltip`
           }

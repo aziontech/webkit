@@ -162,50 +162,80 @@ Client logo files spell the brand one word per word, and the codemod rewrites th
 
 ## 3. Renamed props and values
 
-| Component              | v5                            | v6                        |
-| ---------------------- | ----------------------------- | ------------------------- |
-| `accordion`            | `value`                       | `modelValue`              |
-| `alert`                | `severity="error"`            | `severity="danger"`       |
-| `attribute-editor`     | `empty`                       | `emptyTitle`              |
-| `badge`                | `severity=default`            | `severity=neutral`        |
-| `backdrop`             | `art`, `kind`                 | `variant`                 |
-| `button`               | `kind="text"`                 | `variant="ghost"`         |
-| `pricing-card`         | `planTitle`                   | `title`                   |
-| `checkbox`             | `inputId`                     | `id`                      |
-| `code-block`           | `border`                      | `bordered`                |
-| `code-block`           | `value`                       | `modelValue`              |
-| `combobox`             | `emptyText`                   | `emptyTitle`              |
-| `console-layout`       | `v-model:navigation-expanded` | `v-model:navigation-open` |
-| `conversation-history` | `label`                       | `ariaLabel`               |
-| `doc-card`             | `link`                        | `linkLabel`               |
-| `doc-card`             | `overline`                    | `eyebrow`                 |
-| `doc-card-group`       | `cols`                        | `columns`                 |
-| `doc-card-group`       | `mobileCols`                  | `mobileColumns`           |
-| `doc-heading`          | `id`                          | `anchor`                  |
-| `file-token-group`     | `alignment`                   | `orientation`             |
-| `item`                 | `kind="outline"`              | `variant="outline"`       |
-| `log-viewer`           | `border`                      | `bordered`                |
-| `log-viewer`           | `showCopy`                    | `copyable`                |
-| `media-tabs`           | `autoPlayInterval`            | `autoplayInterval`        |
-| `media-tabs`           | `autoPlay`                    | `autoplay`                |
-| `multi-select`         | `emptyText`                   | `emptyTitle`              |
-| `navigation-menu`      | `value`                       | `modelValue`              |
-| `overline`             | `showCursor`                  | `cursor`                  |
-| `payment-brand`        | `label`                       | `ariaLabel`               |
-| `popover`              | `width`                       | `size`                    |
-| `progress`             | `shape`, `kind`               | `variant`                 |
-| `qr-code`              | `label`                       | `ariaLabel`               |
-| `quote-tabs`           | `autoPlayInterval`            | `autoplayInterval`        |
-| `quote-tabs`           | `autoPlay`                    | `autoplay`                |
-| `response-branches`    | `label`                       | `ariaLabel`               |
-| `severity-tag`         | `level`                       | `severity`                |
-| `skeleton`             | `kind="shape"`                | `variant="rectangle"`     |
-| `split-button`         | `model`                       | `items`                   |
-| `table`                | `border`                      | `bordered`                |
-| `tabs`                 | `value`                       | `modelValue`              |
-| `textarea`             | `resizable`                   | `resize`                  |
-| `theme-switcher`       | `value`                       | `modelValue`              |
-| `wizard`               | `v-model:activeStep`          | `v-model`                 |
+| Component              | v5                            | v6                               |
+| ---------------------- | ----------------------------- | -------------------------------- |
+| `accordion`            | `value`                       | `modelValue`                     |
+| `alert`                | `severity="error"`            | `severity="danger"`              |
+| `attribute-editor`     | `empty`                       | `emptyTitle`                     |
+| `badge`                | `severity=default`            | `severity=neutral`               |
+| `backdrop`             | `art`, `kind`                 | `variant`                        |
+| `button`               | `kind="text"`                 | `variant="ghost"`                |
+| `pricing-card`         | `planTitle`                   | `title`                          |
+| `checkbox`             | `inputId`                     | `id`                             |
+| `code-block`           | `border`                      | `bordered`                       |
+| `code-block`           | `value`                       | `modelValue`                     |
+| `combobox`             | `emptyText`                   | `emptyTitle`                     |
+| `console-layout`       | `v-model:navigation-expanded` | `v-model:navigation-open`        |
+| `conversation-history` | `label`                       | `ariaLabel`                      |
+| `doc-card`             | `link`                        | `linkLabel`                      |
+| `doc-card`             | `overline`                    | `eyebrow`                        |
+| `doc-card-group`       | `cols`                        | `columns`                        |
+| `doc-card-group`       | `mobileCols`                  | `mobileColumns`                  |
+| `doc-heading`          | `id`                          | `anchor`                         |
+| `dropdown-menu`        | `placement`, `offset`         | `side` + `align`, `sideOffset`   |
+| `file-token-group`     | `alignment`                   | `orientation`                    |
+| `hint`                 | `placement`                   | `side`                           |
+| `hover-card`           | `placement`, `offset`         | `side` + `align`, `sideOffset`   |
+| `item`                 | `kind="outline"`              | `variant="outline"`              |
+| `log-viewer`           | `border`                      | `bordered`                       |
+| `log-viewer`           | `showCopy`                    | `copyable`                       |
+| `media-tabs`           | `autoPlayInterval`            | `autoplayInterval`               |
+| `media-tabs`           | `autoPlay`                    | `autoplay`                       |
+| `multi-select`         | `emptyText`                   | `emptyTitle`                     |
+| `navigation-menu`      | `value`                       | `modelValue`                     |
+| `overline`             | `showCursor`                  | `cursor`                         |
+| `payment-brand`        | `label`                       | `ariaLabel`                      |
+| `popover`              | `placement`, `offset`         | `side` + `align`, `sideOffset`   |
+| `popover`              | `width`                       | `size`                           |
+| `progress`             | `shape`, `kind`               | `variant`                        |
+| `qr-code`              | `label`                       | `ariaLabel`                      |
+| `quote-tabs`           | `autoPlayInterval`            | `autoplayInterval`               |
+| `quote-tabs`           | `autoPlay`                    | `autoplay`                       |
+| `response-branches`    | `label`                       | `ariaLabel`                      |
+| `severity-tag`         | `level`                       | `severity`                       |
+| `skeleton`             | `kind="shape"`                | `variant="rectangle"`            |
+| `split-button`         | `model`                       | `items`                          |
+| `table`                | `border`                      | `bordered`                       |
+| `tabs`                 | `value`                       | `modelValue`                     |
+| `textarea`             | `resizable`                   | `resize`                         |
+| `theme-switcher`       | `value`                       | `modelValue`                     |
+| `tooltip`              | `placement`                   | `side` (+ `align`, `sideOffset`) |
+| `wizard`               | `v-model:activeStep`          | `v-model`                        |
+
+### Overlays: `side` and `align` replace `placement`
+
+Every anchored overlay takes the same three props, shaped like Radix and shadcn: `side`
+(`top · bottom · start · end`, or `auto` for the side with the most room), `align`
+(`start · center · end`) and `sideOffset` (the gap in px). `Tooltip`, `Hint`, `Popover`,
+`HoverCard`, `DropdownMenu` and `NavigationMenu.Viewport` share them, and Select, Combobox,
+MultiSelect, the date pickers, PropertyFilter, ContextMenu and DropdownMenu sub-menus anchor
+through the same engine (`usePlacement`). The codemod splits the old value:
+`placement="bottom-end"` becomes `side="bottom" align="end"`, `placement="right-start"` becomes
+`side="end" align="start"`, `placement="left"` becomes `side="start"`, and `offset` becomes
+`sideOffset`. A bound `:placement` is renamed to `:side` with `left`/`right` mapped; a compound
+value inside an expression (`:placement="open ? 'top-end' : 'bottom'"`) is left for you to split.
+
+`start` and `end` follow the text direction. Under `dir="rtl"` `side="end"` opens on the left and
+`align="start"` lines the panel up with the trigger's right edge, so a panel that was
+`placement="bottom-start"` now opens from the right edge of its trigger in a right-to-left page
+(it stayed on the left in v5). Drop any `dir === 'rtl' ? 'left' : 'right'` you wrote to fix
+this by hand: write `side="end"`. The panels render `data-side` and `data-align` (the resolved,
+logical values) instead of `data-placement`. The types follow: `TooltipSide`, `PopoverSide`,
+`HoverCardSide`, `DropdownMenuSide` and `HintSide` (`top · bottom · start · end`; the prop is
+`XSide | 'auto'`) plus `PopoverAlign`, `HoverCardAlign`, `DropdownMenuAlign` and `TooltipAlign`
+replace `*Placement` and `*PlacementSide`. `usePlacement` from `@aziontech/webkit/use-placement`
+takes `side`, `align`, `sideOffset`, `alignOffset`, `autoSides` and an optional `dir`, and returns
+`resolvedSide` and `resolvedAlign` instead of `resolvedPlacement`.
 
 ### The look is `variant`, the sort of part is `type`
 
@@ -318,8 +348,8 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 | `DocTocLink`                           | `DocOnThisPageLink`                     |
 | `DropdownContext`                      | `DropdownMenuContext`                   |
 | `DropdownOptionValue`                  | `DropdownMenuOptionValue`               |
-| `DropdownPlacement`                    | `DropdownMenuPlacement`                 |
-| `DropdownPlacementInput`               | `DropdownMenuPlacement`                 |
+| `DropdownPlacement`                    | `DropdownMenuSide`                      |
+| `DropdownPlacementInput`               | `DropdownMenuSide`                      |
 | `FeatureTabsAction`                    | `SectionTitleAction`                    |
 | `FeatureWidgetsAction`                 | `SectionTitleAction`                    |
 | `FilterField`                          | `TableFilterField`                      |
@@ -351,7 +381,7 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 | `PickListItems`                        | `TransferListItems`                     |
 | `PickListSide`                         | `TransferListSide`                      |
 | `PickListValue`                        | `TransferListValue`                     |
-| `PopoverPlacementInput`                | `PopoverPlacement`                      |
+| `PopoverPlacementInput`                | `PopoverSide`                           |
 | `PricingPlansAction`                   | `SectionTitleAction`                    |
 | `ProgressBarShape`                     | `ProgressKind`                          |
 | `ProgressBarSize`                      | `ProgressSize`                          |
@@ -373,7 +403,7 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 | `TabViewTabRegistration`               | `TabsTabRegistration`                   |
 | `TabViewValue`                         | `TabsValue`                             |
 | `TemplateGalleryAction`                | `SectionTitleAction`                    |
-| `TooltipPlacementInput`                | `TooltipPlacement`                      |
+| `TooltipPlacementInput`                | `TooltipSide`                           |
 | `UseCaseLinksItem`                     | `CapabilityGridItem`                    |
 | `UseCasesAction`                       | `SectionTitleAction`                    |
 
@@ -384,9 +414,9 @@ is `SectionTitleAction` (`@aziontech/webkit/section-title`), a breadcrumb entry 
 `LogoTreatment` (`@aziontech/webkit/logo`). Each section still re-exports the shared type, so an
 import the codemod rewrote keeps its path. `LogoTreatment` uses the `Logo` words: `as-is` is
 `color`, and `logoTreatment: 'invert-light'` on a `LogoWallSection` mark is `artwork: 'light'`
-(change those values by hand). The placement types follow the prop: `TooltipPlacement`,
-`PopoverPlacement`, `HoverCardPlacement` and `DropdownMenuPlacement` are the prop's union (with
-`'auto'`), and `*PlacementSide` is the narrower side union. Every root and public part exports its
+(change those values by hand). The overlay position types are `TooltipSide`, `PopoverSide`,
+`HoverCardSide`, `DropdownMenuSide` and `HintSide`, with `*Align` beside them (see "Overlays:
+`side` and `align` replace `placement`"). Every root and public part exports its
 props as `<Component>Props` (`ButtonProps`, `TableSearchProps`), re-exported by its compound entry;
 there is no bare `Props` export.
 
@@ -638,65 +668,66 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 
 #### Data attributes and test ids (update CSS selectors and tests by hand)
 
-| Component                                                      | v5                                                                                                  | v6                                                                                                                                     |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `chat-message`, `prompt-input`, `tool-approval`, `tool-call`   | `data-status` mirrors `state`                                                                       | `data-status` mirrors `status`                                                                                                         |
-| `section-title`, `section-module`, `article-cards`             | `data-kind`                                                                                         | `data-align`                                                                                                                           |
-| `stepper-step`                                                 | `data-state="upcoming\|current\|complete\|error\|loading"`                                          | `data-status` + `data-active` (+ `data-completed`)                                                                                     |
-| `stepper`                                                      | `data-current`                                                                                      | `data-active`                                                                                                                          |
-| `stepper-step`                                                 | `data-step-dot`, `data-step-disc`, `data-step-description`, `data-step-connector`, `data-step-body` | `data-slot="step-dot"` … `data-slot="step-body"`                                                                                       |
-| `upload-progress`                                              | `data-state="running\|done\|failed"`, `data-collapsed`                                              | `data-status="running\|success\|error"`, `data-state="open\|closed"`                                                                   |
-| `trace`                                                        | `data-tone="root\|ok\|error\|running"`                                                              | `data-status="success\|error\|running"` + `data-root`                                                                                  |
-| `log-viewer`                                                   | `data-border`                                                                                       | `data-bordered`                                                                                                                        |
-| `response-loading`                                             | `data-visible`                                                                                      | `data-state="open\|closed"`                                                                                                            |
-| `toaster` region                                               | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
-| `toast-item`                                                   | `data-severity="loading"`                                                                           | `data-loading` (+ `aria-busy`)                                                                                                         |
-| `tutorial-panel` step row                                      | `data-tutorial-step`                                                                                | `data-slot="tutorial-step"`                                                                                                            |
-| `breadcrumb-item`                                              | `data-current`                                                                                      | `data-active`                                                                                                                          |
-| `sidebar-menu-item`                                            | `data-selected`                                                                                     | `data-active`                                                                                                                          |
-| `pagination-button`                                            | `data-selected`                                                                                     | `data-active`                                                                                                                          |
-| `hotspot`                                                      | `data-active` (marker shown) / `data-current` (current step)                                        | `data-marker` / `data-active`                                                                                                          |
-| `navigation-menu` (root, list, icon, content, popup, backdrop) | `data-open` / `data-closed`                                                                         | `data-state="open\|closed"`                                                                                                            |
-| `navigation-menu-positioner`, `navigation-menu-arrow`          | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
-| `drawer-content`                                               | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
-| `sidebar`                                                      | `data-collapsed`                                                                                    | `data-state="open\|closed"`                                                                                                            |
-| `resizable-pane`                                               | `data-collapsed`                                                                                    | `data-state="open\|closed"`                                                                                                            |
-| `settings-section` (body)                                      | `data-open`                                                                                         | `data-state="open\|closed"`                                                                                                            |
-| `doc-prompt` (prompt text)                                     | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
-| `settings-row`                                                 | `data-level`                                                                                        | `data-depth`                                                                                                                           |
-| `page-header`                                                  | `__breadcrumb` test id                                                                              | `__breadcrumbs`                                                                                                                        |
-| `dropdown-menu`, `dropdown-menu-group`                         | `__top` / `__bottom` test ids                                                                       | `__header` / `__footer`                                                                                                                |
-| `alert`                                                        | `data-slot="alert-action"`                                                                          | `data-slot="alert-actions"`                                                                                                            |
-| `accordion`                                                    | `data-arrow="left\|right"`                                                                          | `data-icon-position="leading\|trailing"`                                                                                               |
-| `button`, `icon-button`, `highlight-button`                    | `data-inactive`                                                                                     | `data-inert`                                                                                                                           |
-| `button-group`                                                 | `data-button-group-item="<id>"`                                                                     | `data-slot="button-group-item"` + `data-id="<id>"`                                                                                     |
-| `chip`                                                         | `data-chip-body`                                                                                    | `data-slot="chip-body"`                                                                                                                |
-| `code-block`                                                   | `data-border`                                                                                       | `data-bordered`                                                                                                                        |
-| `code-block`                                                   | `data-side="left\|right"` (split diff)                                                              | `data-side="start\|end"`                                                                                                               |
-| `copy-button`                                                  | `data-state="default"`                                                                              | `data-state="idle"`                                                                                                                    |
-| `date-range-picker`                                            | `data-part="trigger"`                                                                               | `data-slot="date-range-picker-trigger"`                                                                                                |
-| `file-token-group`                                             | `data-file-token-remove`                                                                            | `data-slot="file-token-remove"`                                                                                                        |
-| `input`, `password-input`                                      | `data-has-icon-left`, `data-has-icon-right`                                                         | `data-leading`, `data-trailing`                                                                                                        |
-| `password-input`                                               | `data-visible`                                                                                      | `data-revealed`                                                                                                                        |
-| `card`                                                         | test id `__header-action`, `__action`                                                               | `__header-actions`, `__actions`                                                                                                        |
-| `command-item`                                                 | test id `__prefix`                                                                                  | `__leading`                                                                                                                            |
-| `command-group`                                                | test id `__heading`                                                                                 | `__label`                                                                                                                              |
-| `tag`, `badge`                                                 | `data-severity` with a brand look                                                                   | `data-variant` (`data-severity` only for the status scale)                                                                             |
-| `table`, `data-table`                                          | `data-border`                                                                                       | `data-bordered`                                                                                                                        |
-| `tree`                                                         | `data-tree-row`, `data-tree-cell`, `data-tree-toggle`, `data-tree-rename`, `data-tree-actions`      | `data-slot="tree-row"` (and `tree-cell`, `tree-toggle`, `tree-rename`, `tree-actions`)                                                 |
-| `data-table`                                                   | `data-tree-gutter`, `data-reorder-cell`                                                             | `data-slot="tree-gutter"`, `data-slot="reorder-cell"`                                                                                  |
-| `filter-menu`                                                  | `data-picked`                                                                                       | `data-selected`                                                                                                                        |
-| `flow`                                                         | `data-flow-kind`, `data-flow-branches`, `data-flow-port`, `data-flow-diagram-anchor`                | `data-slot="flow-diagram-node"` / `flow-diagram-parallel` / `flow-branches` / `flow-port` / `flow-diagram-anchor`, side in `data-side` |
-| `tracker`                                                      | readout `data-visible`                                                                              | readout `data-state="open                                                                                                              | closed"` |
-| `table-sort-button`                                            | `data-direction`, `data-visible`                                                                    | `data-sort`                                                                                                                            |
-| `pricing-card`                                                 | `data-slot-position`, `data-aligned`                                                                | `data-actions-position`, `data-equal-height`                                                                                           |
-| `newsletter-section`, `hero-form-section`, `job-posting`       | `data-error`                                                                                        | `data-failed`                                                                                                                          |
-| `conversation`                                                 | `data-alignment` (root)                                                                             | `data-layout`                                                                                                                          |
-| `hero-title`                                                   | `data-centered`, `data-mobile-centered`                                                             | `data-align`, `data-mobile-align`                                                                                                      |
-| `listing-index`, `story-index` (filter panel)                  | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
-| `media-tabs`                                                   | `data-position`                                                                                     | `data-tabs-side`                                                                                                                       |
-| `quote` (highlighted phrase)                                   | `data-highlight`                                                                                    | `data-slot="highlight"`                                                                                                                |
-| `sticky-stack`                                                 | `data-complete`                                                                                     | `data-completed`                                                                                                                       |
+| Component                                                                                                       | v5                                                                                                  | v6                                                                                                                                     |
+| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `chat-message`, `prompt-input`, `tool-approval`, `tool-call`                                                    | `data-status` mirrors `state`                                                                       | `data-status` mirrors `status`                                                                                                         |
+| `section-title`, `section-module`, `article-cards`                                                              | `data-kind`                                                                                         | `data-align`                                                                                                                           |
+| `stepper-step`                                                                                                  | `data-state="upcoming\|current\|complete\|error\|loading"`                                          | `data-status` + `data-active` (+ `data-completed`)                                                                                     |
+| `stepper`                                                                                                       | `data-current`                                                                                      | `data-active`                                                                                                                          |
+| `stepper-step`                                                                                                  | `data-step-dot`, `data-step-disc`, `data-step-description`, `data-step-connector`, `data-step-body` | `data-slot="step-dot"` … `data-slot="step-body"`                                                                                       |
+| `upload-progress`                                                                                               | `data-state="running\|done\|failed"`, `data-collapsed`                                              | `data-status="running\|success\|error"`, `data-state="open\|closed"`                                                                   |
+| `trace`                                                                                                         | `data-tone="root\|ok\|error\|running"`                                                              | `data-status="success\|error\|running"` + `data-root`                                                                                  |
+| `log-viewer`                                                                                                    | `data-border`                                                                                       | `data-bordered`                                                                                                                        |
+| `tooltip`, `popover`, `hover-card-content`, `dropdown-menu`, `context-menu`, `date-picker`, `date-range-picker` | `data-placement="bottom-start"`                                                                     | `data-side="bottom"` + `data-align="start"` (logical: `start`/`end`, never `left`/`right`)                                             |
+| `response-loading`                                                                                              | `data-visible`                                                                                      | `data-state="open\|closed"`                                                                                                            |
+| `toaster` region                                                                                                | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
+| `toast-item`                                                                                                    | `data-severity="loading"`                                                                           | `data-loading` (+ `aria-busy`)                                                                                                         |
+| `tutorial-panel` step row                                                                                       | `data-tutorial-step`                                                                                | `data-slot="tutorial-step"`                                                                                                            |
+| `breadcrumb-item`                                                                                               | `data-current`                                                                                      | `data-active`                                                                                                                          |
+| `sidebar-menu-item`                                                                                             | `data-selected`                                                                                     | `data-active`                                                                                                                          |
+| `pagination-button`                                                                                             | `data-selected`                                                                                     | `data-active`                                                                                                                          |
+| `hotspot`                                                                                                       | `data-active` (marker shown) / `data-current` (current step)                                        | `data-marker` / `data-active`                                                                                                          |
+| `navigation-menu` (root, list, icon, content, popup, backdrop)                                                  | `data-open` / `data-closed`                                                                         | `data-state="open\|closed"`                                                                                                            |
+| `navigation-menu-positioner`, `navigation-menu-arrow`                                                           | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
+| `drawer-content`                                                                                                | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
+| `sidebar`                                                                                                       | `data-collapsed`                                                                                    | `data-state="open\|closed"`                                                                                                            |
+| `resizable-pane`                                                                                                | `data-collapsed`                                                                                    | `data-state="open\|closed"`                                                                                                            |
+| `settings-section` (body)                                                                                       | `data-open`                                                                                         | `data-state="open\|closed"`                                                                                                            |
+| `doc-prompt` (prompt text)                                                                                      | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
+| `settings-row`                                                                                                  | `data-level`                                                                                        | `data-depth`                                                                                                                           |
+| `page-header`                                                                                                   | `__breadcrumb` test id                                                                              | `__breadcrumbs`                                                                                                                        |
+| `dropdown-menu`, `dropdown-menu-group`                                                                          | `__top` / `__bottom` test ids                                                                       | `__header` / `__footer`                                                                                                                |
+| `alert`                                                                                                         | `data-slot="alert-action"`                                                                          | `data-slot="alert-actions"`                                                                                                            |
+| `accordion`                                                                                                     | `data-arrow="left\|right"`                                                                          | `data-icon-position="leading\|trailing"`                                                                                               |
+| `button`, `icon-button`, `highlight-button`                                                                     | `data-inactive`                                                                                     | `data-inert`                                                                                                                           |
+| `button-group`                                                                                                  | `data-button-group-item="<id>"`                                                                     | `data-slot="button-group-item"` + `data-id="<id>"`                                                                                     |
+| `chip`                                                                                                          | `data-chip-body`                                                                                    | `data-slot="chip-body"`                                                                                                                |
+| `code-block`                                                                                                    | `data-border`                                                                                       | `data-bordered`                                                                                                                        |
+| `code-block`                                                                                                    | `data-side="left\|right"` (split diff)                                                              | `data-side="start\|end"`                                                                                                               |
+| `copy-button`                                                                                                   | `data-state="default"`                                                                              | `data-state="idle"`                                                                                                                    |
+| `date-range-picker`                                                                                             | `data-part="trigger"`                                                                               | `data-slot="date-range-picker-trigger"`                                                                                                |
+| `file-token-group`                                                                                              | `data-file-token-remove`                                                                            | `data-slot="file-token-remove"`                                                                                                        |
+| `input`, `password-input`                                                                                       | `data-has-icon-left`, `data-has-icon-right`                                                         | `data-leading`, `data-trailing`                                                                                                        |
+| `password-input`                                                                                                | `data-visible`                                                                                      | `data-revealed`                                                                                                                        |
+| `card`                                                                                                          | test id `__header-action`, `__action`                                                               | `__header-actions`, `__actions`                                                                                                        |
+| `command-item`                                                                                                  | test id `__prefix`                                                                                  | `__leading`                                                                                                                            |
+| `command-group`                                                                                                 | test id `__heading`                                                                                 | `__label`                                                                                                                              |
+| `tag`, `badge`                                                                                                  | `data-severity` with a brand look                                                                   | `data-variant` (`data-severity` only for the status scale)                                                                             |
+| `table`, `data-table`                                                                                           | `data-border`                                                                                       | `data-bordered`                                                                                                                        |
+| `tree`                                                                                                          | `data-tree-row`, `data-tree-cell`, `data-tree-toggle`, `data-tree-rename`, `data-tree-actions`      | `data-slot="tree-row"` (and `tree-cell`, `tree-toggle`, `tree-rename`, `tree-actions`)                                                 |
+| `data-table`                                                                                                    | `data-tree-gutter`, `data-reorder-cell`                                                             | `data-slot="tree-gutter"`, `data-slot="reorder-cell"`                                                                                  |
+| `filter-menu`                                                                                                   | `data-picked`                                                                                       | `data-selected`                                                                                                                        |
+| `flow`                                                                                                          | `data-flow-kind`, `data-flow-branches`, `data-flow-port`, `data-flow-diagram-anchor`                | `data-slot="flow-diagram-node"` / `flow-diagram-parallel` / `flow-branches` / `flow-port` / `flow-diagram-anchor`, side in `data-side` |
+| `tracker`                                                                                                       | readout `data-visible`                                                                              | readout `data-state="open                                                                                                              | closed"` |
+| `table-sort-button`                                                                                             | `data-direction`, `data-visible`                                                                    | `data-sort`                                                                                                                            |
+| `pricing-card`                                                                                                  | `data-slot-position`, `data-aligned`                                                                | `data-actions-position`, `data-equal-height`                                                                                           |
+| `newsletter-section`, `hero-form-section`, `job-posting`                                                        | `data-error`                                                                                        | `data-failed`                                                                                                                          |
+| `conversation`                                                                                                  | `data-alignment` (root)                                                                             | `data-layout`                                                                                                                          |
+| `hero-title`                                                                                                    | `data-centered`, `data-mobile-centered`                                                             | `data-align`, `data-mobile-align`                                                                                                      |
+| `listing-index`, `story-index` (filter panel)                                                                   | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
+| `media-tabs`                                                                                                    | `data-position`                                                                                     | `data-tabs-side`                                                                                                                       |
+| `quote` (highlighted phrase)                                                                                    | `data-highlight`                                                                                    | `data-slot="highlight"`                                                                                                                |
+| `sticky-stack`                                                                                                  | `data-complete`                                                                                     | `data-completed`                                                                                                                       |
 
 ## 4. Manual changes
 
@@ -1473,6 +1504,9 @@ copy them again to get the mirrored version.
   (`@aziontech/webkit/styles` and the `icon` props of Button, IconButton, Link, Breadcrumb and
   MenuItem); external-link arrows, media controls and logos do not. Add `rtl:-scale-x-100` to a
   directional glyph you draw yourself.
+- **Overlays.** `side` and `align` take `start` / `end` and follow the direction (see "Overlays:
+  `side` and `align` replace `placement`"): menus, popovers, list boxes and date panels anchored at
+  the start edge open from the trigger's right edge under `rtl`.
 - **User data.** `Input`, `Textarea`, `NumberInput` and `PasswordInput` render `dir="auto"` unless
   you pass `dir`; `CodeBlock` lines, `Kbd`, `LogViewer` timestamps and the `BrowserFrame` address are
   `dir="ltr"`. Snapshot tests of those components see the new attribute.

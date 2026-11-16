@@ -3,14 +3,14 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 13
+spec_version: 14
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 573ae5c7d83c04172f08d1275d613ca6f42bdc3f3eb5e5e7c1829bbbf69be48f
+checksum: a30255b51066a31b6b5781d9934dac9b90bbd57bae5f0ac715e025523c50ad7f
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Sidebar — Component Spec
@@ -174,7 +174,8 @@ Two details are what make the pair correct, and neither costs more than one attr
         </span>
         <DropdownMenu
           v-model:open="accountMenuOpen"
-          placement="top-end"
+          side="top"
+          align="end"
         >
           <DropdownMenu.Trigger>
             <IconButton

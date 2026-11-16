@@ -383,6 +383,8 @@ describe('PropertyFilter', () => {
       await fireEvent.update(input, 'sta')
       const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement
       expect(listbox.getAttribute('dir')).toBe('rtl')
+      expect(listbox.getAttribute('data-side')).toMatch(/^(bottom|top)$/)
+      expect(listbox.getAttribute('data-align')).toBe('start')
       await fireEvent.update(input, 'stat = x')
       await fireEvent.keyDown(input, { key: 'Enter' })
       const error = view.getByTestId('property-filter__error')

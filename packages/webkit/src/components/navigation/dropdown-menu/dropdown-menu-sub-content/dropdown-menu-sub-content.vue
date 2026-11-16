@@ -32,16 +32,13 @@
 
   const isOpen = computed(() => sub.isOpen.value && parent.isOpen.value)
 
-  const placement = computed(() =>
-    resolveDirection(sub.triggerEl.value) === 'rtl' ? 'left-start' : 'right-start'
-  )
-
-  const { resolvedPlacement, panelStyle } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: sub.triggerEl,
     panelRef: panelEl,
     isOpen,
-    placement,
-    offset: 4,
+    side: 'end',
+    align: 'start',
+    sideOffset: 4,
     onDismiss: () => sub.setOpen(false)
   })
 
@@ -128,7 +125,8 @@
         :lang="portalLocale.lang"
         :data-testid="testId"
         :data-state="isOpen ? 'open' : 'closed'"
-        :data-placement="resolvedPlacement"
+        :data-side="resolvedSide"
+        :data-align="resolvedAlign"
         :style="panelStyle"
         class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
         @keydown="onKeydown"
