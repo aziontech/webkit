@@ -462,7 +462,7 @@ fills its column, so every copy button lines up. `more` puts the other domains b
   <Table.CellLink
     :label="row.domains[0]"
     :href="`https://${row.domains[0]}`"
-    :more="row.domains.slice(1).map((label) => ({ label, href: `https://${label}` }))"
+    :more="row.domains.slice(1).map((label: string) => ({ label, href: `https://${label}` }))"
     :noun="{ one: 'domain', other: 'domains' }"
     copyable
   />

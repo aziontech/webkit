@@ -50,7 +50,9 @@ every webkit primitive the same way:
 for a page that opens its search palette. It already composes `AppLayout`, `Sidebar`, `SidebarMenu`,
 `AppHeader`, `Breadcrumb`, `SearchTrigger` and `Command`, so you never assemble those into a shell
 of your own. Start it from the `shell/console` block (`npx @aziontech/webkit add shell/console`, or
-`get_block`): the block is the `App.vue`, with the real console navigation.
+`get_block`): the block is your `App.vue`, with the real console navigation. `add` copies it into
+your views folder and prints the path it wrote (`src/views/console.vue`); make that file your
+`src/App.vue` instead of adding it as a route.
 
 **The focused creation shell is a block, not a component:** `top-bar/creation-bar`
 (`npx @aziontech/webkit view top-bar/creation-bar`), built from `app-header`, `icon-button`,
@@ -289,6 +291,9 @@ the same way.
 
 ```ts
 // router.ts — the flow's route opts out of the console layout
+import ApplicationsView from './views/ApplicationsView.vue'
+import CreateApplicationView from './views/CreateApplicationView.vue'
+
 const routes = [
   { path: '/applications', component: ApplicationsView },
   {
@@ -880,9 +885,9 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 
 ```vue
 <script setup lang="ts">
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+  import BreadcrumbRoot from '@aziontech/webkit/breadcrumb-root'
   import type { SidebarMenuNode } from '@aziontech/webkit/sidebar-menu'
-  import SidebarMenu from '@aziontech/webkit/sidebar-menu-root'
+  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -912,12 +917,12 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 </script>
 
 <template>
-  <SidebarMenu
+  <SidebarMenuRoot
     :groups="groups"
     :active-id="activeId"
     @navigate="(event: MouseEvent, node: SidebarMenuNode) => follow(event, node.href ?? '')"
   />
-  <Breadcrumb
+  <BreadcrumbRoot
     :items="[{ label: 'Applications', href: '/applications' }, { label: 'edge-app' }]"
     @navigate="follow"
   />

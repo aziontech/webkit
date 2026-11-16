@@ -67,14 +67,14 @@ stylelint config (consumer lint).
 
 **A component has one name — the kebab-case name — and every surface derives from it.**
 
-| Surface                    | Form                      | Example (`empty-state`)                                  |
-| -------------------------- | ------------------------- | -------------------------------------------------------- |
-| spec file + frontmatter    | kebab                     | `.specs/empty-state.md`                                  |
-| folder + `.vue` file       | kebab                     | `content/empty-state/empty-state.vue`                    |
-| export subpath             | kebab                     | `"./empty-state"`                                        |
-| `defineOptions({ name })`  | PascalCase                | `EmptyState`                                             |
-| `data-testid` fallback     | the kebab name itself     | `empty-state`                                            |
-| import binding + story tag | PascalCase of the subpath | `import EmptyState from '@aziontech/webkit/empty-state'` |
+| Surface                      | Form                      | Example (`empty-state`)                                  |
+| ---------------------------- | ------------------------- | -------------------------------------------------------- |
+| spec file + frontmatter      | kebab                     | `.specs/empty-state.md`                                  |
+| folder + `.vue` file         | kebab                     | `content/empty-state/empty-state.vue`                    |
+| export subpath               | kebab                     | `"./empty-state"`                                        |
+| `defineOptions({ name })`    | PascalCase                | `EmptyState`                                             |
+| `data-testid` fallback       | the kebab name itself     | `empty-state`                                            |
+| import binding + example tag | PascalCase of the subpath | `import EmptyState from '@aziontech/webkit/empty-state'` |
 
 Plurality is part of the name: a single token is `chip`; a container for many is a
 different component (`chip-group`), never a plural spelling of the same one.
@@ -228,6 +228,8 @@ split into two variants with two payload shapes.**
 
 <!-- prettier-ignore -->
 ```ts
+interface MenuItem { id: string; label: string }
+
 const emit = defineEmits<{
   'update:modelValue': [value: string]                  // model — the new value only
   'item-click': [event: MouseEvent, item: MenuItem]     // activation — DOM event FIRST
@@ -258,6 +260,9 @@ Scoped payloads are named-key objects. Fallback content lives inside the `<slot>
 <!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
+interface TableRow { id: string; label: string }
+
+defineProps<{ rows: TableRow[] }>()
 defineSlots<{
   /** Default content. */
   default(): unknown
@@ -267,9 +272,11 @@ defineSlots<{
 </script>
 
 <template>
-  <slot name="row" :item="row" :index="i">
-    {{ row.label }}   <!-- fallback when the consumer passes nothing -->
-  </slot>
+  <div v-for="(row, i) in rows" :key="row.id">
+    <slot name="row" :item="row" :index="i">
+      {{ row.label }}   <!-- fallback when the consumer passes nothing -->
+    </slot>
+  </div>
 </template>
 ```
 
@@ -315,11 +322,17 @@ Behaviour (B):
 <!-- prettier-ignore -->
 ```ts
 // ✅
+import { readonly, ref, toValue, type MaybeRefOrGetter } from 'vue'
+
 export function useCounter(start: MaybeRefOrGetter<number>) {
   const n = ref(toValue(start))
   return { count: readonly(n), increment: () => n.value++ }
 }
+```
 
+<!-- snippet: partial -->
+<!-- prettier-ignore -->
+```ts
 // ❌ blocked
 export function useCounter() { return reactive({ n: 0 }) }   // reactive return
 // use-counter.js                                             // .js composable
@@ -357,6 +370,7 @@ blocks, no component-local CSS.**
 </button>
 ```
 
+<!-- snippet: partial -->
 <!-- prettier-ignore -->
 ```ts
 // ❌ the whole class-map pattern is banned
@@ -395,8 +409,12 @@ attributes explicitly, and exposes a minimal imperative API.**
 <!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
+import { computed, useAttrs } from 'vue'
+import { cn } from '@aziontech/webkit/utils/cn'
+
 defineOptions({ name: 'Card', inheritAttrs: false })
 const attrs = useAttrs()
+const testId = computed(() => (attrs['data-testid'] as string) ?? 'card')
 </script>
 
 <template>
@@ -486,10 +504,13 @@ major in that state, and is removed in a subsequent major (`BREAKING CHANGE:`). 
 applies from 6.0 on: 6.0 itself was the clean break that removed every older name outright
 (`MIGRATION_V6.md` + `webkit migrate v6`).
 
-<!-- prettier-ignore -->
 ```ts
-/** @deprecated since 4.2 — use `variant` instead. Removed in 5.0. */
-variant?: string
+export interface AlertProps {
+  /** @deprecated since 6.2 — use `severity` instead. Removed in 7.0. */
+  tone?: 'info' | 'danger'
+  /** Colour meaning of the message. */
+  severity?: 'info' | 'danger'
+}
 ```
 
 - A bare `@deprecated` (no replacement/version) is blocked.
@@ -512,7 +533,11 @@ folder.**
 // ✅
 import Button from '@aziontech/webkit/button'
 import TableRoot from '@aziontech/webkit/table-root'   // root-only, tree-shakeable
+```
 
+<!-- snippet: partial -->
+<!-- prettier-ignore -->
+```ts
 // ❌ all blocked
 import { Button } from '@aziontech/webkit'             // barrel — retains the catalog
 import X from '@aziontech/webkit/feedback/skeleton'    // category in the path
@@ -548,6 +573,7 @@ against `.size-limit.json`; unbudgeted paths stay gated by review.
 `Object.assign`) plus a tree-shakeable `-root` export, and shares state root→leaf through
 `provide`/`inject`.**
 
+<!-- snippet: partial -->
 <!-- prettier-ignore -->
 ```ts
 // index.ts — runtime + the type vue-tsc derives
@@ -604,7 +630,7 @@ Internal to the webkit repo — how its own components come to exist.
   (another DS, Figma naming, library examples, an inherited CONTRACT.md) is rewritten to
   these conventions before the spec is written. The spec wins over the source.
 - The creation pipeline (`/component-create`) is spec → validate → discovery → scaffold →
-  story → echo cross-check → lint/type/build gates; every write passes the hooks.
+  test + examples → echo cross-check → lint/type/build gates; every write passes the hooks.
 
 **Enforced by:** `enforce-spec-exists` · `enforce-component-create` ·
 `validate-spec-compliance` · the echo-reporter cross-check.

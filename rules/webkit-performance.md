@@ -11,19 +11,20 @@ Composition components (Table, DropdownMenu, Dialog, and similar) expose two roo
 
 Rules:
 
-- If you only need the root, import the `-root` path.
-- If you need a few sub-components, import each on its own subpath (`@aziontech/webkit/table-row`) instead of pulling the whole compound.
-- Reach for the compound path only when the dot-notation ergonomics are worth shipping the whole set.
+- When you render the parts with dot-notation (`<Table.Row>`), import the compound path. It is the form the examples and blocks use.
+- When you render only the root, import the `-root` path and bind it as `TableRoot`: it has no dot-notation parts, so `<TableRoot.Row>` is a type error.
+- On a bundle-sensitive screen that uses a few parts, import the `-root` path plus each part on its own subpath (`@aziontech/webkit/table-row` as `TableRow`) instead of the whole compound.
+- Bind every import to the PascalCase of its path (`table-root` is `TableRoot`, `table-row` is `TableRow`).
 
-```js
-// Only the root — smallest:
-import Table from '@aziontech/webkit/table-root'
-
-// A specific sub-component — still tree-shakeable:
-import TableRow from '@aziontech/webkit/table-row'
-
-// The full compound — convenient, heavier:
+```ts
+// The compound: every part attached for dot-notation
 import Table from '@aziontech/webkit/table'
+
+// Only the root, nothing attached: smallest
+import TableRoot from '@aziontech/webkit/table-root'
+
+// One part on its own, still tree-shakeable
+import TableRow from '@aziontech/webkit/table-row'
 ```
 
 ## Icons: import the font once, use CSS classes

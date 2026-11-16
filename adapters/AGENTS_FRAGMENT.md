@@ -26,8 +26,9 @@ The chrome of an app is one layout component, composed once in the app's root (`
 | Documentation               | `DocLayout` (`@aziontech/webkit/doc-layout`)         | sticky header, docs rail (drawer on phones), the "On this page" rail tracking the reading position; the document scrolls                                                                                                                                                                                                                                 |
 
 Start the layout from its shell block (`npx @aziontech/webkit add shell/console`,
-`shell/site`, `shell/docs`): the block is the `App.vue`, with the real navigation data;
-replace its stand-in body with `<RouterView />`. Every other block is then **only the page body**
+`shell/site`, `shell/docs`): the block is the `App.vue`, with the real navigation data. `add`
+writes it into your views folder and prints the path; move that file to `src/App.vue` (no route)
+and replace its stand-in body with `<RouterView />`. Every other block is then **only the page body**
 that renders inside the layout's default slot: it renders no `<main>`, `AppLayout`, `Sidebar`,
 `AppHeader`, `SiteHeader`, `SiteFooter`, `Command` or navigation data of its own. If a block you
 copied still carries an inline shell (some platform blocks wrap their body in a `AppHeader` and a
@@ -83,18 +84,23 @@ foundation, a JSON API per component, and `llms-full.txt` with everything in one
 - **Styles + theme.** Load `src/webkit.css` once at the app entry — it `@import`s the theme's
   Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + fonts) and `@source`s webkit so its
   component classes compile. Import `webkit.css`, not `@aziontech/theme` bare (the `@source` is what
-  compiles webkit's classes). Light is the default; for dark set `<html data-theme="dark">`.
+  compiles webkit's classes). With no `data-theme` the theme follows the device; pin it with
+  `<html data-theme="light">` or `<html data-theme="dark">`.
 - **Accessible & keyboard-operable.** Label every field, keep a visible focus ring, mirror state in
   ARIA, no click handler without a key handler.
 - **Right-to-left ready.** Logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`,
-  `text-start`, `border-s`, `rounded-s`); directional icons mirror with `rtl:-scale-x-100`; arrow-key
+  `text-start`, `border-s`, `rounded-s`); webkit `icon` props already mirror directional glyphs, and
+  only an `<i>` glyph you draw yourself takes `rtl:-scale-x-100` (never a class on a webkit tag); arrow-key
   and drag logic reads `useDirection` (`@aziontech/webkit/use-direction`); code, URLs and IDs
   inside text sit in `dir="ltr"` or `<bdi>` (rule `webkit-direction`).
 - **Built-in strings stay built in.** Never re-type a string a webkit component already ships
   (close, pagination, calendar, keycaps, wizard steps): set `locale` on `WebkitProvider` and rename
   one with its `messages` prop. Product copy follows `/webkit-microcopy` (rule `webkit-strings`).
-- **Small bundles.** Prefer the `<name>-root` path (or specific sub-components), import icons
-  individually, lazy-load heavy overlays.
+- **Small bundles.** A composition component is imported as its compound
+  (`import Select from '@aziontech/webkit/select'`, then `<Select.Trigger>`). Only when you render the
+  root alone, import the `-root` path and bind it as `<Name>Root`
+  (`import TableRoot from '@aziontech/webkit/table-root'`): it has no dot-notation parts. Import icons
+  individually and lazy-load heavy overlays.
 - **App-level setup at first use.** A few components declare a one-time wiring in their catalog
   `setup` field (via the MCP's `get_component`). Toast: before the first `toast(...)` call, wire
   `import { ToastPlugin } from '@aziontech/webkit/toast'` + `.use(ToastPlugin)` on `createApp()`

@@ -47,16 +47,23 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
 <script setup lang="ts">
   import { logicalArrowKey, useDirection } from '@aziontech/webkit/use-direction'
 
+  defineProps<{ label: string; domain: string }>()
+  const emit = defineEmits<{ next: [event: KeyboardEvent]; previous: [event: KeyboardEvent] }>()
+
   const dir = useDirection()
   const onKeydown = (event: KeyboardEvent) => {
     const key = logicalArrowKey(event.key, dir.value)
-    if (key === 'ArrowRight') next()
-    if (key === 'ArrowLeft') previous()
+    if (key === 'ArrowRight') emit('next', event)
+    if (key === 'ArrowLeft') emit('previous', event)
   }
 </script>
 
 <template>
-  <div class="flex items-center gap-(--spacing-xs) ps-(--spacing-md)">
+  <div
+    tabindex="0"
+    class="flex items-center gap-(--spacing-xs) ps-(--spacing-md)"
+    @keydown="onKeydown"
+  >
     <span class="truncate">{{ label }}</span>
     <span
       dir="ltr"

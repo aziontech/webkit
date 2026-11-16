@@ -27,18 +27,18 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 
 ```vue
 <script setup>
-  import ConsoleLayout from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot from '@aziontech/webkit/console-layout-root'
   import { navigation } from './navigation'
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     :navigation="navigation"
     :breadcrumbs="$route.meta.breadcrumbs ?? []"
     :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
   >
     <RouterView />
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
 </template>
 ```
 
@@ -61,6 +61,8 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 
 The shell blocks (`shell/console`, `shell/site`, `shell/docs`) are these layouts with
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
+`npx @aziontech/webkit add shell/console` writes the block into your views folder and prints the
+path (`src/views/console.vue`): move that file to `src/App.vue`, and skip the route it suggests.
 A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeader`,
 `SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
 create flow (`create/*`, headed by the `top-bar/creation-bar` bar) or a
@@ -131,7 +133,7 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 - **Toast**: fire-from-anywhere (`toast.success('Saved')`) only renders if a region is mounted. Wire the service once in the entry — `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto `createApp()`; the plugin mounts the region automatically (options: `app.use(ToastPlugin, { position: 'top-right' })`). A manually mounted Toaster also counts — never add both blindly (the store keeps only the first region active, but one wiring is enough). `npx webkit doctor` flags toast usage with no wired region.
 
-- **Theme (light or dark)**: the theme is light by default. An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
+- **Theme (light or dark)**: with no `data-theme` the theme follows the device (`prefers-color-scheme`). An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark, and an app that is always light sets `data-theme="light"`; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
 
 - **WebkitProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import WebkitProvider from '@aziontech/webkit/webkit-provider'`.
 
@@ -211,13 +213,17 @@ it only through its props (`variant`, `size`); a class or style on its tag is re
 
 ### Compound vs tree-shakeable root
 
-`Table` (and other composition components) has two import shapes. Use the narrow one when you can:
+`Table` (and every other composition component) has two import shapes. Lead with the compound, the
+form the examples and blocks use; reach for the root path only when you render the root alone:
 
-```js
-import Table from '@aziontech/webkit/table-root' // root only — smallest
-import TableRow from '@aziontech/webkit/table-row' // one sub-component
-import Table from '@aziontech/webkit/table' // full compound: Table.Row, Table.Cell, ...
+```ts
+import Table from '@aziontech/webkit/table' // compound: Table.Row, Table.Cell, ...
+import TableRoot from '@aziontech/webkit/table-root' // root only, no dot-notation parts
+import TableRow from '@aziontech/webkit/table-row' // one part on its own
 ```
+
+Bind each import to the PascalCase of its path: `table-root` is `TableRoot`, never `Table`, so
+`<Table.Row>` never appears on a binding that has no parts.
 
 ### Lazy-load a heavy overlay
 

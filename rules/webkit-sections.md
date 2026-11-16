@@ -34,7 +34,7 @@ JSON. Never rebuild a band from primitives when a section exists.
   itself. A page that ends on any other band closes with `SectionGap hatch` + the closing
   `RegistrationFrame` of `shell/site`.
 - Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
-  `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
+  `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleVariant`,
   `MediaSplitSection` action `variant` (`ghost` for a "Learn more" text button beside `codeTabs`), `SiteFooter` link
   `external`, `CapabilityGrid` items with `href` for a linked grid, `ProcessScroll` `pinned`
   (a band that pins while its tall cards slide sideways), a `HeroFormSection` field's
@@ -79,7 +79,7 @@ JSON. Never rebuild a band from primitives when a section exists.
   `webkit/no-root-relative-asset`).
 - Do not put a `SectionGap` or a closing `RegistrationFrame` after a closing section: the hatch doubles
   (`webkit/no-gap-after-closing-section`).
-- Do not wrap a bare `CapabilityGrid` in a `SectionModule` to move its title: set `titleKind`, or
+- Do not wrap a bare `CapabilityGrid` in a `SectionModule` to move its title: set `titleVariant`, or
   its capability headings rise to `h2`.
 
 ## Correct
@@ -88,17 +88,17 @@ JSON. Never rebuild a band from primitives when a section exists.
 <script setup lang="ts">
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import PricingPlans from '@aziontech/webkit/pricing-plans'
-  import NewsletterSection from '@aziontech/webkit/newsletter-section'
-
-  interface SectionEntry {
-    /** The section's props, as the page JSON stores them. */
-    props: Record<string, unknown>
-  }
+  import PricingPlans, { type PricingPlansProps } from '@aziontech/webkit/pricing-plans'
+  import NewsletterSection, {
+    type NewsletterSectionProps
+  } from '@aziontech/webkit/newsletter-section'
 
   interface Props {
-    /** The page JSON, one entry per section. */
-    page: { pricing: SectionEntry; newsletter: SectionEntry }
+    /** The page JSON, one entry per section, each holding that section's props. */
+    page: {
+      pricing: { props: PricingPlansProps }
+      newsletter: { props: NewsletterSectionProps }
+    }
   }
 
   defineProps<Props>()
