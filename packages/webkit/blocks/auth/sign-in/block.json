@@ -3,7 +3,7 @@
   "name": "SignIn",
   "title": "Blocks/Auth/SignIn",
   "surface": "app",
-  "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.",
+  "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses `PersonalToken`: one masked `PasswordInput` for the token, a link to where tokens are created, and a `sign-in` event that hands the token to the app. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -81,7 +81,20 @@
     "tela de consentimento",
     "conceder acesso",
     "autorizar dispositivo",
-    "login pela cli"
+    "login pela cli",
+    "token sign in",
+    "api token sign in",
+    "personal token",
+    "personal token sign in",
+    "sign in with token",
+    "sign in with api key",
+    "api key login",
+    "paste token",
+    "access token login",
+    "token login",
+    "entrar com token",
+    "login com token",
+    "token pessoal"
   ],
   "skills": ["webkit-form", "webkit-errors", "webkit-microcopy"],
   "steps": ["email", "password", "reset", "sent", "new-password"],
@@ -159,6 +172,16 @@
       "name": "DeviceAuthorization",
       "summary": "Device or CLI authorization: the code the terminal printed, shown large to compare, the request details (application, device, IP address, time), the account and scopes, Cancel / Confirm, and a typed code entry (8 characters, grouped by 4) when the codes do not match.",
       "file": "variants/device-authorization.vue"
+    },
+    {
+      "name": "PersonalToken",
+      "summary": "Sign in with an Azion personal token, for an app with no accounts of its own: one masked, monospace `PasswordInput` with show and hide, a link to how tokens are created, required and no-spaces checks on the field, a danger notice when Azion rejects the token (the field is cleared), a warning with Retry when Azion cannot be reached, and a `sign-in` event `(event, token)` once the token is accepted. The block stores nothing; the app keeps the token for the session.",
+      "file": "variants/personal-token.vue"
+    },
+    {
+      "name": "RejectedToken",
+      "summary": "401 on the personal token: the same card with the danger notice under the heading, the field cleared and focused for another paste.",
+      "file": "variants/rejected-token.vue"
     }
   ]
 }

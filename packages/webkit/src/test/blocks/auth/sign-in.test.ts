@@ -10,7 +10,9 @@ import IncorrectCredentials from '../../../../blocks/auth/sign-in/variants/incor
 import MfaCode from '../../../../blocks/auth/sign-in/variants/mfa-code.vue'
 import MfaSetup from '../../../../blocks/auth/sign-in/variants/mfa-setup.vue'
 import OauthConsent from '../../../../blocks/auth/sign-in/variants/oauth-consent.vue'
+import PersonalToken from '../../../../blocks/auth/sign-in/variants/personal-token.vue'
 import ProvidersLoading from '../../../../blocks/auth/sign-in/variants/providers-loading.vue'
+import RejectedToken from '../../../../blocks/auth/sign-in/variants/rejected-token.vue'
 import ServerError from '../../../../blocks/auth/sign-in/variants/server-error.vue'
 import Submitting from '../../../../blocks/auth/sign-in/variants/submitting.vue'
 import { expectNoA11yViolations } from '../../axe'
@@ -256,5 +258,65 @@ describe('auth/sign-in', () => {
     await waitFor(() =>
       expect(view.getByText('We sent another link to jane.doe@example.com.')).toBeTruthy()
     )
+  })
+})
+
+describe('auth/sign-in#PersonalToken', () => {
+  const VALID = 'azion0123456789abcdef0123456789abcdef'
+
+  it('labels the token field, hides it by default and links to where tokens are made', async () => {
+    const view = render(PersonalToken)
+    const input = view.getByLabelText('Personal token') as HTMLInputElement
+
+    expect(input.tagName).toBe('INPUT')
+    expect(input.type).toBe('password')
+    expect(input.getAttribute('autocomplete')).toBe('off')
+    await fireEvent.click(view.getByRole('button', { name: 'Show password' }))
+    expect(input.type).toBe('text')
+    const link = view.getByRole('link', { name: 'How to create a personal token' })
+    expect(link.getAttribute('href')).toContain('azion.com')
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('asks for a token on an empty submit and emits nothing', async () => {
+    const view = render(PersonalToken)
+
+    await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
+
+    expect(view.getByText('Paste your personal token.')).toBeTruthy()
+    expect(view.getByLabelText(/^Personal token/).getAttribute('aria-invalid')).toBe('true')
+    expect(view.emitted()['sign-in']).toBeUndefined()
+  })
+
+  it('shows a rejected token in the notice, clears the field and emits nothing', async () => {
+    const view = render(PersonalToken)
+
+    await fireEvent.update(view.getByLabelText('Personal token'), 'short-token')
+    await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
+
+    await waitFor(() => expect(view.getByText(/Azion did not accept this token/)).toBeTruthy())
+    expect((view.getByLabelText('Personal token') as HTMLInputElement).value).toBe('')
+    expect(view.emitted()['sign-in']).toBeUndefined()
+  })
+
+  it('emits the event and the trimmed token once Azion accepts it', async () => {
+    const view = render(PersonalToken)
+
+    await fireEvent.update(view.getByLabelText('Personal token'), `  ${VALID}  `)
+    await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
+
+    await waitFor(() => expect(view.emitted()['sign-in']).toHaveLength(1))
+    const [event, token] = view.emitted()['sign-in']![0] as [Event, string]
+    expect(event).toBeInstanceOf(Event)
+    expect(token).toBe(VALID)
+    expect((view.getByLabelText('Personal token') as HTMLInputElement).value).toBe('')
+  })
+
+  it('RejectedToken: opens on the rejection with the field focused', async () => {
+    const view = render(RejectedToken)
+
+    expect(view.getByText(/Azion did not accept this token/)).toBeTruthy()
+    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText('Personal token')))
+    await expectNoA11yViolations(view.container)
   })
 })
