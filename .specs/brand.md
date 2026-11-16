@@ -3,11 +3,11 @@ name: brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: 379913149088b99c60ff48209aed10105dbcb4d8642406c278b5c2a46c02f4e9
+checksum: c7c2c14c07ac45479f7c68f8f4e8fecbb8709b6e0ea8c8b26fba4fdf9f74919c
 created: 2026-07-13
 last_updated: 2026-11-16
 ---
@@ -42,6 +42,10 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 - Choose the lockup with `variant` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
 - Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
+- Take the logo only from Brand, never from a copied SVG file or a website URL.
+- Keep clear contrast between the logo and its background, and clear space around it; never shrink it below the `small` size.
+- Do not set the logo next to text or interface elements in the brand primary colour: the signature lockup already carries it.
+- Black and white versions of the logo do not exist yet: ask the Design team for them, never recolour a copy.
 
 ## Usage
 
