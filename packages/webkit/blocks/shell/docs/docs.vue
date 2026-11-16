@@ -14,6 +14,11 @@
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { ref } from 'vue'
 
+  defineSlots<{
+    /** The page body: the route's article; the sample guide stands in for RouterView. */
+    default(): unknown
+  }>()
+
   const sections = [
     { label: 'Reference', href: '/docs/reference' },
     { label: 'Guides', href: '/docs/guides' },
@@ -21,6 +26,26 @@
   ]
 
   const navigation: DocLayoutNavGroup[] = [
+    {
+      label: 'Get started',
+      items: [
+        { id: 'overview', label: 'Overview', href: '/docs' },
+        {
+          id: 'get-started',
+          label: 'Get started',
+          type: 'inline',
+          defaultOpen: true,
+          children: [
+            {
+              id: 'create-an-account',
+              label: 'Create an account',
+              href: '/docs/get-started/create-an-account'
+            },
+            { id: 'first-deploy', label: 'First deploy', href: '/docs/get-started/first-deploy' }
+          ]
+        }
+      ]
+    },
     {
       label: 'Functions',
       items: [
@@ -30,37 +55,35 @@
           label: 'Getting started',
           href: '/docs/functions/getting-started'
         },
+        { id: 'functions-limits', label: 'Limits', href: '/docs/functions/limits' }
+      ]
+    },
+    {
+      label: 'Applications',
+      items: [
+        { id: 'applications-overview', label: 'Overview', href: '/docs/applications' },
+        { id: 'applications-cache', label: 'Cache', href: '/docs/applications/cache' }
+      ]
+    },
+    {
+      label: 'Dev tools',
+      items: [
+        { id: 'azion-cli', label: 'Azion CLI', href: '/docs/dev-tools/cli' },
         {
-          id: 'functions-how-it-works',
-          label: 'How it works',
-          href: '/docs/functions/how-it-works'
-        },
-        { id: 'functions-examples', label: 'Examples', href: '/docs/functions/examples' },
-        { id: 'functions-reference', label: 'Reference', href: '/docs/functions/reference' },
-        { id: 'functions-limits', label: 'Limits', href: '/docs/functions/limits' },
-        {
-          id: 'functions-best-practices',
-          label: 'Best practices',
-          href: '/docs/functions/best-practices'
-        },
-        {
-          id: 'functions-troubleshooting',
-          label: 'Troubleshooting',
-          href: '/docs/functions/troubleshooting'
+          id: 'agent-setup-group',
+          label: 'Agent setup',
+          type: 'inline',
+          defaultOpen: true,
+          children: [
+            { id: 'agent-setup', label: 'Overview', href: '/docs/agent-setup' },
+            { id: 'claude-code', label: 'Claude Code', href: '/docs/agent-setup/claude-code' }
+          ]
         }
       ]
     }
   ]
 
   const crumbs = [{ label: 'Functions', href: '/docs/functions' }, { label: 'Getting started' }]
-
-  const outline = [
-    { id: 'prerequisites', text: 'Prerequisites', depth: 2 },
-    { id: 'create-the-function', text: 'Create the function', depth: 2 },
-    { id: 'instantiate-the-function', text: 'Instantiate it in your application', depth: 2 },
-    { id: 'verify-the-response', text: 'Verify the response', depth: 2 },
-    { id: 'next-steps', text: 'Next steps', depth: 2 }
-  ]
 
   const outlineGroups = [
     {
@@ -145,59 +168,59 @@
 <template>
   <DocLayout
     :navigation="navigation"
-    active-id="functions-getting-started"
     :sections="sections"
     home="/docs"
-    :outline="outline"
     :outline-groups="outlineGroups"
   >
-    <article
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
-    >
-      <DocPageHeader
-        title="Getting started"
-        description="Create a function, instantiate it in an application, and verify the response from the edge."
-        :breadcrumbs="crumbs"
-      />
-      <DocProse>
-        <DocHeading
-          anchor="prerequisites"
-          :level="2"
-          >Prerequisites</DocHeading
-        >
-        <p>An Azion account and an application that already answers on its Azion domain.</p>
-        <DocHeading
-          anchor="create-the-function"
-          :level="2"
-          >Create the function</DocHeading
-        >
-        <p>
-          Open Functions in the console, select Create Function, paste the handler below and save
-          it.
-        </p>
-        <DocHeading
-          anchor="instantiate-the-function"
-          :level="2"
-          >Instantiate it in your application</DocHeading
-        >
-        <p>
-          On the application's Functions tab, add an instance pointing at the function you just
-          created.
-        </p>
-        <DocHeading
-          anchor="verify-the-response"
-          :level="2"
-          >Verify the response</DocHeading
-        >
-        <p>Request the domain and read the header the function sets.</p>
-        <DocHeading
-          anchor="next-steps"
-          :level="2"
-          >Next steps</DocHeading
-        >
-        <p>Read the limits before you move a production route onto the function.</p>
-      </DocProse>
-    </article>
+    <slot>
+      <article
+        class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
+      >
+        <DocPageHeader
+          title="Getting started"
+          description="Create a function, instantiate it in an application, and verify the response from the edge."
+          :breadcrumbs="crumbs"
+        />
+        <DocProse>
+          <DocHeading
+            anchor="prerequisites"
+            :level="2"
+            >Prerequisites</DocHeading
+          >
+          <p>An Azion account and an application that already answers on its Azion domain.</p>
+          <DocHeading
+            anchor="create-the-function"
+            :level="2"
+            >Create the function</DocHeading
+          >
+          <p>
+            Open Functions in the console, select Create Function, paste the handler below and save
+            it.
+          </p>
+          <DocHeading
+            anchor="instantiate-the-function"
+            :level="2"
+            >Instantiate it in your application</DocHeading
+          >
+          <p>
+            On the application's Functions tab, add an instance pointing at the function you just
+            created.
+          </p>
+          <DocHeading
+            anchor="verify-the-response"
+            :level="2"
+            >Verify the response</DocHeading
+          >
+          <p>Request the domain and read the header the function sets.</p>
+          <DocHeading
+            anchor="next-steps"
+            :level="2"
+            >Next steps</DocHeading
+          >
+          <p>Read the limits before you move a production route onto the function.</p>
+        </DocProse>
+      </article>
+    </slot>
 
     <template #actions>
       <IconButton

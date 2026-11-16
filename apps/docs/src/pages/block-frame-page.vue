@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Toaster } from '@aziontech/webkit/toast'
   import { useHead } from '@unhead/vue'
-  import { type Component, computed, onBeforeUnmount, onMounted, watch } from 'vue'
+  import { type Component, computed, h, onBeforeUnmount, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
   import { cached, findBlock, keys } from '../lib/data'
@@ -17,11 +17,14 @@
   const state = computed(() =>
     block.value?.states.find((entry) => entry.slug === String(route.params.state))
   )
-  const live = computed(() =>
-    block.value && state.value
-      ? cached<Component>(keys.block(block.value.dir, state.value.file))
-      : undefined
-  )
+  const live = computed(() => {
+    if (!block.value || !state.value) return undefined
+    const page = cached<Component>(keys.block(block.value.dir, state.value.file))
+    const shellFile = block.value.shell
+    if (!page || !shellFile || shellFile === state.value.file) return page
+    const shell = cached<Component>(keys.block(block.value.dir, shellFile))
+    return shell ? () => h(shell, null, { default: () => h(page) }) : page
+  })
 
   useHead({
     title: computed(() =>

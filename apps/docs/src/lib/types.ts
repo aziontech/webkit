@@ -51,6 +51,7 @@ export type BlockIndexItem = {
   dir: string
   uses: string[]
   layout: string
+  shell: string | null
   llms: string | null
 }
 

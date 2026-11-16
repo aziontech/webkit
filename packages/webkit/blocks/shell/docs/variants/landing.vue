@@ -6,50 +6,8 @@
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocHero from '@aziontech/webkit/doc-hero'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { useColorMode } from '@aziontech/webkit/use-color-mode'
-
-  const sections = [
-    { label: 'Reference', href: '/docs/reference' },
-    { label: 'Guides', href: '/docs/guides' },
-    { label: 'Dev tools', href: '/docs/dev-tools' }
-  ]
-
-  const gettingStarted = ['Fundamentals', 'Agent setup', 'Use cases', 'Support', 'Marketplace']
-  const platform = [
-    'Workloads',
-    'Applications',
-    'Firewall',
-    'Functions',
-    'Connectors',
-    'Object Storage',
-    'SQL Database',
-    'KV Store'
-  ]
-
-  const slug = (label: string) => label.toLowerCase().replaceAll(' ', '-')
-
-  const navigation: DocLayoutNavGroup[] = [
-    {
-      label: 'Getting started',
-      items: [
-        { id: 'overview', label: 'Overview', href: '/docs' },
-        ...gettingStarted.map((label) => ({ id: slug(label), label, href: `/docs/${slug(label)}` }))
-      ]
-    },
-    {
-      label: 'Platform resources',
-      items: platform.map((label) => ({ id: slug(label), label, href: `/docs/${slug(label)}` }))
-    }
-  ]
-
-  const { mode: theme } = useColorMode()
 
   const prompt =
     'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
@@ -221,280 +179,189 @@
       target: '_blank' as const
     }
   ]
-
-  const footerColumns = [
-    { title: 'Company', links: ['About us', 'Careers', 'Compliance', 'Privacy Policy'] },
-    { title: 'Resources', links: ['Blog', 'Learning', 'Marketplace', 'Success cases'] },
-    { title: 'Getting started', links: ['Start for free', 'Pricing', 'Contact'] },
-    { title: 'Developer', links: ['Documentation', 'API', 'Release notes'] }
-  ]
 </script>
 
 <template>
-  <DocLayout
-    :navigation="navigation"
-    active-id="overview"
-    :sections="sections"
-    home="/docs"
-  >
-    <article class="layout-column layout-boundary-inline flex flex-col pb-(--spacing-2xl)">
-      <DocHero
-        title="Welcome to Azion Docs"
-        description="We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts."
-      >
-        <template #actions>
-          <Button
-            label="Get started"
-            variant="primary"
-            size="large"
-            href="/docs/get-started"
-          />
-          <CopyPromptButton :value="prompt" />
-        </template>
-        <template #note>
-          The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.
-        </template>
-      </DocHero>
+  <article class="layout-column layout-boundary-inline flex flex-col pb-(--spacing-2xl)">
+    <DocHero
+      title="Welcome to Azion Docs"
+      description="We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts."
+    >
+      <template #actions>
+        <Button
+          label="Get started"
+          variant="primary"
+          size="large"
+          href="/docs/get-started"
+        />
+        <CopyPromptButton :value="prompt" />
+      </template>
+      <template #note>
+        The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.
+      </template>
+    </DocHero>
 
-      <DocProse>
-        <div class="flex flex-col gap-(--spacing-2xl)">
-          <section
-            aria-labelledby="start-by-interface"
-            class="flex flex-col"
-          >
-            <DocHeading
-              anchor="start-by-interface"
-              :level="2"
-              >Start by interface</DocHeading
-            >
-            <p>
-              Hand the Console to a coding agent, or drive it yourself: visually, from the terminal,
-              or over the API.
-            </p>
-            <DocAgentCard
-              :prompt="prompt"
-              action-href="/docs/agent-setup"
-            />
-            <DocCardGroup :columns="3">
-              <DocCard
-                v-for="item in interfaces"
-                :key="item.title"
-                :title="item.title"
-                :icon="item.icon"
-                :link-label="item.link"
-                :href="item.href"
-                >{{ item.text }}</DocCard
-              >
-            </DocCardGroup>
-          </section>
-
-          <section
-            aria-labelledby="start-by-objective"
-            class="flex flex-col"
-          >
-            <DocHeading
-              anchor="start-by-objective"
-              :level="2"
-              >Start by objective</DocHeading
-            >
-            <p>Build something, make it faster, lock it down, or run AI on it.</p>
-            <DocCardGroup :columns="2">
-              <DocCard
-                v-for="item in objectives"
-                :key="item.title"
-                :title="item.title"
-                :icon="item.icon"
-                :href="item.href"
-                >{{ item.text }}</DocCard
-              >
-              <div class="sm:col-span-2">
-                <DocCard
-                  title="Explore use cases"
-                  icon="ai ai-sitemap"
-                  href="/docs/customer-use-cases"
-                  >Validated designs that show how Azion products combine to solve each use case,
-                  grouped by solution.</DocCard
-                >
-              </div>
-            </DocCardGroup>
-            <p>Also useful: <a href="/docs/observe">Observe</a></p>
-          </section>
-
-          <section
-            aria-labelledby="templates"
-            class="flex flex-col"
-          >
-            <DocHeading
-              anchor="templates"
-              :level="2"
-              >Ready-made templates</DocHeading
-            >
-            <p>Deploy in one step, with CI/CD already wired up.</p>
-            <DocCardGroup
-              :columns="4"
-              :mobile-columns="2"
-            >
-              <DocCard
-                v-for="item in templates"
-                :key="item.title"
-                :title="item.title"
-                :icon="item.icon"
-                :href="item.href"
-              />
-            </DocCardGroup>
-            <p>
-              Also useful: <a href="/docs/get-started/first-deploy">First deploy</a>,
-              <a href="/docs/frameworks-compatibility">Frameworks compatibility</a>
-            </p>
-          </section>
-
-          <section
-            aria-labelledby="stop-attacks"
-            class="flex flex-col"
-          >
-            <DocHeading
-              anchor="stop-attacks"
-              :level="2"
-              >Stop attacks</DocHeading
-            >
-            <p>
-              Everything you need to protect applications, APIs, and the traffic that reaches them.
-            </p>
-            <DocCardGroup :columns="3">
-              <DocCard
-                v-for="item in attacks"
-                :key="item.title"
-                :title="item.title"
-                :icon="item.icon"
-                :href="item.href"
-                >{{ item.text }}</DocCard
-              >
-            </DocCardGroup>
-            <p>
-              Reference, when you need the details:
-              <a href="/docs/ddos-protection">DDoS Protection</a>,
-              <a href="/docs/waf-rule-sets">WAF Rule Sets</a>,
-              <a href="/docs/bot-manager">Bot Manager</a>
-            </p>
-          </section>
-
-          <section
-            aria-labelledby="compliance"
-            class="flex flex-col"
-          >
-            <DocHeading
-              anchor="compliance"
-              :level="2"
-              >Assess risk and prove compliance</DocHeading
-            >
-            <p>
-              What the platform covers, what stays with you, and where the evidence lives when an
-              auditor asks for it.
-            </p>
-            <DocCardGroup :columns="3">
-              <DocCard
-                v-for="item in compliance"
-                :key="item.title"
-                :title="item.title"
-                :icon="item.icon"
-                :href="item.href"
-                >{{ item.text }}</DocCard
-              >
-            </DocCardGroup>
-          </section>
-
-          <section
-            aria-labelledby="follow-along"
-            class="flex flex-col"
-          >
-            <DocHeading
-              anchor="follow-along"
-              :level="2"
-              >Follow along</DocHeading
-            >
-            <p>
-              Release notes as things ship, plus the blog, the YouTube channel, and the Discord
-              where questions get answered.
-            </p>
-            <DocCardGroup :columns="3">
-              <DocCard
-                v-for="item in followAlong"
-                :key="item.title"
-                :title="item.title"
-                :icon="item.icon"
-                :link-label="item.link"
-                :target="item.target"
-                :href="item.href"
-                >{{ item.text }}</DocCard
-              >
-              <div class="lg:col-span-2">
-                <DocCard
-                  title="Style guide"
-                  icon="ai ai-pencil"
-                  href="/docs/style-guide"
-                  >How Azion writes documentation: voice, structure, and conventions.</DocCard
-                >
-              </div>
-            </DocCardGroup>
-          </section>
-        </div>
-      </DocProse>
-      <div class="mt-(--spacing-2xl)">
-        <DocPreviousNext :next="{ label: 'Agent setup', href: '/docs/agent-setup' }" />
-      </div>
-    </article>
-
-    <template #actions>
-      <IconButton
-        icon="ai ai-github"
-        variant="outline"
-        size="medium"
-        aria-label="Azion on GitHub"
-        href="https://github.com/aziontech"
-        target="_blank"
-        class="shrink-0"
-      />
-      <Button
-        label="Console"
-        variant="secondary"
-        size="medium"
-        class="shrink-0"
-        href="https://console.azion.com"
-      />
-    </template>
-
-    <template #navigation-footer>
-      <ThemeSwitcher
-        v-model="theme"
-        aria-label="Theme"
-      />
-    </template>
-    <template #footer>
-      <div class="w-full border-t border-(--border-default)">
-        <Footer
-          variant="content"
-          aria-label="Footer"
+    <DocProse>
+      <div class="flex flex-col gap-(--spacing-2xl)">
+        <section
+          aria-labelledby="start-by-interface"
+          class="flex flex-col"
         >
-          <Footer.Column
-            v-for="column in footerColumns"
-            :key="column.title"
-            :title="column.title"
-          >
-            <Footer.Link
-              v-for="link in column.links"
-              :key="link"
-              href="#"
-              >{{ link }}</Footer.Link
+          <DocHeading :level="2">Start by interface</DocHeading>
+          <p>
+            Hand the Console to a coding agent, or drive it yourself: visually, from the terminal,
+            or over the API.
+          </p>
+          <DocAgentCard
+            :prompt="prompt"
+            action-href="/docs/agent-setup"
+          />
+          <DocCardGroup :columns="3">
+            <DocCard
+              v-for="item in interfaces"
+              :key="item.title"
+              :title="item.title"
+              :icon="item.icon"
+              :link-label="item.link"
+              :href="item.href"
+              >{{ item.text }}</DocCard
             >
-          </Footer.Column>
-          <template #status>
-            <StatusIndicator
-              severity="success"
-              label="All systems operational"
+          </DocCardGroup>
+        </section>
+
+        <section
+          aria-labelledby="start-by-objective"
+          class="flex flex-col"
+        >
+          <DocHeading :level="2">Start by objective</DocHeading>
+          <p>Build something, make it faster, lock it down, or run AI on it.</p>
+          <DocCardGroup :columns="2">
+            <DocCard
+              v-for="item in objectives"
+              :key="item.title"
+              :title="item.title"
+              :icon="item.icon"
+              :href="item.href"
+              >{{ item.text }}</DocCard
+            >
+            <div class="sm:col-span-2">
+              <DocCard
+                title="Explore use cases"
+                icon="ai ai-sitemap"
+                href="/docs/customer-use-cases"
+                >Validated designs that show how Azion products combine to solve each use case,
+                grouped by solution.</DocCard
+              >
+            </div>
+          </DocCardGroup>
+          <p>Also useful: <a href="/docs/observe">Observe</a></p>
+        </section>
+
+        <section
+          aria-labelledby="templates"
+          class="flex flex-col"
+        >
+          <DocHeading :level="2">Ready-made templates</DocHeading>
+          <p>Deploy in one step, with CI/CD already wired up.</p>
+          <DocCardGroup
+            :columns="4"
+            :mobile-columns="2"
+          >
+            <DocCard
+              v-for="item in templates"
+              :key="item.title"
+              :title="item.title"
+              :icon="item.icon"
+              :href="item.href"
             />
-          </template>
-        </Footer>
+          </DocCardGroup>
+          <p>
+            Also useful: <a href="/docs/get-started/first-deploy">First deploy</a>,
+            <a href="/docs/frameworks-compatibility">Frameworks compatibility</a>
+          </p>
+        </section>
+
+        <section
+          aria-labelledby="stop-attacks"
+          class="flex flex-col"
+        >
+          <DocHeading :level="2">Stop attacks</DocHeading>
+          <p>
+            Everything you need to protect applications, APIs, and the traffic that reaches them.
+          </p>
+          <DocCardGroup :columns="3">
+            <DocCard
+              v-for="item in attacks"
+              :key="item.title"
+              :title="item.title"
+              :icon="item.icon"
+              :href="item.href"
+              >{{ item.text }}</DocCard
+            >
+          </DocCardGroup>
+          <p>
+            Reference, when you need the details:
+            <a href="/docs/ddos-protection">DDoS Protection</a>,
+            <a href="/docs/waf-rule-sets">WAF Rule Sets</a>,
+            <a href="/docs/bot-manager">Bot Manager</a>
+          </p>
+        </section>
+
+        <section
+          aria-labelledby="compliance"
+          class="flex flex-col"
+        >
+          <DocHeading :level="2">Assess risk and prove compliance</DocHeading>
+          <p>
+            What the platform covers, what stays with you, and where the evidence lives when an
+            auditor asks for it.
+          </p>
+          <DocCardGroup :columns="3">
+            <DocCard
+              v-for="item in compliance"
+              :key="item.title"
+              :title="item.title"
+              :icon="item.icon"
+              :href="item.href"
+              >{{ item.text }}</DocCard
+            >
+          </DocCardGroup>
+        </section>
+
+        <section
+          aria-labelledby="follow-along"
+          class="flex flex-col"
+        >
+          <DocHeading :level="2">Follow along</DocHeading>
+          <p>
+            Release notes as things ship, plus the blog, the YouTube channel, and the Discord where
+            questions get answered.
+          </p>
+          <DocCardGroup :columns="3">
+            <DocCard
+              v-for="item in followAlong"
+              :key="item.title"
+              :title="item.title"
+              :icon="item.icon"
+              :link-label="item.link"
+              :target="item.target"
+              :href="item.href"
+              >{{ item.text }}</DocCard
+            >
+            <div class="lg:col-span-2">
+              <DocCard
+                title="Style guide"
+                icon="ai ai-pencil"
+                href="/docs/style-guide"
+                >How Azion writes documentation: voice, structure, and conventions.</DocCard
+              >
+            </div>
+          </DocCardGroup>
+        </section>
       </div>
-    </template>
-  </DocLayout>
+    </DocProse>
+    <div class="mt-(--spacing-2xl)">
+      <DocPreviousNext :next="{ label: 'Agent setup', href: '/docs/agent-setup' }" />
+    </div>
+  </article>
 </template>
