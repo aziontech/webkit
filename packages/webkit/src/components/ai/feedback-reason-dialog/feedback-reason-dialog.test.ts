@@ -1,14 +1,15 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, type PropType, ref } from 'vue'
 
 import Default from '../../../../examples/feedback-reason-dialog/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import FeedbackReasonDialog, {
-  type FeedbackReasonDialogPayload
+  type FeedbackReasonDialogPayload,
+  type FeedbackReasonDialogReason
 } from './feedback-reason-dialog.vue'
 
 afterEach(() => cleanup())
@@ -16,7 +17,10 @@ afterEach(() => cleanup())
 const dialog = () => document.body.querySelector<HTMLElement>('[role="dialog"]')
 
 const Harness = defineComponent({
-  props: { reasons: { type: Array, default: () => [] }, loading: Boolean },
+  props: {
+    reasons: { type: Array as PropType<FeedbackReasonDialogReason[]>, default: () => [] },
+    loading: Boolean
+  },
   emits: ['sent'],
   setup(props, { emit }) {
     const open = ref(true)

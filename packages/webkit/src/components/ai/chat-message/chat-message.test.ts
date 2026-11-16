@@ -87,7 +87,7 @@ describe('ChatMessage', () => {
     expect(getByTestId('chat-message__error')).toHaveTextContent('Connection lost.')
     await userEvent.click(getByRole('button', { name: 'Try again' }))
     expect(emitted('retry')).toHaveLength(1)
-    expect(emitted('retry')![0]![0]).toBeInstanceOf(MouseEvent)
+    expect(emitted<unknown[]>('retry')![0]![0]).toBeInstanceOf(MouseEvent)
   })
 
   it('provides from and status to its parts, and Actions render only when success', async () => {
@@ -136,7 +136,7 @@ describe('ChatMessage', () => {
           h(ChatMessageFeedback, {
             modelValue: value.value,
             loading: loading.value,
-            'onUpdate:modelValue': (next: 'up' | 'down') => {
+            'onUpdate:modelValue': (next: 'up' | 'down' | null) => {
               value.value = next
               loading.value = true
             }
