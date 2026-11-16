@@ -245,20 +245,24 @@ You only write the source. `build:catalog` and the package's `prepack` generate 
 (`catalog.json`, its `blocks`, the packaged `skills/` and `rules/`), and CI fails the PR when the
 source and the generated files disagree. Nobody rewrites the AI files by hand.
 
-| When you…                                             | You write                                                                                    | Generated                                      | CI gate                                                             |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------- |
-| Create or change a component or a section             | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples | `catalog.json` imports, with docs and examples | `check:catalog` (fails on a missing doc section), hooks             |
-| Create or change a block in `packages/webkit/blocks/` | `block.json` (with `intents` and `skills`), the `.vue`, `variants/`, `guidelines.md`         | `catalog.json` `blocks`                        | `check:blocks` (G1)                                                 |
-| Rename, deprecate or remove a component               | The spec, with `deprecated: true` / `replaced_by`                                            | The catalog                                    | `cited-names` (G2)                                                  |
-| Create or change a skill or a rule                    | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                               | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests                |
-| Change a token                                        | `packages/theme`                                                                             | Tokens in the catalog                          | `validate-tokens`                                                   |
-| Open a new spec                                       | The spec in `status: draft`, `template: 2`, only on your branch                              | —                                              | `spec-status` (G3): no draft lands on `main`; `check:spec-template` |
-| Release a version                                     | Nothing                                                                                      | The release, by release-please                 | —                                                                   |
+| When you…                                             | You write                                                                                          | Generated                                      | CI gate                                                             |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------- |
+| Create or change a component or a section             | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples       | `catalog.json` imports, with docs and examples | `check:catalog` (fails on a missing doc section), hooks             |
+| Create or change a block in `packages/webkit/blocks/` | `block.json` (`intents`, `skills`, `files`), the `.vue`, `sample.ts`, `variants/`, `guidelines.md` | `catalog.json` `blocks`                        | `check:blocks` (G1)                                                 |
+| Rename, deprecate or remove a component               | The spec, with `deprecated: true` / `replaced_by`                                                  | The catalog                                    | `cited-names` (G2)                                                  |
+| Create or change a skill or a rule                    | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                                     | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests                |
+| Change a token                                        | `packages/theme`                                                                                   | Tokens in the catalog                          | `validate-tokens`                                                   |
+| Open a new spec                                       | The spec in `status: draft`, `template: 2`, only on your branch                                    | —                                              | `spec-status` (G3): no draft lands on `main`; `check:spec-template` |
+| Release a version                                     | Nothing                                                                                            | The release, by release-please                 | —                                                                   |
 
 After any of these, run `pnpm --filter @aziontech/webkit build:catalog` and commit `catalog.json` and `catalog/`.
 A block's SFC must pass the consumer lint; legacy findings are frozen in
 `packages/webkit/scripts/blocks-baseline.json` and can only go down
-(`pnpm --filter @aziontech/webkit run check:blocks --update` after fixing some).
+(`pnpm --filter @aziontech/webkit run check:blocks --update` after fixing some). A block also
+follows the data contract (`.claude/commands/block-new.md`, "The data contract"): typed props in,
+events out, sample records in `sample.ts` (listed in `block.json` `files`), and variants that
+import the primary instead of copying it. Blocks not yet on it are frozen in
+`packages/webkit/scripts/blocks-data-baseline.json`, which the same `--update` shrinks.
 
 ## Quality gates
 

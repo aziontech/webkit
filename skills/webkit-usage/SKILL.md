@@ -80,7 +80,16 @@ canonical block. Before adapting it, read the guidelines (`view`, or the `guidel
 `get_block` returns): when to use the screen and when another block fits better, what each building block (A,
 B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
 matches your case, switch to the block it names. Then change only the content of the copy,
-keeping to the guidelines. Only when no block fits, compose from components (below). A marketing band is a page section, not a block (rule
+keeping to the guidelines. Only when no block fits, compose from components (below).
+
+A block takes its data through props and emits its actions; it fetches nothing. `add` copies its
+data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one). To go live,
+do not rewrite the block: render it from the routed page that owns the request and pass what the
+request returns (its `## Data` guidelines list the props and events):
+`<TableView :resources="rows" :loading="pending" :error="message" @refresh="load" @retry="load" />`.
+A data prop left out renders the sample; pass `[]` for none, and delete the `.sample.ts` file and
+its import once real data flows. A state variant (`--variant Empty`) is the same block with other
+props, so it imports the primary instead of copying it. A marketing band is a page section, not a block (rule
 `webkit-sections`).
 
 ## Headers and the docs home — never hand-build these
