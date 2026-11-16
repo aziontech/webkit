@@ -324,6 +324,6 @@ export const sampleFailedSteps: DeploymentLogsStep[] = [
 export const sampleCreateFlowFailedSteps: DeploymentLogsStep[] = sampleFailedSteps.map((step) => ({
   ...step,
   title: step.id === 'rules' ? 'Routing rules' : step.title,
-  description: step.description.replace('Routing Rules', 'Routing rules'),
+  description: step.description?.replace('Routing Rules', 'Routing rules'),
   lines: step.lines.map((line) => ({ ...line, message: line.message.replace(/!$/, '.') }))
 }))
