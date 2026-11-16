@@ -170,6 +170,25 @@
 
   const closingOf = (section: PlanComparisonSectionSection | undefined) => section?.action
 
+  const isCategory = (row: PlanComparisonSectionRow) =>
+    Boolean(row.group) && row.values.every((value) => value === '' || value === undefined)
+
+  const bodiesOf = (section: PlanComparisonSectionSection) =>
+    section.rows.reduce<
+      { start: number; rows: { row: PlanComparisonSectionRow; rowIndex: number }[] }[]
+    >(
+      (bodies, row, rowIndex) => {
+        if (isCategory(row)) bodies.push({ start: rowIndex, rows: [] })
+        bodies[bodies.length - 1]?.rows.push({ row, rowIndex })
+        return bodies
+      },
+      [{ start: -1, rows: [] }]
+    )
+
+  const bands = computed(() =>
+    props.sections.map((section) => ({ section, bodies: bodiesOf(section) }))
+  )
+
   const isClosingRow = (sectionIndex: number, rowIndex: number) =>
     !props.primaryAction &&
     sectionIndex === props.sections.length - 1 &&
@@ -202,7 +221,7 @@
           <tr>
             <th
               scope="col"
-              class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal"
+              class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) text-start align-top lg:p-(--spacing-lg) font-normal"
             >
               <span class="text-overline-md text-(--text-muted) max-lg:sr-only">{{
                 columnLabel
@@ -282,122 +301,131 @@
             </th>
           </tr>
         </thead>
-        <tbody
-          v-for="(section, sectionIndex) in sections"
+        <template
+          v-for="({ section, bodies }, sectionIndex) in bands"
           :key="section.title"
         >
-          <tr>
-            <th
-              scope="colgroup"
-              :colspan="columns.length + 1"
-              :data-ruled="sectionIndex > 0 || null"
-              class="border-b border-(--border-default) p-(--spacing-sm) pt-(--spacing-xl) text-start lg:p-(--spacing-lg) lg:pt-(--spacing-xl) font-normal data-ruled:border-t"
-            >
-              <Eyebrow
-                v-if="section.eyebrow"
-                :prefix="EYEBROW_PREFIX"
-                class="mb-(--spacing-xs)"
-              >
-                {{ section.eyebrow }}
-              </Eyebrow>
-              <span class="block text-heading-lg text-(--text-default)">{{ section.title }}</span>
-              <span
-                v-if="section.description"
-                class="mt-(--spacing-xs) block max-w-md text-body-sm text-(--text-muted) md:text-body-md"
-              >
-                {{ section.description }}
-              </span>
-            </th>
-          </tr>
-          <tr
-            v-for="(row, rowIndex) in section.rows"
-            :key="rowIndex"
-            :data-lead="row.group || null"
-            :data-ruled="(row.group && rowIndex > 0) || null"
-            :data-closing="isClosingRow(sectionIndex, rowIndex) || null"
-            class="group/row"
+          <tbody
+            v-for="(body, bodyIndex) in bodies"
+            :key="body.start"
           >
-            <th
-              scope="row"
-              class="border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b"
+            <tr v-if="bodyIndex === 0">
+              <th
+                scope="rowgroup"
+                :colspan="columns.length + 1"
+                :data-ruled="sectionIndex > 0 || null"
+                class="border-b border-(--border-default) p-(--spacing-sm) pt-(--spacing-xl) text-start lg:p-(--spacing-lg) lg:pt-(--spacing-xl) font-normal data-ruled:border-t"
+              >
+                <Eyebrow
+                  v-if="section.eyebrow"
+                  :prefix="EYEBROW_PREFIX"
+                  class="mb-(--spacing-xs)"
+                >
+                  {{ section.eyebrow }}
+                </Eyebrow>
+                <span class="block text-heading-lg text-(--text-default)">{{ section.title }}</span>
+                <span
+                  v-if="section.description"
+                  class="mt-(--spacing-xs) block max-w-md text-body-sm text-(--text-muted) md:text-body-md"
+                >
+                  {{ section.description }}
+                </span>
+              </th>
+            </tr>
+            <tr
+              v-for="{ row, rowIndex } in body.rows"
+              :key="rowIndex"
+              :data-lead="row.group || null"
+              :data-ruled="(row.group && rowIndex > 0) || null"
+              :data-closing="isClosingRow(sectionIndex, rowIndex) || null"
+              class="group/row"
             >
-              <span>
-                <template v-if="row.hint">
-                  {{ labelHead(row.label)
-                  }}<span class="whitespace-nowrap"
-                    >{{ labelTail(row.label)
-                    }}<span class="-my-(--spacing-2xs) ms-(--spacing-2xs) inline-flex align-middle"
-                      ><Popover side="auto">
-                        <PopoverTrigger>
-                          <IconButton
-                            variant="ghost"
-                            size="small"
-                            icon="ai ai-circle-info"
-                            :aria-label="t('planComparisonSection.about', { label: row.label })"
-                          />
-                        </PopoverTrigger>
-                        <PopoverContent>
-                          <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
-                            <PopoverTitle>{{ row.label }}</PopoverTitle>
-                            <PopoverDescription>{{ row.hint }}</PopoverDescription>
-                          </div>
-                        </PopoverContent>
-                      </Popover></span
-                    ></span
-                  >
-                </template>
-                <template v-else>{{ row.label }}</template>
-                <Tag
-                  v-if="row.tag"
-                  :label="row.tag"
-                  severity="neutral"
-                  size="small"
-                  class="ms-(--spacing-xs) align-middle"
+              <th
+                :scope="isCategory(row) ? 'rowgroup' : 'row'"
+                :colspan="isCategory(row) ? columns.length + 1 : undefined"
+                class="border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b"
+              >
+                <span>
+                  <template v-if="row.hint">
+                    {{ labelHead(row.label)
+                    }}<span class="whitespace-nowrap"
+                      >{{ labelTail(row.label)
+                      }}<span
+                        class="-my-(--spacing-2xs) ms-(--spacing-2xs) inline-flex align-middle"
+                        ><Popover side="auto">
+                          <PopoverTrigger>
+                            <IconButton
+                              variant="ghost"
+                              size="small"
+                              icon="ai ai-circle-info"
+                              :aria-label="t('planComparisonSection.about', { label: row.label })"
+                            />
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
+                              <PopoverTitle>{{ row.label }}</PopoverTitle>
+                              <PopoverDescription>{{ row.hint }}</PopoverDescription>
+                            </div>
+                          </PopoverContent>
+                        </Popover></span
+                      ></span
+                    >
+                  </template>
+                  <template v-else>{{ row.label }}</template>
+                  <Tag
+                    v-if="row.tag"
+                    :label="row.tag"
+                    severity="neutral"
+                    size="small"
+                    class="ms-(--spacing-xs) align-middle"
+                  />
+                </span>
+              </th>
+              <template v-if="!isCategory(row)">
+                <td
+                  v-for="{ plan, index } in columns"
+                  :key="plan.id"
+                  :data-folded="plan.id !== visiblePlan || null"
+                  class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b max-lg:data-folded:hidden"
+                >
+                  <template v-if="isIncluded(row.values[index])">
+                    <Tooltip :content="includedText">
+                      <i
+                        class="ai ai-circle-check text-body-md text-(--success-foreground)"
+                        aria-hidden="true"
+                      />
+                    </Tooltip>
+                    <span class="sr-only">{{ includedText }}</span>
+                  </template>
+                  <template v-else-if="isExcluded(row.values[index])">
+                    <Tooltip :content="excludedText">
+                      <i
+                        class="ai ai-circle-minus text-body-md text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                    </Tooltip>
+                    <span class="sr-only">{{ excludedText }}</span>
+                  </template>
+                  <span v-else-if="row.values[index]">{{ row.values[index] }}</span>
+                </td>
+              </template>
+            </tr>
+            <tr v-if="bodyIndex === bodies.length - 1 && closingOf(section)">
+              <td
+                :colspan="columns.length + 1"
+                class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
+              >
+                <Link
+                  :label="closingOf(section)?.label"
+                  :href="closingOf(section)?.href"
+                  target="_blank"
+                  icon="ai ai-arrow-right"
+                  size="medium"
                 />
-              </span>
-            </th>
-            <td
-              v-for="{ plan, index } in columns"
-              :key="plan.id"
-              :data-folded="plan.id !== visiblePlan || null"
-              class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b max-lg:data-folded:hidden"
-            >
-              <template v-if="isIncluded(row.values[index])">
-                <Tooltip :content="includedText">
-                  <i
-                    class="ai ai-circle-check text-body-md text-(--success-foreground)"
-                    aria-hidden="true"
-                  />
-                </Tooltip>
-                <span class="sr-only">{{ includedText }}</span>
-              </template>
-              <template v-else-if="isExcluded(row.values[index])">
-                <Tooltip :content="excludedText">
-                  <i
-                    class="ai ai-circle-minus text-body-md text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </Tooltip>
-                <span class="sr-only">{{ excludedText }}</span>
-              </template>
-              <span v-else-if="row.values[index]">{{ row.values[index] }}</span>
-            </td>
-          </tr>
-          <tr v-if="closingOf(section)">
-            <td
-              :colspan="columns.length + 1"
-              class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
-            >
-              <Link
-                :label="closingOf(section)?.label"
-                :href="closingOf(section)?.href"
-                target="_blank"
-                icon="ai ai-arrow-right"
-                size="medium"
-              />
-            </td>
-          </tr>
-        </tbody>
+              </td>
+            </tr>
+          </tbody>
+        </template>
         <tfoot v-if="primaryAction">
           <tr>
             <td

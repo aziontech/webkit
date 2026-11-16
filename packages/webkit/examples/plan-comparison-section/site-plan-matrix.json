@@ -99,7 +99,7 @@
             "values": ["", "", ""]
           },
           {
-            "label": "Workloads",
+            "label": "Workloads per account",
             "hint": "A workload is the domain and TLS configuration that exposes an application or firewall to the internet.",
             "values": ["10 included", "20 included", "Custom"]
           },

@@ -56,6 +56,9 @@ const band = (props: Record<string, unknown> = {}) =>
     }
   })
 
+const isBandHead = (row: HTMLElement) =>
+  sections.some(({ eyebrow }) => row.textContent?.includes(eyebrow))
+
 const planHeads = (container: Element) =>
   Array.from(container.querySelectorAll('thead th[scope="col"]')).slice(1) as HTMLElement[]
 
@@ -113,7 +116,9 @@ describe('PlanComparisonSection', () => {
     const { getAllByRole } = band()
 
     expect(
-      getAllByRole('rowheader').map((cell) => cell.textContent?.replace(/\s+/g, ' ').trim())
+      getAllByRole('rowheader')
+        .filter((cell) => !isBandHead(cell))
+        .map((cell) => cell.textContent?.replace(/\s+/g, ' ').trim())
     ).toEqual([
       'Applications',
       'Rules Engine',
@@ -123,10 +128,50 @@ describe('PlanComparisonSection', () => {
     ])
   })
 
+  it('opens each category in its own tbody under one spanning rowgroup head, with no value cells', () => {
+    const { container } = band()
+    const category = Array.from(container.querySelectorAll('tbody th')).find(
+      (cell) =>
+        cell.textContent?.trim() === 'Applications' && cell.closest('tr')?.children.length === 1
+    ) as HTMLTableCellElement
+
+    expect(category).toBeTruthy()
+    expect(category.getAttribute('scope')).toBe('rowgroup')
+    expect(category.colSpan).toBe(4)
+    expect(category.closest('tr')?.querySelectorAll('td')).toHaveLength(0)
+    expect(category.closest('tbody')?.firstElementChild).toBe(category.closest('tr'))
+    expect(category.closest('tbody')?.textContent).toContain('Rules per application')
+    expect(category.closest('tbody')?.textContent).not.toContain('Build, run and scale')
+  })
+
+  it('keeps a group row that carries values as a feature row', () => {
+    const { getByRole } = band()
+    const row = getByRole('rowheader', { name: 'SOC 2 Type 2' }).closest('tr') as HTMLElement
+
+    expect(row.querySelector('th')?.getAttribute('scope')).toBe('row')
+    expect(row.querySelectorAll('td')).toHaveLength(3)
+  })
+
+  it('heads every band with a spanning rowgroup cell', () => {
+    const { container } = band()
+    const bandHeads = Array.from(container.querySelectorAll('tbody th')).filter((cell) =>
+      isBandHead(cell as HTMLElement)
+    ) as HTMLTableCellElement[]
+
+    expect(bandHeads).toHaveLength(2)
+    bandHeads.forEach((cell) => {
+      expect(cell.getAttribute('scope')).toBe('rowgroup')
+      expect(cell.colSpan).toBe(4)
+    })
+    expect(container.querySelector('th[scope="colgroup"]')).toBeNull()
+  })
+
   it('ticks true and ✓, dashes —, and shows any other text as written', () => {
     const { getAllByRole } = band()
 
-    const rows = getAllByRole('row').filter((row) => within(row).queryByRole('rowheader'))
+    const rows = getAllByRole('row').filter(
+      (row) => within(row).queryByRole('rowheader') && !isBandHead(row)
+    )
     const rules = within(rows[1]).getAllByRole('cell')
     rules.forEach((cell) => expect(within(cell).getByText('Included')).toBeInTheDocument())
     const allowance = within(rows[2]).getAllByRole('cell')
@@ -163,7 +208,9 @@ describe('PlanComparisonSection', () => {
   it('draws included and not-included marks with tooltips of their labels', () => {
     const { getAllByRole } = band()
 
-    const rows = getAllByRole('row').filter((row) => within(row).queryByRole('rowheader'))
+    const rows = getAllByRole('row').filter(
+      (row) => within(row).queryByRole('rowheader') && !isBandHead(row)
+    )
     const included = within(rows[1]).getAllByRole('cell')[0]!
     expect(included.querySelector('.ai-circle-check')).not.toBeNull()
     expect(within(included).getByTestId('tooltip')).toBeInTheDocument()
@@ -174,7 +221,9 @@ describe('PlanComparisonSection', () => {
   it('falls back to the locale labels when the cell labels are empty', () => {
     const { getAllByRole } = band({ includedLabel: '', excludedLabel: '' })
 
-    const rows = getAllByRole('row').filter((row) => within(row).queryByRole('rowheader'))
+    const rows = getAllByRole('row').filter(
+      (row) => within(row).queryByRole('rowheader') && !isBandHead(row)
+    )
     expect(
       within(within(rows[1]).getAllByRole('cell')[0]!).getByText('Included')
     ).toBeInTheDocument()
