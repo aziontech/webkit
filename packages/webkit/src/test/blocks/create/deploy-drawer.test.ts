@@ -42,7 +42,7 @@ describe('deploy-drawer', () => {
     expect(within(dialog).getByText('acme-store')).toBeTruthy()
     expect(within(dialog).queryByText('web-app')).toBeNull()
     await fireEvent.click(within(dialog).getByRole('button', { name: 'Deploy' }))
-    const [event, values] = view.emitted('submit')?.[0] ?? []
+    const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
     expect(event).toBeInstanceOf(Event)
     expect(values).toEqual({
       versions: { service: 'B1' },
@@ -62,7 +62,7 @@ describe('deploy-drawer', () => {
       true
     )
     await fireEvent.click(within(dialog).getByRole('button', { name: 'Retry' }))
-    expect(view.emitted('retry')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('retry')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
   })
 
   it('shows the build it is given in place of the resources', async () => {

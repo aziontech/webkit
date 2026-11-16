@@ -63,15 +63,15 @@ describe('detail/dns-zone-detail', () => {
     expect(root.textContent).not.toContain('192.0.2.1')
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
     await fireEvent.click(buttonByText('Add Record', root))
-    expect(view.emitted('refresh')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
-    expect(view.emitted('create')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('refresh')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('create')).toHaveLength(1)
   })
 
   it('shows the empty state for no records and the alert for an error', async () => {
     const view = render(DnsZoneDetail, { props: { tab: 'records', records: [] } })
     await waitFor(() => expect(view.container.textContent).toContain('No records yet'))
     await fireEvent.click(buttonByText('Import zone file', view.container as HTMLElement))
-    expect(view.emitted('import')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('import')).toHaveLength(1)
     await view.rerender({ tab: 'records', records: [], error: "Couldn't load the records." })
     expect(view.container.textContent).toContain("Couldn't load the records.")
     expect(view.container.textContent).not.toContain('No records yet')
@@ -81,7 +81,7 @@ describe('detail/dns-zone-detail', () => {
     const view = render(DnsZoneDetail)
     await fireEvent.update(view.getByRole('textbox', { name: 'Name' }), 'edge-zone')
     await fireEvent.click(await view.findByRole('button', { name: 'Save' }))
-    expect(view.emitted('submit')?.[0]?.[1]).toEqual({
+    expect(view.emitted<unknown[]>('submit')?.[0]?.[1]).toEqual({
       name: 'edge-zone',
       domain: 'example.com',
       dnssec: true,

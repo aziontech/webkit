@@ -23,7 +23,7 @@ describe('account/mfa-settings', () => {
     await fireEvent.click(button(dialog()!, 'Require MFA'))
     await waitFor(() => expect(dialog()).toBeNull())
     expect(view.container.textContent).not.toMatch(/sign in with a password only/)
-    expect(view.emitted('update:required')).toEqual([[true]])
+    expect(view.emitted<unknown[]>('update:required')).toEqual([[true]])
   })
 
   it('renders the people it is given instead of the sample and emits the row actions', async () => {
@@ -56,12 +56,12 @@ describe('account/mfa-settings', () => {
     await fireEvent.click(
       await waitFor(() => view.getByRole('menuitem', { name: 'Send setup reminder' }))
     )
-    expect(view.emitted('remind')![0][1]).toMatchObject({ id: 'u-2' })
+    expect(view.emitted<unknown[]>('remind')![0][1]).toMatchObject({ id: 'u-2' })
     await fireEvent.click(view.getByRole('button', { name: /Actions for Jane Doe/ }))
     await fireEvent.click(await waitFor(() => view.getByRole('menuitem', { name: 'Reset MFA' })))
     await waitFor(() => expect(dialog()).not.toBeNull())
     await fireEvent.click(button(dialog()!, 'Reset MFA'))
-    expect(view.emitted('reset')![0][1]).toMatchObject({ id: 'u-1' })
+    expect(view.emitted<unknown[]>('reset')![0][1]).toMatchObject({ id: 'u-1' })
     await waitFor(() =>
       expect(view.container.textContent).toMatch(/2 of 2 people sign in with a password only/)
     )
@@ -73,7 +73,7 @@ describe('account/mfa-settings', () => {
     expect(view.getByRole('switch', { name: 'Require MFA' })).toBeDisabled()
     expect(view.container.textContent).not.toContain('Avery Stone')
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 
   it('filters people by MFA status under the table-view controls row', async () => {

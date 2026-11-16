@@ -70,14 +70,14 @@ describe('change-plan-drawer', () => {
     })
     expect(panel.textContent).not.toContain('Enterprise')
     await fireEvent.click(buttonByText('Continue with Team', panel))
-    expect(view.emitted('plan-select')?.[0]?.[1]).toMatchObject({ id: 'team' })
+    expect(view.emitted<unknown[]>('plan-select')?.[0]?.[1]).toMatchObject({ id: 'team' })
     await waitFor(() => expect(document.body.textContent).toContain('Ending in 4242'))
     const upgrade = Array.from(document.querySelectorAll('button')).find(
       (button) => button.textContent?.trim() === 'Upgrade'
     ) as HTMLButtonElement
     await fireEvent.click(upgrade)
-    await waitFor(() => expect(view.emitted('upgrade')).toHaveLength(1))
-    expect(view.emitted('upgrade')?.[0]?.[1]).toMatchObject({
+    await waitFor(() => expect(view.emitted<unknown[]>('upgrade')).toHaveLength(1))
+    expect(view.emitted<unknown[]>('upgrade')?.[0]?.[1]).toMatchObject({
       period: 'yearly',
       card: null,
       address: { city: 'San Francisco' }

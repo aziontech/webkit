@@ -55,7 +55,7 @@ describe('team-permissions', () => {
     const view = render(TeamPermissions)
     await fireEvent.click(view.getByRole('button', { name: /Actions for Developers/ }))
     await fireEvent.click(await waitFor(() => view.getByRole('menuitem', { name: 'Duplicate' })))
-    expect(view.emitted('row-action')![0][1]).toMatchObject({
+    expect(view.emitted<unknown[]>('row-action')![0][1]).toMatchObject({
       value: 'duplicate',
       team: { id: 'team-2' }
     })
@@ -67,10 +67,10 @@ describe('team-permissions', () => {
       return node
     })
     await fireEvent.click(buttonByText('Delete team', confirm))
-    expect(view.emitted('delete')![0][1]).toMatchObject({ id: 'team-5' })
+    expect(view.emitted<unknown[]>('delete')![0][1]).toMatchObject({ id: 'team-5' })
     await waitFor(() => expect(view.container.textContent).not.toContain('Contractors'))
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
-    expect(view.emitted('refresh')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('refresh')).toHaveLength(1)
   })
 
   it('shows the error message with Retry in place of the table', async () => {
@@ -78,7 +78,7 @@ describe('team-permissions', () => {
     expect(view.container.textContent).toContain('The API answered 503.')
     expect(view.queryByRole('button', { name: 'Refresh' })).toBeNull()
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 })
 

@@ -33,7 +33,7 @@ describe('dashboard/breakdown-dashboard', () => {
   it('emits export with the card and still downloads the CSV', async () => {
     const view = render(BreakdownDashboard)
     await fireEvent.click(view.getByRole('button', { name: 'Export CSV' }))
-    expect(view.emitted('export')?.[0]?.[1]).toBe('spend-by-category')
+    expect(view.emitted<unknown[]>('export')?.[0]?.[1]).toBe('spend-by-category')
     await waitFor(() => expect(document.body.textContent).toContain('CSV exported.'))
   })
 
@@ -47,7 +47,7 @@ describe('dashboard/breakdown-dashboard', () => {
       true
     )
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 
   it('hides the sample while loading', () => {

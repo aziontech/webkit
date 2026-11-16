@@ -24,6 +24,6 @@ describe('state/not-found', () => {
     )
     home.addEventListener('click', (event) => event.preventDefault())
     await fireEvent.click(home)
-    expect(view.emitted('home')?.[0][0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('home')?.[0][0]).toBeInstanceOf(MouseEvent)
   })
 })

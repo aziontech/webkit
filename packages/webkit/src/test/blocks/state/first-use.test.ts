@@ -23,8 +23,8 @@ describe('state/first-use', () => {
     expect((view.getByLabelText('Via CLI command') as HTMLInputElement).value).toBe('azion link')
     await fireEvent.click(view.getByRole('button', { name: 'Import' }))
     await fireEvent.click(view.getByRole('button', { name: 'Create' }))
-    expect(view.emitted('import')?.[0][0]).toBeInstanceOf(MouseEvent)
-    expect(view.emitted('create')?.[0][0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('import')?.[0][0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('create')?.[0][0]).toBeInstanceOf(MouseEvent)
   })
 
   it('loading replaces the methods with a busy placeholder', () => {

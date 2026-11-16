@@ -45,8 +45,8 @@ describe('account/tokens', () => {
     await userEvent.clear(name)
     await userEvent.type(name, 'Release bot')
     await fireEvent.click(buttonByText('Create Personal Token', drawer))
-    await waitFor(() => expect(view.emitted('create')).toHaveLength(1))
-    expect(view.emitted('create')![0][1]).toEqual({
+    await waitFor(() => expect(view.emitted<unknown[]>('create')).toHaveLength(1))
+    expect(view.emitted<unknown[]>('create')![0][1]).toEqual({
       name: 'Release bot',
       description: '',
       expiresInDays: 30
@@ -77,7 +77,7 @@ describe('account/tokens', () => {
     expect(statuses[0]).toHaveAttribute('data-testid', 'copy-button__status')
     await expectNoA11yViolations(reveal)
     await fireEvent.click(buttonByText('I copied the token', reveal))
-    expect(view.emitted('update:secret')).toEqual([[null]])
+    expect(view.emitted<unknown[]>('update:secret')).toEqual([[null]])
   })
 
   it('renders the tokens it is given instead of the sample, and the empty card for none', async () => {
@@ -111,11 +111,11 @@ describe('account/tokens', () => {
     expect(failed.container.textContent).toContain('The API answered 503.')
     expect(failed.container.textContent).not.toContain('Local CLI')
     await fireEvent.click(failed.getByRole('button', { name: 'Retry' }))
-    expect(failed.emitted('retry')).toHaveLength(1)
+    expect(failed.emitted<unknown[]>('retry')).toHaveLength(1)
     failed.unmount()
     const view = render(Tokens)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
-    expect(view.emitted('refresh')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('refresh')).toHaveLength(1)
   })
 
   it('revokes a token only after confirmation', async () => {
@@ -130,6 +130,9 @@ describe('account/tokens', () => {
     expect(confirm.textContent).toContain('stop working right away')
     await fireEvent.click(buttonByText('Revoke token', confirm))
     await waitFor(() => expect(view.getAllByText('Revoked').length).toBe(2))
-    expect(view.emitted('revoke')![0][1]).toMatchObject({ id: 'tok-7c1e', name: 'Local CLI' })
+    expect(view.emitted<unknown[]>('revoke')![0][1]).toMatchObject({
+      id: 'tok-7c1e',
+      name: 'Local CLI'
+    })
   })
 })

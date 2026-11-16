@@ -52,7 +52,7 @@ describe('create-wizard', () => {
       }
     })
     await fireEvent.click(await screen.findByRole('button', { name: 'Create Access List' }))
-    const [event, values] = view.emitted('submit')?.[0] ?? []
+    const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
     expect(event).toBeInstanceOf(MouseEvent)
     expect(values).toEqual({
       name: 'office-ranges',
@@ -86,7 +86,7 @@ describe('create-wizard', () => {
     const create = await screen.findByRole('button', { name: 'Create Access List' }, wait)
     expect(create.getAttribute('aria-busy')).toBe('true')
     await fireEvent.click(create)
-    expect(busy.emitted('submit')).toBeUndefined()
+    expect(busy.emitted<unknown[]>('submit')).toBeUndefined()
   })
 
   it('runs on the Wizard: Next needs an answer, and a host with the module off adds a step', async () => {

@@ -80,7 +80,7 @@ describe('settings/settings-form', () => {
     await fireEvent.update(view.getByLabelText('Email'), 'alex.morgan@example.com')
     await waitFor(() => expect(save.disabled).toBe(false))
     await fireEvent.click(save)
-    const [event, values] = view.emitted('submit')?.[0] ?? []
+    const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
     expect(event).toBeInstanceOf(MouseEvent)
     expect(values).toMatchObject({ fullName: 'Alex Morgan', email: 'alex.morgan@example.com' })
     await view.rerender({ loading: true })
@@ -123,6 +123,8 @@ describe('settings/settings-form', () => {
       (button) => button.textContent?.trim() === 'Retry'
     ) as HTMLButtonElement
     await fireEvent.click(retry)
-    expect(view.emitted('submit')?.[0]?.[1]).toMatchObject({ email: 'alex.morgan@example.com' })
+    expect(view.emitted<unknown[]>('submit')?.[0]?.[1]).toMatchObject({
+      email: 'alex.morgan@example.com'
+    })
   })
 })

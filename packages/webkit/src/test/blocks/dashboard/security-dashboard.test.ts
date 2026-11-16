@@ -43,7 +43,7 @@ describe('dashboard/security-dashboard#ByActor', () => {
   it('emits refresh from the Refresh button', async () => {
     const view = render(SecurityByActor)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
-    expect(view.emitted('refresh')?.length).toBe(1)
+    expect(view.emitted<unknown[]>('refresh')?.length).toBe(1)
   })
 })
 
@@ -58,7 +58,7 @@ describe('dashboard/security-dashboard', () => {
       requests: 42
     }
     const view = render(Security, { props: { sourceIps: [row] } })
-    const table = byTestId('data-table', view.container)
+    const table = byTestId('data-table', view.container as HTMLElement)
     expect(table?.textContent).toContain('198.51.100.7')
     expect(table?.textContent).not.toContain('203.0.113.42')
   })
@@ -92,6 +92,6 @@ describe('dashboard/security-dashboard', () => {
       "Couldn't load top source IPs by blocked requests. Check your connection and retry."
     )
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 })

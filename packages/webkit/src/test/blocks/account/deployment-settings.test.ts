@@ -36,7 +36,7 @@ describe('account/deployment-settings', () => {
   it('emits save with the values and hides the SaveBar once the save ends', async () => {
     const view = render(BuildDeployment, { props: { defaultDraft: { bindingPolicy: 'FLEXIBLE' } } })
     await fireEvent.click(buttonByText('Save', view.container as HTMLElement)!)
-    expect(view.emitted('save')?.[0]?.[1]).toEqual({
+    expect(view.emitted<unknown[]>('save')?.[0]?.[1]).toEqual({
       bindingPolicy: 'FLEXIBLE',
       deploymentPolicy: 'single_version',
       applyToExisting: false
@@ -107,7 +107,7 @@ describe('account/deployment-settings', () => {
     await waitFor(() => expect(dialog()).not.toBeNull())
     await fireEvent.click(buttonByText('Delete', dialog()!)!)
     await waitFor(() => expect(view.queryByText('acme-store')).toBeNull())
-    expect(view.emitted('delete')?.[0]?.[1]).toMatchObject({ id: 'store' })
+    expect(view.emitted<unknown[]>('delete')?.[0]?.[1]).toMatchObject({ id: 'store' })
   })
 
   it('shows no sample while loading, and Refresh emits refresh', async () => {
@@ -116,7 +116,7 @@ describe('account/deployment-settings', () => {
     loading.unmount()
     const view = render(BuildDeployment)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
-    expect(view.emitted('refresh')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('refresh')).toHaveLength(1)
   })
 
   it('rebinds an environment to a matching setting and marks it shared', async () => {
@@ -134,7 +134,7 @@ describe('account/deployment-settings', () => {
       )
     )
     expect(view.getAllByText('Shared · 3 services').length).toBeGreaterThan(0)
-    expect(view.emitted('bind')?.[0]?.[0]).toEqual({
+    expect(view.emitted<unknown[]>('bind')?.[0]?.[0]).toEqual({
       serviceId: 'svc-status',
       environment: 'Production',
       settingId: 'ds-storefront'
@@ -170,7 +170,10 @@ describe('account/deployment-settings', () => {
     await fireEvent.click(submit)
     await waitFor(() => expect(dialog()).toBeNull())
     expect(view.getByText('edge-canary')).toBeTruthy()
-    expect(view.emitted('create')?.[0]?.[1]).toMatchObject({ name: 'edge-canary', system: false })
+    expect(view.emitted<unknown[]>('create')?.[0]?.[1]).toMatchObject({
+      name: 'edge-canary',
+      system: false
+    })
   })
 
   it('offers no row actions on Default and asks before deleting a setting', async () => {

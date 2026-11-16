@@ -47,7 +47,7 @@ describe('view/table-view block', () => {
     expect(view.container.textContent).toContain('The API answered 503.')
     expect(view.container.textContent).not.toContain('resource-01')
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 
   it('renders the rows it is given instead of the sample, and the empty card for none', async () => {
@@ -67,7 +67,7 @@ describe('view/table-view block', () => {
       }
     })
     await waitFor(() => expect(view.container.textContent).toContain('acme-store'))
-    expect(resourceNames(view.container)).toEqual([])
+    expect(resourceNames(view.container as HTMLElement)).toEqual([])
     view.unmount()
     const empty = render(TableViewEmpty)
     expect(empty.container.textContent).toContain('No resources yet')
@@ -78,8 +78,8 @@ describe('view/table-view block', () => {
     const view = render(TableView)
     await fireEvent.click(view.getByRole('button', { name: 'Create Resource' }))
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
-    expect(view.emitted('create')).toHaveLength(1)
-    expect(view.emitted('refresh')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('create')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('refresh')).toHaveLength(1)
     expect(view.container.querySelector('[aria-busy="true"]')).toBeNull()
   })
 })

@@ -30,7 +30,7 @@ describe('deploy-progress-dialog', () => {
       within(dialog).getByRole('heading', { name: 'Deployed 4 of 5 Deployment Settings' })
     ).toBeTruthy()
     await fireEvent.click(within(dialog).getByRole('button', { name: 'Retry failed' }))
-    const [event, failed] = view.emitted('retry')?.[0] ?? []
+    const [event, failed] = view.emitted<unknown[]>('retry')?.[0] ?? []
     expect(event).toBeInstanceOf(MouseEvent)
     expect(failed).toEqual(samplePartialItems.filter((item) => item.status === 'failed'))
   })

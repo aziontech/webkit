@@ -31,7 +31,7 @@ describe('detail/attached-resources', () => {
     expect(view.container.textContent).not.toContain('shop.example.com')
     expect(view.container.textContent).toContain('1 domain')
     await fireEvent.click(view.getByRole('button', { name: 'Add Domain' }))
-    expect(view.emitted('create')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('create')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
   })
 
   it('shows the error with Retry instead of the sample', async () => {
@@ -42,6 +42,6 @@ describe('detail/attached-resources', () => {
     expect(view.container.textContent).not.toContain('shop.example.com')
     expect(view.container.textContent).toContain('0 domains')
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 })

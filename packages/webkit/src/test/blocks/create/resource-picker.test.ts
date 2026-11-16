@@ -34,14 +34,14 @@ describe('resource-picker', () => {
     expect(screen.queryByText('web-app')).toBeNull()
     expect(screen.getByRole('status').textContent).toBe('2 projects')
     await fireEvent.click(screen.getByRole('button', { name: /docs-site/ }))
-    expect(view.emitted('update:modelValue')).toEqual([['docs-site']])
+    expect(view.emitted<unknown[]>('update:modelValue')).toEqual([['docs-site']])
   })
 
   it('emits load-more and reveals the next batch', async () => {
     const view = render(ResourcePicker)
     expect(screen.getByRole('status').textContent).toBe('5 of 19 projects')
     await fireEvent.click(screen.getByRole('button', { name: 'Load 5 more' }))
-    expect(view.emitted('load-more')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('load-more')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
     expect(screen.getByRole('status').textContent).toBe('10 of 19 projects')
   })
 

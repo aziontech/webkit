@@ -66,7 +66,7 @@ describe('create-hub', () => {
     expect(screen.getByText("The repositories didn't load.")).toBeTruthy()
     expect(screen.queryByRole('list', { name: 'Repositories in jane-doe' })).toBeNull()
     await fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
-    expect(view.emitted('retry')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('retry')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
   })
 
   it('renders the repositories it is given and emits import with the repository', async () => {
@@ -78,7 +78,7 @@ describe('create-hub', () => {
     expect(within(list).getAllByRole('listitem')).toHaveLength(1)
     expect(screen.queryByRole('button', { name: 'Import docs-site' })).toBeNull()
     await fireEvent.click(screen.getByRole('button', { name: 'Import acme-store' }))
-    const [event, payload] = view.emitted('import')?.[0] ?? []
+    const [event, payload] = view.emitted<unknown[]>('import')?.[0] ?? []
     expect(event).toBeInstanceOf(MouseEvent)
     expect(payload).toEqual(repository)
   })
@@ -87,6 +87,6 @@ describe('create-hub', () => {
     const view = render(CreateHub, { props: { connectError: 'GitHub did not answer.' } })
     expect(screen.getByText('GitHub did not answer.')).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Continue with GitHub' }))
-    expect(view.emitted('connect')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('connect')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
   })
 })

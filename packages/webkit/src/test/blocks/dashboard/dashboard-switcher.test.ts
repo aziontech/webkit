@@ -97,9 +97,9 @@ describe('dashboard/dashboard-switcher', () => {
   it('emits refresh and retry instead of faking a request', async () => {
     const view = render(Switcher, { props: { error: 'Check your connection and retry.' } })
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
-    expect(view.emitted('refresh')).toHaveLength(1)
-    await fireEvent.click(buttonByText('Retry', view.container)!)
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('refresh')).toHaveLength(1)
+    await fireEvent.click(buttonByText('Retry', view.container as HTMLElement)!)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
     expect(view.container.textContent).toContain(
       "Couldn't load requests over time. Check your connection and retry."
     )
@@ -107,7 +107,7 @@ describe('dashboard/dashboard-switcher', () => {
 
   it('seeds the FilterMenu chip and the comparison from the period model', () => {
     const view = render(Switcher, { props: { period: '7d' } })
-    const chip = byTestId('filter-menu-chip-group__chip-period', view.container)!
+    const chip = byTestId('filter-menu-chip-group__chip-period', view.container as HTMLElement)!
     expect(chip.textContent).toContain('Last 7 days')
     expect(view.container.textContent).toContain('vs previous 7 days')
   })

@@ -19,9 +19,9 @@ describe('dashboard/configurable-dashboard', () => {
       props: { layout: [{ id: 'latency', span: 12 }] }
     })
     await fireEvent.click(view.getByRole('button', { name: 'Edit layout' }))
-    expect(view.emitted('update:editing')?.[0]).toEqual([true])
+    expect(view.emitted<unknown[]>('update:editing')?.[0]).toEqual([true])
     await fireEvent.click(view.getByRole('button', { name: 'Reset layout' }))
-    const reset = view.emitted('update:layout')?.at(-1)?.[0] as { id: string }[]
+    const reset = view.emitted<unknown[]>('update:layout')?.at(-1)?.[0] as { id: string }[]
     expect(reset.map((card) => card.id)).toEqual([
       'requests',
       'regions',
@@ -37,6 +37,6 @@ describe('dashboard/configurable-dashboard', () => {
     expect(view.container.textContent).toContain("Couldn't load top sources. The API answered 503.")
     expect(view.container.textContent).not.toContain('payments-api')
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 })

@@ -51,7 +51,7 @@ describe('account/billing', () => {
     )
     const visaRow = view.getByText('Acme Inc.').closest('tr, [role="row"]') as HTMLElement
     expect(visaRow.textContent).toContain('Default')
-    expect(view.emitted('set-default')?.[0]?.[1]).toMatchObject({ id: 'pm-2' })
+    expect(view.emitted<unknown[]>('set-default')?.[0]?.[1]).toMatchObject({ id: 'pm-2' })
   })
 
   it('removes a card only after confirmation', async () => {
@@ -69,7 +69,7 @@ describe('account/billing', () => {
     expect(view.container.textContent).toContain('John Smith')
     await fireEvent.click(buttonByText('Remove', confirm))
     await waitFor(() => expect(view.container.textContent).not.toContain('John Smith'))
-    expect(view.emitted('remove')?.[0]?.[1]).toMatchObject({ id: 'pm-3' })
+    expect(view.emitted<unknown[]>('remove')?.[0]?.[1]).toMatchObject({ id: 'pm-3' })
   })
 
   it('renders the invoices it is given, the empty card for none, and the error message', async () => {
@@ -101,14 +101,14 @@ describe('account/billing', () => {
     expect(failed.container.textContent).toContain('The billing API answered 503.')
     expect(failed.queryByRole('table', { name: 'Invoices' })).toBeNull()
     await fireEvent.click(failed.getByRole('button', { name: 'Retry' }))
-    expect(failed.emitted('retry')).toHaveLength(1)
+    expect(failed.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 
   it('emits refresh instead of faking a reload', async () => {
     const view = render(Billing)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh billing data' }))
     await fireEvent.click(view.getByRole('button', { name: 'Refresh invoices' }))
-    expect(view.emitted('refresh')).toHaveLength(2)
+    expect(view.emitted<unknown[]>('refresh')).toHaveLength(2)
     expect(view.container.textContent).toContain('INV-A12401')
   })
 })

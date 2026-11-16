@@ -204,10 +204,10 @@ describe('auth/sign-in', () => {
     await fireEvent.update(view.getByLabelText('Email'), 'jane.doe@example.com')
     await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
     await waitFor(() => expect(view.getByLabelText('Password')).toBeTruthy())
-    expect(view.emitted('continue')?.[0]?.[1]).toBe('jane.doe@example.com')
+    expect(view.emitted<unknown[]>('continue')?.[0]?.[1]).toBe('jane.doe@example.com')
     await fireEvent.update(view.getByLabelText('Password'), 'correct-horse-battery')
     await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
-    const [event, values] = view.emitted('submit')?.[0] ?? []
+    const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
     expect(event).toBeInstanceOf(Event)
     expect(values).toEqual({ email: 'jane.doe@example.com', password: 'correct-horse-battery' })
     await view.rerender({ loading: true })
@@ -248,7 +248,7 @@ describe('auth/sign-in', () => {
     )
     expect(view.getByRole('link', { name: 'Azion home' }).getAttribute('href')).toBe('/')
     await fireEvent.click(view.getByRole('button', { name: 'Continue with GitHub' }))
-    const [event, provider] = view.emitted('provider-click')?.[0] ?? []
+    const [event, provider] = view.emitted<unknown[]>('provider-click')?.[0] ?? []
     expect(event).toBeInstanceOf(MouseEvent)
     expect(provider).toBe('github')
   })
@@ -259,7 +259,7 @@ describe('auth/sign-in', () => {
     })
     await fireEvent.click(view.getByRole('button', { name: 'Forgot your password?' }))
     await fireEvent.click(view.getByRole('button', { name: 'Send reset link' }))
-    expect(view.emitted('reset-request')?.[0]?.[1]).toBe('jane.doe@example.com')
+    expect(view.emitted<unknown[]>('reset-request')?.[0]?.[1]).toBe('jane.doe@example.com')
     expect(view.getByRole('heading', { level: 1, name: 'Check your inbox' })).toBeTruthy()
   })
 
@@ -294,7 +294,7 @@ describe('auth/sign-in', () => {
     })
     expect(view.getByText(/Sign-in failed on our side/)).toBeTruthy()
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
-    expect(view.emitted('submit')?.[0]?.[1]).toEqual({
+    expect(view.emitted<unknown[]>('submit')?.[0]?.[1]).toEqual({
       email: 'jane.doe@example.com',
       password: 'correct-horse-battery'
     })

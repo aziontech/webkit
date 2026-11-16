@@ -14,7 +14,7 @@ describe('state async-submit and form-validation', () => {
     expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()
     expect(view.getByRole('heading', { level: 1, name: 'Deploy web-app' })).toBeTruthy()
     await fireEvent.click(view.getByRole('button', { name: 'Deploy' }))
-    const deploy = view.emitted('deploy')
+    const deploy = view.emitted<unknown[]>('deploy')
     expect(deploy).toHaveLength(1)
     expect(deploy![0]![0]).toBeInstanceOf(MouseEvent)
     expect(view.container.textContent).not.toContain('Deploying')
@@ -41,7 +41,7 @@ describe('state async-submit and form-validation', () => {
     expect(view.container.textContent).toContain('The build ran out of memory.')
     expect(view.container.textContent).toContain('Failed on build')
     await fireEvent.click(view.getAllByRole('button', { name: 'Redeploy' })[0]!)
-    expect(view.emitted('redeploy')![0]![0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('redeploy')![0]![0]).toBeInstanceOf(MouseEvent)
     view.unmount()
   })
 
@@ -56,7 +56,7 @@ describe('state async-submit and form-validation', () => {
       }
     })
     await fireEvent.click(view.getByRole('button', { name: 'Create' }))
-    const submit = view.emitted('submit')
+    const submit = view.emitted<unknown[]>('submit')
     expect(submit).toHaveLength(1)
     expect(submit![0]![0]).toBeInstanceOf(Event)
     expect(submit![0]![1]).toEqual({
@@ -73,7 +73,7 @@ describe('state async-submit and form-validation', () => {
   it('form-validation: an empty submit shows the field messages and emits nothing', async () => {
     const view = render(FormValidation)
     await fireEvent.click(view.getByRole('button', { name: 'Create' }))
-    expect(view.emitted('submit')).toBeUndefined()
+    expect(view.emitted<unknown[]>('submit')).toBeUndefined()
     expect(view.container.textContent).toContain('Select an environment.')
   })
 
@@ -83,7 +83,7 @@ describe('state async-submit and form-validation', () => {
     expect(view.getByRole('link', { name: 'Services' })).toBeTruthy()
     expect(view.container.textContent).toContain('This origin no longer exists.')
     await fireEvent.click(view.getByRole('button', { name: 'Reload origins' }))
-    expect(view.emitted('reload-origins')![0]![0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('reload-origins')![0]![0]).toBeInstanceOf(MouseEvent)
     await view.rerender({ origins: sampleReloadedOrigins, originError: '' })
     await waitFor(() =>
       expect(view.container.textContent).toContain('Select an origin to continue.')

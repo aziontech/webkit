@@ -20,6 +20,6 @@ describe('top-bar/auth-bar', () => {
     expect(docs.getAttribute('href')).toBe('https://example.com/docs')
     docs.addEventListener('click', (event) => event.preventDefault())
     await fireEvent.click(docs)
-    expect(view.emitted('docs')?.[0][0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>('docs')?.[0][0]).toBeInstanceOf(MouseEvent)
   })
 })

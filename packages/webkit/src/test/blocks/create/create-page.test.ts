@@ -28,7 +28,7 @@ describe('create-page', () => {
     await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), ' acme-domain ')
     await fireEvent.update(screen.getByRole('textbox', { name: 'Domain name' }), 'example.com')
     await fireEvent.click(screen.getByRole('button', { name: 'Save' }))
-    const [event, values] = view.emitted('submit')?.[0] ?? []
+    const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
     expect(event).toBeInstanceOf(Event)
     expect(values).toEqual({
       name: 'acme-domain',
@@ -48,7 +48,7 @@ describe('create-page', () => {
     const save = screen.getByRole('button', { name: 'Save' })
     expect(save.getAttribute('aria-busy')).toBe('true')
     await fireEvent.click(save)
-    expect(view.emitted('submit')).toBeUndefined()
+    expect(view.emitted<unknown[]>('submit')).toBeUndefined()
     await view.rerender({ loading: false, error: 'The service did not answer.' })
     await waitFor(() => expect(screen.getByText('The service did not answer.')).toBeTruthy(), wait)
   })

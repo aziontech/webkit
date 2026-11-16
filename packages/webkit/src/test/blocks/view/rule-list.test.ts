@@ -117,7 +117,7 @@ describe('view/rule-list block', () => {
       (button) => button.textContent?.trim() === 'Save'
     ) as HTMLButtonElement
     await fireEvent.click(save)
-    const [event, rules] = view.emitted('save')![0] as [
+    const [event, rules] = view.emitted<unknown[]>('save')![0] as [
       MouseEvent,
       { id: string; active: boolean }[]
     ]
@@ -177,7 +177,7 @@ describe('view/rule-list block', () => {
         ]
       }
     })
-    expect(requestNames(view.container)).toEqual(['Block bots'])
+    expect(requestNames(view.container as HTMLElement)).toEqual(['Block bots'])
     expect(view.queryByText('Docs rewrite')).toBeNull()
     expect(view.getByText('No response rules yet')).toBeTruthy()
   })
@@ -187,7 +187,7 @@ describe('view/rule-list block', () => {
     const adds = view.getAllByRole('button', { name: 'Add Rule' })
     await fireEvent.click(adds[0])
     await fireEvent.click(adds[1])
-    const calls = view.emitted('create') as [MouseEvent, string?][]
+    const calls = view.emitted<unknown[]>('create') as [MouseEvent, string?][]
     expect(calls).toHaveLength(2)
     expect(calls[0][0]).toBeInstanceOf(MouseEvent)
     expect(calls[0][1]).toBeUndefined()
@@ -287,7 +287,7 @@ describe('view/rule-list block', () => {
   it('names each rule with a link button that emits edit with the event and the rule', async () => {
     const view = render(RulesList)
     await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))
-    const [event, rule] = view.emitted('edit')![0] as [MouseEvent, { name: string }]
+    const [event, rule] = view.emitted<unknown[]>('edit')![0] as [MouseEvent, { name: string }]
     expect(event).toBeInstanceOf(MouseEvent)
     expect(rule.name).toBe('Docs rewrite')
   })
@@ -308,6 +308,6 @@ describe('view/rule-list block', () => {
     expect(view.queryByText('Docs rewrite')).toBeNull()
     expect(view.getByRole('button', { name: 'Add Rule' }).hasAttribute('disabled')).toBe(true)
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
-    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 })
