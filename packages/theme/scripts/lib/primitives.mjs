@@ -24,7 +24,7 @@ import { tracking } from '../../src/tokens/primitives/typography/tracking.js'
 import { assertResolvedRefs, isTokenRef } from '../../src/tokens/token-ref.js'
 
 export const buildTrees = () => {
-  const { brand, ...restColors } = colorPrimitives
+  const { brand, chart: _chartHues, ...restColors } = colorPrimitives
   const color = {
     ...restColors,
     'brand-primary': brand.primary,
