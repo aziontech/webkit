@@ -72,7 +72,10 @@ for (const [size, value] of sizes) {
   test(`@${size} compiles to the theme's --container-${size} (${value})`, () => {
     assert.deepEqual(rules.get(`@${size}:flex`), { name: '', query: `width >= ${value}` })
     assert.deepEqual(rules.get(`@max-${size}:hidden`), { name: '', query: `width < ${value}` })
-    assert.deepEqual(rules.get(`@${size}/probe:grid`), { name: 'probe', query: `width >= ${value}` })
+    assert.deepEqual(rules.get(`@${size}/probe:grid`), {
+      name: 'probe',
+      query: `width >= ${value}`
+    })
   })
 }
 

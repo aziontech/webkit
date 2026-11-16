@@ -47,9 +47,23 @@ Verify a `webkit` cause in the package source before you claim it.
 Write `/data/eval-m27b/compare/scores/<BATCH>.json`:
 
 ```json
-{ "<id>": { "desktop": 4.5, "iphone": 4, "page": 4.25,
-            "notes": "one to three sentences on the visible differences, most important first",
-            "causes": [ { "kind": "webkit", "severity": "high|medium|low", "where": "component/block/doc", "text": "…", "fix": "what WebKit should change" } ] } }
+{
+  "<id>": {
+    "desktop": 4.5,
+    "iphone": 4,
+    "page": 4.25,
+    "notes": "one to three sentences on the visible differences, most important first",
+    "causes": [
+      {
+        "kind": "webkit",
+        "severity": "high|medium|low",
+        "where": "component/block/doc",
+        "text": "…",
+        "fix": "what WebKit should change"
+      }
+    ]
+  }
+}
 ```
 
 Then end with a short report: the mean per profile, the three worst pages and why, and the WebKit causes ranked by

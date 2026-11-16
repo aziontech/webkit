@@ -26,7 +26,7 @@
 
 14:54 — **Worked well — site chrome:** `SiteNav` + `SiteFooter` (examples/site-nav/site-default.json, examples/site-footer/site-default.vue) gave a pixel-close nav and footer from data alone. Copied the menus JSON and re-labelled the footer columns from pages.json. ~10 min.
 
-14:54 — **medium — finding the section components:** `npx @aziontech/webkit search` / llms.txt list *platform* blocks (console screens) first; marketing sections (SubjectLibrary, RecognitionMarquee, HeroForm, MediaSplitStack, ClosingCallToAction, HeroBand) only live under "Components: Marketing sections" in llms.txt. The shells/website block does not mention them. I only found the right ones because the package ships the azion.com structure trees in `docs/reviews/m2.7/battery-2-kit/structure/` with names like `block-subject-library`. ~15 min.
+14:54 — **medium — finding the section components:** `npx @aziontech/webkit search` / llms.txt list _platform_ blocks (console screens) first; marketing sections (SubjectLibrary, RecognitionMarquee, HeroForm, MediaSplitStack, ClosingCallToAction, HeroBand) only live under "Components: Marketing sections" in llms.txt. The shells/website block does not mention them. I only found the right ones because the package ships the azion.com structure trees in `docs/reviews/m2.7/battery-2-kit/structure/` with names like `block-subject-library`. ~15 min.
 
 14:54 — **Worked well — site-learning:** `HeroBand kind="title-band"` + `carouselMarks` (client registry names copied from examples/hero-form/default.vue) and `SubjectLibrary` with the 16 subjects + `closing` rendered almost identical to the reference (desktop 3927px vs 4027px ref). ~10 min.
 
@@ -42,7 +42,7 @@
 
 14:55 — **low — asset imports undocumented:** the recognition-marquee example uses `logo: '/marketing-components/logos/gigaom-extended-reversed.svg'` (a site-relative path that does not exist in my app). I found by reading package.json `exports` that `@aziontech/webkit/assets/<file>.svg` is importable as a Vite URL. Not stated in recognition-marquee.md or usage.md. ~5 min.
 
-14:55 — **low — HeroBand height:** `headerOffset` docs say "height of the site header taken out of a band that fills a screen". Tried `56px`; the reference hero is a full 900px *below* the header, so left it empty. A literal length is also against rule webkit-page-layout ("never a literal length") with no header-height token documented.
+14:55 — **low — HeroBand height:** `headerOffset` docs say "height of the site header taken out of a band that fills a screen". Tried `56px`; the reference hero is a full 900px _below_ the header, so left it empty. A literal length is also against rule webkit-page-layout ("never a literal length") with no header-height token documented.
 
 14:55 — **low — marquee item copy:** pages.json truncates the Frost & Sullivan report name ("…Award, North"); kept it verbatim.
 
@@ -58,7 +58,7 @@
 
 14:58 — **Worked well — site-privacy-policy:** `npx @aziontech/webkit add shells/documentation --variant Article` copied a full docs page (GlobalHeader + SearchTrigger/Command, Sidebar + MenuRoot/MenuGroup/MenuSub + ThemeSwitcher, DocPageHeader with breadcrumb/last updated/meta actions, DocProse + DocHeading, DocPagination, DocOnThisPage with groups, DocCta). Replacing the copy gave a near pixel match on desktop and iPhone. Best experience of the job. ~25 min.
 
-14:58 — **high — docs shell scroll model vs. reference:** the block puts the article in an inner `ScrollArea` inside an `h-screen` frame. The live docs page scrolls the *document* (full-page capture is 4369px). With the block as-is the page is one 900px screen and a full-page screenshot shows nothing below the fold. Changed the frame to `min-h-screen`, dropped `ScrollArea`, made both rails `sticky top-0 h-screen self-start`. That is a structural edit to a block the docs tell me to "change only the content" of, and `webkit diff` will now report drift. ~10 min.
+14:58 — **high — docs shell scroll model vs. reference:** the block puts the article in an inner `ScrollArea` inside an `h-screen` frame. The live docs page scrolls the _document_ (full-page capture is 4369px). With the block as-is the page is one 900px screen and a full-page screenshot shows nothing below the fold. Changed the frame to `min-h-screen`, dropped `ScrollArea`, made both rails `sticky top-0 h-screen self-start`. That is a structural edit to a block the docs tell me to "change only the content" of, and `webkit diff` will now report drift. ~10 min.
 
 14:58 — **medium — docs footer:** the Article block's footer is a bare `Footer kind="content"` with string links and only a status slot (no socials/brand/language). The reference docs footer is the site footer. `SiteFooter kind="content"` did exactly that — but the block does not use or mention it; found it from site-footer.md's `kind` prop.
 
@@ -82,12 +82,12 @@
 
 15:01 — **medium — init's eslint config does not ignore `dist/`:** after `npm run build`, the husky pre-commit (`eslint .`) fails with 49 `webkit/no-hardcoded-color` errors inside **WebKit's own compiled code** in dist/assets (hex palettes in the brand-globe scene, `#F3652B` in SiteNav/footer chunks). So the package's own components would fail its own rule, and init's config blocks every commit after the first build. Added `{ ignores: ['dist/**'] }` to eslint.config.mjs. Same for the hook's stylelint run (hex colours, literal ms timings and `0px` in the theme/WebKit compiled CSS): added `.stylelintignore` with `dist/**`.
 
-
 ---
 
 # DONE — S4c
 
 ## Pages
+
 - `site-privacy-policy`: **built** — docs shell from `shells/documentation` (Article variant): header with SearchTrigger/Command, rail with Agreements and Policies + Previous versions, DocPageHeader, full policy text in DocProse, DocPagination, On this page + GitHub/Community + Ready to build? card, site footer (`SiteFooter kind="content"`). Missing: "Developer tools ▾" dropdown chevron (plain link); the full-width divider under the page header sits inside the column.
 - `site-learning`: **built** — HeroBand title-band + client strip, SubjectLibrary (16 subjects) + closing CTA. Missing: the closing CTA spans 1/2 of the last row instead of 2/3 (CardGrid balanced layout); footer "Our Community ↗" external icon.
 - `site-recognitions`: **partial** — HeroBand centered, RecognitionMarquee (5 items), MediaSplitStack (9 bands, "Learn More" on the last one), ClosingCallToAction. Missing: the G2 "Leader"/"High Performer" badge images (not shipped; G2 symbol used instead).
@@ -95,14 +95,17 @@
 - `/` lists links to every page. Vue Router history mode, one route per page, catch-all → index. Dark only (`<html data-theme="dark">`).
 
 ## WebKit pieces used most
+
 SiteNav, SiteFooter, SectionContainer + SectionGap, HeroBand, HeroForm, SubjectLibrary, RecognitionMarquee, MediaSplitStack, ClosingCallToAction, the `shells/documentation` Article block (GlobalHeader, SearchTrigger, Command, Sidebar, Menu*, ThemeSwitcher, DocPageHeader, DocProse, DocHeading, DocPagination, DocOnThisPage, DocCta), `@aziontech/webkit/assets/*` logos, WebkitProvider.
 
 ## Top 5 problems with WebKit (by impact)
-1. **Type-checking breaks the default build** — `vue-tsc` cannot resolve 21 WebKit subpaths (brand, button, site-nav, site-footer, menu-*, doc-*) or the `@aziontech/icons` side-effect import, though the README says vue-tsc works. I had to drop vue-tsc from `build`.
+
+1. **Type-checking breaks the default build** — `vue-tsc` cannot resolve 21 WebKit subpaths (brand, button, site-nav, site-footer, menu-_, doc-_) or the `@aziontech/icons` side-effect import, though the README says vue-tsc works. I had to drop vue-tsc from `build`.
 2. **Docs shell scroll model** — the `shells/documentation` block scrolls the article inside an `h-screen` ScrollArea. The real docs page scrolls the document, so I had to make a structural edit to a block that "should only change content", and the block now shows drift.
 3. **Marketing sections are hard to find** — `search` and llms.txt lead with console/platform blocks; the right site sections only became obvious from the azion.com structure dumps shipped under docs/reviews. shells/website does not point to them, and there is no landing-page (brand-only) header.
 4. **Missing marketing assets and layout options** — no G2 badge art; MediaSplitStack `image` has no framed/contained mode; SubjectLibrary's closing CTA cannot span 2 of 3 cells (balanced grid overrides what its own description promises); SiteFooter links cannot carry an external icon.
 5. **Setup inconsistencies** — webkit 5.12.0 depends on theme ^4 while theme 5.2.2 ships (a nested theme 4.3.1 gets installed and `doctor` stays silent); init pins 8 devDeps to "latest" and then `doctor` warns about them; the strict lint rejects the stock vite.config.ts comment, and init's ESLint/Stylelint configs lint `dist/`, where WebKit's own compiled code breaks its own rules (hex colours, literal timings), so every commit after the first build fails until `dist/` is ignored; asset import paths in examples (`/marketing-components/logos/...`) do not exist in a consumer app.
 
 ## Build
+
 `npm run build` (= `vite build`) **passes** and produces `app/dist/` (SPA; serve with index.html fallback). `npx eslint .` passes; `npx @aziontech/webkit check` reports 0 errors (1 warning: devDeps pinned to "latest" by init). `npm run typecheck` (vue-tsc) still fails, see problem 1.

@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
+import { _internals as initPlan } from '../src/cli/plan.js'
 import { VUE_TSC_KNOWN_GOOD } from '../src/cli/toolchain.js'
 import { buildWorkspace, packWorkspace, runLogged as run } from './lib/consumer-app.mjs'
 
@@ -37,8 +38,8 @@ export const APP_VUE = `<script setup lang="ts">
     toast.success('Saved')
   }
   const heroClass = cn('a', 'b')
-  const saveKind: ButtonVariant = 'secondary'
-  const saveProps: ButtonProps = { kind: saveKind, label: 'Save' }
+  const saveVariant: ButtonVariant = 'secondary'
+  const saveProps: ButtonProps = { variant: saveVariant, label: 'Save' }
 </script>
 
 <template>
@@ -135,8 +136,13 @@ function main() {
     '@aziontech/icons': `file:${tarballs.iconsTgz}`,
     'vue-router': '^5.5.0'
   }
-  appPkg.devDependencies = { ...appPkg.devDependencies, 'vue-tsc': VUE_TSC_KNOWN_GOOD }
+  appPkg.devDependencies = {
+    ...appPkg.devDependencies,
+    ...Object.fromEntries(initPlan.STYLE_DEV_DEPS.map(({ dep, version }) => [dep, version])),
+    'vue-tsc': VUE_TSC_KNOWN_GOOD
+  }
   writeFileSync(appPkgPath, `${JSON.stringify(appPkg, null, 2)}\n`)
+  writeFileSync(join(app, 'postcss.config.mjs'), initPlan.postcssConfig())
 
   const webkitPkg = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf8'))
   writeFileSync(join(app, 'src/App.vue'), APP_VUE)

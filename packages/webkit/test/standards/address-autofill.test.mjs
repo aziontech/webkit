@@ -13,10 +13,7 @@ const TOKENS = {
   'Cardholder name': 'cc-name'
 }
 
-const FORMS = [
-  'change-plan-drawer/change-plan-drawer.vue',
-  'onboarding-form/onboarding-form.vue'
-]
+const FORMS = ['change-plan-drawer/change-plan-drawer.vue', 'onboarding-form/onboarding-form.vue']
 
 const fieldTokens = (source) => {
   const found = {}
