@@ -1,16 +1,1 @@
-<svg width="54.15" height="21.45" viewBox="43.87 25.33 54.15 21.45" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g>
-<g clip-path="url(#hdi-color-clip0_1457_43)">
-<path d="M68.1508 46.771H76.1089C84.7721 46.771 89.1037 42.2578 89.1037 35.9292V35.8788C89.1037 29.525 84.8476 25.3396 76.3607 25.3396H68.1508V46.771ZM75.303 40.9215V31.2143H76.4866C79.7605 31.2143 81.8759 32.6767 81.8759 36.0301V36.1057C81.8759 39.4591 79.7605 40.9215 76.4866 40.9215H75.303Z" fill="#00833E"></path>
-<path d="M90.8917 46.771H98.0187V25.3396H90.8917V46.771Z" fill="#00833E"></path>
-<path d="M51.0259 39.6362H58.1529V32.4756H51.0259V39.6362Z" fill="#E1251B"></path>
-<path d="M58.1529 46.771H65.2799V25.3396H58.1529V46.771Z" fill="#00833E"></path>
-<path d="M43.8737 46.771H51.0007V25.3396H43.8737V46.771Z" fill="#00833E"></path>
-</g>
-</g>
-<defs>
-<clipPath id="hdi-color-clip0_1457_43">
-<rect width="54.2526" height="21.7832" fill="white" transform="translate(43.8737 25.1086)"></rect>
-</clipPath>
-</defs>
-</svg>
+<svg width="54.15" height="21.45" viewBox="43.87 25.33 54.15 21.45" fill="none" xmlns="http://www.w3.org/2000/svg"><g><g clip-path="url(#hdi-color-clip0_1457_43)"><path d="M68.15 46.771h7.959c8.663 0 12.995-4.513 12.995-10.842v-.05c0-6.354-4.256-10.54-12.743-10.54h-8.21zm7.153-5.85v-9.707h1.184c3.273 0 5.389 1.463 5.389 4.816v.076c0 3.353-2.116 4.816-5.39 4.816z" fill="#00833E"/><path d="M90.892 46.771h7.127V25.34h-7.127z" fill="#00833E"/><path d="M51.026 39.636h7.127v-7.16h-7.127z" fill="#E1251B"/><path d="M58.153 46.771h7.127V25.34h-7.127z" fill="#00833E"/><path d="M43.874 46.771H51V25.34h-7.127z" fill="#00833E"/></g></g><defs><clipPath id="hdi-color-clip0_1457_43"><rect width="54.253" height="21.783" fill="white" transform="translate(43.874 25.109)"/></clipPath></defs></svg>
