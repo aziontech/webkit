@@ -13,25 +13,80 @@
   import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
   import Table from '@aziontech/webkit/table'
   import Tabs from '@aziontech/webkit/tabs'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
-  type EntryStatus = 'Active' | 'Inactive'
+  import { sampleEntriesFor, samplePage, sampleSections } from './sample'
 
-  type Entry = {
+  /** Status of one entry of a sibling page. */
+  export type SectionedResourceEntryStatus = 'Active' | 'Inactive'
+
+  /** One row of the current sibling page. */
+  export interface SectionedResourceEntry {
+    /** Entry id, shown in the ID column. */
     id: string
+    /** Entry name, the link to the entry. */
     name: string
-    status: EntryStatus
+    /** Whether the entry is in effect. */
+    status: SectionedResourceEntryStatus
+    /** Who changed it last. */
     owner: string
+    /** When it changed last. */
     modifiedAt: Date
   }
 
-  type Sibling = {
+  /** One sibling page of the open tab. */
+  export interface SectionedResourceSibling {
+    /** Route segment of the page, also its model value. */
     id: string
+    /** Page name, plural, in sentence case. */
     label: string
+    /** Noun of one entry, used in Add. */
     noun: string
   }
+
+  /** A named group of sibling pages. */
+  export interface SectionedResourceSection {
+    /** Group label in the menu and the folded Select. */
+    label: string
+    /** The pages of the group. */
+    items: SectionedResourceSibling[]
+  }
+
+  export interface SectionedResourceProps {
+    /** The sibling pages of the open tab, in groups; 7 or fewer switch with a ToggleGroup. Left out, the sample renders. */
+    sections?: SectionedResourceSection[]
+    /** Entries of the current sibling page. Left out, the sample renders. */
+    entries?: SectionedResourceEntry[]
+    /** A request for the entries is in flight. */
+    loading?: boolean
+    /** Value of the tab this block renders the page of. */
+    currentTab?: string
+    /** Route of the resource; tabs and sibling pages hang under it. */
+    basePath?: string
+    /** How the heading names the resource, e.g. the acme-default policy. */
+    resourceLabel?: string
+  }
+
+  const props = withDefaults(defineProps<SectionedResourceProps>(), {
+    sections: undefined,
+    entries: undefined,
+    loading: false,
+    currentTab: 'private-access',
+    basePath: '/policies/acme-default',
+    resourceLabel: 'the acme-default policy'
+  })
+
+  const emit = defineEmits<{
+    /** Refresh was pressed. */
+    refresh: [event: MouseEvent]
+    /** Add in the heading or the empty page was pressed. */
+    add: [event: MouseEvent, sibling: SectionedResourceSibling]
+  }>()
+
+  const page = defineModel<string>('page', { default: '' })
 
   const tabs = [
     { value: 'web-security', label: 'Web security' },
@@ -43,86 +98,45 @@
     { value: 'versions', label: 'Versions' }
   ]
 
-  const activeTab = ref('private-access')
+  const activeTab = ref(props.currentTab)
   const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
 
-  const base = '/policies/acme-default/private-access'
+  const sections = computed(() => props.sections ?? sampleSections)
+  const siblings = computed(() => sections.value.flatMap((section) => section.items))
+  const few = computed(() => siblings.value.length <= 7)
 
-  const sections: { label: string; items: Sibling[] }[] = [
-    {
-      label: 'Applications',
-      items: [
-        { id: 'app-segments', label: 'App segments', noun: 'Segment' },
-        { id: 'segment-groups', label: 'Segment groups', noun: 'Group' },
-        { id: 'server-groups', label: 'Server groups', noun: 'Server Group' },
-        { id: 'connectors', label: 'Connectors', noun: 'Connector' }
-      ]
-    },
-    {
-      label: 'Access',
-      items: [
-        { id: 'access-rules', label: 'Access rules', noun: 'Rule' },
-        { id: 'identity-providers', label: 'Identity providers', noun: 'Provider' },
-        { id: 'posture-checks', label: 'Posture checks', noun: 'Check' },
-        { id: 'device-groups', label: 'Device groups', noun: 'Device Group' }
-      ]
-    },
-    {
-      label: 'Network',
-      items: [
-        { id: 'tunnels', label: 'Tunnels', noun: 'Tunnel' },
-        { id: 'dns-resolvers', label: 'DNS resolvers', noun: 'Resolver' },
-        { id: 'split-routes', label: 'Split routes', noun: 'Route' },
-        { id: 'ip-pools', label: 'IP pools', noun: 'Pool' }
-      ]
-    },
-    {
-      label: 'Monitoring',
-      items: [
-        { id: 'alerts', label: 'Alerts', noun: 'Alert' },
-        { id: 'reports', label: 'Reports', noun: 'Report' },
-        { id: 'log-streams', label: 'Log streams', noun: 'Stream' },
-        { id: 'webhooks', label: 'Webhooks', noun: 'Webhook' }
-      ]
-    }
-  ]
+  const base = computed(() => `${props.basePath}/${props.currentTab}`)
+  const hrefOf = (sibling: SectionedResourceSibling) => `${base.value}/${sibling.id}`
 
-  const hrefOf = (sibling: Sibling) => `${base}/${sibling.id}`
-
-  const groups: SidebarMenuGroupNode[] = sections.map((section) => ({
-    label: section.label,
-    items: section.items.map((sibling) => ({
-      id: sibling.id,
-      label: sibling.label,
-      href: hrefOf(sibling)
+  const groups = computed<SidebarMenuGroupNode[]>(() =>
+    sections.value.map((section) => ({
+      label: section.label,
+      items: section.items.map((sibling) => ({
+        id: sibling.id,
+        label: sibling.label,
+        href: hrefOf(sibling)
+      }))
     }))
-  }))
+  )
 
-  const siblings = sections.flatMap((section) => section.items)
+  const options = computed(() =>
+    siblings.value.map((sibling) => ({ label: sibling.label, value: sibling.id }))
+  )
 
-  const routePath = ref(`${base}/access-rules`)
+  const pageId = computed(
+    () => page.value || (props.sections ? (siblings.value[0]?.id ?? '') : samplePage)
+  )
+  const routePath = computed(() => `${base.value}/${pageId.value}`)
 
-  const match = computed(() => siblings.find((sibling) => hrefOf(sibling) === routePath.value))
-  const current = computed(() => match.value ?? siblings[0])
+  const match = computed(() => siblings.value.find((sibling) => sibling.id === pageId.value))
+  const current = computed(
+    () => match.value ?? siblings.value[0] ?? { id: '', label: '', noun: '' }
+  )
 
   const owners = ['Jane Doe', 'John Smith', 'Alex Morgan', 'Sam Lee', 'Priya Patel']
 
-  const referenceTime = Date.UTC(2026, 10, 10, 12)
-
-  const emptySections = ['posture-checks', 'webhooks', 'exceptions']
-
-  const entries = computed<Entry[]>(() =>
-    Array.from({ length: emptySections.includes(current.value.id) ? 0 : 6 }, (_, index) => {
-      const n = index + 1
-      const slug = current.value.noun.toLowerCase().replace(/\s+/g, '-')
-      return {
-        id: `${30410 + n * 157}`,
-        name: `${slug}-${String(n).padStart(2, '0')}`,
-        status: n === 5 ? 'Inactive' : 'Active',
-        owner: owners[index % owners.length],
-        modifiedAt: new Date(referenceTime - n * 9 * 86_400_000)
-      }
-    })
+  const entries = computed<SectionedResourceEntry[]>(
+    () => props.entries ?? (props.loading ? [] : sampleEntriesFor(current.value))
   )
 
   const properties: FilteringProperty[] = [
@@ -152,16 +166,17 @@
     pagination: { pageSize: 10 }
   })
 
-  const go = (href: string) => {
-    if (href === routePath.value) return
-    routePath.value = href
+  const go = (id: string) => {
+    if (id === pageId.value) return
+    page.value = id
     clearFilters()
   }
 
   const navigate = (event: MouseEvent, node: SidebarMenuNode) => {
     if (!node.href || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
     event.preventDefault()
-    go(node.href)
+    const sibling = siblings.value.find((item) => hrefOf(item) === node.href)
+    if (sibling) go(sibling.id)
   }
 
   const pick = (value: string | undefined) => {
@@ -169,20 +184,7 @@
   }
 
   const labelOf = (value: string | undefined) =>
-    siblings.find((sibling) => hrefOf(sibling) === value)?.label ?? ''
-
-  const policyBase = '/policies/acme-default'
-
-  const loading = ref(false)
-  let refreshTimer: ReturnType<typeof setTimeout> | undefined
-  const refresh = () => {
-    if (loading.value) return
-    loading.value = true
-    clearTimeout(refreshTimer)
-    refreshTimer = setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
+    siblings.value.find((sibling) => sibling.id === value)?.label ?? ''
 </script>
 
 <template>
@@ -199,14 +201,31 @@
     </div>
 
     <section
-      v-if="activeTab === 'private-access'"
+      v-if="activeTab === currentTab"
       class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1"
     >
       <div class="layout-column layout-boundary @container/tab flex min-w-0 flex-col">
         <div
-          class="flex min-w-0 flex-col gap-(--layout-group-gap) @3xl/tab:flex-row @3xl/tab:items-start @3xl/tab:gap-(--layout-section-gap)"
+          :data-nav="few ? 'toggle' : 'menu'"
+          class="flex min-w-0 flex-col gap-(--layout-group-gap) data-[nav=menu]:@3xl/tab:flex-row data-[nav=menu]:@3xl/tab:items-start data-[nav=menu]:@3xl/tab:gap-(--layout-section-gap)"
         >
-          <div class="hidden w-(--container-3xs) shrink-0 @3xl/tab:block">
+          <div
+            v-if="few"
+            class="flex min-w-0"
+          >
+            <ToggleGroup
+              :model-value="pageId"
+              :options="options"
+              size="medium"
+              :aria-label="tabLabel"
+              @update:model-value="pick"
+            />
+          </div>
+
+          <div
+            v-if="!few"
+            class="hidden w-(--container-3xs) shrink-0 @3xl/tab:block"
+          >
             <SidebarMenuRoot
               :groups="groups"
               :active-id="match?.id ?? ''"
@@ -215,11 +234,14 @@
             />
           </div>
 
-          <div class="w-full max-w-(--layout-measure-control) @3xl/tab:hidden">
+          <div
+            v-if="!few"
+            class="w-full max-w-(--layout-measure-control) @3xl/tab:hidden"
+          >
             <Field>
               <Field.Label>{{ tabLabel }}</Field.Label>
               <Select
-                :model-value="routePath"
+                :model-value="pageId"
                 size="medium"
                 :display-value="labelOf"
                 @update:model-value="pick"
@@ -234,7 +256,7 @@
                     <Select.Item
                       v-for="sibling in section.items"
                       :key="sibling.id"
-                      :value="hrefOf(sibling)"
+                      :value="sibling.id"
                     >
                       {{ sibling.label }}
                     </Select.Item>
@@ -247,7 +269,7 @@
           <div class="flex min-w-0 flex-1 flex-col">
             <PageHeader
               :title="current.label"
-              :description="`${current.label} of the acme-default policy.`"
+              :description="`${current.label} of ${resourceLabel}.`"
               size="small"
             >
               <template #actions>
@@ -264,6 +286,7 @@
                   icon="ai ai-plus"
                   variant="outline"
                   size="medium"
+                  @click="emit('add', $event, current)"
                 />
               </template>
             </PageHeader>
@@ -286,7 +309,7 @@
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh"
-                    @click="refresh"
+                    @click="emit('refresh', $event)"
                   />
                 </Tooltip>
               </header>
@@ -338,6 +361,7 @@
                             icon="ai ai-plus"
                             variant="secondary"
                             size="small"
+                            @click="emit('add', $event, current)"
                           />
                         </template>
                       </EmptyState>
@@ -377,14 +401,14 @@
             size="medium"
             icon="ai ai-external-link"
             :title="tabLabel"
-            :description="`${tabLabel} opens on its own page of the acme-default policy.`"
+            :description="`${tabLabel} opens on its own page of ${resourceLabel}.`"
           >
             <template #actions>
               <Button
                 :label="`Open ${tabLabel}`"
                 variant="outline"
                 size="small"
-                :href="`${policyBase}/${activeTab}`"
+                :href="`${basePath}/${activeTab}`"
               />
             </template>
           </EmptyState>

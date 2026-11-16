@@ -8,11 +8,63 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
+  import { computed } from 'vue'
 
-  const breadcrumb = [
+  import { sampleAccount, sampleTemplate } from './sample'
+
+  /** The template the page deploys. */
+  export interface DeployTemplateTemplate {
+    /** Display name, the preview card title and the last crumb. */
+    name: string
+    /** One sentence on what it launches. */
+    description: string
+    /** Logo glyph class. */
+    icon: string
+    /** The Git provider it clones from, named in the preview card. */
+    provider: string
+    /** Provider glyph class. */
+    providerIcon: string
+    /** The account or organization that publishes it. */
+    scope: string
+    /** The folder or repository it clones. */
+    path: string
+  }
+
+  export interface DeployTemplateProps {
+    /** The template to deploy. Left out, the sample renders. */
+    template?: DeployTemplateTemplate
+    /** The signed-in account, the avatar label. Left out, the sample renders. */
+    account?: string
+    /** Where Manage connected providers leads. */
+    providersHref?: string
+  }
+
+  const props = withDefaults(defineProps<DeployTemplateProps>(), {
+    template: undefined,
+    account: undefined,
+    providersHref: '#'
+  })
+
+  const emit = defineEmits<{
+    /** Back to Creation Center was pressed. */
+    back: [event: MouseEvent]
+    /** The account menu button was pressed. */
+    account: [event: MouseEvent]
+    /** Continue with GitHub was pressed. */
+    connect: [event: MouseEvent]
+    /** Continue without Git was pressed. */
+    'skip-git': [event: MouseEvent]
+    /** Browse templates was pressed. */
+    browse: [event: MouseEvent]
+  }>()
+
+  const currentTemplate = computed(() => props.template ?? sampleTemplate)
+  const currentAccount = computed(() => props.account ?? sampleAccount)
+
+  const breadcrumb = computed(() => [
     { label: 'Start from a template' },
-    { label: 'Nuxt E-commerce', active: true }
-  ]
+    { label: currentTemplate.value.name, active: true }
+  ])
 </script>
 
 <template>
@@ -24,6 +76,7 @@
           aria-label="Back to Creation Center"
           variant="outline"
           size="small"
+          @click="(event: MouseEvent) => emit('back', event)"
         />
         <AppHeader.Brand>
           <a
@@ -44,10 +97,11 @@
         <button
           type="button"
           aria-label="Account settings"
+          @click="(event: MouseEvent) => emit('account', event)"
           class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Avatar
-            label="name@example.com"
+            :label="currentAccount"
             size="medium"
             variant="square"
           />
@@ -68,7 +122,8 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-color ai-nuxt text-body-lg leading-none text-(--text-default)"
+                  :class="currentTemplate.icon"
+                  class="text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -76,28 +131,29 @@
               <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
                 <div class="flex w-full min-w-0 flex-col overflow-hidden">
                   <span class="flex items-center gap-(--spacing-xs)">
-                    <span class="truncate text-heading-2xs text-(--text-default)"
-                      >Nuxt E-commerce</span
-                    >
+                    <span class="truncate text-heading-2xs text-(--text-default)">{{
+                      currentTemplate.name
+                    }}</span>
                   </span>
                   <span class="text-body-xs text-(--text-muted)">
-                    Launch a Nuxt e-commerce or content app in a few steps.
+                    {{ currentTemplate.description }}
                   </span>
                 </div>
 
                 <div class="flex w-full flex-col gap-(--spacing-2xs)">
                   <span class="truncate text-body-2xs text-(--text-muted)"
-                    >Cloning from GitHub</span
+                    >Cloning from {{ currentTemplate.provider }}</span
                   >
                   <div class="flex items-center gap-(--spacing-md)">
                     <span
                       class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)"
                     >
                       <i
-                        class="ai ai-github text-[length:inherit] leading-none"
+                        :class="currentTemplate.providerIcon"
+                        class="text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
-                      acme
+                      {{ currentTemplate.scope }}
                     </span>
                     <span
                       class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
@@ -106,7 +162,7 @@
                         class="ai ai-folder text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
-                      templates/nuxt-ecommerce
+                      {{ currentTemplate.path }}
                     </span>
                   </div>
                 </div>
@@ -123,7 +179,7 @@
             bordered
             size="medium"
             title="Connect a Git provider"
-            description="Nuxt E-commerce is cloned into a repository in your account, then deployed from it on every push."
+            :description="`${currentTemplate.name} is cloned into a repository in your account, then deployed from it on every push.`"
             class="w-full"
           >
             <template #icon>
@@ -152,15 +208,17 @@
                 icon="ai ai-github"
                 variant="secondary"
                 size="large"
+                @click="(event: MouseEvent) => emit('connect', event)"
               />
               <Button
                 label="Continue without Git"
                 variant="ghost"
                 size="large"
+                @click="(event: MouseEvent) => emit('skip-git', event)"
               />
               <Link
                 label="Manage connected providers"
-                href="#"
+                :href="providersHref"
                 size="large"
               />
             </template>
@@ -170,6 +228,7 @@
             label="Browse templates"
             variant="outline"
             size="medium"
+            @click="(event: MouseEvent) => emit('browse', event)"
           />
         </div>
       </div>

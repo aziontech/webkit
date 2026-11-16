@@ -31,6 +31,7 @@
     "name": "MainSettings",
     "file": "dns-zone-detail.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Records",

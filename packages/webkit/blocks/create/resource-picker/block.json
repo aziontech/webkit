@@ -30,6 +30,7 @@
     "name": "Existing",
     "file": "resource-picker.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "New",

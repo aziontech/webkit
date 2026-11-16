@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
+import DnsZoneDetail from '../../../../blocks/detail/dns-zone-detail/dns-zone-detail.vue'
 import ImportZoneFile from '../../../../blocks/detail/dns-zone-detail/variants/import-zone-file.vue'
 import Records from '../../../../blocks/detail/dns-zone-detail/variants/records.vue'
 import { expectNoA11yViolations } from '../../axe'
@@ -39,6 +40,55 @@ describe('detail/dns-zone-detail', () => {
     await waitFor(() => expect(root.textContent).toContain('192.0.2.1'))
   })
 
+  it('renders the records it is given and emits the list actions', async () => {
+    const view = render(DnsZoneDetail, {
+      props: {
+        tab: 'records',
+        records: [
+          {
+            id: '500001',
+            name: 'docs',
+            type: 'CNAME',
+            value: 'docs.example.net',
+            ttl: 300,
+            policy: 'simple',
+            weight: null,
+            description: 'Docs site.'
+          }
+        ]
+      }
+    })
+    const root = view.container as HTMLElement
+    expect(root.textContent).toContain('docs.example.net')
+    expect(root.textContent).not.toContain('192.0.2.1')
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    await fireEvent.click(buttonByText('Add Record', root))
+    expect(view.emitted('refresh')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted('create')).toHaveLength(1)
+  })
+
+  it('shows the empty state for no records and the alert for an error', async () => {
+    const view = render(DnsZoneDetail, { props: { tab: 'records', records: [] } })
+    await waitFor(() => expect(view.container.textContent).toContain('No records yet'))
+    await fireEvent.click(buttonByText('Import zone file', view.container as HTMLElement))
+    expect(view.emitted('import')).toHaveLength(1)
+    await view.rerender({ tab: 'records', records: [], error: "Couldn't load the records." })
+    expect(view.container.textContent).toContain("Couldn't load the records.")
+    expect(view.container.textContent).not.toContain('No records yet')
+  })
+
+  it('emits submit with the edited settings instead of faking a save', async () => {
+    const view = render(DnsZoneDetail)
+    await fireEvent.update(view.getByRole('textbox', { name: 'Name' }), 'edge-zone')
+    await fireEvent.click(await view.findByRole('button', { name: 'Save' }))
+    expect(view.emitted('submit')?.[0]?.[1]).toEqual({
+      name: 'edge-zone',
+      domain: 'example.com',
+      dnssec: true,
+      active: true
+    })
+  })
+
   it('offers table preferences instead of a hand-made columns popover', () => {
     const view = render(Records)
     expect(view.getByRole('button', { name: 'Table preferences' })).toBeTruthy()
@@ -73,7 +123,7 @@ describe('dns-zone-detail#ImportZoneFile', () => {
       () => expect(screen.getByText('Imported 1 record from the pasted zone file.')).toBeTruthy(),
       wait
     )
-    expect(screen.getByText(/1 line was left out/)).toBeTruthy()
+    expect(screen.getAllByText(/1 line was left out/).length).toBeGreaterThan(0)
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Import zone file' })).toBeNull()
     )

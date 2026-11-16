@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/vue'
+import { fireEvent, render, screen } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import DeploySuccess from '../../../../blocks/create/deploy-success/deploy-success.vue'
@@ -28,5 +28,43 @@ describe('deploy-success', () => {
     render(DeploySuccessCli)
     expect(screen.getByRole('button', { name: 'Deploy this resource' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Deploy using a new service' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Visit site' })).toBeNull()
+    expect(screen.getByRole('heading', { name: 'Get started' })).toBeTruthy()
+  })
+
+  it('renders the records it is given and emits the next step and manage', async () => {
+    const step = { icon: 'ai ai-box', title: 'Open the store', description: 'Go to the store.' }
+    const view = render(DeploySuccess, {
+      props: {
+        deployment: {
+          name: 'acme-store',
+          created: 'Created 2 minutes ago',
+          domain: 'store.example.com',
+          url: 'https://store.example.com',
+          addDomainHref: '/services/1?tab=settings'
+        },
+        resources: [
+          {
+            key: 'store',
+            kind: 'Storage',
+            icon: 'ai ai-inbox',
+            name: 'acme-assets',
+            state: 'bound',
+            reference: '3 files'
+          }
+        ],
+        nextSteps: [step]
+      }
+    })
+    expect(screen.getByRole('heading', { name: 'acme-store' })).toBeTruthy()
+    expect(screen.getByText('Bound')).toBeTruthy()
+    expect(screen.queryByText('web-app-assets')).toBeNull()
+    expect(screen.queryByText('Source:', { exact: false })).toBeNull()
+    expect(screen.queryByRole('heading', { name: 'Get started' })).toBeNull()
+    await fireEvent.click(screen.getByRole('button', { name: 'Open the store' }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Manage service' }))
+    const emitted = view.emitted()
+    expect((emitted['next-step'][0] as unknown[])[1]).toEqual(step)
+    expect(emitted.manage).toHaveLength(1)
   })
 })

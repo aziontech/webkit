@@ -57,6 +57,73 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 
 `Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
 
+### K. Load failure — `Alert` (optional)
+
+When `error` is set, a danger `Alert` with Retry takes the records table's place; the heading and the controls row stay, the controls disabled.
+
+## Data
+
+The page takes the zone, its records and both requests' state through props and emits every action; it fetches nothing and fakes no save or refresh. `DnsZoneDetailZone`, `DnsZoneDetailRecord`, `DnsZoneDetailSettings` and `DnsZoneDetailProps` are exported from `dns-zone-detail.vue`, and `sample.ts` holds the sample zone and record the page renders when `zone` or `records` is left out (the records never while `loading` or `error` is set). The settings form keeps its own draft; `zone` is the baseline Discard returns to, and a new `zone` resets the form to it.
+
+| Prop          | Type                           | What it does                                                                                                      |
+| ------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `zone`        | `DnsZoneDetailZone`            | Name, domain, DNSSEC and Active for the form, plus the nameservers and the DNSSEC key values to copy.             |
+| `records`     | `DnsZoneDetailRecord[]`        | The records table; the filter, the sort and the pages run on them in the browser. Pass `[]` for a zone with none. |
+| `loading`     | `boolean`                      | The records request is in flight: Refresh spins and the table shows its loading state.                            |
+| `error`       | `string`                       | Why the records failed to load, shown in a danger `Alert` with Retry in place of the table.                       |
+| `saving`      | `boolean`                      | The save is in flight: the form locks and Save spins.                                                             |
+| `importable`  | `boolean`                      | Shows Import zone file beside Add Record in the Records heading.                                                  |
+| `v-model:tab` | `'main-settings' \| 'records'` | The open tab.                                                                                                     |
+
+| Event        | Payload                      | When                                                                  |
+| ------------ | ---------------------------- | --------------------------------------------------------------------- |
+| `submit`     | `(event, values)`            | Save with a valid draft; `values` is name, domain, DNSSEC and Active. |
+| `discard`    | `(event)`                    | Discard; the draft is already back to `zone`.                         |
+| `create`     | `(event)`                    | Add Record, in the heading or the empty state.                        |
+| `import`     | `(event)`                    | Import zone file, in the heading or the empty state.                  |
+| `refresh`    | `(event)`                    | Refresh.                                                              |
+| `retry`      | `(event)`                    | Retry in the error alert.                                             |
+| `row-action` | `(event, { value, record })` | Edit or Delete in a row menu.                                         |
+
+To go live, render the page from a route that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import DnsZoneDetail, { type DnsZoneDetailSettings } from './dns-zone-detail.vue'
+
+  const { zone, update } = useZone()
+  const { data: records, pending, error, refresh } = useZoneRecords()
+  const loadError = "Couldn't load the records. Check your connection and retry."
+  const saving = ref(false)
+
+  const save = async (_event: Event, values: DnsZoneDetailSettings) => {
+    saving.value = true
+    try {
+      await update(values)
+    } finally {
+      saving.value = false
+    }
+  }
+</script>
+
+<template>
+  <DnsZoneDetail
+    v-if="zone"
+    :zone="zone"
+    :records="records ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    :saving="saving"
+    @submit="save"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep settings and records on separate tabs, each with its own scroll.
@@ -98,9 +165,9 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 
 ## States
 
-- MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
-- Records: the Records tab with the zone's one A record, the ID column hidden by default.
-- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `FieldError` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+- MainSettings: the default `tab`, the Main settings tab with General, nameservers, DNSSEC and Status from `zone`; the save bar appears on the first edit and Save spins while `saving`.
+- Records: `tab="records"`, the Records tab with the zone's one A record from `records`, the ID column hidden by default; `loading` spins Refresh and loads the table, `error` swaps the table for a danger `Alert` with Retry, and `[]` shows No records yet.
+- ImportZoneFile: `importable` puts Import zone file beside Add Record; the page listens to `import` and opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `FieldError` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
 
 ## Importing a zone file
 

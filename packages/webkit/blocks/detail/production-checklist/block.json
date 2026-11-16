@@ -25,6 +25,7 @@
     "name": "Card",
     "file": "production-checklist.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Success",

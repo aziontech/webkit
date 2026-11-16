@@ -45,6 +45,51 @@ A large `Input` with a search icon, placeholder and matching `aria-label`, shown
 
 A transparent small full-width `Button` under the list while more matches remain, labelled with the size of the next batch and spinning with `:loading` while it fetches. The list pages five at a time. A no-match line replaces the rows when the search finds nothing, and a visually hidden `role="status"` line reports the count after every search and load.
 
+## Data
+
+The block takes its resources through props, keeps the answer in `v-model`s and emits Load more; it fetches nothing. `ResourcePickerOption`, `ResourcePickerMode` and `ResourcePickerProps` are exported from `resource-picker.vue`, and `sample.ts` holds the sample projects the block renders when `projects` is left out (and never while `loading` or `error` is set).
+
+| Prop / model   | Type                     | What it does                                                                                                  |
+| -------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `projects`     | `ResourcePickerOption[]` | The resources that can be bound; searched and paged five at a time in the browser. Pass `[]` when none exist. |
+| `loading`      | `boolean`                | The next page is loading: skeleton rows follow the visible ones and Load more spins.                          |
+| `error`        | `string`                 | The required message, shown under the search above the list, or under the Name field in New.                  |
+| `v-model`      | `string`                 | The `value` of the chosen resource.                                                                           |
+| `v-model:mode` | `ResourcePickerMode`     | `existing` or `new`. Left out, the card opens on Existing when anything exists and on New when nothing does.  |
+| `v-model:name` | `string`                 | The Name of the resource to create in New.                                                                    |
+
+| Event       | Payload   | When                                                       |
+| ----------- | --------- | ---------------------------------------------------------- |
+| `load-more` | `(event)` | Load more was pressed; the next five matches are revealed. |
+
+To go live, render the block from the create flow that owns the request and the answer:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import ResourcePicker from './resource-picker.vue'
+
+  const { data, pending } = useProjects()
+  const project = ref('')
+  const mode = ref<'existing' | 'new'>()
+  const name = ref('')
+  const required = ref('')
+</script>
+
+<template>
+  <ResourcePicker
+    v-model="project"
+    v-model:mode="mode"
+    v-model:name="name"
+    :projects="data ?? []"
+    :loading="pending"
+    :error="required"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import. Set `error` when Next is pressed with nothing chosen and clear it once the user answers.
+
 ## Do
 
 - Default to Existing when anything exists, and drop the toggle entirely when nothing does.
@@ -89,11 +134,11 @@ A transparent small full-width `Button` under the list while more matches remain
 
 ## States
 
-- Existing: resources exist; the toggle sits on Existing with a row already chosen in the first batch.
-- New: the user switched to New; the list gives way to the Name field with the allowed characters as helper text.
-- Loading: Load more was pressed; five skeleton rows follow the visible ones and the button spins.
-- Required: Next was pressed with nothing chosen; the required message sits under the search, above the list.
-- Empty: nothing exists to bind; no toggle, one line saying a new project is created, and the Name field.
+- Existing: `projects` holds resources; the toggle sits on Existing with the `v-model` row chosen in the first batch.
+- New: `mode` is `new` (the user switched to New); the list gives way to the Name field with the allowed characters as helper text.
+- Loading: `loading` is set after Load more; five skeleton rows follow the visible ones and the button spins.
+- Required: `error` holds the required message after Next was pressed with nothing chosen; the required message sits under the search, above the list.
+- Empty: `projects` is `[]`, nothing exists to bind; no toggle, one line saying a new project is created, and the Name field.
 - OptionalBinding: the Protect with a firewall switch is on and New firewall is selected; the Name is prefilled from the project and the Firewall modules list has DDoS Protection locked on.
 
 ## Related

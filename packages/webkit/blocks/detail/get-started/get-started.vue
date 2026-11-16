@@ -3,14 +3,32 @@
   import CodeBlock from '@aziontech/webkit/code-block'
   import SectionHeader from '@aziontech/webkit/section-header'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, ref } from 'vue'
+  import { computed } from 'vue'
 
-  const PATHS = [
+  import { sampleResourceName } from './sample'
+
+  /** A deploy path the steps follow. */
+  export type GetStartedPath = 'cli' | 'actions'
+
+  export interface GetStartedProps {
+    /** The resource slug the link command fills in. Left out, the sample renders. */
+    resourceName?: string
+  }
+
+  const props = withDefaults(defineProps<GetStartedProps>(), {
+    resourceName: ''
+  })
+
+  const path = defineModel<GetStartedPath>({ default: 'cli' })
+
+  const name = computed(() => props.resourceName || sampleResourceName)
+
+  const PATHS: { label: string; value: GetStartedPath }[] = [
     { label: 'CLI', value: 'cli' },
     { label: 'GitHub Actions', value: 'actions' }
   ]
 
-  const CLI_STEPS = [
+  const cliSteps = computed(() => [
     {
       title: 'Install the CLI',
       description:
@@ -48,7 +66,7 @@
           language: 'bash',
           code: `platform login
 platform link \\
-  --name analytics-app`
+  --name ${name.value}`
         }
       ]
     },
@@ -66,7 +84,7 @@ platform sync`
         }
       ]
     }
-  ]
+  ])
 
   const ACTIONS_STEPS = [
     {
@@ -116,8 +134,7 @@ jobs:
     }
   ]
 
-  const path = ref('cli')
-  const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : CLI_STEPS))
+  const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : cliSteps.value))
 </script>
 
 <template>

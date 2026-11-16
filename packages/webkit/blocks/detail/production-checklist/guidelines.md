@@ -37,6 +37,43 @@ One small `Item` per gate, rendered as a full-width button: the gate's icon, its
 
 A large right-side `Drawer` that the expand button and every row open. `PanelHeader` repeats the title with the progress `Tag` and one sentence on where the service stands, beside the drawer's own close button; `PanelBody` lists every gate as a medium `Item` with its description and either its outlined action `Button` or, once done, a Done `Tag` with what it now serves; `PanelFooter` ends with a primary Done `Button` that closes it.
 
+## Data
+
+The block takes its gates through props and emits every action; it fetches nothing. `ProductionChecklistStep` and `ProductionChecklistProps` are exported from `production-checklist.vue`, and `sample.ts` holds the sample gates the block renders when `steps` is left out.
+
+| Prop          | Type                        | What it does                                                                    |
+| ------------- | --------------------------- | ------------------------------------------------------------------------------- |
+| `steps`       | `ProductionChecklistStep[]` | The gates, in order; the count and the success state follow their `done` flags. |
+| `defaultOpen` | `boolean`                   | Opens the drawer on mount, as the expand button or a row does.                  |
+
+| Event         | Payload         | When                                                                             |
+| ------------- | --------------- | -------------------------------------------------------------------------------- |
+| `step-action` | `(event, step)` | A gate's action in the drawer (Add Domain, Attach Policy...); the drawer closes. |
+| `done`        | `(event)`       | The drawer's Done button; the drawer closes.                                     |
+
+To go live, render the block from the Overview tab that knows which gates are done:
+
+```vue
+<script setup lang="ts">
+  import ProductionChecklist, { type ProductionChecklistStep } from './production-checklist.vue'
+
+  const { data } = useServiceReadiness()
+  const router = useRouter()
+
+  const onStepAction = (_event: MouseEvent, step: ProductionChecklistStep) =>
+    router.push(`/service/setup/${step.id}`)
+</script>
+
+<template>
+  <ProductionChecklist
+    :steps="data?.steps ?? []"
+    @step-action="onStepAction"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Order the gates by how much they matter for production; domain first.
@@ -72,9 +109,9 @@ A large right-side `Drawer` that the expand button and every row open. `PanelHea
 
 ## States
 
-- Card: some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
-- Success: every gate done; the tag reads Ready for production and the rows are gone.
-- DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
+- Card: `steps` with some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
+- Success: `steps` with every gate done; the tag reads Ready for production and the rows are gone.
+- DrawerDetail: `defaultOpen`, as when the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
 
 ## Related
 

@@ -17,67 +17,158 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+
+  import { sampleImpact, sampleResources } from './sample'
+
+  /** The kind of resource a card or a dependency row deploys. */
+  export type ReleaseImpactResourceType =
+    'service' | 'policy' | 'storage' | 'errorPage' | 'module' | 'integration'
+
+  /** One version a resource can deploy at. */
+  export interface ReleaseImpactVersion {
+    /** Version identifier. */
+    id: string
+    /** The latest Ready version. */
+    current?: boolean
+    /** How long ago it was built, e.g. 2 hours ago. */
+    age: string
+  }
+
+  /** A dependency row inside a resource card. */
+  export interface ReleaseImpactDependency {
+    /** Resource name. */
+    name: string
+    /** The version it deploys at, or latest to track the latest Ready one. */
+    versionId: string
+    /** The versions it can deploy at. */
+    versions: ReleaseImpactVersion[]
+    /** Other services that use the same resource. */
+    sharedWith?: string[]
+  }
+
+  /** The dependencies of one type under a resource card. */
+  export interface ReleaseImpactDependencyGroup {
+    /** The dependency type, which names the group. */
+    type: ReleaseImpactResourceType
+    /** The dependencies. */
+    rows: ReleaseImpactDependency[]
+  }
+
+  /** One resource the release deploys. */
+  export interface ReleaseImpactResource {
+    /** The resource type, unique per release. */
+    type: ReleaseImpactResourceType
+    /** Resource name. */
+    name: string
+    /** The release cannot leave it out. */
+    required?: boolean
+    /** A switch can leave it out of the release. */
+    canToggle?: boolean
+    /** It deploys as it is, with no version to pick. */
+    readonly?: boolean
+    /** It is part of the release. */
+    enabled: boolean
+    /** A line shown while it is left out. */
+    note?: string
+    /** The version it deploys at, or latest to track the latest Ready one; empty when it has none. */
+    versionId: string
+    /** The versions it can deploy at; empty when it has no Ready version. */
+    versions: ReleaseImpactVersion[]
+    /** Its dependencies, grouped by type. */
+    groups: ReleaseImpactDependencyGroup[]
+  }
+
+  /** A project a Deployment Setting deploys. */
+  export interface ReleaseImpactProject {
+    /** Project identifier. */
+    id: string
+    /** Project name. */
+    name: string
+    /** Domains the project serves. */
+    domainsCount: number
+  }
+
+  /** An environment under a Deployment Setting. */
+  export interface ReleaseImpactEnvironment {
+    /** Environment identifier. */
+    id: string
+    /** Environment name, e.g. Production. */
+    name: string
+    /** The projects that deploy in it. */
+    projects: ReleaseImpactProject[]
+  }
+
+  /** A Deployment Setting the release reaches. */
+  export interface ReleaseImpactSettings {
+    /** Setting identifier. */
+    id: string
+    /** Setting name. */
+    name: string
+    /** Domains reached through it. */
+    domainsCount: number
+    /** The environments it deploys to. */
+    environments: ReleaseImpactEnvironment[]
+  }
+
+  export interface ReleaseImpactProps {
+    /** The resources the release deploys; switches and version picks edit a local copy. Left out, the sample renders. */
+    resources?: ReleaseImpactResource[]
+    /** The Deployment Settings the release reaches, with their environments and projects. Left out, the sample renders. */
+    impact?: ReleaseImpactSettings[]
+    /** The impact is being computed. */
+    loading?: boolean
+    /** Why the impact could not be read, shown in the warning alert with Retry. */
+    error?: string
+    /** The projects list came back truncated, so the impact may be incomplete. */
+    truncated?: boolean
+    /** The release is deploying. */
+    deploying?: boolean
+    /** The last run deployed the release. */
+    deployed?: boolean
+    /** Why the last run failed, shown in the danger alert and the error toast. */
+    deployError?: string
+  }
 
   type ImpactState = 'ready' | 'loading' | 'partial' | 'unavailable'
   type Outcome = '' | 'failed' | 'succeeded'
-  type ResourceType = 'service' | 'policy' | 'storage' | 'errorPage' | 'module' | 'integration'
-
-  interface Scenario {
-    impact: ImpactState
-    missingVersion: boolean
-    failFirstRun: boolean
-  }
 
   interface ResourceTypeMeta {
     label: string
     icon: string
   }
 
-  interface ResourceVersion {
-    id: string
-    current?: boolean
-    age: string
-  }
-
   interface VersionedResource {
     versionId: string
-    versions: ResourceVersion[]
+    versions: ReleaseImpactVersion[]
   }
 
-  interface DependencyRow extends VersionedResource {
-    name: string
-    sharedWith?: string[]
-  }
+  const props = withDefaults(defineProps<ReleaseImpactProps>(), {
+    resources: undefined,
+    impact: undefined,
+    loading: false,
+    error: '',
+    truncated: false,
+    deploying: false,
+    deployed: false,
+    deployError: ''
+  })
 
-  interface DependencyGroup {
-    type: ResourceType
-    rows: DependencyRow[]
-  }
-
-  interface ResourceCard extends VersionedResource {
-    type: ResourceType
-    name: string
-    required?: boolean
-    canToggle?: boolean
-    readonly?: boolean
-    enabled: boolean
-    note?: string
-    groups: DependencyGroup[]
-  }
-
-  const SCENARIO: Scenario = {
-    impact: 'ready',
-    missingVersion: false,
-    failFirstRun: false
-  }
+  const emit = defineEmits<{
+    /** Deploy release was confirmed, or Redeploy pressed; carries the included resources at their versions. */
+    deploy: [event: MouseEvent, resources: ReleaseImpactResource[]]
+    /** Retry in the unavailable impact alert. */
+    retry: [event: MouseEvent]
+    /** Edit in the outcome alert; focus moves to the resources. */
+    edit: [event: MouseEvent]
+  }>()
 
   const RUN_TOAST = 'release-impact-run'
-  const RUN_MS = 3000
-  const IMPACT_MS = 1200
   const LATEST = 'latest'
 
-  const resourceTypes: Record<ResourceType, ResourceTypeMeta> = {
+  const runToast = (description: string) => ({ id: RUN_TOAST, description })
+
+  const resourceTypes: Record<ReleaseImpactResourceType, ResourceTypeMeta> = {
     service: { label: 'Service', icon: 'ai ai-server' },
     policy: { label: 'Policy', icon: 'ai ai-shield' },
     storage: { label: 'Storage', icon: 'ai ai-inbox' },
@@ -86,129 +177,52 @@
     integration: { label: 'Integrations', icon: 'ai ai-link' }
   }
 
-  const cards = reactive<ResourceCard[]>([
-    {
-      type: 'service',
-      name: 'web-app',
-      required: true,
-      enabled: true,
-      versionId: 'AG1VVDJP',
-      versions: [
-        { id: 'AG1VVDJP', current: true, age: '2 hours ago' },
-        { id: 'AF3K2L9Q', age: '1 day ago' },
-        { id: 'AD7M1X4R', age: '4 days ago' }
-      ],
-      groups: [
-        {
-          type: 'module',
-          rows: [
-            {
-              name: 'auth-gateway',
-              versionId: 'AB2C9D1E',
-              versions: [
-                { id: 'AB2C9D1E', current: true, age: '3 days ago' },
-                { id: 'AA8F3G2H', age: '2 weeks ago' }
-              ],
-              sharedWith: ['checkout', 'admin-panel']
-            },
-            {
-              name: 'geo-redirect',
-              versionId: LATEST,
-              versions: [{ id: 'AC4J6K8L', current: true, age: '5 days ago' }]
-            }
-          ]
-        },
-        {
-          type: 'integration',
-          rows: [
-            {
-              name: 'payments-api',
-              versionId: 'AE5N7P9Q',
-              versions: [{ id: 'AE5N7P9Q', current: true, age: '1 week ago' }]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      type: 'policy',
-      name: 'edge-policy',
-      canToggle: true,
-      enabled: true,
-      versionId: SCENARIO.missingVersion ? '' : LATEST,
-      versions: SCENARIO.missingVersion
-        ? []
-        : [
-            { id: 'AH3R5T7V', current: true, age: '6 hours ago' },
-            { id: 'AG9W1X3Y', age: '3 days ago' }
-          ],
-      groups: []
-    },
-    {
-      type: 'storage',
-      name: 'web-app-assets',
-      readonly: true,
-      enabled: true,
-      versionId: 'AJ2B4D6F',
-      versions: [{ id: 'AJ2B4D6F', current: true, age: '2 weeks ago' }],
-      groups: []
-    },
-    {
-      type: 'errorPage',
-      name: 'web-app-errors',
-      canToggle: true,
-      enabled: false,
-      note: 'Left out of this release. The error page serving now keeps serving.',
-      versionId: LATEST,
-      versions: [{ id: 'AK8M2P4R', current: true, age: '1 month ago' }],
-      groups: []
-    }
-  ])
-
-  const impactTree = [
-    {
-      id: 'production-settings',
-      name: 'production-settings',
-      domainsCount: 6,
-      environments: [
-        {
-          id: 'production',
-          name: 'Production',
-          projects: [
-            { id: 'web-app', name: 'web-app', domainsCount: 2 },
-            { id: 'storefront', name: 'storefront', domainsCount: 3 }
-          ]
-        },
-        {
-          id: 'preview',
-          name: 'Preview',
-          projects: [{ id: 'web-app-preview', name: 'web-app-preview', domainsCount: 1 }]
-        }
-      ]
-    },
-    {
-      id: 'staging-settings',
-      name: 'staging-settings',
-      domainsCount: 0,
-      environments: []
-    }
-  ]
-
   const impactViews = [
     { label: 'Tree', value: 'tree' },
     { label: 'Flow', value: 'flow' }
   ]
 
-  const impactState = ref<ImpactState>(SCENARIO.impact)
+  const cloneResource = (card: ReleaseImpactResource): ReleaseImpactResource => ({
+    ...card,
+    versions: card.versions.map((version) => ({ ...version })),
+    groups: card.groups.map((group) => ({
+      ...group,
+      rows: group.rows.map((row) => ({
+        ...row,
+        versions: row.versions.map((version) => ({ ...version }))
+      }))
+    }))
+  })
+
+  const cards = ref<ReleaseImpactResource[]>([])
+  watch(
+    () => props.resources ?? sampleResources,
+    (next) => {
+      cards.value = next.map(cloneResource)
+    },
+    { immediate: true }
+  )
+
+  const impactTree = computed<ReleaseImpactSettings[]>(
+    () => props.impact ?? (props.loading || props.error ? [] : sampleImpact)
+  )
+
+  const impactState = computed<ImpactState>(() => {
+    if (props.loading) return 'loading'
+    if (props.error) return 'unavailable'
+    return props.truncated ? 'partial' : 'ready'
+  })
   const impactView = ref('tree')
   const confirmOpen = ref(false)
-  const deploying = ref(false)
-  const outcome = ref<Outcome>('')
-  const failNext = ref(SCENARIO.failFirstRun)
+  const dismissed = ref(false)
   const resourcesHeadingEl = ref<HTMLElement | null>(null)
 
-  let impactTimer = 0
-  let runTimer = 0
+  const deploying = computed(() => props.deploying)
+  const outcome = computed<Outcome>(() => {
+    if (dismissed.value || props.deploying) return ''
+    if (props.deployError) return 'failed'
+    return props.deployed ? 'succeeded' : ''
+  })
 
   const plural = (count: number, one: string, other: string) =>
     `${count} ${count === 1 ? one : other}`
@@ -218,33 +232,35 @@
     return card.versions.find((version) => version.id === id)?.id ?? String(id)
   }
 
-  const resolvedVersion = (card: ResourceCard) =>
+  const resolvedVersion = (card: ReleaseImpactResource) =>
     card.versionId === LATEST
       ? (card.versions.find((version) => version.current)?.id ?? '')
       : card.versionId
 
-  const dependencyCount = (card: ResourceCard) =>
+  const dependencyCount = (card: ReleaseImpactResource) =>
     card.groups.reduce((total, group) => total + group.rows.length, 0)
 
-  const included = computed(() => cards.filter((card) => card.enabled))
+  const included = computed(() => cards.value.filter((card) => card.enabled))
 
   const missing = computed(() =>
     included.value.filter((card) => !card.readonly && !card.versions.length)
   )
 
   const projects = computed(() =>
-    impactTree.flatMap((settings) =>
+    impactTree.value.flatMap((settings) =>
       settings.environments.flatMap((environment) => environment.projects)
     )
   )
 
   const environments = computed(() =>
-    impactTree.flatMap((settings) => settings.environments.map((environment) => environment.name))
+    impactTree.value.flatMap((settings) =>
+      settings.environments.map((environment) => environment.name)
+    )
   )
 
   const impactSummary = computed(
     () =>
-      `This release reaches ${plural(projects.value.length, 'project', 'projects')} in ${plural(environments.value.length, 'environment', 'environments')} through ${plural(impactTree.length, 'Deployment Setting', 'Deployment Settings')}.`
+      `This release reaches ${plural(projects.value.length, 'project', 'projects')} in ${plural(environments.value.length, 'environment', 'environments')} through ${plural(impactTree.value.length, 'Deployment Setting', 'Deployment Settings')}.`
   )
 
   const blocker = computed(() => {
@@ -271,65 +287,62 @@
   const unavailableMessage = computed(() =>
     impactState.value === 'partial'
       ? 'The projects list was truncated, so these numbers may be incomplete. You can still deploy.'
-      : 'The projects that deploy with these settings could not be read, so the impact is unknown. Retry, or deploy without the preview.'
+      : props.error
   )
 
-  const loadImpact = () => {
-    clearTimeout(impactTimer)
-    impactState.value = 'loading'
-    impactTimer = setTimeout(() => {
-      impactState.value = SCENARIO.impact === 'unavailable' ? 'partial' : 'ready'
-    }, IMPACT_MS)
-  }
-
-  const edit = async () => {
+  const edit = async (event: MouseEvent) => {
     toast.dismiss(RUN_TOAST)
-    outcome.value = ''
+    dismissed.value = true
+    emit('edit', event)
     await nextTick()
     resourcesHeadingEl.value?.focus()
   }
 
-  const finishRun = () => {
-    deploying.value = false
-    if (failNext.value) {
-      failNext.value = false
-      outcome.value = 'failed'
-      toast.error("The release wasn't deployed.", {
-        id: RUN_TOAST,
-        description: 'edge-policy was refused: a rule points at an integration that does not exist.'
-      })
-      return
-    }
-    outcome.value = 'succeeded'
-    toast.success('Release deployed.', {
-      id: RUN_TOAST,
-      description: `${releaseLine.value} serve ${plural(projects.value.length, 'project', 'projects')} now.`
-    })
+  const deploy = (event: MouseEvent) => {
+    emit('deploy', event, included.value.map(cloneResource))
   }
 
-  const startRun = () => {
-    clearTimeout(runTimer)
-    deploying.value = true
-    outcome.value = ''
-    toast.loading('Deploying release…', {
-      id: RUN_TOAST,
-      description: `${releaseLine.value}. It keeps running if you leave.`
-    })
-    runTimer = setTimeout(finishRun, RUN_MS)
-  }
-
-  const confirmDeploy = () => {
+  const confirmDeploy = (event: MouseEvent) => {
     confirmOpen.value = false
-    startRun()
+    deploy(event)
   }
 
-  onMounted(() => {
-    if (SCENARIO.failFirstRun) finishRun()
-  })
+  watch(
+    () => [props.deploying, props.deployed, props.deployError],
+    () => {
+      dismissed.value = false
+    }
+  )
+
+  watch(
+    () => props.deploying,
+    (running) => {
+      if (!running) return
+      toast.loading(
+        'Deploying release…',
+        runToast(`${releaseLine.value}. It keeps running if you leave.`)
+      )
+    },
+    { immediate: true }
+  )
+
+  watch(
+    outcome,
+    (next) => {
+      if (next === 'failed')
+        toast.error("The release wasn't deployed.", runToast(props.deployError))
+      else if (next === 'succeeded')
+        toast.success(
+          'Release deployed.',
+          runToast(
+            `${releaseLine.value} serve ${plural(projects.value.length, 'project', 'projects')} now.`
+          )
+        )
+    },
+    { immediate: true }
+  )
 
   onBeforeUnmount(() => {
-    clearTimeout(impactTimer)
-    clearTimeout(runTimer)
     toast.dismiss(RUN_TOAST)
   })
 </script>
@@ -350,7 +363,7 @@
           key="alert-1"
           v-if="outcome === 'failed'"
           severity="danger"
-          label="The release wasn't deployed. edge-policy was refused: a rule points at an integration that does not exist. Nothing changed in traffic."
+          :label="`The release wasn't deployed. ${deployError} Nothing changed in traffic.`"
         >
           <template #actions>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -365,7 +378,7 @@
                 variant="outline"
                 size="small"
                 icon="ai ai-refresh"
-                @click="startRun"
+                @click="deploy"
               />
             </div>
           </template>
@@ -389,7 +402,7 @@
                 variant="outline"
                 size="small"
                 icon="ai ai-refresh"
-                @click="startRun"
+                @click="deploy"
               />
             </div>
           </template>
@@ -752,7 +765,7 @@
                       variant="outline"
                       size="small"
                       icon="ai ai-refresh"
-                      @click="loadImpact"
+                      @click="emit('retry', $event)"
                     />
                   </div>
 
