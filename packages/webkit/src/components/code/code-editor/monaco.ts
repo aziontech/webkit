@@ -23,7 +23,7 @@ export interface CodeEditorMonacoEditor extends CodeEditorDisposable {
 
 /** The part of a Monaco diff editor CodeEditor uses. */
 export interface CodeEditorMonacoDiffEditor extends CodeEditorDisposable {
-  setModel(model: { original: CodeEditorMonacoModel; modified: CodeEditorMonacoModel }): void
+  setModel(model: object | null): void
   getModifiedEditor(): CodeEditorMonacoEditor
   getOriginalEditor?(): CodeEditorMonacoEditor
   updateOptions(options: Record<string, unknown>): void
