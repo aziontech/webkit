@@ -100,9 +100,10 @@ test('migrateSource turns kind into variant (the look) or type (the sort of part
     '</template>'
   ].join('\n')
   const v6 = loadMigration(6)
-  const { source } = migrateSource(sfc, v6)
+  const { source, warnings } = migrateSource(sfc, v6)
   assert.match(source, /<Button variant="outline" label="Cancel" \/>/)
-  assert.match(source, /<Button :variant="primary \? 'primary' : 'ghost'" label="Back" \/>/)
+  assert.match(source, /<Button :variant="primary \? 'primary' : 'transparent'" label="Back" \/>/)
+  assert.ok(warnings.some((w) => w.includes('button') && w.includes('bound expression')))
   assert.match(source, /<Table\.Cell type="checkbox" \/>/)
   assert.match(source, /<Pagination\.Button type="next" \/>/)
   assert.match(source, /<ConsoleShowcase title-align="left" \/>/)
@@ -248,12 +249,13 @@ test('migrateSource splits an overlay placement into side and align, logical sid
     '  <DropdownMenu placement="top-start" offset="2" />',
     '</template>'
   ].join('\n')
-  const { source } = migrateSource(sfc, { ...migration, props })
+  const { source, warnings } = migrateSource(sfc, { ...migration, props })
   assert.match(source, /<Popover side="bottom" align="end" :side-offset="8" \/>/)
   assert.match(source, /<Popover side="end" align="start" \/>/)
   assert.match(source, /<Popover side="auto" \/>/)
   assert.match(source, /<Tooltip side="start" \/>/)
-  assert.match(source, /<Tooltip :side="rtl \? 'start' : 'end'" \/>/)
+  assert.match(source, /<Tooltip :side="rtl \? 'left' : 'right'" \/>/)
+  assert.ok(warnings.some((w) => w.includes('tooltip') && w.includes('bound expression')))
   assert.match(source, /<DropdownMenu side="top" align="start" side-offset="2" \/>/)
   assert.equal(migrateSource(source, { ...migration, props }).source, source)
 })
@@ -807,4 +809,47 @@ test('a Table preset or toolbar control moves to its own import, and an unused c
   )
   assert.match(source, /h\(TableExportButton\)/)
   assert.match(source, /<TableSearch \/>/)
+})
+
+test('migrateSource renames a static value and a bound single literal, never other bound expressions', () => {
+  const sfc = [
+    '<script setup>',
+    "import Message from '@aziontech/webkit/message'",
+    '</script>',
+    '<template>',
+    '  <Message severity="error" label="Failed" />',
+    `  <Message :severity="'error'" />`,
+    `  <Message :severity="results.type === 'error' ? 'error' : 'info'" />`,
+    '  <Message :severity="level" />',
+    '</template>'
+  ].join('\n')
+  const { source, warnings } = migrateSource(sfc, migration)
+  assert.match(source, /<Alert severity="danger" label="Failed" \/>/)
+  assert.match(source, /<Alert :severity="'danger'" \/>/)
+  assert.match(source, /<Alert :severity="results\.type === 'error' \? 'error' : 'info'" \/>/)
+  assert.match(source, /<Alert :severity="level" \/>/)
+  const manual = warnings.filter((w) => w.includes('bound expression'))
+  assert.equal(manual.length, 2)
+  assert.ok(manual.some((w) => w.includes(`results.type === 'error'`) && w.includes('error')))
+  assert.ok(manual.some((w) => w.includes('"level"')))
+  assert.equal(migrateSource(source, migration).source, source)
+})
+
+test('migrateSource maps a Toaster corner onto the logical position', () => {
+  const v6 = loadMigration(6)
+  const sfc = [
+    '<script setup>',
+    "import { Toaster } from '@aziontech/webkit/toast'",
+    '</script>',
+    '<template>',
+    '  <Toaster position="bottom-right" />',
+    '  <Toaster position="top-left" :duration="0" />',
+    '  <Toaster position="top-center" />',
+    '</template>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, v6)
+  assert.match(source, /<Toaster position="bottom-end" \/>/)
+  assert.match(source, /<Toaster position="top-start" :duration="0" \/>/)
+  assert.match(source, /<Toaster position="top-center" \/>/)
+  assert.equal(migrateSource(source, v6).source, source)
 })

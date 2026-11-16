@@ -261,14 +261,15 @@ function outsideQuotes(text, fn) {
     .join('')
 }
 
-function mapLiterals(expr, values) {
-  if (!values) return expr
-  return expr.replace(/(['`])([a-z][a-z0-9-]*)\1/g, (all, q, v) =>
-    Object.hasOwn(values, v) && !/^(true|false)$/.test(values[v]) ? `${q}${values[v]}${q}` : all
-  )
+function mapLiteral(expr, values) {
+  const m = expr.trim().match(/^(['`])([a-z][a-z0-9-]*)\1$/)
+  if (!m) return null
+  const [, q, v] = m
+  if (!Object.hasOwn(values, v) || /^(true|false)$/.test(values[v])) return expr
+  return expr.replace(`${q}${v}${q}`, `${q}${values[v]}${q}`)
 }
 
-function renameAttributes(attrs, rules) {
+function renameAttributes(attrs, rules, onManual = () => {}) {
   let out = attrs
   for (const [oldProp, ruleSpec] of Object.entries(rules)) {
     if (oldProp.startsWith('#')) continue
@@ -297,9 +298,14 @@ function renameAttributes(attrs, rules) {
         (all, sp, bind, eq, dq, dv, sq, sv) => {
           const q = dq || sq
           const expr = dq ? dv : sv
-          return inverts
-            ? `${sp}${bind}${toKebab}${eq}${q}!(${expr})${q}`
-            : `${sp}${bind}${toKebab}${eq}${q}${mapLiterals(expr, rule.values)}${q}`
+          if (inverts) return `${sp}${bind}${toKebab}${eq}${q}!(${expr})${q}`
+          let next = expr
+          if (rule.values) {
+            const literal = mapLiteral(expr, rule.values)
+            if (literal === null) onManual(oldProp, expr)
+            else next = literal
+          }
+          return `${sp}${bind}${toKebab}${eq}${q}${next}${q}`
         }
       )
       out = out.replace(
@@ -617,7 +623,11 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
             `${PREFIX}${subpath}: <${binding}> prop ${prop} was removed in v6: ${spec.removed}`
           )
       }
-      const renamed = renameAttributes(attrs, rules)
+      const renamed = renameAttributes(attrs, rules, (prop, expr) =>
+        warnings.push(
+          `${PREFIX}${subpath}: <${binding}> :${kebab(prop)}="${expr}" is a bound expression; map its ${Object.keys(rules[prop].values).join(', ')} values by hand`
+        )
+      )
       if (renamed !== attrs) slotEdits.push([start, end, renamed])
       cursor = end
     }
