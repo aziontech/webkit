@@ -188,12 +188,12 @@
             class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow lg:data-[active]:pt-(--spacing-xl) motion-reduce:transition-none"
           >
             <h3
-              class="m-0 text-heading-md text-(--text-muted) transition-[color,opacity] duration-moderate-01 ease-out group-data-[active]:text-(--text-default) group-data-[complete]:opacity-55 motion-reduce:transition-none"
+              class="m-0 text-heading-md text-(--text-default) transition-[color,opacity] duration-moderate-01 ease-out motion-reduce:transition-none lg:text-(--text-muted) lg:group-data-[active]:text-(--text-default) lg:group-data-[complete]:opacity-55"
             >
               <button
                 type="button"
                 :aria-current="isActive(index) ? 'true' : undefined"
-                class="m-0 cursor-pointer p-0 text-left after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                class="m-0 cursor-default p-0 text-left lg:cursor-pointer lg:after:absolute lg:after:inset-0 lg:after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
                 @click="goTo(index)"
                 @focus="goTo(index)"
               >
