@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useMediaQuery } from '../../../composables/use-media-query'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
@@ -104,6 +105,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ consoleShowcaseSection: en.consoleShowcaseSection })
+  const roomy = useMediaQuery('(min-width: 40rem)', true)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'console-showcase-section'
@@ -183,7 +185,7 @@
               v-if="tabs.length"
               v-model="current"
               :options="options"
-              size="large"
+              :size="roomy ? 'large' : 'medium'"
               :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
             />
           </template>
