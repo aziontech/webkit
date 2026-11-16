@@ -98,7 +98,7 @@ export default {
 
 ## Where the token lives
 
-The person pastes the token into `auth/sign-in` (`PersonalToken`), which emits `sign-in` with `(event, token)` and stores nothing. Your app decides where it goes:
+The person pastes the token into `auth/sign-in` (`PersonalToken`, the `token-sign-in.vue` card), which emits `sign-in` with `(event, token)` and stores nothing. Your app checks it with one API call, passes `loading` while it waits, and answers with `error`: `rejected` (401), `no-access` (403), `rate-limited` (429), `unreachable` (no answer) or a message. The card's Remember for this tab option (`v-model:remember`, off by default) tells your app where the token goes:
 
 | Place                                | Use it                             | Why                                                                      |
 | ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------ |
@@ -113,15 +113,15 @@ Sign-out clears it (`token.value = ''` and `sessionStorage.removeItem`). Tell th
 
 ## Map every answer to a state
 
-| Answer                        | What it means                                                                                                 | What the screen does                                                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `200` with data               | success                                                                                                       | Render; an empty list is the component's empty state (`EmptyState`, the table's empty slot), not an error.                        |
-| `204 No Content`              | nothing at that path                                                                                          | Treat as empty, not as a failure (some v4 collections answer 204 instead of `{ results: [] }`).                                   |
-| `401`, `403`                  | token rejected, expired or revoked                                                                            | Clear the token and route to sign-in with a reason (`/login?reason=expired`); on sign-in itself, `RejectedToken`. Never toast it. |
-| `429`                         | rate limited                                                                                                  | A warning with Retry; read `x-ratelimit-reset` for when.                                                                          |
-| `400` with `{ detail }`       | the request or query is invalid (GraphQL limits and validation arrive this way, not as `errors[]` with `200`) | Show `detail` next to the control that built the request.                                                                         |
-| `200` with GraphQL `errors[]` | the query ran but a field failed                                                                              | Show the messages where the result would be.                                                                                      |
-| `5xx`, network failure        | the API or the network is down                                                                                | The component's `error` state (`Chart`, `FilePreview` and `DataTable` take one) with Retry; keep what the person typed.           |
+| Answer                        | What it means                                                                                                 | What the screen does                                                                                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `200` with data               | success                                                                                                       | Render; an empty list is the component's empty state (`EmptyState`, the table's empty slot), not an error.                                                  |
+| `204 No Content`              | nothing at that path                                                                                          | Treat as empty, not as a failure (some v4 collections answer 204 instead of `{ results: [] }`).                                                             |
+| `401`, `403`                  | token rejected, expired or revoked (401), or valid without the permissions (403)                              | Clear the token and route to sign-in with a reason (`/login?reason=expired`); on sign-in itself, `error="rejected"` or `error="no-access"`. Never toast it. |
+| `429`                         | rate limited                                                                                                  | A warning with Retry; read `x-ratelimit-reset` for when.                                                                                                    |
+| `400` with `{ detail }`       | the request or query is invalid (GraphQL limits and validation arrive this way, not as `errors[]` with `200`) | Show `detail` next to the control that built the request.                                                                                                   |
+| `200` with GraphQL `errors[]` | the query ran but a field failed                                                                              | Show the messages where the result would be.                                                                                                                |
+| `5xx`, network failure        | the API or the network is down                                                                                | The component's `error` state (`Chart`, `FilePreview` and `DataTable` take one) with Retry; keep what the person typed.                                     |
 
 `webkit-errors` decides where each message goes (field, section, toast); this table only says which answer is which.
 
