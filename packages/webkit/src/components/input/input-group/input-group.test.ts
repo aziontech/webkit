@@ -324,8 +324,9 @@ describe('InputGroup', () => {
     })
 
     it('renders the Invalid story with data-invalid on the root', () => {
-      const { getByTestId } = render(Invalid)
+      const { getByTestId, getByRole } = render(Invalid)
       expect(getByTestId('input-group').getAttribute('data-invalid')).toBe('true')
+      expect(getByRole('textbox', { name: 'Domain' }).getAttribute('aria-invalid')).toBe('true')
     })
 
     it('renders the Required story with data-required on the root', () => {
@@ -334,8 +335,9 @@ describe('InputGroup', () => {
     })
 
     it('renders the Disabled story with data-disabled on the root', () => {
-      const { getByTestId } = render(Disabled)
+      const { getByTestId, getByRole } = render(Disabled)
       expect(getByTestId('input-group').getAttribute('data-disabled')).toBe('true')
+      expect((getByRole('textbox', { name: 'Domain' }) as HTMLInputElement).disabled).toBe(true)
     })
   })
 })

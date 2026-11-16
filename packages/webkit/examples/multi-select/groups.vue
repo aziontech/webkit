@@ -26,7 +26,7 @@
 </script>
 
 <template>
-  <div style="width: 280px">
+  <div class="w-full max-w-70">
     <MultiSelectRoot
       aria-label="Options"
       v-model="value"

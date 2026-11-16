@@ -624,7 +624,7 @@ describe('NavigationMenu', () => {
     describe('documented example integration', () => {
       it('renders the Default story composition without error', () => {
         const { getByRole } = render(Default)
-        expect(getByRole('navigation', { name: 'Azion' })).toBeTruthy()
+        expect(getByRole('navigation', { name: 'Acme' })).toBeTruthy()
       })
     })
   })

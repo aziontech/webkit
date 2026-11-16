@@ -6,7 +6,7 @@
 </script>
 
 <template>
-  <div class="w-[20rem]">
+  <div class="w-full max-w-80">
     <NumberInput
       v-model="value"
       aria-label="Quantity"

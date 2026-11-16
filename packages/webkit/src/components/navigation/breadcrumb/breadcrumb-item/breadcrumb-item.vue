@@ -93,5 +93,11 @@
     >
       {{ label }}
     </span>
+    <span
+      v-if="!active"
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
   </component>
 </template>

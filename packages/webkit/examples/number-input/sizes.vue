@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <div class="flex w-[20rem] flex-col gap-(--spacing-md)">
+  <div class="flex w-full max-w-80 flex-col gap-(--spacing-md)">
     <NumberInput
       v-model="small"
       size="small"
