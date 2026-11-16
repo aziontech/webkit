@@ -176,7 +176,8 @@
             >
             <DropdownMenu
               v-model:open="accountMenuOpen"
-              placement="top-end"
+              side="top"
+              align="end"
             >
               <DropdownMenuTrigger>
                 <IconButton
