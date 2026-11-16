@@ -65,12 +65,13 @@
   const rootEl = ref<globalThis.HTMLDivElement | null>(null)
   const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)
 
-  const { panelStyle } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: ctx.triggerEl,
     panelRef: rootEl,
     isOpen: ctx.open,
-    placement: 'bottom-start',
-    offset: 4,
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 4,
     matchTriggerWidth: true
   })
 
@@ -154,6 +155,8 @@
         :data-testid="testId"
         :data-state="ctx.open.value ? 'open' : 'closed'"
         :class="attrs.class"
+        :data-side="resolvedSide"
+        :data-align="resolvedAlign"
         :style="panelStyle"
         class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
         @keydown="onKeydown"
