@@ -432,6 +432,17 @@ export const fileDropzone = {
   title: 'Drop files to upload'
 } as const
 
+export const filePreview = {
+  download: 'Download',
+  loading: 'Loading preview',
+  contents: 'Contents of {name}',
+  noPreview: 'No preview for this file type',
+  noPreviewDetail: 'Download the file to open it.',
+  error: 'The preview could not load',
+  empty: 'This file is empty.',
+  truncated: 'Showing the first {shown} characters. Download the file to see all of it.'
+} as const
+
 export const fileTokenGroup = {
   label: 'Files',
   remove: 'Remove {name}',
@@ -1370,6 +1381,7 @@ export const en = {
   errorBoundary,
   field,
   fileDropzone,
+  filePreview,
   fileTokenGroup,
   filterMenu,
   uploadProgress,

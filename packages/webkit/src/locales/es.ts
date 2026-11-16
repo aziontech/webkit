@@ -507,6 +507,16 @@ export const es: Messages = {
   fileDropzone: {
     title: 'Suelta archivos para subirlos'
   },
+  filePreview: {
+    download: 'Descargar',
+    loading: 'Cargando vista previa',
+    contents: 'Contenido de {name}',
+    noPreview: 'No hay vista previa para este tipo de archivo',
+    noPreviewDetail: 'Descarga el archivo para abrirlo.',
+    error: 'No se pudo cargar la vista previa',
+    empty: 'Este archivo está vacío.',
+    truncated: 'Mostrando los primeros {shown} caracteres. Descarga el archivo para verlo completo.'
+  },
   fileTokenGroup: {
     label: 'Archivos',
     remove: 'Quitar {name}',
