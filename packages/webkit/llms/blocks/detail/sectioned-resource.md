@@ -43,7 +43,7 @@ Below `@3xl` of the tab body the menu is hidden and a medium `Select` takes its 
 
 ### D. Few siblings — `ToggleGroup` (optional)
 
-When `sections` hold 7 or fewer pages there is no menu and no folded `Select`: a medium `ToggleGroup` labelled with the tab name sits above the list and switches between them, at every width.
+When `sections` hold 7 or fewer pages there is no menu: from `@3xl` of the tab body a medium `ToggleGroup` labelled with the tab name sits above the list and switches between them. Below `@3xl` the same folded `Select` of section C takes its place, because six segments truncate every label on a phone.
 
 ### E. Page heading — `PageHeader`, `Button` (required)
 
@@ -157,7 +157,7 @@ Then delete `sample.ts` and its import.
 
 - `Default` — primary (the code below)
 - `Narrow` — The same Private access tab in a narrow page, below `@3xl` of the tab body: the local navigation folds into a medium `Select` labelled Private access, its 16 options in the same 4 groups, with Server groups current; the list takes the full width under it.
-- `FewSiblings` — The Network security tab with 6 sibling pages: no local navigation. A medium `ToggleGroup` labelled Network security switches between them above the list, the alternative rule 4 prescribes for 7 or fewer siblings.
+- `FewSiblings` — The Network security tab with 6 sibling pages: no local navigation. From `@3xl` of the tab body a medium `ToggleGroup` labelled Network security switches between them above the list, the alternative rule 4 prescribes for 7 or fewer siblings; below `@3xl` it folds into the same medium `Select`.
 
 Each variant is the same screen in another state: `get_block("detail/sectioned-resource", { variant })`, or the file under `blocks/detail/sectioned-resource/variants/`.
 
@@ -380,7 +380,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
         >
           <div
             v-if="few"
-            class="flex min-w-0"
+            class="hidden min-w-0 @3xl/tab:flex"
           >
             <ToggleGroup
               :model-value="pageId"
@@ -403,10 +403,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
             />
           </div>
 
-          <div
-            v-if="!few"
-            class="w-full max-w-(--layout-measure-control) @3xl/tab:hidden"
-          >
+          <div class="w-full max-w-(--layout-measure-control) @3xl/tab:hidden">
             <Field>
               <Field.Label>{{ tabLabel }}</Field.Label>
               <Select

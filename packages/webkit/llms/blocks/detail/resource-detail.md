@@ -42,7 +42,7 @@ A full-bleed `PageTabs` with one `Tabs.Trigger` per concern: Overview, Versions,
 
 ### C. Summary facts band — `Link`, `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
 
-A grid of label and value pairs: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links carry a `Tooltip` that says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
+A grid of label and value pairs, one column below `sm` so no value runs into the next: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links carry a `Tooltip` that says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
 
 ### D. Summary state band — `Button` (optional)
 
@@ -521,7 +521,7 @@ jobs:
                   </div>
 
                   <div
-                    class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6"
+                    class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6"
                   >
                     <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Deployment</span>
