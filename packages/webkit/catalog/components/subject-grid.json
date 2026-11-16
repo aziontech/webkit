@@ -10,8 +10,8 @@
   "Inside another band's cell → compose `registration-frame` and `call-to-action` directly."
  ],
  "related": [
-  "call-to-action` — the `lead` band drawn in the closing cell.",
-  "card-grid` — the divider grid the subject cards sit in."
+  "`call-to-action` — the `lead` band drawn in the closing cell.",
+  "`card-grid` — the divider grid the subject cards sit in."
  ],
  "bestPractices": [
   "Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.",

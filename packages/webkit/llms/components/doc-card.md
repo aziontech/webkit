@@ -4,7 +4,7 @@
 
 - Import: `import DocCard from '@aziontech/webkit/doc-card'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-card.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-card.json)
+- API as JSON: [doc-card.json](doc-card.json)
 
 ## When to use
 
@@ -27,8 +27,8 @@
 
 ## Related
 
-- DocCardGroup` — the frame and grid this is a cell of; a card outside one has no cell ring.
-- DocItem` — the row counterpart. A card claims a whole tile; a row claims one line.
+- `DocCardGroup` — the frame and grid this is a cell of; a card outside one has no cell ring.
+- `DocItem` — the row counterpart. A card claims a whole tile; a row claims one line.
 
 ## Props
 

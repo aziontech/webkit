@@ -8,9 +8,9 @@
   "Footnotes in documentation → `doc-prose` conventions."
  ],
  "related": [
-  "sources` — the list citations point at.",
-  "streaming-response` — renders citations from `[n]` in Markdown.",
-  "tooltip` — shows the source title."
+  "`sources` — the list citations point at.",
+  "`streaming-response` — renders citations from `[n]` in Markdown.",
+  "`tooltip` — shows the source title."
  ],
  "bestPractices": [
   "Number in order of first use: [1], [2], [3].",

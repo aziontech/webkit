@@ -18,8 +18,8 @@
   "For a checklist entry or a feature bullet — a step claims an order and a number."
  ],
  "related": [
-  "DocSteps` — the sibling root that numbers this; it provides the context this step registers with.",
-  "DocProse` — the step heading marks itself `data-doc-chrome`, so prose rules stop at its edge."
+  "`DocSteps` — the sibling root that numbers this; it provides the context this step registers with.",
+  "`DocProse` — the step heading marks itself `data-doc-chrome`, so prose rules stop at its edge."
  ],
  "bestPractices": [
   "Lead the title with the verb and keep it to one line of instruction.",
@@ -48,7 +48,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocStep from '@aziontech/webkit/doc-step'\n  import DocSteps from '@aziontech/webkit/doc-steps'\n</script>\n\n<template>\n  <DocSteps>\n    <DocStep title=\"Install the CLI.\">\n      <p>Download the binary for your system and add it to your path.</p>\n    </DocStep>\n    <DocStep title=\"Log in.\">\n      <p>Run the login command and paste the token from your account settings.</p>\n    </DocStep>\n    <DocStep title=\"Deploy the project.\" />\n  </DocSteps>\n</template>"
+   "file": "examples/doc-step/default.vue"
   }
  ],
  "docs": "components/doc-step.md"

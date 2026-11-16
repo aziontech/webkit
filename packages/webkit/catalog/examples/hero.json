@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "The band spans the window; its copy stays on the page’s measure.",
-   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero max-width=\"7xl\">\n    <Hero.Title\n      align=\"center\"\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n      description=\"Run closer to users with low-latency delivery and stable routing.\"\n    />\n  </Hero>\n</template>"
+   "file": "examples/hero/default.vue"
   },
   {
    "name": "Widths",
    "summary": "Three caps in one view — a width only reads against another.",
-   "sfc": "<script setup>\n  import HeroRoot from '@aziontech/webkit/hero-root'\n</script>\n\n<template>\n  <div>\n    <HeroRoot max-width=\"4xl\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">4xl</p>\n    </HeroRoot>\n    <HeroRoot max-width=\"7xl\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">7xl</p>\n    </HeroRoot>\n    <HeroRoot max-width=\"full\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">full</p>\n    </HeroRoot>\n  </div>\n</template>"
+   "file": "examples/hero/widths.vue"
   },
   {
    "name": "Screen",
    "summary": "With `variant=\"screen\"` the band measures one viewport, minus whatever `--hero-banner-offset` a sticky bar above it declares.",
-   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero\n    variant=\"screen\"\n    max-width=\"site\"\n  >\n    <Hero.Title\n      align=\"center\"\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n    />\n  </Hero>\n</template>"
+   "file": "examples/hero/screen.vue"
   }
  ]
 }

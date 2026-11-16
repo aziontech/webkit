@@ -4,7 +4,7 @@
 
 - Import: `import PhoneInput from '@aziontech/webkit/phone-input'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [phone-input.json](https://github.com/aziontech/webkit/blob/main/.specs/phone-input.json)
+- API as JSON: [phone-input.json](phone-input.json)
 
 ## When to use
 
@@ -14,10 +14,10 @@
 ## Do
 
 - Put it in a `Field` with a `Field.Label`; the label targets the tel input.
-- v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.
+- `v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.
 - Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
-- v-model:country` defaults to `'US'`; seed it with the user's country when you know it.
-- searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
+- `v-model:country` defaults to `'US'`; seed it with the user's country when you know it.
+- `searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
 
 ## Don’t
 

@@ -22,9 +22,9 @@
   "For articles with images → use `article-cards`."
  ],
  "related": [
-  "carousel` — the primitive this band composes; reach for it directly only for a non-card row.",
-  "capability-grid` — the same content as a static, fully visible grid.",
-  "process-scroll` — numbered dark cards, pinned on scroll with `pinned`."
+  "`carousel` — the primitive this band composes; reach for it directly only for a non-card row.",
+  "`capability-grid` — the same content as a static, fully visible grid.",
+  "`process-scroll` — numbered dark cards, pinned on scroll with `pinned`."
  ],
  "bestPractices": [
   "Give the band a `title`; its arrows sit on the title row, and the title names the row for assistive technology.",
@@ -84,11 +84,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CardCarousel from '@aziontech/webkit/card-carousel'\n\n  const items = [\n    {\n      eyebrow: 'E-commerce',\n      title: 'E-commerce product image optimization',\n      description:\n        'Optimize product images for faster page loads and better conversion rates. Automatically deliver responsive images at the right size and format for each device.',\n      href: '/docs/products/build/applications/image-processor',\n      linkLabel: 'See example'\n    },\n    {\n      eyebrow: 'Media',\n      title: 'News and media site responsive images',\n      description:\n        'Deliver optimized images for news articles and media content that load instantly on any device. Automatic format conversion ensures the best experience.',\n      href: '/docs/products/build/applications/image-processor',\n      linkLabel: 'See example'\n    },\n    {\n      eyebrow: 'UGC',\n      title: 'User-generated content optimization',\n      description:\n        'Optimize user-uploaded images on-the-fly from your storage. Apply consistent sizing, quality, and format standards without preprocessing.',\n      href: '/docs/products/build/applications/image-processor',\n      linkLabel: 'See example'\n    },\n    {\n      eyebrow: 'Marketplace',\n      title: 'Marketplace listing thumbnails',\n      description:\n        'Crop and compress every seller photo to the same frame and quality, whatever size it was uploaded at.',\n      href: '/docs/products/build/applications/image-processor',\n      linkLabel: 'See example'\n    },\n    {\n      eyebrow: 'SaaS',\n      title: 'Avatars and workspace logos',\n      description:\n        'Resize profile pictures and logos for every place your product shows them, from one original in your bucket.',\n      href: '/docs/products/build/applications/image-processor',\n      linkLabel: 'See example'\n    },\n    {\n      eyebrow: 'Travel',\n      title: 'Destination galleries',\n      description:\n        'Serve large hotel and destination photos as WebP or AVIF, so galleries stay sharp without slowing the booking flow.',\n      href: '/docs/products/build/applications/image-processor',\n      linkLabel: 'See example'\n    }\n  ]\n</script>\n\n<template>\n  <CardCarousel\n    title=\"See how to use\"\n    :items=\"items\"\n  />\n</template>"
+   "file": "examples/card-carousel/default.vue"
   },
   {
    "name": "Plain cards",
-   "sfc": "<script setup>\n  import CardCarousel from '@aziontech/webkit/card-carousel'\n\n  const items = [\n    {\n      title: 'E-commerce and retail platforms',\n      description:\n        'Handle peak shopping events and flash sales without downtime. Distribute traffic across multiple origins to keep checkout fast.'\n    },\n    {\n      title: 'Media streaming and content delivery',\n      description:\n        'Deliver video and audio with low latency and high availability, balancing traffic across CDN origins and streaming servers.'\n    },\n    {\n      title: 'Financial services and banking',\n      description:\n        'Keep transaction processing reliable with automated failover, distributing API traffic across multiple data centers.'\n    },\n    {\n      title: 'SaaS and API platforms',\n      description:\n        'Spread tenant traffic across regions and origins, and route around an unhealthy origin before customers notice.'\n    },\n    {\n      title: 'Gaming and interactive applications',\n      description:\n        'Hold sessions on the same origin with persistence, while the rest of the traffic scales out across healthy servers.'\n    }\n  ]\n</script>\n\n<template>\n  <CardCarousel\n    eyebrow=\"Industries\"\n    title=\"Optimize traffic distribution across industries\"\n    :items=\"items\"\n  />\n</template>"
+   "file": "examples/card-carousel/plain.vue"
   }
  ],
  "docs": "components/card-carousel.md"

@@ -4,7 +4,7 @@
 
 - Import: `import CustomerUseCases from '@aziontech/webkit/customer-use-cases'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [customer-use-cases.json](https://github.com/aziontech/webkit/blob/main/.specs/customer-use-cases.json)
+- API as JSON: [customer-use-cases.json](customer-use-cases.json)
 
 ## When to use
 

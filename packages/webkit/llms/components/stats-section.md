@@ -4,7 +4,7 @@
 
 - Import: `import StatsSection from '@aziontech/webkit/stats-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [stats-section.json](https://github.com/aziontech/webkit/blob/main/.specs/stats-section.json)
+- API as JSON: [stats-section.json](stats-section.json)
 
 ## When to use
 

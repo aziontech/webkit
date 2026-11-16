@@ -4,7 +4,7 @@
 
 - Import: `import Quote from '@aziontech/webkit/quote'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [quote.json](https://github.com/aziontech/webkit/blob/main/.specs/quote.json)
+- API as JSON: [quote.json](quote.json)
 
 ## When to use
 

@@ -9,8 +9,8 @@
   "A confirmation with no input → `ConfirmDialog`."
  ],
  "related": [
-  "chat-message` — `ChatMessage.Feedback` holds the thumbs that open it.",
-  "confirm-dialog` — the same dialog anatomy for a yes/no decision."
+  "`chat-message` — `ChatMessage.Feedback` holds the thumbs that open it.",
+  "`confirm-dialog` — the same dialog anatomy for a yes/no decision."
  ],
  "bestPractices": [
   "Open it only after a thumbs-down; a thumbs-up needs no reason.",

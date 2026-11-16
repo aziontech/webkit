@@ -4,7 +4,7 @@
 
 - Import: `import MediaTabs from '@aziontech/webkit/media-tabs'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [media-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/media-tabs.json)
+- API as JSON: [media-tabs.json](media-tabs.json)
 
 ## When to use
 

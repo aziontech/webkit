@@ -4,7 +4,7 @@
 
 - Import: `import PricingPlans from '@aziontech/webkit/pricing-plans'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [pricing-plans.json](https://github.com/aziontech/webkit/blob/main/.specs/pricing-plans.json)
+- API as JSON: [pricing-plans.json](pricing-plans.json)
 
 ## When to use
 

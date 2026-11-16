@@ -15,10 +15,10 @@
   "For a moving strip of many small marks, such as a tool stack → use `marquee`."
  ],
  "related": [
-  "card-grid` — the frame register the wall is built on; its cells draw the rules and marks.",
-  "quote` — one named customer's statement; the wall shows many without words.",
-  "stats` — the numeric form of the same proof band.",
-  "brand` — the product's own mark, not a customer's."
+  "`card-grid` — the frame register the wall is built on; its cells draw the rules and marks.",
+  "`quote` — one named customer's statement; the wall shows many without words.",
+  "`stats` — the numeric form of the same proof band.",
+  "`brand` — the product's own mark, not a customer's."
  ],
  "bestPractices": [
   "Place the wall inside a `registration-frame` (in a `section-module`, as every framed band is). The grid is `card-grid`'s `flush` frame: the surrounding frame draws the outer rules and the cells lay their right and bottom rules onto it.",

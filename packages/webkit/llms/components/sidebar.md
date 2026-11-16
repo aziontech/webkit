@@ -5,7 +5,7 @@
 - Import: `import SidebarRoot from '@aziontech/webkit/sidebar-root'`
 - Compound import (dot notation, not tree-shakeable): `import Sidebar from '@aziontech/webkit/sidebar'`
 - Category: layout · Surface: app · Structure: composition
-- API as JSON: [sidebar.json](https://github.com/aziontech/webkit/blob/main/.specs/sidebar.json)
+- API as JSON: [sidebar.json](sidebar.json)
 
 ## When to use
 

@@ -4,7 +4,7 @@
 
 - Import: `import DonutChart from '@aziontech/webkit/donut-chart'`
 - Category: chart · Surface: app · Structure: monolithic
-- API as JSON: [donut-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/donut-chart.json)
+- API as JSON: [donut-chart.json](donut-chart.json)
 
 ## When to use
 
@@ -63,7 +63,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `center` | { total: number; active: ChartSeries | null }` \| Replaces the center readout. |
+| `center` | `{ total: number; active: ChartSeries | null }` \| Replaces the center readout. |
 | `empty` | — | Replaces the default EmptyState. |
 | `empty-actions` | — | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
 | `error` | — | Replaces the default danger Alert. |

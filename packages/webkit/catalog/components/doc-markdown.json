@@ -12,14 +12,14 @@
   "Code with no prose around it → `CodeBlock` or `DocCodeGroup`."
  ],
  "related": [
-  "DocProse` — wrap this component in it; it owns the type scale, the block rhythm and the copyable inline code chips.",
-  "DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.",
-  "DocLayout`, `DocOnThisPage` — take `parseDocMarkdown(source).headings` as `outline` / `items`.",
-  "DocPageHeader` — takes the frontmatter's `title` and `description`.",
-  "DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.",
-  "HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.",
-  "RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.",
-  "StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have."
+  "`DocProse` — wrap this component in it; it owns the type scale, the block rhythm and the copyable inline code chips.",
+  "`DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.",
+  "`DocLayout`, `DocOnThisPage` — take `parseDocMarkdown(source).headings` as `outline` / `items`.",
+  "`DocPageHeader` — takes the frontmatter's `title` and `description`.",
+  "`DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.",
+  "`HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.",
+  "`RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.",
+  "`StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have."
  ],
  "bestPractices": [
   "Wrap it in `DocProse` and pass the page's headings to the layout from the same source: `const { headings, frontmatter } = parseDocMarkdown(source)`.",

@@ -4,7 +4,7 @@
 
 - Import: `import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [architecture-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/architecture-tabs.json)
+- API as JSON: [architecture-tabs.json](architecture-tabs.json)
 
 ## When to use
 

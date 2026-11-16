@@ -4,7 +4,7 @@
 
 - Import: `import Tracker from '@aziontech/webkit/tracker'`
 - Category: chart · Surface: app · Structure: monolithic
-- API as JSON: [tracker.json](https://github.com/aziontech/webkit/blob/main/.specs/tracker.json)
+- API as JSON: [tracker.json](tracker.json)
 
 ## When to use
 

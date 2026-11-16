@@ -21,9 +21,9 @@
   "More than five options → let the reader type; the prompt input stays available."
  ],
  "related": [
-  "prompt-input` — the open-ended alternative that must stay reachable.",
-  "empty-state` — hosts the vertical support prompts before the first message.",
-  "chip`, `button` — visual cousins; prompts are their own control because they send text."
+  "`prompt-input` — the open-ended alternative that must stay reachable.",
+  "`empty-state` — hosts the vertical support prompts before the first message.",
+  "`chip`, `button` — visual cousins; prompts are their own control because they send text."
  ],
  "bestPractices": [
   "Five or fewer, ordered by likelihood.",
@@ -51,7 +51,7 @@
    "type": "'horizontal' | 'vertical'",
    "default": "'horizontal'",
    "required": "false",
-   "doc": "horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation)."
+   "doc": "`horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation)."
   },
   {
    "name": "disabled",
@@ -74,11 +74,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n  import { ref } from 'vue'\n\n  const sent = ref('')\n  const items = [\n    { id: 'ttl', label: 'What TTL should my images use?' },\n    { id: 'wildcard', label: 'How do I purge a whole folder?' },\n    { id: 'origin', label: 'Why does the origin still get requests?' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <SuggestionGroup\n      :items=\"items\"\n      aria-label=\"Follow-up questions\"\n      @select=\"(event, item) => (sent = item.label)\"\n    />\n    <p\n      v-if=\"sent\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      Sent: {{ sent }}\n    </p>\n  </div>\n</template>"
+   "file": "examples/suggestion-group/default.vue"
   },
   {
    "name": "SupportPrompts",
-   "sfc": "<script setup>\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n\n  const items = [\n    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },\n    { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' },\n    { id: 'cache', label: 'Explain why my cache hit ratio dropped', icon: 'ai ai-chart-line' },\n    { id: 'domain', label: 'Point my domain to a workload', icon: 'ai ai-globe' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-sm)\">\n    <SuggestionGroup\n      :items=\"items\"\n      orientation=\"vertical\"\n    />\n  </div>\n</template>"
+   "file": "examples/suggestion-group/support-prompts.vue"
   }
  ],
  "docs": "components/suggestion-group.md"

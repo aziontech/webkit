@@ -22,10 +22,10 @@
   "A promotional band between page sections → use `call-to-action` with `variant=\"announcement\"`."
  ],
  "related": [
-  "toast` — overlay stack raised imperatively, auto-dismissing and not anchored to content.",
-  "field-error` — field-level guidance and errors below an input.",
-  "doc-callout` — docs admonition rendered on the `Alert` surface.",
-  "empty-state` — a full zero-data block, not a status banner."
+  "`toast` — overlay stack raised imperatively, auto-dismissing and not anchored to content.",
+  "`field-error` — field-level guidance and errors below an input.",
+  "`doc-callout` — docs admonition rendered on the `Alert` surface.",
+  "`empty-state` — a full zero-data block, not a status banner."
  ],
  "bestPractices": [
   "Pick `severity` by meaning. `danger` and `warning` render with `role=\"alert\"`.",
@@ -127,15 +127,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <Alert\n    severity=\"info\"\n    label=\"Your workload finished deploying in 42 seconds.\"\n    action-label=\"Label\"\n  />\n</template>"
+   "file": "examples/alert/default.vue"
   },
   {
    "name": "Severities",
-   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-4\">\n    <Alert\n      severity=\"info\"\n      label=\"Your workload finished deploying in 42 seconds.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"success\"\n      label=\"The certificate was issued and is now serving traffic.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"warning\"\n      label=\"This edge function is close to its execution time limit.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"danger\"\n      label=\"The last deploy failed before reaching the edge.\"\n      action-label=\"Label\"\n    />\n  </div>\n</template>"
+   "file": "examples/alert/severities.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-4\">\n    <Alert\n      severity=\"info\"\n      size=\"small\"\n      label=\"A small note.\"\n    />\n    <Alert\n      severity=\"info\"\n      size=\"medium\"\n      label=\"A medium note.\"\n    />\n  </div>\n</template>"
+   "file": "examples/alert/sizes.vue"
   }
  ],
  "docs": "components/alert.md"

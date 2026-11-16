@@ -8,8 +8,8 @@
   "For a grid of product use cases → use `customer-use-cases`."
  ],
  "related": [
-  "feature-item` — each self-serve channel is a linked topic.",
-  "customer-use-cases` — the sibling band of icon-led topics."
+  "`feature-item` — each self-serve channel is a linked topic.",
+  "`customer-use-cases` — the sibling band of icon-led topics."
  ],
  "bestPractices": [
   "Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.",

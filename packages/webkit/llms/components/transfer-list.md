@@ -5,7 +5,7 @@
 - Import: `import TransferListRoot from '@aziontech/webkit/transfer-list-root'`
 - Compound import (dot notation, not tree-shakeable): `import TransferList from '@aziontech/webkit/transfer-list'`
 - Category: data · Surface: app · Structure: composition
-- API as JSON: [transfer-list.json](https://github.com/aziontech/webkit/blob/main/.specs/transfer-list.json)
+- API as JSON: [transfer-list.json](transfer-list.json)
 
 ## When to use
 

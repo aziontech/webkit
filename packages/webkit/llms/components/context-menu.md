@@ -5,7 +5,7 @@
 - Import: `import ContextMenuRoot from '@aziontech/webkit/context-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import ContextMenu from '@aziontech/webkit/context-menu'`
 - Category: navigation · Surface: app · Structure: composition
-- API as JSON: [context-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/context-menu.json)
+- API as JSON: [context-menu.json](context-menu.json)
 
 ## When to use
 
@@ -19,7 +19,7 @@
 - Mirror the visible row-actions menu; a context menu adds speed, never exclusive actions.
 - Keep it short (under about ten items), group with `ContextMenu.Group`, and put destructive actions in their own last group.
 - Give the panel a name with `aria-label` when the target is not obvious from focus (for example `aria-label="Actions for production"`).
-- disabled` gives the area back to the browser's native menu.
+- `disabled` gives the area back to the browser's native menu.
 
 ## Don’t
 

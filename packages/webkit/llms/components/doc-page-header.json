@@ -20,9 +20,9 @@
   "The documentation home → use `DocHero` (display title, `Get started` and `CopyPromptButton`), then `DocAgentCard`."
  ],
  "related": [
-  "DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.",
-  "DocOnThisPage` — the rail beside the body, which lists those `h2`s.",
-  "Button` / `Tooltip` / `Separator` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them."
+  "`DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.",
+  "`DocOnThisPage` — the rail beside the body, which lists those `h2`s.",
+  "`Button` / `Tooltip` / `Separator` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them."
  ],
  "bestPractices": [
   "Give every `metaActions` entry a `tip`: two or three words name a control, and only a sentence says what it does.",
@@ -102,15 +102,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocPageHeader from '@aziontech/webkit/doc-page-header'\n</script>\n\n<template>\n  <DocPageHeader\n    title=\"Deploy an application\"\n    description=\"Go from a template to a live edge application in a few clicks.\"\n    :breadcrumbs=\"[{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]\"\n    last-updated=\"2026-06-30\"\n    :meta-actions=\"[\n      {\n        value: 'copy',\n        label: 'Copy as Markdown',\n        icon: 'ai ai-copy',\n        tip: 'Copy this page as Markdown, ready to paste into an assistant.'\n      },\n      {\n        value: 'markdown',\n        label: 'View as Markdown',\n        icon: 'ai ai-eye',\n        tip: 'Open this page as plain Markdown in a new tab.'\n      },\n      {\n        value: 'agent-setup',\n        label: 'Agent setup',\n        icon: 'ai ai-microchip-ai',\n        href: '/docs/agent-setup',\n        tip: 'Set up your coding agent to build on Azion.'\n      }\n    ]\"\n  />\n</template>"
+   "file": "examples/doc-page-header/default.vue"
   },
   {
    "name": "Actions",
-   "sfc": "<script setup>\n  import DocPageHeader from '@aziontech/webkit/doc-page-header'\n\n  const onActionClick = (event, action) => action\n</script>\n\n<template>\n  <DocPageHeader\n    title=\"Deploy an application\"\n    description=\"Three entries, three shapes: a button that acts on the page, an in-app link, and a link that leaves the documentation.\"\n    last-updated=\"2026-06-30\"\n    :meta-actions=\"[\n      {\n        value: 'copy',\n        label: 'Copy as Markdown',\n        icon: 'ai ai-copy',\n        tip: 'Copy this page as Markdown, ready to paste into an assistant.'\n      },\n      {\n        value: 'agent-setup',\n        label: 'Agent setup',\n        icon: 'ai ai-microchip-ai',\n        href: '/docs/agent-setup',\n        tip: 'Set up your coding agent to build on Azion.'\n      },\n      {\n        value: 'source',\n        label: 'Edit this page',\n        icon: 'ai ai-pencil',\n        href: 'https://github.com/aziontech/azion-docs',\n        target: '_blank',\n        tip: 'Open this page in the repository and propose a change.'\n      }\n    ]\"\n    @action-click=\"onActionClick\"\n  />\n</template>"
+   "file": "examples/doc-page-header/actions.vue"
   },
   {
    "name": "Regions",
-   "sfc": "<script setup>\n  import DocPageHeader from '@aziontech/webkit/doc-page-header'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <DocPageHeader\n      title=\"No breadcrumb\"\n      description=\"The trail is optional; the masthead closes up rather than leaving a gap.\"\n      last-updated=\"2026-06-30\"\n    />\n    <DocPageHeader\n      title=\"No deck\"\n      :breadcrumbs=\"[{ label: 'Docs', href: '/docs' }, { label: 'No deck' }]\"\n      last-updated=\"Updated this morning\"\n    />\n    <DocPageHeader\n      title=\"No date\"\n      description=\"Without a date the belt starts the line, and the line is pulled left by one step so the first label lands on the column the title and deck start on.\"\n      :meta-actions=\"[\n        {\n          value: 'copy',\n          label: 'Copy as Markdown',\n          icon: 'ai ai-copy',\n          tip: 'Copy this page as Markdown, ready to paste into an assistant.'\n        },\n        {\n          value: 'markdown',\n          label: 'View as Markdown',\n          icon: 'ai ai-eye',\n          tip: 'Open this page as plain Markdown in a new tab.'\n        }\n      ]\"\n    />\n    <DocPageHeader\n      title=\"Nothing to do with it\"\n      description=\"No date and no entries: the meta line renders no element at all.\"\n    />\n  </div>\n</template>"
+   "file": "examples/doc-page-header/regions.vue"
   }
  ],
  "docs": "components/doc-page-header.md"

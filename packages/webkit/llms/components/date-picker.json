@@ -23,13 +23,13 @@
   "A duration or count (retention days, TTL) rather than a date → use `number-input`."
  ],
  "related": [
-  "date-range-picker` — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time=\"false\"`. It is built on this component's grid, fields and time zone selector.",
-  "timestamp` — shows a moment in time in the app's time zone.",
-  "field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
-  "input` — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side."
+  "`date-range-picker` — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time=\"false\"`. It is built on this component's grid, fields and time zone selector.",
+  "`timestamp` — shows a moment in time in the app's time zone.",
+  "`field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
+  "`input` — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side."
  ],
  "bestPractices": [
-  "modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
+  "`modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
   "Bind a `Date` or `null`.",
   "Bound the selectable days with `min` and `max` instead of validating after commit.",
   "Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label."
@@ -184,15 +184,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DatePickerRoot from '@aziontech/webkit/date-picker-root'\n  import { ref } from 'vue'\n\n  const date = ref(null)\n</script>\n\n<template>\n  <DatePickerRoot\n    v-model=\"date\"\n    aria-label=\"Start date\"\n  />\n</template>"
+   "file": "examples/date-picker/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import DatePickerRoot from '@aziontech/webkit/date-picker-root'\n  import { ref } from 'vue'\n\n  const date = ref(new Date(2026, 9, 8))\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-start gap-4\">\n    <DatePickerRoot\n      v-model=\"date\"\n      size=\"small\"\n    />\n    <DatePickerRoot\n      v-model=\"date\"\n      size=\"medium\"\n    />\n    <DatePickerRoot\n      v-model=\"date\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+   "file": "examples/date-picker/sizes.vue"
   },
   {
    "name": "Horizontal",
-   "sfc": "<script setup>\n  import DatePickerRoot from '@aziontech/webkit/date-picker-root'\n  import { ref } from 'vue'\n\n  const date = ref(null)\n</script>\n\n<template>\n  <DatePickerRoot\n    v-model=\"date\"\n    orientation=\"horizontal\"\n    clearable\n    show-time\n  />\n</template>"
+   "file": "examples/date-picker/horizontal.vue"
   }
  ],
  "docs": "components/date-picker.md"

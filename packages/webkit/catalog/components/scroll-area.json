@@ -10,9 +10,9 @@
   "It is a code sample → use `code-block`, which already scrolls its lines."
  ],
  "related": [
-  "sidebar` — scrolls its navigation inside a built-in ScrollArea.",
-  "code-block` — runs its code lines in a ScrollArea with `orientation=\"both\"`.",
-  "resizable` — draggable regions; each pane can hold a ScrollArea."
+  "`sidebar` — scrolls its navigation inside a built-in ScrollArea.",
+  "`code-block` — runs its code lines in a ScrollArea with `orientation=\"both\"`.",
+  "`resizable` — draggable regions; each pane can hold a ScrollArea."
  ],
  "bestPractices": [
   "Give it a bounded height, or a flex parent that constrains it. Without a limit the content never overflows and nothing scrolls.",

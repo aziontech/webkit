@@ -4,7 +4,7 @@
 
 - Import: `import SectionStack from '@aziontech/webkit/section-stack'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [section-stack.json](https://github.com/aziontech/webkit/blob/main/.specs/section-stack.json)
+- API as JSON: [section-stack.json](section-stack.json)
 
 ## When to use
 

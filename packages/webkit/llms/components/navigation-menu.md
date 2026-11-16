@@ -5,7 +5,7 @@
 - Import: `import NavigationMenuRoot from '@aziontech/webkit/navigation-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import NavigationMenu from '@aziontech/webkit/navigation-menu'`
 - Category: navigation · Surface: app · Structure: composition
-- API as JSON: [navigation-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/navigation-menu.json)
+- API as JSON: [navigation-menu.json](navigation-menu.json)
 
 ## When to use
 
@@ -25,7 +25,7 @@
 - Test ids: root fallback `navigation-menu` (its own name); every part uses its own name (`navigation-menu-list`, `navigation-menu-item`, `navigation-menu-trigger` with its chevron `navigation-menu__icon`, `navigation-menu-content`, `navigation-menu-viewport` and the viewport's inner `__portal`, `__positioner`, `__popup`, `__arrow`, `__backdrop`), and a consumer `data-testid` wins on every part; one set on the `Viewport` lands on its popup.
 - Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.
 - The compound has the shadcn parts only: `List`, `Item`, `Trigger`, `Content`, `Link`, `Viewport`. 6.0 folded the Base UI overlay chain (`Portal`, `Positioner`, `Popup`, `Arrow`, `Backdrop`) into `Viewport` props, and the `Icon` part into the trigger, which renders its own chevron.
-- NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop.
+- `NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop.
 
 ## Don’t
 

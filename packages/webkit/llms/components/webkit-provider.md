@@ -4,7 +4,7 @@
 
 - Import: `import WebkitProvider from '@aziontech/webkit/webkit-provider'`
 - Category: provider · Surface: app · Structure: monolithic
-- API as JSON: [webkit-provider.json](https://github.com/aziontech/webkit/blob/main/.specs/webkit-provider.json)
+- API as JSON: [webkit-provider.json](webkit-provider.json)
 
 ## When to use
 
@@ -30,7 +30,7 @@
 
 ## Related
 
-- use-locale` — the composable components use to read the active locale, translate a key and format with `Intl`; use it in your own components to match WebKit's formatting.
+- `use-locale` — the composable components use to read the active locale, translate a key and format with `Intl`; use it in your own components to match WebKit's formatting.
 - [pagination](pagination.md) — reads its labels and the "Showing x to y of z" line from the catalog.
 - [confirm-dialog](confirm-dialog.md) — reads Confirm and Cancel from the catalog when no label is passed.
 

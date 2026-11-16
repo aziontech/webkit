@@ -5,7 +5,7 @@
 - Import: `import CommandRoot from '@aziontech/webkit/command-root'`
 - Compound import (dot notation, not tree-shakeable): `import Command from '@aziontech/webkit/command'`
 - Category: overlay · Surface: app · Structure: composition
-- API as JSON: [command.json](https://github.com/aziontech/webkit/blob/main/.specs/command.json)
+- API as JSON: [command.json](command.json)
 
 ## When to use
 

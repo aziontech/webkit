@@ -4,7 +4,7 @@
 
 - Import: `import Backdrop from '@aziontech/webkit/backdrop'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [backdrop.json](https://github.com/aziontech/webkit/blob/main/.specs/backdrop.json)
+- API as JSON: [backdrop.json](backdrop.json)
 
 ## When to use
 
@@ -24,10 +24,10 @@
 
 ## Related
 
-- Hero` — the `background` slot it fills.
-- NetworkMap`, `SpinningGlobe` — what it draws.
-- Texture` — the dot lattice.
-- Banner` — the announcement band (unrelated surface).
+- `Hero` — the `background` slot it fills.
+- `NetworkMap`, `SpinningGlobe` — what it draws.
+- `Texture` — the dot lattice.
+- `Banner` — the announcement band (unrelated surface).
 
 ## Props
 

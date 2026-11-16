@@ -19,9 +19,9 @@
   "As a general-purpose layout grid for application screens; it is documentation chrome, tied to the `DocProse` ladder."
  ],
  "related": [
-  "DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.",
-  "RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.",
-  "DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder."
+  "`DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.",
+  "`RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.",
+  "`DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder."
  ],
  "bestPractices": [
   "Pick `columns` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.",
@@ -57,11 +57,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocCard from '@aziontech/webkit/doc-card'\n  import DocCardGroup from '@aziontech/webkit/doc-card-group'\n</script>\n\n<template>\n  <DocCardGroup :columns=\"2\">\n    <DocCard\n      title=\"Start from a template\"\n      icon=\"ai ai-layout-grid\"\n      href=\"#templates\"\n    >\n      Ready-made projects that go live in a few clicks. No local tooling.\n    </DocCard>\n    <DocCard\n      title=\"Import from GitHub\"\n      icon=\"ai ai-github\"\n      href=\"#github\"\n    >\n      Connect a repository and let Azion build it on every push.\n    </DocCard>\n  </DocCardGroup>\n</template>"
+   "file": "examples/doc-card-group/default.vue"
   },
   {
    "name": "Columns",
-   "sfc": "<script setup>\n  import DocCard from '@aziontech/webkit/doc-card'\n  import DocCardGroup from '@aziontech/webkit/doc-card-group'\n</script>\n\n<template>\n  <DocCardGroup :columns=\"3\">\n    <DocCard\n      title=\"Start from a template\"\n      icon=\"ai ai-layout-grid\"\n      href=\"#templates\"\n    >\n      Ready-made projects that go live in a few clicks. No local tooling.\n    </DocCard>\n    <DocCard\n      title=\"Import from GitHub\"\n      icon=\"ai ai-github\"\n      href=\"#github\"\n    >\n      Connect a repository and let Azion build it on every push.\n    </DocCard>\n    <DocCard\n      title=\"Deploy with the CLI\"\n      icon=\"ai ai-desktop\"\n      href=\"#cli\"\n    >\n      Ship the project already open in your editor.\n    </DocCard>\n  </DocCardGroup>\n</template>"
+   "file": "examples/doc-card-group/columns.vue"
   }
  ],
  "docs": "components/doc-card-group.md"

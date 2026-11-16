@@ -22,8 +22,8 @@
   "For copy beside one piece of media in a hand-built SFC that needs the `media` slot → use `media-split`."
  ],
  "related": [
-  "media-split` — the band primitive the section is rendered with.",
-  "media-split-stack-section` — the stacked sibling for a run of claims."
+  "`media-split` — the band primitive the section is rendered with.",
+  "`media-split-stack-section` — the stacked sibling for a run of claims."
  ],
  "bestPractices": [
   "Give the band exactly one media: `scene`, `codeTabs`, `widget` (a `ConsoleMockup` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.",
@@ -112,7 +112,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "value` of the code tab open first; empty, or a value no tab carries, opens the first tab."
+   "doc": "`value` of the code tab open first; empty, or a value no tab carries, opens the first tab."
   },
   {
    "name": "copyAriaLabel",
@@ -187,15 +187,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import MediaSplitSection from '@aziontech/webkit/media-split-section'\n</script>\n\n<template>\n  <MediaSplitSection\n    eyebrow=\"Our values\"\n    title=\"Four values shape every role at Azion\"\n    description=\"Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers.\"\n    size=\"large\"\n    :scene=\"{ component: 'BrandGlobeScene' }\"\n  />\n</template>"
+   "file": "examples/media-split-section/default.vue"
   },
   {
    "name": "Product media",
-   "sfc": "<script setup>\n  import MediaSplitSection from '@aziontech/webkit/media-split-section'\n</script>\n\n<template>\n  <MediaSplitSection\n    eyebrow=\"Real-Time Events\"\n    title=\"Filter every request as it happens\"\n    description=\"Narrow the event stream by status, path or country, and read the matching requests seconds after they arrive.\"\n    widget=\"real-time-events-filter\"\n    :primary-action=\"{\n      label: 'Learn more',\n      href: '/en/products/real-time-events/',\n      trailing: true\n    }\"\n  />\n  <MediaSplitSection\n    eyebrow=\"Cache\"\n    title=\"Serve repeat requests from the nearest location\"\n    description=\"Cached responses never travel back to your origin, so it handles a fraction of the traffic.\"\n    diagram=\"cache\"\n  />\n</template>"
+   "file": "examples/media-split-section/product-media.vue"
   },
   {
    "name": "Code",
-   "sfc": "<script setup>\n  import MediaSplitSection from '@aziontech/webkit/media-split-section'\n\n  const codeTabs = [\n    {\n      label: 'cache-settings.json',\n      value: 'cache-settings',\n      language: 'json',\n      code: '{\\n  \"cache_settings\": {\\n    \"name\": \"api-cache\",\\n    \"browser_cache_settings\": {\\n      \"ttl\": 60\\n    },\\n    \"cdn_cache_settings\": {\\n      \"ttl\": 30\\n    },\\n    \"cache_key\": {\\n      \"query_string\": \"whitelist\",\\n      \"query_string_fields\": [\"user_id\", \"category\"],\\n      \"cookie\": \"whitelist\",\\n      \"cookie_names\": [\"session_id\", \"region\"]\\n    },\\n    \"methods\": [\"GET\", \"POST\", \"OPTIONS\"],\\n    \"stale_cache\": true\\n  }\\n}',\n      fileName: 'cache-settings.json',\n      fileIcon: 'ai ai-json'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Learn more',\n    href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',\n    trailing: true,\n    variant: 'ghost'\n  }\n</script>\n\n<template>\n  <MediaSplitSection\n    title=\"From basic caching to advanced acceleration\"\n    description=\"Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.\"\n    :code-tabs=\"codeTabs\"\n    copy-aria-label=\"Copy the cache settings sample\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+   "file": "examples/media-split-section/code.vue"
   }
  ],
  "docs": "components/media-split-section.md"

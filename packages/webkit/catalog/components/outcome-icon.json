@@ -11,9 +11,9 @@
   "A message with text and actions → use `alert` or `toast`."
  ],
  "related": [
-  "status-indicator` — a coloured dot with a label, for live states.",
-  "tag` — a labelled pill for a state.",
-  "toast` — reports the outcome of an async action wherever the user is."
+  "`status-indicator` — a coloured dot with a label, for live states.",
+  "`tag` — a labelled pill for a state.",
+  "`toast` — reports the outcome of an async action wherever the user is."
  ],
  "bestPractices": [
   "Pair the mark with words that say the same thing; the mark is not the only cue.",

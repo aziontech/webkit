@@ -10,9 +10,9 @@
   "Help text for a form field → use the field's `field-description`."
  ],
  "related": [
-  "tutorial-panel` — the provider holds the steps a hotspot shows; the panel lists and runs the tutorials.",
-  "popover` — the overlay the current step opens in.",
-  "help-panel` — static help without a guided run."
+  "`tutorial-panel` — the provider holds the steps a hotspot shows; the panel lists and runs the tutorials.",
+  "`popover` — the overlay the current step opens in.",
+  "`help-panel` — static help without a guided run."
  ],
  "bestPractices": [
   "Wrap exactly the control the step is about; keep the marker beside it, not inside a long row.",

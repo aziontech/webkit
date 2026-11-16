@@ -13,10 +13,10 @@
   "The choice is submitted with a form instead of applied immediately → use `checkbox`."
  ],
  "related": [
-  "field` — a horizontal `Field` gives the switch its label and description; a `Field.Label` wrapping it is a card-style option.",
-  "input-group` — a text input with a trailing switch addon that enables it, inside a `Field`.",
-  "checkbox` — boolean selection submitted with a form.",
-  "item` — list row whose title names a bare switch."
+  "`field` — a horizontal `Field` gives the switch its label and description; a `Field.Label` wrapping it is a card-style option.",
+  "`input-group` — a text input with a trailing switch addon that enables it, inside a `Field`.",
+  "`checkbox` — boolean selection submitted with a form.",
+  "`item` — list row whose title names a bare switch."
  ],
  "bestPractices": [
   "The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.",

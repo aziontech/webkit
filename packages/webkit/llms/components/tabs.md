@@ -5,7 +5,7 @@
 - Import: `import TabsRoot from '@aziontech/webkit/tabs-root'`
 - Compound import (dot notation, not tree-shakeable): `import Tabs from '@aziontech/webkit/tabs'`
 - Category: navigation · Surface: app · Structure: composition
-- API as JSON: [tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/tabs.json)
+- API as JSON: [tabs.json](tabs.json)
 
 ## When to use
 
@@ -21,8 +21,8 @@
 - Any string or number is a valid `value`, spaces and punctuation included: the tab and panel ids are derived from it with every character outside `A-Z a-z 0-9 -` encoded, so `aria-controls` / `aria-labelledby` stay valid id tokens.
 - Type a variable that holds the active tab or a list of tab definitions with the exported `TabsValue` (`ref<TabsValue>('overview')`), never `string | number` spelled out or a cast.
 - Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
-- closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
-- dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
+- `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
+- `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).
 - Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
 - Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
@@ -45,7 +45,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `defaultValue` | `TabsValue \| null` | `null` | false | Initial active tab when uncontrolled. |
-| `activationMode` | `'automatic' \| 'manual'` | `'automatic'` | false | automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render). |
+| `activationMode` | `'automatic' \| 'manual'` | `'automatic'` | false | `automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render). |
 | `modelValue` | `TabsValue \| null \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Slots

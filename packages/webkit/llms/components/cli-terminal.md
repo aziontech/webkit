@@ -4,7 +4,7 @@
 
 - Import: `import CliTerminal from '@aziontech/webkit/cli-terminal'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [cli-terminal.json](https://github.com/aziontech/webkit/blob/main/.specs/cli-terminal.json)
+- API as JSON: [cli-terminal.json](cli-terminal.json)
 
 ## When to use
 

@@ -11,8 +11,8 @@
   "As a section heading. A callout is an interruption, not structure."
  ],
  "related": [
-  "Alert` — the webkit surface this renders on; reach for it directly outside documentation prose.",
-  "DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder."
+  "`Alert` — the webkit surface this renders on; reach for it directly outside documentation prose.",
+  "`DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder."
  ],
  "bestPractices": [
   "Let the glyph and the tint carry the severity; do not restate it in the copy (\"Warning: …\").",

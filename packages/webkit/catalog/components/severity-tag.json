@@ -10,9 +10,9 @@
   "The user can select or remove the value (a severity filter) → use `chip`."
  ],
  "related": [
-  "tag` — a toned status or category label; use it for outcomes and states, not for an ordered level.",
-  "badge` — a dense count or short-label indicator.",
-  "chip` — an interactive or removable token, for severity filters."
+  "`tag` — a toned status or category label; use it for outcomes and states, not for an ordered level.",
+  "`badge` — a dense count or short-label indicator.",
+  "`chip` — an interactive or removable token, for severity filters."
  ],
  "bestPractices": [
   "Keep the default label (the level name from the locale catalog, translated under `WebkitProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.",

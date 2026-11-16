@@ -4,7 +4,7 @@
 
 - Import: `import SuggestionGroup from '@aziontech/webkit/suggestion-group'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [suggestion-group.json](https://github.com/aziontech/webkit/blob/main/.specs/suggestion-group.json)
+- API as JSON: [suggestion-group.json](suggestion-group.json)
 
 ## When to use
 
@@ -38,7 +38,7 @@
 | --- | --- | --- | --- | --- |
 | `items` | `SuggestionGroupItem[]` | `[]` | false | Up to five prompts, most likely first. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`). |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false | horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation). |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false | `horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation). |
 | `disabled` | `boolean` | `false` | false | Disables every prompt, while a response is being generated. |
 
 ## Events

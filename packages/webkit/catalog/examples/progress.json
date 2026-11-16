@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "Determinate bar at 60%.",
-   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <Progress :value=\"60\" />\n</template>"
+   "file": "examples/progress/default.vue"
   },
   {
    "name": "Shapes",
    "summary": "Both corner-radius variants stacked: `rounded` and `flat`.",
-   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      variant=\"rounded\"\n    />\n    <Progress\n      :value=\"60\"\n      variant=\"flat\"\n    />\n  </div>\n</template>"
+   "file": "examples/progress/shapes.vue"
   },
   {
    "name": "Sizes",
    "summary": "All height tokens stacked: `small`, `medium`, `large`.",
-   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      size=\"small\"\n    />\n    <Progress\n      :value=\"60\"\n      size=\"medium\"\n    />\n    <Progress\n      :value=\"60\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+   "file": "examples/progress/sizes.vue"
   }
  ]
 }

@@ -4,7 +4,7 @@
 
 - Import: `import Illustration from '@aziontech/webkit/illustration'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [illustration.json](https://github.com/aziontech/webkit/blob/main/.specs/illustration.json)
+- API as JSON: [illustration.json](illustration.json)
 
 ## When to use
 
@@ -36,7 +36,7 @@
 - [empty-state](empty-state.md) — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.
 - [flow-diagram](flow-diagram.md) — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.
 - [skeleton](skeleton.md) — the loading placeholder; an illustration is never a loading state.
-- svg/azion/*` — drawn brand marks, for artwork that is not part of the illustration library.
+- `svg/azion/*` — drawn brand marks, for artwork that is not part of the illustration library.
 
 ## Props
 

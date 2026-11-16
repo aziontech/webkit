@@ -4,7 +4,7 @@
 
 - Import: `import ArtifactPreview from '@aziontech/webkit/artifact-preview'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [artifact-preview.json](https://github.com/aziontech/webkit/blob/main/.specs/artifact-preview.json)
+- API as JSON: [artifact-preview.json](artifact-preview.json)
 
 ## When to use
 

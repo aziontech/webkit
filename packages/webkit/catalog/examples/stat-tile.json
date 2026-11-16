@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "Blocked threats rose 12.4 percent. A rise in threats is bad, so the tile sets inverse and the delta reads as a regression.",
-   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <StatTile\n    label=\"Blocked threats\"\n    :value=\"48210\"\n    :delta=\"12.4\"\n    delta-label=\"vs previous 24 hours\"\n    inverse\n    :trend=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n  />\n</template>"
+   "file": "examples/stat-tile/default.vue"
   },
   {
    "name": "Deltas",
    "summary": "A good rise, a bad rise with inverse, a flat change, and no delta at all.",
-   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2 lg:grid-cols-4\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"8.2\"\n      delta-label=\"vs previous 24 hours\"\n    />\n    <StatTile\n      label=\"Blocked threats\"\n      :value=\"48210\"\n      :delta=\"12.4\"\n      delta-label=\"vs previous 24 hours\"\n      inverse\n    />\n    <StatTile\n      label=\"Cache hit ratio\"\n      :value=\"96.2\"\n      unit=\"%\"\n      :delta=\"0\"\n      delta-label=\"vs previous 24 hours\"\n    />\n    <StatTile\n      label=\"Edge locations\"\n      :value=\"120\"\n    />\n  </div>\n</template>"
+   "file": "examples/stat-tile/deltas.vue"
   },
   {
    "name": "Variants",
    "summary": "variant=\"mono\" (default) draws the big-number mono figure of a usage strip; variant=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
-   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"12.4\"\n    />\n    <StatTile\n      variant=\"sans\"\n      label=\"Requests\"\n      :value=\"48.2\"\n      unit=\"M\"\n    />\n  </div>\n</template>"
+   "file": "examples/stat-tile/variants.vue"
   }
  ]
 }

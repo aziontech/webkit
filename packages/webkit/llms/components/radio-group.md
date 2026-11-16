@@ -5,7 +5,7 @@
 - Import: `import RadioGroupRoot from '@aziontech/webkit/radio-group-root'`
 - Compound import (dot notation, not tree-shakeable): `import RadioGroup from '@aziontech/webkit/radio-group'`
 - Category: input · Surface: app · Structure: composition
-- API as JSON: [radio-group.json](https://github.com/aziontech/webkit/blob/main/.specs/radio-group.json)
+- API as JSON: [radio-group.json](radio-group.json)
 
 ## When to use
 

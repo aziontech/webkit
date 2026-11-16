@@ -4,7 +4,7 @@
 
 - Import: `import ResponseLoading from '@aziontech/webkit/response-loading'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [response-loading.json](https://github.com/aziontech/webkit/blob/main/.specs/response-loading.json)
+- API as JSON: [response-loading.json](response-loading.json)
 
 ## When to use
 
@@ -35,7 +35,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`). |
-| `variant` | `'inline' \| 'bar'` | `'inline'` | false | inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. |
+| `variant` | `'inline' \| 'bar'` | `'inline'` | false | `inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. |
 | `delay` | `number` | `1000` | false | Milliseconds to wait before showing anything, so a fast response never flickers a loading state. |
 
 ## Sub-components

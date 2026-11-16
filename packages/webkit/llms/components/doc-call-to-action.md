@@ -4,7 +4,7 @@
 
 - Import: `import DocCallToAction from '@aziontech/webkit/doc-call-to-action'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-call-to-action.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-call-to-action.json)
+- API as JSON: [doc-call-to-action.json](doc-call-to-action.json)
 
 ## When to use
 
@@ -24,9 +24,9 @@
 
 ## Related
 
-- DocOnThisPage` — the rail it closes.
-- RegistrationFrame` — the frame.
-- CallToAction` — the marketing closing band.
+- `DocOnThisPage` — the rail it closes.
+- `RegistrationFrame` — the frame.
+- `CallToAction` — the marketing closing band.
 
 ## Props
 

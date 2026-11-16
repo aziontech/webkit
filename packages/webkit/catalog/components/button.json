@@ -17,18 +17,18 @@
   "The single AI or highlight entry point that must stand out from every other action → use `highlight-button`."
  ],
  "related": [
-  "icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `ghost` variant matches this one.",
-  "split-button` — joins a Button to a chevron menu of related actions.",
-  "highlight-button` — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.",
-  "link` — a text link that navigates to a page, resource or URL.",
-  "toggle-group` — a group of mutually exclusive options, not a single action."
+  "`icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `ghost` variant matches this one.",
+  "`split-button` — joins a Button to a chevron menu of related actions.",
+  "`highlight-button` — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.",
+  "`link` — a text link that navigates to a page, resource or URL.",
+  "`toggle-group` — a group of mutually exclusive options, not a single action."
  ],
  "bestPractices": [
   "Keep one `variant=\"primary\"` per view or region; use `danger` only for destructive actions.",
-  "variant=\"link\"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).",
+  "`variant=\"link\"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).",
   "Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.",
   "Use `iconPosition=\"leading\"` for a glyph that names the action and `\"trailing\"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.",
   "Put brand or product marks in the `leading` slot; `icon` takes an Azion icon class.",
-  "label` is required and is the accessible name; never pass an empty string to get an icon-only control."
+  "`label` is required and is the accessible name; never pass an empty string to get an icon-only control."
  ]
 }

@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "Default primary button at large size.",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Button\n    variant=\"primary\"\n    size=\"large\"\n    label=\"Button\"\n  />\n</template>"
+   "file": "examples/button/default.vue"
   },
   {
    "name": "Variants",
    "summary": "All variants side by side. `link` is an inline text action with no box, for a cell or a summary line that opens a drawer or a flow; `size` does not apply to it.",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Button\n      variant=\"primary\"\n      label=\"Button\"\n    />\n    <Button\n      variant=\"secondary\"\n      label=\"Button\"\n    />\n    <Button\n      variant=\"outline\"\n      label=\"Button\"\n    />\n    <Button\n      variant=\"ghost\"\n      label=\"Button\"\n    />\n    <Button\n      variant=\"danger\"\n      label=\"Button\"\n    />\n    <Button\n      variant=\"link\"\n      label=\"Link button\"\n    />\n  </div>\n</template>"
+   "file": "examples/button/variants.vue"
   },
   {
    "name": "Sizes",
    "summary": "All size variants side by side.",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Button\n      size=\"small\"\n      label=\"Button\"\n    />\n    <Button\n      size=\"medium\"\n      label=\"Button\"\n    />\n    <Button\n      size=\"large\"\n      label=\"Button\"\n    />\n  </div>\n</template>"
+   "file": "examples/button/sizes.vue"
   }
  ]
 }

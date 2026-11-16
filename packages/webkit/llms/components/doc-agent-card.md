@@ -4,7 +4,7 @@
 
 - Import: `import DocAgentCard from '@aziontech/webkit/doc-agent-card'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-agent-card.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-agent-card.json)
+- API as JSON: [doc-agent-card.json](doc-agent-card.json)
 
 ## When to use
 
@@ -26,10 +26,10 @@
 
 ## Related
 
-- CopyPromptButton` — the left column's action.
-- DocHero` — the masthead above it on a docs home.
-- DocCardGroup` — the Console / CLI / API cards that follow it; both share `RegistrationFrame`'s corner marks.
-- Texture` — the `dither` halftone behind the guided action.
+- `CopyPromptButton` — the left column's action.
+- `DocHero` — the masthead above it on a docs home.
+- `DocCardGroup` — the Console / CLI / API cards that follow it; both share `RegistrationFrame`'s corner marks.
+- `Texture` — the `dither` halftone behind the guided action.
 
 ## Props
 

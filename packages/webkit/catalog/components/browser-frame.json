@@ -15,10 +15,10 @@
   "For a framed page section or grid cell → use `registration-frame`."
  ],
  "related": [
-  "doc-frame` — the documentation figure frame for stills and clips; no live viewport.",
-  "embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.",
-  "registration-frame` — the page's registration frame (hairlines + corner marks), not a window.",
-  "copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value."
+  "`doc-frame` — the documentation figure frame for stills and clips; no live viewport.",
+  "`embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.",
+  "`registration-frame` — the page's registration frame (hairlines + corner marks), not a window.",
+  "`copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value."
  ],
  "bestPractices": [
   "Compose the default slot exactly as the screen would be composed in an app — the frame mirrors the page's stylesheets and theme into its viewport, so no extra wiring or classes are needed.",

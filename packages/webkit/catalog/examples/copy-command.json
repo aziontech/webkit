@@ -3,12 +3,12 @@
   {
    "name": "Default",
    "summary": "One shell command with the `$` prompt and a copy button, sized for a hero's actions row.",
-   "sfc": "<script setup>\n  import CopyCommand from '@aziontech/webkit/copy-command'\n</script>\n\n<template>\n  <CopyCommand value=\"npm create azion@latest\" />\n</template>"
+   "file": "examples/copy-command/default.vue"
   },
   {
    "name": "Prompt",
    "summary": "With `shell` off the line is a prompt for an AI agent: no `$`, and the field and copy button are named Prompt.",
-   "sfc": "<script setup>\n  import CopyCommand from '@aziontech/webkit/copy-command'\n</script>\n\n<template>\n  <CopyCommand\n    :shell=\"false\"\n    value=\"Deploy this repository to Azion and give me the URL\"\n  />\n</template>"
+   "file": "examples/copy-command/prompt.vue"
   }
  ]
 }

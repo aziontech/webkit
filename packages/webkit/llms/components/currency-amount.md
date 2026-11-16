@@ -4,7 +4,7 @@
 
 - Import: `import CurrencyAmount from '@aziontech/webkit/currency-amount'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [currency-amount.json](https://github.com/aziontech/webkit/blob/main/.specs/currency-amount.json)
+- API as JSON: [currency-amount.json](currency-amount.json)
 
 ## When to use
 
@@ -14,7 +14,7 @@
 ## Do
 
 - Pass `value` already formatted as a string (`'1,250.00'`). The component does no number or locale formatting.
-- prefix` defaults to `'$'`; set `prefix=""` to drop the symbol. The suffix renders only when `suffix` is set.
+- `prefix` defaults to `'$'`; set `prefix=""` to drop the symbol. The suffix renders only when `suffix` is set.
 - Pick `size` by reading distance, not by available space: `small` in tables and lists, `medium` (the default) on cards, `large` only for a headline price.
 - Don't restyle the parts with classes; each size takes its typography from the `text-amount-*` and `text-label-code-*` tokens.
 

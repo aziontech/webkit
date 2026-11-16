@@ -20,8 +20,8 @@
   "A searchable table of records → `TableRoot`."
  ],
  "related": [
-  "conversation` — shows the conversation the history selects.",
-  "drawer` — holds the history on narrow screens."
+  "`conversation` — shows the conversation the history selects.",
+  "`drawer` — holds the history on narrow screens."
  ],
  "bestPractices": [
   "Title each conversation from its first prompt, short; the full title shows on hover through `title`.",
@@ -85,11 +85,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ConversationHistory from '@aziontech/webkit/conversation-history'\n  import { ref } from 'vue'\n\n  const now = '2026-11-11T15:00:00'\n  const items = ref([\n    { id: 'c1', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T14:20:00' },\n    { id: 'c2', title: 'Why is my function returning 502?', updatedAt: '2026-11-11T09:05:00' },\n    { id: 'c3', title: 'Set up a WAF rule for login attempts', updatedAt: '2026-11-10T18:40:00' },\n    { id: 'c4', title: 'Image optimization query parameters', updatedAt: '2026-11-07T11:00:00' },\n    {\n      id: 'c5',\n      title: 'Migrate DNS records from another provider',\n      updatedAt: '2026-10-28T16:30:00'\n    },\n    { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00' }\n  ])\n  const active = ref('c2')\n\n  const remove = (event, id) => {\n    items.value = items.value.filter((item) => item.id !== id)\n    if (active.value === id) active.value = null\n  }\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xs)\">\n    <ConversationHistory\n      v-model=\"active\"\n      :items=\"items\"\n      :now=\"now\"\n      removable\n      @remove=\"remove\"\n    />\n  </div>\n</template>"
+   "file": "examples/conversation-history/default.vue"
   },
   {
    "name": "States",
-   "sfc": "<script setup>\n  import ConversationHistory from '@aziontech/webkit/conversation-history'\n</script>\n\n<template>\n  <div class=\"grid w-full gap-(--spacing-xl) sm:grid-cols-2\">\n    <ConversationHistory\n      loading\n      aria-label=\"Conversation history, loading\"\n    />\n    <ConversationHistory\n      :items=\"[]\"\n      aria-label=\"Conversation history, empty\"\n    />\n  </div>\n</template>"
+   "file": "examples/conversation-history/states.vue"
   }
  ],
  "docs": "components/conversation-history.md"

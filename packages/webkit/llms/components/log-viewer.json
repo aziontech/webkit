@@ -28,9 +28,9 @@
   "Rows of structured records with columns, sorting or paging → use `table`."
  ],
  "related": [
-  "code-block` — highlighted source code with a copy action, not a stream of typed log lines.",
-  "cli-terminal` — marketing band that plays a scripted terminal session.",
-  "deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log."
+  "`code-block` — highlighted source code with a copy action, not a stream of typed log lines.",
+  "`cli-terminal` — marketing band that plays a scripted terminal session.",
+  "`deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log."
  ],
  "bestPractices": [
   "Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`); the type drives the line's rendering. A warning is a `text` line with `level: 'warn'`; `level` drives the warnings filter and the level toggles.",
@@ -138,15 +138,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import LogViewer from '@aziontech/webkit/log-viewer'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    {\n      id: '4',\n      time: '13:47:43',\n      type: 'text',\n      level: 'warn',\n      message: 'Bundle larger than recommended'\n    }\n  ]\n  const search = ref('')\n  const level = ref('')\n</script>\n\n<template>\n  <div class=\"h-[640px]\">\n    <LogViewer\n      :lines=\"lines\"\n      v-model:search=\"search\"\n      v-model:level=\"level\"\n      class=\"h-full\"\n    >\n      <LogViewer.Header />\n      <LogViewer.Content />\n    </LogViewer>\n  </div>\n</template>"
+   "file": "examples/log-viewer/default.vue"
   },
   {
    "name": "Borderless",
-   "sfc": "<script setup>\n  import LogViewer from '@aziontech/webkit/log-viewer'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    {\n      id: '4',\n      time: '13:47:43',\n      type: 'text',\n      level: 'warn',\n      message: 'Bundle larger than recommended'\n    }\n  ]\n  const search = ref('')\n  const level = ref('')\n</script>\n\n<template>\n  <div\n    class=\"rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)\"\n  >\n    <span class=\"text-label-sm text-(--text-muted)\">Deploy output</span>\n    <div class=\"mt-(--spacing-sm) h-[420px]\">\n      <LogViewer\n        :lines=\"lines\"\n        :bordered=\"false\"\n        v-model:search=\"search\"\n        v-model:level=\"level\"\n        class=\"h-full\"\n      >\n        <LogViewer.Header />\n        <LogViewer.Content />\n      </LogViewer>\n    </div>\n  </div>\n</template>"
+   "file": "examples/log-viewer/borderless.vue"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import LogViewer from '@aziontech/webkit/log-viewer'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    {\n      id: '4',\n      time: '13:47:43',\n      type: 'text',\n      level: 'warn',\n      message: 'Bundle larger than recommended'\n    }\n  ]\n  const search = ref('')\n  const level = ref('')\n</script>\n\n<template>\n  <div class=\"h-[640px]\">\n    <LogViewer\n      :lines=\"lines\"\n      loading\n      v-model:search=\"search\"\n      v-model:level=\"level\"\n      class=\"h-full\"\n    >\n      <LogViewer.Header />\n      <LogViewer.Content />\n    </LogViewer>\n  </div>\n</template>"
+   "file": "examples/log-viewer/loading.vue"
   }
  ],
  "docs": "components/log-viewer.md"

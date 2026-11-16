@@ -11,10 +11,10 @@
   "Choosing one of a few mutually exclusive options → use `toggle-group`."
  ],
  "related": [
-  "button` — labelled counterpart; sizes line up and its `text` variant matches `ghost` here.",
-  "copy-button` — IconButton plus Tooltip with the clipboard write built in.",
-  "tooltip` — wrap an IconButton to show its name on hover and focus.",
-  "split-button` — uses an IconButton as its chevron menu toggle."
+  "`button` — labelled counterpart; sizes line up and its `text` variant matches `ghost` here.",
+  "`copy-button` — IconButton plus Tooltip with the clipboard write built in.",
+  "`tooltip` — wrap an IconButton to show its name on hover and focus.",
+  "`split-button` — uses an IconButton as its chevron menu toggle."
  ],
  "bestPractices": [
   "Always name it with the kebab attribute `aria-label=\"Delete domain\"` (`:aria-label` when the name changes, `aria-labelledby` when visible text already names it). Describe the action (\"Delete domain\"), not the glyph (\"Trash\"). Write `aria-label`, never the camelCase `ariaLabel` attribute: Vue maps the kebab attribute onto the `ariaLabel` prop, and it is the form every other attribute takes in a template.",

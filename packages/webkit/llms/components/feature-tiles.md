@@ -4,7 +4,7 @@
 
 - Import: `import FeatureTiles from '@aziontech/webkit/feature-tiles'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [feature-tiles.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-tiles.json)
+- API as JSON: [feature-tiles.json](feature-tiles.json)
 
 ## When to use
 

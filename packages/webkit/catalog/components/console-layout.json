@@ -11,11 +11,11 @@
   "When the page needs the split panel → compose `AppLayout` directly; `ConsoleLayout` covers the navigation, header, notifications, tools and content regions."
  ],
  "related": [
-  "AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.",
-  "Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).",
-  "SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.",
-  "Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).",
-  "shell/console` — the block that shows this layout with sample console navigation."
+  "`AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.",
+  "`Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).",
+  "`SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.",
+  "`Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).",
+  "`shell/console` — the block that shows this layout with sample console navigation."
  ],
  "bestPractices": [
   "Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.",

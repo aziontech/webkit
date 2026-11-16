@@ -4,7 +4,7 @@
 
 - Import: `import Card from '@aziontech/webkit/card'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [card.json](https://github.com/aziontech/webkit/blob/main/.specs/card.json)
+- API as JSON: [card.json](card.json)
 
 ## When to use
 
@@ -18,14 +18,14 @@
 
 - Put the body in the default slot.
 - Use `title` for a plain heading (rendered as an `h2`). Use the `header` slot only when the header needs another layout: it replaces both the title and `header-actions`.
-- header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
+- `header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
-- variant="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.
+- `variant="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.
 - Keep the description to one or two sentences; the card clamps it to three lines.
 - Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
 - Integration cards sit under a section heading, so their title is an `h3`.
-- featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain integration tile.
+- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain integration tile.
 
 ## Don’t
 
@@ -51,7 +51,7 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty; with `variant="integration"`, the item name. |
 | `padded` | `boolean` | `true` | false | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
-| `variant` | `'default' \| 'integration'` | `'default'` | false | integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot. |
+| `variant` | `'default' \| 'integration'` | `'default'` | false | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot. |
 | `logo` | `string` | `''` | false | Integration variant: icon class for the logo mark. The `logo` slot takes an image instead. |
 | `vendor` | `string` | `''` | false | Integration variant: who publishes the item, shown as "by {vendor}". |
 | `description` | `string` | `''` | false | Integration variant: one or two sentences on what the item does. |

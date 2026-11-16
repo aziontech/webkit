@@ -13,10 +13,10 @@
   "For live data or anything the reader operates — a diagram is a figure, not a control."
  ],
  "related": [
-  "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.",
-  "media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
-  "registration-frame` — the registration frame a diagram's groups and tiles are drawn in.",
-  "tag` — the status chip a card or item node carries."
+  "`illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.",
+  "`media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
+  "`registration-frame` — the registration frame a diagram's groups and tiles are drawn in.",
+  "`tag` — the status chip a card or item node carries."
  ],
  "bestPractices": [
   "Keep a diagram to about four columns in the wide layout so it fits a band's media cell; split a larger story into several diagrams.",

@@ -9,9 +9,9 @@
   "For page navigation — use links or `DocCardGroup`."
  ],
  "related": [
-  "DocTab` — the panel it reads.",
-  "Tabs` — the surface it renders on.",
-  "DocCodeGroup`."
+  "`DocTab` — the panel it reads.",
+  "`Tabs` — the surface it renders on.",
+  "`DocCodeGroup`."
  ],
  "bestPractices": [
   "Two to five tabs; put the most common path first.",

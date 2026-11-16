@@ -18,7 +18,7 @@
   "The user picks from a fixed set of numbers → use `select`."
  ],
  "related": [
-  "input` — free-text sibling with the same field API."
+  "`input` — free-text sibling with the same field API."
  ],
  "bestPractices": [
   "Set `min` / `max` / `step` to constrain input rather than validating after the fact.",
@@ -135,15 +135,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import NumberInput from '@aziontech/webkit/number-input'\n  import { ref } from 'vue'\n\n  const value = ref(1)\n</script>\n\n<template>\n  <div class=\"w-[20rem]\">\n    <NumberInput\n      v-model=\"value\"\n      :min=\"0\"\n      :max=\"100\"\n      :step=\"1\"\n      placeholder=\"Quantity\"\n    />\n  </div>\n</template>"
+   "file": "examples/number-input/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import NumberInput from '@aziontech/webkit/number-input'\n  import { ref } from 'vue'\n\n  const small = ref(1)\n  const medium = ref(10)\n  const large = ref(100)\n</script>\n\n<template>\n  <div class=\"flex w-[20rem] flex-col gap-(--spacing-md)\">\n    <NumberInput\n      v-model=\"small\"\n      size=\"small\"\n      aria-label=\"Quantity, small\"\n      :min=\"0\"\n      :max=\"9\"\n      :step=\"1\"\n    />\n    <NumberInput\n      v-model=\"medium\"\n      size=\"medium\"\n      aria-label=\"Quantity, medium\"\n      :min=\"0\"\n      :max=\"99\"\n      :step=\"5\"\n    />\n    <NumberInput\n      v-model=\"large\"\n      size=\"large\"\n      aria-label=\"Quantity, large\"\n      :min=\"0\"\n      :max=\"1000\"\n      :step=\"50\"\n    />\n  </div>\n</template>"
+   "file": "examples/number-input/sizes.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import NumberInput from '@aziontech/webkit/number-input'\n  import { ref } from 'vue'\n\n  const value = ref(42)\n</script>\n\n<template>\n  <div class=\"w-[20rem]\">\n    <NumberInput\n      v-model=\"value\"\n      aria-label=\"Quantity\"\n      disabled\n    />\n  </div>\n</template>"
+   "file": "examples/number-input/disabled.vue"
   }
  ],
  "docs": "components/number-input.md"

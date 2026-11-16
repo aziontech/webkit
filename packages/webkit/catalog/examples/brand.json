@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "The default AZION wordmark lockup.",
-   "sfc": "<script setup>\n  import Brand from '@aziontech/webkit/brand'\n</script>\n\n<template>\n  <Brand variant=\"default\" />\n</template>"
+   "file": "examples/brand/default.vue"
   },
   {
    "name": "Variants",
    "summary": "All brand lockups side by side: default (AZION wordmark), reduced (the \"A\" glyph), and extended (wordmark with the \"move to the edge technologies®\" tagline).",
-   "sfc": "<script setup>\n  import Brand from '@aziontech/webkit/brand'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-8\">\n    <Brand variant=\"default\" />\n    <Brand variant=\"reduced\" />\n    <Brand variant=\"extended\" />\n  </div>\n</template>"
+   "file": "examples/brand/variants.vue"
   },
   {
    "name": "Sizes",
    "summary": "The lockup at each size token — small (16px), medium (24px), and large (32px) tall — with width scaling to preserve the aspect ratio.",
-   "sfc": "<script setup>\n  import Brand from '@aziontech/webkit/brand'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-8\">\n    <Brand\n      variant=\"default\"\n      size=\"small\"\n    />\n    <Brand\n      variant=\"default\"\n      size=\"medium\"\n    />\n    <Brand\n      variant=\"default\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+   "file": "examples/brand/sizes.vue"
   }
  ]
 }

@@ -10,9 +10,9 @@
   "Determinate progress → `progress`."
  ],
  "related": [
-  "chat-message` — renders this while `pending`.",
-  "progress` — the indeterminate bar it draws.",
-  "reasoning` — thinking with a trace."
+  "`chat-message` — renders this while `pending`.",
+  "`progress` — the indeterminate bar it draws.",
+  "`reasoning` — thinking with a trace."
  ],
  "bestPractices": [
   "Text says `[Generating|Loading] <what>` without end punctuation: `Generating a response`, `Loading list of workloads`.",

@@ -11,12 +11,12 @@
   "A number with a range → use `NumberInput`."
  ],
  "related": [
-  "field` — wrap it in a `Field` for the label, the description and the error; the label names the input.",
-  "password-input` — the other credential input of the auth screens.",
-  "input` — the plain text field it shares tokens with."
+  "`field` — wrap it in a `Field` for the label, the description and the error; the label names the input.",
+  "`password-input` — the other credential input of the auth screens.",
+  "`input` — the plain text field it shares tokens with."
  ],
  "bestPractices": [
-  "Label it with what the code is and where it comes from: `Authentication code`, and a description `The 6-digit code from your authenticator app.",
+  "Label it with what the code is and where it comes from: `Authentication code`, and a description `The 6-digit code from your authenticator app.`",
   "Submit on `complete` only when the code is the last thing to fill; keep a Verify button for keyboard users and for a failed attempt.",
   "After a rejected code, mark it `invalid`, clear it, and keep focus in it.",
   "Use `group=\"3\"` for codes people read aloud or copy from a phone; it draws a separator between groups and does not change the value."

@@ -4,7 +4,7 @@
 
 - Import: `import QuoteTabs from '@aziontech/webkit/quote-tabs'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [quote-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/quote-tabs.json)
+- API as JSON: [quote-tabs.json](quote-tabs.json)
 
 ## When to use
 

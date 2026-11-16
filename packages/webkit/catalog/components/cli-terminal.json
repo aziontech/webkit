@@ -9,8 +9,8 @@
   "For several capabilities, each with its own file → use `feature-scroll` with code items."
  ],
  "related": [
-  "code-block` — the terminal session the band shows.",
-  "media-split-section` — the sibling band with the sample (`codeTabs`) beside the copy."
+  "`code-block` — the terminal session the band shows.",
+  "`media-split-section` — the sibling band with the sample (`codeTabs`) beside the copy."
  ],
  "bestPractices": [
   "Keep the session to a few commands and their output; comment the output lines so the copied text still runs.",

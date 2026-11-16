@@ -7,7 +7,7 @@
   "For client marks → use `client-mosaic` or `logo-wall-section`."
  ],
  "related": [
-  "bento-grid` — the grid the marks are laid in."
+  "`bento-grid` — the grid the marks are laid in."
  ],
  "bestPractices": [
   "Give each item a `logoLight` when its mark needs a different file on the light theme; otherwise one `logo` serves both.",

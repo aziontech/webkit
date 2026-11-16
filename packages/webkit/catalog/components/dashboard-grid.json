@@ -11,10 +11,10 @@
   "A grid of resources the reader selects, not arranges → use `card-list`."
  ],
  "related": [
-  "chart-card` — the card each `DashboardGrid.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
-  "resizable` — split panes with a draggable divider, not a grid of cards.",
-  "card-list` — a selectable collection of item cards with a fixed layout.",
-  "page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
+  "`chart-card` — the card each `DashboardGrid.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
+  "`resizable` — split panes with a draggable divider, not a grid of cards.",
+  "`card-list` — a selectable collection of item cards with a fixed layout.",
+  "`page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
  ],
  "bestPractices": [
   "Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.",

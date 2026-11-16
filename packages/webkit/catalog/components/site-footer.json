@@ -10,8 +10,8 @@
   "For a closing ask above the footer → use `closing-call-to-action`."
  ],
  "related": [
-  "footer` — the composition footer this section fills.",
-  "closing-call-to-action` — the band that sits right above it."
+  "`footer` — the composition footer this section fills.",
+  "`closing-call-to-action` — the band that sits right above it."
  ],
  "bestPractices": [
   "**Do** render it as the last child of the page shell, as is: it draws its own top rule, its frame and its closing bottom rule.",

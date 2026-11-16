@@ -5,7 +5,7 @@
 - Import: `import DrawerRoot from '@aziontech/webkit/drawer-root'`
 - Compound import (dot notation, not tree-shakeable): `import Drawer from '@aziontech/webkit/drawer'`
 - Category: overlay · Surface: app · Structure: composition
-- API as JSON: [drawer.json](https://github.com/aziontech/webkit/blob/main/.specs/drawer.json)
+- API as JSON: [drawer.json](drawer.json)
 
 ## When to use
 

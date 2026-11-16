@@ -4,7 +4,7 @@
 
 - Import: `import UploadProgress from '@aziontech/webkit/upload-progress'`
 - Category: feedback · Surface: app · Structure: monolithic
-- API as JSON: [upload-progress.json](https://github.com/aziontech/webkit/blob/main/.specs/upload-progress.json)
+- API as JSON: [upload-progress.json](upload-progress.json)
 
 ## When to use
 

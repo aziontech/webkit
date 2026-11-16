@@ -4,7 +4,7 @@
 
 - Import: `import TopologyDiagram from '@aziontech/webkit/topology-diagram'`
 - Category: data · Surface: app · Structure: monolithic
-- API as JSON: [topology-diagram.json](https://github.com/aziontech/webkit/blob/main/.specs/topology-diagram.json)
+- API as JSON: [topology-diagram.json](topology-diagram.json)
 
 ## When to use
 
@@ -32,7 +32,7 @@
 - [flow-diagram](flow-diagram.md) — the connector engine and anchors this component reuses.
 - [tree](tree.md) — hierarchical data without connectors.
 - [dropdown-menu](dropdown-menu.md) — the bind control's menu.
-- detail/resource-detail` — the page whose topology tab holds it.
+- `detail/resource-detail` — the page whose topology tab holds it.
 
 ## Props
 

@@ -23,10 +23,10 @@
   "For a grid of cards → use `card-grid`."
  ],
  "related": [
-  "media-split` — the band this stack holds, typically at `size=\"large\"`. Inside the stack it frames its own two cells, so leave its `framed` off.",
-  "sticky-stack` — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.",
-  "registration-frame` — the frame each band is drawn in.",
-  "section-gap` — the spacer usually above the stack; pass `flush` so the first band does not draw a second rule under it."
+  "`media-split` — the band this stack holds, typically at `size=\"large\"`. Inside the stack it frames its own two cells, so leave its `framed` off.",
+  "`sticky-stack` — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.",
+  "`registration-frame` — the frame each band is drawn in.",
+  "`section-gap` — the spacer usually above the stack; pass `flush` so the first band does not draw a second rule under it."
  ],
  "bestPractices": [
   "Keep the run to three to six bands. With `sticky` every band read stays pinned as a ledge, and a long run fills the viewport with ledges.",
@@ -65,11 +65,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaSplit from '@aziontech/webkit/media-split'\n  import SectionStack from '@aziontech/webkit/section-stack'\n</script>\n\n<template>\n  <SectionStack>\n    <MediaSplit\n      title=\"Build and Run Applications\"\n      description=\"Deploy applications and static sites straight from Git.\"\n      size=\"large\"\n      align=\"center\"\n      :heading-level=\"3\"\n    >\n      <template #media>\n        <Illustration name=\"ai-applications\" />\n      </template>\n    </MediaSplit>\n    <MediaSplit\n      title=\"Secure Applications and Networks\"\n      description=\"Stop DDoS attacks, bots and exploits before they reach your origin.\"\n      size=\"large\"\n      align=\"center\"\n      :heading-level=\"3\"\n    >\n      <template #media>\n        <Illustration name=\"deploy-secure-mcp-server\" />\n      </template>\n    </MediaSplit>\n    <MediaSplit\n      title=\"Observe Every Request\"\n      description=\"Follow logs, metrics and events from every location as they happen.\"\n      size=\"large\"\n      align=\"center\"\n      :heading-level=\"3\"\n    >\n      <template #media>\n        <Illustration name=\"live-debugging\" />\n      </template>\n    </MediaSplit>\n  </SectionStack>\n</template>"
+   "file": "examples/section-stack/default.vue"
   },
   {
    "name": "Sticky",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaSplit from '@aziontech/webkit/media-split'\n  import SectionStack from '@aziontech/webkit/section-stack'\n</script>\n\n<template>\n  <SectionStack\n    sticky\n    flush\n  >\n    <MediaSplit\n      title=\"Build and Run Applications\"\n      description=\"Deploy applications and static sites straight from Git.\"\n      size=\"large\"\n      align=\"center\"\n      :heading-level=\"3\"\n    >\n      <template #media>\n        <Illustration name=\"ai-applications\" />\n      </template>\n    </MediaSplit>\n    <MediaSplit\n      title=\"Secure Applications and Networks\"\n      description=\"Stop DDoS attacks, bots and exploits before they reach your origin.\"\n      size=\"large\"\n      align=\"center\"\n      :heading-level=\"3\"\n    >\n      <template #media>\n        <Illustration name=\"deploy-secure-mcp-server\" />\n      </template>\n    </MediaSplit>\n    <MediaSplit\n      title=\"Observe Every Request\"\n      description=\"Follow logs, metrics and events from every location as they happen.\"\n      size=\"large\"\n      align=\"center\"\n      :heading-level=\"3\"\n    >\n      <template #media>\n        <Illustration name=\"live-debugging\" />\n      </template>\n    </MediaSplit>\n  </SectionStack>\n</template>"
+   "file": "examples/section-stack/sticky.vue"
   }
  ],
  "docs": "components/section-stack.md"

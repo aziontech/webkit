@@ -5,7 +5,7 @@
 - Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
 - Category: ai · Surface: app · Structure: composition
-- API as JSON: [chat-message.json](https://github.com/aziontech/webkit/blob/main/.specs/chat-message.json)
+- API as JSON: [chat-message.json](chat-message.json)
 
 ## When to use
 

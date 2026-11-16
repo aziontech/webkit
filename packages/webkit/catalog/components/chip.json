@@ -12,9 +12,9 @@
   "It is a static descriptive label/category with no interaction → use `tag`."
  ],
  "related": [
-  "badge` — static count/short-value indicator.",
-  "tag` — static labelled status/category chip.",
-  "tooltip` — composed by the remove control to name what it removes."
+  "`badge` — static count/short-value indicator.",
+  "`tag` — static labelled status/category chip.",
+  "`tooltip` — composed by the remove control to name what it removes."
  ],
  "bestPractices": [
   "When removable, expose an accessible remove control with a clear label.",

@@ -12,11 +12,11 @@
   "A static \"nothing here yet\" panel with no drop behavior → use `empty-state`."
  ],
  "related": [
-  "button`: the \"Browse files\" action composed into the default slot. It is the keyboard path to the same outcome as a drop.",
-  "empty-state`: a no-data panel. Compose a FileDropzone inside or beside it when the empty state's call to action is \"upload\".",
-  "progress`: the consumer renders per-file progress after `drop`. The dropzone does not track uploads.",
-  "toast`: confirms the result of a drop or reports rejected files to everyone, including users who never see the drag.",
-  "card`: a positioned container (`class=\"relative\"`) that hosts an `overlay` dropzone."
+  "`button`: the \"Browse files\" action composed into the default slot. It is the keyboard path to the same outcome as a drop.",
+  "`empty-state`: a no-data panel. Compose a FileDropzone inside or beside it when the empty state's call to action is \"upload\".",
+  "`progress`: the consumer renders per-file progress after `drop`. The dropzone does not track uploads.",
+  "`toast`: confirms the result of a drop or reports rejected files to everyone, including users who never see the drag.",
+  "`card`: a positioned container (`class=\"relative\"`) that hosts an `overlay` dropzone."
  ],
  "bestPractices": [
   "Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens a native `<input type=\"file\">`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.",

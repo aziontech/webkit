@@ -5,7 +5,7 @@
 - Import: `import DashboardGridRoot from '@aziontech/webkit/dashboard-grid-root'`
 - Compound import (dot notation, not tree-shakeable): `import DashboardGrid from '@aziontech/webkit/dashboard-grid'`
 - Category: layout · Surface: app · Structure: composition
-- API as JSON: [dashboard-grid.json](https://github.com/aziontech/webkit/blob/main/.specs/dashboard-grid.json)
+- API as JSON: [dashboard-grid.json](dashboard-grid.json)
 
 ## When to use
 

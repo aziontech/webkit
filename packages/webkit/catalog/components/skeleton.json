@@ -11,10 +11,10 @@
   "A settled state such as Active or Failed → use `status-indicator`."
  ],
  "related": [
-  "progress` — measured or indeterminate progress of a task, not a placeholder.",
-  "spinner` — compact busy glyph for buttons and inline status.",
-  "empty-state` — what replaces the skeleton when the request returns nothing.",
-  "table` — its `loading` prop renders skeleton rows for you."
+  "`progress` — measured or indeterminate progress of a task, not a placeholder.",
+  "`spinner` — compact busy glyph for buttons and inline status.",
+  "`empty-state` — what replaces the skeleton when the request returns nothing.",
+  "`table` — its `loading` prop renders skeleton rows for you."
  ],
  "bestPractices": [
   "Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.",

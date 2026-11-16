@@ -11,10 +11,10 @@
   "One section on its own — import that section (`@aziontech/webkit/<name>`) and bind its props."
  ],
  "related": [
-  "section-container` — the column the renderer lays `sections` in.",
-  "section-gap` — the hatched break it draws before each band.",
+  "`section-container` — the column the renderer lays `sections` in.",
+  "`section-gap` — the hatched break it draws before each band.",
   "The page sections (`hero-section`, `customer-use-cases`, `faq-section`, …) — what each `_id` names.",
-  "shell/site` — the nav and footer frame a page renders inside."
+  "`shell/site` — the nav and footer frame a page renders inside."
  ],
  "bestPractices": [
   "Write `_id` as the section's public subpath (`customer-use-cases` for `@aziontech/webkit/customer-use-cases`); the `props` object is exactly what the section's own `site-*.json` example carries.",

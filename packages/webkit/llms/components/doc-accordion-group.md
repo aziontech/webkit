@@ -4,7 +4,7 @@
 
 - Import: `import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-accordion-group.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-accordion-group.json)
+- API as JSON: [doc-accordion-group.json](doc-accordion-group.json)
 
 ## When to use
 
@@ -27,9 +27,9 @@
 
 ## Related
 
-- DocAccordion` — the entry it reads.
-- Accordion` — the design-system surface it renders on.
-- Faq` — the marketing FAQ band.
+- `DocAccordion` — the entry it reads.
+- `Accordion` — the design-system surface it renders on.
+- `Faq` — the marketing FAQ band.
 
 ## Props
 

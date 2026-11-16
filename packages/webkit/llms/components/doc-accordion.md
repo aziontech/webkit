@@ -4,7 +4,7 @@
 
 - Import: `import DocAccordion from '@aziontech/webkit/doc-accordion'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-accordion.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-accordion.json)
+- API as JSON: [doc-accordion.json](doc-accordion.json)
 
 ## When to use
 
@@ -21,7 +21,7 @@
 
 ## Related
 
-- DocAccordionGroup` — the group that reads it.
+- `DocAccordionGroup` — the group that reads it.
 
 ## Props
 

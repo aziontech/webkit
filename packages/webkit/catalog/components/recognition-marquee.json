@@ -9,8 +9,8 @@
   "For customer quotes → use `client-quotes`."
  ],
  "related": [
-  "quote` — the signed card each recognition renders with.",
-  "photo-marquee` — the sibling strip of pictures with the same loop."
+  "`quote` — the signed card each recognition renders with.",
+  "`photo-marquee` — the sibling strip of pictures with the same loop."
  ],
  "bestPractices": [
   "Five to eight items; the loop needs enough width to read as continuous.",

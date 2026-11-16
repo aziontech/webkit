@@ -10,8 +10,8 @@
   "On a page with no reading order (a reference index, a landing page): a next link that points somewhere arbitrary is worse than none."
  ],
  "related": [
-  "Pagination` — the data counterpart; numbered pages over a collection, not two named documents.",
-  "DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages."
+  "`Pagination` — the data counterpart; numbered pages over a collection, not two named documents.",
+  "`DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages."
  ],
  "bestPractices": [
   "Pass the destination's real title, not \"Next page\". The title is what tells the reader whether they want to go.",

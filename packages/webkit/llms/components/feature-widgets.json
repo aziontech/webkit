@@ -19,8 +19,8 @@
   "For a long argument per feature → use `feature-scroll`."
  ],
  "related": [
-  "bento-grid` — the grid the cells are laid in.",
-  "highlight-button` — the copy affordance a cell renders when it carries `copy`."
+  "`bento-grid` — the grid the cells are laid in.",
+  "`highlight-button` — the copy affordance a cell renders when it carries `copy`."
  ],
  "bestPractices": [
   "Give each item an `action` (a link), a `copy` (text to put on the clipboard), or both when the reader may want the docs and the prompt.",
@@ -116,11 +116,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import FeatureWidgets from '@aziontech/webkit/feature-widgets'\n</script>\n\n<template>\n  <FeatureWidgets\n    anchor=\"get-started\"\n    eyebrow=\"Get started\"\n    title=\"Start where you already work\"\n    description=\"The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal.\"\n    :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n    :secondary-action=\"{ label: 'Docs', href: '/site/docs', trailing: true }\"\n    :columns=\"3\"\n    :items=\"[\n      {\n        title: 'Ask your coding agent',\n        description:\n          'Connect the Azion MCP servers to Claude Code, Cursor or ChatGPT, and the agent creates, instances and routes the function, with a dry run before every write.',\n        illustration: 'deploy-secure-mcp-server',\n        copy: {\n          label: 'Copy prompt',\n          text: 'Create a function that answers 401 when a request has no Authorization header.'\n        }\n      },\n      {\n        title: 'Build it in the Console',\n        description:\n          'Choose the application it runs on, write the handler in the editor, name it, and create it. The rule that runs it is drafted for you.',\n        illustration: 'build-applications',\n        action: { label: 'Docs', href: '/site/docs' }\n      },\n      {\n        title: 'Ship it from the terminal',\n        description:\n          'azion init scaffolds from 25 presets, azion dev serves it on localhost:3333, and azion deploy puts it on a live domain.',\n        illustration: 'quick-start-with-templates',\n        action: { label: 'Docs', href: '/site/docs' }\n      }\n    ]\"\n  />\n</template>"
+   "file": "examples/feature-widgets/default.vue"
   },
   {
    "name": "Live scenes",
-   "sfc": "<script setup>\n  import FeatureWidgets from '@aziontech/webkit/feature-widgets'\n\n  const docs = 'https://www.azion.com/en/documentation/products/build/applications/'\n\n  const items = [\n    {\n      title: 'Cache settings you reuse.',\n      description:\n        'Set the CDN TTL, stale cache and large file optimization once, then reuse the setting wherever the application needs it.',\n      scene: { component: 'ConsoleMockup', props: { name: 'application-cache' } },\n      action: { label: 'Docs', href: docs }\n    },\n    {\n      title: 'Rules that decide what is cached.',\n      description:\n        'Match a path, a method or a header, and attach a cache setting to just that traffic.',\n      scene: { component: 'ConsoleMockup', props: { name: 'application-rule' } },\n      action: { label: 'Docs', href: docs }\n    },\n    {\n      title: 'Functions for the cases rules miss.',\n      description:\n        'Rewrite cache headers on the response in a few lines of JavaScript, running in every data center before the response leaves.',\n      scene: { component: 'ConsoleMockup', props: { name: 'application-function' } },\n      action: { label: 'Docs', href: docs },\n      copy: {\n        label: 'Copy prompt',\n        text: 'Write an Azion function that sets cache-control to public, max-age=3600 on every response from /assets.'\n      }\n    }\n  ]\n</script>\n\n<template>\n  <FeatureWidgets\n    anchor=\"built-in\"\n    eyebrow=\"Built in\"\n    title=\"Every cache control in one application\"\n    description=\"Cache settings, the rules that apply them and the functions that shape responses live inside the application, versioned and deployed with it.\"\n    :columns=\"3\"\n    :items=\"items\"\n  />\n</template>"
+   "file": "examples/feature-widgets/live-scenes.vue"
   }
  ],
  "docs": "components/feature-widgets.md"

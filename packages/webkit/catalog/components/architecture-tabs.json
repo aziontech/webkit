@@ -9,8 +9,8 @@
   "For a scroll-driven walkthrough → use `feature-scroll`."
  ],
  "related": [
-  "media-tabs` — the timed tab row this section renders through.",
-  "diagram` — the named architecture diagram each tab draws."
+  "`media-tabs` — the timed tab row this section renders through.",
+  "`diagram` — the named architecture diagram each tab draws."
  ],
  "bestPractices": [
   "Keep to five tabs with `tabsSide` `top` or `bottom`, three with `start` or `end`; tabs past the limit are not rendered.",

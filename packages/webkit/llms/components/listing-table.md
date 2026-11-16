@@ -4,7 +4,7 @@
 
 - Import: `import ListingTable from '@aziontech/webkit/listing-table'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [listing-table.json](https://github.com/aziontech/webkit/blob/main/.specs/listing-table.json)
+- API as JSON: [listing-table.json](listing-table.json)
 
 ## When to use
 

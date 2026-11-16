@@ -30,14 +30,14 @@
   "Vertical application navigation → use `sidebar-menu`."
  ],
  "related": [
-  "split-button` — composes `DropdownMenu` for its chevron menu.",
-  "select` — form control with a field trigger and a bound value.",
-  "popover` — same trigger and anchoring model, with free-form content instead of option rows.",
-  "command` — modal ⌘K palette with search and filtering."
+  "`split-button` — composes `DropdownMenu` for its chevron menu.",
+  "`select` — form control with a field trigger and a bound value.",
+  "`popover` — same trigger and anchoring model, with free-form content instead of option rows.",
+  "`command` — modal ⌘K palette with search and filtering."
  ],
  "bestPractices": [
   "Give every `DropdownMenu.Item` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.",
-  "selected` is a display flag. The dropdown never sets it, so derive it from your own state.",
+  "`selected` is a display flag. The dropdown never sets it, so derive it from your own state.",
   "Use the `command` prop or the `trailing` slot on an option, not both. A `command` shortcut is live while its option is mounted (inside a group, only while the panel is open). Every menu on the page shares one `window` listener, so a shortcut fires one option only: the one in the open menu, else the one whose trigger has focus, else the first registered.",
   "Write `DropdownMenu.Item` (also exported as `DropdownMenuItem`); 6.0 removed the `DropdownMenu.Option` alias and the `left` / `right` slots. Items may sit directly in the root: an item outside a group renders inside the panel like a grouped one.",
   "Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `header` slot and footer actions in `footer`; those regions stay outside the scrolling list.",
@@ -111,15 +111,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <DropdownMenuRoot>\n    <DropdownMenuTrigger>\n      <IconButton\n        variant=\"outline\"\n        icon=\"ai ai-plus\"\n        aria-label=\"Open menu\"\n      />\n    </DropdownMenuTrigger>\n    <DropdownMenuGroup>\n      <DropdownMenuItem\n        value=\"profile\"\n        label=\"Profile\"\n      />\n      <DropdownMenuItem\n        value=\"settings\"\n        label=\"Settings\"\n      />\n      <DropdownMenuItem\n        value=\"billing\"\n        label=\"Billing\"\n      />\n      <DropdownMenuItem\n        value=\"invite\"\n        label=\"Invite members\"\n      />\n      <DropdownMenuItem\n        value=\"logs\"\n        label=\"Audit log\"\n      />\n      <DropdownMenuItem\n        value=\"signout\"\n        label=\"Sign out\"\n      />\n    </DropdownMenuGroup>\n  </DropdownMenuRoot>\n</template>"
+   "file": "examples/dropdown-menu/default.vue"
   },
   {
    "name": "Groups",
-   "sfc": "<script setup>\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <DropdownMenuRoot>\n    <DropdownMenuTrigger>\n      <IconButton\n        variant=\"outline\"\n        icon=\"ai ai-plus\"\n        aria-label=\"Open menu\"\n      />\n    </DropdownMenuTrigger>\n    <DropdownMenuGroup label=\"Account\">\n      <DropdownMenuItem\n        value=\"profile\"\n        label=\"Profile\"\n        command=\"⌘P\"\n      />\n      <DropdownMenuItem\n        value=\"settings\"\n        label=\"Settings\"\n      />\n    </DropdownMenuGroup>\n    <DropdownMenuGroup label=\"Workspace\">\n      <DropdownMenuItem\n        value=\"invite\"\n        label=\"Invite members\"\n      />\n      <DropdownMenuItem\n        value=\"logs\"\n        label=\"Audit log\"\n        selected\n      />\n    </DropdownMenuGroup>\n  </DropdownMenuRoot>\n</template>"
+   "file": "examples/dropdown-menu/groups.vue"
   },
   {
    "name": "States",
-   "sfc": "<script setup>\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <DropdownMenuRoot :open=\"true\">\n    <DropdownMenuTrigger>\n      <IconButton\n        variant=\"outline\"\n        icon=\"ai ai-plus\"\n        aria-label=\"Open menu\"\n      />\n    </DropdownMenuTrigger>\n    <DropdownMenuGroup label=\"Option states\">\n      <DropdownMenuItem\n        value=\"default\"\n        label=\"Default\"\n      />\n      <DropdownMenuItem\n        value=\"selected\"\n        label=\"Selected\"\n        selected\n      />\n      <DropdownMenuItem\n        value=\"disabled\"\n        label=\"Disabled\"\n        disabled\n      />\n    </DropdownMenuGroup>\n  </DropdownMenuRoot>\n</template>"
+   "file": "examples/dropdown-menu/states.vue"
   }
  ],
  "docs": "components/dropdown-menu.md"

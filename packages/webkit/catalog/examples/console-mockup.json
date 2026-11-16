@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "A framed widget, the workloads list, filling a panel the host sizes.",
-   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"h-96 w-full\">\n    <ConsoleMockup name=\"workloads-list\" />\n  </div>\n</template>"
+   "file": "examples/console-mockup/default.vue"
   },
   {
    "name": "Variants",
    "summary": "A workload screen plated as a console window and bare, and a fragment framed in a console window titled with its module beside the same fragment bare on the host surface.",
-   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2\">\n    <div class=\"h-80 w-full\">\n      <ConsoleMockup\n        name=\"workload-topology\"\n        variant=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full\">\n      <ConsoleMockup\n        name=\"workload-topology\"\n        variant=\"bare\"\n      />\n    </div>\n    <div class=\"h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"edge-dns-record\"\n        variant=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"edge-dns-record\"\n        variant=\"bare\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/console-mockup/variants.vue"
   },
   {
    "name": "Still fragment",
    "summary": "The same fragment with its collaborator cursor, as a feature grid shows it, and with `:cursor=\"false\"`, as a product band that reads like a screenshot wants it. Each fragment keeps its own plating unless `variant` asks for the other one; `width` and `fade` re-plate only the workload screens, and setting them on a fragment warns in development.",
-   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2\">\n    <div class=\"h-80 w-full p-(--spacing-xl)\">\n      <ConsoleMockup name=\"data-stream-source\" />\n    </div>\n    <div class=\"h-80 w-full p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"data-stream-source\"\n        :cursor=\"false\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/console-mockup/still-fragment.vue"
   }
  ]
 }

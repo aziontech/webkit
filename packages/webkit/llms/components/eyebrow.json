@@ -23,10 +23,10 @@
   "The text is a field label → use `Field.Label`."
  ],
  "related": [
-  "section-title` — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix=\"//\"` and `cursor`.",
-  "hero-title` — the hero copy block; renders its `eyebrow` as an Eyebrow closed by the cursor, with `single-line` turned off.",
-  "tag` — a compact label attached to an item, not a heading companion.",
-  "badge` — a compact count or status indicator."
+  "`section-title` — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix=\"//\"` and `cursor`.",
+  "`hero-title` — the hero copy block; renders its `eyebrow` as an Eyebrow closed by the cursor, with `single-line` turned off.",
+  "`tag` — a compact label attached to an item, not a heading companion.",
+  "`badge` — a compact count or status indicator."
  ],
  "bestPractices": [
   "Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.",
@@ -71,15 +71,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Eyebrow from '@aziontech/webkit/eyebrow'\n</script>\n\n<template>\n  <Eyebrow>OVERLINE TEXT</Eyebrow>\n</template>"
+   "file": "examples/eyebrow/default.vue"
   },
   {
    "name": "Prefixes",
-   "sfc": "<script setup>\n  import Eyebrow from '@aziontech/webkit/eyebrow'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <Eyebrow prefix=\"//\">COMMENT STYLE</Eyebrow>\n    <Eyebrow prefix=\"<>\">CODE LABEL</Eyebrow>\n    <Eyebrow prefix=\"</>\">CLOSING TAG</Eyebrow>\n  </div>\n</template>"
+   "file": "examples/eyebrow/prefixes.vue"
   },
   {
    "name": "Cursor",
-   "sfc": "<script setup>\n  import Eyebrow from '@aziontech/webkit/eyebrow'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <Eyebrow\n      cursor\n      prefix=\"//\"\n      >OVERLINE TEXT</Eyebrow\n    >\n    <Eyebrow cursor>NO PREFIX</Eyebrow>\n  </div>\n</template>"
+   "file": "examples/eyebrow/cursor.vue"
   }
  ],
  "docs": "components/eyebrow.md"

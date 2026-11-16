@@ -13,11 +13,11 @@
   "A single search over names → use `input`, or `table-search` inside a table."
  ],
  "related": [
-  "data-table` — `Table.Filter type=\"menu\"` and `FilterMenu.ChipGroup` (no `fields`) render this menu and its chips over the table's `filters` model.",
-  "property-filter` — the token-based filter field for typed queries.",
-  "popover` — the overlay the menu opens in.",
-  "date-range-picker` — the range picker the custom date period uses.",
-  "chip` — each applied filter in `FilterMenu.ChipGroup`."
+  "`data-table` — `Table.Filter type=\"menu\"` and `FilterMenu.ChipGroup` (no `fields`) render this menu and its chips over the table's `filters` model.",
+  "`property-filter` — the token-based filter field for typed queries.",
+  "`popover` — the overlay the menu opens in.",
+  "`date-range-picker` — the range picker the custom date period uses.",
+  "`chip` — each applied filter in `FilterMenu.ChipGroup`."
  ],
  "bestPractices": [
   "Put the Filter button first in the controls row, before the search field, and `FilterMenu.ChipGroup` on its own row below the controls.",

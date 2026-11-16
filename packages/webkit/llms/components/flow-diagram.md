@@ -5,7 +5,7 @@
 - Import: `import FlowDiagramRoot from '@aziontech/webkit/flow-diagram-root'`
 - Compound import (dot notation, not tree-shakeable): `import FlowDiagram from '@aziontech/webkit/flow-diagram'`
 - Category: data · Surface: app · Structure: composition
-- API as JSON: [flow-diagram.json](https://github.com/aziontech/webkit/blob/main/.specs/flow-diagram.json)
+- API as JSON: [flow-diagram.json](flow-diagram.json)
 
 ## When to use
 

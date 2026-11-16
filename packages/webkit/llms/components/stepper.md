@@ -5,7 +5,7 @@
 - Import: `import StepperRoot from '@aziontech/webkit/stepper-root'`
 - Compound import (dot notation, not tree-shakeable): `import Stepper from '@aziontech/webkit/stepper'`
 - Category: navigation · Surface: app · Structure: composition
-- API as JSON: [stepper.json](https://github.com/aziontech/webkit/blob/main/.specs/stepper.json)
+- API as JSON: [stepper.json](stepper.json)
 
 ## When to use
 

@@ -5,7 +5,7 @@
 - Import: `import PanelRoot from '@aziontech/webkit/panel-root'`
 - Compound import (dot notation, not tree-shakeable): `import Panel from '@aziontech/webkit/panel'`
 - Category: overlay · Surface: app · Structure: composition
-- API as JSON: [panel.json](https://github.com/aziontech/webkit/blob/main/.specs/panel.json)
+- API as JSON: [panel.json](panel.json)
 
 ## When to use
 
@@ -16,8 +16,8 @@
 
 - Inside a dialog or drawer, use only `PanelHeader`, `PanelBody` and `PanelFooter`. The overlay already renders the `Panel` root, so a second `Panel` inside it nests two shells.
 - Put long content in `PanelBody`. It is the only region that scrolls; the header and footer stay in place.
-- size` caps the max width (`small`, `medium`, `large` map to the `--container-sm` / `--container-xl` / `--container-2xl` tokens). `sizeAtMd` applies that cap from `md` up only and is meant for the dialog's mobile bottom sheet.
-- Panel` has no open state, no dismissal and no focus management. Don't use it alone as a modal.
+- `size` caps the max width (`small`, `medium`, `large` map to the `--container-sm` / `--container-xl` / `--container-2xl` tokens). `sizeAtMd` applies that cap from `md` up only and is meant for the dialog's mobile bottom sheet.
+- `Panel` has no open state, no dismissal and no focus management. Don't use it alone as a modal.
 
 ## Don’t
 

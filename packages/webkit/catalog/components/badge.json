@@ -11,8 +11,8 @@
   "The \"+N\" that opens the hidden items of a truncated list → use `overflow-count`."
  ],
  "related": [
-  "tag` — labelled status/category chip with optional icon and pill shape; use when the label is descriptive, not a count.",
-  "chip` — interactive/removable token; use when the user can select or dismiss it."
+  "`tag` — labelled status/category chip with optional icon and pill shape; use when the label is descriptive, not a count.",
+  "`chip` — interactive/removable token; use when the user can select or dismiss it."
  ],
  "bestPractices": [
   "Keep the content to a number (`12`, `99+`); words belong in `tag` or `status-indicator`.",

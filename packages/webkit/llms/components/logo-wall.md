@@ -4,7 +4,7 @@
 
 - Import: `import LogoWall from '@aziontech/webkit/logo-wall'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [logo-wall.json](https://github.com/aziontech/webkit/blob/main/.specs/logo-wall.json)
+- API as JSON: [logo-wall.json](logo-wall.json)
 
 ## When to use
 

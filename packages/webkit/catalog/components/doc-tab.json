@@ -7,7 +7,7 @@
   "Outside `DocTabs` — it renders no tab of its own."
  ],
  "related": [
-  "DocTabs`."
+  "`DocTabs`."
  ],
  "bestPractices": [
   "A short title: the platform or tool name."

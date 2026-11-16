@@ -10,8 +10,8 @@
   "For a single run of body copy in an application screen — use the `text-body-*` tokens directly."
  ],
  "related": [
-  "DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.",
-  "DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge."
+  "`DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.",
+  "`DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge."
  ],
  "bestPractices": [
   "Mark a documentation component's root `data-doc-chrome` so prose rules stop there, and `data-doc-block` so it takes the block rung of the ladder. A callout is both.",

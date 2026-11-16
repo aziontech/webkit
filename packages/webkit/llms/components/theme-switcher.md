@@ -4,7 +4,7 @@
 
 - Import: `import ThemeSwitcher from '@aziontech/webkit/theme-switcher'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [theme-switcher.json](https://github.com/aziontech/webkit/blob/main/.specs/theme-switcher.json)
+- API as JSON: [theme-switcher.json](theme-switcher.json)
 
 ## When to use
 

@@ -4,7 +4,7 @@
 
 - Import: `import NetworkSection from '@aziontech/webkit/network-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [network-section.json](https://github.com/aziontech/webkit/blob/main/.specs/network-section.json)
+- API as JSON: [network-section.json](network-section.json)
 
 ## When to use
 

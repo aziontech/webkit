@@ -9,8 +9,8 @@
   "For an opening band with calls to action and no form → use `hero-section`, which takes every other marketing page opening."
  ],
  "related": [
-  "newsletter-section` — the other form section; same `submit` and state contract.",
-  "alert` — renders the success and failure messages."
+  "`newsletter-section` — the other form section; same `submit` and state contract.",
+  "`alert` — renders the success and failure messages."
  ],
  "bestPractices": [
   "Give every field a unique `name`; it is the key of the submitted value.",

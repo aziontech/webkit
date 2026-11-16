@@ -4,7 +4,7 @@
 
 - Import: `import DocHero from '@aziontech/webkit/doc-hero'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-hero.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-hero.json)
+- API as JSON: [doc-hero.json](doc-hero.json)
 
 ## When to use
 
@@ -25,9 +25,9 @@
 
 ## Related
 
-- DocPageHeader` — the article masthead.
-- CopyPromptButton` — the second action of the row.
-- DocAgentCard` — the agent card that usually opens the first section under the hero.
+- `DocPageHeader` — the article masthead.
+- `CopyPromptButton` — the second action of the row.
+- `DocAgentCard` — the agent card that usually opens the first section under the hero.
 
 ## Props
 

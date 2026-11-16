@@ -20,8 +20,8 @@
   "For a single run of body copy in an application screen — use the `text-body-*` tokens directly."
  ],
  "related": [
-  "DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.",
-  "DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge."
+  "`DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.",
+  "`DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge."
  ],
  "bestPractices": [
   "Mark a documentation component's root `data-doc-chrome` so prose rules stop there, and `data-doc-block` so it takes the block rung of the ladder. A callout is both.",
@@ -42,11 +42,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocProse from '@aziontech/webkit/doc-prose'\n</script>\n\n<template>\n  <DocProse>\n    <h2>Deploy an application</h2>\n    <p>\n      Templates are ready-made projects that go live in a few clicks. You don't need any local\n      tooling, and the <a href=\"https://www.azion.com/en/documentation/\">template's guide</a> lists\n      what each one needs.\n    </p>\n    <h3>What you get</h3>\n    <ul>\n      <li>A <strong>workload</strong> bound to its own Azion domain</li>\n      <li>An edge application built from your <code>azion.config.js</code></li>\n      <li>A certificate issued and renewed for you</li>\n    </ul>\n    <ol>\n      <li>Pick a template</li>\n      <li>Fill in the fields it asks for</li>\n      <li>Deploy</li>\n    </ol>\n    <blockquote>\n      <p>The first request to a location is a cache miss. Warm-up is per location, not global.</p>\n    </blockquote>\n    <h4>Build command</h4>\n    <p>\n      An h4 is a label inside a section rather than a new section, so it shares the base gap of the\n      prose around it and carries its level on weight instead.\n    </p>\n    <hr />\n    <p>A section break above resets the reader before the next part of the page.</p>\n  </DocProse>\n</template>"
+   "file": "examples/doc-prose/default.vue"
   },
   {
    "name": "ChromeBoundary",
-   "sfc": "<script setup>\n  import DocProse from '@aziontech/webkit/doc-prose'\n</script>\n\n<template>\n  <DocProse>\n    <h2>The contract stops at a component's edge</h2>\n    <p>This paragraph is authored prose, so it takes the prose rung and the prose ink.</p>\n    <div data-doc-chrome>\n      <h2>A component's own heading</h2>\n      <p>A component's own copy keeps whatever that component gives it.</p>\n    </div>\n    <p>And prose after the component picks the ladder back up.</p>\n  </DocProse>\n</template>"
+   "file": "examples/doc-prose/chrome-boundary.vue"
   }
  ],
  "docs": "components/doc-prose.md"

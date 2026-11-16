@@ -4,7 +4,7 @@
 
 - Import: `import MapChart from '@aziontech/webkit/map-chart'`
 - Category: chart · Surface: app · Structure: monolithic
-- API as JSON: [map-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/map-chart.json)
+- API as JSON: [map-chart.json](map-chart.json)
 
 ## When to use
 

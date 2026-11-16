@@ -11,11 +11,11 @@
   "For a band inside the page column → use `section-module` or a sibling section."
  ],
  "related": [
-  "hero` — the band primitive every layout is rendered with.",
-  "hero-title` — the headline block rendered inside it.",
-  "hero-form-section` — the opening band with a lead form beside the copy.",
-  "flow-diagram` — the diagram primitive the `levels` topology is drawn with.",
-  "feature-item` — the icon, heading and sentence each argument of `items` is rendered with."
+  "`hero` — the band primitive every layout is rendered with.",
+  "`hero-title` — the headline block rendered inside it.",
+  "`hero-form-section` — the opening band with a lead form beside the copy.",
+  "`flow-diagram` — the diagram primitive the `levels` topology is drawn with.",
+  "`feature-item` — the icon, heading and sentence each argument of `items` is rendered with."
  ],
  "bestPractices": [
   "Use `title-band` with `size=\"large\"` for a product page and `size=\"medium\"` for a page whose bands start right under the headline.",

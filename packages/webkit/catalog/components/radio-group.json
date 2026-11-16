@@ -13,10 +13,10 @@
   "A compact segmented control that switches a view → use `ToggleGroup`."
  ],
  "related": [
-  "toggle-group` — a segmented button group for switching views or filters.",
-  "theme-switcher` — the system / light / dark choice in app chrome.",
-  "select` — one value from a longer list.",
-  "field` — wraps the group with its title, description and error; `Field.Set` with `Field.Legend` names it natively."
+  "`toggle-group` — a segmented button group for switching views or filters.",
+  "`theme-switcher` — the system / light / dark choice in app chrome.",
+  "`select` — one value from a longer list.",
+  "`field` — wraps the group with its title, description and error; `Field.Set` with `Field.Legend` names it natively."
  ],
  "bestPractices": [
   "Name the group: put it in a `Field.Set` with a `Field.Legend`, give the `Field` a `Field.Title`, or set `aria-label` on the root.",

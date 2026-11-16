@@ -4,7 +4,7 @@
 
 - Import: `import Tooltip from '@aziontech/webkit/tooltip'`
 - Category: overlay · Surface: app · Structure: monolithic
-- API as JSON: [tooltip.json](https://github.com/aziontech/webkit/blob/main/.specs/tooltip.json)
+- API as JSON: [tooltip.json](tooltip.json)
 
 ## When to use
 

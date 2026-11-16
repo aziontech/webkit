@@ -2471,14 +2471,14 @@
      "type": "'pending' | 'approved' | 'denied' | 'expired'",
      "default": "'pending'",
      "required": "false",
-     "doc": "pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text."
+     "doc": "`pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text."
     },
     {
      "name": "variant",
      "type": "'default' | 'danger'",
      "default": "'default'",
      "required": "false",
-     "doc": "danger` for an action that cannot be undone: the approve button turns destructive."
+     "doc": "`danger` for an action that cannot be undone: the approve button turns destructive."
     },
     {
      "name": "confirmationPhrase",
@@ -2552,7 +2552,7 @@
      "type": "'inline' | 'bar'",
      "default": "'inline'",
      "required": "false",
-     "doc": "inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear."
+     "doc": "`inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear."
     },
     {
      "name": "delay",
@@ -3056,7 +3056,7 @@
      "type": "'split' | 'start'",
      "default": "'split'",
      "required": "false",
-     "doc": "split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer)."
+     "doc": "`split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer)."
     }
    ],
    "slots": [
@@ -3486,7 +3486,7 @@
      "type": "'horizontal' | 'vertical'",
      "default": "'horizontal'",
      "required": "false",
-     "doc": "horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation)."
+     "doc": "`horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation)."
     },
     {
      "name": "disabled",
@@ -3537,7 +3537,7 @@
      "type": "'pending' | 'running' | 'success' | 'error' | 'denied'",
      "default": "'running'",
      "required": "false",
-     "doc": "pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it)."
+     "doc": "`pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it)."
     },
     {
      "name": "defaultOpen",
@@ -3948,7 +3948,7 @@
    "props": [
     {
      "name": "options",
-     "type": "ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean }`)",
+     "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean }`)",
      "default": "[]",
      "required": "false",
      "doc": "Segmented choices shown as a mutually exclusive group."
@@ -5152,7 +5152,7 @@
    "slots": [
     {
      "name": "center",
-     "scope": "{ total: number; active: ChartSeries",
+     "scope": "`{ total: number; active: ChartSeries",
      "notes": "null }` | Replaces the center readout."
     },
     {
@@ -6382,7 +6382,7 @@
      "type": "'default' | 'integration'",
      "default": "'default'",
      "required": "false",
-     "doc": "integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot."
+     "doc": "`integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot."
     },
     {
      "name": "logo",
@@ -7527,7 +7527,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance."
+     "notes": "`KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance."
     }
    ],
    "surface": "app",
@@ -7692,7 +7692,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance."
+     "notes": "`KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance."
     }
    ],
    "surface": "app",
@@ -8730,7 +8730,7 @@
     {
      "name": "filter-apply",
      "payload": "(event: Event, filters: TableAppliedFilter[])",
-     "notes": "Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`."
+     "notes": "`Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`."
     },
     {
      "name": "filter-remove",
@@ -8750,12 +8750,12 @@
     {
      "name": "reorder",
      "payload": "(event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow })",
-     "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
+     "notes": "`reorderable`: a row moved from index `from` to index `to` of `data`."
     },
     {
      "name": "load-more",
      "payload": "(event: Event)",
-     "notes": "moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
+     "notes": "`moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
     }
    ],
    "slots": [
@@ -9127,7 +9127,7 @@
      "type": "'tokens' | 'query'",
      "default": "'tokens'",
      "required": "false",
-     "doc": "tokens` turns each choice into a token; `query` edits one query string."
+     "doc": "`tokens` turns each choice into a token; `query` edits one query string."
     },
     {
      "name": "validate",
@@ -11399,7 +11399,7 @@
    "props": [
     {
      "name": "severity",
-     "type": "Severity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`)",
+     "type": "`Severity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`)",
      "default": "'success'",
      "required": "false",
      "doc": "Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`)."
@@ -11771,7 +11771,7 @@
     },
     {
      "name": "variant",
-     "type": "ProgressVariant` (`'rounded' | 'flat'`)",
+     "type": "`ProgressVariant` (`'rounded' | 'flat'`)",
      "default": "'flat'",
      "required": "false",
      "doc": "Track and fill corner-radius variant."
@@ -12677,7 +12677,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "Field.Label`, the control, `Field.Description`, `Field.Error` (or `Field.Content` beside the control in a horizontal field)."
+     "notes": "`Field.Label`, the control, `Field.Description`, `Field.Error` (or `Field.Content` beside the control in a horizontal field)."
     }
    ],
    "surface": "app",
@@ -12726,7 +12726,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "Field.Label`, the control, `Field.Description`, `Field.Error` (or `Field.Content` beside the control in a horizontal field)."
+     "notes": "`Field.Label`, the control, `Field.Description`, `Field.Error` (or `Field.Content` beside the control in a horizontal field)."
     }
    ],
    "surface": "app",
@@ -12962,7 +12962,7 @@
      "type": "'numeric' | 'alphanumeric'",
      "default": "'numeric'",
      "required": "false",
-     "doc": "numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case."
+     "doc": "`numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case."
     },
     {
      "name": "group",
@@ -15161,12 +15161,12 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "footer-column`: its `Footer.Link` items."
+     "notes": "`footer-column`: its `Footer.Link` items."
     },
     {
      "name": "default",
      "scope": "—",
-     "notes": "footer-link`: the link label."
+     "notes": "`footer-link`: the link label."
     }
    ],
    "surface": "app",
@@ -15238,12 +15238,12 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "footer-column`: its `Footer.Link` items."
+     "notes": "`footer-column`: its `Footer.Link` items."
     },
     {
      "name": "default",
      "scope": "—",
-     "notes": "footer-link`: the link label."
+     "notes": "`footer-link`: the link label."
     }
    ],
    "surface": "app",
@@ -15631,7 +15631,7 @@
     {
      "name": "account-menu",
      "scope": "—",
-     "notes": "DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`."
+     "notes": "`DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`."
     }
    ],
    "surface": "app",
@@ -15791,7 +15791,7 @@
     {
      "name": "account-menu",
      "scope": "—",
-     "notes": "DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`."
+     "notes": "`DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`."
     }
    ],
    "surface": "app",
@@ -16559,7 +16559,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "app-header-brand` exposes `default` for logo markup."
+     "notes": "`app-header-brand` exposes `default` for logo markup."
     }
    ],
    "surface": "app",
@@ -16604,7 +16604,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "app-header-brand` exposes `default` for logo markup."
+     "notes": "`app-header-brand` exposes `default` for logo markup."
     }
    ],
    "surface": "app",
@@ -18777,7 +18777,7 @@
      "type": "'automatic' | 'manual'",
      "default": "'automatic'",
      "required": "false",
-     "doc": "automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render)."
+     "doc": "`automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render)."
     },
     {
      "name": "modelValue",
@@ -18822,7 +18822,7 @@
      "type": "'automatic' | 'manual'",
      "default": "'automatic'",
      "required": "false",
-     "doc": "automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render)."
+     "doc": "`automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render)."
     },
     {
      "name": "modelValue",
@@ -20247,7 +20247,7 @@
    "props": [
     {
      "name": "placement",
-     "type": "HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
+     "type": "`HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
      "default": "'bottom'",
      "required": "false",
      "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."
@@ -20320,7 +20320,7 @@
    "props": [
     {
      "name": "placement",
-     "type": "HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
+     "type": "`HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
      "default": "'bottom'",
      "required": "false",
      "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."
@@ -20438,7 +20438,7 @@
     },
     {
      "name": "size",
-     "type": "PopoverSize` (`'small' | 'medium' | 'large'`)",
+     "type": "`PopoverSize` (`'small' | 'medium' | 'large'`)",
      "default": "undefined",
      "required": "false",
      "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`."
@@ -20511,7 +20511,7 @@
     },
     {
      "name": "size",
-     "type": "PopoverSize` (`'small' | 'medium' | 'large'`)",
+     "type": "`PopoverSize` (`'small' | 'medium' | 'large'`)",
      "default": "undefined",
      "required": "false",
      "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`."
@@ -25086,7 +25086,7 @@
    "slots": [
     {
      "name": "scene",
-     "scope": "{ tab: string",
+     "scope": "`{ tab: string",
      "notes": "undefined }` | The scene the band presents; `tab` is the selected tab value (undefined without tabs)."
     }
    ],
@@ -25841,7 +25841,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "value` of the code tab open first; empty, or a value no tab carries, opens the first tab."
+     "doc": "`value` of the code tab open first; empty, or a value no tab carries, opens the first tab."
     },
     {
      "name": "copyAriaLabel",

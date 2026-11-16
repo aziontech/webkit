@@ -22,12 +22,12 @@
   "A fixed list of named intervals and nothing custom → use `select` or `toggle-group`."
  ],
  "related": [
-  "date-picker` — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.",
-  "timestamp` — displays a moment in time; both read the `WebkitProvider` `timeZone`.",
-  "webkit-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.",
-  "field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
-  "property-filter` — the query bar it sits next to in an events toolbar.",
-  "chart` — the histogram whose brush usually writes an absolute range back into this picker."
+  "`date-picker` — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.",
+  "`timestamp` — displays a moment in time; both read the `WebkitProvider` `timeZone`.",
+  "`webkit-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.",
+  "`field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
+  "`property-filter` — the query bar it sits next to in an events toolbar.",
+  "`chart` — the histogram whose brush usually writes an absolute range back into this picker."
  ],
  "bestPractices": [
   "Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them.",
@@ -171,15 +171,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DateRangePicker from '@aziontech/webkit/date-range-picker'\n  import { ref } from 'vue'\n\n  const range = ref({ type: 'relative', amount: 15, unit: 'minute', key: 'last-15-minutes' })\n</script>\n\n<template>\n  <DateRangePicker\n    v-model=\"range\"\n    aria-label=\"Events time range\"\n  />\n</template>"
+   "file": "examples/date-range-picker/default.vue"
   },
   {
    "name": "Absolute",
-   "sfc": "<script setup>\n  import DateRangePicker from '@aziontech/webkit/date-range-picker'\n  import { ref } from 'vue'\n\n  const range = ref({\n    type: 'absolute',\n    start: '2026-11-10T12:00:00.000Z',\n    end: '2026-11-10T18:30:00.000Z'\n  })\n</script>\n\n<template>\n  <DateRangePicker\n    v-model=\"range\"\n    range-selector-mode=\"absolute-only\"\n    time-zone=\"UTC\"\n    :max=\"new Date('2026-11-11T00:00:00.000Z')\"\n    aria-label=\"Billing window\"\n  />\n</template>"
+   "file": "examples/date-range-picker/absolute.vue"
   },
   {
    "name": "RelativeOnly",
-   "sfc": "<script setup>\n  import DateRangePicker from '@aziontech/webkit/date-range-picker'\n  import { ref } from 'vue'\n\n  const options = [\n    { key: 'last-1-hour', amount: 1, unit: 'hour' },\n    { key: 'last-24-hours', amount: 24, unit: 'hour' },\n    { key: 'last-7-days', amount: 7, unit: 'day' },\n    { key: 'last-30-days', amount: 30, unit: 'day' }\n  ]\n\n  const range = ref({ type: 'relative', amount: 24, unit: 'hour', key: 'last-24-hours' })\n</script>\n\n<template>\n  <DateRangePicker\n    v-model=\"range\"\n    :relative-options=\"options\"\n    range-selector-mode=\"relative-only\"\n    aria-label=\"Metrics interval\"\n  />\n</template>"
+   "file": "examples/date-range-picker/relative-only.vue"
   }
  ],
  "docs": "components/date-range-picker.md"

@@ -8,9 +8,9 @@
   "For a plain wall with one quote → use `logo-wall-section`."
  ],
  "related": [
-  "bento-grid` — the grid the cells are laid in.",
-  "client-story-columns` — the three-column sibling with brand-coloured faces.",
-  "logo` — draws every client mark in the ink its fill needs."
+  "`bento-grid` — the grid the cells are laid in.",
+  "`client-story-columns` — the three-column sibling with brand-coloured faces.",
+  "`logo` — draws every client mark in the ink its fill needs."
  ],
  "bestPractices": [
   "Two stories and six marks fill the four-column grid exactly.",

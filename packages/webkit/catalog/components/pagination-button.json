@@ -12,10 +12,10 @@
   "It is a \"Load more\" control at the end of a list → use `button`."
  ],
  "related": [
-  "pagination` — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.",
-  "pagination-description` — the page-info text that sits beside the strip.",
-  "pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.",
-  "icon-button` — a standalone icon-only action with its own frame and radius."
+  "`pagination` — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.",
+  "`pagination-description` — the page-info text that sits beside the strip.",
+  "`pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.",
+  "`icon-button` — a standalone icon-only action with its own frame and radius."
  ],
  "bestPractices": [
   "Place it only inside `pagination`'s default slot: the strip's border and frame come from the root, and the outer radius is applied through `first:` / `last:`, so only the first and last buttons of the strip round their corners.",

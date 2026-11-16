@@ -11,10 +11,10 @@
   "A single standalone link inside body content → use `link` instead of `Footer.Link`."
  ],
  "related": [
-  "app-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
-  "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.",
-  "site-footer` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.",
-  "registration-frame` — the footer's own frame: the hatched gutters, the framed column and the signature box are `RegistrationFrame` instances (`borders` / `marks` / `hatch`)."
+  "`app-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
+  "`brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.",
+  "`site-footer` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.",
+  "`registration-frame` — the footer's own frame: the hatched gutters, the framed column and the signature box are `RegistrationFrame` instances (`borders` / `marks` / `hatch`)."
  ],
  "bestPractices": [
   "Compose every band from existing DS components (`Brand`, `IconButton variant=\"ghost\" size=\"small\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",

@@ -10,9 +10,9 @@
   "A single count without a list behind it → use `Badge`."
  ],
  "related": [
-  "table` — `Table.CellTags` and `Table.CellLink` put this chip after the values they fit.",
-  "tag` — the chip is a small secondary `Tag`.",
-  "popover` — the list opens in a `Popover`."
+  "`table` — `Table.CellTags` and `Table.CellLink` put this chip after the values they fit.",
+  "`tag` — the chip is a small secondary `Tag`.",
+  "`popover` — the list opens in a `Popover`."
  ],
  "bestPractices": [
   "Show the first item (or as many as fit) beside the chip; the chip counts only the hidden ones, and `items` passes only those.",

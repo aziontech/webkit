@@ -4,7 +4,7 @@
 
 - Import: `import PricingCard from '@aziontech/webkit/pricing-card'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [pricing-card.json](https://github.com/aziontech/webkit/blob/main/.specs/pricing-card.json)
+- API as JSON: [pricing-card.json](pricing-card.json)
 
 ## When to use
 

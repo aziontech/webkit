@@ -4,7 +4,7 @@
 
 - Import: `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [password-requirements.json](https://github.com/aziontech/webkit/blob/main/.specs/password-requirements.json)
+- API as JSON: [password-requirements.json](password-requirements.json)
 
 ## When to use
 

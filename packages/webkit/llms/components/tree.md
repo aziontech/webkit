@@ -4,7 +4,7 @@
 
 - Import: `import Tree from '@aziontech/webkit/tree'`
 - Category: data · Surface: app · Structure: monolithic
-- API as JSON: [tree.json](https://github.com/aziontech/webkit/blob/main/.specs/tree.json)
+- API as JSON: [tree.json](tree.json)
 
 ## When to use
 

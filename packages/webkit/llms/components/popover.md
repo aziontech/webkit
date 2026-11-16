@@ -5,7 +5,7 @@
 - Import: `import PopoverRoot from '@aziontech/webkit/popover-root'`
 - Compound import (dot notation, not tree-shakeable): `import Popover from '@aziontech/webkit/popover'`
 - Category: overlay · Surface: app · Structure: composition
-- API as JSON: [popover.json](https://github.com/aziontech/webkit/blob/main/.specs/popover.json)
+- API as JSON: [popover.json](popover.json)
 
 ## When to use
 
@@ -47,7 +47,7 @@
 | `placement` | `PopoverPlacement` | `'bottom-start'` | false | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
 | `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
-| `size` | `PopoverSize` (`'small' \| 'medium' \| 'large'`)` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`. |
+| `size` | ``PopoverSize` (`'small' \| 'medium' \| 'large'`)` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |

@@ -4,7 +4,7 @@
 
 - Import: `import CodeEditor from '@aziontech/webkit/code-editor'`
 - Category: code · Surface: app · Structure: monolithic
-- API as JSON: [code-editor.json](https://github.com/aziontech/webkit/blob/main/.specs/code-editor.json)
+- API as JSON: [code-editor.json](code-editor.json)
 
 ## When to use
 

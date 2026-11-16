@@ -5,7 +5,7 @@
 - Import: `import PaginationRoot from '@aziontech/webkit/pagination-root'`
 - Compound import (dot notation, not tree-shakeable): `import Pagination from '@aziontech/webkit/pagination'`
 - Category: data · Surface: app · Structure: composition
-- API as JSON: [pagination.json](https://github.com/aziontech/webkit/blob/main/.specs/pagination.json)
+- API as JSON: [pagination.json](pagination.json)
 
 ## When to use
 
@@ -17,7 +17,7 @@
 ## Do
 
 - Prefer data-driven mode (`total` set); in composition mode the root emits nothing and you own every button's `active` / `disabled` state and every click.
-- page` is 1-based. Changing the page size through the selector emits `update:pageSize` and resets the page to `1`.
+- `page` is 1-based. Changing the page size through the selector emits `update:pageSize` and resets the page to `1`.
 - Keep `page-size-options` aligned with what your data source accepts; the default is `[10, 25, 50, 100]`.
 - Tune `sibling-count` (default `1`) instead of hiding buttons — it controls how many numbers sit on each side of the current page before the overflow ellipsis.
 - Set `aria-label` when a page carries more than one pagination, so each navigation landmark has a distinct name.

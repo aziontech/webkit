@@ -4,7 +4,7 @@
 
 - Import: `import ConsoleShowcase from '@aziontech/webkit/console-showcase'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [console-showcase.json](https://github.com/aziontech/webkit/blob/main/.specs/console-showcase.json)
+- API as JSON: [console-showcase.json](console-showcase.json)
 
 ## When to use
 
@@ -25,9 +25,9 @@
 
 ## Related
 
-- ConsoleMockup` — the console scenes it frames.
-- ToggleGroup` — the tab control.
-- Texture`, `RegistrationFrame`, `SectionTitle`.
+- `ConsoleMockup` — the console scenes it frames.
+- `ToggleGroup` — the tab control.
+- `Texture`, `RegistrationFrame`, `SectionTitle`.
 
 ## Props
 
@@ -53,7 +53,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `scene` | { tab: string | undefined }` \| The scene the band presents; `tab` is the selected tab value (undefined without tabs). |
+| `scene` | `{ tab: string | undefined }` \| The scene the band presents; `tab` is the selected tab value (undefined without tabs). |
 
 ## States
 

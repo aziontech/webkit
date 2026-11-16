@@ -4,7 +4,7 @@
 
 - Import: `import DataGrid from '@aziontech/webkit/data-grid'`
 - Category: data · Surface: app · Structure: monolithic
-- API as JSON: [data-grid.json](https://github.com/aziontech/webkit/blob/main/.specs/data-grid.json)
+- API as JSON: [data-grid.json](data-grid.json)
 
 ## When to use
 

@@ -23,10 +23,10 @@
   "For a hairline grid of cells → use `card-grid` inside this module's body."
  ],
  "related": [
-  "section-container` — the framed column this module stacks inside.",
-  "section-title` — the header row this module renders by default.",
-  "card-grid` — the edge-to-edge cell grid a module's body commonly holds.",
-  "registration-frame` — the registration frame a body wraps itself in."
+  "`section-container` — the framed column this module stacks inside.",
+  "`section-title` — the header row this module renders by default.",
+  "`card-grid` — the edge-to-edge cell grid a module's body commonly holds.",
+  "`registration-frame` — the registration frame a body wraps itself in."
  ],
  "bestPractices": [
   "Pass `divided` as `false` on the first module in a column: its top edge is already the hero's bottom rule, and drawing its own would put two hairlines on one pixel.",
@@ -100,15 +100,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import SectionModule from '@aziontech/webkit/section-module'\n</script>\n\n<template>\n  <SectionModule\n    eyebrow=\"Platform\"\n    title=\"Build, run, and protect applications\"\n    description=\"One sentence naming what the band is about.\"\n  >\n    <p class=\"m-0 text-body-md text-(--text-muted)\">Everything the band has to say.</p>\n  </SectionModule>\n</template>"
+   "file": "examples/section-module/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import SectionModule from '@aziontech/webkit/section-module'\n</script>\n\n<template>\n  <div>\n    <SectionModule\n      :divided=\"false\"\n      variant=\"start\"\n      eyebrow=\"Platform\"\n      title=\"Left\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header sits at the start edge.</p>\n    </SectionModule>\n    <SectionModule\n      variant=\"center\"\n      eyebrow=\"Platform\"\n      title=\"Centered\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header is centered.</p>\n    </SectionModule>\n    <SectionModule\n      variant=\"split\"\n      eyebrow=\"Platform\"\n      title=\"Horizontal\"\n      description=\"The description takes its own column.\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">\n        The headline and its description share a row.\n      </p>\n    </SectionModule>\n  </div>\n</template>"
+   "file": "examples/section-module/variants.vue"
   },
   {
    "name": "Divided",
-   "sfc": "<script setup>\n  import SectionModule from '@aziontech/webkit/section-module'\n</script>\n\n<template>\n  <div>\n    <SectionModule\n      :divided=\"false\"\n      title=\"First module\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">\n        Its top edge belongs to the hero above it, so it draws none.\n      </p>\n    </SectionModule>\n    <SectionModule title=\"Second module\">\n      <p class=\"m-0 text-body-md text-(--text-muted)\">\n        This one draws the rule that divides the two.\n      </p>\n    </SectionModule>\n  </div>\n</template>"
+   "file": "examples/section-module/divided.vue"
   }
  ],
  "docs": "components/section-module.md"

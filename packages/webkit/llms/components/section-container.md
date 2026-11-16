@@ -4,7 +4,7 @@
 
 - Import: `import SectionContainer from '@aziontech/webkit/section-container'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [section-container.json](https://github.com/aziontech/webkit/blob/main/.specs/section-container.json)
+- API as JSON: [section-container.json](section-container.json)
 
 ## When to use
 

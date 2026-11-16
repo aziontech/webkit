@@ -4,7 +4,7 @@
 
 - Import: `import SettingsSection from '@aziontech/webkit/settings-section'`
 - Category: layout · Surface: app · Structure: monolithic
-- API as JSON: [settings-section.json](https://github.com/aziontech/webkit/blob/main/.specs/settings-section.json)
+- API as JSON: [settings-section.json](settings-section.json)
 
 ## When to use
 

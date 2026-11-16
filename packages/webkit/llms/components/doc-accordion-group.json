@@ -21,9 +21,9 @@
   "Inside an application screen — use `Accordion` directly."
  ],
  "related": [
-  "DocAccordion` — the entry it reads.",
-  "Accordion` — the design-system surface it renders on.",
-  "Faq` — the marketing FAQ band."
+  "`DocAccordion` — the entry it reads.",
+  "`Accordion` — the design-system surface it renders on.",
+  "`Faq` — the marketing FAQ band."
  ],
  "bestPractices": [
   "Write each title as the full question the reader would ask.",
@@ -52,11 +52,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocAccordion from '@aziontech/webkit/doc-accordion'\n  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'\n</script>\n\n<template>\n  <DocAccordionGroup>\n    <DocAccordion\n      title=\"Why does my first request miss the cache?\"\n      default-open\n    >\n      <p>Each location warms up on its own first request. Warm-up is per location, not global.</p>\n    </DocAccordion>\n    <DocAccordion title=\"Can I purge a single path?\">\n      <p>Yes. Purge by URL for one object, or by wildcard for a folder.</p>\n    </DocAccordion>\n    <DocAccordion title=\"How long does a purge take to reach every location?\">\n      <p>Usually a few seconds. The purge request returns once every location has confirmed it.</p>\n    </DocAccordion>\n  </DocAccordionGroup>\n</template>"
+   "file": "examples/doc-accordion-group/default.vue"
   },
   {
    "name": "Multiple",
-   "sfc": "<script setup>\n  import DocAccordion from '@aziontech/webkit/doc-accordion'\n  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'\n</script>\n\n<template>\n  <DocAccordionGroup type=\"multiple\">\n    <DocAccordion\n      title=\"Which runtimes are supported?\"\n      default-open\n    >\n      <p>JavaScript and TypeScript, plus WebAssembly modules compiled from other languages.</p>\n    </DocAccordion>\n    <DocAccordion\n      title=\"Is there a cold start?\"\n      default-open\n    >\n      <p>Isolates start in under a millisecond, so there is no warm-up to plan for.</p>\n    </DocAccordion>\n  </DocAccordionGroup>\n</template>"
+   "file": "examples/doc-accordion-group/multiple.vue"
   }
  ],
  "docs": "components/doc-accordion-group.md"

@@ -20,8 +20,8 @@
   "For an editable field — use `Input`."
  ],
  "related": [
-  "CopyButton`, `InputGroup` — the parts.",
-  "CliTerminal` — a full terminal session."
+  "`CopyButton`, `InputGroup` — the parts.",
+  "`CliTerminal` — a full terminal session."
  ],
  "bestPractices": [
   "One line that works when pasted as is.",
@@ -50,11 +50,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CopyCommand from '@aziontech/webkit/copy-command'\n</script>\n\n<template>\n  <CopyCommand value=\"npm create azion@latest\" />\n</template>"
+   "file": "examples/copy-command/default.vue"
   },
   {
    "name": "Prompt",
-   "sfc": "<script setup>\n  import CopyCommand from '@aziontech/webkit/copy-command'\n</script>\n\n<template>\n  <CopyCommand\n    :shell=\"false\"\n    value=\"Deploy this repository to Azion and give me the URL\"\n  />\n</template>"
+   "file": "examples/copy-command/prompt.vue"
   }
  ],
  "docs": "components/copy-command.md"

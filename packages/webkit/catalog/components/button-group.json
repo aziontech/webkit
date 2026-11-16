@@ -15,12 +15,12 @@
   "A long list of commands or navigation → use `dropdown-menu`."
  ],
  "related": [
-  "icon-button` — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.",
-  "toggle-group` — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).",
-  "split-button` — one main action plus a menu, with a visible text label.",
-  "dropdown-menu` — the menu behind menu items and the More actions overflow.",
-  "tooltip` — the visible name of each icon.",
-  "code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
+  "`icon-button` — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.",
+  "`toggle-group` — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).",
+  "`split-button` — one main action plus a menu, with a visible text label.",
+  "`dropdown-menu` — the menu behind menu items and the More actions overflow.",
+  "`tooltip` — the visible name of each icon.",
+  "`code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
  ],
  "bestPractices": [
   "Give the toolbar an `aria-label` that names the surface (\"Editor actions\"), and every item a `label` that says what it does (\"Copy code\", not \"Copy\"). Write the kebab attribute (`aria-label`, `:aria-label` when the name changes, `aria-labelledby` when a visible heading already names the surface), never the camelCase `ariaLabel` attribute.",

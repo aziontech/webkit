@@ -4,7 +4,7 @@
 
 - Import: `import FeatureScroll from '@aziontech/webkit/feature-scroll'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [feature-scroll.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-scroll.json)
+- API as JSON: [feature-scroll.json](feature-scroll.json)
 
 ## When to use
 

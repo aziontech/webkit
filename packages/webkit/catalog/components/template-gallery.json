@@ -12,8 +12,8 @@
   "For a closing ask with links or a command and no templates → use `closing-call-to-action`; for an email sign-up close → use `newsletter-section`."
  ],
  "related": [
-  "media-split` — the framed copy-and-media split the band is built on; it owns the band's named region.",
-  "marquee` — the row of framework and cloud marks that closes the band."
+  "`media-split` — the framed copy-and-media split the band is built on; it owns the band's named region.",
+  "`marquee` — the row of framework and cloud marks that closes the band."
  ],
  "bestPractices": [
   "Keep the wall to an even number of templates so the two columns end level.",

@@ -17,7 +17,7 @@
   "Outside a `DocAccordionGroup` — it renders no trigger of its own."
  ],
  "related": [
-  "DocAccordionGroup` — the group that reads it."
+  "`DocAccordionGroup` — the group that reads it."
  ],
  "bestPractices": [
   "Keep the title a question; keep the body prose."
@@ -51,7 +51,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocAccordion from '@aziontech/webkit/doc-accordion'\n  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'\n</script>\n\n<template>\n  <DocAccordionGroup>\n    <DocAccordion\n      title=\"Can I keep a stale object while the origin is down?\"\n      default-open\n    >\n      <p>\n        Yes. Turn on stale cache and the last good copy is served until the origin answers again.\n      </p>\n    </DocAccordion>\n  </DocAccordionGroup>\n</template>"
+   "file": "examples/doc-accordion/default.vue"
   }
  ],
  "docs": "components/doc-accordion.md"

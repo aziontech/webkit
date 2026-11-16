@@ -5,7 +5,7 @@
 - Import: `import ResizableRoot from '@aziontech/webkit/resizable-root'`
 - Compound import (dot notation, not tree-shakeable): `import Resizable from '@aziontech/webkit/resizable'`
 - Category: layout · Surface: app · Structure: composition
-- API as JSON: [resizable.json](https://github.com/aziontech/webkit/blob/main/.specs/resizable.json)
+- API as JSON: [resizable.json](resizable.json)
 
 ## When to use
 

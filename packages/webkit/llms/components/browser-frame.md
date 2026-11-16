@@ -4,7 +4,7 @@
 
 - Import: `import BrowserFrame from '@aziontech/webkit/browser-frame'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [browser-frame.json](https://github.com/aziontech/webkit/blob/main/.specs/browser-frame.json)
+- API as JSON: [browser-frame.json](browser-frame.json)
 
 ## When to use
 

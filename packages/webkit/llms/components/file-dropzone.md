@@ -4,7 +4,7 @@
 
 - Import: `import FileDropzone from '@aziontech/webkit/file-dropzone'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [file-dropzone.json](https://github.com/aziontech/webkit/blob/main/.specs/file-dropzone.json)
+- API as JSON: [file-dropzone.json](file-dropzone.json)
 
 ## When to use
 

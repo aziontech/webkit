@@ -22,14 +22,14 @@
   "Code with no prose around it → `CodeBlock` or `DocCodeGroup`."
  ],
  "related": [
-  "DocProse` — wrap this component in it; it owns the type scale, the block rhythm and the copyable inline code chips.",
-  "DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.",
-  "DocLayout`, `DocOnThisPage` — take `parseDocMarkdown(source).headings` as `outline` / `items`.",
-  "DocPageHeader` — takes the frontmatter's `title` and `description`.",
-  "DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.",
-  "HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.",
-  "RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.",
-  "StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have."
+  "`DocProse` — wrap this component in it; it owns the type scale, the block rhythm and the copyable inline code chips.",
+  "`DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.",
+  "`DocLayout`, `DocOnThisPage` — take `parseDocMarkdown(source).headings` as `outline` / `items`.",
+  "`DocPageHeader` — takes the frontmatter's `title` and `description`.",
+  "`DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.",
+  "`HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.",
+  "`RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.",
+  "`StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have."
  ],
  "bestPractices": [
   "Wrap it in `DocProse` and pass the page's headings to the layout from the same source: `const { headings, frontmatter } = parseDocMarkdown(source)`.",
@@ -61,11 +61,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup lang=\"ts\">\n  import DocMarkdown from '@aziontech/webkit/doc-markdown'\n  import DocProse from '@aziontech/webkit/doc-prose'\n\n  const source = [\n    '---',\n    'title: First deploy',\n    'description: Deploy a template and see it served from the edge.',\n    '---',\n    '',\n    '## Before you start',\n    '',\n    'You need an Acme account. Log in with `acme login`, then read the [CLI reference](https://example.com/docs/cli).',\n    '',\n    '- A project folder with a `package.json`',\n    '- Node.js 22 or later',\n    '',\n    '<Note>A first deploy takes about a minute.</Note>',\n    '',\n    '## Deploy with the CLI',\n    '',\n    '<Steps>',\n    '  <Step title=\"Install the CLI\">',\n    '    <CodeGroup>',\n    '    ```bash npm',\n    '    npm install -g acme-cli',\n    '    ```',\n    '    ```bash pnpm',\n    '    pnpm add -g acme-cli',\n    '    ```',\n    '    </CodeGroup>',\n    '  </Step>',\n    '  <Step title=\"Deploy\">Run `acme deploy` from the project folder.</Step>',\n    '</Steps>',\n    '',\n    '## Limits',\n    '',\n    '| Plan | Builds per day |',\n    '| :--- | ---: |',\n    '| Free | 100 |',\n    '| Pro | 1,000 |',\n    '',\n    '## Next steps',\n    '',\n    '<CardGroup cols={2}>',\n    '  <Card title=\"Domains\" icon=\"ai ai-globe\" href=\"/docs/domains\">Point your own domain at the deploy.</Card>',\n    '  <Card title=\"Cache\" icon=\"ai ai-bolt\" href=\"/docs/cache\">Cache static assets at the edge.</Card>',\n    '</CardGroup>'\n  ].join('\\n')\n</script>\n\n<template>\n  <DocProse>\n    <DocMarkdown :source=\"source\" />\n  </DocProse>\n</template>"
+   "file": "examples/doc-markdown/default.vue"
   },
   {
    "name": "Components",
-   "sfc": "<script setup lang=\"ts\">\n  import Alert from '@aziontech/webkit/alert'\n  import DocMarkdown, { parseDocMarkdown } from '@aziontech/webkit/doc-markdown'\n  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'\n  import DocProse from '@aziontech/webkit/doc-prose'\n\n  const components = { Alert }\n\n  const source = [\n    '## Maintenance',\n    '',\n    '<Alert severity=\"warning\" label=\"Deploys pause on March 9, 2026, from 02:00 to 03:00 UTC.\" />',\n    '',\n    'Requests keep being served during the window; only new deploys wait.',\n    '',\n    '## Changelog',\n    '',\n    '<Update label=\"March 2, 2026\" description=\"v2.4.0\" tags={[\"CLI\"]}>Deploys start 30% faster.</Update>'\n  ].join('\\n')\n\n  const { headings } = parseDocMarkdown(source, components)\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-(--spacing-lg) md:flex-row\">\n    <DocProse class=\"min-w-0 flex-1\">\n      <DocMarkdown\n        :source=\"source\"\n        :components=\"components\"\n      />\n    </DocProse>\n    <div class=\"md:w-(--container-3xs)\">\n      <DocOnThisPage :items=\"headings\" />\n    </div>\n  </div>\n</template>"
+   "file": "examples/doc-markdown/components.vue"
   }
  ],
  "docs": "components/doc-markdown.md"

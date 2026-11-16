@@ -17,7 +17,7 @@
   "For client marks → use `client-mosaic` or `logo-wall-section`."
  ],
  "related": [
-  "bento-grid` — the grid the marks are laid in."
+  "`bento-grid` — the grid the marks are laid in."
  ],
  "bestPractices": [
   "Give each item a `logoLight` when its mark needs a different file on the light theme; otherwise one `logo` serves both.",
@@ -67,7 +67,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import monasheesExtendedMono from '@aziontech/webkit/assets/monashees-extended-mono.svg'\n  import monasheesExtendedReversed from '@aziontech/webkit/assets/monashees-extended-reversed.svg'\n  import qualcommExtendedMono from '@aziontech/webkit/assets/qualcomm-extended-mono.svg'\n  import qualcommExtendedReversed from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'\n  import InvestorMarks from '@aziontech/webkit/investor-marks'\n</script>\n\n<template>\n  <InvestorMarks\n    eyebrow=\"Investors\"\n    title=\"Backed by visionary investors\"\n    link-label=\"Visit website\"\n    :items=\"[\n      {\n        name: 'monashees+',\n        logo: monasheesExtendedReversed,\n        logoLight: monasheesExtendedMono,\n        href: 'https://www.monashees.com'\n      },\n      {\n        name: 'Qualcomm Ventures',\n        logo: qualcommExtendedReversed,\n        logoLight: qualcommExtendedMono,\n        href: 'https://www.qualcommventures.com'\n      }\n    ]\"\n  />\n</template>"
+   "file": "examples/investor-marks/default.vue"
   }
  ],
  "docs": "components/investor-marks.md"

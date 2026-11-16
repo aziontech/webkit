@@ -4,7 +4,7 @@
 
 - Import: `import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'`
 - Category: navigation · Surface: app · Structure: monolithic
-- API as JSON: [breadcrumb-item.json](https://github.com/aziontech/webkit/blob/main/.specs/breadcrumb-item.json)
+- API as JSON: [breadcrumb-item.json](breadcrumb-item.json)
 
 ## When to use
 
@@ -17,7 +17,7 @@
 - Set `active` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
 - Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.
 - Use `show-icon` together with `icon` (an Azion icon class; empty shows `ai ai-box`); `icon` alone renders nothing.
-- disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
+- `disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
 
 ## Don’t
 

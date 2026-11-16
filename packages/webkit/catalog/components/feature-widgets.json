@@ -9,8 +9,8 @@
   "For a long argument per feature → use `feature-scroll`."
  ],
  "related": [
-  "bento-grid` — the grid the cells are laid in.",
-  "highlight-button` — the copy affordance a cell renders when it carries `copy`."
+  "`bento-grid` — the grid the cells are laid in.",
+  "`highlight-button` — the copy affordance a cell renders when it carries `copy`."
  ],
  "bestPractices": [
   "Give each item an `action` (a link), a `copy` (text to put on the clipboard), or both when the reader may want the docs and the prompt.",

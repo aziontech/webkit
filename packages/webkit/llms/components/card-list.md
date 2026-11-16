@@ -4,7 +4,7 @@
 
 - Import: `import CardList from '@aziontech/webkit/card-list'`
 - Category: data · Surface: app · Structure: monolithic
-- API as JSON: [card-list.json](https://github.com/aziontech/webkit/blob/main/.specs/card-list.json)
+- API as JSON: [card-list.json](card-list.json)
 
 ## When to use
 
@@ -27,7 +27,7 @@
 
 ## Related
 
-- use-collection` — filters, pages and selects; `cardListProps` is the binding.
+- `use-collection` — filters, pages and selects; `cardListProps` is the binding.
 - [table](table.md) — the same collection as rows; same item and selection model.
 - [property-filter](property-filter.md), `collection-preferences`, `pagination` — the controls around it.
 - [card](card.md) — one standalone card.

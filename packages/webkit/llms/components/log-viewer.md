@@ -5,7 +5,7 @@
 - Import: `import LogViewerRoot from '@aziontech/webkit/log-viewer-root'`
 - Compound import (dot notation, not tree-shakeable): `import LogViewer from '@aziontech/webkit/log-viewer'`
 - Category: code · Surface: app · Structure: composition
-- API as JSON: [log-viewer.json](https://github.com/aziontech/webkit/blob/main/.specs/log-viewer.json)
+- API as JSON: [log-viewer.json](log-viewer.json)
 
 ## When to use
 
@@ -35,7 +35,7 @@
 
 - [code-block](code-block.md) — highlighted source code with a copy action, not a stream of typed log lines.
 - [cli-terminal](cli-terminal.md) — marketing band that plays a scripted terminal session.
-- deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
+- `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Props
 

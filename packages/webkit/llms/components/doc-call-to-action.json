@@ -19,9 +19,9 @@
   "More than once per page."
  ],
  "related": [
-  "DocOnThisPage` — the rail it closes.",
-  "RegistrationFrame` — the frame.",
-  "CallToAction` — the marketing closing band."
+  "`DocOnThisPage` — the rail it closes.",
+  "`RegistrationFrame` — the frame.",
+  "`CallToAction` — the marketing closing band."
  ],
  "bestPractices": [
   "One primary action; a secondary only when it is a real alternative (talk to sales).",
@@ -70,11 +70,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'\n</script>\n\n<template>\n  <div class=\"max-w-56\">\n    <DocCallToAction\n      title=\"Ready to build?\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n    >\n      Deploy your first application in minutes.\n    </DocCallToAction>\n  </div>\n</template>"
+   "file": "examples/doc-call-to-action/default.vue"
   },
   {
    "name": "Two actions",
-   "sfc": "<script setup>\n  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'\n</script>\n\n<template>\n  <div class=\"max-w-56\">\n    <DocCallToAction\n      title=\"Running at scale?\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n      :secondary-action=\"{ label: 'Talk to sales', href: '/contact' }\"\n    >\n      Plans with support and volume pricing.\n    </DocCallToAction>\n  </div>\n</template>"
+   "file": "examples/doc-call-to-action/two-actions.vue"
   }
  ],
  "docs": "components/doc-call-to-action.md"

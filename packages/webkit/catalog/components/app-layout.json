@@ -14,12 +14,12 @@
   "Marketing and documentation pages → use the `shell/site` and `shell/docs` blocks."
  ],
  "related": [
-  "sidebar` — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.",
-  "app-header` — the bar that goes in the `header` slot.",
-  "help-panel` — the content of the tools region.",
-  "drawer` — what the navigation and tools regions become below `compactBelow`.",
-  "resizable` — a split between panes inside a page, without the shell.",
-  "alert` — the flash messages composed into the `notifications` slot."
+  "`sidebar` — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.",
+  "`app-header` — the bar that goes in the `header` slot.",
+  "`help-panel` — the content of the tools region.",
+  "`drawer` — what the navigation and tools regions become below `compactBelow`.",
+  "`resizable` — a split between panes inside a page, without the shell.",
+  "`alert` — the flash messages composed into the `notifications` slot."
  ],
  "bestPractices": [
   "One `AppLayout` per page, at the root. Do not nest them.",

@@ -4,7 +4,7 @@
 
 - Import: `import StoryIndex from '@aziontech/webkit/story-index'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [story-index.json](https://github.com/aziontech/webkit/blob/main/.specs/story-index.json)
+- API as JSON: [story-index.json](story-index.json)
 
 ## When to use
 

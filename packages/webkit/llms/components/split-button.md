@@ -4,7 +4,7 @@
 
 - Import: `import SplitButton from '@aziontech/webkit/split-button'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [split-button.json](https://github.com/aziontech/webkit/blob/main/.specs/split-button.json)
+- API as JSON: [split-button.json](split-button.json)
 
 ## When to use
 

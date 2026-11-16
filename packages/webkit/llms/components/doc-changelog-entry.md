@@ -4,7 +4,7 @@
 
 - Import: `import DocChangelogEntry from '@aziontech/webkit/doc-changelog-entry'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-changelog-entry.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-changelog-entry.json)
+- API as JSON: [doc-changelog-entry.json](doc-changelog-entry.json)
 
 ## When to use
 
@@ -27,9 +27,9 @@
 
 ## Related
 
-- DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.
-- Tag` — renders the entry's tags row (`severity="neutral"`): small and rounded in the label column, medium with the default shape under a `title`.
-- use-heading-navigation` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNavigation`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over.
+- `DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.
+- `Tag` — renders the entry's tags row (`severity="neutral"`): small and rounded in the label column, medium with the default shape under a `title`.
+- `use-heading-navigation` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNavigation`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over.
 
 ## Props
 

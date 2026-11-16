@@ -14,11 +14,11 @@
   "A page with nothing configured yet, which needs one call to action → use `empty-state`."
  ],
  "related": [
-  "drawer` — the host that opens, closes and traps focus around a help panel shown as an overlay.",
-  "tutorial-panel` — guided tutorials, drawn with these parts plus its own task list.",
-  "link` — the standalone link each `HelpPanel.Footer` row is composed from.",
-  "skeleton` — what the panel renders in place of its content while `loading`.",
-  "doc-prose` — long-form documentation prose; a help section is a few short paragraphs, not an article."
+  "`drawer` — the host that opens, closes and traps focus around a help panel shown as an overlay.",
+  "`tutorial-panel` — guided tutorials, drawn with these parts plus its own task list.",
+  "`link` — the standalone link each `HelpPanel.Footer` row is composed from.",
+  "`skeleton` — what the panel renders in place of its content while `loading`.",
+  "`doc-prose` — long-form documentation prose; a help section is a few short paragraphs, not an article."
  ],
  "bestPractices": [
   "One topic per panel. When the reader moves to another part of the page, swap the panel's content — do not stack two headers.",

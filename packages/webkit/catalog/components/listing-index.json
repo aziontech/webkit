@@ -12,9 +12,9 @@
   "For a card grid of customer stories with search and facets → use `story-index`."
  ],
  "related": [
-  "table` — the composed rows and cells the listing renders from the small breakpoint up.",
-  "item` — the list rows the listing renders below the small breakpoint.",
-  "empty-state` — the state shown when the search and facets match nothing."
+  "`table` — the composed rows and cells the listing renders from the small breakpoint up.",
+  "`item` — the list rows the listing renders below the small breakpoint.",
+  "`empty-state` — the state shown when the search and facets match nothing."
  ],
  "bestPractices": [
   "Name the first column after what the row is (`Role`); it is the row's link, and the second column describes the row on phones.",

@@ -4,7 +4,7 @@
 
 - Import: `import StatTileGroup from '@aziontech/webkit/stat-tile-group'`
 - Category: chart · Surface: app · Structure: monolithic
-- API as JSON: [stat-tile-group.json](https://github.com/aziontech/webkit/blob/main/.specs/stat-tile-group.json)
+- API as JSON: [stat-tile-group.json](stat-tile-group.json)
 
 ## When to use
 

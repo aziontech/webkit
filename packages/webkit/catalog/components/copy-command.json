@@ -10,8 +10,8 @@
   "For an editable field — use `Input`."
  ],
  "related": [
-  "CopyButton`, `InputGroup` — the parts.",
-  "CliTerminal` — a full terminal session."
+  "`CopyButton`, `InputGroup` — the parts.",
+  "`CliTerminal` — a full terminal session."
  ],
  "bestPractices": [
   "One line that works when pasted as is.",

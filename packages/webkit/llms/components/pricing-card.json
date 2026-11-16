@@ -22,10 +22,10 @@
   "The card holds general content rather than a price → use `card`."
  ],
  "related": [
-  "currency-amount` — typesets the amount inside the card; use it directly for prices outside a tier card.",
-  "pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.",
-  "plan-comparison` — the matrix that sits under the plan cards.",
-  "card` — generic bordered card with header, content and footer regions."
+  "`currency-amount` — typesets the amount inside the card; use it directly for prices outside a tier card.",
+  "`pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.",
+  "`plan-comparison` — the matrix that sits under the plan cards.",
+  "`card` — generic bordered card with header, content and footer regions."
  ],
  "bestPractices": [
   "In a row of tiers, set `equalHeight` on every card so each caveat reserves the same band and the feature lists start on one line.",
@@ -159,15 +159,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import PricingCard from '@aziontech/webkit/pricing-card'\n</script>\n\n<template>\n  <PricingCard\n    title=\"Pro\"\n    pricing-details=\"Billed annually or $25/mo billed monthly.\"\n    actions-position=\"bottom\"\n    variant=\"contained\"\n    value=\"20\"\n    prefix=\"$\"\n    suffix=\"/ mon\"\n    action-label=\"Label\"\n  />\n</template>"
+   "file": "examples/pricing-card/default.vue"
   },
   {
    "name": "Aligned",
-   "sfc": "<script setup>\n  import PricingCard from '@aziontech/webkit/pricing-card'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-[repeat(auto-fit,320px)] gap-6\">\n    <PricingCard\n      equal-height\n      title=\"Hobby\"\n      pricing-details=\"\"\n      value=\"Free\"\n      prefix=\"\"\n      suffix=\"\"\n      action-label=\"Start for free\"\n    />\n    <PricingCard\n      equal-height\n      show-tag\n      tag-label=\"Popular\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually, save 20%\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Continue with Pro\"\n    />\n    <PricingCard\n      equal-height\n      title=\"Enterprise\"\n      pricing-details=\"Tailored to your usage requirements and payment terms\"\n      value=\"Custom\"\n      prefix=\"\"\n      suffix=\"\"\n      action-label=\"Talk to a specialist\"\n    />\n  </div>\n</template>"
+   "file": "examples/pricing-card/aligned.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import PricingCard from '@aziontech/webkit/pricing-card'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-[repeat(auto-fit,320px)] gap-6\">\n    <PricingCard\n      actions-position=\"bottom\"\n      variant=\"contained\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <PricingCard\n      actions-position=\"bottom\"\n      variant=\"ghost\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <PricingCard\n      actions-position=\"middle\"\n      variant=\"contained\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <PricingCard\n      actions-position=\"middle\"\n      variant=\"ghost\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n  </div>\n</template>"
+   "file": "examples/pricing-card/variants.vue"
   }
  ],
  "docs": "components/pricing-card.md"

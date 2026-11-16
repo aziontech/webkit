@@ -15,11 +15,11 @@
   "For the grid that lays the tiles out, or a framed cell that wraps media _and_ copy together → use `card-grid`."
  ],
  "related": [
-  "card-grid` — the grid that lays a row of tiles out; use its `gap` register, whose gutters keep every tile's frame its own.",
-  "feature-item` — the heading-led claim, for a band whose items belong in the outline.",
-  "media-split` — one scene beside one block of copy, across the whole band.",
-  "registration-frame` — the frame this tile draws around its media.",
-  "illustration` — the scene the frame usually holds; unnamed, it renders the placeholder that reserves a tile's space."
+  "`card-grid` — the grid that lays a row of tiles out; use its `gap` register, whose gutters keep every tile's frame its own.",
+  "`feature-item` — the heading-led claim, for a band whose items belong in the outline.",
+  "`media-split` — one scene beside one block of copy, across the whole band.",
+  "`registration-frame` — the frame this tile draws around its media.",
+  "`illustration` — the scene the frame usually holds; unnamed, it renders the placeholder that reserves a tile's space."
  ],
  "bestPractices": [
   "End the lead with a full stop. It runs into the sentence that follows it, so the stop is what separates them — the component adds no punctuation of its own.",

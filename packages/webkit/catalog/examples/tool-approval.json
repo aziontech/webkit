@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "The agent asks to run a deployment command: the question names it in code, the body shows exactly what will run, and Deny or Deploy decide; the card then shows the outcome in text.",
-   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Allow `azion deploy --env production`?\"\n      description=\"Deploys the current build of storefront to production. The previous version stays available for rollback.\"\n      approve-label=\"Deploy\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    >\n      <CodeBlock\n        :tabs=\"[\n          {\n            label: 'Shell',\n            value: 'cmd',\n            code: 'azion deploy --env production --workload storefront',\n            language: 'bash'\n          }\n        ]\"\n        :show-line-numbers=\"false\"\n      />\n    </ToolApproval>\n  </div>\n</template>"
+   "file": "examples/tool-approval/default.vue"
   },
   {
    "name": "Irreversible",
    "summary": "A destructive request: the frame and the Delete button turn danger, and Delete stays disabled until the reader types the domain name.",
-   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Delete the domain `www.example.com`?\"\n      description=\"The domain stops answering at once and its certificate is revoked. This cannot be undone.\"\n      variant=\"danger\"\n      confirmation-phrase=\"www.example.com\"\n      approve-label=\"Delete\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    />\n  </div>\n</template>"
+   "file": "examples/tool-approval/irreversible.vue"
   },
   {
    "name": "Resolved",
    "summary": "The three outcomes that stay in the thread after a decision: Approved, Denied and Request expired, each in text with its status dot.",
-   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <ToolApproval\n      title=\"Allow `purge_urls`?\"\n      description=\"Purges https://www.example.com/styles.css from every edge location.\"\n      status=\"approved\"\n    />\n    <ToolApproval\n      title=\"Approve deployment to production?\"\n      description=\"Deploys the current build of storefront to production.\"\n      status=\"denied\"\n    />\n    <ToolApproval\n      title=\"Allow `delete_cache_rule`?\"\n      description=\"Removes the rule that caches images for one day.\"\n      status=\"expired\"\n    />\n  </div>\n</template>"
+   "file": "examples/tool-approval/resolved.vue"
   }
  ]
 }

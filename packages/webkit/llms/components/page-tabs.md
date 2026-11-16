@@ -4,7 +4,7 @@
 
 - Import: `import PageTabs from '@aziontech/webkit/page-tabs'`
 - Category: navigation · Surface: app · Structure: monolithic
-- API as JSON: [page-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/page-tabs.json)
+- API as JSON: [page-tabs.json](page-tabs.json)
 
 ## When to use
 

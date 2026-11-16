@@ -4,7 +4,7 @@
 
 - Import: `import OverflowCount from '@aziontech/webkit/overflow-count'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [overflow-count.json](https://github.com/aziontech/webkit/blob/main/.specs/overflow-count.json)
+- API as JSON: [overflow-count.json](overflow-count.json)
 
 ## When to use
 

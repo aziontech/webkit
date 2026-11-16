@@ -9,10 +9,10 @@
   "Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`."
  ],
  "related": [
-  "use-collection` — saves the preferences; `preferencesProps` is the binding.",
-  "data-table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.",
-  "card-list` — takes the page size and the visible fields.",
-  "property-filter` — sits beside it in the controls row."
+  "`use-collection` — saves the preferences; `preferencesProps` is the binding.",
+  "`data-table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.",
+  "`card-list` — takes the page size and the visible fields.",
+  "`property-filter` — sits beside it in the controls row."
  ],
  "bestPractices": [
   "Lock the column that names the item (`locked: true`): a row without its name is unreadable.",

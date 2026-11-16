@@ -26,9 +26,9 @@
   "A handful of fixed options → use a horizontal `field` with a `checkbox` for each."
  ],
  "related": [
-  "multi-select` — compact dropdown for multi-pick when the remaining pool does not need to stay visible.",
-  "table` — row selection over tabular data.",
-  "checkbox` — independent boolean or small-set multi-pick."
+  "`multi-select` — compact dropdown for multi-pick when the remaining pool does not need to stay visible.",
+  "`table` — row selection over tabular data.",
+  "`checkbox` — independent boolean or small-set multi-pick."
  ],
  "bestPractices": [
   "Set `item-key` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.",
@@ -90,15 +90,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import TransferList from '@aziontech/webkit/transfer-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <TransferList\n    v-model=\"model\"\n    item-key=\"id\"\n  >\n    <TransferList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </TransferList.Source>\n\n    <TransferList.Controls />\n\n    <TransferList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </TransferList.Target>\n  </TransferList>\n</template>"
+   "file": "examples/transfer-list/default.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import TransferList from '@aziontech/webkit/transfer-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <TransferList\n    v-model=\"model\"\n    item-key=\"id\"\n    disabled\n  >\n    <TransferList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </TransferList.Source>\n\n    <TransferList.Controls />\n\n    <TransferList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </TransferList.Target>\n  </TransferList>\n</template>"
+   "file": "examples/transfer-list/disabled.vue"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import TransferList from '@aziontech/webkit/transfer-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <TransferList\n    v-model=\"model\"\n    item-key=\"id\"\n  >\n    <TransferList.Source\n      title=\"Available\"\n      loading\n    >\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </TransferList.Source>\n\n    <TransferList.Controls />\n\n    <TransferList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </TransferList.Target>\n  </TransferList>\n</template>"
+   "file": "examples/transfer-list/loading.vue"
   }
  ],
  "docs": "components/transfer-list.md"

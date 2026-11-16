@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "A static medium panel with a header, a body and a footer of actions, the shell a dialog or drawer renders around its content.",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PanelBody from '@aziontech/webkit/panel-body'\n  import PanelFooter from '@aziontech/webkit/panel-footer'\n  import PanelHeader from '@aziontech/webkit/panel-header'\n  import Panel from '@aziontech/webkit/panel-root'\n</script>\n\n<template>\n  <Panel size=\"medium\">\n    <PanelHeader>\n      <h2 class=\"text-heading-sm text-(--text-default)\">Cache settings</h2>\n    </PanelHeader>\n    <PanelBody>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        Objects are cached at the edge for the TTL set on each rule.\n      </p>\n    </PanelBody>\n    <PanelFooter>\n      <Button\n        label=\"Cancel\"\n        variant=\"outline\"\n      />\n      <Button\n        label=\"Save\"\n        variant=\"primary\"\n      />\n    </PanelFooter>\n  </Panel>\n</template>"
+   "file": "examples/panel/default.vue"
   }
  ]
 }

@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "A stacked group bound with `v-model`: one tab stop, the arrow keys move the selection, and the disabled option is skipped.",
-   "sfc": "<script setup>\n  import RadioGroup from '@aziontech/webkit/radio-group'\n  import { ref } from 'vue'\n\n  const cycle = ref('monthly')\n</script>\n\n<template>\n  <RadioGroup\n    v-model=\"cycle\"\n    name=\"billing-cycle\"\n    aria-label=\"Billing cycle\"\n  >\n    <RadioGroup.Item value=\"monthly\">Monthly</RadioGroup.Item>\n    <RadioGroup.Item value=\"yearly\">Yearly, two months free</RadioGroup.Item>\n    <RadioGroup.Item\n      value=\"contract\"\n      disabled\n    >\n      Annual contract\n    </RadioGroup.Item>\n  </RadioGroup>\n</template>"
+   "file": "examples/radio-group/default.vue"
   },
   {
    "name": "Horizontal",
    "summary": "`orientation=\"horizontal\"` lays three short options in a row that wraps in a narrow container.",
-   "sfc": "<script setup>\n  import RadioGroup from '@aziontech/webkit/radio-group'\n  import { ref } from 'vue'\n\n  const protocol = ref('https')\n</script>\n\n<template>\n  <RadioGroup\n    v-model=\"protocol\"\n    name=\"protocol\"\n    orientation=\"horizontal\"\n    aria-label=\"Protocol\"\n  >\n    <RadioGroup.Item value=\"http\">HTTP</RadioGroup.Item>\n    <RadioGroup.Item value=\"https\">HTTPS</RadioGroup.Item>\n    <RadioGroup.Item value=\"both\">Both</RadioGroup.Item>\n  </RadioGroup>\n</template>"
+   "file": "examples/radio-group/horizontal.vue"
   },
   {
    "name": "Disabled",
    "summary": "`disabled` on the group disables every option and keeps the selection visible.",
-   "sfc": "<script setup>\n  import RadioGroup from '@aziontech/webkit/radio-group'\n  import { ref } from 'vue'\n\n  const plan = ref('pro')\n</script>\n\n<template>\n  <RadioGroup\n    v-model=\"plan\"\n    name=\"plan\"\n    disabled\n    aria-label=\"Plan\"\n  >\n    <RadioGroup.Item value=\"free\">Free</RadioGroup.Item>\n    <RadioGroup.Item value=\"pro\">Pro</RadioGroup.Item>\n    <RadioGroup.Item value=\"enterprise\">Enterprise</RadioGroup.Item>\n  </RadioGroup>\n</template>"
+   "file": "examples/radio-group/disabled.vue"
   }
  ]
 }

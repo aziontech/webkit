@@ -18,7 +18,7 @@
   "For more than five stages or stages with art — use `FeatureScroll`."
  ],
  "related": [
-  "Texture`, `RegistrationFrame`, `SectionTitle`."
+  "`Texture`, `RegistrationFrame`, `SectionTitle`."
  ],
  "bestPractices": [
   "Name each stage with a verb.",
@@ -104,11 +104,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ProcessScroll from '@aziontech/webkit/process-scroll'\n\n  const steps = [\n    { title: 'Push', description: 'Every push to the main branch builds a new version.' },\n    { title: 'Build', description: 'The build runs in an isolated worker with your settings.' },\n    {\n      title: 'Deploy',\n      description: 'The version goes live everywhere at once, with no regions to pick.'\n    },\n    { title: 'Observe', description: 'Metrics and logs for the new version arrive in seconds.' }\n  ]\n</script>\n\n<template>\n  <ProcessScroll\n    eyebrow=\"How it works\"\n    title=\"From commit to production\"\n    description=\"Four stages, all automatic once the repository is connected.\"\n    :steps=\"steps\"\n  />\n</template>"
+   "file": "examples/process-scroll/default.vue"
   },
   {
    "name": "Pinned",
-   "sfc": "<script setup>\n  import ProcessScroll from '@aziontech/webkit/process-scroll'\n\n  const steps = [\n    { title: 'Role request', description: 'A hiring manager requests a new role.' },\n    {\n      title: 'Scope and posting',\n      description: 'People and the hiring manager scope the role and publish the opening.'\n    },\n    {\n      title: 'Recruiting and interviews',\n      description: 'Candidates meet the team in technical and culture interviews.'\n    },\n    { title: 'Calibration', description: 'The panel compares notes and decides together.' },\n    { title: 'Offer letter', description: 'The chosen candidate receives the offer.' }\n  ]\n</script>\n\n<template>\n  <ProcessScroll\n    pinned\n    title-variant=\"center\"\n    title=\"Hiring process\"\n    description=\"Every role goes through the same five stages, from the first request to the offer.\"\n    :steps=\"steps\"\n  />\n</template>"
+   "file": "examples/process-scroll/pinned.vue"
   }
  ],
  "docs": "components/process-scroll.md"

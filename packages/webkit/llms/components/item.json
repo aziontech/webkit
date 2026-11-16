@@ -34,14 +34,14 @@
   "A single surface that frames arbitrary content → use `card`."
  ],
  "related": [
-  "card` — the surface an `Item.List` sits in (with `:padded=\"false\"`).",
-  "table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.",
-  "sidebar-menu` — navigation rows with nesting and drill levels.",
-  "avatar` — the usual leading media for people rows inside `Item.Media`."
+  "`card` — the surface an `Item.List` sits in (with `:padded=\"false\"`).",
+  "`table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.",
+  "`sidebar-menu` — navigation rows with nesting and drill levels.",
+  "`avatar` — the usual leading media for people rows inside `Item.Media`."
  ],
  "bestPractices": [
   "Use `Item.Group` off-card and `Item.List` inside a `card` with `:padded=\"false\"`; both force their child items' `variant` (`inline` in a group, `default` in a list), so do not set `variant` on rows inside them.",
-  "Item.List` draws its own dividers — do not add `Item.Separator` inside it.",
+  "`Item.List` draws its own dividers — do not add `Item.Separator` inside it.",
   "With `href` or `clickable` the whole row is one focusable control with the row's hover, active and focus ring, so do not also put buttons or links inside that row.",
   "Set `Item.Media` `type=\"icon\"` for a glyph and `type=\"image\"` for a picture; the frame sizes and clips the content.",
   "Use `size=\"small\"` for dense lists; `medium` is the default.",
@@ -90,15 +90,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item>\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        variant=\"outline\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "file": "examples/item/default.vue"
   },
   {
    "name": "Outline",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item variant=\"outline\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        variant=\"outline\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "file": "examples/item/outline.vue"
   },
   {
    "name": "Muted",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item variant=\"muted\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        variant=\"outline\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "file": "examples/item/muted.vue"
   }
  ],
  "docs": "components/item.md"

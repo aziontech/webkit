@@ -14,11 +14,11 @@
   "For the product-page walkthrough placed from page JSON → use `feature-scroll`."
  ],
  "related": [
-  "media-tabs` — the pointer-driven sibling. Same two-column anatomy; the selection moves on hover, click and a timer, and the band does not pin.",
-  "media-split` — one claim, one medium, no selection and no pin.",
-  "code-block` — the medium this band most often holds, one sample per claim.",
-  "illustration` — the official scene a claim's `media` slot otherwise holds.",
-  "section-title` — the heading above the band; this component carries no title of its own."
+  "`media-tabs` — the pointer-driven sibling. Same two-column anatomy; the selection moves on hover, click and a timer, and the band does not pin.",
+  "`media-split` — one claim, one medium, no selection and no pin.",
+  "`code-block` — the medium this band most often holds, one sample per claim.",
+  "`illustration` — the official scene a claim's `media` slot otherwise holds.",
+  "`section-title` — the heading above the band; this component carries no title of its own."
  ],
  "bestPractices": [
   "Keep the run to three to six claims. The band holds the page for `dwell` of a screen per claim, and a reader who cannot see the end of it reads it as a page that will not let go.",

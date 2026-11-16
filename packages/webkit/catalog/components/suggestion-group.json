@@ -11,9 +11,9 @@
   "More than five options → let the reader type; the prompt input stays available."
  ],
  "related": [
-  "prompt-input` — the open-ended alternative that must stay reachable.",
-  "empty-state` — hosts the vertical support prompts before the first message.",
-  "chip`, `button` — visual cousins; prompts are their own control because they send text."
+  "`prompt-input` — the open-ended alternative that must stay reachable.",
+  "`empty-state` — hosts the vertical support prompts before the first message.",
+  "`chip`, `button` — visual cousins; prompts are their own control because they send text."
  ],
  "bestPractices": [
   "Five or fewer, ordered by likelihood.",

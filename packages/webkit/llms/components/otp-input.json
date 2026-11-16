@@ -21,12 +21,12 @@
   "A number with a range → use `NumberInput`."
  ],
  "related": [
-  "field` — wrap it in a `Field` for the label, the description and the error; the label names the input.",
-  "password-input` — the other credential input of the auth screens.",
-  "input` — the plain text field it shares tokens with."
+  "`field` — wrap it in a `Field` for the label, the description and the error; the label names the input.",
+  "`password-input` — the other credential input of the auth screens.",
+  "`input` — the plain text field it shares tokens with."
  ],
  "bestPractices": [
-  "Label it with what the code is and where it comes from: `Authentication code`, and a description `The 6-digit code from your authenticator app.",
+  "Label it with what the code is and where it comes from: `Authentication code`, and a description `The 6-digit code from your authenticator app.`",
   "Submit on `complete` only when the code is the last thing to fill; keep a Verify button for keyboard users and for a failed attempt.",
   "After a rejected code, mark it `invalid`, clear it, and keep focus in it.",
   "Use `group=\"3\"` for codes people read aloud or copy from a phone; it draws a separator between groups and does not change the value."
@@ -44,7 +44,7 @@
    "type": "'numeric' | 'alphanumeric'",
    "default": "'numeric'",
    "required": "false",
-   "doc": "numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case."
+   "doc": "`numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case."
   },
   {
    "name": "group",
@@ -102,15 +102,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const code = ref('')\n  const entered = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <Field>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput\n        v-model=\"code\"\n        name=\"code\"\n        @complete=\"(value) => (entered = value)\"\n      />\n      <Field.Description>The 6-digit code from your authenticator app.</Field.Description>\n    </Field>\n    <p\n      class=\"text-body-sm text-(--text-muted)\"\n      role=\"status\"\n    >\n      {{ entered ? `Code ${entered} entered.` : '' }}\n    </p>\n  </div>\n</template>"
+   "file": "examples/otp-input/default.vue"
   },
   {
    "name": "Groups",
-   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const code = ref('')\n  const recovery = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <Field>\n      <Field.Label>Verification code</Field.Label>\n      <OtpInput\n        v-model=\"code\"\n        :group=\"3\"\n      />\n      <Field.Description>We sent a 6-digit code to the email on the account.</Field.Description>\n    </Field>\n    <Field>\n      <Field.Label>Recovery code</Field.Label>\n      <OtpInput\n        v-model=\"recovery\"\n        mode=\"alphanumeric\"\n        :length=\"8\"\n        :group=\"4\"\n      />\n      <Field.Description\n        >One of the 8-character codes you saved when you set up MFA.</Field.Description\n      >\n    </Field>\n  </div>\n</template>"
+   "file": "examples/otp-input/groups.vue"
   },
   {
    "name": "States",
-   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const rejected = ref('')\n  const checking = ref('482913')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <Field invalid>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput v-model=\"rejected\" />\n      <Field.Description\n        >That code is not valid. Enter the current code from your app.</Field.Description\n      >\n    </Field>\n    <Field disabled>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput v-model=\"checking\" />\n      <Field.Description>Checking the code.</Field.Description>\n    </Field>\n  </div>\n</template>"
+   "file": "examples/otp-input/states.vue"
   }
  ],
  "docs": "components/otp-input.md"

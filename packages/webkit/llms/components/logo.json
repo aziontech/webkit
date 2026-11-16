@@ -24,10 +24,10 @@
   "A grid of client marks → use `LogoWall`; it renders each mark and can render `Logo` in its `mark` slot."
  ],
  "related": [
-  "brand` — the Azion lockup; `Logo` is everyone else's.",
-  "payment-brand` — card-network plates, drawn in tokens.",
-  "logo-wall` — the grid that lays marks out; `Logo` draws one mark.",
-  "avatar` — a person's or an organization's picture with initials."
+  "`brand` — the Azion lockup; `Logo` is everyone else's.",
+  "`payment-brand` — card-network plates, drawn in tokens.",
+  "`logo-wall` — the grid that lays marks out; `Logo` draws one mark.",
+  "`avatar` — a person's or an organization's picture with initials."
  ],
  "bestPractices": [
   "Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.",
@@ -102,15 +102,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n</script>\n\n<template>\n  <Logo\n    :name=\"client.name\"\n    :src=\"client.logo\"\n    :src-light=\"client.logoLight\"\n    :artwork=\"client.artwork\"\n    size=\"large\"\n    class=\"max-w-40\"\n  />\n</template>"
+   "file": "examples/logo/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n  const sizes = ['small', 'medium', 'large']\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"size in sizes\"\n      :key=\"size\"\n      class=\"flex flex-wrap items-center gap-(--spacing-xl)\"\n    >\n      <span class=\"w-20 text-label-md text-(--text-muted)\">{{ size }}</span>\n      <Logo\n        :name=\"client.name\"\n        :src=\"client.logo\"\n        :src-light=\"client.logoLight\"\n        :artwork=\"client.artwork\"\n        :size=\"size\"\n        class=\"max-w-40\"\n      />\n      <Logo\n        name=\"Acme Inc.\"\n        :size=\"size\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/logo/sizes.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import claudeSymbol from '@aziontech/webkit/assets/claude-symbol-color.svg'\n  import itauExtendedReversed from '@aziontech/webkit/assets/itau-extended-reversed.webp'\n  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'\n  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'\n  import Logo from '@aziontech/webkit/logo'\n\n  const variants = [\n    { variant: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },\n    {\n      variant: 'monochrome',\n      label: 'Monochrome',\n      fill: 'bg-(--bg-canvas)',\n      ink: 'text-(--text-muted)'\n    },\n    {\n      variant: 'current',\n      label: 'Current',\n      fill: 'bg-(--bg-canvas) text-(--text-muted)',\n      ink: 'text-(--text-muted)'\n    },\n    {\n      variant: 'knockout',\n      label: 'Knockout',\n      fill: 'bg-(--color-base-white)',\n      ink: 'text-(--color-base-black)'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"row in variants\"\n      :key=\"row.variant\"\n      class=\"flex flex-wrap items-center gap-(--spacing-xl) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)\"\n      :class=\"row.fill\"\n    >\n      <span\n        class=\"w-28 text-label-md\"\n        :class=\"row.ink\"\n        >{{ row.label }}</span\n      >\n      <Logo\n        name=\"Netshoes\"\n        :src=\"netshoesExtendedReversed\"\n        :src-light=\"netshoesExtendedColor\"\n        :variant=\"row.variant\"\n        class=\"max-w-32\"\n      />\n      <Logo\n        name=\"Itaú\"\n        :src=\"itauExtendedReversed\"\n        artwork=\"light\"\n        :variant=\"row.variant\"\n        class=\"max-w-32\"\n      />\n      <Logo\n        name=\"Claude\"\n        :src=\"claudeSymbol\"\n        :variant=\"row.variant\"\n      />\n      <Logo\n        name=\"Acme Inc.\"\n        :variant=\"row.variant\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/logo/variants.vue"
   }
  ],
  "docs": "components/logo.md"

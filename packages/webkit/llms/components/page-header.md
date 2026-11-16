@@ -4,7 +4,7 @@
 
 - Import: `import PageHeader from '@aziontech/webkit/page-header'`
 - Category: layout · Surface: app · Structure: monolithic
-- API as JSON: [page-header.json](https://github.com/aziontech/webkit/blob/main/.specs/page-header.json)
+- API as JSON: [page-header.json](page-header.json)
 
 ## When to use
 
@@ -19,10 +19,10 @@
 - Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
-- breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
-- icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
-- meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
-- tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
+- `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
+- `icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
+- `meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
+- `tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
 
 ## Don’t
 

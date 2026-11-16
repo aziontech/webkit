@@ -4,7 +4,7 @@
 
 - Import: `import CollectionPreferences from '@aziontech/webkit/collection-preferences'`
 - Category: data · Surface: app · Structure: monolithic
-- API as JSON: [collection-preferences.json](https://github.com/aziontech/webkit/blob/main/.specs/collection-preferences.json)
+- API as JSON: [collection-preferences.json](collection-preferences.json)
 
 ## When to use
 
@@ -25,7 +25,7 @@
 
 ## Related
 
-- use-collection` — saves the preferences; `preferencesProps` is the binding.
+- `use-collection` — saves the preferences; `preferencesProps` is the binding.
 - [data-table](data-table.md) — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.
 - [card-list](card-list.md) — takes the page size and the visible fields.
 - [property-filter](property-filter.md) — sits beside it in the controls row.

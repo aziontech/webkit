@@ -4,7 +4,7 @@
 
 - Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [feedback-reason-dialog.json](https://github.com/aziontech/webkit/blob/main/.specs/feedback-reason-dialog.json)
+- API as JSON: [feedback-reason-dialog.json](feedback-reason-dialog.json)
 
 ## When to use
 

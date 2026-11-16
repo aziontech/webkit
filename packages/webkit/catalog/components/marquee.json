@@ -14,10 +14,10 @@
   "For one mark in its own right (a header lockup, a client story card) → use `brand`."
  ],
  "related": [
-  "logo-wall` — the static, wrapping grid of consumer-supplied marks; reach for the strip only when the wall would be too long.",
-  "carousel` — the user-driven snap scroller; this one moves on its own and holds no essential content.",
-  "brand` — the Azion lockup, for the product's own mark rather than a third party's.",
-  "eyebrow` — renders the `label` above the row."
+  "`logo-wall` — the static, wrapping grid of consumer-supplied marks; reach for the strip only when the wall would be too long.",
+  "`carousel` — the user-driven snap scroller; this one moves on its own and holds no essential content.",
+  "`brand` — the Azion lockup, for the product's own mark rather than a third party's.",
+  "`eyebrow` — renders the `label` above the row."
  ],
  "bestPractices": [
   "Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.",

@@ -14,10 +14,10 @@
   "For a label-and-value pair at body scale inside a card or list → use `item`."
  ],
  "related": [
-  "section-title` — the framed section header this band usually sits under.",
-  "card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.",
-  "currency-amount` — a monetary amount at three reading distances, with symbol handling.",
-  "pricing-card` — a plan card, where the headline figure is a price."
+  "`section-title` — the framed section header this band usually sits under.",
+  "`card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.",
+  "`currency-amount` — a monetary amount at three reading distances, with symbol handling.",
+  "`pricing-card` — a plan card, where the headline figure is a price."
  ],
  "bestPractices": [
   "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",

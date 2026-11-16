@@ -4,7 +4,7 @@
 
 - Import: `import Reasoning from '@aziontech/webkit/reasoning'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [reasoning.json](https://github.com/aziontech/webkit/blob/main/.specs/reasoning.json)
+- API as JSON: [reasoning.json](reasoning.json)
 
 ## When to use
 

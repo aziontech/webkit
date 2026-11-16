@@ -4,7 +4,7 @@
 
 - Import: `import CardCarousel from '@aziontech/webkit/card-carousel'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [card-carousel.json](https://github.com/aziontech/webkit/blob/main/.specs/card-carousel.json)
+- API as JSON: [card-carousel.json](card-carousel.json)
 
 ## When to use
 

@@ -4,7 +4,7 @@
 
 - Import: `import DocTabs from '@aziontech/webkit/doc-tabs'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-tabs.json)
+- API as JSON: [doc-tabs.json](doc-tabs.json)
 
 ## When to use
 
@@ -24,9 +24,9 @@
 
 ## Related
 
-- DocTab` — the panel it reads.
-- Tabs` — the surface it renders on.
-- DocCodeGroup`.
+- `DocTab` — the panel it reads.
+- `Tabs` — the surface it renders on.
+- `DocCodeGroup`.
 
 ## Slots
 

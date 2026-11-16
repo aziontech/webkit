@@ -12,9 +12,9 @@
   "For articles with images → use `article-cards`."
  ],
  "related": [
-  "carousel` — the primitive this band composes; reach for it directly only for a non-card row.",
-  "capability-grid` — the same content as a static, fully visible grid.",
-  "process-scroll` — numbered dark cards, pinned on scroll with `pinned`."
+  "`carousel` — the primitive this band composes; reach for it directly only for a non-card row.",
+  "`capability-grid` — the same content as a static, fully visible grid.",
+  "`process-scroll` — numbered dark cards, pinned on scroll with `pinned`."
  ],
  "bestPractices": [
   "Give the band a `title`; its arrows sit on the title row, and the title names the row for assistive technology.",

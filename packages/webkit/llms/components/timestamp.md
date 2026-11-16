@@ -4,7 +4,7 @@
 
 - Import: `import Timestamp from '@aziontech/webkit/timestamp'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [timestamp.json](https://github.com/aziontech/webkit/blob/main/.specs/timestamp.json)
+- API as JSON: [timestamp.json](timestamp.json)
 
 ## When to use
 

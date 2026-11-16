@@ -4,7 +4,7 @@
 
 - Import: `import Badge from '@aziontech/webkit/badge'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [badge.json](https://github.com/aziontech/webkit/blob/main/.specs/badge.json)
+- API as JSON: [badge.json](badge.json)
 
 ## When to use
 

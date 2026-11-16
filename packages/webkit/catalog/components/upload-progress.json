@@ -11,9 +11,9 @@
   "Progress of a page load or a determinate step inside a form → use `progress`."
  ],
  "related": [
-  "file-token-group` — the files picked for upload, before the transfer starts.",
-  "progress` — the bar used for the overall and per-file progress.",
-  "toast` — reports the outcome of a single async action."
+  "`file-token-group` — the files picked for upload, before the transfer starts.",
+  "`progress` — the bar used for the overall and per-file progress.",
+  "`toast` — reports the outcome of a single async action."
  ],
  "bestPractices": [
   "Keep the card until the person closes it when anything failed; close it yourself a few seconds after a clean finish if you like.",

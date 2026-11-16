@@ -22,14 +22,14 @@
   "For a plain framed container with arbitrary content → use `registration-frame` instead."
  ],
  "related": [
-  "hero` — the opening band; its `Hero.Title` renders the page's `h1` at hero scale.",
-  "registration-frame` — the frame this component composes.",
-  "section-gap` — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.",
-  "eyebrow` — the eyebrow treatment rendered above the headline."
+  "`hero` — the opening band; its `Hero.Title` renders the page's `h1` at hero scale.",
+  "`registration-frame` — the frame this component composes.",
+  "`section-gap` — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.",
+  "`eyebrow` — the eyebrow treatment rendered above the headline."
  ],
  "bestPractices": [
   "Leave `framed` on when the header is a brick of its own in a page column; turn it off when a band composes the header inside a frame it already draws, so the rule and the padding are not drawn twice.",
-  "framed` defaults to `true` here, unlike `call-to-action`, `faq` and `media-split`, where it defaults to `false`: a section title most often opens a page section as its own brick, while those components are most often composed inside a band's frame. The default stays as it is because flipping it would change every existing page; pass `framed` explicitly when composing.",
+  "`framed` defaults to `true` here, unlike `call-to-action`, `faq` and `media-split`, where it defaults to `false`: a section title most often opens a page section as its own brick, while those components are most often composed inside a band's frame. The default stays as it is because flipping it would change every existing page; pass `framed` explicitly when composing.",
   "Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline. `size` changes the headline's step on the type scale, never its heading level — a page with a `large` and a `small` header still reads as two `h2`s.",
   "Leave `size` at `medium` for an ordinary section opener. Reach for `large` only where the headline is the band's whole statement, and for `small` where the header opens a subsection inside a band that already has one.",
   "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
@@ -115,15 +115,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <SectionTitle\n    eyebrow=\"Platform\"\n    title=\"Everything runs at the edge\"\n    description=\"One platform for applications, security and observability.\"\n  />\n</template>"
+   "file": "examples/section-title/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <div>\n    <SectionTitle\n      variant=\"center\"\n      eyebrow=\"Centered\"\n      title=\"A symmetric section opener\"\n      description=\"Copy capped at the reading width and centered in the frame — the default.\"\n    />\n    <SectionTitle\n      variant=\"start\"\n      eyebrow=\"Left\"\n      title=\"The same stack, at the start edge\"\n      description=\"Same anatomy, aligned to the start — for a section that reads rather than announces.\"\n    />\n    <SectionTitle\n      variant=\"split\"\n      eyebrow=\"Horizontal\"\n      title=\"Headline in the first column\"\n      description=\"The description takes the third column, with the middle one left as air. Below the md breakpoint the grid collapses and this falls back under the headline.\"\n    />\n  </div>\n</template>"
+   "file": "examples/section-title/variants.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <div>\n    <SectionTitle\n      size=\"small\"\n      variant=\"start\"\n      eyebrow=\"Small\"\n      title=\"A subsection inside a band\"\n      description=\"The headline drops a step so it opens a part of a section without competing with the section's own header.\"\n    />\n    <SectionTitle\n      size=\"medium\"\n      variant=\"start\"\n      eyebrow=\"Medium\"\n      title=\"An ordinary section opener\"\n      description=\"The default step, and the one nearly every section header wants.\"\n    />\n    <SectionTitle\n      size=\"large\"\n      variant=\"start\"\n      eyebrow=\"Large\"\n      title=\"The headline is the statement\"\n      description=\"For a band that carries one claim and little else — the copy under it stays at reading size.\"\n    />\n  </div>\n</template>"
+   "file": "examples/section-title/sizes.vue"
   }
  ],
  "docs": "components/section-title.md"

@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "The baseline Chip rendering its `label`.",
-   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <Chip\n    label=\"Label\"\n    variant=\"filled\"\n    size=\"medium\"\n  />\n</template>"
+   "file": "examples/chip/default.vue"
   },
   {
    "name": "Variants",
    "summary": "The three variants in the order they read in a filter surface: an applied value (the grey `filled` fill), an available one, and the control that adds one.",
-   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Chip\n      label=\"Production\"\n      variant=\"filled\"\n      size=\"medium\"\n      removable\n    />\n    <Chip\n      label=\"Status\"\n      variant=\"outline\"\n      size=\"medium\"\n      clickable\n    />\n    <Chip\n      label=\"Add filter\"\n      variant=\"dashed\"\n      size=\"medium\"\n      clickable\n    />\n  </div>\n</template>"
+   "file": "examples/chip/variants.vue"
   },
   {
    "name": "Sizes",
    "summary": "Both sizes side by side.",
-   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Chip\n      label=\"Small\"\n      size=\"small\"\n    />\n    <Chip\n      label=\"Medium\"\n      size=\"medium\"\n    />\n  </div>\n</template>"
+   "file": "examples/chip/sizes.vue"
   }
  ]
 }

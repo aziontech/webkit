@@ -20,9 +20,9 @@
   "The user can select or remove the value (a severity filter) → use `chip`."
  ],
  "related": [
-  "tag` — a toned status or category label; use it for outcomes and states, not for an ordered level.",
-  "badge` — a dense count or short-label indicator.",
-  "chip` — an interactive or removable token, for severity filters."
+  "`tag` — a toned status or category label; use it for outcomes and states, not for an ordered level.",
+  "`badge` — a dense count or short-label indicator.",
+  "`chip` — an interactive or removable token, for severity filters."
  ],
  "bestPractices": [
   "Keep the default label (the level name from the locale catalog, translated under `WebkitProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.",
@@ -65,15 +65,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import SeverityTag from '@aziontech/webkit/severity-tag'\n</script>\n\n<template>\n  <SeverityTag\n    severity=\"info\"\n    size=\"medium\"\n  />\n</template>"
+   "file": "examples/severity-tag/default.vue"
   },
   {
    "name": "Severities",
-   "sfc": "<script setup>\n  import SeverityTag from '@aziontech/webkit/severity-tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SeverityTag severity=\"critical\" />\n    <SeverityTag severity=\"high\" />\n    <SeverityTag severity=\"medium\" />\n    <SeverityTag severity=\"low\" />\n    <SeverityTag severity=\"info\" />\n  </div>\n</template>"
+   "file": "examples/severity-tag/severities.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import SeverityTag from '@aziontech/webkit/severity-tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SeverityTag\n      severity=\"high\"\n      size=\"small\"\n    />\n    <SeverityTag\n      severity=\"high\"\n      size=\"medium\"\n    />\n  </div>\n</template>"
+   "file": "examples/severity-tag/sizes.vue"
   }
  ],
  "docs": "components/severity-tag.md"

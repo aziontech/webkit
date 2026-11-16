@@ -4,7 +4,7 @@
 
 - Import: `import SiteLayout from '@aziontech/webkit/site-layout'`
 - Category: layout · Surface: site · Structure: monolithic
-- API as JSON: [site-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/site-layout.json)
+- API as JSON: [site-layout.json](site-layout.json)
 
 ## When to use
 
@@ -28,11 +28,11 @@
 
 ## Related
 
-- SiteHeader` — the bar and its mega-menus; `navigation` is bound onto it.
-- SiteFooter` — the footer; `footer` is bound onto it (`variant="site"` closes a framed page).
-- SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
-- Command` — the search palette the bar's search button opens.
-- shell/site` — the block that shows this layout with the azion.com navigation and footer.
+- `SiteHeader` — the bar and its mega-menus; `navigation` is bound onto it.
+- `SiteFooter` — the footer; `footer` is bound onto it (`variant="site"` closes a framed page).
+- `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
+- `Command` — the search palette the bar's search button opens.
+- `shell/site` — the block that shows this layout with the azion.com navigation and footer.
 
 ## Props
 

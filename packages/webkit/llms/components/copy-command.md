@@ -4,7 +4,7 @@
 
 - Import: `import CopyCommand from '@aziontech/webkit/copy-command'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [copy-command.json](https://github.com/aziontech/webkit/blob/main/.specs/copy-command.json)
+- API as JSON: [copy-command.json](copy-command.json)
 
 ## When to use
 
@@ -25,8 +25,8 @@
 
 ## Related
 
-- CopyButton`, `InputGroup` — the parts.
-- CliTerminal` — a full terminal session.
+- `CopyButton`, `InputGroup` — the parts.
+- `CliTerminal` — a full terminal session.
 
 ## Props
 

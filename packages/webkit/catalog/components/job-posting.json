@@ -9,8 +9,8 @@
   "For a newsletter sign-up at the end of a page → use `newsletter-section`."
  ],
  "related": [
-  "hero-section` — the title band above the posting; its action links to `#` plus `form.anchor`.",
-  "hero-form-section` — the sibling page section that also emits `submit` and takes `loading`, `submitted` and `failed`."
+  "`hero-section` — the title band above the posting; its action links to `#` plus `form.anchor`.",
+  "`hero-form-section` — the sibling page section that also emits `submit` and takes `loading`, `submitted` and `failed`."
  ],
  "bestPractices": [
   "Write each section as a short heading and its `blocks`: a `text` block per paragraph, a `list` block per bullet list, in the posting's order.",

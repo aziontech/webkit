@@ -4,7 +4,7 @@
 
 - Import: `import InvestorMarks from '@aziontech/webkit/investor-marks'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [investor-marks.json](https://github.com/aziontech/webkit/blob/main/.specs/investor-marks.json)
+- API as JSON: [investor-marks.json](investor-marks.json)
 
 ## When to use
 

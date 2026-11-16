@@ -4,7 +4,7 @@
 
 - Import: `import PaymentBrand from '@aziontech/webkit/payment-brand'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [payment-brand.json](https://github.com/aziontech/webkit/blob/main/.specs/payment-brand.json)
+- API as JSON: [payment-brand.json](payment-brand.json)
 
 ## When to use
 

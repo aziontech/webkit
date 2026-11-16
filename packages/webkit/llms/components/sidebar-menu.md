@@ -5,7 +5,7 @@
 - Import: `import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import SidebarMenu from '@aziontech/webkit/sidebar-menu'`
 - Category: navigation · Surface: app · Structure: composition
-- API as JSON: [sidebar-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/sidebar-menu.json)
+- API as JSON: [sidebar-menu.json](sidebar-menu.json)
 
 ## When to use
 
@@ -52,7 +52,7 @@
 ## Related
 
 - [sidebar](sidebar.md) — the most common host. It supplies the landmark, the scroll region, and the header/footer; this menu is placed in its default slot. The two are independent — neither imports the other.
-- sidebar-menu-item` — **is** `SidebarMenu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.
+- `sidebar-menu-item` — **is** `SidebarMenu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.
 - [navigation-menu](navigation-menu.md) — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.
 - [accordion](accordion.md) — a **reference only**, for content disclosure rather than navigation. `SidebarMenu` borrows the _shape_ of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `SidebarMenu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates the token rules § Forbidden in animations).
 - [tag](tag.md) — renders the optional trailing badge on a row via `sidebar-menu-item`'s `tagValue`.

@@ -4,7 +4,7 @@
 
 - Import: `import CodeBlock from '@aziontech/webkit/code-block'`
 - Category: code · Surface: app · Structure: monolithic
-- API as JSON: [code-block.json](https://github.com/aziontech/webkit/blob/main/.specs/code-block.json)
+- API as JSON: [code-block.json](code-block.json)
 
 ## When to use
 

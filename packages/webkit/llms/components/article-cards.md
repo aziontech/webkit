@@ -4,7 +4,7 @@
 
 - Import: `import ArticleCards from '@aziontech/webkit/article-cards'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [article-cards.json](https://github.com/aziontech/webkit/blob/main/.specs/article-cards.json)
+- API as JSON: [article-cards.json](article-cards.json)
 
 ## When to use
 

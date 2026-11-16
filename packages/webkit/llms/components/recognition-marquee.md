@@ -4,7 +4,7 @@
 
 - Import: `import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [recognition-marquee.json](https://github.com/aziontech/webkit/blob/main/.specs/recognition-marquee.json)
+- API as JSON: [recognition-marquee.json](recognition-marquee.json)
 
 ## When to use
 

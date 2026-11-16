@@ -5,7 +5,7 @@
 - Import: `import DatePickerRoot from '@aziontech/webkit/date-picker-root'`
 - Compound import (dot notation, not tree-shakeable): `import DatePicker from '@aziontech/webkit/date-picker'`
 - Category: input · Surface: app · Structure: composition
-- API as JSON: [date-picker.json](https://github.com/aziontech/webkit/blob/main/.specs/date-picker.json)
+- API as JSON: [date-picker.json](date-picker.json)
 
 ## When to use
 
@@ -15,7 +15,7 @@
 
 ## Do
 
-- modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply="false"` when every edit should commit at once.
+- `modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply="false"` when every edit should commit at once.
 - Bind a `Date` or `null`.
 - Bound the selectable days with `min` and `max` instead of validating after commit.
 - Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label.

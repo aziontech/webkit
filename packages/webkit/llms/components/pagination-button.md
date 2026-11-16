@@ -4,7 +4,7 @@
 
 - Import: `import PaginationButton from '@aziontech/webkit/pagination-button'`
 - Category: data · Surface: app · Structure: monolithic
-- API as JSON: [pagination-button.json](https://github.com/aziontech/webkit/blob/main/.specs/pagination-button.json)
+- API as JSON: [pagination-button.json](pagination-button.json)
 
 ## When to use
 
@@ -31,8 +31,8 @@
 ## Related
 
 - [pagination](pagination.md) — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.
-- pagination-description` — the page-info text that sits beside the strip.
-- pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.
+- `pagination-description` — the page-info text that sits beside the strip.
+- `pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.
 - [icon-button](icon-button.md) — a standalone icon-only action with its own frame and radius.
 
 ## Props

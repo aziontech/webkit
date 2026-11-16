@@ -4,7 +4,7 @@
 
 - Import: `import TemplateGallery from '@aziontech/webkit/template-gallery'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [template-gallery.json](https://github.com/aziontech/webkit/blob/main/.specs/template-gallery.json)
+- API as JSON: [template-gallery.json](template-gallery.json)
 
 ## When to use
 

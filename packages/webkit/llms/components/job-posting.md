@@ -4,7 +4,7 @@
 
 - Import: `import JobPosting from '@aziontech/webkit/job-posting'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [job-posting.json](https://github.com/aziontech/webkit/blob/main/.specs/job-posting.json)
+- API as JSON: [job-posting.json](job-posting.json)
 
 ## When to use
 

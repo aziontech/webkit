@@ -11,8 +11,8 @@
   "Inside another band's cell → compose `link-directory` directly."
  ],
  "related": [
-  "link-directory` — the named navigation landmark whose columns and rows this band fills.",
-  "section-title` — the headline over the directory."
+  "`link-directory` — the named navigation landmark whose columns and rows this band fills.",
+  "`section-title` — the headline over the directory."
  ],
  "bestPractices": [
   "Keep to four groups or fewer; the directory fans out to one column per group at the large breakpoint, up to four, so one, two or three groups never leave an empty cell.",

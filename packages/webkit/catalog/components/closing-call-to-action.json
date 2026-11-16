@@ -12,9 +12,9 @@
   "For an ask in the middle of a page → compose `call-to-action` directly."
  ],
  "related": [
-  "call-to-action` — the framed band this section renders.",
-  "newsletter-section` — the closing band whose ask is a subscribe form.",
-  "template-gallery` — with `closing`, the closing band that lists deployable templates."
+  "`call-to-action` — the framed band this section renders.",
+  "`newsletter-section` — the closing band whose ask is a subscribe form.",
+  "`template-gallery` — with `closing`, the closing band that lists deployable templates."
  ],
  "bestPractices": [
   "Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.",

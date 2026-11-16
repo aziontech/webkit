@@ -15,9 +15,9 @@
   "For a logo row with no quotation → compose the marks directly; a `quote` without `text` is not a logo wall."
  ],
  "related": [
-  "stats` — the numeric form of the same proof band.",
-  "card-grid` — the uniform grid a row of peer quotes is laid out on; `bento-grid` when one quote is given more weight than its neighbours.",
-  "avatar` — the person's likeness, composed by the `highlight` register when a `photo` is given."
+  "`stats` — the numeric form of the same proof band.",
+  "`card-grid` — the uniform grid a row of peer quotes is laid out on; `bento-grid` when one quote is given more weight than its neighbours.",
+  "`avatar` — the person's likeness, composed by the `highlight` register when a `photo` is given."
  ],
  "bestPractices": [
   "Keep `text` to one or two sentences. A testimonial that needs a paragraph is a case study, and belongs behind a link.",

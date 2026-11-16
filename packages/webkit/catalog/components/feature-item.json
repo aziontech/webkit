@@ -15,9 +15,9 @@
   "For a console list row with media and actions → use `item`."
  ],
  "related": [
-  "card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `registration-frame` cell.",
-  "bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.",
-  "section-title` — the headline that opens the band a row of topics sits in."
+  "`card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `registration-frame` cell.",
+  "`bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.",
+  "`section-title` — the headline that opens the band a row of topics sits in."
  ],
  "bestPractices": [
   "Let the cell own the surface. A topic paints no background and adds no padding, so put it inside `CardGrid.Cell` / `BentoGrid.Cell` (or a padded cell the page owns) rather than giving the topic a fill.",

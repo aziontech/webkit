@@ -15,11 +15,11 @@
   "Key/value pairs or tags → use `attribute-editor` or `tag-editor` (their key cells may hold a Combobox)."
  ],
  "related": [
-  "select` — closed list, button trigger, no free entry.",
-  "input` — the field Combobox is built on; use it alone when there are no suggestions.",
-  "field` — label, description and error around the Combobox; it reads id, invalid, disabled and required from it.",
-  "command` — palette of actions, not a form value.",
-  "property-filter` — token-based filtering with the same listbox look."
+  "`select` — closed list, button trigger, no free entry.",
+  "`input` — the field Combobox is built on; use it alone when there are no suggestions.",
+  "`field` — label, description and error around the Combobox; it reads id, invalid, disabled and required from it.",
+  "`command` — palette of actions, not a form value.",
+  "`property-filter` — token-based filtering with the same listbox look."
  ],
  "bestPractices": [
   "Put the Combobox in a `Field` so it gets a visible label; use `ariaLabel` only where no label can be shown.",

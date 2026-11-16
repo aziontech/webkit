@@ -4,7 +4,7 @@
 
 - Import: `import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [closing-call-to-action.json](https://github.com/aziontech/webkit/blob/main/.specs/closing-call-to-action.json)
+- API as JSON: [closing-call-to-action.json](closing-call-to-action.json)
 
 ## When to use
 

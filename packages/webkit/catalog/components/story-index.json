@@ -9,8 +9,8 @@
   "For a filterable list of non-article rows (jobs) → use `listing-index`."
  ],
  "related": [
-  "article-index` — the filterable list of articles or resources.",
-  "empty-state` — the no-match state."
+  "`article-index` — the filterable list of articles or resources.",
+  "`empty-state` — the no-match state."
  ],
  "bestPractices": [
   "Derive each facet's `options` from the values the items carry, so every option matches at least one story.",

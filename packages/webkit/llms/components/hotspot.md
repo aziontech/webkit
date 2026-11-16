@@ -4,7 +4,7 @@
 
 - Import: `import Hotspot from '@aziontech/webkit/hotspot'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [hotspot.json](https://github.com/aziontech/webkit/blob/main/.specs/hotspot.json)
+- API as JSON: [hotspot.json](hotspot.json)
 
 ## When to use
 

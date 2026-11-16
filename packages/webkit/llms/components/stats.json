@@ -24,10 +24,10 @@
   "For a label-and-value pair at body scale inside a card or list → use `item`."
  ],
  "related": [
-  "section-title` — the framed section header this band usually sits under.",
-  "card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.",
-  "currency-amount` — a monetary amount at three reading distances, with symbol handling.",
-  "pricing-card` — a plan card, where the headline figure is a price."
+  "`section-title` — the framed section header this band usually sits under.",
+  "`card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.",
+  "`currency-amount` — a monetary amount at three reading distances, with symbol handling.",
+  "`pricing-card` — a plan card, where the headline figure is a price."
  ],
  "bestPractices": [
   "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
@@ -60,11 +60,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Stats from '@aziontech/webkit/stats'\n</script>\n\n<template>\n  <Stats\n    :items=\"[\n      { value: '120', suffix: '+', label: 'Points of presence' },\n      { value: '99.99', suffix: '%', label: 'Availability' },\n      { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n      { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n    ]\"\n  />\n</template>"
+   "file": "examples/stats/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Stats from '@aziontech/webkit/stats'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <Stats\n      size=\"small\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n    <Stats\n      size=\"medium\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n    <Stats\n      size=\"large\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n  </div>\n</template>"
+   "file": "examples/stats/sizes.vue"
   }
  ],
  "docs": "components/stats.md"

@@ -4,7 +4,7 @@
 
 - Import: `import Chip from '@aziontech/webkit/chip'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [chip.json](https://github.com/aziontech/webkit/blob/main/.specs/chip.json)
+- API as JSON: [chip.json](chip.json)
 
 ## When to use
 

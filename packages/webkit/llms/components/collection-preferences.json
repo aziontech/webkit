@@ -19,10 +19,10 @@
   "Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`."
  ],
  "related": [
-  "use-collection` — saves the preferences; `preferencesProps` is the binding.",
-  "data-table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.",
-  "card-list` — takes the page size and the visible fields.",
-  "property-filter` — sits beside it in the controls row."
+  "`use-collection` — saves the preferences; `preferencesProps` is the binding.",
+  "`data-table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.",
+  "`card-list` — takes the page size and the visible fields.",
+  "`property-filter` — sits beside it in the controls row."
  ],
  "bestPractices": [
   "Lock the column that names the item (`locked: true`): a row without its name is unreadable.",
@@ -118,15 +118,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n  import { ref } from 'vue'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'status', label: 'Status' },\n    { id: 'region', label: 'Region' },\n    { id: 'requests', label: 'Requests' }\n  ]\n\n  const preferences = ref({\n    pageSize: 25,\n    columns: [\n      { id: 'name', visible: true },\n      { id: 'status', visible: true },\n      { id: 'region', visible: false },\n      { id: 'requests', visible: true }\n    ],\n    wrapLines: false,\n    striped: false,\n    density: 'comfortable'\n  })\n</script>\n\n<template>\n  <CollectionPreferences\n    v-model:preferences=\"preferences\"\n    :columns=\"columns\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n  />\n</template>"
+   "file": "examples/collection-preferences/default.vue"
   },
   {
    "name": "InADrawer",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n  import { ref } from 'vue'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'domain', label: 'Domain' },\n    { id: 'status', label: 'Status' }\n  ]\n\n  const preferences = ref({ density: 'compact' })\n</script>\n\n<template>\n  <CollectionPreferences\n    v-model:preferences=\"preferences\"\n    :columns=\"columns\"\n    :sections=\"['columns', 'density']\"\n    container=\"drawer\"\n  >\n    <template #trigger=\"{ open }\">\n      <Button\n        label=\"Table settings\"\n        icon=\"ai ai-settings\"\n        variant=\"outline\"\n        size=\"medium\"\n        @click=\"open\"\n      />\n    </template>\n  </CollectionPreferences>\n</template>"
+   "file": "examples/collection-preferences/in-a-drawer.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'status', label: 'Status' }\n  ]\n</script>\n\n<template>\n  <CollectionPreferences\n    :columns=\"columns\"\n    :page-size-options=\"[10, 25, 50]\"\n    disabled\n  />\n</template>"
+   "file": "examples/collection-preferences/disabled.vue"
   }
  ],
  "docs": "components/collection-preferences.md"

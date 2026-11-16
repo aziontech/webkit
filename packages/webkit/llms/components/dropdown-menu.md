@@ -5,7 +5,7 @@
 - Import: `import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import DropdownMenu from '@aziontech/webkit/dropdown-menu'`
 - Category: navigation · Surface: app · Structure: composition
-- API as JSON: [dropdown-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/dropdown-menu.json)
+- API as JSON: [dropdown-menu.json](dropdown-menu.json)
 
 ## When to use
 
@@ -16,7 +16,7 @@
 ## Do
 
 - Give every `DropdownMenu.Item` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.
-- selected` is a display flag. The dropdown never sets it, so derive it from your own state.
+- `selected` is a display flag. The dropdown never sets it, so derive it from your own state.
 - Use the `command` prop or the `trailing` slot on an option, not both. A `command` shortcut is live while its option is mounted (inside a group, only while the panel is open). Every menu on the page shares one `window` listener, so a shortcut fires one option only: the one in the open menu, else the one whose trigger has focus, else the first registered.
 - Write `DropdownMenu.Item` (also exported as `DropdownMenuItem`); 6.0 removed the `DropdownMenu.Option` alias and the `left` / `right` slots. Items may sit directly in the root: an item outside a group renders inside the panel like a grouped one.
 - Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `header` slot and footer actions in `footer`; those regions stay outside the scrolling list.

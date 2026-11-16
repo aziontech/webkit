@@ -4,7 +4,7 @@
 
 - Import: `import NewsletterSection from '@aziontech/webkit/newsletter-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [newsletter-section.json](https://github.com/aziontech/webkit/blob/main/.specs/newsletter-section.json)
+- API as JSON: [newsletter-section.json](newsletter-section.json)
 
 ## When to use
 

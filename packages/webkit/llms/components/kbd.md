@@ -4,7 +4,7 @@
 
 - Import: `import Kbd from '@aziontech/webkit/kbd'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [kbd.json](https://github.com/aziontech/webkit/blob/main/.specs/kbd.json)
+- API as JSON: [kbd.json](kbd.json)
 
 ## When to use
 

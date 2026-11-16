@@ -4,7 +4,7 @@
 
 - Import: `import SparkChart from '@aziontech/webkit/spark-chart'`
 - Category: chart · Surface: app · Structure: monolithic
-- API as JSON: [spark-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/spark-chart.json)
+- API as JSON: [spark-chart.json](spark-chart.json)
 
 ## When to use
 

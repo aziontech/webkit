@@ -25,9 +25,9 @@
   "For a console list row with media and actions → use `item`."
  ],
  "related": [
-  "card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `registration-frame` cell.",
-  "bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.",
-  "section-title` — the headline that opens the band a row of topics sits in."
+  "`card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `registration-frame` cell.",
+  "`bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.",
+  "`section-title` — the headline that opens the band a row of topics sits in."
  ],
  "bestPractices": [
   "Let the cell own the surface. A topic paints no background and adds no padding, so put it inside `CardGrid.Cell` / `BentoGrid.Cell` (or a padded cell the page owns) rather than giving the topic a fill.",
@@ -92,15 +92,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import FeatureItem from '@aziontech/webkit/feature-item'\n</script>\n\n<template>\n  <div class=\"relative\">\n    <FeatureItem\n      icon=\"ai ai-edge-nodes\"\n      title=\"Consistent global speed\"\n      description=\"Serve content and run web apps across hundreds of locations with median latency under 30 ms. No infra to manage.\"\n    />\n  </div>\n</template>"
+   "file": "examples/feature-item/default.vue"
   },
   {
    "name": "WithoutIcon",
-   "sfc": "<script setup>\n  import FeatureItem from '@aziontech/webkit/feature-item'\n</script>\n\n<template>\n  <FeatureItem\n    title=\"Frontend and API logic together\"\n    description=\"Deploy your frontend and backend API as a single, simple project — in one deploy.\"\n  />\n</template>"
+   "file": "examples/feature-item/without-icon.vue"
   },
   {
    "name": "Linked",
-   "sfc": "<script setup>\n  import FeatureItem from '@aziontech/webkit/feature-item'\n</script>\n\n<template>\n  <div class=\"relative\">\n    <FeatureItem\n      icon=\"ai ai-tiered-cache\"\n      title=\"Accelerate API responses\"\n      description=\"Cache API responses on a distributed architecture to reduce latency and origin load.\"\n      href=\"/products/cache\"\n    />\n  </div>\n</template>"
+   "file": "examples/feature-item/linked.vue"
   }
  ],
  "docs": "components/feature-item.md"

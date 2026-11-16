@@ -4,7 +4,7 @@
 
 - Import: `import FileTokenGroup from '@aziontech/webkit/file-token-group'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [file-token-group.json](https://github.com/aziontech/webkit/blob/main/.specs/file-token-group.json)
+- API as JSON: [file-token-group.json](file-token-group.json)
 
 ## When to use
 

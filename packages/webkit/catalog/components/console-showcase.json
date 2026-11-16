@@ -10,9 +10,9 @@
   "For code — use `MediaSplitSection` with `codeTabs`, or `CliTerminal`."
  ],
  "related": [
-  "ConsoleMockup` — the console scenes it frames.",
-  "ToggleGroup` — the tab control.",
-  "Texture`, `RegistrationFrame`, `SectionTitle`."
+  "`ConsoleMockup` — the console scenes it frames.",
+  "`ToggleGroup` — the tab control.",
+  "`Texture`, `RegistrationFrame`, `SectionTitle`."
  ],
  "bestPractices": [
   "Two to four tabs, each a different view, labelled with one word.",

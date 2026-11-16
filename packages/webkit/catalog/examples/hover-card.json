@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "A user link inside a sentence. Rest the pointer on it or tab to it: after `openDelay` (500 ms) the card shows who the person is; it stays while the pointer moves onto it and closes after `closeDelay` (300 ms) or on `Esc`.",
-   "sfc": "<script setup>\n  import Avatar from '@aziontech/webkit/avatar'\n  import HoverCard from '@aziontech/webkit/hover-card'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <p class=\"text-body-sm text-(--text-default)\">\n    Deployed by\n    <HoverCard>\n      <HoverCard.Trigger>\n        <Link\n          href=\"https://example.com/people/jane-doe\"\n          label=\"Jane Doe\"\n          size=\"small\"\n        />\n      </HoverCard.Trigger>\n      <HoverCard.Content>\n        <div class=\"flex items-center gap-(--spacing-sm)\">\n          <Avatar label=\"Jane Doe\" />\n          <div class=\"flex flex-col\">\n            <span class=\"text-label-md text-(--text-default)\">Jane Doe</span>\n            <span class=\"text-body-sm text-(--text-muted)\">jane.doe@example.com</span>\n          </div>\n        </div>\n        <p class=\"text-body-sm text-(--text-default)\">\n          Owner of production and staging. Joined Acme in March 2024.\n        </p>\n      </HoverCard.Content>\n    </HoverCard>\n    two hours ago.\n  </p>\n</template>"
+   "file": "examples/hover-card/default.vue"
   },
   {
    "name": "ResourcePreview",
    "summary": "Card forced open (`default-open`) on a resource name, the main use in tables: status, region, last deploy and domain, the same facts the resource page shows.",
-   "sfc": "<script setup>\n  import HoverCard from '@aziontech/webkit/hover-card'\n  import Link from '@aziontech/webkit/link'\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-sm) flex-col gap-(--spacing-xs) pb-48\">\n    <span class=\"text-label-sm text-(--text-muted)\">Application</span>\n    <HoverCard\n      default-open\n      placement=\"bottom-start\"\n    >\n      <HoverCard.Trigger>\n        <Link\n          href=\"https://example.com/applications/acme-store\"\n          label=\"acme-store\"\n          size=\"small\"\n        />\n      </HoverCard.Trigger>\n      <HoverCard.Content>\n        <div class=\"flex items-center justify-between gap-(--spacing-sm)\">\n          <span class=\"text-label-md text-(--text-default)\">acme-store</span>\n          <Tag\n            label=\"Active\"\n            severity=\"success\"\n            size=\"small\"\n          />\n        </div>\n        <dl class=\"grid grid-cols-2 gap-(--spacing-xs) text-body-sm\">\n          <dt class=\"text-(--text-muted)\">Region</dt>\n          <dd class=\"text-(--text-default)\">United States</dd>\n          <dt class=\"text-(--text-muted)\">Last deploy</dt>\n          <dd class=\"text-(--text-default)\">2026-11-12 14:30 UTC</dd>\n          <dt class=\"text-(--text-muted)\">Domain</dt>\n          <dd class=\"text-(--text-default)\"><bdi>app.example.com</bdi></dd>\n        </dl>\n      </HoverCard.Content>\n    </HoverCard>\n  </div>\n</template>"
+   "file": "examples/hover-card/resource-preview.vue"
   },
   {
    "name": "Disabled",
    "summary": "`disabled` keeps the link and never opens the card.",
-   "sfc": "<script setup>\n  import HoverCard from '@aziontech/webkit/hover-card'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <p class=\"text-body-sm text-(--text-default)\">\n    Deployed by\n    <HoverCard disabled>\n      <HoverCard.Trigger>\n        <Link\n          href=\"https://example.com/people/jane-doe\"\n          label=\"Jane Doe\"\n          size=\"small\"\n        />\n      </HoverCard.Trigger>\n      <HoverCard.Content>\n        <p class=\"text-body-sm text-(--text-default)\">Owner of production.</p>\n      </HoverCard.Content>\n    </HoverCard>\n    two hours ago.\n  </p>\n</template>"
+   "file": "examples/hover-card/disabled.vue"
   }
  ]
 }

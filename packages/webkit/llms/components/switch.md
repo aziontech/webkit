@@ -4,7 +4,7 @@
 
 - Import: `import Switch from '@aziontech/webkit/switch'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [switch.json](https://github.com/aziontech/webkit/blob/main/.specs/switch.json)
+- API as JSON: [switch.json](switch.json)
 
 ## When to use
 

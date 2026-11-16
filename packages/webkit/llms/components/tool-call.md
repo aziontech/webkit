@@ -4,7 +4,7 @@
 
 - Import: `import ToolCall from '@aziontech/webkit/tool-call'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [tool-call.json](https://github.com/aziontech/webkit/blob/main/.specs/tool-call.json)
+- API as JSON: [tool-call.json](tool-call.json)
 
 ## When to use
 
@@ -35,7 +35,7 @@
 | --- | --- | --- | --- | --- |
 | `name` | `string` | `—` | true | The tool or command identifier, shown in code font (`list_workloads`). |
 | `title` | `string` | `''` | false | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. |
-| `status` | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false | pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
+| `status` | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false | `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; details start collapsed. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 

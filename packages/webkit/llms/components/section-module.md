@@ -4,7 +4,7 @@
 
 - Import: `import SectionModule from '@aziontech/webkit/section-module'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [section-module.json](https://github.com/aziontech/webkit/blob/main/.specs/section-module.json)
+- API as JSON: [section-module.json](section-module.json)
 
 ## When to use
 

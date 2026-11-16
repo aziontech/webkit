@@ -4,7 +4,7 @@
 
 - Import: `import RegistrationFrame from '@aziontech/webkit/registration-frame'`
 - Category: layout · Surface: site · Structure: monolithic
-- API as JSON: [registration-frame.json](https://github.com/aziontech/webkit/blob/main/.specs/registration-frame.json)
+- API as JSON: [registration-frame.json](registration-frame.json)
 
 ## When to use
 

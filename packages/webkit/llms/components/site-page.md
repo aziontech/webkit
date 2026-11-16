@@ -4,7 +4,7 @@
 
 - Import: `import SitePage from '@aziontech/webkit/site-page'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [site-page.json](https://github.com/aziontech/webkit/blob/main/.specs/site-page.json)
+- API as JSON: [site-page.json](site-page.json)
 
 ## When to use
 
@@ -36,7 +36,7 @@
 - [section-container](section-container.md) — the column the renderer lays `sections` in.
 - [section-gap](section-gap.md) — the hatched break it draws before each band.
 - The page sections (`hero-section`, `customer-use-cases`, `faq-section`, …) — what each `_id` names.
-- shell/site` — the nav and footer frame a page renders inside.
+- `shell/site` — the nav and footer frame a page renders inside.
 
 ## Props
 

@@ -4,7 +4,7 @@
 
 - Import: `import FeatureTabs from '@aziontech/webkit/feature-tabs'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [feature-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-tabs.json)
+- API as JSON: [feature-tabs.json](feature-tabs.json)
 
 ## When to use
 

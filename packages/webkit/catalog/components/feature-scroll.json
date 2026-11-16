@@ -11,8 +11,8 @@
   "In a hand-built SFC that needs its own media slot → use `sticky-stack` directly."
  ],
  "related": [
-  "sticky-stack` — the scroll engine the large layout runs on.",
-  "media-tile` — the cell the small layout renders each feature with."
+  "`sticky-stack` — the scroll engine the large layout runs on.",
+  "`media-tile` — the cell the small layout renders each feature with."
  ],
  "bestPractices": [
   "Four to six items; the stack needs enough steps to earn the scroll.",

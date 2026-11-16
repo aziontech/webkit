@@ -4,7 +4,7 @@
 
 - Import: `import HeroFormSection from '@aziontech/webkit/hero-form-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [hero-form-section.json](https://github.com/aziontech/webkit/blob/main/.specs/hero-form-section.json)
+- API as JSON: [hero-form-section.json](hero-form-section.json)
 
 ## When to use
 

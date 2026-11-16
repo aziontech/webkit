@@ -5,7 +5,7 @@
 - Import: `import WizardRoot from '@aziontech/webkit/wizard-root'`
 - Compound import (dot notation, not tree-shakeable): `import Wizard from '@aziontech/webkit/wizard'`
 - Category: navigation · Surface: app · Structure: composition
-- API as JSON: [wizard.json](https://github.com/aziontech/webkit/blob/main/.specs/wizard.json)
+- API as JSON: [wizard.json](wizard.json)
 
 ## When to use
 

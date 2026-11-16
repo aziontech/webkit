@@ -19,10 +19,10 @@
   "Values by country or location → use `map-chart`."
  ],
  "related": [
-  "chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
-  "donut-chart` — part-to-whole at a glance, sharing this chart's palette, legend and states.",
-  "stat-tile` — one figure with a delta and a sparkline, for a KPI row above the charts.",
-  "table` — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface."
+  "`chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
+  "`donut-chart` — part-to-whole at a glance, sharing this chart's palette, legend and states.",
+  "`stat-tile` — one figure with a delta and a sparkline, for a KPI row above the charts.",
+  "`table` — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface."
  ],
  "bestPractices": [
   "Pass series in a stable order: the slot follows the series position, so color follows the entity. A filter that hides a series keeps the others' colors.",

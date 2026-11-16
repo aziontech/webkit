@@ -24,8 +24,8 @@
   "A screenshot or clip in documentation → use `doc-frame`."
  ],
  "related": [
-  "illustration` — the same closed-registry pattern for static scenes.",
-  "texture` — the texture a full-screen widget grounds itself with through `texture`."
+  "`illustration` — the same closed-registry pattern for static scenes.",
+  "`texture` — the texture a full-screen widget grounds itself with through `texture`."
  ],
  "bestPractices": [
   "Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.",
@@ -121,15 +121,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"h-96 w-full\">\n    <ConsoleMockup name=\"workloads-list\" />\n  </div>\n</template>"
+   "file": "examples/console-mockup/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2\">\n    <div class=\"h-80 w-full\">\n      <ConsoleMockup\n        name=\"workload-topology\"\n        variant=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full\">\n      <ConsoleMockup\n        name=\"workload-topology\"\n        variant=\"bare\"\n      />\n    </div>\n    <div class=\"h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"edge-dns-record\"\n        variant=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"edge-dns-record\"\n        variant=\"bare\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/console-mockup/variants.vue"
   },
   {
    "name": "Still fragment",
-   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2\">\n    <div class=\"h-80 w-full p-(--spacing-xl)\">\n      <ConsoleMockup name=\"data-stream-source\" />\n    </div>\n    <div class=\"h-80 w-full p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"data-stream-source\"\n        :cursor=\"false\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/console-mockup/still-fragment.vue"
   }
  ],
  "docs": "components/console-mockup.md"

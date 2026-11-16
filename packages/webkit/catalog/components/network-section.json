@@ -8,9 +8,9 @@
   "For a logo wall with one quote → use `logo-wall-section`."
  ],
  "related": [
-  "network-map` — the animated map behind the copy.",
-  "quote` / `feature-item` — the cell types of the `outcomes` and `benefits` floors.",
-  "stats` — the row the `stats` floor renders."
+  "`network-map` — the animated map behind the copy.",
+  "`quote` / `feature-item` — the cell types of the `outcomes` and `benefits` floors.",
+  "`stats` — the row the `stats` floor renders."
  ],
  "bestPractices": [
   "Four short `claims`; they are chips, not sentences. Give a claim as `{ label, mobile: false }` to keep it to the medium breakpoint and up when the phone band has room for fewer chips.",

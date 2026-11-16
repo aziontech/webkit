@@ -21,9 +21,9 @@
   "A ranking across categories → use `bar-list`."
  ],
  "related": [
-  "status-indicator` — the current state; a Tracker is that state's history.",
-  "spark-chart` — a measured trend rather than a sequence of states.",
-  "chart-card` — the box a Tracker sits in, with the uptime figure in its header."
+  "`status-indicator` — the current state; a Tracker is that state's history.",
+  "`spark-chart` — a measured trend rather than a sequence of states.",
+  "`chart-card` — the box a Tracker sits in, with the uptime figure in its header."
  ],
  "bestPractices": [
   "Write each `label` as period plus state (\"Nov 3 · Partial outage\"), so the readout stands alone.",
@@ -75,15 +75,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Tracker from '@aziontech/webkit/tracker'\n  import { useLocale } from '@aziontech/webkit/use-locale'\n\n  const DAYS = 90\n  const DEGRADED_DAY = 52\n  const OUTAGE_DAY = 73\n\n  const { formatDate } = useLocale()\n\n  const days = Array.from({ length: DAYS }, (_, index) => {\n    const date = new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))\n    const id = date.toISOString().slice(0, 10)\n    const day = formatDate(date, {\n      month: 'short',\n      day: 'numeric',\n      timeZone: 'UTC'\n    })\n    if (index === DAYS - 1) return { id, label: `${day} · No data` }\n    if (index === OUTAGE_DAY) return { id, severity: 'danger', label: `${day} · Partial outage` }\n    if (index === DEGRADED_DAY)\n      return { id, severity: 'warning', label: `${day} · Degraded performance` }\n    return { id, severity: 'success', label: `${day} · Operational` }\n  })\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xl) pt-(--spacing-xl)\">\n    <Tracker\n      aria-label=\"Edge Application uptime, last 90 days\"\n      :items=\"days\"\n    />\n  </div>\n</template>"
+   "file": "examples/tracker/default.vue"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import Tracker from '@aziontech/webkit/tracker'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xl) pt-(--spacing-xl)\">\n    <Tracker\n      aria-label=\"Edge Application uptime, last 90 days\"\n      loading\n    />\n  </div>\n</template>"
+   "file": "examples/tracker/loading.vue"
   },
   {
    "name": "Empty",
-   "sfc": "<script setup>\n  import Tracker from '@aziontech/webkit/tracker'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xl) pt-(--spacing-xl)\">\n    <Tracker\n      aria-label=\"Edge Application uptime, last 90 days\"\n      :items=\"[]\"\n    />\n  </div>\n</template>"
+   "file": "examples/tracker/empty.vue"
   }
  ],
  "docs": "components/tracker.md"

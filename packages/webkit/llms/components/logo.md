@@ -4,7 +4,7 @@
 
 - Import: `import Logo from '@aziontech/webkit/logo'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [logo.json](https://github.com/aziontech/webkit/blob/main/.specs/logo.json)
+- API as JSON: [logo.json](logo.json)
 
 ## When to use
 

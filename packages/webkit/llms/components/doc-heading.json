@@ -20,9 +20,9 @@
   "On marketing pages — use `SectionTitle`."
  ],
  "related": [
-  "DocOnThisPage` — the rail that points at the ids.",
-  "useHeadingNavigation` — the page-provided scroll handler.",
-  "DocProse` — skips `[data-doc-anchor]` in its link rules."
+  "`DocOnThisPage` — the rail that points at the ids.",
+  "`useHeadingNavigation` — the page-provided scroll handler.",
+  "`DocProse` — skips `[data-doc-anchor]` in its link rules."
  ],
  "bestPractices": [
   "Give every heading a stable, slug-like `anchor`.",
@@ -64,11 +64,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocHeading from '@aziontech/webkit/doc-heading'\n</script>\n\n<template>\n  <DocHeading\n    anchor=\"purge-by-url\"\n    :level=\"2\"\n  >\n    Purge by URL\n  </DocHeading>\n</template>"
+   "file": "examples/doc-heading/default.vue"
   },
   {
    "name": "Levels",
-   "sfc": "<script setup>\n  import DocHeading from '@aziontech/webkit/doc-heading'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <DocHeading\n      anchor=\"cache\"\n      :level=\"1\"\n      label=\"Cache\"\n    />\n    <DocHeading\n      anchor=\"cache-rules\"\n      :level=\"2\"\n      label=\"Cache rules\"\n    />\n    <DocHeading\n      anchor=\"cache-keys\"\n      :level=\"3\"\n      label=\"Cache keys\"\n    />\n    <DocHeading\n      anchor=\"query-strings\"\n      :level=\"4\"\n      label=\"Query strings\"\n    />\n  </div>\n</template>"
+   "file": "examples/doc-heading/levels.vue"
   }
  ],
  "docs": "components/doc-heading.md"

@@ -4,7 +4,7 @@
 
 - Import: `import SearchTrigger from '@aziontech/webkit/search-trigger'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [search-trigger.json](https://github.com/aziontech/webkit/blob/main/.specs/search-trigger.json)
+- API as JSON: [search-trigger.json](search-trigger.json)
 
 ## When to use
 
@@ -31,11 +31,11 @@
 
 ## Related
 
-- Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.
-- Kbd` — draws the keycap with the OS-aware modifier glyph.
-- IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.
-- Tooltip` — shows the label over the folded magnifier on hover and focus.
-- AppHeader` — the bar it sits in, usually in `AppHeader.End`.
+- `Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.
+- `Kbd` — draws the keycap with the OS-aware modifier glyph.
+- `IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.
+- `Tooltip` — shows the label over the folded magnifier on hover and focus.
+- `AppHeader` — the bar it sits in, usually in `AppHeader.End`.
 
 ## Props
 

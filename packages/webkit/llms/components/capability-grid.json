@@ -21,8 +21,8 @@
   "For cells that each carry their own action or copy button — use `FeatureWidgets`."
  ],
  "related": [
-  "FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.",
-  "FeatureTiles` — tiles with illustrations."
+  "`FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.",
+  "`FeatureTiles` — tiles with illustrations."
  ],
  "bestPractices": [
   "Three or six items at three columns, four or eight at four, so rows stay full.",
@@ -102,15 +102,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'ai ai-bolt',\n      title: 'Functions',\n      description: 'Run JavaScript and WebAssembly close to every user.'\n    },\n    {\n      icon: 'ai ai-database',\n      title: 'Object Storage',\n      description: 'Keep files where they are read, with no egress to plan for.'\n    },\n    {\n      icon: 'ai ai-shield',\n      title: 'Firewall',\n      description: 'Stop bots and attacks before they reach your origin.'\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    eyebrow=\"Platform\"\n    title=\"Everything an application needs, in one place\"\n    description=\"Compute, storage and security that deploy together.\"\n    :items=\"items\"\n    :primary-action=\"{ label: 'Explore the platform', href: '/platform', trailing: true }\"\n  />\n</template>"
+   "file": "examples/capability-grid/default.vue"
   },
   {
    "name": "Points",
-   "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'ai ai-globe',\n      title: 'Global network',\n      description: 'Traffic lands on the nearest location.',\n      points: ['Anycast routing', 'Automatic failover']\n    },\n    {\n      icon: 'ai ai-lock',\n      title: 'Certificates',\n      description: 'TLS for every domain, renewed for you.',\n      points: ['Managed certificates', 'Bring your own']\n    },\n    {\n      icon: 'ai ai-chart-line',\n      title: 'Observability',\n      description: 'Metrics and logs in seconds.',\n      points: ['Real-time metrics', 'Log streaming']\n    },\n    {\n      icon: 'ai ai-sitemap',\n      title: 'Load balancing',\n      description: 'Spread requests across origins.',\n      points: ['Health checks', 'Weighted pools']\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    title=\"Built for production\"\n    :items=\"items\"\n    :columns=\"4\"\n  />\n</template>"
+   "file": "examples/capability-grid/points.vue"
   },
   {
    "name": "Left title",
-   "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'ai ai-check',\n      title: 'Grow with Azion',\n      description: 'Offer a platform your customers already trust, with pricing built for resale.'\n    },\n    {\n      icon: 'ai ai-check',\n      title: 'Get certified',\n      description: 'Train your team on the platform and earn the certifications your projects need.'\n    },\n    {\n      icon: 'ai ai-check',\n      title: 'Sell together',\n      description:\n        'Work joint accounts with our sales engineers, from the first call to production.'\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    title-variant=\"start\"\n    title=\"Why you should be a partner\"\n    description=\"Build, sell and deliver modern applications with the Azion team beside you.\"\n    :items=\"items\"\n  />\n</template>"
+   "file": "examples/capability-grid/title-start.vue"
   }
  ],
  "docs": "components/capability-grid.md"

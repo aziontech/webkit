@@ -4,7 +4,7 @@
 
 - Import: `import AppLayout from '@aziontech/webkit/app-layout'`
 - Category: layout · Surface: app · Structure: monolithic
-- API as JSON: [app-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/app-layout.json)
+- API as JSON: [app-layout.json](app-layout.json)
 
 ## When to use
 

@@ -9,10 +9,10 @@
   "For a plain texture — use `Texture`."
  ],
  "related": [
-  "Hero` — the `background` slot it fills.",
-  "NetworkMap`, `SpinningGlobe` — what it draws.",
-  "Texture` — the dot lattice.",
-  "Banner` — the announcement band (unrelated surface)."
+  "`Hero` — the `background` slot it fills.",
+  "`NetworkMap`, `SpinningGlobe` — what it draws.",
+  "`Texture` — the dot lattice.",
+  "`Banner` — the announcement band (unrelated surface)."
  ],
  "bestPractices": [
   "One backdrop per page.",

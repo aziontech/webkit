@@ -10,8 +10,8 @@
   "For a single figure inside another band → use `stats` directly."
  ],
  "related": [
-  "stats` — the figure row this band frames.",
-  "network-section` — the band that pairs claims with client outcomes."
+  "`stats` — the figure row this band frames.",
+  "`network-section` — the band that pairs claims with client outcomes."
  ],
  "bestPractices": [
   "Keep `value` short and the unit in `suffix`, so the figure reads at a glance.",

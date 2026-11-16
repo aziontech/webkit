@@ -4,7 +4,7 @@
 
 - Import: `import ComplianceLogos from '@aziontech/webkit/compliance-logos'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [compliance-logos.json](https://github.com/aziontech/webkit/blob/main/.specs/compliance-logos.json)
+- API as JSON: [compliance-logos.json](compliance-logos.json)
 
 ## When to use
 

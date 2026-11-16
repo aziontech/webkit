@@ -21,8 +21,8 @@
   "For an application surface — use `Card`, which is the console's carded surface."
  ],
  "related": [
-  "DocCardGroup` — the frame and grid this is a cell of; a card outside one has no cell ring.",
-  "DocItem` — the row counterpart. A card claims a whole tile; a row claims one line."
+  "`DocCardGroup` — the frame and grid this is a cell of; a card outside one has no cell ring.",
+  "`DocItem` — the row counterpart. A card claims a whole tile; a row claims one line."
  ],
  "bestPractices": [
   "Keep the title to a noun phrase and let the copy carry the verb.",
@@ -103,11 +103,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocCard from '@aziontech/webkit/doc-card'\n</script>\n\n<template>\n  <DocCard\n    title=\"Edge Application\"\n    icon=\"ai ai-server\"\n    href=\"/docs/edge-application\"\n    link-label=\"Read the guide\"\n  >\n    Serve and cache your application at the edge, close to the people using it.\n  </DocCard>\n</template>"
+   "file": "examples/doc-card/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import DocCard from '@aziontech/webkit/doc-card'\n</script>\n\n<template>\n  <div class=\"grid gap-(--spacing-md) sm:grid-cols-2\">\n    <DocCard\n      title=\"Edge Application\"\n      icon=\"ai ai-server\"\n      href=\"/docs/edge-application\"\n      link-label=\"Read the guide\"\n    >\n      The plain shape: a glyph, a title, copy and a call to action.\n    </DocCard>\n    <DocCard\n      eyebrow=\"Azion CLI\"\n      title=\"Deploy from your terminal\"\n      icon=\"ai ai-desktop\"\n      href=\"/docs/cli\"\n    >\n      An overline says who or when, for a title that does not carry it.\n    </DocCard>\n    <DocCard\n      title=\"Community templates\"\n      href=\"https://github.com/aziontech\"\n      target=\"_blank\"\n      link-label=\"Browse on GitHub\"\n    >\n      A card that leaves the documentation trades the chevron for a diagonal arrow.\n    </DocCard>\n    <DocCard title=\"Not a destination\">\n      With no href the root is a plain block, so it is neither focusable nor announced as a link.\n    </DocCard>\n  </div>\n</template>"
+   "file": "examples/doc-card/variants.vue"
   }
  ],
  "docs": "components/doc-card.md"

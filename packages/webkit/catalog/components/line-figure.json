@@ -11,9 +11,9 @@
   "Inside dense application screens."
  ],
  "related": [
-  "Illustration` — static art from the registry.",
-  "ConsoleMockup` — product scenes.",
-  "EmptyState` — can carry a figure in its art slot."
+  "`Illustration` — static art from the registry.",
+  "`ConsoleMockup` — product scenes.",
+  "`EmptyState` — can carry a figure in its art slot."
  ],
  "bestPractices": [
   "One figure per view; two figures answering the pointer compete.",

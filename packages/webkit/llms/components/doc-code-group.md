@@ -4,7 +4,7 @@
 
 - Import: `import DocCodeGroup from '@aziontech/webkit/doc-code-group'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-code-group.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-code-group.json)
+- API as JSON: [doc-code-group.json](doc-code-group.json)
 
 ## When to use
 
@@ -30,8 +30,8 @@
 
 ## Related
 
-- CodeBlock` — the surface it renders on.
-- DocTabs` — alternatives that are prose, not code.
+- `CodeBlock` — the surface it renders on.
+- `DocTabs` — alternatives that are prose, not code.
 
 ## Props
 

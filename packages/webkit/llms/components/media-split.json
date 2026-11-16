@@ -28,12 +28,12 @@
   "For a picture with no explanation → use `illustration` directly."
  ],
  "related": [
-  "section-title` — the copy-only section header.",
-  "feature-item` — the smaller unit when a page needs several claims rather than one.",
-  "illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
-  "texture` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
-  "registration-frame` — the frame the band is drawn with. With `framed` on, or inside a `section-stack`, each of the band's two cells is its own `registration-frame`.",
-  "section-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
+  "`section-title` — the copy-only section header.",
+  "`feature-item` — the smaller unit when a page needs several claims rather than one.",
+  "`illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
+  "`texture` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
+  "`registration-frame` — the frame the band is drawn with. With `framed` on, or inside a `section-stack`, each of the band's two cells is its own `registration-frame`.",
+  "`section-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
  ],
  "bestPractices": [
   "By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
@@ -211,15 +211,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaSplit from '@aziontech/webkit/media-split'\n</script>\n\n<template>\n  <MediaSplit\n    eyebrow=\"Deployment\"\n    title=\"Go from repository to running application in three steps.\"\n    description=\"Pick a method, point at a repository, then name the application and deploy it. There is no pipeline to assemble first and nothing to size — the last step ships it.\"\n  >\n    <template #media>\n      <Illustration name=\"quick-start-with-templates\" />\n    </template>\n  </MediaSplit>\n</template>"
+   "file": "examples/media-split/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaSplit from '@aziontech/webkit/media-split'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <MediaSplit\n      variant=\"media-end\"\n      eyebrow=\"Deployment\"\n      title=\"Go from repository to running application in three steps.\"\n      description=\"Pick a method, point at a repository, then name the application and deploy it. There is no pipeline to assemble first and nothing to size — the last step ships it.\"\n    >\n      <template #media>\n        <Illustration name=\"quick-start-with-templates\" />\n      </template>\n    </MediaSplit>\n    <MediaSplit\n      variant=\"media-start\"\n      eyebrow=\"Deployment\"\n      title=\"Go from repository to running application in three steps.\"\n      description=\"Pick a method, point at a repository, then name the application and deploy it. There is no pipeline to assemble first and nothing to size — the last step ships it.\"\n    >\n      <template #media>\n        <Illustration name=\"quick-start-with-templates\" />\n      </template>\n    </MediaSplit>\n  </div>\n</template>"
+   "file": "examples/media-split/variants.vue"
   },
   {
    "name": "Orientations",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaSplit from '@aziontech/webkit/media-split'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <MediaSplit\n      orientation=\"horizontal\"\n      eyebrow=\"Deployment\"\n      title=\"Horizontal: two cells from lg up.\"\n      description=\"The band proper. It stacks below lg and splits above it, so a full-width page reads as a column of alternating halves.\"\n    >\n      <template #media>\n        <Illustration name=\"quick-start-with-templates\" />\n      </template>\n    </MediaSplit>\n    <div class=\"max-w-(--container-lg)\">\n      <MediaSplit\n        orientation=\"vertical\"\n        variant=\"media-start\"\n        eyebrow=\"Deployment\"\n        title=\"Vertical: stacked at every width.\"\n        description=\"The shape a band takes in a column too narrow to carry two halves. variant picks which cell is on top — media-start leads with the picture.\"\n      >\n        <template #media>\n          <Illustration name=\"quick-start-with-templates\" />\n        </template>\n      </MediaSplit>\n    </div>\n  </div>\n</template>"
+   "file": "examples/media-split/orientations.vue"
   }
  ],
  "docs": "components/media-split.md"

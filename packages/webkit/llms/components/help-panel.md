@@ -5,7 +5,7 @@
 - Import: `import HelpPanelRoot from '@aziontech/webkit/help-panel-root'`
 - Compound import (dot notation, not tree-shakeable): `import HelpPanel from '@aziontech/webkit/help-panel'`
 - Category: content · Surface: app · Structure: composition
-- API as JSON: [help-panel.json](https://github.com/aziontech/webkit/blob/main/.specs/help-panel.json)
+- API as JSON: [help-panel.json](help-panel.json)
 
 ## When to use
 

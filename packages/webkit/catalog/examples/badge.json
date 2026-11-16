@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "A single badge driven by the controls.",
-   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <Badge\n    label=\"99\"\n    variant=\"primary\"\n    size=\"medium\"\n  />\n</template>"
+   "file": "examples/badge/default.vue"
   },
   {
    "name": "Severities",
    "summary": "Both variants and every severity side by side.",
-   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      variant=\"primary\"\n    />\n    <Badge\n      label=\"99\"\n      variant=\"secondary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"success\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"info\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"warning\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"danger\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"neutral\"\n    />\n  </div>\n</template>"
+   "file": "examples/badge/severities.vue"
   },
   {
    "name": "Sizes",
    "summary": "All sizes side by side.",
-   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      size=\"small\"\n    />\n    <Badge\n      label=\"99\"\n      size=\"medium\"\n    />\n    <Badge\n      label=\"99\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+   "file": "examples/badge/sizes.vue"
   }
  ]
 }

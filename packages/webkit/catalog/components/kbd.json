@@ -9,8 +9,8 @@
   "You need an interactive control that fires on click → use `button` / `icon-button`; Kbd is a presentational hint only."
  ],
  "related": [
-  "command` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.",
-  "badge` — compact non-interactive indicator for counts/status; Kbd is specifically for keyboard keys."
+  "`command` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.",
+  "`badge` — compact non-interactive indicator for counts/status; Kbd is specifically for keyboard keys."
  ],
  "bestPractices": [
   "Keep the default slot to a single key or glyph (`K`, `7`, `Enter`, `Esc`, `/`); avoid lowercase words or sentences.",

@@ -11,10 +11,10 @@
   "For the empty framed band that separates two sections → use `section-gap`, which is this frame configured for that one job."
  ],
  "related": [
-  "section-gap` — an empty `registration-frame` that holds the air between two sections.",
-  "section-title` — a `registration-frame` around a centered section header.",
-  "card` — a padded surface with header/content/footer regions; a card, not a frame.",
-  "separator` — one hairline with optional centered label; no corners, no content."
+  "`section-gap` — an empty `registration-frame` that holds the air between two sections.",
+  "`section-title` — a `registration-frame` around a centered section header.",
+  "`card` — a padded surface with header/content/footer regions; a card, not a frame.",
+  "`separator` — one hairline with optional centered label; no corners, no content."
  ],
  "bestPractices": [
   "Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush=\"left\"`) with the same mechanic.",

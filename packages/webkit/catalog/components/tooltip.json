@@ -13,10 +13,10 @@
   "Guidance or errors the user needs to complete a field → use `field-error`."
  ],
  "related": [
-  "popover` — click-opened, interactive, with a header, body and footer.",
-  "hint` — the focusable info glyph that renders a `Tooltip` for you.",
-  "hover-card` — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.",
-  "icon-button` — the most common trigger; it still needs its own `ariaLabel`."
+  "`popover` — click-opened, interactive, with a header, body and footer.",
+  "`hint` — the focusable info glyph that renders a `Tooltip` for you.",
+  "`hover-card` — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.",
+  "`icon-button` — the most common trigger; it still needs its own `ariaLabel`."
  ],
  "bestPractices": [
   "Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.",

@@ -4,7 +4,7 @@
 
 - Import: `import Input from '@aziontech/webkit/input'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [input.json](https://github.com/aziontech/webkit/blob/main/.specs/input.json)
+- API as JSON: [input.json](input.json)
 
 ## When to use
 

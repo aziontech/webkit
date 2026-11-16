@@ -11,9 +11,9 @@
   "A confirmation or content modal without search/list semantics → use `dialog` directly."
  ],
  "related": [
-  "dialog` — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.",
-  "kbd` — renders each item's keyboard-shortcut hint and the ⌘K affordance.",
-  "dropdown-menu` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger."
+  "`dialog` — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.",
+  "`kbd` — renders each item's keyboard-shortcut hint and the ⌘K affordance.",
+  "`dropdown-menu` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger."
  ],
  "bestPractices": [
   "Write items as Title Case verb phrases describing an action (\"Deploy Project\"), not navigation labels.",

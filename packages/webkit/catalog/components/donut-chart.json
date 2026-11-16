@@ -10,9 +10,9 @@
   "Change over time → use `chart`."
  ],
  "related": [
-  "chart` — the cartesian sibling; same series model, so a dataset moves between them without reshaping.",
-  "chart-card` — the box a dashboard donut sits in.",
-  "stat-tile` — the total alone, with a delta."
+  "`chart` — the cartesian sibling; same series model, so a dataset moves between them without reshaping.",
+  "`chart-card` — the box a dashboard donut sits in.",
+  "`stat-tile` — the total alone, with a delta."
  ],
  "bestPractices": [
   "Keep it to six slices or fewer; the seventh and beyond fold into Other automatically.",

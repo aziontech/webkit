@@ -9,8 +9,8 @@
   "For marks with photos and stories in a mosaic → use `client-mosaic`."
  ],
  "related": [
-  "logo-wall` — the wall the marks are laid in, with the quote in its aside.",
-  "logo` — draws every mark (the wall's and the quote's) right on both themes."
+  "`logo-wall` — the wall the marks are laid in, with the quote in its aside.",
+  "`logo` — draws every mark (the wall's and the quote's) right on both themes."
  ],
  "bestPractices": [
   "Eight or nine logos fill the rectangle wall beside the aside.",

@@ -4,7 +4,7 @@
 
 - Import: `import HighlightButton from '@aziontech/webkit/highlight-button'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [highlight-button.json](https://github.com/aziontech/webkit/blob/main/.specs/highlight-button.json)
+- API as JSON: [highlight-button.json](highlight-button.json)
 
 ## When to use
 
@@ -17,7 +17,7 @@
 - Use at most one per view; the glow loses its meaning when it repeats.
 - Keep the label short and verb-led, and pair it with a leading `icon` (for example `ai ai-sparkles`).
 - It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
-- disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
+- `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
 - The glow stops under reduced motion, so never use it to convey state.
 
 ## Don’t

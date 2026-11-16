@@ -12,9 +12,9 @@
   "For content we own and could render directly — an embed is a last resort, not a layout tool."
  ],
  "related": [
-  "doc-frame` — the documentation frame for stills and clips, not third-party documents.",
-  "registration-frame` — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.",
-  "media-split` — when the embed is one half of a copy-and-media band."
+  "`doc-frame` — the documentation frame for stills and clips, not third-party documents.",
+  "`registration-frame` — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.",
+  "`media-split` — when the embed is one half of a copy-and-media band."
  ],
  "bestPractices": [
   "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
