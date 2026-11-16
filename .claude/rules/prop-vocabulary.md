@@ -38,12 +38,15 @@ In the tables below, staged entries are marked _(staged)_.
 | Light-dismiss (outside-click / Esc)          | `dismissible`                                                          | `boolean`                                                  | `dismissable`, `closeable`                                                                        |
 | Explicit close affordance (X)                | `closable`                                                             | `boolean`                                                  | — (a different concept from `dismissible`)                                                        |
 | Primary heading text                         | `title`                                                                | `string`                                                   | `heading`, `header`; _(staged)_ `headline`                                                        |
-| Primary two-way value                        | `modelValue` (`v-model`)                                               | per component                                              | `isToggled`; `v-model:value` for the primary value (review)                                       |
+| Primary two-way value                        | `modelValue` (`v-model`)                                               | per component                                              | `isToggled`; `v-model:value` (`model-shape`)                                                      |
 | Anything that opens                          | `open` (`v-model:open`, seed `defaultOpen`)                            | `boolean`                                                  | `expanded`, `visible`, `show`, `opened`, `shown`                                                  |
 | Ids of the parts that are open               | `openKeys` (`v-model:openKeys`)                                        | `string[]`                                                 | `expandedKeys`, `expandedIds`, `openIds`, `expandedItems`                                         |
 | The page or item you are on (`aria-current`) | `active`                                                               | `boolean`                                                  | `current`, `activated`, `isCurrent`                                                               |
-| Picked single key                            | `selected` (`v-model:selected`)                                        | key                                                        | — (review)                                                                                        |
-| Picked keys of a multi-selection             | `selectedKeys` (`v-model:selectedKeys`)                                | `string[]`                                                 | `selectedIds`, `selectedValues`, `checkedKeys`, `selectedItems`                                   |
+| Picked flag on an item                       | `selected` (`v-model:selected`)                                        | `boolean`                                                  | a string `selected` (that is `selectedKey`)                                                       |
+| Picked single key                            | `selectedKey` (`v-model:selectedKey`)                                  | `string` or `string \| null`                               | `selected` as a string, `selectedId`                                                              |
+| Picked keys of a multi-selection             | `selectedKeys` (`v-model:selectedKeys`)                                | `string[]`                                                 | `selectedIds`, `selectedValues`, `checkedKeys`, `selectedItems`, `rowSelection`                   |
+| The item you are on, by id                   | `activeKey` (`v-model:activeKey`)                                      | `string \| null`                                           | `activeId`, a string `active`                                                                     |
+| Current page                                 | `page` (`v-model:page`, 1-based) + `pageSize`                          | `number`                                                   | `pagination`, `pageIndex`, `currentPage`                                                          |
 | Disabled                                     | `disabled`                                                             | `boolean`                                                  | `isDisabled` (prefix rule); _(staged)_ `enabled`                                                  |
 | Loading                                      | `loading`                                                              | `boolean`                                                  | `isLoading` (prefix rule)                                                                         |
 | Leading or trailing glyph                    | `icon`                                                                 | `string` (icon name)                                       | _(staged)_ `iconName`, `leadingIcon`, `trailingIcon`                                              |
@@ -110,6 +113,55 @@ against its value map.
 > shadcn's `destructive` because it matches our colour names. Code ported from shadcn maps
 > `destructive` → `danger`; from Material, `outlined` → `outline`, `text` → `ghost`.
 
+## Closed value sets
+
+The banned-value maps above catch the known wrong words. On top of them, five axes are a
+**closed set**: every member of the union (resolved through local and imported aliases,
+`Exclude<…>` and `Extract<…>`) is a shared value or an extra the component documents in the
+machine source (`VARIANT_EXTRAS`, `SEVERITY_EXTRAS`, `STATUS_EXTRAS`, `ORIENTATION_EXTRAS` in
+`lib/prop-vocabulary.mjs`, keyed by the component, its root, or `<component>.<prop>`). The
+axis is the prop name or its `*<Axis>` suffix (`titleVariant`, `tagSeverity`).
+
+| Axis          | Shared set                                                             | Documented extras (component → values)                                                                                                    |
+| ------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`     | `primary · secondary · outline · ghost · danger · link`                | the component's own looks, e.g. `avatar` circle·square, `chip` filled·dashed, `tag` accent·contrast·highlight, `texture` dots·grid·lines… |
+| `severity`    | `neutral · info · success · warning · danger`                          | `severity-tag` critical·high·medium·low (a security level); `chart` the `severity-*` palette                                              |
+| `status`      | `pending · running · success · error · canceled · skipped · streaming` | `prompt-input` ready; `tool-approval` approved·denied·expired; `tool-call` denied                                                         |
+| `orientation` | `horizontal · vertical`                                                | `field` responsive; `scroll-area` both                                                                                                    |
+| `size`        | `tiny · small · medium · large · xlarge`, ordered subset (see Size)    | none                                                                                                                                      |
+
+- **A `variant` union made only of alignment words** (`start`, `center`, `end`, `split`) is
+  the `align` axis, never a look: `section-title` is `align="start|center|split"`.
+- **An exported `*Severity` type derives from `Severity`** (`packages/webkit/src/utils/severity.ts`)
+  — `Severity`, `Exclude<Severity, …>` or `Extract<Severity, …>` — instead of re-listing the
+  values. An exported `*Status` / `*Orientation` type stays inside its set too.
+- **A union a file declares for an axis prop is named `<Component><Axis>`**
+  (`DateRangePickerSize`, `SectionTitleAlign`); reusing another component's exported union is
+  fine.
+- Adding an extra is an API decision: one line in the machine source and the table above, in
+  the same PR.
+
+## Two-way models
+
+`defineModel` declarations are checked like props (names, booleans, value sets) and against
+one shape per concept, so the same idea binds the same type on every component (`model-shape`):
+
+| Model                                | Type                      | Not                                                |
+| ------------------------------------ | ------------------------- | -------------------------------------------------- |
+| primary value                        | default model (`v-model`) | `v-model:value`                                    |
+| `open`, `*Open`                      | `boolean`                 | a string or object                                 |
+| `selected`, `active`                 | `boolean`                 | a string id (that is `selectedKey` / `activeKey`)  |
+| `*Key`                               | `string` (or `\| null`)   | `*Id`                                              |
+| `*Keys` (`selectedKeys`, `openKeys`) | `string[]`                | a record (`Record<string, boolean>`), `*Ids`       |
+| `page`, `pageSize`                   | `number`, page 1-based    | `pagination` (`{ pageIndex }`), a string page name |
+| `*Index`                             | `number` (or `\| null`)   | —                                                  |
+
+- **An id is a key**: a model named `*Id` / `*Ids` is reported with its `*Key` / `*Keys` name.
+- **A seed is `default<Model>`** (`defaultOpen`, `defaultValue`, `defaultSnapshot`); an
+  `initial<X>` prop is reported.
+- **Templates** (examples, blocks, apps) never bind `v-model:value` or a banned model name
+  (`v-model:row-selection`, `v-model:expanded`, `v-model:pagination`).
+
 ## Size
 
 `size` takes **`'small' | 'medium' | 'large'`**, in that order; a subset is fine
@@ -175,8 +227,8 @@ sides of a bar are `start` / `end`.
 - **`type`** — native pass-throughs (`<input type>`, `<button type>`) **and** the sort of part
   (`<Table.Cell type="checkbox">`, `<Pagination.Button type="next">`). Only a _look_ named
   `type` is wrong (that is `variant`).
-- **`value`** — identity, the `v-model` payload, clipboard or display text. `v-model:value` for
-  the primary value cannot be blocked by name, so it is review-only.
+- **`value`** — identity, the `v-model` payload, clipboard or display text. As a model name
+  it is blocked: the primary value is the default model.
 - **`error`** — a message string, or a send-failed state on a form band, is a different concept
   from the `invalid` flag.
 - **`level`** — on `doc-heading`, which _is_ a heading; everywhere else a heading level is
@@ -219,6 +271,10 @@ old → new map, with value renames, is `packages/webkit/src/cli/migrations/v6-p
 - Do not use `xs`/`sm`/`md`/`lg`/`xl` for `size`; do not reorder the `size` union.
 - Do not prefix a boolean with `is`/`has`, and do not name it negatively or as `hide*`.
 - Do not use `left`/`right` for a position, side or alignment value.
+- Do not put a value in a `variant` / `severity` / `status` / `orientation` union that is
+  neither shared nor a documented extra of that component.
+- Do not bind a two-way value with a shape its concept does not take (a record of ids, a
+  0-based page, a string `selected`).
 - Do not let the spec's Default column disagree with `withDefaults`.
 - Do not edit `prop-vocabulary.md` without editing `lib/prop-vocabulary.mjs` in the same PR
   (and vice-versa) — they are one source in two forms.

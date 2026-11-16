@@ -29,7 +29,10 @@ them, and `npx @aziontech/webkit migrate` rewrites them for you.
 | Colour meaning                    | `severity="neutral\|info\|success\|warning\|danger"`           | `error`, `default`, `secondary`                          |
 | How a job or step ended           | `status="pending\|running\|success\|error\|canceled\|skipped"` | `state`, `done`, `failed`, `completed`                   |
 | The page you are on               | `active` (renders `aria-current`)                              | `current`                                                |
-| Picked items                      | `v-model:selected`, `v-model:selectedKeys`                     | `selectedIds`                                            |
+| Picked items                      | `v-model:selectedKey`, `v-model:selectedKeys` (`string[]`)     | `selectedIds`, `rowSelection`, a string `selected`       |
+| Ids of open parts                 | `v-model:openKeys` (`string[]`)                                | `expanded`, `expandedKeys`                               |
+| The primary value                 | `v-model`                                                      | `v-model:value`                                          |
+| The current page                  | `v-model:page` (from 1) + `v-model:page-size`                  | `v-model:pagination`, `pageIndex`                        |
 | Anything that opens               | `open`, `v-model:open`                                         | `expanded`, `visible`, `show`                            |
 | Where an icon sits in the control | `icon-position="leading\|trailing"`                            | `left`, `right`                                          |
 | Sides and alignment               | `align="start\|center\|end"`, `side="start\|end"`              | `left`, `right`, `top`, `bottom` for alignment           |

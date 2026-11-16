@@ -69,7 +69,12 @@ export const CONCEPTS = [
   {
     concept: 'picked keys of a multi-selection (v-model:selectedKeys)',
     canonical: 'selectedKeys',
-    aliases: ['selectedIds', 'selectedValues', 'checkedKeys', 'selectedItems']
+    aliases: ['selectedIds', 'selectedValues', 'checkedKeys', 'selectedItems', 'rowSelection']
+  },
+  {
+    concept: 'current page, 1-based (v-model:page, with v-model:pageSize)',
+    canonical: 'page',
+    aliases: ['pagination', 'pageIndex', 'currentPage']
   },
   {
     concept: 'disabled',
@@ -285,6 +290,185 @@ export const VALUE_PATTERNS = [
   }
 ]
 
+// Closed value sets: every member of a matching union is a shared value or an extra the
+// component documents here (prop-vocabulary.md, "Closed value sets"). Extras are keyed by
+// the component's kebab name, or by "<component>.<prop>" for one prop. A `variant` union
+// made only of alignment words is the `align` axis, never a look.
+export const SHARED_VARIANTS = ['primary', 'secondary', 'outline', 'ghost', 'danger', 'link']
+export const SEVERITY_VALUES = ['neutral', 'info', 'success', 'warning', 'danger']
+export const STATUS_VALUES = [
+  'pending',
+  'running',
+  'success',
+  'error',
+  'canceled',
+  'skipped',
+  'streaming'
+]
+export const ORIENTATION_VALUES = ['horizontal', 'vertical']
+export const ALIGN_WORDS = ['start', 'center', 'end', 'split', 'left', 'right']
+
+export const VARIANT_EXTRAS = {
+  'app-header': ['content', 'site'],
+  'article-index.rowVariant': ['byline', 'center'],
+  avatar: ['circle', 'square'],
+  backdrop: ['globe', 'map', 'network'],
+  'bento-grid': ['surface', 'canvas', 'none'],
+  brand: ['default', 'reduced', 'extended'],
+  'call-to-action': ['panel', 'split', 'lead', 'announcement'],
+  card: ['default', 'integration'],
+  'card-grid': ['gap', 'divider', 'frame', 'surface', 'canvas', 'none'],
+  carousel: ['strip', 'cards'],
+  chip: ['filled', 'dashed'],
+  'closing-call-to-action': ['split', 'panel', 'frame'],
+  'console-mockup': ['window', 'bare'],
+  'console-showcase': ['console', 'diagram'],
+  'doc-callout': ['note', 'info', 'tip', 'check', 'warning'],
+  'doc-prompt': ['block', 'line'],
+  'feature-tiles': ['artwork', 'illustrated'],
+  'file-dropzone': ['inline', 'overlay'],
+  footer: ['content', 'site'],
+  hero: ['band', 'screen'],
+  'hero-section': [
+    'center',
+    'title-band',
+    'center-band',
+    'compact-band',
+    'pixel-floor',
+    'copy-beside-art',
+    'copy-on-top-art'
+  ],
+  item: ['default', 'muted', 'inline', 'option'],
+  kbd: ['combined', 'separate'],
+  'key-value-list': ['stacked', 'split'],
+  logo: ['color', 'monochrome', 'current', 'knockout'],
+  'logo-wall': ['square', 'rectangle'],
+  'logo-wall-section': ['wall', 'quote'],
+  'logo-wall-section.quoteVariant': ['highlight', 'signed'],
+  marquee: ['plain', 'band'],
+  'media-split': ['media-end', 'media-start'],
+  'media-split-stack-section': ['media-end', 'alternating'],
+  'media-tile': ['frame', 'plain'],
+  'multi-select': ['summary', 'chips'],
+  'navigation-menu': ['default', 'contrast'],
+  'network-section': ['outcomes', 'benefits', 'stats'],
+  'pricing-card': ['contained'],
+  progress: ['rounded', 'flat'],
+  quote: ['inline', 'signed', 'highlight'],
+  'radio-group': ['default', 'card'],
+  'response-loading': ['inline', 'bar'],
+  'save-bar': ['floating', 'docked', 'plain', 'fade', 'centered'],
+  'settings-row': ['field', 'compact', 'stacked'],
+  'sidebar-menu-item.tagVariant': ['accent'],
+  'site-footer': ['content', 'site'],
+  skeleton: ['rectangle', 'circle'],
+  'stat-tile': ['mono', 'sans'],
+  switch: ['default', 'privacy'],
+  tag: ['accent', 'contrast', 'highlight'],
+  texture: ['dots', 'grid', 'lines', 'dither', 'pixelate', 'none']
+}
+export const SEVERITY_EXTRAS = {
+  chart: ['severity-critical', 'severity-high', 'severity-medium', 'severity-low', 'severity-info'],
+  'severity-tag': ['critical', 'high', 'medium', 'low']
+}
+export const STATUS_EXTRAS = {
+  'prompt-input': ['ready'],
+  'tool-approval': ['approved', 'denied', 'expired'],
+  'tool-call': ['denied']
+}
+export const ORIENTATION_EXTRAS = {
+  field: ['responsive'],
+  'scroll-area': ['both']
+}
+
+export const VALUE_SETS = [
+  {
+    axis: 'variant',
+    test: /^variant$|[a-z]Variant$/,
+    values: SHARED_VARIANTS,
+    extras: VARIANT_EXTRAS
+  },
+  {
+    axis: 'severity',
+    test: /^severity$|[a-z]Severity$/,
+    values: SEVERITY_VALUES,
+    extras: SEVERITY_EXTRAS
+  },
+  { axis: 'status', test: /^status$|[a-z]Status$/, values: STATUS_VALUES, extras: STATUS_EXTRAS },
+  {
+    axis: 'orientation',
+    test: /^orientation$|[a-z]Orientation$/,
+    values: ORIENTATION_VALUES,
+    extras: ORIENTATION_EXTRAS
+  }
+]
+
+export function valueSetFor(prop) {
+  return VALUE_SETS.find((x) => x.test.test(prop)) || null
+}
+
+export function extrasFor(set, component, prop, root = component) {
+  return [
+    ...(set.extras[`${component}.${prop}`] || []),
+    ...(set.extras[component] || []),
+    ...(set.extras[root] || [])
+  ]
+}
+
+/**
+ * Check a union's members against its closed value set. Returns an error message or null.
+ * `members` is the resolved list of string literals.
+ */
+export function checkValueSet(prop, members, component, root = component) {
+  const set = valueSetFor(prop)
+  if (!set || !members?.length) return null
+  if (set.axis === 'variant' && members.every((m) => ALIGN_WORDS.includes(m)))
+    return `${prop} values ${members.map((m) => `'${m}'`).join(' | ')} are alignment, not a look — name the prop "align" (${RULE_DOC}).`
+  const allowed = new Set([...set.values, ...extrasFor(set, component, prop, root)])
+  const bad = members.filter((m) => !allowed.has(m))
+  if (!bad.length) return null
+  return `${prop} values ${bad.map((b) => `'${b}'`).join(', ')} are outside the ${set.axis} set (${set.values.join(' | ')}) and not a documented ${component} extra (${RULE_DOC}).`
+}
+
+// Two-way models (defineModel). The primary value is the default model; a named model
+// takes the type its concept fixes, so the same concept binds the same shape everywhere.
+// An id is a key: one id is `<x>Key`, a list is `<x>Keys`. A seed is `default<Model>`.
+export const MODELS = {
+  banned: {
+    value: 'the default model, defineModel<T>() bound with v-model (never v-model:value)'
+  },
+  types: [
+    {
+      test: /Keys$/,
+      type: /^string\[\]$/,
+      want: 'string[]',
+      concept: 'ids of picked or open items'
+    },
+    { test: /Key$/, type: /^string( \| null)?$/, want: 'string | null', concept: 'id of one item' },
+    { test: /^open$|[a-z]Open$/, type: /^boolean$/, want: 'boolean', concept: 'open state' },
+    {
+      test: /^(selected|active)$/,
+      type: /^boolean$/,
+      want: 'boolean (a single picked id is selectedKey)',
+      concept: 'picked or current flag'
+    },
+    {
+      test: /^(page|pageSize)$/,
+      type: /^number$/,
+      want: 'number',
+      concept: '1-based page and page size'
+    },
+    {
+      test: /Index$/,
+      type: /^number( \| null)?$/,
+      want: 'number | null',
+      concept: 'position in a list'
+    }
+  ],
+  idWord: /[a-z]Ids?$|^ids?$/,
+  seedPrefix: /^initial[A-Z]/
+}
+
 // Size scale: tiny and xlarge exist only for a component that truly needs a 4th step.
 export const SIZE = {
   prop: 'size',
@@ -358,6 +542,11 @@ export const DATA_ATTRIBUTES = {
 }
 
 const RULE_DOC = '.claude/rules/prop-vocabulary.md'
+
+/** Canonical name for a banned prop or model name, or null. */
+export function canonicalFor(name, stage = 'all') {
+  return aliasMap(stage)[name]?.canonical ?? null
+}
 
 function aliasMap(stage) {
   const map = {}
@@ -466,8 +655,20 @@ export function checkPropVocabulary(props, opts = {}) {
         continue
       }
     }
-    if (p.name === SIZE.prop) {
-      const msg = checkSizeUnion(unionOf(p, opts))
+    const members =
+      typeof opts.resolveMembers === 'function'
+        ? opts.resolveMembers(p.type || '')
+        : membersOf(unionOf(p, opts))
+    if (opts.component && valueSetFor(p.name)) {
+      const msg = checkValueSet(p.name, members, opts.component, opts.root)
+      if (msg) {
+        push(p.name, msg, 'prop-value', false)
+        continue
+      }
+    }
+    if (p.name === SIZE.prop || (opts.component && /[a-z]Size$/.test(p.name))) {
+      const text = members ? members.map((m) => `'${m}'`).join(' | ') : unionOf(p, opts)
+      const msg = checkSizeUnion(text)
       if (msg) push(p.name, msg, 'prop-value', false)
     }
   }

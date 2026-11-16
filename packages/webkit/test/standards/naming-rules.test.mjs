@@ -7,6 +7,10 @@ import {
   NAMING_STAGED_BLOCKS,
   RULES,
   addedViolations,
+  checkAxisTypes,
+  checkTemplateModels,
+  extractModels,
+  unionResolver,
   checkFile,
   checkFillPairs,
   checkPartExports,
@@ -19,6 +23,7 @@ import {
   checkDataAttributes,
   checkEventVocabulary,
   checkPropVocabulary,
+  checkValueSet,
   checkSlotVocabulary,
   vocabularySnapshot
 } from '../../../../.claude/hooks/lib/prop-vocabulary.mjs'
@@ -151,6 +156,15 @@ const FIXTURES = {
     ),
     sfc(
       "interface Props { variant?: 'primary' | 'outline' | 'ghost' | 'link'; iconPosition?: 'leading' | 'trailing'; align?: 'start' | 'center' | 'end' }\nwithDefaults(defineProps<Props>(), {})"
+    )
+  ],
+  'model-shape': [
+    `${C}/data/tree/tree.vue`,
+    sfc(
+      "const value = defineModel<string>('value')\nconst activeId = defineModel<string | null>('activeId')\nconst selected = defineModel<string>('selected')\nconst openKeys = defineModel<Record<string, boolean>>('openKeys')\ninterface Props { initialState?: object }\nwithDefaults(defineProps<Props>(), {})"
+    ),
+    sfc(
+      "const model = defineModel<string>({ default: '' })\nconst activeKey = defineModel<string | null>('activeKey')\nconst selectedKey = defineModel<string>('selectedKey')\nconst openKeys = defineModel<string[]>('openKeys')\nconst open = defineModel<boolean>('open')\ninterface Props { defaultOpen?: boolean }\nwithDefaults(defineProps<Props>(), {})"
     )
   ],
   'event-name': [
@@ -543,4 +557,159 @@ test('validate-naming hook: an edit that keeps existing debt is not blocked, and
     encoding: 'utf8'
   })
   assert.equal(broken.status, 0)
+})
+
+const BTN = `${C}/action/button/button.vue`
+const valueHits = (rel, script) =>
+  checkFile(rel, sfc(script), ctx)
+    .filter((x) => x.rule === 'prop-value')
+    .map((x) => x.message)
+
+test('prop-value: a variant union reads only shared values or documented extras', () => {
+  assert.equal(
+    valueHits(BTN, "interface Props { variant?: 'primary' | 'ghost' | 'link' }").length,
+    0
+  )
+  assert.equal(
+    valueHits(BTN, "interface Props { variant?: 'primary' | 'fancy' }").length,
+    1,
+    'an undocumented look fires'
+  )
+  const avatar = `${C}/content/avatar/avatar.vue`
+  assert.equal(valueHits(avatar, "interface Props { variant?: 'circle' | 'square' }").length, 0)
+  assert.equal(valueHits(avatar, "interface Props { variant?: 'circle' | 'hexagon' }").length, 1)
+})
+
+test('prop-value: a variant made only of alignment words must be align', () => {
+  const msg = checkValueSet('variant', ['start', 'center', 'split'], 'section-title')
+  assert.match(msg, /name the prop "align"/)
+  assert.match(checkValueSet('titleVariant', ['start', 'center'], 'process-scroll'), /align/)
+  assert.equal(checkValueSet('variant', ['primary', 'outline'], 'button'), null)
+})
+
+test('prop-value: severity, status and orientation use their closed sets', () => {
+  assert.equal(checkValueSet('severity', ['info', 'danger'], 'alert'), null)
+  assert.match(checkValueSet('severity', ['error'], 'alert'), /severity set/)
+  assert.equal(checkValueSet('status', ['pending', 'running', 'success'], 'stepper'), null)
+  assert.match(checkValueSet('status', ['done'], 'stepper'), /status set/)
+  assert.equal(checkValueSet('status', ['ready', 'pending'], 'prompt-input'), null)
+  assert.equal(checkValueSet('orientation', ['horizontal', 'vertical'], 'resizable'), null)
+  assert.match(checkValueSet('orientation', ['diagonal'], 'resizable'), /orientation set/)
+  assert.equal(checkValueSet('orientation', ['vertical', 'responsive'], 'field'), null)
+})
+
+test('prop-value: unions resolve through imported aliases and Exclude/Extract', () => {
+  const types = new Map([['Severity', "'neutral' | 'info' | 'success' | 'warning' | 'danger'"]])
+  const resolve = unionResolver("type AlertSeverity = Exclude<Severity, 'neutral'>", types)
+  assert.deepEqual(resolve('AlertSeverity'), ['info', 'success', 'warning', 'danger'])
+  assert.deepEqual(resolve("Extract<Severity, 'info' | 'danger'>"), ['info', 'danger'])
+  assert.equal(resolve('string'), null)
+  const withTypes = { ...ctx, types }
+  const imported = sfc(
+    "import type { Severity } from '../../../utils/severity'\ntype BadgeSeverity = Severity | 'error'\ninterface Props { severity?: BadgeSeverity }"
+  )
+  const rel = `${C}/content/badge/badge.vue`
+  assert.equal(checkFile(rel, imported, withTypes).filter((x) => x.rule === 'prop-value').length, 1)
+  const clean = imported.replace(" | 'error'", '')
+  assert.equal(checkFile(rel, clean, withTypes).filter((x) => x.rule === 'prop-value').length, 0)
+})
+
+test('prop-value: size unions are ordered subsets of the size scale, also through an alias', () => {
+  assert.equal(
+    valueHits(BTN, "type ButtonSize = 'small' | 'large'\ninterface Props { size?: ButtonSize }")
+      .length,
+    0
+  )
+  assert.equal(
+    valueHits(BTN, "type ButtonSize = 'large' | 'small'\ninterface Props { size?: ButtonSize }")
+      .length,
+    1
+  )
+  assert.equal(valueHits(BTN, "interface Props { iconSize?: 'sm' | 'md' }").length, 1)
+})
+
+test('prop-value: an exported severity type derives from Severity instead of re-listing it', () => {
+  const rel = `${C}/feedback/alert/alert.vue`
+  assert.equal(
+    checkAxisTypes(rel, "export type AlertSeverity = 'info' | 'danger'", ['alert']).length,
+    1
+  )
+  assert.equal(
+    checkAxisTypes(rel, "export type AlertSeverity = Exclude<Severity, 'neutral'>", ['alert'], {
+      types: new Map([['Severity', "'neutral' | 'info' | 'success' | 'warning' | 'danger'"]])
+    }).length,
+    0
+  )
+  assert.equal(
+    checkAxisTypes(rel, "export type JobStatus = 'starting' | 'idle'", ['alert']).length,
+    1,
+    'an exported status type outside the set fires'
+  )
+})
+
+test('type-name: a union the file declares for an axis prop is <Component><Axis>', () => {
+  const typeHits = (script) =>
+    checkFile(BTN, sfc(script), ctx)
+      .filter((x) => x.rule === 'type-name')
+      .map((x) => x.message)
+  assert.equal(typeHits("type RangeSize = 'small'\ninterface Props { size?: RangeSize }").length, 1)
+  assert.equal(
+    typeHits("type ButtonSize = 'small'\ninterface Props { size?: ButtonSize }").length,
+    0
+  )
+  assert.equal(
+    typeHits(
+      "import type { IconButtonSize } from '../icon-button/icon-button.vue'\ninterface Props { size?: IconButtonSize }"
+    ).length,
+    0,
+    'a reused imported union is fine'
+  )
+})
+
+test('model-shape: models are read from defineModel, default and named', () => {
+  assert.deepEqual(
+    extractModels(
+      "const a = defineModel<string>({ default: '' })\nconst b = defineModel<Record<string, boolean>>('rowSelection')\nconst c = defineModel('open')"
+    ).map((m) => [m.name, m.type]),
+    [
+      ['modelValue', 'string'],
+      ['rowSelection', 'Record<string, boolean>'],
+      ['open', '']
+    ]
+  )
+})
+
+test('model-shape: one concept binds one name and one type', () => {
+  const modelHits = (script) =>
+    checkFile(`${C}/data/tree/tree.vue`, sfc(script), ctx).filter((x) =>
+      ['model-shape', 'prop-name'].includes(x.rule)
+    )
+  assert.equal(
+    modelHits("const s = defineModel<Record<string, boolean>>('rowSelection')").length,
+    1
+  )
+  assert.equal(modelHits("const s = defineModel<string[]>('selectedKeys')").length, 0)
+  assert.equal(modelHits("const s = defineModel<number[]>('selectedKeys')").length, 1)
+  assert.equal(modelHits("const s = defineModel<string>('selectedKey')").length, 0)
+  assert.equal(modelHits("const s = defineModel<ExpandedState>('expanded')").length, 1)
+  assert.equal(modelHits("const p = defineModel<PaginationState>('pagination')").length, 1)
+  assert.equal(modelHits("const p = defineModel<number>('page')").length, 0)
+  assert.equal(modelHits("const p = defineModel<string>('page')").length, 1)
+  assert.equal(modelHits("const o = defineModel<string>('open')").length, 1)
+  assert.equal(modelHits("const o = defineModel<boolean>('toolsOpen')").length, 0)
+  assert.equal(modelHits("const a = defineModel<string | null>('active')").length, 1)
+  assert.equal(modelHits("const a = defineModel<boolean>('active')").length, 0)
+  assert.equal(modelHits("const s = defineModel<TableStateSnapshot>('state')").length, 1)
+  assert.equal(modelHits('interface Props { initialState?: object }').length, 1)
+  assert.equal(modelHits('interface Props { defaultSnapshot?: object }').length, 0)
+})
+
+test('model-shape: templates never bind v-model:value or a banned model name', () => {
+  const tpl = (body) => sfc('', body)
+  const rel = 'packages/webkit/examples/tree/default.vue'
+  assert.equal(checkTemplateModels(rel, tpl('<Tabs v-model:value="tab" />')).length, 1)
+  assert.equal(checkTemplateModels(rel, tpl('<DataTable v-model:row-selection="s" />')).length, 1)
+  assert.equal(checkTemplateModels(rel, tpl('<DataTable v-model:expanded="s" />')).length, 1)
+  assert.equal(checkTemplateModels(rel, tpl('<Tabs v-model="tab" />')).length, 0)
+  assert.equal(checkTemplateModels(rel, tpl('<DataTable v-model:selected-keys="s" />')).length, 0)
 })
