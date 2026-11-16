@@ -332,10 +332,10 @@
     narrow.value
       ? [
           nameColumn,
-          { ...statusColumn, width: 64 },
-          { ...moveColumn, width: 56, align: 'center' },
           descriptionColumn,
-          modifiedColumn
+          modifiedColumn,
+          { ...statusColumn, width: 64, frozen: 'end' },
+          { ...moveColumn, header: 'Move', width: 56, align: 'center', frozen: 'end' }
         ]
       : [
           { ...moveColumn, width: 168 },
