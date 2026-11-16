@@ -72,7 +72,10 @@ function migrationFindings(rel, source, migration) {
       .filter((w) => !/is not an export of v\d/.test(w))
       .map((w) => ({
         source: 'migration',
-        severity: /^(PrimeIcons class|Azion icon)/.test(w) ? 'warn' : 'error',
+        severity:
+          /^(PrimeIcons class|Azion icon)/.test(w) || /migrate cannot read/.test(w)
+            ? 'warn'
+            : 'error',
         file: rel,
         message: `v5 API to replace by hand: ${w} (MIGRATION_V6.md).`
       }))

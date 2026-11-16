@@ -877,10 +877,41 @@ test('migrateSource renames a static value and a bound single literal, never oth
   assert.match(source, /<Alert :severity="results\.type === 'error' \? 'error' : 'info'" \/>/)
   assert.match(source, /<Alert :severity="level" \/>/)
   const manual = warnings.filter((w) => w.includes('bound expression'))
-  assert.equal(manual.length, 2)
+  assert.equal(manual.length, 1)
   assert.ok(manual.some((w) => w.includes(`results.type === 'error'`) && w.includes('error')))
-  assert.ok(manual.some((w) => w.includes('"level"')))
+  const unread = warnings.filter((w) => w.includes('migrate cannot read'))
+  assert.equal(unread.length, 1)
+  assert.match(unread[0], /"level".*never yields 'error' \(now 'danger'\).*webkit-migrate-ok/)
   assert.equal(migrateSource(source, migration).source, source)
+})
+
+test('a bound value whose literals are all current values is not manual work', () => {
+  const tag = loadMigration(6)
+  const sfc = [
+    '<script setup>',
+    "import Tag from '@aziontech/webkit/tag'",
+    "import Alert from '@aziontech/webkit/alert'",
+    '</script>',
+    '<template>',
+    `  <Tag :severity="value ? 'success' : 'neutral'" />`,
+    `  <Tag :severity="value ? 'success' : 'secondary'" />`,
+    `  <Alert :severity="\`\${kind}\`" />`,
+    '  <Tag :severity="levelSeverity(value)" />',
+    '  <!-- webkit-migrate-ok -->',
+    '  <Tag :severity="documentBadge.severity" />',
+    `  <!-- webkit-migrate-ok -->`,
+    `  <Alert :severity="result === 'error' ? 'danger' : 'info'" />`,
+    '</template>'
+  ].join('\n')
+  const { source, warnings } = migrateSource(sfc, tag)
+  assert.equal(source, sfc)
+  assert.ok(!warnings.some((w) => w.includes(`'success' : 'neutral'`)))
+  assert.ok(warnings.some((w) => w.includes(`'success' : 'secondary'`) && /by hand/.test(w)))
+  assert.ok(warnings.some((w) => w.includes('${kind}') && /by hand/.test(w)))
+  const unread = warnings.filter((w) => w.includes('migrate cannot read'))
+  assert.equal(unread.length, 1)
+  assert.match(unread[0], /levelSeverity\(value\).*'secondary' \(now 'neutral'\)/)
+  assert.ok(!warnings.some((w) => w.includes('documentBadge') || w.includes("result === 'error'")))
 })
 
 test('migrateSource maps a Toaster corner onto the logical position', () => {

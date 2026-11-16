@@ -269,6 +269,24 @@ function mapLiteral(expr, values) {
   return expr.replace(`${q}${v}${q}`, `${q}${values[v]}${q}`)
 }
 
+const STRING_LITERAL = /(['"`])((?:\\.|(?!\1)[^\\])*)\1/g
+
+export function boundValueKind(expr, values) {
+  const literals = [...expr.matchAll(STRING_LITERAL)]
+  if (!literals.length) return 'opaque'
+  const old = (v) => Object.hasOwn(values, v) && values[v] !== v && !/^(true|false)$/.test(v)
+  const dynamic = literals.some(([, q, v]) => q === '`' && v.includes('${'))
+  return dynamic || literals.some(([, , v]) => old(v)) ? 'old' : 'current'
+}
+
+const MIGRATE_OK = 'webkit-migrate-ok'
+
+function acknowledged(source, index) {
+  const lineStart = source.lastIndexOf('\n', index - 1) + 1
+  const previous = source.lastIndexOf('\n', lineStart - 2) + 1
+  return source.slice(previous, index).includes(MIGRATE_OK)
+}
+
 function renameAttributes(attrs, rules, onManual = () => {}) {
   let out = attrs
   for (const [oldProp, ruleSpec] of Object.entries(rules)) {
@@ -302,8 +320,8 @@ function renameAttributes(attrs, rules, onManual = () => {}) {
           let next = expr
           if (rule.values) {
             const literal = mapLiteral(expr, rule.values)
-            if (literal === null) onManual(oldProp, expr)
-            else next = literal
+            if (literal !== null) next = literal
+            else onManual(oldProp, expr, boundValueKind(expr, rule.values))
           }
           return `${sp}${bind}${toKebab}${eq}${q}${next}${q}`
         }
@@ -623,11 +641,18 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
             `${PREFIX}${subpath}: <${binding}> prop ${prop} was removed in v6: ${spec.removed}`
           )
       }
-      const renamed = renameAttributes(attrs, rules, (prop, expr) =>
+      const reviewed = acknowledged(out, m.index)
+      const renamed = renameAttributes(attrs, rules, (prop, expr, kind) => {
+        if (kind === 'current' || reviewed) return
+        const { values } = rules[prop]
+        const old = Object.keys(values).filter((v) => values[v] !== v)
+        const tag = `${PREFIX}${subpath}: <${binding}> :${kebab(prop)}="${expr}"`
         warnings.push(
-          `${PREFIX}${subpath}: <${binding}> :${kebab(prop)}="${expr}" is a bound expression; map its ${Object.keys(rules[prop].values).join(', ')} values by hand`
+          kind === 'opaque'
+            ? `${tag} is bound to a value migrate cannot read: make sure it never yields ${old.map((v) => `'${v}' (now '${values[v]}')`).join(', ')}, then put <!-- ${MIGRATE_OK} --> on the line above the tag`
+            : `${tag} is a bound expression; map its ${old.join(', ')} values by hand (or, when only a comparison keeps an old value, put <!-- ${MIGRATE_OK} --> on the line above the tag)`
         )
-      )
+      })
       if (renamed !== attrs) slotEdits.push([start, end, renamed])
       cursor = end
     }

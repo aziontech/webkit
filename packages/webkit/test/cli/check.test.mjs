@@ -161,6 +161,32 @@ test('check reports PrimeIcons classes: a mapped pair is an error, a mark with n
   }
 })
 
+test('check passes bound values a migrated app reads from variables, and warns once for the unreadable ones', () => {
+  const dir = makeProject({
+    'src/views/Status.vue': [
+      '<script setup>',
+      "import Tag from '@aziontech/webkit/tag'",
+      'defineProps({ value: Boolean, level: String })',
+      '</script>',
+      '<template>',
+      `  <Tag :severity="value ? 'success' : 'neutral'" />`,
+      '  <Tag :severity="level" />',
+      '  <!-- webkit-migrate-ok -->',
+      '  <Tag :severity="level" />',
+      '</template>',
+      ''
+    ].join('\n')
+  })
+  try {
+    const migration = by(cliJson(dir, 'check', '--no-lint').json, 'migration')
+    assert.equal(migration.length, 1)
+    assert.equal(migration[0].severity, 'warn')
+    assert.match(migration[0].message, /:severity="level" is bound to a value migrate cannot read/)
+  } finally {
+    cleanup(dir)
+  }
+})
+
 test('check passes a wired project and enforces --max-warnings', () => {
   const dir = initialised({
     'src/main.ts': "import './webkit.css'\n",
