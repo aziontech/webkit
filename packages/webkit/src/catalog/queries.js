@@ -401,20 +401,22 @@ export function getImport(catalog, name) {
     const subExample = subs[0] ?? `${catalog.prefix}name-part`
     if (hasLeanRoot && tree !== e.import) {
       const compoundBinding = pascalCase(key)
+      const part = pascalCase(subpathOf(catalog, subExample).replace(`${key}-`, ''))
       result.compoundAlternative = {
         import: `import ${compoundBinding} from '${e.import}'`,
         importPath: e.import,
         binding: compoundBinding,
         note:
           `The compound import (${e.import}) attaches every sub-component for dot-notation ` +
-          `(${compoundBinding}.Row, …), but it is NOT tree-shakeable — it retains all ` +
-          `sub-components even when you render only the root. Prefer the -root import above ` +
-          `for the smallest bundle; use the compound when you want the dot-notation ergonomics.`,
+          `(${compoundBinding}.${part}, …); it is the form the examples and blocks use. It keeps ` +
+          `every sub-component in the bundle even when you render only the root.`,
         subcomponents: subs
       }
       result.note =
-        `${key} is a compound root. The tree-shakeable root import (above) is preferred; ` +
-        `import sub-components individually (e.g. ${subExample}) to keep the bundle minimal.`
+        `${key} is a compound root. When you render its parts with dot-notation, import the ` +
+        `compound (${compoundBinding}). The import above is the root alone, bound as ${binding}: ` +
+        `it has no dot-notation parts, so import each part you render from its own subpath ` +
+        `(e.g. ${subExample}).`
     } else {
       result.subcomponents = subs
       result.note =

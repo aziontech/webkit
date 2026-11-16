@@ -28,6 +28,15 @@ test('view shows a component API with an example, and a block with guidelines an
     assert.ok(comp.json.example.sfc.includes('<template>'))
     const text = cli(dir, 'view', 'button')
     assert.match(text.stdout, /import Button from '@aziontech\/webkit\/button'/)
+    assert.doesNotMatch(text.stdout, /Root only/)
+
+    const compound = cli(dir, 'view', 'select')
+    assert.match(compound.stdout, /^import Select from '@aziontech\/webkit\/select'$/m)
+    assert.match(
+      compound.stdout,
+      /Root only, no dot-notation parts: import SelectRoot from '@aziontech\/webkit\/select-root'/
+    )
+    assert.doesNotMatch(compound.stdout, /import Select from '@aziontech\/webkit\/select-root'/)
 
     const block = cli(dir, 'view', 'create/create-hub', '--variant', 'Connected')
     assert.equal(block.code, 0, block.stderr)
