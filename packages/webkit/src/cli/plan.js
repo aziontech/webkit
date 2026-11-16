@@ -5,7 +5,14 @@ import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
 import { LEGACY_MARKER, listBundle } from './bundle.js'
-import { planSources, SOURCES_FILE, SOURCES_IMPORT } from './css-sources.js'
+import {
+  exclusionLine,
+  missingExclusions,
+  planSources,
+  SOURCE_EXCLUSIONS,
+  SOURCES_FILE,
+  SOURCES_IMPORT
+} from './css-sources.js'
 import { planSync } from './sync.js'
 import {
   brokenVueTscIn,
@@ -228,9 +235,7 @@ function styleEntryContent() {
 ${SOURCES_IMPORT}
 
 /* The AI guidance files are full of example classes that are not your UI: keep them out of the scan. */
-@source not '../.claude';
-@source not '../CLAUDE.md';
-@source not '../AGENTS.md';
+${SOURCE_EXCLUSIONS.map(exclusionLine).join('\n')}
 
 /* Text rendering. The type ladder is drawn at these settings, so they are the design
    system's default — and they live here, in your file, so you can change them. */
@@ -471,6 +476,64 @@ const STARTER_STYLESHEETS = [
 const fingerprint = (text) =>
   createHash('sha256').update(text.replace(/\r\n/g, '\n').trimEnd()).digest('hex').slice(0, 16)
 
+const EARLIER_STYLE_ENTRIES = [
+  '42d5b05127616e6d',
+  '3c498ad1699cc895',
+  '04b3cbca9b8c78fa',
+  '014e7a73f539943e',
+  'f0c58d451b181d7f',
+  'c45ab2a0f76cc676'
+]
+
+const STYLE_ENTRY = 'src/webkit.css'
+
+export function patchStyleEntry(css) {
+  const lines = css.split('\n')
+  const added = []
+  const registered =
+    /@import\b[^\n]*['"]\.\/webkit\.sources\.css['"]/.test(css) ||
+    /@import\b[^\n]*@aziontech\/webkit\/styles\/all/.test(css) ||
+    /@source\b[^\n]*@aziontech\/webkit/.test(css)
+  const lastImport = () => lines.findLastIndex((line) => /^\s*@import\b/.test(line))
+  if (!registered) {
+    const styles = lines.findIndex((line) =>
+      /^\s*@import\b[^\n]*@aziontech\/webkit\/styles['"]/.test(line)
+    )
+    lines.splice((styles >= 0 ? styles : lastImport()) + 1, 0, SOURCES_IMPORT)
+    added.push(SOURCES_IMPORT)
+  }
+  const exclusions = missingExclusions(css).map(exclusionLine)
+  if (exclusions.length) {
+    const sources = lines.findIndex((line) => line.includes("'./webkit.sources.css'"))
+    lines.splice((sources >= 0 ? sources : lastImport()) + 1, 0, ...exclusions)
+    added.push(...exclusions)
+  }
+  return { css: lines.join('\n'), added }
+}
+
+function styleEntryAction(projectDir) {
+  const content = styleEntryContent()
+  const current = read(join(projectDir, STYLE_ENTRY))
+  const unchanged = { type: 'write', path: STYLE_ENTRY, content, skipIfExists: true }
+  if (current == null || fingerprint(current) === fingerprint(content)) return unchanged
+  if (EARLIER_STYLE_ENTRIES.includes(fingerprint(current))) {
+    return {
+      type: 'write',
+      path: STYLE_ENTRY,
+      content,
+      note: 'the untouched template of an earlier WebKit, replaced with the 6.0 one'
+    }
+  }
+  const { css, added } = patchStyleEntry(current)
+  if (!added.length) return unchanged
+  return {
+    type: 'write',
+    path: STYLE_ENTRY,
+    content: css,
+    note: `edited by hand, so only added ${added.join(' ')}`
+  }
+}
+
 const REFERENCE_EXTENSIONS = /\.(vue|[cm]?[jt]sx?|html|css|scss)$/
 
 function referencedElsewhere(projectDir, needle, skip) {
@@ -613,12 +676,7 @@ export function planInit(projectDir, opts = {}) {
       skipIfExists: true
     })
   }
-  actions.push({
-    type: 'write',
-    path: 'src/webkit.css',
-    content: styleEntryContent(),
-    skipIfExists: true
-  })
+  actions.push(styleEntryAction(projectDir))
   actions.push({
     type: 'write',
     path: SOURCES_FILE,

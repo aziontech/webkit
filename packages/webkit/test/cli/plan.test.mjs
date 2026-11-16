@@ -150,6 +150,47 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
   }
 })
 
+const V5_WEBKIT_CSS =
+  "/* @aziontech/webkit design-system styles. Import this once from your app entry. */\n@import '@aziontech/theme';\n\n/* The Azion fonts (Rubik, Roboto Mono, \u2026) from fonts.azion.com. Delete this line if your app\n   hosts its own font files. */\n@import '@aziontech/theme/fonts.css';\n\n/* webkit is consumed as source \u2014 this registers it with Tailwind so its component classes compile. */\n@import '@aziontech/webkit/styles';\n\n/* Text rendering. The type ladder is drawn at these settings, so they are the design\n   system's default \u2014 and they live here, in your file, so you can change them. */\n@layer base {\n  html {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n  }\n}\n"
+
+test('init replaces the untouched 5.x src/webkit.css with the 6.0 template', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/webkit.css'), V5_WEBKIT_CSS)
+    const plan = planInit(dir, {})
+    const action = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
+    assert.equal(action.skipIfExists, undefined)
+    applyPlan(dir, [action])
+    const css = readFileSync(join(dir, 'src/webkit.css'), 'utf8')
+    assert.match(css, /@import '\.\/webkit\.sources\.css';/)
+    assert.match(css, /@source not '\.\.\/\.claude';/)
+    assert.equal(planInit(dir, {}).find((a) => a.path === 'src/webkit.css').skipIfExists, true)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('init patches an edited src/webkit.css with only the 6.0 lines it lacks', () => {
+  const dir = makeProject()
+  try {
+    const edited = `${V5_WEBKIT_CSS}\n.brand { color: var(--primary); }\n`
+    writeFileSync(join(dir, 'src/webkit.css'), edited)
+    const plan = planInit(dir, {})
+    const action = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
+    const [result] = applyPlan(dir, [action])
+    assert.match(result.detail, /edited by hand/)
+    const css = readFileSync(join(dir, 'src/webkit.css'), 'utf8')
+    assert.match(css, /\.brand \{ color: var\(--primary\); \}/)
+    assert.match(
+      css,
+      /@import '@aziontech\/webkit\/styles';\n@import '\.\/webkit\.sources\.css';\n@source not '\.\.\/\.claude';\n@source not '\.\.\/CLAUDE\.md';\n@source not '\.\.\/AGENTS\.md';/
+    )
+    assert.equal(planInit(dir, {}).find((a) => a.path === 'src/webkit.css').skipIfExists, true)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test('an existing postcss config is advised, not overwritten', () => {
   const dir = makeProject()
   try {

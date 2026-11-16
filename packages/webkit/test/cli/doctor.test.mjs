@@ -32,6 +32,28 @@ test('doctor on a bare project fails the required checks', () => {
   }
 })
 
+test('doctor warns when src/webkit.css does not keep the AI guidance files out of the scan', () => {
+  const dir = makeProject()
+  try {
+    mkdirSync(join(dir, 'src'))
+    writeFileSync(
+      join(dir, 'src/webkit.css'),
+      "@import '@aziontech/theme';\n@import './webkit.sources.css';\n@source not '../.claude';\n"
+    )
+    const warned = detailOf(planDoctor(dir), 'webkit.css @source not')
+    assert.equal(warned.status, 'warn')
+    assert.match(warned.detail, /CLAUDE\.md, AGENTS\.md/)
+    assert.match(warned.detail, /`@source not '\.\.\/AGENTS\.md';`/)
+    writeFileSync(
+      join(dir, 'src/webkit.css'),
+      "@import './webkit.sources.css';\n@source not '../.claude';\n@source not '../CLAUDE.md';\n@source not '../AGENTS.md';\n"
+    )
+    assert.equal(statusOf(planDoctor(dir), 'webkit.css @source not'), 'ok')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test('doctor fails a v5 .mcp.json that still runs the webkit-mcp bin of @aziontech/webkit', () => {
   const dir = makeProject()
   try {

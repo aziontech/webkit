@@ -3,7 +3,7 @@ import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
 import { readJsonStrict } from './apply.js'
-import { planSources, SOURCES_FILE } from './css-sources.js'
+import { exclusionLine, missingExclusions, planSources, SOURCES_FILE } from './css-sources.js'
 import {
   ALL_DEPS,
   ENTRY_CANDIDATES,
@@ -178,6 +178,17 @@ export function planDoctor(projectDir) {
           ? 'src/webkit.css registers webkit with an explicit @source'
           : `src/webkit.css does not register webkit with Tailwind — component classes will not compile (unstyled UI). Add \`@import './webkit.sources.css';\` (6.0: \`@aziontech/webkit/styles\` no longer scans WebKit) and run \`npx @aziontech/webkit css\`.`
   )
+
+  if (cssEntry) {
+    const unexcluded = missingExclusions(cssEntry)
+    add(
+      'webkit.css @source not',
+      unexcluded.length ? 'warn' : 'ok',
+      unexcluded.length
+        ? `src/webkit.css does not keep ${unexcluded.map((p) => p.slice(3)).join(', ')} out of the Tailwind scan, so the example classes in the AI guidance files compile into your CSS. Add ${unexcluded.map((p) => `\`${exclusionLine(p)}\``).join(' ')} (or run \`npx @aziontech/webkit init\`).`
+        : 'src/webkit.css keeps the AI guidance files (.claude, CLAUDE.md, AGENTS.md) out of the Tailwind scan'
+    )
+  }
 
   if (importsSources) {
     const sources = planSources(projectDir)

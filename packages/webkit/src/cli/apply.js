@@ -86,7 +86,11 @@ function applyWrite(projectDir, action) {
   }
   ensureDir(target)
   writeFileSync(target, action.content, 'utf8')
-  return { action, result: 'written', detail: action.path }
+  return {
+    action,
+    result: 'written',
+    detail: action.note ? `${action.path} (${action.note})` : action.path
+  }
 }
 
 function applyMergeJson(projectDir, action) {
