@@ -1,6 +1,6 @@
-import type { AttachedResourcesDomain } from './attached-resources.vue'
+import type { DomainsCardDomain } from './domains-card.vue'
 
-export const sampleDomains: AttachedResourcesDomain[] = [
+export const sampleDomains: DomainsCardDomain[] = [
   {
     id: 'generated',
     domain: 'web-app-7f3a.example.net',

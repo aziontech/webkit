@@ -3,7 +3,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import LineFigure from '@aziontech/webkit/line-figure'
 
-  export interface NotFoundProps {
+  export interface ErrorPageProps {
     /** What happened, in the user's words. */
     title?: string
     /** Why it may have happened and what to do next. */
@@ -14,7 +14,7 @@
     docsHref?: string
   }
 
-  withDefaults(defineProps<NotFoundProps>(), {
+  withDefaults(defineProps<ErrorPageProps>(), {
     title: 'Page not found',
     description:
       'There is nothing deployed at this address. Check the URL or head back to the start.',

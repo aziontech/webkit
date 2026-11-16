@@ -1,12 +1,12 @@
 import { cleanup, fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import NotFound from '../../../../blocks/state/not-found/not-found.vue'
+import ErrorPage from '../../../../blocks/state/error-page/error-page.vue'
 
 afterEach(() => cleanup())
-describe('state/not-found', () => {
+describe('state/error-page', () => {
   it('renders the copy and links it is given and emits home', async () => {
-    const view = render(NotFound, {
+    const view = render(ErrorPage, {
       props: {
         title: 'Domain not found',
         description: 'No domain with this name exists in the account.',

@@ -1,13 +1,13 @@
 import type {
-  SplitViewEvent,
-  SplitViewEventLevel,
-  SplitViewField,
-  SplitViewFieldCategory
-} from './split-view.vue'
+  EventsExplorerEvent,
+  EventsExplorerEventLevel,
+  EventsExplorerField,
+  EventsExplorerFieldCategory
+} from './events-explorer.vue'
 
 export const sampleNow = new Date(Date.UTC(2026, 10, 10, 14, 30))
 
-export const sampleCategories: SplitViewFieldCategory[] = [
+export const sampleCategories: EventsExplorerFieldCategory[] = [
   { id: 'request', label: 'Request' },
   { id: 'response', label: 'Response' },
   { id: 'cache', label: 'Cache' },
@@ -19,7 +19,7 @@ export const sampleCategories: SplitViewFieldCategory[] = [
   { id: 'identifiers', label: 'Identifiers' }
 ]
 
-export const sampleFields: SplitViewField[] = [
+export const sampleFields: EventsExplorerField[] = [
   { id: 'time', label: 'Time', core: true, minWidth: 80, mono: true },
   { id: 'level', label: 'Level', core: true, minWidth: 104 },
   { id: 'sourceLabel', label: 'Source', core: true, minWidth: 80 },
@@ -64,7 +64,7 @@ export const sampleFields: SplitViewField[] = [
 
 interface EventTemplate {
   source: string
-  level: SplitViewEventLevel
+  level: EventsExplorerEventLevel
   message: string
   requestMethod?: string
   requestUri?: string
@@ -187,7 +187,7 @@ const calmTemplates = eventTemplates.filter((template) => template.level !== 'Er
 const errorTemplates = eventTemplates.filter((template) => template.level === 'Error')
 const rotation = [...calmTemplates, ...calmTemplates, ...errorTemplates]
 
-const seedEvents = (): SplitViewEvent[] => {
+const seedEvents = (): EventsExplorerEvent[] => {
   const pick = sequence(20260814)
   return Array.from({ length: eventCount }, (_, index) => {
     const template = rotation[index % rotation.length]
@@ -219,4 +219,4 @@ const seedEvents = (): SplitViewEvent[] => {
   })
 }
 
-export const sampleEvents: SplitViewEvent[] = seedEvents()
+export const sampleEvents: EventsExplorerEvent[] = seedEvents()

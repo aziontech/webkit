@@ -36,10 +36,10 @@
   import { sampleCategories, sampleEvents, sampleFields, sampleNow } from './sample'
 
   /** Severity of an event; it colors the level tag and stacks the volume chart. */
-  export type SplitViewEventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
+  export type EventsExplorerEventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
 
   /** One event of the log. */
-  export interface SplitViewEvent {
+  export interface EventsExplorerEvent {
     /** Stable key of the event. */
     id: string
     /** When the event happened; the Time column, the period filter and the chart read it. */
@@ -47,7 +47,7 @@
     /** Source key: http, security, services or access (any other key shows as written). */
     source: string
     /** Severity of the event. */
-    level: SplitViewEventLevel
+    level: EventsExplorerEventLevel
     /** One-line description, the Event column and the heading of the document. */
     message: string
     /** Every other value, keyed by the id of a field in fields. */
@@ -55,10 +55,10 @@
   }
 
   /** How a field value is written: a locale number, or a number of milliseconds. */
-  export type SplitViewFieldFormat = 'number' | 'milliseconds'
+  export type EventsExplorerFieldFormat = 'number' | 'milliseconds'
 
   /** One field of the events: a table column, a row of the fields panel and a key of the document. */
-  export interface SplitViewField {
+  export interface EventsExplorerField {
     /** Key of the value on each event; time and sourceLabel are derived from at and source. */
     id: string
     /** Column header and fields panel label. */
@@ -78,11 +78,11 @@
     /** Writes the value in the code font. */
     mono?: boolean
     /** How the value is written. */
-    format?: SplitViewFieldFormat
+    format?: EventsExplorerFieldFormat
   }
 
   /** A group of hidden fields in the fields panel. */
-  export interface SplitViewFieldCategory {
+  export interface EventsExplorerFieldCategory {
     /** Key the fields name in their category. */
     id: string
     /** Heading of the group. */
@@ -90,7 +90,7 @@
   }
 
   /** One bar of the volume chart. */
-  export interface SplitViewBucket {
+  export interface EventsExplorerBucket {
     /** Start of the bar. */
     at: Date
     /** End of the bar. */
@@ -102,7 +102,7 @@
   }
 
   /** The numbers above the chart. */
-  export interface SplitViewSummary {
+  export interface EventsExplorerSummary {
     /** Events that match. */
     total: number
     /** Of them, events at the Error level. */
@@ -112,19 +112,19 @@
   }
 
   /** Applied values per filter field; period holds the time range. */
-  export type SplitViewFilters = FilterMenuModel
+  export type EventsExplorerFilters = FilterMenuModel
 
-  export interface SplitViewProps {
+  export interface EventsExplorerProps {
     /** The events. Left out, the sample renders. Filtered, searched and paged in the browser unless total is set. */
-    events?: SplitViewEvent[]
+    events?: EventsExplorerEvent[]
     /** The fields of the events, in order; the columns, the fields panel and the document follow them. Left out, the sample fields. */
-    fields?: SplitViewField[]
+    fields?: EventsExplorerField[]
     /** The categories of the fields panel, in order. Left out, derived from the fields. */
-    categories?: SplitViewFieldCategory[]
+    categories?: EventsExplorerFieldCategory[]
     /** The volume chart bars. Left out, counted from the events in the period. */
-    buckets?: SplitViewBucket[]
+    buckets?: EventsExplorerBucket[]
     /** The numbers above the chart. Left out, counted from the events that match. */
-    summary?: SplitViewSummary
+    summary?: EventsExplorerSummary
     /** Every event that matches on the server: events is then one page the server already filtered, and the pages follow page and pageSize. */
     total?: number
     /** The moment relative periods end at. Left out, the sample clock. */
@@ -139,7 +139,7 @@
     error?: string
   }
 
-  const props = withDefaults(defineProps<SplitViewProps>(), {
+  const props = withDefaults(defineProps<EventsExplorerProps>(), {
     events: undefined,
     fields: undefined,
     categories: undefined,
@@ -156,18 +156,18 @@
   const emit = defineEmits<{
     refresh: [event: MouseEvent]
     retry: [event: MouseEvent]
-    select: [event: MouseEvent, record: SplitViewEvent]
+    select: [event: MouseEvent, record: EventsExplorerEvent]
     'load-more': [event: Event]
   }>()
 
-  const filters = defineModel<SplitViewFilters>('filters', {
+  const filters = defineModel<EventsExplorerFilters>('filters', {
     default: () => ({ period: ['24h'] })
   })
   const search = defineModel<string>('search', { default: '' })
   const page = defineModel<number>('page', { default: 1 })
   const pageSize = defineModel<number>('pageSize', { default: 25 })
 
-  type EventRow = SplitViewEvent & { time: string; sourceLabel: string }
+  type EventRow = EventsExplorerEvent & { time: string; sourceLabel: string }
 
   type AppliedValue = FilterMenuValue
 
@@ -231,16 +231,16 @@
     label
   }))
 
-  const eventLevels: Record<SplitViewEventLevel, TagSeverity> = {
+  const eventLevels: Record<EventsExplorerEventLevel, TagSeverity> = {
     Error: 'danger',
     Warning: 'warning',
     Info: 'info',
     Debug: 'neutral'
   }
 
-  const eventLevelSeverity = (level: SplitViewEventLevel) => eventLevels[level] ?? 'neutral'
+  const eventLevelSeverity = (level: EventsExplorerEventLevel) => eventLevels[level] ?? 'neutral'
 
-  const levelOrder = Object.keys(eventLevels) as SplitViewEventLevel[]
+  const levelOrder = Object.keys(eventLevels) as EventsExplorerEventLevel[]
 
   const eventLevelOptions = levelOrder.map((value) => ({ value, label: value }))
 
@@ -304,7 +304,7 @@
 
   const eventFields = computed(() => props.fields ?? sampleFields)
 
-  const eventFieldCategories = computed<SplitViewFieldCategory[]>(() => {
+  const eventFieldCategories = computed<EventsExplorerFieldCategory[]>(() => {
     if (props.categories) return props.categories
     if (!props.fields) return sampleCategories
     const ids = [...new Set(props.fields.map((field) => field.category ?? ''))].filter(Boolean)
@@ -317,7 +317,7 @@
 
   const eventField = (id: string) => eventFields.value.find((field) => field.id === id)
 
-  const formatEventValue = (field: SplitViewField | undefined, value: unknown) => {
+  const formatEventValue = (field: EventsExplorerField | undefined, value: unknown) => {
     if (value === undefined || value === null || value === '') return '—'
     if (typeof value !== 'number' || !field?.format) return String(value)
     return field.format === 'number' ? formatNumber(value) : `${value} ms`
@@ -325,7 +325,7 @@
 
   const serverMode = computed(() => props.total !== undefined)
 
-  const sourceEvents = computed<SplitViewEvent[]>(
+  const sourceEvents = computed<EventsExplorerEvent[]>(
     () => props.events ?? (props.loading || props.error ? [] : sampleEvents)
   )
 
@@ -375,7 +375,10 @@
     return 32
   }
 
-  const eventBuckets = (list: EventRow[], range: FilterMenuRange | null): SplitViewBucket[] => {
+  const eventBuckets = (
+    list: EventRow[],
+    range: FilterMenuRange | null
+  ): EventsExplorerBucket[] => {
     const end = (range?.end ?? nowDate.value).getTime()
     const start = (range?.start ?? new Date(end - fullWindowMinutes * 60000)).getTime()
     const span = Math.max(1, end - start)
@@ -398,7 +401,7 @@
     return result
   }
 
-  const eventSummary = (list: EventRow[]): SplitViewSummary => {
+  const eventSummary = (list: EventRow[]): EventsExplorerSummary => {
     const errors = list.filter((event) => event.level === 'Error').length
     const times = list
       .map((event) => event.requestTimeMs)
@@ -534,13 +537,13 @@
   const fieldsOpen = ref(true)
   const fieldSearch = ref('')
 
-  const matchesFieldSearch = (field: SplitViewField) => {
+  const matchesFieldSearch = (field: EventsExplorerField) => {
     const term = fieldSearch.value.trim().toLowerCase()
     if (!term) return true
     return field.label.toLowerCase().includes(term) || field.id.toLowerCase().includes(term)
   }
 
-  const shownFields = computed<Array<SplitViewField & { locked?: boolean }>>(() => [
+  const shownFields = computed<Array<EventsExplorerField & { locked?: boolean }>>(() => [
     ...coreFields.value.filter(matchesFieldSearch).map((field) => ({ ...field, locked: true })),
     ...optionalFields.value.filter(
       (field) => shownColumns.value.includes(field.id) && matchesFieldSearch(field)
@@ -565,7 +568,7 @@
     () => shownFields.value.length > 0 || fieldCategories.value.length > 0
   )
 
-  const categoryFilterCount = (category: { fields: SplitViewField[] }) =>
+  const categoryFilterCount = (category: { fields: EventsExplorerField[] }) =>
     category.fields.filter((field) => filters.value[field.id]?.length).length
 
   const defaultCategories = () => eventFieldCategories.value.slice(0, 1).map(({ id }) => id)
@@ -602,7 +605,7 @@
 
   const unfilterableFields = new Set(['time', 'sourceLabel'])
 
-  const canFilterField = (field: SplitViewField) => !unfilterableFields.has(field.id)
+  const canFilterField = (field: EventsExplorerField) => !unfilterableFields.has(field.id)
 
   const topFieldValues = (id: string) =>
     fieldValueCounts(matchedEvents.value, id).slice(0, topValues)
@@ -627,7 +630,7 @@
     filters.value = { ...filters.value, [id]: next }
   }
 
-  const toColumn = (field: SplitViewField): TableColumn => ({
+  const toColumn = (field: EventsExplorerField): TableColumn => ({
     accessorKey: field.id,
     header: field.label,
     sortable: true,
@@ -804,7 +807,7 @@
     ]
   })
 
-  const levelColors: Record<SplitViewEventLevel, ChartColor> = {
+  const levelColors: Record<EventsExplorerEventLevel, ChartColor> = {
     Error: 'severity-critical',
     Warning: 'severity-medium',
     Info: 'severity-low',
@@ -1351,7 +1354,7 @@
                     <template #cell-level="{ value }">
                       <Tag
                         :label="String(value)"
-                        :severity="eventLevelSeverity(value as SplitViewEventLevel)"
+                        :severity="eventLevelSeverity(value as EventsExplorerEventLevel)"
                         size="small"
                       />
                     </template>

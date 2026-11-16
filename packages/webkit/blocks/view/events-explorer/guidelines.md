@@ -48,7 +48,7 @@ Each row's detail cell is an `IconButton` named Open event <id> with `aria-expan
 
 Below that width the same document opens in a large right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and the drawer's own close button. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
 
-The fields panel (D) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
+The fields panel (D) is the `events-explorer#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
 
 ### H. Query bar — `Tooltip`, `IconButton` (optional)
 
@@ -76,24 +76,24 @@ The document lists every field of the event. Search in this event narrows the li
 
 ## Data
 
-The block takes its events through props and emits every action; it fetches nothing. `SplitViewEvent`, `SplitViewField`, `SplitViewBucket`, `SplitViewProps` and the other types are exported from `split-view.vue`, and `sample.ts` holds the sample events, fields and clock the block renders when `events` is left out (and never while `loading` or `error` is set). The filters (the period included), the search and the page are models the page can own, so it can run them on the server.
+The block takes its events through props and emits every action; it fetches nothing. `EventsExplorerEvent`, `EventsExplorerField`, `EventsExplorerBucket`, `EventsExplorerProps` and the other types are exported from `events-explorer.vue`, and `sample.ts` holds the sample events, fields and clock the block renders when `events` is left out (and never while `loading` or `error` is set). The filters (the period included), the search and the page are models the page can own, so it can run them on the server.
 
-| Prop / model              | Type                       | What it does                                                                                                                                                                                                                                                                                  |
-| ------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `events`                  | `SplitViewEvent[]`         | The events: `id`, `at`, `source`, `level`, `message` and one key per field. Pass `[]` for a workspace with no traffic.                                                                                                                                                                        |
-| `fields`                  | `SplitViewField[]`         | The fields, in order; the columns, the fields panel and the document follow them. Core fields stay shown, and the first columns are `host`, `status` and `remoteAddress` when the fields have them, else the first three others; `time` and `sourceLabel` are derived from `at` and `source`. |
-| `categories`              | `SplitViewFieldCategory[]` | The groups of the fields panel, in order. Left out with `fields` given, one group per `category` the fields name.                                                                                                                                                                             |
-| `buckets`                 | `SplitViewBucket[]`        | The volume chart bars, per level. Left out, the block counts them from the events in the period.                                                                                                                                                                                              |
-| `summary`                 | `SplitViewSummary`         | Events, Errors and Avg request time. Left out, counted from the events that match.                                                                                                                                                                                                            |
-| `total`                   | `number`                   | Server mode: every match on the server. `events` is then the page the server filtered, the block does not filter, search or slice it, and the pages follow `page` and `pageSize`.                                                                                                             |
-| `now`                     | `Date`                     | Where relative periods end (Last hour ends now). Left out, the sample clock; a live page passes the time of its request.                                                                                                                                                                      |
-| `moreRows`, `loadingMore` | `boolean`                  | More events exist after the last one, and the next ones are loading; the table offers to load more and emits `load-more`.                                                                                                                                                                     |
-| `loading`                 | `boolean`                  | A request is in flight: `Skeleton`s hold the summary and the chart, the table shows its loading rows and Refresh spins.                                                                                                                                                                       |
-| `error`                   | `string`                   | Why the events failed to load, shown in the danger `Alert` with Retry that replaces the log.                                                                                                                                                                                                  |
-| `v-model:filters`         | `SplitViewFilters`         | Applied values per field id, as `FilterMenu` writes them. `period` holds the range: `15m`, `1h`, `6h`, `24h` or `{ start, end }` (the chart brush writes one). Starts at `24h`.                                                                                                               |
-| `v-model:search`          | `string`                   | The search text.                                                                                                                                                                                                                                                                              |
-| `v-model:page`            | `number`                   | The table page, 1-based, back to `1` when the filters or the search change.                                                                                                                                                                                                                   |
-| `v-model:page-size`       | `number`                   | Rows per page, `25` by default.                                                                                                                                                                                                                                                               |
+| Prop / model              | Type                            | What it does                                                                                                                                                                                                                                                                                  |
+| ------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `events`                  | `EventsExplorerEvent[]`         | The events: `id`, `at`, `source`, `level`, `message` and one key per field. Pass `[]` for a workspace with no traffic.                                                                                                                                                                        |
+| `fields`                  | `EventsExplorerField[]`         | The fields, in order; the columns, the fields panel and the document follow them. Core fields stay shown, and the first columns are `host`, `status` and `remoteAddress` when the fields have them, else the first three others; `time` and `sourceLabel` are derived from `at` and `source`. |
+| `categories`              | `EventsExplorerFieldCategory[]` | The groups of the fields panel, in order. Left out with `fields` given, one group per `category` the fields name.                                                                                                                                                                             |
+| `buckets`                 | `EventsExplorerBucket[]`        | The volume chart bars, per level. Left out, the block counts them from the events in the period.                                                                                                                                                                                              |
+| `summary`                 | `EventsExplorerSummary`         | Events, Errors and Avg request time. Left out, counted from the events that match.                                                                                                                                                                                                            |
+| `total`                   | `number`                        | Server mode: every match on the server. `events` is then the page the server filtered, the block does not filter, search or slice it, and the pages follow `page` and `pageSize`.                                                                                                             |
+| `now`                     | `Date`                          | Where relative periods end (Last hour ends now). Left out, the sample clock; a live page passes the time of its request.                                                                                                                                                                      |
+| `moreRows`, `loadingMore` | `boolean`                       | More events exist after the last one, and the next ones are loading; the table offers to load more and emits `load-more`.                                                                                                                                                                     |
+| `loading`                 | `boolean`                       | A request is in flight: `Skeleton`s hold the summary and the chart, the table shows its loading rows and Refresh spins.                                                                                                                                                                       |
+| `error`                   | `string`                        | Why the events failed to load, shown in the danger `Alert` with Retry that replaces the log.                                                                                                                                                                                                  |
+| `v-model:filters`         | `EventsExplorerFilters`         | Applied values per field id, as `FilterMenu` writes them. `period` holds the range: `15m`, `1h`, `6h`, `24h` or `{ start, end }` (the chart brush writes one). Starts at `24h`.                                                                                                               |
+| `v-model:search`          | `string`                        | The search text.                                                                                                                                                                                                                                                                              |
+| `v-model:page`            | `number`                        | The table page, 1-based, back to `1` when the filters or the search change.                                                                                                                                                                                                                   |
+| `v-model:page-size`       | `number`                        | Rows per page, `25` by default.                                                                                                                                                                                                                                                               |
 
 | Event       | Payload           | When                                                        |
 | ----------- | ----------------- | ----------------------------------------------------------- |
@@ -108,9 +108,9 @@ To go live, render the block from a page that owns the query and pass what it re
 <script setup lang="ts">
   import { ref } from 'vue'
 
-  import SplitView, { type SplitViewFilters } from './split-view.vue'
+  import EventsExplorer, { type EventsExplorerFilters } from './events-explorer.vue'
 
-  const filters = ref<SplitViewFilters>({ period: ['24h'] })
+  const filters = ref<EventsExplorerFilters>({ period: ['24h'] })
   const search = ref('')
   const page = ref(1)
   const pageSize = ref(25)
@@ -119,7 +119,7 @@ To go live, render the block from a page that owns the query and pass what it re
 </script>
 
 <template>
-  <SplitView
+  <EventsExplorer
     v-model:filters="filters"
     v-model:search="search"
     v-model:page="page"

@@ -1,19 +1,19 @@
 import { cleanup, fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import AttachedResources from '../../../../blocks/detail/attached-resources/attached-resources.vue'
+import DomainsCard from '../../../../blocks/detail/domains-card/domains-card.vue'
 
 afterEach(() => cleanup())
 
-describe('detail/attached-resources', () => {
+describe('detail/domains-card', () => {
   it('renders the sample domains when none are given', () => {
-    const view = render(AttachedResources)
+    const view = render(DomainsCard)
     expect(view.container.textContent).toContain('shop.example.com')
     expect(view.container.textContent).toContain('3 domains')
   })
 
   it('renders the domains it is given and emits Add Domain', async () => {
-    const view = render(AttachedResources, {
+    const view = render(DomainsCard, {
       props: {
         domains: [
           {
@@ -35,7 +35,7 @@ describe('detail/attached-resources', () => {
   })
 
   it('shows the error with Retry instead of the sample', async () => {
-    const view = render(AttachedResources, {
+    const view = render(DomainsCard, {
       props: { error: "Couldn't load the domains." }
     })
     expect(view.container.textContent).toContain("Couldn't load the domains.")

@@ -13,7 +13,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 - Conditions and actions evaluated in order: use `edit/rule-builder`.
 - A fixed set of named settings on one resource: use `edit/edit-resource` or `settings/settings-form`.
-- A short read-only list of related records inside a settings tab: use `detail/attached-resources`.
+- A short read-only list of related records inside a settings tab: use `detail/domains-card`.
 - A long document or code the user edits as text: use `edit/function-editor`.
 
 ## Building blocks

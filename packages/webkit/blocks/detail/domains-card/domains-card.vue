@@ -13,7 +13,7 @@
   import { sampleDomains } from './sample'
 
   /** A domain the resource answers on. */
-  export interface AttachedResourcesDomain {
+  export interface DomainsCardDomain {
     /** The row key. */
     id: string
     /** The address, without the scheme. */
@@ -28,16 +28,16 @@
     generated: boolean
   }
 
-  export interface AttachedResourcesProps {
+  export interface DomainsCardProps {
     /** The domains. Pass an empty array for a resource with none. Left out, the sample renders. */
-    domains?: AttachedResourcesDomain[]
+    domains?: DomainsCardDomain[]
     /** The domains request is in flight: the table shows its loading state. */
     loading?: boolean
     /** Why the domains failed to load, shown in a danger alert with Retry in place of the table. */
     error?: string
   }
 
-  const props = withDefaults(defineProps<AttachedResourcesProps>(), {
+  const props = withDefaults(defineProps<DomainsCardProps>(), {
     domains: undefined,
     loading: false,
     error: ''
@@ -48,11 +48,11 @@
     retry: [event: MouseEvent]
     'row-action': [
       event: Event,
-      payload: { value: DropdownMenuItemValue; domain: AttachedResourcesDomain }
+      payload: { value: DropdownMenuItemValue; domain: DomainsCardDomain }
     ]
   }>()
 
-  const domains = computed<AttachedResourcesDomain[]>(
+  const domains = computed<DomainsCardDomain[]>(
     () => props.domains ?? (props.loading || props.error ? [] : sampleDomains)
   )
 

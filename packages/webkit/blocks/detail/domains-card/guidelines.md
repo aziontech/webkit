@@ -4,7 +4,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 ## When to use
 
-- Use attached-resources inside a section of a resource's Settings tab for a short list of the records it owns; it is a section, not a page.
+- Use domains-card inside a section of a resource's Settings tab for a short list of the records it owns; it is a section, not a page.
 - A section of a resource's Settings tab lists related records owned by that resource (domains, attached origins, bound certificates) and the list is short enough to read without search or paging.
 - Each related record has two to four attributes worth scanning side by side, and one or two row actions.
 - The user adds a related record from inside the resource, so the action reads `Add <Module>`.
@@ -44,13 +44,13 @@ When `error` is set, a danger `Alert` with Retry takes the table's place inside 
 
 ## Data
 
-The card takes its domains and the request's state through props and emits every action; it fetches nothing. `AttachedResourcesDomain` and `AttachedResourcesProps` are exported from `attached-resources.vue`, and `sample.ts` holds the sample domains the card renders when `domains` is left out (and never while `loading` or `error` is set).
+The card takes its domains and the request's state through props and emits every action; it fetches nothing. `DomainsCardDomain` and `DomainsCardProps` are exported from `domains-card.vue`, and `sample.ts` holds the sample domains the card renders when `domains` is left out (and never while `loading` or `error` is set).
 
-| Prop      | Type                        | What it does                                                                         |
-| --------- | --------------------------- | ------------------------------------------------------------------------------------ |
-| `domains` | `AttachedResourcesDomain[]` | The rows and the footer count. Pass `[]` for a resource with none.                   |
-| `loading` | `boolean`                   | The request is in flight: the table shows its loading state.                         |
-| `error`   | `string`                    | Why the domains failed to load, shown in a danger `Alert` with Retry over the table. |
+| Prop      | Type                  | What it does                                                                         |
+| --------- | --------------------- | ------------------------------------------------------------------------------------ |
+| `domains` | `DomainsCardDomain[]` | The rows and the footer count. Pass `[]` for a resource with none.                   |
+| `loading` | `boolean`             | The request is in flight: the table shows its loading state.                         |
+| `error`   | `string`              | Why the domains failed to load, shown in a danger `Alert` with Retry over the table. |
 
 | Event        | Payload                      | When                          |
 | ------------ | ---------------------------- | ----------------------------- |
@@ -62,14 +62,14 @@ To go live, render the card from the settings section that owns the request:
 
 ```vue
 <script setup lang="ts">
-  import AttachedResources from './attached-resources.vue'
+  import DomainsCard from './domains-card.vue'
 
   const { data, pending, error, refresh } = useResourceDomains()
   const loadError = "Couldn't load the domains. Check your connection and retry."
 </script>
 
 <template>
-  <AttachedResources
+  <DomainsCard
     :domains="data ?? []"
     :loading="pending"
     :error="error ? loadError : ''"

@@ -16,7 +16,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - Rows of a resource that are not a SQL table (variables, records): use `detail/dns-zone-detail`.
 - Editing a function or configuration as code: use `edit/function-editor`.
 - Files and folders of a storage resource: use `view/file-browser`.
-- Events explored over time: use `view/split-view`.
+- Events explored over time: use `view/events-explorer`.
 
 ## Building blocks
 

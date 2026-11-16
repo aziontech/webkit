@@ -299,8 +299,8 @@
       "tool": "blocks",
       "lang": "en",
       "query": "log explorer",
-      "top1": "view/split-view",
-      "top3": ["view/split-view"]
+      "top1": "view/events-explorer",
+      "top3": ["view/events-explorer"]
     },
     {
       "tool": "blocks",
@@ -844,7 +844,7 @@
       "lang": "pt-BR",
       "query": "excluir domínio",
       "top1": "edit/delete-dialog",
-      "top3": ["edit/delete-dialog", "detail/attached-resources"]
+      "top3": ["edit/delete-dialog", "detail/domains-card"]
     },
     {
       "tool": "blocks",

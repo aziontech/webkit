@@ -35,7 +35,7 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 
 ## Data
 
-The block shows no records and fetches nothing: the primary takes the copy and the links a real app sets as props and emits Go to home. `NotFoundProps` is exported from `not-found.vue`; every prop defaults to the 404 copy above.
+The block shows no records and fetches nothing: the primary takes the copy and the links a real app sets as props and emits Go to home. `ErrorPageProps` is exported from `error-page.vue`; every prop defaults to the 404 copy above.
 
 | Prop          | Type     | What it does                                |
 | ------------- | -------- | ------------------------------------------- |
@@ -53,7 +53,7 @@ To go live, render the primary from the catch-all route and point the links at t
 ```vue
 <script setup lang="ts">
   import { useRouter } from 'vue-router'
-  import NotFound from './not-found.vue'
+  import ErrorPage from './error-page.vue'
 
   const router = useRouter()
   const goHome = (event: MouseEvent) => {
@@ -63,7 +63,7 @@ To go live, render the primary from the catch-all route and point the links at t
 </script>
 
 <template>
-  <NotFound
+  <ErrorPage
     docs-href="https://example.com/docs"
     @home="goHome"
   />
