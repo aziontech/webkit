@@ -126,7 +126,7 @@
     :data-density="density"
     :data-wrap="wrapLines || null"
     :style="viewportHeightVar"
-    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)"
+    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:break-words data-[wrap]:[&_[role=cell]_:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])]:whitespace-nowrap flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"
