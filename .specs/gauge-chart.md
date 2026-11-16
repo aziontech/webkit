@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 1bf94e8b0099e979113154a1c619e5a13edf7f3f698cf76b12ffeb2e95c95fad
+checksum: 9a0fb2718138cf478748a261109500cc96574b64da73ccc90d4baab9aedfbbab
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -119,7 +119,7 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 
 | Region           | Token (DESIGN.md)                                                                       |
 | ---------------- | --------------------------------------------------------------------------------------- |
-| track            | `var(--chart-grid)`                                                                     |
+| track            | `var(--border-muted)`                                                                   |
 | arc, no band     | `var(--chart-series-1)`                                                                 |
 | arc in a band    | `var(--chart-status-*)`, `var(--severity-*)`                                            |
 | band marks       | `var(--bg-surface)`                                                                     |

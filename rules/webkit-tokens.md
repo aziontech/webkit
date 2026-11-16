@@ -91,6 +91,13 @@ sets these variables on the dashboard's root element, and every chart inside re-
 | `--chart-sequential-1` (lowest) … `--chart-sequential-7`                                | `--chart-status-*` and `--severity-*` (they mean a state)                                              |
 | `--chart-diverging-negative`, `--chart-diverging-neutral`, `--chart-diverging-positive` | `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*` (the chrome) |
 
+- **Gridlines are half a border.** `--chart-grid` (the lines behind the marks) sits halfway, in
+  perceived lightness, between `--border-default` and `--bg-surface`: it keeps half the border's
+  contrast, so the card edge reads before the grid and the grid never competes with the data. Light
+  `#E5E5E5`, dark `#1A1A1A`. The axis baseline stays `--chart-axis`, at full border strength. The
+  value is a primitive step, never `color-mix()` or an opacity: tokens resolve to a plain colour so
+  canvas charts and the contrast tests can read them. If `--border-default` or `--bg-surface`
+  changes, pick the new halfway step; `chart-role.test.mjs` fails until you do.
 - **Both themes.** A palette supplies a light and a dark value for every variable it sets (set the
   dark values under `[data-theme='dark']`); a half palette breaks the theme switch.
 - **Same checks as the default.** Every series value clears 3:1 (WCAG) and Lc 30 (APCA) on

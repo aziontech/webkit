@@ -86,6 +86,17 @@ for (const variant of ['light', 'dark']) {
     }
   });
 
+  test(`${variant}: gridlines sit halfway between the border line and the card surface`, () => {
+    const lightness = (hex) => {
+      const y = luminance(hex);
+      return y > 216 / 24389 ? 116 * Math.cbrt(y) - 16 : (24389 / 27) * y;
+    };
+    const surface = lightness(vars[variant]['--bg-surface']);
+    const border = lightness(vars[variant]['--border-default']);
+    const share = (lightness(vars[variant]['--chart-grid']) - surface) / (border - surface);
+    assert.ok(share >= 0.4 && share <= 0.6, `--chart-grid (${variant}) keeps ${share.toFixed(2)} of the border contrast`);
+  });
+
   test(`${variant}: the eight series slots are eight distinct colors`, () => {
     const values = SERIES.map((name) => vars[variant][name].toUpperCase());
     assert.equal(new Set(values).size, SERIES.length);

@@ -800,7 +800,6 @@
   --illustration-info: var(--info-foreground);
   --illustration-info-surface: var(--info);
   --chart-series-other: #808080;
-  --chart-grid: var(--border-muted);
   --chart-axis: var(--border-default);
   --chart-label: var(--text-muted);
   --chart-crosshair: var(--text-muted);
@@ -808,6 +807,7 @@
   --chart-tooltip-text: var(--text-default);
   --chart-tooltip-muted: var(--text-muted);
   --chart-tooltip-border: var(--border-default);
+  --chart-grid: #E5E5E5;
   --chart-series-1: #0072F5;
   --chart-series-2: #0D9488;
   --chart-series-3: #6D28D9;
@@ -926,7 +926,6 @@
   --illustration-info: var(--info-foreground);
   --illustration-info-surface: var(--info);
   --chart-series-other: #808080;
-  --chart-grid: var(--border-muted);
   --chart-axis: var(--border-default);
   --chart-label: var(--text-muted);
   --chart-crosshair: var(--text-muted);
@@ -934,6 +933,7 @@
   --chart-tooltip-text: var(--text-default);
   --chart-tooltip-muted: #D1D1D1;
   --chart-tooltip-border: var(--border-default);
+  --chart-grid: #1A1A1A;
   --chart-series-1: #2F86FF;
   --chart-series-2: #14A08C;
   --chart-series-3: #8B5CF6;
@@ -1060,7 +1060,6 @@
     --illustration-info: var(--info-foreground);
     --illustration-info-surface: var(--info);
     --chart-series-other: #808080;
-    --chart-grid: var(--border-muted);
     --chart-axis: var(--border-default);
     --chart-label: var(--text-muted);
     --chart-crosshair: var(--text-muted);
@@ -1068,6 +1067,7 @@
     --chart-tooltip-text: var(--text-default);
     --chart-tooltip-muted: #D1D1D1;
     --chart-tooltip-border: var(--border-default);
+    --chart-grid: #1A1A1A;
     --chart-series-1: #2F86FF;
     --chart-series-2: #14A08C;
     --chart-series-3: #8B5CF6;

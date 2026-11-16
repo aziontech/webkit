@@ -2,7 +2,6 @@ import { tokenRef } from '../token-ref.js'
 
 const shared = {
   'chart-series-other': tokenRef('primitives.gray.500'),
-  'chart-grid': tokenRef('theme.border.border-muted'),
   'chart-axis': tokenRef('theme.border.border-default'),
   'chart-label': tokenRef('theme.text.text-muted'),
   'chart-crosshair': tokenRef('theme.text.text-muted'),
@@ -15,6 +14,7 @@ const shared = {
 export const chart = {
   light: {
     ...shared,
+    'chart-grid': tokenRef('primitives.gray.200'),
     'chart-series-1': tokenRef('primitives.blue.500'),
     'chart-series-2': tokenRef('primitives.chart.teal.light'),
     'chart-series-3': tokenRef('primitives.chart.violet.light'),
@@ -40,6 +40,7 @@ export const chart = {
   },
   dark: {
     ...shared,
+    'chart-grid': tokenRef('primitives.gray.800'),
     'chart-tooltip-muted': tokenRef('primitives.gray.275'),
     'chart-series-1': tokenRef('primitives.chart.blue.dark'),
     'chart-series-2': tokenRef('primitives.chart.teal.dark'),

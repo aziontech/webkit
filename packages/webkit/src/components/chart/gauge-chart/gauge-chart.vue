@@ -263,7 +263,7 @@
           <path
             :d="ARC"
             fill="none"
-            stroke="var(--chart-grid)"
+            stroke="var(--border-muted)"
             stroke-width="10"
             stroke-linecap="round"
           />

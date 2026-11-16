@@ -73,6 +73,11 @@ validated for color-vision separation and 3:1 contrast in both themes:
   green series reads as "healthy" when it just means "series 3".
 - **Chrome**: `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, and the inverse
   tooltip `--chart-tooltip-bg` / `--chart-tooltip-text` / `--chart-tooltip-muted`.
+- **Gridlines are fainter than borders.** Draw the lines behind the marks with `--chart-grid`,
+  never `--border-default` or `--border-muted`: it keeps half the card border's contrast, so the
+  grid recedes behind the data. The zero baseline and axis ticks use `--chart-axis` (full border
+  strength). A custom SVG or canvas chart reads the same two tokens; do not lower a border with
+  `opacity` or `color-mix()` to fake a gridline.
 
 ```ts
 // The webkit components assign these for you. A custom SVG mark passes the var() straight to
