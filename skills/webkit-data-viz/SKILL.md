@@ -58,8 +58,13 @@ validated for color-vision separation and 3:1 contrast in both themes:
 
 - **Categorical** (distinct series, no order): `--chart-series-1` … `--chart-series-8`, in a fixed
   order that is the same in both themes. A ninth series folds into `--chart-series-other`; never
-  generate or reuse a hue. Series 4 is an orange hue: when a view also shows severity, color the
-  severity with `--severity-*` / `--chart-status-*`, never with a series slot.
+  generate or reuse a hue.
+- **Severity never takes a series slot.** A severity scale (critical, high, medium, low) is coloured
+  with `--severity-*` (or `--chart-status-*` for a state), never with `--chart-series-*`, and a series
+  never borrows a severity colour. `--severity-high` and `--chart-series-4` are both orange: the
+  design owner accepted that look (2026-11-16), so a "High" bar next to series 4 stays as it is —
+  the legend and the label tell them apart. Do not move either token or re-order the series to
+  avoid it.
 - **Sequential** (magnitude, e.g. a heatmap): `--chart-sequential-1` (lowest) … `--chart-sequential-7`.
 - **Diverging** (+/- around a midpoint): `--chart-diverging-negative` (orange), `--chart-diverging-neutral`,
   `--chart-diverging-positive` (blue).
@@ -219,6 +224,7 @@ above rather than eyeballing one mode.
   `data-theme` change** so the canvas repaints in the new theme.
 - `--chart-status-*` means status only — never a categorical accent; series slots follow
   declaration order and never cycle.
+- Severity never takes a series slot, and a series never takes a severity colour.
 - Every chart renders loading, empty, and error inside its own box (`Skeleton` / `EmptyState` /
   `Alert`) — no blank async rectangle.
 - `tabular-nums` on every figure that stacks in a column or updates in place.
