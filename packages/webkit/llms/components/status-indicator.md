@@ -44,6 +44,7 @@
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Narrow container: the indicator shrinks to its container and the label ends in an ellipsis instead of overflowing.
 
 ## Accessibility
 

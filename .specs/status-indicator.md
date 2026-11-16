@@ -3,8 +3,8 @@ name: status-indicator
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 7
-checksum: 40e5242f66ed0296b198762821da9dd0f8f9942fe5f8f4083192b51d144f4c88
+spec_version: 8
+checksum: bfdc582407857e0cabb3521768defebc38fb47e97cd87c6f0efb1358f9e4bac6
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -77,6 +77,7 @@ Shows the settled or transitional state of one resource as a colored dot (or a s
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Narrow container: the indicator shrinks to its container and the label ends in an ellipsis instead of overflowing.
 
 ## Motion & Animations
 

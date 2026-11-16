@@ -108,7 +108,7 @@
 
 ## Responsive
 
-- The button never wraps its label (`whitespace-nowrap`); keep labels short, or let the layout stack buttons on narrow screens.
+- The button never wraps its label (`whitespace-nowrap`); in a container narrower than the label the button shrinks and the `label` ends in an ellipsis (a default-slot label truncates only when it brings its own truncating element). Keep labels short, or let the layout stack buttons on narrow screens.
 - Touch: drawn heights are 28 / 32 / 40 px; a `[data-slot=touch-target]` span extends the hit area to 44 px on a coarse pointer.
 - No hover-only affordance: every state reads without hover.
 

@@ -219,6 +219,11 @@
     "assets/todocartoes-extended-reversed.svg": {
       "to": "assets/todo-cartoes-extended-reversed.svg"
     },
+    "dropdown-option": {
+      "to": "dropdown-menu-item",
+      "from": "DropdownOption",
+      "binding": "DropdownMenuItem"
+    },
     "dropdown-menu-option": {
       "to": "dropdown-menu-item",
       "from": "DropdownMenuOption",
@@ -258,6 +263,11 @@
       "to": "help-panel-footer",
       "from": "HelpPanelLinks",
       "binding": "HelpPanelFooter"
+    },
+    "paginator-info": {
+      "to": "pagination-description",
+      "from": "PaginatorInfo",
+      "binding": "PaginationDescription"
     },
     "pagination-info": {
       "to": "pagination-description",

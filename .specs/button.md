@@ -3,9 +3,9 @@ name: button
 category: action
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
-checksum: ee1bb99820c08ebce1cabe1e6de2c381244cc6aa4bf8a5daaa61ff06dfdf85c7
+checksum: bd0b0b7a3bda0080e304419696f79c5215f54eaaeadeb28bc9ca3633cf72c790
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -165,7 +165,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 
 ## Responsive
 
-- The button never wraps its label (`whitespace-nowrap`); keep labels short, or let the layout stack buttons on narrow screens.
+- The button never wraps its label (`whitespace-nowrap`); in a container narrower than the label the button shrinks and the `label` ends in an ellipsis (a default-slot label truncates only when it brings its own truncating element). Keep labels short, or let the layout stack buttons on narrow screens.
 - Touch: drawn heights are 28 / 32 / 40 px; a `[data-slot=touch-target]` span extends the hit area to 44 px on a coarse pointer.
 - No hover-only affordance: every state reads without hover.
 

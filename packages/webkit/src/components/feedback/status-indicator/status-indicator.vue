@@ -45,7 +45,7 @@
     :data-testid="testId"
     :data-severity="severity"
     :data-loading="loading || null"
-    class="group inline-flex items-center gap-(--spacing-3) rounded-(--shape-control) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+    class="group inline-flex min-w-0 max-w-full items-center gap-(--spacing-3) rounded-(--shape-control) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
   >
     <Spinner
       v-if="loading"
@@ -60,7 +60,7 @@
       class="size-2 shrink-0 rounded-full data-[severity=success]:bg-(--success-mark) data-[severity=info]:bg-(--info-mark) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-mark) data-[severity=danger]:bg-(--danger-mark) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText]"
     />
     <span
-      class="whitespace-nowrap group-data-[loading]:text-(--text-muted)"
+      class="min-w-0 truncate group-data-[loading]:text-(--text-muted)"
       :data-testid="`${testId}__label`"
     >
       {{ loading ? loadingText : text }}

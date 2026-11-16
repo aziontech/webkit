@@ -14,8 +14,10 @@ const modules = import.meta.glob<{ default: Component }>(
 // reflow.css) and compares the inked pixels. Chromium keeps SVG fills, so line, area, bar, donut
 // and map marks survive; marks painted with `background-color` (tracker blocks, bar-list fills,
 // legend keys) are forced to Canvas and vanish unless they opt out with `forced-color-adjust:
-// none`. A surface that only loses its tinted fill (an Alert) keeps its border and stays above the
-// threshold; a vanished mark drops the ink to a tenth. The PNGs land in __screenshots__ for review.
+// none`. A vanished mark drops the ink to a tenth. A chart in its error state draws no marks (an
+// Alert replaces the plot and only loses its tinted fill, keeping border and text), so it is held
+// to staying visible instead of to the ratio. Transitions render for real (no stub wrapper), so
+// the Alert lays out as it does in an app. The PNGs land in __screenshots__ for review.
 // The ratio is calibrated on Chromium and asserted there only; other engines take the shots.
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
 
@@ -78,7 +80,10 @@ describe('forced colors · chart marks (screenshots)', () => {
     host.style.width = '720px'
     host.style.padding = '16px'
     document.body.appendChild(host)
-    render(mod.default, { container: host })
+    render(mod.default, {
+      container: host,
+      global: { stubs: { transition: false, 'transition-group': false } }
+    })
     await settle()
     const name = file.replace(/[/.]/g, '-')
     await commands.emulateMedia({ forcedColors: 'none' })
@@ -87,8 +92,13 @@ describe('forced colors · chart marks (screenshots)', () => {
     await commands.emulateMedia({ forcedColors: 'active' })
     await settle()
     const forced = await ink(host, `${name}-forced`)
+    const marksReplaced = host.querySelector('[data-error]') !== null
     host.remove()
     if (normal < 100 || server.browser !== 'chromium') return
+    if (marksReplaced) {
+      expect(forced, 'the error state vanished').toBeGreaterThan(normal * 0.1)
+      return
+    }
     expect(forced / normal, 'marks drawn with a background vanished').toBeGreaterThan(0.25)
   })
 })

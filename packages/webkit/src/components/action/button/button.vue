@@ -107,7 +107,7 @@
     :data-testid="testId"
     @click="onClick"
   >
-    <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
+    <span class="relative z-1 inline-flex min-w-0 max-w-full items-center gap-(--spacing-xs)">
       <slot name="leading" />
       <Spinner
         v-if="loading"
@@ -122,7 +122,13 @@
         class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
-      <slot>{{ label }}</slot>
+      <slot
+        ><span
+          v-if="label"
+          class="min-w-0 overflow-x-clip text-ellipsis"
+          >{{ label }}</span
+        ></slot
+      >
     </span>
     <span
       aria-hidden="true"
@@ -148,7 +154,7 @@
     :data-testid="testId"
     @click="onClick"
   >
-    <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
+    <span class="relative z-1 inline-flex min-w-0 max-w-full items-center gap-(--spacing-xs)">
       <slot name="leading" />
       <Spinner
         v-if="loading"
@@ -163,7 +169,13 @@
         class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
-      <slot>{{ label }}</slot>
+      <slot
+        ><span
+          v-if="label"
+          class="min-w-0 overflow-x-clip text-ellipsis"
+          >{{ label }}</span
+        ></slot
+      >
     </span>
     <span
       aria-hidden="true"
