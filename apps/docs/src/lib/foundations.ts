@@ -91,6 +91,18 @@ export const FOUNDATIONS: FoundationPage[] = [
     title: 'Accessibility',
     summary: 'Role, keyboard, focus and motion are built in.',
     markdown: 'rules/webkit-accessibility.md'
+  },
+  {
+    slug: 'azion-api',
+    title: 'Calling the Azion API',
+    summary: 'CORS, a dev proxy and an edge proxy, and where the personal token lives.',
+    markdown: 'skills/webkit-azion-api/SKILL.md'
+  },
+  {
+    slug: 'query-explorer',
+    title: 'Query explorer',
+    summary: 'A Metrics and Events GraphQL explorer built from WebKit components.',
+    markdown: 'skills/webkit-query-explorer/SKILL.md'
   }
 ]
 

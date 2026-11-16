@@ -143,6 +143,7 @@ before any polish:
 - **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-ai-surfaces` (chat, streamed responses, citations, feedback, actions the reader approves)
 - **Polish:** `/webkit-motion-polish` · `/webkit-final-polish` (finish + earned delight)
 - **Verify + migrate:** `/webkit-ui-verify` (runtime axe + both themes + states) · `/webkit-adoption`
+- **Azion API:** `/webkit-azion-api` (CORS, the Vite dev proxy and a same-origin edge proxy, the personal token kept in memory or `sessionStorage`) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer: `DateRangePicker` + `useTimeRange`, `PropertyFilter`, `Chart`, `DataTable`, `CodeBlock`)
 
 Mechanics of consuming the package (imports, tokens, tree-shaking) live in `/webkit-usage`.
 
