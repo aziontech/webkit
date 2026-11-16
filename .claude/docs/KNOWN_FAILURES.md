@@ -19,9 +19,7 @@ CI= PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm exec vitest run <test file> -t
 
 Fail on every run, alone too.
 
-| Test                                                                                                                     | Symptom                                                                                                                                                                                       | Status (checked 2026-11-16)                                                                                                        |
-| ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `src/test/forced-colors-charts.test.ts` › `chart/error-state.vue keeps its marks under forced-colors: active` (Chromium) | `marks drawn with a background vanished: expected 0.2426 to be greater than 0.25`: under forced colors the error-state example keeps about 24% of its inked pixels, just under the 25% floor. | Open. Fails alone. Decide whether the error state should draw more marks in forced colors or the example is exempt from the floor. |
+None.
 
 ## Flaky under load
 
