@@ -28,6 +28,50 @@ come back to.
 
 ---
 
+## Principles
+
+Every principle is held by a rule and a gate, not by memory. The rules ship in
+`node_modules/@aziontech/webkit/rules/`.
+
+| Principle                                | Rule                                               | Gate                                                                               |
+| ---------------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Every visual decision comes from a token | `webkit-tokens`, `webkit-styling`                  | `webkit/no-hardcoded-color`, `webkit/no-hardcoded-motion`, stylelint config, hooks |
+| Use the system before building           | `webkit-prefer-over-custom`, `webkit-sections`     | `webkit/prefer-webkit-component`, review                                           |
+| A component is used as shipped           | `webkit-style-override`                            | `webkit/no-style-override`                                                         |
+| The spec is the source of truth          | the spec pipeline (`.specs/`, in the repository)   | spec hooks, `spec-status` and `catalog` gates                                      |
+| Accessible by construction               | `webkit-accessibility`                             | `vuejs-accessibility` lint, axe in every component test                            |
+| Small by default                         | `webkit-imports`, `webkit-performance`             | `webkit/no-barrel-import`, the size budget gate                                    |
+| Enforced, not remembered                 | every rule names its gate                          | write-time hooks, `webkit check`, the CI ratchet                                   |
+| Assets come from the bank                | `webkit-site-pages` (SD-13, SD-14, SD-18 to SD-20) | `webkit/no-root-relative-asset`, review                                            |
+
+The layers: **foundations** (the `@aziontech/theme` tokens and the asset bank), **components**
+(primitives, marketing and docs components, page sections), **blocks** (reviewed, copyable
+screens under `blocks/`) and **assets** (brand marks, illustrations, diagrams, the icons of
+`@aziontech/icons`).
+
+## Where to check
+
+Never answer a WebKit question from memory or from a copy in another document: read it at the
+version the project has installed, and cite where it was read.
+
+| Question                                          | Read                                                                                |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Is WebKit installed and wired here?               | the project's `package.json` and `.mcp.json`, then `npx @aziontech/webkit doctor`   |
+| How do I install, update, or add the CI gates?    | the package `README.md` and [`toolkit/CLI.md`](./toolkit/CLI.md)                    |
+| Which component fits? Its API and import?         | the MCP: `suggest_component`, `list_components`, `get_component`; or `catalog.json` |
+| Which screen do I start from?                     | the MCP `search_blocks` / `get_block`, or `npx @aziontech/webkit search` / `view`   |
+| Is this import or class valid?                    | the MCP `get_import` / `validate_usage`, then the lint                              |
+| Which token or asset?                             | the MCP `list_tokens` / `list_assets`, or `llms/foundations/`                       |
+| Everything above without MCP                      | `llms/llms.txt` (one page per component, block and foundation); the docs site       |
+| Which rule blocked this, and how do I fix it?     | the lint message, then `rules/webkit-*.md`                                          |
+| A design rule for a product screen or a web page? | `/webkit-product-screens` (routing table) or rule `webkit-site-pages` (SD rules)    |
+| Something not yet published?                      | the WebKit repository; never in place of the installed version                      |
+
+When two sources disagree, the installed package wins over the docs site, and the docs site over
+the repository's main branch: the package is what the project runs.
+
+---
+
 ## Foundations — the tokens everything is built from
 
 Every visual decision comes from a token. Raw values (hex, Tailwind palette names, raw

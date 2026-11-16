@@ -254,6 +254,49 @@ FENCE  CLAUDE.md (fragment stale)
 
 Consumers are expected to keep their `.claude/` copies **committed**, and to run `sync --check` in CI (it is read-only and exits non-zero on drift) so an upstream webkit update is caught instead of silently going stale.
 
+## Project contract
+
+Every repository that builds Azion product screens or web pages on WebKit meets these conditions
+before any UI work, and the skills (`webkit-product-screens`, `webkit-site-pages`) check them first:
+
+1. `@aziontech/webkit`, `@aziontech/theme` and `@aziontech/icons` are installed at a version the
+   repository pins.
+2. `init` has run: lint, styles, the theme entry, the MCP server, the pre-commit lint, the
+   `.claude/` bundle and the `CLAUDE.md` fragment are wired.
+3. The lint preset is the strictest one the package offers (`strict`).
+4. The `.claude/` bundle is committed and current: `sync --check` exits 0. A deliberate local edit is
+   reported, never treated as the rule; a rule changes in WebKit.
+5. `doctor` reports no `FAIL`.
+
+`init`, `sync` and CI changes touch the repository for everyone who works in it: show the
+`--dry-run` plan and run them only with the person's consent.
+
+| CI gate          | Passes when                                                  |
+| ---------------- | ------------------------------------------------------------ |
+| Wiring           | `doctor` exits 0                                             |
+| Rules reach code | `canary` proves the lint rules still fire in this repository |
+| Agent bundle     | `sync --check` exits 0                                       |
+| Lint and styles  | no new violation over the repository's baseline (`check`)    |
+| Adoption report  | `report` writes the adoption numbers to the run summary      |
+
+A repository with existing violations runs lint as a ratchet: the baseline records today's count
+and a pull request may only lower it. A baseline is never raised, and a rule never disabled, to
+make a gate pass.
+
+### Which copy of a rule to read
+
+Read every rule, skill and agent at the version the project runs, from the first of these that
+exists:
+
+1. the project's `.claude/` bundle, when `sync --check` reports it current;
+2. `node_modules/@aziontech/webkit/` (`rules/`, `skills/`, `adapters/claude/agents/`, `docs/`,
+   `llms/`, `catalog.json`), for a stale or edited bundle or a file outside it;
+3. the published package by URL at the installed version
+   (`https://cdn.jsdelivr.net/npm/@aziontech/webkit@<version>/<path>`), when nothing is installed;
+4. the WebKit repository, only for a change not yet published.
+
+Cite what was read as `@aziontech/webkit@<version> <path>`.
+
 ## Dependency versions
 
 `init` records each missing toolkit dependency as a caret range (`^9.39.3`), keeps one you already declare at a compatible or newer version, and raises only one older than WebKit needs — it never downgrades. `vue-tsc` is never rewritten: when your range can resolve to a release with a known bug (3.3.14), `init` and `doctor` print the pin (`npm i -D vue-tsc@3.3.13`) for you to run. After you install, run `doctor` to see the **resolved** versions and pin the ones you want to freeze — this keeps `init` simple and offline while giving you a reproducible pin when you're ready.

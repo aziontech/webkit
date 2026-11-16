@@ -446,6 +446,23 @@ major ahead; `doctor` reports the resolved versions to pin.
 
 ---
 
+## Ownership
+
+| Area                                                                 | Owner                                                                                              |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| The WebKit repository, its packages and apps                         | Design team (`@aziontech/team-uxe`)                                                                |
+| The design rules of product screens and web pages                    | Design team, in WebKit: `skills/`, `rules/` (the Web Design Guide is `rules/webkit-site-pages.md`) |
+| The action labels of web pages (Start for free, Docs, Talk to sales) | Design team, in WebKit: SD-04                                                                      |
+| Voice, every other label, facts, positioning, product names, terms   | Marketing, in `azioncorp/azion-ai-toolkit` (`azion-brand-voice`, `azion-kb`)                       |
+| Translation of page copy                                             | Marketing, `translate-content`                                                                     |
+
+Design knowledge lives in WebKit only (owner decision 2026-11-16, C10): when WebKit and any other
+document disagree about a design decision, WebKit wins and the other document is fixed. WebKit
+points at marketing's content; marketing's toolkit does not restate WebKit's rules. A project that
+needs something the system does not have asks the Design team instead of building it locally.
+
+---
+
 ## The rule system — scopes and enforcement
 
 A **standard** is one `.claude/rules/<id>.md` (the human rule, written for the AI and for
