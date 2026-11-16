@@ -225,8 +225,16 @@ test('check warns when a copied block drifted from the canonical one', () => {
     writeFileSync(manifestPath, JSON.stringify(manifest))
     const r = cliJson(dir, 'check', '--no-lint')
     const drift = by(r.json, 'blocks')
+    const changed = drift.find((f) => f.file === 'src/views/auth-bar.vue')
+    assert.match(changed.message, /differs from the copy recorded at the same version/)
+    assert.doesNotMatch(changed.message, /copied from (\S+) to \1/)
+    manifest.blocks['top-bar/auth-bar'].version = '0.0.1'
+    writeFileSync(manifestPath, JSON.stringify(manifest))
+    const older = by(cliJson(dir, 'check', '--no-lint').json, 'blocks')
     assert.ok(
-      drift.some((f) => f.file === 'src/views/auth-bar.vue' && /changed since/.test(f.message))
+      older.some(
+        (f) => f.file === 'src/views/auth-bar.vue' && /copied from 0\.0\.1 to /.test(f.message)
+      )
     )
     assert.ok(drift.some((f) => f.file === 'src/views/Gone.vue' && /file is gone/.test(f.message)))
     assert.ok(drift.every((f) => f.severity === 'warn'))

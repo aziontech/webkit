@@ -520,7 +520,11 @@ export function blockDrift(projectDir, webkit) {
         findings.push({
           severity: 'warn',
           file: file.path,
-          message: `the canonical ${id} (${file.variant}) changed since it was copied from ${entry.version || 'an older version'} to ${webkit.version}: review with \`npx ${PACKAGE_NAME} diff ${file.path}\`.`
+          message: `${
+            entry.version === webkit.version
+              ? `the canonical ${id} (${file.variant}) in the installed ${PACKAGE_NAME}@${webkit.version} differs from the copy recorded at the same version (the package was rebuilt or the block source changed under it)`
+              : `the canonical ${id} (${file.variant}) changed since it was copied from ${entry.version || 'an older version'} to ${webkit.version}`
+          }: review with \`npx ${PACKAGE_NAME} diff ${file.path}\`.`
         })
       }
     }

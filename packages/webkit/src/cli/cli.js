@@ -531,7 +531,9 @@ function runDiff(projectDir, target, parsed) {
   const color = useColor()
   for (const f of result.files) {
     const upstream = f.upstreamChanged
-      ? ` — the canonical block changed since it was copied (${result.recordedVersion} → ${result.version})`
+      ? result.recordedVersion === result.version
+        ? ` — the installed canonical block differs from the copy recorded at the same version (${result.version})`
+        : ` — the canonical block changed since it was copied (${result.recordedVersion} → ${result.version})`
       : ''
     if (f.status === 'identical') {
       process.stdout.write(`${f.path}: identical to ${f.source}${upstream}\n`)
