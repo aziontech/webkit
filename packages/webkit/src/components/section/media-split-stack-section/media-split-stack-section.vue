@@ -123,7 +123,7 @@
       <SectionTitle
         v-if="hasHeader"
         align="center"
-        size="large"
+        size="medium"
         :eyebrow="eyebrow"
         :title="title"
         :description="description"

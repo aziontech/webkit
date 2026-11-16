@@ -120,6 +120,12 @@ describe('MediaSplitStackSection', () => {
     expect(getByText(EYEBROW)).toBeInTheDocument()
   })
 
+  it('opens the run with the medium section title', () => {
+    const { getByTestId } = run({ title: TITLE })
+
+    expect(getByTestId('section-title').getAttribute('data-size')).toBe('medium')
+  })
+
   it('drops the band headlines to h3 under a section title', () => {
     const { getByRole, queryAllByRole } = run({ title: TITLE })
 

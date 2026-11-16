@@ -40,6 +40,8 @@ JSON. Never rebuild a band from primitives when a section exists.
   (a band that pins while its tall cards slide sideways), a `HeroFormSection` field's
   `visuallyHiddenLabel` (a field labelled by its placeholder), `NetworkSection` benefits without
   `icon` (the bold run-in lead-in) and outcomes without `logo`.
+- A header that opens a run of bands inside a page (`MediaSplitStackSection`, a `SectionTitle` over
+  a `SectionStack`) is the medium `SectionTitle`; `size="large"` is for a page's opening title only.
 - A titled row of cards that scrolls sideways, with the previous/next arrows on the title row ("See
   how to use", "Industries"), is `CardCarousel` (`card-carousel`): each card takes `eyebrow`,
   `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Eyebrow`.
