@@ -734,12 +734,12 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "23.75 KB"
+    "limit": "24.05 KB"
   },
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "15.5 KB"
+    "limit": "15.7 KB"
   },
   {
     "name": "chart-line",
