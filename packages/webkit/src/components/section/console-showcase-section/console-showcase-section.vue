@@ -185,7 +185,7 @@
               v-if="tabs.length"
               v-model="current"
               :options="options"
-              :size="roomy ? 'large' : 'medium'"
+              :size="roomy ? 'large' : 'small'"
               :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
             />
           </template>
