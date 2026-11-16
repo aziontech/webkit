@@ -84,7 +84,7 @@ import '@aziontech/icons/azionicons-color'
 
 ### Package exports
 
-The package exposes the following named exports (defined in the generated `dist/package.json`):
+The package exposes the following named exports (defined in `package.json`; every target is a built file in `dist/`):
 
 ```js
 import '@aziontech/icons' // → dist/index.css (azionicons + colored classes)
@@ -339,8 +339,9 @@ Here's how that your SVG needs to looks in code:
 | ------------------ | ------------------------------------------------------------------ |
 | `npm run build`    | Validate SVGs → generate fonts → assemble `dist/` for npm          |
 | `npm run validate` | Run SVG validation only (`node scripts/validate.mjs`)              |
-| `npm run pack:dry` | Preview the npm package contents (`cd dist && npm pack --dry-run`) |
-| `npm run publish`  | Publish to npm from `dist/` (`cd dist && npm publish`)             |
+| `npm run test`     | Check the published files and that nothing is a runtime dependency |
+| `npm run pack:dry` | Preview the npm package contents (`npm pack --dry-run`)            |
+| `npm run release`  | Publish to npm (`npm publish`)                                     |
 | `npm run lint`     | Lint source files with ESLint                                      |
 | `npm run format`   | Format `scripts/` and `src/` with Prettier                         |
 
@@ -408,19 +409,19 @@ npm run build
 
 ### Build pipeline (`build`)
 
-The [`scripts/build-icons.mjs`](scripts/build-icons.mjs) orchestrator runs 7 steps:
+The [`scripts/build-icons.mjs`](scripts/build-icons.mjs) orchestrator runs these steps:
 
 1. **Validate SVGs** — runs `scripts/check-svg.mjs` (blocks on errors)
 2. **Clean `dist/`** — removes and recreates the output directory
 3. **Generate fonts** — runs `scripts/build-woff2.mjs` (fantasticon for `ai`; the colored `ai-color` folder is not a font input)
 4. **Create `index.css`** — barrel file importing `azionicons.css` and `azionicons-color.css`
-5. **Generate `dist/package.json`** — creates a clean package manifest with exports for npm
-6. **Copy LICENSE & README.md** — into `dist/` for npm
-7. **Generate catalogs & colored CSS** — `dist/catalog.json` (font icons, via `build-catalog.mjs`), `dist/color-catalog.json` (colored SVGs, via `build-color-catalog.mjs`), and `dist/azionicons-color.css` (colored `.ai-color.ai-<name>` rules, via `build-color-css.mjs`)
+5. **Generate catalogs & colored CSS** — `dist/catalog.json` (font icons, via `build-catalog.mjs`), `dist/color-catalog.json` (colored SVGs, via `build-color-catalog.mjs`), and `dist/azionicons-color.css` (colored `.ai-color.ai-<name>` rules, via `build-color-css.mjs`)
 
 ### Publishing
 
-The package is published from the `dist/` directory, which contains its own generated `package.json`:
+The package is published from this folder. `package.json#files` limits the tarball to `dist/`,
+`LICENSE` and `README.md`, so the SVG sources, the build scripts and fantasticon's `tmp/` logs never
+ship, and fantasticon is a dev dependency: installing `@aziontech/icons` adds no other package.
 
 ```bash
 # Build the package
@@ -433,7 +434,6 @@ npm run pack:dry
 npm run publish
 ```
 
-> **Note:** The root `package.json` has `"private": true` to prevent accidental publishing from the root. The generated `dist/package.json` is the actual publishable manifest.
 
 ---
 

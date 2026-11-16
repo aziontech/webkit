@@ -320,8 +320,11 @@ jobs:
       - name: MCP server tests (@aziontech/webkit-mcp over stdio)
         run: pnpm --filter @aziontech/webkit-mcp test
 
-      - name: Theme tests (device contract, container scale in @theme, CSS types)
+      - name: Theme tests (device contract, container scale in @theme, CSS types, shipped font files)
         run: pnpm --filter @aziontech/theme test
+
+      - name: Icons package tests (published files, no runtime dependencies)
+        run: pnpm --filter @aziontech/icons test
 
       - name: Server rendering — every block and example renders with vue/server-renderer in Node
         run: pnpm --filter @aziontech/webkit test:ssr

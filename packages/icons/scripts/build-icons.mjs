@@ -1,19 +1,11 @@
 import { execSync } from 'node:child_process'
-import {
-  rmSync,
-  mkdirSync,
-  copyFileSync,
-  writeFileSync,
-  readFileSync,
-  readdirSync,
-  existsSync
-} from 'node:fs'
+import { rmSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
 const CHARSET = 'utf-8'
 const DIST_DIR = './dist'
 
-console.log('\n🔍 Step 1/9 — Validating SVG files...\n')
+console.log('\n🔍 Step 1/7 — Validating SVG files...\n')
 try {
   execSync('node scripts/check-svg.mjs', { stdio: 'inherit' })
 } catch {
@@ -21,11 +13,11 @@ try {
   process.exit(1)
 }
 
-console.log('\n🧹 Step 2/9 — Cleaning dist/ directory...\n')
+console.log('\n🧹 Step 2/7 — Cleaning dist/ directory...\n')
 rmSync(DIST_DIR, { recursive: true, force: true })
 mkdirSync(DIST_DIR, { recursive: true })
 
-console.log('⚙️  Step 3/9 — Generating icon fonts via fantasticon...\n')
+console.log('⚙️  Step 3/7 — Generating icon fonts via fantasticon...\n')
 try {
   execSync('node scripts/build-woff2.mjs', { stdio: 'inherit' })
 } catch {
@@ -33,7 +25,7 @@ try {
   process.exit(1)
 }
 
-console.log('\n📦 Step 4/9 — Creating dist/index.css barrel file...\n')
+console.log('\n📦 Step 4/7 — Creating dist/index.css barrel file...\n')
 const barrelContent = `@import './azionicons.css';
 @import './azionicons-color.css';
 `
@@ -42,47 +34,7 @@ console.log('  ✔ dist/index.css created')
 writeFileSync(join(DIST_DIR, 'index.d.ts'), 'export {}\n', CHARSET)
 console.log('  ✔ dist/index.d.ts created')
 
-console.log('\n📋 Step 5/9 — Generating dist/package.json...\n')
-const rootPkg = JSON.parse(readFileSync('./package.json', CHARSET))
-const distPkg = {
-  name: rootPkg.name,
-  version: rootPkg.version,
-  description: rootPkg.description,
-  keywords: ['icons', 'icon-font', 'azionicons', 'css', 'woff2'],
-  license: rootPkg.license,
-  repository: rootPkg.repository,
-  publishConfig: rootPkg.publishConfig ?? { access: 'public' },
-  style: 'index.css',
-  main: 'index.css',
-  types: 'index.d.ts',
-  exports: {
-    '.': { types: './index.d.ts', default: './index.css' },
-    './azionicons': { types: './index.d.ts', default: './azionicons.css' },
-    './azionicons-color': { types: './index.d.ts', default: './azionicons-color.css' },
-    './catalog': './catalog.json',
-    './color-catalog': './color-catalog.json'
-  }
-}
-writeFileSync(join(DIST_DIR, 'package.json'), JSON.stringify(distPkg, null, 2) + '\n', CHARSET)
-console.log('  ✔ dist/package.json created')
-
-console.log('\n📄 Step 6/9 — Copying LICENSE and README.md into dist/...\n')
-
-if (existsSync('./LICENSE')) {
-  copyFileSync('./LICENSE', join(DIST_DIR, 'LICENSE'))
-  console.log('  ✔ LICENSE copied')
-} else {
-  console.log('  ⚠ LICENSE not found — skipped')
-}
-
-if (existsSync('./README.md')) {
-  copyFileSync('./README.md', join(DIST_DIR, 'README.md'))
-  console.log('  ✔ README.md copied')
-} else {
-  console.log('  ⚠ README.md not found — skipped')
-}
-
-console.log('\n📦 Step 7/9 — Generating dist/catalog.json + dist/color-catalog.json...\n')
+console.log('\n📦 Step 5/7 — Generating dist/catalog.json + dist/color-catalog.json...\n')
 try {
   execSync('node scripts/build-catalog.mjs', { stdio: 'inherit' })
   console.log('  ✔ dist/catalog.json created')
@@ -91,7 +43,7 @@ try {
   process.exit(1)
 }
 
-console.log('\n📦 Step 8/9 — Generating dist/catalog.json + dist/color-catalog.json...\n')
+console.log('\n📦 Step 6/7 — Generating dist/catalog.json + dist/color-catalog.json...\n')
 try {
   execSync('node scripts/build-color-catalog.mjs', { stdio: 'inherit' })
   console.log('  ✔ dist/color-catalog.json created')
@@ -102,7 +54,7 @@ try {
   process.exit(1)
 }
 
-console.log('\n📦 Step 9/9 — Generating dist/azionicons.css ...\n')
+console.log('\n📦 Step 7/7 — Generating dist/azionicons.css ...\n')
 try {
   execSync('node scripts/build-color-css.mjs', { stdio: 'inherit' })
   console.log('  ✔ dist/azionicons-color.css created')
