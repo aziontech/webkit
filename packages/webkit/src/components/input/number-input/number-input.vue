@@ -159,7 +159,7 @@
       'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
       'data-[invalid]:border-(--danger-border)',
-      'data-[required]:border-(--warning-border)',
+      'data-[required]:not-data-[invalid]:border-(--warning-border)',
       'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs['class']
     ]"
