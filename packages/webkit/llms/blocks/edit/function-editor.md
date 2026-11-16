@@ -52,7 +52,7 @@ In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is t
 1. The heading Test run, a `StatusIndicator` (Completed, or Running with its loading dot), the run ID in code type with a `CopyButton`.
 2. The request that triggered the run and one line on its outcome (the status code and what happened).
 3. A four-column `KeyValueList` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
-4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
+4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected-key`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
 5. Logs: a `LogViewer` with `LogViewerContent` on the same clock as the trace, `copyable`, and its loading state while running.
 
 ### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
@@ -77,7 +77,51 @@ The form column with four `SettingsSection`s: General (Name, required on Save), 
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; a saved change raises a success toast ("image-optimizer saved.") and the bar leaves. A failed save keeps the bar and every change, and puts a small danger `Alert` in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries and Discard clears it.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. Save emits `submit` with the values and the page sets `loading`. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; when `loading` ends with no `error`, a success toast says "image-optimizer saved." and the bar leaves. A failed save (`error` set) keeps the bar and every change, and puts a small danger `Alert` with the message in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries, and Discard emits `discard` so the page clears the error.
+
+## Data
+
+The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `function-editor.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props.
+
+| Prop              | Type                             | What it does                                                                                        |
+| ----------------- | -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `service`         | `FunctionEditorService`          | The saved name, execution environment, status, code and argument schema (JSON text).                |
+| `fields`          | `FunctionEditorField[]`          | The saved argument fields, in order. Pass `[]` for a service with no form.                          |
+| `defaultDraft`    | `Partial<FunctionEditorService>` | Unsaved edits the editor opens with, so the save bar is up.                                         |
+| `defaultTab`      | `'code' \| 'settings'`           | The tab the page opens on.                                                                          |
+| `defaultDocument` | `'code' \| 'arguments'`          | The document of the Code tab the page opens on.                                                     |
+| `defaultOpenKeys` | `string[]`                       | Ids of the fields that open expanded.                                                               |
+| `loading`         | `boolean`                        | The save is in flight; when it ends with no `error` the editor takes the draft as saved and toasts. |
+| `error`           | `string`                         | Why the save failed, shown in the danger `Alert` of the save bar.                                   |
+
+| Event     | Payload           | When                                                                |
+| --------- | ----------------- | ------------------------------------------------------------------- |
+| `submit`  | `(event, values)` | Save, once Name and Code are filled; `values` holds the fields too. |
+| `discard` | `(event)`         | Discard; the draft is already back to the saved props.              |
+
+To go live, render the block from a page that owns the request:
+
+```vue
+<script setup lang="ts">
+  import FunctionEditor from './function-editor.vue'
+
+  const { service, fields } = useFunction()
+  const { run, pending, error, reset } = useSaveFunction()
+</script>
+
+<template>
+  <FunctionEditor
+    :service="service"
+    :fields="fields"
+    :loading="pending"
+    :error="error ? 'Not saved. Check your connection and save again.' : ''"
+    @submit="(event, values) => run(values)"
+    @discard="reset"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -126,12 +170,12 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 
 ## States
 
-- Code: the Code tab with the Code document filling the editor pane.
-- Arguments: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
-- NoArguments: the Arguments document of a service with no form, the empty schema and the no fields empty state.
+- Code: the default, `defaultTab` `code`: the Code tab with the Code document filling the editor pane.
+- Arguments: `defaultDocument` `arguments` with `defaultOpenKeys`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
+- NoArguments: a `service` with an empty schema and `fields` `[]`: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
-- Settings: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
-- Saving: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
+- Settings: `defaultTab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
+- Saving: `loading` with a `defaultDraft`: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
 
 ## Related
 
@@ -184,28 +228,115 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, useId } from 'vue'
+  import { computed, nextTick, reactive, ref, toRaw, useId, watch } from 'vue'
 
-  type FieldBase = {
+  import { sampleFields, sampleService } from './sample'
+
+  /** The value type of one argument field. */
+  export type FunctionEditorFieldType =
+    'string' | 'integer' | 'number' | 'boolean' | 'select' | 'array'
+
+  /** What every argument field carries, whatever its type. */
+  export interface FunctionEditorFieldBase {
+    /** Stable key of the row in the builder. */
     id: string
+    /** The argument name the code reads. */
     key: string
+    /** The label the form shows. */
     title: string
+    /** The help text under the field. */
     description: string
+    /** The form refuses to save without it. */
     required: boolean
+    /** Shortest text allowed, as typed. */
     minLength: string
+    /** Longest text allowed, as typed. */
     maxLength: string
+    /** Pattern the text must match. */
     pattern: string
+    /** Smallest number allowed, as typed. */
     minimum: string
+    /** Largest number allowed, as typed. */
     maximum: string
+    /** The choices of a choice field. */
     options: string[]
+    /** The item type of a list field. */
     itemType: string
   }
-  type SchemaField = FieldBase &
+
+  /** One field of the argument form, with a default that matches its type. */
+  export type FunctionEditorField = FunctionEditorFieldBase &
     (
       | { type: 'boolean'; default: boolean }
       | { type: 'array'; default: string[] }
       | { type: 'string' | 'integer' | 'number' | 'select'; default: string }
     )
+
+  /** Where the service runs. */
+  export type FunctionEditorEnvironment = 'request' | 'gateway'
+
+  /** The saved service the editor opens on. */
+  export interface FunctionEditorService {
+    /** The service name. */
+    name: string
+    /** Where the service runs. */
+    executionEnvironment: FunctionEditorEnvironment
+    /** Whether the service runs at all. */
+    active: boolean
+    /** The source code. */
+    code: string
+    /** The argument form schema, as JSON text. */
+    schema: string
+  }
+
+  /** What a save sends: the service and its argument fields. */
+  export interface FunctionEditorValues extends FunctionEditorService {
+    /** The argument fields, in order. */
+    fields: FunctionEditorField[]
+  }
+
+  /** A tab of the editor. */
+  export type FunctionEditorTab = 'code' | 'settings'
+
+  /** A document of the Code tab. */
+  export type FunctionEditorDocument = 'code' | 'arguments'
+
+  export interface FunctionEditorProps {
+    /** The saved service; the editor opens on it and Discard returns to it. Left out, the sample renders. */
+    service?: FunctionEditorService
+    /** The saved argument fields. Left out, the sample fields render. */
+    fields?: FunctionEditorField[]
+    /** Unsaved edits the editor opens with on top of the service, so it starts dirty. */
+    defaultDraft?: Partial<FunctionEditorService>
+    /** The tab the editor opens on. */
+    defaultTab?: FunctionEditorTab
+    /** The document the Code tab opens on. */
+    defaultDocument?: FunctionEditorDocument
+    /** Ids of the fields that open expanded. */
+    defaultOpenKeys?: string[]
+    /** The save is in flight: the save bar stays, Save spins, Discard and the editors lock. */
+    loading?: boolean
+    /** Why the save failed, shown in a danger alert in the save bar; the edits are kept. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<FunctionEditorProps>(), {
+    service: undefined,
+    fields: undefined,
+    defaultDraft: () => ({}),
+    defaultTab: 'code',
+    defaultDocument: 'code',
+    defaultOpenKeys: () => [],
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: FunctionEditorValues]
+    discard: [event: MouseEvent]
+  }>()
+
+  type SchemaField = FunctionEditorField
 
   const loadMonaco = async (): Promise<CodeEditorMonacoModule> => {
     const [{ default: EditorWorker }, { default: JsonWorker }, { default: TsWorker }] =
@@ -247,88 +378,16 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
   ]
 
   const runtimeLabel = 'JavaScript'
-  const code = `const ALLOWED = ['webp', 'avif']
-
-export async function handleRequest(request, args = {}) {
-  const url = new URL(request.url)
-  const format = url.searchParams.get('format') ?? args.defaultFormat
-
-  if (!ALLOWED.includes(format)) return fetch(request)
-
-  url.searchParams.set('format', format)
-  url.searchParams.set('quality', String(args.quality))
-  return fetch(url.toString())
-}
-`
-  const formSchema = {
-    type: 'object',
-    properties: {
-      defaultFormat: {
-        type: 'string',
-        title: 'Default format',
-        description:
-          'Used when the request does not ask for a format. Only these are rewritten. Anything else passes through untouched.',
-        enum: ['webp', 'avif'],
-        default: 'webp'
-      },
-      quality: {
-        type: 'integer',
-        title: 'Quality',
-        description: 'Compression quality applied to every rewritten image.',
-        minimum: 1,
-        maximum: 100,
-        default: 80
-      }
-    },
-    required: ['defaultFormat']
-  }
   const cleanSchema = JSON.stringify({ type: 'object', properties: {} }, null, 2)
 
-  const activeTab = ref('code')
-  const activeDocument = ref('code')
-  const form = reactive({
-    name: 'image-optimizer',
-    executionEnvironment: 'request',
-    active: true,
-    code,
-    schema: JSON.stringify(formSchema, null, 2)
-  })
-  const fields = ref<SchemaField[]>([
-    {
-      id: 'field-1',
-      key: 'defaultFormat',
-      type: 'select',
-      title: 'Default format',
-      description:
-        'Used when the request does not ask for a format. Only these are rewritten. Anything else passes through untouched.',
-      required: true,
-      default: 'webp',
-      minLength: '',
-      maxLength: '',
-      pattern: '',
-      minimum: '',
-      maximum: '',
-      options: ['webp', 'avif'],
-      itemType: 'string'
-    },
-    {
-      id: 'field-2',
-      key: 'quality',
-      type: 'integer',
-      title: 'Quality',
-      description: 'Compression quality applied to every rewritten image.',
-      required: false,
-      default: '80',
-      minLength: '',
-      maxLength: '',
-      pattern: '',
-      minimum: '1',
-      maximum: '100',
-      options: [],
-      itemType: 'string'
-    }
-  ])
-  const expanded = ref(new Set<string>())
+  const savedService = computed<FunctionEditorService>(() => props.service ?? sampleService)
+  const savedFields = computed<SchemaField[]>(() => props.fields ?? sampleFields)
+
+  const activeTab = ref<string>(props.defaultTab)
+  const activeDocument = ref<string>(props.defaultDocument)
+  const form = reactive<FunctionEditorService>({ ...savedService.value })
+  const draftFields = ref<SchemaField[]>(structuredClone(toRaw(savedFields.value)))
+  const expanded = ref(new Set<string>(props.defaultOpenKeys))
   const touched = ref(new Set<string>())
   const schemaWidth = ref(420)
   const schemaExpanded = ref(true)
@@ -338,7 +397,7 @@ export async function handleRequest(request, args = {}) {
   const nameMessageId = useId()
   const groupName = useId()
 
-  let sequence = 2
+  let sequence = draftFields.value.length
   const newField = (): SchemaField => ({
     id: 'field-' + (sequence += 1),
     key: '',
@@ -368,7 +427,7 @@ export async function handleRequest(request, args = {}) {
     if (!key) return touched.value.has(field.id) ? 'Give the field a name.' : ''
     if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key))
       return 'Letters, digits and underscore, not starting with a digit.'
-    return fields.value.some((other) => other.id !== field.id && other.key.trim() === key)
+    return draftFields.value.some((other) => other.id !== field.id && other.key.trim() === key)
       ? 'Another field already uses this name.'
       : ''
   }
@@ -389,30 +448,30 @@ export async function handleRequest(request, args = {}) {
 
   const addField = () => {
     const field = newField()
-    fields.value.push(field)
+    draftFields.value.push(field)
     open(field.id)
     nextTick(() => document.getElementById(formId + '-key-' + field.id)?.focus())
   }
   const removeField = (index: number) => {
-    const [removed] = fields.value.splice(index, 1)
+    const [removed] = draftFields.value.splice(index, 1)
     if (!removed) return
     const next = new Set(expanded.value)
     next.delete(removed.id)
     expanded.value = next
   }
   const duplicateField = (index: number) => {
-    const copy = { ...fields.value[index], id: newField().id, key: '' }
-    fields.value.splice(index + 1, 0, copy)
+    const copy = { ...draftFields.value[index], id: newField().id, key: '' }
+    draftFields.value.splice(index + 1, 0, copy)
     open(copy.id)
   }
   const moveStatus = ref('')
   const fieldName = (field: SchemaField) => field.key || 'this field'
   const move = (index: number, direction: number) => {
     const to = index + direction
-    if (to < 0 || to >= fields.value.length) return
-    const [moved] = fields.value.splice(index, 1)
-    fields.value.splice(to, 0, moved)
-    moveStatus.value = `${fieldName(moved)} moved to position ${to + 1} of ${fields.value.length}.`
+    if (to < 0 || to >= draftFields.value.length) return
+    const [moved] = draftFields.value.splice(index, 1)
+    draftFields.value.splice(to, 0, moved)
+    moveStatus.value = `${fieldName(moved)} moved to position ${to + 1} of ${draftFields.value.length}.`
     nextTick(() => {
       const same = document.getElementById(`${formId}-${direction < 0 ? 'up' : 'down'}-${moved.id}`)
       const other = document.getElementById(
@@ -424,7 +483,7 @@ export async function handleRequest(request, args = {}) {
   }
   const removeForm = () => {
     form.schema = cleanSchema
-    fields.value = []
+    draftFields.value = []
   }
 
   const onTypeChange = (field: SchemaField) => {
@@ -443,24 +502,39 @@ export async function handleRequest(request, args = {}) {
       .filter(Boolean)
   const listToLines = (list: unknown) => (Array.isArray(list) ? list.join('\n') : '')
 
-  const snapshot = () => JSON.stringify({ form, fields: fields.value })
+  const snapshot = () => JSON.stringify({ form, fields: draftFields.value })
   const baseline = ref(snapshot())
+  Object.assign(form, props.defaultDraft)
   const dirty = computed(() => snapshot() !== baseline.value)
-  const discard = () => {
-    const saved: { form: typeof form; fields: SchemaField[] } = JSON.parse(baseline.value)
+  const saving = computed(() => props.loading)
+  const saveError = computed(() => props.error)
+
+  watch(
+    () => JSON.stringify({ service: savedService.value, fields: savedFields.value }),
+    () => {
+      Object.assign(form, savedService.value)
+      draftFields.value = structuredClone(toRaw(savedFields.value))
+      baseline.value = snapshot()
+    }
+  )
+
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (!before || now || props.error) return
+      baseline.value = snapshot()
+      toast.success(`${form.name} saved.`)
+    }
+  )
+
+  const discard = (event: MouseEvent) => {
+    const saved: { form: FunctionEditorService; fields: SchemaField[] } = JSON.parse(baseline.value)
     Object.assign(form, saved.form)
-    fields.value = saved.fields
-    saveError.value = ''
+    draftFields.value = saved.fields
+    emit('discard', event)
   }
-  const saving = ref(false)
-  const saveError = ref('')
-  const saveRequest = () =>
-    new Promise<boolean>((resolve) => {
-      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
-    })
-  const save = async () => {
+  const save = (event: Event) => {
     if (saving.value) return
-    saveError.value = ''
     nameError.value = form.name.trim() ? '' : 'This field is required.'
     codeError.value = form.code.trim() ? '' : 'This field is required.'
     if (codeError.value) {
@@ -473,15 +547,7 @@ export async function handleRequest(request, args = {}) {
       nextTick(() => document.getElementById(target)?.focus())
       return
     }
-    saving.value = true
-    const saved = await saveRequest()
-    saving.value = false
-    if (!saved) {
-      saveError.value = 'Not saved. You are offline; check your connection and save again.'
-      return
-    }
-    baseline.value = snapshot()
-    toast.success(`${form.name} saved.`)
+    emit('submit', event, { ...form, fields: structuredClone(toRaw(draftFields.value)) })
   }
 </script>
 
@@ -573,7 +639,7 @@ export async function handleRequest(request, args = {}) {
                       class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
                     >
                       <span class="text-label-sm text-(--text-muted)">
-                        {{ fields.length }} {{ fields.length === 1 ? 'field' : 'fields' }}
+                        {{ draftFields.length }} {{ draftFields.length === 1 ? 'field' : 'fields' }}
                       </span>
                       <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                         <Button
@@ -627,7 +693,7 @@ export async function handleRequest(request, args = {}) {
                         <ResizableHandle aria-label="Resize the schema" />
                         <ResizablePane aria-label="Fields">
                           <div
-                            v-if="fields.length === 0"
+                            v-if="draftFields.length === 0"
                             class="flex min-h-0 flex-1 p-(--spacing-sm)"
                           >
                             <div class="flex min-h-0 flex-1">
@@ -671,7 +737,7 @@ export async function handleRequest(request, args = {}) {
                                       class="relative flex w-full flex-col *:data-[slot=item]:rounded-none *:data-[slot=item]:border-b-(--border-muted) [&>[data-slot=item]:last-child]:border-b-transparent"
                                     >
                                       <Item
-                                        v-for="(field, index) in fields"
+                                        v-for="(field, index) in draftFields"
                                         :key="field.id"
                                         size="small"
                                       >
@@ -698,7 +764,7 @@ export async function handleRequest(request, args = {}) {
                                                 icon="ai ai-arrow-down"
                                                 variant="ghost"
                                                 size="small"
-                                                :disabled="index === fields.length - 1"
+                                                :disabled="index === draftFields.length - 1"
                                                 :aria-label="'Move ' + fieldName(field) + ' down'"
                                                 @click="move(index, 1)"
                                               />
@@ -1284,4 +1350,111 @@ export async function handleRequest(request, args = {}) {
     </Transition>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { FunctionEditorField, FunctionEditorService } from './function-editor.vue'
+
+const sampleCode = `const ALLOWED = ['webp', 'avif']
+
+export async function handleRequest(request, args = {}) {
+  const url = new URL(request.url)
+  const format = url.searchParams.get('format') ?? args.defaultFormat
+
+  if (!ALLOWED.includes(format)) return fetch(request)
+
+  url.searchParams.set('format', format)
+  url.searchParams.set('quality', String(args.quality))
+  return fetch(url.toString())
+}
+`
+
+const formSchema = {
+  type: 'object',
+  properties: {
+    defaultFormat: {
+      type: 'string',
+      title: 'Default format',
+      description:
+        'Used when the request does not ask for a format. Only these are rewritten. Anything else passes through untouched.',
+      enum: ['webp', 'avif'],
+      default: 'webp'
+    },
+    quality: {
+      type: 'integer',
+      title: 'Quality',
+      description: 'Compression quality applied to every rewritten image.',
+      minimum: 1,
+      maximum: 100,
+      default: 80
+    }
+  },
+  required: ['defaultFormat']
+}
+
+export const sampleService: FunctionEditorService = {
+  name: 'image-optimizer',
+  executionEnvironment: 'request',
+  active: true,
+  code: sampleCode,
+  schema: JSON.stringify(formSchema, null, 2)
+}
+
+export const sampleFields: FunctionEditorField[] = [
+  {
+    id: 'field-1',
+    key: 'defaultFormat',
+    type: 'select',
+    title: 'Default format',
+    description:
+      'Used when the request does not ask for a format. Only these are rewritten. Anything else passes through untouched.',
+    required: true,
+    default: 'webp',
+    minLength: '',
+    maxLength: '',
+    pattern: '',
+    minimum: '',
+    maximum: '',
+    options: ['webp', 'avif'],
+    itemType: 'string'
+  },
+  {
+    id: 'field-2',
+    key: 'quality',
+    type: 'integer',
+    title: 'Quality',
+    description: 'Compression quality applied to every rewritten image.',
+    required: false,
+    default: '80',
+    minLength: '',
+    maxLength: '',
+    pattern: '',
+    minimum: '1',
+    maximum: '100',
+    options: [],
+    itemType: 'string'
+  }
+]
+
+const authCode = `const SECRET = 'demo-only'
+
+export async function handleRequest(request) {
+  const token = request.headers.get('authorization')?.replace('Bearer ', '')
+  if (!token) return new Response('Unauthorized', { status: 401 })
+
+  const response = await fetch(request)
+  response.headers.set('x-authenticated', 'true')
+  return response
+}
+`
+
+export const sampleServiceWithoutArguments: FunctionEditorService = {
+  name: 'auth-handler',
+  executionEnvironment: 'request',
+  active: true,
+  code: authCode,
+  schema: JSON.stringify({ type: 'object', properties: {} }, null, 2)
+}
 ```

@@ -88,6 +88,55 @@ A ranked list sorted descending (top sources). Renders its own loading and empty
 Bars, area or line over time. All time series share one `active-index`, so hovering a moment moves the
 crosshair on every card. A legend with totals appears only when a card has more than one series.
 
+### J. Load failure — `Alert` (required)
+
+When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+
+## Data
+
+The block takes its series through props and emits every change; it fetches nothing. `ConfigurableDashboardProps` and `ConfigurableDashboardSeries` are exported from `configurable-dashboard.vue`, and `sample.ts` holds the sample period the block renders when a data prop is left out (and never while `loading` or `error` is set). The layout is a model, so the page can save it per user.
+
+| Prop              | Type                          | What it does                                                                                                                            |
+| ----------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `labels`          | `string[]`                    | The interval labels of the time charts.                                                                                                 |
+| `series`          | `ConfigurableDashboardSeries` | The series of each chart card, by card (`requests`, `regions`, `transfer`, `errors`, `latency`). A card left out shows its empty state. |
+| `sources`         | `BarListItem[]`               | The services ranked in Top sources. `[]` shows its empty state.                                                                         |
+| `loading`         | `boolean`                     | The period is loading; every card shows its skeleton.                                                                                   |
+| `error`           | `string`                      | Why the period could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                 |
+| `v-model:layout`  | `DashboardGridLayoutItem[]`   | The order, span and height of the cards; defaults to the built-in layout, which Reset layout restores.                                  |
+| `v-model:editing` | `boolean`                     | Edit mode (handles, resize corners, span tags and the help line); default `false`.                                                      |
+
+| Event            | Payload   | When                                                               |
+| ---------------- | --------- | ------------------------------------------------------------------ |
+| `retry`          | `(event)` | Retry in any card's error alert.                                   |
+| `update:layout`  | `(value)` | A card was moved or resized, or Reset layout restored the default. |
+| `update:editing` | `(value)` | Edit layout or Done.                                               |
+
+To go live, render the block from a page that owns the request and the saved layout:
+
+```vue
+<script setup lang="ts">
+  import ConfigurableDashboard from './configurable-dashboard.vue'
+
+  const { data, pending, error, refresh } = useTrafficOverview()
+  const layout = useSavedLayout('traffic-overview')
+</script>
+
+<template>
+  <ConfigurableDashboard
+    v-model:layout="layout"
+    :labels="data?.labels ?? []"
+    :series="data?.series ?? {}"
+    :sources="data?.sources ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the layout as data (id, span, height, order) owned by the page, bind it to `DashboardGrid`, and persist
@@ -126,11 +175,11 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ## States
 
-- Default: the arranged dashboard, read-only.
-- Editing: handles and resize corners on every card, span tags in the headers, help line visible.
-- Loading: every chart renders its own `Skeleton` inside its card; the layout holds its shape.
-- Empty: nothing recorded yet; each card keeps its place and size and shows its empty state.
-- Error: the request failed; every card keeps its place, size and header with a danger `Alert` that names what did not load and offers Retry.
+- Default: the arranged dashboard, read-only (`v-model:layout`).
+- Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
+- Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
+- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
+- Error: the request failed (`error` is set); every card keeps its place, size and header with a danger `Alert` that names what did not load, carries the message and offers Retry.
 
 ## Related
 
@@ -153,6 +202,7 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
@@ -165,22 +215,44 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
-  const loading = false
+  import { sampleLabels, sampleSeries, sampleSources } from './sample'
 
-  const labels = [
-    '11:00',
-    '13:00',
-    '15:00',
-    '17:00',
-    '19:00',
-    '21:00',
-    '23:00',
-    '01:00',
-    '03:00',
-    '05:00',
-    '07:00',
-    '09:00'
-  ]
+  /** A card on the grid. */
+  export type ConfigurableDashboardCardId =
+    'requests' | 'regions' | 'transfer' | 'errors' | 'sources' | 'latency'
+
+  /** A card that draws series. */
+  export type ConfigurableDashboardChartId = Exclude<ConfigurableDashboardCardId, 'sources'>
+
+  /** The series of each chart card, by card; a card left out shows its empty state. */
+  export type ConfigurableDashboardSeries = Partial<
+    Record<ConfigurableDashboardChartId, ChartSeries[]>
+  >
+
+  export interface ConfigurableDashboardProps {
+    /** The interval labels of the time charts. Left out, the sample renders. */
+    labels?: string[]
+    /** The series of each chart card. Left out, the sample renders. */
+    series?: ConfigurableDashboardSeries
+    /** The services ranked in Top sources. Left out, the sample renders. */
+    sources?: BarListItem[]
+    /** The period is loading: every card shows its skeleton. */
+    loading?: boolean
+    /** Why the period could not load, after the name of each card in its danger alert. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<ConfigurableDashboardProps>(), {
+    labels: undefined,
+    series: undefined,
+    sources: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+  }>()
 
   type CardVariant = 'area' | 'donut' | 'line' | 'bar' | 'bar-list'
   type CardFormat = 'count' | 'bytes' | 'ms'
@@ -190,179 +262,77 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
     hint: string
     kind: CardVariant
     format: CardFormat
-    series: ChartSeries[]
-    items?: BarListItem[]
   }
 
-  const cards: Record<string, DashboardCard> = {
+  const cards: Record<ConfigurableDashboardCardId, DashboardCard> = {
     requests: {
       title: 'Requests over time',
       hint: 'Requests served by every service, per interval.',
       kind: 'area',
-      format: 'count',
-      series: [
-        {
-          id: 'requests',
-          name: 'Requests',
-          values: [
-            2029738, 1799252, 1910217, 1633835, 1757364, 1722765, 2157932, 2151290, 2283541,
-            2397218, 2545994, 2347243
-          ]
-        }
-      ]
+      format: 'count'
     },
     regions: {
       title: 'Requests by region',
       hint: 'Share of requests by the region that served them.',
       kind: 'donut',
-      format: 'count',
-      series: [
-        {
-          id: 'South America',
-          name: 'South America',
-          values: [9820000]
-        },
-        {
-          id: 'North America',
-          name: 'North America',
-          values: [7410000]
-        },
-        {
-          id: 'Europe',
-          name: 'Europe',
-          values: [4960000]
-        },
-        {
-          id: 'Asia',
-          name: 'Asia',
-          values: [2230000]
-        },
-        {
-          id: 'Oceania',
-          name: 'Oceania',
-          values: [610000]
-        }
-      ]
+      format: 'count'
     },
     transfer: {
       title: 'Data transferred',
       hint: 'Data delivered to clients and received from them, per interval.',
       kind: 'line',
-      format: 'bytes',
-      series: [
-        {
-          id: 'out',
-          name: 'Out',
-          values: [
-            7464097327, 8703777359, 8853256007, 10189608468, 10484778433, 10611102405, 9993797117,
-            9768346098, 10386911277, 8642195236, 7365365394, 8004529693
-          ]
-        },
-        {
-          id: 'in',
-          name: 'In',
-          values: [
-            1991543196, 1861411304, 1899395715, 1528384777, 1319208897, 1269798165, 1261414828,
-            1391471001, 1417213338, 1614716457, 1979668469, 2070880025
-          ]
-        }
-      ]
+      format: 'bytes'
     },
     errors: {
       title: 'Errors by status',
       hint: 'Requests that ended in a client or server error, per interval.',
       kind: 'bar',
-      format: 'count',
-      series: [
-        {
-          id: '4xx',
-          name: '4xx',
-          values: [
-            13707, 15864, 14544, 16239, 19681, 24625, 22235, 22216, 22808, 17486, 16275, 15501
-          ]
-        },
-        {
-          id: '5xx',
-          name: '5xx',
-          values: [8144, 8724, 9890, 8837, 7067, 7731, 5015, 3592, 4017, 3975, 5911, 7275]
-        }
-      ]
+      format: 'count'
     },
     sources: {
       title: 'Top sources',
       hint: 'The services that received the most requests in the period.',
       kind: 'bar-list',
-      format: 'count',
-      series: [],
-      items: [
-        {
-          id: 'web-app-prod',
-          name: 'web-app-prod',
-          value: 11420000
-        },
-        {
-          id: 'payments-api',
-          name: 'payments-api',
-          value: 6240000
-        },
-        {
-          id: 'storefront-checkout',
-          name: 'storefront-checkout',
-          value: 4910000
-        },
-        {
-          id: 'marketing-site',
-          name: 'marketing-site',
-          value: 2380000
-        },
-        {
-          id: 'status-page',
-          name: 'status-page',
-          value: 860000
-        }
-      ]
+      format: 'count'
     },
     latency: {
       title: 'Response time',
       hint: 'Time to the first byte at the 95th percentile, per interval.',
       kind: 'line',
-      format: 'ms',
-      series: [
-        {
-          id: 'p95',
-          name: 'p95',
-          values: [166, 167, 151, 172, 200, 191, 205, 208, 205, 182, 165, 175]
-        }
-      ]
+      format: 'ms'
     }
   }
 
-  const defaultLayout: DashboardGridLayoutItem[] = [
-    {
-      id: 'requests',
-      span: 8
-    },
-    {
-      id: 'regions',
-      span: 4
-    },
-    {
-      id: 'transfer',
-      span: 6
-    },
-    {
-      id: 'errors',
-      span: 6
-    },
-    {
-      id: 'sources',
-      span: 4
-    },
-    {
-      id: 'latency',
-      span: 8
+  const defaultSpans: Record<ConfigurableDashboardCardId, number> = {
+    requests: 8,
+    regions: 4,
+    transfer: 6,
+    errors: 6,
+    sources: 4,
+    latency: 8
+  }
+
+  const defaultLayout: DashboardGridLayoutItem[] = Object.entries(defaultSpans).map(
+    ([id, span]) => ({ id, span })
+  )
+
+  const layoutModel = defineModel<DashboardGridLayoutItem[]>('layout')
+  const editing = defineModel<boolean>('editing', { default: false })
+
+  const layout = computed<DashboardGridLayoutItem[]>({
+    get: () => layoutModel.value ?? defaultLayout.map((card) => ({ ...card })),
+    set: (next) => {
+      layoutModel.value = next
     }
-  ]
+  })
+
+  const blocked = computed(() => props.loading || props.error !== '')
+  const labels = computed(() => props.labels ?? (blocked.value ? [] : sampleLabels))
+  const chartSeries = computed(() => props.series ?? (blocked.value ? {} : sampleSeries))
+  const sources = computed(() => props.sources ?? (blocked.value ? [] : sampleSources))
+  const cardOf = (id: string) => cards[id as ConfigurableDashboardCardId]
+  const seriesOf = (id: string) => chartSeries.value[id as ConfigurableDashboardChartId] ?? []
+  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
 
@@ -381,8 +351,6 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
     ms: (value) => `${Math.round(value)} ms`
   }
 
-  const editing = ref(false)
-  const layout = ref<DashboardGridLayoutItem[]>(defaultLayout.map((card) => ({ ...card })))
   const activeIndex = ref<number | null>(null)
   const announcement = ref('')
 
@@ -442,14 +410,14 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
           v-for="card in layout"
           :key="card.id"
           :item-id="card.id"
-          :label="cards[card.id].title"
+          :label="cardOf(card.id).title"
         >
           <ChartCard>
             <ChartCard.Header>
-              <ChartCard.DragHandle :aria-label="'Move ' + cards[card.id].title" />
+              <ChartCard.DragHandle :aria-label="'Move ' + cardOf(card.id).title" />
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-                <ChartCard.Title>{{ cards[card.id].title }}</ChartCard.Title>
-                <Hint :content="cards[card.id].hint" />
+                <ChartCard.Title>{{ cardOf(card.id).title }}</ChartCard.Title>
+                <Hint :content="cardOf(card.id).hint" />
               </span>
               <ChartCard.Action v-if="editing">
                 <Tag
@@ -461,30 +429,37 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
               </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="failed(cardOf(card.id).title.toLowerCase())"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <DonutChart
-                v-if="cards[card.id].kind === 'donut'"
-                :series="cards[card.id].series"
-                :format-value="formatters[cards[card.id].format]"
+                v-else-if="cardOf(card.id).kind === 'donut'"
+                :series="seriesOf(card.id)"
+                :format-value="formatters[cardOf(card.id).format]"
                 empty-title="No requests yet"
                 empty-description="Metrics appear here once a service serves requests."
                 :loading="loading"
-                :aria-label="cards[card.id].title"
+                :aria-label="cardOf(card.id).title"
               />
               <BarList
-                v-else-if="cards[card.id].kind === 'bar-list'"
-                :items="cards[card.id].items"
+                v-else-if="cardOf(card.id).kind === 'bar-list'"
+                :items="sources"
                 sort="descending"
-                :format-value="formatters[cards[card.id].format]"
+                :format-value="formatters[cardOf(card.id).format]"
                 empty-title="No requests yet"
                 :loading="loading"
-                :aria-label="cards[card.id].title"
+                :aria-label="cardOf(card.id).title"
               />
               <Chart
                 v-else
                 v-model:active-index="activeIndex"
-                :series="cards[card.id].series"
+                :series="seriesOf(card.id)"
                 :labels="labels"
-                :format-value="formatters[cards[card.id].format]"
+                :format-value="formatters[cardOf(card.id).format]"
                 empty-title="No requests yet"
                 empty-description="Metrics appear here once a service serves requests."
                 :loading="loading"
@@ -493,20 +468,20 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
                 <Chart.Axis type="y" />
                 <Chart.Axis type="x" />
                 <Chart.Bar
-                  v-if="cards[card.id].kind === 'bar'"
+                  v-if="cardOf(card.id).kind === 'bar'"
                   stacked
                 />
-                <Chart.Area v-else-if="cards[card.id].kind === 'area'" />
+                <Chart.Area v-else-if="cardOf(card.id).kind === 'area'" />
                 <Chart.Line v-else />
                 <Chart.Crosshair />
                 <Chart.Tooltip />
                 <Chart.Legend
-                  v-if="cards[card.id].series.length > 1"
+                  v-if="seriesOf(card.id).length > 1"
                   total
                 />
               </Chart>
             </ChartCard.Content>
-            <ChartCard.ResizeHandle :aria-label="'Resize ' + cards[card.id].title" />
+            <ChartCard.ResizeHandle :aria-label="'Resize ' + cardOf(card.id).title" />
           </ChartCard>
         </DashboardGrid.Item>
       </DashboardGrid>
@@ -520,4 +495,132 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { BarListItem } from '@aziontech/webkit/bar-list'
+
+import type { ConfigurableDashboardSeries } from './configurable-dashboard.vue'
+
+export const sampleLabels: string[] = [
+  '11:00',
+  '13:00',
+  '15:00',
+  '17:00',
+  '19:00',
+  '21:00',
+  '23:00',
+  '01:00',
+  '03:00',
+  '05:00',
+  '07:00',
+  '09:00'
+]
+
+export const sampleSeries: ConfigurableDashboardSeries = {
+  requests: [
+    {
+      id: 'requests',
+      name: 'Requests',
+      values: [
+        2029738, 1799252, 1910217, 1633835, 1757364, 1722765, 2157932, 2151290, 2283541, 2397218,
+        2545994, 2347243
+      ]
+    }
+  ],
+  regions: [
+    {
+      id: 'South America',
+      name: 'South America',
+      values: [9820000]
+    },
+    {
+      id: 'North America',
+      name: 'North America',
+      values: [7410000]
+    },
+    {
+      id: 'Europe',
+      name: 'Europe',
+      values: [4960000]
+    },
+    {
+      id: 'Asia',
+      name: 'Asia',
+      values: [2230000]
+    },
+    {
+      id: 'Oceania',
+      name: 'Oceania',
+      values: [610000]
+    }
+  ],
+  transfer: [
+    {
+      id: 'out',
+      name: 'Out',
+      values: [
+        7464097327, 8703777359, 8853256007, 10189608468, 10484778433, 10611102405, 9993797117,
+        9768346098, 10386911277, 8642195236, 7365365394, 8004529693
+      ]
+    },
+    {
+      id: 'in',
+      name: 'In',
+      values: [
+        1991543196, 1861411304, 1899395715, 1528384777, 1319208897, 1269798165, 1261414828,
+        1391471001, 1417213338, 1614716457, 1979668469, 2070880025
+      ]
+    }
+  ],
+  errors: [
+    {
+      id: '4xx',
+      name: '4xx',
+      values: [13707, 15864, 14544, 16239, 19681, 24625, 22235, 22216, 22808, 17486, 16275, 15501]
+    },
+    {
+      id: '5xx',
+      name: '5xx',
+      values: [8144, 8724, 9890, 8837, 7067, 7731, 5015, 3592, 4017, 3975, 5911, 7275]
+    }
+  ],
+  latency: [
+    {
+      id: 'p95',
+      name: 'p95',
+      values: [166, 167, 151, 172, 200, 191, 205, 208, 205, 182, 165, 175]
+    }
+  ]
+}
+
+export const sampleSources: BarListItem[] = [
+  {
+    id: 'web-app-prod',
+    name: 'web-app-prod',
+    value: 11420000
+  },
+  {
+    id: 'payments-api',
+    name: 'payments-api',
+    value: 6240000
+  },
+  {
+    id: 'storefront-checkout',
+    name: 'storefront-checkout',
+    value: 4910000
+  },
+  {
+    id: 'marketing-site',
+    name: 'marketing-site',
+    value: 2380000
+  },
+  {
+    id: 'status-page',
+    name: 'status-page',
+    value: 860000
+  }
+]
 ```

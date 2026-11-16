@@ -16,9 +16,9 @@ The async-action pattern, and the standard for every build and deploy screen. A 
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.
 
-The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-right' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region.
+The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-end' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region.
 
-The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Error the permanent failure toast and Success the success toast; leaving the page dismisses the story's toast so the next story starts clean.
+The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Error the permanent failure toast and Success the success toast; leaving the page dismisses the toast so the next story starts clean.
 
 ## When to use
 
@@ -38,7 +38,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 
 ### A. Actions — `Button` (required)
 
-**Deploy**, the `EmptyState` action, starts the run and shows `loading` while it runs; the outcome `Alert`s carry Edit and Redeploy.
+**Deploy**, the `EmptyState` action, emits `deploy`; the outcome `Alert`s carry Edit and Redeploy, which emit `edit` and `redeploy`, and the success `Alert` adds Open service.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -52,9 +52,62 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 
 `bordered`, the deploy glyph, a title, one sentence and **Deploy** as its only action. It gives way to the logs card once a run starts.
 
+### E. Outcome — `Alert` (error and success only)
+
+Under the heading, with a scale-in entrance: `severity="danger"` with the `error` text and Edit and Redeploy when the run failed, `severity="success"` naming the address and the attempts with Edit, Redeploy and Open service when it is live.
+
+### F. Deployment logs — `Card`, `StatusIndicator`, `LogViewer`, `ToggleGroup` (running and error only)
+
+A flush `Card` titled Deployment holding `LogViewer.Steps` over the `steps` prop. While the run is in flight the header carries a loading `StatusIndicator` (Building), the logs header counts the finished steps and names the running one, and a progress bar runs along the bottom edge. After a failure the header carries a `ToggleGroup` for the Phased or Complete view, the logs header a danger `Tag` naming the failed step, the failed step opens, and the skipped steps say where the run stopped.
+
+## Data
+
+The block takes the run through props and emits every action; it fetches nothing and runs no timer. `AsyncSubmitStep`, `AsyncSubmitDeployment` and `AsyncSubmitProps` are exported from `async-submit.vue`, and `sample.ts` holds the running and failed steps, the failure reason and the deployment the variants pass.
+
+| Prop           | Type                    | What it does                                                                                                |
+| -------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `loading`      | `boolean`               | A run is in flight: the heading reads Deploying, the logs card streams and the progress toast shows.        |
+| `error`        | `string`                | Why the run failed, in the danger `Alert`; the heading reads Failed and the permanent failure toast shows.  |
+| `errorSummary` | `string`                | One line for the failure toast; left empty, the toast names the failed step.                                |
+| `deployment`   | `AsyncSubmitDeployment` | The finished run (`domain`, `attempts`): the heading reads Deployed and the success `Alert` and toast show. |
+| `steps`        | `AsyncSubmitStep[]`     | The steps of the current or the failed run, with their log lines; `[]` by default.                          |
+
+With none of them set the block is Idle. `loading` wins over `error`, and `error` over `deployment`, so a redeploy after a failure reads Deploying.
+
+| Event          | Payload   | When                                                   |
+| -------------- | --------- | ------------------------------------------------------ |
+| `deploy`       | `(event)` | Deploy in the idle `EmptyState`.                       |
+| `redeploy`     | `(event)` | Redeploy in an outcome `Alert` or toast.               |
+| `edit`         | `(event)` | Edit in an outcome `Alert` or toast; the toast closes. |
+| `open-service` | `(event)` | Open service in the success `Alert`.                   |
+
+To go live, keep the run in a store that outlives the page and pass its state:
+
+```vue
+<script setup lang="ts">
+  import AsyncSubmit from './async-submit.vue'
+
+  const run = useDeployRun('web-app')
+</script>
+
+<template>
+  <AsyncSubmit
+    :loading="run.running"
+    :error="run.error ?? ''"
+    :deployment="run.deployment"
+    :steps="run.steps"
+    @deploy="run.start"
+    @redeploy="run.start"
+    @edit="openSettings"
+  />
+</template>
+```
+
+Then delete `sample.ts`; the variants are the only files that import it.
+
 ## Do
 
-- Keep the run, its timer and its outcome outside the page component (a small module-scope store), so leaving the page never cancels it or loses the result.
+- Keep the run and its outcome outside the page component (a small module-scope store) and pass its state in, so leaving the page never cancels it or loses the result.
 - Show progress as a `loading` toast (no duration, not closable) that follows the user through the app while the run lasts.
 - Report the end wherever the user is, on success and on failure. A failure toast is permanent (`duration: 0`) and `closable`; a success toast is `closable` with the default 6 second duration.
 - Raise the toasts through `toast` only; the app mounts the region once (`ToastPlugin` or one `Toaster` at its root), so the page body never renders a `Toaster`.
@@ -94,10 +147,10 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 
 ## States
 
-- Idle: nothing running; the heading reads Idle and the `EmptyState` offers Deploy.
-- Running: mid-run; the heading reads Deploying, the logs card streams under the Building status and the progress toast reads `Deploying web-app…`.
-- Error: the routing rules were refused; the heading reads Failed, the danger `Alert` carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs stay open on the failed step.
-- Success: the run is live; the heading reads Deployed, the success `Alert` names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.
+- Idle: no prop set, nothing running; the heading reads Idle and the `EmptyState` offers Deploy.
+- Running: `loading` with the running `steps`; the heading reads Deploying, the logs card streams under the Building status and the progress toast reads `Deploying web-app…`.
+- Error: `error` and the failed `steps`, the routing rules were refused; the heading reads Failed, the danger `Alert` carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs stay open on the failed step.
+- Success: `deployment` is set, the run is live; the heading reads Deployed, the success `Alert` names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.
 
 ## Related
 
@@ -119,55 +172,163 @@ Each variant is the same screen in another state: `get_block("state/async-submit
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import LogViewer, {
+    type LogViewerStep,
+    type LogViewerStepsView
+  } from '@aziontech/webkit/log-viewer'
   import PageHeader from '@aziontech/webkit/page-header'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, onBeforeUnmount, ref } from 'vue'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  interface StatusTag {
+  /** Where the run stands, read from the props. */
+  export type AsyncSubmitStatus = 'idle' | 'running' | 'error' | 'success'
+
+  /** A label and color for a status tag. */
+  export interface AsyncSubmitTag {
+    /** Tag text. */
     label: string
+    /** Tag color. */
     severity: TagSeverity
   }
 
+  /** One step of the deployment logs. */
+  export interface AsyncSubmitStep extends LogViewerStep {
+    /** A tag beside the step name, such as Failed or Skipped. */
+    tag?: AsyncSubmitTag
+  }
+
+  /** The finished deployment, shown in the success Alert. */
+  export interface AsyncSubmitDeployment {
+    /** The address the service answers on. */
+    domain: string
+    /** How many runs it took. */
+    attempts: number
+  }
+
+  export interface AsyncSubmitProps {
+    /** A run is in flight: the heading reads Deploying and the logs card streams the steps. */
+    loading?: boolean
+    /** Why the run failed, shown in the danger Alert with Edit and Redeploy. */
+    error?: string
+    /** One line for the failure toast; left empty, the toast names the failed step. */
+    errorSummary?: string
+    /** The finished run: the heading reads Deployed and the success Alert names the address. */
+    deployment?: AsyncSubmitDeployment
+    /** The steps of the current or the failed run, streamed in the logs card. */
+    steps?: AsyncSubmitStep[]
+  }
+
+  const props = withDefaults(defineProps<AsyncSubmitProps>(), {
+    loading: false,
+    error: '',
+    errorSummary: '',
+    deployment: undefined,
+    steps: () => []
+  })
+
+  const emit = defineEmits<{
+    deploy: [event: MouseEvent]
+    redeploy: [event: MouseEvent]
+    edit: [event: MouseEvent]
+    'open-service': [event: MouseEvent]
+  }>()
+
   const REPO = { name: 'web-app', scope: 'acme' }
+  const RUN_TOAST = 'async-submit-run'
+  const logViews = [
+    { label: 'Phased', value: 'phased' },
+    { label: 'Complete', value: 'complete' }
+  ]
 
-  const status = ref('idle')
-  const running = computed(() => status.value === 'running')
+  const status = computed<AsyncSubmitStatus>(() => {
+    if (props.loading) return 'running'
+    if (props.error) return 'error'
+    if (props.deployment) return 'success'
+    return 'idle'
+  })
 
-  const statusTag = computed<StatusTag>(() => {
+  const statusTag = computed<AsyncSubmitTag>(() => {
     if (status.value === 'running') return { label: 'Deploying', severity: 'info' }
     if (status.value === 'error') return { label: 'Failed', severity: 'danger' }
     if (status.value === 'success') return { label: 'Deployed', severity: 'success' }
     return { label: 'Idle', severity: 'neutral' }
   })
 
-  const RUN_TOAST = 'async-submit-run'
-  let runTimer: ReturnType<typeof setTimeout> | undefined
+  const runningStep = computed(() => props.steps.find((step) => step.status === 'running'))
+  const failedStep = computed(() => props.steps.find((step) => step.status === 'error'))
+  const doneCount = computed(() => props.steps.filter((step) => step.status === 'success').length)
+  const failedTitle = computed(() => failedStep.value?.title.toLowerCase() ?? '')
 
-  const deploy = () => {
-    if (running.value) return
-    status.value = 'running'
-    toast.loading(`Deploying ${REPO.name}…`, {
-      id: RUN_TOAST,
-      description: `${REPO.scope}/${REPO.name}. It keeps running if you leave.`
-    })
-    clearTimeout(runTimer)
-    runTimer = setTimeout(() => {
-      status.value = 'success'
-      toast.success(`${REPO.name} is live.`, {
-        id: RUN_TOAST,
-        description: `It is available at ${REPO.name}.example.com.`,
-        closable: true
-      })
-    }, 25000)
+  const logViewer = ref<LogViewerStepsView>('phased')
+  const openStep = ref<string | undefined>()
+  watch(
+    () => (status.value === 'running' ? runningStep.value?.id : failedStep.value?.id),
+    (next) => {
+      openStep.value = next
+    },
+    { immediate: true }
+  )
+
+  const stepTag = (key: string) => props.steps.find((step) => step.id === key)?.tag
+
+  const edit = (event: MouseEvent) => {
+    toast.dismiss(RUN_TOAST)
+    emit('edit', event)
   }
 
-  onBeforeUnmount(() => {
-    clearTimeout(runTimer)
-    toast.dismiss(RUN_TOAST)
-  })
+  const redeploy = (event: MouseEvent) => emit('redeploy', event)
+
+  const deploy = (event: MouseEvent) => {
+    if (props.loading) return
+    emit('deploy', event)
+  }
+
+  const reportRunning = () =>
+    toast.loading(`Deploying ${REPO.name}…`, {
+      description: `${REPO.scope}/${REPO.name}. It keeps running if you leave.`,
+      id: RUN_TOAST
+    })
+
+  const reportFailure = () =>
+    toast.error(`${REPO.name} wasn't deployed.`, {
+      description: props.errorSummary || `${failedStep.value?.title ?? 'The deploy'} failed.`,
+      id: RUN_TOAST,
+      duration: 0,
+      closable: true,
+      actions: [
+        { label: 'Edit', onClick: edit },
+        { label: 'Redeploy', onClick: redeploy }
+      ]
+    })
+
+  const reportSuccess = (deployment: AsyncSubmitDeployment) =>
+    toast.success(`${REPO.name} is live.`, {
+      description: `It is available at ${deployment.domain}.`,
+      id: RUN_TOAST,
+      closable: true,
+      actions: [
+        { label: 'Edit', onClick: edit },
+        { label: 'Redeploy', onClick: redeploy }
+      ]
+    })
+
+  const report = (next: AsyncSubmitStatus) => {
+    if (next === 'running') reportRunning()
+    else if (next === 'error') reportFailure()
+    else if (next === 'success' && props.deployment) reportSuccess(props.deployment)
+  }
+
+  onMounted(() => report(status.value))
+  watch(status, report)
+
+  onBeforeUnmount(() => toast.dismiss(RUN_TOAST))
 </script>
 
 <template>
@@ -187,7 +348,147 @@ Each variant is the same screen in another state: `get_block("state/async-submit
         </template>
       </PageHeader>
 
-      <div class="layout-section-start">
+      <div
+        v-if="status === 'error'"
+        key="status-failed"
+        class="[--popup-origin:top] layout-section-start animate-popup-scale-in motion-reduce:animate-none"
+      >
+        <Alert
+          severity="danger"
+          :label="error"
+        >
+          <template #actions>
+            <div class="flex items-center gap-(--spacing-xs)">
+              <Button
+                label="Edit"
+                variant="ghost"
+                size="medium"
+                @click="edit"
+              />
+              <Button
+                label="Redeploy"
+                variant="secondary"
+                size="medium"
+                icon="ai ai-refresh"
+                @click="redeploy"
+              />
+            </div>
+          </template>
+        </Alert>
+      </div>
+
+      <div
+        v-else-if="status === 'success' && deployment"
+        key="status-live"
+        class="[--popup-origin:top] layout-section-start animate-popup-scale-in motion-reduce:animate-none"
+      >
+        <Alert
+          severity="success"
+          :label="`${REPO.name} is live at ${deployment.domain}. It took ${deployment.attempts} attempt${deployment.attempts > 1 ? 's' : ''}.`"
+        >
+          <template #actions>
+            <div class="flex items-center gap-(--spacing-xs)">
+              <Button
+                label="Edit"
+                variant="ghost"
+                size="medium"
+                @click="edit"
+              />
+              <Button
+                label="Redeploy"
+                variant="ghost"
+                size="medium"
+                icon="ai ai-refresh"
+                @click="redeploy"
+              />
+              <Button
+                label="Open service"
+                variant="secondary"
+                size="medium"
+                @click="emit('open-service', $event)"
+              />
+            </div>
+          </template>
+        </Alert>
+      </div>
+
+      <div
+        v-if="status === 'running' || (status === 'error' && steps.length)"
+        class="layout-section-start"
+      >
+        <Card :padded="false">
+          <template #header>
+            <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
+            <StatusIndicator
+              v-if="status === 'running'"
+              loading
+              severity="info"
+              label="Building"
+            />
+            <ToggleGroup
+              v-else
+              v-model="logViewer"
+              :options="logViews"
+              class="shrink-0"
+              aria-label="Log view"
+            />
+          </template>
+
+          <template #default>
+            <LogViewer.Steps
+              v-model:view="logViewer"
+              v-model:open-step="openStep"
+              :steps="steps"
+              :copyable="status !== 'running'"
+              :view-switch="false"
+              :progress="status === 'running'"
+            >
+              <template #header>
+                <p class="shrink-0 text-heading-2xs text-(--text-default)">Logs</p>
+                <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
+                  <template v-if="status === 'running'">
+                    <span class="shrink-0 text-label-sm text-(--text-default)"
+                      >{{ doneCount }}/{{ steps.length }} steps</span
+                    >
+                    <span
+                      v-if="runningStep"
+                      class="truncate text-label-sm text-(--text-muted)"
+                      >{{ runningStep.title }}</span
+                    >
+                  </template>
+                  <Tag
+                    v-else
+                    :label="`Failed on ${failedTitle}`"
+                    severity="danger"
+                  />
+                </div>
+              </template>
+              <template #step-meta="{ step }">
+                <Tag
+                  v-if="stepTag(step.id)"
+                  v-bind="stepTag(step.id)"
+                  size="small"
+                />
+              </template>
+              <template
+                v-if="status === 'error'"
+                #step-empty="{ step }"
+              >
+                {{
+                  step.status === 'skipped'
+                    ? `Never ran. The deployment stopped at ${failedTitle}.`
+                    : 'No log lines yet.'
+                }}
+              </template>
+            </LogViewer.Steps>
+          </template>
+        </Card>
+      </div>
+
+      <div
+        v-if="status === 'idle'"
+        class="layout-section-start"
+      >
         <EmptyState
           bordered
           icon="ai ai-cloud-upload"
@@ -200,7 +501,6 @@ Each variant is the same screen in another state: `get_block("state/async-submit
               variant="primary"
               size="medium"
               icon="ai ai-play"
-              :loading="running"
               @click="deploy"
             />
           </template>
@@ -209,4 +509,366 @@ Each variant is the same screen in another state: `get_block("state/async-submit
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { AsyncSubmitDeployment, AsyncSubmitStep } from './async-submit.vue'
+
+export const sampleRunningSteps: AsyncSubmitStep[] = [
+  {
+    id: 'token',
+    title: 'Access token',
+    description: 'Deploy token created and added to the CLI',
+    status: 'success',
+    duration: '3s',
+    lines: [
+      {
+        id: '0',
+        time: '13:47:33',
+        type: 'success',
+        message: '[TASK] - #. Deploy started successfully!'
+      },
+      {
+        id: '1',
+        time: '13:47:33',
+        type: 'text',
+        message: '[TASK] - #. Creating access token!'
+      },
+      {
+        id: '2',
+        time: '13:47:35',
+        type: 'text',
+        message: '[TASK] - #. Adding token to the CLI!'
+      },
+      {
+        id: '3',
+        time: '13:47:36',
+        type: 'success',
+        message: '[TASK] - #. Token added successfully!'
+      }
+    ]
+  },
+  {
+    id: 'clone',
+    title: 'Clone template',
+    description: 'Template cloned into the GitHub scope',
+    status: 'success',
+    duration: '4s',
+    lines: [
+      {
+        id: '0',
+        time: '13:47:37',
+        type: 'text',
+        message: '[TASK] - # Current directory: vue/vue3-vite-static/'
+      },
+      { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
+      {
+        id: '2',
+        time: '13:47:39',
+        type: 'text',
+        message: 'Receiving objects: 100% (312/312), 1.14 MiB'
+      },
+      {
+        id: '3',
+        time: '13:47:40',
+        type: 'success',
+        message: '[TASK] - #. Template cloned successfully!'
+      }
+    ]
+  },
+  {
+    id: 'install',
+    title: 'Install dependencies',
+    description: '478 packages installed',
+    status: 'running',
+    duration: '',
+    lines: [
+      { id: '0', time: '13:47:41', type: 'text', message: '[TASK] - # npm install' },
+      {
+        id: '1',
+        time: '13:47:45',
+        type: 'text',
+        message: 'npm warn deprecated inflight@1.0.6: this module is not supported'
+      }
+    ]
+  },
+  {
+    id: 'build',
+    title: 'Build',
+    description: 'Project built into dist/',
+    status: 'pending',
+    duration: '',
+    lines: []
+  },
+  {
+    id: 'upload',
+    title: 'Upload',
+    description: 'Static assets uploaded to storage',
+    status: 'pending',
+    duration: '',
+    lines: []
+  },
+  {
+    id: 'service',
+    title: 'Service',
+    description: 'Service and cache settings created',
+    status: 'pending',
+    duration: '',
+    lines: []
+  },
+  {
+    id: 'rules',
+    title: 'Routing rules',
+    description: 'Request rules and cache policies applied',
+    status: 'pending',
+    duration: '',
+    lines: []
+  },
+  {
+    id: 'deploy',
+    title: 'Publish',
+    description: 'Repository wired and the deploy published',
+    status: 'pending',
+    duration: '',
+    lines: []
+  }
+]
+
+export const sampleFailedSteps: AsyncSubmitStep[] = [
+  {
+    id: 'token',
+    title: 'Access token',
+    description: 'Deploy token created and added to the CLI',
+    status: 'success',
+    duration: '3s',
+    lines: [
+      {
+        id: '0',
+        time: '13:47:33',
+        type: 'success',
+        message: '[TASK] - #. Deploy started successfully!'
+      },
+      {
+        id: '1',
+        time: '13:47:33',
+        type: 'text',
+        message: '[TASK] - #. Creating access token!'
+      },
+      {
+        id: '2',
+        time: '13:47:35',
+        type: 'text',
+        message: '[TASK] - #. Adding token to the CLI!'
+      },
+      {
+        id: '3',
+        time: '13:47:36',
+        type: 'success',
+        message: '[TASK] - #. Token added successfully!'
+      }
+    ]
+  },
+  {
+    id: 'clone',
+    title: 'Clone template',
+    description: 'Template cloned into the GitHub scope',
+    status: 'success',
+    duration: '4s',
+    lines: [
+      {
+        id: '0',
+        time: '13:47:37',
+        type: 'text',
+        message: '[TASK] - # Current directory: vue/vue3-vite-static/'
+      },
+      { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
+      {
+        id: '2',
+        time: '13:47:39',
+        type: 'text',
+        message: 'Receiving objects: 100% (312/312), 1.14 MiB'
+      },
+      {
+        id: '3',
+        time: '13:47:40',
+        type: 'success',
+        message: '[TASK] - #. Template cloned successfully!'
+      }
+    ]
+  },
+  {
+    id: 'install',
+    title: 'Install dependencies',
+    description: '478 packages installed',
+    status: 'success',
+    duration: '9s',
+    lines: [
+      { id: '0', time: '13:47:41', type: 'text', message: '[TASK] - # npm install' },
+      {
+        id: '1',
+        time: '13:47:45',
+        type: 'text',
+        message: 'npm warn deprecated inflight@1.0.6: this module is not supported'
+      },
+      {
+        id: '2',
+        time: '13:47:48',
+        type: 'text',
+        message: 'added 478 packages, and audited 479 packages in 9s'
+      },
+      {
+        id: '3',
+        time: '13:47:48',
+        type: 'text',
+        level: 'warn',
+        message: '24 vulnerabilities (5 low, 7 moderate, 10 high, 2 critical)'
+      },
+      {
+        id: '4',
+        time: '13:47:49',
+        type: 'success',
+        message: '[TASK] - # Dependencies installed successfully!'
+      }
+    ]
+  },
+  {
+    id: 'build',
+    title: 'Build',
+    description: 'Project built into dist/',
+    status: 'success',
+    duration: '8s',
+    lines: [
+      { id: '0', time: '13:47:50', type: 'text', message: '[TASK] - # Build template' },
+      {
+        id: '1',
+        time: '13:47:52',
+        type: 'text',
+        message: 'vite v6.0.7 building for production…'
+      },
+      {
+        id: '2',
+        time: '13:47:56',
+        type: 'text',
+        message: '214 modules transformed · dist/assets 1.2 MB'
+      },
+      {
+        id: '3',
+        time: '13:47:57',
+        type: 'success',
+        message: '[TASK] - # Build completed successfully!'
+      }
+    ]
+  },
+  {
+    id: 'upload',
+    title: 'Upload',
+    description: 'Static assets uploaded to storage',
+    status: 'success',
+    duration: '5s',
+    lines: [
+      {
+        id: '0',
+        time: '13:47:58',
+        type: 'text',
+        message: '[TASK] - # Uploading static assets to storage'
+      },
+      { id: '1', time: '13:47:59', type: 'text', message: 'create mode 100644 src/main.js' },
+      {
+        id: '2',
+        time: '13:47:59',
+        type: 'text',
+        message: 'create mode 100644 src/router/index.js'
+      },
+      {
+        id: '3',
+        time: '13:48:01',
+        type: 'text',
+        message: '[TASK] - # 24 files uploaded (1.2 MB)'
+      },
+      {
+        id: '4',
+        time: '13:48:02',
+        type: 'success',
+        message: '[TASK] - # Upload completed successfully!'
+      }
+    ]
+  },
+  {
+    id: 'service',
+    title: 'Service',
+    description: 'Service and cache settings created',
+    status: 'success',
+    duration: '5s',
+    lines: [
+      { id: '0', time: '13:48:03', type: 'text', message: '[TASK] - # Creating service' },
+      {
+        id: '1',
+        time: '13:48:05',
+        type: 'text',
+        message: '[TASK] - # Cache Setting __DEFAULT__ created'
+      },
+      {
+        id: '2',
+        time: '13:48:07',
+        type: 'success',
+        message: '[TASK] - # Service created successfully!'
+      }
+    ]
+  },
+  {
+    id: 'rules',
+    title: 'Routing rules',
+    description: 'Request rules and cache policies applied',
+    status: 'error',
+    duration: '4s',
+    tag: { label: 'Failed', severity: 'danger' },
+    lines: [
+      {
+        id: '0',
+        time: '13:48:08',
+        type: 'text',
+        message: '[TASK] - # Configuring routing rules and cache policies'
+      },
+      {
+        id: '1',
+        time: '13:48:09',
+        type: 'text',
+        level: 'warn',
+        message: '[ERROR] - # Routing rules rejected the configuration'
+      },
+      {
+        id: '2',
+        time: '13:48:10',
+        type: 'text',
+        message: "409 Conflict: rule 'default-cache' already bound to this domain"
+      },
+      {
+        id: '3',
+        time: '13:48:11',
+        type: 'text',
+        level: 'warn',
+        message: '[ERROR] - # Deploy finalized with errors. Nothing was published.'
+      }
+    ]
+  },
+  {
+    id: 'deploy',
+    title: 'Publish',
+    description: 'Repository wired and the deploy published',
+    status: 'skipped',
+    duration: '',
+    tag: { label: 'Skipped', severity: 'neutral' },
+    lines: []
+  }
+]
+
+export const sampleError =
+  'The template built, its assets were uploaded and the service was created, but a rule with the same behavior is already bound to this domain, so the routing rules were refused. Nothing was published, so a redeploy starts from the same commit.'
+
+export const sampleDeployment: AsyncSubmitDeployment = {
+  domain: 'web-app.example.com',
+  attempts: 1
+}
 ```

@@ -51,7 +51,7 @@
    "type": "ChartColor",
    "default": "1",
    "required": "false",
-   "doc": "Hue of the mark: a categorical slot (1–6), `other`, or a status."
+   "doc": "Hue of the mark: a categorical slot (1–8), `other`, or a status."
   },
   {
    "name": "size",

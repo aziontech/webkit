@@ -57,8 +57,8 @@
   },
   {
    "name": "variant",
-   "type": "'default' | 'danger'",
-   "default": "'default'",
+   "type": "'primary' | 'danger'",
+   "default": "'primary'",
    "required": "false",
    "doc": "`danger` for an action that cannot be undone: the approve button turns destructive."
   },

@@ -26,6 +26,9 @@
    "file": "blocks/account/billing/variants/payment-methods.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type {\n  BillingInvoice,\n  BillingPaymentInformation,\n  BillingPaymentMethod,\n  BillingSubscription\n} from './billing.vue'\n\nexport const sampleUpdatedAt = new Date(Date.UTC(2026, 10, 10, 12))\n\nexport const sampleSubscription: BillingSubscription = {\n  plan: 'Pro',\n  startedAt: new Date(Date.UTC(2023, 0, 25)),\n  nextChargeAt: new Date(Date.UTC(2026, 11, 1)),\n  nextChargeAmount: 184.2\n}\n\nexport const samplePaymentInformation: BillingPaymentInformation = {\n  email: 'billing@example.com',\n  autoRenewal: true,\n  address: '100 Market Street, Suite 400, San Francisco, CA 94105',\n  taxId: ''\n}\n\nexport const samplePaymentMethods: BillingPaymentMethod[] = [\n  {\n    id: 'pm-1',\n    holder: 'Jane Doe',\n    brand: 'Mastercard',\n    last4: '1702',\n    expires: '02 / 2027',\n    default: true\n  },\n  {\n    id: 'pm-2',\n    holder: 'Acme Inc.',\n    brand: 'Visa',\n    last4: '4431',\n    expires: '11 / 2026',\n    default: false\n  },\n  {\n    id: 'pm-3',\n    holder: 'John Smith',\n    brand: 'American Express',\n    last4: '9008',\n    expires: '05 / 2028',\n    default: false\n  }\n]\n\nconst usage = [\n  184.2, 171.95, 168.4, 159.1, 162.75, 148.3, 139.9, 131.25, 126.6, 118.4, 104.15, 96.8\n]\nconst seatsByMonth = [8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 4, 4]\n\nexport const sampleInvoices: BillingInvoice[] = usage.map((amount, index) => ({\n  id: `INV-A${12401 - index}`,\n  number: 132 - index,\n  plan: 'Pro',\n  cycle: 'Monthly',\n  seats: seatsByMonth[index],\n  billedAt: new Date(Date.UTC(2026, 10 - index, 1)),\n  amount,\n  brand: 'Mastercard',\n  paymentMethod: 'Mastercard •••• 1702',\n  status: index === 3 ? 'Refunded' : 'Paid'\n}))"
+ },
  "sfcFile": "blocks/account/billing/billing.vue",
  "guidelinesFile": "blocks/account/billing/guidelines.md"
 }

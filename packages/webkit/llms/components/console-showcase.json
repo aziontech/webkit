@@ -37,8 +37,8 @@
    "doc": "What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height."
   },
   {
-   "name": "titleVariant",
-   "type": "SectionTitleVariant",
+   "name": "titleAlign",
+   "type": "SectionTitleAlign",
    "default": "'center'",
    "required": "false",
    "doc": "Layout of the headline block."

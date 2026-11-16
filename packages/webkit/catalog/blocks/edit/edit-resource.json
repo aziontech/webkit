@@ -56,6 +56,9 @@
    "file": "blocks/edit/edit-resource/variants/protocols.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { EditResourceProject } from './edit-resource.vue'\n\nexport const sampleProject: EditResourceProject = {\n  name: 'web-app',\n  active: true,\n  modules: {\n    compression: true,\n    caching: true,\n    device_detection: false,\n    custom_code: true,\n    image_optimization: false,\n    load_balancing: false,\n    web_socket_proxy: false\n  }\n}"
+ },
  "sfcFile": "blocks/edit/edit-resource/edit-resource.vue",
  "guidelinesFile": "blocks/edit/edit-resource/guidelines.md"
 }

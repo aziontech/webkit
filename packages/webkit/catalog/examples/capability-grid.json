@@ -12,7 +12,7 @@
   },
   {
    "name": "Left title",
-   "summary": "`titleKind: 'start'` sets the section title at the start edge over the grid; the capabilities stay `h3` under the band's `h2`.",
+   "summary": "`titleAlign: 'start'` sets the section title at the start edge over the grid; the capabilities stay `h3` under the band's `h2`.",
    "file": "examples/capability-grid/title-start.vue"
   }
  ]

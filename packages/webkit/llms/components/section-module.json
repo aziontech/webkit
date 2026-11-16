@@ -56,8 +56,8 @@
    "doc": "Short uppercase overline rendered above the headline."
   },
   {
-   "name": "variant",
-   "type": "SectionModuleVariant",
+   "name": "align",
+   "type": "SectionModuleAlign",
    "default": "'start'",
    "required": "false",
    "doc": "Layout of the default header row."
@@ -103,8 +103,8 @@
    "file": "examples/section-module/default.vue"
   },
   {
-   "name": "Variants",
-   "file": "examples/section-module/variants.vue"
+   "name": "Alignments",
+   "file": "examples/section-module/alignments.vue"
   },
   {
    "name": "Divided",

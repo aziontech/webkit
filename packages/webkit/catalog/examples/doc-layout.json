@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The docs chrome around an article: section links and search in the sticky header, the docs tree with the theme switch at its foot, the article in the slot with headings tracked by the On this page rail, a call to action under the rail and the footer under the article. The document scrolls; the header and both rails stay in view.",
+   "summary": "The docs chrome around an article: section links and search in the sticky header, the docs tree with the theme switch at its foot, the article in the slot, whose anchored DocHeadings fill and drive the On this page rail on their own, a call to action under the rail and the footer under the article. The document scrolls; the header and both rails stay in view.",
    "file": "examples/doc-layout/default.vue"
   },
   {

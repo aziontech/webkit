@@ -36,7 +36,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `TrackerItem[]` | `[]` | false | One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block. |
+| `items` | `TrackerItem[]` | `[]` | false | One block per period, oldest first; each item is `{ id?: string; severity?: ChartSemanticSeverity; label: string }`. No severity renders a neutral no-data block. |
 | `loading` | `boolean` | `false` | false | Renders a Skeleton strip in place of the blocks. |
 | `error` | `string` | `''` | false | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens kept under forced colors) in place of the blocks. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the strip. |

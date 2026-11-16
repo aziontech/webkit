@@ -1,11 +1,11 @@
 # WafTuning (`view/waf-tuning`)
 
-> The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `Table.CellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `TableCellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/waf-tuning/waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/waf-tuning")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -38,9 +38,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `Input` (numeric; "Use a whole number." under it when it is not one), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
 
-### C. Matches table — `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Alert` (required)
+### C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 
-A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `Table.CellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
+A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `TableCellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
 ### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
@@ -48,7 +48,62 @@ A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says 
 
 ### E. Outcome — `Alert` (required)
 
-Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `state/form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+Allow rules emits `allow`; the page sets `allowing` while the request runs. Success (`allowing` turns off with no `allowError`) closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure (`allowError` set) keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `state/form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set).
+
+| Prop                  | Type                    | What it does                                                                                                                                                   |
+| --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `matches`             | `WafTuningMatch[]`      | The matched rules for the range; the minimum hits and the search filter them in the browser. Pass `[]` for a rule set with no match yet.                       |
+| `v-model:range`       | `'1h' \| '24h' \| '7d'` | The time range; refetch the matches when it changes. Defaults to `24h`.                                                                                        |
+| `loading`             | `boolean`               | The matches are loading: the settings and actions disable and the table shows skeleton rows.                                                                   |
+| `error`               | `string`                | Why the matches failed to load, shown in the danger `Alert` with Retry that replaces the table.                                                                |
+| `defaultSelectedKeys` | `string[]`              | Rule ids checked when the block opens.                                                                                                                         |
+| `defaultOpen`         | `boolean`               | Opens the allow dialog on the checked rules.                                                                                                                   |
+| `allowing`            | `boolean`               | The allow request is in flight: the dialog locks and Allow rules spins. When it turns off with no `allowError`, the dialog closes and the success toast shows. |
+| `allowError`          | `string`                | Why the allowed rules were not created, shown at the top of the dialog; the submit reads Try again.                                                            |
+
+| Event          | Payload                        | When                               |
+| -------------- | ------------------------------ | ---------------------------------- |
+| `refresh`      | `(event)`                      | Refresh.                           |
+| `retry`        | `(event)`                      | Retry in the load error alert.     |
+| `allow`        | `(event, { matches, reason })` | Allow rules with a reason entered. |
+| `update:range` | `(range)`                      | A new time range was picked.       |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import WafTuning, { type WafTuningAllowPayload } from './waf-tuning.vue'
+
+  const range = ref<'1h' | '24h' | '7d'>('24h')
+  const { data, pending, error, refresh } = useWafMatches(range)
+  const { run: createAllowed, pending: allowing, error: allowFailed } = useCreateAllowedRules()
+  const allow = (_event: Event, payload: WafTuningAllowPayload) => createAllowed(payload)
+</script>
+
+<template>
+  <WafTuning
+    v-model:range="range"
+    :matches="data ?? []"
+    :loading="pending"
+    :error="error ? 'Couldn\'t load the matched requests. Check your connection and retry.' : ''"
+    :allowing="allowing"
+    :allow-error="
+      allowFailed
+        ? 'The allowed rules weren\'t created. Nothing changed in the rule set; try again.'
+        : ''
+    "
+    @refresh="refresh"
+    @retry="refresh"
+    @allow="allow"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -86,12 +141,12 @@ Success closes the dialog, clears the selection, moves focus to the matched-requ
 
 ## States
 
-- Default: five rules matched in the last 24 hours, minimum 100 hits.
-- Allow: two rules checked and the dialog open.
-- AllowError: the dialog with the failure `Alert` and Try again.
-- Empty: no match yet, no settings.
-- Loading: settings disabled, skeleton rows.
-- LoadError: the matched requests did not load; a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.
+- Default: the matches passed in `matches` (the sample when it is left out), minimum 100 hits.
+- Allow: `defaultSelectedKeys` checks two rules and `defaultOpen` opens the dialog.
+- AllowError: the same dialog with `allowError` set: the failure `Alert` and Try again.
+- Empty: `matches` is `[]`: no match yet, no settings.
+- Loading: `loading`: settings disabled, skeleton rows.
+- LoadError: `error` set: a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.
 
 ## Related
 
@@ -132,78 +187,82 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import Table from '@aziontech/webkit/table'
+  import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, ref } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
-  interface Match {
+  import { sampleMatches } from './sample'
+
+  /** A time range the matches are counted over. */
+  export type WafTuningRange = '1h' | '24h' | '7d'
+
+  /** One rule of the rule set and the requests it matched. */
+  export interface WafTuningMatch {
+    /** The rule id, the row key. */
     ruleId: string
+    /** The threat the rule detects. */
     threat: string
+    /** How many requests it matched in the range. */
     hits: number
+    /** The addresses it matched most. */
     ips: string[]
+    /** The countries it matched most. */
     countries: string[]
+    /** The paths it matched on; one allowed rule is created per path. */
     paths: string[]
   }
 
-  const RANGES = [
-    { value: '1h', label: 'Last hour', factor: 0.04 },
-    { value: '24h', label: 'Last 24 hours', factor: 1 },
-    { value: '7d', label: 'Last 7 days', factor: 6.2 }
-  ]
+  /** What Allow rules sends. */
+  export interface WafTuningAllowPayload {
+    /** The checked rules. */
+    matches: WafTuningMatch[]
+    /** Why their requests are legitimate. */
+    reason: string
+  }
 
-  const MATCHES: Match[] = [
-    {
-      ruleId: '1005',
-      threat: 'SQL injection',
-      hits: 18432,
-      ips: ['203.0.113.41', '198.51.100.7', '203.0.113.90', '192.0.2.15'],
-      countries: ['United States', 'Brazil', 'Germany'],
-      paths: ['/api/v1/search', '/api/v1/login', '/checkout']
-    },
-    {
-      ruleId: '1015',
-      threat: 'Unwanted access',
-      hits: 6210,
-      ips: ['198.51.100.22', '203.0.113.8'],
-      countries: ['United States', 'Netherlands'],
-      paths: ['/admin', '/wp-login.php']
-    },
-    {
-      ruleId: '1201',
-      threat: 'Cross-site scripting',
-      hits: 2288,
-      ips: ['192.0.2.31', '198.51.100.12', '203.0.113.77'],
-      countries: ['Singapore', 'India'],
-      paths: ['/v2/comments', '/v2/profile', '/search']
-    },
-    {
-      ruleId: '1302',
-      threat: 'File upload',
-      hits: 934,
-      ips: ['192.0.2.77'],
-      countries: ['Ireland'],
-      paths: ['/api/v1/upload']
-    },
-    {
-      ruleId: '1402',
-      threat: 'Evading tricks',
-      hits: 120,
-      ips: ['203.0.113.5', '198.51.100.61'],
-      countries: ['Chile'],
-      paths: ['/v2/graphql']
-    }
-  ]
+  export interface WafTuningProps {
+    /** The matched rules for the range. Pass an empty list for a rule set with no match yet. Left out, the sample renders. */
+    matches?: WafTuningMatch[]
+    /** The matches are loading: the settings and actions disable and the table shows skeleton rows. */
+    loading?: boolean
+    /** Why the matches could not load; a danger alert with Retry takes the table's place. */
+    error?: string
+    /** Rule ids checked when the block opens. */
+    defaultSelectedKeys?: string[]
+    /** Opens the allow dialog on the checked rules when the block opens. */
+    defaultOpen?: boolean
+    /** The allow request is in flight: the dialog locks and Allow rules spins. */
+    allowing?: boolean
+    /** Why the allowed rules were not created, shown at the top of the dialog. */
+    allowError?: string
+  }
 
-  const INITIAL_ROWS = MATCHES
-  const INITIAL_LOADING = false
-  const INITIAL_SELECTION: Record<string, boolean> = {}
-  const ALLOW_ON_START = false
-  const FAILED_ON_START = false
-  const ALLOW_FAILURES = 0
-  const LOAD_FAILED_ON_START = false
+  const props = withDefaults(defineProps<WafTuningProps>(), {
+    matches: undefined,
+    loading: false,
+    error: '',
+    defaultSelectedKeys: () => [],
+    defaultOpen: false,
+    allowing: false,
+    allowError: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    allow: [event: Event, payload: WafTuningAllowPayload]
+  }>()
+
+  const range = defineModel<WafTuningRange>('range', { default: '24h' })
+
+  const RANGES: { value: WafTuningRange; label: string }[] = [
+    { value: '1h', label: 'Last hour' },
+    { value: '24h', label: 'Last 24 hours' },
+    { value: '7d', label: 'Last 7 days' }
+  ]
 
   const columns: TableColumn[] = [
     {
@@ -220,12 +279,16 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
     { accessorKey: 'paths', header: 'Top paths', grow: 3 }
   ]
 
-  const range = ref('24h')
+  const source = computed<WafTuningMatch[]>(
+    () => props.matches ?? (props.loading || props.error ? [] : sampleMatches)
+  )
+  const loading = computed(() => props.loading)
+  const loadFailed = computed(() => props.error !== '')
+  const noMatches = computed(() => !props.loading && !loadFailed.value && !source.value.length)
+
   const threshold = ref('100')
   const search = ref('')
-  const loading = ref(INITIAL_LOADING)
-  const loadFailed = ref(LOAD_FAILED_ON_START)
-  const selection = ref({ ...INITIAL_SELECTION })
+  const selectedKeys = ref<string[]>([...props.defaultSelectedKeys])
   const sorting = ref([{ id: 'hits', desc: true }])
 
   const rangeLabel = (value: string) => RANGES.find((item) => item.value === value)?.label ?? ''
@@ -237,43 +300,26 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
     () => threshold.value.trim() !== '' && !/^\d+$/.test(threshold.value.trim())
   )
 
-  const rows = computed(() => {
-    const factor = RANGES.find((item) => item.value === range.value)?.factor ?? 1
-    return INITIAL_ROWS.map((row) => ({ ...row, hits: Math.round(row.hits * factor) })).filter(
-      (row) => row.hits >= minimumHits.value
-    )
-  })
-  const selected = computed(() => rows.value.filter((row) => selection.value[row.ruleId]))
+  const rows = computed(() => source.value.filter((row) => row.hits >= minimumHits.value))
+  const selected = computed(() =>
+    rows.value.filter((row) => selectedKeys.value.includes(row.ruleId))
+  )
   const pathCount = computed(() => selected.value.reduce((sum, row) => sum + row.paths.length, 0))
   const { formatNumber } = useLocale()
 
   const formatHits = (value: number) => formatNumber(value)
 
-  const tuningTableEl = ref<TableExposed<Match> | null>(null)
+  const tuningTableEl = ref<TableExposed<WafTuningMatch> | null>(null)
   const resultsEl = ref<HTMLElement | null>(null)
   const exportCsv = () => tuningTableEl.value?.exportCsv({ filename: 'waf-tuning.csv' })
 
-  const refresh = () => {
-    if (loading.value) return
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
-
-  const retry = () => {
-    loadFailed.value = false
-    refresh()
-  }
-
-  const allowOpen = ref(ALLOW_ON_START)
-  const allowFailed = ref(FAILED_ON_START)
+  const allowOpen = ref(props.defaultOpen)
+  const allowFailed = ref(props.allowError !== '')
   const reason = ref('')
   const submitted = ref(false)
-  const allowing = ref(false)
+  const allowing = computed(() => props.allowing)
   const reasonMissing = computed(() => submitted.value && !reason.value.trim())
   const reasonFieldEl = ref<HTMLElement | null>(null)
-  let failuresLeft = ALLOW_FAILURES
 
   const openAllow = () => {
     reason.value = ''
@@ -282,31 +328,41 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
     allowOpen.value = true
   }
 
-  const allow = () => {
+  const allow = (event: Event) => {
     submitted.value = true
     if (allowing.value) return
     if (!reason.value.trim()) {
       nextTick(() => reasonFieldEl.value?.querySelector('textarea')?.focus())
       return
     }
-    allowing.value = true
     allowFailed.value = false
-    setTimeout(() => {
-      allowing.value = false
-      if (failuresLeft > 0) {
-        failuresLeft -= 1
+    emit('allow', event, { matches: [...selected.value], reason: reason.value.trim() })
+  }
+
+  watch(
+    () => props.allowError,
+    (next) => {
+      allowFailed.value = next !== ''
+    }
+  )
+
+  watch(
+    () => props.allowing,
+    (now, before) => {
+      if (!before || now) return
+      if (props.allowError) {
         allowFailed.value = true
         return
       }
       const created = pathCount.value
       allowOpen.value = false
-      selection.value = {}
+      selectedKeys.value = []
       setTimeout(() => resultsEl.value?.focus(), 0)
       toast.success(`${created} allowed ${created === 1 ? 'rule' : 'rules'} created.`, {
         description: 'Requests that match them are no longer blocked by this rule set.'
       })
-    }, 900)
-  }
+    }
+  )
 </script>
 
 <template>
@@ -344,7 +400,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
         aria-label="Matched requests"
       >
         <div
-          v-if="INITIAL_ROWS.length"
+          v-if="!noMatches"
           class="flex min-w-0 flex-wrap items-end gap-(--spacing-sm)"
         >
           <div class="w-full sm:w-48">
@@ -406,7 +462,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
               size="medium"
               aria-label="Refresh matched requests"
               :disabled="loading"
-              @click="refresh"
+              @click="(event: MouseEvent) => emit('refresh', event)"
             />
           </Tooltip>
         </div>
@@ -414,9 +470,9 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
         <Alert
           v-if="loadFailed"
           severity="danger"
-          label="Couldn't load the matched requests. Check your connection and retry."
+          :label="error"
           action-label="Retry"
-          @action="retry"
+          @action="(event: MouseEvent) => emit('retry', event)"
         />
         <Card
           v-else
@@ -424,7 +480,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
         >
           <template #default>
             <EmptyState
-              v-if="!INITIAL_ROWS.length"
+              v-if="noMatches"
               icon="ai ai-shield"
               title="No matches yet"
               description="This rule set has not matched any request. Matches appear here as traffic arrives."
@@ -433,7 +489,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
               v-else
               ref="tuningTableEl"
               v-model:global-filter="search"
-              v-model:row-selection="selection"
+              v-model:selected-keys="selectedKeys"
               v-model:sorting="sorting"
               :data="rows"
               :columns="columns"
@@ -451,19 +507,19 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
                 <span class="tabular-nums">{{ formatHits(value) }}</span>
               </template>
               <template #cell-ips="{ value }">
-                <Table.CellTags
+                <TableCellTags
                   :items="value"
                   :noun="{ one: 'IP address', other: 'IP addresses' }"
                 />
               </template>
               <template #cell-countries="{ value }">
-                <Table.CellTags
+                <TableCellTags
                   :items="value"
                   :noun="{ one: 'country', other: 'countries' }"
                 />
               </template>
               <template #cell-paths="{ value }">
-                <Table.CellTags
+                <TableCellTags
                   :items="value"
                   :noun="{ one: 'path', other: 'paths' }"
                 />
@@ -523,7 +579,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
               <Alert
                 v-if="allowFailed"
                 severity="danger"
-                label="The allowed rules weren't created. Nothing changed in the rule set; try again."
+                :label="allowError"
               />
               <DialogDescription>
                 Requests these rules matched on their paths will no longer be blocked. One allowed
@@ -592,4 +648,53 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
     </Dialog>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { WafTuningMatch } from './waf-tuning.vue'
+
+export const sampleMatches: WafTuningMatch[] = [
+  {
+    ruleId: '1005',
+    threat: 'SQL injection',
+    hits: 18432,
+    ips: ['203.0.113.41', '198.51.100.7', '203.0.113.90', '192.0.2.15'],
+    countries: ['United States', 'Brazil', 'Germany'],
+    paths: ['/api/v1/search', '/api/v1/login', '/checkout']
+  },
+  {
+    ruleId: '1015',
+    threat: 'Unwanted access',
+    hits: 6210,
+    ips: ['198.51.100.22', '203.0.113.8'],
+    countries: ['United States', 'Netherlands'],
+    paths: ['/admin', '/wp-login.php']
+  },
+  {
+    ruleId: '1201',
+    threat: 'Cross-site scripting',
+    hits: 2288,
+    ips: ['192.0.2.31', '198.51.100.12', '203.0.113.77'],
+    countries: ['Singapore', 'India'],
+    paths: ['/v2/comments', '/v2/profile', '/search']
+  },
+  {
+    ruleId: '1302',
+    threat: 'File upload',
+    hits: 934,
+    ips: ['192.0.2.77'],
+    countries: ['Ireland'],
+    paths: ['/api/v1/upload']
+  },
+  {
+    ruleId: '1402',
+    threat: 'Evading tricks',
+    hits: 120,
+    ips: ['203.0.113.5', '198.51.100.61'],
+    countries: ['Chile'],
+    paths: ['/v2/graphql']
+  }
+]
 ```

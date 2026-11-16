@@ -38,7 +38,7 @@
   "One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.",
   "Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.",
   "Set `completed` on a tutorial from what the product recorded (the `complete` event), not from a click.",
-  "Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation."
+  "Bind `v-model:activeKey` and `v-model:step` and persist them when a tutorial must survive a navigation."
  ],
  "props": [
   {

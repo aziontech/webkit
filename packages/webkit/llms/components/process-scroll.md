@@ -1,6 +1,6 @@
 # Process Scroll
 
-> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleVariant: 'center'`. From the design sample's site `ProcessScroll`.
+> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleAlign: 'center'`. From the design sample's site `ProcessScroll`.
 
 - Import: `import ProcessScroll from '@aziontech/webkit/process-scroll'`
 - Category: section · Surface: site · Structure: monolithic
@@ -9,7 +9,7 @@
 ## When to use
 
 - Use ProcessScroll for numbered stage cards; set `pinned` to pin them under the header while they slide.
-- How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-variant="center"`).
+- How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-align="center"`).
 
 ## Do
 
@@ -32,7 +32,7 @@
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `eyebrow` | `string` | `''` | false | Eyebrow above the title. |
-| `titleVariant` | `SectionTitleVariant` | `'split'` | false | Alignment of the section title over the card row. |
+| `titleAlign` | `SectionTitleAlign` | `'split'` | false | Alignment of the section title over the card row. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Paragraph beside the headline. |
 | `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'` | false | Column span of the paragraph: `wide` runs it across the middle column too. |
@@ -121,7 +121,7 @@
 <template>
   <ProcessScroll
     pinned
-    title-variant="center"
+    title-align="center"
     title="Hiring process"
     description="Every role goes through the same five stages, from the first request to the offer."
     :steps="steps"

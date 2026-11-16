@@ -1,11 +1,11 @@
 # ScanResultsDashboard (`dashboard/scan-results-dashboard`)
 
-> A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated DataTable: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `DataTable`, `Table.CellStatus`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated DataTable: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `DataTable`, `TableCellStatus`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/dashboard/scan-results-dashboard/scan-results-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/scan-results-dashboard")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [Table](../../components/table.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -100,9 +100,57 @@ size and dates in tabular figures.
 `No verdict yet` / `Verdicts appear once the first item finishes its analysis.` in the donut,
 `No items yet` in sources, and `No matching items` / `Change the search or the filters.` in the table.
 
-### O. Verdict — `Table.CellStatus` (required)
+### O. Verdict — `TableCellStatus` (required)
 
 The verdict of each row, in the same hue as its donut slice.
+
+### P. Load failure — `Alert` (required)
+
+With `error` set, a danger `Alert` with Retry takes the place of each card's content, naming what did
+not load (`Couldn't load verdicts.`); the tiles read as a dash.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `ScanResultsSubmission`, `ScanResultsSummary`, `ScanResultsVerdict`, `ScanResultsSource` and `ScanResultsDashboardProps` are exported from `scan-results-dashboard.vue`, and `sample.ts` holds the sample figures, splits and submissions the block renders when a data prop is left out (and never while `loading` or `error` is set).
+
+| Prop           | Type                      | What it does                                                                                                  |
+| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `summary`      | `ScanResultsSummary`      | The six tiles and the Held and flagged card. All zeros is the nothing-submitted state.                        |
+| `verdictSplit` | `ChartSeries[]`           | One donut slice per verdict, each with its status color. `[]` shows `No verdict yet`.                         |
+| `sources`      | `BarListItem[]`           | One bar per source. `[]` shows `No items yet`.                                                                |
+| `submissions`  | `ScanResultsSubmission[]` | The Submissions rows; the search and the filters run on them in the browser. `[]` shows `No items yet`.       |
+| `loading`      | `boolean`                 | The period is loading: every region shows its Skeleton.                                                       |
+| `error`        | `string`                  | Why the request failed, shown after `Couldn't load verdicts.` (sources, submissions…) in each danger `Alert`. |
+
+| Event     | Payload   | When                              |
+| --------- | --------- | --------------------------------- |
+| `refresh` | `(event)` | Refresh in the page heading.      |
+| `retry`   | `(event)` | Retry in any of the error alerts. |
+
+The `Held deliveries` and `Early delivery alerts` links point at `#held` and `#alerts`; point them at your pages. To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import ScanResultsDashboard from './scan-results-dashboard.vue'
+
+  const { data, pending, error, refresh } = useScanResults()
+</script>
+
+<template>
+  <ScanResultsDashboard
+    :summary="data?.summary"
+    :verdict-split="data?.verdicts ?? []"
+    :sources="data?.sources ?? []"
+    :submissions="data?.submissions ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -136,9 +184,9 @@ The verdict of each row, in the same hue as its donut slice.
 ## States
 
 - Default: results with verdicts, exceptions and the submissions table.
-- Loading: tiles, donut and bar list render their own `Skeleton`, the summary card holds Skeleton lines and the table shows Skeleton rows.
-- Empty: nothing submitted yet; tiles read zero, verdicts and sources keep their box with an `EmptyState`, and the Submissions card drops the filters and the table for one `EmptyState`.
-- Error: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Loading: `loading`; tiles, donut and bar list render their own `Skeleton`, the summary card holds Skeleton lines and the table shows Skeleton rows.
+- Empty: nothing submitted yet (a zero `summary`, `[]` splits and `submissions`); tiles read zero, verdicts and sources keep their box with an `EmptyState`, and the Submissions card drops the filters and the table for one `EmptyState`.
+- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
@@ -159,6 +207,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Card from '@aziontech/webkit/card'
   import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'
@@ -174,130 +223,147 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
-  type Verdict = 'clean' | 'suspicious' | 'flagged' | 'pending'
-  type SubmissionSource = 'inline' | 'api' | 'upload' | 'scheduled'
+  import { sampleSources, sampleSubmissions, sampleSummary, sampleVerdictSplit } from './sample'
 
-  interface Submission {
+  /** The verdict an item received; pending while its analysis runs. */
+  export type ScanResultsVerdict = 'clean' | 'suspicious' | 'flagged' | 'pending'
+  /** Where an item came from. */
+  export type ScanResultsSource = 'inline' | 'api' | 'upload' | 'scheduled'
+
+  /** One row of the Submissions table. */
+  export interface ScanResultsSubmission {
+    /** Stable key. */
     id: string
+    /** File name. */
     name: string
-    verdict: Verdict
+    /** The verdict it received. */
+    verdict: ScanResultsVerdict
+    /** What the analysis classified it as; a dash while pending. */
     category: string
+    /** Risk score from 0 to 100; null while pending. */
     score: number | null
+    /** File type in words. */
     type: string
+    /** Size in bytes. */
     size: number
-    source: SubmissionSource
+    /** Where it came from. */
+    source: ScanResultsSource
+    /** Who sent it first. */
     submitter: string
+    /** When it was seen last, as an ISO-like date and time. */
     lastSeen: string
   }
 
-  const loading = false
+  /** The figures of the summary tiles and the Held and flagged card. */
+  export interface ScanResultsSummary {
+    /** Items sent for analysis in the period. */
+    submitted: number
+    /** Items waiting for a verdict now. */
+    analyzing: number
+    /** Items submitted in the last 24 hours. */
+    last24h: number
+    /** Items flagged as harmful. */
+    flagged: number
+    /** Deliveries held for a verdict now. */
+    held: number
+    /** Deliveries held in the last 24 hours. */
+    heldLast24h: number
+    /** Early delivery alerts nobody has reviewed. */
+    alertsOpen: number
+    /** Every early delivery alert in the period. */
+    alertsTotal: number
+  }
+
+  export interface ScanResultsDashboardProps {
+    /** The summary figures. Left out, the sample renders. */
+    summary?: ScanResultsSummary
+    /** One donut slice per verdict. Left out, the sample renders. */
+    verdictSplit?: ChartSeries[]
+    /** One bar per source. Left out, the sample renders. */
+    sources?: BarListItem[]
+    /** The Submissions rows, filtered in the browser; pass an empty list when none exists. Left out, the sample renders. */
+    submissions?: ScanResultsSubmission[]
+    /** The period is loading. */
+    loading?: boolean
+    /** Why the period could not load, shown after what did not load in each danger alert. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<ScanResultsDashboardProps>(), {
+    summary: undefined,
+    verdictSplit: undefined,
+    sources: undefined,
+    submissions: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+  }>()
+
+  const blocked = computed(() => props.loading || props.error !== '')
+  const summary = computed<ScanResultsSummary | null>(
+    () => props.summary ?? (blocked.value ? null : sampleSummary)
+  )
+  const verdictSplit = computed(
+    () => props.verdictSplit ?? (blocked.value ? [] : sampleVerdictSplit)
+  )
+  const sourceItems = computed(() => props.sources ?? (blocked.value ? [] : sampleSources))
+  const submissions = computed(() => props.submissions ?? (blocked.value ? [] : sampleSubmissions))
+
   const search = ref('')
   const status = ref('all')
   const verdict = ref('all')
   const source = ref('all')
 
-  const summary = {
-    held: 9,
-    heldLast24h: 46,
-    alertsOpen: 3,
-    alertsTotal: 14
-  }
-
-  const figures = [
+  const figures: {
+    key: keyof ScanResultsSummary
+    label: string
+    description: string
+  }[] = [
     {
-      id: 'submitted',
+      key: 'submitted',
       label: 'Submitted',
-      description: 'Items sent for analysis in the selected period.',
-      value: 18420
+      description: 'Items sent for analysis in the selected period.'
     },
     {
-      id: 'analyzing',
+      key: 'analyzing',
       label: 'In analysis',
-      description: 'Items waiting for a verdict right now.',
-      value: 37
+      description: 'Items waiting for a verdict right now.'
     },
     {
-      id: 'last-24h',
+      key: 'last24h',
       label: 'Last 24 hours',
-      description: 'Items submitted in the last 24 hours.',
-      value: 1284
+      description: 'Items submitted in the last 24 hours.'
     },
     {
-      id: 'flagged',
+      key: 'flagged',
       label: 'Flagged',
-      description: 'Items whose verdict marks them as harmful.',
-      value: 212
+      description: 'Items whose verdict marks them as harmful.'
     },
     {
-      id: 'held',
+      key: 'held',
       label: 'Held for a verdict',
-      description: 'Deliveries paused until their analysis finishes.',
-      value: 9
+      description: 'Deliveries paused until their analysis finishes.'
     },
     {
-      id: 'alerts',
+      key: 'alertsOpen',
       label: 'Open alerts',
-      description: 'Items delivered before they were flagged that nobody has reviewed yet.',
-      value: 3
+      description: 'Items delivered before they were flagged that nobody has reviewed yet.'
     }
   ]
 
-  const verdictSplit: ChartSeries[] = [
-    {
-      id: 'clean',
-      name: 'Clean',
-      color: 'success',
-      values: [16930]
-    },
-    {
-      id: 'suspicious',
-      name: 'Suspicious',
-      color: 'warning',
-      values: [1241]
-    },
-    {
-      id: 'flagged',
-      name: 'Flagged',
-      color: 'danger',
-      values: [212]
-    },
-    {
-      id: 'pending',
-      name: 'Pending',
-      color: 'other',
-      values: [37]
-    }
-  ]
-
-  const sourceItems: BarListItem[] = [
-    {
-      id: 'inline',
-      name: 'Inline scan',
-      value: 11640
-    },
-    {
-      id: 'api',
-      name: 'API submission',
-      value: 4380
-    },
-    {
-      id: 'upload',
-      name: 'Manual upload',
-      value: 1620
-    },
-    {
-      id: 'scheduled',
-      name: 'Scheduled scan',
-      value: 780
-    }
-  ]
-
-  const verdicts: Record<Verdict, { label: string; severity: TagSeverity; color: ChartColor }> = {
+  const verdicts: Record<
+    ScanResultsVerdict,
+    { label: string; severity: TagSeverity; color: ChartColor }
+  > = {
     clean: {
       label: 'Clean',
       severity: 'success',
@@ -320,7 +386,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
     }
   }
 
-  const sources: Record<SubmissionSource, string> = {
+  const sourceLabels: Record<ScanResultsSource, string> = {
     inline: 'Inline scan',
     api: 'API submission',
     upload: 'Manual upload',
@@ -384,157 +450,10 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
     }
   ]
 
-  const submissions: Submission[] = [
-    {
-      id: 'submission-01',
-      name: 'quarterly-report.pdf',
-      verdict: 'clean',
-      category: 'Document',
-      score: 4,
-      type: 'PDF',
-      size: 2480000,
-      source: 'inline',
-      submitter: 'ava.wilson',
-      lastSeen: '2026-11-10 13:42'
-    },
-    {
-      id: 'submission-02',
-      name: 'installer-setup.exe',
-      verdict: 'flagged',
-      category: 'Trojan',
-      score: 96,
-      type: 'Executable',
-      size: 18300000,
-      source: 'inline',
-      submitter: 'mark.chen',
-      lastSeen: '2026-11-10 13:18'
-    },
-    {
-      id: 'submission-03',
-      name: 'invoice-0425.docm',
-      verdict: 'suspicious',
-      category: 'Macro',
-      score: 71,
-      type: 'Office document',
-      size: 184000,
-      source: 'upload',
-      submitter: 'lisa.martin',
-      lastSeen: '2026-11-10 12:57'
-    },
-    {
-      id: 'submission-04',
-      name: 'build-artifacts.zip',
-      verdict: 'pending',
-      category: '—',
-      score: null,
-      type: 'Archive',
-      size: 46700000,
-      source: 'api',
-      submitter: 'ci-runner',
-      lastSeen: '2026-11-10 12:51'
-    },
-    {
-      id: 'submission-05',
-      name: 'team-photo.png',
-      verdict: 'clean',
-      category: 'Image',
-      score: 1,
-      type: 'Image',
-      size: 3120000,
-      source: 'inline',
-      submitter: 'sam.okafor',
-      lastSeen: '2026-11-10 12:33'
-    },
-    {
-      id: 'submission-06',
-      name: 'update-helper.dll',
-      verdict: 'flagged',
-      category: 'Ransomware',
-      score: 99,
-      type: 'Library',
-      size: 912000,
-      source: 'api',
-      submitter: 'ci-runner',
-      lastSeen: '2026-11-10 11:46'
-    },
-    {
-      id: 'submission-07',
-      name: 'pricing-model.xlsx',
-      verdict: 'clean',
-      category: 'Spreadsheet',
-      score: 6,
-      type: 'Office document',
-      size: 640000,
-      source: 'upload',
-      submitter: 'priya.nair',
-      lastSeen: '2026-11-10 11:20'
-    },
-    {
-      id: 'submission-08',
-      name: 'run-me.sh',
-      verdict: 'suspicious',
-      category: 'Script',
-      score: 63,
-      type: 'Script',
-      size: 4200,
-      source: 'inline',
-      submitter: 'david.kim',
-      lastSeen: '2026-11-10 10:58'
-    },
-    {
-      id: 'submission-09',
-      name: 'meeting-notes.txt',
-      verdict: 'clean',
-      category: 'Text',
-      score: 0,
-      type: 'Text',
-      size: 12800,
-      source: 'scheduled',
-      submitter: 'scheduler',
-      lastSeen: '2026-11-10 10:12'
-    },
-    {
-      id: 'submission-10',
-      name: 'browser-extension.crx',
-      verdict: 'suspicious',
-      category: 'Adware',
-      score: 58,
-      type: 'Extension',
-      size: 1740000,
-      source: 'inline',
-      submitter: 'mark.chen',
-      lastSeen: '2026-11-10 09:47'
-    },
-    {
-      id: 'submission-11',
-      name: 'backup-2026-11.tar.gz',
-      verdict: 'pending',
-      category: '—',
-      score: null,
-      type: 'Archive',
-      size: 128000000,
-      source: 'scheduled',
-      submitter: 'scheduler',
-      lastSeen: '2026-11-10 09:30'
-    },
-    {
-      id: 'submission-12',
-      name: 'driver-package.msi',
-      verdict: 'clean',
-      category: 'Installer',
-      score: 9,
-      type: 'Installer',
-      size: 22600000,
-      source: 'api',
-      submitter: 'ci-runner',
-      lastSeen: '2026-11-10 08:54'
-    }
-  ]
-
   const submissionColumns: TableColumn[] = [
     {
-      id: 'name',
       accessorKey: 'name',
+      id: 'name',
       header: 'Name',
       align: 'start',
       sortable: true,
@@ -542,64 +461,64 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       grow: 2
     },
     {
-      id: 'verdict',
       accessorKey: 'verdict',
+      id: 'verdict',
       header: 'Verdict',
       align: 'start',
       sortable: true,
       minWidth: 112
     },
     {
-      id: 'category',
       accessorKey: 'category',
+      id: 'category',
       header: 'Category',
       align: 'start',
       sortable: true,
       minWidth: 112
     },
     {
-      id: 'score',
       accessorKey: 'score',
+      id: 'score',
       header: 'Score',
       align: 'end',
       sortable: true,
       minWidth: 80
     },
     {
-      id: 'type',
       accessorKey: 'type',
+      id: 'type',
       header: 'Type',
       align: 'start',
       sortable: true,
       minWidth: 128
     },
     {
-      id: 'size',
       accessorKey: 'size',
+      id: 'size',
       header: 'Size',
       align: 'end',
       sortable: true,
       minWidth: 88
     },
     {
-      id: 'source',
       accessorKey: 'source',
+      id: 'source',
       header: 'Source',
       align: 'start',
       sortable: true,
       minWidth: 128
     },
     {
-      id: 'submitter',
       accessorKey: 'submitter',
+      id: 'submitter',
       header: 'First submitter',
       align: 'start',
       sortable: true,
       minWidth: 128
     },
     {
-      id: 'lastSeen',
       accessorKey: 'lastSeen',
+      id: 'lastSeen',
       header: 'Last seen',
       align: 'start',
       sortable: true,
@@ -608,7 +527,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
   ]
 
   const rows = computed(() =>
-    submissions.filter(
+    submissions.value.filter(
       (row) =>
         (status.value === 'all' ||
           (status.value === 'analyzing') === (row.verdict === 'pending')) &&
@@ -655,6 +574,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
             variant="outline"
             size="medium"
             aria-label="Refresh"
+            @click="(event: MouseEvent) => emit('refresh', event)"
           />
         </template>
       </PageHeader>
@@ -665,12 +585,12 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
         >
           <li
             v-for="figure in figures"
-            :key="figure.id"
+            :key="figure.key"
             class="flex min-w-0 flex-col"
           >
             <StatTile
               :label="figure.label"
-              :value="figure.value"
+              :value="error ? null : (summary?.[figure.key] ?? null)"
               :format-value="formatters.compact"
               :loading="loading"
             >
@@ -693,7 +613,15 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load verdicts. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <DonutChart
+              v-else
               :series="verdictSplit"
               :format-value="formatters.compact"
               size="small"
@@ -716,7 +644,15 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load sources. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <BarList
+              v-else
               :items="sourceItems"
               :format-value="formatters.compact"
               empty-title="No items yet"
@@ -729,8 +665,15 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
         <div class="lg:col-span-4">
           <Card title="Held and flagged">
             <template #default>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="`Couldn't load held and flagged submissions. ${error}`"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <div
-                v-if="loading"
+                v-else-if="loading || !summary"
                 aria-busy="true"
                 class="flex flex-col gap-(--spacing-sm)"
               >
@@ -793,8 +736,15 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load submissions. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <div
-              v-if="loading || submissions.length"
+              v-else-if="loading || submissions.length"
               class="flex min-w-0 flex-col gap-(--spacing-sm)"
             >
               <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
@@ -911,7 +861,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                   </div>
                 </template>
                 <template #cell-verdict="{ row }">
-                  <Table.CellStatus
+                  <TableCellStatus
                     :label="verdicts[row.verdict].label"
                     :severity="verdicts[row.verdict].severity"
                   />
@@ -923,7 +873,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                   <span class="tabular-nums">{{ formatters.size(row.size) }}</span>
                 </template>
                 <template #cell-source="{ row }">
-                  {{ sources[row.source] }}
+                  {{ sourceLabels[row.source] }}
                 </template>
                 <template #cell-lastSeen="{ row }">
                   <time
@@ -947,4 +897,232 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { BarListItem } from '@aziontech/webkit/bar-list'
+import type { ChartSeries } from '@aziontech/webkit/chart'
+
+import type { ScanResultsSubmission, ScanResultsSummary } from './scan-results-dashboard.vue'
+
+export const sampleSummary: ScanResultsSummary = {
+  submitted: 18420,
+  analyzing: 37,
+  last24h: 1284,
+  flagged: 212,
+  held: 9,
+  heldLast24h: 46,
+  alertsOpen: 3,
+  alertsTotal: 14
+}
+
+export const sampleEmptySummary: ScanResultsSummary = {
+  submitted: 0,
+  analyzing: 0,
+  last24h: 0,
+  flagged: 0,
+  held: 0,
+  heldLast24h: 0,
+  alertsOpen: 0,
+  alertsTotal: 0
+}
+
+export const sampleVerdictSplit: ChartSeries[] = [
+  {
+    id: 'clean',
+    name: 'Clean',
+    color: 'success',
+    values: [16930]
+  },
+  {
+    id: 'suspicious',
+    name: 'Suspicious',
+    color: 'warning',
+    values: [1241]
+  },
+  {
+    id: 'flagged',
+    name: 'Flagged',
+    color: 'danger',
+    values: [212]
+  },
+  {
+    id: 'pending',
+    name: 'Pending',
+    color: 'other',
+    values: [37]
+  }
+]
+
+export const sampleSources: BarListItem[] = [
+  {
+    id: 'inline',
+    name: 'Inline scan',
+    value: 11640
+  },
+  {
+    id: 'api',
+    name: 'API submission',
+    value: 4380
+  },
+  {
+    id: 'upload',
+    name: 'Manual upload',
+    value: 1620
+  },
+  {
+    id: 'scheduled',
+    name: 'Scheduled scan',
+    value: 780
+  }
+]
+
+export const sampleSubmissions: ScanResultsSubmission[] = [
+  {
+    id: 'submission-01',
+    name: 'quarterly-report.pdf',
+    verdict: 'clean',
+    category: 'Document',
+    score: 4,
+    type: 'PDF',
+    size: 2480000,
+    source: 'inline',
+    submitter: 'ava.wilson',
+    lastSeen: '2026-11-10 13:42'
+  },
+  {
+    id: 'submission-02',
+    name: 'installer-setup.exe',
+    verdict: 'flagged',
+    category: 'Trojan',
+    score: 96,
+    type: 'Executable',
+    size: 18300000,
+    source: 'inline',
+    submitter: 'mark.chen',
+    lastSeen: '2026-11-10 13:18'
+  },
+  {
+    id: 'submission-03',
+    name: 'invoice-0425.docm',
+    verdict: 'suspicious',
+    category: 'Macro',
+    score: 71,
+    type: 'Office document',
+    size: 184000,
+    source: 'upload',
+    submitter: 'lisa.martin',
+    lastSeen: '2026-11-10 12:57'
+  },
+  {
+    id: 'submission-04',
+    name: 'build-artifacts.zip',
+    verdict: 'pending',
+    category: '—',
+    score: null,
+    type: 'Archive',
+    size: 46700000,
+    source: 'api',
+    submitter: 'ci-runner',
+    lastSeen: '2026-11-10 12:51'
+  },
+  {
+    id: 'submission-05',
+    name: 'team-photo.png',
+    verdict: 'clean',
+    category: 'Image',
+    score: 1,
+    type: 'Image',
+    size: 3120000,
+    source: 'inline',
+    submitter: 'sam.okafor',
+    lastSeen: '2026-11-10 12:33'
+  },
+  {
+    id: 'submission-06',
+    name: 'update-helper.dll',
+    verdict: 'flagged',
+    category: 'Ransomware',
+    score: 99,
+    type: 'Library',
+    size: 912000,
+    source: 'api',
+    submitter: 'ci-runner',
+    lastSeen: '2026-11-10 11:46'
+  },
+  {
+    id: 'submission-07',
+    name: 'pricing-model.xlsx',
+    verdict: 'clean',
+    category: 'Spreadsheet',
+    score: 6,
+    type: 'Office document',
+    size: 640000,
+    source: 'upload',
+    submitter: 'priya.nair',
+    lastSeen: '2026-11-10 11:20'
+  },
+  {
+    id: 'submission-08',
+    name: 'run-me.sh',
+    verdict: 'suspicious',
+    category: 'Script',
+    score: 63,
+    type: 'Script',
+    size: 4200,
+    source: 'inline',
+    submitter: 'david.kim',
+    lastSeen: '2026-11-10 10:58'
+  },
+  {
+    id: 'submission-09',
+    name: 'meeting-notes.txt',
+    verdict: 'clean',
+    category: 'Text',
+    score: 0,
+    type: 'Text',
+    size: 12800,
+    source: 'scheduled',
+    submitter: 'scheduler',
+    lastSeen: '2026-11-10 10:12'
+  },
+  {
+    id: 'submission-10',
+    name: 'browser-extension.crx',
+    verdict: 'suspicious',
+    category: 'Adware',
+    score: 58,
+    type: 'Extension',
+    size: 1740000,
+    source: 'inline',
+    submitter: 'mark.chen',
+    lastSeen: '2026-11-10 09:47'
+  },
+  {
+    id: 'submission-11',
+    name: 'backup-2026-11.tar.gz',
+    verdict: 'pending',
+    category: '—',
+    score: null,
+    type: 'Archive',
+    size: 128000000,
+    source: 'scheduled',
+    submitter: 'scheduler',
+    lastSeen: '2026-11-10 09:30'
+  },
+  {
+    id: 'submission-12',
+    name: 'driver-package.msi',
+    verdict: 'clean',
+    category: 'Installer',
+    score: 9,
+    type: 'Installer',
+    size: 22600000,
+    source: 'api',
+    submitter: 'ci-runner',
+    lastSeen: '2026-11-10 08:54'
+  }
+]
 ```

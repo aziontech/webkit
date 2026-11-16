@@ -1,11 +1,11 @@
 # Billing (`account/billing`)
 
-> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `CurrencyAmount`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
+> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `CurrencyAmount`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `DataTable` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `TableCellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `DataTable` of cards (holder with a Default `Tag`, brand and last four, expiry, `TableCellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/billing/billing.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/billing")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CurrencyAmount](../../components/currency-amount.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [SectionHeader](../../components/section-header.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CurrencyAmount](../../components/currency-amount.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [SectionHeader](../../components/section-header.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -52,9 +52,9 @@ A `Card` whose header holds the `Subscription plan` heading and the outlined `Ch
 
 A small `SectionHeader` `Invoices` over the table-view controls row: `PropertyFilter` bound with `v-bind="propertyFilterProps"` (Invoice ID free text, Plan, Cycle and Status with options), then Refresh (`Refresh invoices`) and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 10, 25 or 50; columns), saved under `storageKey`.
 
-### G. Invoices table — `DataTable`, `Table`, `useCollection` (required)
+### G. Invoices table — `DataTable`, `TableCellActions`, `TableCellStatus`, `useCollection` (required)
 
-One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `CurrencyAmount`, Payment method with its plate, Status as `Table.CellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
+One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `CurrencyAmount`, Payment method with its plate, Status as `TableCellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
 
 ### H. No invoices and no match — `EmptyState` (conditional)
 
@@ -66,11 +66,64 @@ A `SectionHeader` with Update over a `Card` of four-column `KeyValueList`: Billi
 
 ### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on the Payment methods tab)
 
-A `SectionHeader` with Add payment method over a flush `Card` and a `DataTable` of cards: Card holder with a small success `Default` tag, Card as the brand plate and the last four, Expiration date, and `Table.CellActions` named after the card with `Set as default` and `Remove` as `DropdownMenu` options, both disabled on the default card. Set as default applies at once with a toast; Remove asks in a `ConfirmDialog` first.
+A `SectionHeader` with Add payment method over a flush `Card` and a `DataTable` of cards: Card holder with a small success `Default` tag, Card as the brand plate and the last four, Expiration date, and `TableCellActions` named after the card with `Set as default` and `Remove` as `DropdownMenu` options, both disabled on the default card. Set as default applies at once with a toast; Remove asks in a `ConfirmDialog` first.
 
 ### Outcomes — through `toast`
 
 Set as default and Remove end in a success toast that names the card. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `BillingProps`, `BillingInvoice`, `BillingPaymentMethod`, `BillingSubscription` and `BillingPaymentInformation` are exported from `billing.vue`, and `sample.ts` holds the sample plan, invoices, cards and payment information the block renders when a prop is left out (and never while `loading` or `error` is set).
+
+| Prop                 | Type                         | What it does                                                                                         |
+| -------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `invoices`           | `BillingInvoice[]`           | The invoices; the filter, the sort and the pages run on them in the browser. `[]` shows No invoices. |
+| `paymentMethods`     | `BillingPaymentMethod[]`     | The cards on file; the one with `default` is charged and named in the plan card.                     |
+| `subscription`       | `BillingSubscription`        | The plan name, its start date and the next charge's date and amount.                                 |
+| `paymentInformation` | `BillingPaymentInformation`  | Billing email, auto-renewal, billing address and Tax ID.                                             |
+| `updatedAt`          | `Date`                       | When the data was fetched, shown beside Refresh.                                                     |
+| `defaultQuery`       | `PropertyFilterQuery`        | The filter the invoices open with.                                                                   |
+| `tab`                | `BillingTab` (`v-model:tab`) | The active tab, `bills` or `payment-methods`.                                                        |
+| `loading`            | `boolean`                    | A request is in flight: skeletons in the plan card and the tables' loading rows.                     |
+| `error`              | `string`                     | Why the billing data failed to load, shown in the danger `Alert` with Retry that replaces the tab.   |
+
+| Event         | Payload           | When                                                                                  |
+| ------------- | ----------------- | ------------------------------------------------------------------------------------- |
+| `refresh`     | `(event)`         | Refresh, in the heading or the invoices controls.                                     |
+| `retry`       | `(event)`         | Retry in the error alert.                                                             |
+| `set-default` | `(event, method)` | Set as default in a card's menu; the table and the plan card already show the change. |
+| `remove`      | `(event, method)` | The remove dialog was confirmed; the card is already gone from the table.             |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import Billing from './billing.vue'
+
+  const { data, pending, error, refresh } = useBilling()
+  const loadError =
+    'Your billing data could not be loaded. Nothing was charged or changed; try again.'
+</script>
+
+<template>
+  <Billing
+    :invoices="data?.invoices ?? []"
+    :payment-methods="data?.paymentMethods ?? []"
+    :subscription="data?.subscription"
+    :payment-information="data?.paymentInformation"
+    :updated-at="data?.fetchedAt"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+    @set-default="(event, method) => setDefaultCard(method.id)"
+    @remove="(event, method) => removeCard(method.id)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -103,12 +156,12 @@ Set as default and Remove end in a success toast that names the card. This page 
 
 ## States
 
-- Default: the Bills tab with the Pro plan, the Enterprise upgrade card and twelve monthly invoices, with filter, refresh, export, preferences, sorting and paging wired.
-- Loading: the first load; skeletons in the plan card and the invoices table's loading rows.
-- Error: the billing data did not load; a danger Alert with Retry.
-- NoInvoices: no invoice yet; a flush empty state says when the first one appears.
-- NoMatch: a filter that matches no invoice; No matching invoices with Clear filters.
-- PaymentMethods: the Payment methods tab with payment information and three cards.
+- Default: the Bills tab (`tab` is `bills`) with the Pro plan, the Enterprise upgrade card and twelve monthly invoices, with filter, refresh, export, preferences, sorting and paging wired.
+- Loading: the first load (`loading`); skeletons in the plan card and the invoices table's loading rows.
+- Error: the billing data did not load (`error` is set); a danger Alert with the message and Retry.
+- NoInvoices: no invoice yet (`invoices` is `[]`); a flush empty state says when the first one appears.
+- NoMatch: a filter that matches no invoice (`defaultQuery` is Status = Overdue); No matching invoices with Clear filters.
+- PaymentMethods: the Payment methods tab (`tab` is `payment-methods`) with payment information and three cards.
 
 ## Related
 
@@ -150,7 +203,9 @@ Each variant is the same screen in another state: `get_block("account/billing", 
   import SectionHeader from '@aziontech/webkit/section-header'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -161,40 +216,128 @@ Each variant is the same screen in another state: `get_block("account/billing", 
     useCollection
   } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  type BillingTab = 'bills' | 'payment-methods'
-  type InvoiceStatus = 'Paid' | 'Refunded' | 'Overdue'
+  import {
+    sampleInvoices,
+    samplePaymentInformation,
+    samplePaymentMethods,
+    sampleSubscription,
+    sampleUpdatedAt
+  } from './sample'
 
-  interface Invoice {
+  /** The page's tabs. */
+  export type BillingTab = 'bills' | 'payment-methods'
+
+  /** How an invoice was settled. */
+  export type BillingInvoiceStatus = 'Paid' | 'Refunded' | 'Overdue'
+
+  /** How often the plan bills. */
+  export type BillingCycle = 'Monthly' | 'Yearly'
+
+  /** One row of the invoices table. */
+  export interface BillingInvoice {
+    /** Invoice ID, the row key and the PDF name. */
     id: string
+    /** Sequential invoice number. */
     number: number
+    /** Plan billed. */
     plan: string
-    cycle: 'Monthly' | 'Yearly'
+    /** Billing cycle. */
+    cycle: BillingCycle
+    /** Seats billed. */
     seats: number
+    /** When the invoice was issued. */
     billedAt: Date
+    /** Amount charged, in the account currency. */
     amount: number
+    /** Brand of the card charged, for its plate. */
     brand: string
+    /** The card charged, as brand and last four. */
     paymentMethod: string
-    status: InvoiceStatus
+    /** How it was settled. */
+    status: BillingInvoiceStatus
   }
 
-  interface PaymentMethod {
+  /** One card on file. */
+  export interface BillingPaymentMethod {
+    /** Stable key. */
     id: string
+    /** Name on the card. */
     holder: string
+    /** Card brand. */
     brand: string
+    /** Last four digits. */
     last4: string
+    /** Expiration, as month and year. */
     expires: string
+    /** Whether invoices are charged to it. */
     default: boolean
   }
 
-  const INITIAL_TAB: BillingTab = 'bills'
-  const INITIAL_QUERY: PropertyFilterQuery = { tokens: [], operation: 'and' }
-  const START_LOADING = false
-  const START_FAILED = false
-  const WITH_INVOICES = true
+  /** The current plan and its next charge. */
+  export interface BillingSubscription {
+    /** Plan name. */
+    plan: string
+    /** When the plan started. */
+    startedAt: Date
+    /** When the next charge runs. */
+    nextChargeAt: Date
+    /** What the next charge bills. */
+    nextChargeAmount: number
+  }
 
-  const UPDATED_AT = new Date(Date.UTC(2026, 10, 10, 12))
+  /** Where invoices go and whether the plan renews. */
+  export interface BillingPaymentInformation {
+    /** Email invoices are sent to. */
+    email: string
+    /** Whether the plan renews on its own. */
+    autoRenewal: boolean
+    /** Billing address, on one line. */
+    address: string
+    /** Tax ID; empty shows the empty-value marker. */
+    taxId: string
+  }
+
+  export interface BillingProps {
+    /** The invoices; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    invoices?: BillingInvoice[]
+    /** The cards on file. Left out, the sample renders. */
+    paymentMethods?: BillingPaymentMethod[]
+    /** The current plan. Left out, the sample renders. */
+    subscription?: BillingSubscription
+    /** Where invoices go. Left out, the sample renders. */
+    paymentInformation?: BillingPaymentInformation
+    /** When the data was fetched. Left out, the sample time renders. */
+    updatedAt?: Date
+    /** The filter the invoices open with. */
+    defaultQuery?: PropertyFilterQuery
+    /** A request is in flight: skeletons and loading rows. */
+    loading?: boolean
+    /** Why the billing data could not load; a danger alert with Retry replaces the tab. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<BillingProps>(), {
+    invoices: undefined,
+    paymentMethods: undefined,
+    subscription: undefined,
+    paymentInformation: undefined,
+    updatedAt: undefined,
+    defaultQuery: () => ({ tokens: [], operation: 'and' }),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'set-default': [event: Event, method: BillingPaymentMethod]
+    remove: [event: Event, method: BillingPaymentMethod]
+  }>()
+
+  const activeTab = defineModel<BillingTab>('tab', { default: 'bills' })
+
   const { formatDate: formatLocaleDate } = useLocale()
 
   const dateFormat = (value: Date | number | string) =>
@@ -217,73 +360,46 @@ Each variant is the same screen in another state: `get_block("account/billing", 
   const formatDate = (value: Date): string => dateFormat(value)
   const formatAmount = (value: number): string => value.toFixed(2)
 
-  const seedMethods: PaymentMethod[] = [
-    {
-      id: 'pm-1',
-      holder: 'Jane Doe',
-      brand: 'Mastercard',
-      last4: '1702',
-      expires: '02 / 2027',
-      default: true
-    },
-    {
-      id: 'pm-2',
-      holder: 'Acme Inc.',
-      brand: 'Visa',
-      last4: '4431',
-      expires: '11 / 2026',
-      default: false
-    },
-    {
-      id: 'pm-3',
-      holder: 'John Smith',
-      brand: 'American Express',
-      last4: '9008',
-      expires: '05 / 2028',
-      default: false
-    }
-  ]
+  const blocked = computed(() => props.loading || props.error !== '')
+  const updatedAt = computed(() => props.updatedAt ?? sampleUpdatedAt)
+  const subscription = computed(
+    () => props.subscription ?? (blocked.value ? undefined : sampleSubscription)
+  )
+  const paymentInformation = computed(
+    () => props.paymentInformation ?? (blocked.value ? undefined : samplePaymentInformation)
+  )
+  const invoiceSource = computed<BillingInvoice[]>(
+    () => props.invoices ?? (blocked.value ? [] : sampleInvoices)
+  )
+  const methodSource = computed<BillingPaymentMethod[]>(
+    () => props.paymentMethods ?? (blocked.value ? [] : samplePaymentMethods)
+  )
 
-  const usage = [
-    184.2, 171.95, 168.4, 159.1, 162.75, 148.3, 139.9, 131.25, 126.6, 118.4, 104.15, 96.8
-  ]
-  const seatsByMonth = [8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 4, 4]
-  const seedInvoices: Invoice[] = usage.map((amount, index) => ({
-    id: `INV-A${12401 - index}`,
-    number: 132 - index,
-    plan: 'Pro',
-    cycle: 'Monthly',
-    seats: seatsByMonth[index],
-    billedAt: new Date(Date.UTC(2026, 10 - index, 1)),
-    amount,
-    brand: 'Mastercard',
-    paymentMethod: 'Mastercard •••• 1702',
-    status: index === 3 ? 'Refunded' : 'Paid'
-  }))
-
-  const activeTab = ref<string>(INITIAL_TAB)
   const tabs: { value: BillingTab; label: string }[] = [
     { value: 'bills', label: 'Bills' },
     { value: 'payment-methods', label: 'Payment methods' }
   ]
 
-  const loading = ref(START_LOADING)
-  const loadFailed = ref(START_FAILED)
-  const invoices = ref<Invoice[]>(WITH_INVOICES ? seedInvoices : [])
-  const paymentMethods = ref<PaymentMethod[]>(seedMethods)
+  const invoiceRows = ref<BillingInvoice[]>([])
+  watch(
+    invoiceSource,
+    (next) => {
+      invoiceRows.value = [...next]
+    },
+    { immediate: true }
+  )
+  const methodRows = ref<BillingPaymentMethod[]>([])
+  watch(
+    methodSource,
+    (next) => {
+      methodRows.value = [...next]
+    },
+    { immediate: true }
+  )
 
-  const load = () => {
-    if (loading.value) return
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      invoices.value = WITH_INVOICES ? seedInvoices : []
-      loading.value = false
-    }, 700)
-  }
-
-  const defaultMethod = computed(() => paymentMethods.value.find((method) => method.default))
-  const methodLabel = (method: PaymentMethod): string => `${method.brand} •••• ${method.last4}`
+  const defaultMethod = computed(() => methodRows.value.find((method) => method.default))
+  const methodLabel = (method: BillingPaymentMethod): string =>
+    `${method.brand} •••• ${method.last4}`
 
   const enterprisePerks = [
     { icon: 'ai ai-chart-line', label: 'On-demand pricing' },
@@ -292,7 +408,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
     { icon: 'ai ai-headphones', label: 'Advanced support available' }
   ]
 
-  const statusSeverity = (status: InvoiceStatus): TagSeverity =>
+  const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
     (({ Paid: 'success', Refunded: 'neutral', Overdue: 'danger' }) as const)[status] ?? 'neutral'
 
   const properties: FilteringProperty[] = [
@@ -305,6 +421,8 @@ Each variant is the same screen in another state: `get_block("account/billing", 
       options: [{ value: 'Paid' }, { value: 'Refunded' }, { value: 'Overdue' }]
     }
   ]
+
+  const actionColumn: TableColumn = { id: 'actions', type: 'action', hideable: false }
 
   const columns: TableColumn[] = [
     { accessorKey: 'number', header: 'No.', label: 'Number', sortable: true, minWidth: 72 },
@@ -323,21 +441,21 @@ Each variant is the same screen in another state: `get_block("account/billing", 
     { accessorKey: 'amount', header: 'Amount', sortable: true, minWidth: 110 },
     { accessorKey: 'paymentMethod', header: 'Payment method', grow: 2, minWidth: 200 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
-    { id: 'actions', type: 'action', hideable: false }
+    actionColumn
   ]
 
   const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
     useCollection({
-      items: invoices,
+      items: invoiceRows,
       columns,
       filtering: { fields: ['id', 'plan', 'cycle', 'status'] },
-      propertyFiltering: { properties, defaultQuery: INITIAL_QUERY },
+      propertyFiltering: { properties, defaultQuery: props.defaultQuery },
       sorting: { defaultState: [{ id: 'billedAt', desc: true }] },
       pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
       preferences: { storageKey: 'billing-invoices' }
     })
 
-  const invoicesTableEl = ref<TableExposed<Invoice> | null>(null)
+  const invoicesTableEl = ref<TableExposed<BillingInvoice> | null>(null)
   const exportCsv = () => invoicesTableEl.value?.exportCsv({ filename: 'invoices.csv' })
 
   const methodColumns: TableColumn[] = [
@@ -351,21 +469,26 @@ Each variant is the same screen in another state: `get_block("account/billing", 
     },
     { accessorKey: 'last4', header: 'Card', grow: 2, minWidth: 200 },
     { accessorKey: 'expires', header: 'Expiration date', minWidth: 140 },
-    { id: 'actions', type: 'action', hideable: false }
+    actionColumn
   ]
 
-  const pendingRemoval = ref<PaymentMethod | null>(null)
+  const pendingRemoval = ref<BillingPaymentMethod | null>(null)
   const removeOpen = ref(false)
 
-  const onMethodAction = (value: DropdownMenuItemValue, method: PaymentMethod) => {
+  const onMethodAction = (
+    event: Event,
+    value: DropdownMenuItemValue,
+    method: BillingPaymentMethod
+  ) => {
     if (value === 'default') {
-      paymentMethods.value = paymentMethods.value.map((item) => ({
+      methodRows.value = methodRows.value.map((item) => ({
         ...item,
         default: item.id === method.id
       }))
       toast.success(`${methodLabel(method)} is now the default.`, {
         description: 'The next invoice is charged to this card.'
       })
+      emit('set-default', event, method)
       return
     }
     if (value === 'remove') {
@@ -374,12 +497,13 @@ Each variant is the same screen in another state: `get_block("account/billing", 
     }
   }
 
-  const removeMethod = () => {
+  const removeMethod = (event: Event) => {
     const method = pendingRemoval.value
     if (!method) return
-    paymentMethods.value = paymentMethods.value.filter((item) => item.id !== method.id)
+    methodRows.value = methodRows.value.filter((item) => item.id !== method.id)
     removeOpen.value = false
     toast.success(`${methodLabel(method)} removed.`)
+    emit('remove', event, method)
   }
 </script>
 
@@ -392,7 +516,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
       >
         <template #actions>
           <span class="text-body-sm text-(--text-muted)"
-            >Updated {{ updatedFormat(UPDATED_AT) }}</span
+            >Updated {{ updatedFormat(updatedAt) }}</span
           >
           <Tooltip
             content="Refresh"
@@ -404,7 +528,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
               size="medium"
               :loading="loading"
               aria-label="Refresh billing data"
-              @click="load"
+              @click="emit('refresh', $event)"
             />
           </Tooltip>
           <Button
@@ -431,16 +555,16 @@ Each variant is the same screen in another state: `get_block("account/billing", 
         class="@container/bands flex min-w-0 flex-col gap-(--layout-section-gap) pb-(--layout-boundary-end)"
       >
         <Alert
-          v-if="loadFailed"
+          v-if="error"
           severity="danger"
         >
-          Your billing data could not be loaded. Nothing was charged or changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="load"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -472,7 +596,9 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                         height="1.25rem"
                       />
                       <template v-else>
-                        <span class="truncate text-label-lg text-(--text-default)">Pro</span>
+                        <span class="truncate text-label-lg text-(--text-default)">{{
+                          subscription?.plan
+                        }}</span>
                         <Tag
                           label="Current plan"
                           severity="neutral"
@@ -485,11 +611,20 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                       :loading="loading"
                       aria-label="Subscription details"
                     >
-                      <KeyValueList.Item label="Plan start date">Jan 25, 2023</KeyValueList.Item>
-                      <KeyValueList.Item label="Next charge date">Dec 1, 2026</KeyValueList.Item>
+                      <KeyValueList.Item label="Plan start date">
+                        <template v-if="subscription">{{
+                          formatDate(subscription.startedAt)
+                        }}</template>
+                      </KeyValueList.Item>
+                      <KeyValueList.Item label="Next charge date">
+                        <template v-if="subscription">{{
+                          formatDate(subscription.nextChargeAt)
+                        }}</template>
+                      </KeyValueList.Item>
                       <KeyValueList.Item label="Next charge value">
                         <CurrencyAmount
-                          value="184.20"
+                          v-if="subscription"
+                          :value="formatAmount(subscription.nextChargeAmount)"
                           size="small"
                         />
                       </KeyValueList.Item>
@@ -593,7 +728,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh invoices"
-                    @click="load"
+                    @click="emit('refresh', $event)"
                   />
                 </Tooltip>
                 <Tooltip
@@ -689,7 +824,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                     </span>
                   </template>
                   <template #cell-status="{ value }">
-                    <Table.CellStatus
+                    <TableCellStatus
                       :label="value"
                       :severity="statusSeverity(value)"
                     />
@@ -757,18 +892,29 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                   aria-label="Payment information"
                 >
                   <KeyValueList.Item label="Billing email">
-                    <span dir="ltr">billing@example.com</span>
+                    <span
+                      v-if="paymentInformation?.email"
+                      dir="ltr"
+                      >{{ paymentInformation.email }}</span
+                    >
                   </KeyValueList.Item>
                   <KeyValueList.Item label="Auto-renewal">
                     <StatusIndicator
-                      severity="success"
-                      label="On"
+                      v-if="paymentInformation"
+                      :severity="paymentInformation.autoRenewal ? 'success' : 'neutral'"
+                      :label="paymentInformation.autoRenewal ? 'On' : 'Off'"
                     />
                   </KeyValueList.Item>
-                  <KeyValueList.Item label="Billing address"
-                    >100 Market Street, Suite 400, San Francisco, CA 94105</KeyValueList.Item
-                  >
-                  <KeyValueList.Item label="Tax ID" />
+                  <KeyValueList.Item label="Billing address">
+                    <template v-if="paymentInformation?.address">{{
+                      paymentInformation.address
+                    }}</template>
+                  </KeyValueList.Item>
+                  <KeyValueList.Item label="Tax ID">
+                    <template v-if="paymentInformation?.taxId">{{
+                      paymentInformation.taxId
+                    }}</template>
+                  </KeyValueList.Item>
                 </KeyValueList>
               </template>
             </Card>
@@ -794,7 +940,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
             <Card :padded="false">
               <template #default>
                 <DataTable
-                  :data="paymentMethods"
+                  :data="methodRows"
                   :columns="methodColumns"
                   row-key="id"
                   :loading="loading"
@@ -838,9 +984,9 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                     <span class="sr-only">Actions</span>
                   </template>
                   <template #cell-actions="{ row }">
-                    <Table.CellActions
+                    <TableCellActions
                       :name="methodLabel(row)"
-                      @select="(_event, value) => onMethodAction(value, row)"
+                      @select="(event, value) => onMethodAction(event, value, row)"
                     >
                       <DropdownMenu.Group>
                         <DropdownMenu.Item
@@ -856,7 +1002,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                           :disabled="row.default"
                         />
                       </DropdownMenu.Group>
-                    </Table.CellActions>
+                    </TableCellActions>
                   </template>
                 </DataTable>
               </template>
@@ -876,4 +1022,76 @@ Each variant is the same screen in another state: `get_block("account/billing", 
     />
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type {
+  BillingInvoice,
+  BillingPaymentInformation,
+  BillingPaymentMethod,
+  BillingSubscription
+} from './billing.vue'
+
+export const sampleUpdatedAt = new Date(Date.UTC(2026, 10, 10, 12))
+
+export const sampleSubscription: BillingSubscription = {
+  plan: 'Pro',
+  startedAt: new Date(Date.UTC(2023, 0, 25)),
+  nextChargeAt: new Date(Date.UTC(2026, 11, 1)),
+  nextChargeAmount: 184.2
+}
+
+export const samplePaymentInformation: BillingPaymentInformation = {
+  email: 'billing@example.com',
+  autoRenewal: true,
+  address: '100 Market Street, Suite 400, San Francisco, CA 94105',
+  taxId: ''
+}
+
+export const samplePaymentMethods: BillingPaymentMethod[] = [
+  {
+    id: 'pm-1',
+    holder: 'Jane Doe',
+    brand: 'Mastercard',
+    last4: '1702',
+    expires: '02 / 2027',
+    default: true
+  },
+  {
+    id: 'pm-2',
+    holder: 'Acme Inc.',
+    brand: 'Visa',
+    last4: '4431',
+    expires: '11 / 2026',
+    default: false
+  },
+  {
+    id: 'pm-3',
+    holder: 'John Smith',
+    brand: 'American Express',
+    last4: '9008',
+    expires: '05 / 2028',
+    default: false
+  }
+]
+
+const usage = [
+  184.2, 171.95, 168.4, 159.1, 162.75, 148.3, 139.9, 131.25, 126.6, 118.4, 104.15, 96.8
+]
+const seatsByMonth = [8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 4, 4]
+
+export const sampleInvoices: BillingInvoice[] = usage.map((amount, index) => ({
+  id: `INV-A${12401 - index}`,
+  number: 132 - index,
+  plan: 'Pro',
+  cycle: 'Monthly',
+  seats: seatsByMonth[index],
+  billedAt: new Date(Date.UTC(2026, 10 - index, 1)),
+  amount,
+  brand: 'Mastercard',
+  paymentMethod: 'Mastercard •••• 1702',
+  status: index === 3 ? 'Refunded' : 'Paid'
+}))
 ```

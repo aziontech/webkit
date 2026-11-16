@@ -7,7 +7,7 @@
   },
   {
    "name": "Selectable",
-   "summary": "With `selectable`, activating a node writes its id to `v-model:selected`, marks the row selected and sets `aria-selected`. The bound id is shown under the tree.",
+   "summary": "With `selectable`, activating a node writes its id to `v-model:selected-key`, marks the row selected and sets `aria-selected`. The bound id is shown under the tree.",
    "file": "examples/tree/selectable.vue"
   },
   {

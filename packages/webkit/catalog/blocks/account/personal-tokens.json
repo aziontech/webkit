@@ -21,6 +21,9 @@
    "file": "blocks/account/personal-tokens/variants/created.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { PersonalTokensToken } from './personal-tokens.vue'\n\nconst DAY = 86_400_000\nconst referenceTime = Date.UTC(2026, 10, 10, 12)\nconst daysFrom = (days: number) => new Date(referenceTime + days * DAY)\n\nexport const sampleNow = new Date(referenceTime)\n\nexport const sampleTokens: PersonalTokensToken[] = [\n  {\n    id: 'tok-7c1e',\n    name: 'Local CLI',\n    description: 'Development laptop',\n    createdAt: daysFrom(-40),\n    createdBy: 'grace.hall@example.com',\n    expiresAt: daysFrom(50),\n    lastUsedAt: daysFrom(-0.1),\n    revoked: false\n  },\n  {\n    id: 'tok-3a90',\n    name: 'Deploy pipeline',\n    description: 'CI job that publishes the storefront',\n    createdAt: daysFrom(-85),\n    createdBy: 'grace.hall@example.com',\n    expiresAt: daysFrom(5),\n    lastUsedAt: daysFrom(-1),\n    revoked: false\n  },\n  {\n    id: 'tok-b412',\n    name: 'Infrastructure as code',\n    description: 'Provider for the staging stack',\n    createdAt: daysFrom(-120),\n    createdBy: 'grace.hall@example.com',\n    expiresAt: daysFrom(-30),\n    lastUsedAt: daysFrom(-31),\n    revoked: false\n  },\n  {\n    id: 'tok-55d2',\n    name: 'Nightly export',\n    description: 'Retired reporting script',\n    createdAt: daysFrom(-200),\n    createdBy: 'grace.hall@example.com',\n    expiresAt: daysFrom(160),\n    lastUsedAt: null,\n    revoked: true\n  }\n]"
+ },
  "sfcFile": "blocks/account/personal-tokens/personal-tokens.vue",
  "guidelinesFile": "blocks/account/personal-tokens/guidelines.md"
 }

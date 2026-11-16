@@ -12,7 +12,7 @@
   "The control is icon-only → use `icon-button`.",
   "One default action with related alternatives in an attached menu → use `split-button`.",
   "A standalone navigation link with a trailing icon and a ghost hover → use `link`.",
-  "Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `variant=\"link\"` Button is for an action with no destination.",
+  "Link-looking text that goes to a URL in a table cell → `TableCellLink`; a `variant=\"link\"` Button is for an action with no destination.",
   "A hand-written `<button class=\"text-(--text-link) …\">` → use `variant=\"link\"`.",
   "The single AI or highlight entry point that must stand out from every other action → use `highlight-button`."
  ],

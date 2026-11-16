@@ -97,7 +97,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 - `data-mode`: `plain` | `loading` | `monaco` — which editor is live
 - `data-invalid`, `data-readonly`, `data-disabled`, `data-diff`, `data-fill`, `data-bordered` mirror their props
 - Borderless (`bordered` false): no border and no radius; the focus ring is drawn inset so a pane edge never clips it
-- Each gutter line with a marker carries `data-severity` (`error` | `warning` | `info`)
+- Each gutter line with a marker carries `data-severity` (`danger` | `warning` | `info`)
 - Diff mode, plain editor: the gutters mark what changed with the same line diff `code-block` draws (`src/utils/line-diff.ts`, one model for both): a removed line carries `data-change="removed"` on the original side, an added line `data-change="added"` on the modified side, tinted `var(--danger)` / `var(--success)` with the `-contrast` number colour; Monaco's diff editor draws its own once it loads
 - Load failure: the plain editor stays and a muted note says the full editor could not load
 
@@ -309,7 +309,7 @@ addEventListener('fetch', (event) => {
   })
   const markers = computed(() =>
     active.value === 'arguments' && !value.value.includes('"greeting"')
-      ? [{ line: 1, severity: 'error', message: 'Add the greeting argument.' }]
+      ? [{ line: 1, severity: 'danger', message: 'Add the greeting argument.' }]
       : []
   )
 </script>

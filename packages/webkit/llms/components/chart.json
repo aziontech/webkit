@@ -35,7 +35,7 @@
  "avoidWhen": [
   "A single headline number with a delta → use `stat-tile`.",
   "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
-  "More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.",
+  "More than about seven classes that all carry meaning → use `table`; color stops separating past the eight series slots.",
   "Two measures on different scales → two charts side by side; this component never draws a second value axis.",
   "One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.",
   "Values by country or location → use `map-chart`."
@@ -66,7 +66,7 @@
    "type": "ChartSeries[]",
    "default": "[]",
    "required": "false",
-   "doc": "Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other."
+   "doc": "Series to plot. The first eight take the fixed categorical slots in order; the rest fold into Other."
   },
   {
    "name": "labels",
@@ -106,7 +106,7 @@
   {
    "name": "cap",
    "type": "number",
-   "default": "6",
+   "default": "8",
    "required": "false",
    "doc": "Series kept before the rest fold into Other."
   },

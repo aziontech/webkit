@@ -11,6 +11,9 @@
    "file": "blocks/detail/dns-zone-detail/variants/import-zone-file.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { DnsZoneDetailRecord, DnsZoneDetailZone } from './dns-zone-detail.vue'\n\nexport const sampleZone: DnsZoneDetailZone = {\n  name: 'main-zone',\n  domain: 'example.com',\n  dnssec: true,\n  active: true,\n  nameservers: ['ns1.example.net', 'ns2.example.com', 'ns3.example.org'],\n  dnssecKey: {\n    keyTag: '34505',\n    algorithm: '13 (ECDSA Curve P-256 with SHA-256)',\n    digestType: '2 (SHA-256)',\n    digest: '8A9E1F2C3B4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F'\n  }\n}\n\nexport const sampleRecords: DnsZoneDetailRecord[] = [\n  {\n    id: '423916',\n    name: 'www',\n    type: 'A',\n    value: '192.0.2.1',\n    ttl: 3600,\n    policy: 'simple',\n    weight: 255,\n    description: 'Points www at the origin server.'\n  }\n]"
+ },
  "sfcFile": "blocks/detail/dns-zone-detail/dns-zone-detail.vue",
  "guidelinesFile": "blocks/detail/dns-zone-detail/guidelines.md"
 }

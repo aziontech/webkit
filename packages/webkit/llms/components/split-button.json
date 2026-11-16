@@ -90,11 +90,11 @@
    "doc": "When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does."
   },
   {
-   "name": "selected",
+   "name": "selectedKey",
    "type": "string | null",
    "default": "null",
    "required": "false",
-   "doc": "Two-way value (`v-model:selected`)."
+   "doc": "Two-way value (`v-model:selectedKey`)."
   }
  ],
  "events": [

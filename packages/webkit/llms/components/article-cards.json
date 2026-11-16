@@ -29,8 +29,8 @@
  ],
  "props": [
   {
-   "name": "variant",
-   "type": "ArticleCardsVariant",
+   "name": "align",
+   "type": "ArticleCardsAlign",
    "default": "'start'",
    "required": "false",
    "doc": "Placement of the heading: `start` sets it at the start, `center` centres it over the cards."
@@ -81,8 +81,8 @@
    "file": "examples/article-cards/default.vue"
   },
   {
-   "name": "Variants",
-   "file": "examples/article-cards/variants.vue"
+   "name": "Alignments",
+   "file": "examples/article-cards/alignments.vue"
   }
  ],
  "docs": "components/article-cards.md"

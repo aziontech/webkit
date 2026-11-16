@@ -76,6 +76,51 @@ Two steps, Project then Domain and deployment, with the last action reading "Cre
 - **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
 - **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/deployment-logs` (InCreateFlow) and ends on `create/deploy-success`.
 
+## Data
+
+The block keeps the form as a local draft, validates each step and emits `submit` with the values; it sends no request. `CreateWizardPolicy`, `CreateWizardValues`, `CreateWizardSubmission` and `CreateWizardProps` are exported from `create-wizard.vue`, and `sample.ts` holds the sample policies the chooser lists when `policies` is left out. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the list.
+
+| Prop            | Type                          | What it does                                                                        |
+| --------------- | ----------------------------- | ----------------------------------------------------------------------------------- |
+| `policies`      | `CreateWizardPolicy[]`        | The policies Where it runs offers; `ready` says whether IP filtering is on in each. |
+| `defaultStep`   | `CreateWizardStep`            | The step the wizard opens on; `where-it-runs` by default.                           |
+| `defaultPolicy` | `string`                      | The policy already picked; empty, Where it runs waits for an answer.                |
+| `defaultValues` | `Partial<CreateWizardValues>` | The Name, Type and List the form starts from.                                       |
+| `loading`       | `boolean`                     | The create request is in flight; Create Access List spins and the wizard locks.     |
+| `error`         | `string`                      | Why the request failed, the description of the error toast with Retry.              |
+
+| Event    | Payload           | When                                                                                                             |
+| -------- | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Create Access List on a valid form, and Retry in the error toast; `values` adds the `policy` and `enableModule`. |
+| `cancel` | `(event)`         | Cancel in the footer.                                                                                            |
+
+To go live, render the block from a page that owns the policies and the request:
+
+```vue
+<script setup lang="ts">
+  import { toast } from '@aziontech/webkit/toast'
+  import CreateWizard, { type CreateWizardSubmission } from './create-wizard.vue'
+
+  const { data: policies } = usePolicies()
+  const { mutate, pending, error } = useCreateAccessList()
+  const create = async (_event: MouseEvent, values: CreateWizardSubmission) => {
+    await mutate(values)
+    toast.success(`${values.name} created.`)
+  }
+</script>
+
+<template>
+  <CreateWizard
+    :policies="policies ?? []"
+    :loading="pending"
+    :error="error ? 'The service did not answer. Check your connection and try again.' : ''"
+    @submit="create"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Ask where the resource runs first, and insert the module step only when the chosen host needs it.
@@ -118,10 +163,10 @@ Two steps, Project then Domain and deployment, with the last action reading "Cre
 
 ## States
 
-- WhereItRuns: the first step; the chooser of policies with search, module tags and the two escape routes.
-- ModuleOff: acme-staging was chosen with IP filtering off, so the IP filtering step shows the warning, the switch card and the note.
-- ListSettings: the settings step; Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
-- Review: the last step, read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error.
+- WhereItRuns: the first step (the default `defaultStep`); the chooser of policies with search, module tags and the two escape routes.
+- ModuleOff: acme-staging was chosen with IP filtering off (`defaultStep="module"`, `defaultPolicy="acme-staging"`), so the IP filtering step shows the warning, the switch card and the note.
+- ListSettings: the settings step (`defaultStep="settings"`, a `defaultPolicy` and a Name in `defaultValues`); Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
+- Review: the last step (`defaultStep="review"` with a `defaultPolicy` and `defaultValues`), read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error; on success it emits `submit`, `loading` spins it and `error` raises the error toast with Retry.
 - CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state.
 
 ## Review step
@@ -185,17 +230,64 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Wizard from '@aziontech/webkit/wizard'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
 
-  type ListType = 'asn' | 'ip_cidr' | 'countries'
-  type FieldName = 'name' | 'type' | 'items'
+  import { samplePolicies } from './sample'
 
-  interface PolicyOption {
+  /** The kind of entry an access list holds. */
+  export type CreateWizardListType = 'asn' | 'ip_cidr' | 'countries'
+
+  /** A policy the list can run on. */
+  export interface CreateWizardPolicy {
+    /** The policy key. */
     value: string
+    /** The policy name. */
     label: string
+    /** The application it protects. */
     description: string
+    /** Whether IP filtering is already on in it. */
     ready: boolean
   }
+
+  /** The values of the Create Access List form. */
+  export interface CreateWizardValues {
+    /** The list name. */
+    name: string
+    /** The kind of entry the list holds. */
+    type: CreateWizardListType
+    /** The entries, one per line. */
+    items: string
+  }
+
+  /** What submit sends: the form values and where the list runs. */
+  export interface CreateWizardSubmission extends CreateWizardValues {
+    /** The policy it runs on; empty when skipped. */
+    policy: string
+    /** Whether IP filtering is turned on in that policy as part of the create. */
+    enableModule: boolean
+  }
+
+  /** A step of the wizard. */
+  export type CreateWizardStep = 'where-it-runs' | 'module' | 'general' | 'settings' | 'review'
+
+  export interface CreateWizardProps {
+    /** The policies to pick from. Left out, the sample renders. */
+    policies?: CreateWizardPolicy[]
+    /** The step the wizard opens on. */
+    defaultStep?: CreateWizardStep
+    /** The policy already picked; empty, Where it runs waits for an answer. */
+    defaultPolicy?: string
+    /** The values the form starts from. */
+    defaultValues?: Partial<CreateWizardValues>
+    /** The create request is in flight; the submit spins and the wizard locks. */
+    loading?: boolean
+    /** Why the create request failed, shown in an error toast with Retry. */
+    error?: string
+  }
+
+  type ListType = CreateWizardListType
+  type FieldName = 'name' | 'type' | 'items'
+  type PolicyOption = CreateWizardPolicy
 
   interface ListField {
     label: string
@@ -215,50 +307,23 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
     fields: FieldName[]
   }
 
+  const props = withDefaults(defineProps<CreateWizardProps>(), {
+    policies: undefined,
+    defaultStep: 'where-it-runs',
+    defaultPolicy: '',
+    defaultValues: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: MouseEvent, values: CreateWizardSubmission]
+    cancel: [event: MouseEvent]
+  }>()
+
   const breadcrumb = [
     { label: 'Access Lists', href: '/access-lists' },
     { label: 'Create Access List' }
-  ]
-  const policies: PolicyOption[] = [
-    { value: 'acme-production', label: 'acme-production', description: 'acme-site', ready: true },
-    { value: 'acme-staging', label: 'acme-staging', description: 'acme-site', ready: false },
-    { value: 'api-hardening', label: 'api-hardening', description: 'legacy-api', ready: false },
-    {
-      value: 'checkout-shield',
-      label: 'checkout-shield',
-      description: 'ecommerce-v2',
-      ready: false
-    },
-    { value: 'dev-sandbox', label: 'dev-sandbox', description: 'internal', ready: false },
-    {
-      value: 'marketing-site',
-      label: 'marketing-site',
-      description: 'marketing-site',
-      ready: false
-    },
-    { value: 'payments-api', label: 'payments-api', description: 'ecommerce-v2', ready: false },
-    { value: 'partner-gateway', label: 'partner-gateway', description: 'legacy-api', ready: true },
-    { value: 'admin-allowlist', label: 'admin-allowlist', description: 'status-page', ready: true },
-    {
-      value: 'media-delivery',
-      label: 'media-delivery',
-      description: 'blog-platform',
-      ready: false
-    },
-    { value: 'acme-canary', label: 'acme-canary', description: 'acme-docs', ready: false },
-    {
-      value: 'search-api-shield',
-      label: 'search-api-shield',
-      description: 'ecommerce-storefront',
-      ready: false
-    },
-    {
-      value: 'legacy-storefront',
-      label: 'legacy-storefront',
-      description: 'ecommerce-storefront',
-      ready: false
-    },
-    { value: 'qa-sandbox', label: 'qa-sandbox', description: 'internal', ready: false }
   ]
   const types = [
     {
@@ -300,21 +365,24 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 
   const VISIBLE = 6
 
-  const current = ref('where-it-runs')
-  const choice = ref('')
+  const policies = computed<CreateWizardPolicy[]>(() => props.policies ?? samplePolicies)
+
+  const current = ref<string>(props.defaultStep)
+  const choice = ref(props.defaultPolicy)
   const enableModule = ref(false)
   const query = ref('')
-  const form = reactive<{ name: string; type: ListType; items: string }>({
+  const form = reactive<CreateWizardValues>({
     name: '',
     type: 'asn',
-    items: ''
+    items: '',
+    ...props.defaultValues
   })
   const errors = reactive<Partial<Record<FieldName, FieldProblem>>>({})
   const answered = ref(choice.value !== '')
   const whereMissing = ref(false)
 
   const moduleMissing = computed(
-    () => !!choice.value && !policies.find((option) => option.value === choice.value)?.ready
+    () => !!choice.value && !policies.value.find((option) => option.value === choice.value)?.ready
   )
 
   const definitions = computed((): StepDefinition[] => [
@@ -377,8 +445,8 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 
   const matches = computed(() => {
     const term = query.value.trim().toLowerCase()
-    if (!term) return policies
-    return policies.filter((option) =>
+    if (!term) return policies.value
+    return policies.value.filter((option) =>
       [option.label, option.description].some((field) => field.toLowerCase().includes(term))
     )
   })
@@ -456,29 +524,33 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
     if (entry && !validate(entry.fields)) event.preventDefault()
   }
 
-  const creating = ref(false)
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const commit = () => {
-    if (creating.value) return
+  const commit = (event: MouseEvent) => {
+    if (props.loading) return
     if (!validate(['name', 'type', 'items'])) {
       const failed = definitions.value.find((entry) => entry.fields.some((field) => errors[field]))
       if (failed) editStep(failed.value)
       return
     }
-    creating.value = true
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      creating.value = false
-      toast.success(`${form.name} created.`, {
-        description: choice.value
-          ? `Rules of ${choice.value} can match on it now.`
-          : 'Bind it to a policy to use it in rules.'
-      })
-    }, 900)
+    emit('submit', event, {
+      name: form.name.trim(),
+      type: form.type,
+      items: entries.value.join('\n'),
+      policy: choice.value,
+      enableModule: moduleMissing.value && enableModule.value
+    })
   }
 
-  onBeforeUnmount(() => clearTimeout(timer))
+  watch(
+    () => props.error,
+    (message) => {
+      if (!message) return
+      toast.error(`Could not create ${form.name.trim() || 'the access list'}.`, {
+        description: message,
+        action: { label: 'Retry', onClick: (event: MouseEvent) => commit(event) }
+      })
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>
@@ -535,9 +607,10 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
           v-model="stepIndex"
           aria-label="Create Access List"
           submit-label="Create Access List"
-          :loading="creating"
+          :loading="loading"
           @next="onNext"
           @submit="commit"
+          @cancel="(event: MouseEvent) => emit('cancel', event)"
         >
           <Wizard.Step
             title="Where it runs"
@@ -931,4 +1004,52 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
     </main>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { CreateWizardPolicy } from './create-wizard.vue'
+
+export const samplePolicies: CreateWizardPolicy[] = [
+  { value: 'acme-production', label: 'acme-production', description: 'acme-site', ready: true },
+  { value: 'acme-staging', label: 'acme-staging', description: 'acme-site', ready: false },
+  { value: 'api-hardening', label: 'api-hardening', description: 'legacy-api', ready: false },
+  {
+    value: 'checkout-shield',
+    label: 'checkout-shield',
+    description: 'ecommerce-v2',
+    ready: false
+  },
+  { value: 'dev-sandbox', label: 'dev-sandbox', description: 'internal', ready: false },
+  {
+    value: 'marketing-site',
+    label: 'marketing-site',
+    description: 'marketing-site',
+    ready: false
+  },
+  { value: 'payments-api', label: 'payments-api', description: 'ecommerce-v2', ready: false },
+  { value: 'partner-gateway', label: 'partner-gateway', description: 'legacy-api', ready: true },
+  { value: 'admin-allowlist', label: 'admin-allowlist', description: 'status-page', ready: true },
+  {
+    value: 'media-delivery',
+    label: 'media-delivery',
+    description: 'blog-platform',
+    ready: false
+  },
+  { value: 'acme-canary', label: 'acme-canary', description: 'acme-docs', ready: false },
+  {
+    value: 'search-api-shield',
+    label: 'search-api-shield',
+    description: 'ecommerce-storefront',
+    ready: false
+  },
+  {
+    value: 'legacy-storefront',
+    label: 'legacy-storefront',
+    description: 'ecommerce-storefront',
+    ready: false
+  },
+  { value: 'qa-sandbox', label: 'qa-sandbox', description: 'internal', ready: false }
+]
 ```

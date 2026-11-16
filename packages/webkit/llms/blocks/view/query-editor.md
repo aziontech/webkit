@@ -70,9 +70,7 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 
 ### J. Bulk row delete — `Button` (optional)
 
-Variant TableData only; it raises its toast with `toast`.
-
-With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:loading` while it runs). Deleting rows is not a deploy: the outcome is a success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Never View deployments, Edit or Redeploy.
+With rows selected, a danger `Delete 2 rows` `Button` takes the place of Sort in the Data toolbar; TableData opens with two rows selected (`defaultSelectedKeys`). It removes the rows from the table and emits `delete-rows`; the page sends the request and raises the success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Deleting rows is not a deploy: never View deployments, Edit or Redeploy.
 
 ### K. Create database page — `Input`, `Button` (optional)
 
@@ -87,6 +85,68 @@ Variant ImportCsv only; it adds `FileDropzone`, `FileTokenGroup`, `Select`, `Set
 An empty table's Data view offers Insert row and Import data from CSV, and accepts a CSV dropped on the empty state; both open a large drawer `Import data into <table>` in three sections. **File**: a `FileDropzone` with Browse files, then the file as a `FileTokenGroup` token (dismiss to pick another); a header with a blank name, a header with no rows or a file that is not `.csv` is an error on the token. **Map columns**: one row per CSV column with its first value as an example, an arrow, and a `Select` of the table's columns (name, type, `required` for NOT NULL ones) plus Skip; columns are matched by name, ignoring case, when the file is read, and everything else starts on Skip. **Check rows**: a polite sentence `4 of 7 rows are ready to insert. 3 rows have errors and will be skipped.`, the errors per line (`Line 4: active “maybe” is not true or false (bool).`; at most 10, then `And N more.`) and the first five valid rows as a `DataTable` named `Import preview` under the table's column names. The footer holds Cancel and the primary `Insert 4 rows`.
 
 Validation runs on Insert, as the form-validation rule says: a table column mapped twice, a NOT NULL column with no CSV column, nothing mapped, or every row failing shows a danger `Alert` in the section that has to change, and nothing is inserted. A primary key may stay unmapped (the database assigns it). While inserting, the fieldset is disabled and Insert spins; then the drawer closes, the rows appear in the table and a success toast `4 rows inserted into subscribers.` says how many rows were skipped and offers Undo. Importing rows is not a deploy, so Edit and Redeploy do not apply.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing and runs no SQL. `QueryEditorTable`, `QueryEditorHistoryEntry`, `QueryEditorResult` and `QueryEditorProps` are exported from `query-editor.vue`, and `sample.ts` holds the sample tables, history and statement the block renders when `tables`, `history` or `sql` is left out (the tables and history never while `loading` or `error` is set).
+
+| Prop                   | Type                        | What it does                                                                                                        |
+| ---------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `tables`               | `QueryEditorTable[]`        | The tables with their columns and rows. Pass `[]` for a database with none.                                         |
+| `history`              | `QueryEditorHistoryEntry[]` | Past queries, newest first.                                                                                         |
+| `result`               | `QueryEditorResult \| null` | What the last run returned: `rows`, an `error` on a line, or a `message`. Left out, Results reads Ready to execute. |
+| `loading`              | `boolean`                   | The tables and rows are loading: `Skeleton` lines hold the side panel and the rows table shows its loading state.   |
+| `running`              | `boolean`                   | A query is in flight: Run query spins, the editor locks and `Skeleton` lines hold Results.                          |
+| `error`                | `string`                    | Why the selected table's rows failed to load, shown in the danger `Alert` with Retry.                               |
+| `defaultTableView`     | `'data' \| 'definition'`    | The view of the selected table the pane opens on.                                                                   |
+| `defaultSelectedKeys`  | `string[]`                  | Rows selected when the page opens, by row key.                                                                      |
+| `defaultTemplatesOpen` | `boolean`                   | The SQL quick templates drawer starts open.                                                                         |
+| `v-model:tab`          | `'tables' \| 'editor'`      | The open tab.                                                                                                       |
+| `v-model:table`        | `string \| null`            | The id of the open table; the first table when `null`.                                                              |
+| `v-model:sql`          | `string`                    | The statement in the editor.                                                                                        |
+
+| Event              | Payload                    | When                                                                            |
+| ------------------ | -------------------------- | ------------------------------------------------------------------------------- |
+| `run`              | `(event, sql)`             | Run query, Refresh results, or Run query in a history row's menu.               |
+| `refresh-tables`   | `(event)`                  | Refresh tables in the side panel.                                               |
+| `create-table`     | `(event)`                  | Create Table, in the side panel or the empty database.                          |
+| `delete-table`     | `(event, table)`           | Delete table in a table's menu; confirm it with `edit/delete-dialog`.           |
+| `refresh`          | `(event)`                  | Refresh in the Data toolbar.                                                    |
+| `retry`            | `(event)`                  | Retry in the rows error alert.                                                  |
+| `insert-row`       | `(event, table)`           | Insert, or Insert row on an empty table.                                        |
+| `import-csv`       | `(event, table)`           | Import data from CSV on an empty table.                                         |
+| `add-column`       | `(event, table)`           | Add column in the Definition view.                                              |
+| `delete-rows`      | `(event, { table, rows })` | A row's Delete row, or Delete N rows; the rows are already gone from the table. |
+| `delete-query`     | `(event, entry)`           | Delete query in a history row's menu; the entry is already gone.                |
+| `download-results` | `(event, result)`          | Download results.                                                               |
+
+To go live, render the block from a page that owns the database and the query runner:
+
+```vue
+<script setup lang="ts">
+  import QueryEditor from './query-editor.vue'
+
+  const { tables, pending, error, refresh } = useDatabaseTables()
+  const { history, run, running, result } = useQueryRunner()
+  const loadError = "Couldn't load the rows. Check your connection and retry."
+</script>
+
+<template>
+  <QueryEditor
+    :tables="tables ?? []"
+    :history="history"
+    :result="result"
+    :loading="pending"
+    :running="running"
+    :error="error ? loadError : ''"
+    @run="(event, sql) => run(sql)"
+    @refresh-tables="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -133,16 +193,16 @@ Validation runs on Insert, as the form-validation rule says: a table column mapp
 
 ## States
 
-- Tables: the Tables tab with the tables listed in the side panel and the selected table's Data view in the pane.
-- Schema: the Definition view of customers, with the Columns heading, Add column and a card of column name, type and constraints.
-- NoTables: a database with no tables; the side panel says so and the pane shows the Create Table empty state.
-- Query: the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
-- Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer open over it.
-- Loading: the tables list and the selected table's rows are loading; `Skeleton` lines hold the side panel and the rows table shows its loading state.
-- TableData: the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
+- Tables: the Tables tab with the tables listed in the side panel and the selected table's Data view in the pane (the sample, or `tables`).
+- Schema: `defaultTableView="definition"`, the Definition view of customers, with the Columns heading, Add column and a card of column name, type and constraints.
+- NoTables: `:tables="[]"`, a database with no tables; the side panel says so and the pane shows the Create Table empty state.
+- Query: `tab="editor"` with `sql`, `history` and `result`, the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
+- Templates: `tab="editor"` and `defaultTemplatesOpen`, the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer open over it.
+- Loading: `loading`, the tables list and the selected table's rows are loading; `Skeleton` lines hold the side panel and the rows table shows its loading state.
+- TableData: `table="tbl-events"` and `defaultSelectedKeys`, the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
 - ImportCsv: the empty subscribers table with the import drawer open on a seven-row file: `plan_name` still on Skip (Insert asks to map `plan`), `referrer` skipped, three lines with errors (a non-boolean, an empty required email, a date that does not parse).
 - CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
-- Error: the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
+- Error: `error`, the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
 
 ## Related
 
@@ -163,7 +223,7 @@ Validation runs on Insert, as the form-validation rule says: a table column mapp
 - `Templates` — The Editor tab before anything ran, with the SQL quick templates drawer open over it: a search and one outlined clickable Item per snippet; choosing one loads its SQL into the editor and closes the drawer.
 - `Loading` — The tables and the selected table's rows are loading: Skeleton lines hold the side panel and the rows DataTable shows its loading state.
 - `Error` — The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.
-- `TableData` — The events table in the Data view: 137 rows in a compact `DataTable` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo.
+- `TableData` — The events table in the Data view: 137 rows in a compact `DataTable` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows takes the place of Sort in the toolbar; it removes them and emits `delete-rows`.
 - `ImportCsv` — An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.
 - `CreateDatabase` — The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, under a centred save bar card with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.
 
@@ -198,137 +258,160 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onMounted, ref, watch } from 'vue'
 
-  interface DatabaseColumn {
+  import { sampleHistory, sampleSql, sampleTables } from './sample'
+
+  /** Which tab the page shows. */
+  export type QueryEditorTab = 'tables' | 'editor'
+
+  /** Which view of the selected table the pane shows. */
+  export type QueryEditorTableView = 'data' | 'definition'
+
+  /** One column of a table's definition. */
+  export interface QueryEditorColumn {
+    /** Stable key. */
     id: string
+    /** Column name, also the row field it reads. */
     name: string
+    /** SQL type, shown beside the name. */
     type: string
+    /** Part of the primary key; the header shows a key. */
     primaryKey: boolean
+    /** The column rejects NULL. */
     notNull: boolean
   }
 
-  interface DatabaseRow {
+  /** One stored row: the stable key and one value per column name. */
+  export interface QueryEditorRow {
+    /** Stable row key. */
     __k: string
     [column: string]: string | number | null
   }
 
-  interface DatabaseTable {
+  /** One table of the database, with its rows. */
+  export interface QueryEditorTable {
+    /** Stable key. */
     id: string
+    /** Table name, listed in the side panel. */
     name: string
-    columns: DatabaseColumn[]
-    rows: DatabaseRow[]
+    /** The table definition. */
+    columns: QueryEditorColumn[]
+    /** The rows shown in the Data view. */
+    rows: QueryEditorRow[]
   }
 
-  interface ResultRow {
+  /** One row of a query result: the stable key and one value per result column. */
+  export interface QueryEditorResultRow {
+    /** Stable row key. */
     __k: number
     [column: string]: string | number | null
   }
 
-  type QueryResult =
-    | { type: 'rows'; columns: string[]; rows: ResultRow[] }
+  /** What the last query returned: rows, a failure on a line, or a message. */
+  export type QueryEditorResult =
+    | { type: 'rows'; columns: string[]; rows: QueryEditorResultRow[] }
     | { type: 'error'; line: number; text: string }
     | { type: 'message'; text: string }
 
-  interface HistoryEntry {
+  /** One past query in the history panel. */
+  export interface QueryEditorHistoryEntry {
+    /** Stable key. */
     id: string
+    /** The statement that ran. */
     sql: string
   }
 
+  export interface QueryEditorProps {
+    /** The database tables with their rows. Left out, the sample renders; pass an empty list for a database with none. */
+    tables?: QueryEditorTable[]
+    /** Past queries, newest first. Left out, the sample renders. */
+    history?: QueryEditorHistoryEntry[]
+    /** What the last query returned; left out, Results is ready to execute. */
+    result?: QueryEditorResult | null
+    /** The tables and the selected table's rows are loading: skeleton lines hold the side panel and the rows table shows its loading state. */
+    loading?: boolean
+    /** A query is in flight: Run query spins, the editor locks and Results shows skeleton lines. */
+    running?: boolean
+    /** Why the selected table's rows could not load; a danger alert with Retry replaces the rows. */
+    error?: string
+    /** The view of the selected table the pane opens on. */
+    defaultTableView?: QueryEditorTableView
+    /** Rows selected when the page opens, by row key. */
+    defaultSelectedKeys?: string[]
+    /** The SQL quick templates drawer starts open. */
+    defaultTemplatesOpen?: boolean
+  }
+
   interface QueryTemplate {
-    id: string
     title: string
     description: string
     icon: string
     sql: string
   }
 
+  const props = withDefaults(defineProps<QueryEditorProps>(), {
+    tables: undefined,
+    history: undefined,
+    result: undefined,
+    loading: false,
+    running: false,
+    error: '',
+    defaultTableView: 'data',
+    defaultSelectedKeys: () => [],
+    defaultTemplatesOpen: false
+  })
+
+  const emit = defineEmits<{
+    run: [event: Event, sql: string]
+    'refresh-tables': [event: MouseEvent]
+    'create-table': [event: MouseEvent]
+    'delete-table': [event: Event, table: QueryEditorTable]
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'insert-row': [event: MouseEvent, table: QueryEditorTable]
+    'import-csv': [event: MouseEvent, table: QueryEditorTable]
+    'add-column': [event: MouseEvent, table: QueryEditorTable]
+    'delete-rows': [event: Event, payload: { table: QueryEditorTable; rows: QueryEditorRow[] }]
+    'delete-query': [event: Event, entry: QueryEditorHistoryEntry]
+    'download-results': [event: MouseEvent, result: QueryEditorResult]
+  }>()
+
+  const activeTab = defineModel<QueryEditorTab>('tab', { default: 'tables' })
+  const selectedTableId = defineModel<string | null>('table', { default: null })
+  const editorSql = defineModel<string>('sql', { default: sampleSql })
+
   const tabs = [
     { value: 'tables', label: 'Tables' },
     { value: 'editor', label: 'Editor' }
   ]
-  const activeTab = ref('tables')
 
-  const tables = ref<DatabaseTable[]>([
-    {
-      id: 'tbl-customers',
-      name: 'customers',
-      columns: [
-        { id: 'col-1', name: 'id', type: 'int8', primaryKey: true, notNull: true },
-        { id: 'col-2', name: 'name', type: 'text', primaryKey: false, notNull: true },
-        { id: 'col-3', name: 'email', type: 'text', primaryKey: false, notNull: true },
-        {
-          id: 'col-4',
-          name: 'created_at',
-          type: 'timestamptz',
-          primaryKey: false,
-          notNull: false
-        }
-      ],
-      rows: [
-        {
-          __k: 'row-1',
-          id: 1,
-          name: 'Jane Doe',
-          email: 'jane.doe@example.com',
-          created_at: '2026-07-21 08:15:00'
-        },
-        {
-          __k: 'row-2',
-          id: 2,
-          name: 'John Smith',
-          email: 'john.smith@example.com',
-          created_at: '2026-07-21 08:15:01'
-        },
-        {
-          __k: 'row-3',
-          id: 3,
-          name: 'Alex Morgan',
-          email: 'alex.morgan@example.com',
-          created_at: null
-        }
-      ]
+  const tableSource = computed<QueryEditorTable[]>(
+    () => props.tables ?? (props.loading || props.error ? [] : sampleTables)
+  )
+  const tableList = ref<QueryEditorTable[]>([])
+  watch(
+    tableSource,
+    (next) => {
+      tableList.value = next.map((table) => ({ ...table, rows: [...table.rows] }))
     },
-    {
-      id: 'tbl-orders',
-      name: 'orders',
-      columns: [
-        { id: 'col-5', name: 'id', type: 'int8', primaryKey: true, notNull: true },
-        { id: 'col-6', name: 'customer_id', type: 'int8', primaryKey: false, notNull: true },
-        { id: 'col-7', name: 'total', type: 'numeric', primaryKey: false, notNull: true }
-      ],
-      rows: [
-        { __k: 'row-4', id: 1001, customer_id: 1, total: '42.50' },
-        { __k: 'row-5', id: 1002, customer_id: 3, total: '18.00' }
-      ]
-    },
-    {
-      id: 'tbl-invoices',
-      name: 'invoices',
-      columns: [
-        { id: 'col-8', name: 'id', type: 'int8', primaryKey: true, notNull: true },
-        {
-          id: 'col-9',
-          name: 'created_at',
-          type: 'timestamptz',
-          primaryKey: false,
-          notNull: false
-        }
-      ],
-      rows: []
-    }
-  ])
+    { immediate: true }
+  )
   const tableSearch = ref('')
-  const selectedTableId = ref<string | null>(null)
   const filteredTables = computed(() => {
     const term = tableSearch.value.trim().toLowerCase()
-    if (!term) return tables.value
-    return tables.value.filter((table) => table.name.toLowerCase().includes(term))
+    if (!term) return tableList.value
+    return tableList.value.filter((table) => table.name.toLowerCase().includes(term))
   })
   const selectedTable = computed(
     () =>
-      tables.value.find((table) => table.id === selectedTableId.value) ?? tables.value[0] ?? null
+      tableList.value.find((table) => table.id === selectedTableId.value) ??
+      tableList.value[0] ??
+      null
   )
   const selectTable = (id: string) => {
     selectedTableId.value = id
+  }
+  const onTableAction = (event: Event, value: unknown, table: QueryEditorTable) => {
+    if (value === 'delete') emit('delete-table', event, table)
   }
 
   const schemaColumns: TableColumn[] = [
@@ -339,8 +422,8 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
   const schemaRows = computed(() => {
     if (!selectedTable.value) return []
     return selectedTable.value.columns.map((column) => ({
-      id: column.id,
       name: column.name,
+      id: column.id,
       type: column.type,
       constraints: [column.primaryKey ? 'PRIMARY KEY' : '', column.notNull ? 'NOT NULL' : '']
         .filter(Boolean)
@@ -354,7 +437,7 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
     if (globalThis.matchMedia?.('(width < 48rem)').matches) leftOpen.value = false
   })
 
-  const tableView = ref('data')
+  const tableView = ref<QueryEditorTableView>(props.defaultTableView)
   const tableViewOptions = [
     { label: 'Data', value: 'data' },
     { label: 'Definition', value: 'definition' }
@@ -379,11 +462,11 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
         )
     )
   })
-  const rowSelection = ref<Record<string, boolean>>({})
+  const selectedKeys = ref<string[]>([...props.defaultSelectedKeys])
   const dataColumns = computed<TableColumn[]>(() => [
     ...(selectedTable.value?.columns ?? []).map((column) => ({
-      id: column.name,
       accessorKey: column.name,
+      id: column.name,
       header: column.name,
       sortable: true,
       minWidth: 160
@@ -391,84 +474,56 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
     { id: '__actions', type: 'action', hideable: false }
   ])
   watch(selectedTableId, () => {
-    rowSelection.value = {}
+    selectedKeys.value = []
   })
   const editorMarkers = computed<CodeEditorMarker[]>(() =>
     results.value?.type === 'error' && results.value.line
-      ? [{ line: results.value.line, severity: 'error', message: results.value.text }]
+      ? [{ line: results.value.line, severity: 'danger', message: results.value.text }]
       : []
   )
   const isNull = (value: unknown) => value === null || value === undefined || value === ''
   const displayCell = (value: unknown) => (isNull(value) ? 'NULL' : String(value))
-  const deleteRow = (row: DatabaseRow) => {
-    const table = tables.value.find((item) => item.id === selectedTable.value?.id)
-    if (!table) return
-    table.rows = table.rows.filter((item) => item.__k !== row.__k)
+  const removeRows = (event: Event, table: QueryEditorTable, keys: Set<string>) => {
+    const rows = table.rows.filter((row) => keys.has(row.__k))
+    if (!rows.length) return
+    table.rows = table.rows.filter((row) => !keys.has(row.__k))
+    emit('delete-rows', event, { table, rows })
+  }
+  const deleteRow = (event: MouseEvent, row: QueryEditorRow) => {
+    const table = tableList.value.find((item) => item.id === selectedTable.value?.id)
+    if (table) removeRows(event, table, new Set([row.__k]))
+  }
+  const deleteSelected = (event: MouseEvent) => {
+    const table = tableList.value.find((item) => item.id === selectedTable.value?.id)
+    if (!table || !selectedKeys.value.length) return
+    removeRows(event, table, new Set(selectedKeys.value))
+    selectedKeys.value = []
   }
 
-  const editorSql = ref(`CREATE TABLE IF NOT EXISTS customers (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);`)
-  const history = ref<HistoryEntry[]>([
-    {
-      id: 'q-0',
-      sql: `CREATE TABLE IF NOT EXISTS customers (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);`
+  const historySource = computed<QueryEditorHistoryEntry[]>(
+    () => props.history ?? (props.loading || props.error ? [] : sampleHistory)
+  )
+  const historyList = ref<QueryEditorHistoryEntry[]>([])
+  watch(
+    historySource,
+    (next) => {
+      historyList.value = [...next]
     },
-    {
-      id: 'q-1',
-      sql: `CREATE TABLE IF NOT EXISTS orders (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  customer_id INTEGER NOT NULL REFERENCES customers (id),
-  total NUMERIC NOT NULL
-);`
-    }
-  ])
+    { immediate: true }
+  )
   const historySearch = ref('')
   const filteredHistory = computed(() => {
     const term = historySearch.value.trim().toLowerCase()
-    if (!term) return history.value
-    return history.value.filter((item) => item.sql.toLowerCase().includes(term))
+    if (!term) return historyList.value
+    return historyList.value.filter((item) => item.sql.toLowerCase().includes(term))
   })
   const oneLine = (sql: string) => sql.replace(/\s+/g, ' ').trim()
 
-  const running = ref(false)
-  const templatesOpen = ref(false)
-  const selectResult: QueryResult = {
-    type: 'rows',
-    columns: ['id', 'name', 'email', 'created_at'],
-    rows: [
-      {
-        __k: 1,
-        id: 1,
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
-        created_at: '2026-07-21 08:15:00'
-      },
-      {
-        __k: 2,
-        id: 2,
-        name: 'John Smith',
-        email: 'john.smith@example.com',
-        created_at: '2026-07-21 08:15:01'
-      },
-      {
-        __k: 3,
-        id: 3,
-        name: 'Alex Morgan',
-        email: 'alex.morgan@example.com',
-        created_at: '2026-07-21 08:15:02'
-      }
-    ]
-  }
-  const results = ref<QueryResult | null>(null)
+  const running = computed(() => props.running)
+  const templatesOpen = ref(props.defaultTemplatesOpen)
+  const results = computed<QueryEditorResult | null>(() =>
+    props.running ? null : (props.result ?? null)
+  )
   const resultColumns = computed<TableColumn[]>(() => {
     if (results.value?.type !== 'rows') return []
     return results.value.columns.map((key, index) => ({
@@ -483,7 +538,7 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
     { label: 'JSON', value: 'json' }
   ]
   const resultSearch = ref('')
-  const resultRows = computed<ResultRow[]>(() =>
+  const resultRows = computed<QueryEditorResultRow[]>(() =>
     results.value?.type === 'rows' ? results.value.rows : []
   )
   const filteredResultRows = computed(() => {
@@ -506,24 +561,14 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
   const applyTemplate = (sql: string) => {
     editorSql.value = sql
   }
-  const loadFromHistory = (item: HistoryEntry) => {
+  const loadFromHistory = (item: QueryEditorHistoryEntry) => {
     editorSql.value = item.sql
     activeTab.value = 'editor'
   }
-  const deleteHistory = (_event: MouseEvent | KeyboardEvent, item: HistoryEntry) => {
-    history.value = history.value.filter((entry) => entry.id !== item.id)
+  const deleteHistory = (event: Event, item: QueryEditorHistoryEntry) => {
+    historyList.value = historyList.value.filter((entry) => entry.id !== item.id)
+    emit('delete-query', event, item)
   }
-  const SQL_VERBS = [
-    'SELECT',
-    'INSERT',
-    'UPDATE',
-    'DELETE',
-    'CREATE',
-    'ALTER',
-    'DROP',
-    'WITH',
-    'PRAGMA'
-  ]
 
   const resultStatus = computed(() => {
     if (running.value) return 'Running the query.'
@@ -533,38 +578,25 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
     return `${count} ${count === 1 ? 'row' : 'rows'} returned.`
   })
 
-  const runQuery = () => {
+  const runQuery = (event: Event) => {
     const sql = editorSql.value.trim()
     if (!sql || running.value) return
-    running.value = true
-    results.value = null
-    setTimeout(() => {
-      if (history.value[0]?.sql !== sql) {
-        history.value = [{ id: `q-${history.value.length + 1}`, sql }, ...history.value]
-      }
-      const verb = sql.split(/\s+/)[0].toUpperCase()
-      const text =
-        verb === 'CREATE'
-          ? 'Table created.'
-          : verb === 'INSERT'
-            ? 'Rows inserted.'
-            : 'Statement executed.'
-      results.value = !SQL_VERBS.includes(verb)
-        ? {
-            type: 'error',
-            line: 1,
-            text: `The statement wasn't executed: near "${verb}", a syntax error. Check the statement and run it again.`
-          }
-        : verb === 'SELECT'
-          ? structuredClone(selectResult)
-          : { type: 'message', text }
-      running.value = false
-    }, 700)
+    emit('run', event, sql)
+  }
+  const onHistoryAction = (event: Event, value: unknown, item: QueryEditorHistoryEntry) => {
+    if (value === 'run') {
+      applyTemplate(item.sql)
+      runQuery(event)
+      return
+    }
+    deleteHistory(event, item)
+  }
+  const downloadResults = (event: MouseEvent) => {
+    if (results.value) emit('download-results', event, results.value)
   }
 
   const templates: QueryTemplate[] = [
     {
-      id: 'create-table',
       title: 'Create table',
       description: 'Create a basic customers table with auto-increment ID and timestamp',
       icon: 'ai ai-table',
@@ -576,7 +608,6 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
 );`
     },
     {
-      id: 'insert-data',
       title: 'Insert data',
       description: 'Insert sample customer records into the customers table',
       icon: 'ai ai-circle-plus',
@@ -586,7 +617,6 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
   ('Alex Morgan', 'alex.morgan@example.com');`
     },
     {
-      id: 'select-all',
       title: 'Select all',
       description: 'Retrieve all records from customers table with limit',
       icon: 'ai ai-list',
@@ -596,14 +626,12 @@ ORDER BY created_at DESC
 LIMIT 100;`
     },
     {
-      id: 'count-records',
       title: 'Count records',
       description: 'Count total number of records in customers table',
       icon: 'ai ai-hash',
       sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
     },
     {
-      id: 'related-table',
       title: 'Related table',
       description: 'Create an orders table that references the customers table',
       icon: 'ai ai-box',
@@ -614,7 +642,6 @@ LIMIT 100;`
 );`
     },
     {
-      id: 'insert-related',
       title: 'Insert related rows',
       description: 'Insert sample orders for existing customers',
       icon: 'ai ai-arrow-right-left',
@@ -623,7 +650,6 @@ LIMIT 100;`
   (3, 18.00);`
     },
     {
-      id: 'join-tables',
       title: 'Join tables',
       description: 'List every order with the name of the customer who placed it',
       icon: 'ai ai-search',
@@ -633,7 +659,6 @@ JOIN customers ON customers.id = orders.customer_id
 ORDER BY orders.id DESC;`
     },
     {
-      id: 'create-index',
       title: 'Create index',
       description: 'Create an index to speed up lookups of orders by customer',
       icon: 'ai ai-sitemap',
@@ -641,7 +666,6 @@ ORDER BY orders.id DESC;`
 ON orders (customer_id);`
     },
     {
-      id: 'top-customers',
       title: 'Top customers',
       description: 'Find the 3 customers with the highest order totals',
       icon: 'ai ai-arrow-down-wide-narrow',
@@ -712,6 +736,7 @@ LIMIT 3;`
                       variant="outline"
                       size="small"
                       aria-label="Refresh tables"
+                      @click="(event: MouseEvent) => emit('refresh-tables', event)"
                     />
                   </Tooltip>
                   <Tooltip content="Create Table">
@@ -720,6 +745,7 @@ LIMIT 3;`
                       variant="outline"
                       size="small"
                       aria-label="Create Table"
+                      @click="(event: MouseEvent) => emit('create-table', event)"
                     />
                   </Tooltip>
                 </div>
@@ -741,8 +767,20 @@ LIMIT 3;`
             </div>
           </template>
           <div>
+            <div
+              v-if="loading"
+              class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) py-(--spacing-sm)"
+              aria-busy="true"
+              aria-label="Loading tables"
+            >
+              <Skeleton
+                v-for="line in 4"
+                :key="line"
+                height="1.5rem"
+              />
+            </div>
             <p
-              v-if="!tables.length"
+              v-else-if="!tableList.length"
               class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
             >
               No tables created yet
@@ -786,7 +824,11 @@ LIMIT 3;`
                     <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
                   </span>
                 </Item>
-                <DropdownMenu placement="bottom-end">
+                <DropdownMenu
+                  side="bottom"
+                  align="end"
+                  @select="(event, value) => onTableAction(event, value, table)"
+                >
                   <DropdownMenu.Trigger>
                     <Tooltip :content="`Actions for ${table.name}`">
                       <IconButton
@@ -837,6 +879,7 @@ LIMIT 3;`
                   variant="secondary"
                   size="medium"
                   class="w-full"
+                  @click="(event: MouseEvent) => emit('create-table', event)"
                 />
               </div>
             </template>
@@ -891,6 +934,17 @@ LIMIT 3;`
               </div>
               <div class="ms-auto flex items-center gap-(--spacing-xs)">
                 <Button
+                  v-if="selectedKeys.length"
+                  key="delete-rows"
+                  :label="`Delete ${selectedKeys.length} ${selectedKeys.length === 1 ? 'row' : 'rows'}`"
+                  variant="danger"
+                  size="medium"
+                  icon="ai ai-trash"
+                  @click="deleteSelected"
+                />
+                <Button
+                  v-else
+                  key="sort"
                   label="Sort"
                   variant="outline"
                   size="medium"
@@ -902,6 +956,7 @@ LIMIT 3;`
                     variant="outline"
                     size="medium"
                     aria-label="Refresh"
+                    @click="(event: MouseEvent) => emit('refresh', event)"
                   />
                 </Tooltip>
                 <Button
@@ -909,13 +964,28 @@ LIMIT 3;`
                   variant="primary"
                   size="medium"
                   icon="ai ai-plus"
+                  @click="(event: MouseEvent) => emit('insert-row', event, selectedTable!)"
                 />
               </div>
             </div>
 
-            <div class="min-h-0 flex-1 overflow-auto">
+            <div
+              v-if="error"
+              class="p-(--spacing-md)"
+            >
+              <Alert
+                severity="danger"
+                :label="error"
+                action-label="Retry"
+                @action="(event: MouseEvent) => emit('retry', event)"
+              />
+            </div>
+            <div
+              v-else
+              class="min-h-0 flex-1 overflow-auto"
+            >
               <DataTable
-                v-model:row-selection="rowSelection"
+                v-model:selected-keys="selectedKeys"
                 :data="filteredRows"
                 :columns="dataColumns"
                 row-key="__k"
@@ -925,6 +995,7 @@ LIMIT 3;`
                 :page-size="25"
                 :page-size-options="[25, 50, 100]"
                 density="compact"
+                :loading="loading"
                 :bordered="false"
                 :aria-label="`Rows of ${selectedTable.name}`"
               >
@@ -962,7 +1033,7 @@ LIMIT 3;`
                       variant="ghost"
                       size="small"
                       :aria-label="`Delete row ${row['id'] ?? row.__k}`"
-                      @click="deleteRow(row)"
+                      @click="(event: MouseEvent) => deleteRow(event, row)"
                     />
                   </Tooltip>
                 </template>
@@ -982,12 +1053,14 @@ LIMIT 3;`
                           variant="secondary"
                           size="medium"
                           icon="ai ai-plus"
+                          @click="(event: MouseEvent) => emit('insert-row', event, selectedTable!)"
                         />
                         <Button
                           label="Import data from CSV"
                           variant="outline"
                           size="medium"
                           icon="ai ai-upload"
+                          @click="(event: MouseEvent) => emit('import-csv', event, selectedTable!)"
                         />
                       </div>
                     </template>
@@ -1025,6 +1098,7 @@ LIMIT 3;`
                 variant="outline"
                 size="medium"
                 icon="ai ai-plus"
+                @click="(event: MouseEvent) => emit('add-column', event, selectedTable!)"
               />
             </div>
             <Card :padded="false">
@@ -1120,13 +1194,9 @@ LIMIT 3;`
                   </span>
                 </Item>
                 <DropdownMenu
-                  placement="bottom-end"
-                  @select="
-                    (event, value) =>
-                      value === 'run'
-                        ? (applyTemplate(item.sql), runQuery())
-                        : deleteHistory(event, item)
-                  "
+                  side="bottom"
+                  align="end"
+                  @select="(event, value) => onHistoryAction(event, value, item)"
                 >
                   <DropdownMenu.Trigger>
                     <Tooltip :content="`Actions for ${oneLine(item.sql)}`">
@@ -1255,6 +1325,7 @@ LIMIT 3;`
                   size="medium"
                   aria-label="Download results"
                   :disabled="!resultRows.length"
+                  @click="downloadResults"
                 />
               </Tooltip>
               <Tooltip content="Toggle columns">
@@ -1365,7 +1436,7 @@ LIMIT 3;`
             >
               <Item
                 v-for="template in filteredTemplates"
-                :key="template.id"
+                :key="template.title"
                 variant="outline"
                 clickable
                 @click="chooseTemplate(template)"
@@ -1406,4 +1477,180 @@ LIMIT 3;`
     </Drawer>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type {
+  QueryEditorHistoryEntry,
+  QueryEditorResult,
+  QueryEditorTable
+} from './query-editor.vue'
+
+export const sampleSql = `CREATE TABLE IF NOT EXISTS customers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);`
+
+export const sampleSelectSql = `SELECT id, name, email, created_at
+FROM customers
+ORDER BY created_at DESC
+LIMIT 100;`
+
+const customers: QueryEditorTable = {
+  id: 'tbl-customers',
+  name: 'customers',
+  columns: [
+    { id: 'col-1', name: 'id', type: 'int8', primaryKey: true, notNull: true },
+    { id: 'col-2', name: 'name', type: 'text', primaryKey: false, notNull: true },
+    { id: 'col-3', name: 'email', type: 'text', primaryKey: false, notNull: true },
+    {
+      id: 'col-4',
+      name: 'created_at',
+      type: 'timestamptz',
+      primaryKey: false,
+      notNull: false
+    }
+  ],
+  rows: [
+    {
+      __k: 'row-1',
+      id: 1,
+      name: 'Jane Doe',
+      email: 'jane.doe@example.com',
+      created_at: '2026-07-21 08:15:00'
+    },
+    {
+      __k: 'row-2',
+      id: 2,
+      name: 'John Smith',
+      email: 'john.smith@example.com',
+      created_at: '2026-07-21 08:15:01'
+    },
+    {
+      __k: 'row-3',
+      id: 3,
+      name: 'Alex Morgan',
+      email: 'alex.morgan@example.com',
+      created_at: null
+    }
+  ]
+}
+
+const orders: QueryEditorTable = {
+  id: 'tbl-orders',
+  name: 'orders',
+  columns: [
+    { id: 'col-5', name: 'id', type: 'int8', primaryKey: true, notNull: true },
+    { id: 'col-6', name: 'customer_id', type: 'int8', primaryKey: false, notNull: true },
+    { id: 'col-7', name: 'total', type: 'numeric', primaryKey: false, notNull: true }
+  ],
+  rows: [
+    { __k: 'row-4', id: 1001, customer_id: 1, total: '42.50' },
+    { __k: 'row-5', id: 1002, customer_id: 3, total: '18.00' }
+  ]
+}
+
+const invoices: QueryEditorTable = {
+  id: 'tbl-invoices',
+  name: 'invoices',
+  columns: [
+    { id: 'col-8', name: 'id', type: 'int8', primaryKey: true, notNull: true },
+    {
+      id: 'col-9',
+      name: 'created_at',
+      type: 'timestamptz',
+      primaryKey: false,
+      notNull: false
+    }
+  ],
+  rows: []
+}
+
+const eventKinds = ['page_view', 'sign_in', 'checkout', 'search']
+const eventPaths = ['/', '/pricing', '/docs/start', '/cart', '/account']
+
+const events: QueryEditorTable = {
+  id: 'tbl-events',
+  name: 'events',
+  columns: [
+    { id: 'col-10', name: 'id', type: 'int8', primaryKey: true, notNull: true },
+    {
+      id: 'col-11',
+      name: 'occurred_at',
+      type: 'timestamptz',
+      primaryKey: false,
+      notNull: true
+    },
+    { id: 'col-12', name: 'kind', type: 'text', primaryKey: false, notNull: true },
+    { id: 'col-13', name: 'path', type: 'text', primaryKey: false, notNull: true },
+    { id: 'col-14', name: 'status', type: 'int4', primaryKey: false, notNull: true },
+    { id: 'col-15', name: 'duration_ms', type: 'int4', primaryKey: false, notNull: false }
+  ],
+  rows: Array.from({ length: 137 }, (_, index) => {
+    const minute = String(index % 60).padStart(2, '0')
+    const hour = String(8 + Math.floor(index / 60)).padStart(2, '0')
+    return {
+      __k: `ev-${index + 1}`,
+      id: 5000 + index,
+      occurred_at: `2026-11-10 ${hour}:${minute}:00`,
+      kind: eventKinds[index % eventKinds.length],
+      path: eventPaths[(index * 3) % eventPaths.length],
+      status: index % 17 === 0 ? 500 : index % 9 === 0 ? 404 : 200,
+      duration_ms: index % 11 === 0 ? null : 40 + ((index * 37) % 400)
+    }
+  })
+}
+
+export const sampleTables: QueryEditorTable[] = [customers, orders, invoices]
+
+export const sampleTablesWithEvents: QueryEditorTable[] = [customers, events, orders, invoices]
+
+export const sampleHistory: QueryEditorHistoryEntry[] = [
+  { id: 'q-0', sql: sampleSql },
+  {
+    id: 'q-1',
+    sql: `CREATE TABLE IF NOT EXISTS orders (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  customer_id INTEGER NOT NULL REFERENCES customers (id),
+  total NUMERIC NOT NULL
+);`
+  }
+]
+
+export const sampleHistoryAfterSelect: QueryEditorHistoryEntry[] = [
+  { id: 'q-2', sql: sampleSelectSql },
+  ...sampleHistory
+]
+
+export const sampleSelectResult: QueryEditorResult = {
+  type: 'rows',
+  columns: ['id', 'name', 'email', 'created_at'],
+  rows: [
+    {
+      __k: 1,
+      id: 1,
+      name: 'Jane Doe',
+      email: 'jane.doe@example.com',
+      created_at: '2026-07-21 08:15:00'
+    },
+    {
+      __k: 2,
+      id: 2,
+      name: 'John Smith',
+      email: 'john.smith@example.com',
+      created_at: '2026-07-21 08:15:01'
+    },
+    {
+      __k: 3,
+      id: 3,
+      name: 'Alex Morgan',
+      email: 'alex.morgan@example.com',
+      created_at: '2026-07-21 08:15:02'
+    }
+  ]
+}
 ```

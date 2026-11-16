@@ -48,9 +48,9 @@ A medium search `Input` across events, hosts, paths and addresses, then outlined
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, each an option `Item` (`clickable`, `variant="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
-### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState` (required)
+### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState`, `Alert` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window. When `error` is set, a danger `Alert` with the message and Retry takes the place of the summary, the chart and the table; the fields panel stays.
 
 ### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -85,6 +85,72 @@ Above the controls row, one tab per open investigation; each keeps its own filte
 Variant EventDocument only; it adds `CopyButton` to the page.
 
 The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` chip with the other filters. Copy copies the fields shown as JSON; the full JSON document stays below.
+
+## Data
+
+The block takes its events through props and emits every action; it fetches nothing. `SplitViewEvent`, `SplitViewField`, `SplitViewBucket`, `SplitViewProps` and the other types are exported from `split-view.vue`, and `sample.ts` holds the sample events, fields and clock the block renders when `events` is left out (and never while `loading` or `error` is set). The filters (the period included), the search and the page are models the page can own, so it can run them on the server.
+
+| Prop / model              | Type                       | What it does                                                                                                                                                                                                                                                                                  |
+| ------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `events`                  | `SplitViewEvent[]`         | The events: `id`, `at`, `source`, `level`, `message` and one key per field. Pass `[]` for a workspace with no traffic.                                                                                                                                                                        |
+| `fields`                  | `SplitViewField[]`         | The fields, in order; the columns, the fields panel and the document follow them. Core fields stay shown, and the first columns are `host`, `status` and `remoteAddress` when the fields have them, else the first three others; `time` and `sourceLabel` are derived from `at` and `source`. |
+| `categories`              | `SplitViewFieldCategory[]` | The groups of the fields panel, in order. Left out with `fields` given, one group per `category` the fields name.                                                                                                                                                                             |
+| `buckets`                 | `SplitViewBucket[]`        | The volume chart bars, per level. Left out, the block counts them from the events in the period.                                                                                                                                                                                              |
+| `summary`                 | `SplitViewSummary`         | Events, Errors and Avg request time. Left out, counted from the events that match.                                                                                                                                                                                                            |
+| `total`                   | `number`                   | Server mode: every match on the server. `events` is then the page the server filtered, the block does not filter, search or slice it, and the pages follow `page` and `pageSize`.                                                                                                             |
+| `now`                     | `Date`                     | Where relative periods end (Last hour ends now). Left out, the sample clock; a live page passes the time of its request.                                                                                                                                                                      |
+| `moreRows`, `loadingMore` | `boolean`                  | More events exist after the last one, and the next ones are loading; the table offers to load more and emits `load-more`.                                                                                                                                                                     |
+| `loading`                 | `boolean`                  | A request is in flight: `Skeleton`s hold the summary and the chart, the table shows its loading rows and Refresh spins.                                                                                                                                                                       |
+| `error`                   | `string`                   | Why the events failed to load, shown in the danger `Alert` with Retry that replaces the log.                                                                                                                                                                                                  |
+| `v-model:filters`         | `SplitViewFilters`         | Applied values per field id, as `FilterMenu` writes them. `period` holds the range: `15m`, `1h`, `6h`, `24h` or `{ start, end }` (the chart brush writes one). Starts at `24h`.                                                                                                               |
+| `v-model:search`          | `string`                   | The search text.                                                                                                                                                                                                                                                                              |
+| `v-model:page`            | `number`                   | The table page, 1-based, back to `1` when the filters or the search change.                                                                                                                                                                                                                   |
+| `v-model:page-size`       | `number`                   | Rows per page, `25` by default.                                                                                                                                                                                                                                                               |
+
+| Event       | Payload           | When                                                        |
+| ----------- | ----------------- | ----------------------------------------------------------- |
+| `refresh`   | `(event)`         | Refresh in the controls row.                                |
+| `retry`     | `(event)`         | Retry in the error alert.                                   |
+| `select`    | `(event, record)` | An event was opened, from its detail button or a row click. |
+| `load-more` | `(event)`         | The end of the loaded events neared, with `moreRows` set.   |
+
+To go live, render the block from a page that owns the query and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+  import SplitView, { type SplitViewFilters } from './split-view.vue'
+
+  const filters = ref<SplitViewFilters>({ period: ['24h'] })
+  const search = ref('')
+  const page = ref(1)
+  const pageSize = ref(25)
+  const { data, pending, error, refresh } = useEvents({ filters, search, page, pageSize })
+  const loadError = "Couldn't load events. Check your connection and retry."
+</script>
+
+<template>
+  <SplitView
+    v-model:filters="filters"
+    v-model:search="search"
+    v-model:page="page"
+    v-model:page-size="pageSize"
+    :events="data?.events ?? []"
+    :fields="data?.fields"
+    :buckets="data?.buckets"
+    :summary="data?.summary"
+    :total="data?.total"
+    :now="data?.requestedAt"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import, and give `fields` its own list. A log that streams instead of paging passes `moreRows` and appends the next events on `load-more`.
 
 ## Do
 
@@ -138,11 +204,11 @@ The document lists every field of the event. Search in this event narrows the li
 
 ## States
 
-- Default: live traffic with the summary, the chart and the log filled, and no filters applied; while Refresh runs the summary values and the chart show `Skeleton`s and the table its loading rows.
-- Loading: the first load; `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
-- Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a `FilterMenu.ChipGroup` chip.
-- Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
-- Error: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry, which reruns the request like Refresh.
+- Default: live traffic with the summary, the chart and the log filled, and no filters applied; while the page refreshes (`loading` with `events`) the summary values and the chart show `Skeleton`s and the table its loading rows.
+- Loading: the first load (`loading` with no `events`); `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
+- Filtered: errors from the Security and Access Control sources (`v-model:filters` seeded with them); the Filter button counts three fields and each shows as a `FilterMenu.ChipGroup` chip.
+- Empty: a workspace with no traffic yet (`events` is `[]`); the summary reads zero, the chart is flat and the log shows No events yet.
+- Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
 - Sessions: three investigation tabs, API errors active.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.
@@ -173,6 +239,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 ```vue
 <script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
+  import Alert from '@aziontech/webkit/alert'
   import Chart, {
     type ChartColor,
     type ChartRange,
@@ -186,7 +253,12 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import FilterMenu, { type FilterMenuField } from '@aziontech/webkit/filter-menu'
+  import FilterMenu, {
+    type FilterMenuField,
+    type FilterMenuModel,
+    type FilterMenuRange,
+    type FilterMenuValue
+  } from '@aziontech/webkit/filter-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item-root'
@@ -200,75 +272,143 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  interface TimeRange {
-    start: Date | null
-    end: Date | null
-  }
+  import { sampleCategories, sampleEvents, sampleFields, sampleNow } from './sample'
 
-  type EventSource = 'http' | 'security' | 'services' | 'access'
-  type EventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
-  type EventFieldCategory =
-    | 'request'
-    | 'response'
-    | 'cache'
-    | 'performance'
-    | 'geolocation'
-    | 'client'
-    | 'security'
-    | 'services'
-    | 'identifiers'
+  /** Severity of an event; it colors the level tag and stacks the volume chart. */
+  export type SplitViewEventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
 
-  type EventRecord = {
+  /** One event of the log. */
+  export interface SplitViewEvent {
+    /** Stable key of the event. */
     id: string
+    /** When the event happened; the Time column, the period filter and the chart read it. */
     at: Date
-    time: string
-    source: EventSource
-    sourceLabel: string
-    level: EventLevel
+    /** Source key: http, security, services or access (any other key shows as written). */
+    source: string
+    /** Severity of the event. */
+    level: SplitViewEventLevel
+    /** One-line description, the Event column and the heading of the document. */
     message: string
-    host?: string
-    requestMethod?: string
-    requestUri?: string
-    status?: number
-    requestTimeMs?: number
-    bytesSent?: number
-    cacheStatus?: string
-    country: string
-    remoteAddress: string
-    ruleName?: string
-    serviceName?: string
-    serviceDurationMs?: number
-    requestId: string
-    resourceId: string
-    userAgent?: string
+    /** Every other value, keyed by the id of a field in fields. */
+    [field: string]: unknown
   }
 
-  type EventFieldId = Exclude<keyof EventRecord, 'id' | 'at' | 'source'>
+  /** How a field value is written: a locale number, or a number of milliseconds. */
+  export type SplitViewFieldFormat = 'number' | 'milliseconds'
 
-  type EventTemplate = Pick<EventRecord, 'source' | 'level' | 'message'> &
-    Partial<
-      Pick<
-        EventRecord,
-        'requestMethod' | 'requestUri' | 'status' | 'ruleName' | 'serviceName' | 'serviceDurationMs'
-      >
-    >
-
-  interface EventField {
-    id: EventFieldId
+  /** One field of the events: a table column, a row of the fields panel and a key of the document. */
+  export interface SplitViewField {
+    /** Key of the value on each event; time and sourceLabel are derived from at and source. */
+    id: string
+    /** Column header and fields panel label. */
     label: string
+    /** Always shown and locked in the fields panel. */
     core?: boolean
+    /** The principal column of the table. */
     principal?: boolean
-    category?: EventFieldCategory
+    /** Id of the category that groups the field in the fields panel while it is hidden. */
+    category?: string
+    /** Share of the spare width the column takes. */
     grow?: TableColumn['grow']
+    /** Narrowest width of the column, in pixels. */
     minWidth?: number
+    /** Alignment of the column; end for numbers. */
     align?: TableColumn['align']
+    /** Writes the value in the code font. */
     mono?: boolean
-    format?: (value: number) => string
+    /** How the value is written. */
+    format?: SplitViewFieldFormat
   }
 
-  type AppliedValue = string | number | TimeRange
+  /** A group of hidden fields in the fields panel. */
+  export interface SplitViewFieldCategory {
+    /** Key the fields name in their category. */
+    id: string
+    /** Heading of the group. */
+    label: string
+  }
 
-  type FilterState = Record<string, AppliedValue[]>
+  /** One bar of the volume chart. */
+  export interface SplitViewBucket {
+    /** Start of the bar. */
+    at: Date
+    /** End of the bar. */
+    end: Date
+    /** Events in the bar. */
+    total: number
+    /** Events in the bar per level. */
+    levels: Record<string, number>
+  }
+
+  /** The numbers above the chart. */
+  export interface SplitViewSummary {
+    /** Events that match. */
+    total: number
+    /** Of them, events at the Error level. */
+    errors: number
+    /** Mean request time in milliseconds, or null when no event has one. */
+    avgRequestTimeMs: number | null
+  }
+
+  /** Applied values per filter field; period holds the time range. */
+  export type SplitViewFilters = FilterMenuModel
+
+  export interface SplitViewProps {
+    /** The events. Left out, the sample renders. Filtered, searched and paged in the browser unless total is set. */
+    events?: SplitViewEvent[]
+    /** The fields of the events, in order; the columns, the fields panel and the document follow them. Left out, the sample fields. */
+    fields?: SplitViewField[]
+    /** The categories of the fields panel, in order. Left out, derived from the fields. */
+    categories?: SplitViewFieldCategory[]
+    /** The volume chart bars. Left out, counted from the events in the period. */
+    buckets?: SplitViewBucket[]
+    /** The numbers above the chart. Left out, counted from the events that match. */
+    summary?: SplitViewSummary
+    /** Every event that matches on the server: events is then one page the server already filtered, and the pages follow page and pageSize. */
+    total?: number
+    /** The moment relative periods end at. Left out, the sample clock. */
+    now?: Date
+    /** More events exist after the last one; the table offers to load more. */
+    moreRows?: boolean
+    /** The next events are loading. */
+    loadingMore?: boolean
+    /** A request is in flight: skeletons hold the numbers and the chart, and the table shows its loading rows. */
+    loading?: boolean
+    /** Why the events could not load; a danger alert with Retry replaces the log. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<SplitViewProps>(), {
+    events: undefined,
+    fields: undefined,
+    categories: undefined,
+    buckets: undefined,
+    summary: undefined,
+    total: undefined,
+    now: undefined,
+    moreRows: false,
+    loadingMore: false,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    select: [event: MouseEvent, record: SplitViewEvent]
+    'load-more': [event: Event]
+  }>()
+
+  const filters = defineModel<SplitViewFilters>('filters', {
+    default: () => ({ period: ['24h'] })
+  })
+  const search = defineModel<string>('search', { default: '' })
+  const page = defineModel<number>('page', { default: 1 })
+  const pageSize = defineModel<number>('pageSize', { default: 25 })
+
+  type EventRow = SplitViewEvent & { time: string; sourceLabel: string }
+
+  type AppliedValue = FilterMenuValue
 
   interface FilterOption {
     value: AppliedValue
@@ -277,26 +417,17 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
   }
 
   interface FilterField {
-    id: string
     label: string
+    id: string
     kind: 'range' | 'options'
     options: FilterOption[]
     formatValue?: (value: AppliedValue) => string
-    match: (event: EventRecord, values: AppliedValue[]) => boolean
+    match: (event: EventRow, values: AppliedValue[]) => boolean
   }
-
-  interface EventBucket {
-    at: Date
-    end: Date
-    total: number
-    levels: Record<string, number>
-  }
-
-  const referenceNow = Date.UTC(2026, 10, 10, 14, 30)
-
-  const minutesAgo = (minutes: number) => new Date(referenceNow - minutes * 60 * 1000)
 
   const { formatDate, formatNumber } = useLocale()
+
+  const nowDate = computed(() => props.now ?? sampleNow)
 
   const dayFormat = (value: Date | number | string) =>
     formatDate(value, {
@@ -327,7 +458,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
   const formatEventClock = (date: unknown) => (isDate(date) ? axisFormat(date) : '')
 
-  const eventSources: Record<EventSource, string> = {
+  const eventSources: Record<string, string> = {
     http: 'HTTP Requests',
     security: 'Security',
     services: 'Services',
@@ -339,16 +470,16 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     label
   }))
 
-  const eventLevels: Record<EventLevel, TagSeverity> = {
+  const eventLevels: Record<SplitViewEventLevel, TagSeverity> = {
     Error: 'danger',
     Warning: 'warning',
     Info: 'info',
     Debug: 'neutral'
   }
 
-  const eventLevelSeverity = (level: EventLevel) => eventLevels[level] ?? 'neutral'
+  const eventLevelSeverity = (level: SplitViewEventLevel) => eventLevels[level] ?? 'neutral'
 
-  const levelOrder = Object.keys(eventLevels) as EventLevel[]
+  const levelOrder = Object.keys(eventLevels) as SplitViewEventLevel[]
 
   const eventLevelOptions = levelOrder.map((value) => ({ value, label: value }))
 
@@ -364,7 +495,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
   const fullWindowMinutes = periodMinutes['24h']
 
-  const withinRange = (date: Date, range: TimeRange | null) => {
+  const withinRange = (date: Date, range: FilterMenuRange | null) => {
     if (!range) return true
     const { start, end } = range
     if (!start && !end) return true
@@ -384,7 +515,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     return true
   }
 
-  const periodRange = (value: AppliedValue, now = new Date(referenceNow)) => {
+  const periodRange = (value: AppliedValue, now = nowDate.value): FilterMenuRange => {
     if (value && typeof value === 'object') {
       return { start: value.start ?? null, end: value.end ?? now }
     }
@@ -410,232 +541,56 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
       : `${from} to ${dayFormat(end)}, ${formatEventClock(end)}`
   }
 
-  const eventFieldCategories: { id: EventFieldCategory; label: string }[] = [
-    { id: 'request', label: 'Request' },
-    { id: 'response', label: 'Response' },
-    { id: 'cache', label: 'Cache' },
-    { id: 'performance', label: 'Performance' },
-    { id: 'geolocation', label: 'Geolocation' },
-    { id: 'client', label: 'Client' },
-    { id: 'security', label: 'Security' },
-    { id: 'services', label: 'Services' },
-    { id: 'identifiers', label: 'Identifiers' }
-  ]
+  const eventFields = computed(() => props.fields ?? sampleFields)
 
-  const eventFields: EventField[] = [
-    { id: 'time', label: 'Time', core: true, minWidth: 80, mono: true },
-    { id: 'level', label: 'Level', core: true, minWidth: 104 },
-    { id: 'sourceLabel', label: 'Source', core: true, minWidth: 80 },
-    { id: 'message', label: 'Event', core: true, principal: true, grow: 3 },
-    { id: 'host', label: 'Host', category: 'request', grow: 2, mono: true },
-    { id: 'requestMethod', label: 'Method', category: 'request', minWidth: 80, mono: true },
-    { id: 'requestUri', label: 'Path', category: 'request', grow: 2, mono: true },
-    { id: 'status', label: 'Status', category: 'response', align: 'end', minWidth: 80, mono: true },
-    {
-      id: 'requestTimeMs',
-      label: 'Request time',
-      category: 'performance',
-      align: 'end',
-      minWidth: 80,
-      format: (value) => `${value} ms`
-    },
-    {
-      id: 'bytesSent',
-      label: 'Bytes sent',
-      category: 'response',
-      align: 'end',
-      minWidth: 80,
-      format: (value) => formatNumber(value)
-    },
-    { id: 'cacheStatus', label: 'Cache status', category: 'cache', minWidth: 80, mono: true },
-    { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
-    { id: 'remoteAddress', label: 'Remote address', category: 'client', minWidth: 80, mono: true },
-    { id: 'ruleName', label: 'Rule', category: 'security', minWidth: 80 },
-    { id: 'serviceName', label: 'Service', category: 'services', minWidth: 80, mono: true },
-    {
-      id: 'serviceDurationMs',
-      label: 'Service duration',
-      category: 'services',
-      align: 'end',
-      minWidth: 80,
-      format: (value) => `${value} ms`
-    },
-    { id: 'requestId', label: 'Request ID', category: 'identifiers', minWidth: 80, mono: true },
-    { id: 'resourceId', label: 'Resource ID', category: 'identifiers', minWidth: 80, mono: true },
-    { id: 'userAgent', label: 'User agent', category: 'client', grow: 3, mono: true }
-  ]
+  const eventFieldCategories = computed<SplitViewFieldCategory[]>(() => {
+    if (props.categories) return props.categories
+    if (!props.fields) return sampleCategories
+    const ids = [...new Set(props.fields.map((field) => field.category ?? ''))].filter(Boolean)
+    return ids.map((category) => ({ label: category, id: category }))
+  })
 
-  const coreFields = eventFields.filter((field) => field.core)
+  const coreFields = computed(() => eventFields.value.filter((field) => field.core))
 
-  const optionalFields = eventFields.filter((field) => !field.core)
+  const optionalFields = computed(() => eventFields.value.filter((field) => !field.core))
 
-  const eventField = (id: string) => eventFields.find((field) => field.id === id)
+  const eventField = (id: string) => eventFields.value.find((field) => field.id === id)
 
-  const formatEventValue = (field: EventField | undefined, value: unknown) => {
+  const formatEventValue = (field: SplitViewField | undefined, value: unknown) => {
     if (value === undefined || value === null || value === '') return '—'
-    return field?.format && typeof value === 'number' ? field.format(value) : String(value)
+    if (typeof value !== 'number' || !field?.format) return String(value)
+    return field.format === 'number' ? formatNumber(value) : `${value} ms`
   }
 
-  const hosts = [
-    'example.com',
-    'api.example.com',
-    'staging.example.com',
-    'legacy.example.com',
-    'cdn.example.com'
-  ]
-  const addresses = [
-    '203.0.113.9',
-    '198.51.100.12',
-    '192.0.2.3',
-    '198.51.100.55',
-    '203.0.113.18',
-    '192.0.2.21',
-    '203.0.113.42'
-  ]
-  const countries = ['United States', 'Brazil', 'Portugal', 'Germany', 'Chile']
-  const agents = [
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-    'curl/8.12.1',
-    'Health-Check/1.0'
-  ]
-  const cacheStatuses = ['HIT', 'MISS', 'BYPASS', 'EXPIRED']
-  const resources = ['res-3f9a21', 'res-77c40b', 'res-91de55']
+  const serverMode = computed(() => props.total !== undefined)
 
-  const eventTemplates: EventTemplate[] = [
-    {
-      source: 'security',
-      level: 'Error',
-      message: 'Blocked SQL injection attempt on /api/session',
-      requestMethod: 'POST',
-      requestUri: '/api/session',
-      status: 403,
-      ruleName: 'SQL Injection · rule 942100'
-    },
-    {
-      source: 'http',
-      level: 'Warning',
-      message: 'Origin responded 502 after 3 retries',
-      requestMethod: 'GET',
-      requestUri: '/checkout/cart',
-      status: 502
-    },
-    {
-      source: 'services',
-      level: 'Info',
-      message: 'auth-handler completed in 12ms',
-      serviceName: 'auth-handler',
-      serviceDurationMs: 12
-    },
-    {
-      source: 'access',
-      level: 'Warning',
-      message: 'Rate limit reached for a single address',
-      requestMethod: 'GET',
-      requestUri: '/api/search',
-      status: 429,
-      ruleName: 'Rate Limit · 100 rpm'
-    },
-    {
-      source: 'services',
-      level: 'Debug',
-      message: 'geo-router resolved region south-america',
-      serviceName: 'geo-router',
-      serviceDurationMs: 4
-    },
-    {
-      source: 'http',
-      level: 'Info',
-      message: 'Delivered from cache',
-      requestMethod: 'GET',
-      requestUri: '/assets/app.js',
-      status: 200
-    },
-    {
-      source: 'access',
-      level: 'Error',
-      message: 'IP list “Known scrapers” denied the request',
-      requestMethod: 'GET',
-      requestUri: '/products',
-      status: 403,
-      ruleName: 'IP list · Known scrapers'
-    },
-    {
-      source: 'http',
-      level: 'Error',
-      message: 'Origin timed out after 30s',
-      requestMethod: 'GET',
-      requestUri: '/reports/monthly.pdf',
-      status: 504
-    }
-  ]
+  const sourceEvents = computed<SplitViewEvent[]>(
+    () => props.events ?? (props.loading || props.error ? [] : sampleEvents)
+  )
 
-  const sequence = (seed: number) => {
-    let state = seed
-    return (length: number) => {
-      state = (state * 1103515245 + 12345) % 2147483648
-      return state % length
-    }
-  }
+  const eventRows = computed<EventRow[]>(() =>
+    sourceEvents.value.map((event) => ({
+      ...event,
+      time: formatEventTime(event.at),
+      sourceLabel: eventSources[event.source] ?? event.source
+    }))
+  )
 
-  const eventCount = 1500
-  const seedWindowMinutes = 1436
-
-  const ageFraction = (u: number) => (4 - Math.sqrt(16 - 15 * u)) / 3
-
-  const calmTemplates = eventTemplates.filter((template) => template.level !== 'Error')
-  const errorTemplates = eventTemplates.filter((template) => template.level === 'Error')
-  const rotation = [...calmTemplates, ...calmTemplates, ...errorTemplates]
-
-  const seedEvents = (): EventRecord[] => {
-    const pick = sequence(20260814)
-    return Array.from({ length: eventCount }, (_, index) => {
-      const template = rotation[index % rotation.length]
-      const progress = (index + pick(100) / 100) / eventCount
-      const at = minutesAgo(0.2 + seedWindowMinutes * ageFraction(progress))
-      const requestScoped = template.source !== 'services'
-      return {
-        id: `ev-${String(index + 1).padStart(3, '0')}`,
-        at,
-        time: formatEventTime(at),
-        source: template.source,
-        sourceLabel: eventSources[template.source],
-        level: template.level,
-        message: template.message,
-        host: requestScoped ? hosts[pick(hosts.length)] : undefined,
-        requestMethod: template.requestMethod,
-        requestUri: template.requestUri,
-        status: template.status,
-        requestTimeMs: requestScoped ? 40 + pick(960) : undefined,
-        bytesSent: requestScoped ? 512 + pick(180000) : undefined,
-        cacheStatus: requestScoped ? cacheStatuses[pick(cacheStatuses.length)] : undefined,
-        country: countries[pick(countries.length)],
-        remoteAddress: addresses[pick(addresses.length)],
-        ruleName: template.ruleName,
-        serviceName: template.serviceName,
-        serviceDurationMs: template.serviceDurationMs,
-        requestId: `${(pick(0xffffff) + 0x100000).toString(16)}-${(pick(0xffff) + 0x1000).toString(16)}`,
-        resourceId: resources[pick(resources.length)],
-        userAgent: requestScoped ? agents[pick(agents.length)] : undefined
-      }
-    })
-  }
-
-  const searchEvents = (list: EventRecord[], term: string) => {
+  const searchEvents = (list: EventRow[], term: string) => {
     const needle = term.trim().toLowerCase()
     if (!needle) return list
     return list.filter((event) =>
-      eventFields.some((field) => {
+      eventFields.value.some((field) => {
         const value = event[field.id]
-        return value !== undefined && String(value).toLowerCase().includes(needle)
+        return value !== undefined && value !== null && String(value).toLowerCase().includes(needle)
       })
     )
   }
 
-  const fieldValueCounts = (list: EventRecord[], id: EventFieldId) => {
-    const counts = new Map<string | number, number>()
+  const fieldValueCounts = (list: EventRow[], id: string) => {
+    const counts = new Map<AppliedValue, number>()
     for (const event of list) {
-      const value = event[id]
+      const value = event[id] as AppliedValue | undefined | null
       if (value === undefined || value === null || value === '') continue
       counts.set(value, (counts.get(value) ?? 0) + 1)
     }
@@ -644,8 +599,8 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
       .sort((a, b) => b.count - a.count)
   }
 
-  const countFieldValues = (list: EventRecord[], id: EventFieldId) => {
-    const values = new Set<string | number>()
+  const countFieldValues = (list: EventRow[], id: string) => {
+    const values = new Set<unknown>()
     for (const event of list) {
       const value = event[id]
       if (value !== undefined && value !== null && value !== '') values.add(value)
@@ -659,8 +614,8 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     return 32
   }
 
-  const eventBuckets = (list: EventRecord[], range: TimeRange | null): EventBucket[] => {
-    const end = (range?.end ?? new Date(referenceNow)).getTime()
+  const eventBuckets = (list: EventRow[], range: FilterMenuRange | null): SplitViewBucket[] => {
+    const end = (range?.end ?? nowDate.value).getTime()
     const start = (range?.start ?? new Date(end - fullWindowMinutes * 60000)).getTime()
     const span = Math.max(1, end - start)
     const bars = bucketCountFor(span / 60000)
@@ -682,43 +637,39 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     return result
   }
 
-  const eventSummary = (list: EventRecord[]) => {
+  const eventSummary = (list: EventRow[]): SplitViewSummary => {
     const errors = list.filter((event) => event.level === 'Error').length
-    const timed = list.filter(
-      (event): event is EventRecord & { requestTimeMs: number } =>
-        typeof event.requestTimeMs === 'number'
-    )
+    const times = list
+      .map((event) => event.requestTimeMs)
+      .filter((value): value is number => typeof value === 'number')
     return {
       total: list.length,
       errors,
-      errorShare: list.length ? errors / list.length : 0,
-      avgRequestTimeMs: timed.length
-        ? Math.round(timed.reduce((sum, event) => sum + event.requestTimeMs, 0) / timed.length)
+      avgRequestTimeMs: times.length
+        ? Math.round(times.reduce((sum, value) => sum + value, 0) / times.length)
         : null
     }
   }
 
-  const events = ref(seedEvents())
-
   const baseFilterFields: FilterField[] = [
     {
-      id: 'period',
       label: 'Period',
+      id: 'period',
       kind: 'range',
       options: eventPeriods,
       formatValue: formatPeriod,
       match: (event, values) => matchPeriod(event.at, values)
     },
     {
-      id: 'source',
       label: 'Source',
+      id: 'source',
       kind: 'options',
       options: eventSourceOptions,
       match: (event, values) => values.includes(event.source)
     },
     {
-      id: 'level',
       label: 'Level',
+      id: 'level',
       kind: 'options',
       options: eventLevelOptions,
       match: (event, values) => values.includes(event.level)
@@ -727,13 +678,9 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
   const baseFilterIds = new Set(baseFilterFields.map((field) => field.id))
 
-  const filters = ref<FilterState>({ period: ['24h'] })
-  const search = ref('')
-  const pagination = ref({ pageIndex: 0, pageSize: 25 })
-
   const activeFieldIds = computed(() =>
     Object.keys(filters.value).filter(
-      (id): id is EventFieldId => !baseFilterIds.has(id) && Boolean(filters.value[id]?.length)
+      (id) => !baseFilterIds.has(id) && Boolean(filters.value[id]?.length)
     )
   )
 
@@ -745,19 +692,19 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
         id,
         label: field?.label ?? id,
         kind: 'options',
-        options: fieldValueCounts(events.value, id).map(({ value }) => ({
+        options: fieldValueCounts(eventRows.value, id).map(({ value }) => ({
           value,
           label: formatEventValue(field, value)
         })),
-        match: (event: EventRecord, values: readonly unknown[]) => values.includes(event[id])
+        match: (event: EventRow, values: readonly unknown[]) => values.includes(event[id])
       }
     })
   ])
 
   const menuFields = computed<FilterMenuField[]>(() =>
     filterFields.value.map((field) => ({
-      id: field.id,
       label: field.label,
+      id: field.id,
       type: field.kind === 'range' ? 'date' : 'multiple',
       options: (field.options ?? [])
         .filter((option) => !option.custom)
@@ -766,7 +713,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
   )
 
   const filteredEvents = computed(() =>
-    events.value.filter((event) =>
+    eventRows.value.filter((event) =>
       filterFields.value.every((field) => {
         const values = filters.value[field.id]
         if (!values?.length) return true
@@ -776,27 +723,18 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
   )
 
   watch(filters, () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
+    page.value = 1
   })
 
-  const loading = ref(false)
-  let refreshTimer: ReturnType<typeof setTimeout> | undefined
-  const refresh = () => {
-    if (loading.value) return
-    loading.value = true
-    clearTimeout(refreshTimer)
-    refreshTimer = setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
-
-  const tableEl = ref<TableExposed<EventRecord> | null>(null)
+  const tableEl = ref<TableExposed<EventRow> | null>(null)
   const exportCsv = () => tableEl.value?.exportCsv({ filename: 'events.csv' })
 
-  const matchedEvents = computed(() => searchEvents(filteredEvents.value, search.value))
+  const matchedEvents = computed(() =>
+    serverMode.value ? eventRows.value : searchEvents(filteredEvents.value, search.value)
+  )
 
   watch(search, () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
+    page.value = 1
   })
 
   const appliedPeriod = computed(() => filters.value.period?.[0] ?? '')
@@ -809,39 +747,50 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     return eventPeriods.find((option) => option.value === period)?.label ?? 'Last 24 hours'
   })
 
-  const selectTimeRange = ({ start, end }: TimeRange) => {
+  const selectTimeRange = ({ start, end }: FilterMenuRange) => {
     filters.value = { ...filters.value, period: [{ start, end }] }
   }
 
-  const buckets = computed(() => eventBuckets(matchedEvents.value, activeWindow.value))
-  const summary = computed(() => eventSummary(matchedEvents.value))
+  const buckets = computed(
+    () => props.buckets ?? eventBuckets(matchedEvents.value, activeWindow.value)
+  )
+  const summary = computed(() => props.summary ?? eventSummary(matchedEvents.value))
 
   const errorShareLabel = computed(() =>
-    summary.value.total ? `${(summary.value.errorShare * 100).toFixed(1)}% of events` : 'none'
+    summary.value.total
+      ? `${((summary.value.errors / summary.value.total) * 100).toFixed(1)}% of events`
+      : 'none'
   )
 
-  const shownColumns = ref(['host', 'status', 'remoteAddress'])
+  const noTraffic = computed(() => !serverMode.value && !sourceEvents.value.length)
+
+  const defaultColumns = () => {
+    const known = ['host', 'status', 'remoteAddress'].filter((id) => eventField(id))
+    return known.length ? known : optionalFields.value.slice(0, 3).map((field) => field.id)
+  }
+
+  const shownColumns = ref(defaultColumns())
   const fieldsOpen = ref(true)
   const fieldSearch = ref('')
 
-  const matchesFieldSearch = (field: EventField) => {
+  const matchesFieldSearch = (field: SplitViewField) => {
     const term = fieldSearch.value.trim().toLowerCase()
     if (!term) return true
     return field.label.toLowerCase().includes(term) || field.id.toLowerCase().includes(term)
   }
 
-  const shownFields = computed<Array<EventField & { locked?: boolean }>>(() => [
-    ...coreFields.filter(matchesFieldSearch).map((field) => ({ ...field, locked: true })),
-    ...optionalFields.filter(
+  const shownFields = computed<Array<SplitViewField & { locked?: boolean }>>(() => [
+    ...coreFields.value.filter(matchesFieldSearch).map((field) => ({ ...field, locked: true })),
+    ...optionalFields.value.filter(
       (field) => shownColumns.value.includes(field.id) && matchesFieldSearch(field)
     )
   ])
 
   const fieldCategories = computed(() =>
-    eventFieldCategories
+    eventFieldCategories.value
       .map((category) => ({
         ...category,
-        fields: optionalFields.filter(
+        fields: optionalFields.value.filter(
           (field) =>
             field.category === category.id &&
             !shownColumns.value.includes(field.id) &&
@@ -855,10 +804,20 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     () => shownFields.value.length > 0 || fieldCategories.value.length > 0
   )
 
-  const categoryFilterCount = (category: { fields: EventField[] }) =>
+  const categoryFilterCount = (category: { fields: SplitViewField[] }) =>
     category.fields.filter((field) => filters.value[field.id]?.length).length
 
-  const openCategories = ref(['request'])
+  const defaultCategories = () => eventFieldCategories.value.slice(0, 1).map(({ id }) => id)
+
+  const openCategories = ref(defaultCategories())
+
+  watch(
+    () => eventFields.value.map((field) => field.id).join(' '),
+    () => {
+      shownColumns.value = defaultColumns()
+      openCategories.value = defaultCategories()
+    }
+  )
 
   const collapsedBeforeSearch = ref<string[] | null>(null)
   watch(fieldSearch, (term, previous) => {
@@ -868,13 +827,13 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
       openCategories.value = fieldCategories.value.map((category) => category.id)
       return
     }
-    openCategories.value = collapsedBeforeSearch.value ?? ['request']
+    openCategories.value = collapsedBeforeSearch.value ?? defaultCategories()
     collapsedBeforeSearch.value = null
   })
 
   const fieldCounts = computed(() =>
     Object.fromEntries(
-      eventFields.map((field) => [field.id, countFieldValues(matchedEvents.value, field.id)])
+      eventFields.value.map((field) => [field.id, countFieldValues(matchedEvents.value, field.id)])
     )
   )
 
@@ -882,12 +841,12 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
   const unfilterableFields = new Set(['time', 'sourceLabel'])
 
-  const canFilterField = (field: EventField) => !unfilterableFields.has(field.id)
+  const canFilterField = (field: SplitViewField) => !unfilterableFields.has(field.id)
 
-  const topFieldValues = (id: EventFieldId) =>
+  const topFieldValues = (id: string) =>
     fieldValueCounts(matchedEvents.value, id).slice(0, topValues)
 
-  const fieldValueOverflow = (id: EventFieldId) =>
+  const fieldValueOverflow = (id: string) =>
     Math.max(0, countFieldValues(matchedEvents.value, id) - topValues)
 
   const isValueApplied = (id: string, value: AppliedValue) =>
@@ -907,7 +866,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     filters.value = { ...filters.value, [id]: next }
   }
 
-  const toColumn = (field: EventField): TableColumn => ({
+  const toColumn = (field: SplitViewField): TableColumn => ({
     accessorKey: field.id,
     header: field.label,
     sortable: true,
@@ -919,18 +878,18 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
   const columns = computed<TableColumn[]>(() => [
     { id: 'detail', header: '', width: 44, align: 'center', hideable: false },
-    ...coreFields.map(toColumn),
-    ...optionalFields.filter((field) => shownColumns.value.includes(field.id)).map(toColumn)
+    ...coreFields.value.map(toColumn),
+    ...optionalFields.value.filter((field) => shownColumns.value.includes(field.id)).map(toColumn)
   ])
 
   const customCellFields = ['status']
   const genericColumns = computed(() =>
-    optionalFields.filter(
+    optionalFields.value.filter(
       (field) => shownColumns.value.includes(field.id) && !customCellFields.includes(field.id)
     )
   )
 
-  const statusField = eventField('status')
+  const statusField = computed(() => eventField('status'))
 
   const statusSeverity = (status: unknown) => {
     if (typeof status !== 'number') return null
@@ -943,7 +902,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
   const selectedEvent = computed(
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
-  const documentEvent = ref<EventRecord | null>(null)
+  const documentEvent = ref<EventRow | null>(null)
   watch(selectedEvent, (event) => {
     if (event) documentEvent.value = event
   })
@@ -986,9 +945,10 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     documentDrawerOpen.value = false
   }
 
-  const openDocument = (_event: MouseEvent, row: EventRecord) => {
+  const openDocument = (event: MouseEvent, row: EventRow) => {
     selectedId.value = row.id
     documentDrawerOpen.value = !isWide.value
+    emit('select', event, sourceEvents.value.find((record) => record.id === row.id) ?? row)
   }
 
   const documentCollapsed = computed({
@@ -1026,7 +986,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     { flush: 'sync' }
   )
 
-  const summaryPriority: EventFieldId[] = [
+  const summaryPriority = [
     'host',
     'requestMethod',
     'requestUri',
@@ -1043,7 +1003,12 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
   const summaryLimit = 6
 
-  const hasEventValue = (event: EventRecord, id: EventFieldId) => {
+  const summaryOrder = computed(() => {
+    const known = summaryPriority.filter((id) => eventField(id))
+    return known.length ? known : optionalFields.value.map((field) => field.id)
+  })
+
+  const hasEventValue = (event: EventRow, id: string) => {
     const value = event[id]
     return value !== undefined && value !== null && value !== ''
   }
@@ -1051,7 +1016,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
   const documentRows = computed(() => {
     const event = selectedEvent.value
     if (!event) return []
-    return summaryPriority
+    return summaryOrder.value
       .filter((id) => hasEventValue(event, id))
       .slice(0, summaryLimit)
       .map((id) => {
@@ -1064,7 +1029,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     const event = selectedEvent.value
     if (!event) return []
     const payload = Object.fromEntries(
-      eventFields
+      eventFields.value
         .filter((field) => hasEventValue(event, field.id))
         .map((field) => [field.id, event[field.id]])
     )
@@ -1078,7 +1043,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     ]
   })
 
-  const levelColors: Record<EventLevel, ChartColor> = {
+  const levelColors: Record<SplitViewEventLevel, ChartColor> = {
     Error: 'severity-critical',
     Warning: 'severity-medium',
     Info: 'severity-low',
@@ -1089,8 +1054,8 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
   const volumeSeries = computed<ChartSeries[]>(() =>
     levelOrder.map((level) => ({
-      id: level,
       name: level,
+      id: level,
       color: levelColors[level] ?? 'other',
       values: buckets.value.map((bucket) => bucket.levels[level] ?? 0)
     }))
@@ -1124,7 +1089,6 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
   )
 
   onBeforeUnmount(() => {
-    clearTimeout(refreshTimer)
     explorerObserver?.disconnect()
   })
 </script>
@@ -1174,7 +1138,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
               :loading="loading"
               aria-label="Refresh"
               data-testid="refresh-button"
-              @click="refresh"
+              @click="(event: MouseEvent) => emit('refresh', event)"
             />
           </Tooltip>
           <Tooltip
@@ -1277,7 +1241,8 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
                     <Popover
                       v-if="canFilterField(field) && fieldCounts[field.id]"
-                      placement="right-start"
+                      side="end"
+                      align="start"
                     >
                       <div
                         class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
@@ -1396,7 +1361,8 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
                             <Popover
                               v-if="canFilterField(field) && fieldCounts[field.id]"
-                              placement="right-start"
+                              side="end"
+                              align="start"
                             >
                               <div
                                 class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
@@ -1481,7 +1447,21 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
               </Sidebar>
             </div>
 
-            <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+            <div
+              v-if="error"
+              class="flex min-w-0 flex-1 flex-col overflow-hidden p-(--spacing-md)"
+            >
+              <Alert
+                severity="danger"
+                :label="error"
+                action-label="Retry"
+                @action="(event: MouseEvent) => emit('retry', event)"
+              />
+            </div>
+            <div
+              v-else
+              class="flex min-w-0 flex-1 flex-col overflow-hidden"
+            >
               <section
                 class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
               >
@@ -1565,19 +1545,24 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
                 <div class="flex min-h-0 flex-1">
                   <DataTable
                     ref="tableEl"
-                    v-model:pagination="pagination"
+                    v-model:page="page"
+                    v-model:page-size="pageSize"
                     :data="matchedEvents"
                     :columns="columns"
                     row-key="id"
                     sortable
                     paginated
-                    :page-size="25"
+                    :manual-pagination="total !== undefined"
+                    :row-count="total"
+                    :more-rows="moreRows"
+                    :loading-more="loadingMore"
                     :bordered="false"
                     density="compact"
                     max-height="100%"
                     class="w-full"
                     :loading="loading"
                     @row-click="openDocument"
+                    @load-more="(event: Event) => emit('load-more', event)"
                   >
                     <template #header-detail>
                       <span class="sr-only">Open the event document</span>
@@ -1604,8 +1589,8 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
                     <template #cell-level="{ value }">
                       <Tag
-                        :label="value"
-                        :severity="eventLevelSeverity(value)"
+                        :label="String(value)"
+                        :severity="eventLevelSeverity(value as SplitViewEventLevel)"
                         size="small"
                       />
                     </template>
@@ -1639,7 +1624,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
 
                     <template #empty>
                       <EmptyState
-                        v-if="!events.length"
+                        v-if="noTraffic"
                         key="no-traffic"
                         size="small"
                         icon="ai ai-inbox"
@@ -1843,4 +1828,231 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     </Drawer>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type {
+  SplitViewEvent,
+  SplitViewEventLevel,
+  SplitViewField,
+  SplitViewFieldCategory
+} from './split-view.vue'
+
+export const sampleNow = new Date(Date.UTC(2026, 10, 10, 14, 30))
+
+export const sampleCategories: SplitViewFieldCategory[] = [
+  { id: 'request', label: 'Request' },
+  { id: 'response', label: 'Response' },
+  { id: 'cache', label: 'Cache' },
+  { id: 'performance', label: 'Performance' },
+  { id: 'geolocation', label: 'Geolocation' },
+  { id: 'client', label: 'Client' },
+  { id: 'security', label: 'Security' },
+  { id: 'services', label: 'Services' },
+  { id: 'identifiers', label: 'Identifiers' }
+]
+
+export const sampleFields: SplitViewField[] = [
+  { id: 'time', label: 'Time', core: true, minWidth: 80, mono: true },
+  { id: 'level', label: 'Level', core: true, minWidth: 104 },
+  { id: 'sourceLabel', label: 'Source', core: true, minWidth: 80 },
+  { id: 'message', label: 'Event', core: true, principal: true, grow: 3 },
+  { id: 'host', label: 'Host', category: 'request', grow: 2, mono: true },
+  { id: 'requestMethod', label: 'Method', category: 'request', minWidth: 80, mono: true },
+  { id: 'requestUri', label: 'Path', category: 'request', grow: 2, mono: true },
+  { id: 'status', label: 'Status', category: 'response', align: 'end', minWidth: 80, mono: true },
+  {
+    id: 'requestTimeMs',
+    label: 'Request time',
+    category: 'performance',
+    align: 'end',
+    minWidth: 80,
+    format: 'milliseconds'
+  },
+  {
+    id: 'bytesSent',
+    label: 'Bytes sent',
+    category: 'response',
+    align: 'end',
+    minWidth: 80,
+    format: 'number'
+  },
+  { id: 'cacheStatus', label: 'Cache status', category: 'cache', minWidth: 80, mono: true },
+  { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
+  { id: 'remoteAddress', label: 'Remote address', category: 'client', minWidth: 80, mono: true },
+  { id: 'ruleName', label: 'Rule', category: 'security', minWidth: 80 },
+  { id: 'serviceName', label: 'Service', category: 'services', minWidth: 80, mono: true },
+  {
+    id: 'serviceDurationMs',
+    label: 'Service duration',
+    category: 'services',
+    align: 'end',
+    minWidth: 80,
+    format: 'milliseconds'
+  },
+  { id: 'requestId', label: 'Request ID', category: 'identifiers', minWidth: 80, mono: true },
+  { id: 'resourceId', label: 'Resource ID', category: 'identifiers', minWidth: 80, mono: true },
+  { id: 'userAgent', label: 'User agent', category: 'client', grow: 3, mono: true }
+]
+
+interface EventTemplate {
+  source: string
+  level: SplitViewEventLevel
+  message: string
+  requestMethod?: string
+  requestUri?: string
+  status?: number
+  ruleName?: string
+  serviceName?: string
+  serviceDurationMs?: number
+}
+
+const minutesAgo = (minutes: number) => new Date(sampleNow.getTime() - minutes * 60 * 1000)
+
+const hosts = [
+  'example.com',
+  'api.example.com',
+  'staging.example.com',
+  'legacy.example.com',
+  'cdn.example.com'
+]
+const addresses = [
+  '203.0.113.9',
+  '198.51.100.12',
+  '192.0.2.3',
+  '198.51.100.55',
+  '203.0.113.18',
+  '192.0.2.21',
+  '203.0.113.42'
+]
+const countries = ['United States', 'Brazil', 'Portugal', 'Germany', 'Chile']
+const agents = [
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+  'curl/8.12.1',
+  'Health-Check/1.0'
+]
+const cacheStatuses = ['HIT', 'MISS', 'BYPASS', 'EXPIRED']
+const resources = ['res-3f9a21', 'res-77c40b', 'res-91de55']
+
+const eventTemplates: EventTemplate[] = [
+  {
+    source: 'security',
+    level: 'Error',
+    message: 'Blocked SQL injection attempt on /api/session',
+    requestMethod: 'POST',
+    requestUri: '/api/session',
+    status: 403,
+    ruleName: 'SQL Injection · rule 942100'
+  },
+  {
+    source: 'http',
+    level: 'Warning',
+    message: 'Origin responded 502 after 3 retries',
+    requestMethod: 'GET',
+    requestUri: '/checkout/cart',
+    status: 502
+  },
+  {
+    source: 'services',
+    level: 'Info',
+    message: 'auth-handler completed in 12ms',
+    serviceName: 'auth-handler',
+    serviceDurationMs: 12
+  },
+  {
+    source: 'access',
+    level: 'Warning',
+    message: 'Rate limit reached for a single address',
+    requestMethod: 'GET',
+    requestUri: '/api/search',
+    status: 429,
+    ruleName: 'Rate Limit · 100 rpm'
+  },
+  {
+    source: 'services',
+    level: 'Debug',
+    message: 'geo-router resolved region south-america',
+    serviceName: 'geo-router',
+    serviceDurationMs: 4
+  },
+  {
+    source: 'http',
+    level: 'Info',
+    message: 'Delivered from cache',
+    requestMethod: 'GET',
+    requestUri: '/assets/app.js',
+    status: 200
+  },
+  {
+    source: 'access',
+    level: 'Error',
+    message: 'IP list “Known scrapers” denied the request',
+    requestMethod: 'GET',
+    requestUri: '/products',
+    status: 403,
+    ruleName: 'IP list · Known scrapers'
+  },
+  {
+    source: 'http',
+    level: 'Error',
+    message: 'Origin timed out after 30s',
+    requestMethod: 'GET',
+    requestUri: '/reports/monthly.pdf',
+    status: 504
+  }
+]
+
+const sequence = (seed: number) => {
+  let state = seed
+  return (length: number) => {
+    state = (state * 1103515245 + 12345) % 2147483648
+    return state % length
+  }
+}
+
+const eventCount = 1500
+const seedWindowMinutes = 1436
+
+const ageFraction = (u: number) => (4 - Math.sqrt(16 - 15 * u)) / 3
+
+const calmTemplates = eventTemplates.filter((template) => template.level !== 'Error')
+const errorTemplates = eventTemplates.filter((template) => template.level === 'Error')
+const rotation = [...calmTemplates, ...calmTemplates, ...errorTemplates]
+
+const seedEvents = (): SplitViewEvent[] => {
+  const pick = sequence(20260814)
+  return Array.from({ length: eventCount }, (_, index) => {
+    const template = rotation[index % rotation.length]
+    const progress = (index + pick(100) / 100) / eventCount
+    const at = minutesAgo(0.2 + seedWindowMinutes * ageFraction(progress))
+    const requestScoped = template.source !== 'services'
+    return {
+      id: `ev-${String(index + 1).padStart(3, '0')}`,
+      at,
+      source: template.source,
+      level: template.level,
+      message: template.message,
+      host: requestScoped ? hosts[pick(hosts.length)] : undefined,
+      requestMethod: template.requestMethod,
+      requestUri: template.requestUri,
+      status: template.status,
+      requestTimeMs: requestScoped ? 40 + pick(960) : undefined,
+      bytesSent: requestScoped ? 512 + pick(180000) : undefined,
+      cacheStatus: requestScoped ? cacheStatuses[pick(cacheStatuses.length)] : undefined,
+      country: countries[pick(countries.length)],
+      remoteAddress: addresses[pick(addresses.length)],
+      ruleName: template.ruleName,
+      serviceName: template.serviceName,
+      serviceDurationMs: template.serviceDurationMs,
+      requestId: `${(pick(0xffffff) + 0x100000).toString(16)}-${(pick(0xffff) + 0x1000).toString(16)}`,
+      resourceId: resources[pick(resources.length)],
+      userAgent: requestScoped ? agents[pick(agents.length)] : undefined
+    }
+  })
+}
+
+export const sampleEvents: SplitViewEvent[] = seedEvents()
 ```

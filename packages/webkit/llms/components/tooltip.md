@@ -42,7 +42,9 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `content` | `string` | `—` | true | Plain text shown inside the tooltip. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false | Anchor side relative to the trigger; `auto` picks the side with room. |
+| `side` | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'` | false | Side of the trigger the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. |
+| `align` | `'start' \| 'center' \| 'end'` | `'center'` | false | Alignment along the trigger edge. |
+| `sideOffset` | `number` | `8` | false | Pixel gap between the trigger and the tooltip. |
 | `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
 | `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
@@ -65,7 +67,9 @@
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `data-state` values: `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop
-- `data-placement`: `top` | `right` | `bottom` | `left`
+- `data-side`: `top` | `bottom` | `start` | `end` — the side the panel landed on after flipping, on the trigger wrapper and the panel
+- `data-align`: `start` | `center` | `end` — the alignment the panel landed on
+- `start` and `end` follow the text direction: under `dir="rtl"`, `side="start"` opens on the right and `align="start"` lines the panel up with the trigger's right edge
 - `data-anchored` on the panel once its opening position has landed — the flag that lets a re-anchor animate while the entrance stays the open animation
 
 ## Accessibility
@@ -94,7 +98,7 @@
 <template>
   <Tooltip
     content="This is a Tooltip"
-    placement="top"
+    side="top"
   >
     <Button
       label="Hover me"
@@ -116,45 +120,45 @@
 <template>
   <div class="flex flex-wrap items-center justify-center gap-(--spacing-8) p-(--spacing-8)">
     <Tooltip
-      content="top placement"
-      placement="top"
+      content="top side"
+      side="top"
     >
       <IconButton
         icon="ai ai-arrow-up"
-        aria-label="top placement"
+        aria-label="top side"
         variant="outline"
         size="medium"
       />
     </Tooltip>
     <Tooltip
-      content="right placement"
-      placement="right"
+      content="end side"
+      side="end"
     >
       <IconButton
         icon="ai ai-arrow-right"
-        aria-label="right placement"
+        aria-label="end side"
         variant="outline"
         size="medium"
       />
     </Tooltip>
     <Tooltip
-      content="bottom placement"
-      placement="bottom"
+      content="bottom side"
+      side="bottom"
     >
       <IconButton
         icon="ai ai-arrow-down"
-        aria-label="bottom placement"
+        aria-label="bottom side"
         variant="outline"
         size="medium"
       />
     </Tooltip>
     <Tooltip
-      content="left placement"
-      placement="left"
+      content="start side"
+      side="start"
     >
       <IconButton
         icon="ai ai-arrow-left"
-        aria-label="left placement"
+        aria-label="start side"
         variant="outline"
         size="medium"
       />
@@ -176,14 +180,14 @@
     <p
       class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
     >
-      All four triggers use <code>placement="auto"</code>.<br />
+      All four triggers use <code>side="auto"</code>.<br />
       Each tooltip resolves to the side with the most available space.
     </p>
 
     <div class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
-        content="auto placement"
-        placement="auto"
+        content="auto side"
+        side="auto"
         :default-open="true"
       >
         <IconButton
@@ -197,8 +201,8 @@
 
     <div class="absolute bottom-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
-        content="auto placement"
-        placement="auto"
+        content="auto side"
+        side="auto"
         :default-open="true"
       >
         <IconButton
@@ -212,8 +216,8 @@
 
     <div class="absolute start-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
-        content="auto placement"
-        placement="auto"
+        content="auto side"
+        side="auto"
         :default-open="true"
       >
         <IconButton
@@ -227,8 +231,8 @@
 
     <div class="absolute end-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
-        content="auto placement"
-        placement="auto"
+        content="auto side"
+        side="auto"
         :default-open="true"
       >
         <IconButton

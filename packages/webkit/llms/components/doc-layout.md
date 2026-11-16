@@ -1,6 +1,6 @@
 # Doc Layout
 
-> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
+> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
 
 - Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -15,8 +15,8 @@
 
 - Compose the layout once, in the app's root; each route renders only its article. Never put a header, a rail or an inner scroll area in a page.
 - Give every navigation row an `id` and an `href` (an in-app path is followed with the router; never `to`); leave `activeId` empty so the current page follows the route.
-- Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
-- Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCallToAction`) in `aside`, and the site footer (`Footer variant="content"`) in `footer`.
+- Never hand the outline to the layout: give each section heading a `DocHeading` with an `anchor` and the layout lists it, in document order, with the heading's own text, and tracks which one is in view. A heading without `anchor` stays out of the outline.
+- Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCallToAction`) in `aside`, and the site footer (`Footer variant="content"`) in `footer`. The `aside` content shows only on pages with an outline, so a shared call to action never lands on the docs home.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
 - Bind `v-model:navigation-open` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
 - A drill row (`type: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`.
@@ -24,13 +24,15 @@
 ## Don’t
 
 - The signed-in console → `ConsoleLayout`. Marketing pages → `SiteLayout`.
-- A docs landing page with no rail (the docs home) → render it with `DocHero` and the sections, without this layout, or pass an empty `navigation` and `outline`.
+- Never as part of a page: a page body is only its article, so it never renders `DocLayout`. A docs home with no outline rail is still a page inside the one layout: its headings carry no `anchor`, so nothing registers and the end rail is not rendered.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- `DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.
-- `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.
+- `DocOnThisPage` — the outline rail; the registered headings and `outlineGroups` are bound onto it.
+- `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header; an anchored level 2 or 3 heading registers itself as an outline entry.
+- `DocChangelogEntry` — each entry registers itself as a level 2 outline entry.
+- `useHeadingOutline` (`@aziontech/webkit/use-heading-navigation`) — the registration a custom heading calls to join the outline.
 - `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
 - `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
 - `SearchTrigger`, `Command` — the header search and the palette it opens.
@@ -44,7 +46,6 @@
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
 | `sections` | `DocLayoutSection[]` | `[]` | false | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`. |
 | `home` | `string` | `'/'` | false | Where the Azion Docs mark links. |
-| `outline` | `DocOnThisPageItem[]` | `[]` | false | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused. |
 | `outlineGroups` | `DocOnThisPageGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). |
 | `rootLabel` | `string` | `''` | false | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
@@ -80,8 +81,8 @@
 
 ## States
 
-- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when `outline` or `aside` has content; the palette `open` / `closed`.
-- Outline: the entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
+- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); the palette `open` / `closed`.
+- Outline: built from the headings the page registers, in document order, updated as a page mounts, changes or leaves (a route change swaps the entries); no heading registers on the server, so the server render and the first client render carry no outline rail and it appears once the page mounts. The entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
 
 ## Accessibility
@@ -158,12 +159,6 @@
     }
   ]
 
-  const outline = [
-    { id: 'before-you-start', text: 'Before you start', depth: 2 },
-    { id: 'deploy-with-cli', text: 'Deploy with Azion CLI', depth: 2 },
-    { id: 'next-steps', text: 'Next steps', depth: 2 }
-  ]
-
   const theme = ref<ThemeSwitcherValue>('system')
 </script>
 
@@ -174,7 +169,6 @@
       { label: 'Guides', href: '/docs' },
       { label: 'Reference', href: '/docs/reference' }
     ]"
-    :outline="outline"
     active-id="first-deploy"
   >
     <template #actions>
@@ -292,7 +286,6 @@
     v-model:navigation-open="open"
     v-model:navigation-width="width"
     :navigation="navigation"
-    :outline="[{ id: 'resize-the-rail', text: 'Resize the rail', depth: 2 }]"
     active-id="first-deploy"
   >
     <div class="layout-boundary">

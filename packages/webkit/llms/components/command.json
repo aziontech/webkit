@@ -71,11 +71,11 @@
    "doc": "Two-way value (`v-model:open`)."
   },
   {
-   "name": "page",
+   "name": "pageKey",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Two-way value (`v-model:page`)."
+   "doc": "Two-way value (`v-model:pageKey`)."
   }
  ],
  "events": [

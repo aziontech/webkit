@@ -1,11 +1,11 @@
 # AccountHierarchy (`account/account-hierarchy`)
 
-> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Create Workspace, a search `Input` over name, ID, type and labels that keeps the ancestors of each match (a small `EmptyState` with Clear search when nothing matches), the paginated tree, an action row with Create Group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource as `KeyValueList`) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.
+> The account hierarchy: organizations, groups and workspaces in one `DataTable` with tree rows (`get-sub-rows`, `v-model:open-keys`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Create Workspace, a search `Input` over name, ID, type and labels that keeps the ancestors of each match (a small `EmptyState` with Clear search when nothing matches), the paginated tree, an action row with Create Group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource as `KeyValueList`) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-hierarchy")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -36,9 +36,9 @@ Title `Manage resources` and one sentence on what the hierarchy decides. The pag
 
 A `role="group"` row named `Resource actions`: Create Group (outlined), a divider, then Move, Labels and Delete. The three bulk actions are disabled until something is selected and act on every selected row, at any depth. At the end, Refresh (spins while the table reloads) and a transparent `Hide details` / `Show details` that toggles the details panel (`aria-expanded`, `aria-controls`). The row wraps on narrow screens.
 
-### C. Resource tree — `Input`, `Card`, `DataTable`, `Table`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
+### C. Resource tree — `Input`, `Card`, `DataTable`, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
 
-A search `Input` named `Search resources` over name, ID, type and labels sits above the tree. A match keeps its ancestors (so a workspace shows under its group and organization) and opens every branch while the search is on; clearing it restores the branches the person had open. No match shows a small `EmptyState` (`No matching resources`) with Clear search in the card. Then a flush `Card` holding `DataTable` (tree rows), `paginated` at 25 rows a page, with `:get-sub-rows="(row) => row.children"`, `v-model:expanded` (the first organization and its first group open) and `v-model:row-selection`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `Table.CellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace neutral). Last accessed, Status (`Table.CellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header (an empty charge is a muted dash through `data-empty`, never a class ternary), Labels as `Table.CellTags` with `+N`, and `Table.CellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. Below the card, a `Link` to Resources pending deletion.
+A search `Input` named `Search resources` over name, ID, type and labels sits above the tree. A match keeps its ancestors (so a workspace shows under its group and organization) and opens every branch while the search is on; clearing it restores the branches the person had open. No match shows a small `EmptyState` (`No matching resources`) with Clear search in the card. Then a flush `Card` holding `DataTable` (tree rows), `paginated` at 25 rows a page, with `:get-sub-rows="(row) => row.children"`, `v-model:open-keys` (the first organization and its first group open) and `v-model:selected-keys`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `TableCellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace neutral). Last accessed, Status (`TableCellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header (an empty charge is a muted dash through `data-empty`, never a class ternary), Labels as `TableCellTags` with `+N`, and `TableCellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. Below the card, a `Link` to Resources pending deletion.
 
 The data stays flat (`parentId`) and the page builds the tree for the table, so a move only changes one field.
 
@@ -67,6 +67,58 @@ No resource: a flush `EmptyState` with Create Workspace replaces the table. Load
 ### Outcomes — through `toast`
 
 Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `AccountHierarchyResource`, `AccountHierarchyRoleBinding` and `AccountHierarchyProps` are exported from `account-hierarchy.vue`, and `sample.ts` holds the sample hierarchy the block renders when `resources` is left out (and never while `loading` or `error` is set).
+
+| Prop           | Type                                 | What it does                                                                                                          |
+| -------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `resources`    | `AccountHierarchyResource[]`         | Every organization, group and workspace, flat; the tree is built from `parentId`. Pass `[]` for an account with none. |
+| `currentId`    | `string`                             | The workspace the person is in, marked with a check.                                                                  |
+| `roleBindings` | `AccountHierarchyRoleBinding[]`      | The role bindings of the one selected resource, in the Permissions tab.                                               |
+| `selectedKeys` | `string[]` (`v-model:selected-keys`) | The ids of the selected rows; load the role bindings when it holds one id.                                            |
+| `loading`      | `boolean`                            | A request is in flight. With no resources it is the first load (loading rows); with resources a refresh.              |
+| `error`        | `string`                             | Why the load failed, shown in the danger `Alert` with Retry.                                                          |
+
+| Event     | Payload                               | When                                                                                  |
+| --------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| `refresh` | `(event)`                             | Refresh.                                                                              |
+| `retry`   | `(event)`                             | Retry in the error alert.                                                             |
+| `move`    | `(event, { resources, destination })` | Move was confirmed; the rows already sit under the new parent.                        |
+| `labels`  | `(event, { resources, add, remove })` | Save labels was confirmed; the rows already show the new labels.                      |
+| `delete`  | `(event, resources)`                  | Delete was confirmed; `resources` holds everything removed, what was inside included. |
+| `undo`    | `(event, { action, resources })`      | Undo in the toast after a move or a delete; the rows are already back.                |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import AccountHierarchy from './account-hierarchy.vue'
+
+  const { data, pending, error, refresh } = useResources()
+  const selectedKeys = ref<string[]>([])
+  const { data: bindings } = useRoleBindings(selectedKeys)
+  const loadError = 'The resources could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <AccountHierarchy
+    v-model:selected-keys="selectedKeys"
+    :resources="data ?? []"
+    :current-id="currentWorkspaceId"
+    :role-bindings="bindings ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+    @move="(event, { resources, destination }) => moveResources(resources, destination)"
+    @delete="(event, resources) => deleteResources(resources)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -102,11 +154,11 @@ Every action ends in a success toast. Move and Delete carry Undo. Hierarchy chan
 
 ## States
 
-- Default: two organizations, three groups and six workspaces; the first organization and its first group open, nothing selected, and every action wired.
-- Selected: one workspace selected; bulk actions enabled and the details panel filled.
-- Empty: no resource; an empty state with Create Workspace.
-- Loading: the first load; the table's loading rows.
-- Error: the hierarchy did not load; a danger Alert with Retry.
+- Default: two organizations, three groups and six workspaces (`resources`); the first organization and its first group open, nothing selected, and every action wired.
+- Selected: one workspace selected (`selectedKeys`); bulk actions enabled and the details panel filled.
+- Empty: no resource (`resources` is `[]`); an empty state with Create Workspace.
+- Loading: the first load (`loading` with no `resources`); the table's loading rows.
+- Error: the hierarchy did not load (`error` is set); a danger Alert with the message and Retry.
 
 ## Related
 
@@ -152,35 +204,98 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import { type TableColumn } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref, useId } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
 
-  type ResourceType = 'organization' | 'group' | 'workspace'
-  type ResourceStatus = 'Active' | 'Suspended' | 'Pending'
+  import { sampleCurrentId, sampleResources, sampleRoleBindings } from './sample'
+
+  /** The level of a resource in the hierarchy. */
+  export type AccountHierarchyResourceType = 'organization' | 'group' | 'workspace'
+  /** The state of a workspace. */
+  export type AccountHierarchyResourceStatus = 'Active' | 'Suspended' | 'Pending'
+
   interface ResourceTypeMeta {
     label: string
     icon: string
     severity?: TagSeverity
     variant?: TagVariant
   }
-  interface Resource {
+
+  /** One organization, group or workspace; the tree is built from parentId. */
+  export interface AccountHierarchyResource {
+    /** Stable key, shown in the ID column. */
     id: string
+    /** Display name. */
     name: string
-    type: ResourceType
+    /** Organization, group or workspace. */
+    type: AccountHierarchyResourceType
+    /** The id of the parent, or null at the top level. */
     parentId: string | null
+    /** Labels used for search, billing reports and policies. */
     labels?: string[]
+    /** When it was last accessed, as display text. */
     lastAccessed?: string
-    status?: ResourceStatus
+    /** Workspace state. */
+    status?: AccountHierarchyResourceStatus
+    /** Estimated month-to-date charges in USD. */
     charges?: number
   }
-  interface ResourceNode extends Resource {
+
+  /** One role and how many members hold it on the selected resource. */
+  export interface AccountHierarchyRoleBinding {
+    /** Role name. */
+    role: string
+    /** Members bound to the role. */
+    members: number
+  }
+
+  export interface AccountHierarchyProps {
+    /** Every resource of the account, flat. Left out, the sample renders. */
+    resources?: AccountHierarchyResource[]
+    /** The id of the workspace the person is in, marked with a check. */
+    currentId?: string
+    /** Role bindings of the single selected resource, shown in the details panel. */
+    roleBindings?: AccountHierarchyRoleBinding[]
+    /** A request is in flight: with no resources it is the first load, with resources a refresh. */
+    loading?: boolean
+    /** Why the resources could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
+
+  interface ResourceNode extends AccountHierarchyResource {
     children?: ResourceNode[]
   }
+  type Resource = AccountHierarchyResource
+  type ResourceStatus = AccountHierarchyResourceStatus
+  type ResourceType = AccountHierarchyResourceType
+
+  const props = withDefaults(defineProps<AccountHierarchyProps>(), {
+    resources: undefined,
+    currentId: undefined,
+    roleBindings: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    move: [event: Event, payload: { resources: Resource[]; destination: Resource }]
+    labels: [event: Event, payload: { resources: Resource[]; add: string[]; remove: string[] }]
+    delete: [event: MouseEvent, resources: Resource[]]
+    undo: [event: MouseEvent, payload: { action: 'move' | 'delete'; resources: Resource[] }]
+  }>()
+
+  const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
 
   const types: Record<ResourceType, ResourceTypeMeta> = {
     organization: { label: 'Organization', icon: 'ai ai-building', variant: 'accent' },
@@ -188,83 +303,26 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
   }
 
-  const seedResources: Resource[] = [
-    {
-      id: 'org-1001',
-      name: 'Acme Inc.',
-      type: 'organization',
-      parentId: null,
-      labels: ['primary']
-    },
-    { id: 'org-1002', name: 'Acme Partners', type: 'organization', parentId: null },
-    { id: 'grp-2101', name: 'Retail and marketplace', type: 'group', parentId: 'org-1001' },
-    { id: 'grp-2102', name: 'Digital services', type: 'group', parentId: 'org-1001' },
-    { id: 'grp-2201', name: 'Resellers', type: 'group', parentId: 'org-1002' },
-    {
-      id: 'ws-30418',
-      name: 'Storefront',
-      type: 'workspace',
-      parentId: 'grp-2101',
-      lastAccessed: '2 hours ago',
-      status: 'Active',
-      charges: 1284,
-      labels: ['retail', 'production']
-    },
-    {
-      id: 'ws-30422',
-      name: 'Checkout',
-      type: 'workspace',
-      parentId: 'grp-2101',
-      lastAccessed: 'Yesterday',
-      status: 'Active',
-      charges: 612.4,
-      labels: ['production']
-    },
-    {
-      id: 'ws-30437',
-      name: 'Loyalty program',
-      type: 'workspace',
-      parentId: 'grp-2101',
-      lastAccessed: '3 days ago',
-      status: 'Pending',
-      charges: 42.1
-    },
-    {
-      id: 'ws-30455',
-      name: 'Media library',
-      type: 'workspace',
-      parentId: 'grp-2102',
-      lastAccessed: '1 week ago',
-      status: 'Active',
-      charges: 3910.75,
-      labels: ['media']
-    },
-    {
-      id: 'ws-30461',
-      name: 'Status page',
-      type: 'workspace',
-      parentId: 'grp-2102',
-      status: 'Suspended',
-      labels: ['staging']
-    },
-    {
-      id: 'ws-30470',
-      name: 'Partner portal',
-      type: 'workspace',
-      parentId: 'grp-2201',
-      lastAccessed: '1 month ago',
-      status: 'Active',
-      charges: 220
-    }
-  ]
-
   const uid = useId()
-  const currentId = 'ws-30418'
-  const resources = ref<Resource[]>(seedResources)
+  const blank = computed(() => props.loading || props.error !== '')
+  const source = computed<Resource[]>(() => props.resources ?? (blank.value ? [] : sampleResources))
+  const items = ref<Resource[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+  const currentId = computed(() => props.currentId ?? (props.resources ? '' : sampleCurrentId))
+  const roleBindings = computed(
+    () => props.roleBindings ?? (props.resources ? [] : sampleRoleBindings)
+  )
+  const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const tree = computed<ResourceNode[]>(() => {
     const byParent = new Map<string | null, Resource[]>()
-    for (const item of resources.value) {
+    for (const item of items.value) {
       const list = byParent.get(item.parentId) ?? []
       list.push(item)
       byParent.set(item.parentId, list)
@@ -308,26 +366,30 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     { id: 'actions', type: 'action', hideable: false }
   ]
 
-  const expanded = ref<Record<string, boolean>>({ 'org-1001': true, 'grp-2101': true })
-  const tableExpanded = computed<true | Record<string, boolean>>({
-    get: () => (needle.value ? true : expanded.value),
+  const expanded = ref<string[]>(['org-1001', 'grp-2101'])
+  const parentIds = computed(() => [
+    ...new Set(items.value.map((item) => item.parentId).filter((id) => id !== null))
+  ])
+  const tableExpanded = computed<string[]>({
+    get: () => (needle.value ? parentIds.value : expanded.value),
     set: (value) => {
-      if (value !== true) expanded.value = value
+      if (!needle.value) expanded.value = value
     }
   })
-  const selection = ref<Record<string, boolean>>({})
 
-  const selected = computed(() => resources.value.filter((item) => selection.value[item.id]))
-  const selectedCount = computed(() => selected.value.length)
-  const focused = computed(() => (selectedCount.value === 1 ? selected.value[0] : null))
+  const selectedResources = computed(() =>
+    items.value.filter((item) => selectedKeys.value.includes(item.id))
+  )
+  const selectedCount = computed(() => selectedResources.value.length)
+  const focused = computed(() => (selectedCount.value === 1 ? selectedResources.value[0] : null))
   const clearSelection = () => {
-    selection.value = {}
+    selectedKeys.value = []
   }
 
   const descendantsOf = (id: string): Resource[] => {
     const out: Resource[] = []
     const walk = (parentId: string) => {
-      for (const item of resources.value)
+      for (const item of items.value)
         if (item.parentId === parentId) {
           out.push(item)
           walk(item.id)
@@ -364,32 +426,6 @@ Each variant is the same screen in another state: `get_block("account/account-hi
       ? 'No resource selected'
       : `${plural(selectedCount.value, 'resource', 'resources')} selected`
   )
-  const roleBindings = [
-    { role: 'Owner', members: 2 },
-    { role: 'Editor', members: 5 },
-    { role: 'Viewer', members: 11 }
-  ]
-
-  const loading = ref(false)
-  const loadFailed = ref(false)
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      resources.value = seedResources
-      loading.value = false
-    }, 700)
-  }
-
-  const refreshing = ref(false)
-  const refresh = () => {
-    if (refreshing.value) return
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
-
   const moveOpen = ref(false)
   const moving = ref<Resource[]>([])
   const destination = ref('')
@@ -398,7 +434,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     const blocked = new Set(
       moving.value.flatMap((item) => [item.id, ...descendantsOf(item.id).map((child) => child.id)])
     )
-    return resources.value
+    return items.value
       .filter((item) => item.type !== 'workspace' && !blocked.has(item.id))
       .map((item) => ({ value: item.id, label: item.name, type: item.type }))
   })
@@ -408,22 +444,32 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     destinationError.value = ''
     moveOpen.value = true
   }
-  const confirmMove = () => {
-    const target = resources.value.find((item) => item.id === destination.value)
+  const confirmMove = (event: Event) => {
+    const target = items.value.find((item) => item.id === destination.value)
     if (!target) {
       destinationError.value = 'Choose where to move the resources.'
       return
     }
     const ids = new Set(moving.value.map((item) => item.id))
-    const before = resources.value
-    resources.value = resources.value.map((item) =>
+    const before = items.value
+    const moved = moving.value
+    items.value = items.value.map((item) =>
       ids.has(item.id) ? { ...item, parentId: target.id } : item
     )
-    expanded.value = { ...expanded.value, [target.id]: true }
+    expanded.value = [...new Set([...expanded.value, target.id])]
     moveOpen.value = false
+    emit('move', event, { resources: moved, destination: target })
     toast.success(`${plural(ids.size, 'resource', 'resources')} moved to ${target.name}.`, {
       description: 'Role bindings inherited from the old parent no longer apply.',
-      actions: [{ label: 'Undo', onClick: () => (resources.value = before) }]
+      actions: [
+        {
+          label: 'Undo',
+          onClick: (undoEvent) => {
+            items.value = before
+            emit('undo', undoEvent, { action: 'move', resources: moved })
+          }
+        }
+      ]
     })
   }
 
@@ -440,20 +486,35 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     deleting.value = items
     deleteOpen.value = true
   }
-  const confirmDelete = () => {
+  const confirmDelete = (event: MouseEvent) => {
+    const removed = items.value.filter((item) =>
+      deleting.value.some(
+        (target) =>
+          target.id === item.id || descendantsOf(target.id).some((child) => child.id === item.id)
+      )
+    )
     const ids = new Set(
       deleting.value.flatMap((item) => [
         item.id,
         ...descendantsOf(item.id).map((child) => child.id)
       ])
     )
-    const before = resources.value
-    resources.value = resources.value.filter((item) => !ids.has(item.id))
-    selection.value = {}
+    const before = items.value
+    items.value = items.value.filter((item) => !ids.has(item.id))
+    selectedKeys.value = []
     deleteOpen.value = false
+    emit('delete', event, removed)
     toast.success(`${plural(ids.size, 'resource', 'resources')} scheduled for deletion.`, {
       description: 'They stay in Resources pending deletion for 30 days.',
-      actions: [{ label: 'Undo', onClick: () => (resources.value = before) }]
+      actions: [
+        {
+          label: 'Undo',
+          onClick: (undoEvent) => {
+            items.value = before
+            emit('undo', undoEvent, { action: 'delete', resources: removed })
+          }
+        }
+      ]
     })
   }
 
@@ -462,7 +523,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   const addLabels = ref<string[]>([])
   const removeLabels = ref<string[]>([])
   const knownLabels = computed(() =>
-    [...new Set(resources.value.flatMap((item) => item.labels ?? []))].sort()
+    [...new Set(items.value.flatMap((item) => item.labels ?? []))].sort()
   )
   const presentLabels = computed(() =>
     [...new Set(labelling.value.flatMap((item) => item.labels ?? []))].sort()
@@ -473,9 +534,14 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     removeLabels.value = []
     labelsOpen.value = true
   }
-  const confirmLabels = () => {
+  const confirmLabels = (event: Event) => {
     const ids = new Set(labelling.value.map((item) => item.id))
-    resources.value = resources.value.map((item) => {
+    emit('labels', event, {
+      resources: labelling.value,
+      add: [...addLabels.value],
+      remove: [...removeLabels.value]
+    })
+    items.value = items.value.map((item) => {
       if (!ids.has(item.id)) return item
       const next = new Set(item.labels ?? [])
       addLabels.value.forEach((label) => next.add(label))
@@ -487,10 +553,10 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   }
 
   const onRowAction = (value: DropdownMenuItemValue, row: Resource) => {
-    const item = resources.value.find((entry) => entry.id === row.id)
+    const item = items.value.find((entry) => entry.id === row.id)
     if (!item) return
     if (value === 'details') {
-      selection.value = { [item.id]: true }
+      selectedKeys.value = [item.id]
       detailsOpen.value = true
     }
     if (value === 'move') openMove([item])
@@ -539,7 +605,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
-          @click="openMove(selected)"
+          @click="openMove(selectedResources)"
         />
         <Button
           label="Labels"
@@ -547,7 +613,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
-          @click="openLabels(selected)"
+          @click="openLabels(selectedResources)"
         />
         <Button
           label="Delete"
@@ -555,7 +621,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
-          @click="openDelete(selected)"
+          @click="openDelete(selectedResources)"
         />
         <div class="ms-auto flex items-center gap-(--spacing-xs)">
           <Tooltip content="Refresh">
@@ -565,7 +631,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
               size="medium"
               :loading="refreshing"
               aria-label="Refresh resources"
-              @click="refresh"
+              @click="emit('refresh', $event)"
             />
           </Tooltip>
           <Button
@@ -602,23 +668,23 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           </div>
 
           <Alert
-            v-if="loadFailed"
+            v-if="error"
             severity="danger"
           >
-            The resources could not be loaded. Nothing was changed; try again.
+            {{ error }}
             <template #actions>
               <Button
                 label="Retry"
                 variant="secondary"
                 size="small"
-                @click="retryLoad"
+                @click="emit('retry', $event)"
               />
             </template>
           </Alert>
 
           <Card
             key="card-1"
-            v-else-if="!loading && !resources.length"
+            v-else-if="!loading && !items.length"
             :padded="false"
           >
             <template #default>
@@ -687,14 +753,14 @@ Each variant is the same screen in another state: `get_block("account/account-hi
             >
               <template #default>
                 <DataTable
-                  v-model:expanded="tableExpanded"
-                  v-model:row-selection="selection"
+                  v-model:open-keys="tableExpanded"
+                  v-model:selected-keys="selectedKeys"
                   :data="visibleTree"
                   paginated
                   :page-size="25"
                   :columns="columns"
                   :get-sub-rows="(row) => row.children"
-                  :loading="loading || refreshing"
+                  :loading="loading"
                   row-key="id"
                   selectable
                   :bordered="false"
@@ -730,7 +796,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                     </span>
                   </template>
                   <template #cell-id="{ row, value }">
-                    <Table.CellId
+                    <TableCellId
                       v-if="row.type === 'workspace'"
                       :value="value"
                       resource="workspace"
@@ -754,7 +820,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                     <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
                   </template>
                   <template #cell-status="{ value }">
-                    <Table.CellStatus
+                    <TableCellStatus
                       :label="value"
                       :severity="statusSeverity(value)"
                     />
@@ -780,7 +846,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                     </span>
                   </template>
                   <template #cell-labels="{ value }">
-                    <Table.CellTags
+                    <TableCellTags
                       :items="value ?? []"
                       icon="ai ai-tag"
                       :noun="{ one: 'label', other: 'labels' }"
@@ -790,7 +856,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                     <span class="sr-only">Actions</span>
                   </template>
                   <template #cell-actions="{ row }">
-                    <Table.CellActions
+                    <TableCellActions
                       :name="row.name"
                       @select="(_event, value) => onRowAction(value, row)"
                     >
@@ -814,7 +880,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                           label="Delete"
                         />
                       </DropdownMenu.Group>
-                    </Table.CellActions>
+                    </TableCellActions>
                   </template>
                 </DataTable>
               </template>
@@ -1129,4 +1195,88 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     />
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { AccountHierarchyResource, AccountHierarchyRoleBinding } from './account-hierarchy.vue'
+
+export const sampleResources: AccountHierarchyResource[] = [
+  {
+    id: 'org-1001',
+    name: 'Acme Inc.',
+    type: 'organization',
+    parentId: null,
+    labels: ['primary']
+  },
+  { id: 'org-1002', name: 'Acme Partners', type: 'organization', parentId: null },
+  { id: 'grp-2101', name: 'Retail and marketplace', type: 'group', parentId: 'org-1001' },
+  { id: 'grp-2102', name: 'Digital services', type: 'group', parentId: 'org-1001' },
+  { id: 'grp-2201', name: 'Resellers', type: 'group', parentId: 'org-1002' },
+  {
+    id: 'ws-30418',
+    name: 'Storefront',
+    type: 'workspace',
+    parentId: 'grp-2101',
+    lastAccessed: '2 hours ago',
+    status: 'Active',
+    charges: 1284,
+    labels: ['retail', 'production']
+  },
+  {
+    id: 'ws-30422',
+    name: 'Checkout',
+    type: 'workspace',
+    parentId: 'grp-2101',
+    lastAccessed: 'Yesterday',
+    status: 'Active',
+    charges: 612.4,
+    labels: ['production']
+  },
+  {
+    id: 'ws-30437',
+    name: 'Loyalty program',
+    type: 'workspace',
+    parentId: 'grp-2101',
+    lastAccessed: '3 days ago',
+    status: 'Pending',
+    charges: 42.1
+  },
+  {
+    id: 'ws-30455',
+    name: 'Media library',
+    type: 'workspace',
+    parentId: 'grp-2102',
+    lastAccessed: '1 week ago',
+    status: 'Active',
+    charges: 3910.75,
+    labels: ['media']
+  },
+  {
+    id: 'ws-30461',
+    name: 'Status page',
+    type: 'workspace',
+    parentId: 'grp-2102',
+    status: 'Suspended',
+    labels: ['staging']
+  },
+  {
+    id: 'ws-30470',
+    name: 'Partner portal',
+    type: 'workspace',
+    parentId: 'grp-2201',
+    lastAccessed: '1 month ago',
+    status: 'Active',
+    charges: 220
+  }
+]
+
+export const sampleCurrentId = 'ws-30418'
+
+export const sampleRoleBindings: AccountHierarchyRoleBinding[] = [
+  { role: 'Owner', members: 2 },
+  { role: 'Editor', members: 5 },
+  { role: 'Viewer', members: 11 }
+]
 ```

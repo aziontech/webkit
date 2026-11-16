@@ -69,6 +69,16 @@
    "name": "DeviceAuthorization",
    "summary": "Device or CLI authorization: the code the terminal printed, shown large to compare, the request details (application, device, IP address, time), the account and scopes, Cancel / Confirm, and a typed code entry (8 characters, grouped by 4) when the codes do not match.",
    "file": "blocks/auth/sign-in/variants/device-authorization.vue"
+  },
+  {
+   "name": "PersonalToken",
+   "summary": "Sign in with an Azion personal token, for an app with no accounts of its own: one masked, monospace `PasswordInput` with show and hide, a link to how tokens are created, required and no-spaces checks on the field, a danger notice when Azion rejects the token (the field is cleared), a warning with Retry when Azion cannot be reached, and a `sign-in` event `(event, token)` once the token is accepted. The block stores nothing; the app keeps the token for the session.",
+   "file": "blocks/auth/sign-in/variants/personal-token.vue"
+  },
+  {
+   "name": "RejectedToken",
+   "summary": "401 on the personal token: the same card with the danger notice under the heading, the field cleared and focused for another paste.",
+   "file": "blocks/auth/sign-in/variants/rejected-token.vue"
   }
  ],
  "sfcFile": "blocks/auth/sign-in/sign-in.vue",

@@ -69,6 +69,49 @@ code face, with an `aria-label` that names it.
 
 Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `copied-label` (`Command copied`) that confirms it.
 
+### J. Placeholder — `Skeleton` (Loading)
+
+While `loading` is set, `Skeleton`s draw the block's footprint in a busy status region: the empty-state band, one row per method and the two promo cards.
+
+## Data
+
+The block shows no records and fetches nothing: a real app sets the copy and the links for its resource and listens for the two create methods. `FirstUseProps` is exported from `first-use.vue`; every prop defaults to the copy above.
+
+| Prop             | Type      | What it does                                                          |
+| ---------------- | --------- | --------------------------------------------------------------------- |
+| `loading`        | `boolean` | The account is still loading; `Skeleton`s draw the block's footprint. |
+| `title`          | `string`  | The `EmptyState` title (`Create your first resource`).                |
+| `description`    | `string`  | The sentence under it.                                                |
+| `docsHref`       | `string`  | Where Documentation goes, in a new tab.                               |
+| `command`        | `string`  | The command the Via CLI row shows and copies (`azion deploy`).        |
+| `agentSetupHref` | `string`  | Where Set up your coding agent goes (`/agent-setup`).                 |
+
+| Event    | Payload   | When                     |
+| -------- | --------- | ------------------------ |
+| `import` | `(event)` | Import, on From GitHub.  |
+| `create` | `(event)` | Create, on From scratch. |
+
+To go live, render the block while the list request is pending or returns nothing:
+
+```vue
+<script setup lang="ts">
+  import FirstUse from './first-use.vue'
+
+  const { data, pending } = useDomains()
+</script>
+
+<template>
+  <FirstUse
+    v-if="pending || data?.length === 0"
+    :loading="pending"
+    title="Create your first domain"
+    docs-href="https://example.com/docs/domains"
+    @import="openImport"
+    @create="openCreate"
+  />
+</template>
+```
+
 ## Do
 
 - Rewrite the headline, lead, methods and promos for each resource kind; the structure stays, the nouns change.
@@ -106,8 +149,8 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 
 ## States
 
-- Default: the explanation, three create methods and the two promos.
-- Loading: while the account reloads, `Skeleton`s draw the block's footprint (empty-state band, three method rows, two promo cards) in a busy status region.
+- Default: `title` and `description`, three create methods and the two promos.
+- Loading: `loading`; while the account reloads, `Skeleton`s draw the block's footprint (empty-state band, three method rows, two promo cards) in a busy status region.
 
 ## Related
 
@@ -141,6 +184,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import Logo from '@aziontech/webkit/logo'
+  import Skeleton from '@aziontech/webkit/skeleton'
 
   const agentMarks = [
     { name: 'Claude', src: claudeMark, mono: false },
@@ -148,10 +192,132 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
     { name: 'Gemini', src: geminiMark, mono: false },
     { name: 'Cursor', src: cursorMark, mono: true }
   ]
+
+  export interface FirstUseProps {
+    /** The account is still loading; skeletons draw the block's footprint. */
+    loading?: boolean
+    /** The empty state's title, naming the resource. */
+    title?: string
+    /** The sentence under the title. */
+    description?: string
+    /** Where Documentation goes; it opens in a new tab. */
+    docsHref?: string
+    /** The command the Via CLI row shows and copies. */
+    command?: string
+    /** Where Set up your coding agent goes. */
+    agentSetupHref?: string
+  }
+
+  withDefaults(defineProps<FirstUseProps>(), {
+    loading: false,
+    title: 'Create your first resource',
+    description: 'Start from scratch, from a template or by importing your code.',
+    docsHref: 'https://example.com/docs/resources',
+    command: 'azion deploy',
+    agentSetupHref: '/agent-setup'
+  })
+
+  const emit = defineEmits<{
+    import: [event: MouseEvent]
+    create: [event: MouseEvent]
+  }>()
+
+  const methods = ['github', 'cli', 'scratch']
+  const promos = ['catalog', 'agent']
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-(--spacing-lg)">
+  <div
+    v-if="loading"
+    class="flex flex-col items-start gap-(--spacing-lg)"
+    role="status"
+    aria-label="Loading resources"
+    aria-busy="true"
+  >
+    <Card
+      :padded="false"
+      class="w-full"
+    >
+      <template #default>
+        <div
+          class="flex flex-col items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-xl)"
+        >
+          <Skeleton
+            width="2.5rem"
+            height="2.5rem"
+          />
+          <Skeleton
+            width="14rem"
+            height="1.25rem"
+          />
+          <Skeleton
+            width="20rem"
+            height="0.875rem"
+          />
+        </div>
+
+        <div class="border-t border-(--border-muted)">
+          <Item.List>
+            <Item
+              v-for="method in methods"
+              :key="method"
+            >
+              <Item.Media>
+                <Skeleton
+                  width="2rem"
+                  height="2rem"
+                />
+              </Item.Media>
+              <Item.Content>
+                <Skeleton
+                  width="8rem"
+                  height="0.875rem"
+                />
+                <Skeleton
+                  width="16rem"
+                  height="0.75rem"
+                />
+              </Item.Content>
+              <Item.Actions>
+                <Skeleton
+                  width="5rem"
+                  height="2rem"
+                />
+              </Item.Actions>
+            </Item>
+          </Item.List>
+        </div>
+      </template>
+    </Card>
+
+    <div class="grid w-full gap-(--spacing-lg) md:grid-cols-2">
+      <Card
+        v-for="promo in promos"
+        :key="promo"
+        class="w-full"
+      >
+        <template #default>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <Skeleton
+              width="7rem"
+              height="2rem"
+            />
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <Skeleton
+                width="12rem"
+                height="1rem"
+              />
+              <Skeleton height="0.875rem" />
+            </div>
+          </div>
+        </template>
+      </Card>
+    </div>
+  </div>
+  <div
+    v-else
+    class="flex flex-col items-start gap-(--spacing-lg)"
+  >
     <Card
       :padded="false"
       class="w-full"
@@ -159,13 +325,13 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
       <template #default>
         <EmptyState
           icon="ai ai-box"
-          title="Create your first resource"
-          description="Start from scratch, from a template or by importing your code."
+          :title="title"
+          :description="description"
         >
           <template #actions>
             <Link
               label="Documentation"
-              href="https://example.com/docs/resources"
+              :href="docsHref"
               target="_blank"
             />
           </template>
@@ -191,6 +357,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                   label="Import"
                   variant="primary"
                   size="medium"
+                  @click="(event: MouseEvent) => emit('import', event)"
                 />
               </Item.Actions>
             </Item>
@@ -214,7 +381,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                   <InputGroupRoot class="w-full">
                     <div class="flex min-w-0 flex-1">
                       <Input
-                        model-value="azion deploy"
+                        :model-value="command"
                         size="large"
                         class="w-full"
                         aria-label="Via CLI command"
@@ -224,7 +391,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                       />
                     </div>
                     <CopyButton
-                      value="azion deploy"
+                      :value="command"
                       aria-label="Copy the Via CLI command"
                       copied-label="Command copied"
                       size="small"
@@ -249,6 +416,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                   label="Create"
                   variant="outline"
                   size="medium"
+                  @click="(event: MouseEvent) => emit('create', event)"
                 />
               </Item.Actions>
             </Item>
@@ -331,7 +499,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
       >
         <template #default>
           <a
-            href="/agent-setup"
+            :href="agentSetupHref"
             class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
             <span

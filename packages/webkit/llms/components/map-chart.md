@@ -16,7 +16,7 @@
 
 - Pair the map with a ranked list or a table: the map shows where, the list shows how much.
 - Pass ISO 3166-1 alpha-2 codes as region ids; names come from the locale (`Intl.DisplayNames`) unless you pass `name`.
-- Keep region and point ids distinct: `v-model:activeId` holds one of them.
+- Keep region and point ids distinct: `v-model:activeKey` holds one of them.
 - Give points a status color only when the color means a state; otherwise leave the series slot.
 
 ## Don’t
@@ -47,7 +47,7 @@
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
 | `tableView` | `boolean` | `false` | false | Shows the data table in place of the map. The table is always present for assistive tech. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the map when it is not inside a ChartCard with a title. |
-| `activeId` | `string \| null` | `null` | false | Two-way value (`v-model:activeId`). |
+| `activeKey` | `string \| null` | `null` | false | Two-way value (`v-model:activeKey`). |
 
 ## Events
 
@@ -66,9 +66,9 @@
 
 ## v-model
 
-| Model              | Type             | Default | Emits             | Notes                                                    |
-| ------------------ | ---------------- | ------- | ----------------- | -------------------------------------------------------- |
-| `v-model:activeId` | `string \| null` | `null`  | `update:activeId` | The region or point under the pointer or keyboard focus. |
+| Model               | Type             | Default | Emits              | Notes                                                    |
+| ------------------- | ---------------- | ------- | ------------------ | -------------------------------------------------------- |
+| `v-model:activeKey` | `string \| null` | `null`  | `update:activeKey` | The region or point under the pointer or keyboard focus. |
 
 ## States
 

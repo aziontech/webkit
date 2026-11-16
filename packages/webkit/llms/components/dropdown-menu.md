@@ -44,8 +44,9 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space. |
-| `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
+| `side` | ``DropdownMenuSide \| 'auto'` (`'top' \| 'bottom' \| 'start' \| 'end'`)` | `'bottom'` | false | Side of the trigger the panel opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. |
+| `align` | ``DropdownMenuAlign` (`'start' \| 'center' \| 'end'`)` | `'start'` | false | Alignment along the trigger edge. |
+| `sideOffset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
@@ -102,7 +103,7 @@
   - Props: `label: string` default `''` — plain-text label; falls back to the default slot. `disabled: boolean` default `false` — the row cannot open its sub-menu and applies disabled tokens.
   - Events: _none_.
   - Slots: `default` (rich label), `leading` (icon before the label).
-- `dropdown-menu-sub-content/dropdown-menu-sub-content.vue` — the nested panel. Teleported to `body` and positioned by the shared `usePlacement` against the sub-trigger at `right-start` (`left-start` under rtl), flipping to the other side when it does not fit; the same surface, border, shadow and motion as the top-level panel, `role="menu"` labelled by the sub-trigger. It is its own menu level: `Down` / `Up` / `Home` / `End` move inside it, `ArrowLeft` (`ArrowRight` under rtl) and `Esc` close it and return focus to the sub-trigger, `Tab` closes the whole menu. Clicks inside it never dismiss the menu.
+- `dropdown-menu-sub-content/dropdown-menu-sub-content.vue` — the nested panel. Teleported to `body` and positioned by the shared `usePlacement` against the sub-trigger at `side="end"` + `align="start"` (the right side in ltr, the left side under rtl), flipping to the other side when it does not fit; the same surface, border, shadow and motion as the top-level panel, `role="menu"` labelled by the sub-trigger. It is its own menu level: `Down` / `Up` / `Home` / `End` move inside it, `ArrowLeft` (`ArrowRight` under rtl) and `Esc` close it and return focus to the sub-trigger, `Tab` closes the whole menu. Clicks inside it never dismiss the menu.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Group>` (groups render into this panel exactly as they do at the top level), which may hold further `<DropdownMenu.Sub>`.
@@ -121,9 +122,10 @@
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
-- `data-placement` on the sub-panel mirrors its resolved side (`right-start` | `right-end` | `left-start` | `left-end`)
-- `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
-- `data-placement` on the panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
+- `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
+- `data-side` / `data-align` on the panel mirror the resolved side and alignment after flipping
+- `start` and `end` follow the text direction: under `dir="rtl"`, `align="start"` lines the panel up with the trigger's right edge and `side="end"` opens on the left
 
 ## Accessibility
 
@@ -144,7 +146,7 @@
 
 - Layout: logical utilities only (`text-start`, `ps-`/`pe-`, `gap`); the panel and every sub-panel bind `dir` / `lang` from `WebkitProvider`, so they lay out in the provider's direction under `body`.
 - Icons: the sub-trigger chevron mirrors (`rtl:-scale-x-100`); the check and radio dot do not.
-- Keyboard: under rtl `ArrowLeft` opens a sub-menu and `ArrowRight` closes it; the sub-panel opens at `left-start` and flips to `right-start` when it does not fit. `Up` / `Down` are unchanged.
+- Keyboard: under rtl `ArrowLeft` opens a sub-menu and `ArrowRight` closes it; the sub-panel opens on the inline end (the left) and flips to the right when it does not fit. `Up` / `Down` are unchanged.
 - User data: none (labels are consumer text).
 
 ## Internationalization

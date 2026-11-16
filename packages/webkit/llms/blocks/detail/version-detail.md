@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/version-detail/version-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/version-detail")`
-- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -41,13 +41,13 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 ### C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton`, `EmptyState` (required)
 
-`PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
+`PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: the open tab's panel goes in the slot named after the tab (`#source`, `#device-groups`, `#cache-settings`, `#functions-instances`, `#rules-engine`), and a tab with no slot shows an `EmptyState` with an Open link to its own page.
 
-### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip` (required)
+### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton` (required)
 
-The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsSection`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled.
+The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsSection`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled. While `creating`, `Skeleton` wires take the sections' place.
 
-### E. Version bar — `Tag`, `SplitButton`, `Button` (required)
+### E. Version bar — `Tag`, `SplitButton`, `Button`, `Spinner` (required)
 
 A bar pinned to the bottom of the settings pane, aligned with the column above it. It names the state with a `Tag` and one sentence. On a draft it holds a primary medium `SplitButton` that saves and deploys, with Save and build and Save in its menu. On a built version it reads Viewing a deployed version with a Read-only tag and offers Add Version and Redeploy.
 
@@ -55,9 +55,9 @@ A bar pinned to the bottom of the settings pane, aligned with the column above i
 
 The side pane titled "Version history", closed with an `IconButton`. It starts on the current version with its `Tag`, its description, its author `Avatar` and a pencil that edits the description in place through a `Field` with a `Textarea` and Cancel and Save `Button`s. Then the changes entry, empty until something is saved, then the five newest earlier versions and Show older for the rest. Each earlier version is a link to that version's page, never a button; the one being viewed carries `aria-current="page"`.
 
-### G. Revert — `Button`, `Tag` (optional, on an earlier Ready version)
+### G. Revert — `ConfirmDialog`, `Button`, `Tag` (optional, on an earlier Ready version)
 
-An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current="page"`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `variant="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
+An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current="page"`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `variant="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and emits `revert`. The page then runs the async-submit pattern: it sets `reverting` (Revert loads, the bar reads "Reverting to <id>…") and raises one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success it passes the version back with `state: 'deployed'`, so its `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
 
 ## List tabs
 
@@ -65,7 +65,57 @@ Source, Device Groups, Cache Settings and Functions Instances are lists inside t
 
 ## Creating and not found
 
-While Add Version copies a built version into a new draft, the workspace is drawn as `Skeleton` wires in a busy status region named "Creating a new version from <id>." and the version bar shows a `Spinner`, "Creating new version…", the copy line, Add Version loading and Redeploy disabled. A version link that points nowhere keeps the trail and renders a bordered `EmptyState` with View Versions.
+While Add Version copies a built version into a new draft (`creating`), the workspace is drawn as `Skeleton` wires in a busy status region named "Creating a new version from <id>." and the version bar shows a `Spinner`, "Creating new version…", the copy line, Add Version loading and Redeploy disabled. A version link that points nowhere keeps the trail and renders a bordered `EmptyState` with View Versions.
+
+## Data
+
+The block takes its versions and settings through props and emits every action; it fetches nothing. `VersionDetailVersion`, `VersionDetailSettings`, `VersionDetailProps` and the other record types are exported from `version-detail.vue`, and `sample.ts` holds the sample resource, versions, settings and revert diff the block renders when those props are left out. The viewed version's `state` decides the page: `draft` is editable, `deployed` is read-only with Redeploy, `ready` is an earlier version with Revert.
+
+| Prop / model           | Type                         | What it does                                                                                                 |
+| ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `resource`             | `VersionDetailResource`      | The resource name and link, used in the trail, the Back link and the page links.                             |
+| `versions`             | `VersionDetailVersion[]`     | Every version, newest first; the trail lists them and the history shows the ones older than the current one. |
+| `settings`             | `VersionDetailSettings`      | The Settings tab values of the viewed version; the form keeps a local draft of them.                         |
+| `revertDiff`           | `VersionDetailRevertDiff`    | What the revert dialog lists against the deployed version.                                                   |
+| `environments`         | `VersionDetailEnvironment[]` | When set, the trail starts with an environment crumb and each version option says where it is live.          |
+| `creating`             | `boolean`                    | A new version is being copied from the viewed one: wires in the workspace, the version bar busy.             |
+| `reverting`            | `boolean`                    | The revert is running: Revert loads and the bar reads Reverting to the version.                              |
+| `v-model:version-id`   | `string`                     | The viewed version; picking one in the trail updates it. Empty shows the first version.                      |
+| `v-model:tab`          | `VersionDetailTab`           | The open tab, `main-settings` by default.                                                                    |
+| `v-model:history-open` | `boolean`                    | Whether the Version history pane is open.                                                                    |
+| `v-model:environment`  | `string`                     | The environment crumb; picking one moves the version crumb to the version live there.                        |
+
+| Event              | Payload                         | When                                                                       |
+| ------------------ | ------------------------------- | -------------------------------------------------------------------------- |
+| `save`             | `(event, { action, settings })` | The Save split button on a draft; `action` is `deploy`, `build` or `save`. |
+| `save-description` | `(event, description)`          | Save under the description editor in the history.                          |
+| `add-version`      | `(event)`                       | Add Version in the bar or the version picker footer.                       |
+| `add-environment`  | `(event)`                       | Add Environment in the environment picker footer.                          |
+| `redeploy`         | `(event)`                       | Redeploy on a deployed version.                                            |
+| `revert`           | `(event, version)`              | The revert dialog was confirmed.                                           |
+
+To go live, render the block from the version route and pass what the API returns:
+
+```vue
+<script setup lang="ts">
+  import VersionDetail from './version-detail.vue'
+
+  const { versionId, versions, settings, saveVersion, revertTo, reverting } = useVersion()
+</script>
+
+<template>
+  <VersionDetail
+    v-model:version-id="versionId"
+    :versions="versions"
+    :settings="settings"
+    :reverting="reverting"
+    @save="(event, { action, settings }) => saveVersion(action, settings)"
+    @revert="(event, version) => revertTo(version.id)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -76,7 +126,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
-- Report a revert like any deploy: one toast that turns into the outcome, with Edit and Redeploy.
+- Report a revert like any deploy: on `revert`, one toast that turns into the outcome, with Edit and Redeploy.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
@@ -119,17 +169,17 @@ While Add Version copies a built version into a new draft, the workspace is draw
 
 ## States
 
-- Draft: the editable draft on its Settings tab, with the Editable tag and the Save and deploy split button in the version bar.
-- Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
-- Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
-- VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
-- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumb` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
-- Creating: Add Version copying AEO25I38 into a new draft, the workspace as `Skeleton` wires and the version bar busy.
+- Draft: the default render, a version with `state: 'draft'` on its Settings tab, with the Editable tag and the Save and deploy split button in the version bar.
+- Deployed: `version-id` on the version with `state: 'deployed'`, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
+- Revert: `version-id` on an earlier version with `state: 'ready'` and `history-open`, read-only, Revert to <id> in the bar and a confirmation with the `revertDiff`; `reverting` shows the run.
+- VersionHistory: `history-open` on the draft, the current version, the empty changes entry and the five newest earlier versions.
+- EnvironmentCrumb: `environments` set, for a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumb` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
+- Creating: `creating` on the deployed AEO25I38, the workspace as `Skeleton` wires and the version bar busy.
 - NotFound: a version that does not exist, a bordered `EmptyState` with View Versions.
-- Source: the draft on its Source tab, the file list of the version bucket with its folder path and Open in Object Storage.
-- DeviceGroups: the draft on its Device Groups tab, the groups table and the add or edit drawer with the User-Agent expression.
-- CacheSettings: the draft on its Cache Settings tab, the cache settings table and the add or edit drawer with Adaptive delivery and Device groups.
-- FunctionsInstances: the draft on its Functions Instances tab, the instances table and the add or edit drawer with the function `Select` and its arguments.
+- Source: `tab="source"` with its panel in the `#source` slot, the file list of the version bucket with its folder path and Open in Object Storage.
+- DeviceGroups: `tab="device-groups"` with its panel in the `#device-groups` slot, the groups table and the add or edit drawer with the User-Agent expression.
+- CacheSettings: `tab="cache-settings"` with its panel in the `#cache-settings` slot, the cache settings table and the add or edit drawer with Adaptive delivery and Device groups.
+- FunctionsInstances: `tab="functions-instances"` with its panel in the `#functions-instances` slot, the instances table and the add or edit drawer with the function `Select` and its arguments.
 
 ## Related
 
@@ -148,7 +198,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - `Draft` — primary (the code below)
 - `Deployed` — The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy.
 - `VersionHistory` — The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest.
-- `Revert` — An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed.
+- `Revert` — An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm emits `revert` with the version; while the parent runs it, `reverting` puts Revert in its loading state and the bar reads Reverting to AK7D0ZX4…, and the parent reports the outcome with one toast that carries Edit and Redeploy.
 - `EnvironmentCrumb` — The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the page's `ConsoleLayout.Breadcrumb` from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`.
 - `Creating` — A new version being copied from the deployed AEO25I38: the workspace is drawn as `Skeleton` wires (a heading band, then sectioned cards of rows with a trailing switch) inside a polite busy status, and the version bar shows a `Spinner`, reads Creating new version… and Copying AEO25I38 into a new draft., with Add Version loading and Redeploy disabled.
 - `NotFound` — A version link that points nowhere: the trail ends on the missing version and the body is a bordered `EmptyState`, Version not found, saying the version may have been deleted, with View Versions back to the Versions tab.
@@ -166,6 +216,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -180,25 +231,161 @@ Each variant is the same screen in another state: `get_block("detail/version-det
   import Select from '@aziontech/webkit/select'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Spinner from '@aziontech/webkit/spinner'
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
 
-  type VersionEntry = {
-    id: string
+  import { sampleResource, sampleRevertDiff, sampleSettings, sampleVersions } from './sample'
+
+  /** Where a version is in its life: an editable draft, the deployed one, or an earlier built one. */
+  export type VersionDetailState = 'draft' | 'deployed' | 'ready'
+
+  /** A tab of the version workspace. */
+  export type VersionDetailTab =
+    | 'main-settings'
+    | 'source'
+    | 'device-groups'
+    | 'cache-settings'
+    | 'functions-instances'
+    | 'rules-engine'
+
+  /** The resource the version belongs to. */
+  export interface VersionDetailResource {
+    /** Resource name, shown in the trail and in the page links. */
     name: string
-    state: string
-    tag: { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
-    comment: string
-    author: string
-    createdAgo: string
+    /** Link to the resource page. */
+    href: string
   }
 
-  const tabs = [
+  /** One version of the resource. */
+  export interface VersionDetailVersion {
+    /** Version id, used in the route. */
+    id: string
+    /** Version name shown in the trail and the history. */
+    name: string
+    /** Lifecycle state; it decides whether the page is editable. */
+    state: VersionDetailState
+    /** The version description. */
+    comment: string
+    /** Who created the version. */
+    author: string
+    /** Relative creation time, such as 1 day ago. */
+    createdAgo: string
+    /** Creation date shown in the tab row of a built version. */
+    createdOn?: string
+  }
+
+  /** The values of the Settings tab. */
+  export interface VersionDetailSettings {
+    /** Resource name. */
+    name: string
+    /** Whether the resource serves traffic. */
+    active: boolean
+    /** Module switches, keyed by module key. */
+    modules: Record<string, boolean>
+  }
+
+  /** One setting a revert changes. */
+  export interface VersionDetailChange {
+    /** Setting name. */
+    setting: string
+    /** Value on the deployed version. */
+    from: string
+    /** Value after the revert. */
+    to: string
+  }
+
+  /** What reverting to the viewed version changes against the deployed one. */
+  export interface VersionDetailRevertDiff {
+    /** The settings that change. */
+    settings: VersionDetailChange[]
+    /** Rules the revert adds. */
+    rulesAdded: number
+    /** Rules the revert removes. */
+    rulesRemoved: number
+    /** One sentence on the rules that change. */
+    rulesNote: string
+  }
+
+  /** An environment the resource deploys to. */
+  export interface VersionDetailEnvironment {
+    /** Environment name. */
+    name: string
+    /** Deployment policy shown as its tag. */
+    policy: string
+    /** Id of the version live there, or an empty string. */
+    serves: string
+  }
+
+  /** The payload of a save from the version bar. */
+  export interface VersionDetailSave {
+    /** The save action picked in the split button. */
+    action: string
+    /** The settings as edited. */
+    settings: VersionDetailSettings
+  }
+
+  export interface VersionDetailProps {
+    /** The resource; left out, the sample resource renders. */
+    resource?: VersionDetailResource
+    /** Every version, newest first; left out, the sample versions render. */
+    versions?: VersionDetailVersion[]
+    /** The Settings tab values of the viewed version; left out, the sample settings render. */
+    settings?: VersionDetailSettings
+    /** The diff the revert dialog shows; left out, the sample diff renders. */
+    revertDiff?: VersionDetailRevertDiff
+    /** The environments; when set, the trail starts with an environment crumb. */
+    environments?: VersionDetailEnvironment[]
+    /** A new version is being copied from the viewed one. */
+    creating?: boolean
+    /** A revert to the viewed version is running. */
+    reverting?: boolean
+  }
+
+  const props = withDefaults(defineProps<VersionDetailProps>(), {
+    resource: undefined,
+    versions: undefined,
+    settings: undefined,
+    revertDiff: undefined,
+    environments: undefined,
+    creating: false,
+    reverting: false
+  })
+
+  const emit = defineEmits<{
+    save: [event: MouseEvent, payload: VersionDetailSave]
+    'save-description': [event: MouseEvent, description: string]
+    'add-version': [event: MouseEvent | KeyboardEvent]
+    'add-environment': [event: MouseEvent | KeyboardEvent]
+    redeploy: [event: MouseEvent]
+    revert: [event: MouseEvent, version: VersionDetailVersion]
+  }>()
+
+  const versionId = defineModel<string>('versionId', { default: '' })
+  const activeTab = defineModel<VersionDetailTab>('tab', { default: 'main-settings' })
+  const historyExpanded = defineModel<boolean>('historyOpen', { default: false })
+  const environment = defineModel<string>('environment', { default: '' })
+
+  defineSlots<{
+    /** The Source tab panel; the fallback links to its own page. */
+    source?(props: { label: string }): unknown
+    /** The Device Groups tab panel. */
+    'device-groups'?(props: { label: string }): unknown
+    /** The Cache Settings tab panel. */
+    'cache-settings'?(props: { label: string }): unknown
+    /** The Functions Instances tab panel. */
+    'functions-instances'?(props: { label: string }): unknown
+    /** The Rules Engine tab panel. */
+    'rules-engine'?(props: { label: string }): unknown
+  }>()
+
+  const tabs: { value: VersionDetailTab; label: string }[] = [
     { value: 'main-settings', label: 'Settings' },
     { value: 'source', label: 'Source' },
     { value: 'device-groups', label: 'Device Groups' },
@@ -206,136 +393,14 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     { value: 'functions-instances', label: 'Functions Instances' },
     { value: 'rules-engine', label: 'Rules Engine' }
   ]
-  const versions: VersionEntry[] = [
-    {
-      id: 'ADA8FMMR',
-      name: 'ADA8FMMR',
-      state: 'draft',
-      tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-pen' },
-      comment: 'Cache static assets for 30 days',
-      author: 'John Smith',
-      createdAgo: '14 hours ago'
-    },
-    {
-      id: 'AEO25I38',
-      name: 'AEO25I38',
-      state: 'active',
-      tag: { label: 'Deployed', variant: 'primary', icon: '' },
-      comment: 'Remove rule"Legacy load balancer"',
-      author: 'Sam Lee',
-      createdAgo: '1 day ago'
-    },
-    {
-      id: 'AG1VVDJP',
-      name: 'AG1VVDJP',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Enable image optimization',
-      author: 'Priya Patel',
-      createdAgo: '3 days ago'
-    },
-    {
-      id: 'AHFPL906',
-      name: 'AHFPL906',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Update function"ab-test" arguments',
-      author: 'Chris Taylor',
-      createdAgo: '3 days ago'
-    },
-    {
-      id: 'AITJB4GN',
-      name: 'AITJB4GN',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Add variable"API_URL"',
-      author: 'Riley Carter',
-      createdAgo: '4 days ago'
-    },
-    {
-      id: 'AK7D0ZX4',
-      name: 'AK7D0ZX4',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Cache static assets for 30 days',
-      author: 'Ethan Brooks',
-      createdAgo: '6 days ago'
-    },
-    {
-      id: 'ALL6QVDL',
-      name: 'ALL6QVDL',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Remove rule"Legacy load balancer"',
-      author: 'Jordan Kim',
-      createdAgo: '1 week ago'
-    }
-  ]
-  const version: VersionEntry = {
-    id: 'ADA8FMMR',
-    name: 'ADA8FMMR',
-    state: 'draft',
-    tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-pen' },
-    comment: 'Cache static assets for 30 days',
-    author: 'John Smith',
-    createdAgo: '14 hours ago'
+  const STATE_TAGS: Record<
+    VersionDetailState,
+    { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
+  > = {
+    draft: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-pen' },
+    deployed: { label: 'Deployed', variant: 'primary', icon: '' },
+    ready: { label: 'Ready', severity: 'success', icon: '' }
   }
-  const earlier: VersionEntry[] = [
-    {
-      id: 'AEO25I38',
-      name: 'AEO25I38',
-      state: 'active',
-      tag: { label: 'Deployed', variant: 'primary', icon: '' },
-      comment: 'Remove rule"Legacy load balancer"',
-      author: 'Sam Lee',
-      createdAgo: '1 day ago'
-    },
-    {
-      id: 'AG1VVDJP',
-      name: 'AG1VVDJP',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Enable image optimization',
-      author: 'Priya Patel',
-      createdAgo: '3 days ago'
-    },
-    {
-      id: 'AHFPL906',
-      name: 'AHFPL906',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Update function"ab-test" arguments',
-      author: 'Chris Taylor',
-      createdAgo: '3 days ago'
-    },
-    {
-      id: 'AITJB4GN',
-      name: 'AITJB4GN',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Add variable"API_URL"',
-      author: 'Riley Carter',
-      createdAgo: '4 days ago'
-    },
-    {
-      id: 'AK7D0ZX4',
-      name: 'AK7D0ZX4',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Cache static assets for 30 days',
-      author: 'Ethan Brooks',
-      createdAgo: '6 days ago'
-    },
-    {
-      id: 'ALL6QVDL',
-      name: 'ALL6QVDL',
-      state: 'ready',
-      tag: { label: 'Ready', severity: 'success', icon: '' },
-      comment: 'Remove rule"Legacy load balancer"',
-      author: 'Jordan Kim',
-      createdAgo: '1 week ago'
-    }
-  ]
   const defaultModules = [
     {
       key: 'protocol_optimization',
@@ -370,35 +435,105 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     { label: 'Save and build', value: 'build' },
     { label: 'Save', value: 'save' }
   ]
+  const wireSections = [
+    { id: 'general', rows: ['62%', '48%'] },
+    { id: 'modules', rows: ['54%', '66%', '44%'] }
+  ]
+  const ADD_VERSION = '__create-version__'
+  const ADD_ENVIRONMENT = '__create-environment__'
 
-  const versionId = ref('ADA8FMMR')
-  const query = ref('')
-  const activeTab = ref('main-settings')
+  const resource = computed(() => props.resource ?? sampleResource)
+  const versions = computed(() => props.versions ?? sampleVersions)
+  const revertDiff = computed(() => props.revertDiff ?? sampleRevertDiff)
+  const environments = computed(() => props.environments ?? [])
+  const viewed = computed<VersionDetailVersion>(
+    () =>
+      versions.value.find((entry) => entry.id === versionId.value) ??
+      versions.value[0] ?? {
+        name: versionId.value,
+        id: versionId.value,
+        state: 'ready',
+        comment: '',
+        author: '',
+        createdAgo: ''
+      }
+  )
+  const isDraft = computed(() => viewed.value.state === 'draft')
+  const deployed = computed(() => versions.value.find((entry) => entry.state === 'deployed'))
+  const version = computed(() =>
+    viewed.value.state === 'ready' ? (deployed.value ?? viewed.value) : viewed.value
+  )
+  const earlier = computed(() =>
+    versions.value.slice(versions.value.findIndex((entry) => entry.id === version.value.id) + 1)
+  )
+  const tagFor = (entry: VersionDetailVersion) => STATE_TAGS[entry.state]
   const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
-  const settings = reactive<{ name: string; active: boolean; modules: Record<string, boolean> }>({
-    name: 'web-app',
-    active: true,
-    modules: {
-      protocol_optimization: true,
-      cache: true,
-      device_detection: false,
-      custom_code: true,
-      image_optimization: false,
-      load_balancing: false,
-      web_socket_proxy: false
-    }
+  const statusLabel = computed(() => {
+    if (props.creating) return 'Creating new version…'
+    if (props.reverting) return `Reverting to ${viewed.value.name}…`
+    if (isDraft.value) return 'Draft'
+    return viewed.value.state === 'deployed'
+      ? 'Viewing a deployed version'
+      : 'Viewing an earlier version'
   })
+  const statusLine = computed(() => {
+    if (props.creating) return `Copying ${viewed.value.name} into a new draft.`
+    if (isDraft.value) return 'This version is open for editing. Deploy it when ready.'
+    return viewed.value.comment
+  })
+
+  const query = ref('')
+  const environmentQuery = ref('')
+  const form = reactive<VersionDetailSettings>({ name: '', active: false, modules: {} })
   const saveAction = ref<string | undefined>('deploy')
-  const historyExpanded = ref(false)
   const historyBasis = ref(348)
-  const description = ref('Cache static assets for 30 days')
+  const description = ref('')
   const draftText = ref('')
   const editing = ref(false)
   const shown = ref(5)
+  const confirmOpen = ref(false)
 
   const matches = computed(() =>
-    versions.filter((entry) => entry.name.toLowerCase().includes(query.value.trim().toLowerCase()))
+    versions.value.filter((entry) =>
+      entry.name.toLowerCase().includes(query.value.trim().toLowerCase())
+    )
   )
+  const environmentMatches = computed(() => {
+    const needle = environmentQuery.value.trim().toLowerCase()
+    if (!needle) return environments.value
+    return environments.value.filter((entry) => entry.name.toLowerCase().includes(needle))
+  })
+  const environmentName = computed(() => environment.value || environments.value[0]?.name || '')
+
+  watch(
+    () => props.settings ?? sampleSettings,
+    (next) => {
+      form.name = next.name
+      form.active = next.active
+      form.modules = { ...next.modules }
+    },
+    { immediate: true }
+  )
+  watch(
+    () => version.value.comment,
+    (next) => {
+      description.value = next
+    },
+    { immediate: true }
+  )
+
+  const servedIn = (id: string) =>
+    environments.value.filter((entry) => entry.serves === id).map((entry) => entry.name)
+  const pickVersion = (value: unknown) => {
+    if (value !== ADD_VERSION && value !== undefined && value !== null)
+      versionId.value = String(value)
+  }
+  const pickEnvironment = (value: unknown) => {
+    if (value === ADD_ENVIRONMENT || value === undefined || value === null) return
+    environment.value = String(value)
+    const served = environments.value.find((entry) => entry.name === value)?.serves
+    if (served) versionId.value = served
+  }
 
   const openHistory = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => {
     if (value === 'history' && historyExpanded.value) {
@@ -408,6 +543,20 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     editing.value = value === 'edit'
     if (editing.value) draftText.value = description.value
     historyExpanded.value = true
+  }
+  const saveDescription = (event: MouseEvent) => {
+    description.value = draftText.value.trim()
+    editing.value = false
+    emit('save-description', event, description.value)
+  }
+  const save = (event: MouseEvent) =>
+    emit('save', event, {
+      action: saveAction.value ?? 'deploy',
+      settings: { ...form, modules: { ...form.modules } }
+    })
+  const confirmRevert = (event: MouseEvent) => {
+    confirmOpen.value = false
+    emit('revert', event, viewed.value)
   }
 </script>
 
@@ -419,13 +568,85 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     <ConsoleLayout.Breadcrumb
       :items="[
         { label: 'Resources', href: '/resources' },
-        { label: 'web-app', href: '/resources/1784552864' }
+        { label: resource.name, href: resource.href }
       ]"
     >
       <Select
+        v-if="environments.length"
         variant="ghost"
         size="small"
-        :model-value="versionId"
+        :model-value="environmentName"
+        :display-value="(value) => String(value ?? '')"
+        @update:model-value="pickEnvironment"
+        @update:open="
+          (open) => {
+            if (!open) environmentQuery = ''
+          }
+        "
+      >
+        <Select.Trigger aria-label="Switch environment" />
+        <Select.Content>
+          <template #search>
+            <Input
+              v-model="environmentQuery"
+              size="small"
+              placeholder="Search environments"
+              aria-label="Search environments"
+              @keydown.stop
+            >
+              <template #leading>
+                <i
+                  class="ai ai-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </template>
+          <Select.Group label="Environments">
+            <Select.Item
+              v-for="entry in environmentMatches"
+              :key="entry.name"
+              :value="entry.name"
+            >
+              {{ entry.name }}
+              <template #tag>
+                <Tag
+                  :label="entry.policy"
+                  severity="neutral"
+                  size="small"
+                />
+              </template>
+            </Select.Item>
+            <p
+              v-if="!environmentMatches.length"
+              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
+            >
+              No environments match"{{ environmentQuery }}".
+            </p>
+          </Select.Group>
+          <template #footer>
+            <Select.Item
+              :value="ADD_ENVIRONMENT"
+              class="w-full"
+              @click="(event: MouseEvent) => emit('add-environment', event)"
+              @keydown.enter="(event: KeyboardEvent) => emit('add-environment', event)"
+            >
+              <span class="flex items-center gap-(--spacing-xs)">
+                <i
+                  class="ai ai-circle-plus"
+                  aria-hidden="true"
+                />
+                Add Environment
+              </span>
+            </Select.Item>
+          </template>
+        </Select.Content>
+      </Select>
+      <Select
+        variant="ghost"
+        size="small"
+        :model-value="viewed.id"
+        @update:model-value="pickVersion"
         :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
         @update:open="
           (open) => {
@@ -458,12 +679,17 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               :value="entry.id"
             >
               {{ entry.name }}
+              <span
+                v-if="servedIn(entry.id).length"
+                class="text-body-xs text-(--text-muted)"
+                >Live in {{ servedIn(entry.id).join(', ') }}</span
+              >
               <template #tag>
                 <Tag
-                  :label="entry.tag.label"
-                  :variant="entry.tag.variant"
-                  :severity="entry.tag.severity"
-                  :icon="entry.tag.icon"
+                  :label="tagFor(entry).label"
+                  :variant="tagFor(entry).variant"
+                  :severity="tagFor(entry).severity"
+                  :icon="tagFor(entry).icon"
                   size="small"
                 />
               </template>
@@ -477,8 +703,10 @@ Each variant is the same screen in another state: `get_block("detail/version-det
           </Select.Group>
           <template #footer>
             <Select.Item
-              value="__create-version__"
+              :value="ADD_VERSION"
               class="w-full"
+              @click="(event: MouseEvent) => emit('add-version', event)"
+              @keydown.enter="(event: KeyboardEvent) => emit('add-version', event)"
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
@@ -496,18 +724,93 @@ Each variant is the same screen in another state: `get_block("detail/version-det
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
     >
-      <Tooltip content="Back to web-app versions">
+      <Tooltip :content="`Back to ${resource.name} versions`">
         <IconButton
           icon="ai ai-arrow-left"
           variant="ghost"
           size="medium"
-          href="/resources/1784552864?tab=versions"
-          aria-label="Back to web-app versions"
+          :href="`${resource.href}?tab=versions`"
+          :aria-label="`Back to ${resource.name} versions`"
         />
       </Tooltip>
+      <div
+        v-if="environments.length"
+        class="min-w-0 flex-1"
+      >
+        <Select
+          :model-value="environmentName"
+          :display-value="(value) => String(value ?? '')"
+          class="w-full"
+          @update:model-value="pickEnvironment"
+          @update:open="
+            (open) => {
+              if (!open) environmentQuery = ''
+            }
+          "
+        >
+          <Select.Trigger aria-label="Switch environment" />
+          <Select.Content>
+            <template #search>
+              <Input
+                v-model="environmentQuery"
+                size="small"
+                placeholder="Search environments"
+                aria-label="Search environments"
+                @keydown.stop
+              >
+                <template #leading>
+                  <i
+                    class="ai ai-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </template>
+            <Select.Group label="Environments">
+              <Select.Item
+                v-for="entry in environmentMatches"
+                :key="entry.name"
+                :value="entry.name"
+              >
+                {{ entry.name }}
+                <template #tag>
+                  <Tag
+                    :label="entry.policy"
+                    severity="neutral"
+                    size="small"
+                  />
+                </template>
+              </Select.Item>
+              <p
+                v-if="!environmentMatches.length"
+                class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
+              >
+                No environments match"{{ environmentQuery }}".
+              </p>
+            </Select.Group>
+            <template #footer>
+              <Select.Item
+                :value="ADD_ENVIRONMENT"
+                class="w-full"
+                @click="(event: MouseEvent) => emit('add-environment', event)"
+                @keydown.enter="(event: KeyboardEvent) => emit('add-environment', event)"
+              >
+                <span class="flex items-center gap-(--spacing-xs)">
+                  <i
+                    class="ai ai-circle-plus"
+                    aria-hidden="true"
+                  />
+                  Add Environment
+                </span>
+              </Select.Item>
+            </template>
+          </Select.Content>
+        </Select>
+      </div>
       <div class="min-w-0 flex-1">
         <Select
-          :model-value="versionId"
+          :model-value="viewed.id"
+          @update:model-value="pickVersion"
           :display-value="
             (id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')
           "
@@ -543,12 +846,17 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 :value="entry.id"
               >
                 {{ entry.name }}
+                <span
+                  v-if="servedIn(entry.id).length"
+                  class="text-body-xs text-(--text-muted)"
+                  >Live in {{ servedIn(entry.id).join(', ') }}</span
+                >
                 <template #tag>
                   <Tag
-                    :label="entry.tag.label"
-                    :variant="entry.tag.variant"
-                    :severity="entry.tag.severity"
-                    :icon="entry.tag.icon"
+                    :label="tagFor(entry).label"
+                    :variant="tagFor(entry).variant"
+                    :severity="tagFor(entry).severity"
+                    :icon="tagFor(entry).icon"
                     size="small"
                   />
                 </template>
@@ -562,8 +870,10 @@ Each variant is the same screen in another state: `get_block("detail/version-det
             </Select.Group>
             <template #footer>
               <Select.Item
-                value="__create-version__"
+                :value="ADD_VERSION"
                 class="w-full"
+                @click="(event: MouseEvent) => emit('add-version', event)"
+                @keydown.enter="(event: KeyboardEvent) => emit('add-version', event)"
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
@@ -593,14 +903,22 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 :label="tab.label"
               />
               <template #actions>
+                <span
+                  v-if="!isDraft && viewed.createdOn"
+                  class="hidden text-body-sm text-(--text-muted) md:inline"
+                >
+                  Created {{ viewed.createdOn }}
+                </span>
                 <Tag
-                  label="Draft"
-                  severity="warning"
-                  icon="ai ai-file-pen"
+                  :label="tagFor(viewed).label"
+                  :variant="tagFor(viewed).variant"
+                  :severity="tagFor(viewed).severity"
+                  :icon="tagFor(viewed).icon"
                   size="medium"
                 />
                 <DropdownMenu
-                  placement="bottom-end"
+                  side="bottom"
+                  align="end"
                   @select="openHistory"
                 >
                   <DropdownMenu.Trigger>
@@ -613,6 +931,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
                     <DropdownMenu.Item
+                      v-if="isDraft"
                       value="edit"
                       label="Edit version info"
                     >
@@ -640,7 +959,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
             </PageTabs>
 
             <section
-              v-if="activeTab === 'main-settings'"
+              v-if="activeTab === 'main-settings' && !creating"
               class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
             >
               <ScrollArea
@@ -648,8 +967,13 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 fade
               >
                 <div class="flex min-h-full flex-col">
-                  <fieldset class="contents">
-                    <legend class="sr-only">web-app ADA8FMMR</legend>
+                  <fieldset
+                    :disabled="!isDraft"
+                    class="contents"
+                  >
+                    <legend class="sr-only">
+                      {{ resource.name }} {{ viewed.name }}{{ isDraft ? '' : ', read-only' }}
+                    </legend>
                     <form
                       class="flex min-h-full flex-col"
                       aria-label="Main settings"
@@ -683,7 +1007,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                     description="A unique and descriptive name to identify the resource."
                                   >
                                     <Input
-                                      v-model="settings.name"
+                                      v-model="form.name"
                                       size="large"
                                       class="w-full"
                                       aria-label="Name"
@@ -695,7 +1019,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                     variant="compact"
                                   >
                                     <Switch
-                                      v-model="settings.active"
+                                      v-model="form.active"
                                       aria-label="Active"
                                     />
                                   </SettingsRow>
@@ -720,7 +1044,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                     variant="compact"
                                   >
                                     <Switch
-                                      v-model="settings.modules[mod.key]"
+                                      v-model="form.modules[mod.key]"
                                       :aria-label="mod.title"
                                     />
                                   </SettingsRow>
@@ -759,7 +1083,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                     </template>
                                     <Tooltip content="Contact sales to activate this module.">
                                       <Switch
-                                        v-model="settings.modules.web_socket_proxy"
+                                        v-model="form.modules.web_socket_proxy"
                                         disabled
                                         aria-label="WebSocket Proxy"
                                       />
@@ -775,6 +1099,89 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                   </fieldset>
                 </div>
               </ScrollArea>
+            </section>
+            <section
+              v-else-if="activeTab === 'main-settings'"
+              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+            >
+              <ScrollArea
+                aria-label="Version settings"
+                fade
+              >
+                <div
+                  role="status"
+                  aria-busy="true"
+                  class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap) animate-fade-in motion-reduce:animate-none"
+                  data-testid="version-detail-wire"
+                >
+                  <span class="sr-only">Creating a new version from {{ viewed.name }}.</span>
+                  <div
+                    class="flex flex-col gap-(--spacing-xs)"
+                    aria-hidden="true"
+                  >
+                    <Skeleton
+                      width="8rem"
+                      height="1.25rem"
+                    />
+                    <Skeleton
+                      width="18rem"
+                      height="0.875rem"
+                    />
+                  </div>
+                  <div
+                    class="mt-(--layout-section-gap) flex flex-col gap-(--layout-section-gap)"
+                    aria-hidden="true"
+                  >
+                    <div
+                      v-for="section in wireSections"
+                      :key="section.id"
+                      class="flex flex-col gap-(--layout-group-gap)"
+                    >
+                      <Skeleton
+                        width="6rem"
+                        height="1rem"
+                      />
+                      <Card :padded="false">
+                        <template #default>
+                          <div class="flex flex-col divide-y divide-(--border-default)">
+                            <div
+                              v-for="(width, index) in section.rows"
+                              :key="index"
+                              class="flex items-center gap-(--spacing-md) p-(--spacing-md)"
+                            >
+                              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
+                                <Skeleton
+                                  width="7rem"
+                                  height="0.875rem"
+                                />
+                                <Skeleton
+                                  :width="width"
+                                  height="0.75rem"
+                                />
+                              </div>
+                              <span class="flex shrink-0">
+                                <Skeleton
+                                  width="2.25rem"
+                                  height="1.25rem"
+                                />
+                              </span>
+                            </div>
+                          </div>
+                        </template>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
+              </ScrollArea>
+            </section>
+            <section
+              v-else-if="$slots[activeTab]"
+              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+            >
+              <slot
+                :name="activeTab"
+                :label="tabLabel"
+              />
             </section>
             <section
               v-else
@@ -793,7 +1200,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                         :label="`Open ${tabLabel}`"
                         variant="outline"
                         size="small"
-                        :href="`/resources/web-app/${activeTab}`"
+                        :href="`/resources/${resource.name}/${activeTab}`"
                       />
                     </template>
                   </EmptyState>
@@ -814,42 +1221,137 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                   class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <span
+                    v-if="creating || isDraft"
                     class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
                     aria-hidden="true"
                   >
-                    <i class="ai ai-file-pen text-body-sm text-(--text-default)" />
+                    <Spinner v-if="creating" />
+                    <i
+                      v-else
+                      class="ai ai-file-pen text-body-sm text-(--text-default)"
+                    />
                   </span>
                   <div
                     class="flex min-w-0 flex-1 flex-col"
                     role="status"
                   >
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="truncate text-body-sm text-(--text-default)">Draft</span>
-                      <span class="hidden shrink-0 sm:inline-flex">
+                      <span class="truncate text-body-sm text-(--text-default)">{{
+                        statusLabel
+                      }}</span>
+                      <span
+                        v-if="!creating"
+                        class="hidden shrink-0 sm:inline-flex"
+                      >
                         <Tag
-                          label="Editable"
-                          severity="info"
+                          :label="isDraft ? 'Editable' : 'Read-only'"
+                          :severity="isDraft ? 'info' : 'neutral'"
+                          :icon="isDraft ? '' : 'ai ai-lock'"
                           size="small"
                         />
                       </span>
                     </div>
                     <p
-                      class="hidden truncate text-body-xs text-(--text-muted) data-dirty:text-(--text-default) md:block"
-                      title="This version is open for editing. Deploy it when ready."
+                      class="hidden truncate text-body-xs text-(--text-muted) md:block"
+                      :title="statusLine"
                     >
-                      This version is open for editing. Deploy it when ready.
+                      {{ statusLine }}
                     </p>
                   </div>
 
                   <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                     <SplitButton
+                      v-if="isDraft && !creating"
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
                       :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
                       variant="primary"
                       size="medium"
                       :items="saveOptions"
+                      @click="save"
                       @item-click="(_event, item) => (saveAction = item.value)"
                     />
+                    <template v-else>
+                      <Button
+                        label="Add Version"
+                        variant="outline"
+                        size="medium"
+                        icon="ai ai-plus"
+                        :loading="creating"
+                        @click="(event: MouseEvent) => emit('add-version', event)"
+                      />
+                      <Button
+                        v-if="viewed.state !== 'ready'"
+                        label="Redeploy"
+                        variant="outline"
+                        size="medium"
+                        icon="ai ai-refresh"
+                        :disabled="creating"
+                        @click="(event: MouseEvent) => emit('redeploy', event)"
+                      />
+                      <ConfirmDialog
+                        v-else
+                        v-model:open="confirmOpen"
+                        :title="`Revert to ${viewed.name}?`"
+                        :description="`Reverting deploys ${viewed.name} to Production in place of ${version.name}. ${version.name} stays in the version history, so you can redeploy it later.`"
+                        :confirm-label="`Revert to ${viewed.name}`"
+                        variant="primary"
+                        size="medium"
+                        @confirm="confirmRevert"
+                      >
+                        <template #trigger>
+                          <Button
+                            :label="`Revert to ${viewed.name}`"
+                            variant="primary"
+                            size="medium"
+                            icon="ai ai-undo"
+                            :loading="reverting"
+                          />
+                        </template>
+                        <div class="flex min-w-0 flex-col gap-(--spacing-md) pt-(--spacing-md)">
+                          <section
+                            aria-labelledby="revert-settings-title"
+                            class="flex min-w-0 flex-col gap-(--spacing-xs)"
+                          >
+                            <h3
+                              id="revert-settings-title"
+                              class="text-label-md text-(--text-default)"
+                            >
+                              What changes against {{ version.name }}
+                            </h3>
+                            <ul
+                              class="flex min-w-0 flex-col divide-y divide-(--border-muted) rounded-(--shape-control) border border-(--border-default)"
+                            >
+                              <li
+                                v-for="change in revertDiff.settings"
+                                :key="change.setting"
+                                class="flex min-w-0 items-center justify-between gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)"
+                              >
+                                <span class="truncate text-body-sm text-(--text-default)">{{
+                                  change.setting
+                                }}</span>
+                                <span class="sr-only">{{
+                                  `changes from ${change.from} to ${change.to}`
+                                }}</span>
+                                <span
+                                  class="flex shrink-0 items-center gap-(--spacing-xs) text-body-sm"
+                                  aria-hidden="true"
+                                >
+                                  <span class="text-(--text-muted) line-through">{{
+                                    change.from
+                                  }}</span>
+                                  <i class="ai ai-arrow-right text-body-xs text-(--text-muted)" />
+                                  <span class="text-(--text-default)">{{ change.to }}</span>
+                                </span>
+                              </li>
+                            </ul>
+                          </section>
+                          <p class="text-body-sm text-(--text-default)">
+                            Rules: {{ revertDiff.rulesAdded }} added,
+                            {{ revertDiff.rulesRemoved }} removed. {{ revertDiff.rulesNote }}
+                          </p>
+                        </div>
+                      </ConfirmDialog>
+                    </template>
                   </div>
                 </div>
               </footer>
@@ -903,7 +1405,10 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-foreground)"
                     aria-hidden="true"
                   >
-                    <i class="ai ai-file-pen text-body-xs" />
+                    <i
+                      :class="version.state === 'draft' ? 'ai ai-file-pen' : 'ai ai-code'"
+                      class="text-body-xs"
+                    />
                   </span>
                   <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -912,14 +1417,14 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                       </span>
                       <span class="flex shrink-0">
                         <Tag
-                          :label="version.tag.label"
-                          :variant="version.tag.variant"
-                          :severity="version.tag.severity"
+                          :label="tagFor(version).label"
+                          :variant="tagFor(version).variant"
+                          :severity="tagFor(version).severity"
                           size="small"
                         />
                       </span>
                       <span
-                        v-if="!editing"
+                        v-if="version.state === 'draft' && !editing"
                         class="ms-auto shrink-0"
                       >
                         <IconButton
@@ -939,7 +1444,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     <p class="text-label-sm text-(--text-muted)">Current version</p>
 
                     <div
-                      v-if="editing"
+                      v-if="version.state === 'draft' && editing"
                       class="flex flex-col gap-(--spacing-sm) pt-(--spacing-xs)"
                     >
                       <Field>
@@ -963,12 +1468,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                           label="Save"
                           variant="primary"
                           size="small"
-                          @click="
-                            () => {
-                              description = draftText.trim()
-                              editing = false
-                            }
-                          "
+                          @click="saveDescription"
                         />
                       </div>
                     </div>
@@ -998,7 +1498,10 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                   </div>
                 </li>
 
-                <li class="relative flex flex-col pb-(--spacing-lg)">
+                <li
+                  v-if="version.state === 'draft'"
+                  class="relative flex flex-col pb-(--spacing-lg)"
+                >
                   <span
                     class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                     aria-hidden="true"
@@ -1029,7 +1532,8 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     aria-hidden="true"
                   />
                   <a
-                    :href="`/resources/web-app/versions/${entry.name}`"
+                    :href="`/resources/${resource.name}/versions/${entry.name}`"
+                    :aria-current="entry.id === viewed.id ? 'page' : undefined"
                     class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                   >
                     <span
@@ -1047,9 +1551,19 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                         </span>
                         <span class="flex shrink-0">
                           <Tag
-                            :label="entry.tag.label"
-                            :variant="entry.tag.variant"
-                            :severity="entry.tag.severity"
+                            :label="tagFor(entry).label"
+                            :variant="tagFor(entry).variant"
+                            :severity="tagFor(entry).severity"
+                            size="small"
+                          />
+                        </span>
+                        <span
+                          v-if="entry.id === viewed.id"
+                          class="flex shrink-0"
+                        >
+                          <Tag
+                            label="Viewing"
+                            severity="info"
                             size="small"
                           />
                         </span>
@@ -1093,4 +1607,123 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type {
+  VersionDetailEnvironment,
+  VersionDetailResource,
+  VersionDetailRevertDiff,
+  VersionDetailSettings,
+  VersionDetailVersion
+} from './version-detail.vue'
+
+export const sampleResource: VersionDetailResource = {
+  name: 'web-app',
+  href: '/resources/1784552864'
+}
+
+export const sampleVersions: VersionDetailVersion[] = [
+  {
+    id: 'ADA8FMMR',
+    name: 'ADA8FMMR',
+    state: 'draft',
+    comment: 'Cache static assets for 30 days',
+    author: 'John Smith',
+    createdAgo: '14 hours ago',
+    createdOn: 'Nov 11, 2026'
+  },
+  {
+    id: 'AEO25I38',
+    name: 'AEO25I38',
+    state: 'deployed',
+    comment: 'Remove rule"Legacy load balancer"',
+    author: 'Sam Lee',
+    createdAgo: '1 day ago',
+    createdOn: 'Nov 5, 2026'
+  },
+  {
+    id: 'AG1VVDJP',
+    name: 'AG1VVDJP',
+    state: 'ready',
+    comment: 'Enable image optimization',
+    author: 'Priya Patel',
+    createdAgo: '3 days ago',
+    createdOn: 'Nov 5, 2026'
+  },
+  {
+    id: 'AHFPL906',
+    name: 'AHFPL906',
+    state: 'ready',
+    comment: 'Update function"ab-test" arguments',
+    author: 'Chris Taylor',
+    createdAgo: '3 days ago',
+    createdOn: 'Nov 5, 2026'
+  },
+  {
+    id: 'AITJB4GN',
+    name: 'AITJB4GN',
+    state: 'ready',
+    comment: 'Add variable"API_URL"',
+    author: 'Riley Carter',
+    createdAgo: '4 days ago',
+    createdOn: 'Nov 5, 2026'
+  },
+  {
+    id: 'AK7D0ZX4',
+    name: 'AK7D0ZX4',
+    state: 'ready',
+    comment: 'Cache static assets for 30 days',
+    author: 'Ethan Brooks',
+    createdAgo: '6 days ago',
+    createdOn: 'Nov 5, 2026'
+  },
+  {
+    id: 'ALL6QVDL',
+    name: 'ALL6QVDL',
+    state: 'ready',
+    comment: 'Remove rule"Legacy load balancer"',
+    author: 'Jordan Kim',
+    createdAgo: '1 week ago',
+    createdOn: 'Nov 5, 2026'
+  }
+]
+
+export const sampleSettings: VersionDetailSettings = {
+  name: 'web-app',
+  active: true,
+  modules: {
+    protocol_optimization: true,
+    cache: true,
+    device_detection: false,
+    custom_code: true,
+    image_optimization: false,
+    load_balancing: false,
+    web_socket_proxy: false
+  }
+}
+
+export const sampleEarlierSettings: VersionDetailSettings = {
+  ...sampleSettings,
+  modules: { ...sampleSettings.modules, device_detection: true, load_balancing: true }
+}
+
+export const sampleRevertDiff: VersionDetailRevertDiff = {
+  settings: [
+    { setting: 'Device Detection', from: 'Off', to: 'On' },
+    { setting: 'Load Balancing', from: 'Off', to: 'On' },
+    { setting: 'Image Optimization', from: 'On', to: 'Off' }
+  ],
+  rulesAdded: 1,
+  rulesRemoved: 0,
+  rulesNote: 'The rule"Legacy load balancer" comes back.'
+}
+
+export const sampleEnvironments: VersionDetailEnvironment[] = [
+  { name: 'Production', policy: 'Single', serves: 'AEO25I38' },
+  { name: 'Preview', policy: 'Versioned', serves: 'AG1VVDJP' },
+  { name: 'Staging', policy: 'Versioned', serves: '' }
+]
 ```

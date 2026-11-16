@@ -92,11 +92,11 @@
    "doc": "Two-way value (`v-model`)."
   },
   {
-   "name": "rowSelection",
-   "type": "Record<string, boolean>",
-   "default": "—",
+   "name": "selectedKeys",
+   "type": "string[]",
+   "default": "() => []",
    "required": "false",
-   "doc": "Two-way value (`v-model:rowSelection`)."
+   "doc": "Two-way value (`v-model:selectedKeys`)."
   }
  ],
  "events": [

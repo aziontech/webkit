@@ -49,6 +49,43 @@ One small `Item` per gate, rendered as a full-width button: the gate's icon, its
 
 A large right-side `Drawer` that the expand button and every row open. `PanelHeader` repeats the title with the progress `Tag` and one sentence on where the service stands, beside the drawer's own close button; `PanelBody` lists every gate as a medium `Item` with its description and either its outlined action `Button` or, once done, a Done `Tag` with what it now serves; `PanelFooter` ends with a primary Done `Button` that closes it.
 
+## Data
+
+The block takes its gates through props and emits every action; it fetches nothing. `ProductionChecklistStep` and `ProductionChecklistProps` are exported from `production-checklist.vue`, and `sample.ts` holds the sample gates the block renders when `steps` is left out.
+
+| Prop          | Type                        | What it does                                                                    |
+| ------------- | --------------------------- | ------------------------------------------------------------------------------- |
+| `steps`       | `ProductionChecklistStep[]` | The gates, in order; the count and the success state follow their `done` flags. |
+| `defaultOpen` | `boolean`                   | Opens the drawer on mount, as the expand button or a row does.                  |
+
+| Event         | Payload         | When                                                                             |
+| ------------- | --------------- | -------------------------------------------------------------------------------- |
+| `step-action` | `(event, step)` | A gate's action in the drawer (Add Domain, Attach Policy...); the drawer closes. |
+| `done`        | `(event)`       | The drawer's Done button; the drawer closes.                                     |
+
+To go live, render the block from the Overview tab that knows which gates are done:
+
+```vue
+<script setup lang="ts">
+  import ProductionChecklist, { type ProductionChecklistStep } from './production-checklist.vue'
+
+  const { data } = useServiceReadiness()
+  const router = useRouter()
+
+  const onStepAction = (_event: MouseEvent, step: ProductionChecklistStep) =>
+    router.push(`/service/setup/${step.id}`)
+</script>
+
+<template>
+  <ProductionChecklist
+    :steps="data?.steps ?? []"
+    @step-action="onStepAction"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Order the gates by how much they matter for production; domain first.
@@ -84,9 +121,9 @@ A large right-side `Drawer` that the expand button and every row open. `PanelHea
 
 ## States
 
-- Card: some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
-- Success: every gate done; the tag reads Ready for production and the rows are gone.
-- DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
+- Card: `steps` with some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
+- Success: `steps` with every gate done; the tag reads Ready for production and the rows are gone.
+- DrawerDetail: `defaultOpen`, as when the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
 
 ## Related
 
@@ -121,42 +158,61 @@ Each variant is the same screen in another state: `get_block("detail/production-
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  const open = ref(false)
+  import { sampleSteps } from './sample'
 
-  const steps = [
-    {
-      id: 'domain',
-      icon: 'ai ai-globe',
-      title: 'Add a custom domain',
-      description:
-        'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
-      actionLabel: 'Add Domain',
-      done: true,
-      doneNote: 'Serving shop.example.com.'
-    },
-    {
-      id: 'policy',
-      icon: 'ai ai-shield',
-      title: 'Enable a security policy',
-      description:
-        'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',
-      actionLabel: 'Attach Policy',
-      done: false,
-      doneNote: ''
-    },
-    {
-      id: 'customPage',
-      icon: 'ai ai-file',
-      title: 'Set custom error pages',
-      description: 'Answer 4xx and 5xx with your own page instead of the default response.',
-      actionLabel: 'Add Error Page',
-      done: false,
-      doneNote: ''
-    }
-  ]
+  /** One gate between the generated hostname and production. */
+  export interface ProductionChecklistStep {
+    /** Stable id of the gate. */
+    id: string
+    /** Icon class of the gate. */
+    icon: string
+    /** Verb-first gate title. */
+    title: string
+    /** What the gate gives the service, shown in the drawer. */
+    description: string
+    /** Label of the drawer action; empty uses the title. */
+    actionLabel: string
+    /** Whether the gate is done. */
+    done: boolean
+    /** What the gate now serves, shown beside the Done tag. */
+    doneNote: string
+  }
 
-  const doneCount = computed(() => steps.filter((step) => step.done).length)
-  const complete = computed(() => steps.length > 0 && doneCount.value === steps.length)
+  export interface ProductionChecklistProps {
+    /** The gates, in order. Left out, the sample renders. */
+    steps?: ProductionChecklistStep[]
+    /** Opens the drawer on mount. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<ProductionChecklistProps>(), {
+    steps: undefined,
+    defaultOpen: false
+  })
+
+  const emit = defineEmits<{
+    /** A gate action in the drawer was pressed. */
+    'step-action': [event: MouseEvent, step: ProductionChecklistStep]
+    /** The drawer Done button was pressed. */
+    done: [event: MouseEvent]
+  }>()
+
+  const open = ref(props.defaultOpen)
+
+  const steps = computed(() => props.steps ?? sampleSteps)
+
+  const onStepAction = (event: MouseEvent, step: ProductionChecklistStep) => {
+    open.value = false
+    emit('step-action', event, step)
+  }
+
+  const onDone = (event: MouseEvent) => {
+    open.value = false
+    emit('done', event)
+  }
+
+  const doneCount = computed(() => steps.value.filter((step) => step.done).length)
+  const complete = computed(() => steps.value.length > 0 && doneCount.value === steps.value.length)
 </script>
 
 <template>
@@ -308,7 +364,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
                 :label="step.actionLabel || step.title"
                 variant="outline"
                 size="small"
-                @click="open = false"
+                @click="onStepAction($event, step)"
               />
             </Item.Footer>
           </Item>
@@ -321,11 +377,55 @@ Each variant is the same screen in another state: `get_block("detail/production-
             label="Done"
             variant="primary"
             size="medium"
-            @click="open = false"
+            @click="onDone"
           />
         </div>
       </PanelFooter>
     </DrawerContent>
   </Drawer>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { ProductionChecklistStep } from './production-checklist.vue'
+
+export const sampleSteps: ProductionChecklistStep[] = [
+  {
+    id: 'domain',
+    icon: 'ai ai-globe',
+    title: 'Add a custom domain',
+    description:
+      'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
+    actionLabel: 'Add Domain',
+    done: true,
+    doneNote: 'Serving shop.example.com.'
+  },
+  {
+    id: 'policy',
+    icon: 'ai ai-shield',
+    title: 'Enable a security policy',
+    description:
+      'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',
+    actionLabel: 'Attach Policy',
+    done: false,
+    doneNote: ''
+  },
+  {
+    id: 'customPage',
+    icon: 'ai ai-file',
+    title: 'Set custom error pages',
+    description: 'Answer 4xx and 5xx with your own page instead of the default response.',
+    actionLabel: 'Add Error Page',
+    done: false,
+    doneNote: ''
+  }
+]
+
+export const sampleCompletedSteps: ProductionChecklistStep[] = [
+  { ...sampleSteps[0] },
+  { ...sampleSteps[1], done: true, doneNote: 'Protected by policy-production.' },
+  { ...sampleSteps[2], done: true, doneNote: 'Serving Branded 404.' }
+]
 ```

@@ -1,11 +1,11 @@
 # MfaSettings (`account/mfa-settings`)
 
-> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingsRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, the `view/table-view` controls row (`PropertyFilter` over name, email, MFA status and method, Refresh and Download CSV as `IconButton`s in a `Tooltip`, `CollectionPreferences`) and a paginated `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder; a filter with no match shows a small `EmptyState` with Clear filters. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingsRow`, `Switch`, `Alert`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Table`, `EmptyState`, `Avatar`, `DropdownMenu`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
+> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingsRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, the `view/table-view` controls row (`PropertyFilter` over name, email, MFA status and method, Refresh and Download CSV as `IconButton`s in a `Tooltip`, `CollectionPreferences`) and a paginated `DataTable` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `TableCellStatus` (Enabled, Not set up), Method, Set up as `TableCellTime`, and `TableCellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder; a filter with no match shows a small `EmptyState` with Clear filters. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingsRow`, `Switch`, `Alert`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `DataTable`, `EmptyState`, `Avatar`, `DropdownMenu`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/mfa-settings/mfa-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/mfa-settings")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -33,7 +33,7 @@ Title `Multi-factor authentication` and one sentence on what the page holds. Act
 
 ### B. Require MFA — `Card`, `Item`, `SettingsRow`, `Switch`, `ConfirmDialog` (required)
 
-One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
+One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once. Either way the block updates `v-model:required` and the page saves it. While data loads or failed, the switch is disabled.
 
 ### C. Password-only warning — `Alert` (conditional)
 
@@ -43,17 +43,63 @@ While MFA is optional and someone has no factor, a warning `Alert` counts them (
 
 The `view/table-view` controls row, as on every account list: a `PropertyFilter` over Name, Email, MFA status and Method (`v-bind="propertyFilterProps"`), then Refresh and Download CSV as outlined `IconButton`s in a `Tooltip`, and `CollectionPreferences` for page size and columns. Download CSV is disabled when no row matches.
 
-### E. People table — `DataTable`, `Table`, `Avatar`, `EmptyState`, `useCollection` (required)
+### E. People table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
 
-A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it), MFA as `Table.CellStatus` (Enabled success, Not set up warning), Method, and Set up as `Table.CellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
+A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it), MFA as `TableCellStatus` (Enabled success, Not set up warning), Method, and Set up as `TableCellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
 
 ### F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
-`Table.CellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
+`TableCellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one. Reset marks the row Not set up and emits `reset`; the reminder emits `remind`.
 
 ### G. Load failure and outcomes — `Alert` (required)
 
-When the list fails to load, a danger `Alert` with Retry takes the table's place. Require, optional, reset and reminder end in a success toast; they are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+When the list fails to load, a danger `Alert` with Retry takes the table's place. The page that runs the request ends require, optional, reset and reminder in a success toast; they are not deploys, so no toast carries Edit or Redeploy. The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its people through props and emits every action; it fetches nothing. `MfaSettingsMember` and `MfaSettingsProps` are exported from `mfa-settings.vue`, and `sample.ts` holds the sample people the block renders when `members` is left out (and never while `loading` or `error` is set).
+
+| Prop       | Type                  | What it does                                                                                                                                |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `members`  | `MfaSettingsMember[]` | The rows; the filter, the sort and the pages run on them in the browser.                                                                    |
+| `loading`  | `boolean`             | A request is in flight. With no people it is the first load (the Switch disables, the table shows loading rows); with people Refresh spins. |
+| `error`    | `string`              | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table; the Switch disables.                  |
+| `required` | `boolean`             | `v-model:required`: whether the account requires MFA; on hides the password-only warning.                                                   |
+
+| Event             | Payload           | When                                                                 |
+| ----------------- | ----------------- | -------------------------------------------------------------------- |
+| `update:required` | `boolean`         | The require dialog was confirmed (`true`), or the Switch turned off. |
+| `refresh`         | `(event)`         | Refresh.                                                             |
+| `retry`           | `(event)`         | Retry in the error alert.                                            |
+| `remind`          | `(event, member)` | Send setup reminder in the row menu.                                 |
+| `reset`           | `(event, member)` | The reset dialog was confirmed; the row already reads Not set up.    |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import MfaSettings from './mfa-settings.vue'
+
+  const { data, pending, error, refresh } = useMfaStatus()
+  const loadError = 'The MFA status could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <MfaSettings
+    :members="data?.members ?? []"
+    :required="data?.required ?? false"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @update:required="saveRequired"
+    @refresh="refresh"
+    @retry="refresh"
+    @remind="(_event, member) => sendReminder(member.id)"
+    @reset="(_event, member) => resetMfa(member.id)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -83,10 +129,10 @@ When the list fails to load, a danger `Alert` with Retry takes the table's place
 
 ## States
 
-- Default: five people, three with a factor, MFA optional, the warning shown.
-- Required: MFA required for the account.
-- Loading: the first load.
-- Error: the list did not load; a danger Alert with Retry.
+- Default: `members` holds five people, three with a factor, MFA optional, the warning shown.
+- Required: MFA required for the account (`required` is `true`); the Switch is on and the warning is gone.
+- Loading: the first load (`loading` with no `members`); the Switch is disabled and the table shows its loading rows.
+- Error: the list did not load (`error` is set); a danger Alert with the message and Retry, the Switch disabled.
 
 ## Related
 
@@ -122,76 +168,73 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import { toast } from '@aziontech/webkit/toast'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  const DAY = 86_400_000
-  const REFERENCE = Date.UTC(2026, 10, 10, 12)
+  import { sampleMembers } from './sample'
 
-  interface Member {
+  /** One person of the account and their second factor. */
+  export interface MfaSettingsMember {
+    /** Stable key. */
     id: string
+    /** Display name. */
     name: string
+    /** Sign-in email, shown under the name. */
     email: string
+    /** The second factor in use, such as Authenticator app; empty when none. */
     method: string
+    /** Whether the person signs in with a second factor. */
     enabled: boolean
+    /** When the second factor was set up, or null when it is not. */
     since: Date | null
   }
 
-  type MemberRow = Member & { status: string }
+  export interface MfaSettingsProps {
+    /** The people to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    members?: MfaSettingsMember[]
+    /** A request is in flight: with no people it is the first load, with people a refresh. */
+    loading?: boolean
+    /** Why the MFA status could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
 
-  const seedMembers: Member[] = [
-    {
-      id: 'm-1',
-      name: 'Avery Stone',
-      email: 'avery.stone@example.com',
-      method: 'Authenticator app',
-      enabled: true,
-      since: new Date(REFERENCE - 210 * DAY)
-    },
-    {
-      id: 'm-2',
-      name: 'Jordan Reyes',
-      email: 'jordan.reyes@example.com',
-      method: 'Authenticator app',
-      enabled: true,
-      since: new Date(REFERENCE - 40 * DAY)
-    },
-    {
-      id: 'm-3',
-      name: 'Priya Nair',
-      email: 'priya.nair@example.com',
-      method: '',
-      enabled: false,
-      since: null
-    },
-    {
-      id: 'm-4',
-      name: 'Lena Fischer',
-      email: 'lena.fischer@example.com',
-      method: 'Authenticator app',
-      enabled: true,
-      since: new Date(REFERENCE - 6 * DAY)
-    },
-    {
-      id: 'm-5',
-      name: 'Marco Bianchi',
-      email: 'marco.bianchi@example.com',
-      method: '',
-      enabled: false,
-      since: null
-    }
-  ]
+  const props = withDefaults(defineProps<MfaSettingsProps>(), {
+    members: undefined,
+    loading: false,
+    error: ''
+  })
 
-  const REQUIRED_ON_START = false
-  const members = ref(seedMembers)
-  const required = ref(REQUIRED_ON_START)
-  const loading = ref(false)
-  const loadFailed = ref(false)
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    remind: [event: Event, member: MfaSettingsMember]
+    reset: [event: MouseEvent, member: MfaSettingsMember]
+  }>()
 
-  const withoutMfa = computed(() => members.value.filter((member) => !member.enabled))
+  const required = defineModel<boolean>('required', { default: false })
+
+  type MemberRow = MfaSettingsMember & { status: string }
+
+  const source = computed<MfaSettingsMember[]>(
+    () => props.members ?? (props.loading || props.error ? [] : sampleMembers)
+  )
+  const items = ref<MfaSettingsMember[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+
+  const loadFailed = computed(() => props.error !== '')
+
+  const withoutMfa = computed(() => items.value.filter((member) => !member.enabled))
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
@@ -201,7 +244,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
     { id: 'actions', type: 'action', hideable: false }
   ]
   const rows = computed(() =>
-    members.value.map((member) => ({
+    items.value.map((member) => ({
       ...member,
       status: member.enabled ? 'Enabled' : 'Not set up'
     }))
@@ -230,22 +273,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
   const membersTableEl = ref<TableExposed<MemberRow> | null>(null)
   const exportCsv = () => membersTableEl.value?.exportCsv({ filename: 'mfa-status.csv' })
 
-  const refreshing = ref(false)
-  const refresh = () => {
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
-
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      members.value = seedMembers
-      loading.value = false
-    }, 700)
-  }
+  const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const requireOpen = ref(false)
   const onRequire = (value: boolean) => {
@@ -254,50 +282,32 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
       return
     }
     required.value = false
-    toast.success('MFA is optional again.', {
-      description: 'People who set it up keep using it.'
-    })
   }
   const confirmRequire = () => {
     required.value = true
     requireOpen.value = false
-    const count = withoutMfa.value.length
-    toast.success('MFA is now required.', {
-      description: count
-        ? `${count} ${count === 1 ? 'person sets' : 'people set'} it up at their next sign-in.`
-        : 'Everyone in the account already uses it.'
-    })
   }
 
-  const pending = ref<MemberRow | null>(null)
+  const pending = ref<MfaSettingsMember | null>(null)
   const resetOpen = ref(false)
-  const onAction = (value: DropdownMenuItemValue, row: MemberRow) => {
+  const onAction = (event: Event, value: DropdownMenuItemValue, row: MemberRow) => {
+    const member = items.value.find((item) => item.id === row.id)
+    if (!member) return
     if (value === 'reset') {
-      pending.value = row
+      pending.value = member
       resetOpen.value = true
       return
     }
-    if (value === 'remind') {
-      toast.success(`Reminder sent to ${row.email}.`, {
-        description: 'The email links to the MFA setup page.'
-      })
-    }
+    if (value === 'remind') emit('remind', event, member)
   }
-  const reset = () => {
-    const row = pending.value
-    if (!row) return
-    const member = members.value.find((item) => item.id === row.id)
-    if (member) {
-      member.enabled = false
-      member.method = ''
-      member.since = null
-    }
+  const reset = (event: MouseEvent) => {
+    const member = pending.value
+    if (!member) return
+    items.value = items.value.map((item) =>
+      item.id === member.id ? { ...item, enabled: false, method: '', since: null } : item
+    )
     resetOpen.value = false
-    toast.success(`MFA reset for ${row.name}.`, {
-      description: required.value
-        ? 'They set it up again at their next sign-in.'
-        : 'They can sign in with their password until they set it up again.'
-    })
+    emit('reset', event, member)
   }
 </script>
 
@@ -344,8 +354,8 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
           v-if="!required && !loading && !loadFailed && withoutMfa.length"
           severity="warning"
         >
-          {{ withoutMfa.length }} of {{ members.length }} people sign in with a password only.
-          Require MFA, or remind them to set it up.
+          {{ withoutMfa.length }} of {{ items.length }} people sign in with a password only. Require
+          MFA, or remind them to set it up.
         </Alert>
 
         <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -371,7 +381,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
                   size="medium"
                   :loading="refreshing"
                   aria-label="Refresh"
-                  @click="refresh"
+                  @click="emit('refresh', $event)"
                 />
               </Tooltip>
               <Tooltip
@@ -398,13 +408,13 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
             v-if="loadFailed"
             severity="danger"
           >
-            The MFA status could not be loaded. Nothing was changed; try again.
+            {{ error }}
             <template #actions>
               <Button
                 label="Retry"
                 variant="secondary"
                 size="small"
-                @click="retryLoad"
+                @click="emit('retry', $event)"
               />
             </template>
           </Alert>
@@ -438,7 +448,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
                   </div>
                 </template>
                 <template #cell-status="{ row }">
-                  <Table.CellStatus
+                  <TableCellStatus
                     :label="row.status"
                     :severity="row.enabled ? 'success' : 'warning'"
                   />
@@ -447,7 +457,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
                   <span class="truncate text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
                 </template>
                 <template #cell-since="{ row }">
-                  <Table.CellTime
+                  <TableCellTime
                     v-if="row.since"
                     :value="row.since"
                   />
@@ -461,9 +471,9 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
                   <span class="sr-only">Actions</span>
                 </template>
                 <template #cell-actions="{ row }">
-                  <Table.CellActions
+                  <TableCellActions
                     :name="row.name"
-                    @select="(_event, value) => onAction(value, row)"
+                    @select="(event, value) => onAction(event, value, row)"
                   >
                     <DropdownMenu.Group>
                       <DropdownMenu.Item
@@ -479,7 +489,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
                         label="Send setup reminder"
                       />
                     </DropdownMenu.Group>
-                  </Table.CellActions>
+                  </TableCellActions>
                 </template>
                 <template #empty>
                   <EmptyState
@@ -529,4 +539,56 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
     />
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { MfaSettingsMember } from './mfa-settings.vue'
+
+const DAY = 86_400_000
+const REFERENCE = Date.UTC(2026, 10, 10, 12)
+
+export const sampleMembers: MfaSettingsMember[] = [
+  {
+    id: 'm-1',
+    name: 'Avery Stone',
+    email: 'avery.stone@example.com',
+    method: 'Authenticator app',
+    enabled: true,
+    since: new Date(REFERENCE - 210 * DAY)
+  },
+  {
+    id: 'm-2',
+    name: 'Jordan Reyes',
+    email: 'jordan.reyes@example.com',
+    method: 'Authenticator app',
+    enabled: true,
+    since: new Date(REFERENCE - 40 * DAY)
+  },
+  {
+    id: 'm-3',
+    name: 'Priya Nair',
+    email: 'priya.nair@example.com',
+    method: '',
+    enabled: false,
+    since: null
+  },
+  {
+    id: 'm-4',
+    name: 'Lena Fischer',
+    email: 'lena.fischer@example.com',
+    method: 'Authenticator app',
+    enabled: true,
+    since: new Date(REFERENCE - 6 * DAY)
+  },
+  {
+    id: 'm-5',
+    name: 'Marco Bianchi',
+    email: 'marco.bianchi@example.com',
+    method: '',
+    enabled: false,
+    since: null
+  }
+]
 ```

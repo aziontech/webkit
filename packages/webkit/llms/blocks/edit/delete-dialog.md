@@ -50,6 +50,44 @@ A full-width `Input` with `autocomplete="off"`, labelled by the prompt paragraph
 
 The visible `variant="danger"` trigger in `#trigger`. The dialog's own footer carries Cancel and `variant="danger"` Delete resource (the title repeated), `:disabled` until the typed name matches and `:loading` while the request runs; while it loads Cancel and the input are disabled and the dialog cannot be dismissed. On success the dialog closes and a toast says `resource-01 was deleted.`
 
+## Data
+
+The block takes the resource name and the request state through props and emits the delete; it fetches nothing. `DeleteDialogProps` is exported from `delete-dialog.vue`, and `sample.ts` holds the sample name the block shows when `name` is left out.
+
+| Prop                  | Type      | What it does                                                                                                                            |
+| --------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`                | `string`  | The resource to delete; the user types it to confirm.                                                                                   |
+| `loading`             | `boolean` | The delete is in flight: Delete spins, Cancel and the input lock. When it ends with no error, the dialog closes with the success toast. |
+| `error`               | `string`  | Why the server refused the delete, shown in the danger `Alert` in place of the warning; the dialog stays open.                          |
+| `defaultConfirmation` | `string`  | The text the input opens with.                                                                                                          |
+| `defaultOpen`         | `boolean` | Whether the dialog starts open when `v-model:open` is not bound.                                                                        |
+| `v-model:open`        | `boolean` | Whether the dialog is open.                                                                                                             |
+
+| Event    | Payload         | When                                                           |
+| -------- | --------------- | -------------------------------------------------------------- |
+| `delete` | `(event, name)` | Delete resource, or Enter in the input, once the name matches. |
+
+To go live, render the block from a page that owns the request:
+
+```vue
+<script setup lang="ts">
+  import DeleteDialog from './delete-dialog.vue'
+
+  const { run, pending, error } = useDeleteResource()
+</script>
+
+<template>
+  <DeleteDialog
+    :name="resource.name"
+    :loading="pending"
+    :error="error?.message ?? ''"
+    @delete="(event, name) => run(name)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Name the resource kind in the title and the resource itself in the chip, so the user knows exactly what goes.
@@ -90,9 +128,9 @@ The visible `variant="danger"` trigger in `#trigger`. The dialog's own footer ca
 
 ## States
 
-- Default: the danger trigger is visible; opening it shows the warning, the name chip and the empty input with Delete resource disabled.
+- Default: the danger trigger is visible (`v-model:open` false); opening it shows the warning, the name chip and the empty input with Delete resource disabled.
 - SettingsRow: the settings-page danger zone; an outlined `Item` row opens the medium `ConfirmDialog` asking for the name through a labelled `Field`, with Delete resource disabled until it matches and loading while it runs.
-- Error: the server refuses the delete (the resource is still used by two workloads); the dialog stays open with the typed name, a danger `Alert` says why, and Delete can run again.
+- Error: `error` set with `defaultOpen` and `defaultConfirmation`: the server refuses the delete (the resource is still used by two workloads); the dialog stays open with the typed name, a danger `Alert` says why, and Delete can run again.
 
 ## Related
 
@@ -121,45 +159,64 @@ Each variant is the same screen in another state: `get_block("edit/delete-dialog
   import CopyButton from '@aziontech/webkit/copy-button'
   import Input from '@aziontech/webkit/input'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, onScopeDispose, ref, useId, watch } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
 
-  const name = 'resource-01'
-  const inUseError = `${name} is still used by 2 workloads. Remove it from them and try again.`
-  const failing = false
+  import { sampleResourceName } from './sample'
 
-  const open = ref(false)
-  const confirmation = ref('')
-  const deleting = ref(false)
-  const deleteError = ref('')
+  export interface DeleteDialogProps {
+    /** The name of the resource to delete; the user types it to confirm. Left out, the sample renders. */
+    name?: string
+    /** The delete request is in flight: the dialog locks and Delete spins; when it ends with no error the dialog closes. */
+    loading?: boolean
+    /** Why the delete was refused, shown in a danger alert in place of the warning; the dialog stays open. */
+    error?: string
+    /** The text the confirmation input opens with. */
+    defaultConfirmation?: string
+    /** Whether the dialog starts open when open is not bound. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<DeleteDialogProps>(), {
+    name: '',
+    loading: false,
+    error: '',
+    defaultConfirmation: '',
+    defaultOpen: false
+  })
+
+  const emit = defineEmits<{
+    delete: [event: Event, name: string]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+  if (props.defaultOpen) open.value = true
+
+  const name = computed(() => props.name || sampleResourceName)
+  const confirmation = ref(props.defaultConfirmation)
+  const deleting = computed(() => props.loading)
+  const deleteError = computed(() => props.error)
   const confirmLabelId = useId()
-  let deleteTimer: ReturnType<typeof setTimeout> | undefined
-
-  onScopeDispose(() => clearTimeout(deleteTimer))
 
   const canDelete = computed(
-    () => confirmation.value.trim().length > 0 && confirmation.value.trim() === name
+    () => confirmation.value.trim().length > 0 && confirmation.value.trim() === name.value
   )
 
   watch(open, (isOpen) => {
-    if (!isOpen) return
-    confirmation.value = ''
-    deleteError.value = ''
+    if (isOpen) confirmation.value = ''
   })
 
-  const confirm = () => {
-    if (!canDelete.value || deleting.value) return
-    deleting.value = true
-    deleteError.value = ''
-    clearTimeout(deleteTimer)
-    deleteTimer = setTimeout(() => {
-      deleting.value = false
-      if (failing) {
-        deleteError.value = inUseError
-        return
-      }
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (!before || now || props.error || !open.value) return
       open.value = false
-      toast.success(`${name} was deleted.`, { id: 'delete-resource-result' })
-    }, 600)
+      toast.success(`${name.value} was deleted.`, { id: 'delete-resource-result' })
+    }
+  )
+
+  const confirm = (event: Event) => {
+    if (!canDelete.value || deleting.value) return
+    emit('delete', event, name.value)
   }
 </script>
 
@@ -229,4 +286,10 @@ Each variant is the same screen in another state: `get_block("edit/delete-dialog
     </div>
   </ConfirmDialog>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+export const sampleResourceName = 'resource-01'
 ```

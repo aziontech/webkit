@@ -156,6 +156,68 @@ or Bar `ToggleGroup`; `Data transferred by project` is a labeled horizontal bar 
 transferred per project. The empty copy is `No usage yet` /
 `Usage appears here once a project serves requests.`
 
+### R. Failure — `Alert` (required)
+
+When the period cannot load (`error`), every card keeps its header and shows a danger `Alert` with
+Retry in place of its chart or table, naming what did not load
+(`Couldn't load top hosts. Check your connection and retry.`); Expand and Export CSV disable.
+
+## Data
+
+The block takes its figures through props and emits its actions; it fetches nothing. `AnalyticsDashboardProps` and the record types (`AnalyticsDashboardKpis`, `AnalyticsDashboardCountry`, `AnalyticsDashboardHost`, `AnalyticsDashboardChanges`, `AnalyticsDashboardRange`) are exported from `analytics-dashboard.vue`, and `sample.ts` holds the sample figures the block renders when a data prop is left out (and never while `loading` or `error` is set). The tile labels, hints and formats, the card titles and the period options stay in the SFC.
+
+| Prop              | Type                             | What it does                                                                                                   |
+| ----------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `v-model:period`  | `string`                         | The selected period (`1h`, `24h`, `7d`, `30d`); defaults to `24h`. Refetch when it changes.                    |
+| `kpis`            | `AnalyticsDashboardKpis`         | The value, delta and sparkline of each tile, keyed by tile id; a tile left out reads as a dash. `{}` is empty. |
+| `intervals`       | `ChartLabel[]`                   | One label per interval of the two time series (a string, a number or a `Date`).                                |
+| `requestSeries`   | `ChartSeries[]`                  | The Requests over time series.                                                                                 |
+| `statusSeries`    | `ChartSeries[]`                  | The Status codes series, one per status class.                                                                 |
+| `countries`       | `AnalyticsDashboardCountry[]`    | The Requests by country bars, top countries first.                                                             |
+| `hosts`           | `AnalyticsDashboardHost[]`       | The Top hosts rows; searched, sorted and paged in the browser.                                                 |
+| `changes`         | `AnalyticsDashboardChanges`      | The change tags of the two time-series cards, in percent; `null` hides a tag.                                  |
+| `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                           |
+| `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                        |
+| `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.       |
+| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.    |
+
+| Event           | Payload   | When                             |
+| --------------- | --------- | -------------------------------- |
+| `update:period` | `(value)` | The Period `Select` changed.     |
+| `retry`         | `(event)` | Retry in any card's error alert. |
+
+Copy query and Export CSV run in the browser on the figures the block holds. To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+  import AnalyticsDashboard from './analytics-dashboard.vue'
+
+  const period = ref('24h')
+  const { data, pending, error, refresh } = useHttpMetrics(period)
+</script>
+
+<template>
+  <AnalyticsDashboard
+    v-model:period="period"
+    :kpis="data?.kpis ?? {}"
+    :intervals="data?.intervals ?? []"
+    :request-series="data?.requests ?? []"
+    :status-series="data?.statusCodes ?? []"
+    :countries="data?.countries ?? []"
+    :hosts="data?.hosts ?? []"
+    :changes="data?.changes"
+    :range="data?.range"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the KPI row to the four numbers the reader checks first; put the rest in cards.
@@ -201,14 +263,14 @@ transferred per project. The empty copy is `No usage yet` /
 
 ## States
 
-- Default: the populated dashboard for the period.
-- Loading: every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
-- Empty: no traffic in the period; tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
+- Default: the populated dashboard for the period (`kpis`, `intervals`, `requestSeries`, `statusSeries`, `countries`, `hosts`, `changes`).
+- Loading: `loading`; every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
+- Empty: `kpis` is `{}` and the series and rows are `[]`; no traffic in the period, tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
 - Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards, and products with sub-dashboards switch them with a `ToggleGroup`, adding breakdown table cards.
-- Expanded: the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
+- Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
 - Usage: the Data usage page, consumption per meter and per project against the previous period.
-- Error: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` holds the message; the request for the period failed, tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
@@ -238,7 +300,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
 
 ```vue
 <script setup lang="ts">
-  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
+  import Alert from '@aziontech/webkit/alert'
+  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
@@ -263,6 +326,118 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
+  import {
+    sampleChanges,
+    sampleCountries,
+    sampleHosts,
+    sampleIntervals,
+    sampleKpis,
+    sampleRange,
+    sampleRequestSeries,
+    sampleStatusSeries
+  } from './sample'
+
+  /** The four figures of the KPI row, in the order they render. */
+  export type AnalyticsDashboardKpiId =
+    'requests' | 'data-transferred' | 'success-rate' | 'status-5xx'
+
+  /** The measured part of one KPI tile. */
+  export interface AnalyticsDashboardKpi {
+    /** The figure for the period; null reads as a dash. */
+    value: number | null
+    /** Change against the previous period, in percent; null hides the delta. */
+    delta: number | null
+    /** The sparkline, one value per interval; empty hides it. */
+    trend: number[]
+  }
+
+  /** The KPI figures by tile; a tile left out reads as a dash. */
+  export type AnalyticsDashboardKpis = Partial<
+    Record<AnalyticsDashboardKpiId, AnalyticsDashboardKpi>
+  >
+
+  /** Requests from one country of origin. */
+  export interface AnalyticsDashboardCountry {
+    /** Country name, the bar label. */
+    country: string
+    /** Requests from it in the period. */
+    requests: number
+  }
+
+  /** One row of the Top hosts table. */
+  export interface AnalyticsDashboardHost {
+    /** Stable row key. */
+    id: string
+    /** The hostname that served the requests. */
+    host: string
+    /** The service behind the host. */
+    service: string
+    /** Requests served in the period. */
+    requests: number
+  }
+
+  /** Change of each time-series total against the previous period, in percent. */
+  export interface AnalyticsDashboardChanges {
+    /** Change of the Requests over time total; null hides the tag. */
+    requests: number | null
+    /** Change of the Status codes total; null hides the tag. */
+    statusCodes: number | null
+  }
+
+  /** The window the period covers, as ISO timestamps, written into each copied query. */
+  export interface AnalyticsDashboardRange {
+    /** Start of the window. */
+    begin: string
+    /** End of the window. */
+    end: string
+  }
+
+  /** A card that opens in the expanded dialog. */
+  export type AnalyticsDashboardCardId = 'requests' | 'status-codes' | 'countries' | 'hosts'
+
+  export interface AnalyticsDashboardProps {
+    /** The KPI figures for the period. Left out, the sample renders. */
+    kpis?: AnalyticsDashboardKpis
+    /** One label per interval of the two time series: a string, a number or a Date. */
+    intervals?: ChartLabel[]
+    /** Series of the Requests over time card, one value per interval. */
+    requestSeries?: ChartSeries[]
+    /** Series of the Status codes card, one per status class. */
+    statusSeries?: ChartSeries[]
+    /** Rows of the Requests by country card, top countries first. */
+    countries?: AnalyticsDashboardCountry[]
+    /** Rows of the Top hosts table. */
+    hosts?: AnalyticsDashboardHost[]
+    /** Change tags in the headers of the two time-series cards. */
+    changes?: AnalyticsDashboardChanges
+    /** The window of the period, written into the queries the card menus copy. */
+    range?: AnalyticsDashboardRange
+    /** The card whose expanded dialog is open on first render; empty opens none. */
+    defaultExpanded?: AnalyticsDashboardCardId | ''
+    /** The figures for the period are loading; every tile, chart and the table hold a skeleton. */
+    loading?: boolean
+    /** Why the period could not load; each card shows it in a danger alert with Retry. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<AnalyticsDashboardProps>(), {
+    kpis: undefined,
+    intervals: undefined,
+    requestSeries: undefined,
+    statusSeries: undefined,
+    countries: undefined,
+    hosts: undefined,
+    changes: undefined,
+    range: undefined,
+    defaultExpanded: '',
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
+
+  const period = defineModel<string>('period', { default: '24h' })
+
   const fallbackPeriod = {
     value: '24h',
     label: 'Last 24 hours',
@@ -274,7 +449,6 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     { value: '7d', label: 'Last 7 days', comparison: 'vs previous 7 days' },
     { value: '30d', label: 'Last 30 days', comparison: 'vs previous 30 days' }
   ]
-  const period = ref(fallbackPeriod.value)
   const periodLabel = (value: string) => periods.find((entry) => entry.value === value)?.label ?? ''
   const currentPeriod = computed(
     () => periods.find((entry) => entry.value === period.value) ?? fallbackPeriod
@@ -284,22 +458,12 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
 
   type FigureFormat = 'count' | 'bytes' | 'percentage'
 
-  interface Figure {
-    id: string
+  interface FigureDefinition {
+    id: AnalyticsDashboardKpiId
     label: string
     description: string
-    value: number | null
     format: FigureFormat
-    delta: number | null
     inverse: boolean
-    trend: number[]
-  }
-
-  interface HostRow {
-    id: string
-    host: string
-    service: string
-    requests: number
   }
 
   interface Variation {
@@ -308,209 +472,106 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     icon: string
   }
 
-  interface Variations {
-    requests: Variation | null
-    statusCodes: Variation | null
-  }
+  const failed = computed(() => props.error !== '')
+  const blank = computed(() => props.loading || failed.value)
+  const fallback = <T,>(value: T | undefined, sample: T, empty: T): T =>
+    value ?? (blank.value ? empty : sample)
 
-  const loading = false
-
-  const figures: Figure[] = [
+  const definitions: FigureDefinition[] = [
     {
-      id: 'requests',
       label: 'Requests',
+      id: 'requests',
       description: 'Sum of requests served by every service in the period.',
-      value: 48920000,
       format: 'count',
-      delta: -1.83,
-      inverse: false,
-      trend: [
-        2029738, 1799252, 1910217, 1633835, 1757364, 1722765, 2157932, 2151290, 2283541, 2397218,
-        2545994, 2347243
-      ]
+      inverse: false
     },
     {
-      id: 'data-transferred',
       label: 'Data transferred',
+      id: 'data-transferred',
       description: 'Sum of data delivered to users by every service in the period.',
-      value: 222000000000,
       format: 'bytes',
-      delta: -13.26,
-      inverse: false,
-      trend: [
-        7464097327, 8703777359, 8853256007, 10189608468, 10484778433, 10611102405, 9993797117,
-        9768346098, 10386911277, 8642195236, 7365365394, 8004529693
-      ]
+      inverse: false
     },
     {
-      id: 'success-rate',
       label: 'Success rate',
+      id: 'success-rate',
       description: 'Share of requests that ended in a 2xx or 3xx status.',
-      value: 98,
       format: 'percentage',
-      delta: 0.42,
-      inverse: false,
-      trend: [99, 99, 99, 99, 98, 98, 97, 97, 97, 97, 97, 99]
+      inverse: false
     },
     {
-      id: 'status-5xx',
       label: 'Status 5xx',
+      id: 'status-5xx',
       description: 'Requests that ended in a server error. A rise is a regression.',
-      value: 158600,
       format: 'count',
-      delta: -5.47,
-      inverse: true,
-      trend: [4580, 5509, 4940, 5670, 7151, 9279, 8251, 8242, 8497, 6207, 5685, 5352]
+      inverse: true
     }
   ]
 
-  const labels = [
-    '11:00',
-    '13:00',
-    '15:00',
-    '17:00',
-    '19:00',
-    '21:00',
-    '23:00',
-    '01:00',
-    '03:00',
-    '05:00',
-    '07:00',
-    '09:00'
-  ]
+  const kpiValues = computed(() => fallback(props.kpis, sampleKpis, {}))
+  const figures = computed(() =>
+    definitions.map((definition) => ({
+      ...definition,
+      ...(kpiValues.value[definition.id] ?? { value: null, delta: null, trend: [] })
+    }))
+  )
 
-  const requests: ChartSeries[] = [
-    {
-      id: 'requests',
-      name: 'Requests',
-      values: [
-        2278608, 2368220, 2548427, 2385746, 2112152, 2214745, 1795004, 1575175, 1640830, 1634383,
-        1933593, 2144294
-      ]
-    }
-  ]
+  const labels = computed(() => fallback(props.intervals, sampleIntervals, []))
+  const requests = computed(() => fallback(props.requestSeries, sampleRequestSeries, []))
+  const statusCodes = computed(() => fallback(props.statusSeries, sampleStatusSeries, []))
+  const countryRows = computed(() => fallback(props.countries, sampleCountries, []))
+  const countryLabels = computed(() => countryRows.value.map((row) => row.country))
+  const countryRequests = computed<ChartSeries[]>(() =>
+    countryRows.value.length
+      ? [
+          {
+            id: 'requests',
+            name: 'Requests by country',
+            values: countryRows.value.map((row) => row.requests)
+          }
+        ]
+      : []
+  )
+  const hosts = computed(() => fallback(props.hosts, sampleHosts, []))
+  const range = computed(() => props.range ?? sampleRange)
 
-  const statusCodes: ChartSeries[] = [
-    {
-      id: '2xx',
-      name: 'Status 2xx',
-      values: [
-        1524883, 1531611, 1348641, 1583433, 1898319, 1802251, 1954175, 1996970, 1957306, 1701833,
-        1509664, 1620625
-      ]
-    },
-    {
-      id: '3xx',
-      name: 'Status 3xx',
-      values: [
-        266730, 270925, 287218, 296721, 286635, 245627, 230388, 201140, 188038, 184104, 197071,
-        244404
-      ]
-    },
-    {
-      id: '4xx',
-      name: 'Status 4xx',
-      values: [40942, 51712, 52096, 55261, 61739, 68992, 75656, 80310, 74603, 63564, 63640, 45548]
-    },
-    {
-      id: '5xx',
-      name: 'Status 5xx',
-      values: [4709, 5417, 4551, 5950, 5281, 8024, 8695, 9676, 8359, 7225, 6456, 5222]
-    }
-  ]
-
-  const countries: string[] = ['United States', 'Brazil', 'Germany', 'India', 'Mexico', 'Argentina']
-
-  const countryRequests: ChartSeries[] = [
-    {
-      id: 'requests',
-      name: 'Requests by country',
-      values: [1048210, 531620, 118930, 92480, 69870, 48420]
-    }
-  ]
-
-  const hosts: HostRow[] = [
-    {
-      id: 'www.example.com',
-      host: 'www.example.com',
-      service: 'Storefront',
-      requests: 1284310
-    },
-    {
-      id: 'api.example.com',
-      host: 'api.example.com',
-      service: 'Checkout API',
-      requests: 712480
-    },
-    {
-      id: 'shop.example.com',
-      host: 'shop.example.com',
-      service: 'Storefront',
-      requests: 498210
-    },
-    {
-      id: 'docs.example.com',
-      host: 'docs.example.com',
-      service: 'Docs',
-      requests: 231640
-    },
-    {
-      id: 'status.example.com',
-      host: 'status.example.com',
-      service: 'Status page',
-      requests: 96120
-    },
-    {
-      id: 'cdn.example.com',
-      host: 'cdn.example.com',
-      service: 'Media',
-      requests: 61870
-    },
-    {
-      id: 'blog.example.com',
-      host: 'blog.example.com',
-      service: 'Docs',
-      requests: 28940
-    }
-  ]
+  const variation = (change: number | null): Variation | null =>
+    change === null
+      ? null
+      : {
+          label: `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`,
+          severity: change >= 0 ? 'success' : 'danger',
+          icon: change >= 0 ? 'ai ai-arrow-up-right' : 'ai ai-arrow-down-right'
+        }
+  const variations = computed(() => {
+    const changes = fallback(props.changes, sampleChanges, { requests: null, statusCodes: null })
+    return { requests: variation(changes.requests), statusCodes: variation(changes.statusCodes) }
+  })
 
   const hostColumns: TableColumn[] = [
     {
-      id: 'host',
       accessorKey: 'host',
+      id: 'host',
       header: 'Host',
       align: 'start',
       sortable: true,
       principal: true
     },
     {
-      id: 'service',
       accessorKey: 'service',
+      id: 'service',
       header: 'Service',
       align: 'start',
       sortable: true
     },
     {
-      id: 'requests',
       accessorKey: 'requests',
+      id: 'requests',
       header: 'Requests',
       align: 'end',
       sortable: true
     }
   ]
-
-  const variations: Variations = {
-    requests: {
-      label: '+10.03%',
-      severity: 'success',
-      icon: 'ai ai-arrow-up-right'
-    },
-    statusCodes: {
-      label: '+14.66%',
-      severity: 'success',
-      icon: 'ai ai-arrow-up-right'
-    }
-  }
 
   const forms: ToggleGroupOption[] = [
     {
@@ -554,16 +615,13 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     orderBy: string
   }
 
-  const periodStart = '2026-11-13T11:00:00Z'
-  const periodEnd = '2026-11-14T10:59:59Z'
-
   const cardQuery = (report: CardQuery) =>
     [
       'query {',
       `  ${report.dataset}(`,
       '    limit: 5000',
       '    aggregate: { sum: requests }',
-      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    filter: { tsRange: { begin: "${range.value.begin}", end: "${range.value.end}" } }`,
       `    orderBy: [${report.orderBy}]`,
       '  ) {',
       ...report.fields.map((field) => `    ${field}`),
@@ -582,9 +640,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     }
   }
 
-  type CardId = 'requests' | 'status-codes' | 'countries' | 'hosts'
-
-  const queries: Record<CardId, CardQuery> = {
+  const queries: Record<AnalyticsDashboardCardId, CardQuery> = {
     requests: { dataset: 'httpMetrics', fields: ['ts', 'requests'], orderBy: 'ts_ASC' },
     'status-codes': {
       dataset: 'httpMetrics',
@@ -608,24 +664,27 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     description: string
     columns: CsvColumn[]
     rows: () => object[]
+    empty: () => boolean
   }
 
-  const seriesRows = (series: readonly ChartSeries[], axis: readonly (string | Date)[]) =>
+  const seriesRows = (series: readonly ChartSeries[], axis: readonly ChartLabel[]) =>
     axis.map((label, index) => ({
       ts: label instanceof Date ? label.toISOString() : label,
       ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
     }))
 
-  const expanded = ref(false)
-  const expandedId = ref<CardId>('requests')
+  const expanded = ref(props.defaultExpanded !== '')
+  const expandedId = ref<AnalyticsDashboardCardId>(props.defaultExpanded || 'requests')
   const expandedReport = computed(() => reports[expandedId.value])
 
-  const openExpanded = (id: CardId) => {
+  const openExpanded = (id: AnalyticsDashboardCardId) => {
     expandedId.value = id
     expanded.value = true
   }
 
-  const onCardOption = (id: CardId, value: string | number) => {
+  const exportDisabled = (id: AnalyticsDashboardCardId) => blank.value || reports[id].empty()
+
+  const onCardOption = (id: AnalyticsDashboardCardId, value: string | number) => {
     const report = reports[id]
     if (value === 'query') {
       copyQuery(report)
@@ -636,54 +695,54 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     toast.success('CSV exported.', { description: filename })
   }
 
-  const reports: Record<CardId, CardReport> = {
+  const reports: Record<AnalyticsDashboardCardId, CardReport> = {
     requests: {
       ...queries.requests,
       label: 'Requests over time',
       description: 'Sum of requests served by every service, per interval.',
       columns: [
-        { id: 'ts', header: 'Time' },
-        { id: 'requests', header: 'Requests' }
+        { header: 'Time', id: 'ts' },
+        { header: 'Requests', id: 'requests' }
       ],
-      rows: () => seriesRows(requests, labels)
+      rows: () => seriesRows(requests.value, labels.value),
+      empty: () => requests.value.length === 0
     },
     'status-codes': {
       ...queries['status-codes'],
       label: 'Status codes',
       description: 'Sum of requests per status class. Switch to Bar to stack the classes.',
       columns: [
-        { id: 'ts', header: 'Time' },
-        { id: '2xx', header: 'Status 2xx' },
-        { id: '3xx', header: 'Status 3xx' },
-        { id: '4xx', header: 'Status 4xx' },
-        { id: '5xx', header: 'Status 5xx' }
+        { header: 'Time', id: 'ts' },
+        { header: 'Status 2xx', id: '2xx' },
+        { header: 'Status 3xx', id: '3xx' },
+        { header: 'Status 4xx', id: '4xx' },
+        { header: 'Status 5xx', id: '5xx' }
       ],
-      rows: () => seriesRows(statusCodes, labels)
+      rows: () => seriesRows(statusCodes.value, labels.value),
+      empty: () => statusCodes.value.length === 0
     },
     countries: {
       ...queries.countries,
       label: 'Requests by country',
       description: 'Sum of requests per country of origin, top countries first.',
       columns: [
-        { id: 'country', header: 'Country' },
-        { id: 'requests', header: 'Requests' }
+        { header: 'Country', id: 'country' },
+        { header: 'Requests', id: 'requests' }
       ],
-      rows: () =>
-        countries.map((country, index) => ({
-          country,
-          requests: countryRequests[0]?.values[index] ?? ''
-        }))
+      rows: () => countryRows.value,
+      empty: () => countryRows.value.length === 0
     },
     hosts: {
       ...queries.hosts,
       label: 'Top hosts',
       description: 'Hosts that served the most requests in the period, with their service.',
       columns: [
-        { id: 'host', header: 'Host' },
-        { id: 'service', header: 'Service' },
-        { id: 'requests', header: 'Requests' }
+        { header: 'Host', id: 'host' },
+        { header: 'Service', id: 'service' },
+        { header: 'Requests', id: 'requests' }
       ],
-      rows: () => hosts
+      rows: () => hosts.value,
+      empty: () => hosts.value.length === 0
     }
   }
 
@@ -785,12 +844,13 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests over time"
-                  :disabled="loading"
+                  :disabled="blank"
                   @click="openExpanded('requests')"
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('requests', value)"
               >
                 <DropdownMenu.Trigger>
@@ -809,14 +869,22 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
-                    :disabled="loading"
+                    :disabled="exportDisabled('requests')"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="failed"
+              severity="danger"
+              :label="`Couldn't load requests over time. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <Chart
+              v-else
               v-model:active-index="activeIndex"
               :series="requests"
               :labels="labels"
@@ -875,12 +943,13 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   variant="ghost"
                   size="small"
                   aria-label="Expand Status codes"
-                  :disabled="loading"
+                  :disabled="blank"
                   @click="openExpanded('status-codes')"
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('status-codes', value)"
               >
                 <DropdownMenu.Trigger>
@@ -899,14 +968,22 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
-                    :disabled="loading"
+                    :disabled="exportDisabled('status-codes')"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="failed"
+              severity="danger"
+              :label="`Couldn't load status codes. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <Chart
+              v-else
               v-model:active-index="activeIndex"
               :series="statusCodes"
               :labels="labels"
@@ -953,12 +1030,13 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests by country"
-                  :disabled="loading"
+                  :disabled="blank"
                   @click="openExpanded('countries')"
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('countries', value)"
               >
                 <DropdownMenu.Trigger>
@@ -977,16 +1055,24 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
-                    :disabled="loading"
+                    :disabled="exportDisabled('countries')"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="failed"
+              severity="danger"
+              :label="`Couldn't load requests by country. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <Chart
+              v-else
               :series="countryRequests"
-              :labels="countries"
+              :labels="countryLabels"
               orientation="horizontal"
               :format-value="formatters.count"
               :height="240"
@@ -1029,12 +1115,13 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top hosts"
-                  :disabled="loading"
+                  :disabled="blank"
                   @click="openExpanded('hosts')"
                 />
               </Tooltip>
               <DropdownMenu
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="(_event, value) => onCardOption('hosts', value)"
               >
                 <DropdownMenu.Trigger>
@@ -1053,14 +1140,24 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
-                    :disabled="loading"
+                    :disabled="exportDisabled('hosts')"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+            <Alert
+              v-if="failed"
+              severity="danger"
+              :label="`Couldn't load top hosts. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
+            <div
+              v-else
+              class="flex min-w-0 flex-col gap-(--spacing-sm)"
+            >
               <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                 <div class="min-w-36 grow basis-(--container-3xs)">
                   <Input
@@ -1188,7 +1285,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               key="chart-3"
               v-else-if="expandedId === 'countries'"
               :series="countryRequests"
-              :labels="countries"
+              :labels="countryLabels"
               orientation="horizontal"
               :format-value="formatters.count"
               :height="420"
@@ -1232,4 +1329,130 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
     </Dialog>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { ChartSeries } from '@aziontech/webkit/chart'
+
+import type {
+  AnalyticsDashboardChanges,
+  AnalyticsDashboardCountry,
+  AnalyticsDashboardHost,
+  AnalyticsDashboardKpis,
+  AnalyticsDashboardRange
+} from './analytics-dashboard.vue'
+
+export const sampleRange: AnalyticsDashboardRange = {
+  begin: '2026-11-13T11:00:00Z',
+  end: '2026-11-14T10:59:59Z'
+}
+
+export const sampleKpis: AnalyticsDashboardKpis = {
+  requests: {
+    value: 48920000,
+    delta: -1.83,
+    trend: [
+      2029738, 1799252, 1910217, 1633835, 1757364, 1722765, 2157932, 2151290, 2283541, 2397218,
+      2545994, 2347243
+    ]
+  },
+  'data-transferred': {
+    value: 222000000000,
+    delta: -13.26,
+    trend: [
+      7464097327, 8703777359, 8853256007, 10189608468, 10484778433, 10611102405, 9993797117,
+      9768346098, 10386911277, 8642195236, 7365365394, 8004529693
+    ]
+  },
+  'success-rate': {
+    value: 98,
+    delta: 0.42,
+    trend: [99, 99, 99, 99, 98, 98, 97, 97, 97, 97, 97, 99]
+  },
+  'status-5xx': {
+    value: 158600,
+    delta: -5.47,
+    trend: [4580, 5509, 4940, 5670, 7151, 9279, 8251, 8242, 8497, 6207, 5685, 5352]
+  }
+}
+
+export const sampleIntervals: string[] = [
+  '11:00',
+  '13:00',
+  '15:00',
+  '17:00',
+  '19:00',
+  '21:00',
+  '23:00',
+  '01:00',
+  '03:00',
+  '05:00',
+  '07:00',
+  '09:00'
+]
+
+export const sampleRequestSeries: ChartSeries[] = [
+  {
+    id: 'requests',
+    name: 'Requests',
+    values: [
+      2278608, 2368220, 2548427, 2385746, 2112152, 2214745, 1795004, 1575175, 1640830, 1634383,
+      1933593, 2144294
+    ]
+  }
+]
+
+export const sampleStatusSeries: ChartSeries[] = [
+  {
+    id: '2xx',
+    name: 'Status 2xx',
+    values: [
+      1524883, 1531611, 1348641, 1583433, 1898319, 1802251, 1954175, 1996970, 1957306, 1701833,
+      1509664, 1620625
+    ]
+  },
+  {
+    id: '3xx',
+    name: 'Status 3xx',
+    values: [
+      266730, 270925, 287218, 296721, 286635, 245627, 230388, 201140, 188038, 184104, 197071, 244404
+    ]
+  },
+  {
+    id: '4xx',
+    name: 'Status 4xx',
+    values: [40942, 51712, 52096, 55261, 61739, 68992, 75656, 80310, 74603, 63564, 63640, 45548]
+  },
+  {
+    id: '5xx',
+    name: 'Status 5xx',
+    values: [4709, 5417, 4551, 5950, 5281, 8024, 8695, 9676, 8359, 7225, 6456, 5222]
+  }
+]
+
+export const sampleCountries: AnalyticsDashboardCountry[] = [
+  { country: 'United States', requests: 1048210 },
+  { country: 'Brazil', requests: 531620 },
+  { country: 'Germany', requests: 118930 },
+  { country: 'India', requests: 92480 },
+  { country: 'Mexico', requests: 69870 },
+  { country: 'Argentina', requests: 48420 }
+]
+
+export const sampleHosts: AnalyticsDashboardHost[] = [
+  { id: 'www.example.com', host: 'www.example.com', service: 'Storefront', requests: 1284310 },
+  { id: 'api.example.com', host: 'api.example.com', service: 'Checkout API', requests: 712480 },
+  { id: 'shop.example.com', host: 'shop.example.com', service: 'Storefront', requests: 498210 },
+  { id: 'docs.example.com', host: 'docs.example.com', service: 'Docs', requests: 231640 },
+  { id: 'status.example.com', host: 'status.example.com', service: 'Status page', requests: 96120 },
+  { id: 'cdn.example.com', host: 'cdn.example.com', service: 'Media', requests: 61870 },
+  { id: 'blog.example.com', host: 'blog.example.com', service: 'Docs', requests: 28940 }
+]
+
+export const sampleChanges: AnalyticsDashboardChanges = {
+  requests: 10.03,
+  statusCodes: 14.66
+}
 ```

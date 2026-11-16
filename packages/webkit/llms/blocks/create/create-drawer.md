@@ -77,6 +77,72 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 
 In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` picks Server certificate (certificate and private key) or Trusted CA (certificate only), and the section hint follows it. The certificate is a required `Field` with a code-font `Textarea` for the PEM text and an outlined Upload file `Button` beside its label that reads a .pem, .crt or .cer file into the same field and announces the file it loaded. As soon as the text holds a certificate, a details panel reads it in the browser: Issued to, Issued by, Valid from and Expires in a two-column `KeyValueList`, the expiry carrying a `StatusIndicator` (success with the days left, warning within 30 days with a line saying to renew it, danger once expired), and a note when intermediate certificates follow. Text that is not a PEM certificate, an expired certificate and a missing or malformed private key are errors under their fields, shown only after Save, with focus on the first. The private key's description says it is stored encrypted and never shown again. Save closes the drawer and raises a success toast with the expiry date.
 
+## Data
+
+The block takes its option lists, its starting values and the save state through props and emits the values; it fetches and saves nothing. `CreateDrawerProps`, `CreateDrawerValues`, `CreateDrawerEnvironment` and `CreateDrawerCertificate` are exported from `create-drawer.vue`, and `sample.ts` holds the environments and certificates the block renders when those props are left out.
+
+| Prop                    | Type                          | What it does                                                                                   |
+| ----------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------- |
+| `environments`          | `CreateDrawerEnvironment[]`   | Every environment of the account, listed in the Environment select.                            |
+| `connectedEnvironments` | `string[]`                    | The environments the resource already publishes to; picking another one says it connects it.   |
+| `certificates`          | `CreateDrawerCertificate[]`   | The certificates Bring my own domain can pick; the one covering the address is preselected.    |
+| `defaultValues`         | `Partial<CreateDrawerValues>` | The values the form opens on (the edited domain); every open resets to them.                   |
+| `title`                 | `string`                      | The trigger label, drawer title and form name (`Add Domain`).                                  |
+| `description`           | `string`                      | The muted line under the title.                                                                |
+| `submitLabel`           | `string`                      | The footer button label; empty uses `title`.                                                   |
+| `open` (`v-model:open`) | `boolean`                     | Whether the drawer is open; the page closes it after a successful save.                        |
+| `defaultOpen`           | `boolean`                     | Opens the drawer on mount.                                                                     |
+| `loading`               | `boolean`                     | The save is in flight: the fieldset locks and the footer button spins.                         |
+| `error`                 | `string`                      | Why the save failed, shown in the danger `Alert` with Retry above the footer; the values stay. |
+
+| Event         | Payload           | When                                                                                     |
+| ------------- | ----------------- | ---------------------------------------------------------------------------------------- |
+| `submit`      | `(event, values)` | A valid Add Domain, or Retry in the error alert; `values` adds `host`, the full address. |
+| `update:open` | `(open)`          | The trigger, the close button, the overlay or Escape.                                    |
+
+The `trigger` slot replaces the Add button (an environment menu, a row menu) and receives `open` to call.
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { toast } from '@aziontech/webkit/toast'
+  import { ref } from 'vue'
+
+  import CreateDrawer, { type CreateDrawerSubmission } from './create-drawer.vue'
+
+  const { environments, certificates, connected } = useDomainOptions()
+  const { create, pending } = useCreateDomain()
+  const open = ref(false)
+  const error = ref('')
+
+  const save = async (_event: Event, values: CreateDrawerSubmission) => {
+    error.value = ''
+    try {
+      await create(values)
+      open.value = false
+      toast.success(`${values.host} added.`)
+    } catch {
+      error.value = `${values.host} wasn't added. The request timed out; your values are kept.`
+    }
+  }
+</script>
+
+<template>
+  <CreateDrawer
+    v-model:open="open"
+    :environments="environments"
+    :connected-environments="connected"
+    :certificates="certificates"
+    :loading="pending"
+    :error="error"
+    @submit="save"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Open on a blank form every time, or on the edited item's values, and clear every error on open.
@@ -119,16 +185,16 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 
 ## States
 
-- Default: Add Domain opened from the resource's Settings tab, blank, on the free domain option.
-- AddEnvironment: the same form opened from the environment menu, titled and saved as Add Environment.
-- EditDomain: opened from a domain row menu on www.example.com, with the Certificate select showing the covering wildcard.
+- Default: Add Domain opened from the resource's Settings tab, blank, on the free domain option; `loading` spins the button while the page saves.
+- AddEnvironment: the same form opened from the environment menu (the `trigger` slot), titled and saved as Add Environment (`title`).
+- EditDomain: opened from a domain row menu on www.example.com (`defaultValues`, `title`, `submitLabel`), with the Certificate select showing the covering wildcard.
 - AddRecord: the DNS zone record form; Name and Value are flagged as required only after an empty Add Record.
 - ItemRows: Add Origin on the Origins page of the storefront resource, a large drawer whose sections are `Item` rows in flush cards, saved together by one Add Origin.
 - NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 - Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
 - CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at medium size above that drawer and selects the new environment back.
-- SaveError: Add Domain after a failed save: the drawer stays open with acme-store and Production kept, the fieldset released, and a danger Alert with Retry above the footer.
+- SaveError: Add Domain after a failed save (`error` set, `defaultOpen`, `defaultValues`): the drawer stays open with acme-store and Production kept, the fieldset released, and a danger Alert with Retry above the footer.
 - FunctionInstance: Add Function Instance (or Edit from a row) with a Function `Select`, a Name, and the arguments as a `SchemaForm` of the chosen function's schema with a Fields or JSON `ToggleGroup`; the JSON `CodeEditor` marks a parse error, and required arguments are flagged only after submit.
 
 ## Related
@@ -172,42 +238,118 @@ Each variant is the same screen in another state: `get_block("create/create-draw
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
 
-  const open = ref(false)
-  const submitting = ref(false)
-  const saveFailed = ref(false)
-  const failNextSave = ref(false)
-  const environmentSelectOpen = ref(false)
-  const certificateTouched = ref(false)
+  import { sampleCertificates, sampleConnectedEnvironments, sampleEnvironments } from './sample'
 
-  type DeploymentPolicy = 'single_version' | 'versioned_urls'
+  /** How an environment publishes its deployments. */
+  export type CreateDrawerDeploymentPolicy = 'single_version' | 'versioned_urls'
 
-  interface EnvironmentOption extends SelectOptionItem {
-    deploymentPolicy: DeploymentPolicy
+  /** Where the domain comes from: a free platform subdomain or the account's own. */
+  export type CreateDrawerDomainKind = 'free' | 'own'
+
+  /** One environment the domain can answer in. */
+  export interface CreateDrawerEnvironment {
+    /** Stable value, sent in the submitted values. */
+    value: string
+    /** Display name. */
+    label: string
+    /** How the environment publishes, named in the helper text. */
+    deploymentPolicy: CreateDrawerDeploymentPolicy
   }
 
+  /** One certificate that can serve an own domain. */
+  export interface CreateDrawerCertificate {
+    /** Certificate id; an empty string is the free platform certificate. */
+    value: string
+    /** Display name. */
+    label: string
+    /** The host or wildcard it covers, used to preselect it for the typed address. */
+    subject: string
+  }
+
+  /** The values of the form. */
+  export interface CreateDrawerValues {
+    /** Where the domain comes from. */
+    kind: CreateDrawerDomainKind
+    /** The name as typed, without the free platform suffix. */
+    domain: string
+    /** The chosen environment value. */
+    environment: string
+    /** The chosen certificate value, empty for the free platform certificate. */
+    certificate: string
+  }
+
+  /** What a valid submit sends. */
+  export interface CreateDrawerSubmission extends CreateDrawerValues {
+    /** The full address, with the free platform suffix when it applies. */
+    host: string
+  }
+
+  export interface CreateDrawerProps {
+    /** Drawer title, trigger label and form name. */
+    title?: string
+    /** Muted line under the title. */
+    description?: string
+    /** Footer button label; empty uses the title. */
+    submitLabel?: string
+    /** Values the form opens on, such as the edited domain. */
+    defaultValues?: Partial<CreateDrawerValues>
+    /** Opens the drawer on mount. */
+    defaultOpen?: boolean
+    /** Every environment of the account. Left out, the sample renders. */
+    environments?: CreateDrawerEnvironment[]
+    /** Environments the resource already publishes to. Left out, the sample renders. */
+    connectedEnvironments?: string[]
+    /** Certificates that can serve an own domain. Left out, the sample renders. */
+    certificates?: CreateDrawerCertificate[]
+    /** The save is in flight: the fieldset locks and the button spins. */
+    loading?: boolean
+    /** Why the save failed, shown in a danger alert with Retry above the footer. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<CreateDrawerProps>(), {
+    title: 'Add Domain',
+    description:
+      'A domain is what puts an environment on this resource. Say where it answers, and name the address.',
+    submitLabel: '',
+    defaultValues: () => ({}),
+    defaultOpen: false,
+    environments: undefined,
+    connectedEnvironments: undefined,
+    certificates: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: CreateDrawerSubmission]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+
+  defineSlots<{
+    /** Replaces the Add button; call open to show the drawer. */
+    trigger(props: { open: () => void }): unknown
+  }>()
+
+  if (props.defaultOpen) open.value = true
+
+  const environmentSelectOpen = ref(false)
+
   const CREATE_ENVIRONMENT = '__create-environment__'
-  const environmentOptions: EnvironmentOption[] = [
-    { value: 'Production', label: 'Production', deploymentPolicy: 'single_version' },
-    { value: 'Preview', label: 'Preview', deploymentPolicy: 'versioned_urls' },
-    { value: 'Stage', label: 'Stage', deploymentPolicy: 'versioned_urls' }
-  ]
-  const policyLabels: Record<DeploymentPolicy, string> = {
+  const environmentOptions = computed(() => props.environments ?? sampleEnvironments)
+  const resourceEnvironments = computed(
+    () => props.connectedEnvironments ?? sampleConnectedEnvironments
+  )
+  const certificateOptions = computed(() => props.certificates ?? sampleCertificates)
+  const policyLabels: Record<CreateDrawerDeploymentPolicy, string> = {
     single_version: 'Single',
     versioned_urls: 'Versioned'
   }
-  const resourceEnvironments = ['Production', 'Preview']
-  const certificateOptions = [
-    { value: '', label: 'Free platform certificate', subject: '' },
-    { value: 'cert-8801', label: 'example.com wildcard', subject: '*.example.com' },
-    { value: 'cert-8803', label: 'api.example.com', subject: 'api.example.com' },
-    { value: 'cert-8805', label: 'staging wildcard', subject: '*.staging.example.com' },
-    { value: 'cert-8802', label: 'example.org', subject: 'example.org' }
-  ]
   const kindOptions = [
     {
       value: 'free',
@@ -221,14 +363,25 @@ Each variant is the same screen in another state: `get_block("create/create-draw
     }
   ]
 
-  const blankForm = () => ({ kind: 'free', domain: '', environment: '', certificate: '' })
-  const form = reactive(blankForm())
+  const initialForm = (): CreateDrawerValues => ({
+    kind: 'free',
+    domain: '',
+    environment: '',
+    certificate: '',
+    ...props.defaultValues
+  })
+  const form = reactive(initialForm())
   const errors = reactive({ domain: '', environment: '' })
+  const certificateTouched = ref(Boolean(form.certificate))
+
+  const openDrawer = () => {
+    open.value = true
+  }
 
   const environmentLabel = (value: string) =>
-    environmentOptions.find((option) => option.value === value)?.label ?? ''
+    environmentOptions.value.find((option) => option.value === value)?.label ?? ''
   const certificateLabel = (value: string) =>
-    certificateOptions.find((option) => option.value === value)?.label ?? ''
+    certificateOptions.value.find((option) => option.value === value)?.label ?? ''
 
   const subjectCovers = (subject: string, host: string) => {
     const pattern = subject.toLowerCase()
@@ -244,7 +397,9 @@ Each variant is the same screen in another state: `get_block("create/create-draw
   const certificateForDomain = (host: string) => {
     const name = host.trim().toLowerCase()
     if (!name) return ''
-    const candidates = certificateOptions.filter((option) => subjectCovers(option.subject, name))
+    const candidates = certificateOptions.value.filter((option) =>
+      subjectCovers(option.subject, name)
+    )
     const exact = candidates.find((option) => option.subject.toLowerCase() === name)
     return (exact ?? candidates[0])?.value ?? ''
   }
@@ -252,10 +407,8 @@ Each variant is the same screen in another state: `get_block("create/create-draw
   watch(open, (isOpen) => {
     if (!isOpen) return
     Object.assign(errors, { domain: '', environment: '' })
-    submitting.value = false
-    saveFailed.value = false
-    Object.assign(form, blankForm())
-    certificateTouched.value = false
+    Object.assign(form, initialForm())
+    certificateTouched.value = Boolean(form.certificate)
   })
 
   const fullDomain = computed(() => {
@@ -293,11 +446,11 @@ Each variant is the same screen in another state: `get_block("create/create-draw
   })
 
   const chosen = computed(() =>
-    environmentOptions.find((option) => option.value === form.environment)
+    environmentOptions.value.find((option) => option.value === form.environment)
   )
 
   const joinsResource = computed(
-    () => Boolean(form.environment) && !resourceEnvironments.includes(form.environment)
+    () => Boolean(form.environment) && !resourceEnvironments.value.includes(form.environment)
   )
 
   const environmentHint = computed(() => {
@@ -323,33 +476,27 @@ Each variant is the same screen in another state: `get_block("create/create-draw
     return !errors.domain && !errors.environment
   }
 
-  const submit = () => {
-    if (submitting.value) return
+  const submit = (event: Event) => {
+    if (props.loading) return
     if (!validate()) return
-    submitting.value = true
-    saveFailed.value = false
-    setTimeout(() => {
-      submitting.value = false
-      if (failNextSave.value) {
-        failNextSave.value = false
-        saveFailed.value = true
-        return
-      }
-      open.value = false
-      toast.success(`${fullDomain.value} added.`)
-    }, 600)
+    emit('submit', event, { ...form, host: fullDomain.value })
   }
 </script>
 
 <template>
-  <Button
-    type="button"
-    label="Add Domain"
-    variant="outline"
-    size="medium"
-    icon="ai ai-plus"
-    @click="open = true"
-  />
+  <slot
+    name="trigger"
+    :open="openDrawer"
+  >
+    <Button
+      type="button"
+      :label="title"
+      variant="outline"
+      size="medium"
+      icon="ai ai-plus"
+      @click="openDrawer"
+    />
+  </slot>
 
   <Drawer
     v-model:open="open"
@@ -359,26 +506,23 @@ Each variant is the same screen in another state: `get_block("create/create-draw
     <DrawerContent>
       <form
         class="flex min-h-0 flex-1 flex-col"
-        aria-label="Add Domain"
+        :aria-label="title"
         novalidate
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>Add Domain</DrawerTitle>
-            <p class="text-body-sm text-(--text-muted)">
-              A domain is what puts an environment on this resource. Say where it answers, and name
-              the address.
-            </p>
+            <DrawerTitle>{{ title }}</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">{{ description }}</p>
           </div>
         </PanelHeader>
 
         <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
-            :disabled="submitting"
+            :disabled="loading"
           >
-            <legend class="sr-only">Add Domain</legend>
+            <legend class="sr-only">{{ title }}</legend>
             <SettingsSection
               title="Environment"
               hint="Where the domain answers."
@@ -396,7 +540,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
                   size="large"
                   class="w-full"
                   placeholder="Select an environment"
-                  :disabled="submitting"
+                  :disabled="loading"
                   :invalid="!!errors.environment"
                   :display-value="environmentLabel"
                   @update:model-value="onEnvironmentModel"
@@ -437,7 +581,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
                     variant="card"
                     name="domain-kind"
                     aria-label="Domain source"
-                    :disabled="submitting"
+                    :disabled="loading"
                   >
                     <RadioGroup.Item
                       v-for="option in kindOptions"
@@ -450,7 +594,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
                 </fieldset>
 
                 <Field
-                  :disabled="submitting"
+                  :disabled="loading"
                   required
                   :invalid="!!errors.domain"
                 >
@@ -475,7 +619,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
                       :model-value="form.certificate"
                       size="large"
                       class="w-full"
-                      :disabled="submitting"
+                      :disabled="loading"
                       :display-value="certificateLabel"
                       @update:model-value="onCertificate"
                     >
@@ -509,12 +653,12 @@ Each variant is the same screen in another state: `get_block("create/create-draw
         </PanelBody>
 
         <div
-          v-if="saveFailed"
+          v-if="error"
           class="px-(--spacing-md) pb-(--spacing-sm)"
         >
           <Alert
             severity="danger"
-            :label="`${fullDomain || 'The domain'} wasn't added. The request timed out; your values are kept.`"
+            :label="error"
             action-label="Retry"
             @action="submit"
           />
@@ -523,10 +667,10 @@ Each variant is the same screen in another state: `get_block("create/create-draw
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
-              label="Add Domain"
+              :label="submitLabel || title"
               variant="primary"
               size="medium"
-              :loading="submitting"
+              :loading="loading"
               type="submit"
             />
           </div>
@@ -535,4 +679,26 @@ Each variant is the same screen in another state: `get_block("create/create-draw
     </DrawerContent>
   </Drawer>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { CreateDrawerCertificate, CreateDrawerEnvironment } from './create-drawer.vue'
+
+export const sampleEnvironments: CreateDrawerEnvironment[] = [
+  { value: 'Production', label: 'Production', deploymentPolicy: 'single_version' },
+  { value: 'Preview', label: 'Preview', deploymentPolicy: 'versioned_urls' },
+  { value: 'Stage', label: 'Stage', deploymentPolicy: 'versioned_urls' }
+]
+
+export const sampleConnectedEnvironments: string[] = ['Production', 'Preview']
+
+export const sampleCertificates: CreateDrawerCertificate[] = [
+  { value: '', label: 'Free platform certificate', subject: '' },
+  { value: 'cert-8801', label: 'example.com wildcard', subject: '*.example.com' },
+  { value: 'cert-8803', label: 'api.example.com', subject: 'api.example.com' },
+  { value: 'cert-8805', label: 'staging wildcard', subject: '*.staging.example.com' },
+  { value: 'cert-8802', label: 'example.org', subject: 'example.org' }
+]
 ```

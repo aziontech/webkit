@@ -1,11 +1,11 @@
 # PersonalTokens (`account/personal-tokens`)
 
-> The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, the table-view controls row (`PropertyFilter` over name, description and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `Table` of tokens (name, description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast. A page body for ConsoleLayout, rendered in its default slot.
+> The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, the table-view controls row (`PropertyFilter` over name, description and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `DataTable` of tokens (name, description, `TableCellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `TableCellTime` for last use and creation, `TableCellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/personal-tokens/personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/personal-tokens")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsSection](../../components/settings-section.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsSection](../../components/settings-section.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -35,13 +35,13 @@ Title `Personal tokens` and one sentence that says what a token does and that it
 
 The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when the account has no token.
 
-### C. Token table — `Card`, `DataTable`, `Table`, `useCollection` (required)
+### C. Token table — `Card`, `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `useCollection` (required)
 
-One `useCollection` over the rows, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`. Columns: Name, Description (muted; `No description` when empty), Status, Expires, Last used, Created, and the row menu. Status uses `Table.CellStatus`: Active (success), `Expires in N days` within 7 days (warning), Expired (danger), Revoked (secondary). Last used and Created use `Table.CellTime` (relative time, exact time on the tooltip, the creator's avatar on Created); a token never used reads `Never used`.
+One `useCollection` over the rows, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`. Columns: Name, Description (muted; `No description` when empty), Status, Expires, Last used, Created, and the row menu. Status uses `TableCellStatus`: Active (success), `Expires in N days` within 7 days (warning), Expired (danger), Revoked (secondary). Last used and Created use `TableCellTime` (relative time, exact time on the tooltip, the creator's avatar on Created); a token never used reads `Never used`.
 
 ### D. Row actions — `DropdownMenu` (required)
 
-`Table.CellActions` named after the token. A live token offers only Revoke; an expired or revoked one offers only Delete, which removes it from the list. A token cannot be edited or extended.
+`TableCellActions` named after the token. A live token offers only Revoke; an expired or revoked one offers only Delete, which removes it from the list. A token cannot be edited or extended.
 
 ### E. No match and empty — `EmptyState` (required)
 
@@ -53,7 +53,7 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 ### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `PanelFooter` (required)
 
-A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
+A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. Create emits `create` with the values; the fields lock while `creating` is set.
 
 ### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldDescription` (required)
 
@@ -61,11 +61,72 @@ Name is required and unique; the error sits under the field (`This field is requ
 
 ### I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 
-After Create the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. Closing clears the secret from memory.
+When the page sets `v-model:secret` to what the create request returned, the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. Closing sets `secret` back to `null`, which clears it from memory.
 
 ### J. Confirmations and outcomes — `ConfirmDialog` (required)
 
-Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone; the confirm button spins while the request runs. Delete asks the same way. Both end in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone, then marks the row revoked and emits `revoke`. Delete asks the same way, removes the row and emits `delete`. The page that runs the request ends both in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its tokens through props and emits every action; it fetches nothing and never makes a secret. `PersonalTokensToken`, `PersonalTokensCreateValues`, `PersonalTokensSecret` and `PersonalTokensProps` are exported from `personal-tokens.vue`, and `sample.ts` holds the sample tokens and clock the block renders when `tokens` and `now` are left out (the tokens never while `loading` or `error` is set).
+
+| Prop       | Type                           | What it does                                                                                                               |
+| ---------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| `tokens`   | `PersonalTokensToken[]`        | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.               |
+| `loading`  | `boolean`                      | A request is in flight. With no tokens it is the first load (the table shows its loading rows); with tokens Refresh spins. |
+| `error`    | `string`                       | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table.                      |
+| `creating` | `boolean`                      | The create request is in flight; the drawer's fields lock and its submit spins.                                            |
+| `now`      | `Date`                         | The moment Status and the expiry hint count from.                                                                          |
+| `secret`   | `PersonalTokensSecret \| null` | `v-model:secret`: the token the create request returned; set, the reveal dialog opens; closing it sets `null`.             |
+
+| Event     | Payload                                         | When                                                                     |
+| --------- | ----------------------------------------------- | ------------------------------------------------------------------------ |
+| `refresh` | `(event)`                                       | Refresh.                                                                 |
+| `retry`   | `(event)`                                       | Retry in the error alert.                                                |
+| `create`  | `(event, { name, description, expiresInDays })` | The drawer passed validation and was submitted.                          |
+| `revoke`  | `(event, token)`                                | The revoke dialog was confirmed; the row already reads Revoked.          |
+| `delete`  | `(event, token)`                                | The delete dialog was confirmed; the row is already gone from the table. |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import PersonalTokens, {
+    type PersonalTokensCreateValues,
+    type PersonalTokensSecret
+  } from './personal-tokens.vue'
+
+  const { data, pending, error, refresh } = usePersonalTokens()
+  const loadError = 'The tokens could not be loaded. Nothing was changed; try again.'
+  const creating = ref(false)
+  const secret = ref<PersonalTokensSecret | null>(null)
+
+  const create = async (_event: Event, values: PersonalTokensCreateValues) => {
+    creating.value = true
+    secret.value = await createPersonalToken(values)
+    creating.value = false
+    refresh()
+  }
+</script>
+
+<template>
+  <PersonalTokens
+    v-model:secret="secret"
+    :tokens="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    :creating="creating"
+    :now="new Date()"
+    @refresh="refresh"
+    @retry="refresh"
+    @create="create"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -98,11 +159,11 @@ Revoke asks in a danger `ConfirmDialog` that says what stops working and that it
 
 ## States
 
-- Default: four tokens (active, expiring in 5 days, expired, revoked) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, the create drawer, the reveal, revoke and delete wired.
-- Empty: no token; the heading and a flush empty state with Create Personal Token.
-- Loading: the first load; controls row and the table's loading rows.
-- Error: the list did not load; a danger Alert with Retry replaces the table.
-- Created: the one-time reveal dialog open after Create.
+- Default: `tokens` holds four tokens (active, expiring in 5 days, expired, revoked) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, the create drawer, the reveal, revoke and delete wired.
+- Empty: no token (`tokens` is `[]`); the heading and a flush empty state with Create Personal Token.
+- Loading: the first load (`loading` with no `tokens`); controls row and the table's loading rows.
+- Error: the list did not load (`error` is set); a danger Alert with the message and Retry replaces the table.
+- Created: the one-time reveal dialog open after Create (`secret` holds the returned token).
 
 ## Related
 
@@ -153,34 +214,97 @@ Each variant is the same screen in another state: `get_block("account/personal-t
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  interface Token {
+  import { sampleNow, sampleTokens } from './sample'
+
+  /** One personal token of the signed-in person. */
+  export interface PersonalTokensToken {
+    /** Stable key. */
     id: string
+    /** Display name. */
     name: string
+    /** What the token is for; empty reads No description. */
     description: string
+    /** When it was created. */
     createdAt: Date
+    /** Who created it, shown under the creation time. */
     createdBy: string
+    /** When it stops working. */
     expiresAt: Date
+    /** The last request it signed, or null when it was never used. */
     lastUsedAt: Date | null
+    /** Whether it was revoked. */
     revoked: boolean
   }
-  type TokenRow = Token & { status: string; expires: string }
+
+  /** What Create Personal Token sends: the name, the description and the lifetime in days. */
+  export interface PersonalTokensCreateValues {
+    /** Trimmed name, unique in the list. */
+    name: string
+    /** Trimmed description, may be empty. */
+    description: string
+    /** Days until the token expires. */
+    expiresInDays: number
+  }
+
+  /** The token the create request returned, shown once in the reveal dialog. */
+  export interface PersonalTokensSecret {
+    /** The token's name. */
+    name: string
+    /** The secret value. */
+    secret: string
+  }
+
+  export interface PersonalTokensProps {
+    /** The tokens to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    tokens?: PersonalTokensToken[]
+    /** A request is in flight: with no tokens it is the first load, with tokens a refresh. */
+    loading?: boolean
+    /** Why the tokens could not load; a danger alert with Retry replaces the table. */
+    error?: string
+    /** The create request is in flight; the drawer's fields lock and its submit spins. */
+    creating?: boolean
+    /** The moment statuses and the expiry hint count from. Left out, the sample clock. */
+    now?: Date
+  }
+
+  const props = withDefaults(defineProps<PersonalTokensProps>(), {
+    tokens: undefined,
+    loading: false,
+    error: '',
+    creating: false,
+    now: undefined
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    create: [event: Event, values: PersonalTokensCreateValues]
+    revoke: [event: MouseEvent, token: PersonalTokensToken]
+    delete: [event: MouseEvent, token: PersonalTokensToken]
+  }>()
+
+  const secretModel = defineModel<PersonalTokensSecret | null>('secret', { default: null })
+
+  type TokenRow = PersonalTokensToken & { status: string; expires: string }
   interface TokenStatus {
     label: string
     severity: TagSeverity
   }
 
   const DAY = 86_400_000
-  const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const daysFrom = (days: number) => new Date(referenceTime + days * DAY)
+  const referenceTime = computed(() => (props.now ?? sampleNow).getTime())
+  const daysFrom = (days: number) => new Date(referenceTime.value + days * DAY)
 
   const { formatDate: formatLocaleDate } = useLocale()
 
@@ -192,54 +316,21 @@ Each variant is the same screen in another state: `get_block("account/personal-t
       timeZone: 'UTC'
     })
 
-  const seedTokens: Token[] = [
-    {
-      id: 'tok-7c1e',
-      name: 'Local CLI',
-      description: 'Development laptop',
-      createdAt: daysFrom(-40),
-      createdBy: 'grace.hall@example.com',
-      expiresAt: daysFrom(50),
-      lastUsedAt: daysFrom(-0.1),
-      revoked: false
+  const source = computed<PersonalTokensToken[]>(
+    () => props.tokens ?? (props.loading || props.error ? [] : sampleTokens)
+  )
+  const items = ref<PersonalTokensToken[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
     },
-    {
-      id: 'tok-3a90',
-      name: 'Deploy pipeline',
-      description: 'CI job that publishes the storefront',
-      createdAt: daysFrom(-85),
-      createdBy: 'grace.hall@example.com',
-      expiresAt: daysFrom(5),
-      lastUsedAt: daysFrom(-1),
-      revoked: false
-    },
-    {
-      id: 'tok-b412',
-      name: 'Infrastructure as code',
-      description: 'Provider for the staging stack',
-      createdAt: daysFrom(-120),
-      createdBy: 'grace.hall@example.com',
-      expiresAt: daysFrom(-30),
-      lastUsedAt: daysFrom(-31),
-      revoked: false
-    },
-    {
-      id: 'tok-55d2',
-      name: 'Nightly export',
-      description: 'Retired reporting script',
-      createdAt: daysFrom(-200),
-      createdBy: 'grace.hall@example.com',
-      expiresAt: daysFrom(160),
-      lastUsedAt: null,
-      revoked: true
-    }
-  ]
+    { immediate: true }
+  )
 
-  const tokens = ref<Token[]>(seedTokens)
-
-  const statusOf = (token: Token): TokenStatus => {
+  const statusOf = (token: PersonalTokensToken): TokenStatus => {
     if (token.revoked) return { label: 'Revoked', severity: 'neutral' }
-    const left = Math.ceil((token.expiresAt.getTime() - referenceTime) / DAY)
+    const left = Math.ceil((token.expiresAt.getTime() - referenceTime.value) / DAY)
     if (left <= 0) return { label: 'Expired', severity: 'danger' }
     if (left <= 7)
       return { label: `Expires in ${left} ${left === 1 ? 'day' : 'days'}`, severity: 'warning' }
@@ -247,7 +338,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
   }
 
   const rows = computed<TokenRow[]>(() =>
-    tokens.value.map((token) => ({
+    items.value.map((token) => ({
       ...token,
       status: statusOf(token).label,
       expires: formatDate(token.expiresAt)
@@ -264,15 +355,15 @@ Each variant is the same screen in another state: `get_block("account/personal-t
     { id: 'actions', type: 'action', hideable: false }
   ]
 
-  const statusOptions = [...new Set(rows.value.map((row) => row.status))]
-    .sort()
-    .map((value) => ({ value }))
-
-  const properties: FilteringProperty[] = [
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
-    { key: 'status', label: 'Status', options: statusOptions }
-  ]
+    {
+      key: 'status',
+      label: 'Status',
+      options: [...new Set(rows.value.map((row) => row.status))].sort().map((value) => ({ value }))
+    }
+  ])
 
   const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
     useCollection({
@@ -287,24 +378,8 @@ Each variant is the same screen in another state: `get_block("account/personal-t
   const tokensTableEl = ref<TableExposed<TokenRow> | null>(null)
   const exportCsv = () => tokensTableEl.value?.exportCsv({ filename: 'personal-tokens.csv' })
 
-  const loading = ref(false)
-  const loadFailed = ref(false)
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
-
-  const refreshing = ref(false)
-  const refresh = () => {
-    if (refreshing.value) return
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
+  const loadFailed = computed(() => props.error !== '')
+  const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const expiryOptions = [
     { value: '7', label: '7 days' },
@@ -317,7 +392,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
     expiryOptions.find((option) => option.value === value)?.label ?? ''
 
   const createOpen = ref(false)
-  const submitting = ref(false)
+  const submitting = computed(() => props.creating)
   const form = reactive({ name: '', description: '', expiresIn: '30' })
   const errors = reactive({ name: '' })
   const expiryHint = computed(
@@ -333,46 +408,28 @@ Each variant is the same screen in another state: `get_block("account/personal-t
 
   const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
-  const revealOpen = ref(false)
-  const revealed = reactive({ name: '', secret: '' })
+  const revealOpen = computed(() => secretModel.value !== null)
+  const revealed = computed(() => secretModel.value ?? { name: '', secret: '' })
+  watch(secretModel, (next) => {
+    if (next) createOpen.value = false
+  })
 
-  const makeSecret = () => {
-    const bytes = new Uint8Array(24)
-    globalThis.crypto?.getRandomValues?.(bytes)
-    return `pat_${Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')}`
-  }
-
-  const submit = () => {
+  const submit = (event: Event) => {
     if (submitting.value) return
     const name = form.name.trim()
     if (!name) errors.name = 'This field is required.'
-    else if (tokens.value.some((token) => token.name.toLowerCase() === name.toLowerCase())) {
+    else if (items.value.some((token) => token.name.toLowerCase() === name.toLowerCase())) {
       errors.name = 'A token with this name already exists. Use another name.'
     } else errors.name = ''
     if (errors.name) {
       focusById('token-name')
       return
     }
-    submitting.value = true
-    setTimeout(() => {
-      submitting.value = false
-      tokens.value = [
-        {
-          id: `tok-${Math.random().toString(16).slice(2, 6)}`,
-          name,
-          description: form.description.trim(),
-          createdAt: new Date(),
-          createdBy: 'grace.hall@example.com',
-          expiresAt: daysFrom(Number(form.expiresIn)),
-          lastUsedAt: null,
-          revoked: false
-        },
-        ...tokens.value
-      ]
-      Object.assign(revealed, { name, secret: makeSecret() })
-      createOpen.value = false
-      revealOpen.value = true
-    }, 700)
+    emit('create', event, {
+      name,
+      description: form.description.trim(),
+      expiresInDays: Number(form.expiresIn)
+    })
   }
 
   const copied = ref(false)
@@ -380,42 +437,36 @@ Each variant is the same screen in another state: `get_block("account/personal-t
     copied.value = true
   }
   const closeReveal = () => {
-    revealOpen.value = false
+    secretModel.value = null
     copied.value = false
-    revealed.secret = ''
   }
 
-  const pending = ref<Token | null>(null)
+  const pending = ref<PersonalTokensToken | null>(null)
   const revokeOpen = ref(false)
   const deleteOpen = ref(false)
-  const working = ref(false)
 
-  const onAction = (value: DropdownMenuItemValue, row: Token) => {
-    pending.value = row
+  const onAction = (value: DropdownMenuItemValue, row: TokenRow) => {
+    pending.value = items.value.find((token) => token.id === row.id) ?? null
     if (value === 'revoke') revokeOpen.value = true
     if (value === 'delete') deleteOpen.value = true
   }
 
-  const revoke = () => {
-    const row = pending.value
-    if (!row || working.value) return
-    working.value = true
-    setTimeout(() => {
-      working.value = false
-      tokens.value = tokens.value.map((token) =>
-        token.id === row.id ? { ...token, revoked: true } : token
-      )
-      revokeOpen.value = false
-      toast.success(`Token "${row.name}" revoked. Requests that use it are now refused.`)
-    }, 600)
+  const revoke = (event: MouseEvent) => {
+    const token = pending.value
+    if (!token) return
+    items.value = items.value.map((item) =>
+      item.id === token.id ? { ...item, revoked: true } : item
+    )
+    revokeOpen.value = false
+    emit('revoke', event, token)
   }
 
-  const remove = () => {
-    const row = pending.value
-    if (!row) return
-    tokens.value = tokens.value.filter((token) => token.id !== row.id)
+  const remove = (event: MouseEvent) => {
+    const token = pending.value
+    if (!token) return
+    items.value = items.value.filter((item) => item.id !== token.id)
     deleteOpen.value = false
-    toast.success(`Token "${row.name}" deleted.`)
+    emit('delete', event, token)
   }
 </script>
 
@@ -468,7 +519,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                 size="medium"
                 :loading="refreshing"
                 aria-label="Refresh"
-                @click="refresh"
+                @click="emit('refresh', $event)"
               />
             </Tooltip>
             <Tooltip
@@ -495,13 +546,13 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           v-if="loadFailed"
           severity="danger"
         >
-          The tokens could not be loaded. Nothing was changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="retryLoad"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -540,7 +591,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
             <DataTable
               ref="tokensTableEl"
               v-bind="tableProps"
-              :loading="loading || refreshing"
+              :loading="loading"
               sortable
               :bordered="false"
               aria-label="Personal tokens"
@@ -561,13 +612,13 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                 >
               </template>
               <template #cell-status="{ row }">
-                <Table.CellStatus
+                <TableCellStatus
                   :label="row.status"
                   :severity="statusOf(row).severity"
                 />
               </template>
               <template #cell-lastUsedAt="{ value }">
-                <Table.CellTime
+                <TableCellTime
                   v-if="value"
                   :value="value"
                 />
@@ -578,7 +629,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                 >
               </template>
               <template #cell-createdAt="{ row }">
-                <Table.CellTime
+                <TableCellTime
                   :value="row.createdAt"
                   :author="row.createdBy"
                 />
@@ -587,7 +638,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                 <span class="sr-only">Actions</span>
               </template>
               <template #cell-actions="{ row }">
-                <Table.CellActions
+                <TableCellActions
                   :name="row.name"
                   @select="(_event, value) => onAction(value, row)"
                 >
@@ -609,7 +660,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                       label="Delete"
                     />
                   </DropdownMenu.Group>
-                </Table.CellActions>
+                </TableCellActions>
               </template>
               <template #empty>
                 <EmptyState
@@ -815,7 +866,6 @@ Each variant is the same screen in another state: `get_block("account/personal-t
       title="Revoke token"
       :description="`Scripts and tools that use “${pending?.name ?? ''}” stop working right away. You cannot undo this.`"
       confirm-label="Revoke token"
-      :loading="working"
       size="small"
       @confirm="revoke"
     />
@@ -830,4 +880,59 @@ Each variant is the same screen in another state: `get_block("account/personal-t
     />
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { PersonalTokensToken } from './personal-tokens.vue'
+
+const DAY = 86_400_000
+const referenceTime = Date.UTC(2026, 10, 10, 12)
+const daysFrom = (days: number) => new Date(referenceTime + days * DAY)
+
+export const sampleNow = new Date(referenceTime)
+
+export const sampleTokens: PersonalTokensToken[] = [
+  {
+    id: 'tok-7c1e',
+    name: 'Local CLI',
+    description: 'Development laptop',
+    createdAt: daysFrom(-40),
+    createdBy: 'grace.hall@example.com',
+    expiresAt: daysFrom(50),
+    lastUsedAt: daysFrom(-0.1),
+    revoked: false
+  },
+  {
+    id: 'tok-3a90',
+    name: 'Deploy pipeline',
+    description: 'CI job that publishes the storefront',
+    createdAt: daysFrom(-85),
+    createdBy: 'grace.hall@example.com',
+    expiresAt: daysFrom(5),
+    lastUsedAt: daysFrom(-1),
+    revoked: false
+  },
+  {
+    id: 'tok-b412',
+    name: 'Infrastructure as code',
+    description: 'Provider for the staging stack',
+    createdAt: daysFrom(-120),
+    createdBy: 'grace.hall@example.com',
+    expiresAt: daysFrom(-30),
+    lastUsedAt: daysFrom(-31),
+    revoked: false
+  },
+  {
+    id: 'tok-55d2',
+    name: 'Nightly export',
+    description: 'Retired reporting script',
+    createdAt: daysFrom(-200),
+    createdBy: 'grace.hall@example.com',
+    expiresAt: daysFrom(160),
+    lastUsedAt: null,
+    revoked: true
+  }
+]
 ```

@@ -17,7 +17,7 @@
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
 - Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
-- Set `titleVariant: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
+- Set `titleAlign: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Don’t
 
@@ -43,14 +43,14 @@
 | `primaryAction` | `CapabilityGridAction` | `undefined` | false | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `CapabilityGridAction` | `undefined` | false | Second button under the section title, `outline`; same shape. Shown only with a label and a link. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `titleVariant` | `SectionTitleVariant` | `'center'` | false | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
+| `titleAlign` | `SectionTitleAlign` | `'center'` | false | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
 
 ## States
 
 - Renders nothing without items.
 - Heading level drops to `h3` under a title and rises to `h2` without one.
 - An item with `href` renders its heading as a link that covers the cell.
-- `titleVariant` is passed to the section title as its `variant`; it has no effect on a bare grid.
+- `titleAlign` is passed to the section title as its `align`; it has no effect on a bare grid.
 
 ## Accessibility
 
@@ -183,7 +183,7 @@
 
 <template>
   <CapabilityGrid
-    title-variant="start"
+    title-align="start"
     title="Why you should be a partner"
     description="Build, sell and deliver modern applications with the Azion team beside you."
     :items="items"

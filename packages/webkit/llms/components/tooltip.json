@@ -45,11 +45,25 @@
    "doc": "Plain text shown inside the tooltip."
   },
   {
-   "name": "placement",
-   "type": "'top' | 'right' | 'bottom' | 'left' | 'auto'",
+   "name": "side",
+   "type": "'top' | 'bottom' | 'start' | 'end' | 'auto'",
    "default": "'top'",
    "required": "false",
-   "doc": "Anchor side relative to the trigger; `auto` picks the side with room."
+   "doc": "Side of the trigger the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time."
+  },
+  {
+   "name": "align",
+   "type": "'start' | 'center' | 'end'",
+   "default": "'center'",
+   "required": "false",
+   "doc": "Alignment along the trigger edge."
+  },
+  {
+   "name": "sideOffset",
+   "type": "number",
+   "default": "8",
+   "required": "false",
+   "doc": "Pixel gap between the trigger and the tooltip."
   },
   {
    "name": "delay",

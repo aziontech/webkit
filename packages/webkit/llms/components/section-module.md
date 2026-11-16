@@ -41,7 +41,7 @@
 | `title` | `string` | `''` | false | Headline of the module's header row, rendered as its `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `variant` | `SectionModuleVariant` | `'start'` | false | Layout of the default header row. |
+| `align` | `SectionModuleAlign` | `'start'` | false | Layout of the default header row. |
 | `divided` | `boolean` | `true` | false | Draw the top rule that divides this module from the one above it. |
 | `padded` | `boolean` | `true` | false | Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. |
 
@@ -56,7 +56,7 @@
 ## States
 
 - Visual states: `default`
-- `data-variant` carries the header layout
+- `data-align` carries the header layout
 - `data-divided` present when the top rule is drawn
 - `data-padded` present when the body is padded
 
@@ -89,7 +89,7 @@
 </template>
 ```
 
-### Variants
+### Alignments
 
 ```vue
 <script setup>
@@ -100,21 +100,21 @@
   <div>
     <SectionModule
       :divided="false"
-      variant="start"
+      align="start"
       eyebrow="Platform"
       title="Left"
     >
       <p class="m-0 text-body-md text-(--text-muted)">The header sits at the start edge.</p>
     </SectionModule>
     <SectionModule
-      variant="center"
+      align="center"
       eyebrow="Platform"
       title="Centered"
     >
       <p class="m-0 text-body-md text-(--text-muted)">The header is centered.</p>
     </SectionModule>
     <SectionModule
-      variant="split"
+      align="split"
       eyebrow="Platform"
       title="Horizontal"
       description="The description takes its own column."

@@ -1,11 +1,11 @@
 # TeamPermissions (`account/team-permissions`)
 
-> Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team. The list and its states are a page body for ConsoleLayout, rendered in its default slot; CreateTeam and EditTeam are full pages in the creation frame of `create/create-page` (a `AppHeader` with Back to Teams and permissions, no rail).
+> Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `Table` of teams (name as `TableCellLink` with a square `Avatar` and the description, permissions as `TableCellTags` with `+N`, members, `TableCellStatus`, and `TableCellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team. The list and its states are a page body for ConsoleLayout, rendered in its default slot; CreateTeam and EditTeam are full pages in the creation frame of `create/create-page` (a `AppHeader` with Back to Teams and permissions, no rail).
 
 - Surface: app
 - Source: `blocks/account/team-permissions/team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/team-permissions")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -35,13 +35,13 @@ Title `Teams and permissions` and the sentence that states the model. Actions: D
 
 The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when there is no team.
 
-### C. Team table — `Card`, `DataTable`, `Table`, `Avatar`, `useCollection` (required)
+### C. Team table — `Card`, `DataTable`, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, `Avatar`, `useCollection` (required)
 
-`DataTable` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `Table.CellLink` to the team's page and its description under it. Permissions: `Table.CellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `Table.CellStatus` (Active, Inactive).
+`DataTable` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `TableCellLink` to the team's page and its description under it. Permissions: `TableCellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `TableCellStatus` (Active, Inactive).
 
 ### D. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
-`Table.CellActions` named after the team: Edit and Duplicate, then Delete in its own group. Duplicate copies the permissions with no members and toasts. Delete asks in a `ConfirmDialog` that says how many members lose what the team grants.
+`TableCellActions` named after the team: Edit and Duplicate, then Delete in its own group. Edit and Duplicate emit `row-action` for the page to open the team or copy it. Delete asks in a `ConfirmDialog` that says how many members lose what the team grants, then removes the row and emits `delete`.
 
 ### E. No match and empty — `EmptyState` (required)
 
@@ -67,13 +67,53 @@ Variants CreateTeam and EditTeam only; they add `AppHeader`, `Brand` and `Breadc
 
 Creating or editing a team is a full page in the creation frame of `create/create-page`, not a page body in `ConsoleLayout`: a `AppHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and nothing on the right: the frame is for one task, so it carries no account control that does nothing. The form scrolls in the `main` under it, and its `SaveBar variant="centered"` floats at the bottom of that scroll region on both pages.
 
-### J. Permission matrix — `Table`, `EmptyState` (CreateTeam, EditTeam)
+### J. Permission matrix — `EmptyState` (CreateTeam, EditTeam)
 
 The matrix is the `Table` compound composed by hand, `bordered`: `aria-label="Permissions granted by this team"` names it, `Table.Header` holds Resource, View and Edit as `Table.HeadCell`s, and each area is one `Table.Body` whose first `Table.Row` carries the area's group `Checkbox` and whose next rows are the resources, with a `Checkbox` per action in a centred `Table.Cell` (a dash for an action the resource does not have). When the filter matches nothing, a small `EmptyState` (`No matching permissions`) with Clear filter takes the table's place.
 
 ### Outcomes — through `toast`
 
-Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+The list emits Duplicate and Delete; the page that runs the request ends it in a success toast (Team changes are not deploys, so the toast has no Edit or Redeploy). The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The list takes its teams through props and emits every action; it fetches nothing. `TeamPermissionsTeam` and `TeamPermissionsProps` are exported from `team-permissions.vue`, and `sample.ts` holds the sample teams the block renders when `teams` is left out (and never while `loading` or `error` is set). CreateTeam and EditTeam are separate pages with their own form state.
+
+| Prop      | Type                    | What it does                                                                                                             |
+| --------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `teams`   | `TeamPermissionsTeam[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.             |
+| `loading` | `boolean`               | A request is in flight. With no teams it is the first load (the table shows its loading rows); with teams Refresh spins. |
+| `error`   | `string`                | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table.                    |
+
+| Event        | Payload                    | When                                                                     |
+| ------------ | -------------------------- | ------------------------------------------------------------------------ |
+| `refresh`    | `(event)`                  | Refresh.                                                                 |
+| `retry`      | `(event)`                  | Retry in the error alert.                                                |
+| `row-action` | `(event, { value, team })` | Edit or Duplicate in the row menu.                                       |
+| `delete`     | `(event, team)`            | The delete dialog was confirmed; the row is already gone from the table. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import TeamPermissions from './team-permissions.vue'
+
+  const { data, pending, error, refresh } = useTeams()
+  const loadError = 'The teams could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <TeamPermissions
+    :teams="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -85,7 +125,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 ## Don't
 
-- Don't list permissions as a long paragraph in the table; use `Table.CellTags` with `+N`.
+- Don't list permissions as a long paragraph in the table; use `TableCellTags` with `+N`.
 - Don't offer an Edit checkbox for a resource that has no edit action; show a dash with a hidden "Not available".
 - Don't save a team with no permission; say so above the matrix.
 
@@ -112,12 +152,12 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 ## States
 
-- Default: five teams (one with every permission, one inactive with no members) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, duplicate and delete wired.
+- Default: `teams` holds five teams (one with every permission, one inactive with no members) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, duplicate and delete wired.
 - CreateTeam: the create page in the creation frame (Back to Teams and permissions, no rail) with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar variant="centered"`, a raised card centred over the bottom of the scroll region, as on Edit Team. A filter with no match shows a small `EmptyState` with Clear filter.
 - EditTeam: in the same creation frame, a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
-- Empty: no team yet; the heading and an empty state with Create Team.
-- Loading: the first load; the controls row and the table's loading rows.
-- Error: the teams did not load; a danger Alert with Retry.
+- Empty: no team yet (`teams` is `[]`); the heading and an empty state with Create Team.
+- Loading: the first load (`loading` with no `teams`); the controls row and the table's loading rows.
+- Error: the teams did not load (`error` is set); a danger Alert with the message and Retry.
 
 ## Related
 
@@ -154,25 +194,63 @@ Each variant is the same screen in another state: `get_block("account/team-permi
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import type { TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  type TeamStatus = 'Active' | 'Inactive'
+  import { sampleTeams } from './sample'
 
-  interface Team {
+  /** Whether a team grants its permissions. */
+  export type TeamPermissionsStatus = 'Active' | 'Inactive'
+
+  /** One team of the account. */
+  export interface TeamPermissionsTeam {
+    /** Stable key, used in the team's page link. */
     id: string
+    /** Display name. */
     name: string
+    /** One line under the name. */
     description: string
+    /** Permission keys the team grants, such as applications.view. */
     permissions: string[]
+    /** How many people belong to the team. */
     members: number
-    status: TeamStatus
+    /** Whether the team grants its permissions. */
+    status: TeamPermissionsStatus
   }
 
-  type TeamRow = Team & { permissionNames: string[] }
+  export interface TeamPermissionsProps {
+    /** The teams to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    teams?: TeamPermissionsTeam[]
+    /** A request is in flight: with no teams it is the first load, with teams a refresh. */
+    loading?: boolean
+    /** Why the teams could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<TeamPermissionsProps>(), {
+    teams: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'row-action': [
+      event: Event,
+      payload: { value: DropdownMenuItemValue; team: TeamPermissionsTeam }
+    ]
+    delete: [event: MouseEvent, team: TeamPermissionsTeam]
+  }>()
+
+  type TeamRow = TeamPermissionsTeam & { permissionNames: string[] }
 
   const permissionLabels: Record<string, string> = {
     'applications.view': 'View Applications',
@@ -195,67 +273,20 @@ Each variant is the same screen in another state: `get_block("account/team-permi
   }
   const allPermissions = Object.keys(permissionLabels)
 
-  const seedTeams: Team[] = [
-    {
-      id: 'team-1',
-      name: 'Administrators',
-      description: 'Full access to the account',
-      permissions: allPermissions,
-      members: 3,
-      status: 'Active'
+  const source = computed<TeamPermissionsTeam[]>(
+    () => props.teams ?? (props.loading || props.error ? [] : sampleTeams)
+  )
+  const items = ref<TeamPermissionsTeam[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
     },
-    {
-      id: 'team-2',
-      name: 'Developers',
-      description: 'Build and deploy applications',
-      permissions: [
-        'applications.view',
-        'applications.edit',
-        'domains.view',
-        'storage.view',
-        'storage.edit',
-        'metrics.view',
-        'logs.view'
-      ],
-      members: 12,
-      status: 'Active'
-    },
-    {
-      id: 'team-3',
-      name: 'Security',
-      description: 'Firewall rules and certificates',
-      permissions: [
-        'firewall.view',
-        'firewall.edit',
-        'certificates.view',
-        'certificates.edit',
-        'logs.view'
-      ],
-      members: 4,
-      status: 'Active'
-    },
-    {
-      id: 'team-4',
-      name: 'Finance',
-      description: 'Invoices and payment methods',
-      permissions: ['billing.view', 'billing.edit'],
-      members: 2,
-      status: 'Active'
-    },
-    {
-      id: 'team-5',
-      name: 'Contractors',
-      description: 'Read-only access for audits',
-      permissions: ['applications.view', 'domains.view', 'metrics.view'],
-      members: 0,
-      status: 'Inactive'
-    }
-  ]
-
-  const teams = ref<Team[]>(seedTeams)
+    { immediate: true }
+  )
 
   const rows = computed<TeamRow[]>(() =>
-    teams.value.map((team) => ({
+    items.value.map((team) => ({
       ...team,
       permissionNames: team.permissions.map((id) => permissionLabels[id] ?? id)
     }))
@@ -269,15 +300,15 @@ Each variant is the same screen in another state: `get_block("account/team-permi
     { id: 'actions', type: 'action', hideable: false }
   ]
 
-  const statusOptions = [...new Set(rows.value.map((row) => row.status))]
-    .sort()
-    .map((value) => ({ value }))
-
-  const properties: FilteringProperty[] = [
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
-    { key: 'status', label: 'Status', options: statusOptions }
-  ]
+    {
+      key: 'status',
+      label: 'Status',
+      options: [...new Set(rows.value.map((row) => row.status))].sort().map((value) => ({ value }))
+    }
+  ])
 
   const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
     useCollection({
@@ -292,57 +323,32 @@ Each variant is the same screen in another state: `get_block("account/team-permi
   const teamsTableEl = ref<TableExposed<TeamRow> | null>(null)
   const exportCsv = () => teamsTableEl.value?.exportCsv({ filename: 'teams.csv' })
 
-  const statusSeverity = (value: TeamStatus): TagSeverity =>
+  const statusSeverity = (value: TeamPermissionsStatus): TagSeverity =>
     value === 'Active' ? 'success' : 'neutral'
 
-  const loading = ref(false)
-  const loadFailed = ref(false)
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
+  const loadFailed = computed(() => props.error !== '')
+  const refreshing = computed(() => props.loading && items.value.length > 0)
 
-  const refreshing = ref(false)
-  const refresh = () => {
-    if (refreshing.value) return
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
-
-  const pending = ref<TeamRow | null>(null)
+  const pending = ref<TeamPermissionsTeam | null>(null)
   const deleteOpen = ref(false)
 
-  const onAction = (value: DropdownMenuItemValue, row: TeamRow) => {
-    if (value === 'duplicate') {
-      const source = teams.value.find((team) => team.id === row.id)
-      if (!source) return
-      const copy: Team = {
-        ...source,
-        id: `team-${teams.value.length + 1}-copy`,
-        name: `${row.name} copy`,
-        members: 0
-      }
-      teams.value = [...teams.value, copy]
-      toast.success(`Team "${copy.name}" created with the same permissions and no members.`)
+  const onAction = (event: Event, value: DropdownMenuItemValue, row: TeamRow) => {
+    const team = items.value.find((item) => item.id === row.id)
+    if (!team) return
+    if (value === 'delete') {
+      pending.value = team
+      deleteOpen.value = true
       return
     }
-    if (value === 'delete') {
-      pending.value = row
-      deleteOpen.value = true
-    }
+    emit('row-action', event, { value, team })
   }
 
-  const remove = () => {
-    const row = pending.value
-    if (!row) return
-    teams.value = teams.value.filter((team) => team.id !== row.id)
+  const remove = (event: MouseEvent) => {
+    const team = pending.value
+    if (!team) return
+    items.value = items.value.filter((item) => item.id !== team.id)
     deleteOpen.value = false
-    toast.success(`Team "${row.name}" deleted.`)
+    emit('delete', event, team)
   }
 </script>
 
@@ -395,7 +401,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                 size="medium"
                 :loading="refreshing"
                 aria-label="Refresh"
-                @click="refresh"
+                @click="emit('refresh', $event)"
               />
             </Tooltip>
             <Tooltip
@@ -422,13 +428,13 @@ Each variant is the same screen in another state: `get_block("account/team-permi
           v-if="loadFailed"
           severity="danger"
         >
-          The teams could not be loaded. Nothing was changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="retryLoad"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -467,7 +473,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
             <DataTable
               ref="teamsTableEl"
               v-bind="tableProps"
-              :loading="loading || refreshing"
+              :loading="loading"
               sortable
               :bordered="false"
               aria-label="Teams"
@@ -480,7 +486,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                     variant="square"
                   />
                   <div class="flex min-w-0 flex-col">
-                    <Table.CellLink
+                    <TableCellLink
                       :label="row.name"
                       :href="`/account/teams/${row.id}`"
                       destination="Team settings"
@@ -492,7 +498,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                 </div>
               </template>
               <template #cell-permissionNames="{ value }">
-                <Table.CellTags
+                <TableCellTags
                   v-if="value.length < allPermissions.length"
                   :items="value"
                 />
@@ -506,7 +512,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                 <span class="tabular-nums">{{ value }}</span>
               </template>
               <template #cell-status="{ value }">
-                <Table.CellStatus
+                <TableCellStatus
                   :label="value"
                   :severity="statusSeverity(value)"
                 />
@@ -515,9 +521,9 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                 <span class="sr-only">Actions</span>
               </template>
               <template #cell-actions="{ row }">
-                <Table.CellActions
+                <TableCellActions
                   :name="row.name"
-                  @select="(_event, value) => onAction(value, row)"
+                  @select="(event, value) => onAction(event, value, row)"
                 >
                   <DropdownMenu.Group>
                     <DropdownMenu.Item
@@ -535,7 +541,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                       label="Delete"
                     />
                   </DropdownMenu.Group>
-                </Table.CellActions>
+                </TableCellActions>
               </template>
               <template #empty>
                 <EmptyState
@@ -574,4 +580,85 @@ Each variant is the same screen in another state: `get_block("account/team-permi
     />
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { TeamPermissionsTeam } from './team-permissions.vue'
+
+export const sampleTeams: TeamPermissionsTeam[] = [
+  {
+    id: 'team-1',
+    name: 'Administrators',
+    description: 'Full access to the account',
+    permissions: [
+      'applications.view',
+      'applications.edit',
+      'domains.view',
+      'domains.edit',
+      'firewall.view',
+      'firewall.edit',
+      'certificates.view',
+      'certificates.edit',
+      'storage.view',
+      'storage.edit',
+      'metrics.view',
+      'logs.view',
+      'billing.view',
+      'billing.edit',
+      'users.view',
+      'users.edit',
+      'tokens.edit'
+    ],
+    members: 3,
+    status: 'Active'
+  },
+  {
+    id: 'team-2',
+    name: 'Developers',
+    description: 'Build and deploy applications',
+    permissions: [
+      'applications.view',
+      'applications.edit',
+      'domains.view',
+      'storage.view',
+      'storage.edit',
+      'metrics.view',
+      'logs.view'
+    ],
+    members: 12,
+    status: 'Active'
+  },
+  {
+    id: 'team-3',
+    name: 'Security',
+    description: 'Firewall rules and certificates',
+    permissions: [
+      'firewall.view',
+      'firewall.edit',
+      'certificates.view',
+      'certificates.edit',
+      'logs.view'
+    ],
+    members: 4,
+    status: 'Active'
+  },
+  {
+    id: 'team-4',
+    name: 'Finance',
+    description: 'Invoices and payment methods',
+    permissions: ['billing.view', 'billing.edit'],
+    members: 2,
+    status: 'Active'
+  },
+  {
+    id: 'team-5',
+    name: 'Contractors',
+    description: 'Read-only access for audits',
+    permissions: ['applications.view', 'domains.view', 'metrics.view'],
+    members: 0,
+    status: 'Inactive'
+  }
+]
 ```

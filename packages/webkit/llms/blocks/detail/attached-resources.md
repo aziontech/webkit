@@ -1,11 +1,11 @@
 # AttachedResources (`detail/attached-resources`)
 
-> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `Table.CellActions` and `Button`.
+> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.
 
 - Surface: app
 - Source: `blocks/detail/attached-resources/attached-resources.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/attached-resources")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [Table](../../components/table.md), [Tag](../../components/tag.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, `TableCellActions`, [Tag](../../components/tag.md)
 - Skills: `webkit-tables`
 
 ## Asked as
@@ -42,13 +42,55 @@ A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-k
 
 One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="neutral"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
 
-### D. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
+### D. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
-`Table.CellActions`, named after the record ("Actions for shop.example.com"), opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or deleted.
+`TableCellActions`, named after the record ("Actions for shop.example.com"), opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or deleted.
 
 ### E. Footer — `Button` (required)
 
 Below a top rule, a muted count on the left ("3 domains") and an outlined medium `Add <Module>` `Button` with a plus icon on the right. The row wraps on narrow cards.
+
+### F. Load failure — `Alert` (optional)
+
+When `error` is set, a danger `Alert` with Retry takes the table's place inside the card; the footer stays.
+
+## Data
+
+The card takes its domains and the request's state through props and emits every action; it fetches nothing. `AttachedResourcesDomain` and `AttachedResourcesProps` are exported from `attached-resources.vue`, and `sample.ts` holds the sample domains the card renders when `domains` is left out (and never while `loading` or `error` is set).
+
+| Prop      | Type                        | What it does                                                                         |
+| --------- | --------------------------- | ------------------------------------------------------------------------------------ |
+| `domains` | `AttachedResourcesDomain[]` | The rows and the footer count. Pass `[]` for a resource with none.                   |
+| `loading` | `boolean`                   | The request is in flight: the table shows its loading state.                         |
+| `error`   | `string`                    | Why the domains failed to load, shown in a danger `Alert` with Retry over the table. |
+
+| Event        | Payload                      | When                          |
+| ------------ | ---------------------------- | ----------------------------- |
+| `create`     | `(event)`                    | Add Domain.                   |
+| `retry`      | `(event)`                    | Retry in the error alert.     |
+| `row-action` | `(event, { value, domain })` | Edit or Delete in a row menu. |
+
+To go live, render the card from the settings section that owns the request:
+
+```vue
+<script setup lang="ts">
+  import AttachedResources from './attached-resources.vue'
+
+  const { data, pending, error, refresh } = useResourceDomains()
+  const loadError = "Couldn't load the domains. Check your connection and retry."
+</script>
+
+<template>
+  <AttachedResources
+    :domains="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -86,7 +128,7 @@ Below a top rule, a muted count on the left ("3 domains") and an outlined medium
 
 ## States
 
-- Default: three domains, one generated by the platform with no row menu, two the user added with Edit and Delete, and the footer counting them beside Add Domain.
+- Default: three domains from `domains`, one generated by the platform with no row menu, two the user added with Edit and Delete, and the footer counting them beside Add Domain; `loading` shows the table's loading state and `error` the danger `Alert` with Retry.
 
 ## Related
 
@@ -105,42 +147,62 @@ Each variant is the same screen in another state: `get_block("detail/attached-re
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import type { DropdownMenuItemValue, TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
 
-  const domains = [
-    {
-      id: 'generated',
-      domain: 'web-app-7f3a.example.net',
-      environment: 'Production',
-      policy: 'Single',
-      certificate: 'Managed',
-      generated: true
-    },
-    {
-      id: 'shop',
-      domain: 'shop.example.com',
-      environment: 'Production',
-      policy: 'Single',
-      certificate: 'Managed',
-      generated: false
-    },
-    {
-      id: 'preview',
-      domain: 'preview.example.com',
-      environment: 'Stage',
-      policy: 'Versioned',
-      certificate: '*.example.com',
-      generated: false
-    }
-  ]
+  import { sampleDomains } from './sample'
+
+  /** A domain the resource answers on. */
+  export interface AttachedResourcesDomain {
+    /** The row key. */
+    id: string
+    /** The address, without the scheme. */
+    domain: string
+    /** The environment it serves, empty when it serves none. */
+    environment: string
+    /** The deployment policy label. */
+    policy: string
+    /** The certificate label. */
+    certificate: string
+    /** Generated by the platform, so it has no row menu. */
+    generated: boolean
+  }
+
+  export interface AttachedResourcesProps {
+    /** The domains. Pass an empty array for a resource with none. Left out, the sample renders. */
+    domains?: AttachedResourcesDomain[]
+    /** The domains request is in flight: the table shows its loading state. */
+    loading?: boolean
+    /** Why the domains failed to load, shown in a danger alert with Retry in place of the table. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<AttachedResourcesProps>(), {
+    domains: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    create: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'row-action': [
+      event: Event,
+      payload: { value: DropdownMenuItemValue; domain: AttachedResourcesDomain }
+    ]
+  }>()
+
+  const domains = computed<AttachedResourcesDomain[]>(
+    () => props.domains ?? (props.loading || props.error ? [] : sampleDomains)
+  )
 
   const columns: TableColumn[] = [
     { accessorKey: 'domain', header: 'Domain', principal: true, grow: 2 },
@@ -151,7 +213,7 @@ Each variant is the same screen in another state: `get_block("detail/attached-re
   ]
 
   const countLabel = computed(
-    () => `${domains.length} ${domains.length === 1 ? 'domain' : 'domains'}`
+    () => `${domains.value.length} ${domains.value.length === 1 ? 'domain' : 'domains'}`
   )
 </script>
 
@@ -159,11 +221,20 @@ Each variant is the same screen in another state: `get_block("detail/attached-re
   <Card :padded="false">
     <template #default>
       <div class="flex min-w-0 flex-col">
+        <Alert
+          v-if="error"
+          severity="danger"
+          :label="error"
+          action-label="Retry"
+          @action="(event: MouseEvent) => emit('retry', event)"
+        />
         <DataTable
+          v-else
           :data="domains"
           :columns="columns"
           row-key="id"
           :bordered="false"
+          :loading="loading"
         >
           <template #cell-environment="{ value }">
             <Tag
@@ -188,9 +259,10 @@ Each variant is the same screen in another state: `get_block("detail/attached-re
             </span>
           </template>
           <template #cell-actions="{ row }">
-            <Table.CellActions
+            <TableCellActions
               v-if="!row.generated"
               :name="row.domain"
+              @select="(event, value) => emit('row-action', event, { value, domain: row })"
             >
               <DropdownMenuGroup>
                 <DropdownMenuItem
@@ -216,7 +288,7 @@ Each variant is the same screen in another state: `get_block("detail/attached-re
                   /></template>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-            </Table.CellActions>
+            </TableCellActions>
           </template>
         </DataTable>
 
@@ -230,10 +302,44 @@ Each variant is the same screen in another state: `get_block("detail/attached-re
             variant="outline"
             size="medium"
             icon="ai ai-plus"
+            @click="(event: MouseEvent) => emit('create', event)"
           />
         </div>
       </div>
     </template>
   </Card>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { AttachedResourcesDomain } from './attached-resources.vue'
+
+export const sampleDomains: AttachedResourcesDomain[] = [
+  {
+    id: 'generated',
+    domain: 'web-app-7f3a.example.net',
+    environment: 'Production',
+    policy: 'Single',
+    certificate: 'Managed',
+    generated: true
+  },
+  {
+    id: 'shop',
+    domain: 'shop.example.com',
+    environment: 'Production',
+    policy: 'Single',
+    certificate: 'Managed',
+    generated: false
+  },
+  {
+    id: 'preview',
+    domain: 'preview.example.com',
+    environment: 'Stage',
+    policy: 'Versioned',
+    certificate: '*.example.com',
+    generated: false
+  }
+]
 ```

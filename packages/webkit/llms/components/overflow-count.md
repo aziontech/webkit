@@ -27,7 +27,7 @@
 
 ## Related
 
-- [table](table.md) — `Table.CellTags` and `Table.CellLink` put this chip after the values they fit.
+- [table](table.md) — `TableCellTags` and `TableCellLink` put this chip after the values they fit.
 - [tag](tag.md) — the chip is a small secondary `Tag`.
 - [popover](popover.md) — the list opens in a `Popover`.
 

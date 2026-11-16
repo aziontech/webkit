@@ -38,13 +38,13 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `content` | `string` | `''` | true | Guidance text revealed on hover or focus; also the trigger's accessible name. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false | Anchor side of the tooltip relative to the glyph. |
+| `side` | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'` | false | Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. `start` and `end` follow the text direction. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`
 - `data-state` values (on the root, owned by `Tooltip`): `open` | `closed`
-- `data-placement` (on the root, owned by `Tooltip`): `top` | `right` | `bottom` | `left`
+- `data-side` (on the root, owned by `Tooltip`): `top` | `bottom` | `start` | `end`, the side the tooltip landed on
 
 ## Accessibility
 
@@ -80,19 +80,19 @@
   <div class="flex items-center gap-(--spacing-lg)">
     <Hint
       content="Anchored above the glyph."
-      placement="top"
+      side="top"
     />
     <Hint
       content="Anchored to the right of the glyph."
-      placement="right"
+      side="end"
     />
     <Hint
       content="Anchored below the glyph."
-      placement="bottom"
+      side="bottom"
     />
     <Hint
       content="Anchored to the left of the glyph."
-      placement="left"
+      side="start"
     />
   </div>
 </template>

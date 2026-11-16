@@ -45,6 +45,43 @@ The title says what happened in the user's words (`Page not found`, `You don't h
 
 Two at most, side by side, wrapping on narrow screens. The way out is primary (`Go to home`, `Retry`, `Back to services`); the help is outlined (`Docs`, `Switch account`, `System status`). Links that leave the app open in a new tab (`target="_blank"`).
 
+## Data
+
+The block shows no records and fetches nothing: the primary takes the copy and the links a real app sets as props and emits Go to home. `NotFoundProps` is exported from `not-found.vue`; every prop defaults to the 404 copy above.
+
+| Prop          | Type     | What it does                                |
+| ------------- | -------- | ------------------------------------------- |
+| `title`       | `string` | The `EmptyState` title (`Page not found`).  |
+| `description` | `string` | The sentence under it: why, and what to do. |
+| `homeHref`    | `string` | Where Go to home goes (`/`).                |
+| `docsHref`    | `string` | Where Docs goes, in a new tab.              |
+
+| Event  | Payload   | When                                                                   |
+| ------ | --------- | ---------------------------------------------------------------------- |
+| `home` | `(event)` | Go to home was clicked; call `preventDefault` to route inside the app. |
+
+To go live, render the primary from the catch-all route and point the links at the app:
+
+```vue
+<script setup lang="ts">
+  import { useRouter } from 'vue-router'
+  import NotFound from './not-found.vue'
+
+  const router = useRouter()
+  const goHome = (event: MouseEvent) => {
+    event.preventDefault()
+    router.push('/')
+  }
+</script>
+
+<template>
+  <NotFound
+    docs-href="https://example.com/docs"
+    @home="goHome"
+  />
+</template>
+```
+
 ## Do
 
 - Render the block on the address the user asked for; do not redirect to `/404`, so reloading tries the real address again and the browser history stays honest.
@@ -80,7 +117,7 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 
 ## States
 
-- Default: 404, the animated azion-404 line figure, Page not found, Go to home and Docs.
+- Default: 404, the animated azion-404 line figure, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
 - Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
 - ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
 - ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
@@ -109,6 +146,29 @@ Each variant is the same screen in another state: `get_block("state/not-found", 
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import LineFigure from '@aziontech/webkit/line-figure'
+
+  export interface NotFoundProps {
+    /** What happened, in the user's words. */
+    title?: string
+    /** Why it may have happened and what to do next. */
+    description?: string
+    /** Where Go to home goes. */
+    homeHref?: string
+    /** Where Docs goes; it opens in a new tab. */
+    docsHref?: string
+  }
+
+  withDefaults(defineProps<NotFoundProps>(), {
+    title: 'Page not found',
+    description:
+      'There is nothing deployed at this address. Check the URL or head back to the start.',
+    homeHref: '/',
+    docsHref: 'https://example.com/docs'
+  })
+
+  const emit = defineEmits<{
+    home: [event: MouseEvent]
+  }>()
 </script>
 
 <template>
@@ -118,8 +178,8 @@ Each variant is the same screen in another state: `get_block("state/not-found", 
     <h1 class="sr-only">Error 404</h1>
     <div class="w-full max-w-(--container-md)">
       <EmptyState
-        title="Page not found"
-        description="There is nothing deployed at this address. Check the URL or head back to the start."
+        :title="title"
+        :description="description"
       >
         <template #icon>
           <div class="w-(--container-3xs) sm:w-(--container-2xs)">
@@ -135,14 +195,15 @@ Each variant is the same screen in another state: `get_block("state/not-found", 
               label="Go to home"
               variant="primary"
               size="medium"
-              href="/"
+              :href="homeHref"
+              @click="(event: MouseEvent) => emit('home', event)"
             />
             <Button
               label="Docs"
               variant="outline"
               icon="ai ai-book"
               size="medium"
-              href="https://example.com/docs"
+              :href="docsHref"
               target="_blank"
             />
           </div>

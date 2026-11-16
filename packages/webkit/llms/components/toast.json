@@ -45,10 +45,10 @@
  "props": [
   {
    "name": "position",
-   "type": "'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'",
-   "default": "'bottom-right'",
+   "type": "'top-start' | 'top-center' | 'top-end' | 'bottom-start' | 'bottom-center' | 'bottom-end'",
+   "default": "'bottom-end'",
    "required": "false",
-   "doc": "Corner (or edge-center) the stack is anchored to."
+   "doc": "Corner (or edge-center) the stack is anchored to; `start` and `end` follow the reading direction."
   },
   {
    "name": "duration",

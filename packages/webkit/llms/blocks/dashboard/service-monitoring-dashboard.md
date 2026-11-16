@@ -1,6 +1,6 @@
 # ServiceMonitoringDashboard (`dashboard/service-monitoring-dashboard`)
 
-> The service monitoring dashboard pattern: a PageHeader with the one window ToggleGroup, status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts read over that window, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as a whole-row Item link to the alert in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `PageHeader`, `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill and scrolls itself: from xl the charts and the alerts rail scroll on their own; below xl the page scrolls as one.
+> The service monitoring dashboard pattern: a PageHeader with the one window ToggleGroup, status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts read over that window, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as a whole-row Item link to the alert in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `PageHeader`, `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton`, `EmptyState` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill and scrolls itself: from xl the charts and the alerts rail scroll on their own; below xl the page scrolls as one.
 
 - Surface: app
 - Source: `blocks/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue` in `@aziontech/webkit`
@@ -90,6 +90,58 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 `No traffic yet` / `Latency appears here once a service serves requests.` in the charts, and
 `No open alerts` / `Alerts appear here when a service crosses a threshold.` in the rail.
 
+### L. Load failure — `Alert` (required)
+
+With `error` set, a danger `Alert` takes the place of each chart and of the rail, naming what did not
+load (`Couldn't load latency.`) with Retry.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `ServiceMonitoringService`, `ServiceMonitoringSeriesData`, `ServiceMonitoringAlert`, `ServiceMonitoringWindow` and `ServiceMonitoringDashboardProps` are exported from `service-monitoring-dashboard.vue`, and `sample.ts` holds the sample services, series and alerts the block renders when a data prop is left out (and never while `loading` or `error` is set).
+
+| Prop / model     | Type                          | What it does                                                                                                   |
+| ---------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `services`       | `ServiceMonitoringService[]`  | One tile per service. A service with `latency: null` shows a dash and no state.                                |
+| `latency`        | `ServiceMonitoringSeriesData` | The `p50`, `p95` and `p99` lines over the window. No series is the `No traffic yet` empty chart.               |
+| `errorRate`      | `ServiceMonitoringSeriesData` | The `Status 4xx` and `Status 5xx` lines over the window.                                                       |
+| `alerts`         | `ServiceMonitoringAlert[]`    | The open alerts in the rail. Pass `[]` for `No open alerts`.                                                   |
+| `loading`        | `boolean`                     | The window is loading: the tiles, both charts and the rail hold Skeletons; the window switch stays usable.     |
+| `error`          | `string`                      | Why the request failed, shown after `Couldn't load latency.` (error rate, open alerts) in each danger `Alert`. |
+| `v-model:window` | `'1h' \| '6h' \| '24h'`       | The window every tile and chart reads; refetch when it changes. Defaults to `24h`.                             |
+
+| Event   | Payload   | When                              |
+| ------- | --------- | --------------------------------- |
+| `retry` | `(event)` | Retry in any of the error alerts. |
+
+Each alert row links to `/alerts/<id>`; point it at your alert page. To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import ServiceMonitoringDashboard, {
+    type ServiceMonitoringWindow
+  } from './service-monitoring-dashboard.vue'
+
+  const range = ref<ServiceMonitoringWindow>('24h')
+  const { data, pending, error, refresh } = useServiceMetrics(range)
+</script>
+
+<template>
+  <ServiceMonitoringDashboard
+    v-model:window="range"
+    :services="data?.services ?? []"
+    :latency="data?.latency"
+    :error-rate="data?.errorRate"
+    :alerts="data?.alerts ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Write the service state in words in every tile.
@@ -125,9 +177,9 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 ## States
 
 - Default: services reporting, both charts populated, open alerts in the rail.
-- Loading: every tile, both charts and the rail hold Skeletons; the window switch stays usable.
-- Empty: no traffic yet; tiles show a dash, both charts say metrics appear once a service serves requests, and the rail reads `No open alerts`.
-- Error: the request failed; tiles show a dash, and both charts and the alert rail show a danger `Alert` that names what did not load and offers Retry.
+- Loading: `loading`; every tile, both charts and the rail hold Skeletons; the window switch stays usable.
+- Empty: no traffic yet (`latency: null` per service, no series, `alerts: []`); tiles show a dash, both charts say metrics appear once a service serves requests, and the rail reads `No open alerts`.
+- Error: `error`; tiles show a dash, and both charts and the alert rail show a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
@@ -148,6 +200,7 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -159,39 +212,100 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, ref } from 'vue'
+  import { computed } from 'vue'
 
-  interface Service {
+  import { sampleAlerts, sampleErrorRate, sampleLatency, sampleServices } from './sample'
+
+  /** The window every tile and chart reads. */
+  export type ServiceMonitoringWindow = '1h' | '6h' | '24h'
+
+  /** One service tile. */
+  export interface ServiceMonitoringService {
+    /** Stable key. */
     id: string
+    /** Service name, the tile label. */
     name: string
+    /** State in words with its status color; hidden while the service has no latency. */
     status: { label: string; severity: StatusIndicatorSeverity }
+    /** p95 latency in milliseconds; null before the service serves traffic. */
     latency: number | null
+    /** Change of p95 latency against the previous window, in percent. */
     delta: number | null
+    /** p95 latency over the window, for the sparkline. */
     trend: number[]
   }
 
-  interface SeriesData {
+  /** The series of one chart over the window. */
+  export interface ServiceMonitoringSeriesData {
+    /** One label per point of the x axis. */
     labels: string[]
+    /** The lines of the chart. */
     series: ChartSeries[]
   }
 
-  interface MonitorAlert {
+  /** One open alert in the rail. */
+  export interface ServiceMonitoringAlert {
+    /** Stable key, used in the alert link. */
     id: string
+    /** Color of the level tag. */
     severity: TagSeverity
+    /** Level in words. */
     level: string
+    /** The threshold that tripped. */
     title: string
+    /** The service the alert belongs to. */
     service: string
+    /** When the alert opened, relative. */
     opened: string
   }
 
-  const loading = false
-  const empty = false
+  export interface ServiceMonitoringDashboardProps {
+    /** One tile per service. Left out, the sample renders. */
+    services?: ServiceMonitoringService[]
+    /** Latency percentiles over the window. Left out, the sample renders. */
+    latency?: ServiceMonitoringSeriesData
+    /** Error rates over the window. Left out, the sample renders. */
+    errorRate?: ServiceMonitoringSeriesData
+    /** The alerts still open; pass an empty list when none is. Left out, the sample renders. */
+    alerts?: ServiceMonitoringAlert[]
+    /** The metrics for the window are loading. */
+    loading?: boolean
+    /** Why the metrics could not load, shown after what did not load in each danger alert. */
+    error?: string
+  }
 
-  const timeWindow = ref('24h')
-  const windowNames: Record<string, string> = { '1h': 'hour', '6h': '6 hours', '24h': '24 hours' }
-  const deltaLabel = computed(
-    () => `p95 latency vs previous ${windowNames[timeWindow.value] ?? '24 hours'}`
+  const props = withDefaults(defineProps<ServiceMonitoringDashboardProps>(), {
+    services: undefined,
+    latency: undefined,
+    errorRate: undefined,
+    alerts: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+  }>()
+
+  const timeWindow = defineModel<ServiceMonitoringWindow>('window', { default: '24h' })
+
+  const blocked = computed(() => props.loading || props.error !== '')
+  const noSeries: ServiceMonitoringSeriesData = { labels: [], series: [] }
+  const services = computed(() => props.services ?? (blocked.value ? [] : sampleServices))
+  const latency = computed(
+    () => props.latency ?? (blocked.value ? noSeries : sampleLatency[timeWindow.value])
   )
+  const errorRate = computed(
+    () => props.errorRate ?? (blocked.value ? noSeries : sampleErrorRate[timeWindow.value])
+  )
+  const alerts = computed(() => props.alerts ?? (blocked.value ? [] : sampleAlerts))
+
+  const windowNames: Record<ServiceMonitoringWindow, string> = {
+    '1h': 'hour',
+    '6h': '6 hours',
+    '24h': '24 hours'
+  }
+  const deltaLabel = computed(() => `p95 latency vs previous ${windowNames[timeWindow.value]}`)
 
   const formatLatency = (value: number) => `${Math.round(value)} ms`
   const formatRate = (value: number) => {
@@ -203,403 +317,6 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
     { label: '1h', value: '1h' },
     { label: '6h', value: '6h' },
     { label: '24h', value: '24h' }
-  ]
-
-  const services: Service[] = [
-    {
-      id: 'web-app-prod',
-      name: 'web-app-prod',
-      status: { label: 'Operational', severity: 'success' },
-      latency: 142,
-      delta: 5.5,
-      trend: [
-        150.67, 152.6, 143.48, 150.61, 171.97, 134.75, 156.49, 120.43, 137.84, 138.04, 133.41,
-        128.77, 110.63, 113.94, 104.35, 120.48, 140.39, 121.08, 150.68, 147.66, 156.97, 145.05,
-        167.95, 182.61
-      ]
-    },
-    {
-      id: 'web-app-eu-prod',
-      name: 'web-app-eu-prod',
-      status: { label: 'Degraded', severity: 'warning' },
-      latency: 860,
-      delta: 2.25,
-      trend: [
-        828.11, 694.93, 849.69, 857.09, 741.51, 859.84, 983.53, 944.1, 1050.31, 856.9, 1024.47,
-        900.75, 1097.77, 979.12, 1039.02, 821.14, 907.25, 785.34, 823.67, 898.16, 865.15, 720.38,
-        683.48, 658.36
-      ]
-    },
-    {
-      id: 'web-app-staging',
-      name: 'web-app-staging',
-      status: { label: 'Down', severity: 'danger' },
-      latency: 2310,
-      delta: -12.04,
-      trend: [
-        2104.28, 2300.85, 2301.59, 2409.15, 2402.99, 2401.06, 2617.89, 2745.05, 2768.72, 2277.7,
-        2220.83, 2286.36, 2675.38, 1939.18, 2500.95, 2209.39, 1780.76, 1665.79, 1874.18, 2302.54,
-        1891.4, 1910.35, 2044.63, 2247.64
-      ]
-    },
-    {
-      id: 'campaign-landing',
-      name: 'campaign-landing',
-      status: { label: 'Operational', severity: 'success' },
-      latency: 98,
-      delta: 10.54,
-      trend: [
-        105.49, 103.1, 103.58, 93.83, 87.47, 87.63, 72.17, 72.04, 94.71, 87.34, 70.53, 79.32, 88.95,
-        106.75, 96.26, 114.14, 119.03, 120.22, 107.42, 116.74, 108.78, 111.72, 96.77, 101.55
-      ]
-    },
-    {
-      id: 'docs-site',
-      name: 'docs-site',
-      status: { label: 'Operational', severity: 'success' },
-      latency: 121,
-      delta: -8.03,
-      trend: [
-        96.77, 120.51, 110.12, 101.64, 120.94, 126.42, 134.79, 134.1, 151.8, 122.97, 143.1, 128.14,
-        147.52, 124.23, 148.85, 124.28, 104.73, 124.28, 113.74, 96.17, 113.13, 109.24, 115.93,
-        104.17
-      ]
-    },
-    {
-      id: 'api-gateway',
-      name: 'api-gateway',
-      status: { label: 'Operational', severity: 'success' },
-      latency: 176,
-      delta: -9.49,
-      trend: [
-        186.03, 178.2, 150.11, 171.27, 172.52, 148.71, 162.95, 162.72, 175.66, 169.93, 168.56,
-        134.98, 177.79, 176.51, 198.4, 164.09, 195.65, 189.51, 192.61, 187.06, 226.81, 177.96,
-        200.99, 193.54
-      ]
-    }
-  ]
-
-  const latency: Record<string, SeriesData> = {
-    '1h': {
-      labels: [
-        '10:05',
-        '10:10',
-        '10:15',
-        '10:20',
-        '10:25',
-        '10:30',
-        '10:35',
-        '10:40',
-        '10:45',
-        '10:50',
-        '10:55',
-        '11:00'
-      ],
-      series: [
-        {
-          id: 'p50',
-          name: 'p50',
-          values: [
-            127.92, 94.53, 97.31, 107.2, 97.36, 110.69, 100.89, 146.8, 146.33, 157.18, 125.77,
-            147.95
-          ]
-        },
-        {
-          id: 'p95',
-          name: 'p95',
-          values: [
-            374.75, 373.91, 308.53, 443.04, 485.87, 397.39, 521.52, 468.61, 397.76, 496.69, 440.19,
-            312.62
-          ]
-        },
-        {
-          id: 'p99',
-          name: 'p99',
-          values: [
-            1165.45, 930.06, 842.26, 817.89, 883.2, 619.11, 793.63, 920.73, 881.72, 909.44, 1103.83,
-            1106.58
-          ]
-        }
-      ]
-    },
-    '6h': {
-      labels: [
-        '05:15',
-        '05:30',
-        '05:45',
-        '06:00',
-        '06:15',
-        '06:30',
-        '06:45',
-        '07:00',
-        '07:15',
-        '07:30',
-        '07:45',
-        '08:00',
-        '08:15',
-        '08:30',
-        '08:45',
-        '09:00',
-        '09:15',
-        '09:30',
-        '09:45',
-        '10:00',
-        '10:15',
-        '10:30',
-        '10:45',
-        '11:00'
-      ],
-      series: [
-        {
-          id: 'p50',
-          name: 'p50',
-          values: [
-            109.27, 121.76, 123.83, 136.32, 143.34, 126.41, 154.32, 161.25, 154.04, 126.59, 144.91,
-            125.14, 123.9, 119.48, 136.03, 112.46, 100.17, 114.2, 92.48, 119.49, 102.27, 88.73,
-            88.59, 106.46
-          ]
-        },
-        {
-          id: 'p95',
-          name: 'p95',
-          values: [
-            360.16, 409.41, 410.82, 451.7, 420.29, 510.08, 543.55, 480.85, 517.95, 504.78, 469.87,
-            512.06, 362.62, 389.29, 367.81, 440.34, 315.09, 286.34, 386.74, 318.29, 345.86, 293.6,
-            390.07, 443.49
-          ]
-        },
-        {
-          id: 'p99',
-          name: 'p99',
-          values: [
-            734.58, 794.77, 703.1, 706.89, 825.77, 691.9, 1007.2, 756.71, 1078.27, 1008.97, 869.74,
-            1151.69, 1154.72, 1189.48, 1059.71, 1151.21, 989.75, 959.28, 1019.08, 879.11, 885.64,
-            909.6, 768.14, 801.24
-          ]
-        }
-      ]
-    },
-    '24h': {
-      labels: [
-        '12:00',
-        '13:00',
-        '14:00',
-        '15:00',
-        '16:00',
-        '17:00',
-        '18:00',
-        '19:00',
-        '20:00',
-        '21:00',
-        '22:00',
-        '23:00',
-        '00:00',
-        '01:00',
-        '02:00',
-        '03:00',
-        '04:00',
-        '05:00',
-        '06:00',
-        '07:00',
-        '08:00',
-        '09:00',
-        '10:00',
-        '11:00'
-      ],
-      series: [
-        {
-          id: 'p50',
-          name: 'p50',
-          values: [
-            113.92, 125.96, 114.96, 117.02, 113.25, 103.18, 118.59, 90.7, 90.48, 105.94, 98.49,
-            104.23, 147.72, 147.56, 122.78, 148.06, 149.49, 161.4, 152.31, 134.62, 146.18, 127.38,
-            127.85, 128.51
-          ]
-        },
-        {
-          id: 'p95',
-          name: 'p95',
-          values: [
-            299.24, 390.05, 365.72, 431.21, 381.87, 406.48, 400.03, 508, 525.04, 509.32, 479.46,
-            464.04, 426.39, 499.62, 517.73, 381.34, 355.4, 386.17, 409.9, 376.56, 297.01, 355.75,
-            359.71, 364.61
-          ]
-        },
-        {
-          id: 'p99',
-          name: 'p99',
-          values: [
-            691.25, 878.67, 869.6, 771.26, 1011.27, 1045.81, 1131.15, 1084.49, 923.34, 921.95,
-            983.26, 948.46, 1047, 1003.13, 1065.87, 855.97, 895.38, 925.79, 809.96, 798.72, 711.55,
-            898.95, 605.55, 837.83
-          ]
-        }
-      ]
-    }
-  }
-
-  const errorRate: Record<string, SeriesData> = {
-    '1h': {
-      labels: [
-        '10:05',
-        '10:10',
-        '10:15',
-        '10:20',
-        '10:25',
-        '10:30',
-        '10:35',
-        '10:40',
-        '10:45',
-        '10:50',
-        '10:55',
-        '11:00'
-      ],
-      series: [
-        {
-          id: '4xx',
-          name: 'Status 4xx',
-          color: 'warning',
-          values: [2.03, 2.59, 2.38, 3.54, 2.62, 2.35, 2.53, 1.88, 1.6, 1.4, 1.69, 1.94]
-        },
-        {
-          id: '5xx',
-          name: 'Status 5xx',
-          color: 'danger',
-          values: [0.61, 0.63, 0.53, 0.66, 0.62, 0.85, 0.59, 0.54, 0.58, 0.48, 0.43, 0.37]
-        }
-      ]
-    },
-    '6h': {
-      labels: [
-        '05:15',
-        '05:30',
-        '05:45',
-        '06:00',
-        '06:15',
-        '06:30',
-        '06:45',
-        '07:00',
-        '07:15',
-        '07:30',
-        '07:45',
-        '08:00',
-        '08:15',
-        '08:30',
-        '08:45',
-        '09:00',
-        '09:15',
-        '09:30',
-        '09:45',
-        '10:00',
-        '10:15',
-        '10:30',
-        '10:45',
-        '11:00'
-      ],
-      series: [
-        {
-          id: '4xx',
-          name: 'Status 4xx',
-          color: 'warning',
-          values: [
-            2.36, 2.73, 2.19, 3.04, 2.31, 1.76, 2.1, 2.4, 1.56, 2.22, 2.12, 1.94, 2.31, 1.6, 2.4,
-            2.64, 1.89, 2.95, 3.15, 2.5, 3.12, 3.47, 2.53, 3.37
-          ]
-        },
-        {
-          id: '5xx',
-          name: 'Status 5xx',
-          color: 'danger',
-          values: [
-            0.63, 0.66, 0.71, 0.64, 0.81, 0.76, 0.66, 0.59, 0.68, 0.57, 0.59, 0.41, 0.57, 0.46,
-            0.36, 0.6, 0.64, 0.53, 0.45, 0.54, 0.5, 0.67, 0.56, 0.72
-          ]
-        }
-      ]
-    },
-    '24h': {
-      labels: [
-        '12:00',
-        '13:00',
-        '14:00',
-        '15:00',
-        '16:00',
-        '17:00',
-        '18:00',
-        '19:00',
-        '20:00',
-        '21:00',
-        '22:00',
-        '23:00',
-        '00:00',
-        '01:00',
-        '02:00',
-        '03:00',
-        '04:00',
-        '05:00',
-        '06:00',
-        '07:00',
-        '08:00',
-        '09:00',
-        '10:00',
-        '11:00'
-      ],
-      series: [
-        {
-          id: '4xx',
-          name: 'Status 4xx',
-          color: 'warning',
-          values: [
-            3.3, 2.66, 2.63, 2.54, 2.66, 2.89, 3.1, 2.84, 2.19, 2.01, 2.54, 2.62, 1.77, 1.9, 2.06,
-            1.9, 2.16, 1.45, 1.44, 2.19, 2.47, 1.96, 2.03, 2.58
-          ]
-        },
-        {
-          id: '5xx',
-          name: 'Status 5xx',
-          color: 'danger',
-          values: [
-            0.57, 0.45, 0.64, 0.48, 0.59, 0.75, 0.75, 0.73, 0.65, 0.64, 0.82, 0.66, 0.81, 0.67, 0.7,
-            0.62, 0.56, 0.48, 0.39, 0.54, 0.44, 0.45, 0.31, 0.49
-          ]
-        }
-      ]
-    }
-  }
-
-  const alerts: MonitorAlert[] = [
-    {
-      id: 'stage-5xx',
-      severity: 'danger',
-      level: 'Critical',
-      title: 'Status 5xx above 5%',
-      service: 'web-app-staging',
-      opened: '12 minutes ago'
-    },
-    {
-      id: 'eu-latency',
-      severity: 'warning',
-      level: 'Warning',
-      title: 'p95 latency above 800 ms',
-      service: 'web-app-eu-prod',
-      opened: '34 minutes ago'
-    },
-    {
-      id: 'eu-upstream',
-      severity: 'warning',
-      level: 'Warning',
-      title: 'Upstream timeouts rising',
-      service: 'web-app-eu-prod',
-      opened: '1 hour ago'
-    },
-    {
-      id: 'docs-disk',
-      severity: 'info',
-      level: 'Info',
-      title: 'Disk usage above 80%',
-      service: 'docs-site',
-      opened: '3 hours ago'
-    }
   ]
 </script>
 
@@ -643,7 +360,7 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
             >
               <template #aside>
                 <StatusIndicator
-                  v-if="!loading && !empty"
+                  v-if="!loading && service.latency !== null"
                   :severity="service.status.severity"
                   :label="service.status.label"
                 />
@@ -661,9 +378,17 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="`Couldn't load latency. ${error}`"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <Chart
-                :series="latency[timeWindow].series"
-                :labels="latency[timeWindow].labels"
+                v-else
+                :series="latency.series"
+                :labels="latency.labels"
                 :format-value="formatLatency"
                 empty-title="No traffic yet"
                 empty-description="Latency appears here once a service serves requests."
@@ -690,9 +415,17 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="`Couldn't load error rate. ${error}`"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <Chart
-                :series="errorRate[timeWindow].series"
-                :labels="errorRate[timeWindow].labels"
+                v-else
+                :series="errorRate.series"
+                :labels="errorRate.labels"
                 :format-value="formatRate"
                 empty-title="No traffic yet"
                 empty-description="Error rates appear here once a service serves requests."
@@ -738,8 +471,15 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
         aria-labelledby="open-alerts-title"
         tabindex="0"
       >
+        <Alert
+          v-if="error"
+          severity="danger"
+          :label="`Couldn't load open alerts. ${error}`"
+          action-label="Retry"
+          @action="(event) => emit('retry', event)"
+        />
         <div
-          v-if="loading"
+          v-else-if="loading"
           class="flex flex-col gap-(--spacing-lg)"
         >
           <Skeleton
@@ -784,4 +524,415 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
     </aside>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type {
+  ServiceMonitoringAlert,
+  ServiceMonitoringSeriesData,
+  ServiceMonitoringService,
+  ServiceMonitoringWindow
+} from './service-monitoring-dashboard.vue'
+
+export const sampleServices: ServiceMonitoringService[] = [
+  {
+    id: 'web-app-prod',
+    name: 'web-app-prod',
+    status: { label: 'Operational', severity: 'success' },
+    latency: 142,
+    delta: 5.5,
+    trend: [
+      150.67, 152.6, 143.48, 150.61, 171.97, 134.75, 156.49, 120.43, 137.84, 138.04, 133.41, 128.77,
+      110.63, 113.94, 104.35, 120.48, 140.39, 121.08, 150.68, 147.66, 156.97, 145.05, 167.95, 182.61
+    ]
+  },
+  {
+    id: 'web-app-eu-prod',
+    name: 'web-app-eu-prod',
+    status: { label: 'Degraded', severity: 'warning' },
+    latency: 860,
+    delta: 2.25,
+    trend: [
+      828.11, 694.93, 849.69, 857.09, 741.51, 859.84, 983.53, 944.1, 1050.31, 856.9, 1024.47,
+      900.75, 1097.77, 979.12, 1039.02, 821.14, 907.25, 785.34, 823.67, 898.16, 865.15, 720.38,
+      683.48, 658.36
+    ]
+  },
+  {
+    id: 'web-app-staging',
+    name: 'web-app-staging',
+    status: { label: 'Down', severity: 'danger' },
+    latency: 2310,
+    delta: -12.04,
+    trend: [
+      2104.28, 2300.85, 2301.59, 2409.15, 2402.99, 2401.06, 2617.89, 2745.05, 2768.72, 2277.7,
+      2220.83, 2286.36, 2675.38, 1939.18, 2500.95, 2209.39, 1780.76, 1665.79, 1874.18, 2302.54,
+      1891.4, 1910.35, 2044.63, 2247.64
+    ]
+  },
+  {
+    id: 'campaign-landing',
+    name: 'campaign-landing',
+    status: { label: 'Operational', severity: 'success' },
+    latency: 98,
+    delta: 10.54,
+    trend: [
+      105.49, 103.1, 103.58, 93.83, 87.47, 87.63, 72.17, 72.04, 94.71, 87.34, 70.53, 79.32, 88.95,
+      106.75, 96.26, 114.14, 119.03, 120.22, 107.42, 116.74, 108.78, 111.72, 96.77, 101.55
+    ]
+  },
+  {
+    id: 'docs-site',
+    name: 'docs-site',
+    status: { label: 'Operational', severity: 'success' },
+    latency: 121,
+    delta: -8.03,
+    trend: [
+      96.77, 120.51, 110.12, 101.64, 120.94, 126.42, 134.79, 134.1, 151.8, 122.97, 143.1, 128.14,
+      147.52, 124.23, 148.85, 124.28, 104.73, 124.28, 113.74, 96.17, 113.13, 109.24, 115.93, 104.17
+    ]
+  },
+  {
+    id: 'api-gateway',
+    name: 'api-gateway',
+    status: { label: 'Operational', severity: 'success' },
+    latency: 176,
+    delta: -9.49,
+    trend: [
+      186.03, 178.2, 150.11, 171.27, 172.52, 148.71, 162.95, 162.72, 175.66, 169.93, 168.56, 134.98,
+      177.79, 176.51, 198.4, 164.09, 195.65, 189.51, 192.61, 187.06, 226.81, 177.96, 200.99, 193.54
+    ]
+  }
+]
+
+export const sampleIdleServices: ServiceMonitoringService[] = sampleServices.map((service) => ({
+  ...service,
+  latency: null,
+  delta: null,
+  trend: []
+}))
+
+export const sampleLatency: Record<ServiceMonitoringWindow, ServiceMonitoringSeriesData> = {
+  '1h': {
+    labels: [
+      '10:05',
+      '10:10',
+      '10:15',
+      '10:20',
+      '10:25',
+      '10:30',
+      '10:35',
+      '10:40',
+      '10:45',
+      '10:50',
+      '10:55',
+      '11:00'
+    ],
+    series: [
+      {
+        id: 'p50',
+        name: 'p50',
+        values: [
+          127.92, 94.53, 97.31, 107.2, 97.36, 110.69, 100.89, 146.8, 146.33, 157.18, 125.77, 147.95
+        ]
+      },
+      {
+        id: 'p95',
+        name: 'p95',
+        values: [
+          374.75, 373.91, 308.53, 443.04, 485.87, 397.39, 521.52, 468.61, 397.76, 496.69, 440.19,
+          312.62
+        ]
+      },
+      {
+        id: 'p99',
+        name: 'p99',
+        values: [
+          1165.45, 930.06, 842.26, 817.89, 883.2, 619.11, 793.63, 920.73, 881.72, 909.44, 1103.83,
+          1106.58
+        ]
+      }
+    ]
+  },
+  '6h': {
+    labels: [
+      '05:15',
+      '05:30',
+      '05:45',
+      '06:00',
+      '06:15',
+      '06:30',
+      '06:45',
+      '07:00',
+      '07:15',
+      '07:30',
+      '07:45',
+      '08:00',
+      '08:15',
+      '08:30',
+      '08:45',
+      '09:00',
+      '09:15',
+      '09:30',
+      '09:45',
+      '10:00',
+      '10:15',
+      '10:30',
+      '10:45',
+      '11:00'
+    ],
+    series: [
+      {
+        id: 'p50',
+        name: 'p50',
+        values: [
+          109.27, 121.76, 123.83, 136.32, 143.34, 126.41, 154.32, 161.25, 154.04, 126.59, 144.91,
+          125.14, 123.9, 119.48, 136.03, 112.46, 100.17, 114.2, 92.48, 119.49, 102.27, 88.73, 88.59,
+          106.46
+        ]
+      },
+      {
+        id: 'p95',
+        name: 'p95',
+        values: [
+          360.16, 409.41, 410.82, 451.7, 420.29, 510.08, 543.55, 480.85, 517.95, 504.78, 469.87,
+          512.06, 362.62, 389.29, 367.81, 440.34, 315.09, 286.34, 386.74, 318.29, 345.86, 293.6,
+          390.07, 443.49
+        ]
+      },
+      {
+        id: 'p99',
+        name: 'p99',
+        values: [
+          734.58, 794.77, 703.1, 706.89, 825.77, 691.9, 1007.2, 756.71, 1078.27, 1008.97, 869.74,
+          1151.69, 1154.72, 1189.48, 1059.71, 1151.21, 989.75, 959.28, 1019.08, 879.11, 885.64,
+          909.6, 768.14, 801.24
+        ]
+      }
+    ]
+  },
+  '24h': {
+    labels: [
+      '12:00',
+      '13:00',
+      '14:00',
+      '15:00',
+      '16:00',
+      '17:00',
+      '18:00',
+      '19:00',
+      '20:00',
+      '21:00',
+      '22:00',
+      '23:00',
+      '00:00',
+      '01:00',
+      '02:00',
+      '03:00',
+      '04:00',
+      '05:00',
+      '06:00',
+      '07:00',
+      '08:00',
+      '09:00',
+      '10:00',
+      '11:00'
+    ],
+    series: [
+      {
+        id: 'p50',
+        name: 'p50',
+        values: [
+          113.92, 125.96, 114.96, 117.02, 113.25, 103.18, 118.59, 90.7, 90.48, 105.94, 98.49,
+          104.23, 147.72, 147.56, 122.78, 148.06, 149.49, 161.4, 152.31, 134.62, 146.18, 127.38,
+          127.85, 128.51
+        ]
+      },
+      {
+        id: 'p95',
+        name: 'p95',
+        values: [
+          299.24, 390.05, 365.72, 431.21, 381.87, 406.48, 400.03, 508, 525.04, 509.32, 479.46,
+          464.04, 426.39, 499.62, 517.73, 381.34, 355.4, 386.17, 409.9, 376.56, 297.01, 355.75,
+          359.71, 364.61
+        ]
+      },
+      {
+        id: 'p99',
+        name: 'p99',
+        values: [
+          691.25, 878.67, 869.6, 771.26, 1011.27, 1045.81, 1131.15, 1084.49, 923.34, 921.95, 983.26,
+          948.46, 1047, 1003.13, 1065.87, 855.97, 895.38, 925.79, 809.96, 798.72, 711.55, 898.95,
+          605.55, 837.83
+        ]
+      }
+    ]
+  }
+}
+
+export const sampleErrorRate: Record<ServiceMonitoringWindow, ServiceMonitoringSeriesData> = {
+  '1h': {
+    labels: [
+      '10:05',
+      '10:10',
+      '10:15',
+      '10:20',
+      '10:25',
+      '10:30',
+      '10:35',
+      '10:40',
+      '10:45',
+      '10:50',
+      '10:55',
+      '11:00'
+    ],
+    series: [
+      {
+        id: '4xx',
+        name: 'Status 4xx',
+        color: 'warning',
+        values: [2.03, 2.59, 2.38, 3.54, 2.62, 2.35, 2.53, 1.88, 1.6, 1.4, 1.69, 1.94]
+      },
+      {
+        id: '5xx',
+        name: 'Status 5xx',
+        color: 'danger',
+        values: [0.61, 0.63, 0.53, 0.66, 0.62, 0.85, 0.59, 0.54, 0.58, 0.48, 0.43, 0.37]
+      }
+    ]
+  },
+  '6h': {
+    labels: [
+      '05:15',
+      '05:30',
+      '05:45',
+      '06:00',
+      '06:15',
+      '06:30',
+      '06:45',
+      '07:00',
+      '07:15',
+      '07:30',
+      '07:45',
+      '08:00',
+      '08:15',
+      '08:30',
+      '08:45',
+      '09:00',
+      '09:15',
+      '09:30',
+      '09:45',
+      '10:00',
+      '10:15',
+      '10:30',
+      '10:45',
+      '11:00'
+    ],
+    series: [
+      {
+        id: '4xx',
+        name: 'Status 4xx',
+        color: 'warning',
+        values: [
+          2.36, 2.73, 2.19, 3.04, 2.31, 1.76, 2.1, 2.4, 1.56, 2.22, 2.12, 1.94, 2.31, 1.6, 2.4,
+          2.64, 1.89, 2.95, 3.15, 2.5, 3.12, 3.47, 2.53, 3.37
+        ]
+      },
+      {
+        id: '5xx',
+        name: 'Status 5xx',
+        color: 'danger',
+        values: [
+          0.63, 0.66, 0.71, 0.64, 0.81, 0.76, 0.66, 0.59, 0.68, 0.57, 0.59, 0.41, 0.57, 0.46, 0.36,
+          0.6, 0.64, 0.53, 0.45, 0.54, 0.5, 0.67, 0.56, 0.72
+        ]
+      }
+    ]
+  },
+  '24h': {
+    labels: [
+      '12:00',
+      '13:00',
+      '14:00',
+      '15:00',
+      '16:00',
+      '17:00',
+      '18:00',
+      '19:00',
+      '20:00',
+      '21:00',
+      '22:00',
+      '23:00',
+      '00:00',
+      '01:00',
+      '02:00',
+      '03:00',
+      '04:00',
+      '05:00',
+      '06:00',
+      '07:00',
+      '08:00',
+      '09:00',
+      '10:00',
+      '11:00'
+    ],
+    series: [
+      {
+        id: '4xx',
+        name: 'Status 4xx',
+        color: 'warning',
+        values: [
+          3.3, 2.66, 2.63, 2.54, 2.66, 2.89, 3.1, 2.84, 2.19, 2.01, 2.54, 2.62, 1.77, 1.9, 2.06,
+          1.9, 2.16, 1.45, 1.44, 2.19, 2.47, 1.96, 2.03, 2.58
+        ]
+      },
+      {
+        id: '5xx',
+        name: 'Status 5xx',
+        color: 'danger',
+        values: [
+          0.57, 0.45, 0.64, 0.48, 0.59, 0.75, 0.75, 0.73, 0.65, 0.64, 0.82, 0.66, 0.81, 0.67, 0.7,
+          0.62, 0.56, 0.48, 0.39, 0.54, 0.44, 0.45, 0.31, 0.49
+        ]
+      }
+    ]
+  }
+}
+
+export const sampleAlerts: ServiceMonitoringAlert[] = [
+  {
+    id: 'stage-5xx',
+    severity: 'danger',
+    level: 'Critical',
+    title: 'Status 5xx above 5%',
+    service: 'web-app-staging',
+    opened: '12 minutes ago'
+  },
+  {
+    id: 'eu-latency',
+    severity: 'warning',
+    level: 'Warning',
+    title: 'p95 latency above 800 ms',
+    service: 'web-app-eu-prod',
+    opened: '34 minutes ago'
+  },
+  {
+    id: 'eu-upstream',
+    severity: 'warning',
+    level: 'Warning',
+    title: 'Upstream timeouts rising',
+    service: 'web-app-eu-prod',
+    opened: '1 hour ago'
+  },
+  {
+    id: 'docs-disk',
+    severity: 'info',
+    level: 'Info',
+    title: 'Disk usage above 80%',
+    service: 'docs-site',
+    opened: '3 hours ago'
+  }
+]
 ```

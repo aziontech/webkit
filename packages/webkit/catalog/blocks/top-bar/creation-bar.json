@@ -11,6 +11,9 @@
    "file": "blocks/top-bar/creation-bar/variants/terminal.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { CreationBarAccount } from './creation-bar.vue'\n\nexport const sampleAccount: CreationBarAccount = {\n  name: 'Amy Chen',\n  email: 'amy.chen@example.com'\n}"
+ },
  "sfcFile": "blocks/top-bar/creation-bar/creation-bar.vue",
  "guidelinesFile": "blocks/top-bar/creation-bar/guidelines.md"
 }

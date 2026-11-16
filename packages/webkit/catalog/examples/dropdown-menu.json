@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Default dropdown with a single unlabeled group of six options and no left/right affordances. Click the trigger to open; controls drive placement, offset, and disabled.",
+   "summary": "Default dropdown with a single unlabeled group of six options and no left/right affordances. Click the trigger to open; controls drive side, align, sideOffset, and disabled.",
    "file": "examples/dropdown-menu/default.vue"
   },
   {

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/resource-detail/resource-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/resource-detail")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [SectionHeader](../../components/section-header.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [TopologyDiagram](../../components/topology-diagram.md), `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [SectionHeader](../../components/section-header.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [TopologyDiagram](../../components/topology-diagram.md), `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -66,6 +66,47 @@ For a resource made from the CLI, the `detail/get-started` section follows the s
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
 - A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
 
+## Data
+
+The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `resource-detail.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs) and keep their own records.
+
+| Prop / model  | Type                     | What it does                                                                                                     |
+| ------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `resource`    | `ResourceDetailResource` | The summary: address, deployment and environment, status, creation, framework; its `name` builds the tab routes. |
+| `v-model:tab` | `ResourceDetailTab`      | The open tab (`overview` by default); a route-driven page binds it to the route.                                 |
+
+| Event                | Payload          | When                                                        |
+| -------------------- | ---------------- | ----------------------------------------------------------- |
+| `resource-action`    | `(event, value)` | Copy URL (`copy-url`) or Settings (`settings`) in the menu. |
+| `connect-repository` | `(event)`        | Connect Git repository under Source.                        |
+
+To go live, render the block from a page that owns the request and the route:
+
+```vue
+<script setup lang="ts">
+  import ResourceDetail, { type ResourceDetailTab } from './resource-detail.vue'
+
+  const route = useRoute()
+  const router = useRouter()
+  const { data } = useResource(route.params.id)
+  const tab = computed({
+    get: () => (route.params.tab ?? 'overview') as ResourceDetailTab,
+    set: (next) => router.push(`/resources/${route.params.id}/${next}`)
+  })
+</script>
+
+<template>
+  <ResourceDetail
+    v-if="data"
+    v-model:tab="tab"
+    :resource="data"
+    @connect-repository="router.push(`/resources/${route.params.id}/build`)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the content in `layout-column` with its boundary inset, and let the tab bar run full-bleed above it.
@@ -110,7 +151,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ### Resource
 
-- ResourceOverview: the Overview tab of a resource made from the CLI, the summary card followed by Get started.
+- ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
@@ -168,27 +209,83 @@ Each variant is the same screen in another state: `get_block("detail/resource-de
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SectionHeader from '@aziontech/webkit/section-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
-  const tabs = [
+  import { sampleResource } from './sample'
+
+  /** A tab of the resource page. */
+  export type ResourceDetailTab = 'overview' | 'versions' | 'build' | 'deployments'
+
+  /** The resource the page shows. */
+  export interface ResourceDetailResource {
+    /** Slug name, used in the tab routes and the CLI link command. */
+    name: string
+    /** The live address, without the scheme; Visit and both address links open it. */
+    domain: string
+    /** The deployment that serves the address, linked to its page. */
+    deploymentId: string
+    /** The environment of that deployment, shown as a tag. */
+    environment: string
+    /** The status label. */
+    status: string
+    /** The status color. */
+    statusSeverity: StatusIndicatorSeverity
+    /** When the resource was created, shown as a relative time. */
+    createdAt: Date
+    /** Who created it, shown with an avatar. */
+    createdBy: string
+    /** The framework preset label. */
+    framework: string
+    /** The framework icon class, a colored icon such as ai-color ai-nextjs. */
+    frameworkIcon: string
+  }
+
+  export interface ResourceDetailProps {
+    /** The resource the page shows. Left out, the sample renders. */
+    resource?: ResourceDetailResource
+  }
+
+  const props = withDefaults(defineProps<ResourceDetailProps>(), {
+    resource: undefined
+  })
+
+  const emit = defineEmits<{
+    'resource-action': [
+      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+      value: DropdownMenuItemValue
+    ]
+    'connect-repository': [event: MouseEvent]
+  }>()
+
+  const activeTab = defineModel<ResourceDetailTab>('tab', { default: 'overview' })
+
+  const resource = computed<ResourceDetailResource>(() => props.resource ?? sampleResource)
+  const address = computed(() => `https://${resource.value.domain}`)
+
+  const { formatRelativeTime } = useLocale()
+  const created = computed(
+    () => `${formatRelativeTime(resource.value.createdAt)} by ${resource.value.createdBy}`
+  )
+
+  const tabs: { value: ResourceDetailTab; label: string }[] = [
     { value: 'overview', label: 'Overview' },
     { value: 'versions', label: 'Versions' },
     { value: 'build', label: 'Build' },
     { value: 'deployments', label: 'Deployments' }
   ]
 
-  const activeTab = ref('overview')
   const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
 
   const PATHS = [
@@ -196,7 +293,7 @@ Each variant is the same screen in another state: `get_block("detail/resource-de
     { label: 'GitHub Actions', value: 'actions' }
   ]
 
-  const CLI_STEPS = [
+  const cliSteps = computed(() => [
     {
       title: 'Install the CLI',
       description:
@@ -234,7 +331,7 @@ Each variant is the same screen in another state: `get_block("detail/resource-de
           language: 'bash',
           code: `platform login
 platform link \\
-  --name analytics-app`
+  --name ${resource.value.name}`
         }
       ]
     },
@@ -252,7 +349,7 @@ platform sync`
         }
       ]
     }
-  ]
+  ])
 
   const ACTIONS_STEPS = [
     {
@@ -303,7 +400,7 @@ jobs:
   ]
 
   const path = ref('cli')
-  const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : CLI_STEPS))
+  const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : cliSteps.value))
 </script>
 
 <template>
@@ -343,19 +440,19 @@ jobs:
                       />
                       <div class="flex min-w-0">
                         <Tooltip
-                          content="Open analytics-app-z1x2c3.example.com in a new tab"
+                          :content="`Open ${resource.domain} in a new tab`"
                           class="w-full"
                         >
                           <a
-                            href="https://analytics-app-z1x2c3.example.com"
+                            :href="address"
                             target="_blank"
                             rel="noopener noreferrer"
                             data-link
                             class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                           >
-                            <span class="truncate underline-offset-2 group-hover/link:underline"
-                              >analytics-app-z1x2c3.example.com</span
-                            >
+                            <span class="truncate underline-offset-2 group-hover/link:underline">{{
+                              resource.domain
+                            }}</span>
                             <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                             <i
                               class="ai ai-external-link shrink-0 text-body-xs leading-none"
@@ -369,14 +466,18 @@ jobs:
                     <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                       <Button
                         label="Visit"
-                        href="https://analytics-app-z1x2c3.example.com"
+                        :href="address"
                         target="_blank"
                         variant="secondary"
                         size="medium"
                         icon="ai ai-external-link"
                       />
 
-                      <DropdownMenu placement="bottom-end">
+                      <DropdownMenu
+                        side="bottom"
+                        align="end"
+                        @select="(event, value) => emit('resource-action', event, value)"
+                      >
                         <DropdownMenu.Trigger>
                           <Tooltip content="Resource actions">
                             <IconButton
@@ -427,18 +528,18 @@ jobs:
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
                           <Tooltip
-                            content="Open 1213275262 in Deployments"
+                            :content="`Open ${resource.deploymentId} in Deployments`"
                             class="w-full"
                           >
                             <Link
-                              label="1213275262"
-                              href="/deployments/1213275262"
+                              :label="resource.deploymentId"
+                              :href="`/deployments/${resource.deploymentId}`"
                               size="small"
                             />
                           </Tooltip>
                         </div>
                         <Tag
-                          label="Production"
+                          :label="resource.environment"
                           severity="neutral"
                           size="small"
                           class="shrink-0"
@@ -451,18 +552,19 @@ jobs:
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
                           <Tooltip
-                            content="Open analytics-app-z1x2c3.example.com in a new tab"
+                            :content="`Open ${resource.domain} in a new tab`"
                             class="w-full"
                           >
                             <a
-                              href="https://analytics-app-z1x2c3.example.com"
+                              :href="address"
                               target="_blank"
                               rel="noopener noreferrer"
                               data-link
                               class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                             >
-                              <span class="truncate underline-offset-2 group-hover/link:underline"
-                                >analytics-app-z1x2c3.example.com</span
+                              <span
+                                class="truncate underline-offset-2 group-hover/link:underline"
+                                >{{ resource.domain }}</span
                               >
                               <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                               <i
@@ -479,8 +581,8 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Status</span>
                       <div class="flex min-h-7 min-w-0 items-center">
                         <StatusIndicator
-                          severity="success"
-                          label="Ready"
+                          :severity="resource.statusSeverity"
+                          :label="resource.status"
                         />
                       </div>
                     </div>
@@ -489,11 +591,11 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Created</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <span class="truncate text-body-sm text-(--text-default)">
-                          2 weeks ago by John Smith
+                          {{ created }}
                         </span>
                         <Avatar
-                          alt="John Smith"
-                          label="John Smith"
+                          :alt="resource.createdBy"
+                          :label="resource.createdBy"
                           size="small"
                           variant="square"
                           class="shrink-0"
@@ -507,6 +609,7 @@ jobs:
                         <Button
                           variant="link"
                           label="Connect Git repository"
+                          @click="(event: MouseEvent) => emit('connect-repository', event)"
                         />
                       </div>
                     </div>
@@ -515,10 +618,13 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Framework</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <i
-                          class="ai-color ai-nextjs shrink-0 text-body-lg"
+                          :class="resource.frameworkIcon"
+                          class="shrink-0 text-body-lg"
                           aria-hidden="true"
                         />
-                        <span class="truncate text-body-sm text-(--text-default)"> Next.js </span>
+                        <span class="truncate text-body-sm text-(--text-default)">
+                          {{ resource.framework }}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -644,7 +750,7 @@ jobs:
                 :label="`Open ${tabLabel}`"
                 variant="outline"
                 size="small"
-                :href="`/resources/analytics-app/${activeTab}`"
+                :href="`/resources/${resource.name}/${activeTab}`"
               />
             </template>
           </EmptyState>
@@ -653,4 +759,25 @@ jobs:
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { ResourceDetailResource } from './resource-detail.vue'
+
+const referenceTime = Date.UTC(2026, 10, 10, 12)
+
+export const sampleResource: ResourceDetailResource = {
+  name: 'analytics-app',
+  domain: 'analytics-app-z1x2c3.example.com',
+  deploymentId: '1213275262',
+  environment: 'Production',
+  status: 'Ready',
+  statusSeverity: 'success',
+  createdAt: new Date(referenceTime - 14 * 86_400_000),
+  createdBy: 'John Smith',
+  framework: 'Next.js',
+  frameworkIcon: 'ai-color ai-nextjs'
+}
 ```

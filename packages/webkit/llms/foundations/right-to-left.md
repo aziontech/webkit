@@ -19,6 +19,10 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
   sign-out. Webkit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
   and `@aziontech/webkit/styles` for any `ai ai-chevron-right`-style glyph); on your own glyph add
   `rtl:-scale-x-100`.
+- Place overlays with `side` and `align` (`Tooltip`, `Popover`, `HoverCard`, `DropdownMenu`,
+  `Hint`, `NavigationMenu.Viewport`): `side="end"` opens on the right in `ltr` and on the left in
+  `rtl`, and `align="start"` lines the panel up with the trigger's start edge in both. Select,
+  Combobox, the date pickers and menus anchor at `bottom` + `start` and mirror on their own.
 - Mirror horizontal motion with the `rtl:` variant: a panel that slides in with
   `-translate-x-full` also gets `rtl:translate-x-full`.
 - Read the direction in script with `useDirection` (`@aziontech/webkit/use-direction`) whenever an
@@ -49,16 +53,23 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
 <script setup lang="ts">
   import { logicalArrowKey, useDirection } from '@aziontech/webkit/use-direction'
 
+  defineProps<{ label: string; domain: string }>()
+  const emit = defineEmits<{ next: [event: KeyboardEvent]; previous: [event: KeyboardEvent] }>()
+
   const dir = useDirection()
   const onKeydown = (event: KeyboardEvent) => {
     const key = logicalArrowKey(event.key, dir.value)
-    if (key === 'ArrowRight') next()
-    if (key === 'ArrowLeft') previous()
+    if (key === 'ArrowRight') emit('next', event)
+    if (key === 'ArrowLeft') emit('previous', event)
   }
 </script>
 
 <template>
-  <div class="flex items-center gap-(--spacing-xs) ps-(--spacing-md)">
+  <div
+    tabindex="0"
+    class="flex items-center gap-(--spacing-xs) ps-(--spacing-md)"
+    @keydown="onKeydown"
+  >
     <span class="truncate">{{ label }}</span>
     <span
       dir="ltr"

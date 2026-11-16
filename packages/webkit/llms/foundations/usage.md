@@ -12,18 +12,18 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 
 ```vue
 <script setup>
-  import ConsoleLayout from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot from '@aziontech/webkit/console-layout-root'
   import { navigation } from './navigation'
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     :navigation="navigation"
     :breadcrumbs="$route.meta.breadcrumbs ?? []"
     :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
   >
     <RouterView />
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
 </template>
 ```
 
@@ -39,18 +39,28 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeader` and `SiteFooter` data. The
   site is dark: `<html data-theme="dark">`. `SiteFooter` binds its language select with
   `v-model:language`; switch the locale from that value.
-- **Docs:** `DocLayout` — the docs tree, section links, `outline` (the article's headings), and
-  `actions`, `navigation-footer`, `aside`, `footer` slots. The document scrolls. A drill row
+- **Docs:** `DocLayout` — the docs tree, section links, `outline-groups`, and `actions`,
+  `navigation-footer`, `aside`, `footer` slots. The document scrolls. The page feeds the "On this
+  page" rail by itself: every `DocHeading` with an `anchor` (level 2 or 3) and every
+  `DocChangelogEntry` registers with the layout, in document order, so App.vue passes nothing per
+  page and a page never renders `DocLayout`; a page with no anchored heading (the docs home) shows no
+  outline rail and no `aside`. A drill row
   (`type: 'drill'`) opens in place and the rail's Back reads `Back to Docs` (`rootLabel` renames it);
   never add a hand-made Back row.
 
 The shell blocks (`shell/console`, `shell/site`, `shell/docs`) are these layouts with
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
+`npx @aziontech/webkit add shell/console` writes the block into your views folder and prints the
+path (`src/views/console.vue`): move that file to `src/App.vue`, and skip the route it suggests.
 A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeader`,
 `SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
 create flow (`create/*`, headed by the `top-bar/creation-bar` bar) or a
 signed-out screen (`auth/sign-in`): route it outside the layout (a route meta `App.vue` reads), and
-it keeps its own bar and `<main>` (`webkit-navigation`).
+it keeps its own bar and `<main>` (`webkit-navigation`). An app with two surfaces (a marketing site
+and its docs) does the same: `App.vue` picks `SiteLayout` or `DocLayout` from a route meta
+(`meta: { layout: 'docs' }`) around one `RouterView`, and every page stays a body. The `shell/docs`
+variants are such bodies: `webkit add shell/docs --variant Article` copies the shell (your App.vue
+or docs layout) and the page side by side.
 
 ## A screen begins from a block
 
@@ -65,7 +75,16 @@ canonical block. Before adapting it, read the guidelines (`view`, or the `guidel
 `get_block` returns): when to use the screen and when another block fits better, what each building block (A,
 B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
 matches your case, switch to the block it names. Then change only the content of the copy,
-keeping to the guidelines. Only when no block fits, compose from components (below). A marketing band is a page section, not a block (rule
+keeping to the guidelines. Only when no block fits, compose from components (below).
+
+A block takes its data through props and emits its actions; it fetches nothing. `add` copies its
+data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one). To go live,
+do not rewrite the block: render it from the routed page that owns the request and pass what the
+request returns (its `## Data` guidelines list the props and events):
+`<TableView :resources="rows" :loading="pending" :error="message" @refresh="load" @retry="load" />`.
+A data prop left out renders the sample; pass `[]` for none, and delete the `.sample.ts` file and
+its import once real data flows. A state variant (`--variant Empty`) is the same block with other
+props, so it imports the primary instead of copying it. A marketing band is a page section, not a block (rule
 `webkit-sections`).
 
 ## Headers and the docs home — never hand-build these
@@ -99,6 +118,8 @@ Structure and states first, polish last:
 - **Polish:** `/webkit-motion-polish` → `/webkit-final-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
 - **Adopting WebKit in an existing app:** `/webkit-adoption`
+- **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
+  lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 
 ## How to find a component
 
@@ -114,9 +135,9 @@ Do not guess a component name or import path. Look it up.
 
 A few components need **one-time wiring in the app entry before first use** — the catalog entry (and `get_component` on the MCP) carries it in a `setup` field. When `setup` is non-null, apply it BEFORE emitting code that uses the component, and check whether the project already has it (do not duplicate).
 
-- **Toast**: fire-from-anywhere (`toast.success('Saved')`) only renders if a region is mounted. Wire the service once in the entry — `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto `createApp()`; the plugin mounts the region automatically (options: `app.use(ToastPlugin, { position: 'top-right' })`). A manually mounted Toaster also counts — never add both blindly (the store keeps only the first region active, but one wiring is enough). `npx webkit doctor` flags toast usage with no wired region.
+- **Toast**: fire-from-anywhere (`toast.success('Saved')`) only renders if a region is mounted. Wire the service once in the entry — `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto `createApp()`; the plugin mounts the region automatically (options: `app.use(ToastPlugin, { position: 'top-end' })`). A manually mounted Toaster also counts — never add both blindly (the store keeps only the first region active, but one wiring is enough). `npx webkit doctor` flags toast usage with no wired region.
 
-- **Theme (light or dark)**: the theme is light by default. An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
+- **Theme (light or dark)**: with no `data-theme` the theme follows the device (`prefers-color-scheme`). An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark, and an app that is always light sets `data-theme="light"`; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
 
 - **WebkitProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import WebkitProvider from '@aziontech/webkit/webkit-provider'`.
 
@@ -148,7 +169,8 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/icon-button` -> `IconButton`.
 - ✅ One `WebkitProvider` at the app root with the user's locale and the catalogs of every language the app offers.
 - ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`).
-- ✅ `import '@aziontech/theme'`, `import '@aziontech/theme/fonts.css'` (unless the app hosts its own fonts) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
+- ✅ `import './webkit.css'` (the theme, the fonts and `./webkit.sources.css`, as `webkit init` writes it) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
+- ✅ `webkit()` from `@aziontech/webkit/vite-plugin` in `vite.config`: it keeps `src/webkit.sources.css`, the WebKit files Tailwind compiles, in step with your imports. Without Vite, run `npx @aziontech/webkit css` after adding or removing a WebKit import.
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
 - ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, and `ai-color ai-<name>` for a colour brand icon. WebKit 6 uses only the Azion set: write `ai ai-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
@@ -196,13 +218,17 @@ it only through its props (`variant`, `size`); a class or style on its tag is re
 
 ### Compound vs tree-shakeable root
 
-`Table` (and other composition components) has two import shapes. Use the narrow one when you can:
+`Table` (and every other composition component) has two import shapes. Lead with the compound, the
+form the examples and blocks use; reach for the root path only when you render the root alone:
 
-```js
-import Table from '@aziontech/webkit/table-root' // root only — smallest
-import TableRow from '@aziontech/webkit/table-row' // one sub-component
-import Table from '@aziontech/webkit/table' // full compound: Table.Row, Table.Cell, ...
+```ts
+import Table from '@aziontech/webkit/table' // compound: Table.Row, Table.Cell, ...
+import TableRoot from '@aziontech/webkit/table-root' // root only, no dot-notation parts
+import TableRow from '@aziontech/webkit/table-row' // one part on its own
 ```
+
+Bind each import to the PascalCase of its path: `table-root` is `TableRoot`, never `Table`, so
+`<Table.Row>` never appears on a binding that has no parts.
 
 ### Lazy-load a heavy overlay
 
@@ -253,10 +279,13 @@ site: your app does not serve it (lint `webkit/no-root-relative-asset`).
 
 ```ts
 // src/main.ts
-import '@aziontech/theme'
-import '@aziontech/theme/fonts.css' // the Azion font faces; leave out when the app hosts its own fonts
+import './webkit.css' // the theme, the fonts and the WebKit files this app imports
 import '@aziontech/icons'
 ```
+
+`src/webkit.css` imports `./webkit.sources.css`, one `@source` per WebKit file the app imports, so
+the stylesheet holds only the classes of the components you use. A bare `import '@aziontech/theme'`
+compiles no component class: the components render unstyled.
 
 ## Quality Checklist
 
@@ -268,7 +297,7 @@ Before you finish UI work in this project:
 - [ ] Icons imported individually; the whole set is never bulk-imported.
 - [ ] Root-only usage takes the `-root` path; heavy overlays are lazy-loaded.
 - [ ] No custom component reinvents something webkit already provides (checked via MCP or `catalog.json`).
-- [ ] `@aziontech/theme` and `@aziontech/icons` are imported once at the app entry.
+- [ ] `./webkit.css` and `@aziontech/icons` are imported once at the app entry, and `npx @aziontech/webkit css --check` passes (the Vite plugin keeps it so).
 - [ ] `WebkitProvider` wraps the app once with the user's locale, and `catalogs` registers every non-English language the app offers.
 
 ## Part B — using a webkit component in your project

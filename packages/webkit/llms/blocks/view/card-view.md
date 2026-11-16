@@ -68,7 +68,45 @@ When `status` is `no-match`, the `CardList` `#empty` slot holds a medium `EmptyS
 
 ### I. Empty listing and load failure — `Card`, `EmptyState`, `Alert`, `Button` (required)
 
-When `status` is `error`, a danger `Alert` with Retry (bound to the collection's `refresh`) takes the cards' place. When `status` is `empty`, the cards and the pagination give way to a flush `Card :padded="false"` holding a medium `EmptyState`, as table-view does, with the module glyph, one sentence, and a small secondary `Create <Object>` with the heading's label. The heading and the controls row stay.
+When `error` is set, a danger `Alert` with that message and Retry (which emits `retry`) takes the cards' place. When `status` is `empty`, the cards and the pagination give way to a flush `Card :padded="false"` holding a medium `EmptyState`, as table-view does, with the module glyph, one sentence, and a small secondary `Create <Object>` with the heading's label. The heading and the controls row stay.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `CardViewApplication` and `CardViewProps` are exported from `card-view.vue`, and `sample.ts` holds the sample cards the block renders when `applications` is left out (and never while `loading` or `error` is set).
+
+| Prop           | Type                    | What it does                                                                                                                                 |
+| -------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `applications` | `CardViewApplication[]` | The cards; the filter, the selection and the pages run on them in the browser. Pass `[]` for an account with none.                           |
+| `loading`      | `boolean`               | A request is in flight. With no cards it is the first load (the controls disable, `CardList` shows placeholder cards); with cards a refresh. |
+| `error`        | `string`                | Why the load failed, shown in the danger `Alert` with Retry that replaces the cards.                                                         |
+
+| Event    | Payload                 | When                                                                            |
+| -------- | ----------------------- | ------------------------------------------------------------------------------- |
+| `create` | `(event)`               | Create Application, in the heading or the empty card.                           |
+| `retry`  | `(event)`               | Retry in the error alert.                                                       |
+| `delete` | `(event, applications)` | The delete dialog was confirmed; the selected cards are already gone from view. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import CardView from './card-view.vue'
+
+  const { data, pending, error, refresh } = useApplications()
+  const loadError = "Couldn't load the applications. Check your connection and retry."
+</script>
+
+<template>
+  <CardView
+    :applications="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -118,9 +156,9 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 ## States
 
 - Default: applications exist; the cards show them with the property filter, multi-select with Delete (n) behind its confirmation dialog, preferences and pagination wired, and filtering to nothing shows No matching applications with Clear filters.
-- Loading: the first load; the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards (`loading`, `aria-busy`).
-- Error: the applications could not load; the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place.
-- Empty: the account has no applications; `useCollection` reports `empty`, the heading and controls stay, and a flush card holding a medium empty state with Create Application replaces the cards.
+- Loading: the first load (`loading` with no `applications`); the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards (`loading`, `aria-busy`).
+- Error: the applications could not load (`error` is set); the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place.
+- Empty: the account has no applications (`applications` is `[]`); `useCollection` reports `empty`, the heading and controls stay, and a flush card holding a medium empty state with Create Application replaces the cards.
 
 ## Related
 
@@ -161,65 +199,66 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, useId, watch } from 'vue'
 
-  type ApplicationStatus = 'Active' | 'Degraded' | 'Inactive'
+  import { sampleApplications } from './sample'
 
-  type Application = {
+  /** How an application is serving. */
+  export type CardViewApplicationStatus = 'Active' | 'Degraded' | 'Inactive'
+
+  /** One card of the list. */
+  export interface CardViewApplication {
+    /** Stable key, used in the link and the selection. */
     id: string
+    /** Display name, linked to the application page. */
     name: string
-    status: ApplicationStatus
+    /** How the application is serving, shown as a tag. */
+    status: CardViewApplicationStatus
+    /** The domain it answers on. */
     domain: string
+    /** The region it runs in. */
     region: string
+    /** Requests in the last 24 hours, shown in compact notation. */
     requests: number
+    /** Who owns it. */
     owner: string
   }
 
+  export interface CardViewProps {
+    /** The applications to list; filtered and paged in the browser. Left out, the sample renders. */
+    applications?: CardViewApplication[]
+    /** A request is in flight: with no cards it is the first load, with cards a refresh. */
+    loading?: boolean
+    /** Why the applications could not load; a danger alert with Retry replaces the cards. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<CardViewProps>(), {
+    applications: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    create: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    delete: [event: Event, applications: CardViewApplication[]]
+  }>()
+
   interface Field {
-    id: Exclude<keyof Application, 'id' | 'name'>
+    id: Exclude<keyof CardViewApplication, 'id' | 'name'>
     header: string
   }
 
-  const app = (
-    n: number,
-    name: string,
-    status: ApplicationStatus,
-    domain: string,
-    region: string,
-    requests: number,
-    owner: string
-  ): Application => ({
-    id: `app-${String(n).padStart(2, '0')}`,
-    name,
-    status,
-    domain,
-    region,
-    requests,
-    owner
-  })
-
-  const applications: Application[] = [
-    app(1, 'storefront', 'Active', 'shop.example.com', 'sa-east', 1240000, 'Ethan Brooks'),
-    app(2, 'checkout', 'Active', 'pay.example.com', 'us-east', 310000, 'Jordan Kim'),
-    app(3, 'blog', 'Inactive', 'blog.example.com', 'eu-west', 0, 'Riley Carter'),
-    app(4, 'docs', 'Active', 'docs.example.com', 'sa-east', 88000, 'Priya Patel'),
-    app(5, 'status-page', 'Active', 'status.example.com', 'us-east', 42000, 'Chris Taylor'),
-    app(6, 'image-resizer', 'Active', 'img.example.com', 'eu-west', 2900000, 'John Smith'),
-    app(7, 'auth-gateway', 'Degraded', 'auth.example.com', 'sa-east', 520000, 'Sam Lee'),
-    app(8, 'landing', 'Inactive', 'www.example.com', 'us-east', 0, 'Taylor Reed'),
-    app(9, 'api', 'Active', 'api.example.com', 'eu-west', 4100000, 'Ethan Brooks'),
-    app(10, 'search', 'Active', 'search.example.com', 'sa-east', 760000, 'Jordan Kim'),
-    app(11, 'webhooks', 'Degraded', 'hooks.example.com', 'us-east', 12000, 'Riley Carter'),
-    app(12, 'reports', 'Active', 'reports.example.com', 'eu-west', 9000, 'Priya Patel'),
-    app(13, 'media', 'Active', 'media.example.com', 'sa-east', 1800000, 'Chris Taylor'),
-    app(14, 'admin', 'Inactive', 'admin.example.com', 'us-east', 300, 'John Smith')
-  ]
-
-  const fields: Field[] = [
-    { id: 'status', header: 'Status' },
-    { id: 'domain', header: 'Domain' },
-    { id: 'region', header: 'Region' },
-    { id: 'requests', header: 'Requests in 24h' },
-    { id: 'owner', header: 'Owner' }
-  ]
+  const FIELD_HEADERS: Record<Field['id'], string> = {
+    status: 'Status',
+    domain: 'Domain',
+    region: 'Region',
+    requests: 'Requests in 24h',
+    owner: 'Owner'
+  }
+  const fields = (Object.keys(FIELD_HEADERS) as Field['id'][]).map((id): Field => ({
+    id,
+    header: FIELD_HEADERS[id]
+  }))
 
   const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
@@ -236,7 +275,19 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
     { key: 'requests', label: 'Requests in 24h', type: 'number' }
   ]
 
-  const items = ref<Application[]>([...applications])
+  const source = computed<CardViewApplication[]>(
+    () => props.applications ?? (props.loading || props.error ? [] : sampleApplications)
+  )
+  const items = ref<CardViewApplication[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+
+  const blocked = computed(() => (props.loading && items.value.length === 0) || props.error !== '')
 
   const {
     cardListProps,
@@ -245,7 +296,6 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
     preferencesProps,
     preferences,
     status,
-    refresh: retry,
     totalCount,
     selectedCount,
     selectedItems,
@@ -275,7 +325,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
   const { formatNumber } = useLocale()
 
   const requestsFormat = (value: number) => formatNumber(value, { notation: 'compact' })
-  const severityOf = (value: ApplicationStatus): TagSeverity =>
+  const severityOf = (value: CardViewApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'neutral'
 
   const CONFIRM_WORD = 'delete'
@@ -296,12 +346,14 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
     if (isOpen) confirmation.value = ''
   })
 
-  const confirmDelete = () => {
+  const confirmDelete = (event: Event) => {
     if (!canDelete.value) return
-    const doomed = new Set(selectedItems.value.map((item) => item.id))
+    const deleted = [...selectedItems.value]
+    const doomed = new Set(deleted.map((item) => item.id))
     items.value = items.value.filter((item) => !doomed.has(item.id))
     clearSelection()
     deleteOpen.value = false
+    emit('delete', event, deleted)
   }
 </script>
 
@@ -326,6 +378,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
             icon="ai ai-plus"
             variant="primary"
             size="large"
+            @click="(event: MouseEvent) => emit('create', event)"
           />
         </template>
       </PageHeader>
@@ -337,6 +390,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                 v-bind="propertyFilterProps"
                 placeholder="Filter applications"
                 aria-label="Filter applications"
+                :disabled="blocked"
               />
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -351,7 +405,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                     icon="ai ai-trash"
                     variant="outline"
                     size="medium"
-                    :disabled="!selectedCount"
+                    :disabled="blocked || !selectedCount"
                   />
                 </template>
                 <div class="flex flex-col gap-(--spacing-md)">
@@ -400,12 +454,20 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                 v-bind="preferencesProps"
                 title="Card preferences"
                 :sections="['page-size', 'columns']"
+                :disabled="blocked"
               />
             </div>
           </header>
 
+          <Alert
+            v-if="error"
+            severity="danger"
+            :label="error"
+            action-label="Retry"
+            @action="(event: MouseEvent) => emit('retry', event)"
+          />
           <Card
-            v-if="status === 'empty'"
+            v-else-if="status === 'empty' && !loading"
             :padded="false"
           >
             <template #default>
@@ -421,22 +483,17 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                     icon="ai ai-plus"
                     variant="secondary"
                     size="small"
+                    @click="(event: MouseEvent) => emit('create', event)"
                   />
                 </template>
               </EmptyState>
             </template>
           </Card>
-          <Alert
-            v-else-if="status === 'error'"
-            severity="danger"
-            label="Couldn't load the applications. Check your connection and retry."
-            action-label="Retry"
-            @action="retry"
-          />
 
           <template v-else>
             <CardList
               v-bind="cardListProps"
+              :loading="loading"
               aria-label="Applications"
             >
               <template #header="{ item }">
@@ -501,4 +558,45 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { CardViewApplication, CardViewApplicationStatus } from './card-view.vue'
+
+const app = (
+  n: number,
+  name: string,
+  status: CardViewApplicationStatus,
+  domain: string,
+  region: string,
+  requests: number,
+  owner: string
+): CardViewApplication => ({
+  id: `app-${String(n).padStart(2, '0')}`,
+  name,
+  status,
+  domain,
+  region,
+  requests,
+  owner
+})
+
+export const sampleApplications: CardViewApplication[] = [
+  app(1, 'storefront', 'Active', 'shop.example.com', 'sa-east', 1240000, 'Ethan Brooks'),
+  app(2, 'checkout', 'Active', 'pay.example.com', 'us-east', 310000, 'Jordan Kim'),
+  app(3, 'blog', 'Inactive', 'blog.example.com', 'eu-west', 0, 'Riley Carter'),
+  app(4, 'docs', 'Active', 'docs.example.com', 'sa-east', 88000, 'Priya Patel'),
+  app(5, 'status-page', 'Active', 'status.example.com', 'us-east', 42000, 'Chris Taylor'),
+  app(6, 'image-resizer', 'Active', 'img.example.com', 'eu-west', 2900000, 'John Smith'),
+  app(7, 'auth-gateway', 'Degraded', 'auth.example.com', 'sa-east', 520000, 'Sam Lee'),
+  app(8, 'landing', 'Inactive', 'www.example.com', 'us-east', 0, 'Taylor Reed'),
+  app(9, 'api', 'Active', 'api.example.com', 'eu-west', 4100000, 'Ethan Brooks'),
+  app(10, 'search', 'Active', 'search.example.com', 'sa-east', 760000, 'Jordan Kim'),
+  app(11, 'webhooks', 'Degraded', 'hooks.example.com', 'us-east', 12000, 'Riley Carter'),
+  app(12, 'reports', 'Active', 'reports.example.com', 'eu-west', 9000, 'Priya Patel'),
+  app(13, 'media', 'Active', 'media.example.com', 'sa-east', 1800000, 'Chris Taylor'),
+  app(14, 'admin', 'Inactive', 'admin.example.com', 'us-east', 300, 'John Smith')
+]
 ```

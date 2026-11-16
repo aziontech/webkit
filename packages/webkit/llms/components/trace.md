@@ -21,7 +21,7 @@
 - Turn on `zoomable` for a run with many short spans next to one long one, so the short ones can be read; bind `v-model:range` when the logs or a chart beside the trace should follow the same window.
 - Use `events` for moments that have no duration of their own (a cache miss, a retry, the first byte), with `at` on the run's clock; keep the names short, they are listed in the details.
 - Turn on `highlightSlowest` where the question is where the time went; the flag goes to the longest span under the root, never to the root itself, which always spans the run.
-- Bind `v-model:selected` when another view (a request path, a log line) selects the same span.
+- Bind `v-model:selected-key` when another view (a request path, a log line) selects the same span.
 - Name the waterfall after the run (`aria-label="Trace of inv_7f21"`).
 
 ## Don’t
@@ -49,15 +49,15 @@
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the spans load; search and selection wait. |
 | `zoomable` | `boolean` | `false` | false | Shows a minimap under the axis to zoom the waterfall into a window of the run. Supports v-model:range. |
 | `highlightSlowest` | `boolean` | `false` | false | Flags the span that took longest, other than the root, in its row and its details. |
-| `selected` | `string` | `''` | false | Two-way value (`v-model:selected`). |
+| `selectedKey` | `string` | `''` | false | Two-way value (`v-model:selectedKey`). |
 | `range` | `TraceRange \| null` | `null` | false | Two-way value (`v-model:range`). |
 
 ## v-model
 
-| Model              | Type                 | Default | Emits             | Notes                                                                                                                                                                                                       |
-| ------------------ | -------------------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:selected` | `string`             | `''`    | `update:selected` | Id of the span whose details show under the waterfall, via `defineModel('selected')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
-| `v-model:range`    | `TraceRange \| null` | `null`  | `update:range`    | The visible window of the run clock, via `defineModel('range')`. `null` shows the whole run. Applied with or without `zoomable`; clamped to the run and widened to at least 1% of it.                       |
+| Model                 | Type                 | Default | Emits                | Notes                                                                                                                                                                                                          |
+| --------------------- | -------------------- | ------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:selectedKey` | `string`             | `''`    | `update:selectedKey` | Id of the span whose details show under the waterfall, via `defineModel('selectedKey')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
+| `v-model:range`       | `TraceRange \| null` | `null`  | `update:range`       | The visible window of the run clock, via `defineModel('range')`. `null` shows the whole run. Applied with or without `zoomable`; clamped to the run and widened to at least 1% of it.                          |
 
 ## States
 
@@ -201,7 +201,7 @@
 
 <template>
   <Trace
-    v-model:selected="selected"
+    v-model:selected-key="selected"
     :spans="spans"
     aria-label="Trace of the test run"
   />
@@ -276,7 +276,7 @@
 
 <template>
   <Trace
-    v-model:selected="selected"
+    v-model:selected-key="selected"
     :spans="spans"
     aria-label="Trace of the failed run"
   />
@@ -330,7 +330,7 @@
 
 <template>
   <Trace
-    v-model:selected="selected"
+    v-model:selected-key="selected"
     :spans="spans"
     aria-label="Trace of the checkout run"
   />

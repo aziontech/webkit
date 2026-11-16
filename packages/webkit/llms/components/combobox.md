@@ -92,6 +92,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 - `data-disabled`, `data-invalid` on the root mirror the resolved props (prop or `Field`)
 - Option rows: `data-active` (the keyboard/pointer highlight), `data-selected` (equals the committed value), `data-disabled`
 - The field shows the selected option's `label` when the value equals an option's `value`, otherwise the value itself
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the listbox panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility
 
@@ -107,7 +108,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 ## Right-to-left
 
-- Layout: logical utilities only (`ps-`/`pe-`, `text-start`, `ms-auto`); the list anchors at `bottom-start` and mirrors.
+- Layout: logical utilities only (`ps-`/`pe-`, `text-start`, `ms-auto`); the list anchors at `side="bottom"` + `align="start"`, which lines it up with the field's right edge under `rtl`.
 - Icons: the search glyph and the check mark are not mirrored.
 - Keyboard: arrows are vertical, no change under rtl; `Home`/`End` keep their meaning.
 - User data: option labels and the field value render with `dir="auto"` / `<bdi>`, so Latin identifiers inside rtl text keep their order.

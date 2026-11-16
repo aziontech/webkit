@@ -55,7 +55,45 @@ A flush `Card` with an `Item.List` holding one `SettingsRow` titled Active with 
 
 ### G. Footer — `PanelFooter`, `Button`, `Alert` (required)
 
-`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. A save that fails keeps the drawer open with every field and a danger `Alert` at the top of `PanelBody` ("Rule not saved. You are offline; check your connection and save again."); Save retries.
+`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. Save emits `submit` with the values. A save that fails (`error` set) keeps the drawer open with every field and a danger `Alert` at the top of `PanelBody` holding that message ("Rule not saved. You are offline; check your connection and save again."); Save retries.
+
+## Data
+
+The block takes the rule it edits through props and emits the values on Save; it fetches nothing and saves nothing. `RuleBuilderRule`, `RuleBuilderCondition`, `RuleBuilderBehavior` and `RuleBuilderProps` are exported from `rule-builder.vue`, and `sample.ts` holds the sample rule the Composed state edits.
+
+| Prop          | Type                      | What it does                                                                                                |
+| ------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `rule`        | `RuleBuilderRule \| null` | The rule to edit: the drawer becomes Edit Rule with the phase locked. Left out, the drawer adds a new rule. |
+| `loading`     | `boolean`                 | The save is in flight: the form locks and Save spins. When it turns off with no `error`, the drawer closes. |
+| `error`       | `string`                  | Why the save failed, in the danger `Alert` at the top of the drawer; the form is kept so Save retries.      |
+| `defaultOpen` | `boolean`                 | The drawer starts open.                                                                                     |
+
+| Event    | Payload           | When                                                                      |
+| -------- | ----------------- | ------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Save passed validation; `values` is the whole rule, without internal ids. |
+
+To go live, render the block from a page that owns the save request:
+
+```vue
+<script setup lang="ts">
+  import RuleBuilder, { type RuleBuilderRule } from './rule-builder.vue'
+
+  const { rule } = useRule()
+  const { pending, error, run } = useSaveRule()
+  const save = (_event: Event, values: RuleBuilderRule) => run(values)
+</script>
+
+<template>
+  <RuleBuilder
+    :rule="rule"
+    :loading="pending"
+    :error="error ? 'Rule not saved. Check your connection and save again.' : ''"
+    @submit="save"
+  />
+</template>
+```
+
+With no `loading` set during the `submit` handler the block treats the save as done at once and closes the drawer.
 
 ## Do
 
@@ -95,8 +133,8 @@ A flush `Card` with an `Item.List` holding one `SettingsRow` titled Active with 
 
 ## States
 
-- Default: Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
-- Composed: Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
+- Default: `rule` left out; Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
+- Composed: `rule` set to the sample; Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
 - In a list: `view/rule-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add Rule) and writes the saved rule back to its row.
 
 ## Related
@@ -153,18 +191,64 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     phases: string[]
     argument: BehaviorArgument | null
   }
-  type Condition = { id: string; variable: string; operator: string; argument: string }
-  type RuleBehavior = { id: string; type: string; [field: string]: string }
-  type RuleSeed = {
-    name: string
-    description: string
-    phase: string
-    criteria: {
-      conditions: { join: string | null; variable: string; operator: string; argument: string }[]
-    }[]
-    behaviors: { type: string; [field: string]: string }[]
-    status: string
+  type Condition = { variable: string; id: string; operator: string; argument: string }
+  type RuleBehavior = { type: string; id: string; [field: string]: string }
+
+  /** One condition: a variable compared with an argument. */
+  export interface RuleBuilderCondition {
+    /** The variable to compare, such as the request URI. */
+    variable: string
+    /** The comparison, such as is-equal or matches. */
+    operator: string
+    /** The value compared with; empty for exists and does-not-exist. */
+    argument: string
   }
+
+  /** One behavior: its type and the argument fields that type takes. */
+  export interface RuleBuilderBehavior {
+    /** The behavior, such as rewrite-request or set-cache-policy. */
+    type: string
+    /** The argument fields, such as target or cacheId. */
+    [field: string]: string
+  }
+
+  /** A rule as the drawer opens on it, and the values Save sends. */
+  export interface RuleBuilderRule {
+    /** Names the rule in the list. */
+    name: string
+    /** A note for whoever reads the rule next. */
+    description: string
+    /** request or response. */
+    phase: string
+    /** Groups of conditions: every condition in a group must match, any one group is enough. */
+    criteria: RuleBuilderCondition[][]
+    /** What the rule does, top to bottom. */
+    behaviors: RuleBuilderBehavior[]
+    /** Whether the rule runs. */
+    active: boolean
+  }
+
+  export interface RuleBuilderProps {
+    /** The rule to edit: the drawer becomes Edit Rule with the phase locked. Left out, it adds a new rule. */
+    rule?: RuleBuilderRule | null
+    /** The save is in flight: the form locks and Save spins; when it ends with no error the drawer closes. */
+    loading?: boolean
+    /** Why the save failed, shown in the danger alert at the top of the drawer; the form is kept. */
+    error?: string
+    /** The drawer starts open. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<RuleBuilderProps>(), {
+    rule: null,
+    loading: false,
+    error: '',
+    defaultOpen: false
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: RuleBuilderRule]
+  }>()
   type RuleForm = {
     name: string
     description: string
@@ -174,9 +258,8 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     active: boolean
   }
 
-  const open = ref(false)
-  const editing = false
-  const rule = null
+  const open = ref(props.defaultOpen)
+  const editing = computed(() => props.rule !== null)
 
   const PHASES = [
     {
@@ -478,8 +561,8 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
   let nextId = 0
   const uid = () => String((nextId += 1))
   const newCondition = (): Condition => ({
-    id: uid(),
     variable: '',
+    id: uid(),
     operator: 'is-equal',
     argument: ''
   })
@@ -488,7 +571,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     { key: 'operator', label: 'Operator' },
     { key: 'argument', label: 'Argument' }
   ]
-  const newBehavior = (): RuleBehavior => ({ id: uid(), type: 'deliver' })
+  const newBehavior = (): RuleBehavior => ({ type: 'deliver', id: uid() })
   const blankForm = (): RuleForm => ({
     name: '',
     description: '',
@@ -497,7 +580,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     behaviors: [newBehavior()],
     active: true
   })
-  const formFor = (seed: RuleSeed | null): RuleForm =>
+  const formFor = (seed: RuleBuilderRule | null): RuleForm =>
     !seed
       ? blankForm()
       : {
@@ -505,20 +588,27 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
           description: seed.description,
           phase: seed.phase,
           criteria: seed.criteria.map((group) =>
-            group.conditions.map(({ variable, operator, argument }) => ({
-              id: uid(),
-              variable,
-              operator,
-              argument
-            }))
+            group.map((condition) => ({ ...condition, id: uid() }))
           ),
           behaviors: seed.behaviors.map((behavior) => ({ ...behavior, id: uid() })),
-          active: seed.status === 'Active'
+          active: seed.active
         }
+  const valuesOf = (): RuleBuilderRule => ({
+    name: form.name.trim(),
+    description: form.description,
+    phase: form.phase,
+    criteria: form.criteria.map((group) =>
+      group.map(({ variable, operator, argument }) => ({ variable, operator, argument }))
+    ),
+    behaviors: form.behaviors.map(({ id: _id, ...behavior }) => behavior),
+    active: form.active
+  })
 
   const form = reactive(blankForm())
   const submitted = ref(false)
-  const submitting = ref(false)
+  const submitting = computed(() => props.loading)
+  const pending = ref(false)
+  const saveError = ref('')
   const nameError = computed(() => submitted.value && !form.name.trim())
   const criteriaErrors = computed(() =>
     submitted.value
@@ -534,12 +624,15 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     open,
     (isOpen) => {
       if (!isOpen) return
-      Object.assign(form, formFor(rule))
+      Object.assign(form, formFor(props.rule))
       submitted.value = false
+      pending.value = false
       saveError.value = ''
     },
     { immediate: true }
   )
+
+  const title = computed(() => (editing.value ? 'Edit Rule' : 'Add Rule'))
 
   const behaviorsForPhase = computed(() =>
     behaviorsFor(form.phase).map(({ value, label }) => ({ value, label }))
@@ -566,7 +659,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
 
   const setBehaviorType = (index: number, type: string) => {
     if (form.behaviors[index].type === type) return
-    form.behaviors[index] = { id: form.behaviors[index].id, type }
+    form.behaviors[index] = { type, id: form.behaviors[index].id }
   }
   const argumentMissing = (behavior: RuleBehavior, field: string) =>
     submitted.value && !String(behavior[field] ?? '').trim()
@@ -579,7 +672,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     (phase) => {
       form.behaviors.forEach((behavior, index) => {
         if (!behaviorAllowedIn(behavior.type, phase)) {
-          form.behaviors[index] = { id: behavior.id, type: 'deliver' }
+          form.behaviors[index] = { type: 'deliver', id: behavior.id }
           return
         }
         const argument = behaviorArgument(behavior.type)
@@ -604,12 +697,28 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     form.behaviors.length > 0 &&
     form.behaviors.every(behaviorFilled)
   const formEl = ref<HTMLFormElement | null>(null)
-  const saveError = ref('')
-  const saveRequest = () =>
-    new Promise<boolean>((resolve) => {
-      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
-    })
-  const submit = async () => {
+
+  watch(
+    () => props.error,
+    (message) => {
+      if (open.value) saveError.value = message
+    }
+  )
+
+  watch(
+    () => props.loading,
+    (now, was) => {
+      if (!was || now || !pending.value) return
+      pending.value = false
+      if (props.error) {
+        saveError.value = props.error
+        return
+      }
+      open.value = false
+    }
+  )
+
+  const submit = async (event: Event) => {
     submitted.value = true
     if (submitting.value) return
     if (!isValid()) {
@@ -622,12 +731,15 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
       )
       return
     }
-    submitting.value = true
     saveError.value = ''
-    const saved = await saveRequest()
-    submitting.value = false
-    if (!saved) {
-      saveError.value = 'Rule not saved. You are offline; check your connection and save again.'
+    emit('submit', event, valuesOf())
+    await nextTick()
+    if (props.loading) {
+      pending.value = true
+      return
+    }
+    if (props.error) {
+      saveError.value = props.error
       return
     }
     open.value = false
@@ -641,7 +753,17 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     side="end"
   >
     <DrawerTrigger>
-      <div class="w-full md:w-fit">
+      <Button
+        v-if="editing"
+        label="Edit Rule"
+        icon="ai ai-pencil"
+        variant="outline"
+        size="medium"
+      />
+      <div
+        v-else
+        class="w-full md:w-fit"
+      >
         <Button
           label="Add Rule"
           icon="ai ai-plus"
@@ -655,13 +777,13 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
       <form
         ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
-        aria-label="Add Rule"
+        :aria-label="title"
         novalidate
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>Add Rule</DrawerTitle>
+            <DrawerTitle>{{ title }}</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Handle the conditional execution of behaviors through logical operators.
             </p>
@@ -683,7 +805,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
-            <legend class="sr-only">Add Rule</legend>
+            <legend class="sr-only">{{ title }}</legend>
             <SettingsSection
               title="General"
               hint="Names the rule in the list and in the deployment log."
@@ -1034,4 +1156,22 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
     </DrawerContent>
   </Drawer>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { RuleBuilderRule } from './rule-builder.vue'
+
+export const sampleRule: RuleBuilderRule = {
+  name: 'Docs rewrite',
+  description: 'Rewrites the docs path and caches it as a static asset.',
+  phase: 'request',
+  criteria: [[{ variable: '${uri}', operator: 'matches', argument: '/docs/*' }]],
+  behaviors: [
+    { type: 'rewrite-request', target: '/documentation${uri}' },
+    { type: 'set-cache-policy', cacheId: 'cs-static' }
+  ],
+  active: true
+}
 ```

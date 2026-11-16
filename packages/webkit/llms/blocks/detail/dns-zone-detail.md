@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/dns-zone-detail/dns-zone-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/dns-zone-detail")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -57,17 +57,84 @@ The Records tab opens with a small `PageHeader` titled Records with a one-senten
 
 One row above the table: a `PropertyFilter` ("Filter records") that takes free text or a property token (Name, Type, Policy, Value), then outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` for page size and visible columns. `useCollection` owns the filter, sort, page and column state: the filter rewinds to the first page, ID is hidden by default and Name cannot be hidden. It is the same recipe as `view/table-view`.
 
-### H. Records table — `Card`, `DataTable`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
+### H. Records table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Tag` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound to `useCollection`'s `tableProps` (row key, sorting, pages of 10 and the column visibility) and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description stay blank when they do not apply; no dash, no "None".
+`Card :padded="false"` around `DataTable :bordered="false"` bound to `useCollection`'s `tableProps` (row key, sorting, pages of 10 and the column visibility) and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `TableCellId` ("Copy record ID") and Value is `TableCellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `TableCellActions` named after the record. Weight and Description stay blank when they do not apply; no dash, no "None".
 
 ### I. Empty and no-match — `EmptyState`, `Button` (required)
 
 The table's `#empty` slot tells the two cases apart through `useCollection`'s `status`. A filter that matches nothing shows "No matching records" with Clear filters; a zone with no records shows "No records yet" with Add Record and Import zone file.
 
-### J. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
+### J. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
-`Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
+`TableCellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
+
+### K. Load failure — `Alert` (optional)
+
+When `error` is set, a danger `Alert` with Retry takes the records table's place; the heading and the controls row stay, the controls disabled.
+
+## Data
+
+The page takes the zone, its records and both requests' state through props and emits every action; it fetches nothing and fakes no save or refresh. `DnsZoneDetailZone`, `DnsZoneDetailRecord`, `DnsZoneDetailSettings` and `DnsZoneDetailProps` are exported from `dns-zone-detail.vue`, and `sample.ts` holds the sample zone and record the page renders when `zone` or `records` is left out (the records never while `loading` or `error` is set). The settings form keeps its own draft; `zone` is the baseline Discard returns to, and a new `zone` resets the form to it.
+
+| Prop          | Type                           | What it does                                                                                                      |
+| ------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `zone`        | `DnsZoneDetailZone`            | Name, domain, DNSSEC and Active for the form, plus the nameservers and the DNSSEC key values to copy.             |
+| `records`     | `DnsZoneDetailRecord[]`        | The records table; the filter, the sort and the pages run on them in the browser. Pass `[]` for a zone with none. |
+| `loading`     | `boolean`                      | The records request is in flight: Refresh spins and the table shows its loading state.                            |
+| `error`       | `string`                       | Why the records failed to load, shown in a danger `Alert` with Retry in place of the table.                       |
+| `saving`      | `boolean`                      | The save is in flight: the form locks and Save spins.                                                             |
+| `importable`  | `boolean`                      | Shows Import zone file beside Add Record in the Records heading.                                                  |
+| `v-model:tab` | `'main-settings' \| 'records'` | The open tab.                                                                                                     |
+
+| Event        | Payload                      | When                                                                  |
+| ------------ | ---------------------------- | --------------------------------------------------------------------- |
+| `submit`     | `(event, values)`            | Save with a valid draft; `values` is name, domain, DNSSEC and Active. |
+| `discard`    | `(event)`                    | Discard; the draft is already back to `zone`.                         |
+| `create`     | `(event)`                    | Add Record, in the heading or the empty state.                        |
+| `import`     | `(event)`                    | Import zone file, in the heading or the empty state.                  |
+| `refresh`    | `(event)`                    | Refresh.                                                              |
+| `retry`      | `(event)`                    | Retry in the error alert.                                             |
+| `row-action` | `(event, { value, record })` | Edit or Delete in a row menu.                                         |
+
+To go live, render the page from a route that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import DnsZoneDetail, { type DnsZoneDetailSettings } from './dns-zone-detail.vue'
+
+  const { zone, update } = useZone()
+  const { data: records, pending, error, refresh } = useZoneRecords()
+  const loadError = "Couldn't load the records. Check your connection and retry."
+  const saving = ref(false)
+
+  const save = async (_event: Event, values: DnsZoneDetailSettings) => {
+    saving.value = true
+    try {
+      await update(values)
+    } finally {
+      saving.value = false
+    }
+  }
+</script>
+
+<template>
+  <DnsZoneDetail
+    v-if="zone"
+    :zone="zone"
+    :records="records ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    :saving="saving"
+    @submit="save"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -110,9 +177,9 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 
 ## States
 
-- MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
-- Records: the Records tab with the zone's one A record, the ID column hidden by default.
-- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `FieldError` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+- MainSettings: the default `tab`, the Main settings tab with General, nameservers, DNSSEC and Status from `zone`; the save bar appears on the first edit and Save spins while `saving`.
+- Records: `tab="records"`, the Records tab with the zone's one A record from `records`, the ID column hidden by default; `loading` spins Refresh and loads the table, `error` swaps the table for a danger `Alert` with Retry, and `[]` shows No records yet.
+- ImportZoneFile: `importable` puts Import zone file beside Add Record; the page listens to `import` and opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `FieldError` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
 
 ## Importing a zone file
 
@@ -141,11 +208,16 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
+  import type {
+    DropdownMenuItemValue,
+    TableColumn,
+    TableExposed
+  } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
@@ -163,68 +235,169 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
   import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, reactive, ref, useId } from 'vue'
+  import { computed, reactive, ref, useId, watch } from 'vue'
 
-  type DnsRecord = {
-    id: string
+  import { sampleRecords, sampleZone } from './sample'
+
+  /** A tab of the zone page. */
+  export type DnsZoneDetailTab = 'main-settings' | 'records'
+
+  /** The DNSSEC values the user copies into the domain provider. */
+  export interface DnsZoneDetailDnssecKey {
+    /** Identifier of the key that signs the zone. */
+    keyTag: string
+    /** The signing algorithm, with its number. */
+    algorithm: string
+    /** The digest hash function, with its number. */
+    digestType: string
+    /** The digest of the public key. */
+    digest: string
+  }
+
+  /** The editable zone settings, and the values a save sends. */
+  export interface DnsZoneDetailSettings {
+    /** The zone name. */
     name: string
+    /** The domain the zone hosts. */
+    domain: string
+    /** Whether DNSSEC signs the zone. */
+    dnssec: boolean
+    /** Whether the zone answers authoritative queries. */
+    active: boolean
+  }
+
+  /** The zone the page shows. */
+  export interface DnsZoneDetailZone extends DnsZoneDetailSettings {
+    /** The nameservers the user sets in the domain provider. */
+    nameservers: string[]
+    /** The DNSSEC key values, shown while DNSSEC is on. */
+    dnssecKey: DnsZoneDetailDnssecKey
+  }
+
+  /** A record of the zone. */
+  export interface DnsZoneDetailRecord {
+    /** The record ID. */
+    id: string
+    /** The record name, relative to the zone. */
+    name: string
+    /** The record type, such as A or CNAME. */
     type: string
+    /** What the record answers with. */
     value: string
+    /** Time to live, in seconds. */
     ttl: number
+    /** The policy option value, simple or weighted. */
     policy: string
-    weight: number
+    /** The weight, blank when it does not apply. */
+    weight: number | null
+    /** What the record is for. */
     description: string
   }
 
-  const activeTab = ref('main-settings')
+  export interface DnsZoneDetailProps {
+    /** The zone; the settings form opens on it and Discard returns to it. Left out, the sample renders. */
+    zone?: DnsZoneDetailZone
+    /** The zone records. Pass an empty array for a zone with none. Left out, the sample renders. */
+    records?: DnsZoneDetailRecord[]
+    /** The records request is in flight: Refresh spins and the table shows its loading state. */
+    loading?: boolean
+    /** Why the records failed to load, shown in a danger alert with Retry in place of the table. */
+    error?: string
+    /** The save is in flight: the form locks and Save spins. */
+    saving?: boolean
+    /** Shows Import zone file in the Records heading. */
+    importable?: boolean
+  }
 
-  const zone = { name: 'main-zone', domain: 'example.com' }
+  const props = withDefaults(defineProps<DnsZoneDetailProps>(), {
+    zone: undefined,
+    records: undefined,
+    loading: false,
+    error: '',
+    saving: false,
+    importable: false
+  })
 
-  const tabs = [
+  const emit = defineEmits<{
+    submit: [event: Event, values: DnsZoneDetailSettings]
+    discard: [event: MouseEvent]
+    create: [event: MouseEvent]
+    import: [event: MouseEvent]
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'row-action': [
+      event: Event,
+      payload: { value: DropdownMenuItemValue; record: DnsZoneDetailRecord }
+    ]
+  }>()
+
+  const activeTab = defineModel<DnsZoneDetailTab>('tab', { default: 'main-settings' })
+
+  const zone = computed<DnsZoneDetailZone>(() => props.zone ?? sampleZone)
+  const records = computed<DnsZoneDetailRecord[]>(
+    () => props.records ?? (props.loading || props.error ? [] : sampleRecords)
+  )
+
+  const tabs: { value: DnsZoneDetailTab; label: string }[] = [
     { value: 'main-settings', label: 'Main settings' },
     { value: 'records', label: 'Records' }
   ]
 
-  const nameservers = ['ns1.example.net', 'ns2.example.com', 'ns3.example.org']
-
-  const dnssecKeys = [
+  const dnssecKeys = computed(() => [
     {
       label: 'Key tag',
-      value: '34505',
+      value: zone.value.dnssecKey.keyTag,
       description:
         'Unique identifier for the DNSSEC key used to sign your zone. Use this value with your domain provider.'
     },
     {
       label: 'Algorithm',
-      value: '13 (ECDSA Curve P-256 with SHA-256)',
+      value: zone.value.dnssecKey.algorithm,
       description: 'Specifies the algorithm used to generate the DNSSEC key.'
     },
     {
       label: 'Digest type',
-      value: '2 (SHA-256)',
+      value: zone.value.dnssecKey.digestType,
       description: 'Indicates the hash function used for the DNSSEC digest.'
     },
     {
       label: 'Digest',
-      value: '8A9E1F2C3B4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F',
+      value: zone.value.dnssecKey.digest,
       description:
         'Cryptographic hash of the public key for DNSSEC validation. Provide this to your provider.'
     }
-  ]
+  ])
+
+  const settingsOf = (source: DnsZoneDetailZone): DnsZoneDetailSettings => ({
+    name: source.name,
+    domain: source.domain,
+    dnssec: source.dnssec,
+    active: source.active
+  })
 
   const errors = reactive({ name: '', domain: '' })
-  const settings = reactive({ name: zone.name, domain: zone.domain, dnssec: true, active: true })
-  const saving = ref(false)
+  const settings = reactive<DnsZoneDetailSettings>(settingsOf(zone.value))
+  const saving = computed(() => props.saving)
   const baseline = ref(JSON.stringify(settings))
   const dirty = computed(() => JSON.stringify(settings) !== baseline.value)
   const nameMessageId = useId()
   const domainMessageId = useId()
   const nameserverMessageId = useId()
+
+  watch(
+    () => JSON.stringify(settingsOf(zone.value)),
+    (next) => {
+      Object.assign(settings, JSON.parse(next) as DnsZoneDetailSettings)
+      baseline.value = next
+    }
+  )
 
   const validate = () => {
     errors.name = settings.name.trim() ? '' : 'This field is required.'
@@ -232,19 +405,16 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
     return !errors.name && !errors.domain
   }
 
-  const save = () => {
+  const save = (event: Event) => {
     if (saving.value || !validate()) return
-    saving.value = true
-    setTimeout(() => {
-      baseline.value = JSON.stringify(settings)
-      saving.value = false
-    }, 900)
+    emit('submit', event, { ...settings })
   }
 
-  const discard = () => {
-    Object.assign(settings, JSON.parse(baseline.value) as typeof settings)
+  const discard = (event: MouseEvent) => {
+    Object.assign(settings, JSON.parse(baseline.value) as DnsZoneDetailSettings)
     errors.name = ''
     errors.domain = ''
+    emit('discard', event)
   }
 
   const POLICY_TYPES = [
@@ -267,19 +437,6 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
     { id: 'actions', type: 'action', hideable: false }
   ]
 
-  const rows: DnsRecord[] = [
-    {
-      id: '423916',
-      name: 'www',
-      type: 'A',
-      value: '192.0.2.1',
-      ttl: 3600,
-      policy: 'simple',
-      weight: 255,
-      description: 'Points www at the origin server.'
-    }
-  ]
-
   const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
     {
@@ -300,7 +457,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
     clearFilters,
     loading: fetching
   } = useCollection({
-    items: rows,
+    items: records,
     columns,
     filtering: { fields: ['name', 'id', 'type', 'value', 'description'] },
     propertyFiltering: { properties },
@@ -311,18 +468,12 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
     }
   })
 
-  const loading = ref(false)
-  let refreshTimer: ReturnType<typeof setTimeout> | undefined
-  const refresh = () => {
-    if (loading.value) return
-    loading.value = true
-    clearTimeout(refreshTimer)
-    refreshTimer = setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
+  const blocked = computed(() => (props.loading && !records.value.length) || props.error !== '')
 
-  const tableEl = ref<TableExposed<DnsRecord> | null>(null)
+  const onRowAction = (event: Event, value: DropdownMenuItemValue, record: DnsZoneDetailRecord) =>
+    emit('row-action', event, { value, record })
+
+  const tableEl = ref<TableExposed<DnsZoneDetailRecord> | null>(null)
 </script>
 
 <template>
@@ -426,7 +577,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                       >
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <InputGroupRoot
-                            v-for="(ns, index) in nameservers"
+                            v-for="(ns, index) in zone.nameservers"
                             :key="ns"
                           >
                             <div class="flex flex-1">
@@ -589,10 +740,19 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
               target="_blank"
             />
             <Button
+              v-if="importable"
+              label="Import zone file"
+              icon="ai ai-file-import"
+              variant="outline"
+              size="medium"
+              @click="(event: MouseEvent) => emit('import', event)"
+            />
+            <Button
               label="Add Record"
               icon="ai ai-plus"
               variant="outline"
               size="medium"
+              @click="(event: MouseEvent) => emit('create', event)"
             />
           </template>
         </PageHeader>
@@ -604,6 +764,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                   v-bind="propertyFilterProps"
                   placeholder="Filter records"
                   aria-label="Filter records"
+                  :disabled="blocked"
                 />
               </div>
               <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -617,7 +778,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh"
-                    @click="refresh"
+                    @click="(event: MouseEvent) => emit('refresh', event)"
                   />
                 </Tooltip>
                 <Tooltip
@@ -628,7 +789,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                     icon="ai ai-download"
                     variant="outline"
                     size="medium"
-                    :disabled="!matchingItems.length"
+                    :disabled="blocked || !matchingItems.length"
                     aria-label="Download CSV"
                     @click="tableEl?.exportCsv({ filename: 'records.csv' })"
                   />
@@ -636,10 +797,21 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 <CollectionPreferences
                   v-bind="preferencesProps"
                   title="Table preferences"
+                  :disabled="blocked"
                 />
               </div>
             </header>
-            <Card :padded="false">
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="error"
+              action-label="Retry"
+              @action="(event: MouseEvent) => emit('retry', event)"
+            />
+            <Card
+              v-else
+              :padded="false"
+            >
               <template #default>
                 <DataTable
                   ref="tableEl"
@@ -652,7 +824,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                     <span class="min-w-0 truncate">{{ value }}</span>
                   </template>
                   <template #cell-id="{ value }">
-                    <Table.CellId
+                    <TableCellId
                       :value="value"
                       resource="record"
                     />
@@ -665,7 +837,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                     />
                   </template>
                   <template #cell-value="{ value }">
-                    <Table.CellLink
+                    <TableCellLink
                       :label="value"
                       copyable
                       @click.stop
@@ -681,7 +853,10 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                     <span class="min-w-0 truncate">{{ value }}</span>
                   </template>
                   <template #cell-actions="{ row }">
-                    <Table.CellActions :name="row.name">
+                    <TableCellActions
+                      :name="row.name"
+                      @select="(event, value) => onRowAction(event, value, row)"
+                    >
                       <DropdownMenuGroup>
                         <DropdownMenuItem
                           value="edit"
@@ -706,7 +881,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                           /></template>
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
-                    </Table.CellActions>
+                    </TableCellActions>
                   </template>
                   <template #empty>
                     <EmptyState
@@ -732,7 +907,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                       size="medium"
                       icon="ai ai-list"
                       title="No records yet"
-                      description="Add a record, or import a zone file, so this zone starts answering for example.com."
+                      :description="`Add a record, or import a zone file, so this zone starts answering for ${zone.domain}.`"
                     >
                       <template #actions>
                         <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
@@ -741,12 +916,14 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                             icon="ai ai-plus"
                             variant="secondary"
                             size="small"
+                            @click="(event: MouseEvent) => emit('create', event)"
                           />
                           <Button
                             label="Import zone file"
                             icon="ai ai-upload"
                             variant="outline"
                             size="small"
+                            @click="(event: MouseEvent) => emit('import', event)"
                           />
                         </div>
                       </template>
@@ -761,4 +938,37 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
     </section>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { DnsZoneDetailRecord, DnsZoneDetailZone } from './dns-zone-detail.vue'
+
+export const sampleZone: DnsZoneDetailZone = {
+  name: 'main-zone',
+  domain: 'example.com',
+  dnssec: true,
+  active: true,
+  nameservers: ['ns1.example.net', 'ns2.example.com', 'ns3.example.org'],
+  dnssecKey: {
+    keyTag: '34505',
+    algorithm: '13 (ECDSA Curve P-256 with SHA-256)',
+    digestType: '2 (SHA-256)',
+    digest: '8A9E1F2C3B4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F'
+  }
+}
+
+export const sampleRecords: DnsZoneDetailRecord[] = [
+  {
+    id: '423916',
+    name: 'www',
+    type: 'A',
+    value: '192.0.2.1',
+    ttl: 3600,
+    policy: 'simple',
+    weight: 255,
+    description: 'Points www at the origin server.'
+  }
+]
 ```

@@ -54,6 +54,59 @@ The Profile variant adds `SettingsSection`, `Textarea`, `Tag`, `ConfirmDialog`, 
 
 The Profile variant stacks one `SettingsSection` per group (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each with a `hint` and an `anchor` over a flush `Card` whose `Item.List` holds the rows. Client ID is a `readonly` `Input`; Billing emails is a three-row `Textarea` that starts empty (an editable contact field never carries sample data) and is required; address rows use `postal-code`, `address-line1` and `address-line2` autocomplete. Requiring MFA is not a switch here: `account/mfa-settings` owns it, and the Multi-factor authentication row links there with `Manage MFA`. Source-control providers are `Item`s with `Item.Media`, a success `Tag` (`Active`) when connected, and `Manage` or `Connect` opening the provider in a new tab. The unsaved-changes `SaveBar` rises with a motion-reduced transition once the form differs from the saved copy. The danger Delete account opens a `variant="danger"` `ConfirmDialog` with a warning `Alert` and `Type <account name> to confirm.` over an `Input`; its confirm stays disabled until the typed name matches. ProfileLoading puts three `Card`s of `Skeleton` rows in place of the sections (`aria-busy`); ProfileError puts a danger `Alert` with Retry there; the heading stays in both.
 
+## Data
+
+The SaveAll form takes the saved profile and the save request's state through props and emits the values; it fetches nothing and fakes no save. `SettingsFormProfile` and `SettingsFormProps` are exported from `settings-form.vue`, and `sample.ts` holds the sample profile the form opens on when `profile` is left out. The form keeps its own draft; `profile` is the baseline that Discard returns to, and a new `profile` resets the form to it. The SavePerGroup, SavePerCard and Profile variants are their own screens and still run on their own local data.
+
+| Prop           | Type                           | What it does                                                                                                                                                                          |
+| -------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `profile`      | `SettingsFormProfile`          | The saved values the form opens on and compares against; Save and Discard stay disabled until the draft differs.                                                                      |
+| `defaultDraft` | `Partial<SettingsFormProfile>` | Unsaved edits the form opens with on top of `profile`, so it starts dirty (a draft restored from storage).                                                                            |
+| `loading`      | `boolean`                      | The save is in flight: the fieldset and Discard disable and Save spins. When it turns off with no `error`, the draft becomes the saved baseline and the `Profile saved.` toast shows. |
+| `error`        | `string`                       | Why the save failed, the description of the `The profile wasn't saved.` error toast with Retry; the draft stays dirty.                                                                |
+
+| Event     | Payload           | When                                                                                  |
+| --------- | ----------------- | ------------------------------------------------------------------------------------- |
+| `submit`  | `(event, values)` | Save (or Retry in the error toast) with a valid draft; `values` is the whole profile. |
+| `discard` | `(event)`         | Discard; the draft is already back to `profile`.                                      |
+
+To go live, render the form from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import SettingsForm, { type SettingsFormProfile } from './settings-form.vue'
+
+  const { data: profile, update } = useProfile()
+  const saving = ref(false)
+  const saveError = ref('')
+
+  const save = async (_event: Event, values: SettingsFormProfile) => {
+    saving.value = true
+    saveError.value = ''
+    try {
+      await update(values)
+    } catch {
+      saveError.value = "The request didn't reach the server. Your changes are kept."
+    } finally {
+      saving.value = false
+    }
+  }
+</script>
+
+<template>
+  <SettingsForm
+    v-if="profile"
+    :profile="profile"
+    :loading="saving"
+    :error="saveError"
+    @submit="save"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Pick the save strategy from how the page is partitioned: one logical unit gets one save.
@@ -97,9 +150,9 @@ The Profile variant stacks one `SettingsSection` per group (General, Company inf
 
 ## States
 
-- SaveAll: Profile with General, Preferences and Notifications in one fieldset and one sticky Discard and Save footer.
-- Saving: the whole fieldset and Discard are disabled and Save shows its loading state.
-- SaveError: the server rejects the save; an error toast with Retry says the changes are kept, and the form stays dirty with every entry.
+- SaveAll: the default props (`profile` left out renders the sample); Profile with General, Preferences and Notifications in one fieldset and one sticky Discard and Save footer.
+- Saving: `loading` with an edit in `defaultDraft`; the whole fieldset and Discard are disabled and Save shows its loading state.
+- SaveError: `error` with an edit in `defaultDraft`; the server rejects the save; an error toast with Retry says the changes are kept, and the form stays dirty with every entry.
 - SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save.
 - SavingOneGroup: General is saving with its rows disabled while Notifications stays editable.
 - SavePerCard: Project settings with Preview Toolbar and Deployment Protection cards, each with an info `Alert`, its fields and its own Save.
@@ -149,7 +202,46 @@ Each variant is the same screen in another state: `get_block("settings/settings-
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, nextTick, onScopeDispose, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+
+  import { sampleProfile } from './sample'
+
+  /** The saved profile, and the values a save sends. */
+  export interface SettingsFormProfile {
+    /** The name shown across the account. */
+    fullName: string
+    /** Sign-in and notification address. */
+    email: string
+    /** Timezone option value. */
+    timezone: string
+    /** Interface language option value. */
+    language: string
+    /** Occasional product emails. */
+    productUpdates: boolean
+  }
+
+  export interface SettingsFormProps {
+    /** The saved profile; the form opens on it and Discard returns to it. Left out, the sample renders. */
+    profile?: SettingsFormProfile
+    /** Unsaved edits the form opens with on top of the profile, so it starts dirty. */
+    defaultDraft?: Partial<SettingsFormProfile>
+    /** The save is in flight: the fieldset and Discard lock and Save spins. */
+    loading?: boolean
+    /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<SettingsFormProps>(), {
+    profile: undefined,
+    defaultDraft: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: SettingsFormProfile]
+    discard: [event: MouseEvent]
+  }>()
 
   const timezones = [
     { label: '(UTC+00:00) UTC', value: 'utc' },
@@ -166,18 +258,11 @@ Each variant is the same screen in another state: `get_block("settings/settings-
   const labelOf = (list: SelectOptionItem[]) => (value: string) =>
     list.find((option) => option.value === value)?.label ?? ''
 
-  const form = reactive({
-    fullName: 'Alex Morgan',
-    email: '',
-    timezone: 'utc',
-    language: 'en',
-    productUpdates: true
-  })
-  const failing = false
+  const saved = computed<SettingsFormProfile>(() => props.profile ?? sampleProfile)
+  const form = reactive<SettingsFormProfile>({ ...saved.value })
   const SAVE_TOAST = 'profile-save'
   const submitted = ref(false)
-  const submitting = ref(false)
-  let saveTimer: ReturnType<typeof setTimeout> | undefined
+  const submitting = computed(() => props.loading)
 
   const {
     isDirty: dirty,
@@ -187,42 +272,69 @@ Each variant is the same screen in another state: `get_block("settings/settings-
     onDiscard: (baseline) => Object.assign(form, baseline)
   })
 
-  onScopeDispose(() => clearTimeout(saveTimer))
+  Object.assign(form, props.defaultDraft)
+
+  watch(
+    () => JSON.stringify(saved.value),
+    () => {
+      Object.assign(form, saved.value)
+      commit()
+    }
+  )
 
   const nameEmpty = computed(() => !form.fullName.trim())
   const emailEmpty = computed(() => !form.email.trim())
   const emailInvalid = computed(() => !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim()))
   const isValid = computed(() => !nameEmpty.value && !emailInvalid.value)
 
-  const submit = () => {
+  const submit = (event: Event) => {
     if (submitting.value) return
     submitted.value = true
     if (!isValid.value) {
       nextTick(() => document.getElementById(nameEmpty.value ? 'full-name' : 'email')?.focus())
       return
     }
-    submitting.value = true
     toast.dismiss(SAVE_TOAST)
-    clearTimeout(saveTimer)
-    saveTimer = setTimeout(() => {
-      submitting.value = false
-      if (failing) {
-        toast.error("The profile wasn't saved.", {
-          id: SAVE_TOAST,
-          description: "The request didn't reach the server. Your changes are kept.",
-          action: { label: 'Retry', onClick: () => submit() }
-        })
+    emit('submit', event, { ...form })
+  }
+
+  const showFailure = () => {
+    toast.error("The profile wasn't saved.", {
+      id: SAVE_TOAST,
+      description: props.error,
+      action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
+    })
+  }
+
+  onMounted(() => {
+    if (props.error) showFailure()
+  })
+
+  watch(
+    () => props.error,
+    (next) => {
+      if (next && !props.loading) showFailure()
+    }
+  )
+
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (!before || now) return
+      if (props.error) {
+        showFailure()
         return
       }
       commit()
       submitted.value = false
       toast.success('Profile saved.', { id: SAVE_TOAST })
-    }, 900)
-  }
+    }
+  )
 
-  const discard = () => {
+  const discard = (event: MouseEvent) => {
     restore()
     submitted.value = false
+    emit('discard', event)
   }
 </script>
 
@@ -429,4 +541,18 @@ Each variant is the same screen in another state: `get_block("settings/settings-
     </SaveBar>
   </form>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { SettingsFormProfile } from './settings-form.vue'
+
+export const sampleProfile: SettingsFormProfile = {
+  fullName: 'Alex Morgan',
+  email: '',
+  timezone: 'utc',
+  language: 'en',
+  productUpdates: true
+}
 ```

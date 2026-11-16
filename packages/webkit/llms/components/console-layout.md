@@ -257,7 +257,7 @@ packages/webkit/src/components/layout/console-layout/
       <Tooltip
         v-if="compact"
         content="Create"
-        placement="bottom"
+        side="bottom"
       >
         <IconButton
           icon="ai ai-circle-plus"

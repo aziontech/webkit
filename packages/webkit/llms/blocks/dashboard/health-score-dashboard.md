@@ -112,6 +112,58 @@ each with the latest value, its unit, a sparkline of the period and the period n
 A timing has no "previous period" the reader acts on here, so these tiles carry no delta and no
 `inverse`.
 
+### O. Load failure — `Alert` (required)
+
+With `error` set, a danger `Alert` with Retry takes the place of each region's content, naming what
+did not load (`Couldn't load overall score.`); the score shows a dash with no band.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `HealthScoreOverall`, `HealthScoreHourlyRow`, `HealthScoreIncident`, `HealthScoreBand`, `HealthScorePeriod` and `HealthScoreDashboardProps` are exported from `health-score-dashboard.vue`, and `sample.ts` holds the sample score, rankings, hourly rows and incidents the block renders when a data prop is left out (and never while `loading` or `error` is set). The RealUser variant is a separate page and keeps its own sample figures.
+
+| Prop / model     | Type                     | What it does                                                                                                               |
+| ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| `overall`        | `HealthScoreOverall`     | The score, its band, the top cause and the score line with its labels. `score: null` shows a dash, no band.                |
+| `applications`   | `BarListItem[]`          | Score per application, lowest first; the cause goes in the name (`Video calls · packet loss`).                             |
+| `locations`      | `BarListItem[]`          | Score per location, the same shape.                                                                                        |
+| `hourly`         | `HealthScoreHourlyRow[]` | One tracker row per application with one block per hour.                                                                   |
+| `incidents`      | `HealthScoreIncident[]`  | The incidents still open, each linking to `/incidents/<id>`. Pass `[]` for `No open incidents`.                            |
+| `loading`        | `boolean`                | The period is loading: every region shows its Skeleton.                                                                    |
+| `error`          | `string`                 | Why the request failed, shown after `Couldn't load overall score.` (hourly score, open incidents…) in each danger `Alert`. |
+| `v-model:period` | `HealthScorePeriod`      | The period every region reads and the empty states name; refetch when it changes. Defaults to `Last 24 hours`.             |
+
+| Event   | Payload   | When                              |
+| ------- | --------- | --------------------------------- |
+| `retry` | `(event)` | Retry in any of the error alerts. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import HealthScoreDashboard, { type HealthScorePeriod } from './health-score-dashboard.vue'
+
+  const period = ref<HealthScorePeriod>('Last 24 hours')
+  const { data, pending, error, refresh } = useExperienceScore(period)
+</script>
+
+<template>
+  <HealthScoreDashboard
+    v-model:period="period"
+    :overall="data?.overall"
+    :applications="data?.applications ?? []"
+    :locations="data?.locations ?? []"
+    :hourly="data?.hourly ?? []"
+    :incidents="data?.incidents ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Use the same three bands, with the same thresholds and words, in every region.
@@ -145,10 +197,10 @@ A timing has no "previous period" the reader acts on here, so these tiles carry 
 ## States
 
 - Default: the scored period.
-- Loading: the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
-- Empty: a period with no samples; the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
+- Loading: `loading`; the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
+- Empty: a period with no samples (`overall.score: null`, every list `[]`); the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
 - RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
-- Error: the request failed; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error`; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
@@ -170,6 +222,7 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Card from '@aziontech/webkit/card'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
@@ -185,43 +238,121 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
   import Tracker, { type TrackerItem } from '@aziontech/webkit/tracker'
   import { computed, ref } from 'vue'
 
-  interface Band {
+  import {
+    sampleApplications,
+    sampleHourly,
+    sampleIncidents,
+    sampleLocations,
+    sampleOverall
+  } from './sample'
+
+  /** The period every region reads. */
+  export type HealthScorePeriod = 'Last hour' | 'Last 24 hours' | 'Last 7 days'
+
+  /** A score band in words with its color. */
+  export interface HealthScoreBand {
+    /** Good, Fair or Poor. */
     label: string
+    /** The band color. */
     severity: TagSeverity
   }
 
-  interface Overall {
+  /** The overall score of the period. */
+  export interface HealthScoreOverall {
+    /** Average score out of 100; null when the period has no samples. */
     score: number | null
-    band: Band | null
+    /** The band of the score; null when the period has no samples. */
+    band: HealthScoreBand | null
+    /** The cause of most poor samples, lowercase; empty hides the line. */
     cause: string
+    /** One label per point of the chart. */
+    labels: string[]
+    /** The score line over the period. */
     series: ChartSeries[]
   }
 
-  interface HourlyRow {
+  /** One application row of the Hourly score tracker. */
+  export interface HealthScoreHourlyRow {
+    /** Stable key. */
     id: string
+    /** Application name. */
     name: string
-    band: Band
+    /** The band of the application over the period. */
+    band: HealthScoreBand
+    /** One block per hour, colored by its band. */
     blocks: TrackerItem[]
   }
 
-  interface Incident {
+  /** One open incident. */
+  export interface HealthScoreIncident {
+    /** Stable key, used in the incident link. */
     id: string
+    /** The application or location affected. */
     name: string
+    /** Application or Location. */
     scope: string
+    /** Icon class of the scope. */
     icon: string
+    /** Devices affected. */
     devices: number
+    /** Share of the samples affected, in percent. */
     share: number
+    /** What causes the poor samples. */
     cause: string
+    /** When it opened, as an ISO date. */
     opened: string
+    /** When it opened, as shown. */
     openedLabel: string
-    band: Band
+    /** The band of the affected samples. */
+    band: HealthScoreBand
   }
 
-  const loading = false
-  const period = ref('Last 24 hours')
+  export interface HealthScoreDashboardProps {
+    /** The overall score and its line. Left out, the sample renders. */
+    overall?: HealthScoreOverall
+    /** Score per application, with its top cause in the name. Left out, the sample renders. */
+    applications?: BarListItem[]
+    /** Score per location, with its top cause in the name. Left out, the sample renders. */
+    locations?: BarListItem[]
+    /** One tracker row per application. Left out, the sample renders. */
+    hourly?: HealthScoreHourlyRow[]
+    /** The incidents still open; pass an empty list when none is. Left out, the sample renders. */
+    incidents?: HealthScoreIncident[]
+    /** The period is loading. */
+    loading?: boolean
+    /** Why the period could not load, shown after what did not load in each danger alert. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<HealthScoreDashboardProps>(), {
+    overall: undefined,
+    applications: undefined,
+    locations: undefined,
+    hourly: undefined,
+    incidents: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+  }>()
+
+  const period = defineModel<HealthScorePeriod>('period', { default: 'Last 24 hours' })
+
+  const blocked = computed(() => props.loading || props.error !== '')
+  const noScore: HealthScoreOverall = { score: null, band: null, cause: '', labels: [], series: [] }
+  const overall = computed(() => props.overall ?? (blocked.value ? noScore : sampleOverall))
+  const applications = computed(
+    () => props.applications ?? (blocked.value ? [] : sampleApplications)
+  )
+  const locations = computed(() => props.locations ?? (blocked.value ? [] : sampleLocations))
+  const hourly = computed(() => props.hourly ?? (blocked.value ? [] : sampleHourly))
+  const incidents = computed(() => props.incidents ?? (blocked.value ? [] : sampleIncidents))
+
   const activeIndex = ref<number | null>(null)
 
-  const periods = [
+  const periods: { label: HealthScorePeriod; phrase: string }[] = [
     {
       label: 'Last hour',
       phrase: 'the last hour'
@@ -239,944 +370,6 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
   const phrase = computed(
     () => periods.find((option) => option.label === period.value)?.phrase ?? ''
   )
-
-  const hours = [
-    '00:00',
-    '01:00',
-    '02:00',
-    '03:00',
-    '04:00',
-    '05:00',
-    '06:00',
-    '07:00',
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18:00',
-    '19:00',
-    '20:00',
-    '21:00',
-    '22:00',
-    '23:00'
-  ]
-
-  const overall: Overall = {
-    score: 79,
-    band: {
-      label: 'Fair',
-      severity: 'warning'
-    },
-    cause: 'packet loss',
-    series: [
-      {
-        id: 'score',
-        name: 'Score',
-        values: [
-          84, 85, 86, 86, 85, 84, 82, 79, 74, 71, 73, 76, 78, 77, 75, 72, 70, 74, 78, 81, 83, 84,
-          85, 84
-        ]
-      }
-    ]
-  }
-
-  const applications: BarListItem[] = [
-    {
-      id: 'video-calls',
-      name: 'Video calls · packet loss',
-      value: 48
-    },
-    {
-      id: 'file-storage',
-      name: 'File storage · slow server response',
-      value: 64
-    },
-    {
-      id: 'crm',
-      name: 'CRM · slow DNS lookups',
-      value: 73
-    },
-    {
-      id: 'mail',
-      name: 'Mail · Wi-Fi signal',
-      value: 83
-    },
-    {
-      id: 'chat',
-      name: 'Chat · Wi-Fi signal',
-      value: 89
-    },
-    {
-      id: 'docs',
-      name: 'Docs · high latency',
-      value: 93
-    }
-  ]
-
-  const locations: BarListItem[] = [
-    {
-      id: 'travel',
-      name: 'Travel · high latency',
-      value: 58
-    },
-    {
-      id: 'home',
-      name: 'Home · Wi-Fi signal',
-      value: 71
-    },
-    {
-      id: 'south-branch',
-      name: 'South branch · packet loss',
-      value: 76
-    },
-    {
-      id: 'north-branch',
-      name: 'North branch · slow DNS lookups',
-      value: 84
-    },
-    {
-      id: 'main-office',
-      name: 'Main office · slow server response',
-      value: 89
-    }
-  ]
-
-  const hourly: HourlyRow[] = [
-    {
-      id: 'video-calls',
-      name: 'Video calls',
-      band: {
-        label: 'Fair',
-        severity: 'warning'
-      },
-      blocks: [
-        {
-          id: 'video-calls-00:00',
-          severity: 'warning',
-          label: '00:00 · 62 · Fair'
-        },
-        {
-          id: 'video-calls-01:00',
-          severity: 'warning',
-          label: '01:00 · 57 · Fair'
-        },
-        {
-          id: 'video-calls-02:00',
-          severity: 'warning',
-          label: '02:00 · 54 · Fair'
-        },
-        {
-          id: 'video-calls-03:00',
-          severity: 'warning',
-          label: '03:00 · 60 · Fair'
-        },
-        {
-          id: 'video-calls-04:00',
-          severity: 'warning',
-          label: '04:00 · 61 · Fair'
-        },
-        {
-          id: 'video-calls-05:00',
-          severity: 'warning',
-          label: '05:00 · 55 · Fair'
-        },
-        {
-          id: 'video-calls-06:00',
-          severity: 'warning',
-          label: '06:00 · 56 · Fair'
-        },
-        {
-          id: 'video-calls-07:00',
-          severity: 'warning',
-          label: '07:00 · 62 · Fair'
-        },
-        {
-          id: 'video-calls-08:00',
-          severity: 'danger',
-          label: '08:00 · 35 · Poor'
-        },
-        {
-          id: 'video-calls-09:00',
-          severity: 'danger',
-          label: '09:00 · 30 · Poor'
-        },
-        {
-          id: 'video-calls-10:00',
-          severity: 'danger',
-          label: '10:00 · 34 · Poor'
-        },
-        {
-          id: 'video-calls-11:00',
-          severity: 'danger',
-          label: '11:00 · 38 · Poor'
-        },
-        {
-          id: 'video-calls-12:00',
-          severity: 'danger',
-          label: '12:00 · 33 · Poor'
-        },
-        {
-          id: 'video-calls-13:00',
-          severity: 'danger',
-          label: '13:00 · 30 · Poor'
-        },
-        {
-          id: 'video-calls-14:00',
-          severity: 'danger',
-          label: '14:00 · 36 · Poor'
-        },
-        {
-          id: 'video-calls-15:00',
-          severity: 'danger',
-          label: '15:00 · 37 · Poor'
-        },
-        {
-          id: 'video-calls-16:00',
-          severity: 'danger',
-          label: '16:00 · 32 · Poor'
-        },
-        {
-          id: 'video-calls-17:00',
-          severity: 'danger',
-          label: '17:00 · 31 · Poor'
-        },
-        {
-          id: 'video-calls-18:00',
-          severity: 'warning',
-          label: '18:00 · 61 · Fair'
-        },
-        {
-          id: 'video-calls-19:00',
-          severity: 'warning',
-          label: '19:00 · 60 · Fair'
-        },
-        {
-          id: 'video-calls-20:00',
-          severity: 'warning',
-          label: '20:00 · 54 · Fair'
-        },
-        {
-          id: 'video-calls-21:00',
-          severity: 'warning',
-          label: '21:00 · 57 · Fair'
-        },
-        {
-          id: 'video-calls-22:00',
-          severity: 'warning',
-          label: '22:00 · 62 · Fair'
-        },
-        {
-          id: 'video-calls-23:00',
-          severity: 'warning',
-          label: '23:00 · 58 · Fair'
-        }
-      ]
-    },
-    {
-      id: 'file-storage',
-      name: 'File storage',
-      band: {
-        label: 'Fair',
-        severity: 'warning'
-      },
-      blocks: [
-        {
-          id: 'file-storage-00:00',
-          severity: 'warning',
-          label: '00:00 · 72 · Fair'
-        },
-        {
-          id: 'file-storage-01:00',
-          severity: 'warning',
-          label: '01:00 · 68 · Fair'
-        },
-        {
-          id: 'file-storage-02:00',
-          severity: 'warning',
-          label: '02:00 · 73 · Fair'
-        },
-        {
-          id: 'file-storage-03:00',
-          severity: 'warning',
-          label: '03:00 · 76 · Fair'
-        },
-        {
-          id: 'file-storage-04:00',
-          severity: 'warning',
-          label: '04:00 · 70 · Fair'
-        },
-        {
-          id: 'file-storage-05:00',
-          severity: 'warning',
-          label: '05:00 · 69 · Fair'
-        },
-        {
-          id: 'file-storage-06:00',
-          severity: 'warning',
-          label: '06:00 · 75 · Fair'
-        },
-        {
-          id: 'file-storage-07:00',
-          severity: 'warning',
-          label: '07:00 · 74 · Fair'
-        },
-        {
-          id: 'file-storage-08:00',
-          severity: 'danger',
-          label: '08:00 · 49 · Poor'
-        },
-        {
-          id: 'file-storage-09:00',
-          severity: 'warning',
-          label: '09:00 · 51 · Fair'
-        },
-        {
-          id: 'file-storage-10:00',
-          severity: 'warning',
-          label: '10:00 · 56 · Fair'
-        },
-        {
-          id: 'file-storage-11:00',
-          severity: 'warning',
-          label: '11:00 · 52 · Fair'
-        },
-        {
-          id: 'file-storage-12:00',
-          severity: 'danger',
-          label: '12:00 · 48 · Poor'
-        },
-        {
-          id: 'file-storage-13:00',
-          severity: 'warning',
-          label: '13:00 · 53 · Fair'
-        },
-        {
-          id: 'file-storage-14:00',
-          severity: 'warning',
-          label: '14:00 · 56 · Fair'
-        },
-        {
-          id: 'file-storage-15:00',
-          severity: 'warning',
-          label: '15:00 · 50 · Fair'
-        },
-        {
-          id: 'file-storage-16:00',
-          severity: 'danger',
-          label: '16:00 · 49 · Poor'
-        },
-        {
-          id: 'file-storage-17:00',
-          severity: 'warning',
-          label: '17:00 · 54 · Fair'
-        },
-        {
-          id: 'file-storage-18:00',
-          severity: 'warning',
-          label: '18:00 · 75 · Fair'
-        },
-        {
-          id: 'file-storage-19:00',
-          severity: 'warning',
-          label: '19:00 · 69 · Fair'
-        },
-        {
-          id: 'file-storage-20:00',
-          severity: 'warning',
-          label: '20:00 · 70 · Fair'
-        },
-        {
-          id: 'file-storage-21:00',
-          severity: 'warning',
-          label: '21:00 · 76 · Fair'
-        },
-        {
-          id: 'file-storage-22:00',
-          severity: 'warning',
-          label: '22:00 · 73 · Fair'
-        },
-        {
-          id: 'file-storage-23:00',
-          severity: 'warning',
-          label: '23:00 · 68 · Fair'
-        }
-      ]
-    },
-    {
-      id: 'crm',
-      name: 'CRM',
-      band: {
-        label: 'Good',
-        severity: 'success'
-      },
-      blocks: [
-        {
-          id: 'crm-00:00',
-          severity: 'warning',
-          label: '00:00 · 76 · Fair'
-        },
-        {
-          id: 'crm-01:00',
-          severity: 'success',
-          label: '01:00 · 81 · Good'
-        },
-        {
-          id: 'crm-02:00',
-          severity: 'success',
-          label: '02:00 · 84 · Good'
-        },
-        {
-          id: 'crm-03:00',
-          severity: 'warning',
-          label: '03:00 · 78 · Fair'
-        },
-        {
-          id: 'crm-04:00',
-          severity: 'warning',
-          label: '04:00 · 77 · Fair'
-        },
-        {
-          id: 'crm-05:00',
-          severity: 'success',
-          label: '05:00 · 83 · Good'
-        },
-        {
-          id: 'crm-06:00',
-          severity: 'success',
-          label: '06:00 · 82 · Good'
-        },
-        {
-          id: 'crm-07:00',
-          severity: 'warning',
-          label: '07:00 · 76 · Fair'
-        },
-        {
-          id: 'crm-08:00',
-          severity: 'warning',
-          label: '08:00 · 63 · Fair'
-        },
-        {
-          id: 'crm-09:00',
-          severity: 'warning',
-          label: '09:00 · 68 · Fair'
-        },
-        {
-          id: 'crm-10:00',
-          severity: 'warning',
-          label: '10:00 · 64 · Fair'
-        },
-        {
-          id: 'crm-11:00',
-          severity: 'warning',
-          label: '11:00 · 60 · Fair'
-        },
-        {
-          id: 'crm-12:00',
-          severity: 'warning',
-          label: '12:00 · 65 · Fair'
-        },
-        {
-          id: 'crm-13:00',
-          severity: 'warning',
-          label: '13:00 · 68 · Fair'
-        },
-        {
-          id: 'crm-14:00',
-          severity: 'warning',
-          label: '14:00 · 62 · Fair'
-        },
-        {
-          id: 'crm-15:00',
-          severity: 'warning',
-          label: '15:00 · 61 · Fair'
-        },
-        {
-          id: 'crm-16:00',
-          severity: 'warning',
-          label: '16:00 · 66 · Fair'
-        },
-        {
-          id: 'crm-17:00',
-          severity: 'warning',
-          label: '17:00 · 67 · Fair'
-        },
-        {
-          id: 'crm-18:00',
-          severity: 'warning',
-          label: '18:00 · 77 · Fair'
-        },
-        {
-          id: 'crm-19:00',
-          severity: 'warning',
-          label: '19:00 · 78 · Fair'
-        },
-        {
-          id: 'crm-20:00',
-          severity: 'success',
-          label: '20:00 · 84 · Good'
-        },
-        {
-          id: 'crm-21:00',
-          severity: 'success',
-          label: '21:00 · 81 · Good'
-        },
-        {
-          id: 'crm-22:00',
-          severity: 'warning',
-          label: '22:00 · 76 · Fair'
-        },
-        {
-          id: 'crm-23:00',
-          severity: 'success',
-          label: '23:00 · 80 · Good'
-        }
-      ]
-    },
-    {
-      id: 'mail',
-      name: 'Mail',
-      band: {
-        label: 'Good',
-        severity: 'success'
-      },
-      blocks: [
-        {
-          id: 'mail-00:00',
-          severity: 'success',
-          label: '00:00 · 93 · Good'
-        },
-        {
-          id: 'mail-01:00',
-          severity: 'success',
-          label: '01:00 · 89 · Good'
-        },
-        {
-          id: 'mail-02:00',
-          severity: 'success',
-          label: '02:00 · 85 · Good'
-        },
-        {
-          id: 'mail-03:00',
-          severity: 'success',
-          label: '03:00 · 90 · Good'
-        },
-        {
-          id: 'mail-04:00',
-          severity: 'success',
-          label: '04:00 · 93 · Good'
-        },
-        {
-          id: 'mail-05:00',
-          severity: 'success',
-          label: '05:00 · 87 · Good'
-        },
-        {
-          id: 'mail-06:00',
-          severity: 'success',
-          label: '06:00 · 86 · Good'
-        },
-        {
-          id: 'mail-07:00',
-          severity: 'success',
-          label: '07:00 · 91 · Good'
-        },
-        {
-          id: 'mail-08:00',
-          severity: 'warning',
-          label: '08:00 · 78 · Fair'
-        },
-        {
-          id: 'mail-09:00',
-          severity: 'warning',
-          label: '09:00 · 72 · Fair'
-        },
-        {
-          id: 'mail-10:00',
-          severity: 'warning',
-          label: '10:00 · 73 · Fair'
-        },
-        {
-          id: 'mail-11:00',
-          severity: 'warning',
-          label: '11:00 · 79 · Fair'
-        },
-        {
-          id: 'mail-12:00',
-          severity: 'warning',
-          label: '12:00 · 76 · Fair'
-        },
-        {
-          id: 'mail-13:00',
-          severity: 'warning',
-          label: '13:00 · 71 · Fair'
-        },
-        {
-          id: 'mail-14:00',
-          severity: 'warning',
-          label: '14:00 · 75 · Fair'
-        },
-        {
-          id: 'mail-15:00',
-          severity: 'warning',
-          label: '15:00 · 79 · Fair'
-        },
-        {
-          id: 'mail-16:00',
-          severity: 'warning',
-          label: '16:00 · 74 · Fair'
-        },
-        {
-          id: 'mail-17:00',
-          severity: 'warning',
-          label: '17:00 · 71 · Fair'
-        },
-        {
-          id: 'mail-18:00',
-          severity: 'success',
-          label: '18:00 · 91 · Good'
-        },
-        {
-          id: 'mail-19:00',
-          severity: 'success',
-          label: '19:00 · 92 · Good'
-        },
-        {
-          id: 'mail-20:00',
-          severity: 'success',
-          label: '20:00 · 86 · Good'
-        },
-        {
-          id: 'mail-21:00',
-          severity: 'success',
-          label: '21:00 · 86 · Good'
-        },
-        {
-          id: 'mail-22:00',
-          severity: 'success',
-          label: '22:00 · 92 · Good'
-        },
-        {
-          id: 'mail-23:00',
-          severity: 'success',
-          label: '23:00 · 91 · Good'
-        }
-      ]
-    },
-    {
-      id: 'chat',
-      name: 'Chat',
-      band: {
-        label: 'Good',
-        severity: 'success'
-      },
-      blocks: [
-        {
-          id: 'chat-00:00',
-          severity: 'success',
-          label: '00:00 · 94 · Good'
-        },
-        {
-          id: 'chat-01:00',
-          severity: 'success',
-          label: '01:00 · 98 · Good'
-        },
-        {
-          id: 'chat-02:00',
-          severity: 'success',
-          label: '02:00 · 93 · Good'
-        },
-        {
-          id: 'chat-03:00',
-          severity: 'success',
-          label: '03:00 · 90 · Good'
-        },
-        {
-          id: 'chat-04:00',
-          severity: 'success',
-          label: '04:00 · 96 · Good'
-        },
-        {
-          id: 'chat-05:00',
-          severity: 'success',
-          label: '05:00 · 97 · Good'
-        },
-        {
-          id: 'chat-06:00',
-          severity: 'success',
-          label: '06:00 · 91 · Good'
-        },
-        {
-          id: 'chat-07:00',
-          severity: 'success',
-          label: '07:00 · 92 · Good'
-        },
-        {
-          id: 'chat-08:00',
-          severity: 'success',
-          label: '08:00 · 86 · Good'
-        },
-        {
-          id: 'chat-09:00',
-          severity: 'success',
-          label: '09:00 · 83 · Good'
-        },
-        {
-          id: 'chat-10:00',
-          severity: 'warning',
-          label: '10:00 · 78 · Fair'
-        },
-        {
-          id: 'chat-11:00',
-          severity: 'success',
-          label: '11:00 · 82 · Good'
-        },
-        {
-          id: 'chat-12:00',
-          severity: 'success',
-          label: '12:00 · 86 · Good'
-        },
-        {
-          id: 'chat-13:00',
-          severity: 'success',
-          label: '13:00 · 81 · Good'
-        },
-        {
-          id: 'chat-14:00',
-          severity: 'warning',
-          label: '14:00 · 78 · Fair'
-        },
-        {
-          id: 'chat-15:00',
-          severity: 'success',
-          label: '15:00 · 84 · Good'
-        },
-        {
-          id: 'chat-16:00',
-          severity: 'success',
-          label: '16:00 · 85 · Good'
-        },
-        {
-          id: 'chat-17:00',
-          severity: 'success',
-          label: '17:00 · 80 · Good'
-        },
-        {
-          id: 'chat-18:00',
-          severity: 'success',
-          label: '18:00 · 91 · Good'
-        },
-        {
-          id: 'chat-19:00',
-          severity: 'success',
-          label: '19:00 · 97 · Good'
-        },
-        {
-          id: 'chat-20:00',
-          severity: 'success',
-          label: '20:00 · 96 · Good'
-        },
-        {
-          id: 'chat-21:00',
-          severity: 'success',
-          label: '21:00 · 90 · Good'
-        },
-        {
-          id: 'chat-22:00',
-          severity: 'success',
-          label: '22:00 · 93 · Good'
-        },
-        {
-          id: 'chat-23:00',
-          severity: 'success',
-          label: '23:00 · 98 · Good'
-        }
-      ]
-    },
-    {
-      id: 'docs',
-      name: 'Docs',
-      band: {
-        label: 'Good',
-        severity: 'success'
-      },
-      blocks: [
-        {
-          id: 'docs-00:00',
-          severity: 'success',
-          label: '00:00 · 97 · Good'
-        },
-        {
-          id: 'docs-01:00',
-          severity: 'success',
-          label: '01:00 · 93 · Good'
-        },
-        {
-          id: 'docs-02:00',
-          severity: 'success',
-          label: '02:00 · 98 · Good'
-        },
-        {
-          id: 'docs-03:00',
-          severity: 'success',
-          label: '03:00 · 100 · Good'
-        },
-        {
-          id: 'docs-04:00',
-          severity: 'success',
-          label: '04:00 · 95 · Good'
-        },
-        {
-          id: 'docs-05:00',
-          severity: 'success',
-          label: '05:00 · 94 · Good'
-        },
-        {
-          id: 'docs-06:00',
-          severity: 'success',
-          label: '06:00 · 99 · Good'
-        },
-        {
-          id: 'docs-07:00',
-          severity: 'success',
-          label: '07:00 · 100 · Good'
-        },
-        {
-          id: 'docs-08:00',
-          severity: 'success',
-          label: '08:00 · 84 · Good'
-        },
-        {
-          id: 'docs-09:00',
-          severity: 'success',
-          label: '09:00 · 85 · Good'
-        },
-        {
-          id: 'docs-10:00',
-          severity: 'success',
-          label: '10:00 · 91 · Good'
-        },
-        {
-          id: 'docs-11:00',
-          severity: 'success',
-          label: '11:00 · 88 · Good'
-        },
-        {
-          id: 'docs-12:00',
-          severity: 'success',
-          label: '12:00 · 83 · Good'
-        },
-        {
-          id: 'docs-13:00',
-          severity: 'success',
-          label: '13:00 · 87 · Good'
-        },
-        {
-          id: 'docs-14:00',
-          severity: 'success',
-          label: '14:00 · 91 · Good'
-        },
-        {
-          id: 'docs-15:00',
-          severity: 'success',
-          label: '15:00 · 86 · Good'
-        },
-        {
-          id: 'docs-16:00',
-          severity: 'success',
-          label: '16:00 · 83 · Good'
-        },
-        {
-          id: 'docs-17:00',
-          severity: 'success',
-          label: '17:00 · 89 · Good'
-        },
-        {
-          id: 'docs-18:00',
-          severity: 'success',
-          label: '18:00 · 100 · Good'
-        },
-        {
-          id: 'docs-19:00',
-          severity: 'success',
-          label: '19:00 · 94 · Good'
-        },
-        {
-          id: 'docs-20:00',
-          severity: 'success',
-          label: '20:00 · 95 · Good'
-        },
-        {
-          id: 'docs-21:00',
-          severity: 'success',
-          label: '21:00 · 100 · Good'
-        },
-        {
-          id: 'docs-22:00',
-          severity: 'success',
-          label: '22:00 · 99 · Good'
-        },
-        {
-          id: 'docs-23:00',
-          severity: 'success',
-          label: '23:00 · 93 · Good'
-        }
-      ]
-    }
-  ]
-
-  const incidents: Incident[] = [
-    {
-      id: 'incident-03',
-      name: 'Video calls',
-      scope: 'Application',
-      icon: 'ai ai-layout-grid',
-      devices: 34,
-      share: 12,
-      cause: 'Packet loss',
-      opened: '2026-11-10T09:40:00Z',
-      openedLabel: '09:40',
-      band: {
-        label: 'Poor',
-        severity: 'danger'
-      }
-    },
-    {
-      id: 'incident-02',
-      name: 'Travel',
-      scope: 'Location',
-      icon: 'ai ai-map-pin',
-      devices: 9,
-      share: 31,
-      cause: 'High latency',
-      opened: '2026-11-10T07:15:00Z',
-      openedLabel: '07:15',
-      band: {
-        label: 'Fair',
-        severity: 'warning'
-      }
-    },
-    {
-      id: 'incident-01',
-      name: 'File storage',
-      scope: 'Application',
-      icon: 'ai ai-layout-grid',
-      devices: 18,
-      share: 7,
-      cause: 'Slow server response',
-      opened: '2026-11-10T06:02:00Z',
-      openedLabel: '06:02',
-      band: {
-        label: 'Fair',
-        severity: 'warning'
-      }
-    }
-  ]
 
   const formatScore = (value: number) => value.toFixed(0)
 </script>
@@ -1230,7 +423,15 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load overall score. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <div
+              v-else
               class="grid grid-cols-1 items-center gap-(--spacing-lg) md:grid-cols-[minmax(0,12rem)_1fr]"
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
@@ -1252,7 +453,7 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
               <Chart
                 v-model:active-index="activeIndex"
                 :series="overall.series"
-                :labels="hours"
+                :labels="overall.labels"
                 :min="0"
                 :max="100"
                 :format-value="formatScore"
@@ -1283,7 +484,15 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load score per application. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <BarList
+              v-else
               :items="applications"
               sort="ascending"
               :format-value="formatScore"
@@ -1302,7 +511,15 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load score per location. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <BarList
+              v-else
               :items="locations"
               sort="ascending"
               :color="2"
@@ -1322,8 +539,15 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load hourly score. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <ul
-              v-if="loading"
+              v-else-if="loading"
               aria-busy="true"
               class="flex flex-col gap-(--spacing-sm)"
             >
@@ -1384,12 +608,19 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
 
       <Card
         title="Open incidents"
-        :padded="false"
+        :padded="error !== ''"
       >
         <template #default>
+          <Alert
+            v-if="error"
+            severity="danger"
+            :label="`Couldn't load open incidents. ${error}`"
+            action-label="Retry"
+            @action="(event) => emit('retry', event)"
+          />
           <Item.List
+            v-else-if="loading"
             key="item.list-1"
-            v-if="loading"
             aria-busy="true"
           >
             <Item
@@ -1468,4 +699,955 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { BarListItem } from '@aziontech/webkit/bar-list'
+
+import type {
+  HealthScoreHourlyRow,
+  HealthScoreIncident,
+  HealthScoreOverall
+} from './health-score-dashboard.vue'
+
+const hours: string[] = [
+  '00:00',
+  '01:00',
+  '02:00',
+  '03:00',
+  '04:00',
+  '05:00',
+  '06:00',
+  '07:00',
+  '08:00',
+  '09:00',
+  '10:00',
+  '11:00',
+  '12:00',
+  '13:00',
+  '14:00',
+  '15:00',
+  '16:00',
+  '17:00',
+  '18:00',
+  '19:00',
+  '20:00',
+  '21:00',
+  '22:00',
+  '23:00'
+]
+
+export const sampleOverall: HealthScoreOverall = {
+  score: 79,
+  band: {
+    label: 'Fair',
+    severity: 'warning'
+  },
+  cause: 'packet loss',
+  labels: hours,
+  series: [
+    {
+      id: 'score',
+      name: 'Score',
+      values: [
+        84, 85, 86, 86, 85, 84, 82, 79, 74, 71, 73, 76, 78, 77, 75, 72, 70, 74, 78, 81, 83, 84, 85,
+        84
+      ]
+    }
+  ]
+}
+
+export const sampleApplications: BarListItem[] = [
+  {
+    id: 'video-calls',
+    name: 'Video calls · packet loss',
+    value: 48
+  },
+  {
+    id: 'file-storage',
+    name: 'File storage · slow server response',
+    value: 64
+  },
+  {
+    id: 'crm',
+    name: 'CRM · slow DNS lookups',
+    value: 73
+  },
+  {
+    id: 'mail',
+    name: 'Mail · Wi-Fi signal',
+    value: 83
+  },
+  {
+    id: 'chat',
+    name: 'Chat · Wi-Fi signal',
+    value: 89
+  },
+  {
+    id: 'docs',
+    name: 'Docs · high latency',
+    value: 93
+  }
+]
+
+export const sampleLocations: BarListItem[] = [
+  {
+    id: 'travel',
+    name: 'Travel · high latency',
+    value: 58
+  },
+  {
+    id: 'home',
+    name: 'Home · Wi-Fi signal',
+    value: 71
+  },
+  {
+    id: 'south-branch',
+    name: 'South branch · packet loss',
+    value: 76
+  },
+  {
+    id: 'north-branch',
+    name: 'North branch · slow DNS lookups',
+    value: 84
+  },
+  {
+    id: 'main-office',
+    name: 'Main office · slow server response',
+    value: 89
+  }
+]
+
+export const sampleHourly: HealthScoreHourlyRow[] = [
+  {
+    id: 'video-calls',
+    name: 'Video calls',
+    band: {
+      label: 'Fair',
+      severity: 'warning'
+    },
+    blocks: [
+      {
+        id: 'video-calls-00:00',
+        severity: 'warning',
+        label: '00:00 · 62 · Fair'
+      },
+      {
+        id: 'video-calls-01:00',
+        severity: 'warning',
+        label: '01:00 · 57 · Fair'
+      },
+      {
+        id: 'video-calls-02:00',
+        severity: 'warning',
+        label: '02:00 · 54 · Fair'
+      },
+      {
+        id: 'video-calls-03:00',
+        severity: 'warning',
+        label: '03:00 · 60 · Fair'
+      },
+      {
+        id: 'video-calls-04:00',
+        severity: 'warning',
+        label: '04:00 · 61 · Fair'
+      },
+      {
+        id: 'video-calls-05:00',
+        severity: 'warning',
+        label: '05:00 · 55 · Fair'
+      },
+      {
+        id: 'video-calls-06:00',
+        severity: 'warning',
+        label: '06:00 · 56 · Fair'
+      },
+      {
+        id: 'video-calls-07:00',
+        severity: 'warning',
+        label: '07:00 · 62 · Fair'
+      },
+      {
+        id: 'video-calls-08:00',
+        severity: 'danger',
+        label: '08:00 · 35 · Poor'
+      },
+      {
+        id: 'video-calls-09:00',
+        severity: 'danger',
+        label: '09:00 · 30 · Poor'
+      },
+      {
+        id: 'video-calls-10:00',
+        severity: 'danger',
+        label: '10:00 · 34 · Poor'
+      },
+      {
+        id: 'video-calls-11:00',
+        severity: 'danger',
+        label: '11:00 · 38 · Poor'
+      },
+      {
+        id: 'video-calls-12:00',
+        severity: 'danger',
+        label: '12:00 · 33 · Poor'
+      },
+      {
+        id: 'video-calls-13:00',
+        severity: 'danger',
+        label: '13:00 · 30 · Poor'
+      },
+      {
+        id: 'video-calls-14:00',
+        severity: 'danger',
+        label: '14:00 · 36 · Poor'
+      },
+      {
+        id: 'video-calls-15:00',
+        severity: 'danger',
+        label: '15:00 · 37 · Poor'
+      },
+      {
+        id: 'video-calls-16:00',
+        severity: 'danger',
+        label: '16:00 · 32 · Poor'
+      },
+      {
+        id: 'video-calls-17:00',
+        severity: 'danger',
+        label: '17:00 · 31 · Poor'
+      },
+      {
+        id: 'video-calls-18:00',
+        severity: 'warning',
+        label: '18:00 · 61 · Fair'
+      },
+      {
+        id: 'video-calls-19:00',
+        severity: 'warning',
+        label: '19:00 · 60 · Fair'
+      },
+      {
+        id: 'video-calls-20:00',
+        severity: 'warning',
+        label: '20:00 · 54 · Fair'
+      },
+      {
+        id: 'video-calls-21:00',
+        severity: 'warning',
+        label: '21:00 · 57 · Fair'
+      },
+      {
+        id: 'video-calls-22:00',
+        severity: 'warning',
+        label: '22:00 · 62 · Fair'
+      },
+      {
+        id: 'video-calls-23:00',
+        severity: 'warning',
+        label: '23:00 · 58 · Fair'
+      }
+    ]
+  },
+  {
+    id: 'file-storage',
+    name: 'File storage',
+    band: {
+      label: 'Fair',
+      severity: 'warning'
+    },
+    blocks: [
+      {
+        id: 'file-storage-00:00',
+        severity: 'warning',
+        label: '00:00 · 72 · Fair'
+      },
+      {
+        id: 'file-storage-01:00',
+        severity: 'warning',
+        label: '01:00 · 68 · Fair'
+      },
+      {
+        id: 'file-storage-02:00',
+        severity: 'warning',
+        label: '02:00 · 73 · Fair'
+      },
+      {
+        id: 'file-storage-03:00',
+        severity: 'warning',
+        label: '03:00 · 76 · Fair'
+      },
+      {
+        id: 'file-storage-04:00',
+        severity: 'warning',
+        label: '04:00 · 70 · Fair'
+      },
+      {
+        id: 'file-storage-05:00',
+        severity: 'warning',
+        label: '05:00 · 69 · Fair'
+      },
+      {
+        id: 'file-storage-06:00',
+        severity: 'warning',
+        label: '06:00 · 75 · Fair'
+      },
+      {
+        id: 'file-storage-07:00',
+        severity: 'warning',
+        label: '07:00 · 74 · Fair'
+      },
+      {
+        id: 'file-storage-08:00',
+        severity: 'danger',
+        label: '08:00 · 49 · Poor'
+      },
+      {
+        id: 'file-storage-09:00',
+        severity: 'warning',
+        label: '09:00 · 51 · Fair'
+      },
+      {
+        id: 'file-storage-10:00',
+        severity: 'warning',
+        label: '10:00 · 56 · Fair'
+      },
+      {
+        id: 'file-storage-11:00',
+        severity: 'warning',
+        label: '11:00 · 52 · Fair'
+      },
+      {
+        id: 'file-storage-12:00',
+        severity: 'danger',
+        label: '12:00 · 48 · Poor'
+      },
+      {
+        id: 'file-storage-13:00',
+        severity: 'warning',
+        label: '13:00 · 53 · Fair'
+      },
+      {
+        id: 'file-storage-14:00',
+        severity: 'warning',
+        label: '14:00 · 56 · Fair'
+      },
+      {
+        id: 'file-storage-15:00',
+        severity: 'warning',
+        label: '15:00 · 50 · Fair'
+      },
+      {
+        id: 'file-storage-16:00',
+        severity: 'danger',
+        label: '16:00 · 49 · Poor'
+      },
+      {
+        id: 'file-storage-17:00',
+        severity: 'warning',
+        label: '17:00 · 54 · Fair'
+      },
+      {
+        id: 'file-storage-18:00',
+        severity: 'warning',
+        label: '18:00 · 75 · Fair'
+      },
+      {
+        id: 'file-storage-19:00',
+        severity: 'warning',
+        label: '19:00 · 69 · Fair'
+      },
+      {
+        id: 'file-storage-20:00',
+        severity: 'warning',
+        label: '20:00 · 70 · Fair'
+      },
+      {
+        id: 'file-storage-21:00',
+        severity: 'warning',
+        label: '21:00 · 76 · Fair'
+      },
+      {
+        id: 'file-storage-22:00',
+        severity: 'warning',
+        label: '22:00 · 73 · Fair'
+      },
+      {
+        id: 'file-storage-23:00',
+        severity: 'warning',
+        label: '23:00 · 68 · Fair'
+      }
+    ]
+  },
+  {
+    id: 'crm',
+    name: 'CRM',
+    band: {
+      label: 'Good',
+      severity: 'success'
+    },
+    blocks: [
+      {
+        id: 'crm-00:00',
+        severity: 'warning',
+        label: '00:00 · 76 · Fair'
+      },
+      {
+        id: 'crm-01:00',
+        severity: 'success',
+        label: '01:00 · 81 · Good'
+      },
+      {
+        id: 'crm-02:00',
+        severity: 'success',
+        label: '02:00 · 84 · Good'
+      },
+      {
+        id: 'crm-03:00',
+        severity: 'warning',
+        label: '03:00 · 78 · Fair'
+      },
+      {
+        id: 'crm-04:00',
+        severity: 'warning',
+        label: '04:00 · 77 · Fair'
+      },
+      {
+        id: 'crm-05:00',
+        severity: 'success',
+        label: '05:00 · 83 · Good'
+      },
+      {
+        id: 'crm-06:00',
+        severity: 'success',
+        label: '06:00 · 82 · Good'
+      },
+      {
+        id: 'crm-07:00',
+        severity: 'warning',
+        label: '07:00 · 76 · Fair'
+      },
+      {
+        id: 'crm-08:00',
+        severity: 'warning',
+        label: '08:00 · 63 · Fair'
+      },
+      {
+        id: 'crm-09:00',
+        severity: 'warning',
+        label: '09:00 · 68 · Fair'
+      },
+      {
+        id: 'crm-10:00',
+        severity: 'warning',
+        label: '10:00 · 64 · Fair'
+      },
+      {
+        id: 'crm-11:00',
+        severity: 'warning',
+        label: '11:00 · 60 · Fair'
+      },
+      {
+        id: 'crm-12:00',
+        severity: 'warning',
+        label: '12:00 · 65 · Fair'
+      },
+      {
+        id: 'crm-13:00',
+        severity: 'warning',
+        label: '13:00 · 68 · Fair'
+      },
+      {
+        id: 'crm-14:00',
+        severity: 'warning',
+        label: '14:00 · 62 · Fair'
+      },
+      {
+        id: 'crm-15:00',
+        severity: 'warning',
+        label: '15:00 · 61 · Fair'
+      },
+      {
+        id: 'crm-16:00',
+        severity: 'warning',
+        label: '16:00 · 66 · Fair'
+      },
+      {
+        id: 'crm-17:00',
+        severity: 'warning',
+        label: '17:00 · 67 · Fair'
+      },
+      {
+        id: 'crm-18:00',
+        severity: 'warning',
+        label: '18:00 · 77 · Fair'
+      },
+      {
+        id: 'crm-19:00',
+        severity: 'warning',
+        label: '19:00 · 78 · Fair'
+      },
+      {
+        id: 'crm-20:00',
+        severity: 'success',
+        label: '20:00 · 84 · Good'
+      },
+      {
+        id: 'crm-21:00',
+        severity: 'success',
+        label: '21:00 · 81 · Good'
+      },
+      {
+        id: 'crm-22:00',
+        severity: 'warning',
+        label: '22:00 · 76 · Fair'
+      },
+      {
+        id: 'crm-23:00',
+        severity: 'success',
+        label: '23:00 · 80 · Good'
+      }
+    ]
+  },
+  {
+    id: 'mail',
+    name: 'Mail',
+    band: {
+      label: 'Good',
+      severity: 'success'
+    },
+    blocks: [
+      {
+        id: 'mail-00:00',
+        severity: 'success',
+        label: '00:00 · 93 · Good'
+      },
+      {
+        id: 'mail-01:00',
+        severity: 'success',
+        label: '01:00 · 89 · Good'
+      },
+      {
+        id: 'mail-02:00',
+        severity: 'success',
+        label: '02:00 · 85 · Good'
+      },
+      {
+        id: 'mail-03:00',
+        severity: 'success',
+        label: '03:00 · 90 · Good'
+      },
+      {
+        id: 'mail-04:00',
+        severity: 'success',
+        label: '04:00 · 93 · Good'
+      },
+      {
+        id: 'mail-05:00',
+        severity: 'success',
+        label: '05:00 · 87 · Good'
+      },
+      {
+        id: 'mail-06:00',
+        severity: 'success',
+        label: '06:00 · 86 · Good'
+      },
+      {
+        id: 'mail-07:00',
+        severity: 'success',
+        label: '07:00 · 91 · Good'
+      },
+      {
+        id: 'mail-08:00',
+        severity: 'warning',
+        label: '08:00 · 78 · Fair'
+      },
+      {
+        id: 'mail-09:00',
+        severity: 'warning',
+        label: '09:00 · 72 · Fair'
+      },
+      {
+        id: 'mail-10:00',
+        severity: 'warning',
+        label: '10:00 · 73 · Fair'
+      },
+      {
+        id: 'mail-11:00',
+        severity: 'warning',
+        label: '11:00 · 79 · Fair'
+      },
+      {
+        id: 'mail-12:00',
+        severity: 'warning',
+        label: '12:00 · 76 · Fair'
+      },
+      {
+        id: 'mail-13:00',
+        severity: 'warning',
+        label: '13:00 · 71 · Fair'
+      },
+      {
+        id: 'mail-14:00',
+        severity: 'warning',
+        label: '14:00 · 75 · Fair'
+      },
+      {
+        id: 'mail-15:00',
+        severity: 'warning',
+        label: '15:00 · 79 · Fair'
+      },
+      {
+        id: 'mail-16:00',
+        severity: 'warning',
+        label: '16:00 · 74 · Fair'
+      },
+      {
+        id: 'mail-17:00',
+        severity: 'warning',
+        label: '17:00 · 71 · Fair'
+      },
+      {
+        id: 'mail-18:00',
+        severity: 'success',
+        label: '18:00 · 91 · Good'
+      },
+      {
+        id: 'mail-19:00',
+        severity: 'success',
+        label: '19:00 · 92 · Good'
+      },
+      {
+        id: 'mail-20:00',
+        severity: 'success',
+        label: '20:00 · 86 · Good'
+      },
+      {
+        id: 'mail-21:00',
+        severity: 'success',
+        label: '21:00 · 86 · Good'
+      },
+      {
+        id: 'mail-22:00',
+        severity: 'success',
+        label: '22:00 · 92 · Good'
+      },
+      {
+        id: 'mail-23:00',
+        severity: 'success',
+        label: '23:00 · 91 · Good'
+      }
+    ]
+  },
+  {
+    id: 'chat',
+    name: 'Chat',
+    band: {
+      label: 'Good',
+      severity: 'success'
+    },
+    blocks: [
+      {
+        id: 'chat-00:00',
+        severity: 'success',
+        label: '00:00 · 94 · Good'
+      },
+      {
+        id: 'chat-01:00',
+        severity: 'success',
+        label: '01:00 · 98 · Good'
+      },
+      {
+        id: 'chat-02:00',
+        severity: 'success',
+        label: '02:00 · 93 · Good'
+      },
+      {
+        id: 'chat-03:00',
+        severity: 'success',
+        label: '03:00 · 90 · Good'
+      },
+      {
+        id: 'chat-04:00',
+        severity: 'success',
+        label: '04:00 · 96 · Good'
+      },
+      {
+        id: 'chat-05:00',
+        severity: 'success',
+        label: '05:00 · 97 · Good'
+      },
+      {
+        id: 'chat-06:00',
+        severity: 'success',
+        label: '06:00 · 91 · Good'
+      },
+      {
+        id: 'chat-07:00',
+        severity: 'success',
+        label: '07:00 · 92 · Good'
+      },
+      {
+        id: 'chat-08:00',
+        severity: 'success',
+        label: '08:00 · 86 · Good'
+      },
+      {
+        id: 'chat-09:00',
+        severity: 'success',
+        label: '09:00 · 83 · Good'
+      },
+      {
+        id: 'chat-10:00',
+        severity: 'warning',
+        label: '10:00 · 78 · Fair'
+      },
+      {
+        id: 'chat-11:00',
+        severity: 'success',
+        label: '11:00 · 82 · Good'
+      },
+      {
+        id: 'chat-12:00',
+        severity: 'success',
+        label: '12:00 · 86 · Good'
+      },
+      {
+        id: 'chat-13:00',
+        severity: 'success',
+        label: '13:00 · 81 · Good'
+      },
+      {
+        id: 'chat-14:00',
+        severity: 'warning',
+        label: '14:00 · 78 · Fair'
+      },
+      {
+        id: 'chat-15:00',
+        severity: 'success',
+        label: '15:00 · 84 · Good'
+      },
+      {
+        id: 'chat-16:00',
+        severity: 'success',
+        label: '16:00 · 85 · Good'
+      },
+      {
+        id: 'chat-17:00',
+        severity: 'success',
+        label: '17:00 · 80 · Good'
+      },
+      {
+        id: 'chat-18:00',
+        severity: 'success',
+        label: '18:00 · 91 · Good'
+      },
+      {
+        id: 'chat-19:00',
+        severity: 'success',
+        label: '19:00 · 97 · Good'
+      },
+      {
+        id: 'chat-20:00',
+        severity: 'success',
+        label: '20:00 · 96 · Good'
+      },
+      {
+        id: 'chat-21:00',
+        severity: 'success',
+        label: '21:00 · 90 · Good'
+      },
+      {
+        id: 'chat-22:00',
+        severity: 'success',
+        label: '22:00 · 93 · Good'
+      },
+      {
+        id: 'chat-23:00',
+        severity: 'success',
+        label: '23:00 · 98 · Good'
+      }
+    ]
+  },
+  {
+    id: 'docs',
+    name: 'Docs',
+    band: {
+      label: 'Good',
+      severity: 'success'
+    },
+    blocks: [
+      {
+        id: 'docs-00:00',
+        severity: 'success',
+        label: '00:00 · 97 · Good'
+      },
+      {
+        id: 'docs-01:00',
+        severity: 'success',
+        label: '01:00 · 93 · Good'
+      },
+      {
+        id: 'docs-02:00',
+        severity: 'success',
+        label: '02:00 · 98 · Good'
+      },
+      {
+        id: 'docs-03:00',
+        severity: 'success',
+        label: '03:00 · 100 · Good'
+      },
+      {
+        id: 'docs-04:00',
+        severity: 'success',
+        label: '04:00 · 95 · Good'
+      },
+      {
+        id: 'docs-05:00',
+        severity: 'success',
+        label: '05:00 · 94 · Good'
+      },
+      {
+        id: 'docs-06:00',
+        severity: 'success',
+        label: '06:00 · 99 · Good'
+      },
+      {
+        id: 'docs-07:00',
+        severity: 'success',
+        label: '07:00 · 100 · Good'
+      },
+      {
+        id: 'docs-08:00',
+        severity: 'success',
+        label: '08:00 · 84 · Good'
+      },
+      {
+        id: 'docs-09:00',
+        severity: 'success',
+        label: '09:00 · 85 · Good'
+      },
+      {
+        id: 'docs-10:00',
+        severity: 'success',
+        label: '10:00 · 91 · Good'
+      },
+      {
+        id: 'docs-11:00',
+        severity: 'success',
+        label: '11:00 · 88 · Good'
+      },
+      {
+        id: 'docs-12:00',
+        severity: 'success',
+        label: '12:00 · 83 · Good'
+      },
+      {
+        id: 'docs-13:00',
+        severity: 'success',
+        label: '13:00 · 87 · Good'
+      },
+      {
+        id: 'docs-14:00',
+        severity: 'success',
+        label: '14:00 · 91 · Good'
+      },
+      {
+        id: 'docs-15:00',
+        severity: 'success',
+        label: '15:00 · 86 · Good'
+      },
+      {
+        id: 'docs-16:00',
+        severity: 'success',
+        label: '16:00 · 83 · Good'
+      },
+      {
+        id: 'docs-17:00',
+        severity: 'success',
+        label: '17:00 · 89 · Good'
+      },
+      {
+        id: 'docs-18:00',
+        severity: 'success',
+        label: '18:00 · 100 · Good'
+      },
+      {
+        id: 'docs-19:00',
+        severity: 'success',
+        label: '19:00 · 94 · Good'
+      },
+      {
+        id: 'docs-20:00',
+        severity: 'success',
+        label: '20:00 · 95 · Good'
+      },
+      {
+        id: 'docs-21:00',
+        severity: 'success',
+        label: '21:00 · 100 · Good'
+      },
+      {
+        id: 'docs-22:00',
+        severity: 'success',
+        label: '22:00 · 99 · Good'
+      },
+      {
+        id: 'docs-23:00',
+        severity: 'success',
+        label: '23:00 · 93 · Good'
+      }
+    ]
+  }
+]
+
+export const sampleIncidents: HealthScoreIncident[] = [
+  {
+    id: 'incident-03',
+    name: 'Video calls',
+    scope: 'Application',
+    icon: 'ai ai-layout-grid',
+    devices: 34,
+    share: 12,
+    cause: 'Packet loss',
+    opened: '2026-11-10T09:40:00Z',
+    openedLabel: '09:40',
+    band: {
+      label: 'Poor',
+      severity: 'danger'
+    }
+  },
+  {
+    id: 'incident-02',
+    name: 'Travel',
+    scope: 'Location',
+    icon: 'ai ai-map-pin',
+    devices: 9,
+    share: 31,
+    cause: 'High latency',
+    opened: '2026-11-10T07:15:00Z',
+    openedLabel: '07:15',
+    band: {
+      label: 'Fair',
+      severity: 'warning'
+    }
+  },
+  {
+    id: 'incident-01',
+    name: 'File storage',
+    scope: 'Application',
+    icon: 'ai ai-layout-grid',
+    devices: 18,
+    share: 7,
+    cause: 'Slow server response',
+    opened: '2026-11-10T06:02:00Z',
+    openedLabel: '06:02',
+    band: {
+      label: 'Fair',
+      severity: 'warning'
+    }
+  }
+]
 ```

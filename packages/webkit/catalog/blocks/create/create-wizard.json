@@ -21,6 +21,9 @@
    "file": "blocks/create/create-wizard/variants/create-and-deploy.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { CreateWizardPolicy } from './create-wizard.vue'\n\nexport const samplePolicies: CreateWizardPolicy[] = [\n  { value: 'acme-production', label: 'acme-production', description: 'acme-site', ready: true },\n  { value: 'acme-staging', label: 'acme-staging', description: 'acme-site', ready: false },\n  { value: 'api-hardening', label: 'api-hardening', description: 'legacy-api', ready: false },\n  {\n    value: 'checkout-shield',\n    label: 'checkout-shield',\n    description: 'ecommerce-v2',\n    ready: false\n  },\n  { value: 'dev-sandbox', label: 'dev-sandbox', description: 'internal', ready: false },\n  {\n    value: 'marketing-site',\n    label: 'marketing-site',\n    description: 'marketing-site',\n    ready: false\n  },\n  { value: 'payments-api', label: 'payments-api', description: 'ecommerce-v2', ready: false },\n  { value: 'partner-gateway', label: 'partner-gateway', description: 'legacy-api', ready: true },\n  { value: 'admin-allowlist', label: 'admin-allowlist', description: 'status-page', ready: true },\n  {\n    value: 'media-delivery',\n    label: 'media-delivery',\n    description: 'blog-platform',\n    ready: false\n  },\n  { value: 'acme-canary', label: 'acme-canary', description: 'acme-docs', ready: false },\n  {\n    value: 'search-api-shield',\n    label: 'search-api-shield',\n    description: 'ecommerce-storefront',\n    ready: false\n  },\n  {\n    value: 'legacy-storefront',\n    label: 'legacy-storefront',\n    description: 'ecommerce-storefront',\n    ready: false\n  },\n  { value: 'qa-sandbox', label: 'qa-sandbox', description: 'internal', ready: false }\n]"
+ },
  "sfcFile": "blocks/create/create-wizard/create-wizard.vue",
  "guidelinesFile": "blocks/create/create-wizard/guidelines.md"
 }

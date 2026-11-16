@@ -11,6 +11,9 @@
    "file": "blocks/account/payment-method-card/variants/disabled.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { PaymentMethodCardCard } from './payment-method-card.vue'\n\nexport const sampleCard: PaymentMethodCardCard = { brand: 'visa', last4: '8888' }"
+ },
  "sfcFile": "blocks/account/payment-method-card/payment-method-card.vue",
  "guidelinesFile": "blocks/account/payment-method-card/guidelines.md"
 }

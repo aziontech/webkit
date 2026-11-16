@@ -104,6 +104,58 @@ as bad in the change tag too.
 Each contributor's share as a `Progress` beside the percentage, with an `aria-label` naming the
 resource (`web-app share of total`). The bar is a visual aid; the number is the value.
 
+### P. Load failure — `Alert` (required)
+
+When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+
+## Data
+
+The block takes its figures and records through props and emits every action; it fetches nothing. `BreakdownDashboardProps` and the record types (`BreakdownDashboardKpis`, `BreakdownDashboardContributor`) are exported from `breakdown-dashboard.vue`, and `sample.ts` holds the sample year the block renders when a data prop is left out (and never while `loading` or `error` is set).
+
+| Prop             | Type                              | What it does                                                                                                                           |
+| ---------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `kpis`           | `BreakdownDashboardKpis`          | The value, delta and sparkline of each tile, by metric (`total`, `compute`, `database`, `storage`). A metric left out reads as a dash. |
+| `labels`         | `string[]`                        | The month labels of Spend by category.                                                                                                 |
+| `series`         | `ChartSeries[]`                   | Monthly spend, one series per category. `[]` shows the chart's empty state.                                                            |
+| `split`          | `ChartSeries[]`                   | This month's spend by category, one value per series, for the donut.                                                                   |
+| `contributors`   | `BreakdownDashboardContributor[]` | The Top contributors rows. `[]` shows No spend in this range.                                                                          |
+| `loading`        | `boolean`                         | The period is loading; every tile, both charts and the table show their skeleton, and the exports disable.                             |
+| `error`          | `string`                          | Why the period could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                |
+| `v-model:period` | `string`                          | The selected period (`12m`, `6m`, `ytd`); default `12m`. Refetch when it changes.                                                      |
+
+| Event           | Payload         | When                                                                                                             |
+| --------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `retry`         | `(event)`       | Retry in any card's error alert.                                                                                 |
+| `export`        | `(event, card)` | Export CSV in the header (`spend-by-category`) or a card menu; the block downloads the CSV of the data it shows. |
+| `update:period` | `(value)`       | The reader picked another period.                                                                                |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import BreakdownDashboard from './breakdown-dashboard.vue'
+
+  const period = ref('12m')
+  const { data, pending, error, refresh } = useSpendBreakdown(period)
+</script>
+
+<template>
+  <BreakdownDashboard
+    v-model:period="period"
+    :kpis="data?.kpis ?? {}"
+    :labels="data?.labels ?? []"
+    :series="data?.series ?? []"
+    :split="data?.split ?? []"
+    :contributors="data?.contributors ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the category order and colors identical across tiles, stacked chart, donut and table.
@@ -136,10 +188,10 @@ resource (`web-app share of total`). The bar is a visual aid; the number is the 
 
 ## States
 
-- Default: the populated breakdown for the period.
-- Loading: every tile, both charts and the table hold their place with a `Skeleton`.
-- Empty: nothing billed in the period; tiles show a dash with no delta or trend, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
-- Error: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Default: the populated breakdown for the period (`v-model:period`).
+- Loading: `loading` is set; every tile, both charts and the table hold their place with a `Skeleton`.
+- Empty: nothing billed in the period (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta or trend, the exports disable, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
+- Error: the request for the period failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
 
 ## Related
 
@@ -161,6 +213,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
@@ -181,232 +234,125 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
-  interface Contributor {
+  import { sampleContributors, sampleKpis, sampleLabels, sampleSeries, sampleSplit } from './sample'
+
+  /** A summary tile. */
+  export type BreakdownDashboardMetric = 'total' | 'compute' | 'database' | 'storage'
+
+  /** The figure a summary tile shows. */
+  export interface BreakdownDashboardKpi {
+    /** Spend this month in USD; null reads as a dash. */
+    value: number | null
+    /** Percent change against last month; null hides the delta. */
+    delta: number | null
+    /** Monthly spend over the range, drawn as the tile sparkline. */
+    trend: number[]
+  }
+
+  /** The figures of the summary tiles, by metric; a metric left out reads as a dash. */
+  export type BreakdownDashboardKpis = Partial<
+    Record<BreakdownDashboardMetric, BreakdownDashboardKpi>
+  >
+
+  /** One row of Top contributors. */
+  export interface BreakdownDashboardContributor {
+    /** Stable key. */
     id: string
+    /** Position by spend, 1 for the largest. */
     rank: number
+    /** The resource name. */
     name: string
+    /** Icon class of the resource kind. */
     icon: string
+    /** The spend category it bills to. */
     category: string
+    /** Spend this month in USD. */
     amount: number
+    /** Percent of the total spend. */
     share: number
+    /** Percent change against last month. */
     change: number
   }
 
-  const loading = false
+  /** A card whose data can be exported as CSV. */
+  export type BreakdownDashboardCard = 'spend-by-category' | 'current-split' | 'top-contributors'
+
+  export interface BreakdownDashboardProps {
+    /** The summary tile figures. Left out, the sample renders. */
+    kpis?: BreakdownDashboardKpis
+    /** The month labels of Spend by category. Left out, the sample renders. */
+    labels?: string[]
+    /** Monthly spend, one series per category. Left out, the sample renders. */
+    series?: ChartSeries[]
+    /** This month's spend by category, one value per series. Left out, the sample renders. */
+    split?: ChartSeries[]
+    /** The resources that cost the most this month. Left out, the sample renders. */
+    contributors?: BreakdownDashboardContributor[]
+    /** The period is loading: every tile, chart and the table show their skeleton. */
+    loading?: boolean
+    /** Why the period could not load, after the name of each card in its danger alert. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<BreakdownDashboardProps>(), {
+    kpis: undefined,
+    labels: undefined,
+    series: undefined,
+    split: undefined,
+    contributors: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+    export: [event: Event, card: BreakdownDashboardCard]
+  }>()
+
+  const period = defineModel<string>('period', { default: '12m' })
+
   const comparison = 'vs previous month'
 
-  const figures = [
+  const tiles: { metric: BreakdownDashboardMetric; label: string; description: string }[] = [
     {
-      id: 'total',
+      metric: 'total',
       label: 'Total spend',
-      description: 'Everything billed to the organization this month.',
-      value: 38500,
-      delta: 4.05,
-      trend: [27600, 28100, 29000, 29900, 31000, 31700, 32700, 33700, 34700, 35600, 37000, 38500]
+      description: 'Everything billed to the organization this month.'
     },
     {
-      id: 'compute',
+      metric: 'compute',
       label: 'Compute',
-      description: 'Spend on compute this month, the share of the total it carries.',
-      value: 16900,
-      delta: 4.32,
-      trend: [11800, 12100, 12400, 12900, 13300, 13700, 14200, 14600, 15100, 15500, 16200, 16900]
+      description: 'Spend on compute this month, the share of the total it carries.'
     },
     {
-      id: 'database',
+      metric: 'database',
       label: 'Database',
-      description: 'Spend on database this month, the share of the total it carries.',
-      value: 9400,
-      delta: 3.3,
-      trend: [7200, 7300, 7500, 7600, 7800, 8000, 8100, 8300, 8600, 8800, 9100, 9400]
+      description: 'Spend on database this month, the share of the total it carries.'
     },
     {
-      id: 'storage',
+      metric: 'storage',
       label: 'Storage',
-      description: 'Spend on storage this month, the share of the total it carries.',
-      value: 6000,
-      delta: 3.45,
-      trend: [4100, 4300, 4400, 4600, 4800, 5000, 5100, 5300, 5500, 5600, 5800, 6000]
+      description: 'Spend on storage this month, the share of the total it carries.'
     }
   ]
 
-  const labels = [
-    'Dec',
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov'
-  ]
-
-  const series: ChartSeries[] = [
-    {
-      id: 'compute',
-      name: 'Compute',
-      values: [11800, 12100, 12400, 12900, 13300, 13700, 14200, 14600, 15100, 15500, 16200, 16900]
-    },
-    {
-      id: 'database',
-      name: 'Database',
-      values: [7200, 7300, 7500, 7600, 7800, 8000, 8100, 8300, 8600, 8800, 9100, 9400]
-    },
-    {
-      id: 'storage',
-      name: 'Storage',
-      values: [4100, 4300, 4400, 4600, 4800, 5000, 5100, 5300, 5500, 5600, 5800, 6000]
-    },
-    {
-      id: 'networking',
-      name: 'Networking',
-      values: [3000, 2900, 3100, 3200, 3400, 3300, 3500, 3700, 3600, 3800, 3900, 4100]
-    },
-    {
-      id: 'monitoring',
-      name: 'Monitoring',
-      values: [1500, 1500, 1600, 1600, 1700, 1700, 1800, 1800, 1900, 1900, 2000, 2100]
-    }
-  ]
-
-  const split: ChartSeries[] = [
-    {
-      id: 'compute',
-      name: 'Compute',
-      values: [16900]
-    },
-    {
-      id: 'database',
-      name: 'Database',
-      values: [9400]
-    },
-    {
-      id: 'storage',
-      name: 'Storage',
-      values: [6000]
-    },
-    {
-      id: 'networking',
-      name: 'Networking',
-      values: [4100]
-    },
-    {
-      id: 'monitoring',
-      name: 'Monitoring',
-      values: [2100]
-    }
-  ]
-
-  const contributors: Contributor[] = [
-    {
-      id: 'web-app',
-      rank: 1,
-      name: 'web-app',
-      icon: 'ai ai-server',
-      category: 'Compute',
-      amount: 6200,
-      share: 16.1,
-      change: 5.08
-    },
-    {
-      id: 'worker-pool',
-      rank: 2,
-      name: 'worker-pool',
-      icon: 'ai ai-server',
-      category: 'Compute',
-      amount: 5900,
-      share: 15.3,
-      change: 5.36
-    },
-    {
-      id: 'orders-db',
-      rank: 3,
-      name: 'orders-db',
-      icon: 'ai ai-database',
-      category: 'Database',
-      amount: 5400,
-      share: 14,
-      change: 5.88
-    },
-    {
-      id: 'api-service',
-      rank: 4,
-      name: 'api-service',
-      icon: 'ai ai-server',
-      category: 'Compute',
-      amount: 4800,
-      share: 12.5,
-      change: 2.13
-    },
-    {
-      id: 'analytics-warehouse',
-      rank: 5,
-      name: 'analytics-warehouse',
-      icon: 'ai ai-database',
-      category: 'Database',
-      amount: 4000,
-      share: 10.4,
-      change: 0
-    },
-    {
-      id: 'media-files',
-      rank: 6,
-      name: 'media-files',
-      icon: 'ai ai-folder',
-      category: 'Storage',
-      amount: 3700,
-      share: 9.6,
-      change: 8.82
-    },
-    {
-      id: 'public-egress',
-      rank: 7,
-      name: 'public-egress',
-      icon: 'ai ai-globe',
-      category: 'Networking',
-      amount: 2600,
-      share: 6.8,
-      change: 4
-    },
-    {
-      id: 'backups',
-      rank: 8,
-      name: 'backups',
-      icon: 'ai ai-folder',
-      category: 'Storage',
-      amount: 2300,
-      share: 6,
-      change: -4.17
-    },
-    {
-      id: 'logs-pipeline',
-      rank: 9,
-      name: 'logs-pipeline',
-      icon: 'ai ai-chart-line',
-      category: 'Monitoring',
-      amount: 2100,
-      share: 5.5,
-      change: 5
-    },
-    {
-      id: 'load-balancer',
-      rank: 10,
-      name: 'load-balancer',
-      icon: 'ai ai-globe',
-      category: 'Networking',
-      amount: 1500,
-      share: 3.9,
-      change: 7.14
-    }
-  ]
+  const blocked = computed(() => props.loading || props.error !== '')
+  const kpis = computed(() => props.kpis ?? (blocked.value ? {} : sampleKpis))
+  const labels = computed(() => props.labels ?? (blocked.value ? [] : sampleLabels))
+  const series = computed(() => props.series ?? (blocked.value ? [] : sampleSeries))
+  const split = computed(() => props.split ?? (blocked.value ? [] : sampleSplit))
+  const contributors = computed(
+    () => props.contributors ?? (blocked.value ? [] : sampleContributors)
+  )
+  const exportable = computed(
+    () =>
+      !blocked.value &&
+      (series.value.length > 0 || split.value.length > 0 || contributors.value.length > 0)
+  )
+  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const contributorColumns: TableColumn[] = [
     {
-      id: 'rank',
       accessorKey: 'rank',
       header: 'Rank',
       align: 'start',
@@ -414,7 +360,6 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
       minWidth: 64
     },
     {
-      id: 'name',
       accessorKey: 'name',
       header: 'Name',
       align: 'start',
@@ -423,7 +368,6 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
       grow: 2
     },
     {
-      id: 'category',
       accessorKey: 'category',
       header: 'Category',
       align: 'start',
@@ -431,7 +375,6 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
       minWidth: 120
     },
     {
-      id: 'amount',
       accessorKey: 'amount',
       header: 'Amount',
       align: 'end',
@@ -439,7 +382,6 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
       minWidth: 104
     },
     {
-      id: 'share',
       accessorKey: 'share',
       header: 'Share of total',
       align: 'start',
@@ -447,7 +389,6 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
       minWidth: 160
     },
     {
-      id: 'change',
       accessorKey: 'change',
       header: 'Change',
       align: 'end',
@@ -506,45 +447,44 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
     change: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
   }
 
-  const period = ref('12m')
   const trendForm = ref('area')
 
-  type CardId = 'spend-by-category' | 'current-split' | 'top-contributors'
+  const csvColumns = (headers: Record<string, string>): CsvColumn[] =>
+    Object.entries(headers).map(([id, header]) => ({ id, header }))
 
   interface CsvReport {
-    columns: CsvColumn[]
+    columns: () => CsvColumn[]
     rows: () => object[]
   }
 
-  const reports: Record<CardId, CsvReport> = {
+  const reports: Record<BreakdownDashboardCard, CsvReport> = {
     'spend-by-category': {
-      columns: [
-        { id: 'month', header: 'Month' },
-        ...series.map((entry) => ({ id: entry.id, header: entry.name }))
+      columns: () => [
+        ...csvColumns({ month: 'Month' }),
+        ...series.value.map((entry) => ({ id: entry.id, header: entry.name }))
       ],
       rows: () =>
-        labels.map((month, index) => ({
+        labels.value.map((month, index) => ({
           month,
-          ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+          ...Object.fromEntries(series.value.map((entry) => [entry.id, entry.values[index] ?? '']))
         }))
     },
     'current-split': {
-      columns: [
-        { id: 'category', header: 'Category' },
-        { id: 'amount', header: 'Spend (USD)' }
-      ],
-      rows: () => split.map((entry) => ({ category: entry.name, amount: entry.values[0] ?? '' }))
+      columns: () => csvColumns({ category: 'Category', amount: 'Spend (USD)' }),
+      rows: () =>
+        split.value.map((entry) => ({ category: entry.name, amount: entry.values[0] ?? '' }))
     },
     'top-contributors': {
-      columns: [
-        { id: 'rank', header: 'Rank' },
-        { id: 'name', header: 'Resource' },
-        { id: 'category', header: 'Category' },
-        { id: 'amount', header: 'Spend (USD)' },
-        { id: 'share', header: 'Share (%)' },
-        { id: 'change', header: 'Change (%)' }
-      ],
-      rows: () => contributors
+      columns: () =>
+        csvColumns({
+          rank: 'Rank',
+          name: 'Resource',
+          category: 'Category',
+          amount: 'Spend (USD)',
+          share: 'Share (%)',
+          change: 'Change (%)'
+        }),
+      rows: () => contributors.value
     }
   }
 
@@ -554,19 +494,20 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
       .replaceAll(' ', '-')
   )
 
-  const exportCsv = (id: CardId) => {
-    const filename = `${id}-${periodSlug.value}.csv`
+  const exportCsv = (event: Event, card: BreakdownDashboardCard) => {
+    emit('export', event, card)
+    const filename = `${card}-${periodSlug.value}.csv`
     try {
-      const report = reports[id]
-      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      const report = reports[card]
+      downloadCsv(filename, toCsv({ columns: report.columns(), rows: report.rows() }))
       toast.success('CSV exported.', { description: filename })
     } catch {
       toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
     }
   }
 
-  const onCardOption = (id: CardId, value: string | number) => {
-    if (value === 'export') exportCsv(id)
+  const onCardOption = (event: Event, card: BreakdownDashboardCard, value: string | number) => {
+    if (value === 'export') exportCsv(event, card)
   }
 </script>
 
@@ -603,30 +544,30 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
             icon="ai ai-download"
             variant="outline"
             size="medium"
-            :disabled="loading"
-            @click="exportCsv('spend-by-category')"
+            :disabled="!exportable"
+            @click="(event: MouseEvent) => exportCsv(event, 'spend-by-category')"
           />
         </template>
       </PageHeader>
 
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
         <li
-          v-for="figure in figures"
-          :key="figure.id"
+          v-for="tile in tiles"
+          :key="tile.metric"
           class="flex min-w-0 flex-col"
         >
           <StatTile
-            :label="figure.label"
-            :value="figure.value"
+            :label="tile.label"
+            :value="kpis[tile.metric]?.value ?? null"
             :format-value="formatters.spend"
-            :delta="figure.delta"
+            :delta="kpis[tile.metric]?.delta ?? null"
             :delta-label="comparison"
             inverse
-            :trend="figure.trend"
+            :trend="kpis[tile.metric]?.trend ?? []"
             :loading="loading"
           >
             <template #aside>
-              <Hint :content="figure.description" />
+              <Hint :content="tile.description" />
             </template>
           </StatTile>
         </li>
@@ -651,8 +592,9 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
                 aria-label="Chart form for Spend by category"
               />
               <DropdownMenu
-                placement="bottom-end"
-                @select="(_event, value) => onCardOption('spend-by-category', value)"
+                side="bottom"
+                align="end"
+                @select="(event, value) => onCardOption(event, 'spend-by-category', value)"
               >
                 <DropdownMenu.Trigger>
                   <IconButton
@@ -666,14 +608,22 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
                   <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
-                    :disabled="loading"
+                    :disabled="!exportable"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="failed('spend by category')"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <Chart
+              v-else
               :series="series"
               :labels="labels"
               :format-value="formatters.spend"
@@ -707,8 +657,9 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
             </span>
             <ChartCard.Action>
               <DropdownMenu
-                placement="bottom-end"
-                @select="(_event, value) => onCardOption('current-split', value)"
+                side="bottom"
+                align="end"
+                @select="(event, value) => onCardOption(event, 'current-split', value)"
               >
                 <DropdownMenu.Trigger>
                   <IconButton
@@ -722,14 +673,22 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
                   <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
-                    :disabled="loading"
+                    :disabled="!exportable"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="failed('current split')"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <DonutChart
+              v-else
               :series="split"
               :format-value="formatters.spend"
               total-label="This month"
@@ -751,8 +710,9 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
             </span>
             <ChartCard.Action>
               <DropdownMenu
-                placement="bottom-end"
-                @select="(_event, value) => onCardOption('top-contributors', value)"
+                side="bottom"
+                align="end"
+                @select="(event, value) => onCardOption(event, 'top-contributors', value)"
               >
                 <DropdownMenu.Trigger>
                   <IconButton
@@ -766,14 +726,22 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
                   <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
-                    :disabled="loading"
+                    :disabled="!exportable"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="failed('top contributors')"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <DataTable
+              v-else
               :data="contributors"
               :columns="contributorColumns"
               row-key="id"
@@ -852,4 +820,212 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { ChartSeries } from '@aziontech/webkit/chart'
+
+import type {
+  BreakdownDashboardContributor,
+  BreakdownDashboardKpis
+} from './breakdown-dashboard.vue'
+
+export const sampleKpis: BreakdownDashboardKpis = {
+  total: {
+    value: 38500,
+    delta: 4.05,
+    trend: [27600, 28100, 29000, 29900, 31000, 31700, 32700, 33700, 34700, 35600, 37000, 38500]
+  },
+  compute: {
+    value: 16900,
+    delta: 4.32,
+    trend: [11800, 12100, 12400, 12900, 13300, 13700, 14200, 14600, 15100, 15500, 16200, 16900]
+  },
+  database: {
+    value: 9400,
+    delta: 3.3,
+    trend: [7200, 7300, 7500, 7600, 7800, 8000, 8100, 8300, 8600, 8800, 9100, 9400]
+  },
+  storage: {
+    value: 6000,
+    delta: 3.45,
+    trend: [4100, 4300, 4400, 4600, 4800, 5000, 5100, 5300, 5500, 5600, 5800, 6000]
+  }
+}
+
+export const sampleLabels: string[] = [
+  'Dec',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov'
+]
+
+export const sampleSeries: ChartSeries[] = [
+  {
+    id: 'compute',
+    name: 'Compute',
+    values: [11800, 12100, 12400, 12900, 13300, 13700, 14200, 14600, 15100, 15500, 16200, 16900]
+  },
+  {
+    id: 'database',
+    name: 'Database',
+    values: [7200, 7300, 7500, 7600, 7800, 8000, 8100, 8300, 8600, 8800, 9100, 9400]
+  },
+  {
+    id: 'storage',
+    name: 'Storage',
+    values: [4100, 4300, 4400, 4600, 4800, 5000, 5100, 5300, 5500, 5600, 5800, 6000]
+  },
+  {
+    id: 'networking',
+    name: 'Networking',
+    values: [3000, 2900, 3100, 3200, 3400, 3300, 3500, 3700, 3600, 3800, 3900, 4100]
+  },
+  {
+    id: 'monitoring',
+    name: 'Monitoring',
+    values: [1500, 1500, 1600, 1600, 1700, 1700, 1800, 1800, 1900, 1900, 2000, 2100]
+  }
+]
+
+export const sampleSplit: ChartSeries[] = [
+  {
+    id: 'compute',
+    name: 'Compute',
+    values: [16900]
+  },
+  {
+    id: 'database',
+    name: 'Database',
+    values: [9400]
+  },
+  {
+    id: 'storage',
+    name: 'Storage',
+    values: [6000]
+  },
+  {
+    id: 'networking',
+    name: 'Networking',
+    values: [4100]
+  },
+  {
+    id: 'monitoring',
+    name: 'Monitoring',
+    values: [2100]
+  }
+]
+
+export const sampleContributors: BreakdownDashboardContributor[] = [
+  {
+    id: 'web-app',
+    rank: 1,
+    name: 'web-app',
+    icon: 'ai ai-server',
+    category: 'Compute',
+    amount: 6200,
+    share: 16.1,
+    change: 5.08
+  },
+  {
+    id: 'worker-pool',
+    rank: 2,
+    name: 'worker-pool',
+    icon: 'ai ai-server',
+    category: 'Compute',
+    amount: 5900,
+    share: 15.3,
+    change: 5.36
+  },
+  {
+    id: 'orders-db',
+    rank: 3,
+    name: 'orders-db',
+    icon: 'ai ai-database',
+    category: 'Database',
+    amount: 5400,
+    share: 14,
+    change: 5.88
+  },
+  {
+    id: 'api-service',
+    rank: 4,
+    name: 'api-service',
+    icon: 'ai ai-server',
+    category: 'Compute',
+    amount: 4800,
+    share: 12.5,
+    change: 2.13
+  },
+  {
+    id: 'analytics-warehouse',
+    rank: 5,
+    name: 'analytics-warehouse',
+    icon: 'ai ai-database',
+    category: 'Database',
+    amount: 4000,
+    share: 10.4,
+    change: 0
+  },
+  {
+    id: 'media-files',
+    rank: 6,
+    name: 'media-files',
+    icon: 'ai ai-folder',
+    category: 'Storage',
+    amount: 3700,
+    share: 9.6,
+    change: 8.82
+  },
+  {
+    id: 'public-egress',
+    rank: 7,
+    name: 'public-egress',
+    icon: 'ai ai-globe',
+    category: 'Networking',
+    amount: 2600,
+    share: 6.8,
+    change: 4
+  },
+  {
+    id: 'backups',
+    rank: 8,
+    name: 'backups',
+    icon: 'ai ai-folder',
+    category: 'Storage',
+    amount: 2300,
+    share: 6,
+    change: -4.17
+  },
+  {
+    id: 'logs-pipeline',
+    rank: 9,
+    name: 'logs-pipeline',
+    icon: 'ai ai-chart-line',
+    category: 'Monitoring',
+    amount: 2100,
+    share: 5.5,
+    change: 5
+  },
+  {
+    id: 'load-balancer',
+    rank: 10,
+    name: 'load-balancer',
+    icon: 'ai ai-globe',
+    category: 'Networking',
+    amount: 1500,
+    share: 3.9,
+    change: 7.14
+  }
+]
 ```

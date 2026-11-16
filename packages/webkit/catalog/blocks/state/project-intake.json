@@ -11,6 +11,9 @@
    "file": "blocks/state/project-intake/variants/upload-error.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { ProjectIntakeUpload } from './project-intake.vue'\n\nexport const sampleUploads: ProjectIntakeUpload[] = [\n  { id: 'package.json', name: 'package.json', size: 1229, status: 'success' },\n  { id: 'app.config.js', name: 'app.config.js', size: 640, status: 'success' },\n  { id: 'src/index.ts', name: 'src/index.ts', size: 3482, status: 'running', progress: 60 },\n  { id: 'src/routes/api.ts', name: 'src/routes/api.ts', size: 2150, status: 'pending' },\n  { id: 'public/index.html', name: 'public/index.html', size: 860, status: 'pending' }\n]\n\nexport const sampleFailedUploads: ProjectIntakeUpload[] = [\n  { id: 'package.json', name: 'package.json', size: 1229, status: 'success' },\n  { id: 'app.config.js', name: 'app.config.js', size: 640, status: 'success' },\n  {\n    id: 'src/index.ts',\n    name: 'src/index.ts',\n    size: 3482,\n    status: 'error',\n    progress: 60,\n    error: 'The upload stopped. Check your connection and retry.'\n  },\n  { id: 'src/routes/api.ts', name: 'src/routes/api.ts', size: 2150, status: 'pending' },\n  { id: 'public/index.html', name: 'public/index.html', size: 860, status: 'pending' }\n]"
+ },
  "sfcFile": "blocks/state/project-intake/project-intake.vue",
  "guidelinesFile": "blocks/state/project-intake/guidelines.md"
 }

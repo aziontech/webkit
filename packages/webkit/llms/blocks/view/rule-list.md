@@ -52,7 +52,7 @@ The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow 
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 
-Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save shows its loading state and the dialog cannot be dismissed while saving. On success the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save emits `save` with every rule in its new order, shows its loading state while `saving` is set, and the dialog cannot be dismissed while saving. On success (`saving` turns off with no `saveError`) the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure (`saveError` set) the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
 ### G. States — `EmptyState`, `Alert` (required)
 
@@ -61,6 +61,59 @@ Loading: triggers read Loading, the search and Add Rule are disabled and each `D
 A rule's name is a `Button variant="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/rule-builder` from it, as EditRule shows.
 
 Each phase renders every rule, unpaged: paging an ordered list would hide the neighbours a move lands between. A phase is sized for the tens of rules people manage by hand; past about 200 rules, split them across phases or rule sets rather than paging one phase.
+
+## Data
+
+The block takes its rules through props and emits every action; it fetches nothing. `RuleListRule`, `RuleListEdit` and `RuleListProps` are exported from `rule-list.vue`, and `sample.ts` holds the sample application and firewall rules the block renders when `rules` is left out (and never while `loading` or `error` is set). Moves and switches stay a local draft until Save.
+
+| Prop                | Type                          | What it does                                                                                                 |
+| ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `subject`           | `'application' \| 'firewall'` | What runs the rules: an application has Request and Response phases, a firewall only Request. Sets the copy. |
+| `rules`             | `RuleListRule[]`              | The saved rules, each phase in run order. Pass `[]` for none.                                                |
+| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add Rule disable.    |
+| `error`             | `string`                      | Why the rules failed to load, shown in the danger `Alert` with Retry that replaces the phases.               |
+| `saving`            | `boolean`                     | The save is in flight. When it turns off with no `saveError`, the draft becomes the saved order.             |
+| `saveError`         | `string`                      | Why the save failed, shown at the top of the review dialog; Save reads Save again.                           |
+| `defaultEdits`      | `RuleListEdit[]`              | Unsaved moves and switches the list opens with.                                                              |
+| `defaultSearch`     | `string`                      | The search the list opens with.                                                                              |
+| `defaultReviewOpen` | `boolean`                     | Opens the Review changes dialog.                                                                             |
+
+| Event    | Payload           | When                                                            |
+| -------- | ----------------- | --------------------------------------------------------------- |
+| `edit`   | `(event, rule)`   | A rule's name.                                                  |
+| `create` | `(event, phase?)` | Add Rule in the heading, or in an empty phase (with its phase). |
+| `retry`  | `(event)`         | Retry in the load error alert.                                  |
+| `save`   | `(event, rules)`  | Save in the review dialog; every rule of every phase, in order. |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import RuleList, { type RuleListRule } from './rule-list.vue'
+
+  const { data, pending, error, refresh } = useRules()
+  const { run: saveOrder, pending: saving, error: saveFailed } = useSaveRuleOrder()
+  const save = (_event: MouseEvent, rules: RuleListRule[]) => saveOrder(rules)
+</script>
+
+<template>
+  <RuleList
+    :rules="data ?? []"
+    :loading="pending"
+    :error="error ? 'Couldn\'t load the rules. Check your connection and retry.' : ''"
+    :saving="saving"
+    :save-error="
+      saveFailed
+        ? 'The new order wasn\'t saved. The rules still run in the saved order; save again to apply it.'
+        : ''
+    "
+    @retry="refresh"
+    @save="save"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -103,14 +156,14 @@ Each phase renders every rule, unpaged: paging an ordered list would hide the ne
 
 ## States
 
-- Application: Request and Response phases, a locked Default rule first in Request, one inactive rule per phase.
-- Firewall: one Request phase, every rule movable.
-- ReviewChanges: two moves and one status change, the save bar and the review dialog open.
-- SaveError: the review dialog open with the failure `Alert` and Save again.
-- Searching: "cache" typed, reordering off with its `Alert`, phases reading "n of total".
-- Empty: a firewall with no rules, the Request phase showing its `EmptyState`.
-- Loading: skeleton rows in each phase, the search and Add Rule disabled.
-- LoadError: the rules did not load; a danger `Alert` with Retry replaces the phases.
+- Application: the default `subject`; Request and Response phases, a locked Default rule first in Request, one inactive rule per phase.
+- Firewall: `subject="firewall"`; one Request phase, every rule movable.
+- ReviewChanges: `defaultEdits` (two moves and one status change) and `defaultReviewOpen`: the save bar and the review dialog open.
+- SaveError: the same with `saveError` set: the failure `Alert` and Save again.
+- Searching: `defaultSearch` "cache": reordering off with its `Alert`, phases reading "n of total".
+- Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
+- Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
+- LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
 - EditRule: the list composed with `edit/rule-builder`. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
@@ -125,7 +178,7 @@ Each phase renders every rule, unpaged: paging an ordered list would hide the ne
 - `Application` — primary (the code below)
 - `Firewall` — A firewall's rules: one Request phase, five rules and no locked rule, so every rule moves; the page says rules run until one refuses the request.
 - `ReviewChanges` — After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase.
-- `SaveError` — The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; the next attempt saves and closes the dialog with the success toast.
+- `SaveError` — The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; pressing it emits `save` once more, and when `saving` turns off with no `saveError` the dialog closes with the success toast.
 - `Searching` — A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.
 - `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.
 - `Loading` — While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.
@@ -162,39 +215,93 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  const SUBJECT: string = 'application'
-  const PAGE_DESCRIPTION =
-    'Rules run top to bottom within each phase, so their order is their behavior. Turn a rule off to skip it without losing its place.'
-  const PHASES = [
-    { value: 'request', label: 'Request' },
-    { value: 'response', label: 'Response' }
-  ] as const
+  import { sampleApplicationRules, sampleFirewallRules } from './sample'
 
-  type Phase = (typeof PHASES)[number]['value']
-  type Control = 'up' | 'down' | 'position'
+  /** What runs the rules: an application has Request and Response phases, a firewall only Request. */
+  export type RuleListSubject = 'application' | 'firewall'
+  /** The phase a rule runs in. */
+  export type RuleListPhase = 'request' | 'response'
 
-  interface Rule {
+  /** One rule, in the order it runs within its phase. */
+  export interface RuleListRule {
+    /** Stable key. */
     id: string
+    /** Display name; it opens the rule. */
     name: string
+    /** What the rule does, in one line. */
     description: string
-    phase: Phase
+    /** The phase it runs in. */
+    phase: RuleListPhase
+    /** Who changed it last. */
     author: string
+    /** When it changed last, as shown. */
     modified: string
+    /** Whether it runs; an inactive rule keeps its place. */
     active: boolean
+    /** Pinned first in its phase: it cannot move or turn off. */
     locked: boolean
   }
 
-  interface RuleOptions {
+  /** An unsaved change the list opens with. */
+  export interface RuleListEdit {
+    /** The rule's phase. */
+    phase: RuleListPhase
+    /** The rule's id. */
+    id: string
+    /** The zero-based position it moves to. */
+    to?: number
+    /** The status it switches to. */
     active?: boolean
-    locked?: boolean
   }
 
-  interface RuleEdit {
-    phase: Phase
-    id: string
-    to?: number
-    active?: boolean
+  export interface RuleListProps {
+    /** What runs the rules; it sets the phases and the copy. */
+    subject?: RuleListSubject
+    /** The saved rules of every phase, each phase in run order. Pass an empty list for none. Left out, the sample renders. */
+    rules?: RuleListRule[]
+    /** The rules are loading: each phase shows skeleton rows and the search and Add Rule disable. */
+    loading?: boolean
+    /** Why the rules could not load; a danger alert with Retry takes the phases' place. */
+    error?: string
+    /** Unsaved moves and switches the list opens with, so the save bar shows. */
+    defaultEdits?: RuleListEdit[]
+    /** The search the list opens with. */
+    defaultSearch?: string
+    /** Opens the Review changes dialog when the block opens. */
+    defaultReviewOpen?: boolean
+    /** The save is in flight: the dialog locks and Save spins. When it turns off with no saveError, the order is saved. */
+    saving?: boolean
+    /** Why the save failed, shown at the top of the review dialog; Save reads Save again. */
+    saveError?: string
   }
+
+  const props = withDefaults(defineProps<RuleListProps>(), {
+    subject: 'application',
+    rules: undefined,
+    loading: false,
+    error: '',
+    defaultEdits: () => [],
+    defaultSearch: '',
+    defaultReviewOpen: false,
+    saving: false,
+    saveError: ''
+  })
+
+  const emit = defineEmits<{
+    edit: [event: MouseEvent, rule: RuleListRule]
+    create: [event: MouseEvent, phase?: RuleListPhase]
+    retry: [event: MouseEvent]
+    save: [event: MouseEvent, rules: RuleListRule[]]
+  }>()
+
+  const ALL_PHASES: { value: RuleListPhase; label: string }[] = [
+    { value: 'request', label: 'Request' },
+    { value: 'response', label: 'Response' }
+  ]
+
+  type Phase = RuleListPhase
+  type Rule = RuleListRule
+  type Control = 'up' | 'down' | 'position'
 
   interface Snapshot {
     order: Record<string, string[]>
@@ -207,130 +314,70 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
     text: string
   }
 
-  const emit = defineEmits<{ edit: [event: MouseEvent, rule: Rule] }>()
+  const SUBJECT = computed(() => props.subject)
+  const PAGE_DESCRIPTION = computed(() =>
+    props.subject === 'firewall'
+      ? 'Rules run top to bottom on every request this firewall sees, until one of them refuses it. Turn a rule off to skip it without losing its place.'
+      : 'Rules run top to bottom within each phase, so their order is their behavior. Turn a rule off to skip it without losing its place.'
+  )
+  const PHASES = computed(() =>
+    props.subject === 'firewall' ? ALL_PHASES.slice(0, 1) : ALL_PHASES
+  )
 
-  const rule = (
-    id: string,
-    name: string,
-    description: string,
-    phase: Phase,
-    author: string,
-    modified: string,
-    options: RuleOptions = {}
-  ): Rule => ({
-    id,
-    name,
-    description,
-    phase,
-    author,
-    modified,
-    active: options.active ?? true,
-    locked: options.locked ?? false
-  })
+  const source = computed<Rule[]>(
+    () =>
+      props.rules ??
+      (props.loading || props.error
+        ? []
+        : props.subject === 'firewall'
+          ? sampleFirewallRules
+          : sampleApplicationRules)
+  )
+  const loadFailed = computed(() => props.error !== '')
 
-  const seed = (): Record<Phase, Rule[]> => ({
-    request: [
-      rule(
-        're-default',
-        'Default rule',
-        'Sends every request to the origin when no other rule matches first.',
-        'request',
-        'Maya Chen',
-        '3 months ago',
-        { locked: true }
-      ),
-      rule(
-        're-maintenance',
-        'Maintenance page',
-        'Serves the maintenance page while the maintenance header is set.',
-        'request',
-        'Leo Park',
-        '1 month ago',
-        { active: false }
-      ),
-      rule(
-        're-www',
-        'Redirect www',
-        'Sends the www host to the apex domain.',
-        'request',
-        'Emily Clark',
-        '12 days ago'
-      ),
-      rule(
-        're-gateway',
-        'API gateway',
-        'Sends API traffic to the gateway service, through the auth check.',
-        'request',
-        'Maya Chen',
-        '2 days ago'
-      ),
-      rule(
-        're-docs',
-        'Docs rewrite',
-        'Rewrites the docs path and caches it as a static asset.',
-        'request',
-        'Sam Okafor',
-        '3 weeks ago'
-      )
-    ],
-    response: [
-      rule(
-        're-cache-bypass',
-        'Cache bypass',
-        'Keeps API responses out of the cache.',
-        'response',
-        'Leo Park',
-        '5 days ago'
-      ),
-      rule(
-        're-security-headers',
-        'Security headers',
-        'Adds the security header set to successful responses.',
-        'response',
-        'Emily Clark',
-        '9 days ago'
-      ),
-      rule(
-        're-compress',
-        'Compress assets',
-        'Compresses script bundles on the way out.',
-        'response',
-        'Sam Okafor',
-        '7 weeks ago',
-        { active: false }
-      )
-    ]
-  })
-
-  const INITIAL_EDITS: RuleEdit[] = []
-  const INITIAL_SEARCH = ''
-  const INITIAL_LOADING = false
-  const REVIEW_ON_START = false
-  const FAILED_ON_START = false
-  const SAVE_FAILURES = 0
-
-  const rules = reactive(seed())
-  const phaseLabel = (phase: Phase) => PHASES.find((item) => item.value === phase)?.label ?? phase
+  const draft = reactive<Record<Phase, Rule[]>>({ request: [], response: [] })
+  const phaseLabel = (phase: Phase) =>
+    ALL_PHASES.find((item) => item.value === phase)?.label ?? phase
 
   const snapshot = (): Snapshot => ({
-    order: Object.fromEntries(PHASES.map(({ value }) => [value, rules[value].map((r) => r.id)])),
+    order: Object.fromEntries(
+      PHASES.value.map(({ value }) => [value, draft[value].map((r) => r.id)])
+    ),
     active: Object.fromEntries(
-      PHASES.flatMap(({ value }) => rules[value].map((r) => [r.id, r.active]))
+      PHASES.value.flatMap(({ value }) => draft[value].map((r) => [r.id, r.active]))
     )
   })
   const saved = ref(snapshot())
 
-  for (const edit of INITIAL_EDITS) {
-    const list = rules[edit.phase]
-    const from = list.findIndex((item) => item.id === edit.id)
-    if (from < 0) continue
-    if (edit.to !== undefined) list.splice(edit.to, 0, ...list.splice(from, 1))
-    if (edit.active !== undefined)
-      list[list.findIndex((item) => item.id === edit.id)].active = edit.active
+  const applyEdits = (edits: RuleListEdit[]) => {
+    for (const edit of edits) {
+      const list = draft[edit.phase]
+      const from = list.findIndex((item) => item.id === edit.id)
+      if (from < 0) continue
+      if (edit.to !== undefined) list.splice(edit.to, 0, ...list.splice(from, 1))
+      if (edit.active !== undefined)
+        list[list.findIndex((item) => item.id === edit.id)].active = edit.active
+    }
   }
 
-  const loading = ref(INITIAL_LOADING)
-  const search = ref(INITIAL_SEARCH)
+  let seeded = false
+  watch(
+    source,
+    (next) => {
+      for (const { value } of ALL_PHASES) {
+        draft[value] = next.filter((item) => item.phase === value).map((item) => ({ ...item }))
+      }
+      saved.value = snapshot()
+      if (!seeded && next.length) {
+        seeded = true
+        applyEdits(props.defaultEdits)
+      }
+    },
+    { immediate: true }
+  )
+
+  const loading = computed(() => props.loading)
+  const search = ref(props.defaultSearch)
   const searching = computed(() => search.value.trim().length > 0)
   const matches = (item: Rule) => {
     const term = search.value.trim().toLowerCase()
@@ -340,16 +387,18 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
     )
   }
 
-  const openPhases = ref<string[]>(PHASES.map((item) => item.value))
+  const openPhases = ref<string[]>(PHASES.value.map((item) => item.value))
   watch(search, () => {
     if (!searching.value) return
-    const hits = PHASES.filter(({ value }) => rules[value].some(matches)).map(({ value }) => value)
+    const hits = PHASES.value
+      .filter(({ value }) => draft[value].some(matches))
+      .map(({ value }) => value)
     openPhases.value = [...new Set([...openPhases.value, ...hits])]
   })
 
   const groups = computed(() =>
-    PHASES.map((phase) => {
-      const list = rules[phase.value]
+    PHASES.value.map((phase) => {
+      const list = draft[phase.value]
       return {
         ...phase,
         total: list.length,
@@ -358,19 +407,19 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
     })
   )
 
-  const saving = ref(false)
+  const saving = computed(() => props.saving)
   const pinned = (phase: Phase) => {
-    const list = rules[phase]
+    const list = draft[phase]
     let count = 0
     while (count < list.length && list[count].locked) count += 1
     return count
   }
   const canReorder = (phase: Phase) =>
-    !searching.value && !saving.value && rules[phase].length - pinned(phase) > 1
+    !searching.value && !saving.value && draft[phase].length - pinned(phase) > 1
   const canMove = (phase: Phase, index: number, direction: number) => {
     if (!canReorder(phase) || index < pinned(phase)) return false
     const to = index + direction
-    return to >= pinned(phase) && to < rules[phase].length
+    return to >= pinned(phase) && to < draft[phase].length
   }
   const lockReason = (phase: Phase, item: Rule) => {
     if (item.locked) return 'The default rule runs first and stays first.'
@@ -402,7 +451,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
     })
 
   const moveTo = (phase: Phase, from: number, to: number, control?: Control) => {
-    const list = rules[phase]
+    const list = draft[phase]
     const head = pinned(phase)
     const target = Math.min(Math.max(to, head), list.length - 1)
     if (from < head || target === from || !canReorder(phase)) return
@@ -418,14 +467,14 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
     moveTo(phase, index, index + direction, control)
   }
 
-  const position = (phase: Phase, item: Rule) => rules[phase].indexOf(item)
-  const positionDraft = ref<{ id: string; value: string } | null>(null)
+  const position = (phase: Phase, item: Rule) => draft[phase].indexOf(item)
+  const positionDraft = ref<{ value: string; id: string } | null>(null)
   const positionValue = (phase: Phase, item: Rule) =>
     positionDraft.value?.id === item.id
       ? positionDraft.value.value
       : String(position(phase, item) + 1)
   const onPositionInput = (item: Rule, value: string) => {
-    positionDraft.value = { id: item.id, value }
+    positionDraft.value = { value, id: item.id }
   }
   const commitPosition = (phase: Phase, item: Rule, refocus: boolean) => {
     const draft = positionDraft.value
@@ -440,7 +489,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
   }
   const reorderRows = (phase: Phase, next: Rule[]) => {
     if (searching.value) return
-    rules[phase] = next
+    draft[phase] = next
   }
   const reorderable = (phase: Phase) => (row: Rule) => !lockReason(phase, row)
 
@@ -458,57 +507,72 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
 
   const dirty = computed(() => JSON.stringify(snapshot()) !== JSON.stringify(saved.value))
   const changes = computed(() =>
-    PHASES.map((phase) => ({
-      ...phase,
-      items: rules[phase.value].flatMap((item, index) => {
-        const lines: ChangeLine[] = []
-        const before = saved.value.order[phase.value].indexOf(item.id)
-        if (before !== index) {
-          lines.push({
-            key: `${item.id}-order`,
-            name: item.name,
-            text: `moves from position ${before + 1} to ${index + 1}`
-          })
-        }
-        if (saved.value.active[item.id] !== item.active) {
-          lines.push({
-            key: `${item.id}-status`,
-            name: item.name,
-            text: item.active ? 'is turned on' : 'is turned off'
-          })
-        }
-        return lines
-      })
-    })).filter((phase) => phase.items.length)
+    PHASES.value
+      .map((phase) => ({
+        ...phase,
+        items: draft[phase.value].flatMap((item, index) => {
+          const lines: ChangeLine[] = []
+          const before = saved.value.order[phase.value].indexOf(item.id)
+          if (before !== index) {
+            lines.push({
+              key: `${item.id}-order`,
+              name: item.name,
+              text: `moves from position ${before + 1} to ${index + 1}`
+            })
+          }
+          if (saved.value.active[item.id] !== item.active) {
+            lines.push({
+              key: `${item.id}-status`,
+              name: item.name,
+              text: item.active ? 'is turned on' : 'is turned off'
+            })
+          }
+          return lines
+        })
+      }))
+      .filter((phase) => phase.items.length)
   )
   const changeCount = computed(() =>
     changes.value.reduce((sum, phase) => sum + phase.items.length, 0)
   )
 
   const discard = () => {
-    for (const { value } of PHASES) {
-      const byId = Object.fromEntries(rules[value].map((item) => [item.id, item]))
-      rules[value] = saved.value.order[value].map((id) => byId[id]).filter(Boolean)
-      for (const item of rules[value]) item.active = saved.value.active[item.id]
+    for (const { value } of PHASES.value) {
+      const byId = Object.fromEntries(draft[value].map((item) => [item.id, item]))
+      draft[value] = saved.value.order[value].map((id) => byId[id]).filter(Boolean)
+      for (const item of draft[value]) item.active = saved.value.active[item.id]
     }
     announce('Changes discarded. The rules are back in their saved order.')
   }
 
-  const reviewOpen = ref(REVIEW_ON_START)
-  const saveFailed = ref(FAILED_ON_START)
-  let failuresLeft = SAVE_FAILURES
+  const reviewOpen = ref(props.defaultReviewOpen)
+  const saveFailed = ref(props.saveError !== '')
   const openReview = () => {
     saveFailed.value = false
     reviewOpen.value = true
   }
-  const save = () => {
+  const save = (event: MouseEvent) => {
     if (saving.value) return
-    saving.value = true
     saveFailed.value = false
-    setTimeout(() => {
-      saving.value = false
-      if (failuresLeft > 0) {
-        failuresLeft -= 1
+    emit(
+      'save',
+      event,
+      PHASES.value.flatMap(({ value }) => draft[value].map((item) => ({ ...item })))
+    )
+  }
+
+  watch(
+    () => props.saveError,
+    (next) => {
+      saveFailed.value = next !== ''
+    }
+  )
+
+  watch(
+    () => props.saving,
+    (now, before) => {
+      if (!before || now) return
+      if (props.saveError) {
         saveFailed.value = true
         return
       }
@@ -516,10 +580,10 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
       reviewOpen.value = false
       setTimeout(() => listEl.value?.focus(), 0)
       toast.success('Rule order saved.', {
-        description: `The ${SUBJECT} runs its rules in the new order.`
+        description: `The ${SUBJECT.value} runs its rules in the new order.`
       })
-    }, 900)
-  }
+    }
+  )
 </script>
 
 <template>
@@ -544,7 +608,8 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
             icon="ai ai-plus"
             variant="outline"
             size="medium"
-            :disabled="loading"
+            :disabled="loading || loadFailed"
+            @click="(event: MouseEvent) => emit('create', event)"
           />
         </template>
       </PageHeader>
@@ -563,7 +628,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
               placeholder="Search rules"
               aria-label="Search rules"
               class="w-full"
-              :disabled="loading"
+              :disabled="loading || loadFailed"
             >
               <template #leading>
                 <i
@@ -576,12 +641,24 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
         </div>
 
         <Alert
-          v-if="searching"
+          v-if="loadFailed"
+          key="load-error"
+          severity="danger"
+          :label="error"
+          action-label="Retry"
+          @action="(event: MouseEvent) => emit('retry', event)"
+        />
+        <Alert
+          v-else-if="searching"
+          key="searching"
           severity="info"
           label="Reordering is off while a search narrows the list. Clear the search to change the order rules run in."
         />
 
-        <Card :padded="false">
+        <Card
+          v-if="!loadFailed"
+          :padded="false"
+        >
           <template #default>
             <Accordion
               v-model="openPhases"
@@ -768,6 +845,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                           icon="ai ai-plus"
                           variant="outline"
                           size="medium"
+                          @click="(event: MouseEvent) => emit('create', event, group.value)"
                         />
                       </template>
                     </EmptyState>
@@ -827,7 +905,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
             <Alert
               v-if="saveFailed"
               severity="danger"
-              label="The new order wasn't saved. The rules still run in the saved order; save again to apply it."
+              :label="saveError"
             />
             <DialogDescription>
               Rules run top to bottom within each phase. Saving applies this order to every
@@ -887,4 +965,146 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
     </Dialog>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { RuleListRule } from './rule-list.vue'
+
+export const sampleApplicationRules: RuleListRule[] = [
+  {
+    id: 're-default',
+    name: 'Default rule',
+    description: 'Sends every request to the origin when no other rule matches first.',
+    phase: 'request',
+    author: 'Maya Chen',
+    modified: '3 months ago',
+    active: true,
+    locked: true
+  },
+  {
+    id: 're-maintenance',
+    name: 'Maintenance page',
+    description: 'Serves the maintenance page while the maintenance header is set.',
+    phase: 'request',
+    author: 'Leo Park',
+    modified: '1 month ago',
+    active: false,
+    locked: false
+  },
+  {
+    id: 're-www',
+    name: 'Redirect www',
+    description: 'Sends the www host to the apex domain.',
+    phase: 'request',
+    author: 'Emily Clark',
+    modified: '12 days ago',
+    active: true,
+    locked: false
+  },
+  {
+    id: 're-gateway',
+    name: 'API gateway',
+    description: 'Sends API traffic to the gateway service, through the auth check.',
+    phase: 'request',
+    author: 'Maya Chen',
+    modified: '2 days ago',
+    active: true,
+    locked: false
+  },
+  {
+    id: 're-docs',
+    name: 'Docs rewrite',
+    description: 'Rewrites the docs path and caches it as a static asset.',
+    phase: 'request',
+    author: 'Sam Okafor',
+    modified: '3 weeks ago',
+    active: true,
+    locked: false
+  },
+  {
+    id: 're-cache-bypass',
+    name: 'Cache bypass',
+    description: 'Keeps API responses out of the cache.',
+    phase: 'response',
+    author: 'Leo Park',
+    modified: '5 days ago',
+    active: true,
+    locked: false
+  },
+  {
+    id: 're-security-headers',
+    name: 'Security headers',
+    description: 'Adds the security header set to successful responses.',
+    phase: 'response',
+    author: 'Emily Clark',
+    modified: '9 days ago',
+    active: true,
+    locked: false
+  },
+  {
+    id: 're-compress',
+    name: 'Compress assets',
+    description: 'Compresses script bundles on the way out.',
+    phase: 'response',
+    author: 'Sam Okafor',
+    modified: '7 weeks ago',
+    active: false,
+    locked: false
+  }
+]
+
+export const sampleFirewallRules: RuleListRule[] = [
+  {
+    id: 'fw-office',
+    name: 'Allow office network',
+    description: 'Lets the office network through before any other rule looks at it.',
+    phase: 'request',
+    author: 'Maya Chen',
+    modified: '2 months ago',
+    active: true,
+    locked: false
+  },
+  {
+    id: 'fw-scanners',
+    name: 'Block scanners',
+    description: 'Refuses requests from the scanner network list.',
+    phase: 'request',
+    author: 'Leo Park',
+    modified: '3 weeks ago',
+    active: true,
+    locked: false
+  },
+  {
+    id: 'fw-login-rate',
+    name: 'Rate limit sign-in',
+    description: 'Allows 20 sign-in requests per minute from one address.',
+    phase: 'request',
+    author: 'Emily Clark',
+    modified: '6 days ago',
+    active: true,
+    locked: false
+  },
+  {
+    id: 'fw-geo',
+    name: 'Restrict countries',
+    description: 'Refuses requests from countries outside the allowed list.',
+    phase: 'request',
+    author: 'Sam Okafor',
+    modified: '1 month ago',
+    active: false,
+    locked: false
+  },
+  {
+    id: 'fw-waf-api',
+    name: 'WAF on API',
+    description: 'Runs the API rule set on every request to the API path.',
+    phase: 'request',
+    author: 'Maya Chen',
+    modified: 'yesterday',
+    active: true,
+    locked: false
+  }
+]
 ```

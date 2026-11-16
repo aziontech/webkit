@@ -78,7 +78,7 @@
 - Visual states of the items: as `dropdown-menu` (`default`, `hover`, `focus-visible`, `selected`, `disabled`, checked).
 - `data-state` values (root, trigger, panel): `open` | `closed`.
 - `data-disabled` on root and trigger mirrors `disabled`.
-- `data-placement` on the panel mirrors the resolved corner (`bottom-start` | `bottom-end` | `top-start` | `top-end`).
+- `data-side` / `data-align` on the panel mirror the resolved side (`bottom` | `top`) and alignment (`start`, or `end` once it flips to fit); `start` is the pointer's inline-start, so under `rtl` the panel's right edge sits on the pointer.
 - `loading`, `empty`, `error`, `readonly`, `invalid`: not states of this component; it renders the items the consumer passes.
 
 ## Accessibility

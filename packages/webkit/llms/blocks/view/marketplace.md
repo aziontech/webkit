@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/marketplace/marketplace.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/marketplace")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -73,15 +73,82 @@ An "Install" `h3` ("Install on another application" once installed somewhere) ov
 
 ### K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
 
-The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
 ### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
 The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingsRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingsRow` in an `Item.List`, the rest are `Field`s. Errors follow `state/form-validation` (SectionRejected): nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
 
+### M. Loading catalog — `Card`, `Skeleton` (required)
+
+While `loading` is set, the Featured row and the heading of All integrations give way to one band that is `aria-busy` and named Loading integrations: the disabled `PropertyFilter` over six `Card`s holding `Skeleton` shapes (mark, name, two lines, the badge and the action), in the grid of the tiles.
+
 ### Install toast — through `toast`
 
 Raised through `toast` with one id for the install, so progress turns into the outcome in place. Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running if you close this panel."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing and runs no install itself. `MarketplaceIntegration`, `MarketplaceInstall` and `MarketplaceProps` are exported from `marketplace.vue`, and `sample.ts` holds the sample catalog and applications the block renders when `integrations` and `applications` are left out (the catalog never while `loading` is set).
+
+| Prop                   | Type                       | What it does                                                                                                 |
+| ---------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `integrations`         | `MarketplaceIntegration[]` | The catalog; the search, the properties, Featured and the tiles run on it in the browser.                    |
+| `applications`         | `string[]`                 | The applications an integration can be installed on; the drawer's `Select` lists the ones it is not on yet.  |
+| `loading`              | `boolean`                  | The catalog is loading: the search disables and six skeleton tiles hold the grid.                            |
+| `installing`           | `boolean`                  | The install request is in flight: Install spins, the field locks and the progress toast shows.               |
+| `error`                | `string`                   | Why the last install failed: the danger `Alert` with Reinstall and the permanent failure toast.              |
+| `installedApplication` | `string`                   | The application the last install succeeded on: the success `Alert`, the Installed tag and the success toast. |
+| `defaultText`          | `string`                   | Search text the filter starts with.                                                                          |
+| `defaultIntegration`   | `string`                   | Id of the integration whose drawer starts open.                                                              |
+| `defaultApplication`   | `string`                   | Application the install field starts with.                                                                   |
+
+| Event     | Payload                                 | When                                                          |
+| --------- | --------------------------------------- | ------------------------------------------------------------- |
+| `select`  | `(event, integration)`                  | A tile, or its Install or Configure button, opens the drawer. |
+| `install` | `(event, { integration, application })` | Install (or Reinstall) with an application chosen.            |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import Marketplace, { type MarketplaceInstall } from './marketplace.vue'
+
+  const { data, pending } = useIntegrations()
+  const { data: applications } = useApplications()
+  const installing = ref(false)
+  const installError = ref('')
+  const installedOn = ref('')
+
+  const install = async (event: Event, { integration, application }: MarketplaceInstall) => {
+    installing.value = true
+    installError.value = ''
+    installedOn.value = ''
+    try {
+      await installIntegration(integration.id, application)
+      installedOn.value = application
+    } catch (failure) {
+      installError.value = reasonOf(failure)
+    } finally {
+      installing.value = false
+    }
+  }
+</script>
+
+<template>
+  <Marketplace
+    :integrations="data ?? []"
+    :applications="applications ?? []"
+    :loading="pending"
+    :installing="installing"
+    :error="installError"
+    :installed-application="installedOn"
+    @install="install"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -129,13 +196,13 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 ## States
 
-- Default: Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
-- Detail: the drawer is open on Request Signer with its details, overview, permissions and the install form.
-- Installing: Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
-- Installed: Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
-- InstallError: the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
-- NoMatch: the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
-- Loading: the search is disabled and six `Skeleton` integration tiles hold the grid in a band that is `aria-busy`.
+- Default: `integrations`, or the sample; Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install emits `install`; `installing`, `error` and `installedApplication` show its outcome.
+- Detail: `defaultIntegration="request-signer"`; the drawer is open on Request Signer with its details, overview, permissions and the install form.
+- Installing: `installing`, with `defaultApplication="storefront"`; Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
+- Installed: `installedApplication="storefront"`; Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
+- InstallError: `error`, with `defaultApplication="checkout"`; the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
+- NoMatch: `defaultText="kubernetes"`; the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
+- Loading: `loading`; the search is disabled and six `Skeleton` integration tiles hold the grid in a band that is `aria-busy`.
 - SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.
 - Configure: Waiting Room settings on storefront, with the SaveBar after a change.
 
@@ -156,7 +223,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - `InstallError` — The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall.
 - `NoMatch` — The Integrations tab with a search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters.
 - `Loading` — The catalog is loading: the integration search is disabled and skeleton integration tiles hold the grid.
-- `SolutionPage` — The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `Table.CellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application.
+- `SolutionPage` — The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `TableCellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application.
 - `Configure` — The screen behind Configure: the integration's settings on one application (Queue visitors `Switch`, Capacity and Queue page title fields, Session length `Select`) in `SettingsSection`s, errors after Save with a summary `Alert`, and a `SaveBar` with Discard and Save; saving is not a deploy, so its toast has no Redeploy.
 
 Each variant is the same screen in another state: `get_block("view/marketplace", { variant })`, or the file under `blocks/view/marketplace/variants/`.
@@ -181,172 +248,107 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import { toast } from '@aziontech/webkit/toast'
   import { useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
-  type IntegrationContext = 'application' | 'firewall'
+  import { sampleApplications, sampleIntegrations } from './sample'
 
-  interface Integration {
+  /** Where an integration runs. */
+  export type MarketplaceContext = 'application' | 'firewall'
+
+  /** One integration of the catalog. */
+  export interface MarketplaceIntegration {
+    /** Stable slug, used in the Configure link. */
     id: string
+    /** The name on the tile and the drawer title. */
     name: string
+    /** Who publishes it. */
     vendor: string
+    /** Icon classes of its mark. */
     logo: string
+    /** The category badge and filter value. */
     category: string
-    context: IntegrationContext
+    /** Where it runs. */
+    context: MarketplaceContext
+    /** One sentence on the tile and in the drawer. */
     description: string
+    /** The current version, as display text. */
     version: string
+    /** When it changed last, as display text. */
     updated: string
+    /** Listed in the Featured row. */
     featured: boolean
+    /** The applications it already runs on. */
     installedOn: string[]
   }
 
-  const CONTEXTS: Record<IntegrationContext, string> = {
+  /** What an install sends. */
+  export interface MarketplaceInstall {
+    /** The integration to install. */
+    integration: MarketplaceIntegration
+    /** The application to install it on. */
+    application: string
+  }
+
+  export interface MarketplaceProps {
+    /** The catalog; filtered in the browser. Left out, the sample renders. */
+    integrations?: MarketplaceIntegration[]
+    /** The applications an integration can be installed on. Left out, the sample renders. */
+    applications?: string[]
+    /** The catalog is loading: the search disables and skeleton tiles hold the grid. */
+    loading?: boolean
+    /** The install request is in flight: Install spins, the field locks and the progress toast shows. */
+    installing?: boolean
+    /** Why the last install failed, shown in the danger alert and the failure toast with Reinstall. */
+    error?: string
+    /** The application the last install succeeded on; the drawer and a toast confirm it. */
+    installedApplication?: string
+    /** Search text the filter starts with. */
+    defaultText?: string
+    /** Id of the integration whose drawer starts open. */
+    defaultIntegration?: string
+    /** Application the install field starts with. */
+    defaultApplication?: string
+  }
+
+  const props = withDefaults(defineProps<MarketplaceProps>(), {
+    integrations: undefined,
+    applications: undefined,
+    loading: false,
+    installing: false,
+    error: '',
+    installedApplication: '',
+    defaultText: '',
+    defaultIntegration: '',
+    defaultApplication: ''
+  })
+
+  const emit = defineEmits<{
+    select: [event: MouseEvent, integration: MarketplaceIntegration]
+    install: [event: Event, payload: MarketplaceInstall]
+  }>()
+
+  const CONTEXTS: Record<MarketplaceContext, string> = {
     application: 'Application',
     firewall: 'Firewall'
   }
-  const APPLICATIONS = ['storefront', 'checkout', 'docs', 'api']
 
-  const integration = (
-    id: string,
-    name: string,
-    vendor: string,
-    logo: string,
-    category: string,
-    context: IntegrationContext,
-    description: string,
-    extra: Partial<Integration> = {}
-  ): Integration => ({
-    id,
-    name,
-    vendor,
-    logo,
-    category,
-    context,
-    description,
-    version: '1.4.0',
-    updated: 'Oct 30, 2026',
-    featured: false,
-    installedOn: [],
-    ...extra
-  })
+  const source = computed<MarketplaceIntegration[]>(
+    () => props.integrations ?? (props.loading ? [] : sampleIntegrations)
+  )
+  const catalog = ref<MarketplaceIntegration[]>([])
+  watch(
+    source,
+    (next) => {
+      catalog.value = next.map((item) => ({ ...item, installedOn: [...item.installedOn] }))
+    },
+    { immediate: true }
+  )
+  const applications = computed(() => props.applications ?? sampleApplications)
 
-  const catalog = ref([
-    integration(
-      'request-signer',
-      'Request Signer',
-      'Acme',
-      'ai ai-key',
-      'Access control',
-      'firewall',
-      'Sign every request with a rotating key, so the origin only answers traffic that passed through.',
-      { featured: true }
-    ),
-    integration(
-      'waiting-room',
-      'Waiting Room',
-      'Acme',
-      'ai ai-hourglass',
-      'Traffic management',
-      'application',
-      'Queue visitors during a traffic surge and let them in as capacity frees up.',
-      { featured: true, installedOn: ['storefront'] }
-    ),
-    integration(
-      'bot-score',
-      'Bot Score',
-      'Acme',
-      'ai ai-shield',
-      'Bot management',
-      'firewall',
-      'Score each request on known bot behaviour and block the ones above your threshold.',
-      { featured: true }
-    ),
-    integration(
-      'split-traffic',
-      'Split Traffic',
-      'Azion',
-      'ai ai-sitemap',
-      'Testing',
-      'application',
-      'Send a share of visitors to a second version of a page and keep each one on theirs.'
-    ),
-    integration(
-      'geo-content',
-      'Geo Content',
-      'Azion',
-      'ai ai-globe',
-      'Personalization',
-      'application',
-      'Serve a regional version of a page from the visitor’s country, with a fallback.'
-    ),
-    integration(
-      'signed-urls',
-      'Signed URLs',
-      'Azion',
-      'ai ai-link',
-      'Access control',
-      'firewall',
-      'Issue links that expire, so protected files can only be fetched for a limited time.',
-      { installedOn: ['docs', 'api'] }
-    ),
-    integration(
-      'rate-guard',
-      'Rate Guard',
-      'Acme',
-      'ai ai-sliders-horizontal',
-      'Access control',
-      'firewall',
-      'Limit how many requests one client can make in a window, per path or per key.'
-    ),
-    integration(
-      'payload-limit',
-      'Payload Limit',
-      'Azion',
-      'ai ai-box',
-      'Traffic management',
-      'firewall',
-      'Refuse request bodies above a size you set, before they reach the origin.'
-    ),
-    integration(
-      'request-id',
-      'Request ID',
-      'Azion',
-      'ai ai-hash',
-      'Observability',
-      'application',
-      'Add a unique identifier header to every request, to trace it across services.'
-    ),
-    integration(
-      'phone-check',
-      'Phone Check',
-      'Acme',
-      'ai ai-phone',
-      'Fraud prevention',
-      'firewall',
-      'Validate phone numbers on sign-up forms and flag numbers linked to fraud.'
-    ),
-    integration(
-      'queue-writer',
-      'Queue Writer',
-      'Azion',
-      'ai ai-inbox',
-      'Messaging',
-      'application',
-      'Write each request to a queue for processing later, and answer the client right away.'
-    ),
-    integration(
-      'schedule-block',
-      'Scheduled Block',
-      'Azion',
-      'ai ai-calendar-x',
-      'Access control',
-      'firewall',
-      'Close an application to traffic on a schedule, such as outside business hours.'
-    )
-  ])
-
-  const withStatus = (item: Integration) => ({
+  const withStatus = (item: MarketplaceIntegration) => ({
     ...item,
     status: item.installedOn.length ? 'installed' : 'available'
   })
@@ -383,29 +385,28 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
 
   const { items, propertyFilterProps, status, filtersActive, clearFilters } = useCollection({
     items: () => catalog.value.map(withStatus),
-    filtering: { fields: ['name', 'vendor', 'description'] },
+    filtering: { fields: ['name', 'vendor', 'description'], defaultText: props.defaultText },
     propertyFiltering: { properties },
     url: true
   })
 
   const featured = computed(() => catalog.value.filter((item) => item.featured))
 
-  const detailOpen = ref(false)
-  const selectedId = ref('request-signer')
-  const selected = computed(
+  const detailOpen = ref(props.defaultIntegration !== '')
+  const selectedId = ref(props.defaultIntegration || 'request-signer')
+  const selected = computed<MarketplaceIntegration | undefined>(
     () => catalog.value.find((item) => item.id === selectedId.value) ?? catalog.value[0]
   )
   const available = computed(() =>
-    APPLICATIONS.filter((app) => !selected.value.installedOn.includes(app))
+    applications.value.filter((app) => !selected.value?.installedOn.includes(app))
   )
 
-  const form = reactive({ application: '' })
+  const form = reactive({ application: props.defaultApplication })
   const showErrors = ref(false)
   const applicationInvalid = computed(() => showErrors.value && !form.application)
 
   const run = reactive({ state: 'idle', application: '', reason: '' })
   const INSTALL_TOAST = 'marketplace-install'
-  let timer: ReturnType<typeof setTimeout> | undefined
 
   const openDetail = (id: string) => {
     if (selectedId.value !== id) {
@@ -417,19 +418,45 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
     detailOpen.value = true
   }
 
+  const onSelect = (event: MouseEvent, item: MarketplaceIntegration) => {
+    openDetail(item.id)
+    emit('select', event, item)
+  }
+
   const configure = () => {
     toast.dismiss(INSTALL_TOAST)
     openDetail(selectedId.value)
   }
 
-  const succeed = (item: Integration, application: string) => {
-    item.installedOn = [...item.installedOn, application]
+  const install = (event: Event) => {
+    showErrors.value = true
+    const integration = selected.value
+    if (!integration || !form.application || props.installing) return
+    emit('install', event, { integration, application: form.application })
+  }
+
+  const showRunning = () => {
+    const item = selected.value
+    if (!item) return
+    const application = form.application
+    Object.assign(run, { state: 'running', application, reason: '' })
+    toast.loading(`Installing ${item.name} on ${application}…`, {
+      description: 'It keeps running if you close this panel.',
+      id: INSTALL_TOAST
+    })
+  }
+
+  const showSucceeded = (application: string) => {
+    const item = selected.value
+    if (!item) return
+    if (!item.installedOn.includes(application))
+      item.installedOn = [...item.installedOn, application]
     form.application = ''
     showErrors.value = false
     Object.assign(run, { state: 'succeeded', application, reason: '' })
     toast.success(`${item.name} is installed on ${application}.`, {
-      id: INSTALL_TOAST,
       description: 'It runs from the next request to the application.',
+      id: INSTALL_TOAST,
       closable: true,
       actions: [
         { label: 'Configure', onClick: configure },
@@ -438,24 +465,56 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
     })
   }
 
-  const install = () => {
-    showErrors.value = true
-    if (!form.application || run.state === 'running') return
+  const showFailed = (reason: string) => {
     const item = selected.value
-    const application = form.application
-    Object.assign(run, { state: 'running', application, reason: '' })
-    toast.loading(`Installing ${item.name} on ${application}…`, {
+    if (!item) return
+    const application = run.application || form.application
+    form.application = application
+    Object.assign(run, { state: 'failed', application, reason })
+    toast.error(`${item.name} wasn't installed on ${application}.`, {
+      description: reason,
       id: INSTALL_TOAST,
-      description: 'It keeps running if you close this panel.'
+      duration: 0,
+      closable: true,
+      actions: [
+        { label: 'Edit', onClick: configure },
+        { label: 'Reinstall', onClick: (event: MouseEvent) => install(event) }
+      ]
     })
-    clearTimeout(timer)
-    timer = setTimeout(() => succeed(item, application), 2400)
   }
 
-  onBeforeUnmount(() => {
-    clearTimeout(timer)
-    toast.dismiss(INSTALL_TOAST)
+  const reinstall = (event: MouseEvent) => {
+    form.application = run.application
+    install(event)
+  }
+
+  watch(
+    () => props.installing,
+    (next) => {
+      if (next) showRunning()
+      else if (props.error) showFailed(props.error)
+    }
+  )
+  watch(
+    () => props.error,
+    (next) => {
+      if (next) showFailed(next)
+    }
+  )
+  watch(
+    () => props.installedApplication,
+    (next) => {
+      if (next) showSucceeded(next)
+    }
+  )
+
+  onMounted(() => {
+    if (props.installing) showRunning()
+    else if (props.error) showFailed(props.error)
+    else if (props.installedApplication) showSucceeded(props.installedApplication)
   })
+
+  onBeforeUnmount(() => toast.dismiss(INSTALL_TOAST))
 </script>
 
 <template>
@@ -478,7 +537,66 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
       </PageHeader>
 
       <div class="layout-section-start">
-        <div class="flex min-w-0 flex-col gap-(--layout-section-gap) pt-(--layout-group-gap)">
+        <section
+          v-if="loading"
+          class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
+          aria-busy="true"
+          aria-label="Loading integrations"
+        >
+          <PropertyFilter
+            v-bind="propertyFilterProps"
+            placeholder="Search integrations"
+            aria-label="Search integrations"
+            disabled
+          />
+          <ul
+            class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 xl:grid-cols-3"
+          >
+            <li
+              v-for="tile in 6"
+              :key="tile"
+              class="flex min-w-0"
+            >
+              <Card class="w-full">
+                <template #default>
+                  <div class="flex flex-col gap-(--spacing-md)">
+                    <div class="flex items-start gap-(--spacing-md)">
+                      <Skeleton
+                        width="2.5rem"
+                        height="2.5rem"
+                      />
+                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
+                        <Skeleton
+                          width="50%"
+                          height="1rem"
+                        />
+                        <Skeleton height="0.875rem" />
+                        <Skeleton
+                          width="75%"
+                          height="0.875rem"
+                        />
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <Skeleton
+                        width="5rem"
+                        height="1.25rem"
+                      />
+                      <Skeleton
+                        width="4.5rem"
+                        height="2rem"
+                      />
+                    </div>
+                  </div>
+                </template>
+              </Card>
+            </li>
+          </ul>
+        </section>
+        <div
+          v-else
+          class="flex min-w-0 flex-col gap-(--layout-section-gap) pt-(--layout-group-gap)"
+        >
           <section
             v-if="!filtersActive"
             class="flex min-w-0 flex-col gap-(--layout-group-gap)"
@@ -506,7 +624,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                   :description="item.description"
                   :badges="[{ label: CONTEXTS[item.context] }]"
                   :installed="item.installedOn.length > 0"
-                  @select="openDetail(item.id)"
+                  @select="(event: MouseEvent) => onSelect(event, item)"
                 />
               </li>
             </ul>
@@ -563,7 +681,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                   :description="item.description"
                   :badges="[{ label: item.category, severity: 'neutral' }]"
                   :installed="item.status === 'installed'"
-                  @select="openDetail(item.id)"
+                  @select="(event: MouseEvent) => onSelect(event, item)"
                 >
                   <template #actions>
                     <Button
@@ -571,7 +689,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                       :aria-label="`${item.status === 'installed' ? 'Configure' : 'Install'} ${item.name}`"
                       variant="outline"
                       size="small"
-                      @click="openDetail(item.id)"
+                      @click="(event: MouseEvent) => onSelect(event, item)"
                     />
                   </template>
                 </Card>
@@ -583,6 +701,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
     </div>
 
     <Drawer
+      v-if="selected"
       v-model:open="detailOpen"
       size="large"
       side="end"
@@ -628,12 +747,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                 severity="danger"
                 :label="`${selected.name} wasn't installed on ${run.application}. ${run.reason}`"
                 action-label="Reinstall"
-                @action="
-                  () => {
-                    form.application = run.application
-                    install()
-                  }
-                "
+                @action="reinstall"
               />
 
               <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
@@ -717,7 +831,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                 <Field
                   v-if="available.length"
                   :invalid="applicationInvalid"
-                  :disabled="run.state === 'running'"
+                  :disabled="installing"
                   required
                 >
                   <Field.Label>Application</Field.Label>
@@ -770,7 +884,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                 variant="primary"
                 size="medium"
                 type="submit"
-                :loading="run.state === 'running'"
+                :loading="installing"
               />
             </div>
           </PanelFooter>
@@ -779,4 +893,151 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
     </Drawer>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { MarketplaceContext, MarketplaceIntegration } from './marketplace.vue'
+
+export const sampleApplications: string[] = ['storefront', 'checkout', 'docs', 'api']
+
+const integration = (
+  id: string,
+  name: string,
+  vendor: string,
+  logo: string,
+  category: string,
+  context: MarketplaceContext,
+  description: string,
+  extra: Partial<MarketplaceIntegration> = {}
+): MarketplaceIntegration => ({
+  id,
+  name,
+  vendor,
+  logo,
+  category,
+  context,
+  description,
+  version: '1.4.0',
+  updated: 'Oct 30, 2026',
+  featured: false,
+  installedOn: [],
+  ...extra
+})
+
+export const sampleIntegrations: MarketplaceIntegration[] = [
+  integration(
+    'request-signer',
+    'Request Signer',
+    'Acme',
+    'ai ai-key',
+    'Access control',
+    'firewall',
+    'Sign every request with a rotating key, so the origin only answers traffic that passed through.',
+    { featured: true }
+  ),
+  integration(
+    'waiting-room',
+    'Waiting Room',
+    'Acme',
+    'ai ai-hourglass',
+    'Traffic management',
+    'application',
+    'Queue visitors during a traffic surge and let them in as capacity frees up.',
+    { featured: true, installedOn: ['storefront'] }
+  ),
+  integration(
+    'bot-score',
+    'Bot Score',
+    'Acme',
+    'ai ai-shield',
+    'Bot management',
+    'firewall',
+    'Score each request on known bot behaviour and block the ones above your threshold.',
+    { featured: true }
+  ),
+  integration(
+    'split-traffic',
+    'Split Traffic',
+    'Azion',
+    'ai ai-sitemap',
+    'Testing',
+    'application',
+    'Send a share of visitors to a second version of a page and keep each one on theirs.'
+  ),
+  integration(
+    'geo-content',
+    'Geo Content',
+    'Azion',
+    'ai ai-globe',
+    'Personalization',
+    'application',
+    'Serve a regional version of a page from the visitor’s country, with a fallback.'
+  ),
+  integration(
+    'signed-urls',
+    'Signed URLs',
+    'Azion',
+    'ai ai-link',
+    'Access control',
+    'firewall',
+    'Issue links that expire, so protected files can only be fetched for a limited time.',
+    { installedOn: ['docs', 'api'] }
+  ),
+  integration(
+    'rate-guard',
+    'Rate Guard',
+    'Acme',
+    'ai ai-sliders-horizontal',
+    'Access control',
+    'firewall',
+    'Limit how many requests one client can make in a window, per path or per key.'
+  ),
+  integration(
+    'payload-limit',
+    'Payload Limit',
+    'Azion',
+    'ai ai-box',
+    'Traffic management',
+    'firewall',
+    'Refuse request bodies above a size you set, before they reach the origin.'
+  ),
+  integration(
+    'request-id',
+    'Request ID',
+    'Azion',
+    'ai ai-hash',
+    'Observability',
+    'application',
+    'Add a unique identifier header to every request, to trace it across services.'
+  ),
+  integration(
+    'phone-check',
+    'Phone Check',
+    'Acme',
+    'ai ai-phone',
+    'Fraud prevention',
+    'firewall',
+    'Validate phone numbers on sign-up forms and flag numbers linked to fraud.'
+  ),
+  integration(
+    'queue-writer',
+    'Queue Writer',
+    'Azion',
+    'ai ai-inbox',
+    'Messaging',
+    'application',
+    'Write each request to a queue for processing later, and answer the client right away.'
+  ),
+  integration(
+    'schedule-block',
+    'Scheduled Block',
+    'Azion',
+    'ai ai-calendar-x',
+    'Access control',
+    'firewall',
+    'Close an application to traffic on a schedule, such as outside business hours.'
+  )
+]
 ```

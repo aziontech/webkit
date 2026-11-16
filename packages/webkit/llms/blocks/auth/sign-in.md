@@ -1,6 +1,6 @@
 # SignIn (`auth/sign-in`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant: one masked `PasswordInput` for the token, a link to where tokens are created, and a `sign-in` event that hands the token to the app. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/auth/sign-in/sign-in.vue` in `@aziontech/webkit`
@@ -10,7 +10,7 @@
 
 ## Asked as
 
-login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; código de verificação; código de autenticação; loading sign-in providers; providers loading; carregando provedores de login; oauth consent; authorize app; authorize application; app authorization; consent screen; allow access; grant access; scopes; permissions requested; third-party app access; device authorization; device code; cli login; connect cli; device flow; autorizar aplicativo; tela de consentimento; conceder acesso; autorizar dispositivo; login pela cli
+login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; código de verificação; código de autenticação; loading sign-in providers; providers loading; carregando provedores de login; oauth consent; authorize app; authorize application; app authorization; consent screen; allow access; grant access; scopes; permissions requested; third-party app access; device authorization; device code; cli login; connect cli; device flow; autorizar aplicativo; tela de consentimento; conceder acesso; autorizar dispositivo; login pela cli; token sign in; api token sign in; personal token; personal token sign in; sign in with token; sign in with api key; api key login; paste token; access token login; token login; entrar com token; login com token; token pessoal
 
 The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
 
@@ -21,6 +21,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - Any signed-out step that asks for credentials (sign in, MFA, set a new password).
 - The OAuth authorize screen (`OauthConsent`): a third-party app asks to act on the signed-in account, and the person allows or denies the scopes it lists.
 - Device and CLI sign-in (`DeviceAuthorization`): a terminal or a device without a browser printed a code, and the person confirms it here.
+- An app with no accounts of its own that calls the Azion API with the person's personal token (PersonalToken): an internal console, a dashboard, a storage browser.
 
 ## When not to use
 
@@ -109,6 +110,72 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 `size="small"`, the step's title and its lead (`Welcome back` / `Sign in to your account.`). The same part on every screen of the block, primary and variants, so the card always opens on one `h1`.
 
+### Q. Provider placeholder — `Skeleton` (while `providersLoading`)
+
+Two bars of the provider buttons' height (`height="2.5rem"`) in a `role="status"` region named `Preparing sign-in providers`, in place of Google and GitHub over the `or` divider. The email field stays usable.
+
+### R. Personal token — `PasswordInput` (PersonalToken and RejectedToken)
+
+For an app that signs in with an Azion personal token instead of an account. One `Field` labelled `Personal token` over a `PasswordInput` with `monospace`, `autocomplete="off"`, `spellcheck="false"` and the show and hide toggle it ships, a `Field.Description` that links to how a token is created (a real Azion documentation link, `target="_blank"`), and a `Field.Error` for the client checks: empty (`Paste your personal token.`) and inner spaces (`A token has no spaces. Copy it again from Personal tokens.`). The card has no Google or GitHub buttons and no steps.
+
+The block checks the token once against the API (the demo's `checkToken` stub: a token under 32 characters is rejected, `9…9` does not answer) and then emits `sign-in` with `(event, token)`, the token trimmed. It stores nothing: keeping the token for the session (memory or `sessionStorage`, never `localStorage` or a cookie the app's server can read) and attaching it to requests is the app's job; see `skills/webkit-azion-api`. A 401 or 403 is a danger notice with no action, the field cleared and focused (RejectedToken); no answer is a warning notice with Retry and the entry kept.
+
+## Data
+
+The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInFailure` and `SignInNoticeKind` are exported from `sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken and RejectedToken are their own card, not the primary with props: they take no account fields and emit `sign-in` with `(event, token)`.
+
+| Prop                                                             | Type                    | What it does                                                                                                                                                                                                   |
+| ---------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `step` (`v-model:step`)                                          | `SignInStep`            | The step the card shows, `email` by default. The card moves itself between email, password, reset, sent and new-password; bind it to move it from the page (after `password-reset`, set it to `password`).     |
+| `defaultValues`                                                  | `Partial<SignInValues>` | The email (and, to repeat a request, the password) the fields open on, such as the address of an expired session.                                                                                              |
+| `loading`                                                        | `boolean`               | A request is in flight: the step's fieldset disables, the form is `aria-busy` and the primary `Button` (and Retry) spin.                                                                                       |
+| `error`                                                          | `string`                | Why the request failed. `bad-credentials` (401), `service-unavailable` (503), `server-error` (500) and `timeout` carry their own copy, severity and Retry; any other text shows as a danger notice with Retry. |
+| `notice`                                                         | `string`                | A non-error outcome: `session-expired`, `signed-in` or `password-updated`, or any text as an info notice.                                                                                                      |
+| `providersLoading`                                               | `boolean`               | The identity providers are still loading; two `Skeleton` bars hold the place of Google and GitHub.                                                                                                             |
+| `homeHref`, `docsHref`, `signUpHref`, `termsHref`, `privacyHref` | `string`                | Where the product mark, Documentation, Sign up and the two terms links lead.                                                                                                                                   |
+
+| Event            | Payload                         | When                                                                                                         |
+| ---------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `provider-click` | `(event, 'google' \| 'github')` | Continue with Google or Continue with GitHub.                                                                |
+| `continue`       | `(event, email)`                | Continue with email passed validation; the card moves to the password step.                                  |
+| `submit`         | `(event, { email, password })`  | Sign in passed validation, or Retry in the notice re-sends the same credentials.                             |
+| `reset-request`  | `(event, email)`                | Send reset link passed validation; the card moves to Check your inbox.                                       |
+| `resend`         | `(event, email)`                | Resend email on the sent step; the card confirms the new link.                                               |
+| `password-reset` | `(event, password)`             | Reset password passed validation; set `step` to `password` and `notice` to `password-updated` when it lands. |
+
+To go live, render the block from the route that owns the session and pass what the request returns. Clear `error` when a new request starts, so the same failure shows again:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import SignIn, { type SignInValues } from './sign-in.vue'
+
+  const loading = ref(false)
+  const error = ref('')
+
+  const signIn = async (_event: Event, values: SignInValues) => {
+    loading.value = true
+    error.value = ''
+    try {
+      await session.signIn(values)
+      router.push('/')
+    } catch (failure) {
+      error.value = failure.status === 401 ? 'bad-credentials' : 'server-error'
+    } finally {
+      loading.value = false
+    }
+  }
+</script>
+
+<template>
+  <SignIn
+    :loading="loading"
+    :error="error"
+    @submit="signIn"
+  />
+</template>
+```
+
 ## Do
 
 - Keep one card and one notice slot for the whole flow; swap the step body, not the page.
@@ -137,6 +204,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
+- Don't keep a personal token in `localStorage`, a URL or a log, and don't echo it back on the page after sign-in.
 - Don't hide or disable the email field while the providers load, and don't show a spinner in place of the provider buttons.
 
 - Don't split a one-time code into separate inputs or move focus between them by hand; `OtpInput` is one field.
@@ -165,6 +233,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - **Scope rows:** title starts with a verb (`Read your workloads`, `Deploy your applications`), the description says what is in and, when it matters, what is not: `Names, domains and status. Not their settings or secrets.`
 - **Consent actions:** `Deny` and `Allow`. Outcomes: `Access granted. Returning to Acme Deploy.` / `Access denied. Returning to Acme Deploy with no access to your account.`
 - **Device actions:** `Cancel` and `Confirm`. Outcomes: `Device connected. Go back to your terminal; you can close this tab.` / `Request cancelled. The device was not connected.`
+- **Personal token:** heading `Sign in with a personal token`; lead `Paste a personal token from your Azion account. It is sent only to the Azion API.`; rejected `Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.`; unreachable `We could not reach Azion to check the token. Your entry is kept.`
 - **Device code errors:** `Enter the code your terminal shows.`, `Enter all 8 characters of the code.`, `That code is not valid or has expired. Check your terminal, or start the sign-in again there.`
 
 ## Accessibility
@@ -185,21 +254,24 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 ## States
 
-- Login: the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
+- Login: the default props, the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
 - SignUp: create an account with a work email (and a password checked by `PasswordRequirements`), Google or GitHub.
-- SessionExpired: opens on the password step for the same email, with an info notice that clears on the next action.
-- Submitting: Sign in in flight on the password step: the primary `Button` loading, the fieldset disabled, the form `aria-busy`.
-- ProvidersLoading: the Login card while the identity providers load; two `Skeleton` bars in a `role="status"` region (`Preparing sign-in providers`) replace Google and GitHub over the `or` divider, and the email step works meanwhile.
+- SessionExpired: `step="password"`, the email in `defaultValues` and `notice="session-expired"`; opens on the password step for the same email, with an info notice that clears on the next action.
+- Submitting: `loading` on the password step; Sign in in flight: the primary `Button` loading, the fieldset disabled, the form `aria-busy`.
+- ProvidersLoading: `providersLoading`; the Login card while the identity providers load; two `Skeleton` bars in a `role="status"` region (`Preparing sign-in providers`) replace Google and GitHub over the `or` divider, and the email step works meanwhile.
 - CheckInbox: the `/signup/verify` card: where the link went, the resend prompt and a secondary Return to sign in.
-- IncorrectCredentials: 401 on Sign in, on the password step of the same two-step card; a danger notice under the heading, no action, the password cleared.
-- ServiceUnavailable: 503 on Sign in; a warning notice with Retry, credentials kept.
-- ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
-- Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
+- IncorrectCredentials: `error="bad-credentials"`; 401 on Sign in, on the password step of the same two-step card; a danger notice under the heading, no action, the password cleared.
+- ServiceUnavailable: `error="service-unavailable"`; 503 on Sign in; a warning notice with Retry, credentials kept.
+- ServerError: `error="server-error"`; 500 on the request; a danger notice with Retry in the card instead of a toast.
+- Timeout: `error="timeout"`; no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
 - DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValueList`, the account and the two scopes, Cancel / Confirm. `The code does not match? Enter the code from your terminal` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
+
+- PersonalToken: sign in with an Azion personal token. One masked, monospace field with show and hide, a link to how tokens are made, required and no-spaces checks, then a check against the API: rejected is a danger notice with the field cleared, no answer a warning with Retry, accepted emits `sign-in` `(event, token)`.
+- RejectedToken: the PersonalToken card after a 401, the danger notice under the heading and the empty field focused.
 
 ## Related
 
@@ -234,6 +306,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - `MfaCode` — The sign-in MFA challenge: a 6-digit OtpInput, focused when the challenge opens, that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
 - `OauthConsent` — The OAuth authorize screen: the requesting app with its publisher and site, the signed-in account with Switch account, the scopes it asks for as a list, where Allow sends you, and Deny / Allow, each settling in the card's notice.
 - `DeviceAuthorization` — Device or CLI authorization: the code the terminal printed, shown large to compare, the request details (application, device, IP address, time), the account and scopes, Cancel / Confirm, and a typed code entry (8 characters, grouped by 4) when the codes do not match.
+- `PersonalToken` — Sign in with an Azion personal token, for an app with no accounts of its own: one masked, monospace `PasswordInput` with show and hide, a link to how tokens are created, required and no-spaces checks on the field, a danger notice when Azion rejects the token (the field is cleared), a warning with Retry when Azion cannot be reached, and a `sign-in` event `(event, token)` once the token is accepted. The block stores nothing; the app keeps the token for the session.
+- `RejectedToken` — 401 on the personal token: the same card with the danger notice under the heading, the field cleared and focused for another paste.
 
 Each variant is the same screen in another state: `get_block("auth/sign-in", { variant })`, or the file under `blocks/auth/sign-in/variants/`.
 
@@ -256,9 +330,53 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
     DEFAULT_PASSWORD_REQUIREMENTS
   } from '@aziontech/webkit/password-requirements'
   import Separator from '@aziontech/webkit/separator'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
+
+  /** The step the card shows. */
+  export type SignInStep = 'email' | 'password' | 'reset' | 'sent' | 'new-password'
+
+  /** An identity provider offered over the email field. */
+  export type SignInProvider = 'google' | 'github'
+
+  /** A sign-in failure with its own copy, severity and Retry rule. */
+  export type SignInFailure = 'bad-credentials' | 'service-unavailable' | 'server-error' | 'timeout'
+
+  /** A neutral or success outcome with its own copy. */
+  export type SignInNoticeKind = 'session-expired' | 'signed-in' | 'password-updated'
+
+  /** The credentials the form sends. */
+  export interface SignInValues {
+    /** The account email. */
+    email: string
+    /** The account password. */
+    password: string
+  }
+
+  export interface SignInProps {
+    /** Values the fields open on, such as the email of an expired session. */
+    defaultValues?: Partial<SignInValues>
+    /** A request is in flight: the step locks, the form is busy and the primary action spins. */
+    loading?: boolean
+    /** Why the last request failed: a failure kind with its own copy, or a message shown as a danger notice with Retry. */
+    error?: SignInFailure | (string & {})
+    /** A non-error outcome for the notice: a notice kind with its own copy, or a message shown as info. */
+    notice?: SignInNoticeKind | (string & {})
+    /** The identity providers are still loading; skeleton bars hold their place. */
+    providersLoading?: boolean
+    /** Where the product mark leads. */
+    homeHref?: string
+    /** Where the Documentation button leads. */
+    docsHref?: string
+    /** Where the Sign up link leads. */
+    signUpHref?: string
+    /** The terms of service page. */
+    termsHref?: string
+    /** The privacy policy page. */
+    privacyHref?: string
+  }
 
   interface CardNotice {
     severity: AlertSeverity
@@ -266,8 +384,31 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
     retry?: boolean
   }
 
-  const failure: string = ''
-  const failureNotices: Record<string, CardNotice> = {
+  const props = withDefaults(defineProps<SignInProps>(), {
+    defaultValues: () => ({}),
+    loading: false,
+    error: '',
+    notice: '',
+    providersLoading: false,
+    homeHref: '/home',
+    docsHref: '/docs',
+    signUpHref: '/signup',
+    termsHref: 'https://example.com/terms',
+    privacyHref: 'https://example.com/privacy'
+  })
+
+  const emit = defineEmits<{
+    'provider-click': [event: MouseEvent, provider: SignInProvider]
+    continue: [event: Event, email: string]
+    submit: [event: Event, values: SignInValues]
+    'reset-request': [event: Event, email: string]
+    resend: [event: MouseEvent, email: string]
+    'password-reset': [event: Event, password: string]
+  }>()
+
+  const step = defineModel<SignInStep>('step', { default: 'email' })
+
+  const failureNotices: Record<SignInFailure, CardNotice> = {
     'bad-credentials': {
       severity: 'danger',
       label: 'Incorrect email or password. Check both and try again.'
@@ -289,15 +430,47 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
     }
   }
 
-  const step = ref('email')
-  const returnStep = ref('email')
-  const email = ref('')
-  const password = ref('')
-  const resetEmail = ref('')
+  const outcomeNotices: Record<SignInNoticeKind, CardNotice> = {
+    'session-expired': {
+      severity: 'info',
+      label: 'Your session expired. Sign in again to pick up where you left off.'
+    },
+    'signed-in': { severity: 'success', label: 'Signed in.' },
+    'password-updated': {
+      severity: 'success',
+      label: 'Password updated. Sign in with the new one.'
+    }
+  }
+
+  const noticeFromProps = (): CardNotice | null => {
+    if (props.error) {
+      return (
+        failureNotices[props.error as SignInFailure] ?? {
+          severity: 'danger',
+          label: props.error,
+          retry: true
+        }
+      )
+    }
+    if (props.notice) {
+      return (
+        outcomeNotices[props.notice as SignInNoticeKind] ?? {
+          severity: 'info',
+          label: props.notice
+        }
+      )
+    }
+    return null
+  }
+
+  const returnStep = ref<SignInStep>('email')
+  const email = ref(props.defaultValues.email ?? '')
+  const password = ref(props.defaultValues.password ?? '')
+  const resetEmail = ref(props.defaultValues.email ?? '')
   const newPassword = ref('')
   const confirmPassword = ref('')
-  const cardNotice = ref<CardNotice | null>(null)
-  const verifying = ref(false)
+  const cardNotice = ref<CardNotice | null>(noticeFromProps())
+  const verifying = computed(() => props.loading)
   const errors = reactive({
     email: '',
     password: '',
@@ -310,7 +483,6 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
   const cardHeight = ref(0)
   const resizing = ref(false)
   let resizeObserver: ResizeObserver | null = null
-  let requestTimer: ReturnType<typeof setTimeout> | undefined
 
   const onCardResize = ([entry]: ResizeObserverEntry[]) => {
     const next = Math.round(entry.contentRect.height)
@@ -326,7 +498,6 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
 
   onScopeDispose(() => {
     resizeObserver?.disconnect()
-    clearTimeout(requestTimer)
   })
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -372,14 +543,21 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
 
   const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
-  const request = (done: () => void) => {
-    verifying.value = true
-    clearTimeout(requestTimer)
-    requestTimer = setTimeout(() => {
-      verifying.value = false
-      done()
-    }, 600)
+  const showOutcome = () => {
+    cardNotice.value = noticeFromProps()
+    if (props.error === 'bad-credentials') {
+      password.value = ''
+      focusField('login-password')
+    }
   }
+
+  watch([() => props.error, () => props.notice], showOutcome)
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (before && !now) showOutcome()
+    }
+  )
 
   const backToEmail = () => {
     cardNotice.value = null
@@ -401,13 +579,12 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
     step.value = returnStep.value
   }
 
-  const resendEmail = () => {
-    request(() => {
-      cardNotice.value = {
-        severity: 'success',
-        label: `We sent another link to ${resetEmail.value}.`
-      }
-    })
+  const resendEmail = (event: MouseEvent) => {
+    emit('resend', event, resetEmail.value)
+    cardNotice.value = {
+      severity: 'success',
+      label: `We sent another link to ${resetEmail.value}.`
+    }
   }
 
   const openResetLink = () => {
@@ -419,29 +596,34 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
     step.value = 'new-password'
   }
 
-  const signIn = () => {
+  const signIn = (event: Event) => {
     errors.password = password.value ? '' : 'This field is required.'
     if (errors.password) {
       focusField('login-password')
       return
     }
-    request(() => {
-      cardNotice.value = failureNotices[failure] ?? { severity: 'success', label: 'Signed in.' }
-    })
+    cardNotice.value = null
+    emit('submit', event, { email: email.value.trim(), password: password.value })
   }
 
-  const onPrimary = () => {
+  const onPrimary = (event: Event) => {
     if (verifying.value) return
     cardNotice.value = null
     if (step.value === 'email') {
       errors.email = emailError(email.value)
       if (errors.email) focusField('login-email')
-      else request(() => (step.value = 'password'))
-    } else if (step.value === 'password') signIn()
+      else {
+        emit('continue', event, email.value.trim())
+        step.value = 'password'
+      }
+    } else if (step.value === 'password') signIn(event)
     else if (step.value === 'reset') {
       errors.resetEmail = emailError(resetEmail.value)
       if (errors.resetEmail) focusField('reset-email')
-      else request(() => (step.value = 'sent'))
+      else {
+        emit('reset-request', event, resetEmail.value.trim())
+        step.value = 'sent'
+      }
     } else if (step.value === 'new-password') {
       errors.newPassword = newPasswordError(newPassword.value)
       errors.confirmPassword = !confirmPassword.value
@@ -451,17 +633,12 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
           : "Passwords don't match."
       if (errors.newPassword || errors.confirmPassword)
         focusField(errors.newPassword ? 'new-password' : 'confirm-password')
-      else
-        request(() => {
-          email.value = resetEmail.value
-          password.value = ''
-          returnStep.value = 'password'
-          step.value = 'password'
-          cardNotice.value = {
-            severity: 'success',
-            label: 'Password updated. Sign in with the new one.'
-          }
-        })
+      else {
+        email.value = resetEmail.value
+        password.value = ''
+        returnStep.value = 'password'
+        emit('password-reset', event, newPassword.value)
+      }
     } else backToSignIn()
   }
 </script>
@@ -474,7 +651,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
     >
       <AppHeader.Brand>
         <a
-          href="/home"
+          :href="homeHref"
           aria-label="Azion home"
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
@@ -491,7 +668,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
           variant="outline"
           size="medium"
           icon="ai ai-book"
-          href="/docs"
+          :href="docsHref"
         />
       </AppHeader.End>
     </AppHeader>
@@ -558,7 +735,19 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                           v-if="step === 'email'"
                           class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
                         >
-                          <div class="flex flex-col gap-(--spacing-sm)">
+                          <div
+                            v-if="providersLoading"
+                            role="status"
+                            aria-label="Preparing sign-in providers"
+                            class="flex flex-col gap-(--spacing-sm)"
+                          >
+                            <Skeleton height="2.5rem" />
+                            <Skeleton height="2.5rem" />
+                          </div>
+                          <div
+                            v-else
+                            class="flex flex-col gap-(--spacing-sm)"
+                          >
                             <Button
                               type="button"
                               label="Continue with Google"
@@ -566,6 +755,9 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                               size="large"
                               icon="ai-color ai-google"
                               class="w-full"
+                              @click="
+                                (event: MouseEvent) => emit('provider-click', event, 'google')
+                              "
                             />
                             <Button
                               type="button"
@@ -574,6 +766,9 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                               size="large"
                               icon="ai ai-github"
                               class="w-full"
+                              @click="
+                                (event: MouseEvent) => emit('provider-click', event, 'github')
+                              "
                             />
                           </div>
 
@@ -801,7 +996,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                 <p class="text-body-xs text-(--text-default)">Don't have an account?</p>
                 <a
                   class="text-link text-body-xs"
-                  href="/signup"
+                  :href="signUpHref"
                   >Sign up</a
                 >
               </div>
@@ -811,7 +1006,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                   By continuing, I agree to the
                   <a
                     class="text-link"
-                    href="https://example.com/terms"
+                    :href="termsHref"
                     target="_blank"
                     rel="noopener noreferrer"
                     >terms of service</a
@@ -819,7 +1014,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                   and
                   <a
                     class="text-link"
-                    href="https://example.com/privacy"
+                    :href="privacyHref"
                     target="_blank"
                     rel="noopener noreferrer"
                     >privacy policy</a

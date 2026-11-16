@@ -1,6 +1,6 @@
 # FormValidation (`state/form-validation`)
 
-> A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `SectionHeader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select is flagged required. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/creation-bar), not in ConsoleLayout.
+> A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. The block fetches nothing: Create emits `submit` with the values, and the page passes back `submitting`, `error`, `takenKey` or `saved`. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `SectionHeader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select is flagged required. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/creation-bar), not in ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/state/form-validation/form-validation.vue` in `@aziontech/webkit`
@@ -83,6 +83,49 @@ The Section variants add `AppHeader`, `IconButton`, `Tooltip`, `Brand`, `Breadcr
 
 A toast shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/webkit-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
+## Data
+
+The block fetches nothing and fakes no request: Create validates the draft, then emits `submit` with the values, and the page that owns the request passes back what happened. `FormValidationValues`, `FormValidationSaved` and `FormValidationProps` are exported from `form-validation.vue`; the Section variants export `FormValidationOrigin`, `FormValidationService` and `FormValidationSectionProps` from `variants/section-rejected.vue`. `sample.ts` holds the filled entries, the origins and the rejection message the variants pass.
+
+| Prop               | Type                            | What it does                                                                                          |
+| ------------------ | ------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `loading`          | `boolean`                       | The form's data is still arriving: `Skeleton` rows stand in for the fields and Create is disabled.    |
+| `submitting`       | `boolean`                       | The create request is in flight: Create spins, the fields and Cancel are disabled.                    |
+| `error`            | `string`                        | A failure no field owns, the description of the error toast with Retry; the entries are kept.         |
+| `takenKey`         | `string`                        | A key the server reported as in use: Key turns `invalid`, the danger `Alert` opens, Key takes focus.  |
+| `saved`            | `FormValidationSaved`           | The variable the request created (`key`, `environment`): the success toast names it, the form clears. |
+| `defaultValues`    | `Partial<FormValidationValues>` | Entries the form opens with, such as a kept draft.                                                    |
+| `defaultSubmitted` | `boolean`                       | Opens with the validation messages shown, as after a press on Create.                                 |
+
+| Event    | Payload           | When                                                         |
+| -------- | ----------------- | ------------------------------------------------------------ |
+| `submit` | `(event, values)` | Create, or Retry in the error toast, with every field valid. |
+
+The Section form takes `origins`, `originError`, `reloading` and `submitting`, and emits `submit` `(event, values)`, `cancel` `(event)` and `reload-origins` `(event)`. A chosen origin missing from a new `origins` list is cleared and flagged required.
+
+To go live, render the block from a page that owns the request:
+
+```vue
+<script setup lang="ts">
+  import FormValidation, { type FormValidationValues } from './form-validation.vue'
+
+  const { create, pending, error, conflictKey, created } = useCreateVariable()
+  const onSubmit = (_event: Event, values: FormValidationValues) => create(values)
+</script>
+
+<template>
+  <FormValidation
+    :submitting="pending"
+    :error="error ? 'The request didn\'t reach the server. Your entries are kept.' : ''"
+    :taken-key="conflictKey ?? ''"
+    :saved="created"
+    @submit="onSubmit"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its imports in the variants.
+
 ## Do
 
 - Validate on submit, not on every keystroke; after the first submit, a field's message updates as the user fixes it.
@@ -127,16 +170,16 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 
 ## States
 
-- Default: the empty Create Variable form, idle.
-- ValidationErrors: Create pressed with gaps; empty Value and Environment take `required`, the malformed Key takes `invalid`, each with its own message, and focus moves to Key.
-- Submitting: the request is in flight; Create shows `loading`, the fields and Cancel are disabled.
-- ServerError: the request failed and no field owns it; an error toast with Retry, the lock released, every entry kept.
-- Conflict: the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
-- Saved: the save went through; a success toast names the variable and where it is available, and the form is cleared.
-- Loading: the form data is still arriving; `Skeleton` rows hold the layout and Create is disabled.
-- SectionRejected: on the long Create Service form, another user deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
-- SectionReloading: Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
-- SectionReloaded: the list is back without the deleted origin; the `Alert` closes, the select is cleared and flagged required with Select an origin to continue.
+- Default: no prop set; the empty Create Variable form, idle.
+- ValidationErrors: `defaultValues` with a malformed key and `defaultSubmitted`, as after Create pressed with gaps; empty Value and Environment take `required`, the malformed Key takes `invalid`, each with its own message, and focus moves to Key.
+- Submitting: `submitting`, the request is in flight; Create shows `loading`, the fields and Cancel are disabled.
+- ServerError: `error`, the request failed and no field owns it; an error toast with Retry, the lock released, every entry kept.
+- Conflict: `takenKey`, the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
+- Saved: `saved`, the save went through; a success toast names the variable and where it is available, and the form is cleared.
+- Loading: `loading`, the form data is still arriving; `Skeleton` rows hold the layout and Create is disabled.
+- SectionRejected: `originError` on the long Create Service form, another user deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
+- SectionReloading: `reloading`, Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
+- SectionReloaded: `origins` without the deleted origin and an empty `originError`; the `Alert` closes, the select is cleared and flagged required with Select an origin to continue.
 
 ## Related
 
@@ -175,42 +218,91 @@ Each variant is the same screen in another state: `get_block("state/form-validat
   import Skeleton from '@aziontech/webkit/skeleton'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
-  type FieldName = 'key' | 'value' | 'environment' | 'description'
-  type FormStatus = 'idle' | 'loading' | 'submitting'
-  type VariableForm = Record<FieldName, string>
-  interface SavedVariable {
+  /** A field of the Create Variable form. */
+  export type FormValidationField = 'key' | 'value' | 'environment' | 'description'
+
+  /** The entries of the form, and the values a submit sends. */
+  export interface FormValidationValues {
+    /** The variable name, uppercase letters, digits and underscores. */
     key: string
+    /** The value services read at runtime. */
+    value: string
+    /** Environment option value. */
+    environment: string
+    /** Optional note, up to 200 characters. */
+    description: string
+  }
+
+  /** The variable a request created, named in the success toast. */
+  export interface FormValidationSaved {
+    /** The key of the new variable. */
+    key: string
+    /** Where it is available. */
     environment: string
   }
 
+  export interface FormValidationProps {
+    /** The form's data is still arriving: Skeleton rows stand in for the fields and Create is disabled. */
+    loading?: boolean
+    /** The create request is in flight: Create spins and the fields and Cancel are disabled. */
+    submitting?: boolean
+    /** Why the request failed when no field owns it, shown in the error toast with Retry; the entries are kept. */
+    error?: string
+    /** A key the server reported as already in use: Key turns invalid and the danger Alert opens above the fields. */
+    takenKey?: string
+    /** The variable the request created: the success toast names it and the form is cleared. */
+    saved?: FormValidationSaved
+    /** Entries the form opens with, such as a kept draft. */
+    defaultValues?: Partial<FormValidationValues>
+    /** Opens with the validation messages shown, as after a press on Create. */
+    defaultSubmitted?: boolean
+  }
+
+  const props = withDefaults(defineProps<FormValidationProps>(), {
+    loading: false,
+    submitting: false,
+    error: '',
+    takenKey: '',
+    saved: undefined,
+    defaultValues: () => ({}),
+    defaultSubmitted: false
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: FormValidationValues]
+  }>()
+
   const KEY_PATTERN = /^[A-Z][A-Z0-9_]*$/
   const DESCRIPTION_LIMIT = 200
-  const existingKeys = ['API_TOKEN']
+  const RESULT_TOAST = 'create-variable-result'
   const environments = [
     { value: 'Production', label: 'Production' },
     { value: 'Preview', label: 'Preview' }
   ]
-  const fieldIds: Record<FieldName, string> = {
+  const fieldIds: Record<FormValidationField, string> = {
     key: 'variable-key',
     value: 'variable-value',
     environment: 'variable-environment',
     description: 'variable-description'
   }
-  const empty = (): VariableForm => ({ key: '', value: '', environment: '', description: '' })
+  const empty = (): FormValidationValues => ({
+    key: '',
+    value: '',
+    environment: '',
+    description: ''
+  })
 
-  const form = reactive<VariableForm>(empty())
-  const submitted = ref(false)
-  const status = ref<FormStatus>('idle')
-  const takenKey = ref('')
+  const form = reactive<FormValidationValues>({ ...empty(), ...props.defaultValues })
+  const submitted = ref(props.defaultSubmitted)
 
-  const errors = computed<Record<FieldName, string>>(() => ({
+  const errors = computed<Record<FormValidationField, string>>(() => ({
     key: !form.key
       ? 'This field is required.'
       : !KEY_PATTERN.test(form.key)
         ? 'Use uppercase letters, digits and underscores, starting with a letter.'
-        : form.key === takenKey.value
+        : form.key === props.takenKey
           ? `A variable named ${form.key} already exists.`
           : '',
     value: form.value ? '' : 'This field is required.',
@@ -222,56 +314,75 @@ Each variant is the same screen in another state: `get_block("state/form-validat
   }))
 
   const conflict = computed(
-    () => submitted.value && Boolean(form.key) && form.key === takenKey.value
+    () => submitted.value && Boolean(form.key) && form.key === props.takenKey
   )
-  const busy = computed(() => status.value === 'loading' || status.value === 'submitting')
-  const missing = (field: FieldName) => submitted.value && !form[field]
-  const invalid = (field: FieldName) =>
+  const busy = computed(() => props.loading || props.submitting)
+  const missing = (field: FormValidationField) => submitted.value && !form[field]
+  const invalid = (field: FormValidationField) =>
     submitted.value && Boolean(form[field]) && Boolean(errors.value[field])
-  const helper = (field: FieldName, guidance: string) =>
+  const helper = (field: FormValidationField, guidance: string) =>
     submitted.value && errors.value[field] ? errors.value[field] : guidance
 
-  const focusField = async (field: FieldName) => {
+  const focusField = async (field: FormValidationField) => {
     await nextTick()
     document.getElementById(fieldIds[field])?.focus()
   }
 
-  const reportSaved = (variable: SavedVariable) =>
-    toast.success(`${variable.key} was created.`, {
-      id: 'create-variable-result',
-      description: `It is available in ${variable.environment}.`
-    })
-
-  const reset = () => {
-    Object.assign(form, empty())
-    submitted.value = false
-    takenKey.value = ''
-    status.value = 'idle'
-  }
-
-  const submit = () => {
+  const submit = (event: Event) => {
     if (busy.value) return
     submitted.value = true
-    const firstError = (Object.keys(fieldIds) as FieldName[]).find((field) => errors.value[field])
+    const firstError = (Object.keys(fieldIds) as FormValidationField[]).find(
+      (field) => errors.value[field]
+    )
     if (firstError) {
-      status.value = 'idle'
       focusField(firstError)
       return
     }
-    status.value = 'submitting'
-    toast.dismiss('create-variable-result')
-    setTimeout(() => {
-      status.value = 'idle'
-      if (existingKeys.includes(form.key)) {
-        takenKey.value = form.key
-        focusField('key')
-        return
-      }
-      const variable = { key: form.key, environment: form.environment }
-      reset()
-      reportSaved(variable)
-    }, 900)
+    toast.dismiss(RESULT_TOAST)
+    emit('submit', event, { ...form })
   }
+
+  const reportFailure = () =>
+    toast.error("The variable wasn't created.", {
+      id: RESULT_TOAST,
+      description: props.error,
+      action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
+    })
+
+  const reportSaved = (variable: FormValidationSaved) => {
+    Object.assign(form, empty())
+    submitted.value = false
+    toast.success(`${variable.key} was created.`, {
+      id: RESULT_TOAST,
+      description: `It is available in ${variable.environment}.`
+    })
+  }
+
+  onMounted(() => {
+    if (props.error) reportFailure()
+    if (props.saved) reportSaved(props.saved)
+  })
+
+  watch(
+    () => props.error,
+    (next) => {
+      if (next) reportFailure()
+    }
+  )
+
+  watch(
+    () => props.saved,
+    (next) => {
+      if (next) reportSaved(next)
+    }
+  )
+
+  watch(
+    () => props.takenKey,
+    (next) => {
+      if (next && !props.submitting) focusField('key')
+    }
+  )
 </script>
 
 <template>
@@ -292,7 +403,7 @@ Each variant is the same screen in another state: `get_block("state/form-validat
 
       <div class="layout-section-start flex flex-col gap-(--spacing-md)">
         <div
-          v-if="status === 'loading'"
+          v-if="loading"
           class="flex flex-col gap-(--spacing-md)"
           role="status"
           aria-label="Loading the form"
@@ -411,12 +522,39 @@ Each variant is the same screen in another state: `get_block("state/form-validat
             label="Create"
             variant="primary"
             size="medium"
-            :disabled="status === 'loading'"
-            :loading="status === 'submitting'"
+            :disabled="loading"
+            :loading="submitting"
           />
         </div>
       </div>
     </form>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { FormValidationValues } from './form-validation.vue'
+import type { FormValidationOrigin } from './variants/section-rejected.vue'
+
+export const sampleValues: FormValidationValues = {
+  key: 'API_BASE_URL',
+  value: 'https://api.example.com/v2',
+  environment: 'Production',
+  description: 'Base URL the checkout service calls.'
+}
+
+export const sampleOrigins: FormValidationOrigin[] = [
+  { value: 'origin-web-prod', label: 'web-origin-prod', kind: 'HTTP' },
+  { value: 'origin-api-prod', label: 'api-origin-prod', kind: 'HTTP' },
+  { value: 'origin-assets', label: 'assets-storage', kind: 'Storage' }
+]
+
+export const sampleReloadedOrigins: FormValidationOrigin[] = sampleOrigins.filter(
+  (origin) => origin.value !== 'origin-web-prod'
+)
+
+export const sampleOriginError =
+  'Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn\'t created. Nothing else was lost: reload the origin list and select another one.'
 ```

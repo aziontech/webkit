@@ -8,11 +8,11 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleVariant: 'center'`. From the design sample's site `ProcessScroll`.",
+ "purpose": "The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleAlign: 'center'`. From the design sample's site `ProcessScroll`.",
  "setup": null,
  "useWhen": [
   "Use ProcessScroll for numbered stage cards; set `pinned` to pin them under the header while they slide.",
-  "How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-variant=\"center\"`)."
+  "How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-align=\"center\"`)."
  ],
  "avoidWhen": [
   "For more than five stages or stages with art — use `FeatureScroll`."
@@ -41,8 +41,8 @@
    "doc": "Eyebrow above the title."
   },
   {
-   "name": "titleVariant",
-   "type": "SectionTitleVariant",
+   "name": "titleAlign",
+   "type": "SectionTitleAlign",
    "default": "'split'",
    "required": "false",
    "doc": "Alignment of the section title over the card row."

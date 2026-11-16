@@ -103,6 +103,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`'s) on the root and the trigger shell, with `aria-invalid` on the trigger and the danger border
 - Reflow: the root is capped at the width of its container (`max-w-full`), so the trigger never overflows a 320 px box.
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the calendar panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility
 

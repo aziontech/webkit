@@ -32,7 +32,7 @@
   "`skeleton` — the rows the tree renders while `loading`."
  ],
  "bestPractices": [
-  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected` and focus are keyed by it.",
+  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected-key` and focus are keyed by it.",
   "Seed `v-model:open-keys` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.",
   "Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.",
   "Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.",
@@ -99,11 +99,11 @@
    "doc": "Two-way value (`v-model:openKeys`)."
   },
   {
-   "name": "selected",
+   "name": "selectedKey",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Two-way value (`v-model:selected`)."
+   "doc": "Two-way value (`v-model:selectedKey`)."
   },
   {
    "name": "selectedKeys",
@@ -117,7 +117,7 @@
   {
    "name": "item-click",
    "payload": "(event: MouseEvent | KeyboardEvent, item: TreeItem)",
-   "notes": "A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selected` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron, inside the `actions` region or in the rename field. With `selectable=\"multiple\"`, Space toggles selection without firing it."
+   "notes": "A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selectedKey` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron, inside the `actions` region or in the rename field. With `selectable=\"multiple\"`, Space toggles selection without firing it."
   },
   {
    "name": "item-double-click",

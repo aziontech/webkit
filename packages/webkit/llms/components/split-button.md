@@ -45,7 +45,7 @@
 | `disabled` | `boolean` | `false` | false | Disables both segments and prevents the menu from opening. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves. |
 | `updateLabelOnSelect` | `boolean` | `false` | false | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
-| `selected` | `string \| null` | `null` | false | Two-way value (`v-model:selected`). |
+| `selectedKey` | `string \| null` | `null` | false | Two-way value (`v-model:selectedKey`). |
 
 ## Events
 
@@ -60,9 +60,9 @@
 
 ## v-model
 
-| Model              | Type             | Default | Emits             | Notes                                                                                                                                                                                                                                                                    |
-| ------------------ | ---------------- | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `v-model:selected` | `string \| null` | `null`  | `update:selected` | Value (`value`, else `label`) of the action the primary button mirrors when `updateLabelOnSelect` is on, via `defineModel('selected')`. Bind it to read or restore the mirrored action; unbound, the control keeps its own. `null` shows the default `label` and `icon`. |
+| Model                 | Type             | Default | Emits                | Notes                                                                                                                                                                                                                                                                       |
+| --------------------- | ---------------- | ------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:selectedKey` | `string \| null` | `null`  | `update:selectedKey` | Value (`value`, else `label`) of the action the primary button mirrors when `updateLabelOnSelect` is on, via `defineModel('selectedKey')`. Bind it to read or restore the mirrored action; unbound, the control keeps its own. `null` shows the default `label` and `icon`. |
 
 ## States
 

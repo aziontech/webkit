@@ -56,13 +56,52 @@ On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right a
 
 `SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
+## Data
+
+The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the new domain.
+
+| Prop            | Type                        | What it does                                                                        |
+| --------------- | --------------------------- | ----------------------------------------------------------------------------------- |
+| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on. |
+| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.               |
+| `error`         | `string`                    | Why the request failed, the description of the error toast with Retry.              |
+
+| Event    | Payload           | When                                                                      |
+| -------- | ----------------- | ------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Save on a valid form, and Retry in the error toast; `values` are trimmed. |
+| `cancel` | `(event)`         | Cancel in the bar.                                                        |
+
+To go live, render the block from a page that owns the request:
+
+```vue
+<script setup lang="ts">
+  import { toast } from '@aziontech/webkit/toast'
+  import CreatePage, { type CreatePageValues } from './create-page.vue'
+
+  const { mutate, pending, error } = useCreateDomain()
+  const create = async (_event: Event, values: CreatePageValues) => {
+    await mutate(values)
+    toast.success(`${values.domain} created.`)
+  }
+</script>
+
+<template>
+  <CreatePage
+    :loading="pending"
+    :error="error ? 'The service did not answer. Check your connection and try again.' : ''"
+    @submit="create"
+    @cancel="router.back()"
+  />
+</template>
+```
+
 ## Do
 
 - Put every required field in the first band; never inside Advanced, so a failed submit always points at something on screen.
 - Validate on submit only, then clear each message as soon as its field is edited.
 - Give every control an `aria-label` that repeats its row title.
 - Keep Cancel and the submit in the same bar, submit last, and name the submit after what it does (Save, Purge, Deploy).
-- Lock the whole `fieldset` and every control with one `submitting` flag while the request is in flight, and put `:loading` on the submit.
+- Lock the whole `fieldset` and every control with one `loading` flag while the request is in flight, and put `:loading` on the submit.
 - On success, show a toast that names the resource and opens it; on failure, an error toast with Retry that keeps the values (`skills/webkit-errors`). Every submit in this block models the request: Default, CreateZone, CreatePurge, CreateService and CreateOrganization.
 
 ## Don't
@@ -97,7 +136,7 @@ On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right a
 
 ## States
 
-- Default: the Create Domain page at rest; General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. Importing a zone file belongs to CreateZone, not to this page.
+- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
 - CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
 - CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
@@ -144,7 +183,28 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, watch } from 'vue'
+
+  /** The values of the Create Domain form. */
+  export interface CreatePageValues {
+    /** What the domain is called in the list. */
+    name: string
+    /** The root hostname it answers for. */
+    domain: string
+    /** Whether DNSSEC signs its answers. */
+    dnssec: boolean
+    /** Whether it answers authoritative DNS queries. */
+    active: boolean
+  }
+
+  export interface CreatePageProps {
+    /** The values the form starts from; each field falls back to empty, DNSSEC off and Active on. */
+    defaultValues?: Partial<CreatePageValues>
+    /** The create request is in flight; the form locks and Save spins. */
+    loading?: boolean
+    /** Why the create request failed, shown in an error toast with Retry. */
+    error?: string
+  }
 
   interface FormErrors {
     name: string
@@ -153,9 +213,26 @@ Each variant is the same screen in another state: `get_block("create/create-page
     domainKind: 'helper' | 'invalid' | 'required'
   }
 
+  const props = withDefaults(defineProps<CreatePageProps>(), {
+    defaultValues: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: CreatePageValues]
+    cancel: [event: MouseEvent]
+  }>()
+
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
 
-  const form = reactive({ name: '', domain: '', dnssec: false, active: true })
+  const form = reactive<CreatePageValues>({
+    name: '',
+    domain: '',
+    dnssec: false,
+    active: true,
+    ...props.defaultValues
+  })
   const errors = reactive<FormErrors>({
     name: '',
     nameKind: 'required',
@@ -193,37 +270,28 @@ Each variant is the same screen in another state: `get_block("create/create-page
     return !errors.name && !errors.domain
   }
 
-  const submitting = ref(false)
-  const SAVE_FAILURES = 0
-  let failuresLeft = SAVE_FAILURES
+  const values = (): CreatePageValues => ({
+    ...form,
+    name: form.name.trim(),
+    domain: form.domain.trim()
+  })
 
-  const sendRequest = () =>
-    new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        if (failuresLeft > 0) {
-          failuresLeft -= 1
-          reject(new Error('The service did not answer. Check your connection and try again.'))
-          return
-        }
-        resolve()
-      }, 900)
-    })
-
-  const submit = async () => {
-    if (submitting.value || !validate()) return
-    submitting.value = true
-    try {
-      await sendRequest()
-      toast.success(`${form.domain.trim()} created.`)
-    } catch (error) {
-      toast.error('Could not create the domain.', {
-        description: error instanceof Error ? error.message : 'Try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
-    } finally {
-      submitting.value = false
-    }
+  const submit = (event: Event) => {
+    if (props.loading || !validate()) return
+    emit('submit', event, values())
   }
+
+  watch(
+    () => props.error,
+    (message) => {
+      if (!message) return
+      toast.error('Could not create the domain.', {
+        description: message,
+        action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
+      })
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>
@@ -285,7 +353,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
             />
 
             <fieldset
-              :disabled="submitting"
+              :disabled="loading"
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
             >
               <legend class="sr-only">Create Domain</legend>
@@ -390,13 +458,14 @@ Each variant is the same screen in another state: `get_block("create/create-page
                 label="Cancel"
                 variant="outline"
                 size="medium"
+                @click="(event: MouseEvent) => emit('cancel', event)"
               />
               <Button
                 label="Save"
                 variant="primary"
                 size="medium"
                 type="submit"
-                :loading="submitting"
+                :loading="loading"
               />
             </template>
           </SaveBar>

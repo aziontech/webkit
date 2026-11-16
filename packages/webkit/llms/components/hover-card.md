@@ -37,8 +37,9 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `placement` | ``HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)` | `'bottom'` | false | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
-| `offset` | `number` | `8` | false | Pixel gap between the trigger and the card. |
+| `side` | ``HoverCardSide \| 'auto'` (`'top' \| 'bottom' \| 'start' \| 'end'`)` | `'bottom'` | false | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. |
+| `align` | ``HoverCardAlign` (`'start' \| 'center' \| 'end'`)` | `'center'` | false | Alignment along the trigger edge. |
+| `sideOffset` | `number` | `8` | false | Pixel gap between the trigger and the card. |
 | `openDelay` | `number` | `500` | false | Milliseconds the pointer or focus must stay on the trigger before the card opens. |
 | `closeDelay` | `number` | `300` | false | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes. |
 | `disabled` | `boolean` | `false` | false | Never opens the card. |
@@ -62,7 +63,7 @@
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` with scope `{ isOpen: boolean }` — the previewed element.
-- `hover-card-content/hover-card-content.vue` — the floating card. Teleported to `body`, rendered only while open, positioned by the root, `data-testid` `hover-card-content`, `data-state`, `data-placement`. Entering it with the pointer cancels a pending close and leaving it schedules one, so the pointer can travel from the trigger to the card; focus entering it does the same and focus leaving it to anything but the trigger schedules the close. `Tab` past its last focusable element moves to the element after the trigger in the page, `Shift+Tab` from its first returns to the trigger. It has no role: it is description text for the trigger, not a dialog, and takes focus only when it holds a link or another focusable element.
+- `hover-card-content/hover-card-content.vue` — the floating card. Teleported to `body`, rendered only while open, positioned by the root, `data-testid` `hover-card-content`, `data-state`, `data-side`, `data-align`. Entering it with the pointer cancels a pending close and leaving it schedules one, so the pointer can travel from the trigger to the card; focus entering it does the same and focus leaving it to anything but the trigger schedules the close. `Tab` past its last focusable element moves to the element after the trigger in the page, `Shift+Tab` from its first returns to the trigger. It has no role: it is description text for the trigger, not a dialog, and takes focus only when it holds a link or another focusable element.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the card content.
@@ -77,7 +78,7 @@
 
 - `data-state` (root, trigger, content): `open` | `closed`.
 - `data-disabled` on the root mirrors `disabled`; the card never opens.
-- `data-placement` on the content mirrors the resolved placement.
+- `data-side` / `data-align` on the content mirror the resolved side and alignment after flipping.
 - `loading`, `empty`, `error`, `readonly`, `invalid`: not states of this component; a preview that loads data shows a `Skeleton` inside `HoverCard.Content`, owned by the consumer.
 
 ## Accessibility
@@ -96,7 +97,7 @@
 - Icons: none.
 - Keyboard: no arrow keys.
 - User data: consumer content; wrap names and domains in `<bdi>` inside the card.
-- Placement: `-start` / `-end` align to the trigger's physical left / right edge, as in `Popover`.
+- Placement: `side="start"` / `"end"` and `align="start"` / `"end"` follow the text direction, as in `Popover`: under `rtl`, `start` is the right side and the right edge.
 
 ## Internationalization
 
@@ -165,7 +166,8 @@ No built-in strings: the card shows only consumer content.
     <span class="text-label-sm text-(--text-muted)">Application</span>
     <HoverCard
       default-open
-      placement="bottom-start"
+      side="bottom"
+      align="start"
     >
       <HoverCard.Trigger>
         <Link

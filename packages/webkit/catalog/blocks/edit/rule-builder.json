@@ -6,6 +6,9 @@
    "file": "blocks/edit/rule-builder/variants/composed.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { RuleBuilderRule } from './rule-builder.vue'\n\nexport const sampleRule: RuleBuilderRule = {\n  name: 'Docs rewrite',\n  description: 'Rewrites the docs path and caches it as a static asset.',\n  phase: 'request',\n  criteria: [[{ variable: '${uri}', operator: 'matches', argument: '/docs/*' }]],\n  behaviors: [\n    { type: 'rewrite-request', target: '/documentation${uri}' },\n    { type: 'set-cache-policy', cacheId: 'cs-static' }\n  ],\n  active: true\n}"
+ },
  "sfcFile": "blocks/edit/rule-builder/rule-builder.vue",
  "guidelinesFile": "blocks/edit/rule-builder/guidelines.md"
 }

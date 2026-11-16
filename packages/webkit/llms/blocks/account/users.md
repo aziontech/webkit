@@ -1,11 +1,11 @@
 # Users (`account/users`)
 
-> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the table-view controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with View profile (a `Dialog` with `KeyValueList`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a large `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValueList`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
+> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the table-view controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `DataTable` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `TableCellStatus` (Active, Invited, Inactive), Last active as `TableCellTime` or `Not signed in yet`, and `TableCellActions` with View profile (a `Dialog` with `KeyValueList`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a large `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `DataTable`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValueList`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/users/users.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/users")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -36,9 +36,9 @@ Title `Users` and one sentence that says access comes from teams. Actions: Docum
 
 The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, email, role and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, and is disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden while the list failed to load.
 
-### C. Users table — `Card`, `DataTable`, `Table`, `Avatar`, `Tag`, `useCollection` (required)
+### C. Users table — `Card`, `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `Tag`, `useCollection` (required)
 
-`DataTable` with `v-bind="tableProps"` in a flush `Card`, sortable by name, role and status. Name: a square `Avatar` with the initials and the name (or the email while the invitation is pending). Email in its own column, left to right in every language. Role is a small `Tag`: Owner (highlight), Admin (info), Developer and Viewer (secondary). Status is `Table.CellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `Table.CellTime`, or `Not signed in yet` for an invitation.
+`DataTable` with `v-bind="tableProps"` in a flush `Card`, sortable by name, role and status. Name: a square `Avatar` with the initials and the name (or the email while the invitation is pending). Email in its own column, left to right in every language. Role is a small `Tag`: Owner (highlight), Admin (info), Developer and Viewer (secondary). Status is `TableCellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `TableCellTime`, or `Not signed in yet` for an invitation.
 
 ### D. Teams per person — `MultiSelect`, `Tooltip` (required)
 
@@ -46,7 +46,7 @@ The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value re
 
 ### E. Row actions — `DataTable`, `DropdownMenu`, `ConfirmDialog` (required)
 
-`Table.CellActions` named after the person. Everyone gets `View profile`; everyone but the owner gets `Edit role`. An invited person gets `Resend invitation` (toast: the earlier link stops working) and `Cancel invitation`; everyone else but the owner gets `Remove from account`. Both removals ask in a `ConfirmDialog` that says what the person loses and what stays.
+`TableCellActions` named after the person. Everyone gets `View profile`; everyone but the owner gets `Edit role`. An invited person gets `Resend invitation` (toast: the earlier link stops working) and `Cancel invitation`; everyone else but the owner gets `Remove from account`. Both removals ask in a `ConfirmDialog` that says what the person loses and what stays.
 
 ### F. Profile and role dialogs — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `KeyValueList`, `Select` (required)
 
@@ -63,6 +63,57 @@ With only the owner, a small `EmptyState` under the table invites the first team
 ### Outcomes — through `toast`
 
 Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `UsersUser`, `UsersTeam`, `UsersInvitation` and `UsersProps` are exported from `users.vue`, and `sample.ts` holds the people and teams the block renders when `users` or `teams` is left out (and never while `loading` or `error` is set).
+
+| Prop                | Type          | What it does                                                                                                        |
+| ------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `users`             | `UsersUser[]` | The people of the account; filtered, sorted and paged in the browser. The owner alone shows the invite empty state. |
+| `teams`             | `UsersTeam[]` | Every team, the options of the Teams pickers.                                                                       |
+| `loading`           | `boolean`     | A request is in flight. With no rows it is the first load; with rows it is a refresh.                               |
+| `error`             | `string`      | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table.               |
+| `defaultInviteOpen` | `boolean`     | Opens the invite drawer on mount.                                                                                   |
+| `defaultEditRoleId` | `string`      | Opens the Edit role dialog for the user with this id on mount.                                                      |
+
+| Event               | Payload                     | When                                                                                    |
+| ------------------- | --------------------------- | --------------------------------------------------------------------------------------- |
+| `invite`            | `(event, { email, teams })` | Send invitation passed validation; the person is already in the list as Invited.        |
+| `refresh`           | `(event)`                   | Refresh.                                                                                |
+| `retry`             | `(event)`                   | Retry in the error alert.                                                               |
+| `role-change`       | `(event, { user, role })`   | Save role, or Undo in its toast; the row already shows the new role.                    |
+| `teams-change`      | `({ user, teams })`         | A row's Teams picker changed, or Undo in its toast.                                     |
+| `resend-invitation` | `(event, user)`             | Resend invitation in the row menu.                                                      |
+| `remove`            | `(event, user)`             | Remove user or Cancel invitation was confirmed; the row is already gone from the table. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import Users from './users.vue'
+
+  const { data, teams, pending, error, refresh, invite, setRole, setTeams, remove } = useUsers()
+  const loadError = 'The users could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <Users
+    :users="data ?? []"
+    :teams="teams"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+    @invite="(event, values) => invite(values)"
+    @role-change="(event, { user, role }) => setRole(user.id, role)"
+    @teams-change="({ user, teams }) => setTeams(user.id, teams)"
+    @remove="(event, user) => remove(user.id)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -100,11 +151,11 @@ Invitations, team changes, resends and removals end in a success toast. They are
 ## States
 
 - Default: six people (the owner, four active or inactive, one invited) with the property filter, Refresh, Download CSV, preferences, inline team changes, View profile, Edit role, resend, cancel and remove wired.
-- Invite: the invite drawer open.
-- EditRole: the Edit role dialog open for Jordan Reyes.
-- OnlyOwner: the owner alone and the invite empty state.
-- Loading: the first load.
-- Error: the list did not load; a danger Alert with Retry.
+- Invite: the invite drawer open (`defaultInviteOpen`).
+- EditRole: the Edit role dialog open for Jordan Reyes (`defaultEditRoleId`).
+- OnlyOwner: the owner alone (`users` holds only the owner) and the invite empty state.
+- Loading: the first load (`loading` with no `users`).
+- Error: the list did not load (`error` is set); a danger Alert with the message and Retry.
 
 ## Related
 
@@ -156,125 +207,125 @@ Each variant is the same screen in another state: `get_block("account/users", { 
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  type UserStatus = 'Active' | 'Invited' | 'Inactive'
-  type UserRole = 'Owner' | 'Admin' | 'Developer' | 'Viewer'
+  import { sampleTeams, sampleUsers } from './sample'
 
-  interface User {
+  /** Whether a person can sign in yet. */
+  export type UsersStatus = 'Active' | 'Invited' | 'Inactive'
+  /** What a person can do on the account. */
+  export type UsersRole = 'Owner' | 'Admin' | 'Developer' | 'Viewer'
+
+  /** One person of the account. */
+  export interface UsersUser {
+    /** Stable key. */
     id: string
+    /** Display name; empty until an invited person accepts. */
     name: string
+    /** Sign-in email. */
     email: string
+    /** The account owner, who cannot be edited or removed. */
     owner: boolean
-    role: UserRole
+    /** What they can do on the account. */
+    role: UsersRole
+    /** Values of the teams they belong to. */
     teams: string[]
-    status: UserStatus
+    /** Whether they can sign in yet. */
+    status: UsersStatus
+    /** When they were last active; null when never signed in. */
     lastActive: Date | null
   }
 
-  const TEAMS = [
-    { value: 'administrators', label: 'Administrators' },
-    { value: 'developers', label: 'Developers' },
-    { value: 'security', label: 'Security' },
-    { value: 'finance', label: 'Finance' },
-    { value: 'support', label: 'Support' }
-  ]
+  /** A team people can join. */
+  export interface UsersTeam {
+    /** Stable key stored in a user's teams. */
+    value: string
+    /** Display name. */
+    label: string
+  }
+
+  /** What the invite form sends. */
+  export interface UsersInvitation {
+    /** The address to invite, trimmed and lowercased. */
+    email: string
+    /** Values of the teams they join. */
+    teams: string[]
+  }
+
+  export interface UsersProps {
+    /** The people of the account. Left out, the sample renders. */
+    users?: UsersUser[]
+    /** Every team of the account. Left out, the sample renders. */
+    teams?: UsersTeam[]
+    /** A request is in flight: with no rows it is the first load, with rows a refresh. */
+    loading?: boolean
+    /** Why the users could not load; a danger alert with Retry replaces the table. */
+    error?: string
+    /** Opens the invite drawer on mount. */
+    defaultInviteOpen?: boolean
+    /** Opens the Edit role dialog for the user with this id on mount. */
+    defaultEditRoleId?: string
+  }
+
+  const props = withDefaults(defineProps<UsersProps>(), {
+    users: undefined,
+    teams: undefined,
+    loading: false,
+    error: '',
+    defaultInviteOpen: false,
+    defaultEditRoleId: ''
+  })
+
+  const emit = defineEmits<{
+    invite: [event: Event, values: UsersInvitation]
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'role-change': [event: Event, payload: { user: UsersUser; role: UsersRole }]
+    'teams-change': [payload: { user: UsersUser; teams: string[] }]
+    'resend-invitation': [event: Event, user: UsersUser]
+    remove: [event: Event, user: UsersUser]
+  }>()
+
+  const source = computed<UsersUser[]>(
+    () => props.users ?? (props.loading || props.error ? [] : sampleUsers)
+  )
+  const items = ref<UsersUser[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+  const teamOptions = computed<UsersTeam[]>(() => props.teams ?? sampleTeams)
+
   const teamLabel = (value: string): string =>
-    TEAMS.find((team) => team.value === value)?.label ?? value
+    teamOptions.value.find((team) => team.value === value)?.label ?? value
   const teamsLabel = (values: string[]): string =>
     values.length ? values.map(teamLabel).join(', ') : 'No team (no access)'
 
-  const ROLES: { value: Exclude<UserRole, 'Owner'>; hint: string }[] = [
+  const ROLES: { value: Exclude<UsersRole, 'Owner'>; hint: string }[] = [
     { value: 'Admin', hint: 'Manages people, teams, billing and every account setting.' },
     { value: 'Developer', hint: 'Works on the resources their teams reach; no account settings.' },
     { value: 'Viewer', hint: 'Reads the resources their teams reach; changes nothing.' }
   ]
-  const roleSeverity = (value: UserRole): TagSeverity | undefined =>
+  const roleSeverity = (value: UsersRole): TagSeverity | undefined =>
     value === 'Owner'
       ? undefined
       : (({ Admin: 'info', Developer: 'neutral', Viewer: 'neutral' } as const)[value] ?? 'neutral')
-  const roleVariant = (value: UserRole): TagVariant | undefined =>
+  const roleVariant = (value: UsersRole): TagVariant | undefined =>
     value === 'Owner' ? 'highlight' : undefined
 
-  const DAY = 86_400_000
-  const REFERENCE = Date.UTC(2026, 10, 10, 12)
-
-  const seedUsers: User[] = [
-    {
-      id: 'u-1',
-      name: 'Avery Stone',
-      email: 'avery.stone@example.com',
-      owner: true,
-      role: 'Owner',
-      teams: ['administrators'],
-      status: 'Active',
-      lastActive: new Date(REFERENCE - 0.02 * DAY)
-    },
-    {
-      id: 'u-2',
-      name: 'Jordan Reyes',
-      email: 'jordan.reyes@example.com',
-      owner: false,
-      role: 'Admin',
-      teams: ['administrators', 'security'],
-      status: 'Active',
-      lastActive: new Date(REFERENCE - 0.1 * DAY)
-    },
-    {
-      id: 'u-3',
-      name: 'Priya Nair',
-      email: 'priya.nair@example.com',
-      owner: false,
-      role: 'Developer',
-      teams: ['developers'],
-      status: 'Active',
-      lastActive: new Date(REFERENCE - 1 * DAY)
-    },
-    {
-      id: 'u-4',
-      name: '',
-      email: 'sam.okafor@example.com',
-      owner: false,
-      role: 'Developer',
-      teams: ['developers', 'support'],
-      status: 'Invited',
-      lastActive: null
-    },
-    {
-      id: 'u-5',
-      name: 'Lena Fischer',
-      email: 'lena.fischer@example.com',
-      owner: false,
-      role: 'Viewer',
-      teams: ['finance'],
-      status: 'Active',
-      lastActive: new Date(REFERENCE - 3 * DAY)
-    },
-    {
-      id: 'u-6',
-      name: 'Marco Bianchi',
-      email: 'marco.bianchi@example.com',
-      owner: false,
-      role: 'Viewer',
-      teams: [],
-      status: 'Inactive',
-      lastActive: new Date(REFERENCE - 64 * DAY)
-    }
-  ]
-
-  const INVITE_ON_START = false
-  const EDIT_ROLE_ON_START = ''
-  const users = ref<User[]>(seedUsers)
-  const loading = ref(false)
-  const loadFailed = ref(false)
-
-  const displayName = (user: User): string => user.name || user.email
-  const statusSeverity = (value: UserStatus): TagSeverity =>
+  const displayName = (user: UsersUser): string => user.name || user.email
+  const statusSeverity = (value: UsersStatus): TagSeverity =>
     (({ Active: 'success', Invited: 'warning', Inactive: 'neutral' }) as const)[value] ?? 'neutral'
 
   const columns: TableColumn[] = [
@@ -288,18 +339,18 @@ Each variant is the same screen in another state: `get_block("account/users", { 
   ]
 
   const optionsOf = (key: 'role' | 'status') =>
-    [...new Set(seedUsers.map((user) => user[key]))].sort().map((value) => ({ value }))
+    [...new Set(source.value.map((user) => user[key]))].sort().map((value) => ({ value }))
 
-  const properties: FilteringProperty[] = [
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'name', label: 'Name' },
     { key: 'email', label: 'Email' },
     { key: 'role', label: 'Role', options: optionsOf('role') },
     { key: 'status', label: 'Status', options: optionsOf('status') }
-  ]
+  ])
 
   const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
     useCollection({
-      items: users,
+      items,
       columns,
       filtering: { fields: ['name', 'email', 'role', 'status'] },
       propertyFiltering: { properties },
@@ -307,32 +358,30 @@ Each variant is the same screen in another state: `get_block("account/users", { 
       preferences: { storageKey: 'account-users' }
     })
 
-  const usersTableEl = ref<TableExposed<User> | null>(null)
+  const usersTableEl = ref<TableExposed<UsersUser> | null>(null)
   const exportCsv = () => usersTableEl.value?.exportCsv({ filename: 'users.csv' })
 
-  const alone = computed(() => !loading.value && users.value.length === 1 && users.value[0].owner)
+  const alone = computed(() => !props.loading && items.value.length === 1 && items.value[0].owner)
 
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      users.value = seedUsers
-      loading.value = false
-    }, 700)
+  const replaceUser = (id: string, patch: Partial<UsersUser>): UsersUser | undefined => {
+    let updated: UsersUser | undefined
+    items.value = items.value.map((user) => {
+      if (user.id !== id) return user
+      updated = { ...user, ...patch }
+      return updated
+    })
+    return updated
   }
 
-  const refreshing = ref(false)
-  const refresh = () => {
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
+  const changeTeams = (id: string, teams: string[]) => {
+    const user = replaceUser(id, { teams })
+    if (user) emit('teams-change', { user, teams })
   }
 
-  const setTeams = (user: User, selected: unknown[]) => {
+  const setTeams = (user: UsersUser, selected: unknown[]) => {
     const next = selected.map(String)
     const before = [...user.teams]
-    user.teams = next
+    changeTeams(user.id, next)
     toast.success(`Teams updated for ${displayName(user)}.`, {
       description: next.length
         ? `${teamsLabel(next)}. Access changes on their next request.`
@@ -340,47 +389,48 @@ Each variant is the same screen in another state: `get_block("account/users", { 
       actions: [
         {
           label: 'Undo',
-          onClick: () => {
-            user.teams = before
-          }
+          onClick: () => changeTeams(user.id, before)
         }
       ]
     })
   }
 
-  const pending = ref<User | null>(null)
+  const pending = ref<UsersUser | null>(null)
   const removeOpen = ref(false)
   const profileOpen = ref(false)
   const roleOpen = ref(false)
-  const nextRole = ref<UserRole>('Developer')
+  const nextRole = ref<UsersRole>('Developer')
   const roleHint = computed(() => ROLES.find((role) => role.value === nextRole.value)?.hint ?? '')
-  const openRole = (user: User) => {
+  const openRole = (user: UsersUser) => {
     pending.value = user
     nextRole.value = user.role
     profileOpen.value = false
     roleOpen.value = true
   }
-  const setRole = (id: string, role: UserRole) => {
-    users.value = users.value.map((user) => (user.id === id ? { ...user, role } : user))
+  const setRole = (event: Event, id: string, role: UsersRole) => {
+    const user = replaceUser(id, { role })
+    if (user) emit('role-change', event, { user, role })
   }
-  const saveRole = () => {
+  const saveRole = (event: Event) => {
     const user = pending.value
     if (!user) return
     const before = user.role
     const after = nextRole.value
     roleOpen.value = false
     if (before === after) return
-    setRole(user.id, after)
+    setRole(event, user.id, after)
     toast.success(`${displayName(user)} is now ${after}.`, {
       description: 'The new role applies on their next request.',
-      actions: [{ label: 'Undo', onClick: () => setRole(user.id, before) }]
+      actions: [{ label: 'Undo', onClick: (undo: MouseEvent) => setRole(undo, user.id, before) }]
     })
   }
 
-  const editOnStart = users.value.find((user) => user.id === EDIT_ROLE_ON_START)
+  const editOnStart = props.defaultEditRoleId
+    ? items.value.find((user) => user.id === props.defaultEditRoleId)
+    : undefined
   if (editOnStart) openRole(editOnStart)
 
-  const onAction = (value: DropdownMenuItemValue, user: User) => {
+  const onAction = (event: Event, value: DropdownMenuItemValue, user: UsersUser) => {
     if (value === 'view') {
       pending.value = user
       profileOpen.value = true
@@ -391,6 +441,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
       return
     }
     if (value === 'resend') {
+      emit('resend-invitation', event, user)
       toast.success(`Invitation sent again to ${user.email}.`, {
         description: 'The earlier link stops working.'
       })
@@ -401,11 +452,12 @@ Each variant is the same screen in another state: `get_block("account/users", { 
       removeOpen.value = true
     }
   }
-  const remove = () => {
+  const remove = (event: Event) => {
     const user = pending.value
     if (!user) return
-    users.value = users.value.filter((item) => item.id !== user.id)
+    items.value = items.value.filter((item) => item.id !== user.id)
     removeOpen.value = false
+    emit('remove', event, user)
     toast.success(
       user.status === 'Invited'
         ? `Invitation to ${user.email} cancelled.`
@@ -413,10 +465,9 @@ Each variant is the same screen in another state: `get_block("account/users", { 
     )
   }
 
-  const inviteOpen = ref(INVITE_ON_START)
+  const inviteOpen = ref(props.defaultInviteOpen)
   const invite = reactive({ email: '', teams: ['developers'] })
   const submitted = ref(false)
-  const sending = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   const errors = computed<{ email?: string; teams?: string }>(() => {
@@ -425,7 +476,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
     const out: { email?: string; teams?: string } = {}
     if (!email) out.email = 'Enter the email address to invite.'
     else if (!EMAIL.test(email)) out.email = 'Enter an email address like name@example.com.'
-    else if (users.value.some((user) => user.email === email))
+    else if (items.value.some((user) => user.email === email))
       out.email = 'This person is already in the account.'
     if (!invite.teams.length) out.teams = 'Choose at least one team, or they get no access.'
     return out
@@ -436,35 +487,32 @@ Each variant is the same screen in another state: `get_block("account/users", { 
     submitted.value = false
     inviteOpen.value = true
   }
-  const sendInvite = () => {
+  const sendInvite = (event: Event) => {
     submitted.value = true
-    if (sending.value) return
     if (Object.keys(errors.value).length) {
       nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
       return
     }
-    sending.value = true
-    setTimeout(() => {
-      const email = invite.email.trim().toLowerCase()
-      users.value = [
-        ...users.value,
-        {
-          id: `u-${users.value.length + 1}-${email}`,
-          name: '',
-          email,
-          owner: false,
-          role: 'Developer',
-          teams: [...invite.teams],
-          status: 'Invited',
-          lastActive: null
-        }
-      ]
-      sending.value = false
-      inviteOpen.value = false
-      toast.success(`Invitation sent to ${email}.`, {
-        description: `They join ${teamsLabel(invite.teams)} when they accept. The link expires in 7 days.`
-      })
-    }, 800)
+    const email = invite.email.trim().toLowerCase()
+    const teams = [...invite.teams]
+    items.value = [
+      ...items.value,
+      {
+        id: `u-${items.value.length + 1}-${email}`,
+        name: '',
+        email,
+        owner: false,
+        role: 'Developer',
+        teams,
+        status: 'Invited',
+        lastActive: null
+      }
+    ]
+    inviteOpen.value = false
+    emit('invite', event, { email, teams })
+    toast.success(`Invitation sent to ${email}.`, {
+      description: `They join ${teamsLabel(teams)} when they accept. The link expires in 7 days.`
+    })
   }
 </script>
 
@@ -496,7 +544,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
         <header
-          v-if="!loadFailed"
+          v-if="!error"
           class="flex flex-wrap items-start gap-(--layout-group-gap)"
         >
           <div class="flex min-w-0 grow basis-(--container-2xs)">
@@ -515,9 +563,9 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                 icon="ai ai-refresh"
                 variant="outline"
                 size="medium"
-                :loading="refreshing"
+                :loading="loading"
                 aria-label="Refresh"
-                @click="refresh"
+                @click="emit('refresh', $event)"
               />
             </Tooltip>
             <Tooltip
@@ -541,16 +589,16 @@ Each variant is the same screen in another state: `get_block("account/users", { 
         </header>
 
         <Alert
-          v-if="loadFailed"
+          v-if="error"
           severity="danger"
         >
-          The users could not be loaded. Nothing was changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="retryLoad"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -563,7 +611,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
             <DataTable
               ref="usersTableEl"
               v-bind="tableProps"
-              :loading="loading || refreshing"
+              :loading="loading"
               sortable
               :bordered="false"
               aria-label="Users"
@@ -615,7 +663,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                     <MultiSelect.Trigger :aria-label="`Teams of ${displayName(row)}`" />
                     <MultiSelect.Content>
                       <MultiSelect.Item
-                        v-for="team in TEAMS"
+                        v-for="team in teamOptions"
                         :key="team.value"
                         :value="team.value"
                       >
@@ -626,13 +674,13 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                 </Tooltip>
               </template>
               <template #cell-status="{ value }">
-                <Table.CellStatus
+                <TableCellStatus
                   :label="value"
                   :severity="statusSeverity(value)"
                 />
               </template>
               <template #cell-lastActive="{ row }">
-                <Table.CellTime
+                <TableCellTime
                   v-if="row.lastActive"
                   :value="row.lastActive"
                 />
@@ -646,9 +694,9 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                 <span class="sr-only">Actions</span>
               </template>
               <template #cell-actions="{ row }">
-                <Table.CellActions
+                <TableCellActions
                   :name="displayName(row)"
-                  @select="(_event, value) => onAction(value, row)"
+                  @select="(event, value) => onAction(event, value, row)"
                 >
                   <DropdownMenu.Group key="profile">
                     <DropdownMenu.Item
@@ -681,7 +729,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                       "
                     />
                   </DropdownMenu.Group>
-                </Table.CellActions>
+                </TableCellActions>
               </template>
               <template #empty>
                 <EmptyState
@@ -705,7 +753,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
         </Card>
 
         <EmptyState
-          v-if="alone && !loadFailed"
+          v-if="alone && !error"
           size="small"
           icon="ai ai-users"
           title="You are the only user"
@@ -728,8 +776,6 @@ Each variant is the same screen in another state: `get_block("account/users", { 
       v-model:open="inviteOpen"
       side="end"
       size="large"
-      :dismissible="!sending"
-      :closable="!sending"
     >
       <DrawerContent>
         <form
@@ -743,10 +789,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
             <DrawerTitle>Invite User</DrawerTitle>
           </PanelHeader>
           <PanelBody>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-              :disabled="sending"
-            >
+            <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
               <legend class="sr-only">Invite User</legend>
               <DrawerDescription>
                 They get an email with a link to join this account. Their teams decide what they can
@@ -785,7 +828,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                   />
                   <MultiSelect.Content>
                     <MultiSelect.Item
-                      v-for="team in TEAMS"
+                      v-for="team in teamOptions"
                       :key="team.value"
                       :value="team.value"
                     >
@@ -807,7 +850,6 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                 type="button"
                 label="Cancel"
                 variant="outline"
-                :disabled="sending"
                 @click="inviteOpen = false"
               />
               <Button
@@ -815,7 +857,6 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                 label="Send invitation"
                 variant="primary"
                 icon="ai ai-send"
-                :loading="sending"
               />
             </div>
           </PanelFooter>
@@ -862,7 +903,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
               <KeyValueList.Item label="Teams">{{ teamsLabel(pending.teams) }}</KeyValueList.Item>
               <KeyValueList.Item label="Status">{{ pending.status }}</KeyValueList.Item>
               <KeyValueList.Item label="Last active">
-                <Table.CellTime
+                <TableCellTime
                   v-if="pending.lastActive"
                   :value="pending.lastActive"
                 />
@@ -968,4 +1009,84 @@ Each variant is the same screen in another state: `get_block("account/users", { 
     />
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { UsersTeam, UsersUser } from './users.vue'
+
+const DAY = 86_400_000
+const referenceTime = Date.UTC(2026, 10, 10, 12)
+
+export const sampleTeams: UsersTeam[] = [
+  { value: 'administrators', label: 'Administrators' },
+  { value: 'developers', label: 'Developers' },
+  { value: 'security', label: 'Security' },
+  { value: 'finance', label: 'Finance' },
+  { value: 'support', label: 'Support' }
+]
+
+export const sampleUsers: UsersUser[] = [
+  {
+    id: 'u-1',
+    name: 'Avery Stone',
+    email: 'avery.stone@example.com',
+    owner: true,
+    role: 'Owner',
+    teams: ['administrators'],
+    status: 'Active',
+    lastActive: new Date(referenceTime - 0.02 * DAY)
+  },
+  {
+    id: 'u-2',
+    name: 'Jordan Reyes',
+    email: 'jordan.reyes@example.com',
+    owner: false,
+    role: 'Admin',
+    teams: ['administrators', 'security'],
+    status: 'Active',
+    lastActive: new Date(referenceTime - 0.1 * DAY)
+  },
+  {
+    id: 'u-3',
+    name: 'Priya Nair',
+    email: 'priya.nair@example.com',
+    owner: false,
+    role: 'Developer',
+    teams: ['developers'],
+    status: 'Active',
+    lastActive: new Date(referenceTime - 1 * DAY)
+  },
+  {
+    id: 'u-4',
+    name: '',
+    email: 'sam.okafor@example.com',
+    owner: false,
+    role: 'Developer',
+    teams: ['developers', 'support'],
+    status: 'Invited',
+    lastActive: null
+  },
+  {
+    id: 'u-5',
+    name: 'Lena Fischer',
+    email: 'lena.fischer@example.com',
+    owner: false,
+    role: 'Viewer',
+    teams: ['finance'],
+    status: 'Active',
+    lastActive: new Date(referenceTime - 3 * DAY)
+  },
+  {
+    id: 'u-6',
+    name: 'Marco Bianchi',
+    email: 'marco.bianchi@example.com',
+    owner: false,
+    role: 'Viewer',
+    teams: [],
+    status: 'Inactive',
+    lastActive: new Date(referenceTime - 64 * DAY)
+  }
+]
 ```

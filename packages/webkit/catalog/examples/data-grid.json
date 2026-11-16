@@ -7,7 +7,7 @@
   },
   {
    "name": "RowSelection",
-   "summary": "`selectable` adds a checkbox column with Select all, bound with `v-model:row-selection`. The toolbar slot's `add` and `remove` emit `row-add` and `row-remove` with the selected rows, and the page writes the new rows to the `v-model`.",
+   "summary": "`selectable` adds a checkbox column with Select all, bound with `v-model:selected-keys`. The toolbar slot's `add` and `remove` emit `row-add` and `row-remove` with the selected rows, and the page writes the new rows to the `v-model`.",
    "file": "examples/data-grid/row-selection.vue"
   },
   {

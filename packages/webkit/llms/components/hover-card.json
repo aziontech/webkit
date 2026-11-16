@@ -36,14 +36,21 @@
  ],
  "props": [
   {
-   "name": "placement",
-   "type": "`HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
+   "name": "side",
+   "type": "`HoverCardSide | 'auto'` (`'top' | 'bottom' | 'start' | 'end'`)",
    "default": "'bottom'",
    "required": "false",
-   "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."
+   "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time."
   },
   {
-   "name": "offset",
+   "name": "align",
+   "type": "`HoverCardAlign` (`'start' | 'center' | 'end'`)",
+   "default": "'center'",
+   "required": "false",
+   "doc": "Alignment along the trigger edge."
+  },
+  {
+   "name": "sideOffset",
    "type": "number",
    "default": "8",
    "required": "false",

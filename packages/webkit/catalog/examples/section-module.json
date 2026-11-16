@@ -6,9 +6,9 @@
    "file": "examples/section-module/default.vue"
   },
   {
-   "name": "Variants",
+   "name": "Alignments",
    "summary": "The three header layouts, stacked — they differ only in where the copy sits.",
-   "file": "examples/section-module/variants.vue"
+   "file": "examples/section-module/alignments.vue"
   },
   {
    "name": "Divided",

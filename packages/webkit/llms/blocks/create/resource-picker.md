@@ -57,6 +57,51 @@ A large `Input` with a search icon, placeholder and matching `aria-label`, shown
 
 A transparent small full-width `Button` under the list while more matches remain, labelled with the size of the next batch and spinning with `:loading` while it fetches. The list pages five at a time. A no-match line replaces the rows when the search finds nothing, and a visually hidden `role="status"` line reports the count after every search and load.
 
+## Data
+
+The block takes its resources through props, keeps the answer in `v-model`s and emits Load more; it fetches nothing. `ResourcePickerOption`, `ResourcePickerMode` and `ResourcePickerProps` are exported from `resource-picker.vue`, and `sample.ts` holds the sample projects the block renders when `projects` is left out (and never while `loading` or `error` is set).
+
+| Prop / model   | Type                     | What it does                                                                                                  |
+| -------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `projects`     | `ResourcePickerOption[]` | The resources that can be bound; searched and paged five at a time in the browser. Pass `[]` when none exist. |
+| `loading`      | `boolean`                | The next page is loading: skeleton rows follow the visible ones and Load more spins.                          |
+| `error`        | `string`                 | The required message, shown under the search above the list, or under the Name field in New.                  |
+| `v-model`      | `string`                 | The `value` of the chosen resource.                                                                           |
+| `v-model:mode` | `ResourcePickerMode`     | `existing` or `new`. Left out, the card opens on Existing when anything exists and on New when nothing does.  |
+| `v-model:name` | `string`                 | The Name of the resource to create in New.                                                                    |
+
+| Event       | Payload   | When                                                       |
+| ----------- | --------- | ---------------------------------------------------------- |
+| `load-more` | `(event)` | Load more was pressed; the next five matches are revealed. |
+
+To go live, render the block from the create flow that owns the request and the answer:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import ResourcePicker from './resource-picker.vue'
+
+  const { data, pending } = useProjects()
+  const project = ref('')
+  const mode = ref<'existing' | 'new'>()
+  const name = ref('')
+  const required = ref('')
+</script>
+
+<template>
+  <ResourcePicker
+    v-model="project"
+    v-model:mode="mode"
+    v-model:name="name"
+    :projects="data ?? []"
+    :loading="pending"
+    :error="required"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import. Set `error` when Next is pressed with nothing chosen and clear it once the user answers.
+
 ## Do
 
 - Default to Existing when anything exists, and drop the toggle entirely when nothing does.
@@ -101,11 +146,11 @@ A transparent small full-width `Button` under the list while more matches remain
 
 ## States
 
-- Existing: resources exist; the toggle sits on Existing with a row already chosen in the first batch.
-- New: the user switched to New; the list gives way to the Name field with the allowed characters as helper text.
-- Loading: Load more was pressed; five skeleton rows follow the visible ones and the button spins.
-- Required: Next was pressed with nothing chosen; the required message sits under the search, above the list.
-- Empty: nothing exists to bind; no toggle, one line saying a new project is created, and the Name field.
+- Existing: `projects` holds resources; the toggle sits on Existing with the `v-model` row chosen in the first batch.
+- New: `mode` is `new` (the user switched to New); the list gives way to the Name field with the allowed characters as helper text.
+- Loading: `loading` is set after Load more; five skeleton rows follow the visible ones and the button spins.
+- Required: `error` holds the required message after Next was pressed with nothing chosen; the required message sits under the search, above the list.
+- Empty: `projects` is `[]`, nothing exists to bind; no toggle, one line saying a new project is created, and the Name field.
 - OptionalBinding: the Protect with a firewall switch is on and New firewall is selected; the Name is prefilled from the project and the Firewall modules list has DDoS Protection locked on.
 
 ## Related
@@ -139,86 +184,90 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, reactive, ref } from 'vue'
 
-  interface PickerOption {
+  import { sampleProjects, sampleSelected } from './sample'
+
+  /** One resource the user can bind. */
+  export interface ResourcePickerOption {
+    /** Identifier emitted as the selection. */
     value: string
+    /** Name shown as the row title. */
     label: string
+    /** Secondary fact shown under the name. */
     description?: string
   }
 
-  interface PickerInitial {
-    chosen?: string
-    message?: string
+  /** Where the bound resource comes from. */
+  export type ResourcePickerMode = 'existing' | 'new'
+
+  export interface ResourcePickerProps {
+    /** The resources that can be bound; searched and paged in the browser. Left out, the sample renders. */
+    projects?: ResourcePickerOption[]
+    /** The next page is loading: skeleton rows follow the visible ones and Load more spins. */
     loading?: boolean
+    /** The required message shown above the list, or under the Name field in New. */
+    error?: string
   }
+
+  const props = withDefaults(defineProps<ResourcePickerProps>(), {
+    projects: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    /** Load more was pressed; the next five matches are revealed. */
+    'load-more': [event: MouseEvent]
+  }>()
+
+  /** The value of the chosen resource. */
+  const selected = defineModel<string>()
+  /** Whether the user binds an existing resource or creates a new one. */
+  const modeModel = defineModel<ResourcePickerMode>('mode')
+  /** The name of the resource to create in New. */
+  const name = defineModel<string>('name', { default: '' })
 
   const projectModes = [
     { label: 'Existing project', value: 'existing' },
     { label: 'New project', value: 'new' }
   ]
-  const projects: PickerOption[] = [
-    { value: 'web-app', label: 'web-app', description: 'Astro · acme/web-app' },
-    {
-      value: 'black-friday-2025',
-      label: 'black-friday-2025',
-      description: 'Next.js · acme/black-friday-2025'
-    },
-    {
-      value: 'black-friday-2026',
-      label: 'black-friday-2026',
-      description: 'Next.js · acme/black-friday-2026'
-    },
-    { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },
-    { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },
-    { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },
-    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · acme/hello-world' },
-    { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },
-    { value: 'company-docs', label: 'company-docs', description: 'HTML · acme/company-docs' },
-    { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },
-    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · acme/analytics-api' },
-    {
-      value: 'react-dashboard',
-      label: 'react-dashboard',
-      description: 'React · acme/react-dashboard'
-    },
-    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · acme/docs-portal' },
-    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · acme/ecommerce-v2' },
-    {
-      value: 'ecommerce-storefront',
-      label: 'ecommerce-storefront',
-      description: 'Nuxt · acme/ecommerce-storefront'
-    },
-    {
-      value: 'marketing-site',
-      label: 'marketing-site',
-      description: 'Astro · acme/marketing-site'
-    },
-    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · acme/blog-platform' },
-    { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },
-    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · acme/mobile-app' }
-  ]
   const PAGE_SIZE = 5
   const wireWidths = ['62%', '48%', '70%', '54%', '44%']
   const wireSubWidths = ['84%', '66%', '78%', '58%', '72%']
 
-  const usePicker = (options: PickerOption[], noun: string, initial: PickerInitial = {}) => {
-    const query = ref('')
-    const chosen = ref(initial.chosen ?? '')
-    const message = ref(initial.message ?? '')
-    const shown = ref(PAGE_SIZE)
-    const loading = ref(initial.loading ?? false)
-    let timer: ReturnType<typeof setTimeout> | undefined
-    onBeforeUnmount(() => clearTimeout(timer))
+  const projects = computed<ResourcePickerOption[]>(
+    () => props.projects ?? (props.loading || props.error ? [] : sampleProjects)
+  )
 
-    const chosenIndex = options.findIndex((option) => option.value === chosen.value)
+  const mode = computed<ResourcePickerMode>({
+    get: () => modeModel.value ?? (projects.value.length ? 'existing' : 'new'),
+    set: (next) => {
+      modeModel.value = next
+    }
+  })
+
+  const chosen = computed<string>({
+    get: () => selected.value ?? (props.projects ? '' : sampleSelected),
+    set: (next) => {
+      selected.value = next
+    }
+  })
+
+  const usePicker = (noun: string) => {
+    const query = ref('')
+    const shown = ref(PAGE_SIZE)
+
+    const chosenIndex = projects.value.findIndex((option) => option.value === chosen.value)
     if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
 
-    const paged = computed(() => options.length > PAGE_SIZE)
+    const loading = computed(() => props.loading)
+    const message = computed(() => props.error)
+    const paged = computed(() => projects.value.length > PAGE_SIZE)
     const matches = computed(() => {
       const text = query.value.trim().toLowerCase()
-      if (!text) return options
-      return options.filter(
+      if (!text) return projects.value
+      return projects.value.filter(
         (option) =>
           option.label.toLowerCase().includes(text) ||
           String(option.description ?? '')
@@ -237,18 +286,14 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
       if (remaining.value)
         return visible.value.length + ' of ' + matches.value.length + ' ' + noun + 's'
       return query.value.trim()
-        ? matches.value.length + ' of ' + options.length + ' ' + noun + 's'
-        : options.length + ' ' + noun + 's'
+        ? matches.value.length + ' of ' + projects.value.length + ' ' + noun + 's'
+        : projects.value.length + ' ' + noun + 's'
     })
 
-    const loadMore = () => {
+    const loadMore = (event: MouseEvent) => {
       if (loading.value || !remaining.value) return
-      loading.value = true
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        shown.value += PAGE_SIZE
-        loading.value = false
-      }, 420)
+      shown.value += PAGE_SIZE
+      emit('load-more', event)
     }
 
     return reactive({
@@ -266,13 +311,7 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
     })
   }
 
-  const mode = ref(projects.length ? 'existing' : 'new')
-  const name = ref('')
-  const projectPicker = usePicker(projects, 'project', {
-    chosen: 'web-app',
-    loading: false,
-    message: ''
-  })
+  const projectPicker = usePicker('project')
 </script>
 
 <template>
@@ -453,4 +492,54 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
     </Card>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { ResourcePickerOption } from './resource-picker.vue'
+
+export const sampleProjects: ResourcePickerOption[] = [
+  { value: 'web-app', label: 'web-app', description: 'Astro · acme/web-app' },
+  {
+    value: 'black-friday-2025',
+    label: 'black-friday-2025',
+    description: 'Next.js · acme/black-friday-2025'
+  },
+  {
+    value: 'black-friday-2026',
+    label: 'black-friday-2026',
+    description: 'Next.js · acme/black-friday-2026'
+  },
+  { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },
+  { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },
+  { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },
+  { value: 'hello-world', label: 'hello-world', description: 'JavaScript · acme/hello-world' },
+  { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },
+  { value: 'company-docs', label: 'company-docs', description: 'HTML · acme/company-docs' },
+  { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },
+  { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · acme/analytics-api' },
+  {
+    value: 'react-dashboard',
+    label: 'react-dashboard',
+    description: 'React · acme/react-dashboard'
+  },
+  { value: 'docs-portal', label: 'docs-portal', description: 'Vue · acme/docs-portal' },
+  { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · acme/ecommerce-v2' },
+  {
+    value: 'ecommerce-storefront',
+    label: 'ecommerce-storefront',
+    description: 'Nuxt · acme/ecommerce-storefront'
+  },
+  {
+    value: 'marketing-site',
+    label: 'marketing-site',
+    description: 'Astro · acme/marketing-site'
+  },
+  { value: 'blog-platform', label: 'blog-platform', description: 'Astro · acme/blog-platform' },
+  { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },
+  { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · acme/mobile-app' }
+]
+
+export const sampleSelected = 'web-app'
 ```

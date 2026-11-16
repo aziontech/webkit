@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the \"eyebrow\"). It renders its default slot in `.text-overline-md` in the logo orange (`--primary`), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.",
+ "purpose": "Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the \"eyebrow\"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange in dark, a darker step in light so the small label keeps 4.5:1), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.",
  "setup": null,
  "useWhen": [
   "Name a section, panel or column group with one or two words set above its headline.",

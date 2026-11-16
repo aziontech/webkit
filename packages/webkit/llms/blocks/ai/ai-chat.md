@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PromptInput](../../components/prompt-input.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [Sources](../../components/sources.md), [StreamingResponse](../../components/streaming-response.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), `use-locale`
+- Components: [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PromptInput](../../components/prompt-input.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [Sources](../../components/sources.md), [StreamingResponse](../../components/streaming-response.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -72,6 +72,51 @@ Variant Artifact only; it adds `ArtifactPreview`, `ArtifactCanvas`, `Resizable`,
 
 When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it; `Show artifact` in the header brings a closed canvas back.
 
+## Data
+
+The block takes the conversation through props and emits every action; it calls no model. `AiChatMessage`, `AiChatProps` and `AiChatFeedback` are exported from `ai-chat.vue`, and `sample.ts` holds the starter prompts the empty state renders when `suggestions` is left out, plus the sample threads the variants pass. The draft in the composer stays local.
+
+| Prop          | Type                    | What it does                                                                                                                                |
+| ------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`    | `AiChatMessage[]`       | The conversation, oldest first: the reader's text, the assistant's Markdown with its reasoning and sources. Empty, the empty state renders. |
+| `suggestions` | `SuggestionGroupItem[]` | The starter prompts under the empty state.                                                                                                  |
+| `followUps`   | `SuggestionGroupItem[]` | Follow-up questions under the last finished answer.                                                                                         |
+| `loading`     | `boolean`               | The assistant is answering: the last assistant message thinks while its `content` is empty, then streams; the composer shows Stop.          |
+| `error`       | `string`                | Why the last answer failed, shown on it with Try again; its partial text stays.                                                             |
+
+| Event      | Payload                | When                                                                                      |
+| ---------- | ---------------------- | ----------------------------------------------------------------------------------------- |
+| `send`     | `(event, text)`        | The composer, a starter prompt or a follow-up; append the reader's message and the reply. |
+| `stop`     | `(event)`              | Stop while the answer streams; keep the text and set `stopped` on it.                     |
+| `retry`    | `(event, message)`     | Try again on a failed answer or Regenerate response.                                      |
+| `new-chat` | `(event)`              | New chat; clear `messages`.                                                               |
+| `feedback` | `({ message, value })` | The reader rated an answer.                                                               |
+
+To go live, render the block from a page that owns the conversation and the model call:
+
+```vue
+<script setup lang="ts">
+  import AiChat from './ai-chat.vue'
+
+  const { messages, streaming, error, send, stop, retry, reset } = useAssistant()
+  const failed = 'The connection was interrupted before the response finished.'
+</script>
+
+<template>
+  <AiChat
+    :messages="messages"
+    :loading="streaming"
+    :error="error ? failed : ''"
+    @send="(_event, text) => send(text)"
+    @stop="stop"
+    @retry="(_event, message) => retry(message)"
+    @new-chat="reset"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Show the loading text only after a second; a response that arrives faster streams directly.
@@ -115,11 +160,11 @@ When an answer produces something longer than a message (a query, a configuratio
 
 ## States
 
-- Empty: the assistant before the first message, with the empty state and four support prompts; selecting one runs a full response.
-- Streaming: a response arriving with its caret and Stop in the composer, then sources, actions and follow-ups.
-- Error: a failed response with its partial text, the error line and Try again.
-- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up streams version 3 into it.
-- LongThread: six earlier turns that overflow the log, opened on the newest response.
+- Empty: `messages` left out or `[]`, with the empty state and four support prompts; selecting one emits `send`.
+- Streaming: `loading` with the last assistant message part-way written: its caret, the busy region and Stop in the composer.
+- Error: `error` set: the last answer keeps its partial text, with the error line and Try again.
+- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
+- LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
 
 ## Related
 
@@ -135,13 +180,13 @@ When an answer produces something longer than a message (a query, a configuratio
 - `Streaming` — A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear.
 - `Error` — A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place.
 - `LongThread` — Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread.
-- `Artifact` — An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; asking for a change streams a new version into the canvas, which locks its pager while it is written and then shows it.
+- `Artifact` — An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question fills the composer. While a new version is written the canvas takes `streaming`, which locks its pager.
 
 Each variant is the same screen in another state: `get_block("ai/ai-chat", { variant })`, or the file under `blocks/ai/ai-chat/variants/`.
 
 ## Code (`Empty`)
 
-````vue
+```vue
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import ChatMessage, {
@@ -158,214 +203,117 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  interface Answer {
-    reasoning: string
+  import { sampleSuggestions } from './sample'
+
+  /** Who wrote a message. */
+  export type AiChatAuthor = 'user' | 'assistant'
+
+  /** One message of the conversation. */
+  export interface AiChatMessage {
+    /** Stable key. */
+    id: string
+    /** The reader or the assistant. */
+    from: AiChatAuthor
+    /** Plain text for the reader; Markdown for the assistant, as much as has arrived. */
     content: string
-    sources: SourcesItem[]
-    followUps: SuggestionGroupItem[]
-  }
-
-  interface UserTurn {
-    id: number
-    from: 'user'
-    text: string
+    /** When it was written, already formatted. */
     time: string
-    error?: string
-  }
-
-  interface AssistantTurn {
-    id: number
-    from: 'assistant'
-    status: ChatMessageStatus
-    content: string
-    thinking: boolean
-    answer: Answer
-    feedback: ChatMessageFeedbackValue | null
-    time: string
-    error?: string
+    /** How the assistant reached the answer, in the collapsible Reasoning. */
+    reasoning?: string
+    /** How long the assistant thought, in seconds, shown once it answers. */
+    reasoningSeconds?: number
+    /** The documents the answer cites, numbered in order. */
+    sources?: SourcesItem[]
+    /** The reader stopped this response; what was written stays. */
     stopped?: boolean
   }
 
-  type Turn = UserTurn | AssistantTurn
-
-  const supportPrompts: SuggestionGroupItem[] = [
-    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
-    {
-      id: 'errors',
-      label: 'Why is storefront answering with 502 errors?',
-      icon: 'ai ai-triangle-alert'
-    },
-    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },
-    { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' }
-  ]
-
-  const turns = ref<Turn[]>([])
-  const state = ref<PromptInputStatus>('ready')
-  const prompt = ref('')
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
-
-  const knowledge: Record<'cache' | 'errors', Answer> = {
-    cache: {
-      reasoning:
-        'The question is about one URL, so a full purge would be too broad. Real-Time Purge by URL is the narrowest option, and the CLI does the same from a terminal.',
-      content: [
-        'Use **Real-Time Purge** with the *URL* type. It removes one object from every edge location in a few seconds [1].',
-        '',
-        '1. Open Real-Time Purge from the products menu.',
-        '2. Choose **URL** and paste the address.',
-        '3. Select Purge.',
-        '',
-        'The same purge from the Azion CLI [2]:',
-        '',
-        '```bash',
-        'azion purge urls --urls https://www.example.com/styles.css',
-        '```'
-      ].join('\n'),
-      sources: [
-        {
-          title: 'Real-Time Purge',
-          href: 'https://www.azion.com/en/documentation/',
-          description: 'Azion documentation · Cache'
-        },
-        {
-          title: 'Azion CLI: purge',
-          href: 'https://www.azion.com/en/documentation/',
-          description: 'Azion documentation · CLI'
-        }
-      ],
-      followUps: [
-        { id: 'wildcard', label: 'How do I purge a whole folder?' },
-        { id: 'ttl', label: 'What TTL should my images use?' },
-        { id: 'origin', label: 'Why does my origin still get requests?' }
-      ]
-    },
-    errors: {
-      reasoning:
-        'The reader asks about errors on storefront. The error rate rose at 14:05; the certificate of the origin expired at the same minute.',
-      content: [
-        'The **502** responses on storefront started at 14:05, when the TLS certificate of the origin `api.example.com` expired [1].',
-        '',
-        '| Time | 5xx rate | Cause |',
-        '| --- | --- | --- |',
-        '| 14:00 | 0.1% | — |',
-        '| 14:05 | 38% | Origin certificate expired |',
-        '',
-        'Renew the certificate at the origin, or let the origin accept plain HTTP from the edge while you renew it.'
-      ].join('\n'),
-      sources: [
-        {
-          title: 'Troubleshooting 502 responses',
-          href: 'https://www.azion.com/en/documentation/',
-          description: 'Azion documentation · Observe'
-        }
-      ],
-      followUps: [
-        { id: 'renew', label: 'How do I renew the origin certificate?' },
-        { id: 'alert', label: 'Alert me when the error rate goes over 5%' }
-      ]
-    }
+  /** A rating the reader gave an answer. */
+  export interface AiChatFeedback {
+    /** The rated answer. */
+    message: AiChatMessage
+    /** Helpful, not helpful, or cleared. */
+    value: ChatMessageFeedbackValue | null
   }
 
-  function answerFor(text: string): Answer {
-    return /error|502|5xx|fail/i.test(text) ? knowledge.errors : knowledge.cache
+  export interface AiChatProps {
+    /** The conversation, oldest first. Left out or empty, the empty state with the suggestions renders. */
+    messages?: AiChatMessage[]
+    /** Starter prompts under the empty state. Left out, the sample prompts render. */
+    suggestions?: SuggestionGroupItem[]
+    /** Follow-up questions shown under the last finished answer. */
+    followUps?: SuggestionGroupItem[]
+    /** The assistant is answering: the last assistant message thinks while empty, then streams. */
+    loading?: boolean
+    /** Why the last answer failed, shown on it with Try again. */
+    error?: string
   }
 
-  const { formatDate } = useLocale()
-
-  function clock(): string {
-    return formatDate(new Date(), { hour: '2-digit', minute: '2-digit' })
-  }
-
-  let nextId = turns.value.length + 1
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  function stopTimers() {
-    clearTimeout(timer)
-    clearInterval(timer)
-  }
-
-  function stream(turn: AssistantTurn) {
-    const full = turn.answer.content
-    turn.status = 'streaming'
-    state.value = 'streaming'
-    let index = turn.content.length
-    timer = setInterval(() => {
-      index = Math.min(full.length, index + 6)
-      turn.content = full.slice(0, index)
-      if (index >= full.length) finish(turn)
-    }, 30)
-  }
-
-  function finish(turn: AssistantTurn) {
-    stopTimers()
-    turn.status = 'success'
-    turn.thinking = false
-    state.value = 'ready'
-    composerEl.value?.focus()
-  }
-
-  function respond(turn: AssistantTurn) {
-    turn.status = 'pending'
-    turn.thinking = true
-    turn.content = ''
-    state.value = 'pending'
-    timer = setTimeout(() => {
-      turn.thinking = false
-      stream(turn)
-    }, 1400)
-  }
-
-  function send(text: string) {
-    if (!text.trim() || state.value !== 'ready') return
-    prompt.value = ''
-    turns.value.push({ id: nextId++, from: 'user', text, time: clock() })
-    const turn = reactive<AssistantTurn>({
-      id: nextId++,
-      from: 'assistant',
-      status: 'pending',
-      content: '',
-      thinking: true,
-      answer: answerFor(text),
-      feedback: null,
-      time: clock()
-    })
-    turns.value.push(turn)
-    respond(turn)
-  }
-
-  function stop() {
-    stopTimers()
-    const turn = turns.value[turns.value.length - 1]
-    if (turn?.from === 'assistant') {
-      turn.status = 'success'
-      turn.thinking = false
-      turn.stopped = true
-    }
-    state.value = 'ready'
-  }
-
-  function retry(turn: Turn) {
-    if (turn.from !== 'assistant') return
-    turn.stopped = false
-    respond(turn)
-  }
-
-  function newChat() {
-    stopTimers()
-    turns.value = []
-    state.value = 'ready'
-    prompt.value = ''
-  }
-
-  const lastAnswer = computed(() => {
-    const turn = turns.value[turns.value.length - 1]
-    return turn?.from === 'assistant' && turn.status === 'success' && !turn.stopped ? turn : null
+  const props = withDefaults(defineProps<AiChatProps>(), {
+    messages: undefined,
+    suggestions: undefined,
+    followUps: undefined,
+    loading: false,
+    error: ''
   })
 
-  onBeforeUnmount(stopTimers)
+  const emit = defineEmits<{
+    send: [event: MouseEvent | KeyboardEvent, text: string]
+    stop: [event: MouseEvent]
+    retry: [event: MouseEvent, message: AiChatMessage]
+    'new-chat': [event: MouseEvent]
+    feedback: [feedback: AiChatFeedback]
+  }>()
+
+  const prompt = ref('')
+  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
+  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
+
+  const turns = computed(() => props.messages ?? [])
+  const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const last = computed(() => turns.value[turns.value.length - 1])
+
+  function statusOf(turn: AiChatMessage): ChatMessageStatus {
+    if (turn.from === 'user' || turn !== last.value) return 'success'
+    if (props.error) return 'error'
+    if (props.loading) return turn.content ? 'streaming' : 'pending'
+    return 'success'
+  }
+
+  const state = computed<PromptInputStatus>(() => {
+    if (!props.loading) return 'ready'
+    return last.value?.from === 'assistant' && !last.value.content ? 'pending' : 'streaming'
+  })
+
+  const lastAnswer = computed(() => {
+    const turn = last.value
+    return turn?.from === 'assistant' && statusOf(turn) === 'success' && !turn.stopped ? turn : null
+  })
+
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (before && !now) composerEl.value?.focus()
+    }
+  )
+
+  function send(event: MouseEvent | KeyboardEvent, text: string) {
+    if (!text.trim() || state.value !== 'ready') return
+    prompt.value = ''
+    emit('send', event, text)
+  }
+
+  function newChat(event: MouseEvent) {
+    prompt.value = ''
+    emit('new-chat', event)
+  }
+
+  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
+    ratings.value[message.id] = value
+    emit('feedback', { message, value })
+  }
 </script>
 
 <template>
@@ -409,9 +357,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           icon="ai ai-ask-azion"
         />
         <SuggestionGroup
-          :items="supportPrompts"
+          :items="starters"
           orientation="vertical"
-          @select="(_event, item) => send(item.label)"
+          @select="(event, item) => send(event, item.label)"
         />
       </div>
       <Conversation
@@ -422,23 +370,24 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           v-for="turn in turns"
           :key="turn.id"
           :from="turn.from"
-          :status="turn.from === 'user' ? 'success' : turn.status"
+          :status="statusOf(turn)"
           :timestamp="turn.time"
-          :error-message="turn.error"
-          @retry="retry(turn)"
+          :error-message="statusOf(turn) === 'error' ? error : undefined"
+          @retry="emit('retry', $event, turn)"
         >
-          <template v-if="turn.from === 'user'">{{ turn.text }}</template>
+          <template v-if="turn.from === 'user'">{{ turn.content }}</template>
           <template v-else>
             <Reasoning
-              :streaming="turn.thinking"
-              :duration="turn.thinking ? undefined : 2"
+              v-if="turn.reasoning"
+              :streaming="statusOf(turn) === 'pending'"
+              :duration="statusOf(turn) === 'pending' ? undefined : turn.reasoningSeconds"
             >
-              <p>{{ turn.answer.reasoning }}</p>
+              <p>{{ turn.reasoning }}</p>
             </Reasoning>
             <StreamingResponse
               :content="turn.content"
-              :streaming="turn.status === 'streaming'"
-              :sources="turn.answer.sources"
+              :streaming="statusOf(turn) === 'streaming'"
+              :sources="turn.sources ?? []"
               :anchor="`answer-${turn.id}`"
             />
             <p
@@ -448,8 +397,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
               You stopped this response.
             </p>
             <Sources
-              v-if="turn.status === 'success' && !turn.stopped"
-              :items="turn.answer.sources"
+              v-if="statusOf(turn) === 'success' && !turn.stopped"
+              :items="turn.sources ?? []"
               :anchor="`answer-${turn.id}`"
             />
           </template>
@@ -468,20 +417,23 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
                 variant="ghost"
                 size="small"
                 :disabled="state !== 'ready'"
-                @click="retry(turn)"
+                @click="emit('retry', $event, turn)"
               />
-              <ChatMessage.Feedback v-model="turn.feedback" />
+              <ChatMessage.Feedback
+                :model-value="ratings[turn.id] ?? null"
+                @update:model-value="(value) => rate(turn, value)"
+              />
             </ChatMessage.Actions>
           </template>
         </ChatMessage>
         <div
-          v-if="lastAnswer"
+          v-if="lastAnswer && followUps?.length"
           class="ps-[calc(2rem+var(--spacing-sm))]"
         >
           <SuggestionGroup
-            :items="lastAnswer.answer.followUps"
+            :items="followUps"
             aria-label="Follow-up questions"
-            @select="(_event, item) => send(item.label)"
+            @select="(event, item) => send(event, item.label)"
           />
         </div>
       </Conversation>
@@ -492,8 +444,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
         v-model="prompt"
         :status="state"
         :max-length="4000"
-        @submit="(_event, { value }) => send(value)"
-        @stop="stop"
+        @submit="(event, { value }) => send(event, value)"
+        @stop="emit('stop', $event)"
       >
         <template #hint>
           The AI assistant can make mistakes. Check important information before you act on it.
@@ -502,4 +454,178 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     </footer>
   </section>
 </template>
+```
+
+## `sample.ts`
+
+````ts
+import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+
+import type { AiChatMessage } from './ai-chat.vue'
+
+const cacheAnswer = [
+  'Use **Real-Time Purge** with the *URL* type. It removes one object from every edge location in a few seconds [1].',
+  '',
+  '1. Open Real-Time Purge from the products menu.',
+  '2. Choose **URL** and paste the address.',
+  '3. Select Purge.',
+  '',
+  'The same purge from the Azion CLI [2]:',
+  '',
+  '```bash',
+  'azion purge urls --urls https://www.example.com/styles.css',
+  '```'
+].join('\n')
+
+const errorsAnswer = [
+  'The **502** responses on storefront started at 14:05, when the TLS certificate of the origin `api.example.com` expired [1].',
+  '',
+  '| Time | 5xx rate | Cause |',
+  '| --- | --- | --- |',
+  '| 14:00 | 0.1% | — |',
+  '| 14:05 | 38% | Origin certificate expired |',
+  '',
+  'Renew the certificate at the origin, or let the origin accept plain HTTP from the edge while you renew it.'
+].join('\n')
+
+export const sampleStreamingMessages: AiChatMessage[] = [
+  {
+    id: 'm1',
+    from: 'user',
+    content: 'Why is storefront answering with 502 errors?',
+    time: '14:12'
+  },
+  {
+    id: 'm2',
+    from: 'assistant',
+    content: errorsAnswer.slice(0, 120),
+    time: '14:12',
+    reasoning:
+      'The reader asks about errors on storefront. The error rate rose at 14:05; the certificate of the origin expired at the same minute.',
+    reasoningSeconds: 2,
+    sources: [
+      {
+        title: 'Troubleshooting 502 responses',
+        href: 'https://www.azion.com/en/documentation/',
+        description: 'Azion documentation · Observe'
+      }
+    ]
+  }
+]
+
+export const sampleInterruptedMessages: AiChatMessage[] = [
+  {
+    id: 'm1',
+    from: 'user',
+    content: 'How do I purge the cache of one URL?',
+    time: '10:41'
+  },
+  {
+    id: 'm2',
+    from: 'assistant',
+    content: cacheAnswer.slice(0, 104),
+    time: '10:41',
+    reasoning:
+      'The question is about one URL, so a full purge would be too broad. Real-Time Purge by URL is the narrowest option, and the CLI does the same from a terminal.',
+    reasoningSeconds: 2,
+    sources: [
+      {
+        title: 'Real-Time Purge',
+        href: 'https://www.azion.com/en/documentation/',
+        description: 'Azion documentation · Cache'
+      },
+      {
+        title: 'Azion CLI: purge',
+        href: 'https://www.azion.com/en/documentation/',
+        description: 'Azion documentation · CLI'
+      }
+    ]
+  }
+]
+
+export const sampleInterruptedError = 'The connection was interrupted before the response finished.'
+
+const history: [string, string][] = [
+  [
+    'Which domains does storefront answer on?',
+    'storefront answers on **www.example.com** and **shop.example.com**.'
+  ],
+  [
+    'Is the certificate of shop.example.com valid?',
+    'Yes. It is a Let’s Encrypt certificate, valid until **14 January**.'
+  ],
+  [
+    'Can it renew on its own?',
+    'Yes. Automatic renewal is on for both domains, 30 days before expiry.'
+  ],
+  ['What is the cache hit ratio today?', '**91%** over the last 24 hours, up from 87% last week.'],
+  [
+    'Which paths miss the cache most?',
+    'The search pages under `/search`, because every query string is a new cache key.'
+  ],
+  [
+    'How do I fix that?',
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page`.'
+  ]
+]
+
+export const sampleLongThread: AiChatMessage[] = history.flatMap(
+  ([question, answer], index): AiChatMessage[] => [
+    { id: `q${index}`, from: 'user', content: question, time: `09:${10 + index * 4}` },
+    {
+      id: `a${index}`,
+      from: 'assistant',
+      content: answer,
+      time: `09:${11 + index * 4}`,
+      reasoning: 'Reading the workload settings of storefront.',
+      reasoningSeconds: 2,
+      sources: []
+    }
+  ]
+)
+
+export const sampleLongThreadFollowUps: SuggestionGroupItem[] = [
+  { id: 'apply', label: 'Apply the allowlist to storefront' },
+  { id: 'ratio', label: 'How much would the hit ratio improve?' }
+]
+
+export const sampleSuggestions: SuggestionGroupItem[] = [
+  { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
+  {
+    id: 'errors',
+    label: 'Why is storefront answering with 502 errors?',
+    icon: 'ai ai-triangle-alert'
+  },
+  { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },
+  { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' }
+]
+
+export const sampleArtifactVersions: string[] = [
+  'SELECT id, customer_id, total\nFROM orders\nORDER BY total DESC\nLIMIT 10;',
+  "SELECT id, customer_id, total\nFROM orders\nWHERE created_at > now() - interval '7 days'\nORDER BY total DESC\nLIMIT 10;"
+]
+
+export const sampleArtifactThread: (AiChatMessage & { version?: number })[] = [
+  { id: 'q1', from: 'user', content: 'Write a query for the ten biggest orders', time: '10:00' },
+  {
+    id: 'a1',
+    from: 'assistant',
+    content: 'Here is a query for the ten biggest orders, newest total first.',
+    time: '10:01',
+    version: 0
+  },
+  { id: 'q2', from: 'user', content: 'Only this week', time: '10:02' },
+  {
+    id: 'a2',
+    from: 'assistant',
+    content: 'Done. Version 2 keeps the orders of the last seven days.',
+    time: '10:03',
+    version: 1
+  }
+]
+
+export const sampleArtifactFollowUps: SuggestionGroupItem[] = [
+  { id: 'email', label: 'Show the customer email too' },
+  { id: 'items', label: 'Count the items of each order' }
+]
 ````

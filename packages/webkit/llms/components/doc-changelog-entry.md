@@ -58,7 +58,7 @@
 
 ## Accessibility
 
-- The label is a real `h2` inside a `section` whose `aria-labelledby` points at it, so every entry is a named region and joins the page outline and the "On this page" rail. With a `title`, the title is that `h2` and the date is plain text, so the region is named by what shipped.
+- The label is a real `h2` inside a `section` whose `aria-labelledby` points at it, so every entry is a named region and joins the page outline; inside `DocLayout` it registers itself (through `useHeadingOutline`) as a level 2 entry of the "On this page" rail, named by its title, or its label without one. With a `title`, the title is that `h2` and the date is plain text, so the region is named by what shipped.
 - The titled node on the rule is decorative (`aria-hidden`).
 - Keyboard map: `Tab` reaches the heading anchor (the label, or the title when set); `Enter` follows it — through the page's provided heading-navigation handler, or native hash navigation without one. Nothing else in the entry's chrome is interactive.
 - Visible focus: the anchor takes `focus-visible:outline-2 focus-visible:outline-offset-2` in the ring token.

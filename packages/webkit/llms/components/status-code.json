@@ -15,7 +15,7 @@
   "A detail panel summarizes the response of one request next to its timing and size."
  ],
  "avoidWhen": [
-  "The status is a resource lifecycle (`Active`, `Pending`, `Failed`) → use `tag` or `Table.CellStatus`.",
+  "The status is a resource lifecycle (`Active`, `Pending`, `Failed`) → use `tag` or `TableCellStatus`.",
   "The value is a security or incident level → use `severity-tag`.",
   "A dot that says whether a service is up → use `status-indicator`."
  ],

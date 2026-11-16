@@ -49,11 +49,56 @@ Country or region. It starts empty on a blank card (selects start empty); the pe
 
 ### F. Notices — `Alert` (required)
 
-The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined card adds a `danger` `Alert` at the top of the form, and the number field takes the invalid state with `The issuer declined this card.`
+The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined card (the `error` prop) adds a `danger` `Alert` at the top of the form with the message.
 
 ### G. Card brand — `PaymentBrand` (required)
 
 The plate before `Ending in 8888`, `brand` as the payment API returns it. It is named after the brand (`Visa`) because the row text says only the last four digits.
+
+## Data
+
+The block takes the card on file through props and emits the new card; it fetches nothing and never sends card data itself. `PaymentMethodCardCard`, `PaymentMethodCardValues` and `PaymentMethodCardProps` are exported from `payment-method-card.vue`, and `sample.ts` holds the sample card the block renders when `card` is left out.
+
+| Prop       | Type                          | What it does                                                                                  |
+| ---------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
+| `card`     | `PaymentMethodCardCard`       | The card on file: `brand` for `PaymentBrand` and the `last4` digits.                          |
+| `editing`  | `boolean` (`v-model:editing`) | The form is open. Change sets it; Cancel clears it; set it to `false` once the card is saved. |
+| `disabled` | `boolean`                     | Disables Change and the form, for example while the hosting drawer submits.                   |
+| `loading`  | `boolean`                     | The new card is being saved: Update spins and the form is locked.                             |
+| `error`    | `string`                      | Why the card was not changed (a decline), in a danger `Alert` at the top of the form.         |
+
+| Event    | Payload                                              | When                                        |
+| -------- | ---------------------------------------------------- | ------------------------------------------- |
+| `submit` | `(event, { holder, country, number, expiry, code })` | Update, once every field passes validation. |
+
+To go live, hand the values to the payment partner's SDK and pass the result back:
+
+```vue
+<script setup lang="ts">
+  import PaymentMethodCard, { type PaymentMethodCardValues } from './payment-method-card.vue'
+
+  const editing = ref(false)
+  const { card, saving, error, save } = usePaymentMethod()
+  const declined =
+    'The card was declined, so the payment method was not changed. Check the number or use another card.'
+
+  const onSubmit = async (event: Event, values: PaymentMethodCardValues) => {
+    if (await save(values)) editing.value = false
+  }
+</script>
+
+<template>
+  <PaymentMethodCard
+    v-model:editing="editing"
+    :card="card"
+    :loading="saving"
+    :error="error ? declined : ''"
+    @submit="onSubmit"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -82,9 +127,9 @@ The plate before `Ending in 8888`, `brand` as the payment API returns it. It is 
 
 ## States
 
-- Default: the card on file as one row with Change.
-- Editing: after Change, the card form over the PCI notice, with Cancel and Update. Update validates every field, focuses the first one in error, and a number ending in 0002 shows the decline.
-- Disabled: while the upgrade submits, the Change action is disabled.
+- Default: the card on file (`card`) as one row with Change.
+- Editing: after Change (`editing`), the card form over the PCI notice, with Cancel and Update. Update validates every field, focuses the first one in error and emits `submit`; `error` shows the decline.
+- Disabled: while the upgrade submits (`disabled`), the Change action is disabled.
 
 ## Related
 
@@ -110,7 +155,55 @@ Each variant is the same screen in another state: `get_block("account/payment-me
   import Input from '@aziontech/webkit/input'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import { nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, watch } from 'vue'
+
+  import { sampleCard } from './sample'
+
+  /** The card on file, as the payment API returns it. */
+  export interface PaymentMethodCardCard {
+    /** Card brand id, drawn by PaymentBrand (visa, mastercard, amex...). */
+    brand: string
+    /** The last four digits of the card number. */
+    last4: string
+  }
+
+  /** What Update sends: the new card as the person typed it. */
+  export interface PaymentMethodCardValues {
+    /** Cardholder name. */
+    holder: string
+    /** Country or region; undefined until the person picks one. */
+    country: string | undefined
+    /** Card number, digits only. */
+    number: string
+    /** Expiration date as MM/YY. */
+    expiry: string
+    /** Security code. */
+    code: string
+  }
+
+  export interface PaymentMethodCardProps {
+    /** The card on file. Left out, the sample renders. */
+    card?: PaymentMethodCardCard
+    /** Disables Change and the form, for example while the hosting drawer submits. */
+    disabled?: boolean
+    /** The new card is being saved: Update spins and the form is locked. */
+    loading?: boolean
+    /** Why the card was not changed (a decline), shown in a danger alert at the top of the form. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<PaymentMethodCardProps>(), {
+    card: undefined,
+    disabled: false,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: PaymentMethodCardValues]
+  }>()
+
+  const editingCard = defineModel<boolean>('editing', { default: false })
 
   const countryOptions: SelectOptionItem[] = [
     { value: 'Brazil', label: 'Brazil' },
@@ -126,8 +219,8 @@ Each variant is the same screen in another state: `get_block("account/payment-me
     expiry: 'card-expiry',
     code: 'card-code'
   }
-  const editingCard = ref(false)
-  const cardLast4 = ref('8888')
+  const cardOnFile = computed<PaymentMethodCardCard>(() => props.card ?? sampleCard)
+  const locked = computed(() => props.disabled || props.loading)
   const blankCard = () => ({
     holder: '',
     country: undefined as string | undefined,
@@ -142,13 +235,11 @@ Each variant is the same screen in another state: `get_block("account/payment-me
     expiry: '',
     code: ''
   })
-  const cardDeclined = ref(false)
 
   const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const clearCardErrors = () => {
     Object.assign(cardErrors, { holder: '', number: '', expiry: '', code: '' })
-    cardDeclined.value = false
   }
 
   const validateCard = () => {
@@ -185,22 +276,21 @@ Each variant is the same screen in another state: `get_block("account/payment-me
   const cancelEditingCard = () => {
     clearCardErrors()
     editingCard.value = false
-    focusById('card-change')
   }
 
-  const updateCard = () => {
-    cardDeclined.value = false
+  watch(editingCard, (editing, wasEditing) => {
+    if (!editing && wasEditing) focusById('card-change')
+  })
+
+  const updateCard = (event: Event) => {
     if (!validateCard()) return
-    const digits = cardForm.number.replace(/\D/g, '')
-    if (digits.endsWith('0002')) {
-      cardDeclined.value = true
-      cardErrors.number = 'The issuer declined this card.'
-      focusById(cardFieldIds.number)
-      return
-    }
-    cardLast4.value = digits.slice(-4)
-    editingCard.value = false
-    focusById('card-change')
+    emit('submit', event, {
+      holder: cardForm.holder.trim(),
+      country: cardForm.country,
+      number: cardForm.number.replace(/\D/g, ''),
+      expiry: cardForm.expiry.trim(),
+      code: cardForm.code.trim()
+    })
   }
 
   const fieldState = (field: 'holder' | 'number' | 'expiry' | 'code') => ({
@@ -220,15 +310,16 @@ Each variant is the same screen in another state: `get_block("account/payment-me
           v-if="!editingCard"
           class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
         >
-          <PaymentBrand brand="visa" />
+          <PaymentBrand :brand="cardOnFile.brand" />
           <p class="min-w-0 flex-1 text-label-md text-(--text-default)">
-            Ending in {{ cardLast4 }}
+            Ending in {{ cardOnFile.last4 }}
           </p>
           <Button
             id="card-change"
             label="Change"
             variant="outline"
             size="small"
+            :disabled="disabled"
             @click="startEditingCard"
           />
         </div>
@@ -240,12 +331,15 @@ Each variant is the same screen in another state: `get_block("account/payment-me
           @submit.prevent="updateCard"
         >
           <Alert
-            v-if="cardDeclined"
+            v-if="error"
             severity="danger"
             size="small"
-            label="The card was declined, so the payment method was not changed. Check the number or use another card."
+            :label="error"
           />
-          <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
+          <fieldset
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+            :disabled="locked"
+          >
             <legend class="sr-only">Payment method</legend>
             <Field v-bind="fieldState('holder')">
               <Field.Label :for="cardFieldIds.holder">Cardholder name</Field.Label>
@@ -346,6 +440,7 @@ Each variant is the same screen in another state: `get_block("account/payment-me
                 label="Cancel"
                 variant="outline"
                 size="medium"
+                :disabled="locked"
                 @click="cancelEditingCard"
               />
             </div>
@@ -356,6 +451,8 @@ Each variant is the same screen in another state: `get_block("account/payment-me
                 label="Update"
                 variant="primary"
                 size="medium"
+                :disabled="disabled"
+                :loading="loading"
               />
             </div>
           </div>
@@ -364,4 +461,12 @@ Each variant is the same screen in another state: `get_block("account/payment-me
     </template>
   </Card>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { PaymentMethodCardCard } from './payment-method-card.vue'
+
+export const sampleCard: PaymentMethodCardCard = { brand: 'visa', last4: '8888' }
 ```

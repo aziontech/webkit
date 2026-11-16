@@ -46,7 +46,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `position` | `'top-left' \| 'top-center' \| 'top-right' \| 'bottom-left' \| 'bottom-center' \| 'bottom-right'` | `'bottom-right'` | false | Corner (or edge-center) the stack is anchored to. |
+| `position` | `'top-start' \| 'top-center' \| 'top-end' \| 'bottom-start' \| 'bottom-center' \| 'bottom-end'` | `'bottom-end'` | false | Corner (or edge-center) the stack is anchored to; `start` and `end` follow the reading direction. |
 | `duration` | `number` | `4000` | false | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
 | `max` | `number` | `3` | false | Maximum simultaneously visible toasts per corner before the rest queue behind. |
 | `expand` | `boolean` | `false` | false | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek. |
@@ -68,7 +68,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 ## Sub-components
 
-- `toast.vue` — the mount-once region, at the component root. `<Teleport to="body">` + a fixed-positioned, `position`-anchored container that renders the live `<TransitionGroup>` stack of `ToastItem`s from the injected store; a region for each of the six positions is in the DOM (empty, zero height) before the first toast. The visible regions are not live regions: next to them the Toaster keeps two visually hidden live regions, `__live-polite` (`role="status"`, `aria-live="polite"`) and `__live-assertive` (`role="alert"`, `aria-live="assertive"`), both `aria-atomic="true"` and in the DOM before the first toast. When a toast arrives, or its message, description or severity changes, its text (message, then description) is written to `__live-assertive` for `danger` and to `__live-polite` for every other severity; progress steps and other in-place updates are not announced. A region that holds toasts is `role="region"` named `Notifications (Alt+T)` from the locale catalog (`toast.region`); an empty one has no role, so empty corners add no landmarks. Props `position?: ToastPosition` (default `'bottom-right'`), `duration?: number` (default `4000`, ms — the stack-wide default each toast inherits unless its own `duration` overrides), `max?: number` (cap the number of simultaneously visible toasts; the rest queue behind until a slot frees), `expand?: boolean` (when `false`, the default, stacked toasts overlap into a peek; when `true`, they lay out fully expanded with a gap), `closable?: boolean` (default `false`; when `true`, every toast shows an always-visible close control unless its own `closable` option overrides). Exposes a scoped `default` slot (`{ toast, dismiss }`) for a bespoke body; falls back to composing `ToastItem` from the store entry. This is the public root attached to the compound as `Toast`.
+- `toast.vue` — the mount-once region, at the component root. `<Teleport to="body">` + a fixed-positioned, `position`-anchored container that renders the live `<TransitionGroup>` stack of `ToastItem`s from the injected store; a region for each of the six positions is in the DOM (empty, zero height) before the first toast. The visible regions are not live regions: next to them the Toaster keeps two visually hidden live regions, `__live-polite` (`role="status"`, `aria-live="polite"`) and `__live-assertive` (`role="alert"`, `aria-live="assertive"`), both `aria-atomic="true"` and in the DOM before the first toast. When a toast arrives, or its message, description or severity changes, its text (message, then description) is written to `__live-assertive` for `danger` and to `__live-polite` for every other severity; progress steps and other in-place updates are not announced. A region that holds toasts is `role="region"` named `Notifications (Alt+T)` from the locale catalog (`toast.region`); an empty one has no role, so empty corners add no landmarks. Props `position?: ToastPosition` (default `'bottom-end'`), `duration?: number` (default `4000`, ms — the stack-wide default each toast inherits unless its own `duration` overrides), `max?: number` (cap the number of simultaneously visible toasts; the rest queue behind until a slot frees), `expand?: boolean` (when `false`, the default, stacked toasts overlap into a peek; when `true`, they lay out fully expanded with a gap), `closable?: boolean` (default `false`; when `true`, every toast shows an always-visible close control unless its own `closable` option overrides). Exposes a scoped `default` slot (`{ toast, dismiss }`) for a bespoke body; falls back to composing `ToastItem` from the store entry. This is the public root attached to the compound as `Toast`.
 - `toast-item/toast-item.vue` — a single notification card (outer flex row, `items-center` so the content and its `trailing` action/close share one centered line; the leading icon and the content column sit in an inner `items-start` group so the typed icon aligns to the title's line — its single line on a one-line toast, the first line on a multi-line one — instead of to the outer row, which the 28px action/close control would otherwise stretch; the `loading` `Spinner` keeps `self-center`. The `trailing` region carries a negative block margin (`-my-(--spacing-2xs)`) so that 28px control does not inflate a one-line card, and a negative inline-end margin (`-mr-(--spacing-xs)`) so the text action's label ends optically flush with the card's padding instead of inset by the button's own padding; height adapts to content). All typography and spacing come from tokens (`text-label-md` / `text-body-xs`, `var(--spacing-*)`) — no raw sizes or line-heights. An optional leading severity icon — an Azion glyph by `severity` sized with the `text-label-md` token to match the title (`ai ai-check` / `ai ai-circle-info` / `ai ai-triangle-alert` / `ai ai-circle-alert`); the `neutral` severity has **no** icon, and a `loading` toast renders a `Spinner` in its place. Followed by a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `danger`). Props `severity?: ToastSeverity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`, default `'neutral'`) and `loading?: boolean` (default `false`; a spinner replaces the leading icon, `aria-busy`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-severity` and `data-loading`.
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`). Renders its default slot as the title text; standalone markup + testId justify the part.
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`). Renders its default slot; standalone markup + testId justify the part.
@@ -86,7 +86,7 @@ The imperative API is backed by a small reactive store composable, declared here
 - `toast.error()` keeps its Sonner-style name and raises a `danger` toast.
 - `data-removing` on a `Toaster` item while its exit transition runs (switches the transition to the exit token).
 - Progress: an entry with `progress` (set by `toast.progress(message, value, options?)`, which defaults `duration` to `0`) renders `__progress` under the copy: a rounded `Progress` bar named by the toast message (`role="progressbar"`, `aria-valuenow` clamped to 0–100) and the percentage formatted with `Intl.NumberFormat` (`style: 'percent'`) in the provider's locale, `aria-hidden` so the region does not announce every step. A later call with the same `id` replaces the entry in place; a typed toast with that `id` drops the bar.
-- `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `left`/`center`/`right`) and the enter/leave translate direction.
+- `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `start`/`center`/`end`, where `start` is the left edge under `ltr` and the right edge under `rtl`) and the enter/leave translate direction.
 - `data-state="open|closed"` on each `Toaster` region: `open` while the stack is laid out expanded (the `expand` prop, hover or focus), `closed` while it overlaps into a peek.
 - The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
 - Announcements go through the two hidden live regions: `danger` to `__live-assertive`, every other severity to `__live-polite`; items inside a Toaster carry no role of their own and the visible regions are not live, so each toast is announced once and never twice. A `ToastItem` rendered outside a Toaster keeps `role="status"` (or `role="alert"` for `danger`). Focus is never stolen (the region is not focused on mount). Tests: `toast.test.ts` › live region (spec), Escape dismisses the focused toast.
@@ -106,7 +106,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ## Right-to-left
 
-- Layout: logical utilities only (`-me-`, `start-`, `gap`); each teleported region binds the provider's `dir`, so the icon leads, the controls trail and the progress bar fills from the start edge under `dir="rtl"`.
+- Layout: logical utilities only (`-me-`, `start-`, `gap`); each teleported region binds the provider's `dir`, and the `start`/`end` positions resolve against it (the provider's `dir`, else the document's), so `bottom-end` sits at the bottom right under `ltr` and the bottom left under `rtl`; the icon leads, the controls trail and the progress bar fills from the start edge under `dir="rtl"`.
 - Icons: severity glyphs and the close `×` are not mirrored.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
@@ -143,7 +143,7 @@ The imperative API is backed by a small reactive store composable, declared here
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
+  <Toaster position="bottom-end" />
   <Button
     label="Show toast"
     @click="show"
@@ -160,7 +160,7 @@ The imperative API is backed by a small reactive store composable, declared here
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
+  <Toaster position="bottom-end" />
   <div class="flex flex-wrap justify-center gap-2">
     <Button
       label="Default"
@@ -235,7 +235,7 @@ The imperative API is backed by a small reactive store composable, declared here
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
+  <Toaster position="bottom-end" />
   <Button
     label="Show toast"
     @click="show"

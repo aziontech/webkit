@@ -38,7 +38,7 @@
 | --- | --- | --- | --- | --- |
 | `values` | `(number \| null)[]` | `[]` | false | The series, oldest first; null leaves a gap. |
 | `type` | `'area' \| 'line' \| 'bar'` | `'area'` | false | Mark drawn for the series. |
-| `color` | `ChartColor` | `1` | false | Hue of the mark: a categorical slot (1–6), `other`, or a status. |
+| `color` | `ChartColor` | `1` | false | Hue of the mark: a categorical slot (1–8), `other`, or a status. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height: 32, 48 or 64 pixels. Width follows the container. |
 | `fromZero` | `boolean` | `false` | false | Starts the value range at zero instead of the lowest value; bars always start at zero. |
 | `ariaLabel` | `string` | `''` | false | Accessible name; when set the chart is an image, when empty it is decorative. |

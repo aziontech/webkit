@@ -26,6 +26,9 @@
    "file": "blocks/view/waf-tuning/variants/loading.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { WafTuningMatch } from './waf-tuning.vue'\n\nexport const sampleMatches: WafTuningMatch[] = [\n  {\n    ruleId: '1005',\n    threat: 'SQL injection',\n    hits: 18432,\n    ips: ['203.0.113.41', '198.51.100.7', '203.0.113.90', '192.0.2.15'],\n    countries: ['United States', 'Brazil', 'Germany'],\n    paths: ['/api/v1/search', '/api/v1/login', '/checkout']\n  },\n  {\n    ruleId: '1015',\n    threat: 'Unwanted access',\n    hits: 6210,\n    ips: ['198.51.100.22', '203.0.113.8'],\n    countries: ['United States', 'Netherlands'],\n    paths: ['/admin', '/wp-login.php']\n  },\n  {\n    ruleId: '1201',\n    threat: 'Cross-site scripting',\n    hits: 2288,\n    ips: ['192.0.2.31', '198.51.100.12', '203.0.113.77'],\n    countries: ['Singapore', 'India'],\n    paths: ['/v2/comments', '/v2/profile', '/search']\n  },\n  {\n    ruleId: '1302',\n    threat: 'File upload',\n    hits: 934,\n    ips: ['192.0.2.77'],\n    countries: ['Ireland'],\n    paths: ['/api/v1/upload']\n  },\n  {\n    ruleId: '1402',\n    threat: 'Evading tricks',\n    hits: 120,\n    ips: ['203.0.113.5', '198.51.100.61'],\n    countries: ['Chile'],\n    paths: ['/v2/graphql']\n  }\n]"
+ },
  "sfcFile": "blocks/view/waf-tuning/waf-tuning.vue",
  "guidelinesFile": "blocks/view/waf-tuning/guidelines.md"
 }

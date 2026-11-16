@@ -43,7 +43,7 @@
 | `dismissible` | `boolean` | `true` | false | When true, backdrop click and Escape close the palette. |
 | `shortcut` | `string` | `'meta+k'` | false | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
-| `page` | `string` | `''` | false | Two-way value (`v-model:page`). |
+| `pageKey` | `string` | `''` | false | Two-way value (`v-model:pageKey`). |
 
 ## Events
 
@@ -117,17 +117,17 @@ packages/webkit/src/components/overlay/command/
   - Props: _none_.
   - Events: _none_.
   - Slots: _none_.
-- `command-page/command-page.vue` — a nested list the palette swaps in when an item with a matching `page` is activated (or when `v-model:page` is set to its `name`). Renders its content only while it is the current page, inside a `display: contents` wrapper so its groups and items rank like top-level ones; every item, group and separator outside any page belongs to the first page and hides while a nested page is open. Pages are siblings inside the list; opening one pushes onto a single stack, and going back pops it. Registers its `heading` with the root so the input's back control can name it.
+- `command-page/command-page.vue` — a nested list the palette swaps in when an item with a matching `page` is activated (or when `v-model:pageKey` is set to its `name`). Renders its content only while it is the current page, inside a `display: contents` wrapper so its groups and items rank like top-level ones; every item, group and separator outside any page belongs to the first page and hides while a nested page is open. Pages are siblings inside the list; opening one pushes onto a single stack, and going back pops it. Registers its `heading` with the root so the input's back control can name it.
   - Props: `name: string` (required) — the identifier items open with `page="…"`. `title: string` default `''` — the page title shown in the back control; empty falls back to `name`.
   - Events: _none_.
   - Slots: `default` — the page's `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`.
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                                                      |
-| -------------- | --------- | ----------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, the `shortcut`, item activation, `Esc`, backdrop click). While unbound the palette is uncontrolled and starts at `defaultOpen`.            |
-| `v-model:page` | `string`  | `''`        | `update:page` | The current page via `defineModel('page')`; `''` is the first page. Item activation with `page`, the back control, `Backspace` in an empty field and `Esc` on a nested page update it. Set it before opening to open straight on a page; otherwise each opening starts on the first page. Changing pages clears the query. |
+| Model             | Type      | Default     | Emits            | Notes                                                                                                                                                                                                                                                                                                                         |
+| ----------------- | --------- | ----------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open`    | `boolean` | `undefined` | `update:open`    | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, the `shortcut`, item activation, `Esc`, backdrop click). While unbound the palette is uncontrolled and starts at `defaultOpen`.               |
+| `v-model:pageKey` | `string`  | `''`        | `update:pageKey` | The current page via `defineModel('pageKey')`; `''` is the first page. Item activation with `page`, the back control, `Backspace` in an empty field and `Esc` on a nested page update it. Set it before opening to open straight on a page; otherwise each opening starts on the first page. Changing pages clears the query. |
 
 ## States
 

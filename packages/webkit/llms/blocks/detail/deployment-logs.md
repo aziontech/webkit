@@ -36,9 +36,9 @@ The user started a deployment and wants to know where it is, whether it went liv
 
 `LogViewer.Steps` (`@aziontech/webkit/log-viewer`, or `@aziontech/webkit/log-viewer-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogViewer` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogViewer`.
 
-### B. Toolbar row — `LogViewer.Steps` header slot (required)
+### B. Toolbar row — `LogViewer.Steps` header slot, `Tag` (required)
 
-The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome Tag and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogViewer`, nothing from steps that never ran.
+The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome `Tag` (Completed, or Failed on the failed step's title) and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogViewer`, nothing from steps that never ran.
 
 ## Create-flow card (InCreateFlow, InCreateFlowError)
 
@@ -47,6 +47,36 @@ The `header` slot starts the toolbar row with a level-2 "Deployment logs" headin
 ## Deployment page (DeploymentDetail, DeploymentError, DeploymentQueued)
 
 A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger with Redeploy; info while queued), the Deployment details card with every fact and its Deployment Settings band, then the Deployment logs card. The logs card header carries the duration or the status and the Phased or Complete switch; the steps drop their own toolbar row and progress. Visit stays disabled until the deployment is live. A queued run shows a not-started `EmptyState` in place of the steps, with no switch.
+
+## Data
+
+The block takes the run through props; it fetches nothing and has no actions of its own. `DeploymentLogsStep` and `DeploymentLogsProps` are exported from `deployment-logs.vue`, and `sample.ts` holds the sample runs (running, succeeded, failed) the block renders when `steps` is left out. Running or settled, the outcome, the counts, the open step and the step tags all follow from the step statuses.
+
+| Prop / model        | Type                   | What it does                                                                                                                                       |
+| ------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `steps`             | `DeploymentLogsStep[]` | The steps in run order, each with its status and lines. A `running` or `pending` step keeps the run in flight; an `error` step is where it failed. |
+| `duration`          | `string`               | How long the settled run took, shown as Deployed in or Failed after. Empty shows no time.                                                          |
+| `v-model:view`      | `DeploymentLogsView`   | `phased` (one log per step) or `complete` (every line as one log). Starts at `phased`.                                                             |
+| `v-model:open-step` | `string`               | Key of the open step. Unbound, the running step opens, else the failed one, else the last.                                                         |
+
+To go live, pass the steps the deployment API streams and refresh them as lines arrive:
+
+```vue
+<script setup lang="ts">
+  import DeploymentLogs from './deployment-logs.vue'
+
+  const { data } = useDeploymentRun(deploymentId)
+</script>
+
+<template>
+  <DeploymentLogs
+    :steps="data?.steps ?? []"
+    :duration="data?.duration ?? ''"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -87,11 +117,11 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 
 ## States
 
-- Running: the run is in flight; the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
-- Success: every step checked, the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
-- Error: the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
-- ContinuousLog: a finished run in the Complete view, every line as one `LogViewer` with its copy button.
-- ContinuousLogError: the failed run in the Complete view, the lines up to the error and nothing from the skipped steps.
+- Running: the run is in flight (a step is `running` or `pending`); the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
+- Success: every step checked (every `steps` status is `success`, `duration` set), the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
+- Error: a step has status `error`; the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
+- ContinuousLog: a finished run in the Complete view (`view` is `complete`), every line as one `LogViewer` with its copy button.
+- ContinuousLogError: the failed run in the Complete view (`view` is `complete`), the lines up to the error and nothing from the skipped steps.
 - InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
 - InCreateFlowError: the create-flow card after a failure, the switch in the header, the failed step open and Edit and Redeploy in the footer.
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
@@ -125,187 +155,85 @@ Each variant is the same screen in another state: `get_block("detail/deployment-
 
 ```vue
 <script setup lang="ts">
-  import LogViewer, { type LogViewerStep } from '@aziontech/webkit/log-viewer'
-  import { computed, ref } from 'vue'
+  import LogViewer, {
+    type LogViewerStep,
+    type LogViewerStepsView
+  } from '@aziontech/webkit/log-viewer'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
 
-  const steps: LogViewerStep[] = [
-    {
-      id: 'token',
-      title: 'Access token',
-      description: 'Deploy token created and added to the CLI',
-      status: 'success',
-      duration: '3s',
-      lines: [
-        {
-          id: '0',
-          time: '13:47:33',
-          type: 'success',
-          message: '[TASK] - #. Deploy started successfully!'
-        },
-        {
-          id: '1',
-          time: '13:47:33',
-          type: 'text',
-          message: '[TASK] - #. Creating access token!'
-        },
-        {
-          id: '2',
-          time: '13:47:35',
-          type: 'text',
-          message: '[TASK] - #. Adding token to the CLI!'
-        },
-        {
-          id: '3',
-          time: '13:47:36',
-          type: 'success',
-          message: '[TASK] - #. Token added successfully!'
-        }
-      ]
-    },
-    {
-      id: 'clone',
-      title: 'Clone template',
-      description: 'Template cloned into the GitHub scope',
-      status: 'success',
-      duration: '4s',
-      lines: [
-        {
-          id: '0',
-          time: '13:47:37',
-          type: 'text',
-          message: '[TASK] - # Current directory: vue/vue3-vite-static/'
-        },
-        { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
-        {
-          id: '2',
-          time: '13:47:39',
-          type: 'text',
-          message: 'Receiving objects: 100% (312/312), 1.14 MiB'
-        },
-        {
-          id: '3',
-          time: '13:47:40',
-          type: 'success',
-          message: '[TASK] - #. Template cloned successfully!'
-        }
-      ]
-    },
-    {
-      id: 'install',
-      title: 'Install dependencies',
-      description: '478 packages installed',
-      status: 'success',
-      duration: '9s',
-      lines: [
-        { id: '0', time: '13:47:41', type: 'text', message: '[TASK] - # npm install' },
-        {
-          id: '1',
-          time: '13:47:45',
-          type: 'text',
-          message: 'npm warn deprecated inflight@1.0.6: this module is not supported'
-        },
-        {
-          id: '2',
-          time: '13:47:48',
-          type: 'text',
-          message: 'added 478 packages, and audited 479 packages in 9s'
-        },
-        {
-          id: '3',
-          time: '13:47:48',
-          type: 'text',
-          level: 'warn',
-          message: '24 vulnerabilities (5 low, 7 moderate, 10 high, 2 critical)'
-        },
-        {
-          id: '4',
-          time: '13:47:49',
-          type: 'success',
-          message: '[TASK] - # Dependencies installed successfully!'
-        }
-      ]
-    },
-    {
-      id: 'build',
-      title: 'Build',
-      description: 'Project built into dist/',
-      status: 'running',
-      duration: '8s',
-      lines: [
-        { id: '0', time: '13:47:50', type: 'text', message: '[TASK] - # Build template' },
-        {
-          id: '1',
-          time: '13:47:52',
-          type: 'text',
-          message: 'vite v6.0.7 building for production...'
-        },
-        {
-          id: '2',
-          time: '13:47:56',
-          type: 'text',
-          message: '214 modules transformed · dist/assets 1.2 MB'
-        },
-        {
-          id: '3',
-          time: '13:47:57',
-          type: 'success',
-          message: '[TASK] - # Build completed successfully!'
-        }
-      ]
-    },
-    {
-      id: 'upload',
-      title: 'Upload',
-      description: 'Static assets uploaded to storage',
-      status: 'pending',
-      duration: '',
-      lines: []
-    },
-    {
-      id: 'service',
-      title: 'Service',
-      description: 'Service and cache settings created',
-      status: 'pending',
-      duration: '',
-      lines: []
-    },
-    {
-      id: 'rules',
-      title: 'Routing Rules',
-      description: 'Request rules and cache policies applied',
-      status: 'pending',
-      duration: '',
-      lines: []
-    },
-    {
-      id: 'deploy',
-      title: 'Publish',
-      description: 'Repository wired and the deploy published',
-      status: 'pending',
-      duration: '',
-      lines: []
-    }
-  ]
+  import { sampleSteps } from './sample'
 
-  const openStep = ref('build')
+  /** One step of the run with its own log lines; a step with status error is where the run failed. */
+  export type DeploymentLogsStep = LogViewerStep
 
-  const doneCount = computed(() => steps.filter((step) => step.status === 'success').length)
-  const currentStep = computed(
-    () => steps.find((step) => step.status === 'running' || step.status === 'error')?.title ?? ''
+  /** Phased shows one log per step; complete shows every line as one log. */
+  export type DeploymentLogsView = LogViewerStepsView
+
+  export interface DeploymentLogsProps {
+    /** The steps of the run, in order. Left out, the sample run renders. */
+    steps?: DeploymentLogsStep[]
+    /** How long the settled run took, shown beside its outcome. */
+    duration?: string
+  }
+
+  const props = withDefaults(defineProps<DeploymentLogsProps>(), {
+    steps: undefined,
+    duration: ''
+  })
+
+  const view = defineModel<DeploymentLogsView>('view', { default: 'phased' })
+  const openStepModel = defineModel<string | undefined>('openStep', { default: undefined })
+
+  const steps = computed<DeploymentLogsStep[]>(() => props.steps ?? sampleSteps)
+
+  const settled = computed(
+    () =>
+      steps.value.length > 0 &&
+      !steps.value.some((step) => step.status === 'running' || step.status === 'pending')
   )
+  const failedStep = computed(() => steps.value.find((step) => step.status === 'error'))
+
+  const openStep = computed({
+    get: () =>
+      openStepModel.value ??
+      (
+        steps.value.find((step) => step.status === 'running') ??
+        failedStep.value ??
+        steps.value.at(-1)
+      )?.id,
+    set: (next) => {
+      openStepModel.value = next
+    }
+  })
+
+  const doneCount = computed(() => steps.value.filter((step) => step.status === 'success').length)
+  const currentStep = computed(
+    () =>
+      steps.value.find((step) => step.status === 'running' || step.status === 'error')?.title ?? ''
+  )
+
+  const stepTags: Partial<
+    Record<DeploymentLogsStep['status'], { label: string; severity: TagSeverity }>
+  > = {
+    error: { label: 'Failed', severity: 'danger' },
+    skipped: { label: 'Skipped', severity: 'neutral' }
+  }
 </script>
 
 <template>
   <LogViewer.Steps
-    :steps="steps"
+    v-model:view="view"
     v-model:open-step="openStep"
-    :copyable="false"
-    :view-switch="false"
-    progress
+    :steps="steps"
+    :copyable="settled"
+    :view-switch="settled"
+    :progress="!settled"
   >
     <template #header>
       <h2 class="m-0 shrink-0 text-heading-2xs text-(--text-default)">Deployment logs</h2>
       <div
+        v-if="!settled"
         role="status"
         class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)"
       >
@@ -314,7 +242,365 @@ Each variant is the same screen in another state: `get_block("detail/deployment-
         >
         <span class="truncate text-label-sm text-(--text-muted)">{{ currentStep }}</span>
       </div>
+      <div
+        v-else
+        class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)"
+      >
+        <Tag
+          :label="failedStep ? `Failed on ${failedStep.title}` : 'Completed'"
+          :severity="failedStep ? 'danger' : 'success'"
+        />
+        <span
+          v-if="duration"
+          class="text-label-sm text-(--text-muted)"
+          >{{ failedStep ? `Failed after ${duration}` : `Deployed in ${duration}` }}</span
+        >
+      </div>
+    </template>
+    <template #step-meta="{ step }">
+      <Tag
+        v-if="stepTags[step.status]"
+        v-bind="stepTags[step.status]"
+        size="small"
+      />
+    </template>
+    <template
+      v-if="failedStep"
+      #step-empty="{ step }"
+    >
+      {{
+        step.status === 'skipped'
+          ? `Never ran. The deployment stopped at ${failedStep.title}.`
+          : 'No log lines yet.'
+      }}
     </template>
   </LogViewer.Steps>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { DeploymentLogsStep } from './deployment-logs.vue'
+
+const tokenStep: DeploymentLogsStep = {
+  id: 'token',
+  title: 'Access token',
+  description: 'Deploy token created and added to the CLI',
+  status: 'success',
+  duration: '3s',
+  lines: [
+    {
+      id: '0',
+      time: '13:47:33',
+      type: 'success',
+      message: '[TASK] - #. Deploy started successfully!'
+    },
+    {
+      id: '1',
+      time: '13:47:33',
+      type: 'text',
+      message: '[TASK] - #. Creating access token!'
+    },
+    {
+      id: '2',
+      time: '13:47:35',
+      type: 'text',
+      message: '[TASK] - #. Adding token to the CLI!'
+    },
+    {
+      id: '3',
+      time: '13:47:36',
+      type: 'success',
+      message: '[TASK] - #. Token added successfully!'
+    }
+  ]
+}
+
+const cloneStep: DeploymentLogsStep = {
+  id: 'clone',
+  title: 'Clone template',
+  description: 'Template cloned into the GitHub scope',
+  status: 'success',
+  duration: '4s',
+  lines: [
+    {
+      id: '0',
+      time: '13:47:37',
+      type: 'text',
+      message: '[TASK] - # Current directory: vue/vue3-vite-static/'
+    },
+    { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
+    {
+      id: '2',
+      time: '13:47:39',
+      type: 'text',
+      message: 'Receiving objects: 100% (312/312), 1.14 MiB'
+    },
+    {
+      id: '3',
+      time: '13:47:40',
+      type: 'success',
+      message: '[TASK] - #. Template cloned successfully!'
+    }
+  ]
+}
+
+const installStep: DeploymentLogsStep = {
+  id: 'install',
+  title: 'Install dependencies',
+  description: '478 packages installed',
+  status: 'success',
+  duration: '9s',
+  lines: [
+    { id: '0', time: '13:47:41', type: 'text', message: '[TASK] - # npm install' },
+    {
+      id: '1',
+      time: '13:47:45',
+      type: 'text',
+      message: 'npm warn deprecated inflight@1.0.6: this module is not supported'
+    },
+    {
+      id: '2',
+      time: '13:47:48',
+      type: 'text',
+      message: 'added 478 packages, and audited 479 packages in 9s'
+    },
+    {
+      id: '3',
+      time: '13:47:48',
+      type: 'text',
+      level: 'warn',
+      message: '24 vulnerabilities (5 low, 7 moderate, 10 high, 2 critical)'
+    },
+    {
+      id: '4',
+      time: '13:47:49',
+      type: 'success',
+      message: '[TASK] - # Dependencies installed successfully!'
+    }
+  ]
+}
+
+const buildStep: DeploymentLogsStep = {
+  id: 'build',
+  title: 'Build',
+  description: 'Project built into dist/',
+  status: 'success',
+  duration: '8s',
+  lines: [
+    { id: '0', time: '13:47:50', type: 'text', message: '[TASK] - # Build template' },
+    {
+      id: '1',
+      time: '13:47:52',
+      type: 'text',
+      message: 'vite v6.0.7 building for production...'
+    },
+    {
+      id: '2',
+      time: '13:47:56',
+      type: 'text',
+      message: '214 modules transformed · dist/assets 1.2 MB'
+    },
+    {
+      id: '3',
+      time: '13:47:57',
+      type: 'success',
+      message: '[TASK] - # Build completed successfully!'
+    }
+  ]
+}
+
+const uploadStep: DeploymentLogsStep = {
+  id: 'upload',
+  title: 'Upload',
+  description: 'Static assets uploaded to storage',
+  status: 'success',
+  duration: '5s',
+  lines: [
+    {
+      id: '0',
+      time: '13:47:58',
+      type: 'text',
+      message: '[TASK] - # Uploading static assets to storage'
+    },
+    { id: '1', time: '13:47:59', type: 'text', message: 'create mode 100644 src/main.js' },
+    {
+      id: '2',
+      time: '13:47:59',
+      type: 'text',
+      message: 'create mode 100644 src/router/index.js'
+    },
+    {
+      id: '3',
+      time: '13:48:01',
+      type: 'text',
+      message: '[TASK] - # 24 files uploaded (1.2 MB)'
+    },
+    {
+      id: '4',
+      time: '13:48:02',
+      type: 'success',
+      message: '[TASK] - # Upload completed successfully!'
+    }
+  ]
+}
+
+const serviceStep: DeploymentLogsStep = {
+  id: 'service',
+  title: 'Service',
+  description: 'Service and cache settings created',
+  status: 'success',
+  duration: '5s',
+  lines: [
+    { id: '0', time: '13:48:03', type: 'text', message: '[TASK] - # Creating service' },
+    {
+      id: '1',
+      time: '13:48:05',
+      type: 'text',
+      message: '[TASK] - # Cache Setting __DEFAULT__ created'
+    },
+    {
+      id: '2',
+      time: '13:48:07',
+      type: 'success',
+      message: '[TASK] - # Service created successfully!'
+    }
+  ]
+}
+
+const rulesStep: DeploymentLogsStep = {
+  id: 'rules',
+  title: 'Routing Rules',
+  description: 'Request rules and cache policies applied',
+  status: 'success',
+  duration: '4s',
+  lines: [
+    {
+      id: '0',
+      time: '13:48:08',
+      type: 'text',
+      message: '[TASK] - # Configuring routing rules and cache policies'
+    },
+    {
+      id: '1',
+      time: '13:48:09',
+      type: 'text',
+      message: "[TASK] - # Rule 'Deliver Static Assets' created"
+    },
+    {
+      id: '2',
+      time: '13:48:11',
+      type: 'success',
+      message: '[TASK] - # Routing rules configured successfully!'
+    }
+  ]
+}
+
+const publishStep: DeploymentLogsStep = {
+  id: 'deploy',
+  title: 'Publish',
+  description: 'Repository wired and the deploy published',
+  status: 'success',
+  duration: '4s',
+  lines: [
+    {
+      id: '0',
+      time: '13:48:12',
+      type: 'text',
+      message: "branch 'main' set up to track 'origin/main'."
+    },
+    {
+      id: '1',
+      time: '13:48:13',
+      type: 'text',
+      message: '[TASK] - #. Set the access token as a repository secret.'
+    },
+    {
+      id: '2',
+      time: '13:48:15',
+      type: 'success',
+      message: '[TASK] - #. Deploy finalized successfully!'
+    }
+  ]
+}
+
+const failedRulesStep: DeploymentLogsStep = {
+  ...rulesStep,
+  status: 'error',
+  lines: [
+    {
+      id: '0',
+      time: '13:48:08',
+      type: 'text',
+      message: '[TASK] - # Configuring routing rules and cache policies'
+    },
+    {
+      id: '1',
+      time: '13:48:09',
+      type: 'text',
+      level: 'warn',
+      message: '[ERROR] - # Routing rules rejected the configuration'
+    },
+    {
+      id: '2',
+      time: '13:48:10',
+      type: 'text',
+      message: "409 Conflict: rule 'default-cache' already bound to this domain"
+    },
+    {
+      id: '3',
+      time: '13:48:11',
+      type: 'text',
+      level: 'warn',
+      message: '[ERROR] - # Deploy finalized with errors. Nothing was published.'
+    }
+  ]
+}
+
+const notRun = (step: DeploymentLogsStep, status: 'pending' | 'skipped'): DeploymentLogsStep => ({
+  ...step,
+  status,
+  duration: '',
+  lines: []
+})
+
+export const sampleSteps: DeploymentLogsStep[] = [
+  tokenStep,
+  cloneStep,
+  installStep,
+  { ...buildStep, status: 'running' },
+  notRun(uploadStep, 'pending'),
+  notRun(serviceStep, 'pending'),
+  notRun(rulesStep, 'pending'),
+  notRun(publishStep, 'pending')
+]
+
+export const sampleSucceededSteps: DeploymentLogsStep[] = [
+  tokenStep,
+  cloneStep,
+  installStep,
+  buildStep,
+  uploadStep,
+  serviceStep,
+  rulesStep,
+  publishStep
+]
+
+export const sampleFailedSteps: DeploymentLogsStep[] = [
+  tokenStep,
+  cloneStep,
+  installStep,
+  buildStep,
+  uploadStep,
+  serviceStep,
+  failedRulesStep,
+  notRun(publishStep, 'skipped')
+]
+
+export const sampleCreateFlowFailedSteps: DeploymentLogsStep[] = sampleFailedSteps.map((step) => ({
+  ...step,
+  title: step.id === 'rules' ? 'Routing rules' : step.title,
+  lines: step.lines.map((line) => ({ ...line, message: line.message.replace(/!$/, '.') }))
+}))
 ```

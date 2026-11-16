@@ -34,7 +34,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'console' \| 'diagram'` | `'console'` | false | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
-| `titleVariant` | `SectionTitleVariant` | `'center'` | false | Layout of the headline block. |
+| `titleAlign` | `SectionTitleAlign` | `'center'` | false | Layout of the headline block. |
 | `titlePadding` | `SectionTitlePadding` | `'medium'` | false | Vertical padding of the headline block. |
 | `size` | `SectionTitleSize` | `'medium'` | false | Step of the headline on the heading scale. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |

@@ -41,11 +41,11 @@
    "doc": "Guidance text revealed on hover or focus; also the trigger's accessible name."
   },
   {
-   "name": "placement",
-   "type": "'top' | 'right' | 'bottom' | 'left' | 'auto'",
+   "name": "side",
+   "type": "'top' | 'bottom' | 'start' | 'end' | 'auto'",
    "default": "'top'",
    "required": "false",
-   "doc": "Anchor side of the tooltip relative to the glyph."
+   "doc": "Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. `start` and `end` follow the text direction."
   }
  ],
  "events": [],

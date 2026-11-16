@@ -81,6 +81,8 @@
 | Model          | Type      | Default     | Emits               | Notes                                                                                                                                                                         |
 | -------------- | --------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`      | `TValue`  | `undefined` | `update:modelValue` | The selection via `defineModel`: the one picked value. Its type flows to `displayValue` and `update:modelValue`. Fires when an option is selected. Uncontrolled when unbound. |
+
+**Empty value.** `undefined` and `null` mean no selection: the trigger shows the placeholder. `''` is a selection when an option has `value=""` (an `Auto` or `Any` choice): the trigger shows that option's label (or `displayValue('')`), `data-filled` is set and a named field submits `''`. With no such option, `''` means no selection, so a model seeded with `ref('')` still shows the placeholder.
 | `v-model:open` | `boolean` | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                    |
 
 ## States
@@ -93,6 +95,7 @@
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-selected` on `<SelectItem>` when the option's value is part of the current selection
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the listbox panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility
 

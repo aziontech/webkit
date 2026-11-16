@@ -51,7 +51,7 @@
    "type": "ChartColor",
    "default": "1",
    "required": "false",
-   "doc": "Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface."
+   "doc": "Hue of the bars: a categorical slot (1–8), `other`, or a status. The fill is that hue tinted over the surface."
   },
   {
    "name": "clickable",

@@ -10,7 +10,7 @@
   "A single count without a list behind it → use `Badge`."
  ],
  "related": [
-  "`table` — `Table.CellTags` and `Table.CellLink` put this chip after the values they fit.",
+  "`table` — `TableCellTags` and `TableCellLink` put this chip after the values they fit.",
   "`tag` — the chip is a small secondary `Tag`.",
   "`popover` — the list opens in a `Popover`."
  ],

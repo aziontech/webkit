@@ -35,7 +35,7 @@
   "Turn on `zoomable` for a run with many short spans next to one long one, so the short ones can be read; bind `v-model:range` when the logs or a chart beside the trace should follow the same window.",
   "Use `events` for moments that have no duration of their own (a cache miss, a retry, the first byte), with `at` on the run's clock; keep the names short, they are listed in the details.",
   "Turn on `highlightSlowest` where the question is where the time went; the flag goes to the longest span under the root, never to the root itself, which always spans the run.",
-  "Bind `v-model:selected` when another view (a request path, a log line) selects the same span.",
+  "Bind `v-model:selected-key` when another view (a request path, a log line) selects the same span.",
   "Name the waterfall after the run (`aria-label=\"Trace of inv_7f21\"`)."
  ],
  "props": [
@@ -82,11 +82,11 @@
    "doc": "Flags the span that took longest, other than the root, in its row and its details."
   },
   {
-   "name": "selected",
+   "name": "selectedKey",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Two-way value (`v-model:selected`)."
+   "doc": "Two-way value (`v-model:selectedKey`)."
   },
   {
    "name": "range",

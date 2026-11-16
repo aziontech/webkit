@@ -380,7 +380,8 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             >
             <DropdownMenu
               v-model:open="accountMenuOpen"
-              placement="top-end"
+              side="top"
+              align="end"
             >
               <DropdownMenuTrigger>
                 <IconButton

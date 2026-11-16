@@ -1,11 +1,11 @@
 # Variables (`edit/variables`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `DataTable`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
+> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/edit/variables/variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/variables")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -38,13 +38,13 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 The same controls row as `view/table-view`, all bound to one client-mode `useCollection` call: a `PropertyFilter` labeled "Filter variables" (free text over key, ID, author and type, plus Key, Author and Type properties), outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` last. The filter, sort and page live in the URL; page size and columns are saved. See `skills/webkit-lists`.
 
-### C. Variables table — `Card`, `DataTable`, `Table.CellId`, `Table.CellLink`, `Avatar`, `Tooltip` (required)
+### C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `Avatar`, `Tooltip` (required)
 
-`Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `Table.CellId` ("Copy variable ID") and Value is `Table.CellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
+`Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `TableCellId` ("Copy variable ID") and Value is `TableCellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
 
-### D. Row actions — `Table`, `DropdownMenu` (required)
+### D. Row actions — `TableCellActions`, `DropdownMenu` (required)
 
-`Table.CellActions`, named after the variable ("Actions for API_URL"), opens its menu of `DropdownMenu.Group`s placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
+`TableCellActions`, named after the variable ("Actions for API_URL"), opens its menu of `DropdownMenu.Group`s placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
 
 ### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
@@ -72,7 +72,7 @@ A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type:
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
-`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. When the save fails, the drawer stays open with every row kept and a danger `Alert` at the top of `PanelBody` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
+`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. Save emits `save` with the pairs. When the save fails (`saveError` set), the drawer stays open with every row kept and a danger `Alert` at the top of `PanelBody` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
 
 ### L. List states — `EmptyState`, `Button` (required)
 
@@ -87,6 +87,50 @@ Every change confirms itself with a success toast: "API_KEY created." or "3 vari
 ### N. Network list drawer — `Drawer`, `SettingsSection`, `ToggleGroup`, `Button`, `Textarea`, `FieldDescription`, `AttributeEditor`, `MultiSelect` (optional)
 
 In the NetworkList state the same drawer recipe creates a network list for firewall rules: a General section with a required Name, then an Entries section whose `ToggleGroup` picks the type (IP/CIDR, ASN, Countries). IP/CIDR and ASN entries are an `AttributeEditor` in list mode, large, with an Address (or ASN) column in the code font through `cell-value` and an optional Comment, at most 200 rows; a paste that would pass 200 says how many lines will be skipped and adds only what fits. Paste list opens the panel of H for a whole list, one entry per line with `#` comments: its report counts the entries found, names the lines that are not valid ("Line 4 is not an IPv4 or IPv6 address, or a CIDR range") and the lines already in the list that will be skipped. Add N entries appends every new line as a row, valid or not, and each invalid row shows its own error under the field right away, so the user fixes the list line by line instead of retyping it; typed rows are checked only after Save, and empty rows are ignored once one row is filled. Countries is a required `MultiSelect`. Save validates, moves focus to the first field in error, then closes the drawer and raises a success toast with the entry count.
+
+## Data
+
+The block takes its variables through props and emits every action; it fetches nothing and saves nothing. `VariablesVariable`, `VariablesScope`, `VariablesDraft`, `VariablesSavePayload` and `VariablesProps` are exported from `variables.vue`, and `sample.ts` holds the sample variables the block renders when `variables` is left out (and never while `loading` is set).
+
+| Prop          | Type                  | What it does                                                                                                      |
+| ------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `variables`   | `VariablesVariable[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.      |
+| `loading`     | `boolean`             | The list is loading or refreshing: Refresh spins and the table shows its loading state.                           |
+| `saving`      | `boolean`             | The save is in flight: the drawer locks and Save spins. When it turns off with no `saveError`, the drawer closes. |
+| `saveError`   | `string`              | Why the save failed, in the danger `Alert` at the top of the drawer; every pair is kept so Save retries.          |
+| `defaultOpen` | `boolean`             | The create drawer starts open.                                                                                    |
+
+| Event     | Payload                         | When                                                                                          |
+| --------- | ------------------------------- | --------------------------------------------------------------------------------------------- |
+| `refresh` | `(event)`                       | Refresh.                                                                                      |
+| `save`    | `(event, { variable, values })` | Save passed validation; `variable` is the row being edited, or `null` when creating `values`. |
+| `clone`   | `(event, variable)`             | Clone in the row menu; the copy is already in the table below it.                             |
+| `delete`  | `(event, variable)`             | The delete dialog was confirmed; the row is already gone from the table.                      |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import Variables, { type VariablesSavePayload } from './variables.vue'
+
+  const { data, pending, refresh } = useVariables()
+  const { saving, error, run } = useSaveVariables()
+  const save = (_event: Event, payload: VariablesSavePayload) => run(payload).then(refresh)
+</script>
+
+<template>
+  <Variables
+    :variables="data ?? []"
+    :loading="pending"
+    :saving="saving"
+    :save-error="error ? 'Variables not saved. Check your connection and save again.' : ''"
+    @refresh="refresh"
+    @save="save"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import. With no `saving` set during the `save` handler the block treats the save as done at once, which is how it runs on its sample.
 
 ## Do
 
@@ -135,13 +179,13 @@ In the NetworkList state the same drawer recipe creates a network list for firew
 
 ## States
 
-- List: the variables list page with the controls row and table; the drawer is closed.
-- First use: no variables yet; the card holds the first-use `EmptyState` with Create Variable.
+- List: the variables list page with the controls row and table, from `variables` (the sample when left out); the drawer is closed. `loading` spins Refresh and puts the table in its loading state.
+- First use: `variables` is `[]`; the card holds the first-use `EmptyState` with Create Variable.
 - No match: the filter matches nothing; the table shows the no-match `EmptyState` with Clear filters.
-- Edit: a row's Edit opens the drawer on that variable; Save replaces it in the list and raises "<KEY> updated.".
-- Save failed: the save request fails; the drawer stays open with its rows and a danger `Alert` above the sections.
-- Delete: a row's Delete opens the typed confirmation; confirming removes the row and raises "<KEY> deleted.".
-- Create: the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
+- Edit: a row's Edit opens the drawer on that variable; Save emits `save` with the variable and replaces it in the list and raises "<KEY> updated.".
+- Save failed: `saveError` is set when the save ends; the drawer stays open with its rows and a danger `Alert` above the sections.
+- Delete: a row's Delete opens the typed confirmation; confirming emits `delete`, removes the row and raises "<KEY> deleted.".
+- Create: `defaultOpen`; the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
 - PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
 - NetworkList: Create Network List opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
 
@@ -157,7 +201,7 @@ In the NetworkList state the same drawer recipe creates a network list for firew
 ## Variants
 
 - `List` — primary (the code below)
-- `Create` — Closed until Create Variable opens it: one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed.
+- `Create` — The list page with the create drawer open on load (`defaultOpen`): one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed, then emits `save` with the pairs and their scope.
 - `PasteEnv` — Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env.
 - `NetworkList` — Create Network List opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast.
 
@@ -198,7 +242,9 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -206,20 +252,91 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
-  type ScopeRef = { type: string; id: string; name: string }
-  type VariableSeed = {
+  import { sampleVariables } from './sample'
+
+  /** Where a variable applies: the whole account, or one environment, project, service or policy. */
+  export interface VariablesScope {
+    /** global, environment, project, service or policy. */
+    type: string
+    /** The resource ID; empty for global. */
     id: string
+    /** The resource name shown in the Scope column; empty for global. */
+    name: string
+  }
+
+  /** One saved variable, a row of the table. */
+  export interface VariablesVariable {
+    /** Stable key, shown in the hidden ID column. */
+    id: string
+    /** The variable name, uppercase letters, numbers and underscores. */
     key: string
+    /** The value; a secret's value is shown masked. */
     value: string
+    /** Whether the value is hidden and write-only. */
     secret: boolean
-    scope: ScopeRef[]
+    /** Where the variable applies. */
+    scope: VariablesScope[]
+    /** Who changed it last. */
     lastEditor: string
+    /** That person's avatar URL; empty shows the initials. */
     lastEditorAvatar: string
+    /** When it changed last, as relative text. */
     lastModified: string
   }
+
+  /** One pair the drawer saves, with the scope chosen for every pair. */
+  export interface VariablesDraft {
+    /** The variable name. */
+    key: string
+    /** The value; empty when an edited secret keeps its saved value. */
+    value: string
+    /** Whether the value is a secret. */
+    secret: boolean
+    /** Where the variable applies. */
+    scope: VariablesScope[]
+  }
+
+  /** What Save sends. */
+  export interface VariablesSavePayload {
+    /** The variable being edited, or null when the drawer creates new ones. */
+    variable: VariablesVariable | null
+    /** The pairs in the drawer. */
+    values: VariablesDraft[]
+  }
+
+  export interface VariablesProps {
+    /** The variables to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    variables?: VariablesVariable[]
+    /** The list is loading or refreshing: Refresh spins and the table shows its loading state. */
+    loading?: boolean
+    /** The save is in flight: the drawer locks and Save spins; when it ends with no saveError the drawer closes. */
+    saving?: boolean
+    /** Why the save failed, shown in the danger alert at the top of the drawer; the pairs are kept. */
+    saveError?: string
+    /** The create drawer starts open. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<VariablesProps>(), {
+    variables: undefined,
+    loading: false,
+    saving: false,
+    saveError: '',
+    defaultOpen: false
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    save: [event: Event, payload: VariablesSavePayload]
+    clone: [event: Event, variable: VariablesVariable]
+    delete: [event: Event, variable: VariablesVariable]
+  }>()
+
+  type ScopeRef = VariablesScope
+  type VariableSeed = VariablesVariable
   type Variable = VariableSeed & { type: string }
-  type VariableDraft = { key: string; value: string; secret: boolean; scope: ScopeRef[] }
-  type Entry = { id: number; key: string; value: string; secret: boolean; visible: boolean }
+  type VariableDraft = VariablesDraft
+  type Entry = { key: string; id: number; value: string; secret: boolean; visible: boolean }
   type EntryProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
   type Pair = { key: string; value: string }
   type ScopeOption = { value: string; label: string }
@@ -242,74 +359,37 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
     { accessorKey: 'lastModified', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', type: 'action', hideable: false }
   ]
-  const seed: VariableSeed[] = [
-    {
-      id: 'v-001',
-      key: 'API_BASE_URL',
-      value: 'https://api.example.com',
-      secret: false,
-      scope: [{ type: 'global', id: '', name: '' }],
-      lastEditor: 'Ethan Brooks',
-      lastEditorAvatar: '',
-      lastModified: '1 month ago'
-    },
-    {
-      id: 'v-002',
-      key: 'PAYMENT_SECRET_KEY',
-      value: 'sk_example_4f8a2c9e',
-      secret: true,
-      scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
-      lastEditor: 'Jordan Kim',
-      lastEditorAvatar: '',
-      lastModified: '2 months ago'
-    },
-    {
-      id: 'v-003',
-      key: 'FEATURE_FLAGS',
-      value: 'checkout_v2,dark_mode',
-      secret: false,
-      scope: [{ type: 'service', id: '3344556677', name: 'storefront' }],
-      lastEditor: 'Taylor Reed',
-      lastEditorAvatar: '',
-      lastModified: '2 months ago'
-    },
-    {
-      id: 'v-004',
-      key: 'DATABASE_PASSWORD',
-      value: 'p4ssw0rd-r0t4t3d',
-      secret: true,
-      scope: [{ type: 'policy', id: '5540117', name: 'production-policy' }],
-      lastEditor: 'John Smith',
-      lastEditorAvatar: '',
-      lastModified: '2 months ago'
-    },
-    {
-      id: 'v-005',
-      key: 'MAX_UPLOAD_MB',
-      value: '25',
-      secret: false,
-      scope: [{ type: 'global', id: '', name: '' }],
-      lastEditor: 'Sam Lee',
-      lastEditorAvatar: '',
-      lastModified: '3 months ago'
-    }
-  ]
 
-  const authors = ['Ethan Brooks', 'Jordan Kim', 'Taylor Reed', 'John Smith', 'Sam Lee', 'Jane Doe']
-  const properties = [
-    { key: 'key', label: 'Key' },
-    { key: 'lastEditor', label: 'Author', options: authors.map((value) => ({ value })) },
-    { key: 'type', label: 'Type', options: [{ value: 'Plain' }, { value: 'Secret' }] }
-  ]
   const withType = (variable: VariableSeed): Variable => ({
     ...variable,
     type: variable.secret ? 'Secret' : 'Plain'
   })
 
-  const variables = ref(seed.map(withType))
+  const source = computed<VariableSeed[]>(
+    () => props.variables ?? (props.loading ? [] : sampleVariables)
+  )
+  const rows = ref<Variable[]>([])
+  watch(
+    source,
+    (next) => {
+      rows.value = next.map(withType)
+    },
+    { immediate: true }
+  )
+  const properties = computed(() => [
+    { key: 'key', label: 'Key' },
+    {
+      key: 'lastEditor',
+      label: 'Author',
+      options: [...new Set(rows.value.map((variable) => variable.lastEditor))].map((value) => ({
+        value
+      }))
+    },
+    { key: 'type', label: 'Type', options: [{ value: 'Plain' }, { value: 'Secret' }] }
+  ])
   const editing = ref<Variable | null>(null)
   const existingKeys = computed(() =>
-    variables.value
+    rows.value
       .filter((variable) => variable.id !== editing.value?.id)
       .map((variable) => variable.key)
   )
@@ -323,7 +403,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
     clearFilters,
     loading: fetching
   } = useCollection({
-    items: variables,
+    items: rows,
     columns,
     filtering: { fields: ['key', 'id', 'lastEditor', 'type'] },
     propertyFiltering: { properties },
@@ -335,16 +415,13 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
     url: true
   })
 
-  const loading = ref(false)
+  const loading = computed(() => props.loading)
   const tableEl = ref<TableExposed<Variable> | null>(null)
   const exportCsv = () => tableEl.value?.exportCsv({ filename: 'variables.csv' })
 
-  const refresh = () => {
+  const refresh = (event: MouseEvent) => {
     if (loading.value) return
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 600)
+    emit('refresh', event)
   }
 
   const displayValue = (row: Variable) => (row.secret ? SECRET_MASK : row.value)
@@ -366,7 +443,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
               : `${group.names.length} ${group.plural}`
       }))
 
-  let nextVariableId = seed.length
+  let nextVariableId = rows.value.length
   const newVariableId = () => `v-${String((nextVariableId += 1)).padStart(3, '0')}`
   const touched = (
     variable: Omit<VariableSeed, 'lastEditor' | 'lastEditorAvatar' | 'lastModified'>
@@ -379,14 +456,14 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
     })
 
   const onCreated = (created: VariableDraft[]) => {
-    variables.value = [
+    rows.value = [
       ...created.map((variable) => touched({ ...variable, id: newVariableId() })),
-      ...variables.value
+      ...rows.value
     ]
   }
 
   const onUpdated = (id: string, [changed]: VariableDraft[]) => {
-    variables.value = variables.value.map((variable) =>
+    rows.value = rows.value.map((variable) =>
       variable.id === id
         ? touched({
             ...variable,
@@ -398,7 +475,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   }
 
   const cloneKey = (key: string) => {
-    const taken = new Set(variables.value.map((variable) => variable.key))
+    const taken = new Set(rows.value.map((variable) => variable.key))
     let candidate = `${key}_COPY`
     let n = 1
     while (taken.has(candidate)) candidate = `${key}_COPY_${(n += 1)}`
@@ -417,28 +494,26 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   const canDelete = computed(
     () => Boolean(pending.value) && confirmation.value.trim() === pending.value?.key
   )
-  const confirmDelete = () => {
-    if (!canDelete.value) return
-    const key = pending.value?.key
-    variables.value = variables.value.filter((variable) => variable.id !== pending.value?.id)
+  const confirmDelete = (event: Event) => {
+    if (!canDelete.value || !pending.value) return
+    const key = pending.value.key
+    emit('delete', event, pending.value)
+    rows.value = rows.value.filter((variable) => variable.id !== pending.value?.id)
     deleteOpen.value = false
     toast.success(`${key} deleted.`)
   }
 
-  const onRowAction = (value: DropdownMenuItemValue, row: Variable) => {
+  const onRowAction = (event: Event, value: DropdownMenuItemValue, row: Variable) => {
     if (value === 'edit') {
       editing.value = row
       drawerOpen.value = true
       return
     }
     if (value === 'duplicate') {
-      const index = variables.value.findIndex((variable) => variable.id === row.id)
+      const index = rows.value.findIndex((variable) => variable.id === row.id)
       const copy = touched({ ...row, id: newVariableId(), key: cloneKey(row.key) })
-      variables.value = [
-        ...variables.value.slice(0, index + 1),
-        copy,
-        ...variables.value.slice(index + 1)
-      ]
+      emit('clone', event, row)
+      rows.value = [...rows.value.slice(0, index + 1), copy, ...rows.value.slice(index + 1)]
       toast.success(`${row.key} cloned as ${copy.key}.`)
       return
     }
@@ -463,8 +538,8 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
 
   let nextEntryId = 0
   const createEntry = (key = '', value = '', secret = false): Entry => ({
-    id: (nextEntryId += 1),
     key,
+    id: (nextEntryId += 1),
     value,
     secret,
     visible: false
@@ -472,9 +547,10 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   const isEmptyEntry = (entry: Entry) => !entry.key.trim() && !entry.value.trim()
   const formatKey = (value: string) => value.replace(/\s/g, '_').toUpperCase()
 
-  const drawerOpen = ref(false)
-  const submitting = ref(false)
-  const saveError = ref('')
+  const drawerOpen = ref(props.defaultOpen)
+  const submitting = computed(() => props.saving)
+  const saveError = ref(props.defaultOpen ? props.saveError : '')
+  const pendingSave = ref<VariablesSavePayload | null>(null)
   const submitted = ref(false)
   const entries = ref([createEntry()])
   const view = ref('Form')
@@ -740,16 +816,47 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
     jsonError.value = ''
     submitted.value = false
     Object.assign(scopes, current ? scopesFor(current.scope) : createScopes())
-    submitting.value = false
+    pendingSave.value = null
     saveError.value = ''
   })
 
   const formEl = ref<HTMLFormElement | null>(null)
-  const saveRequest = () =>
-    new Promise<boolean>((resolve) => {
-      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
-    })
-  const submit = async () => {
+  const finishSave = ({ variable, values }: VariablesSavePayload) => {
+    if (variable) {
+      onUpdated(variable.id, values)
+      toast.success(`${values[0].key} updated.`)
+    } else {
+      onCreated(values)
+      toast.success(
+        values.length === 1 ? `${values[0].key} created.` : `${values.length} variables created.`
+      )
+    }
+    editing.value = null
+    drawerOpen.value = false
+  }
+
+  watch(
+    () => props.saveError,
+    (message) => {
+      if (drawerOpen.value) saveError.value = message
+    }
+  )
+
+  watch(
+    () => props.saving,
+    (now, was) => {
+      const payload = pendingSave.value
+      if (!was || now || !payload) return
+      pendingSave.value = null
+      if (props.saveError) {
+        saveError.value = props.saveError
+        return
+      }
+      finishSave(payload)
+    }
+  )
+
+  const submit = async (event: Event) => {
     if (submitting.value) return
     if (view.value === 'JSON') {
       if (jsonError.value) return
@@ -766,34 +873,28 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
         ?.focus()
       return
     }
-    submitting.value = true
     saveError.value = ''
-    const saved = await saveRequest()
-    if (!saved) {
-      submitting.value = false
-      saveError.value =
-        'Variables not saved. You are offline; check your connection and save again.'
+    const scope = scopePayload()
+    const payload: VariablesSavePayload = {
+      variable: editing.value,
+      values: filledEntries.value.map((entry) => ({
+        key: entry.key.trim(),
+        value: entry.value,
+        secret: entry.secret,
+        scope
+      }))
+    }
+    emit('save', event, payload)
+    await nextTick()
+    if (props.saving) {
+      pendingSave.value = payload
       return
     }
-    const scope = scopePayload()
-    const created = filledEntries.value.map((entry) => ({
-      key: entry.key.trim(),
-      value: entry.value,
-      secret: entry.secret,
-      scope
-    }))
-    if (editing.value) {
-      onUpdated(editing.value.id, created)
-      toast.success(`${created[0].key} updated.`)
-    } else {
-      onCreated(created)
-      toast.success(
-        created.length === 1 ? `${created[0].key} created.` : `${created.length} variables created.`
-      )
+    if (props.saveError) {
+      saveError.value = props.saveError
+      return
     }
-    editing.value = null
-    submitting.value = false
-    drawerOpen.value = false
+    finishSave(payload)
   }
 </script>
 
@@ -868,7 +969,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
 
         <section class="flex min-h-0 flex-col">
           <Card
-            v-if="status === 'empty'"
+            v-if="status === 'empty' && !loading"
             key="first-use"
             :padded="false"
           >
@@ -925,14 +1026,14 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                 </template>
 
                 <template #cell-id="{ value }">
-                  <Table.CellId
+                  <TableCellId
                     :value="value"
                     resource="variable"
                   />
                 </template>
 
                 <template #cell-value="{ row }">
-                  <Table.CellLink
+                  <TableCellLink
                     :label="displayValue(row)"
                     :copyable="!row.secret"
                     :copy-value="row.value"
@@ -978,9 +1079,9 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                 </template>
 
                 <template #cell-actions="{ row }">
-                  <Table.CellActions
+                  <TableCellActions
                     :name="row.key"
-                    @select="(_event, value) => onRowAction(value, row)"
+                    @select="(event, value) => onRowAction(event, value, row)"
                   >
                     <DropdownMenu.Group>
                       <DropdownMenu.Item
@@ -1020,7 +1121,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                         </template>
                       </DropdownMenu.Item>
                     </DropdownMenu.Group>
-                  </Table.CellActions>
+                  </TableCellActions>
                 </template>
 
                 <template #empty>
@@ -1438,4 +1539,63 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
     </ConfirmDialog>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { VariablesVariable } from './variables.vue'
+
+export const sampleVariables: VariablesVariable[] = [
+  {
+    id: 'v-001',
+    key: 'API_BASE_URL',
+    value: 'https://api.example.com',
+    secret: false,
+    scope: [{ type: 'global', id: '', name: '' }],
+    lastEditor: 'Ethan Brooks',
+    lastEditorAvatar: '',
+    lastModified: '1 month ago'
+  },
+  {
+    id: 'v-002',
+    key: 'PAYMENT_SECRET_KEY',
+    value: 'sk_example_4f8a2c9e',
+    secret: true,
+    scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
+    lastEditor: 'Jordan Kim',
+    lastEditorAvatar: '',
+    lastModified: '2 months ago'
+  },
+  {
+    id: 'v-003',
+    key: 'FEATURE_FLAGS',
+    value: 'checkout_v2,dark_mode',
+    secret: false,
+    scope: [{ type: 'service', id: '3344556677', name: 'storefront' }],
+    lastEditor: 'Taylor Reed',
+    lastEditorAvatar: '',
+    lastModified: '2 months ago'
+  },
+  {
+    id: 'v-004',
+    key: 'DATABASE_PASSWORD',
+    value: 'p4ssw0rd-r0t4t3d',
+    secret: true,
+    scope: [{ type: 'policy', id: '5540117', name: 'production-policy' }],
+    lastEditor: 'John Smith',
+    lastEditorAvatar: '',
+    lastModified: '2 months ago'
+  },
+  {
+    id: 'v-005',
+    key: 'MAX_UPLOAD_MB',
+    value: '25',
+    secret: false,
+    scope: [{ type: 'global', id: '', name: '' }],
+    lastEditor: 'Sam Lee',
+    lastEditorAvatar: '',
+    lastModified: '3 months ago'
+  }
+]
 ```

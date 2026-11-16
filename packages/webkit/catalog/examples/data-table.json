@@ -7,7 +7,7 @@
   },
   {
    "name": "WithCheckboxes",
-   "summary": "A leading selection column (`selectable`): each row gets a checkbox and the header gets a select-all box that reflects the all/none/indeterminate state. Selection is exposed via `v-model:row-selection`; changes log to the Actions panel.",
+   "summary": "A leading selection column (`selectable`): each row gets a checkbox and the header gets a select-all box that reflects the all/none/indeterminate state. Selection is exposed via `v-model:selected-keys`; changes log to the Actions panel.",
    "file": "examples/data-table/with-checkboxes.vue"
   },
   {

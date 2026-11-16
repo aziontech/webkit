@@ -47,14 +47,21 @@
  ],
  "props": [
   {
-   "name": "placement",
-   "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
-   "default": "'bottom-start'",
+   "name": "side",
+   "type": "`DropdownMenuSide | 'auto'` (`'top' | 'bottom' | 'start' | 'end'`)",
+   "default": "'bottom'",
    "required": "false",
-   "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space."
+   "doc": "Side of the trigger the panel opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time."
   },
   {
-   "name": "offset",
+   "name": "align",
+   "type": "`DropdownMenuAlign` (`'start' | 'center' | 'end'`)",
+   "default": "'start'",
+   "required": "false",
+   "doc": "Alignment along the trigger edge."
+  },
+  {
+   "name": "sideOffset",
    "type": "number",
    "default": "4",
    "required": "false",

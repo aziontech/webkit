@@ -39,6 +39,34 @@ The bar in its default `content` placement, labelled `aria-label="Console"`. Fil
 
 One outlined, medium button with the book icon and an `href` to the docs. It is the only action in the bar; do not add Contact, Sign up or a language switch next to it.
 
+## Data
+
+The bar shows no records and fetches nothing; a real app sets only where its two links go. `AuthBarProps` is exported from `auth-bar.vue`.
+
+| Prop       | Type     | What it does                        |
+| ---------- | -------- | ----------------------------------- |
+| `homeHref` | `string` | Where the brand goes (`/home`).     |
+| `docsHref` | `string` | Where Documentation goes (`/docs`). |
+
+| Event  | Payload   | When                                                              |
+| ------ | --------- | ----------------------------------------------------------------- |
+| `docs` | `(event)` | Documentation was clicked; call `preventDefault` to route in-app. |
+
+To go live, point the links at the app's routes:
+
+```vue
+<script setup lang="ts">
+  import AuthBar from './auth-bar.vue'
+</script>
+
+<template>
+  <AuthBar
+    home-href="/"
+    docs-href="https://example.com/docs"
+  />
+</template>
+```
+
 ## Do
 
 - Keep the bar identical across every signed-out step so the user knows they are still in the same flow.
@@ -62,7 +90,7 @@ One outlined, medium button with the book icon and an `href` to the docs. It is 
 
 ## States
 
-- Default: the only state; the bar never changes between signed-out steps.
+- Default: the only state; the bar never changes between signed-out steps, and `homeHref` / `docsHref` only move its links.
 
 ## Related
 
@@ -84,6 +112,22 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
   import AppHeader from '@aziontech/webkit/app-header'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+
+  export interface AuthBarProps {
+    /** Where the brand goes. */
+    homeHref?: string
+    /** Where Documentation goes. */
+    docsHref?: string
+  }
+
+  withDefaults(defineProps<AuthBarProps>(), {
+    homeHref: '/home',
+    docsHref: '/docs'
+  })
+
+  const emit = defineEmits<{
+    docs: [event: MouseEvent]
+  }>()
 </script>
 
 <template>
@@ -94,7 +138,7 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
     >
       <AppHeader.Brand>
         <a
-          href="/home"
+          :href="homeHref"
           aria-label="Azion home"
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
@@ -111,7 +155,8 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
           variant="outline"
           size="medium"
           icon="ai ai-book"
-          href="/docs"
+          :href="docsHref"
+          @click="(event: MouseEvent) => emit('docs', event)"
         />
       </AppHeader.End>
     </AppHeader>

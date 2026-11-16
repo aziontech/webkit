@@ -50,6 +50,45 @@ Above the step, a preview `Card` names the template, its one-sentence descriptio
 
 An outlined medium `Button` under the step that returns to the template list. It is the way back to choose another template; the header's back control leaves the flow.
 
+## Data
+
+The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out. The variants are their own screens (the later steps of the flow) and keep their own records.
+
+| Prop            | Type                     | What it does                                                                       |
+| --------------- | ------------------------ | ---------------------------------------------------------------------------------- |
+| `template`      | `DeployTemplateTemplate` | The template: its name in the crumb, the preview card and the connect description. |
+| `account`       | `string`                 | The signed-in account, the avatar label.                                           |
+| `providersHref` | `string`                 | Where Manage connected providers leads.                                            |
+
+| Event      | Payload   | When                     |
+| ---------- | --------- | ------------------------ |
+| `back`     | `(event)` | Back to Creation Center. |
+| `account`  | `(event)` | The account button.      |
+| `connect`  | `(event)` | Continue with GitHub.    |
+| `skip-git` | `(event)` | Continue without Git.    |
+| `browse`   | `(event)` | Browse templates.        |
+
+To go live, render the block from the page that loads the template and pass it:
+
+```vue
+<script setup lang="ts">
+  import DeployTemplate from './deploy-template.vue'
+
+  const { template, account } = useTemplatePage()
+</script>
+
+<template>
+  <DeployTemplate
+    :template="template"
+    :account="account.email"
+    providers-href="/account/git-providers"
+    @connect="connectGitHub"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the template preview card at the top of the column through every phase, so the user always sees what is being deployed.
@@ -95,7 +134,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 
 ## States
 
-- ConnectGit: no Git provider yet; the template preview over the Connect a Git provider card and Browse templates.
+- ConnectGit: no Git provider yet; the `template` preview over the Connect a Git provider card and Browse templates.
 - Form: GitHub connected; scope and repository name side by side, public by default, over the store domain setting and the Build and output settings and Environment variables groups; Deploy shows the missing access token under its field.
 - BuildSettings: after a failed Deploy; both groups open, a Build preset on the detected Nuxt preset, and the required access token in error.
 - SettingsLoading: the template settings loading as Skeleton bands, Deploy disabled.
@@ -144,11 +183,63 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
+  import { computed } from 'vue'
 
-  const breadcrumb = [
+  import { sampleAccount, sampleTemplate } from './sample'
+
+  /** The template the page deploys. */
+  export interface DeployTemplateTemplate {
+    /** Display name, the preview card title and the last crumb. */
+    name: string
+    /** One sentence on what it launches. */
+    description: string
+    /** Logo glyph class. */
+    icon: string
+    /** The Git provider it clones from, named in the preview card. */
+    provider: string
+    /** Provider glyph class. */
+    providerIcon: string
+    /** The account or organization that publishes it. */
+    scope: string
+    /** The folder or repository it clones. */
+    path: string
+  }
+
+  export interface DeployTemplateProps {
+    /** The template to deploy. Left out, the sample renders. */
+    template?: DeployTemplateTemplate
+    /** The signed-in account, the avatar label. Left out, the sample renders. */
+    account?: string
+    /** Where Manage connected providers leads. */
+    providersHref?: string
+  }
+
+  const props = withDefaults(defineProps<DeployTemplateProps>(), {
+    template: undefined,
+    account: undefined,
+    providersHref: '#'
+  })
+
+  const emit = defineEmits<{
+    /** Back to Creation Center was pressed. */
+    back: [event: MouseEvent]
+    /** The account menu button was pressed. */
+    account: [event: MouseEvent]
+    /** Continue with GitHub was pressed. */
+    connect: [event: MouseEvent]
+    /** Continue without Git was pressed. */
+    'skip-git': [event: MouseEvent]
+    /** Browse templates was pressed. */
+    browse: [event: MouseEvent]
+  }>()
+
+  const currentTemplate = computed(() => props.template ?? sampleTemplate)
+  const currentAccount = computed(() => props.account ?? sampleAccount)
+
+  const breadcrumb = computed(() => [
     { label: 'Start from a template' },
-    { label: 'Nuxt E-commerce', active: true }
-  ]
+    { label: currentTemplate.value.name, active: true }
+  ])
 </script>
 
 <template>
@@ -160,6 +251,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
           aria-label="Back to Creation Center"
           variant="outline"
           size="small"
+          @click="(event: MouseEvent) => emit('back', event)"
         />
         <AppHeader.Brand>
           <a
@@ -180,10 +272,11 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
         <button
           type="button"
           aria-label="Account settings"
+          @click="(event: MouseEvent) => emit('account', event)"
           class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Avatar
-            label="name@example.com"
+            :label="currentAccount"
             size="medium"
             variant="square"
           />
@@ -204,7 +297,8 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-color ai-nuxt text-body-lg leading-none text-(--text-default)"
+                  :class="currentTemplate.icon"
+                  class="text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -212,28 +306,29 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
               <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
                 <div class="flex w-full min-w-0 flex-col overflow-hidden">
                   <span class="flex items-center gap-(--spacing-xs)">
-                    <span class="truncate text-heading-2xs text-(--text-default)"
-                      >Nuxt E-commerce</span
-                    >
+                    <span class="truncate text-heading-2xs text-(--text-default)">{{
+                      currentTemplate.name
+                    }}</span>
                   </span>
                   <span class="text-body-xs text-(--text-muted)">
-                    Launch a Nuxt e-commerce or content app in a few steps.
+                    {{ currentTemplate.description }}
                   </span>
                 </div>
 
                 <div class="flex w-full flex-col gap-(--spacing-2xs)">
                   <span class="truncate text-body-2xs text-(--text-muted)"
-                    >Cloning from GitHub</span
+                    >Cloning from {{ currentTemplate.provider }}</span
                   >
                   <div class="flex items-center gap-(--spacing-md)">
                     <span
                       class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)"
                     >
                       <i
-                        class="ai ai-github text-[length:inherit] leading-none"
+                        :class="currentTemplate.providerIcon"
+                        class="text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
-                      acme
+                      {{ currentTemplate.scope }}
                     </span>
                     <span
                       class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
@@ -242,7 +337,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
                         class="ai ai-folder text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
-                      templates/nuxt-ecommerce
+                      {{ currentTemplate.path }}
                     </span>
                   </div>
                 </div>
@@ -259,7 +354,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
             bordered
             size="medium"
             title="Connect a Git provider"
-            description="Nuxt E-commerce is cloned into a repository in your account, then deployed from it on every push."
+            :description="`${currentTemplate.name} is cloned into a repository in your account, then deployed from it on every push.`"
             class="w-full"
           >
             <template #icon>
@@ -288,15 +383,17 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
                 icon="ai ai-github"
                 variant="secondary"
                 size="large"
+                @click="(event: MouseEvent) => emit('connect', event)"
               />
               <Button
                 label="Continue without Git"
                 variant="ghost"
                 size="large"
+                @click="(event: MouseEvent) => emit('skip-git', event)"
               />
               <Link
                 label="Manage connected providers"
-                href="#"
+                :href="providersHref"
                 size="large"
               />
             </template>
@@ -306,10 +403,29 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
             label="Browse templates"
             variant="outline"
             size="medium"
+            @click="(event: MouseEvent) => emit('browse', event)"
           />
         </div>
       </div>
     </main>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { DeployTemplateTemplate } from './deploy-template.vue'
+
+export const sampleTemplate: DeployTemplateTemplate = {
+  name: 'Nuxt E-commerce',
+  description: 'Launch a Nuxt e-commerce or content app in a few steps.',
+  icon: 'ai-color ai-nuxt',
+  provider: 'GitHub',
+  providerIcon: 'ai ai-github',
+  scope: 'acme',
+  path: 'templates/nuxt-ecommerce'
+}
+
+export const sampleAccount = 'name@example.com'
 ```

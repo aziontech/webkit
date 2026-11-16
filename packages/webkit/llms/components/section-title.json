@@ -14,7 +14,7 @@
   "Use SectionTitle as the header row of a marketing band; console pages use SectionHeader.",
   "Opening a marketing or landing page section that needs a framed header.",
   "Whenever the header itself should carry the rule that separates it from the content below, with no extra margin.",
-  "For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `variant=\"split\"`."
+  "For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `align=\"split\"`."
  ],
  "avoidWhen": [
   "For the page's leading band and its `h1` → use `hero` instead.",
@@ -36,7 +36,7 @@
   "Reach for `split` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",
   "In `split`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.",
   "In `split`, set `descriptionWidth=\"wide\"` when the description runs to a paragraph and would stack six or more lines in the third column alone; it then spans the middle and third columns, capped at `--container-xl` and aligned to the right edge so it ends where the narrow description ends. It takes the column a `--section-title-headline-span` of `2` would claim, so use one or the other. Outside `split` the prop has no effect.",
-  "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `variant` above it.",
+  "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `align` above it.",
   "The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component."
  ],
  "props": [
@@ -62,8 +62,8 @@
    "doc": "Short uppercase overline rendered above the headline."
   },
   {
-   "name": "variant",
-   "type": "'center' | 'start' | 'split'",
+   "name": "align",
+   "type": "'start' | 'center' | 'split'",
    "default": "'center'",
    "required": "false",
    "doc": "Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns."
@@ -107,7 +107,7 @@
   {
    "name": "actions",
    "scope": "—",
-   "notes": "Call-to-action row under the copy, aligned with the chosen `variant`."
+   "notes": "Call-to-action row under the copy, aligned with the chosen `align`."
   }
  ],
  "styleSeam": false,
@@ -118,8 +118,8 @@
    "file": "examples/section-title/default.vue"
   },
   {
-   "name": "Variants",
-   "file": "examples/section-title/variants.vue"
+   "name": "Alignments",
+   "file": "examples/section-title/alignments.vue"
   },
   {
    "name": "Sizes",

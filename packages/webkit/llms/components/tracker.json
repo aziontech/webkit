@@ -37,7 +37,7 @@
    "type": "TrackerItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block."
+   "doc": "One block per period, oldest first; each item is `{ id?: string; severity?: ChartSemanticSeverity; label: string }`. No severity renders a neutral no-data block."
   },
   {
    "name": "loading",

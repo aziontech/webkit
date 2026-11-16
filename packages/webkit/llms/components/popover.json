@@ -41,21 +41,28 @@
   "Let `Popover.Trigger` show the pointer: its wrapper sets `cursor-pointer` (`cursor-not-allowed` when disabled), so a `Tag`, `Avatar` or icon slotted in reads as clickable. Don't put `cursor-pointer` on the slotted WebKit component — `webkit/no-style-override` blocks it.",
   "Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.",
   "Set `size` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.",
-  "Use `placement=\"auto\"` for triggers that can sit near a viewport edge.",
-  "Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (`PopoverPlacementSide` when it cannot be `'auto'`), never a cast.",
+  "Use `side=\"auto\"` for triggers that can sit near a viewport edge.",
+  "Use `side=\"end\"` (or `\"start\"`) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. `start` and `end` follow the text direction, so the panel opens on the inline end in both `ltr` and `rtl`. Type a side held in a variable with the exported `PopoverSide` (and `PopoverAlign` for the alignment), never a cast.",
   "Bind the open state with `v-model:open` (or `:open` + `@update:open`, whose handler receives a `boolean`).",
   "Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action."
  ],
  "props": [
   {
-   "name": "placement",
-   "type": "PopoverPlacement",
-   "default": "'bottom-start'",
+   "name": "side",
+   "type": "PopoverSide | 'auto'",
+   "default": "'bottom'",
    "required": "false",
-   "doc": "Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment."
+   "doc": "Side of the trigger the panel opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time."
   },
   {
-   "name": "offset",
+   "name": "align",
+   "type": "PopoverAlign",
+   "default": "'start'",
+   "required": "false",
+   "doc": "Alignment along the trigger edge."
+  },
+  {
+   "name": "sideOffset",
    "type": "number",
    "default": "4",
    "required": "false",

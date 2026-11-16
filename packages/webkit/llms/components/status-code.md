@@ -19,7 +19,7 @@
 
 ## Don’t
 
-- The status is a resource lifecycle (`Active`, `Pending`, `Failed`) → use `tag` or `Table.CellStatus`.
+- The status is a resource lifecycle (`Active`, `Pending`, `Failed`) → use `tag` or `TableCellStatus`.
 - The value is a security or incident level → use `severity-tag`.
 - A dot that says whether a service is up → use `status-indicator`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

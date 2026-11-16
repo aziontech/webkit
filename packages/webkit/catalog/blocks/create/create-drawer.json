@@ -51,6 +51,9 @@
    "file": "blocks/create/create-drawer/variants/save-error.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { CreateDrawerCertificate, CreateDrawerEnvironment } from './create-drawer.vue'\n\nexport const sampleEnvironments: CreateDrawerEnvironment[] = [\n  { value: 'Production', label: 'Production', deploymentPolicy: 'single_version' },\n  { value: 'Preview', label: 'Preview', deploymentPolicy: 'versioned_urls' },\n  { value: 'Stage', label: 'Stage', deploymentPolicy: 'versioned_urls' }\n]\n\nexport const sampleConnectedEnvironments: string[] = ['Production', 'Preview']\n\nexport const sampleCertificates: CreateDrawerCertificate[] = [\n  { value: '', label: 'Free platform certificate', subject: '' },\n  { value: 'cert-8801', label: 'example.com wildcard', subject: '*.example.com' },\n  { value: 'cert-8803', label: 'api.example.com', subject: 'api.example.com' },\n  { value: 'cert-8805', label: 'staging wildcard', subject: '*.staging.example.com' },\n  { value: 'cert-8802', label: 'example.org', subject: 'example.org' }\n]"
+ },
  "sfcFile": "blocks/create/create-drawer/create-drawer.vue",
  "guidelinesFile": "blocks/create/create-drawer/guidelines.md"
 }

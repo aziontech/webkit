@@ -22,7 +22,7 @@
   "`skeleton` — the rows the tree renders while `loading`."
  ],
  "bestPractices": [
-  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected` and focus are keyed by it.",
+  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected-key` and focus are keyed by it.",
   "Seed `v-model:open-keys` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.",
   "Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.",
   "Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.",

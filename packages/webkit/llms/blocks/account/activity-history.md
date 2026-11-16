@@ -1,11 +1,11 @@
 # ActivityHistory (`account/activity-history`)
 
-> The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as a `Tag`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
+> The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `DataTable` of events, newest first: Event, Category as a `Tag`, User, IP address with a `CopyButton`, and Date as `TableCellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/activity-history/activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/activity-history")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [Table](../../components/table.md), `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -43,9 +43,9 @@ The period comes first in the reader's mind and is filtered before the collectio
 
 Refresh and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 25, 50 or 100; columns), saved under `storageKey`.
 
-### E. Event table — `Card`, `DataTable`, `Table`, `Tag`, `CopyButton`, `useCollection` (required)
+### E. Event table — `Card`, `DataTable`, `TableCellTime`, `Tag`, `CopyButton`, `useCollection` (required)
 
-One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `Table.CellTime` (relative, exact time on the tooltip).
+One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `TableCellTime` (relative, exact time on the tooltip).
 
 ### F. No match and empty period — `EmptyState` (required)
 
@@ -54,6 +54,49 @@ Filters that hide every event fill the table's `#empty` slot with `No matching e
 ### G. Load failure — `Alert` (conditional)
 
 A danger `Alert` with Retry takes the table's place; the controls stay so the reader can change the period.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `ActivityHistoryEvent` and `ActivityHistoryProps` are exported from `activity-history.vue`, and `sample.ts` holds the sample events and the fixed clock the block renders when `events` and `now` are left out (the events never show while `loading` or `error` is set).
+
+| Prop      | Type                     | What it does                                                                                                   |
+| --------- | ------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `events`  | `ActivityHistoryEvent[]` | The log; the period, the filter, the sort and the pages run on it in the browser. Pass `[]` for none.          |
+| `now`     | `Date`                   | The moment relative periods count back from; pass the request time.                                            |
+| `range`   | `DateRangeValue`         | The selected period, two-way with `v-model:range` (the last 30 days by default); fetch the period it names.    |
+| `loading` | `boolean`                | A request is in flight. With no events it is the first load (the table's loading rows); with events a refresh. |
+| `error`   | `string`                 | Why the load failed, shown in the danger `Alert` with Retry that replaces the table.                           |
+
+| Event          | Payload   | When                                                  |
+| -------------- | --------- | ----------------------------------------------------- |
+| `refresh`      | `(event)` | Refresh.                                              |
+| `retry`        | `(event)` | Retry in the error alert.                             |
+| `update:range` | `(range)` | The period changed in the picker or the widen button. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import ActivityHistory from './activity-history.vue'
+
+  const { data, range, requestedAt, pending, error, refresh } = useActivity()
+  const loadError = 'The activity could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <ActivityHistory
+    v-model:range="range"
+    :events="data ?? []"
+    :now="requestedAt"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -86,9 +129,9 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 ## States
 
 - Default: ten events over three weeks, the last 30 days selected, with filter, period, refresh, export, preferences, sorting and paging wired.
-- Empty: the last 15 minutes hold no event; a flush empty state offers the next longer period, the last hour.
-- Loading: the first load; the controls and the table's loading rows.
-- Error: the log did not load; a danger Alert with Retry.
+- Empty: the period (`range`, the last 15 minutes) holds no event; a flush empty state offers the next longer period, the last hour.
+- Loading: the first load (`loading` with no `events`); the controls and the table's loading rows.
+- Error: the log did not load (`error` is set); a danger Alert with the message and Retry.
 
 ## Related
 
@@ -125,115 +168,71 @@ Each variant is the same screen in another state: `get_block("account/activity-h
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
+  import { sampleEvents, sampleNow } from './sample'
+
   const MINUTE = 60_000
   const HOUR = 60 * MINUTE
   const DAY = 24 * HOUR
-  const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const ago = (ms: number) => new Date(referenceTime - ms)
 
-  type ActivityCategory = 'Sign-in' | 'Security' | 'Deploy' | 'Users' | 'Billing'
+  /** What kind of change an event records. */
+  export type ActivityHistoryCategory = 'Sign-in' | 'Security' | 'Deploy' | 'Users' | 'Billing'
 
-  interface ActivityEvent {
+  /** One entry of the audit log. */
+  export interface ActivityHistoryEvent {
+    /** Stable key. */
     id: string
+    /** A past-tense sentence naming the object. */
     event: string
-    category: ActivityCategory
+    /** What kind of change it records. */
+    category: ActivityHistoryCategory
+    /** Email of the person who did it. */
     user: string
+    /** The address it came from. */
     ip: string
+    /** When it happened. */
     at: Date
   }
 
-  const seedEvents: ActivityEvent[] = [
-    {
-      id: 'evt-1048',
-      event: 'Signed in',
-      category: 'Sign-in',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(25 * MINUTE)
-    },
-    {
-      id: 'evt-1047',
-      event: 'Revoked personal token “Nightly export”',
-      category: 'Security',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(3 * HOUR)
-    },
-    {
-      id: 'evt-1046',
-      event: 'Deployed storefront to Production',
-      category: 'Deploy',
-      user: 'jonas.weber@example.com',
-      ip: '198.51.100.7',
-      at: ago(9 * HOUR)
-    },
-    {
-      id: 'evt-1045',
-      event: 'Changed the role of henry.young@example.com to Admin',
-      category: 'Users',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(1 * DAY + 2 * HOUR)
-    },
-    {
-      id: 'evt-1044',
-      event: 'Turned on multi-factor authentication',
-      category: 'Security',
-      user: 'henry.young@example.com',
-      ip: '192.0.2.61',
-      at: ago(2 * DAY)
-    },
-    {
-      id: 'evt-1043',
-      event: 'Updated the billing email',
-      category: 'Billing',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(3 * DAY)
-    },
-    {
-      id: 'evt-1042',
-      event: 'Failed sign-in: wrong authentication code',
-      category: 'Sign-in',
-      user: 'jonas.weber@example.com',
-      ip: '198.51.100.90',
-      at: ago(4 * DAY + 5 * HOUR)
-    },
-    {
-      id: 'evt-1041',
-      event: 'Invited lee.park@example.com to the team Developers',
-      category: 'Users',
-      user: 'henry.young@example.com',
-      ip: '192.0.2.61',
-      at: ago(6 * DAY)
-    },
-    {
-      id: 'evt-1040',
-      event: 'Created personal token “Deploy pipeline”',
-      category: 'Security',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(12 * DAY)
-    },
-    {
-      id: 'evt-1039',
-      event: 'Changed the plan from Free to Pro',
-      category: 'Billing',
-      user: 'grace.hall@example.com',
-      ip: '203.0.113.24',
-      at: ago(21 * DAY)
-    }
-  ]
+  export interface ActivityHistoryProps {
+    /** The events to list; the period, the filter, the sort and the pages run in the browser. Left out, the sample renders. */
+    events?: ActivityHistoryEvent[]
+    /** The moment relative periods count back from. Left out, the sample clock is used. */
+    now?: Date
+    /** A request is in flight: with no events it is the first load, with events a refresh. */
+    loading?: boolean
+    /** Why the events could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
 
-  const events = ref(seedEvents)
+  const props = withDefaults(defineProps<ActivityHistoryProps>(), {
+    events: undefined,
+    now: undefined,
+    loading: false,
+    error: ''
+  })
 
-  const categorySeverity = (category: ActivityCategory): TagSeverity | undefined =>
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+  }>()
+
+  const range = defineModel<DateRangeValue>('range', {
+    default: () => ({ type: 'relative', amount: 30, unit: 'day', key: 'last-30-days' })
+  })
+
+  const entries = computed<ActivityHistoryEvent[]>(
+    () => props.events ?? (props.loading || props.error ? [] : sampleEvents)
+  )
+  const referenceTime = computed(() => (props.now ?? sampleNow).getTime())
+
+  const categorySeverity = (category: ActivityHistoryCategory): TagSeverity | undefined =>
     category === 'Billing'
       ? undefined
       : ((
@@ -245,15 +244,9 @@ Each variant is the same screen in another state: `get_block("account/activity-h
           } as const
         )[category] ?? 'neutral')
 
-  const categoryVariant = (category: ActivityCategory): TagVariant | undefined =>
+  const categoryVariant = (category: ActivityHistoryCategory): TagVariant | undefined =>
     category === 'Billing' ? 'primary' : undefined
 
-  const range = ref<DateRangeValue>({
-    type: 'relative',
-    amount: 30,
-    unit: 'day',
-    key: 'last-30-days'
-  })
   const relativeOptions: RelativeOption[] = [
     { key: 'last-15-minutes', amount: 15, unit: 'minute' },
     { key: 'last-1-hour', amount: 1, unit: 'hour' },
@@ -274,24 +267,24 @@ Each variant is the same screen in another state: `get_block("account/activity-h
       return { start: new Date(value.start).getTime(), end: new Date(value.end).getTime() }
     }
     const span = (value?.amount ?? 30) * (UNIT_MS[value?.unit] ?? DAY)
-    return { start: referenceTime - span, end: Number.POSITIVE_INFINITY }
+    return { start: referenceTime.value - span, end: Number.POSITIVE_INFINITY }
   })
   const inRange = computed(() =>
-    events.value.filter((entry) => {
+    entries.value.filter((entry) => {
       const time = entry.at.getTime()
       return time >= period.value.start && time <= period.value.end
     })
   )
 
   const optionsOf = (key: 'category' | 'user') =>
-    [...new Set(seedEvents.map((entry) => entry[key]))].sort().map((value) => ({ value }))
+    [...new Set(entries.value.map((entry) => entry[key]))].sort().map((value) => ({ value }))
 
-  const properties: FilteringProperty[] = [
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'event', label: 'Event' },
     { key: 'category', label: 'Category', options: optionsOf('category') },
     { key: 'user', label: 'User', options: optionsOf('user') },
     { key: 'ip', label: 'IP address' }
-  ]
+  ])
 
   const columns: TableColumn[] = [
     { accessorKey: 'event', header: 'Event', principal: true, hideable: false, grow: 2 },
@@ -312,24 +305,14 @@ Each variant is the same screen in another state: `get_block("account/activity-h
       preferences: { storageKey: 'activity-history' }
     })
 
-  const loading = ref(false)
-  const loadFailed = ref(false)
-  const load = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
-
-  const activityTableEl = ref<TableExposed<ActivityEvent> | null>(null)
+  const activityTableEl = ref<TableExposed<ActivityHistoryEvent> | null>(null)
   const exportCsv = () => activityTableEl.value?.exportCsv({ filename: 'activity-history.csv' })
 
   const RETENTION_DAYS = 90
   const widerRange = computed<RelativeOption | null>(() => {
     const span =
       period.value.end === Number.POSITIVE_INFINITY
-        ? referenceTime - period.value.start
+        ? referenceTime.value - period.value.start
         : period.value.end - period.value.start
     if (span >= RETENTION_DAYS * DAY) return null
     return (
@@ -395,7 +378,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
                 size="medium"
                 :loading="loading"
                 aria-label="Refresh"
-                @click="load"
+                @click="emit('refresh', $event)"
               />
             </Tooltip>
             <Tooltip
@@ -419,16 +402,16 @@ Each variant is the same screen in another state: `get_block("account/activity-h
         </header>
 
         <Alert
-          v-if="loadFailed"
+          v-if="error"
           severity="danger"
         >
-          The activity could not be loaded. Nothing was changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="load"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -509,7 +492,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
                 </div>
               </template>
               <template #cell-at="{ value }">
-                <Table.CellTime :value="value" />
+                <TableCellTime :value="value" />
               </template>
               <template #empty>
                 <EmptyState
@@ -535,4 +518,100 @@ Each variant is the same screen in another state: `get_block("account/activity-h
     </div>
   </div>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { ActivityHistoryEvent } from './activity-history.vue'
+
+const MINUTE = 60_000
+const HOUR = 60 * MINUTE
+const DAY = 24 * HOUR
+
+export const sampleNow = new Date(Date.UTC(2026, 10, 10, 12))
+const ago = (ms: number) => new Date(sampleNow.getTime() - ms)
+
+export const sampleEvents: ActivityHistoryEvent[] = [
+  {
+    id: 'evt-1048',
+    event: 'Signed in',
+    category: 'Sign-in',
+    user: 'grace.hall@example.com',
+    ip: '203.0.113.24',
+    at: ago(25 * MINUTE)
+  },
+  {
+    id: 'evt-1047',
+    event: 'Revoked personal token “Nightly export”',
+    category: 'Security',
+    user: 'grace.hall@example.com',
+    ip: '203.0.113.24',
+    at: ago(3 * HOUR)
+  },
+  {
+    id: 'evt-1046',
+    event: 'Deployed storefront to Production',
+    category: 'Deploy',
+    user: 'jonas.weber@example.com',
+    ip: '198.51.100.7',
+    at: ago(9 * HOUR)
+  },
+  {
+    id: 'evt-1045',
+    event: 'Changed the role of henry.young@example.com to Admin',
+    category: 'Users',
+    user: 'grace.hall@example.com',
+    ip: '203.0.113.24',
+    at: ago(1 * DAY + 2 * HOUR)
+  },
+  {
+    id: 'evt-1044',
+    event: 'Turned on multi-factor authentication',
+    category: 'Security',
+    user: 'henry.young@example.com',
+    ip: '192.0.2.61',
+    at: ago(2 * DAY)
+  },
+  {
+    id: 'evt-1043',
+    event: 'Updated the billing email',
+    category: 'Billing',
+    user: 'grace.hall@example.com',
+    ip: '203.0.113.24',
+    at: ago(3 * DAY)
+  },
+  {
+    id: 'evt-1042',
+    event: 'Failed sign-in: wrong authentication code',
+    category: 'Sign-in',
+    user: 'jonas.weber@example.com',
+    ip: '198.51.100.90',
+    at: ago(4 * DAY + 5 * HOUR)
+  },
+  {
+    id: 'evt-1041',
+    event: 'Invited lee.park@example.com to the team Developers',
+    category: 'Users',
+    user: 'henry.young@example.com',
+    ip: '192.0.2.61',
+    at: ago(6 * DAY)
+  },
+  {
+    id: 'evt-1040',
+    event: 'Created personal token “Deploy pipeline”',
+    category: 'Security',
+    user: 'grace.hall@example.com',
+    ip: '203.0.113.24',
+    at: ago(12 * DAY)
+  },
+  {
+    id: 'evt-1039',
+    event: 'Changed the plan from Free to Pro',
+    category: 'Billing',
+    user: 'grace.hall@example.com',
+    ip: '203.0.113.24',
+    at: ago(21 * DAY)
+  }
+]
 ```

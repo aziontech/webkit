@@ -37,7 +37,7 @@
 
 - A single headline number with a delta → use `stat-tile`.
 - Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.
-- More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.
+- More than about seven classes that all carry meaning → use `table`; color stops separating past the eight series slots.
 - Two measures on different scales → two charts side by side; this component never draws a second value axis.
 - One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.
 - Values by country or location → use `map-chart`.
@@ -54,13 +54,13 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `series` | `ChartSeries[]` | `[]` | false | Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other. |
+| `series` | `ChartSeries[]` | `[]` | false | Series to plot. The first eight take the fixed categorical slots in order; the rest fold into Other. |
 | `labels` | `ChartLabel[]` | `[]` | false | One category label per index: a string, a number, or a Date. |
 | `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Value axis direction. Horizontal lays categories down the side, for ordered bars. |
 | `labelScale` | `'category' \| 'linear'` | `'category'` | false | How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets. |
 | `min` | `number` | `0` | false | Floor of the value axis. Marks grow from one baseline. |
 | `max` | `number` | `undefined` | false | Ceiling of the value axis. When absent, the nice ceiling of the visible data. |
-| `cap` | `number` | `6` | false | Series kept before the rest fold into Other. |
+| `cap` | `number` | `8` | false | Series kept before the rest fold into Other. |
 | `otherLabel` | `string` | `''` | false | Name of the folded series. Empty uses the locale catalog (`Other`). |
 | `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats ticks, tooltip values and legend totals. |
 | `formatLabel` | `(label: ChartLabel) => string` | `formatLabel` | false | Formats category labels on the axis and in the tooltip. |
@@ -176,6 +176,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - `data-dimmed` on a series when another series is emphasized from the legend
 - Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
 - Server render and hydration: the default label format prints Date labels in `timeZone`. With no `timeZone` it prints UTC on the server and in the first client render, so the axis, tooltip title and summary match, and switches to the runtime's zone on mount. Midnight detection (day labels against clock labels) uses the same zone.
+- Default Date label format follows the span and spacing of the Date labels, in the chart's locale: labels within one day print the time (`14:00`), and midnight prints the day (`Nov 9`); a sub-day series that spans several days prints the day at midnight and the day with the time elsewhere (`Nov 10, 04:00`), so every tick and tooltip title names its day; daily buckets print the day (`Nov 9`); monthly buckets print the month (`Nov`). The year is added when the labels cross a calendar year. A custom `formatLabel` replaces all of this.
 
 ## Accessibility
 

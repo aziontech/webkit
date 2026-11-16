@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Use SearchTrigger only in the top bar to open the ⌘K palette (Command); search over one table is Table.Search.
+- Use SearchTrigger only in the top bar to open the ⌘K palette (Command); search over one table is TableSearch.
 - The search entry of every app header — console, demo, docs or site top bar (`AppHeader.End`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
 - Anywhere a shortcut-backed launcher should look like a field without being one.
 
@@ -56,7 +56,7 @@
 
 - Visual states: `default`, `hover` (border strengthens), `focus-visible` (ring), `disabled`.
 - `data-disabled` mirrors `disabled`; `data-collapsible` mirrors `collapsible`.
-- Folded (`collapsible` in a container narrower than 47rem): a `Tooltip` (`placement="bottom"`, test id `<testid>__tooltip`) shows the label on hover and focus. It is disabled while the trigger is unfolded or `disabled`; the trigger measures its own label with a `ResizeObserver` to know which form is drawn.
+- Folded (`collapsible` in a container narrower than 47rem): a `Tooltip` (`side="bottom"`, test id `<testid>__tooltip`) shows the label on hover and focus. It is disabled while the trigger is unfolded or `disabled`; the trigger measures its own label with a `ResizeObserver` to know which form is drawn.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the palette owns open state).
 
 ## Accessibility

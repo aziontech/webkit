@@ -6,9 +6,9 @@
    "file": "examples/article-cards/default.vue"
   },
   {
-   "name": "Variants",
+   "name": "Alignments",
    "summary": "Both placements stacked: the `start` heading over three covers, then the `center` heading under an overline over three cards that draw their client marks. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
-   "file": "examples/article-cards/variants.vue"
+   "file": "examples/article-cards/alignments.vue"
   }
  ]
 }

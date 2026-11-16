@@ -678,7 +678,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Accessibility
 
-- The label is a real `h2` inside a `section` whose `aria-labelledby` points at it, so every entry is a named region and joins the page outline and the "On this page" rail. With a `title`, the title is that `h2` and the date is plain text, so the region is named by what shipped.
+- The label is a real `h2` inside a `section` whose `aria-labelledby` points at it, so every entry is a named region and joins the page outline; inside `DocLayout` it registers itself (through `useHeadingOutline`) as a level 2 entry of the "On this page" rail, named by its title, or its label without one. With a `title`, the title is that `h2` and the date is plain text, so the region is named by what shipped.
 - The titled node on the rule is decorative (`aria-hidden`).
 - Keyboard map: `Tab` reaches the heading anchor (the label, or the title when set); `Enter` follows it — through the page's provided heading-navigation handler, or native hash navigation without one. Nothing else in the entry's chrome is interactive.
 - Visible focus: the anchor takes `focus-visible:outline-2 focus-visible:outline-offset-2` in the ring token.
@@ -891,7 +891,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 # Doc Heading
 
-> A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
+> A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift. Inside `DocLayout`, a level 2 or 3 heading with an `anchor` registers itself (through `useHeadingOutline`) as an entry of the layout's "On this page" rail, with its rendered text and its level, once it mounts, and leaves the rail when it unmounts; the page never lists its headings anywhere else.
 
 - Import: `import DocHeading from '@aziontech/webkit/doc-heading'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -905,7 +905,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Do
 
 - Give every heading a stable, slug-like `anchor`.
-- Without an `anchor` the heading renders plain text with no anchor — a link to nowhere is never drawn.
+- Without an `anchor` the heading renders plain text with no anchor — a link to nowhere is never drawn — and stays out of the layout's outline; a page with no outline rail (the docs home) leaves its headings unanchored.
 
 ## Don’t
 
@@ -1181,7 +1181,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 # Doc Layout
 
-> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
+> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
 
 - Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -1195,8 +1195,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - Compose the layout once, in the app's root; each route renders only its article. Never put a header, a rail or an inner scroll area in a page.
 - Give every navigation row an `id` and an `href` (an in-app path is followed with the router; never `to`); leave `activeId` empty so the current page follows the route.
-- Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
-- Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCallToAction`) in `aside`, and the site footer (`Footer variant="content"`) in `footer`.
+- Never hand the outline to the layout: give each section heading a `DocHeading` with an `anchor` and the layout lists it, in document order, with the heading's own text, and tracks which one is in view. A heading without `anchor` stays out of the outline.
+- Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCallToAction`) in `aside`, and the site footer (`Footer variant="content"`) in `footer`. The `aside` content shows only on pages with an outline, so a shared call to action never lands on the docs home.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
 - Bind `v-model:navigation-open` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
 - A drill row (`type: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`.
@@ -1204,12 +1204,14 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Don’t
 
 - The signed-in console → `ConsoleLayout`. Marketing pages → `SiteLayout`.
-- A docs landing page with no rail (the docs home) → render it with `DocHero` and the sections, without this layout, or pass an empty `navigation` and `outline`.
+- Never as part of a page: a page body is only its article, so it never renders `DocLayout`. A docs home with no outline rail is still a page inside the one layout: its headings carry no `anchor`, so nothing registers and the end rail is not rendered.
 
 ## Related
 
-- `DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.
-- `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.
+- `DocOnThisPage` — the outline rail; the registered headings and `outlineGroups` are bound onto it.
+- `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header; an anchored level 2 or 3 heading registers itself as an outline entry.
+- `DocChangelogEntry` — each entry registers itself as a level 2 outline entry.
+- `useHeadingOutline` (`@aziontech/webkit/use-heading-navigation`) — the registration a custom heading calls to join the outline.
 - `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
 - `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
 - `SearchTrigger`, `Command` — the header search and the palette it opens.
@@ -1223,7 +1225,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
 | `sections` | `DocLayoutSection[]` | `[]` | false | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`. |
 | `home` | `string` | `'/'` | false | Where the Azion Docs mark links. |
-| `outline` | `DocOnThisPageItem[]` | `[]` | false | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused. |
 | `outlineGroups` | `DocOnThisPageGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). |
 | `rootLabel` | `string` | `''` | false | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
@@ -1259,8 +1260,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## States
 
-- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when `outline` or `aside` has content; the palette `open` / `closed`.
-- Outline: the entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
+- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); the palette `open` / `closed`.
+- Outline: built from the headings the page registers, in document order, updated as a page mounts, changes or leaves (a route change swaps the entries); no heading registers on the server, so the server render and the first client render carry no outline rail and it appears once the page mounts. The entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
 
 ## Accessibility
@@ -1303,12 +1304,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
     }
   ]
 
-  const outline = [
-    { id: 'before-you-start', text: 'Before you start', depth: 2 },
-    { id: 'deploy-with-cli', text: 'Deploy with Azion CLI', depth: 2 },
-    { id: 'next-steps', text: 'Next steps', depth: 2 }
-  ]
-
   const theme = ref<ThemeSwitcherValue>('system')
 </script>
 
@@ -1319,7 +1314,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
       { label: 'Guides', href: '/docs' },
       { label: 'Reference', href: '/docs/reference' }
     ]"
-    :outline="outline"
     active-id="first-deploy"
   >
     <template #actions>
@@ -1390,7 +1384,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 # Doc Markdown
 
-> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for `DocOnThisPage` / `DocLayout`'s `outline`) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocOnThisPage`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
 - Import: `import DocMarkdown from '@aziontech/webkit/doc-markdown'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -1403,7 +1397,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Do
 
-- Wrap it in `DocProse` and pass the page's headings to the layout from the same source: `const { headings, frontmatter } = parseDocMarkdown(source)`.
+- Wrap it in `DocProse`; inside `DocLayout` the headings it renders register with the layout's outline, so the page passes nothing. Read the frontmatter (and, for a standalone `DocOnThisPage`, the headings) from the same source: `const { headings, frontmatter } = parseDocMarkdown(source)`.
 - Write one component tag per line block; a one-line callout (`<Note>Copy.</Note>`) is fine. Attribute values are strings, numbers, booleans or a string list (`tags={["API", "CLI"]}`); anything else stays literal text.
 - Repeated headings are fine: the second `Test it` gets the id `test-it-2`, so anchors and the outline stay unique.
 - Use `components` to swap the component a tag mounts (your own `Card`) or to add a block tag your docs use; never fork the parser.
@@ -1420,7 +1414,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - `DocProse` — wrap this component in it; it owns the type scale, the block rhythm and the copyable inline code chips.
 - `DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.
-- `DocLayout`, `DocOnThisPage` — take `parseDocMarkdown(source).headings` as `outline` / `items`.
+- `DocLayout` — its outline lists the rendered `DocHeading`s with no wiring. `DocOnThisPage` — takes `parseDocMarkdown(source).headings` as `items` when used without the layout.
 - `DocPageHeader` — takes the frontmatter's `title` and `description`.
 - `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.
 - `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
@@ -5121,7 +5115,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `title` | `string` | `''` | false | Headline of the module's header row, rendered as its `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `variant` | `SectionModuleVariant` | `'start'` | false | Layout of the default header row. |
+| `align` | `SectionModuleAlign` | `'start'` | false | Layout of the default header row. |
 | `divided` | `boolean` | `true` | false | Draw the top rule that divides this module from the one above it. |
 | `padded` | `boolean` | `true` | false | Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. |
 
@@ -5136,7 +5130,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## States
 
 - Visual states: `default`
-- `data-variant` carries the header layout
+- `data-align` carries the header layout
 - `data-divided` present when the top rule is drawn
 - `data-padded` present when the body is padded
 
@@ -5311,7 +5305,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Use SectionTitle as the header row of a marketing band; console pages use SectionHeader.
 - Opening a marketing or landing page section that needs a framed header.
 - Whenever the header itself should carry the rule that separates it from the content below, with no extra margin.
-- For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `variant="split"`.
+- For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `align="split"`.
 
 ## Do
 
@@ -5323,7 +5317,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Reach for `split` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.
 - In `split`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.
 - In `split`, set `descriptionWidth="wide"` when the description runs to a paragraph and would stack six or more lines in the third column alone; it then spans the middle and third columns, capped at `--container-xl` and aligned to the right edge so it ends where the narrow description ends. It takes the column a `--section-title-headline-span` of `2` would claim, so use one or the other. Outside `split` the prop has no effect.
-- Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `variant` above it.
+- Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `align` above it.
 - The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component.
 
 ## Don’t
@@ -5346,7 +5340,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `title` | `string` | `—` | true | Headline of the section, rendered as the section's `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline; overridden by the default slot. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `variant` | `'center' \| 'start' \| 'split'` | `'center'` | false | Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
+| `align` | `'start' \| 'center' \| 'split'` | `'center'` | false | Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. |
 | `framed` | `boolean` | `true` | false | Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. |
 | `padding` | `'small' \| 'medium'` | `'medium'` | false | Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. |
@@ -5357,12 +5351,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | Description body; replaces the `description` prop when provided. |
-| `actions` | — | Call-to-action row under the copy, aligned with the chosen `variant`. |
+| `actions` | — | Call-to-action row under the copy, aligned with the chosen `align`. |
 
 ## States
 
 - Visual states: `default`
-- `data-variant` mirrors the `variant` prop: `center` | `start` | `split`
+- `data-align` mirrors the `align` prop: `start` | `center` | `split`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-framed` present when the header draws its own frame and padding
 - `data-padding` mirrors the `padding` prop: `small` | `medium`
@@ -6171,7 +6165,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `ArticleCardsVariant` | `'start'` | false | Placement of the heading: `start` sets it at the start, `center` centres it over the cards. |
+| `align` | `ArticleCardsAlign` | `'start'` | false | Placement of the heading: `start` sets it at the start, `center` centres it over the cards. |
 | `anchor` | `string` | `''` | false | Id set on the band so an in-page `#hash` link can target it. |
 | `eyebrow` | `string` | `''` | false | Eyebrow above the heading. |
 | `title` | `string` | `''` | false | Headline of the band; the band renders no header when empty. |
@@ -6181,7 +6175,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## States
 
 - Visual states: `default`, `hover` (the card lifts to the raised surface and its media scales up), `focus-visible` (inset ring)
-- `data-variant` mirrors the `variant` prop and places the heading
+- `data-align` mirrors the `align` prop and places the heading
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
@@ -6207,7 +6201,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 <template>
   <ArticleCards
-    variant="start"
+    align="start"
     title="Related Articles"
     aria-label="Related Articles"
     :items="[
@@ -6553,7 +6547,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
 - Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
-- Set `titleVariant: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
+- Set `titleAlign: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Don’t
 
@@ -6578,14 +6572,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `primaryAction` | `CapabilityGridAction` | `undefined` | false | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `CapabilityGridAction` | `undefined` | false | Second button under the section title, `outline`; same shape. Shown only with a label and a link. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `titleVariant` | `SectionTitleVariant` | `'center'` | false | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
+| `titleAlign` | `SectionTitleAlign` | `'center'` | false | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
 
 ## States
 
 - Renders nothing without items.
 - Heading level drops to `h3` under a title and rises to `h2` without one.
 - An item with `href` renders its heading as a link that covers the cell.
-- `titleVariant` is passed to the section title as its `variant`; it has no effect on a bare grid.
+- `titleAlign` is passed to the section title as its `align`; it has no effect on a bare grid.
 
 ## Accessibility
 
@@ -7799,7 +7793,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'console' \| 'diagram'` | `'console'` | false | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
-| `titleVariant` | `SectionTitleVariant` | `'center'` | false | Layout of the headline block. |
+| `titleAlign` | `SectionTitleAlign` | `'center'` | false | Layout of the headline block. |
 | `titlePadding` | `SectionTitlePadding` | `'medium'` | false | Vertical padding of the headline block. |
 | `size` | `SectionTitleSize` | `'medium'` | false | Step of the headline on the heading scale. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
@@ -8656,7 +8650,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
 | `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `titleVariant` | `SectionTitleVariant` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
+| `titleAlign` | `SectionTitleAlign` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
 | `columns` | `FeatureWidgetsColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |
 | `items` | `FeatureWidgetsItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. |
@@ -11007,7 +11001,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Process Scroll
 
-> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleVariant: 'center'`. From the design sample's site `ProcessScroll`.
+> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleAlign: 'center'`. From the design sample's site `ProcessScroll`.
 
 - Import: `import ProcessScroll from '@aziontech/webkit/process-scroll'`
 - Category: section · Surface: site · Structure: monolithic
@@ -11015,7 +11009,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## When to use
 
 - Use ProcessScroll for numbered stage cards; set `pinned` to pin them under the header while they slide.
-- How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-variant="center"`).
+- How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-align="center"`).
 
 ## Do
 
@@ -11037,7 +11031,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `eyebrow` | `string` | `''` | false | Eyebrow above the title. |
-| `titleVariant` | `SectionTitleVariant` | `'split'` | false | Alignment of the section title over the card row. |
+| `titleAlign` | `SectionTitleAlign` | `'split'` | false | Alignment of the section title over the card row. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Paragraph beside the headline. |
 | `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'` | false | Column span of the paragraph: `wide` runs it across the middle column too. |

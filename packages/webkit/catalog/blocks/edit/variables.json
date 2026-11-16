@@ -2,7 +2,7 @@
  "variants": [
   {
    "name": "Create",
-   "summary": "Closed until Create Variable opens it: one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed.",
+   "summary": "The list page with the create drawer open on load (`defaultOpen`): one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed, then emits `save` with the pairs and their scope.",
    "file": "blocks/edit/variables/variants/create.vue"
   },
   {
@@ -16,6 +16,9 @@
    "file": "blocks/edit/variables/variants/network-list.vue"
   }
  ],
+ "files": {
+  "sample.ts": "import type { VariablesVariable } from './variables.vue'\n\nexport const sampleVariables: VariablesVariable[] = [\n  {\n    id: 'v-001',\n    key: 'API_BASE_URL',\n    value: 'https://api.example.com',\n    secret: false,\n    scope: [{ type: 'global', id: '', name: '' }],\n    lastEditor: 'Ethan Brooks',\n    lastEditorAvatar: '',\n    lastModified: '1 month ago'\n  },\n  {\n    id: 'v-002',\n    key: 'PAYMENT_SECRET_KEY',\n    value: 'sk_example_4f8a2c9e',\n    secret: true,\n    scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],\n    lastEditor: 'Jordan Kim',\n    lastEditorAvatar: '',\n    lastModified: '2 months ago'\n  },\n  {\n    id: 'v-003',\n    key: 'FEATURE_FLAGS',\n    value: 'checkout_v2,dark_mode',\n    secret: false,\n    scope: [{ type: 'service', id: '3344556677', name: 'storefront' }],\n    lastEditor: 'Taylor Reed',\n    lastEditorAvatar: '',\n    lastModified: '2 months ago'\n  },\n  {\n    id: 'v-004',\n    key: 'DATABASE_PASSWORD',\n    value: 'p4ssw0rd-r0t4t3d',\n    secret: true,\n    scope: [{ type: 'policy', id: '5540117', name: 'production-policy' }],\n    lastEditor: 'John Smith',\n    lastEditorAvatar: '',\n    lastModified: '2 months ago'\n  },\n  {\n    id: 'v-005',\n    key: 'MAX_UPLOAD_MB',\n    value: '25',\n    secret: false,\n    scope: [{ type: 'global', id: '', name: '' }],\n    lastEditor: 'Sam Lee',\n    lastEditorAvatar: '',\n    lastModified: '3 months ago'\n  }\n]"
+ },
  "sfcFile": "blocks/edit/variables/variables.vue",
  "guidelinesFile": "blocks/edit/variables/guidelines.md"
 }

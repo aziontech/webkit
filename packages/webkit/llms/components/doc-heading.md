@@ -1,6 +1,6 @@
 # Doc Heading
 
-> A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
+> A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift. Inside `DocLayout`, a level 2 or 3 heading with an `anchor` registers itself (through `useHeadingOutline`) as an entry of the layout's "On this page" rail, with its rendered text and its level, once it mounts, and leaves the rail when it unmounts; the page never lists its headings anywhere else.
 
 - Import: `import DocHeading from '@aziontech/webkit/doc-heading'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -15,7 +15,7 @@
 ## Do
 
 - Give every heading a stable, slug-like `anchor`.
-- Without an `anchor` the heading renders plain text with no anchor — a link to nowhere is never drawn.
+- Without an `anchor` the heading renders plain text with no anchor — a link to nowhere is never drawn — and stays out of the layout's outline; a page with no outline rail (the docs home) leaves its headings unanchored.
 
 ## Don’t
 

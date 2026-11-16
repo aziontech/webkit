@@ -47,7 +47,7 @@
 | `maxHeight` | `string` | `''` | false | Max height (CSS length) of the scrolling viewport; the header stays on top. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the grid when no visible heading names it. |
 | `modelValue` | `TRow[]` | `() => []` | false | Two-way value (`v-model`). |
-| `rowSelection` | `Record<string, boolean>` | `—` | false | Two-way value (`v-model:rowSelection`). |
+| `selectedKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:selectedKeys`). |
 
 ## Events
 
@@ -67,10 +67,10 @@
 
 ## v-model
 
-| Model                   | Type                      | Default | Emits                 | Notes                                                                                                                   |
-| ----------------------- | ------------------------- | ------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `v-model`               | `TRow[]`                  | `[]`    | `update:modelValue`   | The rows. A committed edit writes a new array with a copy of the edited row.                                            |
-| `v-model:row-selection` | `Record<string, boolean>` | `{}`    | `update:rowSelection` | Selected row ids (the same shape as DataTable's `rowSelection`). Space on the checkbox column and Select all change it. |
+| Model                   | Type       | Default | Emits                 | Notes                                                                                                                                                |
+| ----------------------- | ---------- | ------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`               | `TRow[]`   | `[]`    | `update:modelValue`   | The rows. A committed edit writes a new array with a copy of the edited row.                                                                         |
+| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Keys of the selected rows, read from `rowKey` (the same shape as DataTable's `selectedKeys`). Space on the checkbox column and Select all change it. |
 
 ## States
 
@@ -180,7 +180,7 @@
     { id: 'r2', host: 'api.example.com', ttl: 300, proxied: true },
     { id: 'r3', host: 'docs.example.com', ttl: 3600, proxied: false }
   ])
-  const selection = ref({})
+  const selection = ref([])
   let next = 4
 
   const columns = [
@@ -195,14 +195,14 @@
   const removeRows = (event, removed) => {
     const ids = new Set(removed.map((row) => row.id))
     rows.value = rows.value.filter((row) => !ids.has(row.id))
-    selection.value = {}
+    selection.value = []
   }
 </script>
 
 <template>
   <DataGrid
     v-model="rows"
-    v-model:row-selection="selection"
+    v-model:selected-keys="selection"
     :columns="columns"
     aria-label="DNS records"
     selectable
