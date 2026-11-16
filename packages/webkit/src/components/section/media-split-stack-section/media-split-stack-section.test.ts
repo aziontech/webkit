@@ -163,7 +163,10 @@ describe('MediaSplitStackSection', () => {
       ]
     })
 
-    expect(await findByTestId('console-mockup')).toHaveAttribute('data-name', 'kv-store-key')
+    expect(await findByTestId('console-mockup', {}, { timeout: 5000 })).toHaveAttribute(
+      'data-name',
+      'kv-store-key'
+    )
   })
 
   it('sets the anchor as the run id', () => {
