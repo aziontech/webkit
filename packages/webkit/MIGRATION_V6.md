@@ -191,7 +191,9 @@ move with it (`ClientQuotesItem` → `ClientQuotesSectionItem`; the codemod rewr
 test id is the new name, and its locale namespace follows (`siteHeader.*` → `siteHeaderSection.*`,
 `listingIndex.*` → `listingIndexSection.*`, … in a `WebkitProvider` `messages` override). Site page
 JSON that still names an old `_id` keeps rendering: `SitePage` maps every old section id in the
-table to its new one; write the new `_id` in new pages. Hero, hero-section
+table to its new one, and translates the renamed props and values of every section in `v6-props.json`
+(`{ _id: 'hero-band', props: { kind: 'centered' } }` renders `hero-section` with `variant: 'center'`);
+write the new `_id` and props in new pages. Hero, hero-section
 and hero-form-section call their client strip `marquee` (`marquee`, `marqueeMarks`,
 `marqueeLabel`), after the component.
 
