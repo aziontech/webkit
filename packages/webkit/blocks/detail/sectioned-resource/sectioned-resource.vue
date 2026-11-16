@@ -214,7 +214,7 @@
         >
           <div
             v-if="few"
-            class="flex min-w-0"
+            class="hidden min-w-0 @3xl/tab:flex"
           >
             <ToggleGroup
               :model-value="pageId"
@@ -237,10 +237,7 @@
             />
           </div>
 
-          <div
-            v-if="!few"
-            class="w-full max-w-(--layout-measure-control) @3xl/tab:hidden"
-          >
+          <div class="w-full max-w-(--layout-measure-control) @3xl/tab:hidden">
             <Field>
               <Field.Label>{{ tabLabel }}</Field.Label>
               <Select

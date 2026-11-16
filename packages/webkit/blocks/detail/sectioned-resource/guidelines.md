@@ -31,7 +31,7 @@ Below `@3xl` of the tab body the menu is hidden and a medium `Select` takes its 
 
 ### D. Few siblings — `ToggleGroup` (optional)
 
-When `sections` hold 7 or fewer pages there is no menu and no folded `Select`: a medium `ToggleGroup` labelled with the tab name sits above the list and switches between them, at every width.
+When `sections` hold 7 or fewer pages there is no menu: from `@3xl` of the tab body a medium `ToggleGroup` labelled with the tab name sits above the list and switches between them. Below `@3xl` the same folded `Select` of section C takes its place, because six segments truncate every label on a phone.
 
 ### E. Page heading — `PageHeader`, `Button` (required)
 

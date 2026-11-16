@@ -244,15 +244,16 @@ Each variant is the same screen in another state: `get_block("detail/deployment-
       </div>
       <div
         v-else
-        class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)"
+        class="ms-auto flex flex-wrap items-center gap-(--spacing-sm)"
       >
         <Tag
+          class="shrink-0 whitespace-nowrap"
           :label="failedStep ? `Failed on ${failedStep.title}` : 'Completed'"
           :severity="failedStep ? 'danger' : 'success'"
         />
         <span
           v-if="duration"
-          class="text-label-sm text-(--text-muted)"
+          class="whitespace-nowrap text-label-sm text-(--text-muted)"
           >{{ failedStep ? `Failed after ${duration}` : `Deployed in ${duration}` }}</span
         >
       </div>
@@ -527,6 +528,7 @@ const publishStep: DeploymentLogsStep = {
 
 const failedRulesStep: DeploymentLogsStep = {
   ...rulesStep,
+  description: 'The rules rejected this deployment (409 Conflict).',
   status: 'error',
   lines: [
     {
@@ -558,8 +560,13 @@ const failedRulesStep: DeploymentLogsStep = {
   ]
 }
 
-const notRun = (step: DeploymentLogsStep, status: 'pending' | 'skipped'): DeploymentLogsStep => ({
+const notRun = (
+  step: DeploymentLogsStep,
+  status: 'pending' | 'skipped',
+  description: string
+): DeploymentLogsStep => ({
   ...step,
+  description,
   status,
   duration: '',
   lines: []
@@ -570,10 +577,10 @@ export const sampleSteps: DeploymentLogsStep[] = [
   cloneStep,
   installStep,
   { ...buildStep, status: 'running' },
-  notRun(uploadStep, 'pending'),
-  notRun(serviceStep, 'pending'),
-  notRun(rulesStep, 'pending'),
-  notRun(publishStep, 'pending')
+  notRun(uploadStep, 'pending', 'Runs after Build'),
+  notRun(serviceStep, 'pending', 'Runs after Upload'),
+  notRun(rulesStep, 'pending', 'Runs after Service'),
+  notRun(publishStep, 'pending', 'Runs after Routing Rules')
 ]
 
 export const sampleSucceededSteps: DeploymentLogsStep[] = [
@@ -595,12 +602,13 @@ export const sampleFailedSteps: DeploymentLogsStep[] = [
   uploadStep,
   serviceStep,
   failedRulesStep,
-  notRun(publishStep, 'skipped')
+  notRun(publishStep, 'skipped', 'Never ran. The deployment stopped at Routing Rules')
 ]
 
 export const sampleCreateFlowFailedSteps: DeploymentLogsStep[] = sampleFailedSteps.map((step) => ({
   ...step,
   title: step.id === 'rules' ? 'Routing rules' : step.title,
+  description: step.description?.replace('Routing Rules', 'Routing rules'),
   lines: step.lines.map((line) => ({ ...line, message: line.message.replace(/!$/, '.') }))
 }))
 ```

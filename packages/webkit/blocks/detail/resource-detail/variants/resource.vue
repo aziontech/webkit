@@ -103,7 +103,7 @@
       </div>
 
       <div
-        class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6"
+        class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6"
       >
         <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
           <span class="text-label-sm text-(--text-muted)">Deployment</span>

@@ -50,7 +50,7 @@ A resizable, collapsible start `Sidebar` named Fields with its own Search fields
 
 ### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState`, `Alert` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window. When `error` is set, a danger `Alert` with the message and Retry takes the place of the summary, the chart and the table; the fields panel stays.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. While the explorer is too narrow for the document pane, Time, Level and Source fold into the Event cell: Level `Tag`, the clock time and the source on top, the event message wrapped under them, so a phone or tablet reads what happened without scrolling sideways. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window. When `error` is set, a danger `Alert` with the message and Retry takes the place of the summary, the chart and the table; the fields panel stays.
 
 ### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -457,6 +457,8 @@ Each variant is the same screen in another state: `get_block("view/events-explor
     isDate(date) ? `${dayFormat(date)}, ${clockFormat(date)}` : ''
 
   const formatEventClock = (date: unknown) => (isDate(date) ? axisFormat(date) : '')
+
+  const formatEventClockSeconds = (date: unknown) => (isDate(date) ? clockFormat(date) : '')
 
   const eventSources: Record<string, string> = {
     http: 'HTTP Requests',
@@ -881,7 +883,9 @@ Each variant is the same screen in another state: `get_block("view/events-explor
 
   const columns = computed<TableColumn[]>(() => [
     { id: 'detail', header: '', width: 44, align: 'center', hideable: false },
-    ...coreFields.value.map(toColumn),
+    ...(compactLog.value
+      ? coreFields.value.filter((field) => field.id === 'message').map(toColumn)
+      : coreFields.value.map(toColumn)),
     ...optionalFields.value.filter((field) => shownColumns.value.includes(field.id)).map(toColumn)
   ])
 
@@ -927,6 +931,8 @@ Each variant is the same screen in another state: `get_block("view/events-explor
       explorerWidth.value === 0 ||
       explorerWidth.value >= fieldsPanelWidth + logMinWidth + documentMinWidth
   )
+
+  const compactLog = computed(() => !isWide.value)
 
   const documentDrawerOpen = ref(false)
 
@@ -1598,8 +1604,35 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                       />
                     </template>
 
-                    <template #cell-message="{ value }">
-                      <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
+                    <template #cell-message="{ value, row }">
+                      <div
+                        v-if="compactLog"
+                        class="flex min-w-0 flex-col gap-(--spacing-2xs) py-(--spacing-2xs)"
+                      >
+                        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                          <Tag
+                            :label="String(row.level)"
+                            :severity="eventLevelSeverity(row.level)"
+                            size="small"
+                            class="shrink-0"
+                          />
+                          <span
+                            class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                            >{{ formatEventClockSeconds(row.at) }}</span
+                          >
+                          <span class="min-w-0 truncate text-body-xs text-(--text-muted)">{{
+                            row.sourceLabel
+                          }}</span>
+                        </div>
+                        <span class="whitespace-normal break-words text-(--text-default)">{{
+                          value
+                        }}</span>
+                      </div>
+                      <span
+                        v-else
+                        class="min-w-0 truncate text-(--text-default)"
+                        >{{ value }}</span
+                      >
                     </template>
 
                     <template #cell-status="{ value }">
