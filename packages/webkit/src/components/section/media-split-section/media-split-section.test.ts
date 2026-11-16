@@ -1,7 +1,6 @@
 import { render, waitFor } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import Code from '../../../../examples/media-split-section/code.vue'
 import ProductMedia from '../../../../examples/media-split-section/product-media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import MediaSplitSection from './media-split-section.vue'
@@ -22,26 +21,6 @@ const image = {
   height: 165
 }
 
-const codeTabs = [
-  {
-    label: 'OpenAI SDK',
-    value: 'openai-sdk',
-    language: 'ts',
-    code: 'const client = new OpenAI()',
-    fileName: 'client.ts',
-    icon: 'ai-color ai-openai'
-  },
-  {
-    label: 'GitHub Copilot',
-    value: 'github-copilot',
-    language: 'json',
-    code: '[]',
-    fileName: 'chatLanguageModels.json',
-    icon: 'ai-color ai-microsoft-copilot'
-  },
-  { label: 'Empty', value: 'empty', code: '' }
-]
-
 const band = (props: Record<string, unknown> = {}) =>
   render(MediaSplitSection, {
     props: {
@@ -54,6 +33,10 @@ const band = (props: Record<string, unknown> = {}) =>
   })
 
 describe('MediaSplitSection', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = band()
 
@@ -249,20 +232,34 @@ describe('MediaSplitSection', () => {
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
   })
 
-  it('draws a diagram, inset, when no widget is set', async () => {
-    const { findByTestId, getByTestId, queryByTestId } = band({ diagram: 'cache' })
+  it('draws neither a diagram nor code: a band with only those has no media and warns', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { getByTestId, queryByTestId, queryAllByRole } = band({
+      image: undefined,
+      diagram: 'cache',
+      codeTabs: [{ label: 'A', value: 'a', code: 'const a = 1' }]
+    })
 
-    const diagram = await findByTestId('diagram', {}, { timeout: 5000 })
-    expect(diagram.getAttribute('data-name')).toBe('cache')
-    expect(queryByTestId('console-mockup')).toBeNull()
-    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    expect(queryByTestId('diagram')).toBeNull()
+    expect(queryAllByRole('tab')).toHaveLength(0)
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media')).toBe(false)
+    expect(warn).toHaveBeenCalledOnce()
+    expect(warn.mock.calls[0]?.[0]).toContain('has no media')
   })
 
-  it('prefers the widget over the diagram', async () => {
-    const { findByTestId, queryByTestId } = band({ widget: 'kv-store-key', diagram: 'cache' })
+  it('treats a Diagram scene as no media', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    band({ image: undefined, scene: { component: 'Diagram', props: { name: 'cache' } } })
 
-    await findByTestId('console-mockup', {}, { timeout: 5000 })
-    expect(queryByTestId('diagram')).toBeNull()
+    expect(warn).toHaveBeenCalledOnce()
+  })
+
+  it('does not warn with a media set', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    band()
+
+    expect(warn).not.toHaveBeenCalled()
   })
 
   it('frames an image whole on a plate when image.framed is set', () => {
@@ -278,40 +275,11 @@ describe('MediaSplitSection', () => {
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(false)
   })
 
-  it('has no a11y violations with a widget and with a diagram', async () => {
+  it('has no a11y violations with a widget and with a framed image', async () => {
     const { container, findByTestId } = render(ProductMedia)
 
     await findByTestId('console-mockup', {}, { timeout: 5000 })
-    await findByTestId('diagram', {}, { timeout: 5000 })
     await expectNoA11yViolations(container)
-  })
-
-  it('draws a code sample, one tab per file with code, opening defaultFile', async () => {
-    const { findAllByRole, container, getByTestId } = band({
-      image: undefined,
-      codeTabs,
-      defaultFile: 'github-copilot'
-    })
-
-    const tabs = await findAllByRole('tab', {}, { timeout: 5000 })
-    expect(tabs.map((tab) => tab.textContent?.trim())).toEqual(['OpenAI SDK', 'GitHub Copilot'])
-    expect(tabs[1]).toHaveAttribute('aria-selected', 'true')
-    expect(container.querySelectorAll('[role="tab"] i.ai-color')).toHaveLength(2)
-    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
-  })
-
-  it('opens the first tab when defaultFile names no tab', async () => {
-    const { findAllByRole } = band({ image: undefined, codeTabs, defaultFile: 'nope' })
-
-    const tabs = await findAllByRole('tab', {}, { timeout: 5000 })
-    expect(tabs[0]).toHaveAttribute('aria-selected', 'true')
-  })
-
-  it('does not link the band to a lone action while it shows code', async () => {
-    const { findAllByRole, getByTestId } = band({ image: undefined, codeTabs, primaryAction })
-
-    await findAllByRole('tab', {}, { timeout: 5000 })
-    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-href')).toBe(false)
   })
 
   it('lets an action variant win over the drawn variant and draws its leading icon', () => {
@@ -324,12 +292,5 @@ describe('MediaSplitSection', () => {
     const second = getByRole('link', { name: secondaryAction.label })
     expect(second).toHaveAttribute('data-variant', 'outline')
     expect(second.querySelector('.ai-github')).not.toBeNull()
-  })
-
-  it('has no a11y violations with a code sample', async () => {
-    const { container, findByRole } = render(Code)
-
-    await findByRole('button', { name: 'Copy the cache settings sample' }, { timeout: 5000 })
-    await expectNoA11yViolations(container)
   })
 })

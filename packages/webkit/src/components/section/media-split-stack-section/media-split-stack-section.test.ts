@@ -1,5 +1,5 @@
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import ProductMedia from '../../../../examples/media-split-stack-section/product-media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -41,6 +41,10 @@ const bandSides = (container: HTMLElement) =>
   )
 
 describe('MediaSplitStackSection', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('renders the run under the default testid', () => {
     const { getByTestId } = run()
 
@@ -54,26 +58,11 @@ describe('MediaSplitStackSection', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['media-end', 'alternating'] as const)(
-    'mirrors variant=%s on data-variant',
-    (variant) => {
-      const { getByTestId } = run({ variant })
+  it('sets every picture at the closing end, with no alternating layout left', () => {
+    const { container, getByTestId } = run({ variant: 'alternating' })
 
-      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
-    }
-  )
-
-  it('defaults to the media-end variant with every picture at the closing end', () => {
-    const { container, getByTestId } = run()
-
-    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('media-end')
+    expect(getByTestId(TESTID).hasAttribute('data-variant')).toBe(false)
     expect(bandSides(container as HTMLElement)).toEqual(['media-end', 'media-end', 'media-end'])
-  })
-
-  it('alternates the media side band by band, starting at the opening end', () => {
-    const { container } = run({ variant: 'alternating' })
-
-    expect(bandSides(container as HTMLElement)).toEqual(['media-start', 'media-end', 'media-start'])
   })
 
   it('renders one band per entry, in order, each named by its title', () => {
@@ -198,34 +187,50 @@ describe('MediaSplitStackSection', () => {
     expect(queryAllByTestId(BAND_TESTID)).toHaveLength(0)
   })
 
-  it('has no a11y violations with the media-end variant', async () => {
+  it('has no a11y violations', async () => {
     const { container } = run()
 
     await expectNoA11yViolations(container)
   })
 
-  it('has no a11y violations with the alternating variant and a header', async () => {
-    const { container } = run({ variant: 'alternating', eyebrow: EYEBROW, title: TITLE })
+  it('has no a11y violations with a header', async () => {
+    const { container } = run({ eyebrow: EYEBROW, title: TITLE })
 
     await expectNoA11yViolations(container)
   })
 
-  it('draws a widget, a diagram and a framed image, each inset from the cell', async () => {
+  it('draws a widget and a framed image, each inset from the cell', async () => {
     const { container, findByTestId, getByRole } = render(ProductMedia)
 
     const widget = await findByTestId('console-mockup', {}, { timeout: 5000 })
     expect(widget.getAttribute('data-name')).toBe('data-stream-source')
-    const diagram = await findByTestId('diagram', {}, { timeout: 5000 })
-    expect(diagram.getAttribute('data-name')).toBe('load-balancer')
     expect(getByRole('img', { name: 'G2' })).toBeInTheDocument()
     await expect.poll(() => widget.textContent).toContain('Data Source')
     expect(widget.textContent).not.toContain('Priya')
     const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
-    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([
-      true,
-      true,
-      true
-    ])
+    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([true, true])
+  })
+
+  it('draws no diagram, and warns in development about a band left without a picture', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { container, queryByTestId } = run({
+      bands: [
+        bands[1],
+        { title: 'Failover', description: 'Route around an origin.', diagram: 'load-balancer' },
+        {
+          title: 'Cache',
+          description: 'Serve from the nearest location.',
+          scene: { component: 'Diagram', props: { name: 'cache' } }
+        }
+      ]
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    expect(queryByTestId('diagram')).toBeNull()
+    const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
+    expect(splits.map((split) => split.hasAttribute('data-media'))).toEqual([true, false, false])
+    expect(warn).toHaveBeenCalledOnce()
+    expect(warn.mock.calls[0]?.[0]).toContain('"Failover", "Cache" has no picture')
   })
 
   it('runs an illustration and a plain image flush', () => {
@@ -253,7 +258,6 @@ describe('MediaSplitStackSection', () => {
     const { container, findByTestId } = render(ProductMedia)
 
     await findByTestId('console-mockup', {}, { timeout: 5000 })
-    await findByTestId('diagram', {}, { timeout: 5000 })
     await expectNoA11yViolations(container)
   })
 })

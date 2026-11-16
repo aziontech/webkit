@@ -62,7 +62,6 @@
 
 <template>
   <MediaSplitStackSection
-    variant="media-end"
     eyebrow="Solutions"
     title="One platform for every workload you run"
     description="Pick the outcome you need; the same distributed platform serves it."

@@ -38,20 +38,22 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
   `RegistrationFrame` of `shell/site`.
 - Reach for the section's own switches before anything else: `ClientQuotesSection` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlightSection` `v-model`, `CapabilityGridSection` `titleAlign`,
-  `MediaSplitSection` action `variant` (`ghost` for a "Learn more" text button beside `codeTabs`), `SiteFooterSection` link
+  `MediaSplitSection` action `variant` (`ghost` for a quiet "Learn more" text button), `SiteFooterSection` link
   `external`, `CapabilityGridSection` items with `href` for a linked grid, `ProcessScrollSection` `pinned`
   (a band that pins while its tall cards slide sideways), a `HeroFormSection` field's
-  `visuallyHiddenLabel` (a field labelled by its placeholder), `NetworkSection` benefits without
-  `icon` (the bold run-in lead-in) and outcomes without `logo`.
+  `visuallyHiddenLabel` (a field labelled by its placeholder) and `NetworkSection` outcomes without
+  `logo`. A `NetworkSection` benefit always carries its `icon`, and a `CapabilityGridSection` gives
+  every item an `icon` (benefits) or none (resources, text columns).
 - A header that opens a run of bands inside a page (`MediaSplitStackSection`, a `SectionTitle` over
   a `SectionStack`) is the medium `SectionTitle`; `size="large"` is for a page's opening title only.
 - A titled row of cards that scrolls sideways, with the previous/next arrows on the title row ("See
   how to use", "Industries"), is `CardCarouselSection` (`card-carousel-section`): each card takes `eyebrow`,
   `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Eyebrow`.
-- A media split whose picture is a product console widget or a request-flow diagram stays a
-  `MediaSplitStackSection` band or a `MediaSplitSection`: set the band's `widget` (a `ConsoleMockup` name) or
-  `diagram` (a `Diagram` name) instead of an illustration. Do not drop to `MediaSplit` and its
-  `media` slot for that.
+- A media band (`MediaSplitSection`, a `MediaSplitStackSection` band) always has a picture, and it is
+  a drawn asset: an illustration, an image or a registered scene; a product console widget is one
+  (set `widget`, a `ConsoleMockup` name). Request-flow diagrams and code never go in a media band:
+  a diagram is a `ConsoleShowcaseSection` with `variant="diagram"`, code a `FeatureScrollSection`
+  step with `code`. Do not drop to `MediaSplit` and its `media` slot to get around it.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content
   has. Its card grid balances the rows itself — the fewest rows the column cap allows on the
   narrowest track count that keeps them, so an even count fills every row (under three columns

@@ -2,39 +2,11 @@
 
 The last ask at the end of a landing page, after a hatched gap. A closing frame follows it, with no rules of its own, because the site footer under it opens with one.
 
-Almost every page ends with the split form, and only its copy changes per page. Careers ends with the single-action panel. The primary form is the loud close, for a page that ends on its one ask.
+Most pages end with the panel form, with one or two actions, and only its copy changes per page; Careers ends with the single-action panel. The primary form is the loud close, for a page that ends on its one ask.
 
-The split, panel and primary forms are the `ClosingCallToActionSection` component from `@aziontech/webkit/closing-call-to-action-section`; it composes `SectionModule`, `CallToAction`, `Button` and `RegistrationFrame`, with `Texture` on the closing frame (and behind the copy in `primary`), and `variant` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `NewsletterSection` from `@aziontech/webkit/newsletter-section`, since its ask is a subscribe form. The agents form is the `primary` form with `audiences`: a switch between ways in (a person or an agent), each with its own copyable line and actions, and a typed line under them; it loads `ToggleGroup`, `InputGroup` and `CopyButton` only when `audiences` is set. The templates close is `TemplateGallerySection` from `@aziontech/webkit/template-gallery-section` with `closing` set, which draws the closing frame under its scrolling grid of deployable templates.
+The panel and primary forms are the `ClosingCallToActionSection` component from `@aziontech/webkit/closing-call-to-action-section`; it composes `SectionModule`, `CallToAction`, `Button` and `RegistrationFrame`, with `Texture` on the closing frame (and behind the copy in `primary`), and `variant` picks the form (`panel` or `primary`). The newsletter form is its own component, `NewsletterSection` from `@aziontech/webkit/newsletter-section`, since its ask is a subscribe form. The agents form is the `primary` form with `audiences`: a switch between ways in (a person or an agent), each with its own copyable line and actions, and a typed line under them; it loads `ToggleGroup`, `InputGroup` and `CopyButton` only when `audiences` is set. The templates close is `TemplateGallerySection` from `@aziontech/webkit/template-gallery-section` with `closing` set, which draws the closing frame under its scrolling grid of deployable templates.
 
 ## Examples
-
-### Split
-
-The solution pages close. `Start for free` sits under the headline and `Talk to sales` in the side cell, then a tall closing frame. The band carries the `contact` anchor, so the page contact links scroll to it.
-
-Example: [`site-split.vue`](./site-split.vue)
-
-##### Use it on the site
-
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
-
-- `variant` is `split`; `anchor` is the band's id for in-page links, `contact` by convention.
-- `eyebrow` is a short overline, such as Build.
-- `title` is the first line of the headline, and `titleMuted` the second line, in muted ink.
-- `description` is the sentence in the side cell.
-- `primaryAction` is the white button under the headline, and `secondaryAction` the outlined button in the side cell. Each takes a `label`, an `href` and `trailing` for the chevron.
-
-Example:
-
-Site JSON: [`site-split.json`](./site-split.json)
-
-<hr
-  style={{
-    margin: 'var(--spacing-2xl) 0 var(--spacing-lg)',
-    border: 0,
-    borderTop: '1px solid var(--border-default)'
-  }}
-/>
 
 ### Panel
 
@@ -47,7 +19,7 @@ Example: [`site-panel.vue`](./site-panel.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `variant` is `panel`.
-- `title` is the headline of the panel, and `description` the sentence under it. `eyebrow` is drawn above the headline; `titleMuted` is not drawn.
+- `title` is the headline of the panel, and `description` the sentence under it. `eyebrow` is drawn above the headline.
 - `primaryAction` is the panel button, with a `label`, an `href` and `trailing` for the chevron. A `secondaryAction` sits beside it as an outlined button.
 
 Example:
@@ -73,9 +45,9 @@ Example: [`site-primary.vue`](./site-primary.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `variant` is `primary`; `anchor` is the band's id for in-page links, `contact` by convention.
-- `title` is the headline and `description` the sentence under it. `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
+- `title` is the headline and `description` the sentence under it. `eyebrow` is not drawn, so the headline stands alone over the texture.
 - `primaryAction` is the white button and `secondaryAction` the outlined one beside it. Each takes a `label`, an `href` and `trailing` for the chevron.
-- `command` is an optional shell line set before the actions, with the `$` prompt and a copy button; `split` and `panel` take it too. See [`command.vue`](./command.vue).
+- `command` is an optional shell line set before the actions, with the `$` prompt and a copy button; `panel` takes it too. See [`command.vue`](./command.vue).
 
 Example:
 

@@ -16,7 +16,7 @@
   export type { SectionTitleAction }
 
   /** Layout of the band. */
-  export type ClosingCallToActionSectionVariant = 'split' | 'panel' | 'primary' | 'frame'
+  export type ClosingCallToActionSectionVariant = 'panel' | 'primary' | 'frame'
 
   /** Visual weight of an audience action. */
   export type ClosingCallToActionSectionAudienceActionVariant = 'secondary' | 'outline'
@@ -56,7 +56,7 @@
   }
 
   export interface ClosingCallToActionSectionProps {
-    /** Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone. */
+    /** Layout of the band: `panel` is one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone. */
     variant?: ClosingCallToActionSectionVariant
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
@@ -64,15 +64,13 @@
     eyebrow?: string
     /** Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty. */
     title?: string
-    /** Second line of the headline in muted ink; drawn in `split` only. */
-    titleMuted?: string
-    /** Supporting sentence: in the aside cell in `split`, under the headline in `panel`. */
+    /** Supporting sentence under the headline. */
     description?: string
-    /** The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
+    /** The white button of the band, under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
     primaryAction?: SectionTitleAction
-    /** The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent. */
+    /** The outlined button of the band, beside the primary one; `{ label, href, trailing? }`. Omitted when absent. */
     secondaryAction?: SectionTitleAction
-    /** Shell command on a copyable line before the actions, copied as written; drawn in `split`, `panel` and `primary`. */
+    /** Shell command on a copyable line before the actions, copied as written; drawn in `panel` and `primary`. */
     command?: string
     /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
     hatch?: boolean
@@ -89,11 +87,10 @@
   }
 
   const props = withDefaults(defineProps<ClosingCallToActionSectionProps>(), {
-    variant: 'split',
+    variant: 'panel',
     anchor: '',
     eyebrow: '',
     title: '',
-    titleMuted: '',
     description: '',
     primaryAction: undefined,
     secondaryAction: undefined,
@@ -120,23 +117,16 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'closing-call-to-action-section'
   )
 
-  const isSplit = computed(() => props.variant === 'split')
-
   const isPrimary = computed(() => props.variant === 'primary')
 
   const isFrame = computed(() => props.variant === 'frame')
 
-  const bandKind = computed(() => (props.variant === 'frame' ? 'split' : props.variant))
+  const bandKind = computed(() => (isPrimary.value ? 'primary' : 'panel'))
 
   const hasAudiences = computed(() => isPrimary.value && props.audiences.length > 0)
 
   const hasActions = computed(() =>
-    Boolean(
-      hasAudiences.value ||
-      props.command ||
-      props.primaryAction ||
-      (!isSplit.value && props.secondaryAction)
-    )
+    Boolean(hasAudiences.value || props.command || props.primaryAction || props.secondaryAction)
   )
 </script>
 
@@ -158,7 +148,6 @@
           :variant="bandKind"
           :eyebrow="isPrimary ? '' : eyebrow"
           :title="title"
-          :title-muted="isSplit ? titleMuted : ''"
           :description="hasAudiences ? '' : description"
         >
           <template
@@ -201,7 +190,7 @@
               />
               <Button
                 key="button-2"
-                v-if="!isSplit && secondaryAction"
+                v-if="secondaryAction"
                 :label="secondaryAction.label"
                 :href="secondaryAction.href"
                 variant="outline"
@@ -211,20 +200,6 @@
                 :animated="Boolean(secondaryAction.trailing)"
               />
             </template>
-          </template>
-          <template
-            v-if="isSplit && secondaryAction"
-            #aside
-          >
-            <Button
-              :label="secondaryAction.label"
-              :href="secondaryAction.href"
-              variant="outline"
-              size="large"
-              :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(secondaryAction.trailing)"
-            />
           </template>
         </CallToAction>
       </SectionModule>

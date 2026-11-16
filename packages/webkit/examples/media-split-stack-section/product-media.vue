@@ -11,13 +11,6 @@
       action: { label: 'Learn more', href: '/en/products/data-stream/' }
     },
     {
-      diagram: 'load-balancer',
-      title: 'Failover and error handling',
-      description:
-        'Route around an unhealthy origin in real time, and retry on the next one before the request fails.',
-      action: { label: 'Learn more', href: '/en/products/load-balancer/' }
-    },
-    {
       image: g2Symbol,
       imageAlt: 'G2',
       imageFramed: true,
@@ -29,8 +22,5 @@
 </script>
 
 <template>
-  <MediaSplitStackSection
-    variant="alternating"
-    :bands="bands"
-  />
+  <MediaSplitStackSection :bands="bands" />
 </template>

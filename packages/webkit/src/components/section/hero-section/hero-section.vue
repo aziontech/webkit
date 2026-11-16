@@ -21,13 +21,7 @@
 
   /** Layout of the opening band. */
   export type HeroSectionVariant =
-    | 'center'
-    | 'title-band'
-    | 'center-band'
-    | 'compact-band'
-    | 'pixel-floor'
-    | 'copy-beside-art'
-    | 'copy-on-top-art'
+    'center' | 'title-band' | 'center-band' | 'compact-band' | 'copy-beside-art' | 'copy-on-top-art'
 
   /** Length of the headline: `short` sets it on the narrow headline measure, `long` lets it take the whole column. */
   export type HeroSectionTitleLength = 'short' | 'long'
@@ -91,7 +85,7 @@
   }
 
   export interface HeroSectionProps {
-    /** Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. */
+    /** Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. */
     variant?: HeroSectionVariant
     /** Vertical rhythm of the band; `large` is the opening a product page leads with. */
     size?: HeroSectionSize
@@ -234,14 +228,10 @@
   const isScreen = computed(() => !BANDS.includes(props.variant))
 
   const isCentered = computed(
-    () =>
-      props.variant !== 'pixel-floor' &&
-      props.variant !== 'copy-beside-art' &&
-      props.variant !== 'compact-band'
+    () => props.variant !== 'copy-beside-art' && props.variant !== 'compact-band'
   )
 
   const heroWidth = computed(() => {
-    if (props.variant === 'pixel-floor') return 'full'
     if (
       props.variant === 'center' ||
       props.variant === 'copy-on-top-art' ||
@@ -337,7 +327,7 @@
     :data-testid="testId"
     :data-variant="variant"
     :data-title-measure="narrowTitle ? 'narrow' : null"
-    class="scroll-mt-(--spacing-2xl) data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg) data-[variant=pixel-floor]:[--hero-banner-floor-bg:var(--bg-surface)] data-[variant=pixel-floor]:[--texture-pool-a:95%_64%] data-[variant=pixel-floor]:[--texture-pool-b:-2%_38%]"
+    class="scroll-mt-(--spacing-2xl) data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg)"
   >
     <Hero
       v-if="title"
@@ -346,9 +336,6 @@
       :max-width="heroWidth"
       :texture="dots ? 'dots' : 'none'"
       :texture-fade="dots ? 'top' : 'none'"
-      :floor-texture="variant === 'pixel-floor' ? 'pixelate' : 'none'"
-      :floor-texture-size="variant === 'pixel-floor' ? 'small' : 'medium'"
-      :bordered="variant !== 'pixel-floor'"
       :padded="variant !== 'copy-on-top-art'"
       :media-align="variant === 'copy-beside-art' ? 'end' : 'center'"
       :offset="isScreen ? headerOffset : ''"

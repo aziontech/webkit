@@ -1,7 +1,6 @@
 {
   "_id": "media-split-stack-section",
   "props": {
-    "variant": "media-end",
     "bands": [
       {
         "image": "/marketing-components/illustrations/quick-start-with-templates.svg",

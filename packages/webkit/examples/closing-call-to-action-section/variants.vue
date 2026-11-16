@@ -5,11 +5,10 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <ClosingCallToActionSection
-      variant="split"
+      variant="panel"
       anchor="contact"
       eyebrow="Build"
-      title="Build once."
-      title-muted="Run everywhere."
+      title="Build once. Run everywhere."
       description="Get a faster path to launch, lower latency, and less infrastructure overhead."
       :primary-action="{
         label: 'Start for free',

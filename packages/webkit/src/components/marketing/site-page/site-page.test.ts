@@ -375,6 +375,108 @@ describe('SitePage', () => {
     expect(band.hasAttribute('kind')).toBe(false)
   })
 
+  it.each([
+    ['hero-section', { variant: 'pixel-floor', title: 'T' }],
+    ['hero-band', { kind: 'pixel-floor', title: 'T' }]
+  ])('renders a removed pixel-floor hero (%s) as the title band', (id, props) => {
+    expect(resolveSectionEntry(id, props)).toEqual({
+      id: 'hero-section',
+      props: { variant: 'title-band', title: 'T' }
+    })
+  })
+
+  it.each([
+    ['closing-call-to-action-section', { variant: 'split' }],
+    ['closing-call-to-action', { kind: 'split' }],
+    ['closing-call-to-action-section', {}]
+  ])('renders a removed split close (%s) as a panel with one headline', (id, props) => {
+    expect(
+      resolveSectionEntry(id, { ...props, title: 'Build once.', titleMuted: 'Run everywhere.' })
+    ).toEqual({
+      id: 'closing-call-to-action-section',
+      props: {
+        ...(Object.keys(props).length ? { variant: 'panel' } : {}),
+        title: 'Build once. Run everywhere.'
+      }
+    })
+  })
+
+  it.each([
+    ['media-split-stack-section', { variant: 'alternating' }],
+    ['media-split-stack', { kind: 'alternating' }]
+  ])('renders a removed alternating run (%s) with every picture at the end', (id, props) => {
+    expect(resolveSectionEntry(id, { ...props, bands: [] })).toEqual({
+      id: 'media-split-stack-section',
+      props: { bands: [] }
+    })
+  })
+
+  it.each(['media-split-section', 'code-split', 'media-split-band'])(
+    'renders a code band (%s) as a feature scroll, one step per file',
+    (id) => {
+      const action = { label: 'Docs', href: '/docs' }
+      const resolved = resolveSectionEntry(id, {
+        title: 'T',
+        description: 'D',
+        copyAriaLabel: 'Copy',
+        codeTabs: [
+          { label: 'Upload', value: 'u', code: 'a()', language: 'ts', fileName: 'u.ts' },
+          { label: 'Empty', value: 'e', code: '' }
+        ],
+        primaryAction: action
+      })
+      expect(resolved.id).toBe('feature-scroll-section')
+      expect(resolved.props).toEqual({
+        title: 'T',
+        description: 'D',
+        items: [
+          {
+            title: 'Upload',
+            description: '',
+            code: { fileName: 'u.ts', code: 'a()', language: 'ts', copyAriaLabel: 'Copy' },
+            action: expect.objectContaining(action)
+          }
+        ]
+      })
+    }
+  )
+
+  it('renders a diagram band as a diagram showcase with the diagram in its scene slot', () => {
+    expect(resolveSectionEntry('media-split-section', { title: 'T', diagram: 'cache' })).toEqual({
+      id: 'console-showcase-section',
+      props: { title: 'T', variant: 'diagram' },
+      scenes: { scene: { component: 'Diagram', props: { name: 'cache' } } }
+    })
+  })
+
+  it('keeps a media band with a picture and drops its retired code and diagram', () => {
+    expect(
+      resolveSectionEntry('media-split-section', {
+        title: 'T',
+        illustration: 'ai-applications',
+        diagram: 'cache',
+        codeTabs: []
+      })
+    ).toEqual({ id: 'media-split-section', props: { title: 'T', illustration: 'ai-applications' } })
+    expect(
+      resolveSectionEntry('media-split-stack-section', {
+        bands: [{ title: 'A', diagram: 'cache' }]
+      }).props
+    ).toEqual({ bands: [{ title: 'A' }] })
+  })
+
+  it('draws an old diagram band through the scene slot of the diagram showcase', async () => {
+    const { findByTestId } = page({
+      sections: [{ _id: 'media-split-section', props: { title: HEADLINE, diagram: 'cache' } }]
+    })
+
+    const diagram = await findByTestId('diagram', {}, { timeout: 5000 })
+    expect(diagram.getAttribute('data-name')).toBe('cache')
+    expect((await findByTestId('console-showcase-section')).getAttribute('data-variant')).toBe(
+      'diagram'
+    )
+  })
+
   it('translates old props on a current _id and keeps a new prop that is already set', () => {
     expect(resolveSectionEntry('hero-section', { kind: 'centered-band', title: 'T' })).toEqual({
       id: 'hero-section',

@@ -3,8 +3,8 @@ name: call-to-action
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: 650afcbdd8dc82b9159ad91aa34e6711f952d766174b56ce69e57e65a0c0e575
+spec_version: 6
+checksum: c00b447ba643c1faa327b34d28c552013719179e4b6a3a003fb7f694ab0028cb
 created: 2026-09-22
 last_updated: 2026-11-16
 ---
@@ -124,7 +124,7 @@ The `lead` register, the lead cell standing alone:
 </template>
 ```
 
-The `split` register, which a product page closes on:
+The `split` register, for a hand-built close with two paths of unequal weight:
 
 ```vue
 <script setup>

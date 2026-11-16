@@ -2,9 +2,9 @@
 
 The core of a product page: a run of copy-beside-art bands, each stating one claim. From `lg` up the bands pin under the site header and pile on each other as the page scrolls.
 
-Every band sits on the same small pixelate texture, fading toward the top. A band with a link is a link as a whole. A single band whose picture is code is `MediaSplitSection` with `codeTabs`.
+Every band sits on the same small pixelate texture, fading toward the top. A band with a link is a link as a whole. A claim shown by code is a `FeatureScrollSection` step with `code`; a band never shows code or a request-flow diagram.
 
-The band is the `MediaSplitStackSection` component from `@aziontech/webkit/media-split-stack-section`; it composes `SectionModule`, `SectionTitle`, `SectionStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. `variant` picks the layout: `media-end` (every picture at the closing end) or `alternating` (the picture swaps sides band by band, starting at the opening end). Both use `_id: 'media-split-stack-section'`.
+The band is the `MediaSplitStackSection` component from `@aziontech/webkit/media-split-stack-section`; it composes `SectionModule`, `SectionTitle`, `SectionStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. Every picture sits at the closing end of its band. It uses `_id: 'media-split-stack-section'`.
 
 ## Examples
 
@@ -18,38 +18,10 @@ Example: [`site-solutions.vue`](./site-solutions.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `variant` is `media-end`.
 - `bands` are the solutions, each a `title`, a `description`, an `action` (`label` and `href`, the button and the link the whole band follows unless the band sets its own `href`), an optional `eyebrow`, and a `scene`, an `illustration` name or an `image` with `imageAlt`.
 - `anchor` is the run's id for in-page links; `description` sits under the section title. With a title the band headlines are `h3`.
-- A band without `action` has no button and no link. A band with no picture renders without its media cell.
+- A band without `action` has no button and no link. Every band needs a picture; one without renders without its media cell and warns in development.
 
 Example:
 
 Site JSON: [`site-solutions.json`](./site-solutions.json)
-
-<hr
-  style={{
-    margin: 'var(--spacing-2xl) 0 var(--spacing-lg)',
-    border: 0,
-    borderTop: '1px solid var(--border-default)'
-  }}
-/>
-
-### Alternating
-
-From the Our Network page: a centered section title, then four large bands alternating media start and end, each with an outlined "Learn more" button and linking through as a whole, like Solutions.
-
-Example: [`site-alternating.vue`](./site-alternating.vue)
-
-##### Use it on the site
-
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
-
-- `variant` is `alternating`; the media side alternates on its own.
-- `eyebrow` and `title` make the heading. Without a title the heading is left out.
-- `bands` are the claims, each a `title`, a `description`, an `action` (`label` and `href`), and an `illustration` with `illustrationLabel` or an `image` with `imageAlt`.
-- A band without `action` has no button and no link. A band with no picture renders without its media cell.
-
-Example:
-
-Site JSON: [`site-alternating.json`](./site-alternating.json)

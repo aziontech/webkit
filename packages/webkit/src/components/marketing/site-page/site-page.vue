@@ -91,9 +91,12 @@
     )
   }
 
-  function resolveScenes(entry: SitePageSection): ResolvedScene[] {
+  function resolveScenes(
+    entry: SitePageSection,
+    translated: Record<string, SitePageScene> = {}
+  ): ResolvedScene[] {
     const scenes: ResolvedScene[] = []
-    for (const [slot, scene] of Object.entries(entry.scenes ?? {})) {
+    for (const [slot, scene] of Object.entries({ ...translated, ...entry.scenes })) {
       const component = resolveScene(scene.component)
       if (!component) {
         warnOnce(`scene:${scene.component}`, `no scene is registered as "${scene.component}".`)
@@ -107,7 +110,7 @@
   function resolveEntries(entries: SitePageSection[], column = false): ResolvedSection[] {
     const resolved: ResolvedSection[] = []
     entries.forEach((entry, index) => {
-      const { id, props: bound } = resolveSectionEntry(entry._id, entry.props)
+      const { id, props: bound, scenes } = resolveSectionEntry(entry._id, entry.props)
       const component = resolveSection(id)
       if (!component) return
       const closing = column && isClosing(entry)
@@ -116,7 +119,7 @@
         entry,
         props: closing && isClosing(entries[index + 1]) ? { ...bound, hatch: false } : bound,
         component,
-        scenes: resolveScenes(entry),
+        scenes: resolveScenes(entry, scenes),
         gapSize:
           entry.gap === 'none' || (closing && bound['variant'] === 'frame')
             ? null

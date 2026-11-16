@@ -49,7 +49,7 @@ Example: [`site-benefits.vue`](./site-benefits.vue)
 
 Same entry, with `variant` set to `benefits` and `benefits[]` in place of `outcomes[]`:
 
-- `benefits[]` fill the floor on up to three columns: three fill one row, four split 2 × 2. Each has an optional `icon`, a `title` and a `description`.
+- `benefits[]` fill the floor on up to three columns: three fill one row, four split 2 × 2. Each has an `icon` (required, an Azion icon class), a `title` and a `description`.
 
 Example:
 

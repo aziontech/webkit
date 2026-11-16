@@ -111,7 +111,7 @@ describe('HeroSection', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['center', 'title-band', 'pixel-floor', 'copy-beside-art'] as const)(
+  it.each(['center', 'title-band', 'copy-beside-art'] as const)(
     'mirrors variant=%s on data-variant',
     (variant) => {
       const { getByTestId } = band({ variant })
@@ -152,8 +152,7 @@ describe('HeroSection', () => {
     for (const props of [
       { variant: 'center', titleLength: 'long' },
       { variant: 'compact-band' },
-      { variant: 'copy-beside-art' },
-      { variant: 'pixel-floor' }
+      { variant: 'copy-beside-art' }
     ]) {
       const { getByTestId, unmount } = band(props)
       expect(getByTestId(TESTID)).not.toHaveAttribute('data-title-measure')
@@ -191,26 +190,23 @@ describe('HeroSection', () => {
     expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('3xl')
   })
 
-  it.each([
-    ['pixel-floor', '4xl'],
-    ['copy-beside-art', 'xl']
-  ] as const)('ignores titleLength with variant=%s', (variant, width) => {
-    const short = band({ variant, titleLength: 'short' })
-    expect(short.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
-    short.unmount()
+  it.each([['copy-beside-art', 'xl']] as const)(
+    'ignores titleLength with variant=%s',
+    (variant, width) => {
+      const short = band({ variant, titleLength: 'short' })
+      expect(short.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
+      short.unmount()
 
-    const long = band({ variant, titleLength: 'long' })
-    expect(long.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
-  })
-
-  it.each(['center', 'pixel-floor', 'copy-beside-art'] as const)(
-    'fills a screen with variant=%s',
-    (variant) => {
-      const { getByTestId } = band({ variant })
-
-      expect(getByTestId(HERO_TESTID).getAttribute('data-variant')).toBe('screen')
+      const long = band({ variant, titleLength: 'long' })
+      expect(long.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
     }
   )
+
+  it.each(['center', 'copy-beside-art'] as const)('fills a screen with variant=%s', (variant) => {
+    const { getByTestId } = band({ variant })
+
+    expect(getByTestId(HERO_TESTID).getAttribute('data-variant')).toBe('screen')
+  })
 
   it('renders the title as the page h1 with its highlight', () => {
     const { getByRole } = band({ titleHighlight: HIGHLIGHT })
@@ -383,7 +379,7 @@ describe('HeroSection', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.each(['center', 'title-band', 'pixel-floor', 'copy-beside-art', 'copy-on-top-art'] as const)(
+  it.each(['center', 'title-band', 'copy-beside-art', 'copy-on-top-art'] as const)(
     'has no a11y violations with variant=%s',
     async (variant) => {
       const { container } = band({

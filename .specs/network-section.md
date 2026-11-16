@@ -4,10 +4,10 @@ category: section
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-04
-last_updated: 2026-11-15
-checksum: a2728233ecbffd0c7749d29cdeb31f6cdd670e3de357b7bec5b474793c0d5a57
+last_updated: 2026-11-16
+checksum: ee41e45b24d54fe8b21b0d6fc5941d7c1f805c74d3f6725f986ad4507e7963c1
 ---
 
 # NetworkSection — Component Spec
@@ -35,7 +35,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 
 - Four short `claims`; they are chips, not sentences. Give a claim as `{ label, mobile: false }` to keep it to the medium breakpoint and up when the phone band has room for fewer chips.
 - Two to four `outcomes`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.
-- Three `benefits` (or six), each a short `title`, a `description` and an optional `icon`; each renders as a topic with its title as an `h3`.
+- Three `benefits` (or six), each a short `title`, a `description` and a required `icon` (an Azion icon class) that leads the topic; each renders as a topic with its title as an `h3`.
 - Four `stats` on the `stats` floor, each a `value` and a `label`, with an optional `prefix` and `suffix`.
 - Give the band an `anchor` when a page links to it with a `#hash`.
 - Leave `logo` out of an outcome when the site shows the figure alone; the cell then renders no mark row.
@@ -91,7 +91,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 | `claimsEyebrow` | `string`                            | `''`         | false    | Eyebrow-set line above the claims.                                                                                                                                                                                                                                                                                                                                                                 |
 | `claims`        | `(string \| NetworkSectionClaim)[]` | `[]`         | false    | Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint.                                                                                                                                                                                                                    |
 | `outcomes`      | `NetworkSectionOutcome[]`           | `[]`         | false    | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`LogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent. |
-| `benefits`      | `NetworkSectionBenefit[]`           | `[]`         | false    | Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`.                                                                                                                                                                                                              |
+| `benefits`      | `NetworkSectionBenefit[]`           | `[]`         | false    | Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon }`, rendered as a topic led by its glyph whose title is an `h3`.                                                                                                                                                                                              |
 | `stats`         | `NetworkSectionStat[]`              | `[]`         | false    | Figures for the `stats` floor, in order, rendered by `stats`; each is `{ value, label, prefix?, suffix? }`.                                                                                                                                                                                                                                                                                        |
 
 ## Events
@@ -108,7 +108,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 - `data-variant` mirrors the `variant` prop and selects the floor (`outcomes`, `benefits` or `stats`)
 - Empty: when `title` is empty the band renders nothing; when the selected floor's array is empty the band renders without a floor
 - An outcome without `logo` renders its quote with no mark row
-- The `benefits` floor is `card-grid`'s `balanced` layout with `columns: 3`, so three benefits fill one row and four split 2 × 2; every benefit is a `feature-item` with an `h3`, led by its glyph when it has an `icon`
+- The `benefits` floor is `card-grid`'s `balanced` layout with `columns: 3`, so three benefits fill one row and four split 2 × 2; every benefit is a `feature-item` with an `h3`, led by its `icon` glyph
 - The `stats` floor is a `stats` row under a rule; `stats` picks its own column count so no cell is left empty
 - Claims: a chip is `h-6` with `text-label-sm` below the small breakpoint and `h-7` with `text-label-md` from it; a claim with `mobile: false` carries `data-mobile="hidden"` and is hidden below the medium breakpoint
 - Anchor: the root carries `id` = `anchor` when set, with a scroll margin so a `#hash` jump clears a sticky header

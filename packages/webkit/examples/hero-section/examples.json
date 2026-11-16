@@ -9,7 +9,7 @@
     },
     {
       "name": "Variants",
-      "summary": "Every layout stacked: `center` over the dot field with the client strip, the large `title-band`, `pixel-floor` with its copy at the start over the animated floor, and `copy-beside-art` with the illustration beside the copy, then `copy-on-top-art` with its copy centered over a scene in the window under it.",
+      "summary": "Every layout stacked: `center` over the dot field with the client strip, the large `title-band`, `copy-beside-art` with the illustration beside the copy, then `copy-on-top-art` with its copy centered over a scene in the window under it.",
       "file": "variants.vue"
     },
     {
@@ -65,12 +65,6 @@
       "json": "site-title-band-carousel.json"
     },
     {
-      "name": "Pixel floor",
-      "summary": "The AI Inference hero: copy at the start over an animated pixel field that stands under the client strip; the light stops under reduced motion.",
-      "file": "site-pixel-floor.vue",
-      "json": "site-pixel-floor.json"
-    },
-    {
       "name": "Copy beside art",
       "summary": "Copy on one side and a wide illustration on the other, with the client strip on the floor; the illustration bleeds past the column edge from medium widths up.",
       "file": "site-copy-beside-art.vue",
@@ -105,8 +99,6 @@
     "TitleBandSmallJson",
     "TitleBandCarousel",
     "TitleBandCarouselJson",
-    "PixelFloor",
-    "PixelFloorJson",
     "CopyBesideArt",
     "CopyBesideArtJson",
     "Topology",

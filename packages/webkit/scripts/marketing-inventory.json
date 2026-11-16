@@ -62,7 +62,7 @@
     "sample:site/ui/sections/CompareCompetitors": "competitor-comparison-section",
     "sample:site/ui/sections/ConsoleShowcase": "console-showcase-section",
     "sample:site/ui/sections/CustomerSpotlight": "client-story-columns-section (reveal=\"hover\")",
-    "sample:site/ui/sections/Heroes": "hero-section (kinds centered, title-band, centered-band, compact-band, pixel-floor, copy-beside-art, copy-on-top-art with levels; top and bottom scene slots)",
+    "sample:site/ui/sections/Heroes": "hero-section (kinds centered, title-band, centered-band, compact-band, copy-beside-art; pixel-floor removed in 6.0, SitePage renders it as title-band, copy-on-top-art with levels; top and bottom scene slots)",
     "sample:site/ui/sections/PlanMatrix": "plan-comparison-section",
     "sample:site/ui/sections/ProcessScroll": "process-scroll-section",
     "sample:site/ui/sections/QuoteBand": "logo-wall-section (kind=\"quote\")",

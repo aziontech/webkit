@@ -3,9 +3,9 @@ name: console-showcase-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
-checksum: 8ed30f4c254e3937aba121ce58d8be2db9a2253ba15cdb3a7f5b0e4b2de837be
+checksum: c598c5589ccdc3647f16ee434cf48d3b8a1cab022c5b7b4321da97c8c91f84a4
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -25,7 +25,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 ## When NOT to use
 
 - For a screenshot with copy beside it — use `MediaSplitSection`.
-- For code — use `MediaSplitSection` with `codeTabs`, or `CliTerminalSection`.
+- For code — use `FeatureScrollSection` (a step with `code`) or `CliTerminalSection`.
 
 ## Related
 
