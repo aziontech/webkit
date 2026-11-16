@@ -5,6 +5,7 @@ Thanks for working on Webkit. This document covers how to propose changes that p
 ## Before you start
 
 - Read the [README](./README.md) for repo layout and the consumer-facing API.
+- Owner decisions are tracked in [`.claude/docs/DECISIONS.md`](./.claude/docs/DECISIONS.md), one row each with its status and where it lives; a change that records or implements one adds or updates its row in the same change.
 - Skim [`.claude/rules/`](./.claude/rules/) — these are non-negotiable:
   - [`dependencies.md`](./.claude/rules/dependencies.md) — no external positioning or animation libs.
   - [`styling.md`](./.claude/rules/styling.md) — classes on the root, no JS class presets.
