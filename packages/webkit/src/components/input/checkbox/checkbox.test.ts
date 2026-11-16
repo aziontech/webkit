@@ -109,8 +109,8 @@ describe('Checkbox', () => {
           h(Checkbox, {
             value: 'cache',
             modelValue: tags.value,
-            'onUpdate:modelValue': (next: string[]) => {
-              tags.value = next
+            'onUpdate:modelValue': (next: unknown) => {
+              tags.value = next as string[]
             }
           })
       })
@@ -156,7 +156,7 @@ describe('Checkbox', () => {
             value: 'pro',
             modelValue: model.value,
             'aria-label': 'Pro',
-            'onUpdate:modelValue': (next: string | null) => (model.value = next)
+            'onUpdate:modelValue': (next: unknown) => (model.value = next as string | null)
           })
       })
       const { getByRole } = render(Host)

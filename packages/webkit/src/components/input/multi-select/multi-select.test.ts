@@ -5,12 +5,15 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/multi-select/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import MultiSelect, {
+import { hostable } from '../../../test/hostable'
+import MultiSelectRoot, {
   MultiSelectContent,
   MultiSelectGroup,
   MultiSelectItem,
   MultiSelectTrigger
 } from './index'
+
+const MultiSelect = hostable(MultiSelectRoot)
 
 // Content Teleports to body, escaping the render container — query it from
 // document.body and remove lingering listbox nodes between tests for isolation.

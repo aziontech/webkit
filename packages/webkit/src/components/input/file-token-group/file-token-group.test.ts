@@ -179,7 +179,7 @@ describe('FileTokenGroup', () => {
       const items = files()
       const view = render(FileTokenGroup, { props: { items } })
       await fireEvent.click(view.getByRole('button', { name: 'Remove a.txt' }))
-      expect(view.emitted('remove')?.[0]?.[1]).toEqual({ index: 0, item: items[0] })
+      expect(view.emitted<unknown[]>('remove')?.[0]?.[1]).toEqual({ index: 0, item: items[0] })
       expect(view.emitted('dismiss')).toBeUndefined()
     })
 
@@ -189,7 +189,10 @@ describe('FileTokenGroup', () => {
         'horizontal'
       )
       next.unmount()
-      const legacy = render(FileTokenGroup, { props: { items: files(), alignment: 'horizontal' } })
+      const legacy = render(FileTokenGroup, {
+        props: { items: files() },
+        attrs: { alignment: 'horizontal' }
+      })
       expect(legacy.getByTestId('file-token-group').getAttribute('data-orientation')).toBe(
         'vertical'
       )
