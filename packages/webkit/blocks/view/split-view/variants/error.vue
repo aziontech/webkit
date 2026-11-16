@@ -368,7 +368,7 @@
 
   const filters = ref<FilterState>({ period: ['24h'] })
   const search = ref('')
-  const pagination = ref({ pageIndex: 0, pageSize: 25 })
+  const page = ref(1)
 
   const activeFieldIds = computed(() =>
     Object.keys(filters.value).filter(
@@ -415,7 +415,7 @@
   )
 
   watch(filters, () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
+    page.value = 1
   })
 
   const loading = ref(false)
@@ -435,7 +435,7 @@
   const matchedEvents = computed(() => searchEvents(filteredEvents.value, search.value))
 
   watch(search, () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
+    page.value = 1
   })
 
   const appliedPeriod = computed(() => filters.value.period?.[0] ?? '')

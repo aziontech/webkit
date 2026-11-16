@@ -24,8 +24,8 @@
     complete: [event: Event, id: string]
   }>()
 
-  /** Id of the running tutorial; null when none runs. Use with v-model:active; unbound, the provider keeps it locally. */
-  const active = defineModel<string | null>('active', { default: null })
+  /** Id of the running tutorial; null when none runs. Use with v-model:active-key; unbound, the provider keeps it locally. */
+  const activeKey = defineModel<string | null>('activeKey', { default: null })
 
   /** 0-based index of the current step across the running tutorial's tasks. Use with v-model:step; unbound, the provider keeps it locally. */
   const step = defineModel<number>('step', { default: 0 })
@@ -42,7 +42,7 @@
   const tutorials = computed<TutorialPanelTutorial[]>(() => props.tutorials)
 
   const activeTutorial = computed<TutorialPanelTutorial | null>(
-    () => tutorials.value.find((tutorial) => tutorial.id === active.value) ?? null
+    () => tutorials.value.find((tutorial) => tutorial.id === activeKey.value) ?? null
   )
 
   const steps = computed<TutorialPanelFlatStep[]>(() => {
@@ -69,14 +69,14 @@
   }
 
   const start = (event: Event, id: string) => {
-    active.value = id
+    activeKey.value = id
     move(0)
     emit('start', event, id)
   }
 
   const exit = (event: Event) => {
     const id = activeTutorial.value?.id
-    active.value = null
+    activeKey.value = null
     step.value = 0
     dismissed.value = false
     if (id) emit('exit', event, id)

@@ -3,11 +3,11 @@ name: gauge-chart
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 84f698ead11d0c52273c3fd006a0542677b79dd6d65b905c932cc94f3a5f05c9
+checksum: 1bf94e8b0099e979113154a1c619e5a13edf7f3f698cf76b12ffeb2e95c95fad
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # GaugeChart — Component Spec
@@ -85,7 +85,7 @@ One reading against a known range, drawn as a half-circle dial with the value un
 | `emptyDescription` | `string`                         | `''`            | false    | Supporting line under the empty title: why there is no reading, or what to do next.                                         |
 | `ariaLabel`        | `string`                         | `''`            | false    | Accessible name of the meter when it is not inside a ChartCard with a title.                                                |
 
-`ChartThreshold` is `{ value: number; severity: ChartThresholdSeverity; label?: string }`, with `ChartThresholdSeverity` = `'neutral' | ChartStatus | ChartSeverity`; it is the same type `Chart.Reference` takes its `severity` from, so a band and a reference line read one severity map (`neutral` draws in `var(--chart-label)`, a status in `var(--chart-status-*)`, a findings level in `var(--severity-*)`).
+`ChartThreshold` is `{ value: number; severity: ChartThresholdSeverity; label?: string }`, with `ChartThresholdSeverity` = `'neutral' | ChartSemanticSeverity | ChartSeverity`; it is the same type `Chart.Reference` takes its `severity` from, so a band and a reference line read one severity map (`neutral` draws in `var(--chart-label)`, a status in `var(--chart-status-*)`, a findings level in `var(--severity-*)`).
 
 ## Events
 

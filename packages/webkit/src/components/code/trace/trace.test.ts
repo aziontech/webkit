@@ -87,7 +87,7 @@ describe('Trace', () => {
     })
     const call = rows(view)[4] as HTMLElement
     await fireEvent.click(call)
-    expect(view.emitted()['update:selected']?.at(-1)).toEqual(['c'])
+    expect(view.emitted()['update:selectedKey']?.at(-1)).toEqual(['c'])
     expect(call.getAttribute('aria-selected')).toBe('true')
     const detail = view.getByRole('region', { name: 'Details of call' })
     expect(detail.textContent).toContain('Attributes')
@@ -95,11 +95,11 @@ describe('Trace', () => {
     expect(detail.textContent).toContain('201')
     expect(view.getByRole('treegrid').getAttribute('aria-describedby')).toBe(detail.id)
     await fireEvent.click(call)
-    expect(view.emitted()['update:selected']?.at(-1)).toEqual([''])
+    expect(view.emitted()['update:selectedKey']?.at(-1)).toEqual([''])
     expect(view.queryByRole('region')).toBeNull()
     await fireEvent.click(call)
     await fireEvent.click(view.getByRole('button', { name: 'Close' }))
-    expect(view.emitted()['update:selected']?.at(-1)).toEqual([''])
+    expect(view.emitted()['update:selectedKey']?.at(-1)).toEqual([''])
     await nextTick()
     expect(document.activeElement).toBe(rows(view)[4])
   })
@@ -127,9 +127,9 @@ describe('Trace', () => {
     expect(document.activeElement).toBe(all()[3])
     expect(all()[3]?.tabIndex).toBe(0)
     await fireEvent.keyDown(all()[3] as HTMLElement, { key: 'Enter' })
-    expect(view.emitted()['update:selected']?.at(-1)).toEqual(['b'])
+    expect(view.emitted()['update:selectedKey']?.at(-1)).toEqual(['b'])
     await fireEvent.keyDown(all()[3] as HTMLElement, { key: ' ' })
-    expect(view.emitted()['update:selected']?.at(-1)).toEqual([''])
+    expect(view.emitted()['update:selectedKey']?.at(-1)).toEqual([''])
     await fireEvent.keyDown(all()[3] as HTMLElement, { key: 'Home' })
     await nextTick()
     expect(document.activeElement).toBe(all()[0])
@@ -169,7 +169,7 @@ describe('Trace', () => {
   })
 
   it('shows placeholder rows in a status region while loading', () => {
-    const view = render(Trace, { props: { spans, loading: true, selected: 'b' } })
+    const view = render(Trace, { props: { spans, loading: true, selectedKey: 'b' } })
     expect(view.getByTestId('trace').getAttribute('aria-busy')).toBe('true')
     expect(view.getByRole('status', { name: 'Loading spans' })).toBeTruthy()
     expect(view.getAllByTestId('trace__skeleton').length).toBeGreaterThan(0)
@@ -223,7 +223,7 @@ describe('Trace', () => {
         provideLocale({ locale: 'pt-BR', catalogs: { ...BUILT_IN_CATALOGS, ...LOCALES } })
         return { spans }
       },
-      template: `<Trace :spans="spans" selected="b" />`
+      template: `<Trace :spans="spans" selected-key="b" />`
     })
     expect(view.getByRole('treegrid', { name: 'Rastreamento' })).toBeTruthy()
     expect(view.getByRole('textbox', { name: 'Buscar spans' })).toBeTruthy()
@@ -301,7 +301,7 @@ describe('Trace', () => {
     it('draws span events as markers and lists them in the details', () => {
       const view = render(Trace, {
         props: {
-          selected: 'a',
+          selectedKey: 'a',
           spans: [
             spans[0],
             {
@@ -328,7 +328,7 @@ describe('Trace', () => {
       const plain = render(Trace, { props: { spans } })
       expect(plain.queryByTestId('trace__slowest')).toBeNull()
       plain.unmount()
-      const view = render(Trace, { props: { spans, highlightSlowest: true, selected: 'b' } })
+      const view = render(Trace, { props: { spans, highlightSlowest: true, selectedKey: 'b' } })
       const flagged = rows(view).filter((row) => row.hasAttribute('data-slowest'))
       expect(flagged.map((row) => row.getAttribute('data-span-id'))).toEqual(['b'])
       expect(flagged[0]?.getAttribute('aria-label')).toBe(

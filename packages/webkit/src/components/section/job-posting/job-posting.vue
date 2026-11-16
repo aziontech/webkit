@@ -386,7 +386,7 @@
                 >
                   <SectionTitle
                     :framed="false"
-                    variant="start"
+                    align="start"
                     size="small"
                     :title="section.title"
                   />
@@ -437,7 +437,7 @@
             <div class="max-w-(--layout-measure-content) px-(--spacing-xl) py-(--spacing-2xl)">
               <SectionTitle
                 :framed="false"
-                variant="start"
+                align="start"
                 :title="form.title"
                 :description="form.description ?? ''"
               />

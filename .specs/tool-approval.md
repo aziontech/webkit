@@ -3,11 +3,11 @@ name: tool-approval
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: 56a9d63dfff2b329a4ae244ae8cf4aad7dc9686ba45fa107e17ab946db538fcb
+checksum: 4bbc46a8cad687d5874557bddc1eb03ac858ff2f22ac2e71cb292f4a6c7d7eec
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # ToolApproval — Component Spec
@@ -96,7 +96,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 | `title`              | `string`                                           | —           | true     | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code.      |
 | `description`        | `string`                                           | `''`        | false    | One or two sentences on what will happen and to what; backticks render as code.                                             |
 | `status`             | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false    | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text.                            |
-| `variant`            | `'default' \| 'danger'`                            | `'default'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                                         |
+| `variant`            | `'primary' \| 'danger'`                            | `'primary'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                                         |
 | `confirmationPhrase` | `string`                                           | `''`        | false    | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
 | `approveLabel`       | `string`                                           | `''`        | false    | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`).          |
 | `denyLabel`          | `string`                                           | `''`        | false    | Text of the deny button. Empty uses the locale catalog (`Deny`).                                                            |

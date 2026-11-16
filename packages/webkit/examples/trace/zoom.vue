@@ -61,7 +61,7 @@
 <template>
   <Trace
     v-model:range="range"
-    v-model:selected="selected"
+    v-model:selected-key="selected"
     :spans="spans"
     zoomable
     aria-label="Trace of the report export"

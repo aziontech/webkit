@@ -62,8 +62,8 @@
     'item-click': [event: MouseEvent | KeyboardEvent, item: SplitButtonItem]
   }>()
 
-  /** Value of the menu action the primary button mirrors when `updateLabelOnSelect` is set (v-model:selected); null shows the default label. */
-  const selectedValue = defineModel<string | null>('selected', { default: null })
+  /** Value of the menu action the primary button mirrors when `updateLabelOnSelect` is set (v-model:selected-key); null shows the default label. */
+  const selectedValue = defineModel<string | null>('selectedKey', { default: null })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ splitButton: en.splitButton })

@@ -1,7 +1,6 @@
 import type {
   Column,
   ColumnOrderState,
-  PaginationState,
   SortingState,
   Table as TanstackTable,
   VisibilityState
@@ -59,7 +58,10 @@ export interface TableAppliedFilter {
 /** JSON-serializable snapshot of every table concern; every field optional for partial restore. */
 export interface TableStateSnapshot {
   sorting?: SortingState
-  pagination?: PaginationState
+  /** Current page, 1-based. */
+  page?: number
+  /** Rows per page. */
+  pageSize?: number
   columnVisibility?: VisibilityState
   columnOrder?: ColumnOrderState
   globalFilter?: string
@@ -87,10 +89,10 @@ export interface TableExposed<TRecord extends object = TableRowRecord> {
     scope?: TableExportButtonScope
     rows?: TRecord[]
   }) => Promise<void>
-  /** Deep-cloned snapshot of sorting, pagination, column visibility and order, search and filters. */
-  getState: () => TableStateSnapshot
-  /** Writes the given concerns back through the same models that back v-model:state. */
-  setState: (next: Partial<TableStateSnapshot>) => void
+  /** Deep-cloned snapshot of sorting, page and page size, column visibility and order, search and filters. */
+  getSnapshot: () => TableStateSnapshot
+  /** Writes the given concerns back through the same models that back v-model:snapshot. */
+  setSnapshot: (next: Partial<TableStateSnapshot>) => void
 }
 
 export interface TableContext {

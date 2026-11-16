@@ -4,15 +4,15 @@ export type ChartLabel = string | number | Date
 
 export type ChartSlot = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
-export type ChartStatus = Exclude<Severity, 'neutral'>
+export type ChartSemanticSeverity = Exclude<Severity, 'neutral'>
 
 export type ChartSeverity =
   'severity-critical' | 'severity-high' | 'severity-medium' | 'severity-low' | 'severity-info'
 
-export type ChartColor = ChartSlot | 'other' | ChartStatus | ChartSeverity
+export type ChartColor = ChartSlot | 'other' | ChartSemanticSeverity | ChartSeverity
 
 /** Tone of a threshold: neutral, the status that reaching it means, or a level on the findings scale. */
-export type ChartThresholdSeverity = 'neutral' | ChartStatus | ChartSeverity
+export type ChartThresholdSeverity = 'neutral' | ChartSemanticSeverity | ChartSeverity
 
 /** One threshold, shared by GaugeChart bands and Chart.Reference lines. */
 export interface ChartThreshold {

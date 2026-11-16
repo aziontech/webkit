@@ -33,14 +33,14 @@
     { accessorKey: 'type', header: 'Type', minWidth: 120 }
   ]
 
-  const expanded = ref({ 'org-1': true })
-  const selection = ref({})
+  const openKeys = ref(['org-1'])
+  const selection = ref([])
 </script>
 
 <template>
   <DataTable
-    v-model:expanded="expanded"
-    v-model:row-selection="selection"
+    v-model:open-keys="openKeys"
+    v-model:selected-keys="selection"
     :data="accounts"
     :columns="columns"
     :get-sub-rows="(row) => row.children"

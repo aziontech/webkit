@@ -18,7 +18,7 @@
   export type { LogoMark }
 
   /** Placement of the band heading. */
-  export type ArticleCardsVariant = 'start' | 'center'
+  export type ArticleCardsAlign = 'start' | 'center'
 
   /** One linked article card. */
   export type ArticleCardsItem = {
@@ -42,7 +42,7 @@
 
   export interface ArticleCardsProps {
     /** Placement of the heading: `start` sets it at the start, `center` centres it over the cards. */
-    variant?: ArticleCardsVariant
+    align?: ArticleCardsAlign
     /** Id set on the band so an in-page hash link can target it. */
     anchor?: string
     /** Eyebrow above the heading. */
@@ -56,7 +56,7 @@
   }
 
   const props = withDefaults(defineProps<ArticleCardsProps>(), {
-    variant: 'start',
+    align: 'start',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -79,7 +79,7 @@
     :data-testid="testId"
     :id="anchor || undefined"
     class="scroll-mt-(--spacing-2xl)"
-    :data-variant="variant"
+    :data-align="align"
     :aria-label="title || undefined"
   >
     <SectionModule
@@ -92,7 +92,7 @@
         #header
       >
         <SectionTitle
-          :variant="variant"
+          :align="align"
           :eyebrow="eyebrow"
           :title="title"
         />

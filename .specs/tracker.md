@@ -3,10 +3,10 @@ name: tracker
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 created: 2026-11-10
-last_updated: 2026-11-15
-checksum: 242cbe7d4735ef12052458bae6b838485ca00ac469dd8470383b1a2b31f24a14
+last_updated: 2026-11-16
+checksum: 4fb4c0e279fec3390e8fed15d17433386aeba524429a692da354dc9b94557c62
 ---
 
 # Tracker — Component Spec
@@ -69,7 +69,7 @@ A status strip: one block per period — a day, an hour, a deployment — colore
 
 | Prop        | Type            | Default | Required | JSDoc                                                                                                                                                   |
 | ----------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`     | `TrackerItem[]` | `[]`    | false    | One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block. |
+| `items`     | `TrackerItem[]` | `[]`    | false    | One block per period, oldest first; each item is `{ id?: string; severity?: ChartSemanticSeverity; label: string }`. No severity renders a neutral no-data block. |
 | `loading`   | `boolean`       | `false` | false    | Renders a Skeleton strip in place of the blocks.                                                                                                        |
 | `error`     | `string`        | `''`    | false    | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens kept under forced colors) in place of the blocks.                   |
 | `ariaLabel` | `string`        | `''`    | false    | Accessible name of the strip.                                                                                                                           |

@@ -765,7 +765,7 @@ describe('Command', () => {
         template: `
         <div>
           <span data-testid="page-value">{{ page }}</span>
-          <Command v-model:open="open" v-model:page="page" shortcut="" @select="onSelect">
+          <Command v-model:open="open" v-model:page-key="page" shortcut="" @select="onSelect">
             <CommandInput placeholder="Search" />
             <CommandList>
               <CommandGroup label="Projects">

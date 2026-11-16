@@ -3,8 +3,9 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import type { Severity } from '../../../utils/severity'
 
-  export type OutcomeIconSeverity = 'success' | 'danger' | 'warning' | 'neutral'
+  export type OutcomeIconSeverity = Exclude<Severity, 'info'>
 
   export type OutcomeIconSize = 'small' | 'medium' | 'large'
 

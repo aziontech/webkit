@@ -3,10 +3,10 @@ name: severity-tag
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: ca9e41f3a34940c39d99e3e8be980ce8d641ddcd2403defc885989646f4b471e
+spec_version: 4
+checksum: 5513e79982a0b8ddf9ab00476861f6538a7f3f31234039eaa19459ce8ff20822
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # SeverityTag — Component Spec
@@ -59,7 +59,7 @@ SeverityTag labels an item with its place on an ordered severity scale: critical
 
 | Prop       | Type                                                  | Default    | Required | JSDoc                                                                                         |
 | ---------- | ----------------------------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------- |
-| `severity` | `'critical' \| 'high' \| 'medium' \| 'low' \| 'info'` | `'info'`   | false    | Severity level on the findings scale (exported as `SeverityTagLevel`, distinct from the shared status `Severity`); sets how many glyph bars fill, their colour and the default label. |
+| `severity` | `'critical' \| 'high' \| 'medium' \| 'low' \| 'info'` | `'info'`   | false    | Severity level on the findings scale (exported as `SeverityTagSeverity`, distinct from the shared status `Severity`); sets how many glyph bars fill, their colour and the default label. |
 | `label`    | `string`                                              | `''`       | false    | Text of the tag. Empty uses the locale catalog (`Critical`, `High`, `Medium`, `Low`, `Info`). |
 | `size`     | `'small' \| 'medium'`                                 | `'medium'` | false    | Size token; `medium` is 24px tall, `small` is 20px.                                           |
 

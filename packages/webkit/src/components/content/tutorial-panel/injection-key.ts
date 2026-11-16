@@ -20,7 +20,7 @@ export interface TutorialPanelTaskData {
 
 /** One tutorial the panel lists and the reader can run. */
 export interface TutorialPanelTutorial {
-  /** Stable identifier, the value of `v-model:active` while this tutorial runs. */
+  /** Stable identifier, the value of `v-model:active-key` while this tutorial runs. */
   id: string
   /** The tutorial's name. */
   title: string

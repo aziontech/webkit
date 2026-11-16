@@ -3,14 +3,14 @@ name: data-grid
 category: data
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 6363933747dbf52420c8b123a5b443dd866ba4b99fc71c7b6475b03ebcfb889b
+checksum: 02e7d95d53e75ff9db3b7123b1f7d4c311657883491bd915ccccc4d8def0491c
 created: 2026-11-15
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # DataGrid — Component Spec
@@ -77,7 +77,7 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
     { id: 'seats', header: 'Seats', type: 'number', align: 'end' },
     { id: 'active', header: 'Active', type: 'boolean' }
   ]
-  const selection = ref({})
+  const selection = ref([])
   let next = 3
   const addRow = () => {
     rows.value = [
@@ -88,14 +88,14 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
   const removeRows = (event, removed) => {
     const ids = new Set(removed.map((row) => row.id))
     rows.value = rows.value.filter((row) => !ids.has(row.id))
-    selection.value = {}
+    selection.value = []
   }
 </script>
 
 <template>
   <DataGrid
     v-model="rows"
-    v-model:row-selection="selection"
+    v-model:selected-keys="selection"
     :columns="columns"
     aria-label="Customers"
     selectable
@@ -125,24 +125,24 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 
 ## Props
 
-| Prop                 | Type               | Default | Required | JSDoc                                                                                                                              |
-| -------------------- | ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `columns`            | `DataGridColumn[]` | `[]`    | false    | Columns in order: `{ id, header, type?, options?, editable?, width?, minWidth?, align? }`; `type` picks the editor (default text). |
-| `rowKey`             | `string`           | `'id'`  | false    | Field used as the stable row id (cursor, selection and edits follow it).                                                           |
-| `selectable`         | `boolean`          | `false` | false    | Adds a leading checkbox column with Select all.                                                                                    |
-| `frozenFirstColumn`  | `boolean`          | `false` | false    | Pins the first data column to the inline start edge while the grid scrolls sideways.                                               |
-| `readonly`           | `boolean`          | `false` | false    | No cell can be edited; the cursor, range selection and copy still work.                                                            |
-| `maxHeight`          | `string`           | `''`    | false    | Max height (CSS length) of the scrolling viewport; the header stays on top.                                                        |
-| `ariaLabel`          | `string`           | `''`    | false    | Accessible name of the grid when no visible heading names it.                                                                      |
+| Prop                | Type               | Default | Required | JSDoc                                                                                                                              |
+| ------------------- | ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `columns`           | `DataGridColumn[]` | `[]`    | false    | Columns in order: `{ id, header, type?, options?, editable?, width?, minWidth?, align? }`; `type` picks the editor (default text). |
+| `rowKey`            | `string`           | `'id'`  | false    | Field used as the stable row id (cursor, selection and edits follow it).                                                           |
+| `selectable`        | `boolean`          | `false` | false    | Adds a leading checkbox column with Select all.                                                                                    |
+| `frozenFirstColumn` | `boolean`          | `false` | false    | Pins the first data column to the inline start edge while the grid scrolls sideways.                                               |
+| `readonly`          | `boolean`          | `false` | false    | No cell can be edited; the cursor, range selection and copy still work.                                                            |
+| `maxHeight`         | `string`           | `''`    | false    | Max height (CSS length) of the scrolling viewport; the header stays on top.                                                        |
+| `ariaLabel`         | `string`           | `''`    | false    | Accessible name of the grid when no visible heading names it.                                                                      |
 
 `DataGridColumn` = `{ id: string; header: string; type?: DataGridColumnType; options?: { label: string; value: string | number }[]; editable?: boolean; width?: number; minWidth?: number; align?: 'start' | 'end' }`, `DataGridColumnType` = `'text' | 'number' | 'boolean' | 'select'`. `DataGridColumnAlign` = `'start' | 'end'`. `width` (px) is the starting width (160 when unset); every header carries a resize handle that drags the width between `minWidth` (64 when unset) and 960 px. The component is generic over its row (`generic="TRow extends object"`), inferred from `v-model`.
 
 ## v-model
 
-| Model                   | Type                      | Default | Emits                 | Notes                                                                                                                   |
-| ----------------------- | ------------------------- | ------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `v-model`               | `TRow[]`                  | `[]`    | `update:modelValue`   | The rows. A committed edit writes a new array with a copy of the edited row.                                            |
-| `v-model:row-selection` | `Record<string, boolean>` | `{}`    | `update:rowSelection` | Selected row ids (the same shape as DataTable's `rowSelection`). Space on the checkbox column and Select all change it. |
+| Model                   | Type       | Default | Emits                 | Notes                                                                                                                                                |
+| ----------------------- | ---------- | ------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`               | `TRow[]`   | `[]`    | `update:modelValue`   | The rows. A committed edit writes a new array with a copy of the edited row.                                                                         |
+| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Keys of the selected rows, read from `rowKey` (the same shape as DataTable's `selectedKeys`). Space on the checkbox column and Select all change it. |
 
 ## Events
 

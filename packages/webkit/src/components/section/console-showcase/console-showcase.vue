@@ -8,9 +8,9 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type {
+    SectionTitleAlign,
     SectionTitlePadding,
-    SectionTitleSize,
-    SectionTitleVariant
+    SectionTitleSize
   } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import type { TextureFade, TextureVariant } from '../../marketing/texture/texture.vue'
@@ -50,7 +50,7 @@
     /** What the panel frames. */
     variant?: ConsoleShowcaseVariant
     /** Layout of the headline block. */
-    titleVariant?: SectionTitleVariant
+    titleAlign?: SectionTitleAlign
     /** Vertical padding of the headline block. */
     titlePadding?: SectionTitlePadding
     /** Step of the headline on the heading scale. */
@@ -81,7 +81,7 @@
 
   const props = withDefaults(defineProps<ConsoleShowcaseProps>(), {
     variant: 'console',
-    titleVariant: 'center',
+    titleAlign: 'center',
     titlePadding: 'medium',
     size: 'medium',
     anchor: '',
@@ -153,7 +153,7 @@
       >
         <SectionTitle
           class="[--section-title-headline-max:var(--container-xl)] [--section-title-headline-span:2]"
-          :variant="titleVariant"
+          :align="titleAlign"
           :padding="titlePadding"
           :size="size"
           :eyebrow="eyebrow"

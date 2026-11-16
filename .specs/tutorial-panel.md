@@ -3,11 +3,11 @@ name: tutorial-panel
 category: content
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: fbab9de7b9aad1c2f00a7438ed6f7598cf4fd7772da24022290c73a4d8f4e858
+checksum: 53c3fba4aaef4d46315611b90d1eb5db556394896c1721c69498fd573b638fed
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # TutorialPanel — Component Spec
@@ -57,7 +57,7 @@ Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit p
 - One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.
 - Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
 - Set `completed` on a tutorial from what the product recorded (the `complete` event), not from a click.
-- Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation.
+- Bind `v-model:activeKey` and `v-model:step` and persist them when a tutorial must survive a navigation.
 
 ## Usage
 
@@ -97,7 +97,7 @@ Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit p
 
 <template>
   <TutorialPanel.Provider
-    v-model:active="active"
+    v-model:active-key="active"
     v-model:step="step"
     :tutorials="tutorials"
   >
@@ -137,10 +137,10 @@ that hosts it owns that), so there is no `Trigger` / `Content`. State flows thro
 `composables/use-tutorial-panel-context.ts`, which throws outside a provider, and `Hotspot` reads it through
 the optional variant, which returns null so a hotspot outside a provider renders only its content.
 
-- `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:active`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step, and the hotspots on the page. Renders only its slot (no element).
+- `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:activeKey`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step, and the hotspots on the page. Renders only its slot (no element).
   - Props: `tutorials?: TutorialPanelTutorial[]` (default `[]`).
-  - Models (`defineModel`): `v-model:active` (`string \| null`, default `null` — the parent owns it when bound, the provider keeps it locally when not), `v-model:step` (`number`, default `0`, same rule; equals the step count once the tutorial is finished).
-  - Events: `update:active` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a `Hotspot` popover, through the context), so the DOM event comes first and the tutorial id second.
+  - Models (`defineModel`): `v-model:activeKey` (`string \| null`, default `null` — the parent owns it when bound, the provider keeps it locally when not), `v-model:step` (`number`, default `0`, same rule; equals the step count once the tutorial is finished).
+  - Events: `update:activeKey` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a `Hotspot` popover, through the context), so the DOM event comes first and the tutorial id second.
   - Slot: `default` — the page, with the panel and every hotspot inside.
 
 - `parts/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an actions row. Provides the task registry (`TutorialTasksInjectionKey`) to its tasks. `data-testid` fallback `tutorial-panel-tasks`; the panel passes `<testId>__tutorial`. `data-completed` mirrors its `completed` prop.
@@ -186,7 +186,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ## Events
 
-_No events on the panel — every action goes through the provider, which emits `start`, `exit`, `complete`, `update:active` and `update:step`._
+_No events on the panel — every action goes through the provider, which emits `start`, `exit`, `complete`, `update:activeKey` and `update:step`._
 
 ## Slots
 

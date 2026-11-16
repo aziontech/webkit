@@ -39,7 +39,7 @@ const columns: DataGridColumn[] = [
 
 const mount = (extra: Record<string, unknown> = {}, dir = 'ltr') => {
   const rows = ref<Row[]>(seed())
-  const selection = ref<Record<string, boolean>>({})
+  const selection = ref<string[]>([])
   const events: Record<string, unknown[][]> = {}
   const record =
     (name: string) =>
@@ -54,8 +54,8 @@ const mount = (extra: Record<string, unknown> = {}, dir = 'ltr') => {
             {
               modelValue: rows.value,
               'onUpdate:modelValue': (next: Row[]) => (rows.value = next),
-              rowSelection: selection.value,
-              'onUpdate:rowSelection': (next: Record<string, boolean>) => (selection.value = next),
+              selectedKeys: selection.value,
+              'onUpdate:selectedKeys': (next: string[]) => (selection.value = next),
               columns,
               ariaLabel: 'Customers',
               onChange: record('change'),
@@ -306,10 +306,10 @@ describe('DataGrid', () => {
     ).toHaveAccessibleName('Select row Jane Doe')
     view.getByTestId('data-grid__select-0').focus()
     await userEvent.keyboard(' ')
-    expect(selection.value).toEqual({ '1': true })
+    expect(selection.value).toEqual(['1'])
     expect(view.getAllByRole('row')[1]?.getAttribute('aria-selected')).toBe('true')
     await userEvent.click(within(view.getByTestId('data-grid__select-all')).getByRole('checkbox'))
-    expect(selection.value).toEqual({ '1': true, '2': true, '3': true })
+    expect(selection.value).toEqual(['1', '2', '3'])
     await expectNoA11yViolations(view.container)
   })
 

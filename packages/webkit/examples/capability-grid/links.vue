@@ -4,7 +4,7 @@
 
 <template>
   <CapabilityGrid
-    title-variant="start"
+    title-align="start"
     eyebrow="Use Cases"
     title="What teams use Application Accelerator for"
     description="Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose."

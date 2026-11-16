@@ -1,5 +1,7 @@
+import type { Severity } from '../../../utils/severity'
+
 /** Colour of a node's status tag. */
-export type TopologyDiagramNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'
+export type TopologyDiagramNodeSeverity = Severity
 
 /** One labelled value in the expanded body of a node. */
 export interface TopologyDiagramNodeField {

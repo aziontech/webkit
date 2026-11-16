@@ -2,6 +2,10 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
 import {
+  MODELS,
+  SEVERITY_EXTRAS,
+  canonicalFor,
+  checkValueSet,
   checkDataAttributes,
   checkEventVocabulary,
   checkPropVocabulary,
@@ -45,6 +49,7 @@ export const RULES = {
   'example-file': { stage: 'staged', decision: 'N13', surface: 'example files' },
   'prop-name': { stage: 'staged', decision: 'N1/N5/N6/api-76', surface: 'props in .vue and specs' },
   'prop-value': { stage: 'staged', decision: 'N2/N3/N5/N7', surface: 'prop value unions' },
+  'model-shape': { stage: 'staged', decision: 'N6', surface: 'two-way models and their seeds' },
   'event-name': { stage: 'staged', decision: 'N18', surface: 'emitted events' },
   'slot-name': { stage: 'staged', decision: 'N7', surface: 'slots' },
   'type-name': { stage: 'staged', decision: 'N1', surface: 'exported types' },
@@ -956,7 +961,226 @@ export function checkIconFile(rel) {
   return problem ? [v('icon-name', rel, 1, `icon file "${name}" ${problem} (${RULE_DOC}).`)] : []
 }
 
-export function checkSfcVocabulary(rel, text, component) {
+function splitTop(text, sep) {
+  const parts = []
+  let depth = 0
+  let quote = null
+  let cur = ''
+  for (const ch of text) {
+    if (quote) {
+      if (ch === quote) quote = null
+    } else if (ch === "'" || ch === '"') quote = ch
+    else if ('<([{'.includes(ch)) depth++
+    else if ('>)]}'.includes(ch)) depth--
+    else if (ch === sep && depth === 0) {
+      parts.push(cur)
+      cur = ''
+      continue
+    }
+    cur += ch
+  }
+  parts.push(cur)
+  return parts.map((x) => x.trim()).filter(Boolean)
+}
+
+export function collectTypes(text, into = new Map()) {
+  for (const m of text.matchAll(
+    /(?:^|\n)\s*(?:export\s+)?type\s+([A-Za-z_$][\w$]*)\s*=\s*([^\n]+(?:\n\s*\|[^\n]+)*)/g
+  )) {
+    if (!into.has(m[1])) into.set(m[1], m[2].replace(/;\s*$/, '').trim())
+  }
+  return into
+}
+
+export function unionResolver(script, types = new Map()) {
+  const local = collectTypes(script)
+  const resolve = (text, depth = 0) => {
+    if (depth > 8) return null
+    const out = []
+    let body = String(text ?? '').trim()
+    if (body.startsWith('|')) body = body.slice(1)
+    for (const part of splitTop(body, '|')) {
+      let m
+      if ((m = part.match(/^'([^']*)'$/) || part.match(/^"([^"]*)"$/))) out.push(m[1])
+      else if (/^(undefined|null|never)$/.test(part)) continue
+      else if ((m = part.match(/^(Exclude|Extract)<([\s\S]+)>$/))) {
+        const [a, b] = splitTop(m[2], ',')
+        const left = resolve(a, depth + 1)
+        const right = resolve(b, depth + 1)
+        if (!left || !right) return null
+        out.push(
+          ...left.filter((x) => (m[1] === 'Exclude' ? !right.includes(x) : right.includes(x)))
+        )
+      } else if (/^[A-Za-z_$][\w$]*$/.test(part)) {
+        const def = local.get(part) ?? types.get(part)
+        if (!def) return null
+        const inner = resolve(def, depth + 1)
+        if (!inner) return null
+        out.push(...inner)
+      } else return null
+    }
+    return out
+  }
+  return resolve
+}
+
+export function extractModels(script) {
+  const out = []
+  for (const m of script.matchAll(/defineModel\s*(<)?/g)) {
+    let i = m.index + m[0].length
+    let type = ''
+    if (m[1]) {
+      let depth = 1
+      const start = i
+      while (i < script.length && depth > 0) {
+        if (script[i] === '<') depth++
+        else if (script[i] === '>' && script[i - 1] !== '=') depth--
+        i++
+      }
+      type = script.slice(start, i - 1).trim()
+    }
+    const rest = script.slice(i).match(/^\s*\(\s*(?:'([A-Za-z][\w]*)'|"([A-Za-z][\w]*)")?/)
+    if (!rest) continue
+    out.push({ name: rest[1] || rest[2] || 'modelValue', type, model: true })
+  }
+  return out
+}
+
+const AXIS_PROP =
+  /^(variant|size|severity|status|orientation)$|[a-z](Variant|Size|Severity|Status|Orientation)$/
+
+export function checkAxisTypeNames(rel, props, component, script = '') {
+  const out = []
+  const local = collectTypes(script)
+  const pascal = kebabToPascal(component)
+  for (const p of props) {
+    if (!AXIS_PROP.test(p.name)) continue
+    const type = String(p.type || '')
+      .replace(/\s*\|\s*(undefined|null)\b/g, '')
+      .trim()
+    if (!/^[A-Z][\w]*$/.test(type) || !local.has(type)) continue
+    const want = `${pascal}${p.name.charAt(0).toUpperCase()}${p.name.slice(1)}`
+    if (type !== want)
+      out.push(
+        v(
+          'type-name',
+          rel,
+          1,
+          `prop "${p.name}" is typed "${type}"; name the union this file declares "${want}" (<Component><Axis>) (${RULE_DOC}).`
+        )
+      )
+  }
+  return out
+}
+
+export function checkAxisTypes(rel, text, names, ctx = {}) {
+  const out = []
+  const resolve = unionResolver(text, ctx.types)
+  for (const m of text.matchAll(
+    /export\s+type\s+([A-Za-z0-9_]+(Severity|Status|Orientation))\s*=\s*([^\n]+(?:\n\s*\|[^\n]+)*)/g
+  )) {
+    const [, name, axis, rhs] = m
+    const line = lineOf(text, m.index)
+    const prop = axis.toLowerCase()
+    const documented = names.some((n) => SEVERITY_EXTRAS[n])
+    if (
+      axis === 'Severity' &&
+      !documented &&
+      splitTop(rhs.trim().replace(/^\|/, ''), '|').some((x) => /^['"]/.test(x))
+    ) {
+      out.push(
+        v(
+          'prop-value',
+          rel,
+          line,
+          `type "${name}" re-lists severity values — derive it from Severity in utils/severity.ts (Severity, Exclude<Severity, …> or Extract<Severity, …>) (${RULE_DOC}).`
+        )
+      )
+      continue
+    }
+    const members = resolve(rhs)
+    if (!members) continue
+    const msgs = names.map((n) => checkValueSet(prop, members, n))
+    if (msgs.every(Boolean)) out.push(v('prop-value', rel, line, `type "${name}": ${msgs[0]}`))
+  }
+  return out
+}
+
+export function checkTemplateModels(rel, text) {
+  const out = []
+  for (const m of templateOf(text).body.matchAll(/v-model:([a-zA-Z][\w-]*)/g)) {
+    const name = kebabToCamel(m[1])
+    const want = Object.hasOwn(MODELS.banned, name) ? MODELS.banned[name] : canonicalFor(name)
+    if (want)
+      out.push(
+        v(
+          'model-shape',
+          rel,
+          lineOf(text, text.indexOf(m[0])),
+          `v-model:${m[1]} is not a WebKit model — use ${Object.hasOwn(MODELS.banned, name) ? want : `v-model:${want}`} (${RULE_DOC}).`
+        )
+      )
+  }
+  return out
+}
+
+export function checkModelShapes(rel, props, models) {
+  const out = []
+  for (const m of models) {
+    if (Object.hasOwn(MODELS.banned, m.name)) {
+      out.push(
+        v(
+          'model-shape',
+          rel,
+          1,
+          `v-model:${m.name} is not allowed — use ${MODELS.banned[m.name]} (${RULE_DOC}).`
+        )
+      )
+      continue
+    }
+    if (MODELS.idWord.test(m.name)) {
+      const want = m.name.replace(/Ids?$/, (x) => (x === 'Ids' ? 'Keys' : 'Key'))
+      out.push(
+        v(
+          'model-shape',
+          rel,
+          1,
+          `model "${m.name}" holds ids — name it "${want}" (an id is a key) (${RULE_DOC}).`
+        )
+      )
+      continue
+    }
+    const shape = MODELS.types.find((x) => x.test.test(m.name))
+    const type = String(m.type || '')
+      .replace(/\s+/g, ' ')
+      .trim()
+    if (shape && type && !shape.type.test(type))
+      out.push(
+        v(
+          'model-shape',
+          rel,
+          1,
+          `model "${m.name}" is typed "${type}"; the ${shape.concept} concept binds ${shape.want} on every component (${RULE_DOC}).`
+        )
+      )
+  }
+  for (const p of props) {
+    if (MODELS.seedPrefix.test(p.name)) {
+      const want = `default${p.name.slice(7)}`
+      out.push(
+        v(
+          'model-shape',
+          rel,
+          1,
+          `seed prop "${p.name}" must be "${want}" (a seed is default<Model>) (${RULE_DOC}).`
+        )
+      )
+    }
+  }
+  return out
+}
+
+export function checkSfcVocabulary(rel, text, component, ctx = {}, root = component) {
   const out = []
   let sfc
   try {
@@ -964,12 +1188,19 @@ export function checkSfcVocabulary(rel, text, component) {
   } catch {
     return out
   }
+  const script = sfc.raw ?? text
   const opts = {
     stage: 'all',
     component,
-    resolveTypeUnion: (t) => resolveTypeUnion(sfc.raw ?? text, t)
+    root,
+    resolveTypeUnion: (t) => resolveTypeUnion(script, t),
+    resolveMembers: unionResolver(script, ctx.types)
   }
-  for (const x of checkPropVocabulary(sfc.props, opts)) out.push(v(x.rule, rel, 1, x.message))
+  const models = extractModels(script)
+  for (const x of checkPropVocabulary([...sfc.props, ...models], opts))
+    out.push(v(x.rule, rel, 1, x.message))
+  out.push(...checkAxisTypeNames(rel, [...sfc.props, ...models], component, script))
+  out.push(...checkModelShapes(rel, sfc.props, models))
   for (const x of checkEventVocabulary(sfc.emits, { stage: 'all' }))
     out.push(v(x.rule, rel, 1, x.message))
   for (const x of checkSlotVocabulary(sfc.slots)) out.push(v(x.rule, rel, 1, x.message))
@@ -1028,7 +1259,7 @@ export function checkTypeNames(rel, text, root) {
   return out
 }
 
-export function checkSpecVocabulary(rel, text) {
+export function checkSpecVocabulary(rel, text, ctx = {}) {
   const out = []
   const name = rel.split('/').pop().replace(/\.md$/, '')
   const body = text.replace(/^---[\s\S]*?---/, '')
@@ -1040,7 +1271,9 @@ export function checkSpecVocabulary(rel, text) {
     .map((r) => ({ name: clean(r.prop), type: r.type ?? '' }))
     .filter((p) => p.name && /^[A-Za-z][\w]*$/.test(p.name))
   const at = (n) => lineOf(text, text.indexOf(`\`${n}\``))
-  for (const x of checkPropVocabulary(props, { stage: 'all', component: name }))
+  const resolve = unionResolver('', ctx.types)
+  const resolveMembers = (t) => resolve(String(t).replace(/`/g, '').replace(/\\\|/g, '|'))
+  for (const x of checkPropVocabulary(props, { stage: 'all', component: name, resolveMembers }))
     out.push(v(x.rule, rel, at(x.prop), x.message))
   const emits = parseTable(getSection(body, 'Events'))
     .map((r) => ({ name: clean(r.event) }))
@@ -1679,7 +1912,7 @@ export function checkFile(rel, text, ctx = {}) {
   if (rel.startsWith('.github/workflows/') && /\.ya?ml$/.test(rel))
     return [...out, ...checkWorkflow(rel, text)]
   if (rel.startsWith('packages/icons/src/svg-raw/')) return [...out, ...checkIconFile(rel)]
-  if (/^\.specs\/[a-z0-9-]+\.md$/.test(rel)) return [...out, ...checkSpecVocabulary(rel, text)]
+  if (/^\.specs\/[a-z0-9-]+\.md$/.test(rel)) return [...out, ...checkSpecVocabulary(rel, text, ctx)]
   out.push(...checkEslintRuleFile(rel), ...checkToolingName(rel))
   if (rel === 'packages/webkit-mcp/src/server.js') out.push(...checkMcpTools(rel, text))
   if (rel === 'packages/webkit/src/cli/cli.js') out.push(...checkCliCommands(rel, text))
@@ -1713,15 +1946,25 @@ export function checkFile(rel, text, ctx = {}) {
   )
     out.push(...checkInjectionKeys(rel, text), ...checkComposableFile(rel, text))
   if (ext === 'vue') {
-    out.push(...checkDomRefs(rel, text), ...checkDataAttributeUsage(rel, text))
+    out.push(
+      ...checkDomRefs(rel, text),
+      ...checkDataAttributeUsage(rel, text),
+      ...checkTemplateModels(rel, text)
+    )
     if (cp && cp.root) {
       out.push(...checkTestid(rel, text))
       const stem = cp.file.replace(/\.vue$/, '')
-      out.push(...checkSfcVocabulary(rel, text, stem))
+      out.push(...checkSfcVocabulary(rel, text, stem, ctx, cp.root))
       out.push(...checkTypeNames(rel, text, cp.root))
     }
   }
-  if (cp && cp.root) out.push(...checkCssVariables(rel, text, cp.root, ctx))
+  if (cp && cp.root) {
+    out.push(...checkCssVariables(rel, text, cp.root, ctx))
+    if (/\.(vue|ts)$/.test(rel)) {
+      const stem = cp.file.replace(/\.(vue|ts)$/, '')
+      out.push(...checkAxisTypes(rel, text, [...new Set([stem, cp.root, cp.category])], ctx))
+    }
+  }
   return out
 }
 
@@ -1845,10 +2088,16 @@ export function loadContext(root) {
     if (stem !== cp.root && cp.segs.length >= 4) parts.push({ name: stem, rel, root: cp.root })
   }
   const cssVarReaders = new Map()
+  const types = new Map()
+  for (const rel of walk(join(root, 'packages/webkit/src/utils'), root, [])) {
+    if (rel.endsWith('.ts') && !isTest(rel))
+      collectTypes(readFileSync(join(root, rel), 'utf8'), types)
+  }
   for (const rel of walk(compRoot, root, [])) {
     const cp = componentPath(rel)
     if (!cp || !cp.root || !/\.(vue|ts|js|css)$/.test(rel) || isTest(rel)) continue
     const text = readFileSync(join(root, rel), 'utf8')
+    if (/\.(vue|ts)$/.test(rel)) collectTypes(text, types)
     for (const m of text.matchAll(/(?:var\(|\()--([a-z0-9-]+)/g)) {
       if (!cssVarReaders.has(m[1])) cssVarReaders.set(m[1], new Set())
       cssVarReaders.get(m[1]).add(cp.root)
@@ -1883,7 +2132,8 @@ export function loadContext(root) {
     tokenKeys,
     specProps,
     cssVarReaders,
-    themeVars
+    themeVars,
+    types
   }
 }
 

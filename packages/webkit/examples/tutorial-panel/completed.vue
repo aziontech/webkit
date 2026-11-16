@@ -38,7 +38,7 @@
 <template>
   <div class="max-w-(--container-xs) rounded-(--shape-card) border border-(--border-default)">
     <TutorialPanel.Provider
-      v-model:active="active"
+      v-model:active-key="active"
       v-model:step="step"
       :tutorials="tutorials"
     >

@@ -54,7 +54,7 @@
   ]
 
   const sorting = ref([])
-  const rowSelection = ref({})
+  const selectedKeys = ref([])
 
   const rowActionGroups = [
     [
@@ -81,7 +81,7 @@
     selectable
     paginated
     :page-size="5"
-    v-model:row-selection="rowSelection"
+    v-model:selected-keys="selectedKeys"
     v-model:sorting="sorting"
     @row-click="onRowClick"
   >

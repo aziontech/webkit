@@ -54,7 +54,7 @@
 
   export type { DateRangeUnit, DateRangeValue, RelativeOption } from './date-range'
 
-  type RangeSize = 'small' | 'medium' | 'large'
+  export type DateRangePickerSize = 'small' | 'medium' | 'large'
   type RangeSelectorMode = 'default' | 'relative-only' | 'absolute-only'
   type PanelMode = 'relative' | 'absolute'
 
@@ -93,7 +93,7 @@
     /** Initial open state of the panel when uncontrolled (v-model:open unbound). */
     defaultOpen?: boolean
     /** Size token of the trigger and the panel controls. */
-    size?: RangeSize
+    size?: DateRangePickerSize
   }
   const props = withDefaults(defineProps<DateRangePickerProps>(), {
     relativeOptions: () => DEFAULT_RELATIVE_OPTIONS,

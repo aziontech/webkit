@@ -3,11 +3,11 @@ name: capability-grid
 category: section
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: c064b707a8ab939dd5f46425bdb366c4823131e596395762ebd7d80e5ea5eef9
+checksum: f78d7e7a127b067d68df6017ad65d664051b6aa43308da6033467eb18f357696
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # CapabilityGrid — Component Spec
@@ -40,7 +40,7 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
 - Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
-- Set `titleVariant: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
+- Set `titleAlign: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Usage
 
@@ -81,7 +81,7 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 | `primaryAction`   | `CapabilityGridAction`  | `undefined` | false    | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                    |
 | `secondaryAction` | `CapabilityGridAction`  | `undefined` | false    | Second button under the section title, `outline`; same shape. Shown only with a label and a link.                                                                                |
 | `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                         |
-| `titleVariant`    | `SectionTitleVariant`   | `'center'`  | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.                  |
+| `titleAlign`      | `SectionTitleAlign`     | `'center'`  | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.                  |
 
 ## Events
 
@@ -96,7 +96,7 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 - Renders nothing without items.
 - Heading level drops to `h3` under a title and rises to `h2` without one.
 - An item with `href` renders its heading as a link that covers the cell.
-- `titleVariant` is passed to the section title as its `variant`; it has no effect on a bare grid.
+- `titleAlign` is passed to the section title as its `align`; it has no effect on a bare grid.
 
 ## Motion & Animations
 
@@ -148,7 +148,7 @@ _none_
 
 - Default — three capabilities with a title and an action.
 - Points — six capabilities with bullet points at four columns.
-- Left title — `titleVariant: 'start'` sets the header at the start edge over the grid.
+- Left title — `titleAlign: 'start'` sets the header at the start edge over the grid.
 - Links — use cases without points, each cell linking to its page.
 
 ## Constraints — DO NOT

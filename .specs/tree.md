@@ -3,11 +3,11 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: ae2e44aa4776796932249ed1c4111ef1d0013547e4cd3eb7672173955ecc28f1
-spec_version: 11
+checksum: 39cbb788c938d0b91b3997d992e8ccec237291a8495166baa845b90433da06af
+spec_version: 12
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Tree — Component Spec
@@ -42,7 +42,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 
 ## Best practices
 
-- Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected` and focus are keyed by it.
+- Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected-key` and focus are keyed by it.
 - Seed `v-model:open-keys` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.
 - Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.
 - Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.
@@ -106,19 +106,19 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 
 ## v-model
 
-| Model                   | Type       | Default | Emits                 | Notes                                                                                                                                                                                                                                                                                                                               |
-| ----------------------- | ---------- | ------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open-keys`     | `string[]` | `[]`    | `update:openKeys`     | Ids of the open parents, via `defineModel<string[]>('openKeys', { default: () => [] })`. Uncontrolled when unbound. Ids of leaves or of unknown nodes are ignored. Collapsing a parent removes only its own id: descendants keep theirs, so re-expanding restores the subtree as it was. Always emits a new array.                  |
-| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Ids of the selected nodes while `selectable="multiple"`, via `defineModel<string[]>('selectedKeys', { default: () => [] })`. Ordered by selection (range and select-all in visible order), without duplicates; emits only when the set changes. Disabled nodes are never added.                                                     |
-| `v-model:selected`      | `string`   | `''`    | `update:selected`     | Id of the selected node, via `defineModel<string>('selected', { default: '' })`. Written only while `selectable`; read only while `selectable` (otherwise no node is marked selected). `''` means nothing is selected. Emits only when the id changes. Single selection only; activating the selected node again does not clear it. |
+| Model                   | Type       | Default | Emits                 | Notes                                                                                                                                                                                                                                                                                                                                  |
+| ----------------------- | ---------- | ------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open-keys`     | `string[]` | `[]`    | `update:openKeys`     | Ids of the open parents, via `defineModel<string[]>('openKeys', { default: () => [] })`. Uncontrolled when unbound. Ids of leaves or of unknown nodes are ignored. Collapsing a parent removes only its own id: descendants keep theirs, so re-expanding restores the subtree as it was. Always emits a new array.                     |
+| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Ids of the selected nodes while `selectable="multiple"`, via `defineModel<string[]>('selectedKeys', { default: () => [] })`. Ordered by selection (range and select-all in visible order), without duplicates; emits only when the set changes. Disabled nodes are never added.                                                        |
+| `v-model:selectedKey`   | `string`   | `''`    | `update:selectedKey`  | Id of the selected node, via `defineModel<string>('selectedKey', { default: '' })`. Written only while `selectable`; read only while `selectable` (otherwise no node is marked selected). `''` means nothing is selected. Emits only when the id changes. Single selection only; activating the selected node again does not clear it. |
 
 ## Events
 
-| Event               | Payload                                                            | Notes                                                                                                                                                                                                                                                                                                                                                              |
-| ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `item-click`        | `(event: MouseEvent \| KeyboardEvent, item: TreeItem)`             | A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selected` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron, inside the `actions` region or in the rename field. With `selectable="multiple"`, Space toggles selection without firing it. |
-| `item-double-click` | `(event: MouseEvent, item: TreeItem)`                              | A row was double-clicked, to open or preview the node. Not fired for a `disabled` node, the chevron, the `actions` region or the rename field. The two clicks before it still fire `item-click`.                                                                                                                                                                   |
-| `rename`            | `(event: KeyboardEvent \| FocusEvent, payload: TreeRenamePayload)` | An in-place rename was submitted (Enter, or the field losing focus) with a trimmed label that is non-empty and differs from `item.label`. `payload.item` is the consumer's node. Escape, an empty label or an unchanged one closes the field without emitting.                                                                                                     |
+| Event               | Payload                                                            | Notes                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `item-click`        | `(event: MouseEvent \| KeyboardEvent, item: TreeItem)`             | A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selectedKey` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron, inside the `actions` region or in the rename field. With `selectable="multiple"`, Space toggles selection without firing it. |
+| `item-double-click` | `(event: MouseEvent, item: TreeItem)`                              | A row was double-clicked, to open or preview the node. Not fired for a `disabled` node, the chevron, the `actions` region or the rename field. The two clicks before it still fire `item-click`.                                                                                                                                                                      |
+| `rename`            | `(event: KeyboardEvent \| FocusEvent, payload: TreeRenamePayload)` | An in-place rename was submitted (Enter, or the field losing focus) with a trimmed label that is non-empty and differs from `item.label`. `payload.item` is the consumer's node. Escape, an empty label or an unchanged one closes the field without emitting.                                                                                                        |
 
 ## Slots
 
@@ -228,7 +228,7 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
 ## Examples
 
 - Default — a bucket-like file tree (folders with nested files three levels deep, glyphs and size descriptions) with one folder seeded in `v-model:open-keys`.
-- Selectable — `selectable` with `v-model:selected` bound and the selected id shown beside the tree; justified because selection changes the row state, the ARIA (`aria-selected`) and the activation behavior.
+- Selectable — `selectable` with `v-model:selected-key` bound and the selected id shown beside the tree; justified because selection changes the row state, the ARIA (`aria-selected`) and the activation behavior.
 - Custom Item — the `item` slot rendering the label with a `Tag` (status) and the `actions` slot rendering an `IconButton` per row; justified because the two scoped slots are the component's only customization surface and need a worked, copy-paste example.
 - Loading — `loading`.
 - Empty — `items` empty, showing the default `EmptyState` with `emptyTitle` / `emptyDescription`; justified because the empty state is a distinct presentation owned by the component.

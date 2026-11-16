@@ -72,7 +72,7 @@
         #header
       >
         <SectionTitle
-          variant="center"
+          align="center"
           :eyebrow="eyebrow"
           :title="title"
         />

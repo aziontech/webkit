@@ -23,7 +23,7 @@
 
 <template>
   <CapabilityGrid
-    title-variant="start"
+    title-align="start"
     title="Why you should be a partner"
     description="Build, sell and deliver modern applications with the Azion team beside you."
     :items="items"

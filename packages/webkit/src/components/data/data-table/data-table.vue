@@ -103,8 +103,6 @@
       selectOnRowClick?: boolean
       /** Render a Pagination in the footer. */
       paginated?: boolean
-      /** Rows per page when paginated. */
-      pageSize?: number
       /** Server-side sorting: emit events, do not sort locally. */
       manualSorting?: boolean
       /** Server-side pagination: emit events, do not slice locally. */
@@ -121,8 +119,8 @@
       error?: string
       /** Fields Table.Filter offers, as facets in the menu or as properties in the property filter. */
       filterFields?: TableFilterField[]
-      /** Uncontrolled seed applied once on mount (per-concern v-model wins over it). */
-      initialState?: Partial<TableStateSnapshot>
+      /** Uncontrolled snapshot seed applied once on mount (per-concern v-model wins over it). */
+      defaultSnapshot?: Partial<TableStateSnapshot>
       /** Default filename for Table.Export and exportCsv(). */
       exportFilename?: string
       /** Rows Table.Export and exportCsv() write for the `filtered` and `all` scopes in place of the rows the table holds; useCollection binds every match, not only the page. */
@@ -160,7 +158,6 @@
       rowSelectable: undefined,
       selectOnRowClick: false,
       paginated: false,
-      pageSize: 10,
       manualSorting: false,
       manualPagination: false,
       manualFiltering: false,
@@ -169,7 +166,7 @@
       loading: false,
       error: '',
       filterFields: () => [],
-      initialState: undefined,
+      defaultSnapshot: undefined,
       exportFilename: 'export.csv',
       exportRows: undefined,
       stackable: false,
@@ -200,20 +197,22 @@
   const data = defineModel<TRow[]>('data', { default: () => [] })
   /** TanStack SortingState (v-model:sorting). */
   const sorting = defineModel<SortingState>('sorting')
-  /** TanStack RowSelectionState (v-model:rowSelection). */
-  const rowSelection = defineModel<RowSelectionState>('rowSelection')
+  /** Keys of the selected rows, read from `rowKey` (v-model:selectedKeys). */
+  const selectedKeys = defineModel<string[]>('selectedKeys')
   /** TanStack VisibilityState (v-model:columnVisibility). */
   const columnVisibility = defineModel<VisibilityState>('columnVisibility')
   /** Search text across every column (v-model:globalFilter). */
   const globalFilter = defineModel<string>('globalFilter')
-  /** TanStack PaginationState (v-model:pagination). */
-  const pagination = defineModel<PaginationState>('pagination')
+  /** Current page, 1-based (v-model:page). */
+  const page = defineModel<number>('page')
+  /** Rows per page when paginated (v-model:pageSize); a new size returns to the first page. */
+  const pageSize = defineModel<number>('pageSize', { default: 10 })
   /** Structured applied conditions, distinct from globalFilter (v-model:filters). */
   const filters = defineModel<TableAppliedFilter[]>('filters')
-  /** Aggregate serializable snapshot layered over the per-concern models (v-model:state). */
-  const state = defineModel<TableStateSnapshot>('state')
-  /** TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }` (v-model:expanded). */
-  const expanded = defineModel<ExpandedState>('expanded')
+  /** Aggregate serializable snapshot layered over the per-concern models (v-model:snapshot). */
+  const snapshotModel = defineModel<TableStateSnapshot>('snapshot')
+  /** Keys of the open tree rows (v-model:openKeys). */
+  const openKeys = defineModel<string[]>('openKeys')
 
   /** Live tail: while true new rows are expected on top; the table scrolls to the newest row and marks the first row older than the live start. Bound with v-model:live; Table.LiveButton toggles it. */
   const live = defineModel<boolean>('live', { default: false })
@@ -272,30 +271,35 @@
   )
 
   const seed = <K extends keyof TableStateSnapshot>(key: K): TableStateSnapshot[K] | undefined =>
-    state.value?.[key] ?? props.initialState?.[key]
+    snapshotModel.value?.[key] ?? props.defaultSnapshot?.[key]
   const internalSorting = ref<SortingState>(sorting.value ?? seed('sorting') ?? [])
-  const internalRowSelection = ref<RowSelectionState>(rowSelection.value ?? {})
+  const keysToRecord = (keys: string[]): Record<string, boolean> =>
+    Object.fromEntries(keys.map((key) => [key, true]))
+  const recordToKeys = (record: Record<string, boolean>): string[] =>
+    Object.keys(record).filter((key) => record[key])
+  const internalRowSelection = ref<RowSelectionState>(keysToRecord(selectedKeys.value ?? []))
   const internalColumnVisibility = ref<VisibilityState>(
     columnVisibility.value ?? seed('columnVisibility') ?? {}
   )
   const internalGlobalFilter = ref<string>(globalFilter.value ?? seed('globalFilter') ?? '')
-  const internalPagination = ref<PaginationState>(
-    pagination.value ?? seed('pagination') ?? { pageIndex: 0, pageSize: props.pageSize }
-  )
+  const internalPagination = ref<PaginationState>({
+    pageIndex: (page.value ?? seed('page') ?? 1) - 1,
+    pageSize: seed('pageSize') ?? pageSize.value
+  })
   const internalColumnOrder = ref<ColumnOrderState>(seed('columnOrder') ?? [])
   const internalFilters = ref<TableAppliedFilter[]>(filters.value ?? seed('filters') ?? [])
-  const internalExpanded = ref<ExpandedState>(expanded.value ?? {})
+  const internalExpanded = ref<Record<string, boolean>>(keysToRecord(openKeys.value ?? []))
   watch(
-    () => expanded.value,
-    (v) => v !== undefined && (internalExpanded.value = v)
+    () => openKeys.value,
+    (v) => v !== undefined && (internalExpanded.value = keysToRecord(v))
   )
   watch(
     () => sorting.value,
     (v) => v && (internalSorting.value = v)
   )
   watch(
-    () => rowSelection.value,
-    (v) => v && (internalRowSelection.value = v)
+    () => selectedKeys.value,
+    (v) => v && (internalRowSelection.value = keysToRecord(v))
   )
   watch(
     () => columnVisibility.value,
@@ -310,17 +314,20 @@
     (v) => v !== undefined && (internalFilters.value = v)
   )
   watch(
-    () => pagination.value,
-    (v) => v && (internalPagination.value = v)
+    () => page.value,
+    (v) => v && (internalPagination.value = { ...internalPagination.value, pageIndex: v - 1 })
   )
+  const writePagination = (next: PaginationState): void => {
+    if (next.pageSize !== internalPagination.value.pageSize)
+      next = { pageIndex: 0, pageSize: (pageSize.value = next.pageSize) }
+    internalPagination.value = next
+    page.value = next.pageIndex + 1
+  }
   watch(
-    () => props.pageSize,
-    (size: number) => {
-      const bound = getCurrentInstance()?.vnode.props
-      if (bound && 'pagination' in bound) return
-      internalPagination.value = { pageIndex: 0, pageSize: size }
-      if (pagination.value) pagination.value = internalPagination.value
-    }
+    () => pageSize.value,
+    (size: number) =>
+      size !== internalPagination.value.pageSize &&
+      writePagination({ pageIndex: 0, pageSize: size })
   )
 
   function applyUpdater<T>(updater: Updater<T>, current: T): T {
@@ -479,7 +486,7 @@
         return sorting.value ?? internalSorting.value
       },
       get rowSelection() {
-        return rowSelection.value ?? internalRowSelection.value
+        return internalRowSelection.value
       },
       get columnVisibility() {
         return columnVisibility.value ?? internalColumnVisibility.value
@@ -488,7 +495,7 @@
         return globalFilter.value ?? internalGlobalFilter.value
       },
       get pagination() {
-        return pagination.value ?? internalPagination.value
+        return internalPagination.value
       },
       get columnFilters() {
         return mappedColumnFilters.value
@@ -497,7 +504,7 @@
         return internalColumnOrder.value
       },
       get expanded() {
-        return expanded.value ?? internalExpanded.value
+        return internalExpanded.value
       }
     },
     getSubRows: (row) => {
@@ -518,9 +525,9 @@
       sorting.value = next
     },
     onRowSelectionChange: (updater: Updater<RowSelectionState>) => {
-      const next = applyUpdater(updater, rowSelection.value ?? internalRowSelection.value)
+      const next = applyUpdater(updater, internalRowSelection.value)
       internalRowSelection.value = next
-      rowSelection.value = next
+      selectedKeys.value = recordToKeys(next)
     },
     onColumnVisibilityChange: (updater: Updater<VisibilityState>) => {
       const next = applyUpdater(updater, columnVisibility.value ?? internalColumnVisibility.value)
@@ -533,18 +540,20 @@
       globalFilter.value = next
     },
     onPaginationChange: (updater: Updater<PaginationState>) => {
-      const next = applyUpdater(updater, pagination.value ?? internalPagination.value)
-      internalPagination.value = next
-      pagination.value = next
+      writePagination(applyUpdater(updater, internalPagination.value))
     },
     onColumnFiltersChange: () => {},
     onColumnOrderChange: (updater: Updater<ColumnOrderState>) => {
       internalColumnOrder.value = applyUpdater(updater, internalColumnOrder.value)
     },
     onExpandedChange: (updater: Updater<ExpandedState>) => {
-      const next = applyUpdater(updater, expanded.value ?? internalExpanded.value)
+      const applied = applyUpdater<ExpandedState>(updater, internalExpanded.value)
+      const next =
+        applied === true
+          ? keysToRecord(table.getCoreRowModel().flatRows.map((row) => row.id))
+          : applied
       internalExpanded.value = next
-      expanded.value = next
+      openKeys.value = recordToKeys(next)
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -674,26 +683,30 @@
     return Promise.resolve()
   }
 
-  const snapshot = (): TableStateSnapshot =>
+  const currentSnapshot = (): TableStateSnapshot =>
     JSON.parse(
       JSON.stringify({
         sorting: table.getState().sorting,
-        pagination: table.getState().pagination,
+        page: table.getState().pagination.pageIndex + 1,
+        pageSize: table.getState().pagination.pageSize,
         columnVisibility: table.getState().columnVisibility,
         columnOrder: internalColumnOrder.value,
         globalFilter: table.getState().globalFilter ?? '',
         filters: appliedFilters.value
       })
     ) as TableStateSnapshot
-  const getState = (): TableStateSnapshot => snapshot()
-  const setState = (next: Partial<TableStateSnapshot>): void => {
+  const getSnapshot = (): TableStateSnapshot => currentSnapshot()
+  const setSnapshot = (next: Partial<TableStateSnapshot>): void => {
     if (next.sorting !== undefined) {
       internalSorting.value = next.sorting
       sorting.value = next.sorting
     }
-    if (next.pagination !== undefined) {
-      internalPagination.value = next.pagination
-      pagination.value = next.pagination
+    if (next.page !== undefined || next.pageSize !== undefined) {
+      internalPagination.value = {
+        pageIndex: (next.page ?? 1) - 1,
+        pageSize: (pageSize.value = next.pageSize ?? pageSize.value)
+      }
+      page.value = next.page ?? 1
     }
     if (next.columnVisibility !== undefined) {
       internalColumnVisibility.value = next.columnVisibility
@@ -712,24 +725,27 @@
     }
   }
 
-  const emitState = useDebounceFn((value: TableStateSnapshot) => (state.value = value), 60)
-  let lastStateJson = ''
+  const emitSnapshot = useDebounceFn(
+    (value: TableStateSnapshot) => (snapshotModel.value = value),
+    60
+  )
+  let lastSnapshotJson = ''
   watch(
-    () => snapshot(),
+    () => currentSnapshot(),
     (value) => {
       const json = JSON.stringify(value)
-      if (json === lastStateJson) return
-      lastStateJson = json
-      emitState(value)
+      if (json === lastSnapshotJson) return
+      lastSnapshotJson = json
+      emitSnapshot(value)
     },
     { deep: true }
   )
   watch(
-    () => state.value,
+    () => snapshotModel.value,
     (value) => {
       if (!value) return
-      if (JSON.stringify(value) === JSON.stringify(snapshot())) return
-      setState(value)
+      if (JSON.stringify(value) === JSON.stringify(currentSnapshot())) return
+      setSnapshot(value)
     },
     { deep: true }
   )
@@ -760,8 +776,8 @@
     reload,
     clearFilters,
     exportCsv: typed<TableExposed<TRow>['exportCsv']>(exportCsv),
-    getState,
-    setState
+    getSnapshot,
+    setSnapshot
   }
   defineExpose(exposed)
 
@@ -777,7 +793,7 @@
   const skeletonRowCount = computed<number>(() => {
     const displayed = props.paginated
       ? rowTotal.value || currentPageSize.value
-      : records().length || props.pageSize
+      : records().length || pageSize.value
     return Math.max(displayed, 1)
   })
 

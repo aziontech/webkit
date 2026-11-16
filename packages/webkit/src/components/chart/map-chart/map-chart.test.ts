@@ -82,7 +82,7 @@ describe('MapChart', () => {
     const view = mount({
       onRegionClick: onRegion,
       onPointClick: onPoint,
-      'onUpdate:activeId': (id: string | null) => ids.push(id)
+      'onUpdate:activeKey': (id: string | null) => ids.push(id)
     })
     await ready(view)
     const plot = view.getByTestId('map-chart__plot')
@@ -97,7 +97,7 @@ describe('MapChart', () => {
     expect(ids).toEqual(['US', 'gru'])
   })
 
-  it('round-trips v-model:activeId from the keyboard and from the parent', async () => {
+  it('round-trips v-model:activeKey from the keyboard and from the parent', async () => {
     const active = ref<string | null>('fra')
     const onPoint = vi.fn()
     const view = render({
@@ -107,8 +107,8 @@ describe('MapChart', () => {
             regions,
             points,
             ariaLabel: 'Requests by country',
-            activeId: active.value,
-            'onUpdate:activeId': (id: string | null) => {
+            activeKey: active.value,
+            'onUpdate:activeKey': (id: string | null) => {
               active.value = id
             },
             onPointClick: onPoint

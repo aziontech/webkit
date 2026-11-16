@@ -156,7 +156,7 @@
           >
             <SectionTitle
               :framed="false"
-              variant="start"
+              align="start"
               size="small"
               :eyebrow="eyebrow"
               :title="title"

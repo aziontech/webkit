@@ -1,7 +1,9 @@
 import { reactive, readonly, ref } from 'vue'
 
+import type { Severity } from '../../../../utils/severity'
+
 /** Colour meaning of a toast, reflected via `data-severity`. */
-export type ToastSeverity = 'neutral' | 'info' | 'success' | 'warning' | 'danger'
+export type ToastSeverity = Severity
 
 /** Corner (or edge-center) a toast (or the whole Toaster) is anchored to. */
 export type ToastPosition =

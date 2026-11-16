@@ -220,7 +220,7 @@
       const parsed: unknown = JSON.parse(text || '{}')
       if (parsed === null || Array.isArray(parsed) || typeof parsed !== 'object') {
         jsonMarkers.value = [
-          { line: 1, severity: 'error', message: 'The arguments must be a JSON object.' }
+          { line: 1, severity: 'danger', message: 'The arguments must be a JSON object.' }
         ]
         return
       }
@@ -230,7 +230,7 @@
       jsonMarkers.value = [
         {
           line: 1,
-          severity: 'error',
+          severity: 'danger',
           message: error instanceof Error ? error.message : 'This is not valid JSON.'
         }
       ]

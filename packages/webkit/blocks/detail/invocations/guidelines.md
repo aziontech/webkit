@@ -32,7 +32,7 @@ A small `SectionHeader`, then a horizontally scrolling surface holding a `FlowDi
 
 ### D. Trace — `Trace` (required)
 
-A small `SectionHeader` over the `Trace` waterfall of the run, its spans nested by `parentId` with a service word and glyph, bound with `v-model:selected` so a node of the request path and a row of the waterfall are one selection. A failed span carries `status: 'error'` and its `message`; a span still going carries `status: 'running'`.
+A small `SectionHeader` over the `Trace` waterfall of the run, its spans nested by `parentId` with a service word and glyph, bound with `v-model:selected-key` so a node of the request path and a row of the waterfall are one selection. A failed span carries `status: 'error'` and its `message`; a span still going carries `status: 'running'`.
 
 ### E. Logs — `SectionHeader`, `StatusIndicator`, `LogViewer`, `LogViewerContent` (required)
 

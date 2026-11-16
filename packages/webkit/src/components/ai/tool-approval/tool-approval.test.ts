@@ -44,6 +44,11 @@ describe('ToolApproval', () => {
     expect(emitted<unknown[]>('deny')![0]![0]).toBeInstanceOf(Event)
   })
 
+  it('defaults to the primary variant', () => {
+    const { getByTestId } = render(ToolApproval, { props: base })
+    expect(getByTestId('tool-approval')).toHaveAttribute('data-variant', 'primary')
+  })
+
   it('uses the approve label and the danger variant', () => {
     const { getByRole, getByTestId } = render(ToolApproval, {
       props: { ...base, variant: 'danger', approveLabel: 'Delete' }

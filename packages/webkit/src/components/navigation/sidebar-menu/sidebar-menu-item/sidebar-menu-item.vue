@@ -3,11 +3,12 @@
 
   import { cn } from '../../../../utils/cn'
   import { directionalIconClass } from '../../../../utils/directional-icons'
+  import type { Severity } from '../../../../utils/severity'
   import Tag from '../../../content/tag/tag.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
 
   /** Status colour of the trailing Tag. */
-  export type SidebarMenuItemTagSeverity = 'neutral' | 'success' | 'info' | 'warning' | 'danger'
+  export type SidebarMenuItemTagSeverity = Severity
 
   /** Brand look of the trailing Tag. */
   export type SidebarMenuItemTagVariant = 'primary' | 'accent'

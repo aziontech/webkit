@@ -3,11 +3,11 @@ name: code-editor
 category: code
 structure: monolithic
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
-checksum: 866ec520a085e7ece8f8d746ba1284871718817cf570f8508468bc628cf6d83c
+checksum: ef750562805739edb235215dabb7ded1c59d5671ffd42bc8b710e048eab9c489
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # CodeEditor — Component Spec
@@ -128,7 +128,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 | `schema`          | `Record<string, unknown>`         | `undefined`   | false    | JSON Schema the value is checked against when `language` is `json` and Monaco is loaded.                      |
 | `ariaLabel`       | `string`                          | `''`          | false    | Accessible name when no `Field` label names it. Empty uses the locale catalog.                                |
 
-Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; endColumn?: number; severity: 'error' | 'warning' | 'info'; message: string }`. `CodeEditorMonaco` is a structural subset of the `monaco-editor` module (`editor.create`, `editor.createDiffEditor`, `editor.createModel`, `editor.defineTheme`, `editor.setTheme`, `editor.setModelMarkers`, `MarkerSeverity`, and the optional `editor.getModelMarkers`, `editor.onDidChangeMarkers`, `json.jsonDefaults`, `languages.getLanguages` / `languages.setMonarchTokensProvider`), so `import('monaco-editor')` satisfies it without WebKit depending on Monaco's types.
+Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; endColumn?: number; severity: 'danger' | 'warning' | 'info'; message: string }`. `CodeEditorMonaco` is a structural subset of the `monaco-editor` module (`editor.create`, `editor.createDiffEditor`, `editor.createModel`, `editor.defineTheme`, `editor.setTheme`, `editor.setModelMarkers`, `MarkerSeverity`, and the optional `editor.getModelMarkers`, `editor.onDidChangeMarkers`, `json.jsonDefaults`, `languages.getLanguages` / `languages.setMonarchTokensProvider`), so `import('monaco-editor')` satisfies it without WebKit depending on Monaco's types.
 
 ## v-model
 
@@ -156,7 +156,7 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 - `data-mode`: `plain` | `loading` | `monaco` — which editor is live
 - `data-invalid`, `data-readonly`, `data-disabled`, `data-diff`, `data-fill`, `data-bordered` mirror their props
 - Borderless (`bordered` false): no border and no radius; the focus ring is drawn inset so a pane edge never clips it
-- Each gutter line with a marker carries `data-severity` (`error` | `warning` | `info`)
+- Each gutter line with a marker carries `data-severity` (`danger` | `warning` | `info`)
 - Diff mode, plain editor: the gutters mark what changed with the same line diff `code-block` draws (`src/utils/line-diff.ts`, one model for both): a removed line carries `data-change="removed"` on the original side, an added line `data-change="added"` on the modified side, tinted `var(--danger)` / `var(--success)` with the `-contrast` number colour; Monaco's diff editor draws its own once it loads
 - Load failure: the plain editor stays and a muted note says the full editor could not load
 

@@ -283,7 +283,7 @@ export function toCodeEditorMarkers(
   column: number
   endLine: number
   endColumn: number
-  severity: 'error' | 'warning' | 'info'
+  severity: 'danger' | 'warning' | 'info'
   message: string
 }[] {
   return markers
@@ -295,7 +295,7 @@ export function toCodeEditorMarkers(
       endColumn: marker.endColumn,
       severity:
         marker.severity >= severity.Error
-          ? ('error' as const)
+          ? ('danger' as const)
           : marker.severity >= severity.Warning
             ? ('warning' as const)
             : ('info' as const),

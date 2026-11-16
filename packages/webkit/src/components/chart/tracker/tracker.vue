@@ -6,7 +6,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { categoryLayout, type ChartStatus, colorToken } from '../lib'
+  import { categoryLayout, type ChartSemanticSeverity, colorToken } from '../lib'
 
   defineOptions({ name: 'Tracker', inheritAttrs: false })
 
@@ -15,13 +15,13 @@
     /** Stable key for the period. */
     id?: string
     /** State of the period. No severity renders a neutral no-data block. */
-    severity?: ChartStatus
+    severity?: ChartSemanticSeverity
     /** Period plus state, read in the readout and announced to assistive tech. */
     label: string
   }
 
   export interface TrackerProps {
-    /** One block per period, oldest first; each item is { id?: string; severity?: ChartStatus; label: string }. No severity renders a neutral no-data block. */
+    /** One block per period, oldest first; each item is { id?: string; severity?: ChartSemanticSeverity; label: string }. No severity renders a neutral no-data block. */
     items?: TrackerItem[]
     /** Renders a Skeleton strip in place of the blocks. */
     loading?: boolean
@@ -56,9 +56,9 @@
   const hasError = computed(() => !props.loading && props.error.length > 0)
   const count = computed(() => (props.loading || hasError.value ? 0 : props.items.length))
   const isEmpty = computed(() => !props.loading && !hasError.value && props.items.length === 0)
-  const statusOf = (item: TrackerItem): ChartStatus | undefined => item.severity
+  const statusOf = (item: TrackerItem): ChartSemanticSeverity | undefined => item.severity
 
-  const WORST: ChartStatus[] = ['danger', 'warning', 'info', 'success']
+  const WORST: ChartSemanticSeverity[] = ['danger', 'warning', 'info', 'success']
   const summary = computed<string>(() => {
     if (props.loading || hasError.value || isEmpty.value) return ''
     const statuses = props.items.map(statusOf)

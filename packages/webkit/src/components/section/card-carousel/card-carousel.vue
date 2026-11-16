@@ -75,7 +75,7 @@
         #header
       >
         <SectionTitle
-          variant="start"
+          align="start"
           size="small"
           :framed="false"
           :eyebrow="eyebrow"

@@ -42,7 +42,7 @@
 
 <template>
   <Trace
-    v-model:selected="selected"
+    v-model:selected-key="selected"
     :spans="spans"
     aria-label="Trace of the checkout run"
   />

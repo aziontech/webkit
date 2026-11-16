@@ -8,7 +8,7 @@
     { id: 'r2', host: 'api.example.com', ttl: 300, proxied: true },
     { id: 'r3', host: 'docs.example.com', ttl: 3600, proxied: false }
   ])
-  const selection = ref({})
+  const selection = ref([])
   let next = 4
 
   const columns = [
@@ -23,14 +23,14 @@
   const removeRows = (event, removed) => {
     const ids = new Set(removed.map((row) => row.id))
     rows.value = rows.value.filter((row) => !ids.has(row.id))
-    selection.value = {}
+    selection.value = []
   }
 </script>
 
 <template>
   <DataGrid
     v-model="rows"
-    v-model:row-selection="selection"
+    v-model:selected-keys="selection"
     :columns="columns"
     aria-label="DNS records"
     selectable

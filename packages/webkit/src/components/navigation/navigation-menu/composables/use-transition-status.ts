@@ -1,11 +1,11 @@
 import { type MaybeRefOrGetter, onScopeDispose, readonly, type Ref, ref, toValue, watch } from 'vue'
 
-export type TransitionStatus = 'starting' | 'ending' | 'idle' | undefined
+export type TransitionPhase = 'starting' | 'ending' | 'idle' | undefined
 
 export interface UseTransitionStatusReturn {
   mounted: Readonly<Ref<boolean>>
   setMounted: (value: boolean) => void
-  transitionStatus: Readonly<Ref<TransitionStatus>>
+  transitionStatus: Readonly<Ref<TransitionPhase>>
 }
 
 export function useTransitionStatus(
@@ -13,7 +13,7 @@ export function useTransitionStatus(
   enableIdleState = false
 ): UseTransitionStatusReturn {
   const mounted = ref(false)
-  const transitionStatus = ref<TransitionStatus>(undefined)
+  const transitionStatus = ref<TransitionPhase>(undefined)
 
   let clearStartingFrame = 0
   let idleFrame = 0
@@ -67,7 +67,7 @@ export function useTransitionStatus(
   })
 
   watch(
-    (): [boolean, TransitionStatus, boolean] => [readOpen(), transitionStatus.value, mounted.value],
+    (): [boolean, TransitionPhase, boolean] => [readOpen(), transitionStatus.value, mounted.value],
     ([isOpen, status, isMounted]) => {
       if (!isOpen || !enableIdleState || !isMounted || status === 'idle') {
         return
@@ -103,6 +103,6 @@ export function useTransitionStatus(
   return {
     mounted: readonly(mounted) as Readonly<Ref<boolean>>,
     setMounted,
-    transitionStatus: readonly(transitionStatus) as Readonly<Ref<TransitionStatus>>
+    transitionStatus: readonly(transitionStatus) as Readonly<Ref<TransitionPhase>>
   }
 }

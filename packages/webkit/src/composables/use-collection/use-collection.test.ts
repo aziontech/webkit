@@ -229,11 +229,13 @@ describe('useCollection — client mode', () => {
     const props = c.tableProps.value
     expect(props.manualPagination).toBe(true)
     expect(props.rowCount).toBe(23)
-    props['onUpdate:rowSelection']({ '1': true, '2': true })
+    expect(props.page).toBe(1)
+    props['onUpdate:selectedKeys'](['1', '2'])
     expect(c.selectedKeys.value).toEqual(['1', '2'])
-    props['onUpdate:pagination']({ pageIndex: 1, pageSize: 10 })
+    props['onUpdate:page'](2)
     expect(c.page.value).toBe(2)
-    props['onUpdate:pagination']({ pageIndex: 0, pageSize: 25 })
+    expect(c.tableProps.value.page).toBe(2)
+    props['onUpdate:pageSize'](25)
     expect(c.pageSize.value).toBe(25)
     props['onUpdate:columnVisibility']({ status: false })
     expect(c.tableProps.value.columnVisibility).toEqual({ status: false })
@@ -508,8 +510,8 @@ describe('useCollection — server mode', () => {
     expect(c.selectedCount.value).toBe(23)
     c.toggleSelection('1', false)
     expect(c.selectedCount.value).toBe(22)
-    expect(c.tableProps.value.rowSelection['1']).toBeUndefined()
-    expect(c.tableProps.value.rowSelection['2']).toBe(true)
+    expect(c.tableProps.value.selectedKeys).not.toContain('1')
+    expect(c.tableProps.value.selectedKeys).toContain('2')
   })
 
   it('exports through exportAll with the current filters, or the loaded page without it', async () => {

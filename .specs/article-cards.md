@@ -3,11 +3,11 @@ name: article-cards
 category: section
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-15
-checksum: 58d65abd0302412f9b47e138075befbeaa8604853fb701f159f95b98a647380e
+last_updated: 2026-11-16
+checksum: 740deb42e1e01d57029323ba2677fef9ba23b3e36fb347bcc2a7ac04fa1814b4
 ---
 
 # ArticleCards — Component Spec
@@ -46,7 +46,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 
 <template>
   <ArticleCards
-    variant="start"
+    align="start"
     title="Related Articles"
     aria-label="Related Articles"
     :items="[
@@ -67,7 +67,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 
 | Prop        | Type                  | Default   | Required | JSDoc                                                                                                                                                |
 | ----------- | --------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`   | `ArticleCardsVariant` | `'start'` | false    | Placement of the heading: `start` sets it at the start, `center` centres it over the cards.                                                          |
+| `align`     | `ArticleCardsAlign`   | `'start'` | false    | Placement of the heading: `start` sets it at the start, `center` centres it over the cards.                                                          |
 | `anchor`    | `string`              | `''`      | false    | Id set on the band so an in-page `#hash` link can target it.                                                                                         |
 | `eyebrow`   | `string`              | `''`      | false    | Eyebrow above the heading.                                                                                                                           |
 | `title`     | `string`              | `''`      | false    | Headline of the band; the band renders no header when empty.                                                                                         |
@@ -85,7 +85,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 ## States
 
 - Visual states: `default`, `hover` (the card lifts to the raised surface and its media scales up), `focus-visible` (inset ring)
-- `data-variant` mirrors the `variant` prop and places the heading
+- `data-align` mirrors the `align` prop and places the heading
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
@@ -153,7 +153,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 ## Examples
 
 - Default
-- Types — composite story rendering both `variant` values stacked.
+- Alignments — composite story rendering both `align` values stacked.
 
 ## Constraints — DO NOT
 

@@ -165,9 +165,15 @@ The full dictionary (concept → canonical name, banned aliases, values) is
 - **The look is `variant`** (N1). Where `kind` meant "which sort of part" (a table cell that is
   a checkbox, a page button that means "next", a chart axis), it is `type`.
 - **Job and step status is `status`** (N5); colour meaning stays `severity`.
-- **`active`** = the page or item you are on (renders `aria-current`); **`selected`** = picked
-  items (`v-model:selected`, `v-model:selectedKeys`); **`open`** = anything that opens
-  (`v-model:open`, and `v-model:openKeys` for the ids of open parts). No `current`, `activated`, `expanded`, `visible`, `show`, `opened` (N6).
+- **`active`** = the page or item you are on (renders `aria-current`); **`selected`** = a
+  picked item (a boolean); **`open`** = anything that opens. An id is a **key**: one id is
+  `v-model:selectedKey` / `v-model:activeKey`, a list is `v-model:selectedKeys` /
+  `v-model:openKeys` (`string[]`). No `current`, `activated`, `expanded`, `visible`, `show`,
+  `opened`, `*Id`, `rowSelection` (N6).
+- **Two-way values are `defineModel`** with one shape per concept: the primary value is the
+  default model (never `v-model:value`), `open` is a boolean seeded by `defaultOpen`, `page` is a
+  1-based number with `pageSize`, and a seed is always `default<Model>` (never `initial<X>`). The
+  table is in [`prop-vocabulary.md`](./prop-vocabulary.md) § Two-way models.
 - **`<part>Position`** takes `leading | trailing` (`iconPosition`); sides and alignment take
   `start | end` (`align: 'start' | 'center' | 'end'`) (N7).
 - **Booleans are positive and unprefixed**: no `is`/`has`, no `hide*` (→ `show<Part>`), no
@@ -192,15 +198,21 @@ The full dictionary (concept → canonical name, banned aliases, values) is
 
 | Concept          | Values                                                                                 |
 | ---------------- | -------------------------------------------------------------------------------------- |
-| Look (`variant`) | `primary · secondary · outline · ghost · danger · link` (a subset per component)       |
+| Look (`variant`) | `primary · secondary · outline · ghost · danger · link` (+ documented extras)          |
 | Size (`size`)    | `small · medium · large`; `tiny` / `xlarge` only for a real 4th step                   |
 | Severity         | `neutral · info · success · warning · danger`                                          |
 | Status           | `pending · running · success · error · canceled · skipped` (+ `streaming` for AI text) |
 | Position         | `leading · trailing`                                                                   |
 | Side, align      | `start · center · end`                                                                 |
+| Orientation      | `horizontal · vertical`                                                                |
 | Selection mode   | `none · single · multiple`                                                             |
 | Logo treatment   | `color · monochrome · knockout`                                                        |
 | Scale steps      | `2xs · xs · sm · md · lg · xl · 2xl · 3xl` (tokens and utilities only)                 |
+
+Five axes are **closed**: a `variant`, `severity`, `status`, `orientation` or `size` union holds
+only shared values or extras the component documents in the vocabulary (see
+[`prop-vocabulary.md`](./prop-vocabulary.md) § Closed value sets). A `variant` made only of
+alignment words is `align`; an exported `*Severity` type derives from `Severity`.
 
 | ✅                               | ❌                                                           |
 | -------------------------------- | ------------------------------------------------------------ |
@@ -475,45 +487,46 @@ One engine checks every rule that a machine can decide, and every rule blocks: t
 (`NAMING_STAGED_BLOCKS` is `true`). The write-time hook blocks a violation a write adds, and
 `check:naming` fails CI on any violation in the tree.
 
-| Rule id            | Checks                                                                         | Decision       |
-| ------------------ | ------------------------------------------------------------------------------ | -------------- |
-| `export-kebab`     | export subpaths and block ids are kebab-case English                           | N18            |
-| `block-id`         | a block's `id` equals its folder path                                          | N9             |
-| `export-synonym`   | no export is a market alias or synonym of another export                       | N12            |
-| `export-retired`   | no retired v6 name (`v6.json`) comes back as an export                         | N12            |
-| `near-duplicate`   | abbreviations, plurals and synonyms in exports, blocks, folders, examples      | N12, N18       |
-| `export-category`  | no category segment in an export key                                           | N11            |
-| `category-folder`  | category folders are singular and in the closed list                           | N11            |
-| `block-path`       | `blocks/<group>/<block>/`, group in the closed list, no surface level          | N9             |
-| `block-word`       | "block", never "pattern" or "template", in titles, catalog keys and MCP tools  | N9             |
-| `block-state`      | block variant names use the state words                                        | N10            |
-| `part-word`        | part suffix in the closed list or a declared domain part; `Body` placement     | N8             |
-| `part-export`      | every part folder has its `<root>-<part>` export                               | N8             |
-| `section-suffix`   | a page section that wraps a primitive (or says band/stack) ends in `-section`  | N12            |
-| `example-file`     | first example is `default.vue`; no banned example file names                   | N13            |
-| `prop-name`        | prop names against the vocabulary (specs and `.vue`)                           | N1, N5, N6     |
-| `prop-value`       | union members against the shared value sets                                    | N2, N3, N5, N7 |
-| `event-name`       | kebab events, no echo, the shared event words                                  | N5             |
-| `slot-name`        | kebab slots; `leading`/`trailing`, never `prefix`/`suffix`/`left`/`right`      | N7             |
-| `type-name`        | no `*Kind` type, no bare `Props`, exported types prefixed by the component     | N1             |
-| `data-attribute`   | kebab `data-*`, no banned attributes                                           | N1, N6, N7     |
-| `testid`           | fallback is the own name; inner parts `__part`; no category prefix             | N11            |
-| `i18n-key`         | camelCase namespaces and keys                                                  | N16            |
-| `injection-key`    | `<Component>[<Part>]InjectionKey` and its `Symbol` description                 | N16            |
-| `composable-file`  | `use-x.ts` exports `useX`                                                      | N16            |
-| `handler-name`     | `onX` handlers in Vue DOM casing, no `handleX`                                 | N16            |
-| `dom-ref-name`     | element refs end in `El` / `Els`                                               | N16            |
-| `private-folder`   | a component's private helpers in `lib/`, never `_lib`, `utils`, `helpers`      | N16            |
-| `css-variable`     | component CSS variables carry the component prefix, no abbreviations           | N16            |
-| `token-name`       | `2xs`/`2xl`, `-foreground`, `code-syntax`, every fill has a foreground pair    | N4, N15        |
-| `icon-name`        | used icon names exist in the icons package; no legacy or `pi` names            | N14            |
-| `file-name`        | kebab files and folders in packages and apps                                   | N18            |
-| `script-name`      | `<verb>:<target>` scripts named after their script file                        | N17            |
-| `filter-name`      | `pnpm --filter` with the full package name                                     | N17            |
-| `workflow-name`    | kebab workflow files; sentence-case names without milestone codes or Storybook | N17            |
-| `eslint-rule-name` | lint rule names start with a verb prefix                                       | N18            |
-| `tooling-name`     | skills, agents and hooks name shapes                                           | N18            |
-| `cli-name`         | CLI commands one word; MCP tools `<verb>_<noun>`                               | N9, N18        |
+| Rule id            | Checks                                                                                 | Decision       |
+| ------------------ | -------------------------------------------------------------------------------------- | -------------- |
+| `export-kebab`     | export subpaths and block ids are kebab-case English                                   | N18            |
+| `block-id`         | a block's `id` equals its folder path                                                  | N9             |
+| `export-synonym`   | no export is a market alias or synonym of another export                               | N12            |
+| `export-retired`   | no retired v6 name (`v6.json`) comes back as an export                                 | N12            |
+| `near-duplicate`   | abbreviations, plurals and synonyms in exports, blocks, folders, examples              | N12, N18       |
+| `export-category`  | no category segment in an export key                                                   | N11            |
+| `category-folder`  | category folders are singular and in the closed list                                   | N11            |
+| `block-path`       | `blocks/<group>/<block>/`, group in the closed list, no surface level                  | N9             |
+| `block-word`       | "block", never "pattern" or "template", in titles, catalog keys and MCP tools          | N9             |
+| `block-state`      | block variant names use the state words                                                | N10            |
+| `part-word`        | part suffix in the closed list or a declared domain part; `Body` placement             | N8             |
+| `part-export`      | every part folder has its `<root>-<part>` export                                       | N8             |
+| `section-suffix`   | a page section that wraps a primitive (or says band/stack) ends in `-section`          | N12            |
+| `example-file`     | first example is `default.vue`; no banned example file names                           | N13            |
+| `prop-name`        | prop names against the vocabulary (specs and `.vue`)                                   | N1, N5, N6     |
+| `prop-value`       | union members against the shared and closed value sets, `Severity`-derived types       | N2, N3, N5, N7 |
+| `model-shape`      | `defineModel` names and types per concept, `default<Model>` seeds, template `v-model:` | N6             |
+| `event-name`       | kebab events, no echo, the shared event words                                          | N5             |
+| `slot-name`        | kebab slots; `leading`/`trailing`, never `prefix`/`suffix`/`left`/`right`              | N7             |
+| `type-name`        | no `*Kind` type, no bare `Props`, exported types prefixed, `<Component><Axis>` unions  | N1             |
+| `data-attribute`   | kebab `data-*`, no banned attributes                                                   | N1, N6, N7     |
+| `testid`           | fallback is the own name; inner parts `__part`; no category prefix                     | N11            |
+| `i18n-key`         | camelCase namespaces and keys                                                          | N16            |
+| `injection-key`    | `<Component>[<Part>]InjectionKey` and its `Symbol` description                         | N16            |
+| `composable-file`  | `use-x.ts` exports `useX`                                                              | N16            |
+| `handler-name`     | `onX` handlers in Vue DOM casing, no `handleX`                                         | N16            |
+| `dom-ref-name`     | element refs end in `El` / `Els`                                                       | N16            |
+| `private-folder`   | a component's private helpers in `lib/`, never `_lib`, `utils`, `helpers`              | N16            |
+| `css-variable`     | component CSS variables carry the component prefix, no abbreviations                   | N16            |
+| `token-name`       | `2xs`/`2xl`, `-foreground`, `code-syntax`, every fill has a foreground pair            | N4, N15        |
+| `icon-name`        | used icon names exist in the icons package; no legacy or `pi` names                    | N14            |
+| `file-name`        | kebab files and folders in packages and apps                                           | N18            |
+| `script-name`      | `<verb>:<target>` scripts named after their script file                                | N17            |
+| `filter-name`      | `pnpm --filter` with the full package name                                             | N17            |
+| `workflow-name`    | kebab workflow files; sentence-case names without milestone codes or Storybook         | N17            |
+| `eslint-rule-name` | lint rule names start with a verb prefix                                               | N18            |
+| `tooling-name`     | skills, agents and hooks name shapes                                                   | N18            |
+| `cli-name`         | CLI commands one word; MCP tools `<verb>_<noun>`                                       | N9, N18        |
 
 ## Review-only
 

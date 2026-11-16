@@ -99,8 +99,8 @@
     highlightSlowest: false
   })
 
-  /** Id of the span whose details show under the waterfall. Supports v-model:selected. */
-  const current = defineModel<string>('selected', { default: '' })
+  /** Id of the span whose details show under the waterfall. Supports v-model:selected-key. */
+  const current = defineModel<string>('selectedKey', { default: '' })
 
   const range = defineModel<TraceRange | null>('range', { default: null })
 

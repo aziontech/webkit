@@ -36,7 +36,7 @@
 
 <template>
   <TutorialPanel.Provider
-    v-model:active="active"
+    v-model:active-key="active"
     v-model:step="step"
     :tutorials="tutorials"
   >

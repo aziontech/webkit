@@ -89,7 +89,7 @@
   <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-md)">
     <Tree
       v-model:open-keys="expanded"
-      v-model:selected="selected"
+      v-model:selected-key="selected"
       :items="items"
       selectable
       aria-label="Bucket objects"

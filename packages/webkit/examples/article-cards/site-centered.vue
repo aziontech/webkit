@@ -51,7 +51,7 @@
     <SectionGap hatch />
 
     <ArticleCards
-      variant="center"
+      align="center"
       anchor="success-cases"
       eyebrow="Success cases"
       title="When our customers succeed, we succeed"

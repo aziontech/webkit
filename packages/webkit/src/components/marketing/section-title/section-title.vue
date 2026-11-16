@@ -10,7 +10,7 @@
   })
 
   /** Layout of the header row. */
-  export type SectionTitleVariant = 'center' | 'start' | 'split'
+  export type SectionTitleAlign = 'start' | 'center' | 'split'
   /** Step of the headline on the heading scale. */
   export type SectionTitleSize = 'small' | 'medium' | 'large'
   /** Vertical padding step of the framed header. */
@@ -37,7 +37,7 @@
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
     /** Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. */
-    variant?: SectionTitleVariant
+    align?: SectionTitleAlign
     /** Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. */
     size?: SectionTitleSize
     /** Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. */
@@ -51,7 +51,7 @@
   const props = withDefaults(defineProps<SectionTitleProps>(), {
     description: '',
     eyebrow: '',
-    variant: 'center',
+    align: 'center',
     size: 'medium',
     framed: true,
     padding: 'medium',
@@ -84,7 +84,7 @@
     :is="frame"
     v-bind="{ ...$attrs, ...frameProps }"
     :data-testid="testId"
-    :data-variant="variant"
+    :data-align="align"
     :data-size="size"
     :data-framed="props.framed || null"
     :data-padding="padding"
@@ -92,10 +92,10 @@
     class="group"
   >
     <div
-      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-2xl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[variant=center]:items-center"
+      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-2xl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[align=center]:items-center"
     >
       <div
-        v-if="variant === 'split'"
+        v-if="align === 'split'"
         class="flex w-full flex-col gap-(--spacing-lg)"
       >
         <Eyebrow
@@ -121,7 +121,7 @@
 
       <div
         v-else
-        class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg) group-data-[variant=center]:items-center group-data-[variant=center]:text-center"
+        class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg) group-data-[align=center]:items-center group-data-[align=center]:text-center"
       >
         <Eyebrow
           v-if="eyebrow"
@@ -144,7 +144,7 @@
 
       <div
         v-if="slots.actions"
-        class="flex w-full max-w-full min-w-0 flex-col items-stretch gap-(--spacing-md) [&>*]:w-full [&>*]:max-w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[variant=center]:justify-center"
+        class="flex w-full max-w-full min-w-0 flex-col items-stretch gap-(--spacing-md) [&>*]:w-full [&>*]:max-w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[align=center]:justify-center"
       >
         <slot name="actions" />
       </div>

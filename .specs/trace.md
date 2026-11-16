@@ -3,11 +3,11 @@ name: trace
 category: code
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: d59f152f33aecff4fb9edda0640005dfcc811c0e7d4e726fe6ef3ea19bd94f3f
+checksum: 229a8b1355966dc05f39c6885648eed25a89e367a7adbbfac3e6ddd358da7d08
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Trace — Component Spec
@@ -45,7 +45,7 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 - Turn on `zoomable` for a run with many short spans next to one long one, so the short ones can be read; bind `v-model:range` when the logs or a chart beside the trace should follow the same window.
 - Use `events` for moments that have no duration of their own (a cache miss, a retry, the first byte), with `at` on the run's clock; keep the names short, they are listed in the details.
 - Turn on `highlightSlowest` where the question is where the time went; the flag goes to the longest span under the root, never to the root itself, which always spans the run.
-- Bind `v-model:selected` when another view (a request path, a log line) selects the same span.
+- Bind `v-model:selected-key` when another view (a request path, a log line) selects the same span.
 - Name the waterfall after the run (`aria-label="Trace of inv_7f21"`).
 
 ## Usage
@@ -72,7 +72,7 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 
 <template>
   <Trace
-    v-model:selected="selected"
+    v-model:selected-key="selected"
     :spans="spans"
     aria-label="Trace of the test run"
   />
@@ -94,10 +94,10 @@ Types (exported from the component): `TraceSpan = { id: string; parentId?: strin
 
 ## v-model
 
-| Model              | Type                 | Default | Emits             | Notes                                                                                                                                                                                                       |
-| ------------------ | -------------------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:selected` | `string`             | `''`    | `update:selected` | Id of the span whose details show under the waterfall, via `defineModel('selected')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
-| `v-model:range`    | `TraceRange \| null` | `null`  | `update:range`    | The visible window of the run clock, via `defineModel('range')`. `null` shows the whole run. Applied with or without `zoomable`; clamped to the run and widened to at least 1% of it.                       |
+| Model                 | Type                 | Default | Emits                | Notes                                                                                                                                                                                                          |
+| --------------------- | -------------------- | ------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:selectedKey` | `string`             | `''`    | `update:selectedKey` | Id of the span whose details show under the waterfall, via `defineModel('selectedKey')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
+| `v-model:range`       | `TraceRange \| null` | `null`  | `update:range`       | The visible window of the run clock, via `defineModel('range')`. `null` shows the whole run. Applied with or without `zoomable`; clamped to the run and widened to at least 1% of it.                          |
 
 ## Events
 

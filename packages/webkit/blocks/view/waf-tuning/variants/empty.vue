@@ -40,7 +40,7 @@
 
   const INITIAL_ROWS: Match[] = []
   const INITIAL_LOADING = false
-  const INITIAL_SELECTION: Record<string, boolean> = {}
+  const INITIAL_SELECTION: string[] = []
   const ALLOW_ON_START = false
   const FAILED_ON_START = false
   const ALLOW_FAILURES = 0
@@ -66,7 +66,7 @@
   const search = ref('')
   const loading = ref(INITIAL_LOADING)
   const loadFailed = ref(LOAD_FAILED_ON_START)
-  const selection = ref({ ...INITIAL_SELECTION })
+  const selection = ref([...INITIAL_SELECTION])
   const sorting = ref([{ id: 'hits', desc: true }])
 
   const rangeLabel = (value: string) => RANGES.find((item) => item.value === value)?.label ?? ''
@@ -84,7 +84,7 @@
       (row) => row.hits >= minimumHits.value
     )
   })
-  const selected = computed(() => rows.value.filter((row) => selection.value[row.ruleId]))
+  const selected = computed(() => rows.value.filter((row) => selection.value.includes(row.ruleId)))
   const pathCount = computed(() => selected.value.reduce((sum, row) => sum + row.paths.length, 0))
   const { formatNumber } = useLocale()
 
@@ -141,7 +141,7 @@
       }
       const created = pathCount.value
       allowOpen.value = false
-      selection.value = {}
+      selection.value = []
       setTimeout(() => resultsEl.value?.focus(), 0)
       toast.success(`${created} allowed ${created === 1 ? 'rule' : 'rules'} created.`, {
         description: 'Requests that match them are no longer blocked by this rule set.'
@@ -274,7 +274,7 @@
               v-else
               ref="tuningTableEl"
               v-model:global-filter="search"
-              v-model:row-selection="selection"
+              v-model:selected-keys="selection"
               v-model:sorting="sorting"
               :data="rows"
               :columns="columns"

@@ -9,7 +9,7 @@
   import { parseInline } from '../lib/parse-markdown'
 
   export type ToolApprovalStatus = 'pending' | 'approved' | 'denied' | 'expired'
-  export type ToolApprovalVariant = 'default' | 'danger'
+  export type ToolApprovalVariant = 'primary' | 'danger'
 
   defineOptions({
     name: 'ToolApproval',
@@ -38,7 +38,7 @@
   const props = withDefaults(defineProps<ToolApprovalProps>(), {
     description: '',
     status: 'pending',
-    variant: 'default',
+    variant: 'primary',
     confirmationPhrase: '',
     approveLabel: '',
     denyLabel: '',
@@ -186,7 +186,7 @@
         />
         <Button
           :label="approveLabel || t('toolApproval.approve')"
-          :variant="variant === 'danger' ? 'danger' : 'primary'"
+          :variant="variant"
           size="medium"
           :disabled="!confirmed"
           :loading="loading"

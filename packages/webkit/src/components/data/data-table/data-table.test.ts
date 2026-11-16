@@ -261,7 +261,7 @@ describe('DataTable', () => {
     })
   })
 
-  describe('row selection (data-driven) — checkbox column + update:rowSelection', () => {
+  describe('row selection (data-driven) — checkbox column + update:selectedKeys', () => {
     it('adds a leading select-all header checkbox and a checkbox per row', () => {
       const { getByLabelText, getAllByLabelText } = render(DataTable, {
         props: { data: rows, columns, selectable: true, rowKey: 'id' }
@@ -272,7 +272,7 @@ describe('DataTable', () => {
       expect(getAllByLabelText('Select row')).toHaveLength(3)
     })
 
-    it('emits update:rowSelection keyed by rowKey when a row checkbox is toggled', async () => {
+    it('emits update:selectedKeys keyed by rowKey when a row checkbox is toggled', async () => {
       const { getAllByLabelText, emitted } = render(DataTable, {
         props: { data: rows, columns, selectable: true, rowKey: 'id' }
       })
@@ -280,21 +280,21 @@ describe('DataTable', () => {
       // Toggle the first row's checkbox (getRowId uses rowKey='id' -> '1').
       await fireEvent.click(getAllByLabelText('Select row')[0])
 
-      const events = emitted()['update:rowSelection'] as unknown[][]
+      const events = emitted()['update:selectedKeys'] as unknown[][]
       expect(events).toBeTruthy()
-      expect(events[events.length - 1][0]).toEqual({ '1': true })
+      expect(events[events.length - 1][0]).toEqual(['1'])
     })
 
-    it('select-all toggles every row via update:rowSelection', async () => {
+    it('select-all toggles every row via update:selectedKeys', async () => {
       const { getByLabelText, emitted } = render(DataTable, {
         props: { data: rows, columns, selectable: true, rowKey: 'id' }
       })
 
       await fireEvent.click(getByLabelText('Select all rows'))
 
-      const events = emitted()['update:rowSelection'] as unknown[][]
-      const latest = events[events.length - 1][0] as Record<string, boolean>
-      expect(latest).toEqual({ '1': true, '2': true, '3': true })
+      const events = emitted()['update:selectedKeys'] as unknown[][]
+      const latest = events[events.length - 1][0] as string[]
+      expect(latest).toEqual(['1', '2', '3'])
     })
 
     it('selectOnRowClick toggles selection when an inert row is clicked', async () => {
@@ -312,8 +312,8 @@ describe('DataTable', () => {
       await fireEvent.click(bodyRow)
 
       // Both the selection change and row-click fire on the inert click.
-      const selection = emitted()['update:rowSelection'] as unknown[][]
-      expect(selection[selection.length - 1][0]).toEqual({ '1': true })
+      const selection = emitted()['update:selectedKeys'] as unknown[][]
+      expect(selection[selection.length - 1][0]).toEqual(['1'])
       expect(emitted()['row-click']).toBeTruthy()
     })
 
@@ -331,20 +331,20 @@ describe('DataTable', () => {
 
       expect(getAllByLabelText('Select row')).toHaveLength(2)
       await fireEvent.click(getAllByRole('row')[1])
-      expect(emitted()['update:rowSelection']).toBeUndefined()
+      expect(emitted()['update:selectedKeys']).toBeUndefined()
       expect(emitted()['row-click']).toBeTruthy()
 
       await fireEvent.click(getByLabelText('Select all rows'))
-      const events = emitted()['update:rowSelection'] as unknown[][]
-      expect(events[events.length - 1][0]).toEqual({ '2': true, '3': true })
+      const events = emitted()['update:selectedKeys'] as unknown[][]
+      expect(events[events.length - 1][0]).toEqual(['2', '3'])
       expect(getByLabelText('Select all rows')).toBeChecked()
     })
   })
 
-  describe('v-model round-trip (controlled rowSelection)', () => {
-    it('reflects a controlled rowSelection prop as the selected row surface', async () => {
+  describe('v-model round-trip (controlled selectedKeys)', () => {
+    it('reflects a controlled selectedKeys prop as the selected row surface', async () => {
       const { getAllByRole, rerender } = render(DataTable, {
-        props: { data: rows, columns, selectable: true, rowKey: 'id', rowSelection: {} }
+        props: { data: rows, columns, selectable: true, rowKey: 'id', selectedKeys: [] }
       })
 
       // Initially nothing selected.
@@ -357,7 +357,7 @@ describe('DataTable', () => {
         columns,
         selectable: true,
         rowKey: 'id',
-        rowSelection: { '2': true }
+        selectedKeys: ['2']
       })
 
       bodyRows = getAllByRole('row').slice(1)
@@ -632,8 +632,8 @@ describe('DataTable', () => {
       const box = within(bar).getByLabelText('Select all rows')
       expect(view.getAllByLabelText('Select all rows')).toHaveLength(1)
       await fireEvent.click(box)
-      const emitted = view.emitted('update:rowSelection') as Record<string, boolean>[][]
-      expect(emitted.at(-1)?.[0]).toEqual({ '1': true, '2': true, '3': true })
+      const emitted = view.emitted('update:selectedKeys') as string[][][]
+      expect(emitted.at(-1)?.[0]).toEqual(['1', '2', '3'])
     })
 
     it('keeps the select-all in the header of the grid', async () => {
@@ -702,7 +702,7 @@ describe('DataTable', () => {
       const host = document.createElement('div')
       host.style.width = '1024px'
       document.body.appendChild(host)
-      const selection = ref<Record<string, boolean>>({})
+      const selection = ref<string[]>([])
       const exported = vi.fn()
       const tableEl = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
       const view = render(
@@ -718,9 +718,8 @@ describe('DataTable', () => {
               manualSorting: true,
               manualFiltering: true,
               manualPagination: true,
-              rowSelection: selection.value,
-              'onUpdate:rowSelection': (value: Record<string, boolean>) =>
-                (selection.value = value),
+              selectedKeys: selection.value,
+              'onUpdate:selectedKeys': (value: string[]) => (selection.value = value),
               onExport: exported
             })
         }),
@@ -731,19 +730,18 @@ describe('DataTable', () => {
 
       await fireEvent.click(view.getByLabelText('Select all rows'))
       await nextTick()
-      expect(Object.keys(selection.value)).toHaveLength(10000)
-      expect(selection.value['9999']).toBe(true)
+      expect(selection.value).toHaveLength(10000)
+      expect(selection.value).toContain('9999')
 
-      const { '42': _dropped, ...rest } = selection.value
-      selection.value = rest
+      selection.value = selection.value.filter((key) => key !== '42')
       await nextTick()
       await fireEvent.click(view.getByLabelText('Select all rows'))
       await nextTick()
-      expect(Object.keys(selection.value)).toHaveLength(10000)
+      expect(selection.value).toHaveLength(10000)
 
       await fireEvent.click(view.getByLabelText('Select all rows'))
       await nextTick()
-      expect(Object.keys(selection.value)).toHaveLength(0)
+      expect(selection.value).toHaveLength(0)
 
       await tableEl.value?.exportCsv({ scope: 'all' })
       expect(exported).toHaveBeenCalledTimes(1)
@@ -1345,7 +1343,7 @@ describe('DataTable', () => {
       expect(sizes(standard.container as HTMLElement)).toEqual(['10', '25', '50', '100'])
     })
 
-    it('moves pages through the footer and emits update:pagination', async () => {
+    it('moves pages through the footer and emits a 1-based update:page', async () => {
       const many = Array.from({ length: 12 }, (_, i) => ({
         id: String(i),
         name: `Row ${i}`,
@@ -1355,9 +1353,37 @@ describe('DataTable', () => {
         props: { columns, data: many, paginated: true, pageSize: 5 }
       })
       await fireEvent.click(view.getByRole('button', { name: 'Next page' }))
-      expect(view.emitted()['update:pagination']?.at(-1)).toEqual([{ pageIndex: 1, pageSize: 5 }])
+      expect(view.emitted()['update:page']?.at(-1)).toEqual([2])
       expect(view.getByText('Row 5')).toBeTruthy()
       expect(view.queryByText('Row 0')).toBeNull()
+    })
+
+    it('shows the page a controlled v-model:page names and returns to page 1 on a new page size', async () => {
+      const many = Array.from({ length: 12 }, (_, i) => ({
+        id: String(i),
+        name: `Row ${i}`,
+        status: 'Active'
+      }))
+      const view = render(DataTable, {
+        props: { columns, data: many, paginated: true, pageSize: 5, page: 3 }
+      })
+      expect(view.getByText('Row 10')).toBeTruthy()
+      expect(view.queryByText('Row 0')).toBeNull()
+      await view.rerender({ columns, data: many, paginated: true, pageSize: 10, page: 3 })
+      expect(view.emitted()['update:page']?.at(-1)).toEqual([1])
+    })
+
+    it('seeds the page and page size from defaultSnapshot', () => {
+      const many = Array.from({ length: 12 }, (_, i) => ({
+        id: String(i),
+        name: `Row ${i}`,
+        status: 'Active'
+      }))
+      const view = render(DataTable, {
+        props: { columns, data: many, paginated: true, defaultSnapshot: { page: 2, pageSize: 5 } }
+      })
+      expect(view.getByText('Row 5')).toBeTruthy()
+      expect(view.queryByText('Row 4')).toBeNull()
     })
 
     it('renders skeleton rows with aria-busy and ignores row clicks while loading', async () => {
@@ -1386,10 +1412,14 @@ describe('DataTable', () => {
       expect(custom.queryByTestId('data-table__empty')).toBeNull()
     })
 
-    it('round-trips getState and setState and mirrors update:state', async () => {
+    it('round-trips getSnapshot and setSnapshot and mirrors update:snapshot', async () => {
       const tableEl = ref<{
-        getState: () => { sorting: unknown[] }
-        setState: (next: { sorting: { id: string; desc: boolean }[] }) => void
+        getSnapshot: () => { sorting: unknown[]; page: number; pageSize: number }
+        setSnapshot: (next: {
+          sorting?: { id: string; desc: boolean }[]
+          page?: number
+          pageSize?: number
+        }) => void
       } | null>(null)
       const states: unknown[] = []
       render(
@@ -1400,18 +1430,24 @@ describe('DataTable', () => {
               columns: [{ accessorKey: 'name', header: 'Name', sortable: true }],
               data: rows,
               sortable: true,
-              'onUpdate:state': (value: unknown) => states.push(value)
+              'onUpdate:snapshot': (value: unknown) => states.push(value)
             })
         })
       )
-      expect(tableEl.value?.getState().sorting).toEqual([])
-      tableEl.value?.setState({ sorting: [{ id: 'name', desc: true }] })
+      expect(tableEl.value?.getSnapshot().sorting).toEqual([])
+      expect(tableEl.value?.getSnapshot().page).toBe(1)
+      expect(tableEl.value?.getSnapshot().pageSize).toBe(10)
+      tableEl.value?.setSnapshot({ sorting: [{ id: 'name', desc: true }] })
       await nextTick()
-      expect(tableEl.value?.getState().sorting).toEqual([{ id: 'name', desc: true }])
+      expect(tableEl.value?.getSnapshot().sorting).toEqual([{ id: 'name', desc: true }])
       await waitFor(() => expect(states.length).toBeGreaterThan(0))
       expect((states.at(-1) as { sorting: unknown[] }).sorting).toEqual([
         { id: 'name', desc: true }
       ])
+      tableEl.value?.setSnapshot({ page: 2, pageSize: 25 })
+      await nextTick()
+      expect(tableEl.value?.getSnapshot().page).toBe(2)
+      expect(tableEl.value?.getSnapshot().pageSize).toBe(25)
     })
 
     it('emits refresh from Table.RefreshButton through the root', async () => {
