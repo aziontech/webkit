@@ -1464,6 +1464,27 @@
       "query": "confirm delete",
       "top1": "confirm-dialog",
       "top3": ["confirm-dialog", "edit/delete-dialog"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "top list",
+      "top1": "bar-list",
+      "top3": ["bar-list"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "ranked list",
+      "top1": "bar-list",
+      "top3": ["bar-list"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "lista ranqueada",
+      "top1": "bar-list",
+      "top3": ["bar-list"]
     }
   ]
 }

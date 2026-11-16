@@ -89,6 +89,20 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
   }
   assert.ok(!names.some((name) => /pattern/.test(name)), 'no tool keeps the old pattern name')
 
+  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8')
+  const undocumented = []
+  for (const tool of list.result.tools) {
+    const row = readme.split('\n').find((line) => line.startsWith(`| \`${tool.name}\``))
+    if (!row) {
+      undocumented.push(`${tool.name}: no row in the README tool table`)
+      continue
+    }
+    for (const arg of Object.keys(tool.inputSchema.properties ?? {})) {
+      if (!row.includes(`\`${arg}\``)) undocumented.push(`${tool.name}: argument ${arg}`)
+    }
+  }
+  assert.deepEqual(undocumented, [], 'document every tool and argument in README.md')
+
   const vocabulary = JSON.parse(
     readFileSync(new URL('../../webkit/catalog.json', import.meta.url), 'utf8')
   ).vocabulary.props
