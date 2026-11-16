@@ -14,9 +14,53 @@
     DEFAULT_PASSWORD_REQUIREMENTS
   } from '@aziontech/webkit/password-requirements'
   import Separator from '@aziontech/webkit/separator'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
+
+  /** The step the card shows. */
+  export type SignInStep = 'email' | 'password' | 'reset' | 'sent' | 'new-password'
+
+  /** An identity provider offered over the email field. */
+  export type SignInProvider = 'google' | 'github'
+
+  /** A sign-in failure with its own copy, severity and Retry rule. */
+  export type SignInFailure = 'bad-credentials' | 'service-unavailable' | 'server-error' | 'timeout'
+
+  /** A neutral or success outcome with its own copy. */
+  export type SignInNoticeKind = 'session-expired' | 'signed-in' | 'password-updated'
+
+  /** The credentials the form sends. */
+  export interface SignInValues {
+    /** The account email. */
+    email: string
+    /** The account password. */
+    password: string
+  }
+
+  export interface SignInProps {
+    /** Values the fields open on, such as the email of an expired session. */
+    defaultValues?: Partial<SignInValues>
+    /** A request is in flight: the step locks, the form is busy and the primary action spins. */
+    loading?: boolean
+    /** Why the last request failed: a failure kind with its own copy, or a message shown as a danger notice with Retry. */
+    error?: SignInFailure | (string & {})
+    /** A non-error outcome for the notice: a notice kind with its own copy, or a message shown as info. */
+    notice?: SignInNoticeKind | (string & {})
+    /** The identity providers are still loading; skeleton bars hold their place. */
+    providersLoading?: boolean
+    /** Where the product mark leads. */
+    homeHref?: string
+    /** Where the Documentation button leads. */
+    docsHref?: string
+    /** Where the Sign up link leads. */
+    signUpHref?: string
+    /** The terms of service page. */
+    termsHref?: string
+    /** The privacy policy page. */
+    privacyHref?: string
+  }
 
   interface CardNotice {
     severity: AlertSeverity
@@ -24,8 +68,31 @@
     retry?: boolean
   }
 
-  const failure: string = ''
-  const failureNotices: Record<string, CardNotice> = {
+  const props = withDefaults(defineProps<SignInProps>(), {
+    defaultValues: () => ({}),
+    loading: false,
+    error: '',
+    notice: '',
+    providersLoading: false,
+    homeHref: '/home',
+    docsHref: '/docs',
+    signUpHref: '/signup',
+    termsHref: 'https://example.com/terms',
+    privacyHref: 'https://example.com/privacy'
+  })
+
+  const emit = defineEmits<{
+    'provider-click': [event: MouseEvent, provider: SignInProvider]
+    continue: [event: Event, email: string]
+    submit: [event: Event, values: SignInValues]
+    'reset-request': [event: Event, email: string]
+    resend: [event: MouseEvent, email: string]
+    'password-reset': [event: Event, password: string]
+  }>()
+
+  const step = defineModel<SignInStep>('step', { default: 'email' })
+
+  const failureNotices: Record<SignInFailure, CardNotice> = {
     'bad-credentials': {
       severity: 'danger',
       label: 'Incorrect email or password. Check both and try again.'
@@ -47,15 +114,47 @@
     }
   }
 
-  const step = ref('email')
-  const returnStep = ref('email')
-  const email = ref('')
-  const password = ref('')
-  const resetEmail = ref('')
+  const outcomeNotices: Record<SignInNoticeKind, CardNotice> = {
+    'session-expired': {
+      severity: 'info',
+      label: 'Your session expired. Sign in again to pick up where you left off.'
+    },
+    'signed-in': { severity: 'success', label: 'Signed in.' },
+    'password-updated': {
+      severity: 'success',
+      label: 'Password updated. Sign in with the new one.'
+    }
+  }
+
+  const noticeFromProps = (): CardNotice | null => {
+    if (props.error) {
+      return (
+        failureNotices[props.error as SignInFailure] ?? {
+          severity: 'danger',
+          label: props.error,
+          retry: true
+        }
+      )
+    }
+    if (props.notice) {
+      return (
+        outcomeNotices[props.notice as SignInNoticeKind] ?? {
+          severity: 'info',
+          label: props.notice
+        }
+      )
+    }
+    return null
+  }
+
+  const returnStep = ref<SignInStep>('email')
+  const email = ref(props.defaultValues.email ?? '')
+  const password = ref(props.defaultValues.password ?? '')
+  const resetEmail = ref(props.defaultValues.email ?? '')
   const newPassword = ref('')
   const confirmPassword = ref('')
-  const cardNotice = ref<CardNotice | null>(null)
-  const verifying = ref(false)
+  const cardNotice = ref<CardNotice | null>(noticeFromProps())
+  const verifying = computed(() => props.loading)
   const errors = reactive({
     email: '',
     password: '',
@@ -68,7 +167,6 @@
   const cardHeight = ref(0)
   const resizing = ref(false)
   let resizeObserver: ResizeObserver | null = null
-  let requestTimer: ReturnType<typeof setTimeout> | undefined
 
   const onCardResize = ([entry]: ResizeObserverEntry[]) => {
     const next = Math.round(entry.contentRect.height)
@@ -84,7 +182,6 @@
 
   onScopeDispose(() => {
     resizeObserver?.disconnect()
-    clearTimeout(requestTimer)
   })
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -130,14 +227,21 @@
 
   const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
-  const request = (done: () => void) => {
-    verifying.value = true
-    clearTimeout(requestTimer)
-    requestTimer = setTimeout(() => {
-      verifying.value = false
-      done()
-    }, 600)
+  const showOutcome = () => {
+    cardNotice.value = noticeFromProps()
+    if (props.error === 'bad-credentials') {
+      password.value = ''
+      focusField('login-password')
+    }
   }
+
+  watch([() => props.error, () => props.notice], showOutcome)
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (before && !now) showOutcome()
+    }
+  )
 
   const backToEmail = () => {
     cardNotice.value = null
@@ -159,13 +263,12 @@
     step.value = returnStep.value
   }
 
-  const resendEmail = () => {
-    request(() => {
-      cardNotice.value = {
-        severity: 'success',
-        label: `We sent another link to ${resetEmail.value}.`
-      }
-    })
+  const resendEmail = (event: MouseEvent) => {
+    emit('resend', event, resetEmail.value)
+    cardNotice.value = {
+      severity: 'success',
+      label: `We sent another link to ${resetEmail.value}.`
+    }
   }
 
   const openResetLink = () => {
@@ -177,29 +280,34 @@
     step.value = 'new-password'
   }
 
-  const signIn = () => {
+  const signIn = (event: Event) => {
     errors.password = password.value ? '' : 'This field is required.'
     if (errors.password) {
       focusField('login-password')
       return
     }
-    request(() => {
-      cardNotice.value = failureNotices[failure] ?? { severity: 'success', label: 'Signed in.' }
-    })
+    cardNotice.value = null
+    emit('submit', event, { email: email.value.trim(), password: password.value })
   }
 
-  const onPrimary = () => {
+  const onPrimary = (event: Event) => {
     if (verifying.value) return
     cardNotice.value = null
     if (step.value === 'email') {
       errors.email = emailError(email.value)
       if (errors.email) focusField('login-email')
-      else request(() => (step.value = 'password'))
-    } else if (step.value === 'password') signIn()
+      else {
+        emit('continue', event, email.value.trim())
+        step.value = 'password'
+      }
+    } else if (step.value === 'password') signIn(event)
     else if (step.value === 'reset') {
       errors.resetEmail = emailError(resetEmail.value)
       if (errors.resetEmail) focusField('reset-email')
-      else request(() => (step.value = 'sent'))
+      else {
+        emit('reset-request', event, resetEmail.value.trim())
+        step.value = 'sent'
+      }
     } else if (step.value === 'new-password') {
       errors.newPassword = newPasswordError(newPassword.value)
       errors.confirmPassword = !confirmPassword.value
@@ -209,17 +317,12 @@
           : "Passwords don't match."
       if (errors.newPassword || errors.confirmPassword)
         focusField(errors.newPassword ? 'new-password' : 'confirm-password')
-      else
-        request(() => {
-          email.value = resetEmail.value
-          password.value = ''
-          returnStep.value = 'password'
-          step.value = 'password'
-          cardNotice.value = {
-            severity: 'success',
-            label: 'Password updated. Sign in with the new one.'
-          }
-        })
+      else {
+        email.value = resetEmail.value
+        password.value = ''
+        returnStep.value = 'password'
+        emit('password-reset', event, newPassword.value)
+      }
     } else backToSignIn()
   }
 </script>
@@ -232,7 +335,7 @@
     >
       <AppHeader.Brand>
         <a
-          href="/home"
+          :href="homeHref"
           aria-label="Azion home"
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
@@ -249,7 +352,7 @@
           variant="outline"
           size="medium"
           icon="ai ai-book"
-          href="/docs"
+          :href="docsHref"
         />
       </AppHeader.End>
     </AppHeader>
@@ -316,7 +419,19 @@
                           v-if="step === 'email'"
                           class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
                         >
-                          <div class="flex flex-col gap-(--spacing-sm)">
+                          <div
+                            v-if="providersLoading"
+                            role="status"
+                            aria-label="Preparing sign-in providers"
+                            class="flex flex-col gap-(--spacing-sm)"
+                          >
+                            <Skeleton height="2.5rem" />
+                            <Skeleton height="2.5rem" />
+                          </div>
+                          <div
+                            v-else
+                            class="flex flex-col gap-(--spacing-sm)"
+                          >
                             <Button
                               type="button"
                               label="Continue with Google"
@@ -324,6 +439,9 @@
                               size="large"
                               icon="ai-color ai-google"
                               class="w-full"
+                              @click="
+                                (event: MouseEvent) => emit('provider-click', event, 'google')
+                              "
                             />
                             <Button
                               type="button"
@@ -332,6 +450,9 @@
                               size="large"
                               icon="ai ai-github"
                               class="w-full"
+                              @click="
+                                (event: MouseEvent) => emit('provider-click', event, 'github')
+                              "
                             />
                           </div>
 
@@ -559,7 +680,7 @@
                 <p class="text-body-xs text-(--text-default)">Don't have an account?</p>
                 <a
                   class="text-link text-body-xs"
-                  href="/signup"
+                  :href="signUpHref"
                   >Sign up</a
                 >
               </div>
@@ -569,7 +690,7 @@
                   By continuing, I agree to the
                   <a
                     class="text-link"
-                    href="https://example.com/terms"
+                    :href="termsHref"
                     target="_blank"
                     rel="noopener noreferrer"
                     >terms of service</a
@@ -577,7 +698,7 @@
                   and
                   <a
                     class="text-link"
-                    href="https://example.com/privacy"
+                    :href="privacyHref"
                     target="_blank"
                     rel="noopener noreferrer"
                     >privacy policy</a

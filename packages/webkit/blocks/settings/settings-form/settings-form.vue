@@ -12,7 +12,46 @@
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, nextTick, onScopeDispose, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+
+  import { sampleProfile } from './sample'
+
+  /** The saved profile, and the values a save sends. */
+  export interface SettingsFormProfile {
+    /** The name shown across the account. */
+    fullName: string
+    /** Sign-in and notification address. */
+    email: string
+    /** Timezone option value. */
+    timezone: string
+    /** Interface language option value. */
+    language: string
+    /** Occasional product emails. */
+    productUpdates: boolean
+  }
+
+  export interface SettingsFormProps {
+    /** The saved profile; the form opens on it and Discard returns to it. Left out, the sample renders. */
+    profile?: SettingsFormProfile
+    /** Unsaved edits the form opens with on top of the profile, so it starts dirty. */
+    defaultDraft?: Partial<SettingsFormProfile>
+    /** The save is in flight: the fieldset and Discard lock and Save spins. */
+    loading?: boolean
+    /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<SettingsFormProps>(), {
+    profile: undefined,
+    defaultDraft: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: SettingsFormProfile]
+    discard: [event: MouseEvent]
+  }>()
 
   const timezones = [
     { label: '(UTC+00:00) UTC', value: 'utc' },
@@ -29,18 +68,11 @@
   const labelOf = (list: SelectOptionItem[]) => (value: string) =>
     list.find((option) => option.value === value)?.label ?? ''
 
-  const form = reactive({
-    fullName: 'Alex Morgan',
-    email: '',
-    timezone: 'utc',
-    language: 'en',
-    productUpdates: true
-  })
-  const failing = false
+  const saved = computed<SettingsFormProfile>(() => props.profile ?? sampleProfile)
+  const form = reactive<SettingsFormProfile>({ ...saved.value })
   const SAVE_TOAST = 'profile-save'
   const submitted = ref(false)
-  const submitting = ref(false)
-  let saveTimer: ReturnType<typeof setTimeout> | undefined
+  const submitting = computed(() => props.loading)
 
   const {
     isDirty: dirty,
@@ -50,42 +82,69 @@
     onDiscard: (baseline) => Object.assign(form, baseline)
   })
 
-  onScopeDispose(() => clearTimeout(saveTimer))
+  Object.assign(form, props.defaultDraft)
+
+  watch(
+    () => JSON.stringify(saved.value),
+    () => {
+      Object.assign(form, saved.value)
+      commit()
+    }
+  )
 
   const nameEmpty = computed(() => !form.fullName.trim())
   const emailEmpty = computed(() => !form.email.trim())
   const emailInvalid = computed(() => !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim()))
   const isValid = computed(() => !nameEmpty.value && !emailInvalid.value)
 
-  const submit = () => {
+  const submit = (event: Event) => {
     if (submitting.value) return
     submitted.value = true
     if (!isValid.value) {
       nextTick(() => document.getElementById(nameEmpty.value ? 'full-name' : 'email')?.focus())
       return
     }
-    submitting.value = true
     toast.dismiss(SAVE_TOAST)
-    clearTimeout(saveTimer)
-    saveTimer = setTimeout(() => {
-      submitting.value = false
-      if (failing) {
-        toast.error("The profile wasn't saved.", {
-          id: SAVE_TOAST,
-          description: "The request didn't reach the server. Your changes are kept.",
-          action: { label: 'Retry', onClick: () => submit() }
-        })
+    emit('submit', event, { ...form })
+  }
+
+  const showFailure = () => {
+    toast.error("The profile wasn't saved.", {
+      id: SAVE_TOAST,
+      description: props.error,
+      action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
+    })
+  }
+
+  onMounted(() => {
+    if (props.error) showFailure()
+  })
+
+  watch(
+    () => props.error,
+    (next) => {
+      if (next && !props.loading) showFailure()
+    }
+  )
+
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (!before || now) return
+      if (props.error) {
+        showFailure()
         return
       }
       commit()
       submitted.value = false
       toast.success('Profile saved.', { id: SAVE_TOAST })
-    }, 900)
-  }
+    }
+  )
 
-  const discard = () => {
+  const discard = (event: MouseEvent) => {
     restore()
     submitted.value = false
+    emit('discard', event)
   }
 </script>
 
