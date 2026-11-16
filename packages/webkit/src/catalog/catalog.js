@@ -73,8 +73,13 @@ function readSource(baseDir, file) {
 
 export function hydratePart(part, readText) {
   if (!part) return part
-  const { sfcFile, guidelinesFile, ...out } = part
+  const { sfcFile, guidelinesFile, fileSources, ...out } = part
   if (sfcFile) out.sfc = readText(sfcFile)
+  if (fileSources) {
+    out.files = Object.fromEntries(
+      Object.entries(fileSources).map(([name, file]) => [name, readText(file)])
+    )
+  }
   if (guidelinesFile) out.guidelines = readText(guidelinesFile)
   for (const key of ['variants', 'examples']) {
     if (!Array.isArray(out[key])) continue

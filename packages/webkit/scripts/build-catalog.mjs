@@ -797,6 +797,11 @@ export function splitCatalog(full) {
       delete part.guidelines
       part.guidelinesFile = `blocks/${id}/${GUIDELINE_FILE}`
     }
+    if (part.files !== undefined) {
+      const dir = dirname(p.source)
+      part.fileSources = Object.fromEntries(Object.keys(part.files).map((f) => [f, `${dir}/${f}`]))
+      delete part.files
+    }
     part.variants = (p.variants || []).map(({ sfc, ...v }) => v)
     meta.variants = (p.variants || []).map((v) => ({ name: v.name }))
     meta.file = file
