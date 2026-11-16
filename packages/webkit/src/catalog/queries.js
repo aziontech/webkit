@@ -1205,9 +1205,16 @@ export function suggestComponent(catalog, need, { surface } = {}) {
       normalize(component.best.name) === nq ||
       normalize(component.best.aliasOf ?? component.best.renamedFrom ?? '') === nq)
   const exactBlock = topBlock && topBlock.score >= EXACT_BLOCK_SCORE
+  const namedComponent =
+    !screenIntent &&
+    component.best &&
+    conceptHits(catalog, q).has(component.best.name) &&
+    !(catalog.blocks[topBlock?.id]?.imports || []).includes(
+      `${catalog.prefix}${component.best.name}`
+    )
   if (
     topBlock &&
-    (exactBlock || !exactComponent) &&
+    (exactBlock || (!exactComponent && !namedComponent)) &&
     (screenIntent ? topBlock.score >= 25 : topBlock.score >= 60)
   ) {
     return {
