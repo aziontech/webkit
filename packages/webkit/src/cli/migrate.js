@@ -309,6 +309,10 @@ function renameAttributes(attrs, rules) {
           const value = dq ? dv : sv
           if (rule.moves && Object.hasOwn(rule.moves, value))
             return `${sp}${kebab(rule.moves[value])}${eq}${q}${value}${q}`
+          if (rule.expand && Object.hasOwn(rule.expand, value))
+            return `${sp}${Object.entries(rule.expand[value])
+              .map(([prop, next]) => `${kebab(prop)}${eq}${q}${next}${q}`)
+              .join(' ')}`
           const mapped = rule.values && value in rule.values ? rule.values[value] : value
           if (rule.values && (mapped === 'true' || mapped === 'false')) {
             return `${sp}:${toKebab}${eq}${q}${mapped}${q}`
