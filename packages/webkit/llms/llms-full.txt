@@ -82,7 +82,7 @@ use it, so you can check a choice against a real one.
 | Surfaces | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised` | page, cards and panels, `Avatar`, striped `Table` rows |
 | Inverted surface | `--bg-contrast`, `--text-contrast` | `Tooltip`, `Tag variant="contrast"` |
 | Behind a modal | `--bg-backdrop` | `Dialog`, `Drawer` |
-| Status message | `--success`, `--warning`, `--danger`, `--info` with `-border` and `-contrast` | `Alert`, `Tag`, `Badge`, `Trace` spans, `Button variant="danger"`. The fill is the box, `-border` its edge, `-contrast` its icon or text. A status dot is the `-contrast` color (`StatusIndicator`). |
+| Status message | `--success`, `--warning`, `--danger`, `--info` with `-border`, `-foreground` and `-mark` | `Alert`, `Tag`, `Badge`, `Trace` spans, `Button variant="danger"`. The fill is the box, `-border` its edge, `-foreground` its icon or text. A status mark that stands on the page (the `StatusIndicator` dot, the `OutcomeIcon` disc) is `-mark`. |
 | Severity | `--severity-critical`, `-high`, `-medium`, `-low` | the bars of `SeverityTag` only |
 | Links | `--text-link`, `--text-link-hover` | `Button variant="link"`, links in text |
 | Form field outline | `--border-input` | the resting and disabled outline of `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `OtpInput`, the date fields, `Checkbox`, `RadioGroup`, `Switch` |
@@ -90,6 +90,61 @@ use it, so you can check a choice against a real one.
 
 Defined but not used by any component yet: `--accent-mask`, `--accent-selected`,
 `--bg-surface-overlay`, `--severity-info`. Do not build on them until a component does.
+
+## Contrast: APCA and WCAG 2
+
+Every colour pair passes **both** WCAG 2.1 AA (4.5:1 text, 3:1 large text, icons and UI marks) and
+APCA (0.0.98G-4g, the `|Lc|` value):
+
+| What sits on the colour | APCA target | Examples |
+| --- | --- | --- |
+| Body text | Lc 75 | `--text-default` on the surfaces |
+| Other text (labels, captions, button text) | Lc 60 | `--text-muted`, links, every `-foreground` on its fill |
+| Icons | Lc 45 | status icons in `--success-foreground` … on a surface |
+| Solid marks (dots, bars, chart series) | Lc 30 | `--chart-series-*`, `--severity-*`, `--border-selected`, the ring |
+| Borders and dividers | Lc 15 | `--border-default`, `--border-muted`, `--border-input` |
+
+The theme test `packages/theme/test/apca-contrast.test.mjs` computes Lc for these pairs on
+`--bg-canvas`, `--bg-surface` and `--bg-surface-raised` in light and dark, and fails a pair below
+its target unless it is listed here. A new token pair, or a value change, must pass before it ships.
+
+Exceptions (the one list; `accepted` means the owner chose the look, `open` waits for a decision):
+
+| Pair | Theme | Lc | Status | Reason |
+| --- | --- | --- | --- | --- |
+| `--primary-foreground` on `--primary` | light, dark | 46.6 | accepted | The black label on the logo orange `#F3652B` matches the logo (2026-11-14). WCAG 6.71:1 passes. |
+| `--border-default` on the surfaces | dark | 0 | accepted | Dark dividers keep the original `#2B2B2B` look (2026-11-16). Form outlines stay `--border-input` `#535353`. |
+| `--border-muted` on the surfaces | dark | 0 | accepted | Dark muted dividers keep the original `#242424` look (2026-11-16). |
+| `--text-brand` on the surfaces | dark | 43.5–44.3 | accepted | The `Eyebrow` label stays the logo orange `#F3652B` in dark. Light uses primary-700 `#B03C02` and passes. |
+| `--border-muted` on `--bg-canvas` | light | 13.3 | open | Light muted divider on the page canvas. |
+| `--text-muted` on `--bg-surface-raised` | dark | 59.9 | open | Dark muted text in menus and popovers. |
+| `--border-input` on `--bg-surface-raised` | dark | 14.6 | open | Dark field outline inside a raised panel. |
+
+Do not "fix" an accepted pair; do not add a pair to this list without the design owner's decision.
+
+## Chart palettes
+
+WebKit ships **one** chart palette: the values of the `--chart-*` tokens. There are no alternate
+palettes in `@aziontech/theme`. An app that offers other palettes (the console API's palette picker)
+sets these variables on the dashboard's root element, and every chart inside re-colours:
+
+| A palette may set | A palette never sets |
+| --- | --- |
+| `--chart-series-1` … `--chart-series-8` | `--chart-series-other` (the grey a ninth series folds into) |
+| `--chart-sequential-1` (lowest) … `--chart-sequential-7` | `--chart-status-*` and `--severity-*` (they mean a state) |
+| `--chart-diverging-negative`, `--chart-diverging-neutral`, `--chart-diverging-positive` | `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*` (the chrome) |
+
+- **Both themes.** A palette supplies a light and a dark value for every variable it sets (set the
+  dark values under `[data-theme='dark']`); a half palette breaks the theme switch.
+- **Same checks as the default.** Every series value clears 3:1 (WCAG) and Lc 30 (APCA) on
+  `--bg-surface`, `--bg-canvas` and `--chart-tooltip-bg` in its theme, the eight series are eight
+  distinct colours, and a series keeps its hue family across the theme switch. These are the checks
+  `packages/theme/test/chart-role.test.mjs` and `apca-contrast.test.mjs` run on the default.
+- **Eight series, then Other.** A palette has at most eight series; a chart with more folds the
+  rest into `--chart-series-other`. A palette never adds `--chart-series-9`.
+- **Where.** On your own root element, or on a webkit tag as a static `style`, an object-literal
+  `:style` or `[--chart-series-1:…]` classes; `webkit/no-style-override` allows exactly these
+  variables (`CHART_PALETTE_VARIABLES` in `@aziontech/webkit/eslint-plugin`) and nothing else.
 
 ## Use a variant only when the component has it
 
@@ -122,7 +177,7 @@ The full token catalog is generated by `@aziontech/theme`. If you need a color t
 
 ## Token groups
 
-735 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
+739 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
 
 | Group | Count | Tokens |
 | --- | --- | --- |
@@ -138,13 +193,13 @@ The full token catalog is generated by `@aziontech/theme`. If you need a color t
 | code | 9 | `--code-editor-line-height` · `--code-syntax-comment` · `--code-syntax-function` · `--code-syntax-identifier` · `--code-syntax-keyword` · `--code-syntax-line-number` · `--code-syntax-punctuation` · `--code-syntax-string` · `--code-syntax-type` |
 | color | 213 | `--color-absolute-black` · `--color-absolute-white` · `--color-alpha-absolute-black` · `--color-alpha-absolute-white` · `--color-alpha-black-100` · `--color-alpha-black-200` · `--color-alpha-black-300` · `--color-alpha-black-400` · `--color-alpha-black-50` · `--color-alpha-black-500` · `--color-alpha-black-600` · `--color-alpha-black-700` · `--color-alpha-black-800` · `--color-alpha-black-900` · `--color-alpha-blue-100` · `--color-alpha-blue-200` · `--color-alpha-blue-300` · `--color-alpha-blue-400` · `--color-alpha-blue-50` · `--color-alpha-blue-500` · `--color-alpha-blue-600` · `--color-alpha-blue-700` · `--color-alpha-blue-800` · `--color-alpha-blue-900` · `--color-alpha-green-100` · `--color-alpha-green-200` · `--color-alpha-green-300` · `--color-alpha-green-400` · `--color-alpha-green-50` · `--color-alpha-green-500` · `--color-alpha-green-600` · `--color-alpha-green-700` · `--color-alpha-green-800` · `--color-alpha-green-900` · `--color-alpha-orange-100` · `--color-alpha-orange-200` · `--color-alpha-orange-300` · `--color-alpha-orange-400` · `--color-alpha-orange-50` · `--color-alpha-orange-500` · `--color-alpha-orange-600` · `--color-alpha-orange-700` · `--color-alpha-orange-800` · `--color-alpha-orange-900` · `--color-alpha-red-100` · `--color-alpha-red-200` · `--color-alpha-red-300` · `--color-alpha-red-400` · `--color-alpha-red-50` · `--color-alpha-red-500` · `--color-alpha-red-600` · `--color-alpha-red-700` · `--color-alpha-red-800` · `--color-alpha-red-900` · `--color-alpha-violet-100` · `--color-alpha-violet-200` · `--color-alpha-violet-300` · `--color-alpha-violet-400` · `--color-alpha-violet-50` · `--color-alpha-violet-500` · `--color-alpha-violet-600` · `--color-alpha-violet-700` · `--color-alpha-violet-800` · `--color-alpha-violet-900` · `--color-alpha-white-100` · `--color-alpha-white-200` · `--color-alpha-white-300` · `--color-alpha-white-400` · `--color-alpha-white-50` · `--color-alpha-white-500` · `--color-alpha-white-600` · `--color-alpha-white-700` · `--color-alpha-white-800` · `--color-alpha-white-900` · `--color-alpha-yellow-100` · `--color-alpha-yellow-200` · `--color-alpha-yellow-300` · `--color-alpha-yellow-400` · `--color-alpha-yellow-50` · `--color-alpha-yellow-500` · `--color-alpha-yellow-600` · `--color-alpha-yellow-700` · `--color-alpha-yellow-800` · `--color-alpha-yellow-900` · `--color-base-black` · `--color-base-white` · `--color-blue-100` · `--color-blue-200` · `--color-blue-300` · `--color-blue-400` · `--color-blue-50` · `--color-blue-500` · `--color-blue-600` · `--color-blue-700` · `--color-blue-800` · `--color-blue-900` · `--color-blue-950` · `--color-brand-accent-100` · `--color-brand-accent-200` · `--color-brand-accent-300` · `--color-brand-accent-400` · `--color-brand-accent-50` · `--color-brand-accent-500` · `--color-brand-accent-600` · `--color-brand-accent-700` · `--color-brand-accent-800` · `--color-brand-accent-900` · `--color-brand-accent-950` · `--color-brand-primary-100` · `--color-brand-primary-200` · `--color-brand-primary-300` · `--color-brand-primary-400` · `--color-brand-primary-50` · `--color-brand-primary-500` · `--color-brand-primary-600` · `--color-brand-primary-700` · `--color-brand-primary-800` · `--color-brand-primary-900` · `--color-brand-primary-950` · `--color-gray-100` · `--color-gray-150` · `--color-gray-200` · `--color-gray-250` · `--color-gray-275` · `--color-gray-300` · `--color-gray-400` · `--color-gray-50` · `--color-gray-500` · `--color-gray-600` · `--color-gray-650` · `--color-gray-700` · `--color-gray-750` · `--color-gray-775` · `--color-gray-800` · `--color-gray-900` · `--color-gray-950` · `--color-green-100` · `--color-green-200` · `--color-green-300` · `--color-green-400` · `--color-green-50` · `--color-green-500` · `--color-green-600` · `--color-green-700` · `--color-green-800` · `--color-green-900` · `--color-green-950` · `--color-indigo-100` · `--color-indigo-200` · `--color-indigo-300` · `--color-indigo-400` · `--color-indigo-50` · `--color-indigo-500` · `--color-indigo-600` · `--color-indigo-700` · `--color-indigo-800` · `--color-indigo-900` · `--color-indigo-950` · `--color-orange-100` · `--color-orange-200` · `--color-orange-300` · `--color-orange-400` · `--color-orange-50` · `--color-orange-500` · `--color-orange-600` · `--color-orange-700` · `--color-orange-800` · `--color-orange-900` · `--color-orange-950` · `--color-red-100` · `--color-red-200` · `--color-red-300` · `--color-red-400` · `--color-red-50` · `--color-red-500` · `--color-red-600` · `--color-red-700` · `--color-red-800` · `--color-red-900` · `--color-red-950` · `--color-slate-100` · `--color-slate-200` · `--color-slate-300` · `--color-slate-400` · `--color-slate-50` · `--color-slate-500` · `--color-slate-600` · `--color-slate-700` · `--color-slate-800` · `--color-slate-900` · `--color-slate-950` · `--color-violet-100` · `--color-violet-200` · `--color-violet-300` · `--color-violet-400` · `--color-violet-50` · `--color-violet-500` · `--color-violet-600` · `--color-violet-700` · `--color-violet-800` · `--color-violet-900` · `--color-violet-950` · `--color-yellow-100` · `--color-yellow-200` · `--color-yellow-300` · `--color-yellow-400` · `--color-yellow-50` · `--color-yellow-500` · `--color-yellow-600` · `--color-yellow-700` · `--color-yellow-800` · `--color-yellow-900` · `--color-yellow-950` |
 | container | 13 | `--container-2xl` · `--container-2xs` · `--container-3xl` · `--container-3xs` · `--container-4xl` · `--container-5xl` · `--container-6xl` · `--container-7xl` · `--container-lg` · `--container-md` · `--container-sm` · `--container-xl` · `--container-xs` |
-| danger | 3 | `--danger` · `--danger-border` · `--danger-foreground` |
+| danger | 4 | `--danger` · `--danger-border` · `--danger-foreground` · `--danger-mark` |
 | direction | 1 | `--direction-sign` |
 | drop | 6 | `--drop-shadow-2xl` · `--drop-shadow-lg` · `--drop-shadow-md` · `--drop-shadow-sm` · `--drop-shadow-xl` · `--drop-shadow-xs` |
 | ease | 7 | `--ease-expressive-entrance` · `--ease-expressive-exit` · `--ease-in` · `--ease-in-out` · `--ease-out` · `--ease-productive-entrance` · `--ease-productive-exit` |
 | font | 12 | `--font-code` · `--font-display` · `--font-sans` · `--font-weight-black` · `--font-weight-bold` · `--font-weight-extrabold` · `--font-weight-extralight` · `--font-weight-light` · `--font-weight-medium` · `--font-weight-normal` · `--font-weight-semibold` · `--font-weight-thin` |
 | illustration | 21 | `--illustration-accent` · `--illustration-block` · `--illustration-code-keyword` · `--illustration-code-punctuation` · `--illustration-danger` · `--illustration-ground` · `--illustration-highlight` · `--illustration-info` · `--illustration-info-surface` · `--illustration-ink` · `--illustration-ink-muted` · `--illustration-line` · `--illustration-line-muted` · `--illustration-line-strong` · `--illustration-primary` · `--illustration-success` · `--illustration-success-surface` · `--illustration-surface` · `--illustration-surface-raised` · `--illustration-warning` · `--illustration-warning-surface` |
-| info | 3 | `--info` · `--info-border` · `--info-foreground` |
+| info | 4 | `--info` · `--info-border` · `--info-foreground` · `--info-mark` |
 | inset | 3 | `--inset-shadow-2xs` · `--inset-shadow-sm` · `--inset-shadow-xs` |
 | layout | 15 | `--layout-boundary-end` · `--layout-boundary-inline` · `--layout-boundary-start` · `--layout-column-measure` · `--layout-group-gap` · `--layout-header-height` · `--layout-measure` · `--layout-measure-content` · `--layout-measure-control` · `--layout-measure-focused` · `--layout-measure-form` · `--layout-measure-form-create` · `--layout-measure-site` · `--layout-measure-site-header` · `--layout-section-gap` |
 | leading | 6 | `--leading-loose` · `--leading-none` · `--leading-normal` · `--leading-relaxed` · `--leading-snug` · `--leading-tight` |
@@ -159,11 +214,11 @@ The full token catalog is generated by `@aziontech/theme`. If you need a color t
 | shape | 4 | `--shape-button` · `--shape-card` · `--shape-control` · `--shape-flat` |
 | size | 28 | `--size-10` · `--size-11` · `--size-12` · `--size-14` · `--size-16` · `--size-2` · `--size-20` · `--size-24` · `--size-28` · `--size-3` · `--size-32` · `--size-36` · `--size-4` · `--size-40` · `--size-44` · `--size-48` · `--size-5` · `--size-52` · `--size-56` · `--size-6` · `--size-60` · `--size-64` · `--size-7` · `--size-72` · `--size-8` · `--size-80` · `--size-9` · `--size-96` |
 | spacing | 36 | `--spacing-1` · `--spacing-10` · `--spacing-11` · `--spacing-12` · `--spacing-14` · `--spacing-16` · `--spacing-2` · `--spacing-20` · `--spacing-24` · `--spacing-28` · `--spacing-2xl` · `--spacing-2xs` · `--spacing-3` · `--spacing-32` · `--spacing-36` · `--spacing-4` · `--spacing-40` · `--spacing-44` · `--spacing-48` · `--spacing-5` · `--spacing-52` · `--spacing-56` · `--spacing-6` · `--spacing-60` · `--spacing-64` · `--spacing-7` · `--spacing-72` · `--spacing-8` · `--spacing-80` · `--spacing-9` · `--spacing-96` · `--spacing-lg` · `--spacing-md` · `--spacing-sm` · `--spacing-xl` · `--spacing-xs` |
-| success | 3 | `--success` · `--success-border` · `--success-foreground` |
+| success | 4 | `--success` · `--success-border` · `--success-foreground` · `--success-mark` |
 | text | 195 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-brand` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-primary` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
 | tracking | 6 | `--tracking-normal` · `--tracking-tight` · `--tracking-tighter` · `--tracking-wide` · `--tracking-wider` · `--tracking-widest` |
 | transition | 8 | `--transition-duration-fast-01` · `--transition-duration-fast-02` · `--transition-duration-moderate-01` · `--transition-duration-moderate-02` · `--transition-duration-slow-01` · `--transition-duration-slow-02` · `--transition-duration-slow-03` · `--transition-duration-slow-04` |
-| warning | 3 | `--warning` · `--warning-border` · `--warning-foreground` |
+| warning | 4 | `--warning` · `--warning-border` · `--warning-foreground` · `--warning-mark` |
 | z | 2 | `--z-control` · `--z-control-overlay` |
 
 ---
@@ -406,10 +461,10 @@ End with: `theme-safe (both themes)` or `N gaps — fix before verifying`.
 | text | 195 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-brand` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-primary` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
 | border | 11 | `--border-default` · `--border-input` · `--border-muted` · `--border-selected` · `--border-strong` · `--border-width-0` · `--border-width-1` · `--border-width-2` · `--border-width-3` · `--border-width-4` · `--border-width-default` |
 | ring | 2 | `--ring-color` · `--ring-offset` |
-| success | 3 | `--success` · `--success-border` · `--success-foreground` |
-| warning | 3 | `--warning` · `--warning-border` · `--warning-foreground` |
-| danger | 3 | `--danger` · `--danger-border` · `--danger-foreground` |
-| info | 3 | `--info` · `--info-border` · `--info-foreground` |
+| success | 4 | `--success` · `--success-border` · `--success-foreground` · `--success-mark` |
+| warning | 4 | `--warning` · `--warning-border` · `--warning-foreground` · `--warning-mark` |
+| danger | 4 | `--danger` · `--danger-border` · `--danger-foreground` · `--danger-mark` |
+| info | 4 | `--info` · `--info-border` · `--info-foreground` · `--info-mark` |
 | severity | 5 | `--severity-critical` · `--severity-high` · `--severity-info` · `--severity-low` · `--severity-medium` |
 | chart | 31 | `--chart-axis` · `--chart-crosshair` · `--chart-diverging-negative` · `--chart-diverging-neutral` · `--chart-diverging-positive` · `--chart-grid` · `--chart-label` · `--chart-sequential-1` · `--chart-sequential-2` · `--chart-sequential-3` · `--chart-sequential-4` · `--chart-sequential-5` · `--chart-sequential-6` · `--chart-sequential-7` · `--chart-series-1` · `--chart-series-2` · `--chart-series-3` · `--chart-series-4` · `--chart-series-5` · `--chart-series-6` · `--chart-series-7` · `--chart-series-8` · `--chart-series-other` · `--chart-status-danger` · `--chart-status-info` · `--chart-status-success` · `--chart-status-warning` · `--chart-tooltip-bg` · `--chart-tooltip-border` · `--chart-tooltip-muted` · `--chart-tooltip-text` |
 | code | 9 | `--code-editor-line-height` · `--code-syntax-comment` · `--code-syntax-function` · `--code-syntax-identifier` · `--code-syntax-keyword` · `--code-syntax-line-number` · `--code-syntax-punctuation` · `--code-syntax-string` · `--code-syntax-type` |
@@ -701,7 +756,7 @@ does (5 → 3 + 2, 7 → 3 + 3 + 1; under four, 7 → 4 + 3): a stretched last c
 wider card. `layout="fixed"` is for tiles whose width must not change (square logo walls, a cell
 spanning rows or columns, a floor that keeps its track count).
 
-**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooter` as its last
+**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooterSection` as its last
 child, unwrapped — a page never adds one. The page ends on its bottom bar at every width: the brand
 leads the social row from `md`; on phones there is no wordmark row and the status line stacks over
 the language select.
@@ -1219,6 +1274,10 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   the webkit types already accept it.
 - Never disable browser zoom (`user-scalable=no`, `maximum-scale=1`).
 - Never rely on color alone for a status: pair it with a label or an icon with a name.
+- Never pick a colour pair by eye. Every pair passes **both** WCAG 2.1 AA (4.5:1 text, 3:1 icons
+  and marks) and APCA: Lc 75 body text, Lc 60 other text, Lc 45 icons, Lc 30 solid marks, Lc 15
+  borders. Use the theme's token pairs (they pass); the few accepted exceptions are listed in
+  `webkit-tokens.md` § "Contrast: APCA and WCAG 2".
 - Never strip the underline from a link inside a sentence (`text-link`, `no-underline`): the link blue is
   only 1.1–1.3:1 against muted body text and 3:1 against default text, so color alone fails WCAG 1.4.1.
   `text-link` keeps a quiet underline at rest and strengthens it on hover. A standalone `Link` (not in a
@@ -1308,8 +1367,8 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`). A page sets its own
   trail, control crumb included, with `ConsoleLayout.Breadcrumb`, and a full-height workspace puts
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
-- **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeader` and `SiteFooter` data. The
-  site is dark: `<html data-theme="dark">`. `SiteFooter` binds its language select with
+- **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeaderSection` and `SiteFooterSection` data. The
+  site is dark: `<html data-theme="dark">`. `SiteFooterSection` binds its language select with
   `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline-groups`, and `actions`,
   `navigation-footer`, `aside`, `footer` slots. The document scrolls. The page feeds the "On this
@@ -1324,8 +1383,8 @@ The shell blocks (`shell/console`, `shell/site`, `shell/docs`) are these layouts
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
 `npx @aziontech/webkit add shell/console` writes the block into your views folder and prints the
 path (`src/views/console.vue`): move that file to `src/App.vue`, and skip the route it suggests.
-A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeader`,
-`SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
+A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeaderSection`,
+`SiteFooterSection` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
 create flow (`create/*`, headed by the `top-bar/creation-bar` bar) or a
 signed-out screen (`auth/sign-in`): route it outside the layout (a route meta `App.vue` reads), and
 it keeps its own bar and `<main>` (`webkit-navigation`). An app with two surfaces (a marketing site
@@ -1531,7 +1590,7 @@ Logos, compliance badges and illustrations ship in the package: import the file 
 `logo: magalu`). Names follow `<brand>-<extended|symbol>-<color|mono|reversed>` (`extended` is the
 wordmark, `symbol` the mark; `color` for light surfaces, `reversed` for dark ones, `mono` in one
 ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. A client wall
-(`ClientQuotes`, `LogoWall`) on the dark site shows each brand in colour: `-extended-color` where it
+(`ClientQuotesSection`, `LogoWall`) on the dark site shows each brand in colour: `-extended-color` where it
 reads on black (GPA, Zoop, HeroSpark, Magalu), `-extended-reversed` where the colour logo has dark
 lettering (Axur, Contabilizei, Dafiti, Global Fashion Group); a one-ink registry `mark` only for a client with no
 logo file. Photos, covers,
@@ -1611,13 +1670,13 @@ has to reject the wrong one.
 
 Pass the name to `Illustration` (`name`) or to a section that shows one (`illustration`).
 
-68 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
+60 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
 
-Used by: FeatureScroll, FeatureTabs, FeatureTiles, FeatureWidgets, HeroSection, Illustration, MediaSplitSection, MediaSplitStackSection, SitePage.
+Used by: FeatureScrollSection, FeatureTabsSection, FeatureTilesSection, FeatureWidgetsSection, HeroSection, Illustration, MediaSplitSection, MediaSplitStackSection, SitePage.
 
 ## Names
 
-`ai-applications` · `ai-gateway` · `api-endpoints` · `automate-threat-mitigation` · `azion-highlight` · `azion-rest-api` · `azion-to-akamai` · `azion-to-aws` · `azion-to-cloudflare` · `azion-to-commerce-tiles` · `azion-to-fastly` · `azion-to-vercel` · `branches` · `build-applications` · `build-databases-from-code` (deprecated, use `sql-sdk-code-cards`) · `chat-and-headset-tiles` · `combine-data-and-vector-search` · `content-and-media-delivery` · `content-and-media-delivery-globe` · `custom-allowed-rules` · `custom-rules-mitigation` · `data-stream-destinations-map` · `ddos-protection` · `deploy-secure-mcp-server` · `detect-and-classify` · `distributed-apis` · `distributed-apis-tile` · `distributed-sql-for-resilient-global-reads` (deprecated, use `globe-with-sql-nodes`) · `dns-protection` · `enable-owasp-protection-with-customizable-rules` (deprecated, use `waf-threat-families-panel`) · `fastest-path-to-live-website` · `global-network` · `globe-with-sql-nodes` · `implement-api-gateway-security` · `improve-application-performance-and-reliability` · `infrastructure-as-code` · `intent-to-policy` · `live-debugging` · `low-latency` · `mitigation-actions` · `modern-frontends` · `multi-format-optimization-with-automatic-detection` · `network-lists-rules-engine` · `no-idle-no-waste` · `personal-tokens` · `preview` · `profiles-per-application` · `programmable-security` · `protect-financial-applications` · `quick-start-with-templates` · `read-at-the-edge` · `real-time-metrics-error-rate` · `real-time-metrics-status-codes` · `replicated-reads` · `reputation-intelligence-for-enhanced-protection` (deprecated, use `reputation-rings-hub`) · `reputation-rings-hub` · `request-inspection` · `retail-application-modernization` · `runtime` · `saas-platforms` (deprecated, use `azion-to-commerce-tiles`) · `sql-sdk-code-cards` · `stay-in-control` (deprecated, use `traffic-and-cost-bar-chart`) · `stream-security-events-for-investigation-and-response` (deprecated, use `data-stream-destinations-map`) · `traffic-and-cost-bar-chart` · `url-based-transformations-without-api-complexity` · `usage-chart` · `waf-threat-families-panel` · `white-gloves-when-it-matters` (deprecated, use `chat-and-headset-tiles`)
+`ai-applications` · `ai-gateway` · `api-endpoints` · `automate-threat-mitigation` · `azion-highlight` · `azion-rest-api` · `azion-to-akamai` · `azion-to-aws` · `azion-to-cloudflare` · `azion-to-commerce-tiles` · `azion-to-fastly` · `azion-to-vercel` · `branches` · `build-applications` · `chat-and-headset-tiles` · `combine-data-and-vector-search` · `content-and-media-delivery` · `content-and-media-delivery-globe` · `custom-allowed-rules` · `custom-rules-mitigation` · `data-stream-destinations-map` · `ddos-protection` · `deploy-secure-mcp-server` · `detect-and-classify` · `distributed-apis` · `distributed-apis-tile` · `dns-protection` · `fastest-path-to-live-website` · `global-network` · `globe-with-sql-nodes` · `implement-api-gateway-security` · `improve-application-performance-and-reliability` · `infrastructure-as-code` · `intent-to-policy` · `live-debugging` · `low-latency` · `mitigation-actions` · `modern-frontends` · `multi-format-optimization-with-automatic-detection` · `network-lists-rules-engine` · `no-idle-no-waste` · `personal-tokens` · `preview` · `profiles-per-application` · `programmable-security` · `protect-financial-applications` · `quick-start-with-templates` · `read-at-the-edge` · `real-time-metrics-error-rate` · `real-time-metrics-status-codes` · `replicated-reads` · `reputation-rings-hub` · `request-inspection` · `retail-application-modernization` · `runtime` · `sql-sdk-code-cards` · `traffic-and-cost-bar-chart` · `url-based-transformations-without-api-complexity` · `usage-chart` · `waf-threat-families-panel`
 
 Descriptions: foundations/illustrations.md.
 
@@ -1633,7 +1692,7 @@ Pass the name to `Diagram` (`name`) or to a section that shows one; the label is
 
 28 names. These are the only values the components accept. An unknown name draws nothing. The MCP tool `list_assets({ kind: "diagrams" })` returns the same list (with a `query` to filter), and `catalog.json#assets.diagrams` points at it as data.
 
-Used by: ArchitectureTabs, Diagram, FeatureScroll, FeatureTabs, FeatureWidgets, MediaSplitSection, MediaSplitStackSection, SitePage.
+Used by: ArchitectureTabsSection, Diagram, FeatureScrollSection, FeatureTabsSection, FeatureWidgetsSection, MediaSplitSection, MediaSplitStackSection, SitePage.
 
 ## Names
 
@@ -1669,11 +1728,11 @@ Descriptions: foundations/line-figures.md.
 
 > Client, analyst and framework marks drawn as theme-aware SVG.
 
-Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`); the label is the accessible name.
+Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name.
 
 60 names. These are the only values the components accept. An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark. The MCP tool `list_assets({ kind: "brandMarks" })` returns the same list (with a `query` to filter), and `catalog.json#assets.brandMarks` points at it as data.
 
-Used by: ClientQuotes, Hero, HeroFormSection, HeroSection, Marquee, QuoteTabs, SitePage, TemplateGallery.
+Used by: ClientQuotesSection, Hero, HeroFormSection, HeroSection, Marquee, QuoteTabs, SitePage, TemplateGallerySection.
 
 ## Names
 
@@ -1837,7 +1896,7 @@ The account's audit log. An admin or a security reviewer answers "who did this, 
 
 ## When not to use
 
-- Request logs or metrics explored over time with a chart: use `view/split-view`.
+- Request logs or metrics explored over time with a chart: use `view/events-explorer`.
 - The deploy history of one resource: use `detail/deployment-logs` or the details page's history tab.
 - A short "recent activity" card on a dashboard: use `Item` rows in a `Card` and link here with View all.
 
@@ -1904,7 +1963,7 @@ What each prop and event does, and the go-live code: [blocks/account/activity-hi
 
 - `view/table-view` — the list page this one follows.
 - `account/personal-tokens` and `account/team-permissions` — the screens whose changes are logged here.
-- `view/split-view` — events over time with a chart and a document pane.
+- `view/events-explorer` — events over time with a chart and a document pane.
 
 ## Variants
 
@@ -3552,7 +3611,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-drawe
 - Surface: app
 - Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-hub")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, EmptyState, IconButton, Input, Item, Link, PageHeader, ScrollArea, Select, Skeleton
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, EmptyState, IconButton, Input, IntegrationCard, Item, Link, PageHeader, ScrollArea, Select, Skeleton
 - Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3584,7 +3643,7 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 - C. Git connect — `EmptyState`, `Button`, `Alert`, `Link` (required until connected)
 - D. Repository search — `Select`, `Input` (required once connected)
 - E. Repository list — `Card`, `Item`, `Button`, `Skeleton`, `Alert`, `EmptyState` (required once connected)
-- F. Template gallery — `Input`, `ScrollArea`, `Card`, `EmptyState` (required)
+- F. Template gallery — `Input`, `ScrollArea`, `Card`, `IntegrationCard`, `EmptyState` (required)
 
 What each part takes: [blocks/create/create-hub.md](blocks/create/create-hub.md).
 
@@ -3630,7 +3689,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 
 ## Accessibility
 
-- The `PageHeader` title is the page's only `h1`; column titles are `h2`, the template section labels `h3`, and template titles sit below them (the integration Card title, and `h4` on a Recommended card).
+- The `PageHeader` title is the page's only `h1`; column titles are `h2`, the template section labels `h3`, and template titles sit below them (the `IntegrationCard` title, and `h4` on a Recommended card).
 - The back `IconButton`, the brand link, the account button, the scope `Select` and the search each have an `aria-label`.
 - Each template tile is reached through its title link, which covers the tile; Enter follows it. Each Import button is named after its repository.
 - The loading region sets `aria-busy="true"` with one `role="status"` line; skeleton rows are hidden from assistive technology.
@@ -4175,7 +4234,7 @@ What each prop and event does, and the go-live code: [blocks/create/deploy-progr
 - Surface: app
 - Source: `blocks/create/deploy-success/deploy-success.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/deploy-success")`
-- Components: Button, Card, CodeBlock, Item, Link, SectionHeader, Tag, ToggleGroup, Tooltip
+- Components: Button, Card, CodeBlock, IntegrationCard, Item, Link, SectionHeader, Tag, ToggleGroup, Tooltip
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4202,7 +4261,7 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 - A. Outcome heading — `Tag` (required)
 - B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 - C. Resources list — `Card`, `Item`, `Tag` (required)
-- D. Next steps — `Card` (required)
+- D. Next steps — `IntegrationCard` (required)
 - E. Get started — `SectionHeader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
 - F. Manage — `Button` (required)
 
@@ -4892,7 +4951,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/analytics
 - `dashboard/configurable-dashboard` — when the reader arranges the cards.
 - `dashboard/service-monitoring-dashboard` — latency percentiles and an alert rail.
 - `ChartCard` / `StatTile` — the card and tile every dashboard shares.
-- `view/split-view` — the events behind these numbers, row by row.
+- `view/events-explorer` — the events behind these numbers, row by row.
 - `edit/edit-resource` (DataStream) — where the streams counted under Data stream are set up.
 
 ## Variants
@@ -5991,112 +6050,6 @@ What each prop and event does, and the go-live code: [blocks/dashboard/service-m
 
 ---
 
-<!-- blocks/detail/attached-resources.md -->
-
-# AttachedResources (`detail/attached-resources`)
-
-> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its depl…
-
-- Surface: app
-- Source: `blocks/detail/attached-resources/attached-resources.vue` in `@aziontech/webkit`
-- MCP: `get_block("detail/attached-resources")`
-- Components: Alert, Button, Card, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, `TableCellActions`, Tag
-- Skills: `webkit-tables`
-
-## Asked as
-
-domains section; domains card; domains table; resource domains; domain list in settings; hostnames; seção de domínios; domínios do recurso; lista de domínios; attached resources; related resources table; recursos vinculados
-
-A short list of the things one resource is attached to, shown in place inside its Settings tab. Here they are its domains: the user sees every address the resource answers on, which environment, deployment policy and certificate each one uses, and can edit, delete or add one without leaving the settings page.
-
-## When to use
-
-- Use attached-resources inside a section of a resource's Settings tab for a short list of the records it owns; it is a section, not a page.
-- A section of a resource's Settings tab lists related records owned by that resource (domains, attached origins, bound certificates) and the list is short enough to read without search or paging.
-- Each related record has two to four attributes worth scanning side by side, and one or two row actions.
-- The user adds a related record from inside the resource, so the action reads `Add <Module>`.
-
-## When not to use
-
-- The related records are many and need search, filters or columns: use the list of `view/table-view`, scoped to the resource.
-- A first-level list of one resource type reached from the sidebar: use `view/table-view`.
-- Pairs of keys and values the user types in place: use `edit/variables`.
-- Choosing one existing resource inside a form: use `create/resource-picker`.
-
-## Building blocks
-
-- A. Container — `Card` (required)
-- B. Attached table — `DataTable` (required)
-- C. Environment chip — `Tag` (optional)
-- D. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
-- E. Footer — `Button` (required)
-- F. Load failure — `Alert` (optional)
-
-What each part takes: [blocks/detail/attached-resources.md](blocks/detail/attached-resources.md).
-
-## Data
-
-The card takes its domains and the request's state through props and emits every action; it fetches nothing. `AttachedResourcesDomain` and `AttachedResourcesProps` are exported from `attached-resources.vue`, and `sample.ts` holds the sample domains the card renders when `domains` is left out (and never while `loading` or `error` is set).
-
-Prop: `domains`, `loading`, `error`.
-
-Event: `create`, `retry`, `row-action`.
-
-Then delete `sample.ts` and its import.
-
-What each prop and event does, and the go-live code: [blocks/detail/attached-resources.md](blocks/detail/attached-resources.md).
-
-## Do
-
-- Keep the card unpadded and the table borderless, so there is one border around the whole list.
-- Keep one chip per row: the Environment `Tag` (secondary, medium, rounded); every other attribute is plain text, with a glyph where it helps.
-- Leave a cell empty when the attribute does not apply to that record.
-- Hide the row menu on records the user cannot change, rather than showing disabled options.
-- Count the records in the footer with the right singular or plural noun.
-- Follow `skills/webkit-tables` for column kinds and the action column.
-
-## Don't
-
-- Don't add search, filters or pagination; switch to the `view/table-view` list when the list needs them.
-- Don't use a primary or large button for Add; the page's Save belongs to the settings form.
-- Don't put Delete in the same group as Edit, or use a destructive color in the menu trigger.
-- Don't write a dash or "None" in cells that do not apply.
-- Don't wrap the table in a second card or give it its own border.
-
-## Copy
-
-- **Column headers:** short nouns without punctuation, e.g. "Domain", "Environment", "Policy", "Certificate".
-- **Add action:** `Add <Module>` with the entity's capitalization, e.g. "Add Domain"; never "Create" inside a resource.
-- **Count:** a number and the noun, singular or plural, e.g. "1 domain", "3 domains".
-- **Row menu:** single verbs, e.g. "Edit", "Delete"; the trigger tooltip reads "Row actions".
-- **Attribute values:** the value as the product names it, e.g. "Production", "Managed".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
-
-## Accessibility
-
-- The row menu trigger's `aria-label` names the record, e.g. "Actions for shop.example.com", so a screen reader user knows which row it acts on.
-- Menu option icons carry `aria-hidden="true"`; the option label is the accessible name.
-- The action column has no visible header; its cells hold only the labeled trigger.
-- The menu is reachable by keyboard, opens on Enter or Space and returns focus to its trigger on close.
-- The count is plain text, read after the table, before the Add button.
-
-## States
-
-- Default: three domains from `domains`, one generated by the platform with no row menu, two the user added with Edit and Delete, and the footer counting them beside Add Domain; `loading` shows the table's loading state and `error` the danger `Alert` with Retry.
-
-## Related
-
-- `edit/edit-resource` — the Settings tab whose Domains section renders this card.
-- `view/table-view` — the full list, with filters and pages, for longer related lists.
-- `edit/delete-dialog` — the dialog behind the row menu's Delete.
-- `DataTable` — the table this card wraps; see `skills/webkit-tables`.
-
-## Variants
-
-`Default` (primary). Code: [blocks/detail/attached-resources.md](blocks/detail/attached-resources.md), `get_block("detail/attached-resources", { variant })`.
-
----
-
 <!-- blocks/detail/deployment-logs.md -->
 
 # DeploymentLogs (`detail/deployment-logs`)
@@ -6129,7 +6082,7 @@ The user started a deployment and wants to know where it is, whether it went liv
 - A dropped folder being uploaded before anything is built: use the Initializing overlay in `state/project-intake`.
 - The overview of the resource the deployment belongs to: use `detail/resource-detail`.
 - One function run with its request path and trace: use `detail/invocations`.
-- Events or logs explored over time with filters and a chart: use `view/split-view`.
+- Events or logs explored over time with filters and a chart: use `view/events-explorer`.
 
 ## Building blocks
 
@@ -6246,7 +6199,7 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 ## When not to use
 
-- The child list is short and needs no search or filters: use `detail/attached-resources` inside a settings section.
+- The child list is short and needs no search or filters: use `detail/domains-card` inside a settings section.
 - A first-level list reached from the sidebar: use `view/table-view`.
 - A resource whose detail page is an overview with several tabs and no dominant record list: use `detail/resource-detail`.
 - Settings only, with no child records: use `edit/edit-resource`.
@@ -6335,13 +6288,119 @@ What each prop and event does, and the go-live code: [blocks/detail/dns-zone-det
 
 - `view/table-view` — the index this page is opened from, and the source of the controls row recipe.
 - `edit/edit-resource` — the settings form and save bar pattern used by Main settings.
-- `detail/attached-resources` — a short related list inside a settings section.
+- `detail/domains-card` — a short related list inside a settings section.
 - `edit/delete-dialog` — the dialog behind the row menu's Delete.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
 
 ## Variants
 
 `MainSettings` (primary) · `Records` · `ImportZoneFile`. Code: [blocks/detail/dns-zone-detail.md](blocks/detail/dns-zone-detail.md), `get_block("detail/dns-zone-detail", { variant })`.
+
+---
+
+<!-- blocks/detail/domains-card.md -->
+
+# DomainsCard (`detail/domains-card`)
+
+> The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its c…
+
+- Surface: app
+- Source: `blocks/detail/domains-card/domains-card.vue` in `@aziontech/webkit`
+- MCP: `get_block("detail/domains-card")`
+- Components: Alert, Button, Card, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, `TableCellActions`, Tag
+- Skills: `webkit-tables`
+
+## Asked as
+
+domains section; domains card; domains table; resource domains; domain list in settings; hostnames; seção de domínios; domínios do recurso; lista de domínios; attached resources; related resources table; recursos vinculados
+
+A short list of the things one resource is attached to, shown in place inside its Settings tab. Here they are its domains: the user sees every address the resource answers on, which environment, deployment policy and certificate each one uses, and can edit, delete or add one without leaving the settings page.
+
+## When to use
+
+- Use domains-card inside a section of a resource's Settings tab for a short list of the records it owns; it is a section, not a page.
+- A section of a resource's Settings tab lists related records owned by that resource (domains, attached origins, bound certificates) and the list is short enough to read without search or paging.
+- Each related record has two to four attributes worth scanning side by side, and one or two row actions.
+- The user adds a related record from inside the resource, so the action reads `Add <Module>`.
+
+## When not to use
+
+- The related records are many and need search, filters or columns: use the list of `view/table-view`, scoped to the resource.
+- A first-level list of one resource type reached from the sidebar: use `view/table-view`.
+- Pairs of keys and values the user types in place: use `edit/variables`.
+- Choosing one existing resource inside a form: use `create/resource-picker`.
+
+## Building blocks
+
+- A. Container — `Card` (required)
+- B. Attached table — `DataTable` (required)
+- C. Environment chip — `Tag` (optional)
+- D. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
+- E. Footer — `Button` (required)
+- F. Load failure — `Alert` (optional)
+
+What each part takes: [blocks/detail/domains-card.md](blocks/detail/domains-card.md).
+
+## Data
+
+The card takes its domains and the request's state through props and emits every action; it fetches nothing. `DomainsCardDomain` and `DomainsCardProps` are exported from `domains-card.vue`, and `sample.ts` holds the sample domains the card renders when `domains` is left out (and never while `loading` or `error` is set).
+
+Prop: `domains`, `loading`, `error`.
+
+Event: `create`, `retry`, `row-action`.
+
+Then delete `sample.ts` and its import.
+
+What each prop and event does, and the go-live code: [blocks/detail/domains-card.md](blocks/detail/domains-card.md).
+
+## Do
+
+- Keep the card unpadded and the table borderless, so there is one border around the whole list.
+- Keep one chip per row: the Environment `Tag` (secondary, medium, rounded); every other attribute is plain text, with a glyph where it helps.
+- Leave a cell empty when the attribute does not apply to that record.
+- Hide the row menu on records the user cannot change, rather than showing disabled options.
+- Count the records in the footer with the right singular or plural noun.
+- Follow `skills/webkit-tables` for column kinds and the action column.
+
+## Don't
+
+- Don't add search, filters or pagination; switch to the `view/table-view` list when the list needs them.
+- Don't use a primary or large button for Add; the page's Save belongs to the settings form.
+- Don't put Delete in the same group as Edit, or use a destructive color in the menu trigger.
+- Don't write a dash or "None" in cells that do not apply.
+- Don't wrap the table in a second card or give it its own border.
+
+## Copy
+
+- **Column headers:** short nouns without punctuation, e.g. "Domain", "Environment", "Policy", "Certificate".
+- **Add action:** `Add <Module>` with the entity's capitalization, e.g. "Add Domain"; never "Create" inside a resource.
+- **Count:** a number and the noun, singular or plural, e.g. "1 domain", "3 domains".
+- **Row menu:** single verbs, e.g. "Edit", "Delete"; the trigger tooltip reads "Row actions".
+- **Attribute values:** the value as the product names it, e.g. "Production", "Managed".
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- The row menu trigger's `aria-label` names the record, e.g. "Actions for shop.example.com", so a screen reader user knows which row it acts on.
+- Menu option icons carry `aria-hidden="true"`; the option label is the accessible name.
+- The action column has no visible header; its cells hold only the labeled trigger.
+- The menu is reachable by keyboard, opens on Enter or Space and returns focus to its trigger on close.
+- The count is plain text, read after the table, before the Add button.
+
+## States
+
+- Default: three domains from `domains`, one generated by the platform with no row menu, two the user added with Edit and Delete, and the footer counting them beside Add Domain; `loading` shows the table's loading state and `error` the danger `Alert` with Retry.
+
+## Related
+
+- `edit/edit-resource` — the Settings tab whose Domains section renders this card.
+- `view/table-view` — the full list, with filters and pages, for longer related lists.
+- `edit/delete-dialog` — the dialog behind the row menu's Delete.
+- `DataTable` — the table this card wraps; see `skills/webkit-tables`.
+
+## Variants
+
+`Default` (primary). Code: [blocks/detail/domains-card.md](blocks/detail/domains-card.md), `get_block("detail/domains-card", { variant })`.
 
 ---
 
@@ -6582,7 +6641,7 @@ A service that is live on its generated hostname is not yet ready for real traff
 
 - Commands to build and deploy a resource for the first time: use `detail/get-started`.
 - Ordered steps the user must complete before the resource exists: use `create/create-wizard`.
-- A list of resources already bound to this one: use `detail/attached-resources`.
+- A list of resources already bound to this one: use `detail/domains-card`.
 - A module the account has never used: use `state/first-use`.
 
 ## Building blocks
@@ -6650,7 +6709,7 @@ What each prop and event does, and the go-live code: [blocks/detail/production-c
 
 - `detail/resource-detail` — the service Overview tab that renders this card under the summary.
 - `detail/get-started` — onboarding before the first deployment, for a resource made from the CLI.
-- `detail/attached-resources` — where an attached policy or error page shows up once added.
+- `detail/domains-card` — where an attached policy or error page shows up once added.
 - `Item` — the row primitive for each gate; see `skills/webkit-ui-states` for the done and empty states.
 
 ## Variants
@@ -7211,7 +7270,7 @@ The settings page of one existing resource. The user comes here to change how th
 - Account or organization settings outside one resource (profile, preferences, notifications): use `settings/settings-form`.
 - A resource whose content is code or a document: use `edit/function-editor`.
 - Deleting the resource: the Danger zone action opens `edit/delete-dialog`.
-- A short list of attached records inside a section: use `detail/attached-resources` as that section's body.
+- A short list of attached records inside a section: use `detail/domains-card` as that section's body.
 
 ## Building blocks
 
@@ -7329,7 +7388,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 
 - `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumb` (the module and the resource as `items`, a `Select` with `variant="ghost"` and `size="small"` in its slot).
 - `create/create-page` — the create page that shares this field list.
-- `detail/attached-resources` — the Domains section body in DeployableSettings.
+- `detail/domains-card` — the Domains section body in DeployableSettings.
 - `edit/delete-dialog` — the dialog behind the Danger zone action.
 - `settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
@@ -7462,7 +7521,7 @@ What each prop and event does, and the go-live code: [blocks/edit/function-edito
 - `shell/console` — the `ConsoleLayout` this page body renders in.
 - `edit/edit-resource` — the settings form and save bar pattern the Settings tab follows.
 - `view/query-editor` — an editor page that runs queries and shows results.
-- `view/split-view` — the events explorer, where the logs of every run land.
+- `view/events-explorer` — the events explorer, where the logs of every run land.
 - `Trace` — the span waterfall of the test run.
 - `detail/version-detail` — reading a deployed version of the code.
 - `ResizableRoot` — the split between schema and fields; see `skills/webkit-layout`.
@@ -7731,7 +7790,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 - Conditions and actions evaluated in order: use `edit/rule-builder`.
 - A fixed set of named settings on one resource: use `edit/edit-resource` or `settings/settings-form`.
-- A short read-only list of related records inside a settings tab: use `detail/attached-resources`.
+- A short read-only list of related records inside a settings tab: use `detail/domains-card`.
 - A long document or code the user edits as text: use `edit/function-editor`.
 
 ## Building blocks
@@ -8071,7 +8130,7 @@ What each part takes: [blocks/shell/console.md](blocks/shell/console.md).
 - Surface: docs
 - Source: `blocks/shell/docs/docs.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/docs")`
-- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocStep, DocSteps, DocTab, DocTabs, Footer, IconButton, `ItemList`, Logo, RegistrationFrame, Select, StatusIndicator, Tag, ThemeSwitcher, `use-color-mode`
+- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, DocTab, DocTabs, Footer, IconButton, `ItemList`, Logo, RegistrationFrame, Select, StatusIndicator, Tag, ThemeSwitcher, `use-color-mode`
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
@@ -8116,7 +8175,7 @@ What each part takes: [blocks/shell/docs.md](blocks/shell/docs.md).
 - Build an index of peers (agents, SDKs, integrations) from AgentSetup: pick (a `DocTabs` filter over a `DocCardGroup`), compare (a `Table`), understand (glossary `DocCard`s). Give each peer its own page from AgentGuide.
 - Render copy authored as Markdown with MDX tags (a content file, a CMS field, a sentence in data) with `DocMarkdown` inside `DocProse`; the headings it renders are `DocHeading`s with slug ids and join the outline on their own. AgentGuide uses it for its step bodies and accordion answers.
 - Show a comparison of peers or a list of tools as a `DataTable` (`bordered`, imported from `data-table`) inside an element with `data-doc-block data-doc-chrome`, so the prose rules stay off it; a yes/no cell is a check or minus glyph with a visually hidden `Yes` / `No`, a category cell a `Tag` with `severity="neutral"`.
-- Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
+- Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocSteps.Step`, with its command as a `CodeBlock` inside the same step.
 
 ## Don't
 
@@ -8178,9 +8237,9 @@ What each part takes: [blocks/shell/docs.md](blocks/shell/docs.md).
 
 ## Asked as
 
-site shell; marketing site layout; landing page layout; website layout; marketing page frame; layout do site; estrutura do site; página de marketing; website shell; marketing site shell; site layout component; SiteLayout; layout do site com SiteHeader
+site shell; marketing site layout; landing page layout; website layout; marketing page frame; layout do site; estrutura do site; página de marketing; website shell; marketing site shell; site layout component; SiteLayout; layout do site com SiteHeaderSection
 
-The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteHeader` and `SiteFooter` data; each page is only its sections, in the layout's slot.
+The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteHeaderSection` and `SiteFooterSection` data; each page is only its sections, in the layout's slot.
 
 ## When to use
 
@@ -8216,7 +8275,7 @@ What each part takes: [blocks/shell/site.md](blocks/shell/site.md).
 
 ## Don't
 
-- Never add `SiteHeader`, `SiteFooter`, `AppHeader` or `Footer` to a page; the layout already renders them.
+- Never add `SiteHeaderSection`, `SiteFooterSection`, `AppHeader` or `Footer` to a page; the layout already renders them.
 - Never render a second `<main>`; the layout owns the landmark.
 - Don't wrap the layout's slot content in a border, padding or `max-w-*` of its own.
 - Don't nest a second `SectionContainer`.
@@ -8372,6 +8431,113 @@ What each prop and event does, and the go-live code: [blocks/state/async-submit.
 ## Variants
 
 `Idle` (primary) · `Running` · `Error` · `Success`. Code: [blocks/state/async-submit.md](blocks/state/async-submit.md), `get_block("state/async-submit", { variant })`.
+
+---
+
+<!-- blocks/state/error-page.md -->
+
+# ErrorPage (`state/error-page`)
+
+> The page an app renders when it cannot show the address the user asked for.
+
+- Surface: app
+- Source: `blocks/state/error-page/error-page.vue` in `@aziontech/webkit`
+- MCP: `get_block("state/error-page")`
+- Components: Button, CopyButton, EmptyState, LineFigure, `Error403`
+- Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
+
+## Asked as
+
+404 page; not found page; page not found; 403 forbidden page; access denied page; 500 error page; server error page; error page; resource not found; página não encontrada; página de erro; acesso negado; erro 404; erro 500
+
+The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.
+
+## When to use
+
+- A route that matches nothing: the catch-all route of the app renders the primary.
+- A route the user's role does not include: render Forbidden instead of hiding the page silently or sending them to the home page.
+- A page whose server request failed as a whole (the data the page needs did not arrive and nothing on it can render): render ServerError.
+- A valid route whose record does not exist (a deleted service, a stale link with an old ID): render ResourceNotFound inside the console shell.
+
+## When not to use
+
+- One region of a page failed to render while the rest works: wrap the region in `ErrorBoundary`; it shows a danger `Alert` with Try again in the region's place.
+- A list with no items yet: use `state/first-use`. A list whose filter matched nothing: use the no-match state of `view/table-view`.
+- A form the server rejected: use `state/form-validation` (SectionRejected).
+- A build or deploy that failed: use `state/async-submit`; its toast and page `Alert` carry Edit and Redeploy.
+- The account itself could not load after sign-in: that is an auth screen; see `auth/sign-in`.
+
+## Building blocks
+
+- A. Figure — `LineFigure` (`@aziontech/webkit/line-figure`)
+- B. Message — `EmptyState` (required)
+- C. Actions — `Button` (required)
+
+What each part takes: [blocks/state/error-page.md](blocks/state/error-page.md).
+
+## Data
+
+The block shows no records and fetches nothing: the primary takes the copy and the links a real app sets as props and emits Go to home. `ErrorPageProps` is exported from `error-page.vue`; every prop defaults to the 404 copy above.
+
+Prop: `title`, `description`, `homeHref`, `docsHref`.
+
+Event: `home`.
+
+What each prop and event does, and the go-live code: [blocks/state/error-page.md](blocks/state/error-page.md).
+
+## Do
+
+- Render the block on the address the user asked for; do not redirect to `/404`, so reloading tries the real address again and the browser history stays honest.
+- Answer with the matching HTTP status when the server renders the page (404, 403, 500), so crawlers and monitoring see it.
+- Keep the shell (navigation, header) around ResourceNotFound and around a 403 inside the console, so the user can move on without the back button.
+- Give a 500 an error reference the user can quote to support, and log the same reference on the server.
+- On 403, say who can grant access (an account admin) and offer the switch when the user belongs to more than one account.
+
+## Don't
+
+- Don't blame the user (`You typed a wrong URL`) or show a stack trace, a raw status line or an exception message.
+- Don't hide a 403 behind a 404 inside the product: a user who followed a link from a teammate needs to know to ask for access. Use 404 for a 403 only where revealing that the page exists would leak information.
+- Don't add a search box, a sitemap or a list of popular pages; two actions are enough.
+- Don't auto-redirect after a countdown; the user decides where to go.
+- Don't put the error code in the visible title; the figure already shows it.
+
+## Copy
+
+- **Title:** what happened, sentence case, no code: `Page not found`, `You don't have access to this page`, `Something went wrong on our side`, `Service 4821 not found`.
+- **Description:** why, and what to do: `There is nothing deployed at this address. Check the URL or head back to the start.` On a 500, reassure: `Nothing you saved was lost.`
+- **Primary action:** where it goes: `Go to home`, `Back to services`; or what it does: `Retry`.
+- **Secondary action:** `Docs`, `Switch account`, `System status`.
+- **Reference:** `Error reference: req_7f3c91ab`, in `text-label-code-sm`, wrapped in `<bdi>` so it keeps its order in right-to-left pages, with a `CopyButton` (`Copy the error reference`) so the user can paste it to support.
+
+## Accessibility
+
+- Each variant has exactly one `h1` (visually hidden) naming the error code, so the page has a heading and the code is announced even though the figure is decorative.
+- Every variant is a body inside the layout's `main`, with no `main` of its own.
+- The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
+- The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
+- Retry shows the `Button` loading state while the page reloads; the button keeps its label.
+- Buttons that open a new tab carry an icon; do not rely on colour.
+
+## States
+
+- Default: 404, the animated azion-404 line figure, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
+- Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
+- ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
+- ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
+
+## Related
+
+- `shell/console` — the shell that frames ResourceNotFound and a 403 inside the product.
+- `state/first-use` — an empty list, which is not an error.
+- `state/form-validation` (SectionRejected) — a server rejection scoped to a form section.
+- `state/async-submit` — the outcome of a build or deploy, with Edit and Redeploy.
+- `auth/sign-in` — the sign-in screens, including the account that could not load.
+
+## Variants
+
+`Default` (primary) · `Forbidden` · `ServerError` · `ResourceNotFound`. Code: [blocks/state/error-page.md](blocks/state/error-page.md), `get_block("state/error-page", { variant })`.
 
 ---
 
@@ -8632,113 +8798,6 @@ What each prop and event does, and the go-live code: [blocks/state/form-validati
 
 ---
 
-<!-- blocks/state/not-found.md -->
-
-# NotFound (`state/not-found`)
-
-> The page an app renders when it cannot show the address the user asked for.
-
-- Surface: app
-- Source: `blocks/state/not-found/not-found.vue` in `@aziontech/webkit`
-- MCP: `get_block("state/not-found")`
-- Components: Button, CopyButton, EmptyState, LineFigure, `Error403`
-- Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
-
-## Asked as
-
-404 page; not found page; page not found; 403 forbidden page; access denied page; 500 error page; server error page; error page; resource not found; página não encontrada; página de erro; acesso negado; erro 404; erro 500
-
-The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.
-
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.
-
-## When to use
-
-- A route that matches nothing: the catch-all route of the app renders the primary.
-- A route the user's role does not include: render Forbidden instead of hiding the page silently or sending them to the home page.
-- A page whose server request failed as a whole (the data the page needs did not arrive and nothing on it can render): render ServerError.
-- A valid route whose record does not exist (a deleted service, a stale link with an old ID): render ResourceNotFound inside the console shell.
-
-## When not to use
-
-- One region of a page failed to render while the rest works: wrap the region in `ErrorBoundary`; it shows a danger `Alert` with Try again in the region's place.
-- A list with no items yet: use `state/first-use`. A list whose filter matched nothing: use the no-match state of `view/table-view`.
-- A form the server rejected: use `state/form-validation` (SectionRejected).
-- A build or deploy that failed: use `state/async-submit`; its toast and page `Alert` carry Edit and Redeploy.
-- The account itself could not load after sign-in: that is an auth screen; see `auth/sign-in`.
-
-## Building blocks
-
-- A. Figure — `LineFigure` (`@aziontech/webkit/line-figure`)
-- B. Message — `EmptyState` (required)
-- C. Actions — `Button` (required)
-
-What each part takes: [blocks/state/not-found.md](blocks/state/not-found.md).
-
-## Data
-
-The block shows no records and fetches nothing: the primary takes the copy and the links a real app sets as props and emits Go to home. `NotFoundProps` is exported from `not-found.vue`; every prop defaults to the 404 copy above.
-
-Prop: `title`, `description`, `homeHref`, `docsHref`.
-
-Event: `home`.
-
-What each prop and event does, and the go-live code: [blocks/state/not-found.md](blocks/state/not-found.md).
-
-## Do
-
-- Render the block on the address the user asked for; do not redirect to `/404`, so reloading tries the real address again and the browser history stays honest.
-- Answer with the matching HTTP status when the server renders the page (404, 403, 500), so crawlers and monitoring see it.
-- Keep the shell (navigation, header) around ResourceNotFound and around a 403 inside the console, so the user can move on without the back button.
-- Give a 500 an error reference the user can quote to support, and log the same reference on the server.
-- On 403, say who can grant access (an account admin) and offer the switch when the user belongs to more than one account.
-
-## Don't
-
-- Don't blame the user (`You typed a wrong URL`) or show a stack trace, a raw status line or an exception message.
-- Don't hide a 403 behind a 404 inside the product: a user who followed a link from a teammate needs to know to ask for access. Use 404 for a 403 only where revealing that the page exists would leak information.
-- Don't add a search box, a sitemap or a list of popular pages; two actions are enough.
-- Don't auto-redirect after a countdown; the user decides where to go.
-- Don't put the error code in the visible title; the figure already shows it.
-
-## Copy
-
-- **Title:** what happened, sentence case, no code: `Page not found`, `You don't have access to this page`, `Something went wrong on our side`, `Service 4821 not found`.
-- **Description:** why, and what to do: `There is nothing deployed at this address. Check the URL or head back to the start.` On a 500, reassure: `Nothing you saved was lost.`
-- **Primary action:** where it goes: `Go to home`, `Back to services`; or what it does: `Retry`.
-- **Secondary action:** `Docs`, `Switch account`, `System status`.
-- **Reference:** `Error reference: req_7f3c91ab`, in `text-label-code-sm`, wrapped in `<bdi>` so it keeps its order in right-to-left pages, with a `CopyButton` (`Copy the error reference`) so the user can paste it to support.
-
-## Accessibility
-
-- Each variant has exactly one `h1` (visually hidden) naming the error code, so the page has a heading and the code is announced even though the figure is decorative.
-- Every variant is a body inside the layout's `main`, with no `main` of its own.
-- The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
-- The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
-- Retry shows the `Button` loading state while the page reloads; the button keeps its label.
-- Buttons that open a new tab carry an icon; do not rely on colour.
-
-## States
-
-- Default: 404, the animated azion-404 line figure, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
-- Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
-- ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
-- ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
-
-## Related
-
-- `shell/console` — the shell that frames ResourceNotFound and a 403 inside the product.
-- `state/first-use` — an empty list, which is not an error.
-- `state/form-validation` (SectionRejected) — a server rejection scoped to a form section.
-- `state/async-submit` — the outcome of a build or deploy, with Edit and Redeploy.
-- `auth/sign-in` — the sign-in screens, including the account that could not load.
-
-## Variants
-
-`Default` (primary) · `Forbidden` · `ServerError` · `ResourceNotFound`. Code: [blocks/state/not-found.md](blocks/state/not-found.md), `get_block("state/not-found", { variant })`.
-
----
-
 <!-- blocks/state/page-skeleton.md -->
 
 # PageSkeleton (`state/page-skeleton`)
@@ -8975,7 +9034,7 @@ The top bar of every signed-out and first-run screen: sign in, sign up, password
 ## When not to use
 
 - Any page with a session: `ConsoleLayout` already renders the console bar (`shell/console`); a create, edit or deploy flow uses `top-bar/creation-bar`.
-- Documentation pages: `DocLayout` renders their bar (`shell/docs`). Marketing pages: `SiteLayout` and `SiteHeader` render theirs (`shell/site`).
+- Documentation pages: `DocLayout` renders their bar (`shell/docs`). Marketing pages: `SiteLayout` and `SiteHeaderSection` render theirs (`shell/site`).
 
 ## Building blocks
 
@@ -9257,6 +9316,143 @@ What each prop and event does, and the go-live code: [blocks/view/card-view.md](
 
 ---
 
+<!-- blocks/view/events-explorer.md -->
+
+# EventsExplorer (`view/events-explorer`)
+
+> The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer.
+
+- Surface: app
+- Source: `blocks/view/events-explorer/events-explorer.vue` in `@aziontech/webkit`
+- MCP: `get_block("view/events-explorer")`
+- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Sidebar, Skeleton, Tabs, Tag, Tooltip, `use-collection`, `use-locale`
+- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
+
+## Asked as
+
+real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida; query language; events query; saved searches; saved queries; query history; date range; time range picker; investigation tabs; event document; consulta de eventos; buscas salvas; intervalo de datas
+
+The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).
+
+## When to use
+
+- Events or logs explored over time, where the volume chart and the rows must agree on one period and one set of filters.
+- Users pivot on field values (level, source, status, host) to find a pattern, then read one event's full document.
+- The record has more fields than a table row can hold, so the full document opens beside the list instead of in a details page.
+
+## When not to use
+
+- A first-level list of resources the user creates and manages: use `view/table-view`.
+- The log of one deployment or build run: use `detail/deployment-logs`.
+- Metrics and charts without a row-level log: use `dashboard/analytics-dashboard`.
+- Files and folders of a storage resource: use `view/file-browser`.
+- Querying a database with SQL: use `view/query-editor`.
+
+## Building blocks
+
+- A. Filter — `FilterMenu` (required)
+- B. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
+- C. Applied filters — `FilterMenu.ChipGroup` (optional)
+- D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Item`, `Accordion`, `Tag` (optional)
+- E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState`, `Alert` (required)
+- F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
+- G. Narrow document — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `Tag`, `CodeBlock` (required)
+- H. Query bar — `Tooltip`, `IconButton` (optional)
+- I. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Item`, `Tooltip` (optional)
+- J. Investigation tabs — `IconButton`, `Input`, `Tooltip` (optional)
+- K. Document tools — `Input`, `IconButton`, `Tooltip` (optional)
+
+What each part takes: [blocks/view/events-explorer.md](blocks/view/events-explorer.md).
+
+## Data
+
+The block takes its events through props and emits every action; it fetches nothing. `EventsExplorerEvent`, `EventsExplorerField`, `EventsExplorerBucket`, `EventsExplorerProps` and the other types are exported from `events-explorer.vue`, and `sample.ts` holds the sample events, fields and clock the block renders when `events` is left out (and never while `loading` or `error` is set). The filters (the period included), the search and the page are models the page can own, so it can run them on the server.
+
+Prop / model: `events`, `fields`, `categories`, `buckets`, `summary`, `total`, `now`, `moreRows`, `loadingMore`, `loading`, `error`, `v-model:filters`, `v-model:search`, `v-model:page`, `v-model:page-size`.
+
+Event: `refresh`, `retry`, `select`, `load-more`.
+
+Then delete `sample.ts` and its import, and give `fields` its own list. A log that streams instead of paging passes `moreRows` and appends the next events on `load-more`.
+
+What each prop and event does, and the go-live code: [blocks/view/events-explorer.md](blocks/view/events-explorer.md).
+
+## Do
+
+- Drive the summary, the chart and the table from one filtered set, so every number agrees.
+- Let a click or drag on the chart set the period, and show the period as a filter the user can clear.
+- Keep the row selected while its document is open, and switch between pane and drawer by the explorer's width, not the viewport's.
+- Let `FilterMenu` count the applied fields on its trigger and `FilterMenu.ChipGroup` show each one in field order.
+- Pick the empty message that matches why the log is empty.
+- In query mode, keep the applied query text as the user typed it, and save and list that text.
+- Keep each investigation tab self-contained: its own filters, search and period.
+- Let the document act on the log (Filter by, Exclude), so a pivot is one click from the value.
+- Mark the page root with `data-layout-fill`, so the panes scroll on their own instead of the page.
+
+## Don't
+
+- Don't navigate away to read one event; the document opens beside the log.
+- Don't add a second filter surface (a row of `Select`s, a filter bar in the fields panel) beside the Filter menu.
+- Don't hide the controls row or the summary when the log is empty.
+- Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
+- Don't let a wide log scroll the page sideways.
+- Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
+- Don't offer the query bar and the Filter menu at once; pick the one that fits the users.
+- Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
+- Don't let investigation tabs grow without a limit, and never close the last one.
+
+## Copy
+
+- **Search:** placeholder names what is searched, e.g. "Search events, hosts, paths or addresses"; `aria-label` "Search events".
+- **Summary labels:** short nouns, e.g. "Events", "Errors", "Avg request time".
+- **Chart hint:** one instruction, e.g. "Drag across the chart, or hold Shift with the arrow keys and press Enter, to filter the log to a span."
+- **Empty log:** title states the fact and the description says what to do, e.g. "No events in this window" with "Widen the period or clear a filter to see more of the log."
+- **Fields panel:** controls name the panel, e.g. "Hide the fields panel", "Show the fields panel".
+- **Document:** drawer title "Event"; close button "Close the event document".
+- **Query bar:** `aria-label` "Query events"; placeholder with one real example; the range "Events time range".
+- **Saved queries:** "Name the current query", Save, "Delete <name>"; empty "No saved queries yet. Name the current query to keep it."
+- **Tabs:** "New investigation", "Actions for <name>", Rename, Duplicate, "Close investigation"; limit "Up to 5 investigations stay open. Close one to start another."
+- **Document tools:** "Search in this event", "Filter by <field> <value>", "Exclude <field> <value>", "Copy the fields shown as JSON"; no match "No field matches “<text>”."
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- The explorer sits in the layout's one `main` landmark; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
+- The chart is `Chart`'s one tab stop with an `aria-label` that carries the summary (busiest bucket) and the instruction; arrow keys move between buckets, Shift extends a span, Enter commits it, and the tooltip follows keyboard focus as it follows the pointer.
+- The Errors value carries an `aria-label` with its share of all events.
+- Every icon-only button has an `aria-label`; decorative glyphs are `aria-hidden="true"`. The row detail button names its event and carries `aria-expanded`.
+- Value options in the fields-panel popovers are buttons with `aria-pressed`, so applied values are announced; the Filter menu's own rows come from `FilterMenu`.
+- The document drawer traps focus while open and closes on Escape; motion is turned off under `prefers-reduced-motion`.
+- Query: the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
+- Sessions: the tabs follow the `Tabs` keyboard map (arrows, Home, End); F2 renames and Delete closes the focused tab, and the same actions sit in a named menu for pointer and screen-reader users; focus returns to the tab after rename or close.
+- EventDocument: Filter by and Exclude are toggle buttons (`aria-pressed`) named with the field and value; the match count of the document search is announced in a `role="status"`.
+
+## States
+
+- Default: live traffic with the summary, the chart and the log filled, and no filters applied; while the page refreshes (`loading` with `events`) the summary values and the chart show `Skeleton`s and the table its loading rows.
+- Loading: the first load (`loading` with no `events`); `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
+- Filtered: errors from the Security and Access Control sources (`v-model:filters` seeded with them); the Filter button counts three fields and each shows as a `FilterMenu.ChipGroup` chip.
+- Empty: a workspace with no traffic yet (`events` is `[]`); the summary reads zero, the chart is flat and the log shows No events yet.
+- Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`.
+- Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
+- Sessions: three investigation tabs, API errors active.
+- EventDocument: an error event's document open, with Host is not legacy.example.com applied.
+
+## Related
+
+- `view/table-view` — the same controls row over a resource list.
+- `detail/deployment-logs` — logs of one deployment run.
+- `dashboard/analytics-dashboard` — the metrics view for the same traffic.
+- `shell/console` — the layout this explorer renders in.
+- `DataTable` — the log table; see `skills/webkit-tables`, `skills/webkit-data-viz` and `skills/webkit-ui-states`.
+
+## Variants
+
+`Default` (primary) · `Filtered` · `Empty` · `Loading` · `Error` · `Query` · `Sessions` · `EventDocument`. Code: [blocks/view/events-explorer.md](blocks/view/events-explorer.md), `get_block("view/events-explorer", { variant })`.
+
+---
+
 <!-- blocks/view/file-browser.md -->
 
 # FileBrowser (`view/file-browser`)
@@ -9287,7 +9483,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A first-level list of resources of one type: use `view/table-view`.
 - Rows of one resource that are records, not files (database rows, variables): use `detail/dns-zone-detail`.
-- Events or logs explored over time: use `view/split-view`.
+- Events or logs explored over time: use `view/events-explorer`.
 - Tables and queries of a database: use `view/query-editor`.
 - Picking an existing resource inside a create form: use `create/resource-picker`.
 
@@ -9406,7 +9602,7 @@ What each prop and event does, and the go-live code: [blocks/view/file-browser.m
 - Surface: app
 - Source: `blocks/view/marketplace/marketplace.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/marketplace")`
-- Components: Alert, Button, Card, DataTable, DocProse, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, Field, Input, Item, KeyValueList, Link, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, Select, SettingsRow, SettingsSection, Skeleton, Switch, `TableCellStatus`, Tabs, Tag, Toast, `use-collection`
+- Components: Alert, Button, Card, DataTable, DocProse, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, Field, Input, IntegrationCard, Item, KeyValueList, Link, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, Select, SettingsRow, SettingsSection, Skeleton, Switch, `TableCellStatus`, Tabs, Tag, Toast, `use-collection`
 - Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -9433,9 +9629,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## Building blocks
 
 - A. Page heading — `PageHeader`, `Button` (required)
-- B. Featured — `Card` (required)
+- B. Featured — `IntegrationCard` (required)
 - C. Search and filter — `PropertyFilter` (required)
-- D. Integration tiles — `Card`, `Button` (required)
+- D. Integration tiles — `IntegrationCard`, `Button` (required)
 - E. No matching integrations — `EmptyState`, `Button` (required)
 - F. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter` (required)
 - G. Install outcome — `Alert` (required)
@@ -9464,7 +9660,7 @@ What each prop and event does, and the go-live code: [blocks/view/marketplace.md
 ## Do
 
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
-- Use `Card variant="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
+- Use `IntegrationCard` for every integration tile, with the installed state as the `installed` prop and one action in the `actions` slot.
 - Hide the Featured row while any filter is set.
 - Keep templates out of this page: a template starts a project, so it lives in `view/template-browser`.
 - Open the detail in a drawer so the catalog, the filter and the scroll stay put.
@@ -9523,7 +9719,7 @@ What each prop and event does, and the go-live code: [blocks/view/marketplace.md
 - `create/deploy-template` — where a template's Deploy leads.
 - `state/async-submit` — the toast and inline outcome every install follows.
 - `state/form-validation` (SectionRejected) — the field, section and toast placement of a form error.
-- `Card` (`variant="integration"`) and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.
 
 ## Variants
 
@@ -9563,7 +9759,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - Rows of a resource that are not a SQL table (variables, records): use `detail/dns-zone-detail`.
 - Editing a function or configuration as code: use `edit/function-editor`.
 - Files and folders of a storage resource: use `view/file-browser`.
-- Events explored over time: use `view/split-view`.
+- Events explored over time: use `view/events-explorer`.
 
 ## Building blocks
 
@@ -9786,143 +9982,6 @@ What each prop and event does, and the go-live code: [blocks/view/rule-list.md](
 
 ---
 
-<!-- blocks/view/split-view.md -->
-
-# SplitView (`view/split-view`)
-
-> The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer.
-
-- Surface: app
-- Source: `blocks/view/split-view/split-view.vue` in `@aziontech/webkit`
-- MCP: `get_block("view/split-view")`
-- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Sidebar, Skeleton, Tabs, Tag, Tooltip, `use-collection`, `use-locale`
-- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
-
-## Asked as
-
-real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida; query language; events query; saved searches; saved queries; query history; date range; time range picker; investigation tabs; event document; consulta de eventos; buscas salvas; intervalo de datas
-
-The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
-
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).
-
-## When to use
-
-- Events or logs explored over time, where the volume chart and the rows must agree on one period and one set of filters.
-- Users pivot on field values (level, source, status, host) to find a pattern, then read one event's full document.
-- The record has more fields than a table row can hold, so the full document opens beside the list instead of in a details page.
-
-## When not to use
-
-- A first-level list of resources the user creates and manages: use `view/table-view`.
-- The log of one deployment or build run: use `detail/deployment-logs`.
-- Metrics and charts without a row-level log: use `dashboard/analytics-dashboard`.
-- Files and folders of a storage resource: use `view/file-browser`.
-- Querying a database with SQL: use `view/query-editor`.
-
-## Building blocks
-
-- A. Filter — `FilterMenu` (required)
-- B. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
-- C. Applied filters — `FilterMenu.ChipGroup` (optional)
-- D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Item`, `Accordion`, `Tag` (optional)
-- E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState`, `Alert` (required)
-- F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
-- G. Narrow document — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `Tag`, `CodeBlock` (required)
-- H. Query bar — `Tooltip`, `IconButton` (optional)
-- I. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Item`, `Tooltip` (optional)
-- J. Investigation tabs — `IconButton`, `Input`, `Tooltip` (optional)
-- K. Document tools — `Input`, `IconButton`, `Tooltip` (optional)
-
-What each part takes: [blocks/view/split-view.md](blocks/view/split-view.md).
-
-## Data
-
-The block takes its events through props and emits every action; it fetches nothing. `SplitViewEvent`, `SplitViewField`, `SplitViewBucket`, `SplitViewProps` and the other types are exported from `split-view.vue`, and `sample.ts` holds the sample events, fields and clock the block renders when `events` is left out (and never while `loading` or `error` is set). The filters (the period included), the search and the page are models the page can own, so it can run them on the server.
-
-Prop / model: `events`, `fields`, `categories`, `buckets`, `summary`, `total`, `now`, `moreRows`, `loadingMore`, `loading`, `error`, `v-model:filters`, `v-model:search`, `v-model:page`, `v-model:page-size`.
-
-Event: `refresh`, `retry`, `select`, `load-more`.
-
-Then delete `sample.ts` and its import, and give `fields` its own list. A log that streams instead of paging passes `moreRows` and appends the next events on `load-more`.
-
-What each prop and event does, and the go-live code: [blocks/view/split-view.md](blocks/view/split-view.md).
-
-## Do
-
-- Drive the summary, the chart and the table from one filtered set, so every number agrees.
-- Let a click or drag on the chart set the period, and show the period as a filter the user can clear.
-- Keep the row selected while its document is open, and switch between pane and drawer by the explorer's width, not the viewport's.
-- Let `FilterMenu` count the applied fields on its trigger and `FilterMenu.ChipGroup` show each one in field order.
-- Pick the empty message that matches why the log is empty.
-- In query mode, keep the applied query text as the user typed it, and save and list that text.
-- Keep each investigation tab self-contained: its own filters, search and period.
-- Let the document act on the log (Filter by, Exclude), so a pivot is one click from the value.
-- Mark the page root with `data-layout-fill`, so the panes scroll on their own instead of the page.
-
-## Don't
-
-- Don't navigate away to read one event; the document opens beside the log.
-- Don't add a second filter surface (a row of `Select`s, a filter bar in the fields panel) beside the Filter menu.
-- Don't hide the controls row or the summary when the log is empty.
-- Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
-- Don't let a wide log scroll the page sideways.
-- Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
-- Don't offer the query bar and the Filter menu at once; pick the one that fits the users.
-- Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
-- Don't let investigation tabs grow without a limit, and never close the last one.
-
-## Copy
-
-- **Search:** placeholder names what is searched, e.g. "Search events, hosts, paths or addresses"; `aria-label` "Search events".
-- **Summary labels:** short nouns, e.g. "Events", "Errors", "Avg request time".
-- **Chart hint:** one instruction, e.g. "Drag across the chart, or hold Shift with the arrow keys and press Enter, to filter the log to a span."
-- **Empty log:** title states the fact and the description says what to do, e.g. "No events in this window" with "Widen the period or clear a filter to see more of the log."
-- **Fields panel:** controls name the panel, e.g. "Hide the fields panel", "Show the fields panel".
-- **Document:** drawer title "Event"; close button "Close the event document".
-- **Query bar:** `aria-label` "Query events"; placeholder with one real example; the range "Events time range".
-- **Saved queries:** "Name the current query", Save, "Delete <name>"; empty "No saved queries yet. Name the current query to keep it."
-- **Tabs:** "New investigation", "Actions for <name>", Rename, Duplicate, "Close investigation"; limit "Up to 5 investigations stay open. Close one to start another."
-- **Document tools:** "Search in this event", "Filter by <field> <value>", "Exclude <field> <value>", "Copy the fields shown as JSON"; no match "No field matches “<text>”."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
-
-## Accessibility
-
-- The explorer sits in the layout's one `main` landmark; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
-- The chart is `Chart`'s one tab stop with an `aria-label` that carries the summary (busiest bucket) and the instruction; arrow keys move between buckets, Shift extends a span, Enter commits it, and the tooltip follows keyboard focus as it follows the pointer.
-- The Errors value carries an `aria-label` with its share of all events.
-- Every icon-only button has an `aria-label`; decorative glyphs are `aria-hidden="true"`. The row detail button names its event and carries `aria-expanded`.
-- Value options in the fields-panel popovers are buttons with `aria-pressed`, so applied values are announced; the Filter menu's own rows come from `FilterMenu`.
-- The document drawer traps focus while open and closes on Escape; motion is turned off under `prefers-reduced-motion`.
-- Query: the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
-- Sessions: the tabs follow the `Tabs` keyboard map (arrows, Home, End); F2 renames and Delete closes the focused tab, and the same actions sit in a named menu for pointer and screen-reader users; focus returns to the tab after rename or close.
-- EventDocument: Filter by and Exclude are toggle buttons (`aria-pressed`) named with the field and value; the match count of the document search is announced in a `role="status"`.
-
-## States
-
-- Default: live traffic with the summary, the chart and the log filled, and no filters applied; while the page refreshes (`loading` with `events`) the summary values and the chart show `Skeleton`s and the table its loading rows.
-- Loading: the first load (`loading` with no `events`); `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
-- Filtered: errors from the Security and Access Control sources (`v-model:filters` seeded with them); the Filter button counts three fields and each shows as a `FilterMenu.ChipGroup` chip.
-- Empty: a workspace with no traffic yet (`events` is `[]`); the summary reads zero, the chart is flat and the log shows No events yet.
-- Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`.
-- Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
-- Sessions: three investigation tabs, API errors active.
-- EventDocument: an error event's document open, with Host is not legacy.example.com applied.
-
-## Related
-
-- `view/table-view` — the same controls row over a resource list.
-- `detail/deployment-logs` — logs of one deployment run.
-- `dashboard/analytics-dashboard` — the metrics view for the same traffic.
-- `shell/console` — the layout this explorer renders in.
-- `DataTable` — the log table; see `skills/webkit-tables`, `skills/webkit-data-viz` and `skills/webkit-ui-states`.
-
-## Variants
-
-`Default` (primary) · `Filtered` · `Empty` · `Loading` · `Error` · `Query` · `Sessions` · `EventDocument`. Code: [blocks/view/split-view.md](blocks/view/split-view.md), `get_block("view/split-view", { variant })`.
-
----
-
 <!-- blocks/view/table-view.md -->
 
 # TableView (`view/table-view`)
@@ -9956,7 +10015,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - A list nested inside one resource (a tab of a details page): use the table inside `detail/resource-detail` or `detail/dns-zone-detail`, with `Add <Module>` instead of `Create`.
 - People on the account: use `account/users`. Teams and their permissions: use `account/team-permissions`. API tokens: use `account/personal-tokens`. The audit log: use `account/activity-history`.
 - Files and folders of a storage resource: use `view/file-browser`.
-- Events or logs explored over time with a chart and a document pane: use `view/split-view`.
+- Events or logs explored over time with a chart and a document pane: use `view/events-explorer`.
 - An account that has never created the resource: use `state/first-use`, which teaches the module before any list exists.
 - Choosing one existing resource inside a form: use `create/resource-picker`.
 
@@ -10065,7 +10124,7 @@ What each prop and event does, and the go-live code: [blocks/view/table-view.md]
 - Surface: app
 - Source: `blocks/view/template-browser/template-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/template-browser")`
-- Components: Alert, Button, Card, DocProse, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, KeyValueList, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, Skeleton, `use-collection`
+- Components: Alert, Button, Card, DocProse, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, IntegrationCard, KeyValueList, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, Skeleton, `use-collection`
 - Skills: `webkit-lists`, `webkit-create-surface`, `webkit-ui-states`
 
 ## Asked as
@@ -10096,7 +10155,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A. Page heading — `PageHeader`, `Button` (required)
 - B. Search and filter — `PropertyFilter` (required)
-- C. Category sections — `Card` (required)
+- C. Category sections — `IntegrationCard` (required)
 - D. No matching templates — `EmptyState`, `Button` (required)
 - E. Preview drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter` (required)
 - F. Template facts — `KeyValueList` (required)
@@ -10172,7 +10231,7 @@ What each prop and event does, and the go-live code: [blocks/view/template-brows
 - `state/async-submit` — the toast and inline outcome every deploy follows.
 - `view/marketplace` — installable integrations into an existing resource; it lists no templates.
 - `create/create-hub` — the creation hub that links here for "Start from a template".
-- `Card` and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.
 
 ## Variants
 
@@ -14626,8 +14685,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 ## Don’t
 
 - The content is build or deploy output with timestamps and log levels → use `log-viewer`.
-- It is a marketing band that pairs a claim with its code → use `media-split-section` with `codeTabs`, or `feature-scroll` with code items for several claims.
-- It is a terminal session of CLI commands on a product page → use `cli-terminal`.
+- It is a marketing band that pairs a claim with its code → use `media-split-section` with `codeTabs`, or `feature-scroll-section` with code items for several claims.
+- It is a terminal session of CLI commands on a product page → use `cli-terminal-section`.
 - You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
 - The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor.
 
@@ -14939,13 +14998,13 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 ## Don’t
 
 - Static, read-only code or configuration snippets → use `code-block`.
-- An animated terminal session on a marketing page → use `cli-terminal`.
+- An animated terminal session on a marketing page → use `cli-terminal-section`.
 - Rows of structured records with columns, sorting or paging → use `table`.
 
 ## Related
 
 - `code-block` — highlighted source code with a copy action, not a stream of typed log lines.
-- `cli-terminal` — marketing band that plays a scripted terminal session.
+- `cli-terminal-section` — marketing band that plays a scripted terminal session.
 - `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Props
@@ -15612,7 +15671,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 ## Related
 
-- `site-header` and `site-footer` — compose Brand for the site chrome.
+- `site-header-section` and `site-footer-section` — compose Brand for the site chrome.
 - `avatar` — the picture or initials of a user, not the product mark.
 - `logo-wall` — third-party company marks.
 
@@ -15894,7 +15953,7 @@ The frame is static apart from its resize handles.
 
 # Card
 
-> Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default variant holds a settings block, a summary or a form section; `variant="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
+> Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. It holds a settings block, a summary or a form section.
 
 - Import: `import Card from '@aziontech/webkit/card'`
 - Category: content · Surface: app · Structure: monolithic
@@ -15904,8 +15963,6 @@ The frame is static apart from its resize handles.
 - Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.
 - Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the body.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
-- A catalog tile for an integration, an extension or a plugin: set `variant="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
-- A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner.
 
 ## Do
 
@@ -15914,11 +15971,6 @@ The frame is static apart from its resize handles.
 - `header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
-- `variant="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.
-- Keep the description to one or two sentences; the card clamps it to three lines.
-- Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
-- Integration cards sit under a section heading, so their title is an `h3`.
-- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain integration tile.
 
 ## Don’t
 
@@ -15927,11 +15979,12 @@ The frame is static apart from its resize handles.
 - It is a framed cell or band of a marketing page → use `registration-frame` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
 - It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
-- It is a template tile in a gallery with no vendor, badge or install state → keep `variant="default"` with the default slot (see `view/template-browser`).
+- It is a catalog tile for an integration, an extension or a plugin (logo, vendor, badges, installed state) → use `integration-card`.
 
 ## Related
 
 - `item` — rows inside the card; with `padded` set to false, an `Item` list runs its dividers to the card edges.
+- `integration-card` — the catalog tile, split out of Card in 6.0.
 - `pricing-card` — pricing tier card with its own price hierarchy and action.
 - `card-grid` — responsive grid of cells for marketing pages.
 - `panel` — the layered shell behind overlays, not an in-page card.
@@ -15941,22 +15994,8 @@ The frame is static apart from its resize handles.
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty; with `variant="integration"`, the item name. |
+| `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty. |
 | `padded` | `boolean` | `true` | false | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
-| `variant` | `'default' \| 'integration'` | `'default'` | false | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot. |
-| `logo` | `string` | `''` | false | Integration variant: icon class for the logo mark. The `logo` slot takes an image instead. |
-| `vendor` | `string` | `''` | false | Integration variant: who publishes the item, shown as "by {vendor}". |
-| `description` | `string` | `''` | false | Integration variant: one or two sentences on what the item does. |
-| `badges` | `CardBadge[]` | `[]` | false | Integration variant: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
-| `installed` | `boolean` | `false` | false | Integration variant: shows the Installed tag. |
-| `href` | `string` | `''` | false | Integration variant: the title links here; without it the title is a button that emits `select`. |
-| `featured` | `boolean` | `false` | false | Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `select` | `event: MouseEvent` | Integration variant without `href`: the title (the whole tile) was activated. |
 
 ## Slots
 
@@ -15964,18 +16003,14 @@ The frame is static apart from its resize handles.
 | --- | --- | --- |
 | `header` | — | Replaces the default header layout (title + header-actions). |
 | `header-actions` | — | Actions aligned to the end of the default header; visible on header hover. |
-| `default` | — | Main card body: children passed without a slot name. With `variant="integration"` it renders under the description. |
+| `default` | — | Main card body: children passed without a slot name. |
 | `footer` | — | Footer actions or metadata; omitted when empty. |
-| `logo` | — | Integration variant: replaces the logo mark, for an `img` with an empty `alt`. |
-| `actions` | — | Integration variant: one action at the end of the tile, above the stretched title target. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValueList`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
-- Integration variant: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
-- Featured (`featured`, integration variant only): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.
 
 ## Accessibility
 
@@ -16421,7 +16456,7 @@ The frame is static apart from its resize handles.
 - A guided tutorial with tasks, progress and hotspots on the real controls → use `tutorial-panel`.
 - The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.
 - Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.
-- Numbered instructions inside a documentation page, read all at once → use `doc-steps` + `doc-step`.
+- Numbered instructions inside a documentation page, read all at once → use `doc-steps` (`DocSteps.Step`).
 - A page with nothing configured yet, which needs one call to action → use `empty-state`.
 
 ## Related
@@ -16788,6 +16823,131 @@ name.
 
 ---
 
+<!-- components/integration-card.md -->
+
+# Integration Card
+
+> Use IntegrationCard for one tile of a catalog of integrations, extensions or plugins; for a bordered box of related content use Card, and for a collection of resource records shown as cards use CardList. A catalog tile laid out from props: a logo mark, the item name, its vendor, a short description, badges, the installed state and one action. The name is the tile's single target: a link when `href` is set, otherwise a button that emits `select`, stretched over the whole tile. `featured` gives the centred, raised layout used for a short row of picks above the full catalog. It was the `integration` variant of `Card` until 6.0, split out because a tile shares neither the header nor the footer of a content card.
+
+- Import: `import IntegrationCard from '@aziontech/webkit/integration-card'`
+- Category: content · Surface: app · Structure: monolithic
+
+## When to use
+
+- A catalog tile for an integration, an extension or a plugin: the logo, the name, the vendor, a short description, badges, the installed state and one action.
+- A short row of highlighted integrations above the full catalog (Featured): add `featured` for the centred, raised layout with the badges in the corner.
+- A starter template or next-step tile that carries a mark, a name and a short description and links somewhere.
+
+## Do
+
+- The tile is laid out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole tile so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.
+- Keep the description to one or two sentences; the tile clamps it to three lines.
+- Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
+- Tiles sit under a section heading, so their title is an `h3`.
+- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain tile.
+
+## Don’t
+
+- A bordered box of related content with a title, a body and a footer → use `card`.
+- One record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
+- One tier of a pricing comparison → use `pricing-card`.
+- A single row of title, description, media and actions → use `item`.
+
+## Related
+
+- `card` — the content box this tile was split from; shares its surface tokens.
+- `tag` — renders the badges and the Installed state.
+- `card-list` — the resource list in card form, with selection.
+- `view/marketplace` — the block that lays these tiles out in a filtered grid.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | `''` | false | The item name; the tile's single target. |
+| `logo` | `string` | `''` | false | Icon class for the logo mark. The `logo` slot takes an image instead. |
+| `vendor` | `string` | `''` | false | Who publishes the item, shown as "by {vendor}". |
+| `description` | `string` | `''` | false | One or two sentences on what the item does. |
+| `badges` | `IntegrationCardBadge[]` | `[]` | false | Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
+| `installed` | `boolean` | `false` | false | Shows the Installed tag. |
+| `href` | `string` | `''` | false | The title links here; without it the title is a button that emits `select`. |
+| `featured` | `boolean` | `false` | false | The featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `select` | `event: MouseEvent` | Without `href`: the title (the whole tile) was activated. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | Extra content under the description. |
+| `logo` | — | Replaces the logo mark, for an `img` with an empty `alt`. |
+| `actions` | — | One action at the end of the tile, above the stretched title target. |
+
+## States
+
+- Visual states: `default`, `hover`, `focus-visible`
+- `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
+- Featured (`featured`): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.
+- Test ids: `integration-card` on the root, with `__logo`, `__title`, `__vendor`, `__installed`, `__actions`, and `__glow` and `__badges` when featured.
+
+## Accessibility
+
+- Visible focus: the stretched title target draws an inset `focus-visible:after:ring-2 focus-visible:after:ring-(--ring-color)` around the whole tile, so `overflow-clip` on the tile never cuts it.
+- Keyboard map: `Tab` reaches the title (a link or a button) and then the action; `Enter` activates the title (`Space` too when it is a button).
+- ARIA: the root is a `section`; the title is an `h3` holding the link or the button; the logo mark is `aria-hidden`; the featured glow is `aria-hidden`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
+- `motion-reduce:transition-none` on the hover and glow transitions.
+- Touch target: the whole tile is the title's target; the action is a regular `Button`.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
+  import { ref } from 'vue'
+
+  const opened = ref('')
+</script>
+
+<template>
+  <div class="flex w-full max-w-[400px] flex-col gap-(--spacing-sm)">
+    <IntegrationCard
+      title="Request Signer"
+      vendor="Acme Inc."
+      logo="ai ai-key"
+      description="Sign every request at the edge with a rotating key, so the origin only answers traffic that passed through."
+      :badges="[{ label: 'Firewall' }]"
+      @select="opened = 'Request Signer'"
+    >
+      <template #actions>
+        <Button
+          label="Install"
+          variant="outline"
+          size="small"
+        />
+      </template>
+    </IntegrationCard>
+    <p
+      class="m-0 text-body-xs text-(--text-muted)"
+      role="status"
+    >
+      {{ opened ? `Opened ${opened}` : '' }}
+    </p>
+  </div>
+</template>
+```
+
+2 more example(s) in [components/integration-card.md](components/integration-card.md).
+
+---
+
 <!-- components/item.md -->
 
 # Item
@@ -16824,7 +16984,7 @@ name.
 ## Related
 
 - `card` — the surface an `Item.List` sits in (with `:padded="false"`).
-- `table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.
+- `table` — columnar data; below `sm`, `listing-table-section` swaps its table rows for `item` rows.
 - `sidebar-menu` — navigation rows with nesting and drill levels.
 - `avatar` — the usual leading media for people rows inside `Item.Media`.
 
@@ -17640,10 +17800,10 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## Don’t
 
 - Steps or tasks with a done/not-done state (a production checklist, a setup guide) → use `outcome-icon` per row, or the `stepper`.
-- A comparison of features across plans → use `plan-comparison` or `table`.
+- A comparison of features across plans → use `plan-comparison-section` or `table`.
 - Label and value facts → use `key-value-list`.
 - Rows that navigate or carry actions → use `item`.
-- Marketing pricing cards on the site → use `pricing-card` / `pricing-plans`, which carry their own feature lists.
+- Marketing pricing cards on the site → use `pricing-card` / `pricing-plans-section`, which carry their own feature lists.
 
 ## Related
 
@@ -17728,16 +17888,16 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ## Don’t
 
-- You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans`.
-- You need a feature-by-feature comparison across plans → use `plan-comparison`.
+- You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans-section`.
+- You need a feature-by-feature comparison across plans → use `plan-comparison-section`.
 - You only need to show an amount, in a table cell or a summary → use `currency-amount`.
 - The card holds general content rather than a price → use `card`.
 
 ## Related
 
 - `currency-amount` — typesets the amount inside the card; use it directly for prices outside a tier card.
-- `pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.
-- `plan-comparison` — the matrix that sits under the plan cards.
+- `pricing-plans-section` — the page section that lays out a row of plan cards with the billing toggle.
+- `plan-comparison-section` — the matrix that sits under the plan cards.
 - `card` — generic bordered card with header, content and footer regions.
 
 ## Props
@@ -18986,8 +19146,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - A small, static table or one whose cells need a layout the column model cannot express → compose it by hand with `table` (no engine in the bundle).
 - People edit many cells of many records in place, spreadsheet-style → use `data-grid`.
 - A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
-- A short titled preview of a longer listing on a marketing page → use `listing-table`.
-- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison`.
+- A short titled preview of a longer listing on a marketing page → use `listing-table-section`.
+- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison-section`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
 - The same records as a grid of cards → use `card-list` (same collection, card layout).
 
@@ -18996,7 +19156,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - `table` — the parts DataTable renders through, and the hand-composed table for small static content; its toolbar parts and cell presets go in DataTable's slots.
 - `data-grid` — the editable, spreadsheet-like grid; use it when cells are edited in place.
 - `pagination` — the page strip; a `paginated` DataTable renders and wires it in the footer.
-- `listing-table` — marketing section that composes `table` for a linked preview of a list.
+- `listing-table-section` — marketing section that composes `table` for a linked preview of a list.
 - `empty-state` — the pattern behind the table's default `empty` slot; override the slot for resource-specific copy and actions.
 - `item` — list rows without a column structure.
 - `filter-menu` — Use FilterMenu when people filter by picking known values per field (status, region, owner) and see them as chips — the default console list filter; `TableFilter` hosts it by default.
@@ -19999,8 +20159,8 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Repeated records with sorting, selection, paging, filtering, virtual rows or tree rows → use `data-table` (`data` + `columns`).
 - People edit many cells of many records in place, spreadsheet-style → use `data-grid`.
 - A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
-- A short titled preview of a longer listing on a marketing page → use `listing-table`.
-- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison`.
+- A short titled preview of a longer listing on a marketing page → use `listing-table-section`.
+- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison-section`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
 - A grid of selectable cards or options → use `radio-group` with `type="card"`.
 - The same records as a grid of cards → use `card-list` (same collection, card layout).
@@ -20012,7 +20172,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - `pagination` — the page strip; put it in a `Table.Footer` in the `footer` slot.
 - `empty-state` — compose it in a full-width row when a hand-composed table has no rows.
 - `item` — list rows without a column structure.
-- `listing-table` — marketing section that composes a DataTable for a linked preview of a list.
+- `listing-table-section` — marketing section that composes a DataTable for a linked preview of a list.
 
 ## Props
 
@@ -20092,7 +20252,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - `data-clickable` on TableCell mirrors the `clickable` prop.
 - Density and wrapping: `data-density="compact"` on the root shrinks the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. A compact header is `Table.Header density="compact"`.
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
-- Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
+- Hover-free devices: a touch screen shows the sort glyph only on the sorted column, as on a pointer screen with no hover; tapping a sortable header sorts it, and keyboard focus reveals the sort button.
 
 ## Accessibility
 
@@ -21067,7 +21227,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## Don’t
 
 - A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.
-- A whole page that cannot be shown (missing route, no access, server failure) → use the `state/not-found` block.
+- A whole page that cannot be shown (missing route, no access, server failure) → use the `state/error-page` block.
 - A field that failed validation → use `field` with its error message.
 - Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`.
 
@@ -21250,7 +21410,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 - Not focusable; no keyboard map.
 - ARIA: the root `svg` is `role="img"` named by `ariaLabel` or the catalog name of the severity.
-- The shape of the glyph tells the outcomes apart without colour (WCAG 1.4.1); glyph against disc meets 3:1 (WCAG 1.4.11) in both themes.
+- The shape of the glyph tells the outcomes apart without colour (WCAG 1.4.1); the disc is a mark-weight status colour (`--*-mark`) that meets 3:1 and APCA Lc 45 on every surface, and the glyph (`--text-contrast`) meets the same against the disc, in both themes (WCAG 1.4.11; `packages/theme/test/status-mark-role.test.mjs`).
 - Motion is decorative and skipped under `prefers-reduced-motion`.
 
 ## Examples
@@ -25083,13 +25243,13 @@ packages/webkit/src/components/input/radio-group/
 
 ## Don’t
 
-- The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-header`, which composes this header.
+- The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-header-section`, which composes this header.
 - The navigation column at the side of the app → use `sidebar`.
 - An action row above a list of records → use the `toolbar` slot of `table`.
 
 ## Related
 
-- `site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
+- `site-header-section` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
 - `navigation-menu` — the dropdown navigation that usually goes in `AppHeader.Center`.
 - `brand` — the Azion lockup to place inside `AppHeader.Brand`.
 - `console-layout` — the console layout template that composes the header with the sidebar and the page.
@@ -25987,7 +26147,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 ## When to use
 
 - Use Footer to compose a footer in product or docs.
-- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
+- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
 - The page-level footer of a site or application, paired with `AppHeader`.
 - Grouped navigation links at the bottom of the page plus a brand/social/status bar.
 
@@ -26012,7 +26172,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 - `app-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
 - `brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
-- `site-footer` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
+- `site-footer-section` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer-section` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
 - `registration-frame` — the footer's own frame: the hatched gutters, the framed column and the signature box are `RegistrationFrame` instances (`borders` / `marks` / `hatch`).
 
 ## Props
@@ -28262,7 +28422,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 ## When to use
 
-- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteHeader, and app navigation uses SidebarMenu.
+- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteHeaderSection, and app navigation uses SidebarMenu.
 - A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).
 - A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.
 - Panel entries need a title plus a muted description line, a leading icon, or a featured "see all" link.
@@ -28285,11 +28445,11 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - It is the persistent vertical navigation of an app → use `sidebar` with `sidebar-menu`.
 - It is a list of actions or options opened from a button → use `dropdown-menu`.
 - It shows where the current page sits in a hierarchy → use `breadcrumb`.
-- It is the marketing site's whole navigation bar → use `site-header`, which already composes this menu.
+- It is the marketing site's whole navigation bar → use `site-header-section`, which already composes this menu.
 
 ## Related
 
-- `site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
+- `site-header-section` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
 - `app-header` — the bar layout this menu usually sits in.
 - `dropdown-menu` — a single-trigger option menu, not a site-wide navigation bar.
 - `sidebar-menu` — vertical, hierarchical navigation rows for a sidebar.
@@ -28532,6 +28692,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `column` | `'full' \| 'data' \| 'form' \| 'focused'` | `'full'` | false | The page column the tab row lines up with: the full width, or the data, form or focused column below it. |
+| `align` | `'start' \| 'center'` | `'start'` | false | Where the tab triggers sit in the row: at the start edge, or centred. Passed to `Tabs.List`. |
 | `modelValue` | `TabsValue \| null` | `null` | false | Two-way value (`v-model`). |
 
 ## Slots
@@ -28934,7 +29095,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
 
 ## Don’t
 
-- Numbered instructions inside a document, where every step is read at once → use `doc-steps` + `doc-step`.
+- Numbered instructions inside a document, where every step is read at once → use `doc-steps` (`DocSteps.Step`).
 - Progress with no discrete, nameable steps (a percentage, an upload) → use `progress`.
 - Switching between peer views that are not ordered and have no completion → use `tabs`.
 - A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow-diagram`.
@@ -29272,7 +29433,7 @@ even when the row carries nothing but its title.
 - A confirmation or a single decision → use `dialog`.
 - Peer views with no order and no completion → use `tabs`.
 - A custom multi-step layout where the caller needs its own actions or a different arrangement → compose
-- Numbered instructions inside documentation → use `doc-steps` + `doc-step`.
+- Numbered instructions inside documentation → use `doc-steps` (`DocSteps.Step`).
 
 ## Related
 
@@ -29983,7 +30144,7 @@ packages/webkit/src/components/overlay/command/
 
 ## Don’t
 
-- The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.
+- The content is a side panel or a long form that should slide from an edge, over the screen that owns it → use `drawer` (nothing inside a drawer navigates; a destination of its own is a page).
 - It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`.
 
 ## Related
@@ -30120,7 +30281,7 @@ packages/webkit/src/components/overlay/command/
 
 # Drawer
 
-> A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. `Drawer.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay, traps focus and scroll-locks the page, so the page behind cannot be clicked or tabbed to while it is open. The header gets the close (X) button on its own unless `closable` is false. It closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger. `:modal="false"` is the one opt-out: no overlay, no focus trap, no scroll lock, for a side panel that works next to the page it talks about (as Radix `modal={false}`).
+> A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row. Nothing inside a drawer navigates: no tabs, breadcrumb or links to other pages. `Drawer.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay, traps focus and scroll-locks the page, so the page behind cannot be clicked or tabbed to while it is open. The header gets the close (X) button on its own unless `closable` is false. It closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger. `:modal="false"` is the one opt-out: no overlay, no focus trap, no scroll lock, for a side panel that works next to the page it talks about (as Radix `modal={false}`).
 
 - Import: `import DrawerRoot from '@aziontech/webkit/drawer-root'`
 - Compound import (dot notation, not tree-shakeable): `import Drawer from '@aziontech/webkit/drawer'`
@@ -30136,7 +30297,7 @@ packages/webkit/src/components/overlay/command/
 ## Do
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
-- Set `size="large"` on the first drawer of a flow. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
+- The first drawer of a flow is `large`, the default. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
 - Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).
 - Keep the drawer modal (the default). Use `:modal="false"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.
 - While an action is in flight, set `:dismissible="false"` and `:closable="false"` together so nothing can close it.
@@ -30163,7 +30324,7 @@ packages/webkit/src/components/overlay/command/
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. |
 | `modal` | `boolean` | `true` | false | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
 | `side` | `DrawerSide` | `'end'` | false | Edge the drawer panel slides from, in reading direction (`start` or `end`). |
-| `size` | `DrawerSize` | `'medium'` | false | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
+| `size` | `DrawerSize` | `'large'` | false | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Slots

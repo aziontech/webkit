@@ -1,0 +1,21 @@
+{
+ "purpose": "A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ConsoleMockup` or a diagram and reads the selected tab from the slot scope. In `console` variant the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsoleShowcaseSection`.",
+ "useWhen": [
+  "Use ConsoleShowcaseSection for a marketing band that plays a product scene under a section title.",
+  "Showing the product itself on a landing page.",
+  "A tour of three or four views of one screen."
+ ],
+ "avoidWhen": [
+  "For a screenshot with copy beside it — use `MediaSplitSection`.",
+  "For code — use `MediaSplitSection` with `codeTabs`, or `CliTerminalSection`."
+ ],
+ "related": [
+  "`ConsoleMockup` — the console scenes it frames.",
+  "`ToggleGroup` — the tab control.",
+  "`Texture`, `RegistrationFrame`, `SectionTitle`."
+ ],
+ "bestPractices": [
+  "Two to four tabs, each a different view, labelled with one word.",
+  "Crop the scene only to remove empty space at its bottom (0.1–0.3)."
+ ]
+}

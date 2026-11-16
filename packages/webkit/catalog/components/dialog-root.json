@@ -5,7 +5,7 @@
   "The interaction must be completed or dismissed before returning to the page."
  ],
  "avoidWhen": [
-  "The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.",
+  "The content is a side panel or a long form that should slide from an edge, over the screen that owns it → use `drawer` (nothing inside a drawer navigates; a destination of its own is a page).",
   "It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`."
  ],
  "related": [

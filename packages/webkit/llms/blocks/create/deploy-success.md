@@ -1,11 +1,11 @@
 # DeploySuccess (`create/deploy-success`)
 
-> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as integration Cards that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `SectionHeader`, `Card`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
+> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `SectionHeader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
 
 - Surface: app
 - Source: `blocks/create/deploy-success/deploy-success.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/deploy-success")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [Item](../../components/item.md), [Link](../../components/link.md), [SectionHeader](../../components/section-header.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [SectionHeader](../../components/section-header.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -41,9 +41,9 @@ The live service: a decorative preview tile (hidden from assistive technology; V
 
 A small heading, "Resources", over `Card :padded="false"` holding an `Item` list, one small row per resource: kind glyph, name, its ID or contents as the description, and a small `Tag` reading Created or Bound. Bound marks a resource that already existed and was attached, so the user can tell new things from reused ones.
 
-### D. Next steps — `Card` (required)
+### D. Next steps — `IntegrationCard` (required)
 
-`Card variant="integration"` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
+`IntegrationCard` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
 ### E. Get started — `SectionHeader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
 
@@ -152,8 +152,9 @@ Each variant is the same screen in another state: `get_block("create/deploy-succ
 ```vue
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Card, { type CardBadge } from '@aziontech/webkit/card'
+  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import IntegrationCard, { type IntegrationCardBadge } from '@aziontech/webkit/integration-card'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import SectionHeader from '@aziontech/webkit/section-header'
@@ -258,7 +259,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-succ
     manage: [event: MouseEvent]
   }>()
 
-  const recommendedBadge: CardBadge[] = [{ label: 'Recommended', variant: 'primary' }]
+  const recommendedBadge: IntegrationCardBadge[] = [{ label: 'Recommended', variant: 'primary' }]
 
   const currentDeployment = computed(() =>
     props.deployment === undefined ? sampleDeployment : props.deployment
@@ -570,10 +571,9 @@ jobs:
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Next steps</h2>
               <div class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3">
-                <Card
+                <IntegrationCard
                   v-for="step in currentNextSteps"
                   :key="step.title"
-                  variant="integration"
                   :title="step.title"
                   :logo="step.icon"
                   :description="step.description"

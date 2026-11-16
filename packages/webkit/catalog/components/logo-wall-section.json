@@ -5,8 +5,8 @@
   "To prove adoption with marks and let one customer speak, early on a home or solution page."
  ],
  "avoidWhen": [
-  "For several quotes in turn → use `client-quotes`.",
-  "For marks with photos and stories in a mosaic → use `client-mosaic`."
+  "For several quotes in turn → use `client-quotes-section`.",
+  "For marks with photos and stories in a mosaic → use `client-mosaic-section`."
  ],
  "related": [
   "`logo-wall` — the wall the marks are laid in, with the quote in its aside.",

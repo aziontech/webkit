@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The library at rest: type in the search field or pick a facet to narrow the grid; when nothing matches, the empty state clears every filter.",
+   "file": "examples/story-index-section/default.vue"
+  },
+  {
+   "name": "NoResults",
+   "summary": "No story matches: the grid gives way to the empty state and its clear-filters action.",
+   "file": "examples/story-index-section/no-results.vue"
+  },
+  {
+   "name": "Paged",
+   "summary": "A `page-size` of two: the grid shows the first two stories and the load-more button reveals the next page; changing the search or a facet returns to the first page. Below the large breakpoint the toolbar folds to a filter button, the shorter search placeholder and a chip per applied facet.",
+   "file": "examples/story-index-section/paged.vue"
+  }
+ ]
+}

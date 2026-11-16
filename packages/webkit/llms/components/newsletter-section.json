@@ -15,19 +15,19 @@
   "To close the Blog or the Resource Hub on a newsletter subscription."
  ],
  "avoidWhen": [
-  "For a close on one or two link actions or a command → use `closing-call-to-action`.",
-  "For a close that lists deployable templates → use `template-gallery` with `closing`.",
+  "For a close on one or two link actions or a command → use `closing-call-to-action-section`.",
+  "For a close that lists deployable templates → use `template-gallery-section` with `closing`.",
   "For a lead form with several fields → use `hero-form-section`."
  ],
  "related": [
-  "`closing-call-to-action` — the closing band whose ask is a link action.",
+  "`closing-call-to-action-section` — the closing band whose ask is a link action.",
   "`alert` — renders the success and failure messages."
  ],
  "bestPractices": [
   "Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.",
   "Keep `description` to one sentence; it is set as the large headline.",
   "Write `form.invalidMessage` with an example address so the fix is obvious.",
-  "Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close."
+  "Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close."
  ],
  "props": [
   {

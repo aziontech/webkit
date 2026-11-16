@@ -24,7 +24,7 @@
 ## Don’t
 
 - A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.
-- A whole page that cannot be shown (missing route, no access, server failure) → use the `state/not-found` block.
+- A whole page that cannot be shown (missing route, no access, server failure) → use the `state/error-page` block.
 - A field that failed validation → use `field` with its error message.
 - Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

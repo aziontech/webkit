@@ -9,7 +9,7 @@
 
 ## When to use
 
-- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteHeader, and app navigation uses SidebarMenu.
+- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteHeaderSection, and app navigation uses SidebarMenu.
 - A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).
 - A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.
 - Panel entries need a title plus a muted description line, a leading icon, or a featured "see all" link.
@@ -32,12 +32,12 @@
 - It is the persistent vertical navigation of an app → use `sidebar` with `sidebar-menu`.
 - It is a list of actions or options opened from a button → use `dropdown-menu`.
 - It shows where the current page sits in a hierarchy → use `breadcrumb`.
-- It is the marketing site's whole navigation bar → use `site-header`, which already composes this menu.
+- It is the marketing site's whole navigation bar → use `site-header-section`, which already composes this menu.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [site-header](site-header.md) — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
+- [site-header-section](site-header-section.md) — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
 - [app-header](app-header.md) — the bar layout this menu usually sits in.
 - [dropdown-menu](dropdown-menu.md) — a single-trigger option menu, not a site-wide navigation bar.
 - [sidebar-menu](sidebar-menu.md) — vertical, hierarchical navigation rows for a sidebar.

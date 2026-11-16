@@ -7,8 +7,8 @@
   },
   {
    "name": "Console panel",
-   "summary": "The same scene in a `ConsoleShowcase` `#scene` slot, switched by the panel's tabs.",
-   "file": "examples/assets-console-trace-scene/console-showcase.vue"
+   "summary": "The same scene in a `ConsoleShowcaseSection` `#scene` slot, switched by the panel's tabs.",
+   "file": "examples/assets-console-trace-scene/console-showcase-section.vue"
   }
  ]
 }

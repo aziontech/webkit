@@ -22,7 +22,7 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 ## When not to use
 
-- The child list is short and needs no search or filters: use `detail/attached-resources` inside a settings section.
+- The child list is short and needs no search or filters: use `detail/domains-card` inside a settings section.
 - A first-level list reached from the sidebar: use `view/table-view`.
 - A resource whose detail page is an overview with several tabs and no dominant record list: use `detail/resource-detail`.
 - Settings only, with no child records: use `edit/edit-resource`.
@@ -192,7 +192,7 @@ Then delete `sample.ts` and its import.
 
 - `view/table-view` — the index this page is opened from, and the source of the controls row recipe.
 - `edit/edit-resource` — the settings form and save bar pattern used by Main settings.
-- `detail/attached-resources` — a short related list inside a settings section.
+- `detail/domains-card` — a short related list inside a settings section.
 - `edit/delete-dialog` — the dialog behind the row menu's Delete.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
 

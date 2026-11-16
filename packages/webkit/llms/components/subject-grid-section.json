@@ -1,0 +1,72 @@
+{
+ "name": "subject-grid-section",
+ "binding": "SubjectGridSection",
+ "import": "@aziontech/webkit/subject-grid-section",
+ "treeShakeableImport": "@aziontech/webkit/subject-grid-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.",
+ "setup": null,
+ "useWhen": [
+  "On the Learning Center index, to list every subject with the articles that teach it.",
+  "Whenever a page needs a grid of topic cards that each carry a short list of links, closed by one call to action."
+ ],
+ "avoidWhen": [
+  "For a grid of features with artwork → use `feature-tiles-section`.",
+  "For a filterable list of rows → use `listing-index-section`.",
+  "Inside another band's cell → compose `registration-frame` and `call-to-action` directly."
+ ],
+ "related": [
+  "`call-to-action` — the `lead` band drawn in the closing cell.",
+  "`card-grid` — the divider grid the subject cards sit in."
+ ],
+ "bestPractices": [
+  "Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.",
+  "Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.",
+  "Keep each subject's articles to a handful; the card grows with its list."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page `id` of the band, the target of a `#hash` link."
+  },
+  {
+   "name": "subjects",
+   "type": "SubjectGridSectionSubject[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped."
+  },
+  {
+   "name": "closing",
+   "type": "SubjectGridSectionClosing",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the band; empty leaves the section unnamed. Set it so the band is a named region landmark."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/subject-grid-section/default.vue"
+  }
+ ],
+ "docs": "components/subject-grid-section.md"
+}

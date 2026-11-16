@@ -4,9 +4,9 @@
 
 Pass the name to `Illustration` (`name`) or to a section that shows one (`illustration`).
 
-68 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
+60 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
 
-Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../components/feature-tabs.md), [FeatureTiles](../components/feature-tiles.md), [FeatureWidgets](../components/feature-widgets.md), [HeroSection](../components/hero-section.md), [Illustration](../components/illustration.md), [MediaSplitSection](../components/media-split-section.md), [MediaSplitStackSection](../components/media-split-stack-section.md), [SitePage](../components/site-page.md).
+Used by: [FeatureScrollSection](../components/feature-scroll-section.md), [FeatureTabsSection](../components/feature-tabs-section.md), [FeatureTilesSection](../components/feature-tiles-section.md), [FeatureWidgetsSection](../components/feature-widgets-section.md), [HeroSection](../components/hero-section.md), [Illustration](../components/illustration.md), [MediaSplitSection](../components/media-split-section.md), [MediaSplitStackSection](../components/media-split-stack-section.md), [SitePage](../components/site-page.md).
 
 ## Usage
 
@@ -38,7 +38,6 @@ Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../comp
 | `azion-to-vercel` | 592x300 |  |
 | `branches` | 170x128 |  |
 | `build-applications` | 592x300 |  |
-| `build-databases-from-code` | 592x300 | Old name, kept so existing page data renders: use `sql-sdk-code-cards`. |
 | `chat-and-headset-tiles` | 230x154 |  |
 | `combine-data-and-vector-search` | 592x300 |  |
 | `content-and-media-delivery` | 583x296 |  |
@@ -51,9 +50,7 @@ Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../comp
 | `detect-and-classify` | 592x300 |  |
 | `distributed-apis` | 592x300 |  |
 | `distributed-apis-tile` | 414x148 |  |
-| `distributed-sql-for-resilient-global-reads` | 592x300 | Old name, kept so existing page data renders: use `globe-with-sql-nodes`. |
 | `dns-protection` | 592x300 |  |
-| `enable-owasp-protection-with-customizable-rules` | 592x300 | Old name, kept so existing page data renders: use `waf-threat-families-panel`. |
 | `fastest-path-to-live-website` | 592x300 |  |
 | `global-network` | 592x300 |  |
 | `globe-with-sql-nodes` | 592x300 |  |
@@ -78,17 +75,12 @@ Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../comp
 | `real-time-metrics-error-rate` | 366x193 |  |
 | `real-time-metrics-status-codes` | 366x250 |  |
 | `replicated-reads` | 592x300 |  |
-| `reputation-intelligence-for-enhanced-protection` | 592x300 | Old name, kept so existing page data renders: use `reputation-rings-hub`. |
 | `reputation-rings-hub` | 592x300 |  |
 | `request-inspection` | 754x382 |  |
 | `retail-application-modernization` | 592x300 |  |
 | `runtime` | 592x300 |  |
-| `saas-platforms` | 592x300 | Old name, kept so existing page data renders: use `azion-to-commerce-tiles`. |
 | `sql-sdk-code-cards` | 592x300 |  |
-| `stay-in-control` | 230x154 | Old name, kept so existing page data renders: use `traffic-and-cost-bar-chart`. |
-| `stream-security-events-for-investigation-and-response` | 592x300 | Old name, kept so existing page data renders: use `data-stream-destinations-map`. |
 | `traffic-and-cost-bar-chart` | 230x154 |  |
 | `url-based-transformations-without-api-complexity` | 592x300 |  |
 | `usage-chart` | 170x128 |  |
 | `waf-threat-families-panel` | 592x300 |  |
-| `white-gloves-when-it-matters` | 230x154 | Old name, kept so existing page data renders: use `chat-and-headset-tiles`. |

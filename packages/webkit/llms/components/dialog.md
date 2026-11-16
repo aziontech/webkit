@@ -21,7 +21,7 @@
 
 ## Don’t
 
-- The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.
+- The content is a side panel or a long form that should slide from an edge, over the screen that owns it → use `drawer` (nothing inside a drawer navigates; a destination of its own is a page).
 - It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

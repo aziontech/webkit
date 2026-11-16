@@ -280,7 +280,7 @@ Then delete `sample.ts` and its import.
 - `dashboard/configurable-dashboard` — when the reader arranges the cards.
 - `dashboard/service-monitoring-dashboard` — latency percentiles and an alert rail.
 - `ChartCard` / `StatTile` — the card and tile every dashboard shares.
-- `view/split-view` — the events behind these numbers, row by row.
+- `view/events-explorer` — the events behind these numbers, row by row.
 - `edit/edit-resource` (DataStream) — where the streams counted under Data stream are set up.
 
 ## Variants

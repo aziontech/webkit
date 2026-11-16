@@ -1,14 +1,14 @@
 {
  "purpose": "A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence. Left alone it moves through the clients on its own, the way `media-tabs` does: a hairline along the panel's bottom edge fills toward the next client, and the band holds still while the reader points at it or works it from the keyboard.",
  "useWhen": [
-  "Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).",
   "Use QuoteTabs in a hand-built SFC that needs the `#actions` slot.",
   "To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.",
   "As a success-story band where the wall of customers and the quotation are the same content, not two lists."
  ],
  "avoidWhen": [
   "For one quotation on its own → use `quote` with `variant=\"highlight\"`.",
-  "For a band of customer quotes the reader browses by client → use `client-quotes`.",
+  "For a band of customer quotes the reader browses by client → use `client-quotes-section`.",
   "For a wall whose cards link to each customer's story → use `logo-wall`.",
   "For a moving strip of marks with no links → use `marquee`.",
   "For switching a page's content between views → use `tabs`."
@@ -18,7 +18,7 @@
   "`logo-wall` — the same framed client cells, as links out rather than as a selector.",
   "`card-grid` — the framed grid the cards are laid out on.",
   "`registration-frame` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.",
-  "`client-quotes` — the page-section band of customer quotes browsed by client.",
+  "`client-quotes-section` — the page-section band of customer quotes browsed by client.",
   "`media-tabs` — the same timer and progress hairline, for claims paired with a medium."
  ],
  "bestPractices": [

@@ -27,7 +27,7 @@
 - For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.
 - For a claim that carries an eyebrow, a media region or a button → use `media-split`.
 - For the headline that opens the whole section → use `section-title`.
-- For a whole band of claims or links placed from page JSON → use `capability-grid`, which lays topics out for you.
+- For a whole band of claims or links placed from page JSON → use `capability-grid-section`, which lays topics out for you.
 - For a measured figure with a unit → use `stats`.
 - For a console list row with media and actions → use `item`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

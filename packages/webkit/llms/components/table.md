@@ -27,8 +27,8 @@
 - Repeated records with sorting, selection, paging, filtering, virtual rows or tree rows → use `data-table` (`data` + `columns`).
 - People edit many cells of many records in place, spreadsheet-style → use `data-grid`.
 - A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
-- A short titled preview of a longer listing on a marketing page → use `listing-table`.
-- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison`.
+- A short titled preview of a longer listing on a marketing page → use `listing-table-section`.
+- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison-section`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
 - A grid of selectable cards or options → use `radio-group` with `type="card"`.
 - The same records as a grid of cards → use `card-list` (same collection, card layout).
@@ -41,7 +41,7 @@
 - [pagination](pagination.md) — the page strip; put it in a `Table.Footer` in the `footer` slot.
 - [empty-state](empty-state.md) — compose it in a full-width row when a hand-composed table has no rows.
 - [item](item.md) — list rows without a column structure.
-- [listing-table](listing-table.md) — marketing section that composes a DataTable for a linked preview of a list.
+- [listing-table-section](listing-table-section.md) — marketing section that composes a DataTable for a linked preview of a list.
 
 ## Props
 
@@ -121,7 +121,7 @@
 - `data-clickable` on TableCell mirrors the `clickable` prop.
 - Density and wrapping: `data-density="compact"` on the root shrinks the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. A compact header is `Table.Header density="compact"`.
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
-- Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
+- Hover-free devices: a touch screen shows the sort glyph only on the sorted column, as on a pointer screen with no hover; tapping a sortable header sorts it, and keyboard focus reveals the sort button.
 
 ## Accessibility
 

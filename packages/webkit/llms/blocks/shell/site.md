@@ -1,6 +1,6 @@
 # Site (`shell/site`)
 
-> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeader data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeader.
+> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeaderSection data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooterSection data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooterSection closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeaderSection.
 
 - Surface: site
 - Source: `blocks/shell/site/site.vue` in `@aziontech/webkit`
@@ -10,9 +10,9 @@
 
 ## Asked as
 
-site shell; marketing site layout; landing page layout; website layout; marketing page frame; layout do site; estrutura do site; página de marketing; website shell; marketing site shell; site layout component; SiteLayout; layout do site com SiteHeader
+site shell; marketing site layout; landing page layout; website layout; marketing page frame; layout do site; estrutura do site; página de marketing; website shell; marketing site shell; site layout component; SiteLayout; layout do site com SiteHeaderSection
 
-The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteHeader` and `SiteFooter` data; each page is only its sections, in the layout's slot.
+The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteHeaderSection` and `SiteFooterSection` data; each page is only its sections, in the layout's slot.
 
 ## When to use
 
@@ -27,7 +27,7 @@ The marketing shell: one continuous frame — the site bar, a hero band that sta
 
 ### A. Site chrome — `SiteLayout` (required)
 
-Composed once in the app's root around `RouterView`. `navigation` is the `SiteHeader` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
+Composed once in the app's root around `RouterView`. `navigation` is the `SiteHeaderSection` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooterSection` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
 
 ### B. Opening band — `Hero` (required)
 
@@ -51,7 +51,7 @@ One per section; here unpadded and undivided around a framed figure row.
 
 ### G. Framed area — `RegistrationFrame` (required)
 
-Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToAction`, `NewsletterSection`, or `TemplateGallery` with `closing`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
+Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToActionSection`, `NewsletterSection`, or `TemplateGallerySection` with `closing`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
 
 ### H. Figures — `Stats` (optional)
 
@@ -72,7 +72,7 @@ A row of headline figures inside a `RegistrationFrame`.
 
 ## Don't
 
-- Never add `SiteHeader`, `SiteFooter`, `AppHeader` or `Footer` to a page; the layout already renders them.
+- Never add `SiteHeaderSection`, `SiteFooterSection`, `AppHeader` or `Footer` to a page; the layout already renders them.
 - Never render a second `<main>`; the layout owns the landmark.
 - Don't wrap the layout's slot content in a border, padding or `max-w-*` of its own.
 - Don't nest a second `SectionContainer`.

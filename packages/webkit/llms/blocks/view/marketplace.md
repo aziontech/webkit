@@ -1,11 +1,11 @@
 # Marketplace (`view/marketplace`)
 
-> The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card variant="integration"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` `IntegrationCard`s (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `IntegrationCard` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/marketplace/marketplace.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/marketplace")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -35,17 +35,17 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 `PageHeader` at its medium size: "Marketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
 
-### B. Featured — `Card` (required)
+### B. Featured — `IntegrationCard` (required)
 
-While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `Card variant="integration" featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
+While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `IntegrationCard featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
 
 ### C. Search and filter — `PropertyFilter` (required)
 
 Under the "All integrations" `h2`, one `PropertyFilter` bound with `v-bind="propertyFilterProps"`. Free text searches the name, the publisher and the description; Publisher and Category list the values in the catalog, Context is Application or Firewall, and Status is Installed or Available. Every token lives in the URL (`url: true`).
 
-### D. Integration tiles — `Card`, `Button` (required)
+### D. Integration tiles — `IntegrationCard`, `Button` (required)
 
-A `ul` grid, one to three tiles a row by width, of `Card variant="integration"`: the logo, the name (the stretched target that emits `select`), "by" the publisher, two lines of description, the category as a secondary badge, the Installed tag from `installed`, and in the `action` slot an outlined small `Button`, Install for an available integration and Configure for an installed one, named with the integration (`Install Rate Guard`). Both the tile and its action open the drawer.
+A `ul` grid, one to three tiles a row by width, of `IntegrationCard`: the logo, the name (the stretched target that emits `select`), "by" the publisher, two lines of description, the category as a secondary badge, the Installed tag from `installed`, and in the `action` slot an outlined small `Button`, Install for an available integration and Configure for an installed one, named with the integration (`Install Rate Guard`). Both the tile and its action open the drawer.
 
 ### E. No matching integrations — `EmptyState`, `Button` (required)
 
@@ -153,7 +153,7 @@ Then delete `sample.ts` and its import.
 ## Do
 
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
-- Use `Card variant="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
+- Use `IntegrationCard` for every integration tile, with the installed state as the `installed` prop and one action in the `actions` slot.
 - Hide the Featured row while any filter is set.
 - Keep templates out of this page: a template starts a project, so it lives in `view/template-browser`.
 - Open the detail in a drawer so the catalog, the filter and the scroll stay put.
@@ -212,7 +212,7 @@ Then delete `sample.ts` and its import.
 - `create/deploy-template` — where a template's Deploy leads.
 - `state/async-submit` — the toast and inline outcome every install follows.
 - `state/form-validation` (SectionRejected) — the field, section and toast placement of a form error.
-- `Card` (`variant="integration"`) and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.
 
 ## Variants
 
@@ -241,6 +241,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -614,9 +615,8 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                 :key="item.id"
                 class="flex min-w-0"
               >
-                <Card
+                <IntegrationCard
                   class="w-full"
-                  variant="integration"
                   featured
                   :title="item.name"
                   :vendor="item.vendor"
@@ -672,9 +672,8 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                 :key="item.id"
                 class="flex min-w-0"
               >
-                <Card
+                <IntegrationCard
                   class="w-full"
-                  variant="integration"
                   :title="item.name"
                   :vendor="item.vendor"
                   :logo="item.logo"
@@ -692,7 +691,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                       @click="(event: MouseEvent) => onSelect(event, item)"
                     />
                   </template>
-                </Card>
+                </IntegrationCard>
               </li>
             </ul>
           </section>

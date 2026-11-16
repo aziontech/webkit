@@ -1,6 +1,6 @@
 # Marquee
 
-> An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band. Its loop (the travelling track, the duplicate copy hidden from assistive technology, hover/focus pause and the pause control) is an internal part shared with `recognition-marquee` and `photo-marquee`.
+> An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band. Its loop (the travelling track, the duplicate copy hidden from assistive technology, hover/focus pause and the pause control) is an internal part shared with `recognition-marquee-section` and `photo-marquee-section`.
 
 - Import: `import Marquee from '@aziontech/webkit/marquee'`
 - Category: marketing · Surface: site · Structure: monolithic

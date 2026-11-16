@@ -63,6 +63,10 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   the webkit types already accept it.
 - Never disable browser zoom (`user-scalable=no`, `maximum-scale=1`).
 - Never rely on color alone for a status: pair it with a label or an icon with a name.
+- Never pick a colour pair by eye. Every pair passes **both** WCAG 2.1 AA (4.5:1 text, 3:1 icons
+  and marks) and APCA: Lc 75 body text, Lc 60 other text, Lc 45 icons, Lc 30 solid marks, Lc 15
+  borders. Use the theme's token pairs (they pass); the few accepted exceptions are listed in
+  `webkit-tokens.md` § "Contrast: APCA and WCAG 2".
 - Never strip the underline from a link inside a sentence (`text-link`, `no-underline`): the link blue is
   only 1.1–1.3:1 against muted body text and 3:1 against default text, so color alone fails WCAG 1.4.1.
   `text-link` keeps a quiet underline at rest and strengthens it on hover. A standalone `Link` (not in a

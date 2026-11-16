@@ -1,6 +1,6 @@
 # Drawer
 
-> A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. `Drawer.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay, traps focus and scroll-locks the page, so the page behind cannot be clicked or tabbed to while it is open. The header gets the close (X) button on its own unless `closable` is false. It closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger. `:modal="false"` is the one opt-out: no overlay, no focus trap, no scroll lock, for a side panel that works next to the page it talks about (as Radix `modal={false}`).
+> A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row. Nothing inside a drawer navigates: no tabs, breadcrumb or links to other pages. `Drawer.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay, traps focus and scroll-locks the page, so the page behind cannot be clicked or tabbed to while it is open. The header gets the close (X) button on its own unless `closable` is false. It closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger. `:modal="false"` is the one opt-out: no overlay, no focus trap, no scroll lock, for a side panel that works next to the page it talks about (as Radix `modal={false}`).
 
 - Import: `import DrawerRoot from '@aziontech/webkit/drawer-root'`
 - Compound import (dot notation, not tree-shakeable): `import Drawer from '@aziontech/webkit/drawer'`
@@ -17,7 +17,7 @@
 ## Do
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
-- Set `size="large"` on the first drawer of a flow. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
+- The first drawer of a flow is `large`, the default. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
 - Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).
 - Keep the drawer modal (the default). Use `:modal="false"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.
 - While an action is in flight, set `:dismissible="false"` and `:closable="false"` together so nothing can close it.
@@ -45,7 +45,7 @@
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. |
 | `modal` | `boolean` | `true` | false | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
 | `side` | `DrawerSide` | `'end'` | false | Edge the drawer panel slides from, in reading direction (`start` or `end`). |
-| `size` | `DrawerSize` | `'medium'` | false | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
+| `size` | `DrawerSize` | `'large'` | false | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Slots

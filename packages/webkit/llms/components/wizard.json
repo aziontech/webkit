@@ -23,7 +23,7 @@
   "A confirmation or a single decision → use `dialog`.",
   "Peer views with no order and no completion → use `tabs`.",
   "A custom multi-step layout where the caller needs its own actions or a different arrangement → compose",
-  "Numbered instructions inside documentation → use `doc-steps` + `doc-step`."
+  "Numbered instructions inside documentation → use `doc-steps` (`DocSteps.Step`)."
  ],
  "related": [
   "`stepper` — the rail this component composes. Reach for it alone when the footer and gating must be",

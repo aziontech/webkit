@@ -22,10 +22,10 @@
 ## Don’t
 
 - Steps or tasks with a done/not-done state (a production checklist, a setup guide) → use `outcome-icon` per row, or the `stepper`.
-- A comparison of features across plans → use `plan-comparison` or `table`.
+- A comparison of features across plans → use `plan-comparison-section` or `table`.
 - Label and value facts → use `key-value-list`.
 - Rows that navigate or carry actions → use `item`.
-- Marketing pricing cards on the site → use `pricing-card` / `pricing-plans`, which carry their own feature lists.
+- Marketing pricing cards on the site → use `pricing-card` / `pricing-plans-section`, which carry their own feature lists.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

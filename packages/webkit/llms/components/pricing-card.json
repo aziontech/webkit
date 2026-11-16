@@ -16,15 +16,15 @@
   "A tier set on the surface behind it (`variant=\"ghost\"`) inside a section that already draws the frame."
  ],
  "avoidWhen": [
-  "You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans`.",
-  "You need a feature-by-feature comparison across plans → use `plan-comparison`.",
+  "You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans-section`.",
+  "You need a feature-by-feature comparison across plans → use `plan-comparison-section`.",
   "You only need to show an amount, in a table cell or a summary → use `currency-amount`.",
   "The card holds general content rather than a price → use `card`."
  ],
  "related": [
   "`currency-amount` — typesets the amount inside the card; use it directly for prices outside a tier card.",
-  "`pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.",
-  "`plan-comparison` — the matrix that sits under the plan cards.",
+  "`pricing-plans-section` — the page section that lays out a row of plan cards with the billing toggle.",
+  "`plan-comparison-section` — the matrix that sits under the plan cards.",
   "`card` — generic bordered card with header, content and footer regions."
  ],
  "bestPractices": [

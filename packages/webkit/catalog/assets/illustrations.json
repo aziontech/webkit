@@ -57,12 +57,6 @@
    "canvas": "592x300"
   },
   {
-   "name": "build-databases-from-code",
-   "canvas": "592x300",
-   "deprecated": true,
-   "replacedBy": "sql-sdk-code-cards"
-  },
-  {
    "name": "chat-and-headset-tiles",
    "canvas": "230x154"
   },
@@ -111,20 +105,8 @@
    "canvas": "414x148"
   },
   {
-   "name": "distributed-sql-for-resilient-global-reads",
-   "canvas": "592x300",
-   "deprecated": true,
-   "replacedBy": "globe-with-sql-nodes"
-  },
-  {
    "name": "dns-protection",
    "canvas": "592x300"
-  },
-  {
-   "name": "enable-owasp-protection-with-customizable-rules",
-   "canvas": "592x300",
-   "deprecated": true,
-   "replacedBy": "waf-threat-families-panel"
   },
   {
    "name": "fastest-path-to-live-website",
@@ -223,12 +205,6 @@
    "canvas": "592x300"
   },
   {
-   "name": "reputation-intelligence-for-enhanced-protection",
-   "canvas": "592x300",
-   "deprecated": true,
-   "replacedBy": "reputation-rings-hub"
-  },
-  {
    "name": "reputation-rings-hub",
    "canvas": "592x300"
   },
@@ -245,26 +221,8 @@
    "canvas": "592x300"
   },
   {
-   "name": "saas-platforms",
-   "canvas": "592x300",
-   "deprecated": true,
-   "replacedBy": "azion-to-commerce-tiles"
-  },
-  {
    "name": "sql-sdk-code-cards",
    "canvas": "592x300"
-  },
-  {
-   "name": "stay-in-control",
-   "canvas": "230x154",
-   "deprecated": true,
-   "replacedBy": "traffic-and-cost-bar-chart"
-  },
-  {
-   "name": "stream-security-events-for-investigation-and-response",
-   "canvas": "592x300",
-   "deprecated": true,
-   "replacedBy": "data-stream-destinations-map"
   },
   {
    "name": "traffic-and-cost-bar-chart",
@@ -281,12 +239,6 @@
   {
    "name": "waf-threat-families-panel",
    "canvas": "592x300"
-  },
-  {
-   "name": "white-gloves-when-it-matters",
-   "canvas": "230x154",
-   "deprecated": true,
-   "replacedBy": "chat-and-headset-tiles"
   }
  ]
 }

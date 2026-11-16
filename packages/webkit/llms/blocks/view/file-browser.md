@@ -26,7 +26,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A first-level list of resources of one type: use `view/table-view`.
 - Rows of one resource that are records, not files (database rows, variables): use `detail/dns-zone-detail`.
-- Events or logs explored over time: use `view/split-view`.
+- Events or logs explored over time: use `view/events-explorer`.
 - Tables and queries of a database: use `view/query-editor`.
 - Picking an existing resource inside a create form: use `create/resource-picker`.
 

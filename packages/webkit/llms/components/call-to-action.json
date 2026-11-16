@@ -12,7 +12,7 @@
  "setup": null,
  "useWhen": [
   "Use CallToAction (primitive) for an ask panel inside a hand-built SFC, mid-page or closing; set `variant=\"announcement\"` for a loud mid-page announcement.",
-  "Rendering page JSON, or you need a whole band with no custom content → the section (`closing-call-to-action`). Building an SFC by hand, needing slots, or nesting inside another band → this primitive.",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`closing-call-to-action-section`). Building an SFC by hand, needing slots, or nesting inside another band → this primitive.",
   "At the end of a marketing page or section, to carry the reader into signup, docs or sales.",
   "Whenever a page needs one visually separated block whose whole job is the action.",
   "Between two sections, as a mid-page ask that should not read as a new section header.",

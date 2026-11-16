@@ -1,5 +1,5 @@
 {
- "purpose": "The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.",
+ "purpose": "The ordered walkthrough from the docs frame: a column of `DocSteps.Step` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.",
  "useWhen": [
   "Use DocSteps only inside documentation prose for numbered instructions read top to bottom.",
   "A procedure the reader performs in order: install, link, deploy.",
@@ -11,7 +11,6 @@
   "For a single instruction — one step is a sentence, not a walkthrough."
  ],
  "related": [
-  "`DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.",
   "`Stepper` — the app's interactive step rail. Both number their steps with the same shared step registry (`useStepRegistry`), which reads the order from the page, so a step inserted between two others takes its place in the count.",
   "`DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder."
  ],

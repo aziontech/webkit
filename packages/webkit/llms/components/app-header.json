@@ -17,12 +17,12 @@
   "The bar of a framed marketing page — `variant=\"site\"` keeps the surface full bleed but caps and centres the regions."
  ],
  "avoidWhen": [
-  "The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-header`, which composes this header.",
+  "The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-header-section`, which composes this header.",
   "The navigation column at the side of the app → use `sidebar`.",
   "An action row above a list of records → use the `toolbar` slot of `table`."
  ],
  "related": [
-  "`site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.",
+  "`site-header-section` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.",
   "`navigation-menu` — the dropdown navigation that usually goes in `AppHeader.Center`.",
   "`brand` — the Azion lockup to place inside `AppHeader.Brand`.",
   "`console-layout` — the console layout template that composes the header with the sidebar and the page."

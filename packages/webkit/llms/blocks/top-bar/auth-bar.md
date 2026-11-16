@@ -23,7 +23,7 @@ The top bar of every signed-out and first-run screen: sign in, sign up, password
 ## When not to use
 
 - Any page with a session: `ConsoleLayout` already renders the console bar (`shell/console`); a create, edit or deploy flow uses `top-bar/creation-bar`.
-- Documentation pages: `DocLayout` renders their bar (`shell/docs`). Marketing pages: `SiteLayout` and `SiteHeader` render theirs (`shell/site`).
+- Documentation pages: `DocLayout` renders their bar (`shell/docs`). Marketing pages: `SiteLayout` and `SiteHeaderSection` render theirs (`shell/site`).
 
 ## Building blocks
 

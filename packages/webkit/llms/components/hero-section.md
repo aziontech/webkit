@@ -17,7 +17,7 @@
 - Use `title-band` with `size="large"` for a product page and `size="medium"` for a page whose bands start right under the headline.
 - Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.
 - Leave `titleLength` at `short` for a headline of up to about seven words: like azion.com, the `center`, `title-band` and `center-band` layouts set it on a narrower measure than the sentence under it, so "Certifications and Compliance" breaks over two lines. Use `long` only for a headline that would run to three lines.
-- Leave `headerOffset` at its default under `SiteHeader`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length.
+- Leave `headerOffset` at its default under `SiteHeaderSection`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length.
 
 ## Don’t
 
@@ -53,7 +53,7 @@
 | `image` | `HeroSectionImage` | `undefined` | false | Image set beside the copy in the `copy-beside-art` layout when no `illustration` is given; `{ src, alt, width, height }`. A portrait image (taller than wide) is drawn at half width, centered, below `md`. |
 | `eyebrowPrefix` | `HeroTitleEyebrowPrefix` | `'//'` | false | Mark set before the eyebrow (`//`, `<>`, `</>`, or empty for none); drawn only with an eyebrow. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteHeader` bar's token, any CSS length, empty for a page with no header above it. |
+| `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteHeaderSection` bar's token, any CSS length, empty for a page with no header above it. |
 | `titleLength` | `HeroSectionTitleLength` | `'short'` | false | Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. |
 | `plain` | `boolean` | `false` | false | Drops the dot texture of the `center` layout. |
 | `levels` | `HeroSectionLevel[]` | `[]` | false | Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped. |
@@ -144,7 +144,7 @@
 
 ```vue
 <script setup>
-  import CopyCommand from '@aziontech/webkit/copy-command'
+  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
   import HeroSection from '@aziontech/webkit/hero-section'
 </script>
 
@@ -198,7 +198,7 @@
       :primary-action="{ label: 'Start for free', href: '/signup' }"
     >
       <template #bottom>
-        <CopyCommand value="npm create azion@latest" />
+        <CopyCommandSection value="npm create azion@latest" />
       </template>
     </HeroSection>
   </div>
@@ -209,7 +209,7 @@
 
 ```vue
 <script setup>
-  import CopyCommand from '@aziontech/webkit/copy-command'
+  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
   import HeroSection from '@aziontech/webkit/hero-section'
 </script>
 
@@ -236,7 +236,7 @@
       description="One command creates, builds and deploys a project."
     >
       <template #bottom>
-        <CopyCommand value="npm create azion@latest" />
+        <CopyCommandSection value="npm create azion@latest" />
       </template>
     </HeroSection>
   </div>

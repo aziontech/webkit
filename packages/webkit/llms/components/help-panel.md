@@ -27,7 +27,7 @@
 - A guided tutorial with tasks, progress and hotspots on the real controls → use `tutorial-panel`.
 - The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.
 - Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.
-- Numbered instructions inside a documentation page, read all at once → use `doc-steps` + `doc-step`.
+- Numbered instructions inside a documentation page, read all at once → use `doc-steps` (`DocSteps.Step`).
 - A page with nothing configured yet, which needs one call to action → use `empty-state`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

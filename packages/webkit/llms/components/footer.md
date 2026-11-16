@@ -10,7 +10,7 @@
 ## When to use
 
 - Use Footer to compose a footer in product or docs.
-- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
+- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
 - The page-level footer of a site or application, paired with `AppHeader`.
 - Grouped navigation links at the bottom of the page plus a brand/social/status bar.
 
@@ -36,7 +36,7 @@
 
 - [app-header](app-header.md) — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
 - [brand](brand.md), `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
-- [site-footer](site-footer.md) — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
+- [site-footer-section](site-footer-section.md) — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer-section` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
 - [registration-frame](registration-frame.md) — the footer's own frame: the hatched gutters, the framed column and the signature box are `RegistrationFrame` instances (`borders` / `marks` / `hatch`).
 
 ## Props

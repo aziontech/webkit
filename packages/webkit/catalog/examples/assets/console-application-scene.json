@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The console Application page in a `ConsoleShowcase` `#scene` slot: each tab plays its page, then opens the create drawer (list tabs) or raises the save bar (form tabs).",
+   "summary": "The console Application page in a `ConsoleShowcaseSection` `#scene` slot: each tab plays its page, then opens the create drawer (list tabs) or raises the save bar (form tabs).",
    "file": "examples/assets-console-application-scene/default.vue"
   },
   {

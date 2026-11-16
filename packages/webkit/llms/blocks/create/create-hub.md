@@ -1,11 +1,11 @@
 # CreateHub (`create/create-hub`)
 
-> The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead offers to upload a file or a folder through the system picker, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a bordered EmptyState with Continue with GitHub until an account is connected (a danger Alert under the button when the connection fails), then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of the ten most recently pushed repositories with a named Import button each and Load more for the rest; skeleton rows with a status line while a scope loads, a danger Alert with Retry when the list fails to load, and a small EmptyState with Clear search when nothing matches. On the right, Start from template: a template search over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column integration Cards with the vendor beside the title; each tile links to its deploy page, and a search with no match shows an EmptyState with Clear search. Each Recommended card turns its mark from grey to colour and lights a glow drawn from its mark on hover and focus. Built from `PageHeader`, `AppHeader`, `Breadcrumb`, `EmptyState`, `Alert`, `Link`, `Select`, `Input`, `Card`, `Item`, `Skeleton`, `ScrollArea` and `Button`.
+> The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead offers to upload a file or a folder through the system picker, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a bordered EmptyState with Continue with GitHub until an account is connected (a danger Alert under the button when the connection fails), then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of the ten most recently pushed repositories with a named Import button each and Load more for the rest; skeleton rows with a status line while a scope loads, a danger Alert with Retry when the list fails to load, and a small EmptyState with Clear search when nothing matches. On the right, Start from template: a template search over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column `IntegrationCard`s with the vendor beside the title; each tile links to its deploy page, and a search with no match shows an EmptyState with Clear search. Each Recommended card turns its mark from grey to colour and lights a glow drawn from its mark on hover and focus. Built from `PageHeader`, `AppHeader`, `Breadcrumb`, `EmptyState`, `Alert`, `Link`, `Select`, `Input`, `Card`, `IntegrationCard`, `Item`, `Skeleton`, `ScrollArea` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-hub")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md)
 - Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -52,9 +52,9 @@ A large `Select` of the connected scopes with the provider glyph in the trigger 
 
 A flush `Card` with an `Item` list, one small row per repository: glyph, name, its last push as the description and a small secondary Import `Button` named after the repository. Repositories are ordered most recently pushed first; the ten most recent show, and a transparent Load more adds ten at a time. While a scope loads, six `Skeleton` rows in the shape of the `Item` stand in, hidden from assistive technology, under an `aria-busy` region with one `role="status"` line. A failed load replaces the list with a danger `Alert` and a Retry action; a search with no match shows a small `EmptyState` with Clear search.
 
-### F. Template gallery — `Input`, `ScrollArea`, `Card`, `EmptyState` (required)
+### F. Template gallery — `Input`, `ScrollArea`, `Card`, `IntegrationCard`, `EmptyState` (required)
 
-Beside the Start from template heading, a medium search `Input` that filters the templates by name and description, then a faded `ScrollArea` with an `aria-label`. A search with no match shows a small `EmptyState` with Clear search. For the full gallery with property filters, preview and loading or failed states, link to `view/template-browser`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. The starter and framework tiles are `Card variant="integration"` with `href`: the title is a link stretched over the tile, with the glyph, the vendor and one sentence. A Recommended card keeps its own glow markup, and its title is a link stretched over the card in the same way; no tile carries `role="button"`. A Recommended card shows its framework mark in grey until it is hovered or focused, then in colour, and lights a soft glow from its top start corner drawn from the mark: an `aria-hidden` span under the content (the `Card` carries `isolate`) holds a scaled, blurred, faded copy of the mark, so a colour mark glows in its own colours and a one-colour mark in `text-(--primary)`.
+Beside the Start from template heading, a medium search `Input` that filters the templates by name and description, then a faded `ScrollArea` with an `aria-label`. A search with no match shows a small `EmptyState` with Clear search. For the full gallery with property filters, preview and loading or failed states, link to `view/template-browser`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. The starter and framework tiles are `IntegrationCard` with `href`: the title is a link stretched over the tile, with the glyph, the vendor and one sentence. A Recommended card keeps its own glow markup, and its title is a link stretched over the card in the same way; no tile carries `role="button"`. A Recommended card shows its framework mark in grey until it is hovered or focused, then in colour, and lights a soft glow from its top start corner drawn from the mark: an `aria-hidden` span under the content (the `Card` carries `isolate`) holds a scaled, blurred, faded copy of the mark, so a colour mark glows in its own colours and a one-colour mark in `text-(--primary)`.
 
 ## Data
 
@@ -141,7 +141,7 @@ Then delete the sample imports. Pass `templates` from the template catalog, or k
 
 ## Accessibility
 
-- The `PageHeader` title is the page's only `h1`; column titles are `h2`, the template section labels `h3`, and template titles sit below them (the integration Card title, and `h4` on a Recommended card).
+- The `PageHeader` title is the page's only `h1`; column titles are `h2`, the template section labels `h3`, and template titles sit below them (the `IntegrationCard` title, and `h4` on a Recommended card).
 - The back `IconButton`, the brand link, the account button, the scope `Select` and the search each have an `aria-label`.
 - Each template tile is reached through its title link, which covers the tile; Enter follows it. Each Import button is named after its repository.
 - The loading region sets `aria-busy="true"` with one `role="status"` line; skeleton rows are hidden from assistive technology.
@@ -187,6 +187,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -240,7 +241,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
     id: string
     /** The section heading. */
     label: string
-    /** Recommended cards in three columns, or two-column integration cards. */
+    /** Recommended cards in three columns, or two-column integration tiles. */
     kind: CreateHubTemplateSectionKind
     /** The templates in the section. */
     items: CreateHubTemplate[]
@@ -784,10 +785,9 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
                             v-if="section.kind === 'list'"
                             class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2"
                           >
-                            <Card
+                            <IntegrationCard
                               v-for="item in section.items"
                               :key="item.slug"
-                              variant="integration"
                               :title="item.title"
                               :logo="`${item.icon} ${item.markClass}`.trim()"
                               :vendor="item.vendor ?? ''"

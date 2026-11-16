@@ -14,7 +14,7 @@
  ],
  "related": [
   "`card` — the surface an `Item.List` sits in (with `:padded=\"false\"`).",
-  "`table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.",
+  "`table` — columnar data; below `sm`, `listing-table-section` swaps its table rows for `item` rows.",
   "`sidebar-menu` — navigation rows with nesting and drill levels.",
   "`avatar` — the usual leading media for people rows inside `Item.Media`."
  ],

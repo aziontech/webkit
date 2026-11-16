@@ -33,7 +33,7 @@
 - A confirmation or a single decision → use `dialog`.
 - Peer views with no order and no completion → use `tabs`.
 - A custom multi-step layout where the caller needs its own actions or a different arrangement → compose
-- Numbered instructions inside documentation → use `doc-steps` + `doc-step`.
+- Numbered instructions inside documentation → use `doc-steps` (`DocSteps.Step`).
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

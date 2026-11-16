@@ -21,7 +21,7 @@ The account's audit log. An admin or a security reviewer answers "who did this, 
 
 ## When not to use
 
-- Request logs or metrics explored over time with a chart: use `view/split-view`.
+- Request logs or metrics explored over time with a chart: use `view/events-explorer`.
 - The deploy history of one resource: use `detail/deployment-logs` or the details page's history tab.
 - A short "recent activity" card on a dashboard: use `Item` rows in a `Card` and link here with View all.
 
@@ -137,7 +137,7 @@ Then delete `sample.ts` and its import.
 
 - `view/table-view` — the list page this one follows.
 - `account/personal-tokens` and `account/team-permissions` — the screens whose changes are logged here.
-- `view/split-view` — events over time with a chart and a document pane.
+- `view/events-explorer` — events over time with a chart and a document pane.
 
 ## Variants
 

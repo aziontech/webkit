@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A ConsoleMockup console screen in the framed panel with three tabs; the scene slot receives the selected tab and shows that widget. The bottom fifth is cropped and faded from the medium breakpoint up.",
+   "file": "examples/console-showcase-section/default.vue"
+  },
+  {
+   "name": "Diagram",
+   "summary": "`variant=\"diagram\"` lets the scene keep its own height, centered on the texture, with an action under the title instead of tabs.",
+   "file": "examples/console-showcase-section/diagram.vue"
+  }
+ ]
+}

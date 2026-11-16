@@ -374,6 +374,7 @@
    "--danger",
    "--danger-border",
    "--danger-foreground",
+   "--danger-mark",
    "--direction-sign",
    "--drop-shadow-2xl",
    "--drop-shadow-lg",
@@ -424,6 +425,7 @@
    "--info",
    "--info-border",
    "--info-foreground",
+   "--info-mark",
    "--inset-shadow-2xs",
    "--inset-shadow-sm",
    "--inset-shadow-xs",
@@ -559,6 +561,7 @@
    "--success",
    "--success-border",
    "--success-foreground",
+   "--success-mark",
    "--text-2xl",
    "--text-2xl--line-height",
    "--text-3xl",
@@ -771,6 +774,7 @@
    "--warning",
    "--warning-border",
    "--warning-foreground",
+   "--warning-mark",
    "--z-control",
    "--z-control-overlay"
   ],
@@ -1172,7 +1176,8 @@
    "danger": [
     "--danger",
     "--danger-border",
-    "--danger-foreground"
+    "--danger-foreground",
+    "--danger-mark"
    ],
    "direction": [
     "--direction-sign"
@@ -1234,7 +1239,8 @@
    "info": [
     "--info",
     "--info-border",
-    "--info-foreground"
+    "--info-foreground",
+    "--info-mark"
    ],
    "inset": [
     "--inset-shadow-2xs",
@@ -1399,7 +1405,8 @@
    "success": [
     "--success",
     "--success-border",
-    "--success-foreground"
+    "--success-foreground",
+    "--success-mark"
    ],
    "text": [
     "--text-2xl",
@@ -1619,7 +1626,8 @@
    "warning": [
     "--warning",
     "--warning-border",
-    "--warning-foreground"
+    "--warning-foreground",
+    "--warning-mark"
    ],
    "z": [
     "--z-control",
@@ -2210,7 +2218,7 @@
  "aliases": {
   "alert-dialog": "confirm-dialog",
   "banner": "alert",
-  "blog-index": "article-index",
+  "blog-index": "article-index-section",
   "bordered-box": "registration-frame",
   "breadcrumbs": "breadcrumb",
   "callout": "alert",
@@ -2218,7 +2226,7 @@
   "config-provider": "webkit-provider",
   "cta": "call-to-action",
   "datatable": "data-table",
-  "feature-grid": "capability-grid",
+  "feature-grid": "capability-grid-section",
   "file-viewer": "file-preview",
   "image-viewer": "file-preview",
   "input-otp": "otp-input",
@@ -2235,14 +2243,19 @@
   "sheet": "drawer",
   "snackbar": "toast",
   "steps": "stepper",
-  "testimonial": "client-quotes",
-  "testimonials": "client-quotes",
+  "testimonial": "client-quotes-section",
+  "testimonials": "client-quotes-section",
   "text-field": "input",
   "transfer": "transfer-list"
  },
  "renamed": {
   "action-confirmation": "tool-approval",
   "ai-loading": "response-loading",
+  "architecture-tabs": "architecture-tabs-section",
+  "article-body": "article-body-section",
+  "article-cards": "article-cards-section",
+  "article-highlight": "article-highlight-section",
+  "article-index": "article-index-section",
   "assets/americamovil-extended-color.svg": "assets/america-movil-extended-color.svg",
   "assets/calvinklein-extended-mono.svg": "assets/calvin-klein-extended-mono.svg",
   "assets/calvinklein-extended-reversed.svg": "assets/calvin-klein-extended-reversed.svg",
@@ -2286,19 +2299,32 @@
   "box-grid-selection": "radio-group",
   "button-highlight": "highlight-button",
   "calendar": "date-picker",
+  "capability-grid": "capability-grid-section",
   "card-box": "card",
+  "card-carousel": "card-carousel-section",
   "card-pricing": "pricing-card",
   "cards": "card-list",
-  "client-mosaic-columns": "client-story-columns",
+  "cli-terminal": "cli-terminal-section",
+  "client-mosaic": "client-mosaic-section",
+  "client-mosaic-columns": "client-story-columns-section",
+  "client-quotes": "client-quotes-section",
+  "client-story-columns": "client-story-columns-section",
+  "closing-call-to-action": "closing-call-to-action-section",
   "closing-call-to-action-newsletter": "newsletter-section",
   "column-navigation": "link-directory",
   "command-menu": "command",
-  "compare-plans": "plan-comparison",
-  "comparison-table": "competitor-comparison",
-  "compliance-badges": "compliance-logos",
+  "compare-plans": "plan-comparison-section",
+  "comparison-table": "competitor-comparison-section",
+  "competitor-comparison": "competitor-comparison-section",
+  "compliance-badges": "compliance-logos-section",
+  "compliance-logos": "compliance-logos-section",
   "console-layout-breadcrumbs": "console-layout-breadcrumb",
-  "console-panel": "console-showcase",
+  "console-panel": "console-showcase-section",
+  "console-showcase": "console-showcase-section",
+  "contact-hub": "contact-hub-section",
+  "copy-command": "copy-command-section",
   "currency": "currency-amount",
+  "customer-use-cases": "customer-use-cases-section",
   "divider": "separator",
   "doc-accordion-item": "doc-accordion",
   "doc-pagination": "doc-previous-next",
@@ -2307,6 +2333,10 @@
   "dropdown": "dropdown-menu",
   "dropdown-menu-option": "dropdown-menu-item",
   "feature-list": "plan-feature-list",
+  "feature-scroll": "feature-scroll-section",
+  "feature-tabs": "feature-tabs-section",
+  "feature-tiles": "feature-tiles-section",
+  "feature-widgets": "feature-widgets-section",
   "filter-menu-chips": "filter-menu-chip-group",
   "flow": "flow-diagram",
   "frame-box": "registration-frame",
@@ -2318,8 +2348,12 @@
   "input-number": "number-input",
   "input-password": "password-input",
   "input-text": "input",
+  "investor-marks": "investor-marks-section",
+  "job-posting": "job-posting-section",
   "key-value-pairs": "key-value-list",
-  "listing-browser": "listing-index",
+  "listing-browser": "listing-index-section",
+  "listing-index": "listing-index-section",
+  "listing-table": "listing-table-section",
   "log-view": "log-viewer",
   "logo-wall-quote": "logo-wall-section",
   "media-split-band": "media-split-section",
@@ -2331,42 +2365,54 @@
   "pagination-info": "pagination-description",
   "paginator": "pagination",
   "panel-content": "panel-body",
+  "photo-marquee": "photo-marquee-section",
   "pick-list": "transfer-list",
+  "plan-comparison": "plan-comparison-section",
+  "platform-directory": "platform-directory-section",
+  "pricing-plans": "pricing-plans-section",
+  "process-scroll": "process-scroll-section",
   "product-widget": "console-mockup",
   "progress-bar": "progress",
   "radio-button": "radio-group",
   "radio-cards": "radio-group",
+  "recognition-marquee": "recognition-marquee-section",
   "resizable-panel": "resizable",
-  "section-command": "copy-command",
+  "section-command": "copy-command-section",
   "segmented-button": "toggle-group",
   "select-option": "select-item",
   "setting-row": "settings-row",
-  "site-nav": "site-header",
+  "site-footer": "site-footer-section",
+  "site-header": "site-header-section",
+  "site-nav": "site-header-section",
   "stats-band": "stats-section",
-  "story-library": "story-index",
-  "subject-library": "subject-grid",
+  "story-index": "story-index-section",
+  "story-library": "story-index-section",
+  "subject-grid": "subject-grid-section",
+  "subject-library": "subject-grid-section",
   "tab-view": "tabs",
   "table-export": "table-export-button",
+  "template-gallery": "template-gallery-section",
   "texture-material": "texture",
   "ticker": "marquee",
   "topic": "feature-item",
-  "use-cases": "customer-use-cases",
+  "use-cases": "customer-use-cases-section",
   "use-heading-nav": "use-heading-navigation"
  },
  "removed": {
-  "article-index-blog": "ArticleIndex from @aziontech/webkit/article-index (filters defaults to category-search)",
-  "article-index-resource-hub": "ArticleIndex from @aziontech/webkit/article-index with filters=\"facets\"",
+  "article-index-blog": "ArticleIndexSection from @aziontech/webkit/article-index-section (filters defaults to category-search)",
+  "article-index-resource-hub": "ArticleIndexSection from @aziontech/webkit/article-index-section with filters=\"facets\"",
   "banner": "CallToAction from @aziontech/webkit/call-to-action with variant=\"announcement\"; the aside slot becomes the default slot",
   "calendar-preset": "DatePicker picks one date and has no presets; for preset ranges use DateRangePicker with relative-options",
-  "closing-call-to-action-agents": "ClosingCallToAction from @aziontech/webkit/closing-call-to-action with variant=\"primary\" and the same audiences, typedLead, typedWords and description",
-  "closing-call-to-action-templates": "TemplateGallery from @aziontech/webkit/template-gallery with closing; the same title, actions, templates and deployLabel",
+  "closing-call-to-action-agents": "ClosingCallToActionSection from @aziontech/webkit/closing-call-to-action-section with variant=\"primary\" and the same audiences, typedLead, typedWords and description",
+  "closing-call-to-action-templates": "TemplateGallerySection from @aziontech/webkit/template-gallery-section with closing; the same title, actions, templates and deployLabel",
   "code-split": "MediaSplitSection from @aziontech/webkit/media-split-section with the same codeTabs, defaultFile and actions",
-  "compare-support-tiers": "PlanComparison from @aziontech/webkit/plan-comparison; pass the tiers as plans",
-  "content-columns": "CapabilityGrid from @aziontech/webkit/capability-grid; items keep title and description, columns is 3 or 4",
-  "customer-spotlight": "ClientStoryColumns from @aziontech/webkit/client-story-columns with reveal=\"hover\"; items become cells and each card's description becomes story",
+  "compare-support-tiers": "PlanComparisonSection from @aziontech/webkit/plan-comparison-section; pass the tiers as plans",
+  "content-columns": "CapabilityGridSection from @aziontech/webkit/capability-grid-section; items keep title and description, columns is 3 or 4",
+  "customer-spotlight": "ClientStoryColumnsSection from @aziontech/webkit/client-story-columns-section with reveal=\"hover\"; items become cells and each card's description becomes story",
   "dialog-overlay": "delete the <DialogOverlay /> element: DialogContent renders the portal and the overlay itself",
   "dialog-portal": "delete the <DialogPortal> wrapper (keep its children): DialogContent renders the portal and the overlay itself",
   "doc-cta": "use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action=\"{ label, href }\", secondary-label and secondary-href become :secondary-action=\"{ label, href }\"",
+  "doc-step": "import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound",
   "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
   "drawer-overlay": "delete the <DrawerOverlay /> element: DrawerContent renders the portal and the overlay itself",
   "drawer-portal": "delete the <DrawerPortal> wrapper (keep its children): DrawerContent renders the portal and the overlay itself",
@@ -2392,19 +2438,19 @@
   "hero-with-opening": "HeroSection from @aziontech/webkit/hero-section with size=\"large\" and the same items (titleLength=\"long\" for a long headline)",
   "label": "use Field.Label inside a Field, or FieldLabel with for (and required) beside its control",
   "mini-button": "Link (label, href, icon) for a text link that navigates; Button variant=\"link\" for a text action without href",
-  "quote-carousel": "ClientQuotes from @aziontech/webkit/client-quotes, or Quote cards in a CardCarousel",
+  "quote-carousel": "ClientQuotesSection from @aziontech/webkit/client-quotes-section, or Quote cards in a CardCarouselSection",
   "radio-button": "a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes variant=\"card\" with description on the item",
   "radio-cards": "RadioGroup variant=\"card\" orientation=\"horizontal\" with :options (the items move to options as is); the #default=\"{ item }\" slot becomes #option=\"{ option }\" and #tag=\"{ item }\" becomes #tag=\"{ option }\"",
-  "resource-grid": "CapabilityGrid from @aziontech/webkit/capability-grid with title-variant=\"horizontal\"; items keep title, description and href",
+  "resource-grid": "CapabilityGridSection from @aziontech/webkit/capability-grid-section with title-variant=\"horizontal\"; items keep title, description and href",
   "shell-mockup": "ConsoleMockup from @aziontech/webkit/console-mockup with the registry name of the console screen; the frame is internal",
   "shell-mockup-part": "ConsoleMockup from @aziontech/webkit/console-mockup; the frame and its parts are internal",
   "shell-mockup-root": "ConsoleMockup from @aziontech/webkit/console-mockup with the registry name of the console screen; the frame is internal",
   "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
-  "sticky-carousel": "ProcessScroll from @aziontech/webkit/process-scroll with pinned and title-variant=\"centered\"; items become steps",
-  "sticky-scroll-code": "FeatureScroll from @aziontech/webkit/feature-scroll; items keep title, description, code and action",
+  "sticky-carousel": "ProcessScrollSection from @aziontech/webkit/process-scroll-section with pinned and title-variant=\"centered\"; items become steps",
+  "sticky-scroll-code": "FeatureScrollSection from @aziontech/webkit/feature-scroll-section; items keep title, description, code and action",
   "table-applied-filters": "FilterMenu.ChipGroup with no fields in the DataTable filters slot (menu type); the property kind shows its own tokens",
   "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
-  "use-case-links": "CapabilityGrid from @aziontech/webkit/capability-grid with title-variant=\"left\"; items keep icon, title, description and href",
+  "use-case-links": "CapabilityGridSection from @aziontech/webkit/capability-grid-section with title-variant=\"left\"; items keep icon, title, description and href",
   "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config"
  },
  "imports": {
@@ -6449,7 +6495,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Heading rendered in the header when the `header` slot is empty; with `variant=\"integration\"`, the item name."
+     "doc": "Heading rendered in the header when the `header` slot is empty."
     },
     {
      "name": "padded",
@@ -6457,69 +6503,6 @@
      "default": "true",
      "required": "false",
      "doc": "Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers."
-    },
-    {
-     "name": "variant",
-     "type": "'default' | 'integration'",
-     "default": "'default'",
-     "required": "false",
-     "doc": "`integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot."
-    },
-    {
-     "name": "logo",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Integration variant: icon class for the logo mark. The `logo` slot takes an image instead."
-    },
-    {
-     "name": "vendor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Integration variant: who publishes the item, shown as \"by {vendor}\"."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Integration variant: one or two sentences on what the item does."
-    },
-    {
-     "name": "badges",
-     "type": "CardBadge[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Integration variant: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
-    },
-    {
-     "name": "installed",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Integration variant: shows the Installed tag."
-    },
-    {
-     "name": "href",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Integration variant: the title links here; without it the title is a button that emits `select`."
-    },
-    {
-     "name": "featured",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner."
-    }
-   ],
-   "events": [
-    {
-     "name": "select",
-     "payload": "event: MouseEvent",
-     "notes": "Integration variant without `href`: the title (the whole tile) was activated."
     }
    ],
    "slots": [
@@ -6536,27 +6519,110 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "Main card body: children passed without a slot name. With `variant=\"integration\"` it renders under the description."
+     "notes": "Main card body: children passed without a slot name."
     },
     {
      "name": "footer",
      "scope": "—",
      "notes": "Footer actions or metadata; omitted when empty."
-    },
-    {
-     "name": "logo",
-     "scope": "—",
-     "notes": "Integration variant: replaces the logo mark, for an `img` with an empty `alt`."
-    },
-    {
-     "name": "actions",
-     "scope": "—",
-     "notes": "Integration variant: one action at the end of the tile, above the stretched title target."
     }
    ],
    "surface": "app",
    "examplesFile": "catalog/examples/card.json",
    "docsFile": "catalog/components/card.json"
+  },
+  "integration-card": {
+   "import": "@aziontech/webkit/integration-card",
+   "target": "./src/components/content/integration-card/integration-card.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/integration-card",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The item name; the tile's single target."
+    },
+    {
+     "name": "logo",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Icon class for the logo mark. The `logo` slot takes an image instead."
+    },
+    {
+     "name": "vendor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Who publishes the item, shown as \"by {vendor}\"."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One or two sentences on what the item does."
+    },
+    {
+     "name": "badges",
+     "type": "IntegrationCardBadge[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
+    },
+    {
+     "name": "installed",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the Installed tag."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The title links here; without it the title is a button that emits `select`."
+    },
+    {
+     "name": "featured",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "event: MouseEvent",
+     "notes": "Without `href`: the title (the whole tile) was activated."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Extra content under the description."
+    },
+    {
+     "name": "logo",
+     "scope": "—",
+     "notes": "Replaces the logo mark, for an `img` with an empty `alt`."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "One action at the end of the tile, above the stretched title target."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/integration-card.json",
+   "docsFile": "catalog/components/integration-card.json"
   },
   "pricing-card": {
    "import": "@aziontech/webkit/pricing-card",
@@ -10962,50 +11028,43 @@
    "examplesFile": "catalog/examples/doc-prose.json",
    "docsFile": "catalog/components/doc-prose.json"
   },
-  "doc-step": {
-   "import": "@aziontech/webkit/doc-step",
-   "target": "./src/components/docs/doc-step/doc-step.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-step",
-   "category": "docs",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The step heading."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "Optional body under the step heading: prose, code, or another component."
-    }
-   ],
-   "surface": "docs",
-   "examplesFile": "catalog/examples/doc-step.json",
-   "docsFile": "catalog/components/doc-step.json"
-  },
   "doc-steps": {
    "import": "@aziontech/webkit/doc-steps",
-   "target": "./src/components/docs/doc-steps/doc-steps.vue",
+   "target": "./src/components/docs/doc-steps/index.ts",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-steps",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/doc-steps-root",
+   "subcomponents": [],
    "category": "docs",
-   "structure": "monolithic",
+   "structure": "composition",
    "slots": [
     {
      "name": "default",
      "scope": "—",
-     "notes": "The `DocStep` children, in the order they should be numbered."
+     "notes": "The `DocSteps.Step` children, in the order they should be numbered."
     }
    ],
    "surface": "docs",
    "examplesFile": "catalog/examples/doc-steps.json",
    "docsFile": "catalog/components/doc-steps.json"
+  },
+  "doc-steps-root": {
+   "import": "@aziontech/webkit/doc-steps-root",
+   "target": "./src/components/docs/doc-steps/doc-steps.vue",
+   "kind": "root",
+   "rootOf": "doc-steps",
+   "treeShakeableImport": "@aziontech/webkit/doc-steps-root",
+   "category": "docs",
+   "structure": "composition",
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `DocSteps.Step` children, in the order they should be numbered."
+    }
+   ],
+   "surface": "docs",
+   "docsFile": "catalog/components/doc-steps-root.json"
   },
   "doc-changelog-entry": {
    "import": "@aziontech/webkit/doc-changelog-entry",
@@ -15944,14 +16003,14 @@
      "type": "SiteLayoutNavigation",
      "default": "—",
      "required": "true",
-     "doc": "The bar, bound onto `SiteHeader`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`."
+     "doc": "The bar, bound onto `SiteHeaderSection`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`."
     },
     {
      "name": "footer",
      "type": "SiteLayoutFooter",
      "default": "undefined",
      "required": "false",
-     "doc": "The footer, bound onto `SiteFooter`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent."
+     "doc": "The footer, bound onto `SiteFooterSection`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent."
     },
     {
      "name": "searchPlaceholder",
@@ -19010,6 +19069,13 @@
      "doc": "The page column the tab row lines up with: the full width, or the data, form or focused column below it."
     },
     {
+     "name": "align",
+     "type": "'start' | 'center'",
+     "default": "'start'",
+     "required": "false",
+     "doc": "Where the tab triggers sit in the row: at the start edge, or centred. Passed to `Tabs.List`."
+    },
+    {
      "name": "modelValue",
      "type": "TabsValue | null",
      "default": "null",
@@ -20118,7 +20184,7 @@
     {
      "name": "size",
      "type": "DrawerSize",
-     "default": "'medium'",
+     "default": "'large'",
      "required": "false",
      "doc": "Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport."
     },
@@ -20191,7 +20257,7 @@
     {
      "name": "size",
      "type": "DrawerSize",
-     "default": "'medium'",
+     "default": "'large'",
      "required": "false",
      "doc": "Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport."
     },
@@ -23469,11 +23535,11 @@
    "treeShakeableImport": "@aziontech/webkit/assets/zoop-extended-color.svg",
    "surface": "site"
   },
-  "architecture-tabs": {
-   "import": "@aziontech/webkit/architecture-tabs",
-   "target": "./src/components/section/architecture-tabs/architecture-tabs.vue",
+  "architecture-tabs-section": {
+   "import": "@aziontech/webkit/architecture-tabs-section",
+   "target": "./src/components/section/architecture-tabs-section/architecture-tabs-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/architecture-tabs",
+   "treeShakeableImport": "@aziontech/webkit/architecture-tabs-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -23507,14 +23573,14 @@
     },
     {
      "name": "tabsSide",
-     "type": "ArchitectureTabsSide",
+     "type": "ArchitectureTabsSectionSide",
      "default": "'top'",
      "required": "false",
      "doc": "Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs."
     },
     {
      "name": "tabs",
-     "type": "ArchitectureTabsTab[]",
+     "type": "ArchitectureTabsSectionTab[]",
      "default": "[]",
      "required": "false",
      "doc": "The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships."
@@ -23542,14 +23608,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/architecture-tabs.json",
-   "docsFile": "catalog/components/architecture-tabs.json"
+   "examplesFile": "catalog/examples/architecture-tabs-section.json",
+   "docsFile": "catalog/components/architecture-tabs-section.json"
   },
-  "article-body": {
-   "import": "@aziontech/webkit/article-body",
-   "target": "./src/components/section/article-body/article-body.vue",
+  "article-body-section": {
+   "import": "@aziontech/webkit/article-body-section",
+   "target": "./src/components/section/article-body-section/article-body-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/article-body",
+   "treeShakeableImport": "@aziontech/webkit/article-body-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -23562,7 +23628,7 @@
     },
     {
      "name": "article",
-     "type": "ArticleBodyArticle",
+     "type": "ArticleBodySectionArticle",
      "default": "—",
      "required": "true",
      "doc": "The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL)."
@@ -23590,21 +23656,21 @@
     },
     {
      "name": "share",
-     "type": "ArticleBodyShare",
+     "type": "ArticleBodySectionShare",
      "default": "undefined",
      "required": "false",
      "doc": "Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent."
     },
     {
      "name": "community",
-     "type": "ArticleBodyCommunity",
+     "type": "ArticleBodySectionCommunity",
      "default": "undefined",
      "required": "false",
      "doc": "The community group: a `title` and `links`, each a `label`, an `href` and an `icon`; omitted when absent."
     },
     {
      "name": "copyPage",
-     "type": "ArticleBodyCopyPage",
+     "type": "ArticleBodySectionCopyPage",
      "default": "undefined",
      "required": "false",
      "doc": "The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent."
@@ -23625,20 +23691,20 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/article-body.json",
-   "docsFile": "catalog/components/article-body.json"
+   "examplesFile": "catalog/examples/article-body-section.json",
+   "docsFile": "catalog/components/article-body-section.json"
   },
-  "article-cards": {
-   "import": "@aziontech/webkit/article-cards",
-   "target": "./src/components/section/article-cards/article-cards.vue",
+  "article-cards-section": {
+   "import": "@aziontech/webkit/article-cards-section",
+   "target": "./src/components/section/article-cards-section/article-cards-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/article-cards",
+   "treeShakeableImport": "@aziontech/webkit/article-cards-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
     {
      "name": "align",
-     "type": "ArticleCardsAlign",
+     "type": "ArticleCardsSectionAlign",
      "default": "'start'",
      "required": "false",
      "doc": "Placement of the heading: `start` sets it at the start, `center` centres it over the cards."
@@ -23666,7 +23732,7 @@
     },
     {
      "name": "items",
-     "type": "ArticleCardsItem[]",
+     "type": "ArticleCardsSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The cards, in order; each is `{ id, href, title, description, meta, image?, mark?, target? }`; a card whose `target` is `_blank` opens in a new tab."
@@ -23680,14 +23746,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/article-cards.json",
-   "docsFile": "catalog/components/article-cards.json"
+   "examplesFile": "catalog/examples/article-cards-section.json",
+   "docsFile": "catalog/components/article-cards-section.json"
   },
-  "article-highlight": {
-   "import": "@aziontech/webkit/article-highlight",
-   "target": "./src/components/section/article-highlight/article-highlight.vue",
+  "article-highlight-section": {
+   "import": "@aziontech/webkit/article-highlight-section",
+   "target": "./src/components/section/article-highlight-section/article-highlight-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/article-highlight",
+   "treeShakeableImport": "@aziontech/webkit/article-highlight-section",
    "models": [
     "modelValue"
    ],
@@ -23703,7 +23769,7 @@
     },
     {
      "name": "items",
-     "type": "ArticleHighlightItem[]",
+     "type": "ArticleHighlightSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`."
@@ -23752,14 +23818,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/article-highlight.json",
-   "docsFile": "catalog/components/article-highlight.json"
+   "examplesFile": "catalog/examples/article-highlight-section.json",
+   "docsFile": "catalog/components/article-highlight-section.json"
   },
-  "article-index": {
-   "import": "@aziontech/webkit/article-index",
-   "target": "./src/components/section/article-index/article-index.vue",
+  "article-index-section": {
+   "import": "@aziontech/webkit/article-index-section",
+   "target": "./src/components/section/article-index-section/article-index-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/article-index",
+   "treeShakeableImport": "@aziontech/webkit/article-index-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -23779,14 +23845,14 @@
     },
     {
      "name": "filters",
-     "type": "ArticleIndexFilters",
+     "type": "ArticleIndexSectionFilters",
      "default": "'category-search'",
      "required": "false",
      "doc": "Filter bar: `category-search` draws the category picker and the search field, `facets` draws one dropdown per facet."
     },
     {
      "name": "items",
-     "type": "ArticleIndexItem[]",
+     "type": "ArticleIndexSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The entries, in order; each is `{ id, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, target? }`."
@@ -23828,7 +23894,7 @@
     },
     {
      "name": "facets",
-     "type": "ArticleIndexFacet[]",
+     "type": "ArticleIndexSectionFacet[]",
      "default": "[]",
      "required": "false",
      "doc": "The facet dropdowns, in order (`facets`); each is `{ id, label, allLabel, options }`."
@@ -23884,7 +23950,7 @@
     },
     {
      "name": "rowVariant",
-     "type": "ArticleIndexRowVariant",
+     "type": "ArticleIndexSectionRowVariant",
      "default": "undefined",
      "required": "false",
      "doc": "Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`."
@@ -23905,14 +23971,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/article-index.json",
-   "docsFile": "catalog/components/article-index.json"
+   "examplesFile": "catalog/examples/article-index-section.json",
+   "docsFile": "catalog/components/article-index-section.json"
   },
-  "cli-terminal": {
-   "import": "@aziontech/webkit/cli-terminal",
-   "target": "./src/components/section/cli-terminal/cli-terminal.vue",
+  "cli-terminal-section": {
+   "import": "@aziontech/webkit/cli-terminal-section",
+   "target": "./src/components/section/cli-terminal-section/cli-terminal-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/cli-terminal",
+   "treeShakeableImport": "@aziontech/webkit/cli-terminal-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -23946,7 +24012,7 @@
     },
     {
      "name": "script",
-     "type": "CliTerminalScript",
+     "type": "CliTerminalSectionScript",
      "default": "undefined",
      "required": "false",
      "doc": "Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`."
@@ -23974,14 +24040,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/cli-terminal.json",
-   "docsFile": "catalog/components/cli-terminal.json"
+   "examplesFile": "catalog/examples/cli-terminal-section.json",
+   "docsFile": "catalog/components/cli-terminal-section.json"
   },
-  "client-mosaic": {
-   "import": "@aziontech/webkit/client-mosaic",
-   "target": "./src/components/section/client-mosaic/client-mosaic.vue",
+  "client-mosaic-section": {
+   "import": "@aziontech/webkit/client-mosaic-section",
+   "target": "./src/components/section/client-mosaic-section/client-mosaic-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/client-mosaic",
+   "treeShakeableImport": "@aziontech/webkit/client-mosaic-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24008,35 +24074,35 @@
     },
     {
      "name": "stories",
-     "type": "ClientMosaicStory[]",
+     "type": "ClientMosaicSectionStory[]",
      "default": "[]",
      "required": "false",
      "doc": "The story cells, in order; each is `{ logo, logoAlt, photo?, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows."
     },
     {
      "name": "logos",
-     "type": "ClientMosaicLogo[]",
+     "type": "ClientMosaicSectionLogo[]",
      "default": "[]",
      "required": "false",
      "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`)."
     },
     {
      "name": "cells",
-     "type": "ClientMosaicCell[]",
+     "type": "ClientMosaicSectionCell[]",
      "default": "[]",
      "required": "false",
      "doc": "The cells in placement order, story and mark cells interleaved; each is `{ logo, logoAlt, href, text?, photo?, span?, rows?, fill?, logoTreatment?, stacked? }` where a cell with `text` is a story cell, `span` and `rows` are `'1'` (default) or `'2'`, and `fill` defaults to `canvas`. When set it replaces `stories` and `logos`."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/client-mosaic.json",
-   "docsFile": "catalog/components/client-mosaic.json"
+   "examplesFile": "catalog/examples/client-mosaic-section.json",
+   "docsFile": "catalog/components/client-mosaic-section.json"
   },
-  "client-story-columns": {
-   "import": "@aziontech/webkit/client-story-columns",
-   "target": "./src/components/section/client-story-columns/client-story-columns.vue",
+  "client-story-columns-section": {
+   "import": "@aziontech/webkit/client-story-columns-section",
+   "target": "./src/components/section/client-story-columns-section/client-story-columns-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/client-story-columns",
+   "treeShakeableImport": "@aziontech/webkit/client-story-columns-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24063,28 +24129,28 @@
     },
     {
      "name": "cells",
-     "type": "ClientStoryColumnsCell[]",
+     "type": "ClientStoryColumnsSectionCell[]",
      "default": "[]",
      "required": "false",
      "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
     },
     {
      "name": "reveal",
-     "type": "ClientStoryColumnsReveal",
+     "type": "ClientStoryColumnsSectionReveal",
      "default": "'always'",
      "required": "false",
      "doc": "When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/client-story-columns.json",
-   "docsFile": "catalog/components/client-story-columns.json"
+   "examplesFile": "catalog/examples/client-story-columns-section.json",
+   "docsFile": "catalog/components/client-story-columns-section.json"
   },
-  "client-quotes": {
-   "import": "@aziontech/webkit/client-quotes",
-   "target": "./src/components/section/client-quotes/client-quotes.vue",
+  "client-quotes-section": {
+   "import": "@aziontech/webkit/client-quotes-section",
+   "target": "./src/components/section/client-quotes-section/client-quotes-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/client-quotes",
+   "treeShakeableImport": "@aziontech/webkit/client-quotes-section",
    "models": [
     "modelValue"
    ],
@@ -24107,7 +24173,7 @@
     },
     {
      "name": "items",
-     "type": "ClientQuotesItem[]",
+     "type": "ClientQuotesSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`."
@@ -24142,20 +24208,20 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/client-quotes.json",
-   "docsFile": "catalog/components/client-quotes.json"
+   "examplesFile": "catalog/examples/client-quotes-section.json",
+   "docsFile": "catalog/components/client-quotes-section.json"
   },
-  "closing-call-to-action": {
-   "import": "@aziontech/webkit/closing-call-to-action",
-   "target": "./src/components/section/closing-call-to-action/closing-call-to-action.vue",
+  "closing-call-to-action-section": {
+   "import": "@aziontech/webkit/closing-call-to-action-section",
+   "target": "./src/components/section/closing-call-to-action-section/closing-call-to-action-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/closing-call-to-action",
+   "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
     {
      "name": "variant",
-     "type": "ClosingCallToActionVariant",
+     "type": "ClosingCallToActionSectionVariant",
      "default": "'split'",
      "required": "false",
      "doc": "Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone."
@@ -24225,7 +24291,7 @@
     },
     {
      "name": "audiences",
-     "type": "ClosingCallToActionAudience[]",
+     "type": "ClosingCallToActionSectionAudience[]",
      "default": "[]",
      "required": "false",
      "doc": "The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, variant?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more."
@@ -24260,8 +24326,8 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/closing-call-to-action.json",
-   "docsFile": "catalog/components/closing-call-to-action.json"
+   "examplesFile": "catalog/examples/closing-call-to-action-section.json",
+   "docsFile": "catalog/components/closing-call-to-action-section.json"
   },
   "newsletter-section": {
    "import": "@aziontech/webkit/newsletter-section",
@@ -24346,11 +24412,11 @@
    "examplesFile": "catalog/examples/newsletter-section.json",
    "docsFile": "catalog/components/newsletter-section.json"
   },
-  "plan-comparison": {
-   "import": "@aziontech/webkit/plan-comparison",
-   "target": "./src/components/section/plan-comparison/plan-comparison.vue",
+  "plan-comparison-section": {
+   "import": "@aziontech/webkit/plan-comparison-section",
+   "target": "./src/components/section/plan-comparison-section/plan-comparison-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/plan-comparison",
+   "treeShakeableImport": "@aziontech/webkit/plan-comparison-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24398,14 +24464,14 @@
     },
     {
      "name": "plans",
-     "type": "PlanComparisonPlan[]",
+     "type": "PlanComparisonSectionPlan[]",
      "default": "[]",
      "required": "false",
      "doc": "The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped."
     },
     {
      "name": "sections",
-     "type": "PlanComparisonSection[]",
+     "type": "PlanComparisonSectionSection[]",
      "default": "[]",
      "required": "false",
      "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover."
@@ -24419,14 +24485,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/plan-comparison.json",
-   "docsFile": "catalog/components/plan-comparison.json"
+   "examplesFile": "catalog/examples/plan-comparison-section.json",
+   "docsFile": "catalog/components/plan-comparison-section.json"
   },
-  "competitor-comparison": {
-   "import": "@aziontech/webkit/competitor-comparison",
-   "target": "./src/components/section/competitor-comparison/competitor-comparison.vue",
+  "competitor-comparison-section": {
+   "import": "@aziontech/webkit/competitor-comparison-section",
+   "target": "./src/components/section/competitor-comparison-section/competitor-comparison-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/competitor-comparison",
+   "treeShakeableImport": "@aziontech/webkit/competitor-comparison-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24488,28 +24554,28 @@
     },
     {
      "name": "competitor",
-     "type": "CompetitorComparisonCompetitor",
+     "type": "CompetitorComparisonSectionCompetitor",
      "default": "—",
      "required": "true",
      "doc": "The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. With only a `name`, the logo is taken from the competitor registry once the page is interactive, and the name is the column head until then or when the registry has no entry."
     },
     {
      "name": "groups",
-     "type": "CompetitorComparisonGroup[]",
+     "type": "CompetitorComparisonSectionGroup[]",
      "default": "[]",
      "required": "false",
      "doc": "The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`)."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/competitor-comparison.json",
-   "docsFile": "catalog/components/competitor-comparison.json"
+   "examplesFile": "catalog/examples/competitor-comparison-section.json",
+   "docsFile": "catalog/components/competitor-comparison-section.json"
   },
-  "compliance-logos": {
-   "import": "@aziontech/webkit/compliance-logos",
-   "target": "./src/components/section/compliance-logos/compliance-logos.vue",
+  "compliance-logos-section": {
+   "import": "@aziontech/webkit/compliance-logos-section",
+   "target": "./src/components/section/compliance-logos-section/compliance-logos-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/compliance-logos",
+   "treeShakeableImport": "@aziontech/webkit/compliance-logos-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24543,7 +24609,7 @@
     },
     {
      "name": "certifications",
-     "type": "ComplianceLogosCertification[]",
+     "type": "ComplianceLogosSectionCertification[]",
      "default": "[]",
      "required": "false",
      "doc": "The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text."
@@ -24564,14 +24630,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/compliance-logos.json",
-   "docsFile": "catalog/components/compliance-logos.json"
+   "examplesFile": "catalog/examples/compliance-logos-section.json",
+   "docsFile": "catalog/components/compliance-logos-section.json"
   },
-  "contact-hub": {
-   "import": "@aziontech/webkit/contact-hub",
-   "target": "./src/components/section/contact-hub/contact-hub.vue",
+  "contact-hub-section": {
+   "import": "@aziontech/webkit/contact-hub-section",
+   "target": "./src/components/section/contact-hub-section/contact-hub-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/contact-hub",
+   "treeShakeableImport": "@aziontech/webkit/contact-hub-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24584,22 +24650,22 @@
     },
     {
      "name": "lanes",
-     "type": "ContactHubLane[]",
+     "type": "ContactHubSectionLane[]",
      "default": "[]",
      "required": "false",
      "doc": "The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them."
     },
     {
      "name": "channels",
-     "type": "ContactHubChannel[]",
+     "type": "ContactHubSectionChannel[]",
      "default": "[]",
      "required": "false",
      "doc": "The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/contact-hub.json",
-   "docsFile": "catalog/components/contact-hub.json"
+   "examplesFile": "catalog/examples/contact-hub-section.json",
+   "docsFile": "catalog/components/contact-hub-section.json"
   },
   "faq-section": {
    "import": "@aziontech/webkit/faq-section",
@@ -24635,11 +24701,11 @@
    "examplesFile": "catalog/examples/faq-section.json",
    "docsFile": "catalog/components/faq-section.json"
   },
-  "feature-scroll": {
-   "import": "@aziontech/webkit/feature-scroll",
-   "target": "./src/components/section/feature-scroll/feature-scroll.vue",
+  "feature-scroll-section": {
+   "import": "@aziontech/webkit/feature-scroll-section",
+   "target": "./src/components/section/feature-scroll-section/feature-scroll-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/feature-scroll",
+   "treeShakeableImport": "@aziontech/webkit/feature-scroll-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24673,21 +24739,21 @@
     },
     {
      "name": "items",
-     "type": "FeatureScrollItem[]",
+     "type": "FeatureScrollSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/feature-scroll.json",
-   "docsFile": "catalog/components/feature-scroll.json"
+   "examplesFile": "catalog/examples/feature-scroll-section.json",
+   "docsFile": "catalog/components/feature-scroll-section.json"
   },
-  "feature-tabs": {
-   "import": "@aziontech/webkit/feature-tabs",
-   "target": "./src/components/section/feature-tabs/feature-tabs.vue",
+  "feature-tabs-section": {
+   "import": "@aziontech/webkit/feature-tabs-section",
+   "target": "./src/components/section/feature-tabs-section/feature-tabs-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/feature-tabs",
+   "treeShakeableImport": "@aziontech/webkit/feature-tabs-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24721,14 +24787,14 @@
     },
     {
      "name": "tabs",
-     "type": "FeatureTabsTab[]",
+     "type": "FeatureTabsSectionTab[]",
      "default": "[]",
      "required": "false",
      "doc": "The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the stable key handed to the band scene as its `tab`, `code` is the `{ label, value, code, language?, fileName?, fileIcon? }` file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name."
     },
     {
      "name": "scene",
-     "type": "FeatureTabsScene",
+     "type": "FeatureTabsSectionScene",
      "default": "undefined",
      "required": "false",
      "doc": "Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations."
@@ -24763,20 +24829,20 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/feature-tabs.json",
-   "docsFile": "catalog/components/feature-tabs.json"
+   "examplesFile": "catalog/examples/feature-tabs-section.json",
+   "docsFile": "catalog/components/feature-tabs-section.json"
   },
-  "feature-tiles": {
-   "import": "@aziontech/webkit/feature-tiles",
-   "target": "./src/components/section/feature-tiles/feature-tiles.vue",
+  "feature-tiles-section": {
+   "import": "@aziontech/webkit/feature-tiles-section",
+   "target": "./src/components/section/feature-tiles-section/feature-tiles-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/feature-tiles",
+   "treeShakeableImport": "@aziontech/webkit/feature-tiles-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
     {
      "name": "variant",
-     "type": "FeatureTilesVariant",
+     "type": "FeatureTilesSectionVariant",
      "default": "'artwork'",
      "required": "false",
      "doc": "Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule."
@@ -24811,21 +24877,21 @@
     },
     {
      "name": "tiles",
-     "type": "FeatureTilesTile[]",
+     "type": "FeatureTilesSectionTile[]",
      "default": "[]",
      "required": "false",
      "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/feature-tiles.json",
-   "docsFile": "catalog/components/feature-tiles.json"
+   "examplesFile": "catalog/examples/feature-tiles-section.json",
+   "docsFile": "catalog/components/feature-tiles-section.json"
   },
-  "feature-widgets": {
-   "import": "@aziontech/webkit/feature-widgets",
-   "target": "./src/components/section/feature-widgets/feature-widgets.vue",
+  "feature-widgets-section": {
+   "import": "@aziontech/webkit/feature-widgets-section",
+   "target": "./src/components/section/feature-widgets-section/feature-widgets-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/feature-widgets",
+   "treeShakeableImport": "@aziontech/webkit/feature-widgets-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -24880,7 +24946,7 @@
     },
     {
      "name": "columns",
-     "type": "FeatureWidgetsColumns",
+     "type": "FeatureWidgetsSectionColumns",
      "default": "2",
      "required": "false",
      "doc": "Column count of the grid from the medium breakpoint up: `2`, `3` or `4`."
@@ -24894,15 +24960,15 @@
     },
     {
      "name": "items",
-     "type": "FeatureWidgetsItem[]",
+     "type": "FeatureWidgetsSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/feature-widgets.json",
-   "docsFile": "catalog/components/feature-widgets.json"
+   "examplesFile": "catalog/examples/feature-widgets-section.json",
+   "docsFile": "catalog/components/feature-widgets-section.json"
   },
   "hero-section": {
    "import": "@aziontech/webkit/hero-section",
@@ -25022,7 +25088,7 @@
      "type": "string",
      "default": "'var(--layout-header-height)'",
      "required": "false",
-     "doc": "Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteHeader` bar's token, any CSS length, empty for a page with no header above it."
+     "doc": "Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteHeaderSection` bar's token, any CSS length, empty for a page with no header above it."
     },
     {
      "name": "titleLength",
@@ -25069,11 +25135,11 @@
    "examplesFile": "catalog/examples/hero-section.json",
    "docsFile": "catalog/components/hero-section.json"
   },
-  "capability-grid": {
-   "import": "@aziontech/webkit/capability-grid",
-   "target": "./src/components/section/capability-grid/capability-grid.vue",
+  "capability-grid-section": {
+   "import": "@aziontech/webkit/capability-grid-section",
+   "target": "./src/components/section/capability-grid-section/capability-grid-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/capability-grid",
+   "treeShakeableImport": "@aziontech/webkit/capability-grid-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -25100,28 +25166,28 @@
     },
     {
      "name": "items",
-     "type": "CapabilityGridItem[]",
+     "type": "CapabilityGridSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell to that page. The band renders nothing when empty."
     },
     {
      "name": "columns",
-     "type": "CapabilityGridColumns",
+     "type": "CapabilityGridSectionColumns",
      "default": "3",
      "required": "false",
      "doc": "Capabilities per row from the large breakpoint up."
     },
     {
      "name": "primaryAction",
-     "type": "CapabilityGridAction",
+     "type": "CapabilityGridSectionAction",
      "default": "undefined",
      "required": "false",
      "doc": "First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
     },
     {
      "name": "secondaryAction",
-     "type": "CapabilityGridAction",
+     "type": "CapabilityGridSectionAction",
      "default": "undefined",
      "required": "false",
      "doc": "Second button under the section title, `outline`; same shape. Shown only with a label and a link."
@@ -25142,14 +25208,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/capability-grid.json",
-   "docsFile": "catalog/components/capability-grid.json"
+   "examplesFile": "catalog/examples/capability-grid-section.json",
+   "docsFile": "catalog/components/capability-grid-section.json"
   },
-  "console-showcase": {
-   "import": "@aziontech/webkit/console-showcase",
-   "target": "./src/components/section/console-showcase/console-showcase.vue",
+  "console-showcase-section": {
+   "import": "@aziontech/webkit/console-showcase-section",
+   "target": "./src/components/section/console-showcase-section/console-showcase-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/console-showcase",
+   "treeShakeableImport": "@aziontech/webkit/console-showcase-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -25225,7 +25291,7 @@
     },
     {
      "name": "tabs",
-     "type": "ConsoleShowcaseTab[]",
+     "type": "ConsoleShowcaseSectionTab[]",
      "default": "[]",
      "required": "false",
      "doc": "Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene."
@@ -25246,14 +25312,14 @@
     },
     {
      "name": "primaryAction",
-     "type": "ConsoleShowcaseAction",
+     "type": "ConsoleShowcaseSectionAction",
      "default": "undefined",
      "required": "false",
      "doc": "First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
     },
     {
      "name": "secondaryAction",
-     "type": "ConsoleShowcaseAction",
+     "type": "ConsoleShowcaseSectionAction",
      "default": "undefined",
      "required": "false",
      "doc": "Second button under the headline, `outline`; same shape. Shown only with a label and a link."
@@ -25267,14 +25333,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/console-showcase.json",
-   "docsFile": "catalog/components/console-showcase.json"
+   "examplesFile": "catalog/examples/console-showcase-section.json",
+   "docsFile": "catalog/components/console-showcase-section.json"
   },
-  "process-scroll": {
-   "import": "@aziontech/webkit/process-scroll",
-   "target": "./src/components/section/process-scroll/process-scroll.vue",
+  "process-scroll-section": {
+   "import": "@aziontech/webkit/process-scroll-section",
+   "target": "./src/components/section/process-scroll-section/process-scroll-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/process-scroll",
+   "treeShakeableImport": "@aziontech/webkit/process-scroll-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -25322,7 +25388,7 @@
     },
     {
      "name": "steps",
-     "type": "ProcessScrollStep[]",
+     "type": "ProcessScrollSectionStep[]",
      "default": "[]",
      "required": "false",
      "doc": "The stages, in order; each is `{ title, description }` and gets its own numbered card."
@@ -25346,18 +25412,18 @@
      "type": "string",
      "default": "'var(--layout-header-height)'",
      "required": "false",
-     "doc": "Height of the sticky site header a pinned band sticks under; defaults to the SiteHeader bar's token, any CSS length."
+     "doc": "Height of the sticky site header a pinned band sticks under; defaults to the SiteHeaderSection bar's token, any CSS length."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/process-scroll.json",
-   "docsFile": "catalog/components/process-scroll.json"
+   "examplesFile": "catalog/examples/process-scroll-section.json",
+   "docsFile": "catalog/components/process-scroll-section.json"
   },
-  "copy-command": {
-   "import": "@aziontech/webkit/copy-command",
-   "target": "./src/components/section/copy-command/copy-command.vue",
+  "copy-command-section": {
+   "import": "@aziontech/webkit/copy-command-section",
+   "target": "./src/components/section/copy-command-section/copy-command-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/copy-command",
+   "treeShakeableImport": "@aziontech/webkit/copy-command-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -25377,8 +25443,8 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/copy-command.json",
-   "docsFile": "catalog/components/copy-command.json"
+   "examplesFile": "catalog/examples/copy-command-section.json",
+   "docsFile": "catalog/components/copy-command-section.json"
   },
   "hero-form-section": {
    "import": "@aziontech/webkit/hero-form-section",
@@ -25533,11 +25599,11 @@
    "examplesFile": "catalog/examples/hero-form-section.json",
    "docsFile": "catalog/components/hero-form-section.json"
   },
-  "investor-marks": {
-   "import": "@aziontech/webkit/investor-marks",
-   "target": "./src/components/section/investor-marks/investor-marks.vue",
+  "investor-marks-section": {
+   "import": "@aziontech/webkit/investor-marks-section",
+   "target": "./src/components/section/investor-marks-section/investor-marks-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/investor-marks",
+   "treeShakeableImport": "@aziontech/webkit/investor-marks-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -25564,7 +25630,7 @@
     },
     {
      "name": "items",
-     "type": "InvestorMarksItem[]",
+     "type": "InvestorMarksSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme."
@@ -25578,27 +25644,27 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/investor-marks.json",
-   "docsFile": "catalog/components/investor-marks.json"
+   "examplesFile": "catalog/examples/investor-marks-section.json",
+   "docsFile": "catalog/components/investor-marks-section.json"
   },
-  "job-posting": {
-   "import": "@aziontech/webkit/job-posting",
-   "target": "./src/components/section/job-posting/job-posting.vue",
+  "job-posting-section": {
+   "import": "@aziontech/webkit/job-posting-section",
+   "target": "./src/components/section/job-posting-section/job-posting-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/job-posting",
+   "treeShakeableImport": "@aziontech/webkit/job-posting-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
     {
      "name": "form",
-     "type": "JobPostingForm",
+     "type": "JobPostingSectionForm",
      "default": "—",
      "required": "true",
      "doc": "The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, type, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`."
     },
     {
      "name": "messages",
-     "type": "JobPostingMessages",
+     "type": "JobPostingSectionMessages",
      "default": "—",
      "required": "true",
      "doc": "Copy of the form and its outcomes: `{ missing, invalidEmail, invalidUrl, error, successTitle, successDescription, done, browse }`."
@@ -25626,7 +25692,7 @@
     },
     {
      "name": "facets",
-     "type": "JobPostingFacet[]",
+     "type": "JobPostingSectionFacet[]",
      "default": "[]",
      "required": "false",
      "doc": "Facts about the posting listed in the rail, in order; each is `{ label, icon? }`."
@@ -25640,7 +25706,7 @@
     },
     {
      "name": "sections",
-     "type": "JobPostingSection[]",
+     "type": "JobPostingSectionSection[]",
      "default": "[]",
      "required": "false",
      "doc": "The description, one row per section in order; each is `{ title, blocks }` where a block is `{ variant: 'text', text }` or `{ type: 'list', items }`."
@@ -25682,14 +25748,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/job-posting.json",
-   "docsFile": "catalog/components/job-posting.json"
+   "examplesFile": "catalog/examples/job-posting-section.json",
+   "docsFile": "catalog/components/job-posting-section.json"
   },
-  "listing-index": {
-   "import": "@aziontech/webkit/listing-index",
-   "target": "./src/components/section/listing-index/listing-index.vue",
+  "listing-index-section": {
+   "import": "@aziontech/webkit/listing-index-section",
+   "target": "./src/components/section/listing-index-section/listing-index-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/listing-index",
+   "treeShakeableImport": "@aziontech/webkit/listing-index-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -25709,14 +25775,14 @@
     },
     {
      "name": "columns",
-     "type": "ListingIndexColumn[]",
+     "type": "ListingIndexSectionColumn[]",
      "default": "[]",
      "required": "false",
      "doc": "The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones."
     },
     {
      "name": "data",
-     "type": "ListingIndexRow[]",
+     "type": "ListingIndexSectionRow[]",
      "default": "[]",
      "required": "false",
      "doc": "Every row, in source order; each is `{ href, group, values, facets, mark? }` where `values` and `facets` are keyed by column and facet and `mark` is the client's `{ name, logo }`."
@@ -25730,14 +25796,14 @@
     },
     {
      "name": "facets",
-     "type": "ListingIndexFacet[]",
+     "type": "ListingIndexSectionFacet[]",
      "default": "[]",
      "required": "false",
      "doc": "The facet selects; each is `{ id, label, allLabel, options }` where `id` matches a row facet and seeds it from `?id=` in the URL, and every option is `{ value, label }`."
     },
     {
      "name": "sorts",
-     "type": "ListingIndexSort[]",
+     "type": "ListingIndexSectionSort[]",
      "default": "[]",
      "required": "false",
      "doc": "The orders, the first the default; each is `{ value, label, by? }` where `by` is the column it sorts on and an empty `by` keeps the source order."
@@ -25800,14 +25866,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/listing-index.json",
-   "docsFile": "catalog/components/listing-index.json"
+   "examplesFile": "catalog/examples/listing-index-section.json",
+   "docsFile": "catalog/components/listing-index-section.json"
   },
-  "listing-table": {
-   "import": "@aziontech/webkit/listing-table",
-   "target": "./src/components/section/listing-table/listing-table.vue",
+  "listing-table-section": {
+   "import": "@aziontech/webkit/listing-table-section",
+   "target": "./src/components/section/listing-table-section/listing-table-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/listing-table",
+   "treeShakeableImport": "@aziontech/webkit/listing-table-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -25827,14 +25893,14 @@
     },
     {
      "name": "columns",
-     "type": "ListingTableColumn[]",
+     "type": "ListingTableSectionColumn[]",
      "default": "[]",
      "required": "false",
      "doc": "The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones."
     },
     {
      "name": "data",
-     "type": "ListingTableRow[]",
+     "type": "ListingTableSectionRow[]",
      "default": "[]",
      "required": "false",
      "doc": "The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text."
@@ -25848,8 +25914,8 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/listing-table.json",
-   "docsFile": "catalog/components/listing-table.json"
+   "examplesFile": "catalog/examples/listing-table-section.json",
+   "docsFile": "catalog/components/listing-table-section.json"
   },
   "logo-wall-section": {
    "import": "@aziontech/webkit/logo-wall-section",
@@ -26114,7 +26180,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`."
+     "doc": "Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`."
     },
     {
      "name": "description",
@@ -26211,11 +26277,11 @@
    "examplesFile": "catalog/examples/network-section.json",
    "docsFile": "catalog/components/network-section.json"
   },
-  "photo-marquee": {
-   "import": "@aziontech/webkit/photo-marquee",
-   "target": "./src/components/section/photo-marquee/photo-marquee.vue",
+  "photo-marquee-section": {
+   "import": "@aziontech/webkit/photo-marquee-section",
+   "target": "./src/components/section/photo-marquee-section/photo-marquee-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/photo-marquee",
+   "treeShakeableImport": "@aziontech/webkit/photo-marquee-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26235,7 +26301,7 @@
     },
     {
      "name": "descriptionWidth",
-     "type": "PhotoMarqueeDescriptionWidth",
+     "type": "PhotoMarqueeSectionDescriptionWidth",
      "default": "'narrow'",
      "required": "false",
      "doc": "Width the description is capped at: `narrow` or `wide`."
@@ -26256,7 +26322,7 @@
     },
     {
      "name": "photos",
-     "type": "PhotoMarqueePhoto[]",
+     "type": "PhotoMarqueeSectionPhoto[]",
      "default": "[]",
      "required": "false",
      "doc": "The photographs, in order; each is `{ src, alt, width, height }`."
@@ -26270,14 +26336,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/photo-marquee.json",
-   "docsFile": "catalog/components/photo-marquee.json"
+   "examplesFile": "catalog/examples/photo-marquee-section.json",
+   "docsFile": "catalog/components/photo-marquee-section.json"
   },
-  "platform-directory": {
-   "import": "@aziontech/webkit/platform-directory",
-   "target": "./src/components/section/platform-directory/platform-directory.vue",
+  "platform-directory-section": {
+   "import": "@aziontech/webkit/platform-directory-section",
+   "target": "./src/components/section/platform-directory-section/platform-directory-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/platform-directory",
+   "treeShakeableImport": "@aziontech/webkit/platform-directory-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26318,21 +26384,21 @@
     },
     {
      "name": "groups",
-     "type": "PlatformDirectoryGroup[]",
+     "type": "PlatformDirectorySectionGroup[]",
      "default": "[]",
      "required": "false",
      "doc": "The columns, in order; each is `{ title, items }` where every item is `{ icon, title, description, href }`. Items without a title or an `href` are skipped, and so are groups left empty."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/platform-directory.json",
-   "docsFile": "catalog/components/platform-directory.json"
+   "examplesFile": "catalog/examples/platform-directory-section.json",
+   "docsFile": "catalog/components/platform-directory-section.json"
   },
-  "pricing-plans": {
-   "import": "@aziontech/webkit/pricing-plans",
-   "target": "./src/components/section/pricing-plans/pricing-plans.vue",
+  "pricing-plans-section": {
+   "import": "@aziontech/webkit/pricing-plans-section",
+   "target": "./src/components/section/pricing-plans-section/pricing-plans-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/pricing-plans",
+   "treeShakeableImport": "@aziontech/webkit/pricing-plans-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26345,7 +26411,7 @@
     },
     {
      "name": "periods",
-     "type": "PricingPlansPeriod[]",
+     "type": "PricingPlansSectionPeriod[]",
      "default": "[]",
      "required": "false",
      "doc": "The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first."
@@ -26359,21 +26425,21 @@
     },
     {
      "name": "plans",
-     "type": "PricingPlansPlan[]",
+     "type": "PricingPlansSectionPlan[]",
      "default": "[]",
      "required": "false",
      "doc": "The plan cards, in order; each is `{ name, description?, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; `description` stands in for a price without `details`, a plan without a name is dropped, and an action without a label or href is dropped."
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/pricing-plans.json",
-   "docsFile": "catalog/components/pricing-plans.json"
+   "examplesFile": "catalog/examples/pricing-plans-section.json",
+   "docsFile": "catalog/components/pricing-plans-section.json"
   },
-  "recognition-marquee": {
-   "import": "@aziontech/webkit/recognition-marquee",
-   "target": "./src/components/section/recognition-marquee/recognition-marquee.vue",
+  "recognition-marquee-section": {
+   "import": "@aziontech/webkit/recognition-marquee-section",
+   "target": "./src/components/section/recognition-marquee-section/recognition-marquee-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/recognition-marquee",
+   "treeShakeableImport": "@aziontech/webkit/recognition-marquee-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26407,7 +26473,7 @@
     },
     {
      "name": "items",
-     "type": "RecognitionMarqueeItem[]",
+     "type": "RecognitionMarqueeSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme."
@@ -26421,14 +26487,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/recognition-marquee.json",
-   "docsFile": "catalog/components/recognition-marquee.json"
+   "examplesFile": "catalog/examples/recognition-marquee-section.json",
+   "docsFile": "catalog/components/recognition-marquee-section.json"
   },
-  "site-footer": {
-   "import": "@aziontech/webkit/site-footer",
-   "target": "./src/components/section/site-footer/site-footer.vue",
+  "site-footer-section": {
+   "import": "@aziontech/webkit/site-footer-section",
+   "target": "./src/components/section/site-footer-section/site-footer-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/site-footer",
+   "treeShakeableImport": "@aziontech/webkit/site-footer-section",
    "models": [
     "language"
    ],
@@ -26437,7 +26503,7 @@
    "props": [
     {
      "name": "variant",
-     "type": "SiteFooterVariant",
+     "type": "SiteFooterSectionVariant",
      "default": "'site'",
      "required": "false",
      "doc": "Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed."
@@ -26465,14 +26531,14 @@
     },
     {
      "name": "columns",
-     "type": "SiteFooterColumn[]",
+     "type": "SiteFooterSectionColumn[]",
      "default": "[]",
      "required": "false",
      "doc": "The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph."
     },
     {
      "name": "socials",
-     "type": "SiteFooterSocial[]",
+     "type": "SiteFooterSectionSocial[]",
      "default": "[]",
      "required": "false",
      "doc": "The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab."
@@ -26507,14 +26573,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/site-footer.json",
-   "docsFile": "catalog/components/site-footer.json"
+   "examplesFile": "catalog/examples/site-footer-section.json",
+   "docsFile": "catalog/components/site-footer-section.json"
   },
-  "site-header": {
-   "import": "@aziontech/webkit/site-header",
-   "target": "./src/components/section/site-header/site-header.vue",
+  "site-header-section": {
+   "import": "@aziontech/webkit/site-header-section",
+   "target": "./src/components/section/site-header-section/site-header-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/site-header",
+   "treeShakeableImport": "@aziontech/webkit/site-header-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26527,35 +26593,35 @@
     },
     {
      "name": "menus",
-     "type": "SiteHeaderMenu[]",
+     "type": "SiteHeaderSectionMenu[]",
      "default": "—",
      "required": "true",
      "doc": "The mega-menus, in bar order; each is `{ value, label, columns }` where `columns` is an array of columns, each holding groups of `{ label, href?, items }` and each item `{ label, description?, href?, icon? }`."
     },
     {
      "name": "links",
-     "type": "SiteHeaderLink[]",
+     "type": "SiteHeaderSectionLink[]",
      "default": "[]",
      "required": "false",
      "doc": "Bar entries that open no panel, after the menus; each is `{ label, href }`."
     },
     {
      "name": "contact",
-     "type": "SiteHeaderLink",
+     "type": "SiteHeaderSectionLink",
      "default": "undefined",
      "required": "false",
      "doc": "Contact link set in the bar from `xl` up and last in the sheet's tree; `{ label, href }`."
     },
     {
      "name": "primaryAction",
-     "type": "SiteHeaderLink",
+     "type": "SiteHeaderSectionLink",
      "default": "undefined",
      "required": "false",
      "doc": "The sign-up button, filled, in the bar and in the sheet footer; `{ label, href }`."
     },
     {
      "name": "secondaryAction",
-     "type": "SiteHeaderLink",
+     "type": "SiteHeaderSectionLink",
      "default": "undefined",
      "required": "false",
      "doc": "The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`."
@@ -26576,7 +26642,7 @@
     }
    ],
    "surface": "site",
-   "docsFile": "catalog/components/site-header.json"
+   "docsFile": "catalog/components/site-header-section.json"
   },
   "stats-section": {
    "import": "@aziontech/webkit/stats-section",
@@ -26605,11 +26671,11 @@
    "examplesFile": "catalog/examples/stats-section.json",
    "docsFile": "catalog/components/stats-section.json"
   },
-  "story-index": {
-   "import": "@aziontech/webkit/story-index",
-   "target": "./src/components/section/story-index/story-index.vue",
+  "story-index-section": {
+   "import": "@aziontech/webkit/story-index-section",
+   "target": "./src/components/section/story-index-section/story-index-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/story-index",
+   "treeShakeableImport": "@aziontech/webkit/story-index-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26629,14 +26695,14 @@
     },
     {
      "name": "items",
-     "type": "StoryIndexItem[]",
+     "type": "StoryIndexSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The stories, in order; each is `{ id, href, client, category, description, facets?, target? }`; a story whose `target` is `_blank` opens in a new tab."
     },
     {
      "name": "facets",
-     "type": "StoryIndexFacet[]",
+     "type": "StoryIndexSectionFacet[]",
      "default": "[]",
      "required": "false",
      "doc": "The facet selects, in order; each is `{ id, label, allLabel, options }`."
@@ -26720,14 +26786,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/story-index.json",
-   "docsFile": "catalog/components/story-index.json"
+   "examplesFile": "catalog/examples/story-index-section.json",
+   "docsFile": "catalog/components/story-index-section.json"
   },
-  "subject-grid": {
-   "import": "@aziontech/webkit/subject-grid",
-   "target": "./src/components/section/subject-grid/subject-grid.vue",
+  "subject-grid-section": {
+   "import": "@aziontech/webkit/subject-grid-section",
+   "target": "./src/components/section/subject-grid-section/subject-grid-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/subject-grid",
+   "treeShakeableImport": "@aziontech/webkit/subject-grid-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26740,14 +26806,14 @@
     },
     {
      "name": "subjects",
-     "type": "SubjectGridSubject[]",
+     "type": "SubjectGridSectionSubject[]",
      "default": "[]",
      "required": "false",
      "doc": "The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped."
     },
     {
      "name": "closing",
-     "type": "SubjectGridClosing",
+     "type": "SubjectGridSectionClosing",
      "default": "undefined",
      "required": "false",
      "doc": "Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent."
@@ -26761,14 +26827,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/subject-grid.json",
-   "docsFile": "catalog/components/subject-grid.json"
+   "examplesFile": "catalog/examples/subject-grid-section.json",
+   "docsFile": "catalog/components/subject-grid-section.json"
   },
-  "template-gallery": {
-   "import": "@aziontech/webkit/template-gallery",
-   "target": "./src/components/section/template-gallery/template-gallery.vue",
+  "template-gallery-section": {
+   "import": "@aziontech/webkit/template-gallery-section",
+   "target": "./src/components/section/template-gallery-section/template-gallery-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/template-gallery",
+   "treeShakeableImport": "@aziontech/webkit/template-gallery-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26816,7 +26882,7 @@
     },
     {
      "name": "templates",
-     "type": "TemplateGalleryTemplate[]",
+     "type": "TemplateGallerySectionTemplate[]",
      "default": "[]",
      "required": "false",
      "doc": "The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped."
@@ -26865,14 +26931,14 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/template-gallery.json",
-   "docsFile": "catalog/components/template-gallery.json"
+   "examplesFile": "catalog/examples/template-gallery-section.json",
+   "docsFile": "catalog/components/template-gallery-section.json"
   },
-  "customer-use-cases": {
-   "import": "@aziontech/webkit/customer-use-cases",
-   "target": "./src/components/section/customer-use-cases/customer-use-cases.vue",
+  "customer-use-cases-section": {
+   "import": "@aziontech/webkit/customer-use-cases-section",
+   "target": "./src/components/section/customer-use-cases-section/customer-use-cases-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/customer-use-cases",
+   "treeShakeableImport": "@aziontech/webkit/customer-use-cases-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -26906,7 +26972,7 @@
     },
     {
      "name": "items",
-     "type": "CustomerUseCasesItem[]",
+     "type": "CustomerUseCasesSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`."
@@ -26920,8 +26986,8 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/customer-use-cases.json",
-   "docsFile": "catalog/components/customer-use-cases.json"
+   "examplesFile": "catalog/examples/customer-use-cases-section.json",
+   "docsFile": "catalog/components/customer-use-cases-section.json"
   },
   "svg/illustration-layers": {
    "import": "@aziontech/webkit/svg/illustration-layers",
@@ -28376,11 +28442,11 @@
    "examplesFile": "catalog/examples/plan-feature-list.json",
    "docsFile": "catalog/components/plan-feature-list.json"
   },
-  "card-carousel": {
-   "import": "@aziontech/webkit/card-carousel",
-   "target": "./src/components/section/card-carousel/card-carousel.vue",
+  "card-carousel-section": {
+   "import": "@aziontech/webkit/card-carousel-section",
+   "target": "./src/components/section/card-carousel-section/card-carousel-section.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/card-carousel",
+   "treeShakeableImport": "@aziontech/webkit/card-carousel-section",
    "category": "section",
    "structure": "monolithic",
    "props": [
@@ -28414,7 +28480,7 @@
     },
     {
      "name": "items",
-     "type": "CardCarouselItem[]",
+     "type": "CardCarouselSectionItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The cards, in order; each is `{ eyebrow?, title, description, href?, linkLabel? }`, and a card with `href` links to it."
@@ -28428,8 +28494,8 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/card-carousel.json",
-   "docsFile": "catalog/components/card-carousel.json"
+   "examplesFile": "catalog/examples/card-carousel-section.json",
+   "docsFile": "catalog/components/card-carousel-section.json"
   }
  },
  "assets": {
@@ -28439,17 +28505,17 @@
    "unknown": "An unknown name renders a \"PLACE DESIGN ASSET\" placeholder and warns in the console.",
    "registry": "src/assets/illustrations/registry.ts",
    "usedBy": [
-    "feature-scroll",
-    "feature-tabs",
-    "feature-tiles",
-    "feature-widgets",
+    "feature-scroll-section",
+    "feature-tabs-section",
+    "feature-tiles-section",
+    "feature-widgets-section",
     "hero-section",
     "illustration",
     "media-split-section",
     "media-split-stack-section",
     "site-page"
    ],
-   "count": 68,
+   "count": 60,
    "file": "catalog/assets/illustrations.json"
   },
   "diagrams": {
@@ -28458,11 +28524,11 @@
    "unknown": "An unknown name draws nothing.",
    "registry": "src/assets/diagrams/registry.ts",
    "usedBy": [
-    "architecture-tabs",
+    "architecture-tabs-section",
     "diagram",
-    "feature-scroll",
-    "feature-tabs",
-    "feature-widgets",
+    "feature-scroll-section",
+    "feature-tabs-section",
+    "feature-widgets-section",
     "media-split-section",
     "media-split-stack-section",
     "site-page"
@@ -28483,18 +28549,18 @@
   },
   "brandMarks": {
    "title": "Brand marks",
-   "summary": "Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`); the label is the accessible name.",
+   "summary": "Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name.",
    "unknown": "An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark.",
    "registry": "src/assets/brands/registry.ts",
    "usedBy": [
-    "client-quotes",
+    "client-quotes-section",
     "hero",
     "hero-form-section",
     "hero-section",
     "marquee",
     "quote-tabs",
     "site-page",
-    "template-gallery"
+    "template-gallery-section"
    ],
    "count": 60,
    "file": "catalog/assets/brand-marks.json"
@@ -30331,7 +30397,7 @@
    "title": "Blocks/Create/CreateHub",
    "source": "blocks/create/create-hub/create-hub.vue",
    "surface": "app",
-   "summary": "The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead offers to upload a file or a folder through the system picker, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a bordered EmptyState with Continue with GitHub until an account is connected (a danger Alert under the button when the connection fails), then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of the ten most recently pushed repositories with a named Import button each and Load more for the rest; skeleton rows with a status line while a scope loads, a danger Alert with Retry when the list fails to load, and a small EmptyState with Clear search when nothing matches. On the right, Start from template: a template search over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column integration Cards with the vendor beside the title; each tile links to its deploy page, and a search with no match shows an EmptyState with Clear search. Each Recommended card turns its mark from grey to colour and lights a glow drawn from its mark on hover and focus. Built from `PageHeader`, `AppHeader`, `Breadcrumb`, `EmptyState`, `Alert`, `Link`, `Select`, `Input`, `Card`, `Item`, `Skeleton`, `ScrollArea` and `Button`.",
+   "summary": "The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead offers to upload a file or a folder through the system picker, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a bordered EmptyState with Continue with GitHub until an account is connected (a danger Alert under the button when the connection fails), then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of the ten most recently pushed repositories with a named Import button each and Load more for the rest; skeleton rows with a status line while a scope loads, a danger Alert with Retry when the list fails to load, and a small EmptyState with Clear search when nothing matches. On the right, Start from template: a template search over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column `IntegrationCard`s with the vendor beside the title; each tile links to its deploy page, and a search with no match shows an EmptyState with Clear search. Each Recommended card turns its mark from grey to colour and lights a glow drawn from its mark on hover and focus. Built from `PageHeader`, `AppHeader`, `Breadcrumb`, `EmptyState`, `Alert`, `Link`, `Select`, `Input`, `Card`, `IntegrationCard`, `Item`, `Skeleton`, `ScrollArea` and `Button`.",
    "intents": [
     "create hub",
     "creation center",
@@ -30366,6 +30432,7 @@
     "EmptyState",
     "IconButton",
     "Input",
+    "IntegrationCard",
     "Item",
     "Link",
     "PageHeader",
@@ -30384,6 +30451,7 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/integration-card",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
@@ -30842,7 +30910,7 @@
    "title": "Blocks/Create/DeploySuccess",
    "source": "blocks/create/deploy-success/deploy-success.vue",
    "surface": "app",
-   "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as integration Cards that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `SectionHeader`, `Card`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
+   "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `SectionHeader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
    "intents": [
     "deploy success",
     "deployment successful",
@@ -30863,6 +30931,7 @@
     "Button",
     "Card",
     "CodeBlock",
+    "IntegrationCard",
     "Item",
     "Link",
     "SectionHeader",
@@ -30874,6 +30943,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-block",
+    "@aziontech/webkit/integration-card",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
     "@aziontech/webkit/section-header",
@@ -32151,55 +32221,6 @@
    ],
    "file": "catalog/blocks/dashboard/service-monitoring-dashboard.json"
   },
-  "detail/attached-resources": {
-   "name": "AttachedResources",
-   "title": "Blocks/Detail/AttachedResources",
-   "source": "blocks/detail/attached-resources/attached-resources.vue",
-   "surface": "app",
-   "kind": "fragment",
-   "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.",
-   "intents": [
-    "domains section",
-    "domains card",
-    "domains table",
-    "resource domains",
-    "domain list in settings",
-    "hostnames",
-    "seção de domínios",
-    "domínios do recurso",
-    "lista de domínios",
-    "attached resources",
-    "related resources table",
-    "recursos vinculados"
-   ],
-   "skills": [
-    "webkit-tables"
-   ],
-   "components": [
-    "Alert",
-    "Button",
-    "Card",
-    "DataTable",
-    "DropdownMenuGroup",
-    "DropdownMenuItem",
-    "TableCellActions",
-    "Tag"
-   ],
-   "imports": [
-    "@aziontech/webkit/alert",
-    "@aziontech/webkit/button",
-    "@aziontech/webkit/card",
-    "@aziontech/webkit/data-table",
-    "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-item",
-    "@aziontech/webkit/table-cell-actions",
-    "@aziontech/webkit/tag"
-   ],
-   "primary": "Default",
-   "guidelinesSummary": "A short list of the things one resource is attached to, shown in place inside its Settings tab. Here they are its domains: the user sees every address the resource answers on, which environment, deployment policy and certificate each one uses, and can edit, delete or add one without leaving the settings page.",
-   "variants": [],
-   "file": "catalog/blocks/detail/attached-resources.json"
-  },
   "detail/deployment-logs": {
    "name": "DeploymentLogs",
    "title": "Blocks/Detail/DeploymentLogs",
@@ -32427,6 +32448,55 @@
     }
    ],
    "file": "catalog/blocks/detail/dns-zone-detail.json"
+  },
+  "detail/domains-card": {
+   "name": "DomainsCard",
+   "title": "Blocks/Detail/DomainsCard",
+   "source": "blocks/detail/domains-card/domains-card.vue",
+   "surface": "app",
+   "kind": "fragment",
+   "summary": "The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.",
+   "intents": [
+    "domains section",
+    "domains card",
+    "domains table",
+    "resource domains",
+    "domain list in settings",
+    "hostnames",
+    "seção de domínios",
+    "domínios do recurso",
+    "lista de domínios",
+    "attached resources",
+    "related resources table",
+    "recursos vinculados"
+   ],
+   "skills": [
+    "webkit-tables"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "DataTable",
+    "DropdownMenuGroup",
+    "DropdownMenuItem",
+    "TableCellActions",
+    "Tag"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/data-table",
+    "@aziontech/webkit/dropdown-menu-group",
+    "@aziontech/webkit/dropdown-menu-item",
+    "@aziontech/webkit/table-cell-actions",
+    "@aziontech/webkit/tag"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "A short list of the things one resource is attached to, shown in place inside its Settings tab. Here they are its domains: the user sees every address the resource answers on, which environment, deployment policy and certificate each one uses, and can edit, delete or add one without leaving the settings page.",
+   "variants": [],
+   "file": "catalog/blocks/detail/domains-card.json"
   },
   "detail/get-started": {
    "name": "GetStarted",
@@ -34131,7 +34201,6 @@
     "DocPreviousNext",
     "DocPrompt",
     "DocProse",
-    "DocStep",
     "DocSteps",
     "DocTab",
     "DocTabs",
@@ -34177,7 +34246,6 @@
     "@aziontech/webkit/doc-previous-next",
     "@aziontech/webkit/doc-prompt",
     "@aziontech/webkit/doc-prose",
-    "@aziontech/webkit/doc-step",
     "@aziontech/webkit/doc-steps",
     "@aziontech/webkit/doc-tab",
     "@aziontech/webkit/doc-tabs",
@@ -34218,7 +34286,7 @@
    "title": "Blocks/Shell/Site",
    "source": "blocks/shell/site/site.vue",
    "surface": "site",
-   "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeader data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width=\"site\"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeader.",
+   "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeaderSection data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooterSection data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width=\"site\"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooterSection closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeaderSection.",
    "intents": [
     "site shell",
     "marketing site layout",
@@ -34232,7 +34300,7 @@
     "marketing site shell",
     "site layout component",
     "SiteLayout",
-    "layout do site com SiteHeader"
+    "layout do site com SiteHeaderSection"
    ],
    "skills": [
     "webkit-layout"
@@ -34260,7 +34328,7 @@
     "@aziontech/webkit/texture"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteHeader` and `SiteFooter` data; each page is only its sections, in the layout's slot.",
+   "guidelinesSummary": "The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteHeaderSection` and `SiteFooterSection` data; each page is only its sections, in the layout's slot.",
    "variants": [],
    "file": "catalog/blocks/shell/site.json"
   },
@@ -34325,6 +34393,62 @@
     }
    ],
    "file": "catalog/blocks/state/async-submit.json"
+  },
+  "state/error-page": {
+   "name": "ErrorPage",
+   "title": "Blocks/State/ErrorPage",
+   "source": "blocks/state/error-page/error-page.vue",
+   "surface": "app",
+   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the animated azion-404 line figure (a still frame under reduced motion), the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button`, `LineFigure` (azion-404) and the `svg/error-403` figure. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "intents": [
+    "404 page",
+    "not found page",
+    "page not found",
+    "403 forbidden page",
+    "access denied page",
+    "500 error page",
+    "server error page",
+    "error page",
+    "resource not found",
+    "página não encontrada",
+    "página de erro",
+    "acesso negado",
+    "erro 404",
+    "erro 500"
+   ],
+   "skills": [
+    "webkit-ui-states",
+    "webkit-errors",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Button",
+    "CopyButton",
+    "EmptyState",
+    "LineFigure",
+    "Error403"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/line-figure",
+    "@aziontech/webkit/svg/error-403"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.",
+   "variants": [
+    {
+     "name": "Forbidden"
+    },
+    {
+     "name": "ServerError"
+    },
+    {
+     "name": "ResourceNotFound"
+    }
+   ],
+   "file": "catalog/blocks/state/error-page.json"
   },
   "state/first-use": {
    "name": "FirstUse",
@@ -34519,62 +34643,6 @@
     }
    ],
    "file": "catalog/blocks/state/form-validation.json"
-  },
-  "state/not-found": {
-   "name": "NotFound",
-   "title": "Blocks/State/NotFound",
-   "source": "blocks/state/not-found/not-found.vue",
-   "surface": "app",
-   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the animated azion-404 line figure (a still frame under reduced motion), the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button`, `LineFigure` (azion-404) and the `svg/error-403` figure. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
-   "intents": [
-    "404 page",
-    "not found page",
-    "page not found",
-    "403 forbidden page",
-    "access denied page",
-    "500 error page",
-    "server error page",
-    "error page",
-    "resource not found",
-    "página não encontrada",
-    "página de erro",
-    "acesso negado",
-    "erro 404",
-    "erro 500"
-   ],
-   "skills": [
-    "webkit-ui-states",
-    "webkit-errors",
-    "webkit-microcopy"
-   ],
-   "components": [
-    "Button",
-    "CopyButton",
-    "EmptyState",
-    "LineFigure",
-    "Error403"
-   ],
-   "imports": [
-    "@aziontech/webkit/button",
-    "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/line-figure",
-    "@aziontech/webkit/svg/error-403"
-   ],
-   "primary": "Default",
-   "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.",
-   "variants": [
-    {
-     "name": "Forbidden"
-    },
-    {
-     "name": "ServerError"
-    },
-    {
-     "name": "ResourceNotFound"
-    }
-   ],
-   "file": "catalog/blocks/state/not-found.json"
   },
   "state/page-skeleton": {
    "name": "PageSkeleton",
@@ -34859,6 +34927,138 @@
    ],
    "file": "catalog/blocks/view/card-view.json"
   },
+  "view/events-explorer": {
+   "name": "EventsExplorer",
+   "title": "Blocks/View/EventsExplorer",
+   "source": "blocks/view/events-explorer/events-explorer.vue",
+   "surface": "app",
+   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
+   "intents": [
+    "real-time events",
+    "events visualizer",
+    "event explorer",
+    "log explorer",
+    "logs viewer",
+    "request logs",
+    "events search",
+    "eventos em tempo real",
+    "visualizador de eventos",
+    "explorador de logs",
+    "split view",
+    "master detail",
+    "list and detail panes",
+    "visão dividida",
+    "query language",
+    "events query",
+    "saved searches",
+    "saved queries",
+    "query history",
+    "date range",
+    "time range picker",
+    "investigation tabs",
+    "event document",
+    "consulta de eventos",
+    "buscas salvas",
+    "intervalo de datas"
+   ],
+   "skills": [
+    "webkit-data-viz",
+    "webkit-tables",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Accordion",
+    "Alert",
+    "Button",
+    "Chart",
+    "Checkbox",
+    "Chip",
+    "CodeBlock",
+    "CopyButton",
+    "DataTable",
+    "DateRangePicker",
+    "DrawerContent",
+    "Drawer",
+    "DrawerTitle",
+    "DropdownMenu",
+    "EmptyState",
+    "Field",
+    "FilterMenu",
+    "IconButton",
+    "Input",
+    "Item",
+    "PanelHeader",
+    "Popover",
+    "PropertyFilter",
+    "Resizable",
+    "Sidebar",
+    "Skeleton",
+    "Tabs",
+    "Tag",
+    "Tooltip",
+    "use-collection",
+    "use-locale"
+   ],
+   "imports": [
+    "@aziontech/webkit/accordion",
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/chart",
+    "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/chip",
+    "@aziontech/webkit/code-block",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/data-table",
+    "@aziontech/webkit/date-range-picker",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-root",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/filter-menu",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/item-root",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/popover",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/resizable",
+    "@aziontech/webkit/sidebar-root",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/tabs",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-locale"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).",
+   "variants": [
+    {
+     "name": "Filtered"
+    },
+    {
+     "name": "Empty"
+    },
+    {
+     "name": "Loading"
+    },
+    {
+     "name": "Error"
+    },
+    {
+     "name": "Query"
+    },
+    {
+     "name": "Sessions"
+    },
+    {
+     "name": "EventDocument"
+    }
+   ],
+   "file": "catalog/blocks/view/events-explorer.json"
+  },
   "view/file-browser": {
    "name": "FileBrowser",
    "title": "Blocks/View/FileBrowser",
@@ -34982,7 +35182,7 @@
    "title": "Blocks/View/Marketplace",
    "source": "blocks/view/marketplace/marketplace.vue",
    "surface": "app",
-   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card variant=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` `IntegrationCard`s (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `IntegrationCard` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "marketplace",
     "integration catalog",
@@ -35018,6 +35218,7 @@
     "EmptyState",
     "Field",
     "Input",
+    "IntegrationCard",
     "Item",
     "KeyValueList",
     "Link",
@@ -35050,6 +35251,7 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/integration-card",
     "@aziontech/webkit/item",
     "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/link",
@@ -35385,138 +35587,6 @@
    ],
    "file": "catalog/blocks/view/rule-list.json"
   },
-  "view/split-view": {
-   "name": "SplitView",
-   "title": "Blocks/View/SplitView",
-   "source": "blocks/view/split-view/split-view.vue",
-   "surface": "app",
-   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
-   "intents": [
-    "real-time events",
-    "events visualizer",
-    "event explorer",
-    "log explorer",
-    "logs viewer",
-    "request logs",
-    "events search",
-    "eventos em tempo real",
-    "visualizador de eventos",
-    "explorador de logs",
-    "split view",
-    "master detail",
-    "list and detail panes",
-    "visão dividida",
-    "query language",
-    "events query",
-    "saved searches",
-    "saved queries",
-    "query history",
-    "date range",
-    "time range picker",
-    "investigation tabs",
-    "event document",
-    "consulta de eventos",
-    "buscas salvas",
-    "intervalo de datas"
-   ],
-   "skills": [
-    "webkit-data-viz",
-    "webkit-tables",
-    "webkit-ui-states"
-   ],
-   "components": [
-    "Accordion",
-    "Alert",
-    "Button",
-    "Chart",
-    "Checkbox",
-    "Chip",
-    "CodeBlock",
-    "CopyButton",
-    "DataTable",
-    "DateRangePicker",
-    "DrawerContent",
-    "Drawer",
-    "DrawerTitle",
-    "DropdownMenu",
-    "EmptyState",
-    "Field",
-    "FilterMenu",
-    "IconButton",
-    "Input",
-    "Item",
-    "PanelHeader",
-    "Popover",
-    "PropertyFilter",
-    "Resizable",
-    "Sidebar",
-    "Skeleton",
-    "Tabs",
-    "Tag",
-    "Tooltip",
-    "use-collection",
-    "use-locale"
-   ],
-   "imports": [
-    "@aziontech/webkit/accordion",
-    "@aziontech/webkit/alert",
-    "@aziontech/webkit/button",
-    "@aziontech/webkit/chart",
-    "@aziontech/webkit/checkbox",
-    "@aziontech/webkit/chip",
-    "@aziontech/webkit/code-block",
-    "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/data-table",
-    "@aziontech/webkit/date-range-picker",
-    "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-root",
-    "@aziontech/webkit/drawer-title",
-    "@aziontech/webkit/dropdown-menu",
-    "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/field",
-    "@aziontech/webkit/filter-menu",
-    "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/input",
-    "@aziontech/webkit/item-root",
-    "@aziontech/webkit/panel-header",
-    "@aziontech/webkit/popover",
-    "@aziontech/webkit/property-filter",
-    "@aziontech/webkit/resizable",
-    "@aziontech/webkit/sidebar-root",
-    "@aziontech/webkit/skeleton",
-    "@aziontech/webkit/tabs",
-    "@aziontech/webkit/tag",
-    "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection",
-    "@aziontech/webkit/use-locale"
-   ],
-   "primary": "Default",
-   "guidelinesSummary": "The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).",
-   "variants": [
-    {
-     "name": "Filtered"
-    },
-    {
-     "name": "Empty"
-    },
-    {
-     "name": "Loading"
-    },
-    {
-     "name": "Error"
-    },
-    {
-     "name": "Query"
-    },
-    {
-     "name": "Sessions"
-    },
-    {
-     "name": "EventDocument"
-    }
-   ],
-   "file": "catalog/blocks/view/split-view.json"
-  },
   "view/table-view": {
    "name": "TableView",
    "title": "Blocks/View/TableView",
@@ -35650,7 +35720,7 @@
    "title": "Blocks/View/TemplateBrowser",
    "source": "blocks/view/template-browser/template-browser.vue",
    "surface": "app",
-   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card variant=\"integration\"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValueList` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `KeyValueList` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is an `IntegrationCard` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValueList` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `IntegrationCard`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `KeyValueList` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "template browser",
     "template gallery",
@@ -35687,6 +35757,7 @@
     "Drawer",
     "DrawerTitle",
     "EmptyState",
+    "IntegrationCard",
     "KeyValueList",
     "PageHeader",
     "PanelBody",
@@ -35705,6 +35776,7 @@
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/integration-card",
     "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/panel-body",
@@ -35830,6 +35902,7 @@
   }
  },
  "blockAliases": {
+  "detail/attached-resources": "detail/domains-card",
   "headers/auth-header": "top-bar/auth-bar",
   "headers/creation-header": "top-bar/creation-bar",
   "headers/creation-header#CreateHub": "top-bar/creation-bar#create-hub",
@@ -35954,7 +36027,7 @@
   "platform/delete/delete-with-confirmation": "edit/delete-dialog",
   "platform/delete/delete-with-confirmation#Failed": "edit/delete-dialog#error",
   "platform/delete/delete-with-confirmation#LabelledField": "edit/delete-dialog#settings-row",
-  "platform/detail/attached-resources": "detail/attached-resources",
+  "platform/detail/attached-resources": "detail/domains-card",
   "platform/detail/deployment-logs": "detail/deployment-logs",
   "platform/detail/deployment-logs#CompleteView": "detail/deployment-logs#continuous-log",
   "platform/detail/deployment-logs#DeploymentFailed": "detail/deployment-logs#deployment-error",
@@ -36024,7 +36097,7 @@
   "platform/shell/multipage-create": "create/create-wizard",
   "platform/shell/query-editor": "view/query-editor",
   "platform/shell/single-page-create": "create/create-page",
-  "platform/shell/split-view": "view/split-view",
+  "platform/shell/split-view": "view/events-explorer",
   "platform/states/async-submit": "state/async-submit",
   "platform/states/async-submit#Failed": "state/async-submit#error",
   "platform/states/async-submit#Succeeded": "state/async-submit#success",
@@ -36034,7 +36107,7 @@
   "platform/states/form-error#Reloaded": "state/form-validation#section-reloaded",
   "platform/states/form-error#Reloading": "state/form-validation#section-reloading",
   "platform/states/form-validation": "state/form-validation",
-  "platform/states/not-found": "state/not-found",
+  "platform/states/not-found": "state/error-page",
   "platform/states/page-wires": "state/page-skeleton",
   "platform/states/project-intake": "state/project-intake",
   "platform/states/project-intake#UploadFailed": "state/project-intake#upload-error",
@@ -36050,8 +36123,8 @@
   "platform/view/rules-list": "view/rule-list",
   "platform/view/rules-list#LoadFailed": "view/rule-list#load-error",
   "platform/view/rules-list#SaveFailed": "view/rule-list#save-error",
-  "platform/view/split-view": "view/split-view",
-  "platform/view/split-view#Failed": "view/split-view#error",
+  "platform/view/split-view": "view/events-explorer",
+  "platform/view/split-view#Failed": "view/events-explorer#error",
   "platform/view/table-view": "view/table-view",
   "platform/view/table-view#Failed": "view/table-view#error",
   "platform/view/template-browser": "view/template-browser",
@@ -36063,7 +36136,9 @@
   "shells/console#AccountSwitchFailed": "shell/console#account-switch-error",
   "shells/documentation": "shell/docs",
   "shells/website": "shell/site",
+  "state/not-found": "state/error-page",
   "top-bars/auth-bar": "top-bar/auth-bar",
-  "top-bars/creation-bar": "top-bar/creation-bar"
+  "top-bars/creation-bar": "top-bar/creation-bar",
+  "view/split-view": "view/events-explorer"
  }
 }

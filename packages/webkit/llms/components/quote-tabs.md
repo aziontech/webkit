@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).
+- Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).
 - Use QuoteTabs in a hand-built SFC that needs the `#actions` slot.
 - To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.
 - As a success-story band where the wall of customers and the quotation are the same content, not two lists.
@@ -25,7 +25,7 @@
 ## Don’t
 
 - For one quotation on its own → use `quote` with `variant="highlight"`.
-- For a band of customer quotes the reader browses by client → use `client-quotes`.
+- For a band of customer quotes the reader browses by client → use `client-quotes-section`.
 - For a wall whose cards link to each customer's story → use `logo-wall`.
 - For a moving strip of marks with no links → use `marquee`.
 - For switching a page's content between views → use `tabs`.
@@ -37,7 +37,7 @@
 - [logo-wall](logo-wall.md) — the same framed client cells, as links out rather than as a selector.
 - [card-grid](card-grid.md) — the framed grid the cards are laid out on.
 - [registration-frame](registration-frame.md) — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.
-- [client-quotes](client-quotes.md) — the page-section band of customer quotes browsed by client.
+- [client-quotes-section](client-quotes-section.md) — the page-section band of customer quotes browsed by client.
 - [media-tabs](media-tabs.md) — the same timer and progress hairline, for claims paired with a medium.
 
 ## Props

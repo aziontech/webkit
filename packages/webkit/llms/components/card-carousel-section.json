@@ -1,0 +1,95 @@
+{
+ "name": "card-carousel-section",
+ "binding": "CardCarouselSection",
+ "import": "@aziontech/webkit/card-carousel-section",
+ "treeShakeableImport": "@aziontech/webkit/card-carousel-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The titled card-carousel-section band of a product or solution page: a section title on the start of the row with the previous/next controls at its end, over a horizontally scrolling track of standalone cards. Each card is an optional overline (the category), a heading, a sentence and, when it links somewhere, a mono link label closed by an arrow (\"See example\", \"See solution\"). The band answers \"see how to use\", \"industries\", \"orchestration with control\" on azion.com product pages, where the cases outnumber the row. It is a page section — the site places it from a `{ _id: 'card-carousel-section', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`variant=\"cards\"`, its `header` slot, `size=\"medium\"` items and its step controls), `section-title` and `eyebrow`, and owns only the card's inner layout.",
+ "setup": null,
+ "useWhen": [
+  "Use CardCarouselSection for four or more marketing cards the reader steps through.",
+  "Four or more cases, industries or examples of equal weight that do not all need to be seen: the reader steps through them.",
+  "When each case is a short card (overline, heading, one or two sentences) that may link to its own page or example."
+ ],
+ "avoidWhen": [
+  "When every case must be visible, or there are three or six of equal weight → use `capability-grid-section` (linked grid) or `customer-use-cases-section` (grid with one action).",
+  "For a quote or testimonial row → use `client-quotes-section`.",
+  "For numbered principles pinned while the page scrolls → use `process-scroll-section` with `pinned`.",
+  "For articles with images → use `article-cards-section`."
+ ],
+ "related": [
+  "`carousel` — the primitive this band composes; reach for it directly only for a non-card row.",
+  "`capability-grid-section` — the same content as a static, fully visible grid.",
+  "`process-scroll-section` — numbered dark cards, pinned on scroll with `pinned`."
+ ],
+ "bestPractices": [
+  "Give the band a `title`; its arrows sit on the title row, and the title names the row for assistive technology.",
+  "Keep each card to a heading and one or two sentences, so the row height stays even.",
+  "Use `eyebrow` on every card or on none; a row where some cards carry an overline reads as ragged.",
+  "Give every card a `linkLabel` when every card has an `href`, and none when none does. The label is a visual cue; the card heading is the link.",
+  "Pass as many cards as the content has; the track scrolls, so the count never has to fill the row."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the band title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered as its `h2` at the start of the row the step controls end; the band renders no title when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting sentence under the headline."
+  },
+  {
+   "name": "items",
+   "type": "CardCarouselSectionItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The cards, in order; each is `{ eyebrow?, title, description, href?, linkLabel? }`, and a card with `href` links to it."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the card row; defaults to the title."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/card-carousel-section/default.vue"
+  },
+  {
+   "name": "Plain cards",
+   "file": "examples/card-carousel-section/plain.vue"
+  }
+ ],
+ "docs": "components/card-carousel-section.md"
+}

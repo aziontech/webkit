@@ -16,18 +16,18 @@
 - Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.
 - Keep `description` to one sentence; it is set as the large headline.
 - Write `form.invalidMessage` with an example address so the fix is obvious.
-- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 
 ## Don’t
 
-- For a close on one or two link actions or a command → use `closing-call-to-action`.
-- For a close that lists deployable templates → use `template-gallery` with `closing`.
+- For a close on one or two link actions or a command → use `closing-call-to-action-section`.
+- For a close that lists deployable templates → use `template-gallery-section` with `closing`.
 - For a lead form with several fields → use `hero-form-section`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [closing-call-to-action](closing-call-to-action.md) — the closing band whose ask is a link action.
+- [closing-call-to-action-section](closing-call-to-action-section.md) — the closing band whose ask is a link action.
 - [alert](alert.md) — renders the success and failure messages.
 
 ## Props

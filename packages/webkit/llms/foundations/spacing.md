@@ -223,7 +223,7 @@ does (5 → 3 + 2, 7 → 3 + 3 + 1; under four, 7 → 4 + 3): a stretched last c
 wider card. `layout="fixed"` is for tiles whose width must not change (square logo walls, a cell
 spanning rows or columns, a floor that keeps its track count).
 
-**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooter` as its last
+**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooterSection` as its last
 child, unwrapped — a page never adds one. The page ends on its bottom bar at every width: the brand
 leads the social row from `md`; on phones there is no wordmark row and the status line stacks over
 the language select.

@@ -1,9 +1,0 @@
-{
- "examples": [
-  {
-   "name": "Default",
-   "summary": "Hobby, Pro and Enterprise with the Monthly / Annual toggle; only the Pro price changes with it. The Enterprise button points at the page contact band.",
-   "file": "examples/pricing-plans/default.vue"
-  }
- ]
-}

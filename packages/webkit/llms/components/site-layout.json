@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The marketing site's chrome, composed once in the app: `SiteHeader` on top, the page's sections in the layout's `<main>`, `SiteFooter` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteHeader` and `SiteFooter` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.",
+ "purpose": "The marketing site's chrome, composed once in the app: `SiteHeaderSection` on top, the page's sections in the layout's `<main>`, `SiteFooterSection` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteHeaderSection` and `SiteFooterSection` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.",
  "setup": null,
  "useWhen": [
   "Use SiteLayout once in the marketing app for the site chrome.",
@@ -20,14 +20,14 @@
   "A one-off landing page with no site navigation (a campaign form) → render the sections on their own."
  ],
  "related": [
-  "`SiteHeader` — the bar and its mega-menus; `navigation` is bound onto it.",
-  "`SiteFooter` — the footer; `footer` is bound onto it (`variant=\"site\"` closes a framed page).",
+  "`SiteHeaderSection` — the bar and its mega-menus; `navigation` is bound onto it.",
+  "`SiteFooterSection` — the footer; `footer` is bound onto it (`variant=\"site\"` closes a framed page).",
   "`SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.",
   "`Command` — the search palette the bar's search button opens.",
   "`shell/site` — the block that shows this layout with the azion.com navigation and footer."
  ],
  "bestPractices": [
-  "Compose the layout once, in the app's root; each route renders only its sections. Never add `SiteHeader`, `SiteFooter`, `AppHeader` or `Footer` to a page.",
+  "Compose the layout once, in the app's root; each route renders only its sections. Never add `SiteHeaderSection`, `SiteFooterSection`, `AppHeader` or `Footer` to a page.",
   "The site is dark: set `data-theme=\"dark\"` on `<html>` (in `index.html`), so the layout, the teleported menus and the palette all resolve the dark tokens.",
   "Bind the real navigation and footer data once (`navigation`, `footer`); give every navigation item an `href` so it also appears in the search palette.",
   "Add extra palette groups (articles, docs results) in the `search` slot; listen to `search-select` for them.",
@@ -39,14 +39,14 @@
    "type": "SiteLayoutNavigation",
    "default": "—",
    "required": "true",
-   "doc": "The bar, bound onto `SiteHeader`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`."
+   "doc": "The bar, bound onto `SiteHeaderSection`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`."
   },
   {
    "name": "footer",
    "type": "SiteLayoutFooter",
    "default": "undefined",
    "required": "false",
-   "doc": "The footer, bound onto `SiteFooter`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent."
+   "doc": "The footer, bound onto `SiteFooterSection`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent."
   },
   {
    "name": "searchPlaceholder",

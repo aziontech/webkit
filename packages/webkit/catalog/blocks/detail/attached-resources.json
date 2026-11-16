@@ -1,8 +1,0 @@
-{
- "variants": [],
- "sfcFile": "blocks/detail/attached-resources/attached-resources.vue",
- "guidelinesFile": "blocks/detail/attached-resources/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/detail/attached-resources/sample.ts"
- }
-}

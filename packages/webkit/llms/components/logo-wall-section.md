@@ -21,8 +21,8 @@
 
 ## Don’t
 
-- For several quotes in turn → use `client-quotes`.
-- For marks with photos and stories in a mosaic → use `client-mosaic`.
+- For several quotes in turn → use `client-quotes-section`.
+- For marks with photos and stories in a mosaic → use `client-mosaic-section`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

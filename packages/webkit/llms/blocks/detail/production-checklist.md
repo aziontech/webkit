@@ -24,7 +24,7 @@ A service that is live on its generated hostname is not yet ready for real traff
 
 - Commands to build and deploy a resource for the first time: use `detail/get-started`.
 - Ordered steps the user must complete before the resource exists: use `create/create-wizard`.
-- A list of resources already bound to this one: use `detail/attached-resources`.
+- A list of resources already bound to this one: use `detail/domains-card`.
 - A module the account has never used: use `state/first-use`.
 
 ## Building blocks
@@ -129,7 +129,7 @@ Then delete `sample.ts` and its import.
 
 - `detail/resource-detail` — the service Overview tab that renders this card under the summary.
 - `detail/get-started` — onboarding before the first deployment, for a resource made from the CLI.
-- `detail/attached-resources` — where an attached policy or error page shows up once added.
+- `detail/domains-card` — where an attached policy or error page shows up once added.
 - `Item` — the row primitive for each gate; see `skills/webkit-ui-states` for the done and empty states.
 
 ## Variants

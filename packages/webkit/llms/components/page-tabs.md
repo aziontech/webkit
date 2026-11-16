@@ -37,6 +37,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `column` | `'full' \| 'data' \| 'form' \| 'focused'` | `'full'` | false | The page column the tab row lines up with: the full width, or the data, form or focused column below it. |
+| `align` | `'start' \| 'center'` | `'start'` | false | Where the tab triggers sit in the row: at the start edge, or centred. Passed to `Tabs.List`. |
 | `modelValue` | `TabsValue \| null` | `null` | false | Two-way value (`v-model`). |
 
 ## Slots

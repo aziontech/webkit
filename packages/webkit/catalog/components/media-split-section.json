@@ -8,7 +8,7 @@
  ],
  "avoidWhen": [
   "For several claims stacked one after the other → use `media-split-stack-section`.",
-  "For a full-width terminal session with no copy column → use `cli-terminal`.",
+  "For a full-width terminal session with no copy column → use `cli-terminal-section`.",
   "For copy beside one piece of media in a hand-built SFC that needs the `media` slot → use `media-split`."
  ],
  "related": [

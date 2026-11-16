@@ -1,0 +1,8 @@
+{
+ "variants": [],
+ "sfcFile": "blocks/detail/domains-card/domains-card.vue",
+ "guidelinesFile": "blocks/detail/domains-card/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/detail/domains-card/sample.ts"
+ }
+}

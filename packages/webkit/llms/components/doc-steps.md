@@ -1,9 +1,10 @@
 # Doc Steps
 
-> The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.
+> The ordered walkthrough from the docs frame: a column of `DocSteps.Step` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.
 
-- Import: `import DocSteps from '@aziontech/webkit/doc-steps'`
-- Category: docs · Surface: docs · Structure: monolithic
+- Import: `import DocStepsRoot from '@aziontech/webkit/doc-steps-root'`
+- Compound import (dot notation, not tree-shakeable): `import DocSteps from '@aziontech/webkit/doc-steps'`
+- Category: docs · Surface: docs · Structure: composition
 - API as JSON: [doc-steps.json](doc-steps.json)
 
 ## When to use
@@ -27,7 +28,6 @@
 
 ## Related
 
-- `DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.
 - `Stepper` — the app's interactive step rail. Both number their steps with the same shared step registry (`useStepRegistry`), which reads the order from the page, so a step inserted between two others takes its place in the count.
 - `DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder.
 
@@ -35,20 +35,25 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The `DocStep` children, in the order they should be numbered. |
+| `default` | — | The `DocSteps.Step` children, in the order they should be numbered. |
+
+## Sub-components
+
+- `doc-steps.vue` — the root column; provides the numbering context.
+- `doc-steps-step.vue` — `DocSteps.Step`, one numbered step: the circled index, the rail that continues to the next step, the step heading (`title` prop, `''` default) and an optional body in its default slot. It registers with the root's context during setup and reads its index back, so an author writes a title and never a number; rendered outside `DocSteps` it throws (`useDocStepsContext must be used within DocSteps.`). The circle and the rail are `aria-hidden`; the heading carries `data-doc-chrome`, the rail `data-step-connector`, the body `data-step-body`; the final step drops its rail through a last-child CSS variant. Test id `doc-steps-step`. It has no standalone export: it only renders inside `DocSteps`, so it ships attached to the compound.
 
 ## States
 
 - Visual states: `default` (the column is not interactive and holds no visual state of its own)
-- Provides the numbering context (the shared step registry): each `DocStep` registers in setup, hands over its element on mount and deregisters on unmount; `index` is the 1-based position on the page; the final step's connector is suppressed by a last-child CSS variant
+- Provides the numbering context (the shared step registry): each `DocSteps.Step` registers in setup, hands over its element on mount and deregisters on unmount; `index` is the 1-based position on the page; the final step's connector is suppressed by a last-child CSS variant
 - `data-doc-block` is the `DocProse` contract (the column takes the block rung of the ladder)
 
 ## Accessibility
 
 - Visible focus: the column is not focusable; `Tab` reaches only interactive content nested inside a step's body.
 - Keyboard map: none of its own.
-- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocStep`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
-- Contrast: inherited from `DocStep`; the column paints nothing.
+- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
+- Contrast: inherited from `DocSteps.Step`; the column paints nothing.
 - Touch target: not applicable; the component is not interactive.
 
 ## Examples
@@ -57,17 +62,16 @@
 
 ```vue
 <script setup>
-  import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
 </script>
 
 <template>
   <DocSteps>
-    <DocStep title="Access Azion Console." />
-    <DocStep title="Click + Create on the homepage." />
-    <DocStep title="Select your preferred template to start your project." />
-    <DocStep title="Fill in the fields the template asks for." />
-    <DocStep title="Customize the elements using the sidebar tools." />
+    <DocSteps.Step title="Access Azion Console." />
+    <DocSteps.Step title="Click + Create on the homepage." />
+    <DocSteps.Step title="Select your preferred template to start your project." />
+    <DocSteps.Step title="Fill in the fields the template asks for." />
+    <DocSteps.Step title="Customize the elements using the sidebar tools." />
   </DocSteps>
 </template>
 ```
@@ -76,25 +80,24 @@
 
 ```vue
 <script setup>
-  import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
 </script>
 
 <template>
   <DocSteps>
-    <DocStep title="Install the Azion CLI">
+    <DocSteps.Step title="Install the Azion CLI">
       <p>
         Homebrew is the shortest path on macOS; every other platform is documented in the CLI
         reference.
       </p>
-    </DocStep>
-    <DocStep title="Link the project">
+    </DocSteps.Step>
+    <DocSteps.Step title="Link the project">
       <p>
         Reads your project, picks a preset, and writes the <code>azion/</code> folder that describes
         the workload.
       </p>
-    </DocStep>
-    <DocStep title="Deploy" />
+    </DocSteps.Step>
+    <DocSteps.Step title="Deploy" />
   </DocSteps>
 </template>
 ```

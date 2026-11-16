@@ -28,7 +28,7 @@
 ## Related
 
 - [faq](faq.md) — the framed accordion band this section renders.
-- [closing-call-to-action](closing-call-to-action.md) — the band that usually follows it.
+- [closing-call-to-action-section](closing-call-to-action-section.md) — the band that usually follows it.
 
 ## Props
 

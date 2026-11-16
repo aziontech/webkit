@@ -1,0 +1,22 @@
+{
+ "purpose": "The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `card-grid`, `feature-item`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.",
+ "useWhen": [
+  "On the Contact page, to route a reader to the team or channel that answers them."
+ ],
+ "avoidWhen": [
+  "For a closing ask at the end of a page → use `closing-call-to-action-section`.",
+  "For a grid of product use cases → use `customer-use-cases-section`."
+ ],
+ "related": [
+  "`feature-item` — each self-serve channel is a linked topic.",
+  "`customer-use-cases-section` — the sibling band of icon-led topics."
+ ],
+ "bestPractices": [
+  "Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.",
+  "Don't pad `channels` to three or drop one to make the row fit.",
+  "Keep each lane's description to one sentence that states what that team handles.",
+  "Set `target: '_blank'` on a channel or status link that leaves the site.",
+  "Lead each lane with its `action`; add a `secondaryAction` only for a second route to the same team (an outlined button after the first).",
+  "Give the band an `anchor` when a page links to it with a `#hash`."
+ ]
+}

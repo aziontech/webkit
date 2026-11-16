@@ -1,0 +1,88 @@
+{
+ "name": "customer-use-cases-section",
+ "binding": "CustomerUseCasesSection",
+ "import": "@aziontech/webkit/customer-use-cases-section",
+ "treeShakeableImport": "@aziontech/webkit/customer-use-cases-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The \"what teams use it for\" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case. It is a page section — the site places it from a `{ _id: 'customer-use-cases-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `card-grid`, `registration-frame`, `eyebrow`, `feature-item` and `button` rather than owning any anatomy of its own.",
+ "setup": null,
+ "useWhen": [
+  "Use CustomerUseCasesSection when the band's title sits in the first grid cell with one action.",
+  "On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.",
+  "Whenever a page needs three to six short, icon-led use cases with one link out to the documentation."
+ ],
+ "avoidWhen": [
+  "For a grid of features with artwork → use `feature-tiles-section`.",
+  "For use cases that each link to their own page, or any grid of claims with no single action → use `capability-grid-section`.",
+  "Inside another band's cell → compose `feature-item` directly."
+ ],
+ "related": [
+  "`feature-item` — the icon, title and description cell each use case is rendered with.",
+  "`card-grid` — the frame grid this band lays its cells in."
+ ],
+ "bestPractices": [
+  "Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.",
+  "Write `title` as the heading the page's outline needs; it is the band's `h2`.",
+  "Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as \"go\".",
+  "Leave `eyebrow` as the product name; it is the overline the reader scans first."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the headline in the title cell, closed by the blinking cursor."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered as its `h2` in the title cell."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One-line lead under the headline."
+  },
+  {
+   "name": "primaryAction",
+   "type": "SectionTitleAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+  },
+  {
+   "name": "items",
+   "type": "CustomerUseCasesSectionItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/customer-use-cases-section/default.vue"
+  }
+ ],
+ "docs": "components/customer-use-cases-section.md"
+}

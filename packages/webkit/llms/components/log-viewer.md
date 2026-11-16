@@ -27,14 +27,14 @@
 ## Don’t
 
 - Static, read-only code or configuration snippets → use `code-block`.
-- An animated terminal session on a marketing page → use `cli-terminal`.
+- An animated terminal session on a marketing page → use `cli-terminal-section`.
 - Rows of structured records with columns, sorting or paging → use `table`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [code-block](code-block.md) — highlighted source code with a copy action, not a stream of typed log lines.
-- [cli-terminal](cli-terminal.md) — marketing band that plays a scripted terminal session.
+- [cli-terminal-section](cli-terminal-section.md) — marketing band that plays a scripted terminal session.
 - `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Props

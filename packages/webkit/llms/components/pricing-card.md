@@ -22,8 +22,8 @@
 
 ## Don’t
 
-- You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans`.
-- You need a feature-by-feature comparison across plans → use `plan-comparison`.
+- You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans-section`.
+- You need a feature-by-feature comparison across plans → use `plan-comparison-section`.
 - You only need to show an amount, in a table cell or a summary → use `currency-amount`.
 - The card holds general content rather than a price → use `card`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -31,8 +31,8 @@
 ## Related
 
 - [currency-amount](currency-amount.md) — typesets the amount inside the card; use it directly for prices outside a tier card.
-- [pricing-plans](pricing-plans.md) — the page section that lays out a row of plan cards with the billing toggle.
-- [plan-comparison](plan-comparison.md) — the matrix that sits under the plan cards.
+- [pricing-plans-section](pricing-plans-section.md) — the page section that lays out a row of plan cards with the billing toggle.
+- [plan-comparison-section](plan-comparison-section.md) — the matrix that sits under the plan cards.
 - [card](card.md) — generic bordered card with header, content and footer regions.
 
 ## Props

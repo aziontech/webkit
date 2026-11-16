@@ -34,7 +34,7 @@
 ## Related
 
 - [card](card.md) — the surface an `Item.List` sits in (with `:padded="false"`).
-- [table](table.md) — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.
+- [table](table.md) — columnar data; below `sm`, `listing-table-section` swaps its table rows for `item` rows.
 - [sidebar-menu](sidebar-menu.md) — navigation rows with nesting and drill levels.
 - [avatar](avatar.md) — the usual leading media for people rows inside `Item.Media`.
 

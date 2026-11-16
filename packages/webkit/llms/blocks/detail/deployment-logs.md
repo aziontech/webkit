@@ -28,7 +28,7 @@ The user started a deployment and wants to know where it is, whether it went liv
 - A dropped folder being uploaded before anything is built: use the Initializing overlay in `state/project-intake`.
 - The overview of the resource the deployment belongs to: use `detail/resource-detail`.
 - One function run with its request path and trace: use `detail/invocations`.
-- Events or logs explored over time with filters and a chart: use `view/split-view`.
+- Events or logs explored over time with filters and a chart: use `view/events-explorer`.
 
 ## Building blocks
 

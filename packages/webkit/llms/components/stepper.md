@@ -24,7 +24,7 @@
 
 ## Don’t
 
-- Numbered instructions inside a document, where every step is read at once → use `doc-steps` + `doc-step`.
+- Numbered instructions inside a document, where every step is read at once → use `doc-steps` (`DocSteps.Step`).
 - Progress with no discrete, nameable steps (a percentage, an upload) → use `progress`.
 - Switching between peer views that are not ordered and have no completion → use `tabs`.
 - A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow-diagram`.

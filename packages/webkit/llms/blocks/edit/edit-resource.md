@@ -27,7 +27,7 @@ The settings page of one existing resource. The user comes here to change how th
 - Account or organization settings outside one resource (profile, preferences, notifications): use `settings/settings-form`.
 - A resource whose content is code or a document: use `edit/function-editor`.
 - Deleting the resource: the Danger zone action opens `edit/delete-dialog`.
-- A short list of attached records inside a section: use `detail/attached-resources` as that section's body.
+- A short list of attached records inside a section: use `detail/domains-card` as that section's body.
 
 ## Building blocks
 
@@ -203,7 +203,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 
 - `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumb` (the module and the resource as `items`, a `Select` with `variant="ghost"` and `size="small"` in its slot).
 - `create/create-page` — the create page that shares this field list.
-- `detail/attached-resources` — the Domains section body in DeployableSettings.
+- `detail/domains-card` — the Domains section body in DeployableSettings.
 - `edit/delete-dialog` — the dialog behind the Danger zone action.
 - `settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.

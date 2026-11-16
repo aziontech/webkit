@@ -25,14 +25,14 @@
 
 ## Don’t
 
-- The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-header`, which composes this header.
+- The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-header-section`, which composes this header.
 - The navigation column at the side of the app → use `sidebar`.
 - An action row above a list of records → use the `toolbar` slot of `table`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [site-header](site-header.md) — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
+- [site-header-section](site-header-section.md) — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
 - [navigation-menu](navigation-menu.md) — the dropdown navigation that usually goes in `AppHeader.Center`.
 - [brand](brand.md) — the Azion lockup to place inside `AppHeader.Brand`.
 - [console-layout](console-layout.md) — the console layout template that composes the header with the sidebar and the page.

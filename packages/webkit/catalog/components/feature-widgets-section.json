@@ -1,0 +1,21 @@
+{
+ "purpose": "The \"three ways to start\" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with \"Copied\" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.",
+ "useWhen": [
+  "Use FeatureWidgetsSection when each cell has its own action or copy button.",
+  "To offer the same outcome through two or three entry points (agent, console, terminal), each with its own next step."
+ ],
+ "avoidWhen": [
+  "For reasons without an action per cell → use `feature-tiles-section` (with pictures) or `capability-grid-section` (without).",
+  "For a long argument per feature → use `feature-scroll-section`."
+ ],
+ "related": [
+  "`bento-grid` — the grid the cells are laid in.",
+  "`highlight-button` — the copy affordance a cell renders when it carries `copy`."
+ ],
+ "bestPractices": [
+  "Give each item an `action` (a link), a `copy` (text to put on the clipboard), or both when the reader may want the docs and the prompt.",
+  "On a product page give each item a `scene` naming a `ConsoleMockup` fragment (`{ component: 'ConsoleMockup', props: { name } }`); keep `illustration` for cells with no console to show.",
+  "Keep `copy.text` self-contained; it is what the reader pastes into their agent.",
+  "Set `anchor` when a hero button scrolls to this band."
+ ]
+}

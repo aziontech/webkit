@@ -1,11 +1,11 @@
 # TemplateBrowser (`view/template-browser`)
 
-> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card variant="integration"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValueList` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `KeyValueList` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is an `IntegrationCard` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValueList` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `IntegrationCard`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `KeyValueList` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/template-browser/template-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/template-browser")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [IntegrationCard](../../components/integration-card.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-create-surface`, `webkit-ui-states`
 
 ## Asked as
@@ -42,9 +42,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 One `PropertyFilter` bound with `v-bind="propertyFilterProps"` from `useCollection`, at full width above the sections. Free text searches the name and the description; Category and Framework are properties with `options`, in catalog order. Every token lives in the URL (`url: true`), so a filtered catalog survives a reload and can be shared. There is no second search field and no filter popover.
 
-### C. Category sections — `Card` (required)
+### C. Category sections — `IntegrationCard` (required)
 
-One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by the width of the content (container queries on the `@container/templates` section, so an open rail does not overstate the room). A tile is a `Card variant="integration"`: the framework mark as its `logo` (colour marks use `ai-color`, and the black Next.js mark inverts in dark), the name as an `h3` holding a button that emits `select` and opens the preview, two lines of description and the framework as a secondary badge. The title's stretched target makes the whole tile one target with the hover wash and the focus ring inside the tile; the markup lives in `Card`, not in the block. Tiles in a row share a height.
+One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by the width of the content (container queries on the `@container/templates` section, so an open rail does not overstate the room). A tile is an `IntegrationCard`: the framework mark as its `logo` (colour marks use `ai-color`, and the black Next.js mark inverts in dark), the name as an `h3` holding a button that emits `select` and opens the preview, two lines of description and the framework as a secondary badge. The title's stretched target makes the whole tile one target with the hover wash and the focus ring inside the tile; the markup lives in `IntegrationCard`, not in the block. Tiles in a row share a height.
 
 ### D. No matching templates — `EmptyState`, `Button` (required)
 
@@ -163,7 +163,7 @@ Then delete `sample.ts` and its import.
 - `state/async-submit` — the toast and inline outcome every deploy follows.
 - `view/marketplace` — installable integrations into an existing resource; it lists no templates.
 - `create/create-hub` — the creation hub that links here for "Start from a template".
-- `Card` and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.
 
 ## Variants
 
@@ -187,6 +187,7 @@ Each variant is the same screen in another state: `get_block("view/template-brow
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -465,8 +466,7 @@ Each variant is the same screen in another state: `get_block("view/template-brow
                 :key="item.id"
                 class="flex min-w-0"
               >
-                <Card
-                  variant="integration"
+                <IntegrationCard
                   class="w-full"
                   :title="item.title"
                   :logo="[item.icon, MARKS[item.framework]].filter(Boolean).join(' ')"

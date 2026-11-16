@@ -28,8 +28,8 @@
 ## Don’t
 
 - The content is build or deploy output with timestamps and log levels → use `log-viewer`.
-- It is a marketing band that pairs a claim with its code → use `media-split-section` with `codeTabs`, or `feature-scroll` with code items for several claims.
-- It is a terminal session of CLI commands on a product page → use `cli-terminal`.
+- It is a marketing band that pairs a claim with its code → use `media-split-section` with `codeTabs`, or `feature-scroll-section` with code items for several claims.
+- It is a terminal session of CLI commands on a product page → use `cli-terminal-section`.
 - You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
 - The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

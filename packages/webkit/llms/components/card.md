@@ -1,6 +1,6 @@
 # Card
 
-> Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default variant holds a settings block, a summary or a form section; `variant="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
+> Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. It holds a settings block, a summary or a form section.
 
 - Import: `import Card from '@aziontech/webkit/card'`
 - Category: content · Surface: app · Structure: monolithic
@@ -11,8 +11,6 @@
 - Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.
 - Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the body.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
-- A catalog tile for an integration, an extension or a plugin: set `variant="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
-- A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner.
 
 ## Do
 
@@ -21,11 +19,6 @@
 - `header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
-- `variant="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.
-- Keep the description to one or two sentences; the card clamps it to three lines.
-- Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
-- Integration cards sit under a section heading, so their title is an `h3`.
-- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain integration tile.
 
 ## Don’t
 
@@ -34,12 +27,13 @@
 - It is a framed cell or band of a marketing page → use `registration-frame` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
 - It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
-- It is a template tile in a gallery with no vendor, badge or install state → keep `variant="default"` with the default slot (see `view/template-browser`).
+- It is a catalog tile for an integration, an extension or a plugin (logo, vendor, badges, installed state) → use `integration-card`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [item](item.md) — rows inside the card; with `padded` set to false, an `Item` list runs its dividers to the card edges.
+- [integration-card](integration-card.md) — the catalog tile, split out of Card in 6.0.
 - [pricing-card](pricing-card.md) — pricing tier card with its own price hierarchy and action.
 - [card-grid](card-grid.md) — responsive grid of cells for marketing pages.
 - [panel](panel.md) — the layered shell behind overlays, not an in-page card.
@@ -49,22 +43,8 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty; with `variant="integration"`, the item name. |
+| `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty. |
 | `padded` | `boolean` | `true` | false | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
-| `variant` | `'default' \| 'integration'` | `'default'` | false | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot. |
-| `logo` | `string` | `''` | false | Integration variant: icon class for the logo mark. The `logo` slot takes an image instead. |
-| `vendor` | `string` | `''` | false | Integration variant: who publishes the item, shown as "by {vendor}". |
-| `description` | `string` | `''` | false | Integration variant: one or two sentences on what the item does. |
-| `badges` | `CardBadge[]` | `[]` | false | Integration variant: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
-| `installed` | `boolean` | `false` | false | Integration variant: shows the Installed tag. |
-| `href` | `string` | `''` | false | Integration variant: the title links here; without it the title is a button that emits `select`. |
-| `featured` | `boolean` | `false` | false | Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `select` | `event: MouseEvent` | Integration variant without `href`: the title (the whole tile) was activated. |
 
 ## Slots
 
@@ -72,18 +52,14 @@
 | --- | --- | --- |
 | `header` | — | Replaces the default header layout (title + header-actions). |
 | `header-actions` | — | Actions aligned to the end of the default header; visible on header hover. |
-| `default` | — | Main card body: children passed without a slot name. With `variant="integration"` it renders under the description. |
+| `default` | — | Main card body: children passed without a slot name. |
 | `footer` | — | Footer actions or metadata; omitted when empty. |
-| `logo` | — | Integration variant: replaces the logo mark, for an `img` with an empty `alt`. |
-| `actions` | — | Integration variant: one action at the end of the tile, above the stretched title target. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValueList`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
-- Integration variant: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
-- Featured (`featured`, integration variant only): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.
 
 ## Accessibility
 
@@ -96,25 +72,21 @@
 
 ## Right-to-left
 
-- Layout: logical utilities only; the logo sits at the start, the badges and the action at the end. Featured: the content is centred and the badges sit in the top end corner (`end-*`), so they move to the left under `dir="rtl"`.
-- Icons: the logo is not mirrored.
+- Layout: logical utilities only; the header actions sit at the end.
+- Icons: none of its own.
 - Keyboard: no arrow-key navigation of its own.
-- User data: the vendor and the title render in `<bdi>`.
+- User data: the title and the slots are consumer content.
 
 ## Internationalization
 
-| Key              | English source | Override prop |
-| ---------------- | -------------- | ------------- |
-| `card.byVendor`  | by {vendor}    | —             |
-| `card.installed` | Installed      | —             |
-
+- Strings: none; every text is consumer content (`title` and the slots).
 - Formatting: none.
 
 ## Responsive
 
-- Container queries: the content region is `@container/card`; the integration layout does not change with width, the description wraps and clamps to three lines.
-- Narrow (≤ 640 px or a narrow container): the badges wrap under the title row; the action stays at the end of its own row. Featured: the corner badges keep their place and the centred block reserves the top inset for them.
-- Touch: the whole tile is the target; the action is a regular `Button`.
+- Container queries: the content region is `@container/card`, so content inside follows the card's width.
+- Narrow (≤ 640 px or a narrow container): the header keeps the title and the actions on one row; the content reflows.
+- Touch: the `header-actions` slot stays visible on hover-free devices.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples

@@ -31,7 +31,7 @@
 - For one claim beside one picture → use `media-split`.
 - For questions and answers, or any run longer than about six items → use `faq`. A pinned band holds the page for its whole run, and a long run holds it too long.
 - On a page that is already a single short screen: there is no scroll to spend.
-- For the product-page walkthrough placed from page JSON → use `feature-scroll`.
+- For the product-page walkthrough placed from page JSON → use `feature-scroll-section`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

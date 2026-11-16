@@ -36,8 +36,8 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`). A page sets its own
   trail, control crumb included, with `ConsoleLayout.Breadcrumb`, and a full-height workspace puts
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
-- **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeader` and `SiteFooter` data. The
-  site is dark: `<html data-theme="dark">`. `SiteFooter` binds its language select with
+- **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeaderSection` and `SiteFooterSection` data. The
+  site is dark: `<html data-theme="dark">`. `SiteFooterSection` binds its language select with
   `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline-groups`, and `actions`,
   `navigation-footer`, `aside`, `footer` slots. The document scrolls. The page feeds the "On this
@@ -52,8 +52,8 @@ The shell blocks (`shell/console`, `shell/site`, `shell/docs`) are these layouts
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
 `npx @aziontech/webkit add shell/console` writes the block into your views folder and prints the
 path (`src/views/console.vue`): move that file to `src/App.vue`, and skip the route it suggests.
-A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeader`,
-`SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
+A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeaderSection`,
+`SiteFooterSection` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
 create flow (`create/*`, headed by the `top-bar/creation-bar` bar) or a
 signed-out screen (`auth/sign-in`): route it outside the layout (a route meta `App.vue` reads), and
 it keeps its own bar and `<main>` (`webkit-navigation`). An app with two surfaces (a marketing site
@@ -259,7 +259,7 @@ Logos, compliance badges and illustrations ship in the package: import the file 
 `logo: magalu`). Names follow `<brand>-<extended|symbol>-<color|mono|reversed>` (`extended` is the
 wordmark, `symbol` the mark; `color` for light surfaces, `reversed` for dark ones, `mono` in one
 ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. A client wall
-(`ClientQuotes`, `LogoWall`) on the dark site shows each brand in colour: `-extended-color` where it
+(`ClientQuotesSection`, `LogoWall`) on the dark site shows each brand in colour: `-extended-color` where it
 reads on black (GPA, Zoop, HeroSpark, Magalu), `-extended-reversed` where the colour logo has dark
 lettering (Axur, Contabilizei, Dafiti, Global Fashion Group); a one-ink registry `mark` only for a client with no
 logo file. Photos, covers,

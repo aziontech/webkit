@@ -50,7 +50,7 @@
 
 - Not focusable; no keyboard map.
 - ARIA: the root `svg` is `role="img"` named by `ariaLabel` or the catalog name of the severity.
-- The shape of the glyph tells the outcomes apart without colour (WCAG 1.4.1); glyph against disc meets 3:1 (WCAG 1.4.11) in both themes.
+- The shape of the glyph tells the outcomes apart without colour (WCAG 1.4.1); the disc is a mark-weight status colour (`--*-mark`) that meets 3:1 and APCA Lc 45 on every surface, and the glyph (`--text-contrast`) meets the same against the disc, in both themes (WCAG 1.4.11; `packages/theme/test/status-mark-role.test.mjs`).
 - Motion is decorative and skipped under `prefers-reduced-motion`.
 
 ## Right-to-left

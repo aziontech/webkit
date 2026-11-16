@@ -40,6 +40,13 @@
    "doc": "The page column the tab row lines up with: the full width, or the data, form or focused column below it."
   },
   {
+   "name": "align",
+   "type": "'start' | 'center'",
+   "default": "'start'",
+   "required": "false",
+   "doc": "Where the tab triggers sit in the row: at the start edge, or centred. Passed to `Tabs.List`."
+  },
+  {
    "name": "modelValue",
    "type": "TabsValue | null",
    "default": "null",
