@@ -1,7 +1,10 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, onMounted, onUpdated, ref, useAttrs } from 'vue'
 
-  import { useHeadingNavigation } from '../../../composables/use-heading-navigation'
+  import {
+    useHeadingNavigation,
+    useHeadingOutline
+  } from '../../../composables/use-heading-navigation'
 
   defineOptions({ name: 'DocHeading', inheritAttrs: false })
 
@@ -30,12 +33,29 @@
 
   const target = computed(() => props.anchor)
 
+  const root = ref<globalThis.HTMLElement | null>(null)
+  const text = ref('')
+
+  const readText = () => {
+    text.value = root.value?.textContent?.trim() ?? ''
+  }
+
+  onMounted(readText)
+  onUpdated(readText)
+
+  useHeadingOutline(root, () =>
+    target.value && (props.level === 2 || props.level === 3)
+      ? { id: target.value, text: text.value || props.label, depth: props.level }
+      : null
+  )
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'doc-heading')
 </script>
 
 <template>
   <component
     :is="`h${level}`"
+    ref="root"
     v-bind="$attrs"
     :id="target || undefined"
     :data-doc-heading="level"

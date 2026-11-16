@@ -3,10 +3,10 @@ name: doc-changelog-entry
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: c69874439aa12a309d890530f4de939ed14a45e19f14ef5700c283fd53780856
+spec_version: 4
+checksum: ef2ed277a687652c238214b04b3d21a03dda5a955cbda8b79dbb6648190a8e5a
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # DocChangelogEntry — Component Spec
@@ -122,7 +122,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The label is a real `h2` inside a `section` whose `aria-labelledby` points at it, so every entry is a named region and joins the page outline and the "On this page" rail. With a `title`, the title is that `h2` and the date is plain text, so the region is named by what shipped.
+- The label is a real `h2` inside a `section` whose `aria-labelledby` points at it, so every entry is a named region and joins the page outline; inside `DocLayout` it registers itself (through `useHeadingOutline`) as a level 2 entry of the "On this page" rail, named by its title, or its label without one. With a `title`, the title is that `h2` and the date is plain text, so the region is named by what shipped.
 - The titled node on the rule is decorative (`aria-hidden`).
 - Keyboard map: `Tab` reaches the heading anchor (the label, or the title when set); `Enter` follows it — through the page's provided heading-navigation handler, or native hash navigation without one. Nothing else in the entry's chrome is interactive.
 - Visible focus: the anchor takes `focus-visible:outline-2 focus-visible:outline-offset-2` in the ring token.

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
+  import { computed, onMounted, onScopeDispose, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import {
     type AppNavGroup,
@@ -13,7 +13,10 @@
   } from '../../../composables/use-app-navigation'
   import {
     type HeadingNavigationItem,
-    provideHeadingNavigation
+    type HeadingOutlineItem,
+    provideHeadingNavigation,
+    provideHeadingOutline,
+    type RegisterHeading
   } from '../../../composables/use-heading-navigation'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -77,8 +80,6 @@
     sections?: DocLayoutSection[]
     /** Where the Azion Docs mark links. */
     home?: string
-    /** The article's headings for the On this page rail; the rail is not rendered when empty. */
-    outline?: DocOnThisPageItem[]
     /** Complementary link groups under the outline. */
     outlineGroups?: DocOnThisPageGroup[]
     /** Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). */
@@ -92,7 +93,6 @@
     activeId: '',
     sections: () => [],
     home: '/',
-    outline: () => [],
     outlineGroups: () => [],
     ariaLabel: '',
     rootLabel: ''
@@ -117,14 +117,14 @@
   /** The rail width in px after a drag; null uses the natural width. Use with `v-model:navigation-width`. */
   const navigationWidth = defineModel<number | null>('navigationWidth', { default: null })
 
-  const slots = defineSlots<{
+  defineSlots<{
     /** The article, rendered inside the layout's main landmark. */
     default(): unknown
     /** The header's end actions after the search. */
     actions(): unknown
     /** The foot of the navigation rail and of the drawer. */
     'navigation-footer'(): unknown
-    /** Content under the outline in the end rail. */
+    /** Content under the outline in the end rail; shown only on pages with an outline. */
     aside(): unknown
     /** The footer under the article. */
     footer(): unknown
@@ -171,9 +171,34 @@
     menuPath.value.length > 1 ? '' : props.rootLabel || t('docLayout.root')
   )
 
-  const hasEndRail = () => props.outline.length > 0 || Boolean(slots.aside)
+  type RegisteredHeading = {
+    el: () => Element | null
+    item: () => HeadingOutlineItem | null
+  }
 
-  const activeHeading = computed(() => headingId.value || props.outline[0]?.id || '')
+  const headings = shallowRef<RegisteredHeading[]>([])
+
+  const registerHeading: RegisterHeading = (el, item) => {
+    const entry = { el, item }
+    headings.value = [...headings.value, entry]
+    return () => {
+      headings.value = headings.value.filter((heading) => heading !== entry)
+    }
+  }
+
+  provideHeadingOutline(registerHeading)
+
+  const outline = computed<DocOnThisPageItem[]>(() =>
+    headings.value
+      .map((heading) => ({ el: heading.el(), item: heading.item() }))
+      .filter((heading): heading is { el: Element; item: HeadingOutlineItem } =>
+        Boolean(heading.el && heading.item)
+      )
+      .sort((a, b) => (a.el.compareDocumentPosition(b.el) & 4 ? -1 : 1))
+      .map((heading) => heading.item)
+  )
+
+  const activeHeading = computed(() => headingId.value || outline.value[0]?.id || '')
 
   watch(
     currentId,
@@ -194,12 +219,10 @@
     query.value = ''
   })
 
-  watch(
-    () => props.outline,
-    () => {
-      headingId.value = ''
-    }
-  )
+  watch(outline, () => {
+    headingId.value = ''
+    onScroll()
+  })
 
   const headerOffset = () => headerEl.value?.getBoundingClientRect().height ?? 0
 
@@ -209,7 +232,7 @@
     frame = 0
     const line = headerOffset() + 8
     let current = ''
-    for (const item of props.outline) {
+    for (const item of outline.value) {
       const el = globalThis.document?.getElementById(item.id)
       if (!el) continue
       if (el.getBoundingClientRect().top <= line) current = item.id
@@ -410,7 +433,7 @@
       </div>
 
       <aside
-        v-if="hasEndRail()"
+        v-if="outline.length"
         :data-testid="`${testId}__aside`"
         class="hidden w-(--container-3xs) shrink-0 border-s border-(--border-default) xl:block"
       >
@@ -418,7 +441,6 @@
           class="sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg)"
         >
           <DocOnThisPage
-            v-if="outline.length"
             :items="outline"
             :groups="outlineGroups"
             :active-id="activeHeading"

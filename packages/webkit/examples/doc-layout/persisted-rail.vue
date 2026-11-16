@@ -50,7 +50,6 @@
     v-model:navigation-open="open"
     v-model:navigation-width="width"
     :navigation="navigation"
-    :outline="[{ id: 'resize-the-rail', text: 'Resize the rail', depth: 2 }]"
     active-id="first-deploy"
   >
     <div class="layout-boundary">
