@@ -279,3 +279,5 @@ Budget-raise: popover 10.6 KB → 10.8 KB (measured 10.69 KB): Roadmap 1 overlay
 Budget-raise: popover-root 4.95 KB → 5.15 KB (measured 5.04 KB): Roadmap 1 overlays: usePlacement resolves side (start/end), align and sideOffset against the text direction, reached through Tooltip, Popover, HoverCard or the menus.
 Budget-raise: css-button 10.5 KB → 10.65 KB (measured 10.51 KB, gzipped CSS of a Button-only app): Roadmap 1 fixes: the theme ships its fonts, so fonts.css declares @font-face rules with unicode-range for the local woff2 files instead of pointing at a font host.
 Budget-raise: site-page 8.15 → 8.55 KB (measured 8.41): old page-JSON section ids keep resolving after the 37 -section renames.
+
+- llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.
