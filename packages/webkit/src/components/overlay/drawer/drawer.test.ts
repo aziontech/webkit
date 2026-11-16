@@ -305,6 +305,20 @@ describe('Drawer', () => {
     })
 
     describe('size prop flows through the injected context', () => {
+      it('defaults to the large panel when no size is passed', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        expect(panel()!.getAttribute('data-size')).toBe('large')
+      })
+
+      it('mirrors an explicit size on the panel', async () => {
+        render(composed({ defaultOpen: true, size: 'medium' }))
+        await settle()
+
+        expect(panel()!.getAttribute('data-size')).toBe('medium')
+      })
+
       // Floor smoke over the DrawerSize enum: the panel shell mounts for each size.
       it.each(['small', 'medium', 'large'] as const)(
         'renders the Teleported panel for size=%s',

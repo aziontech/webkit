@@ -172,7 +172,8 @@ component that truly needs a 4th step (whether it does is review). Banned tokens
 not to props).
 
 House default: **actions and links** (button, icon-button, link, …) default to `large`;
-**everything else** to `medium`.
+**everything else** to `medium`. One exception: `drawer` defaults to `large`, because the
+first drawer of a flow is the large one and only a nested drawer steps down to `medium`.
 
 `closable` house default: `true` on `dialog` and `drawer` (modal overlays always show a way
 out), `false` everywhere else.

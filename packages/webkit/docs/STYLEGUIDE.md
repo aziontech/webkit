@@ -181,7 +181,7 @@ defaults) · type-coverage ≥ 95%.
 | Booleans (any)                       | positive polarity — `visible`, `open`, `active`, `expanded`    | `hidden`, `closed`, `inactive`, `collapsed`              |
 | Value change                         | `v-model` / `update:<x>` only                                  | a redundant `<x>-change` echo alongside `update:<x>`     |
 
-`size` house default: **actions/links default to `large`; everything else `medium`.**
+`size` house default: **actions/links default to `large`; everything else `medium`** (`drawer` is the one exception: it defaults to `large`).
 
 **Enforced by:** `validate-spec-compliance` (write-time + the CI ratchet; the dictionary lives in
 `prop-vocabulary.mjs` and is stamped into `catalog.json` for the MCP).
