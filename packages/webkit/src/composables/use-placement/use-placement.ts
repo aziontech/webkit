@@ -10,10 +10,14 @@ import {
 } from 'vue'
 
 import { getFixedFrame } from '../../utils/containing-block'
+import { type Direction, resolveDirection } from '../use-direction'
 
-export type Side = 'top' | 'right' | 'bottom' | 'left'
+/** Side of the anchor the panel opens on; `start` and `end` follow the text direction. */
+export type Side = 'top' | 'bottom' | 'start' | 'end'
+/** Alignment of the panel along the anchor edge; `start` and `end` follow the text direction on `top`/`bottom`. */
 export type Align = 'start' | 'center' | 'end'
-export type Placement = Side | `${Side}-${Align}`
+/** A screen side, after `start`/`end` resolved against the text direction. */
+export type PhysicalSide = 'top' | 'right' | 'bottom' | 'left'
 
 /** Viewport-space rectangle (the shape `getBoundingClientRect()` returns). */
 export interface Rect {
@@ -40,23 +44,35 @@ export interface ComputePlacementInput {
   panelSize: Size
   /** The area the panel must stay inside: the clipping ancestors intersected with the viewport. */
   boundary: Rect
-  placement: Placement | 'auto'
-  /** Candidates tried in order when `placement === 'auto'`. */
-  autoPlacements?: Placement[]
-  /** Flip an explicit placement to the opposite side when it does not fit. */
+  /** Preferred side, or `'auto'` for the first of `autoSides` that fits. */
+  side: Side | 'auto'
+  /** Alignment along the anchor edge. Defaults to `'center'`. */
+  align?: Align
+  /** Text direction that resolves `start`/`end`. Defaults to `'ltr'`. */
+  dir?: Direction
+  /** Candidates tried in order when `side === 'auto'`. */
+  autoSides?: Side[]
+  /** Flip an explicit side to the opposite one when it does not fit. */
   flip: boolean
   /** Gap between trigger and panel along the main axis. */
-  offset: number
+  sideOffset: number
   /** Minimum distance kept from the boundary edges, together or per axis. */
   collisionPadding: CollisionPadding
-  /** Shift along the alignment axis, in px (towards the end for `start`/`center`, towards the start for `end`). */
+  /** Shift along the alignment axis, in px, away from the aligned edge (towards the inline end for `center`). */
   alignOffset?: number
   /** Vertical sides only: the panel spans exactly the trigger, so it is never shifted or capped across. */
   matchTriggerWidth?: boolean
 }
 
 export interface ComputePlacementResult {
-  placement: Placement
+  /** Resolved side after flipping, in the logical vocabulary. */
+  side: Side
+  /** Resolved alignment, in the logical vocabulary. */
+  align: Align
+  /** The screen side the panel landed on. */
+  physicalSide: PhysicalSide
+  /** CSS transform origin facing the anchor. */
+  origin: string
   top: number
   left: number
   /** Final panel size after shrinking; equals the natural size when nothing was capped. */
@@ -71,11 +87,15 @@ export interface UsePlacementOptions {
   triggerRef: MaybeRefOrGetter<globalThis.HTMLElement | null>
   panelRef: MaybeRefOrGetter<globalThis.HTMLElement | null>
   isOpen: MaybeRefOrGetter<boolean>
-  placement: MaybeRefOrGetter<Placement | 'auto'>
-  offset?: MaybeRefOrGetter<number>
+  side: MaybeRefOrGetter<Side | 'auto'>
+  align?: MaybeRefOrGetter<Align>
+  sideOffset?: MaybeRefOrGetter<number>
+  alignOffset?: MaybeRefOrGetter<number>
   collisionPadding?: CollisionPadding
   flip?: boolean
-  autoPlacements?: Placement[]
+  autoSides?: Side[]
+  /** Text direction that resolves `start`/`end`; read from the trigger's nearest `dir` when omitted. */
+  dir?: MaybeRefOrGetter<Direction | undefined>
   zIndex?: number
   /**
    * When provided, a scroll that moves the trigger dismisses the panel through this callback
@@ -91,34 +111,51 @@ export interface UsePlacementOptions {
 }
 
 export interface UsePlacementReturn {
-  resolvedPlacement: Readonly<Ref<Placement>>
+  /** Side the panel landed on, after flipping. */
+  resolvedSide: Readonly<Ref<Side>>
+  /** Alignment the panel landed on. */
+  resolvedAlign: Readonly<Ref<Align>>
   panelStyle: Readonly<Ref<Record<string, string>>>
   /** True one frame after the opening placements landed, so only re-anchors transition. */
   anchored: Readonly<Ref<boolean>>
   updatePosition: () => void
 }
 
-const OPPOSITE: Record<Side, Side> = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' }
+interface PhysicalPlacement {
+  side: PhysicalSide
+  align: Align
+}
 
-const DEFAULT_AUTO_PLACEMENTS: Placement[] = ['bottom', 'top', 'right', 'left']
+interface Candidate extends PhysicalPlacement {
+  logical: Side
+}
+
+const OPPOSITE = {
+  top: 'bottom',
+  bottom: 'top',
+  left: 'right',
+  right: 'left',
+  start: 'end',
+  end: 'start'
+} as const
+
+const DEFAULT_AUTO_SIDES: Side[] = ['bottom', 'top', 'end', 'start']
 
 const SCROLLS = /auto|scroll|overlay/
 
-function splitPlacement(placement: Placement): { side: Side; align: Align } {
-  const [side, align = 'center'] = placement.split('-') as [Side, Align | undefined]
-  return { side, align }
-}
-
-function joinPlacement(side: Side, align: Align): Placement {
-  return align === 'center' ? side : `${side}-${align}`
-}
-
-function isVertical(side: Side): boolean {
+function isVertical(side: Side | PhysicalSide): boolean {
   return side === 'top' || side === 'bottom'
 }
 
-function getPopupOrigin(placement: Placement): string {
-  const { side, align } = splitPlacement(placement)
+function toPhysical(side: Side, align: Align, rtl: boolean): Candidate {
+  if (isVertical(side)) {
+    const flipped = align === 'start' ? 'end' : align === 'end' ? 'start' : align
+    return { logical: side, side: side as PhysicalSide, align: rtl ? flipped : align }
+  }
+  return { logical: side, side: (side === 'start') === rtl ? 'right' : 'left', align }
+}
+
+function getPopupOrigin({ side, align }: PhysicalPlacement): string {
   if (isVertical(side)) {
     const vertical = side === 'top' ? 'bottom' : 'top'
     const horizontal = align === 'start' ? 'left' : align === 'end' ? 'right' : 'center'
@@ -139,12 +176,14 @@ function resolvePadding(padding: CollisionPadding): { x: number; y: number } {
 }
 
 export function computePlacement(input: ComputePlacementInput): ComputePlacementResult {
-  const { triggerRect: trigger, panelSize, boundary, offset } = input
+  const { triggerRect: trigger, panelSize, boundary, sideOffset: offset } = input
   const padding = resolvePadding(input.collisionPadding)
-  const alignOffset = input.alignOffset ?? 0
+  const rtl = input.dir === 'rtl'
+  const align = input.align ?? 'center'
+  const rawAlignOffset = input.alignOffset ?? 0
 
-  const mainSize = (side: Side) => (isVertical(side) ? panelSize.height : panelSize.width)
-  const available = (side: Side) => {
+  const mainSize = (side: PhysicalSide) => (isVertical(side) ? panelSize.height : panelSize.width)
+  const available = (side: PhysicalSide) => {
     switch (side) {
       case 'bottom':
         return boundary.bottom - trigger.bottom - offset - padding.y
@@ -156,24 +195,25 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
         return trigger.left - boundary.left - offset - padding.x
     }
   }
-  const clearance = (placement: Placement) => {
-    const { side } = splitPlacement(placement)
-    return available(side) - mainSize(side)
-  }
-  const fits = (placement: Placement) => clearance(placement) >= 0
+  const clearance = ({ side }: PhysicalPlacement) => available(side) - mainSize(side)
+  const fits = (placement: PhysicalPlacement) => clearance(placement) >= 0
 
-  let resolved: Placement
-  if (input.placement === 'auto') {
-    const candidates = input.autoPlacements?.length ? input.autoPlacements : DEFAULT_AUTO_PLACEMENTS
+  let resolved: Candidate
+  if (input.side === 'auto') {
+    const sides = input.autoSides?.length ? input.autoSides : DEFAULT_AUTO_SIDES
+    const candidates = sides.map((side) => toPhysical(side, align, rtl))
     resolved =
       candidates.find(fits) ??
       candidates.reduce((best, candidate) =>
         clearance(candidate) > clearance(best) ? candidate : best
       )
   } else {
-    resolved = input.placement
-    const { side, align } = splitPlacement(resolved)
-    const opposite = joinPlacement(OPPOSITE[side], align)
+    resolved = toPhysical(input.side, align, rtl)
+    const opposite: Candidate = {
+      logical: OPPOSITE[resolved.logical],
+      side: OPPOSITE[resolved.side],
+      align: resolved.align
+    }
     if (
       input.flip &&
       !fits(resolved) &&
@@ -183,7 +223,9 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
     }
   }
 
-  const { side, align } = splitPlacement(resolved)
+  const { side, align: physicalAlign } = resolved
+  const alignOffset =
+    rtl && physicalAlign === 'center' && isVertical(side) ? -rawAlignOffset : rawAlignOffset
   const vertical = isVertical(side)
   const locked = vertical && input.matchTriggerWidth === true
 
@@ -203,13 +245,13 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
   let left: number
   if (vertical) {
     top = side === 'top' ? trigger.top - height - offset : trigger.bottom + offset
-    if (align === 'start') left = trigger.left + alignOffset
-    else if (align === 'end') left = trigger.right - width - alignOffset
+    if (physicalAlign === 'start') left = trigger.left + alignOffset
+    else if (physicalAlign === 'end') left = trigger.right - width - alignOffset
     else left = trigger.left + trigger.width / 2 - width / 2 + alignOffset
   } else {
     left = side === 'left' ? trigger.left - width - offset : trigger.right + offset
-    if (align === 'start') top = trigger.top + alignOffset
-    else if (align === 'end') top = trigger.bottom - height - alignOffset
+    if (physicalAlign === 'start') top = trigger.top + alignOffset
+    else if (physicalAlign === 'end') top = trigger.bottom - height - alignOffset
     else top = trigger.top + trigger.height / 2 - height / 2 + alignOffset
   }
 
@@ -217,7 +259,10 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
   top = clamp(top, boundary.top + padding.y, boundary.bottom - padding.y - height)
 
   return {
-    placement: resolved,
+    side: resolved.logical,
+    align,
+    physicalSide: side,
+    origin: getPopupOrigin(resolved),
     top,
     left,
     width,
@@ -267,19 +312,23 @@ export function usePlacement({
   triggerRef,
   panelRef,
   isOpen,
-  placement,
-  offset = 4,
+  side,
+  align = 'center',
+  sideOffset = 4,
+  alignOffset = 0,
   collisionPadding = 8,
   flip = true,
-  autoPlacements,
+  autoSides,
+  dir,
   zIndex = 1100,
   onDismiss,
   matchTriggerWidth = false
 }: UsePlacementOptions): UsePlacementReturn {
-  const initial = toValue(placement)
-  const resolvedPlacement = ref<Placement>(
-    initial === 'auto' ? (autoPlacements?.[0] ?? 'bottom') : initial
+  const initial = toValue(side)
+  const resolvedSide = ref<Side>(
+    initial === 'auto' ? (autoSides?.[0] ?? DEFAULT_AUTO_SIDES[0]!) : initial
   )
+  const resolvedAlign = ref<Align>(toValue(align))
   const offScreenStyle: Record<string, string> = {
     position: 'fixed',
     top: '0',
@@ -317,14 +366,18 @@ export function usePlacement({
       triggerRect,
       panelSize,
       boundary: getClippingBoundary(trigger, viewport),
-      placement: toValue(placement),
-      autoPlacements,
+      side: toValue(side),
+      align: toValue(align),
+      dir: toValue(dir) ?? resolveDirection(trigger),
+      autoSides,
       flip,
-      offset: toValue(offset),
+      sideOffset: toValue(sideOffset),
+      alignOffset: toValue(alignOffset),
       collisionPadding,
       matchTriggerWidth
     })
-    resolvedPlacement.value = result.placement
+    resolvedSide.value = result.side
+    resolvedAlign.value = result.align
 
     const style: Record<string, string> = {
       position: 'fixed',
@@ -334,7 +387,7 @@ export function usePlacement({
         (result.top - frame.top) / frame.scaleY
       )}px`,
       zIndex: String(zIndex),
-      '--popup-origin': getPopupOrigin(result.placement)
+      '--popup-origin': result.origin
     }
     if (result.maxHeight !== null) {
       style['maxHeight'] = `${result.maxHeight / frame.scaleY}px`
@@ -418,7 +471,7 @@ export function usePlacement({
   )
 
   watch(
-    () => toValue(placement),
+    () => [toValue(side), toValue(align), toValue(sideOffset), toValue(alignOffset)],
     () => {
       if (toValue(isOpen)) nextTick(() => updatePosition())
     }
@@ -452,7 +505,8 @@ export function usePlacement({
   })
 
   return {
-    resolvedPlacement: readonly(resolvedPlacement),
+    resolvedSide: readonly(resolvedSide),
+    resolvedAlign: readonly(resolvedAlign),
     panelStyle: readonly(panelStyle) as Readonly<Ref<Record<string, string>>>,
     anchored: readonly(anchored),
     updatePosition

@@ -1,6 +1,7 @@
 import { nextTick, onScopeDispose, readonly, type Ref, ref, watch } from 'vue'
 
 import { useOverlayLayer } from '../use-overlay-layer'
+import type { Align, Side } from '../use-placement'
 import { registerShortcut } from './lib/shortcut-registry'
 
 /** Identifier an option emits on the root `select` event. */
@@ -8,9 +9,6 @@ export type MenuOptionValue = string | number
 
 /** The pointer or keyboard event that activated a menu item. */
 export type MenuActivationEvent = globalThis.MouseEvent | globalThis.KeyboardEvent
-
-/** Corner a menu panel opens from, relative to its anchor. */
-export type MenuPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
 
 /** Which item a focus move lands on. */
 export type MenuFocusTarget = 'first' | 'last' | 'next' | 'prev'
@@ -23,8 +21,10 @@ export interface MenuContext {
   isOpen: Readonly<Ref<boolean>>
   /** Whether the root is disabled. */
   disabled: Readonly<Ref<boolean>>
-  /** Resolved placement of the top-level panel. */
-  placement: Readonly<Ref<MenuPlacement>>
+  /** Side the top-level panel landed on. */
+  side: Readonly<Ref<Side>>
+  /** Alignment the top-level panel landed on. */
+  align: Readonly<Ref<Align>>
   /** Id of the element that labels the top-level panel. */
   triggerId: string
   /** Id of the top-level menu element. */
@@ -75,7 +75,8 @@ export interface UseMenuRootOptions {
   testId: string
   isOpen: Readonly<Ref<boolean>>
   disabled: Readonly<Ref<boolean>>
-  placement: Readonly<Ref<MenuPlacement>>
+  side: Readonly<Ref<Side>>
+  align: Readonly<Ref<Align>>
   triggerId: string
   panelId: string
   triggerEl: Ref<globalThis.HTMLElement | null>
@@ -281,7 +282,8 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
     testId: options.testId,
     isOpen,
     disabled,
-    placement: options.placement,
+    side: options.side,
+    align: options.align,
     triggerId: options.triggerId,
     panelId: options.panelId,
     triggerEl,

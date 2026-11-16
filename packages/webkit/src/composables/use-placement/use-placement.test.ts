@@ -25,9 +25,10 @@ const base = (overrides: Partial<ComputePlacementInput>): ComputePlacementInput 
   triggerRect: rect(100, 100, 200, 40),
   panelSize: { width: 240, height: 200 },
   boundary: VIEWPORT,
-  placement: 'bottom-start',
+  side: 'bottom',
+  align: 'start',
   flip: true,
-  offset: 4,
+  sideOffset: 4,
   collisionPadding: 8,
   ...overrides
 })
@@ -35,7 +36,7 @@ const base = (overrides: Partial<ComputePlacementInput>): ComputePlacementInput 
 describe('computePlacement (pure geometry)', () => {
   it('keeps the preferred side when it fits and reports no cap', () => {
     const r = computePlacement(base({}))
-    expect(r.placement).toBe('bottom-start')
+    expect([r.side, r.align]).toEqual(['bottom', 'start'])
     expect(r.top).toBe(144)
     expect(r.left).toBe(100)
     expect(r.maxHeight).toBeNull()
@@ -45,7 +46,7 @@ describe('computePlacement (pure geometry)', () => {
   it('flips to the opposite side (alignment preserved) when only that side fits', () => {
     // Trigger 100px from the bottom edge: a 200px panel fits above, not below.
     const r = computePlacement(base({ triggerRect: rect(100, 460, 200, 40) }))
-    expect(r.placement).toBe('top-start')
+    expect([r.side, r.align]).toEqual(['top', 'start'])
     expect(r.top).toBe(460 - 200 - 4)
     expect(r.maxHeight).toBeNull()
   })
@@ -56,7 +57,7 @@ describe('computePlacement (pure geometry)', () => {
     const r = computePlacement(
       base({ triggerRect: trigger, panelSize: { width: 240, height: 400 } })
     )
-    expect(r.placement).toBe('top-start')
+    expect([r.side, r.align]).toEqual(['top', 'start'])
     expect(r.maxHeight).toBe(300 - 4 - 8)
     expect(r.height).toBe(r.maxHeight)
     expect(r.top).toBe(8)
@@ -68,21 +69,21 @@ describe('computePlacement (pure geometry)', () => {
     const r = computePlacement(
       base({ triggerRect: trigger, panelSize: { width: 240, height: 900 } })
     )
-    expect(r.placement).toBe('bottom-start')
+    expect([r.side, r.align]).toEqual(['bottom', 'start'])
     expect(r.top).toBe(104)
     expect(r.maxHeight).toBe(600 - 104 - 8)
     expect(r.top + r.height).toBe(600 - 8)
   })
 
-  it('placement=auto picks the first candidate that fits, in preference order', () => {
+  it('side=auto picks the first candidate that fits, in preference order', () => {
     const r = computePlacement(
       base({
-        placement: 'auto',
-        autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
+        side: 'auto',
+        autoSides: ['bottom', 'top'],
         triggerRect: rect(100, 460, 200, 40)
       })
     )
-    expect(r.placement).toBe('top-start')
+    expect([r.side, r.align]).toEqual(['top', 'start'])
   })
 
   it('shifts the panel back inside a boundary narrower than the viewport', () => {
@@ -96,7 +97,7 @@ describe('computePlacement (pure geometry)', () => {
     const boundary = rect(0, 0, 1000, 300)
     const r = computePlacement(base({ boundary, triggerRect: rect(100, 200, 200, 40) }))
     // 200 above, 60 below inside the boundary: flips up and caps to the space above.
-    expect(r.placement).toBe('top-start')
+    expect([r.side, r.align]).toEqual(['top', 'start'])
     expect(r.maxHeight).toBe(200 - 4 - 8)
     expect(r.top).toBe(8)
   })
@@ -149,6 +150,37 @@ describe('computePlacement (pure geometry)', () => {
     const r = computePlacement(base({ triggerRect: rect(0, 20, 120, 40), collisionPadding: 24 }))
     expect(r.left).toBe(24)
     expect(r.top).toBe(64)
+  })
+})
+
+describe('computePlacement (text direction)', () => {
+  const trigger = rect(400, 100, 200, 40)
+
+  it('aligns start to the left edge in ltr and to the right edge in rtl', () => {
+    const ltr = computePlacement(base({ triggerRect: trigger }))
+    const rtl = computePlacement(base({ triggerRect: trigger, dir: 'rtl' }))
+    expect(ltr.left).toBe(trigger.left)
+    expect(rtl.left + rtl.width).toBe(trigger.right)
+    expect([rtl.side, rtl.align]).toEqual(['bottom', 'start'])
+    expect(rtl.origin).toBe('top right')
+  })
+
+  it('places side=start on the left in ltr and on the right in rtl', () => {
+    const ltr = computePlacement(base({ triggerRect: trigger, side: 'start', align: 'center' }))
+    const rtl = computePlacement(
+      base({ triggerRect: trigger, side: 'start', align: 'center', dir: 'rtl' })
+    )
+    expect(ltr.physicalSide).toBe('left')
+    expect(rtl.physicalSide).toBe('right')
+    expect(rtl.side).toBe('start')
+    expect(rtl.left).toBe(trigger.right + 4)
+  })
+
+  it('flips side=end to start in the logical vocabulary when only the other side fits', () => {
+    const nearLeft = rect(200, 100, 200, 40)
+    const r = computePlacement(base({ triggerRect: nearLeft, side: 'end', dir: 'rtl' }))
+    expect(r.physicalSide).toBe('right')
+    expect(r.side).toBe('start')
   })
 })
 
@@ -222,7 +254,8 @@ describe('usePlacement (composable, real layout)', () => {
         triggerRef,
         panelRef,
         isOpen,
-        placement: 'bottom-start',
+        side: 'bottom',
+        align: 'start',
         matchTriggerWidth: true
       })
       return () => [
@@ -296,7 +329,8 @@ describe('usePlacement (composable, real layout)', () => {
           triggerRef,
           panelRef,
           isOpen,
-          placement: 'bottom-start',
+          side: 'bottom',
+          align: 'start',
           onDismiss: () => {
             dismissed.value += 1
           }
@@ -347,7 +381,8 @@ describe('usePlacement (composable, real layout)', () => {
         triggerRef,
         panelRef,
         isOpen,
-        placement: 'bottom-start',
+        side: 'bottom',
+        align: 'start',
         onDismiss: () => {
           dismissed.value += 1
         }
@@ -426,7 +461,7 @@ describe('usePlacement listeners', () => {
       setup() {
         const triggerRef = ref<HTMLElement | null>(null)
         const panelRef = ref<HTMLElement | null>(null)
-        usePlacement({ triggerRef, panelRef, isOpen, placement: 'bottom-start' })
+        usePlacement({ triggerRef, panelRef, isOpen, side: 'bottom', align: 'start' })
         return () => [
           h('button', { ref: triggerRef, type: 'button' }, 'trigger'),
           isOpen.value ? h('div', { ref: panelRef }, 'panel') : null

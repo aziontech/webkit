@@ -4,7 +4,6 @@ export type {
   MenuFocusTarget,
   MenuLevel,
   MenuOptionValue,
-  MenuPlacement,
   UseMenuRootOptions,
   UseMenuRootReturn
 } from './use-menu-root'
