@@ -57,7 +57,7 @@
       aria-hidden="true"
       :data-testid="`${testId}__dot`"
       :data-severity="severity"
-      class="size-2 shrink-0 rounded-full data-[severity=success]:bg-(--success-foreground) data-[severity=info]:bg-(--info-foreground) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-foreground) data-[severity=danger]:bg-(--danger-foreground) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText]"
+      class="size-2 shrink-0 rounded-full data-[severity=success]:bg-(--success-mark) data-[severity=info]:bg-(--info-mark) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-mark) data-[severity=danger]:bg-(--danger-mark) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText]"
     />
     <span
       class="whitespace-nowrap group-data-[loading]:text-(--text-muted)"

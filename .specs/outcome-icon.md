@@ -3,11 +3,11 @@ name: outcome-icon
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: c1b1fa2f2b23500cdad29e3699fc86bad991112943c41199e1e5d1c5a226c96c
+checksum: 29dcb308c4141acf07ae55e8936f7ad096067a31ba571776d865e566d18d88bf
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # OutcomeIcon — Component Spec
@@ -93,9 +93,9 @@ _none_
 
 | Region                      | Token                                                                      |
 | --------------------------- | -------------------------------------------------------------------------- |
-| success disc / glyph        | `var(--success)` / `var(--success-foreground)`                             |
-| danger disc / glyph         | `var(--danger)` / `var(--danger-foreground)`                               |
-| warning disc / glyph        | `var(--warning)` / `var(--warning-foreground)`                             |
+| success disc / glyph        | `var(--success-mark)` / `var(--text-contrast)`                             |
+| danger disc / glyph         | `var(--danger-mark)` / `var(--text-contrast)`                              |
+| warning disc / glyph        | `var(--warning-mark)` / `var(--text-contrast)`                             |
 | neutral disc / ring / glyph | `var(--bg-surface-raised)` / `var(--border-default)` / `var(--text-muted)` |
 
 ## Theme gaps
@@ -108,7 +108,7 @@ _none_
 
 - Not focusable; no keyboard map.
 - ARIA: the root `svg` is `role="img"` named by `ariaLabel` or the catalog name of the severity.
-- The shape of the glyph tells the outcomes apart without colour (WCAG 1.4.1); glyph against disc meets 3:1 (WCAG 1.4.11) in both themes.
+- The shape of the glyph tells the outcomes apart without colour (WCAG 1.4.1); the disc is a mark-weight status colour (`--*-mark`) that meets 3:1 and APCA Lc 45 on every surface, and the glyph (`--text-contrast`) meets the same against the disc, in both themes (WCAG 1.4.11; `packages/theme/test/status-mark-role.test.mjs`).
 - Motion is decorative and skipped under `prefers-reduced-motion`.
 
 ## Internationalization

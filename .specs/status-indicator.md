@@ -3,10 +3,10 @@ name: status-indicator
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: 03eb9e220f9d81074addd7986f820c5c2c373cde404c812f18ab16c3911a0f50
+spec_version: 7
+checksum: 40e5242f66ed0296b198762821da9dd0f8f9942fe5f8f4083192b51d144f4c88
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Status Indicator — Component Spec
@@ -91,6 +91,7 @@ _none_
 | spacing    | `var(--spacing-3)`     |
 | shape      | `var(--shape-control)` |
 | ring       | `var(--ring-color)`    |
+| dot        | `var(--success-mark)`, `var(--info-mark)`, `var(--warning-mark)`, `var(--danger-mark)`; `var(--text-muted)` for `neutral` |
 
 ## Theme gaps
 
