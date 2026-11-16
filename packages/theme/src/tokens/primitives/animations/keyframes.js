@@ -16,7 +16,7 @@ export const keyframes = {
     '50%': 'opacity: 0'
   },
   highlight: {
-    '0%, 40%': 'background-color: var(--surface-hover); font-weight: 500',
+    '0%, 40%': 'background-color: var(--bg-hover); font-weight: 500',
     '100%': 'background-color: transparent; font-weight: 400'
   },
   shimmer: {
