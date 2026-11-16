@@ -308,6 +308,11 @@ PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm test:browser-webkit
 
 Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm check:pack`.
 
+A test that fails for a known reason (a pre-existing failure, or a flake that passes alone) is
+listed in [`.claude/docs/KNOWN_FAILURES.md`](./.claude/docs/KNOWN_FAILURES.md) with how to re-run
+it. Check there before treating a red test as your regression, and add or remove the row in the
+commit that finds or fixes it.
+
 ### Visual regression (styled, Playwright)
 
 The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA.
