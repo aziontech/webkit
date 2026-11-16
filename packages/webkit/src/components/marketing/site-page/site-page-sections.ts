@@ -233,6 +233,150 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
   'template-gallery': { target: 'template-gallery-section' }
 }
 
+type LegacyProp = string | { to: string; values: Record<string, string> }
+
+const legacyProps: Record<string, Record<string, LegacyProp>> = {
+  'architecture-tabs-section': {
+    interval: 'autoplayInterval',
+    position: { to: 'tabsSide', values: { left: 'start', right: 'end' } }
+  },
+  'article-cards-section': {
+    kind: { to: 'align', values: { left: 'start', centered: 'center' } },
+    variant: 'align'
+  },
+  'article-index-section': {
+    categoryLabel: 'categoryAriaLabel',
+    rowKind: { to: 'rowVariant', values: { centered: 'center' } },
+    kind: 'variant'
+  },
+  'capability-grid-section': {
+    kind: 'variant',
+    titleKind: 'titleAlign',
+    titleVariant: 'titleAlign'
+  },
+  'closing-call-to-action-section': {
+    kind: 'variant'
+  },
+  'console-showcase-section': {
+    kind: 'variant',
+    titleKind: 'titleAlign',
+    titleVariant: 'titleAlign'
+  },
+  'feature-tabs-section': {
+    interval: 'autoplayInterval'
+  },
+  'feature-tiles-section': {
+    kind: 'variant'
+  },
+  'feature-widgets-section': {
+    titleKind: {
+      to: 'titleAlign',
+      values: { centered: 'center', left: 'start', horizontal: 'split' }
+    },
+    kind: 'variant',
+    titleVariant: 'titleAlign'
+  },
+  'hero-form-section': {
+    carouselMarks: 'marqueeMarks',
+    carouselLabel: 'marqueeLabel',
+    highlight: 'titleHighlight',
+    error: 'failed',
+    tickerLabel: 'marqueeLabel',
+    tickerMarks: 'marqueeMarks'
+  },
+  'hero-section': {
+    carouselMarks: 'marqueeMarks',
+    carouselLabel: 'marqueeLabel',
+    highlight: 'titleHighlight',
+    kind: { to: 'variant', values: { centered: 'center', 'centered-band': 'center-band' } },
+    tickerLabel: 'marqueeLabel',
+    tickerMarks: 'marqueeMarks',
+    illustration: {
+      to: 'illustration',
+      values: {
+        'build-databases-from-code': 'sql-sdk-code-cards',
+        'distributed-sql-for-resilient-global-reads': 'globe-with-sql-nodes',
+        'enable-owasp-protection-with-customizable-rules': 'waf-threat-families-panel',
+        'reputation-intelligence-for-enhanced-protection': 'reputation-rings-hub',
+        'saas-platforms': 'azion-to-commerce-tiles',
+        'stay-in-control': 'traffic-and-cost-bar-chart',
+        'stream-security-events-for-investigation-and-response': 'data-stream-destinations-map',
+        'white-gloves-when-it-matters': 'chat-and-headset-tiles'
+      }
+    }
+  },
+  'job-posting-section': {
+    error: 'failed'
+  },
+  'listing-index-section': {
+    rows: 'data'
+  },
+  'listing-table-section': {
+    rows: 'data'
+  },
+  'logo-wall-section': {
+    kind: 'variant',
+    quoteKind: 'quoteVariant'
+  },
+  'media-split-section': {
+    illustration: {
+      to: 'illustration',
+      values: {
+        'build-databases-from-code': 'sql-sdk-code-cards',
+        'distributed-sql-for-resilient-global-reads': 'globe-with-sql-nodes',
+        'enable-owasp-protection-with-customizable-rules': 'waf-threat-families-panel',
+        'reputation-intelligence-for-enhanced-protection': 'reputation-rings-hub',
+        'saas-platforms': 'azion-to-commerce-tiles',
+        'stay-in-control': 'traffic-and-cost-bar-chart',
+        'stream-security-events-for-investigation-and-response': 'data-stream-destinations-map',
+        'white-gloves-when-it-matters': 'chat-and-headset-tiles'
+      }
+    }
+  },
+  'media-split-stack-section': {
+    kind: 'variant'
+  },
+  'network-section': {
+    lead: 'claimsEyebrow',
+    kind: 'variant'
+  },
+  'newsletter-section': {
+    error: 'failed'
+  },
+  'process-scroll-section': {
+    kind: 'variant',
+    titleKind: 'titleAlign',
+    titleVariant: 'titleAlign'
+  },
+  'template-gallery-section': {
+    tickerLabel: 'marqueeLabel',
+    tickerMarks: 'marqueeMarks'
+  }
+}
+
+const translateLegacyProps = (id: string, props: SitePageSectionProps): SitePageSectionProps => {
+  const renames = Object.prototype.hasOwnProperty.call(legacyProps, id)
+    ? legacyProps[id]
+    : undefined
+  if (!renames) return props
+  let next = props
+  for (const [from, rename] of Object.entries(renames)) {
+    if (!Object.prototype.hasOwnProperty.call(next, from)) continue
+    const to = typeof rename === 'string' ? rename : rename.to
+    const value = next[from]
+    const mapped =
+      typeof rename === 'string' || typeof value !== 'string'
+        ? value
+        : Object.prototype.hasOwnProperty.call(rename.values, value)
+          ? rename.values[value]
+          : value
+    if (to === from) next = { ...next, [to]: mapped }
+    else if (!Object.prototype.hasOwnProperty.call(next, to))
+      next = { ...without(next, from), [to]: mapped }
+  }
+  return next
+}
+
 export function resolveSectionEntry(
   id: string,
   props: SitePageSectionProps = {}
@@ -240,8 +384,9 @@ export function resolveSectionEntry(
   const alias = Object.prototype.hasOwnProperty.call(sitePageSectionAliases, id)
     ? sitePageSectionAliases[id]
     : undefined
-  if (!alias) return { id, props }
-  return { id: alias.target, props: alias.props ? alias.props(props) : props }
+  if (!alias) return { id, props: translateLegacyProps(id, props) }
+  const translated = translateLegacyProps(alias.target, props)
+  return { id: alias.target, props: alias.props ? alias.props(translated) : translated }
 }
 
 export function isSitePageSectionId(id: string): id is SitePageSectionId {

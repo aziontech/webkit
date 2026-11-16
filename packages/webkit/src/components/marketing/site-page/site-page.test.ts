@@ -2,6 +2,7 @@ import userEvent from '@testing-library/user-event'
 import { render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import legacyPropMaps from '../../../cli/migrations/v6-props.json'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SitePage, { type SitePageSection, type SitePageSubmit } from './site-page.vue'
 import { resolveSectionEntry, sitePageSectionAliases, sitePageSections } from './site-page-sections'
@@ -362,6 +363,54 @@ describe('SitePage', () => {
     expect(band.getAttribute('data-variant')).toBe('copy-on-top-art')
     expect(warn).not.toHaveBeenCalled()
   })
+
+  it('renders an old hero-band entry with its old kind value on the renamed layout', async () => {
+    const { findByTestId } = page({
+      hero: [{ _id: 'hero-band', props: { kind: 'centered', title: HEADLINE } }],
+      sections: [uses]
+    })
+
+    const band = await findByTestId('hero-section')
+    expect(band.getAttribute('data-variant')).toBe('center')
+    expect(band.hasAttribute('kind')).toBe(false)
+  })
+
+  it('translates old props on a current _id and keeps a new prop that is already set', () => {
+    expect(resolveSectionEntry('hero-section', { kind: 'centered-band', title: 'T' })).toEqual({
+      id: 'hero-section',
+      props: { variant: 'center-band', title: 'T' }
+    })
+    expect(resolveSectionEntry('network-section', { kind: 'a', variant: 'b' }).props).toEqual({
+      kind: 'a',
+      variant: 'b'
+    })
+    expect(
+      resolveSectionEntry('hero-with-opening', { highlight: 'Build', title: 'fast' }).props
+    ).toMatchObject({ variant: 'title-band', titleHighlight: 'Build', title: 'fast' })
+  })
+
+  const sectionRenames = Object.entries(legacyPropMaps as Record<string, Record<string, unknown>>)
+    .filter(([id]) => Object.prototype.hasOwnProperty.call(sitePageSections, id))
+    .flatMap(([id, renames]) =>
+      Object.entries(renames)
+        .filter(
+          ([from, rename]) => !from.startsWith('#') && !(rename as { removed?: string }).removed
+        )
+        .map(([from, rename]) => {
+          const to = typeof rename === 'string' ? rename : (rename as { to: string }).to
+          const values =
+            typeof rename === 'string' ? {} : (rename as { values: Record<string, string> }).values
+          const [oldValue, newValue] = Object.entries(values)[0] ?? ['old', 'old']
+          return [id, from, to, oldValue, newValue] as const
+        })
+    )
+
+  it.each(sectionRenames)(
+    'translates %s %s to %s from the v6 props map',
+    (id, from, to, oldValue, newValue) => {
+      expect(resolveSectionEntry(id, { [from]: oldValue }).props).toEqual({ [to]: newValue })
+    }
+  )
 
   it('closes the page on a template gallery set as closing, with no trailing gap after it', async () => {
     const { findByTestId, getAllByTestId } = page({
