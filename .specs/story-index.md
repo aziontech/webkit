@@ -3,11 +3,11 @@ name: story-index
 category: section
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-15
-checksum: a4d403c91ebf7e663f92383c3ea8cb55ba9575026b0a29aac72637b22516e5d1
+last_updated: 2026-11-16
+checksum: 7bdcc856a097f65974770dd99e231b3c8534d9328fc83dfa5a66621c5c3c1f5e
 ---
 
 # StoryIndex — Component Spec
@@ -132,7 +132,7 @@ Every success story of a company as one filterable library. A left-aligned title
 | ------------------------------- | ------------------------------------------------------------------------------------- |
 | card fill                       | hover `var(--bg-surface-raised)`                                                      |
 | rules                           | `var(--border-default)`                                                               |
-| overline, description, read cue | `text-overline-sm` / `text-body-sm`, `var(--text-muted)`, hover `var(--text-default)` |
+| overline, description, read cue | `text-overline-sm` / `text-body-sm`; overline and read cue `var(--text-muted)` (cue hover `var(--text-default)`), description `var(--text-default)` |
 | no-match text                   | `text-label-sm`, `var(--text-muted)`                                                  |
 | focus ring                      | `var(--ring-color)`                                                                   |
 

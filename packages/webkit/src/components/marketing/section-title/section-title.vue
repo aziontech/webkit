@@ -112,7 +112,7 @@
           </h2>
           <p
             v-if="hasDescription()"
-            class="m-0 self-start text-pretty text-heading-sm text-(--text-muted) md:col-start-3 md:group-data-[description-width=wide]:col-span-2 md:group-data-[description-width=wide]:col-start-2 md:group-data-[description-width=wide]:max-w-(--container-xl) md:group-data-[description-width=wide]:justify-self-end"
+            class="m-0 self-start text-pretty text-body-lg text-(--text-muted) md:col-start-3 md:group-data-[description-width=wide]:col-span-2 md:group-data-[description-width=wide]:col-start-2 md:group-data-[description-width=wide]:max-w-(--container-xl) md:group-data-[description-width=wide]:justify-self-end"
           >
             <slot>{{ description }}</slot>
           </p>
@@ -136,7 +136,7 @@
         </h2>
         <p
           v-if="hasDescription()"
-          class="m-0 text-pretty text-heading-sm text-(--text-muted)"
+          class="m-0 text-pretty text-body-lg text-(--text-muted)"
         >
           <slot>{{ description }}</slot>
         </p>
