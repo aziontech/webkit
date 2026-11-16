@@ -28,7 +28,7 @@
         >
           <span
             class="h-12 w-full rounded-(--shape-control) border border-(--border-muted) transition-[scale] duration-fast-02 ease-productive-entrance group-hover:scale-y-110 motion-reduce:transition-none"
-            :style="{ background: `var(${token.name})` }"
+            :style="{ background: token.value }"
             aria-hidden="true"
           />
           <span class="text-label-code-sm text-(--text-default)">{{
