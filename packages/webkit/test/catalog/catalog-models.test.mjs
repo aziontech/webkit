@@ -40,7 +40,8 @@ test('the catalog lists v-model values as props, so webkit view shows them', asy
     ['sidebar-menu', 'openKeys'],
     ['settings-section', 'open'],
     ['sidebar', 'open'],
-    ['tree', 'selected']
+    ['tree', 'selectedKey'],
+    ['tree', 'selectedKeys']
   ]) {
     const entry = find(name)
     assert.ok(entry, `${name} is in the catalog`)
