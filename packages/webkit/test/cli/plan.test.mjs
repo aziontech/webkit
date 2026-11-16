@@ -703,9 +703,9 @@ test('applyPlan raises a dependency older than WebKit needs and says so', () => 
     const after = JSON.parse(readFileSync(pkgPath, 'utf8'))
     const wanted = _internals.DEP_VERSION('@aziontech/webkit')
     assert.equal(after.dependencies['@aziontech/webkit'], wanted)
-    assert.equal(after.devDependencies.tailwindcss, '^4.0.0')
+    assert.equal(after.devDependencies.tailwindcss, '^4.1.0')
     const raised = results.find((r) => r.action.dep === 'tailwindcss')
-    assert.match(raised.detail, /tailwindcss@\^4\.0\.0 \(was \^3\.4\.0, older than WebKit needs\)/)
+    assert.match(raised.detail, /tailwindcss@\^4\.1\.0 \(was \^3\.4\.0, older than WebKit needs\)/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
