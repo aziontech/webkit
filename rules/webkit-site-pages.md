@@ -29,6 +29,12 @@ labels. Marketing owns the content, in its own toolkit, and WebKit only points t
 When this rule and any other design document disagree about a design decision, this rule wins
 and the other document is fixed.
 
+Four parts are the marketing site's own decisions: the action labels (SD-04), the product and
+Solution page patterns (SD-22, SD-23), the line budgets (SD-24) and Photography and generated
+art. The site's documentation decides them. WebKit keeps them here as the sample its examples,
+blocks and demos follow, and updates them when the site's documentation changes; for the site,
+its documentation wins.
+
 ## Index
 
 | ID    | Rule                                                        |
