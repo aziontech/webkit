@@ -216,6 +216,10 @@ export const SYNONYM_GROUPS = [
   ['deploy', 'deployment', 'implantação', 'despliegue', 'implementación']
 ]
 
+export const RENDERS_THROUGH = {
+  'data-table': ['table']
+}
+
 export const COMPONENT_TERMS = {
   button: ['botão', 'botón', 'boton'],
   checkbox: ['check box', 'caixa de seleção', 'casilla de verificación', 'casilla'],

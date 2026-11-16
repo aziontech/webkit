@@ -6,6 +6,7 @@ import {
   MARKETING_PAGE_NOT,
   MARKETING_PAGES,
   MARKETING_WORDS,
+  RENDERS_THROUGH,
   SCREEN_WORDS,
   STOPWORDS,
   SYNONYM_GROUPS
@@ -942,6 +943,14 @@ function screenIntentOf(nq) {
 
 const EXACT_BLOCK_SCORE = 1000
 
+function blockRenders(catalog, id, name) {
+  return (catalog.blocks[id]?.imports || []).some((imp) => {
+    if (!imp.startsWith(catalog.prefix)) return false
+    const used = imp.slice(catalog.prefix.length)
+    return used === name || (RENDERS_THROUGH[used] || []).includes(name)
+  })
+}
+
 function isExactBlock(id, p, q) {
   return [id, id.split('/').pop(), p.name].some((s) => normalize(s) === q)
 }
@@ -1220,9 +1229,7 @@ export function suggestComponent(catalog, need, { surface } = {}) {
     !screenIntent &&
     component.best &&
     conceptHits(catalog, q).has(component.best.name) &&
-    !(catalog.blocks[topBlock?.id]?.imports || []).includes(
-      `${catalog.prefix}${component.best.name}`
-    )
+    !blockRenders(catalog, topBlock?.id, component.best.name)
   if (
     topBlock &&
     (exactBlock || (!exactComponent && !namedComponent)) &&
