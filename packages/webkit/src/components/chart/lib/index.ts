@@ -1,4 +1,5 @@
-export { formatCompact, formatLabel, formatShare, formatSignedPercent } from './format'
+export type { ChartDateSpan } from './format'
+export { dateSpan, formatCompact, formatLabel, formatShare, formatSignedPercent } from './format'
 export type { BarEnd } from './path'
 export { areaPath, barPath, linePath } from './path'
 export type { CategoryLayout, LinearScale, NiceTicks } from './scale'

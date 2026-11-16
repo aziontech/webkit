@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { compileThemeVars } from '../src/tokens/theme-colors.js';
 
 const SERIES = [1, 2, 3, 4, 5, 6].map((n) => `--chart-series-${n}`);
+const STATUS = ['success', 'warning', 'danger', 'info'].map((s) => `--chart-status-${s}`);
 const CHROME = [
   '--chart-series-other',
   '--chart-grid',
@@ -52,6 +53,20 @@ for (const variant of ['light', 'dark']) {
         const ratio = contrast(vars[variant][name], vars[variant][surface]);
         assert.ok(ratio >= 3, `${name} on ${surface} (${variant}) is ${ratio.toFixed(2)}:1`);
       }
+    }
+  });
+
+  test(`${variant}: status marks clear 3:1 on the chart surfaces and stay apart from the text ink`, () => {
+    const surfaces = ['--bg-surface', '--bg-canvas', '--chart-tooltip-bg'];
+    for (const name of STATUS) {
+      for (const surface of surfaces) {
+        const ratio = contrast(vars[variant][name], vars[variant][surface]);
+        assert.ok(ratio >= 3, `${name} on ${surface} (${variant}) is ${ratio.toFixed(2)}:1`);
+      }
+    }
+    for (const name of [...SERIES, '--chart-series-other', ...STATUS]) {
+      const ratio = contrast(vars[variant][name], vars[variant]['--text-default']);
+      assert.ok(ratio >= 2.5, `${name} against --text-default (${variant}) is ${ratio.toFixed(2)}:1`);
     }
   });
 

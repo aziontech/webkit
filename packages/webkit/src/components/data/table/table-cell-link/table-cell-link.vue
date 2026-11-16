@@ -18,7 +18,7 @@
   export interface TableCellLinkProps {
     /** The resource name shown in the cell. */
     label?: string
-    /** An address outside the app; opens in a new tab. */
+    /** An absolute address outside the app (a scheme such as `https:` or a leading `//`); opens in a new tab with the external mark. A relative address is treated as an in-app link. */
     href?: string
     /** An in-app route; rendered with the app's `RouterLink` when one is registered, otherwise as a plain link. */
     to?: string | Record<string, unknown>
@@ -59,14 +59,15 @@
     instance?.appContext.components['RouterLink'] as Component | undefined
 
   const isLink = computed<boolean>(() => Boolean(props.href || props.to))
-  const external = computed<boolean>(() => Boolean(props.href))
+  const external = computed<boolean>(() => /^([a-z][a-z\d+.-]*:|\/\/)/i.test(props.href))
   const tag = computed<string | Component>(() => {
     if (props.href) return 'a'
     if (!props.to) return 'span'
     return routerLink() ?? 'a'
   })
   const linkAttrs = computed<Record<string, unknown>>(() => {
-    if (props.href) return { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
+    if (external.value) return { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
+    if (props.href) return { href: props.href }
     if (!props.to) return {}
     if (typeof tag.value !== 'string') return { to: props.to }
     return { href: typeof props.to === 'string' ? props.to : undefined }
@@ -118,7 +119,7 @@
           >{{ ` ${t('common.newTab')}` }}</span
         >
         <i
-          v-if="isLink"
+          v-if="external"
           class="ai ai-external-link shrink-0 text-body-xs leading-none"
           aria-hidden="true"
         />

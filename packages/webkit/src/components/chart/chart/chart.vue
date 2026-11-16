@@ -26,6 +26,7 @@
     type ChartPoint,
     type ChartRange,
     type ChartSeries,
+    dateSpan,
     formatCompact,
     formatLabel as formatCategoryLabel,
     hasAnyValue,
@@ -142,9 +143,10 @@
   const labelZone = computed<string | undefined>(
     () => props.timeZone || (mounted.value ? undefined : 'UTC')
   )
+  const labelSpan = computed(() => dateSpan(props.labels))
   const labelText = (label: ChartLabel): string =>
     props.formatLabel === formatCategoryLabel
-      ? formatCategoryLabel(label, locale.value, labelZone.value)
+      ? formatCategoryLabel(label, locale.value, labelZone.value, labelSpan.value)
       : props.formatLabel(label)
   const card = inject(ChartCardInjectionKey, null)
   const uid = useId()

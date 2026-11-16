@@ -12,17 +12,17 @@ const shared = {
   'chart-tooltip-bg': tokenRef('theme.background.bg-surface-raised'),
   'chart-tooltip-text': tokenRef('theme.text.text-default'),
   'chart-tooltip-muted': tokenRef('theme.text.text-muted'),
-  'chart-tooltip-border': tokenRef('theme.border.border-default'),
-  'chart-status-success': tokenRef('theme.success.success-foreground'),
-  'chart-status-warning': tokenRef('theme.warning.warning-foreground'),
-  'chart-status-danger': tokenRef('theme.danger.danger-foreground'),
-  'chart-status-info': tokenRef('theme.info.info-foreground')
+  'chart-tooltip-border': tokenRef('theme.border.border-default')
 }
 
 export const chart = {
   light: {
     ...shared,
     'chart-series-3': tokenRef('primitives.green.700'),
+    'chart-status-success': tokenRef('primitives.green.700'),
+    'chart-status-warning': tokenRef('primitives.yellow.700'),
+    'chart-status-danger': tokenRef('primitives.red.500'),
+    'chart-status-info': tokenRef('primitives.blue.500'),
     'chart-series-2': tokenRef('primitives.blue.600'),
     'chart-series-5': tokenRef('primitives.violet.700'),
     'chart-sequential-1': tokenRef('primitives.blue.100'),
@@ -39,6 +39,10 @@ export const chart = {
   dark: {
     ...shared,
     'chart-series-3': tokenRef('primitives.green.600'),
+    'chart-status-success': tokenRef('primitives.green.600'),
+    'chart-status-warning': tokenRef('primitives.yellow.600'),
+    'chart-status-danger': tokenRef('primitives.red.400'),
+    'chart-status-info': tokenRef('primitives.blue.400'),
     'chart-tooltip-muted': tokenRef('primitives.gray.275'),
     'chart-series-2': tokenRef('primitives.blue.500'),
     'chart-series-5': tokenRef('primitives.violet.600'),

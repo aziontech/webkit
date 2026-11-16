@@ -3,11 +3,11 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: b0000b25d3b1629b3f68c2177bfe51823e49bd3d81c823a8aa65193cb1a0c81a
-spec_version: 11
+checksum: 54833e47d994d37e50d543224ad12205a78d8e892305872b6a87418ee09efa0e
+spec_version: 12
 template: 2
 created: 2026-10-20
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Chart — Component Spec
@@ -244,6 +244,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - `data-dimmed` on a series when another series is emphasized from the legend
 - Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
 - Server render and hydration: the default label format prints Date labels in `timeZone`. With no `timeZone` it prints UTC on the server and in the first client render, so the axis, tooltip title and summary match, and switches to the runtime's zone on mount. Midnight detection (day labels against clock labels) uses the same zone.
+- Default Date label format follows the span and spacing of the Date labels, in the chart's locale: labels within one day print the time (`14:00`), and midnight prints the day (`Nov 9`); a sub-day series that spans several days prints the day at midnight and the day with the time elsewhere (`Nov 10, 04:00`), so every tick and tooltip title names its day; daily buckets print the day (`Nov 9`); monthly buckets print the month (`Nov`). The year is added when the labels cross a calendar year. A custom `formatLabel` replaces all of this.
 
 ## Motion & Animations
 
