@@ -4,9 +4,9 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 7
-checksum: ffef227916ac7d0ab49ac047e42f88e847bb2c2000cda29d1ff90f2736e64fc4
+checksum: 3132d18b0044dc2cd0f02db0824c4aeb2aca794148f9f636747107c90fcf368b
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Stepper — Component Spec
@@ -30,7 +30,7 @@ component with a different job (a compact progress ribbon), not a prop on this o
 
 ## When NOT to use
 
-- Numbered instructions inside a document, where every step is read at once → use `doc-steps` + `doc-step`.
+- Numbered instructions inside a document, where every step is read at once → use `doc-steps` (`DocSteps.Step`).
 - Progress with no discrete, nameable steps (a percentage, an upload) → use `progress`.
 - Switching between peer views that are not ordered and have no completion → use `tabs`.
 - A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow-diagram`.
@@ -209,9 +209,9 @@ even when the row carries nothing but its title.
 
 ## Theme gaps
 
-| Figma variable                         | Temporary primitive                                                                                   | Follow-up                                                                                          |
-| -------------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| — (documentation gap, not a token gap) | `var(--radius-full)` — ships in the theme as `9999px` and is what `doc-step` already uses for its dot | `TODO: document --radius-full in DESIGN.md § Shape; there is no --shape-* alias for a full circle` |
+| Figma variable                         | Temporary primitive                                                                                        | Follow-up                                                                                          |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| — (documentation gap, not a token gap) | `var(--radius-full)` — ships in the theme as `9999px` and is what `DocSteps.Step` already uses for its dot | `TODO: document --radius-full in DESIGN.md § Shape; there is no --shape-* alias for a full circle` |
 
 ## Accessibility (WCAG 2.1 AA)
 
