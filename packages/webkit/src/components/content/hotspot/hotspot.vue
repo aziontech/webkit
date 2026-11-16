@@ -103,9 +103,9 @@
     <Popover
       v-if="entry"
       :open="isOpen"
-      placement="auto"
+      side="auto"
       size="small"
-      :offset="8"
+      :side-offset="8"
       :data-testid="`${testId}__popover`"
       @update:open="(value) => setOpen(Boolean(value))"
     >

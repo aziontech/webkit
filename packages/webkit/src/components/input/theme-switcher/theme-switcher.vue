@@ -171,7 +171,7 @@
       v-for="(mode, index) in MODES"
       :key="mode.value"
       :content="t(mode.key)"
-      placement="bottom"
+      side="bottom"
     >
       <button
         :ref="(el) => setSegmentEl(el as globalThis.HTMLButtonElement | null, index)"

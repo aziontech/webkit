@@ -251,7 +251,7 @@
                     v-if="item.definition"
                     class="-my-(--spacing-2xs) inline-flex shrink-0"
                   >
-                    <Popover placement="auto">
+                    <Popover side="auto">
                       <PopoverTrigger>
                         <IconButton
                           variant="ghost"

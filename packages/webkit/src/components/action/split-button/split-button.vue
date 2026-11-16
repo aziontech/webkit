@@ -124,7 +124,8 @@
     class="relative inline-flex w-fit"
   >
     <DropdownMenu
-      placement="bottom-end"
+      side="bottom"
+      align="end"
       :disabled="disabled || loading"
       :data-testid="`${testId}__menu`"
       @select="onSelect"

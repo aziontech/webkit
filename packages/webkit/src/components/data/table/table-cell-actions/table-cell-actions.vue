@@ -49,7 +49,8 @@
   <DropdownMenu
     v-bind="$attrs"
     :data-testid="testId"
-    placement="bottom-end"
+    side="bottom"
+    align="end"
     :disabled="disabled"
     @select="(event, value) => emit('select', event, value)"
   >

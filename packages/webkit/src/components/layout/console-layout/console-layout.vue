@@ -535,7 +535,8 @@
               >
               <DropdownMenu
                 v-if="$slots['account-menu']"
-                placement="top-end"
+                side="top"
+                align="end"
                 @select="onAccountSelect"
               >
                 <DropdownMenuTrigger>
@@ -563,7 +564,7 @@
                 <template v-if="compact">
                   <Tooltip
                     :content="t('consoleLayout.openNavigation')"
-                    placement="bottom"
+                    side="bottom"
                   >
                     <IconButton
                       icon="ai ai-menu"
@@ -643,7 +644,8 @@
               />
               <DropdownMenu
                 v-if="account && $slots['account-menu']"
-                placement="bottom-end"
+                side="bottom"
+                align="end"
                 @select="onAccountSelect"
               >
                 <DropdownMenuTrigger>

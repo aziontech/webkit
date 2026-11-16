@@ -127,7 +127,7 @@
   >
     <Tooltip
       :content="t('copyPromptButton.tooltip')"
-      placement="top"
+      side="top"
       :data-testid="`${testId}__tooltip`"
       class="min-w-0 max-w-full"
     >
@@ -209,7 +209,7 @@
     <Tooltip
       v-if="closable"
       :content="t('copyPromptButton.dismiss')"
-      placement="top"
+      side="top"
     >
       <IconButton
         icon="ai ai-x"

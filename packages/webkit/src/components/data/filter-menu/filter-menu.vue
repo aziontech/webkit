@@ -299,7 +299,8 @@
     v-model:open="open"
     :data-testid="testId"
     :disabled="disabled"
-    placement="bottom-start"
+    side="bottom"
+    align="start"
     :dismissible="!calendarOpen"
     class="shrink-0"
   >
