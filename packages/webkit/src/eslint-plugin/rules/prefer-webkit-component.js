@@ -1,6 +1,6 @@
 const DEFAULT_PACKAGES = {
   primevue:
-    'Use the @aziontech/webkit equivalent (see @aziontech/webkit/list_components or suggest_component).'
+    'Use the @aziontech/webkit equivalent: ask the webkit MCP (suggest_component, search_components) or read catalog.json.'
 }
 
 export default {

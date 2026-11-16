@@ -3,7 +3,7 @@
 
   import type { TabsValue } from '../tabs/injection-key'
   import TabsRoot from '../tabs/tabs.vue'
-  import TabsList from '../tabs/tabs-list.vue'
+  import TabsList, { type TabsListAlign } from '../tabs/tabs-list.vue'
 
   defineOptions({
     name: 'PageTabs',
@@ -16,10 +16,13 @@
   export interface PageTabsProps {
     /** The page column the tab row lines up with: the full width, or the data, form or focused column below it. */
     column?: PageTabsColumn
+    /** Where the tab triggers sit in the row: at the start edge, or centred. Passed to Tabs.List. */
+    align?: TabsListAlign
   }
 
   withDefaults(defineProps<PageTabsProps>(), {
-    column: 'full'
+    column: 'full',
+    align: 'start'
   })
 
   const value = defineModel<TabsValue | null>({ default: null })
@@ -53,7 +56,7 @@
           :data-testid="`${testId}__tabs`"
           class="w-full"
         >
-          <TabsList>
+          <TabsList :align="align">
             <slot />
           </TabsList>
         </TabsRoot>

@@ -3,13 +3,13 @@ name: dialog
 category: overlay
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 512b15c5252de49163abe0351f983c41d36b50f5cf94c9d633affc327020570e
+checksum: 270318ea8b42de42f19081157ab514a112cd902a242894ef164c36f67e88b13e
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Dialog — Component Spec
@@ -25,7 +25,7 @@ Modal surface above the page, built on the shared Panel shell. `Dialog.Content` 
 
 ## When NOT to use
 
-- The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.
+- The content is a side panel or a long form that should slide from an edge, over the screen that owns it → use `drawer` (nothing inside a drawer navigates; a destination of its own is a page).
 - It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`.
 
 ## Related

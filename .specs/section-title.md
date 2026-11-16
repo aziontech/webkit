@@ -3,8 +3,8 @@ name: section-title
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 8
-checksum: 2403bac6311ceae31d08a891769f880483a5bc8dad4c0bca2d91f73b54190db9
+spec_version: 9
+checksum: 47749b2e8ed1039a8348157167ffdf1d087f6460a7c09c277638a505b695efba
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
@@ -117,7 +117,7 @@ _none_
 | typography (headline, `size="small"`)  | `.text-heading-lg`                         |
 | typography (headline, `size="medium"`) | `.text-heading-xl`                         |
 | typography (headline, `size="large"`)  | `.text-heading-2xl`                        |
-| typography (description)               | `.text-heading-sm`                         |
+| typography (description)               | `.text-body-lg`                            |
 | headline text                          | `var(--text-default)`                      |
 | description text                       | `var(--text-muted)`                        |
 | spacing (copy stack)                   | `var(--spacing-lg)`                        |

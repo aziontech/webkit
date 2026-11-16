@@ -34,7 +34,7 @@
     closable: true,
     modal: true,
     side: 'end',
-    size: 'medium'
+    size: 'large'
   })
 
   /** Controlled open state. Use with v-model:open; while unbound the drawer starts at defaultOpen. */

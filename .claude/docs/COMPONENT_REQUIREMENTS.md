@@ -656,20 +656,13 @@ defineSlots<{
 }>()
 ```
 
-### 2.5. `as-child` / Slot pattern — _pending_
+### 2.5. No `asChild` / `as` — the component owns its root
 
-> **Status: not yet available.** A Slot helper composable does not exist in this repository today. Do **not** import a phantom path; the `validate-references.mjs` hook will block it. When a real component needs this pattern, propose adding the helper under `packages/webkit/src/composables/` in a dedicated PR, then revisit this section.
+WebKit has no `asChild` prop, no `as` / `is` string prop and no Slot helper, and it will not add one (see [`.claude/rules/root-element.md`](../rules/root-element.md)). `webkit/no-polymorphic-as-prop` blocks a `defineProps` that declares `as` or `asChild`, and `validate-references.mjs` blocks a phantom Slot import.
 
-When the helper ships, the pattern looks like: a component exposes `asChild?: boolean`. When `asChild` is `true`, it clones the single default-slot child and forwards classes/attrs/refs/listeners into it (same idea used by overlay trigger components in this codebase).
-
-```ts
-interface Props {
-  /** Render as the child element instead of a default `<button>`. */
-  asChild?: boolean
-}
-```
-
-Use cases (when available): triggers of overlay components, link-or-button wrappers, any sub-component that primarily forwards behavior to a user-supplied element.
+- **Link or button:** the component switches its own root on a data prop — `href` renders an anchor, no `href` a button (`<component :is="href ? 'a' : 'button'">`). A row or card that is clickable takes `href` or `clickable`.
+- **Overlay triggers** (`Dialog.Trigger`, `Drawer.Trigger`, `Popover.Trigger`, `DropdownMenu.Trigger`, …) wrap the consumer's control: when the slot holds one control (a `Button`, an `IconButton`, a native button or link) the trigger forwards its ARIA, click and keyboard handlers onto that control; otherwise it renders its own button around the content. The consumer writes `<Dialog.Trigger><Button label="Open" /></Dialog.Trigger>` and never an `asChild`.
+- **Close parts** (`Dialog.Close`, `Drawer.Close`) render their own close `IconButton`; the header adds it on its own while `closable` is true.
 
 ### 2.6. `data-state` / `data-disabled` / `data-orientation` attributes
 
@@ -740,7 +733,7 @@ Naming pattern: `<ComponentName><PropName>` — `ButtonVariant`, `ButtonSize`, `
 
 When the component justifies Composition Pattern, ship the **complete anatomy** — each meaningful part is its own public sub-component. Reference anatomies:
 
-- **Dialog:** `Dialog` (root) + `DialogTrigger` (as-child) + `DialogPortal` (teleport) + `DialogOverlay` (backdrop) + `DialogContent` (panel) + `DialogTitle` + `DialogDescription` + `DialogClose` (as-child).
+- **Dialog:** `Dialog` (root) + `DialogTrigger` (wraps the consumer's control, § 2.5) + `DialogContent` (teleports, renders the overlay, traps focus) + `DialogTitle` + `DialogDescription` + `DialogClose`.
 - **Tabs:** `Tabs` + `Tabs.List` + `Tabs.Trigger` + `Tabs.Content`.
 - **Accordion:** `Accordion` + `AccordionItem` + `AccordionTrigger` + `AccordionContent`.
 - **DropdownMenu:** `DropdownMenu` + `DropdownMenuTrigger` + `DropdownMenuContent` + `DropdownMenuItem` + `DropdownMenuSeparator` + `DropdownMenuLabel`.
@@ -756,10 +749,6 @@ packages/webkit/src/components/overlay/dialog/
 ├── injection-key.ts
 ├── dialog-trigger/
 │   └── dialog-trigger.vue
-├── dialog-portal/
-│   └── dialog-portal.vue
-├── dialog-overlay/
-│   └── dialog-overlay.vue
 ├── dialog-content/
 │   └── dialog-content.vue
 ├── dialog-title/
@@ -777,7 +766,7 @@ Conventions:
 - **Folder per sub-component, file keeps the full prefix** (`dialog-trigger/dialog-trigger.vue`, never `dialog-trigger/index.vue`). Reasons: (a) unambiguous error traces — stack frames show `dialog-trigger.vue`, not 27 different `index.vue` lines; (b) easier grep by file name; (c) editor breadcrumbs stay legible.
 - **Public export path stays flat.** `packages/webkit/package.json#exports` keeps `./dialog-trigger` as the consumer-facing path; only the right-hand value reflects the folder nesting (`./src/components/overlay/dialog/dialog-trigger/dialog-trigger.vue`). Consumers see no churn.
 - **Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts`** at the root level (sibling of `<name>.vue`, **not** inside any sub-component folder). Root imports `./injection-key`; sub-components import `../injection-key`.
-- **`as-child`** enabled on `Trigger` and `Close` variants.
+- **`Trigger`** forwards its behaviour onto the slotted control and **`Close`** renders its own button (§ 2.5); no `asChild`.
 - **`data-state`** exposed on Root + Content for state-driven styling.
 - Each public sub-component receives an entry in `package.json#exports` (`./dialog`, `./dialog-trigger`, …). The root's `default.vue` example renders the full composition anatomy (the spec's `## Usage` tree) — there is no separate composition example by default.
 
@@ -1046,8 +1035,8 @@ The spec lists which `variant` / `size` examples exist. Do **not** add visual pe
 - [ ] **Naming conventions** applied (`variant`/`size`/booleans without prefix, events kebab-case).
 - [ ] **Controlled / uncontrolled** states implemented when applicable.
 - [ ] Composition Pattern only when justified (sibling sub-components + typed `provide`/`inject`).
-- [ ] When Composition Pattern: complete anatomy shipped (Trigger/Portal/Overlay/Content/Title/Description/Close as applicable — see § 2.9), with the canonical folder-per-sub-component layout (`<root>/<root>-<part>/<root>-<part>.vue`; shared `injection-key.ts` at the root level).
-- [ ] **`asChild`** exposed on trigger-like sub-components (Trigger/Close/etc.) — § 2.5.
+- [ ] When Composition Pattern: complete anatomy shipped (Trigger/Content/Title/Description/Close as applicable — see § 2.9), with the canonical folder-per-sub-component layout (`<root>/<root>-<part>/<root>-<part>.vue`; shared `injection-key.ts` at the root level).
+- [ ] No `as` / `asChild` prop; link-or-button switches on `href`, and Trigger parts forward onto the slotted control — § 2.5.
 - [ ] **`data-state`/`data-disabled`/`data-orientation`** exposed on the root and on stateful sub-components — § 2.6.
 - [ ] **`VariantProps`** (e.g. `ButtonVariant`, `ButtonSize`) exported as named exports — § 2.8.
 - [ ] **`cn` helper** used for class merging when consumer classes may override defaults (once `clsx` + `tailwind-merge` are installed — § 2.7).

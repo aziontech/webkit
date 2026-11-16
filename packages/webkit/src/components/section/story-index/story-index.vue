@@ -399,7 +399,7 @@
                   />
                 </span>
                 <span class="text-overline-sm text-(--text-muted)">{{ item.category }}</span>
-                <span class="text-pretty text-body-sm text-(--text-muted)">
+                <span class="text-pretty text-body-sm text-(--text-default)">
                   {{ item.description }}
                 </span>
                 <span

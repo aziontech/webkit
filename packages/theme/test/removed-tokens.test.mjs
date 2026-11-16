@@ -23,6 +23,18 @@ test('the variables removed in 6.0 no longer ship', () => {
   assert.equal(colors.primitives.surface, undefined)
 })
 
+test('every theme variable the keyframes read is defined', () => {
+  const setByComponent = new Set(['--texture-wave-shift'])
+  const keyframes = [...css.matchAll(/@keyframes[^{]+\{([\s\S]*?)\n\}/g)].map((match) => match[1]).join('\n')
+  const defined = new Set([...css.matchAll(/(--[\w-]+)\s*:/g)].map((match) => match[1]))
+  const read = [...keyframes.matchAll(/var\((--[\w-]+)\)/g)].map((match) => match[1])
+  assert.ok(read.length > 0)
+  assert.deepEqual(
+    read.filter((name) => !defined.has(name) && !setByComponent.has(name)),
+    []
+  )
+})
+
 test('the README maps every removed variable family to its replacement', () => {
   const section = readme.split('### Variables removed in 6.0')[1]?.split('\n## ')[0] ?? ''
   for (const family of [

@@ -45,6 +45,21 @@ describe('PageTabs', () => {
     expect(getAllByRole('tab')).toHaveLength(2)
   })
 
+  it('passes align to the tab list, start by default', () => {
+    const tabs = () => [
+      h(TabsTrigger, { value: 'overview', label: 'Overview' }),
+      h(TabsTrigger, { value: 'settings', label: 'Settings' })
+    ]
+    const start = render(PageTabs, { slots: { default: tabs } })
+    expect(within(start.container as HTMLElement).getByRole('tablist').dataset.align).toBe('start')
+    start.unmount()
+
+    const centred = render(PageTabs, { props: { align: 'center' }, slots: { default: tabs } })
+    expect(within(centred.container as HTMLElement).getByRole('tablist').dataset.align).toBe(
+      'center'
+    )
+  })
+
   it('honours a consumer data-testid', () => {
     const { Harness } = harness('overview', 'service-tabs')
     const { getByTestId } = within(render(Harness).container as HTMLElement)

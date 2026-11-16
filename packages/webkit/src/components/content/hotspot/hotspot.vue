@@ -107,7 +107,7 @@
       size="small"
       :side-offset="8"
       :data-testid="`${testId}__popover`"
-      @update:open="(value) => setOpen(Boolean(value))"
+      @update:open="setOpen"
     >
       <PopoverTrigger :data-testid="`${testId}__trigger`">
         <button

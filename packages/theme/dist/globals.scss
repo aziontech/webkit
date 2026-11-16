@@ -765,15 +765,19 @@
   --success: #78EDA2;
   --success-border: #22C55E66;
   --success-foreground: #0A2916;
+  --success-mark: #16833F;
   --warning: #FAD76B;
   --warning-border: #F7BD0880;
   --warning-foreground: #312602;
+  --warning-mark: #947105;
   --danger: #F3A5A5;
   --danger-border: #E51A1A66;
   --danger-foreground: #2E0606;
+  --danger-mark: #E51A1A;
   --info: #99C9FF;
   --info-border: #0072F566;
   --info-foreground: #003066;
+  --info-mark: #0072F5;
   --illustration-ground: var(--bg-canvas);
   --illustration-surface: var(--bg-surface);
   --illustration-surface-raised: var(--bg-surface-raised);
@@ -887,15 +891,19 @@
   --success: #0A2916;
   --success-border: #22C55E66;
   --success-foreground: #52E086;
+  --success-mark: #18B452;
   --warning: #312602;
   --warning-border: #F7BD0880;
   --warning-foreground: #F7BD08;
+  --warning-mark: #C59707;
   --danger: #5B0B0B;
   --danger-border: #E51A1A66;
   --danger-foreground: #F9D2D2;
+  --danger-mark: #ED7878;
   --info: #001833;
   --info-border: #0072F566;
   --info-foreground: #99C9FF;
+  --info-mark: #3392FF;
   --illustration-ground: var(--bg-canvas);
   --illustration-surface: var(--bg-surface);
   --illustration-surface-raised: var(--bg-surface-raised);
@@ -938,9 +946,9 @@
   --chart-status-warning: #C59707;
   --chart-status-danger: #E74B4B;
   --chart-status-info: #3392FF;
-  --chart-sequential-1: #312E81;
-  --chart-sequential-2: #3730A3;
-  --chart-sequential-3: #4338CA;
+  --chart-sequential-1: #1E1B4B;
+  --chart-sequential-2: #312E81;
+  --chart-sequential-3: #3730A3;
   --chart-sequential-4: #4F46E5;
   --chart-sequential-5: #6366F1;
   --chart-sequential-6: #818CF8;
@@ -1017,15 +1025,19 @@
     --success: #0A2916;
     --success-border: #22C55E66;
     --success-foreground: #52E086;
+    --success-mark: #18B452;
     --warning: #312602;
     --warning-border: #F7BD0880;
     --warning-foreground: #F7BD08;
+    --warning-mark: #C59707;
     --danger: #5B0B0B;
     --danger-border: #E51A1A66;
     --danger-foreground: #F9D2D2;
+    --danger-mark: #ED7878;
     --info: #001833;
     --info-border: #0072F566;
     --info-foreground: #99C9FF;
+    --info-mark: #3392FF;
     --illustration-ground: var(--bg-canvas);
     --illustration-surface: var(--bg-surface);
     --illustration-surface-raised: var(--bg-surface-raised);
@@ -1068,9 +1080,9 @@
     --chart-status-warning: #C59707;
     --chart-status-danger: #E74B4B;
     --chart-status-info: #3392FF;
-    --chart-sequential-1: #312E81;
-    --chart-sequential-2: #3730A3;
-    --chart-sequential-3: #4338CA;
+    --chart-sequential-1: #1E1B4B;
+    --chart-sequential-2: #312E81;
+    --chart-sequential-3: #3730A3;
     --chart-sequential-4: #4F46E5;
     --chart-sequential-5: #6366F1;
     --chart-sequential-6: #818CF8;
@@ -1114,7 +1126,7 @@
 }
 
 @keyframes highlight {
-  0%, 40% { background-color: var(--surface-hover); font-weight: 500; }
+  0%, 40% { background-color: var(--bg-hover); font-weight: 500; }
   100% { background-color: transparent; font-weight: 400; }
 }
 
@@ -1634,6 +1646,9 @@
 @utility bg-success-foreground { background-color: var(--success-foreground); }
 @utility text-success-foreground { color: var(--success-foreground); }
 @utility border-success-foreground { border-color: var(--success-foreground); }
+@utility bg-success-mark { background-color: var(--success-mark); }
+@utility text-success-mark { color: var(--success-mark); }
+@utility border-success-mark { border-color: var(--success-mark); }
 @utility bg-warning { background-color: var(--warning); }
 @utility text-warning { color: var(--warning); }
 @utility border-warning { border-color: var(--warning); }
@@ -1643,6 +1658,9 @@
 @utility bg-warning-foreground { background-color: var(--warning-foreground); }
 @utility text-warning-foreground { color: var(--warning-foreground); }
 @utility border-warning-foreground { border-color: var(--warning-foreground); }
+@utility bg-warning-mark { background-color: var(--warning-mark); }
+@utility text-warning-mark { color: var(--warning-mark); }
+@utility border-warning-mark { border-color: var(--warning-mark); }
 @utility bg-danger { background-color: var(--danger); }
 @utility text-danger { color: var(--danger); }
 @utility border-danger { border-color: var(--danger); }
@@ -1652,6 +1670,9 @@
 @utility bg-danger-foreground { background-color: var(--danger-foreground); }
 @utility text-danger-foreground { color: var(--danger-foreground); }
 @utility border-danger-foreground { border-color: var(--danger-foreground); }
+@utility bg-danger-mark { background-color: var(--danger-mark); }
+@utility text-danger-mark { color: var(--danger-mark); }
+@utility border-danger-mark { border-color: var(--danger-mark); }
 @utility bg-info { background-color: var(--info); }
 @utility text-info { color: var(--info); }
 @utility border-info { border-color: var(--info); }
@@ -1661,6 +1682,9 @@
 @utility bg-info-foreground { background-color: var(--info-foreground); }
 @utility text-info-foreground { color: var(--info-foreground); }
 @utility border-info-foreground { border-color: var(--info-foreground); }
+@utility bg-info-mark { background-color: var(--info-mark); }
+@utility text-info-mark { color: var(--info-mark); }
+@utility border-info-mark { border-color: var(--info-mark); }
 
 @layer base {
   html {
