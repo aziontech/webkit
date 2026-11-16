@@ -836,10 +836,14 @@ control (shadcn/ui anatomy). `Field` carries `orientation` (`vertical`, `horizon
 `invalid`, `disabled` and `required`, and the control inside picks up its id, `aria-describedby` and
 state on its own.
 
+<!-- snippet: partial -->
+
 ```vue
 <!-- v5 -->
 <FieldText v-model="name" label="Name" helper-text="Shown on invoices." required />
+```
 
+```vue
 <!-- v6 -->
 <Field required>
   <Field.Label>Name</Field.Label>
@@ -1026,13 +1030,17 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `ArtifactPreview`       | `copy`              | `(value)`                        | `(event, value)`                                    |
 | `DocAgentCard`          | `copy`              | `(value)`                        | `(event, value)`                                    |
 
+<!-- snippet: partial -->
+
 ```vue
 <!-- v5 -->
 <SuggestionGroup :items="items" @select="(item) => send(item.label)" />
 <PromptInput v-model="draft" @submit="(value, references) => send(value, references)" />
 <FileTokenGroup :items="files" @dismiss="(index) => removeFile(index)" />
 <ButtonGroup :items="actions" @click="({ id }) => run(id)" />
+```
 
+```vue
 <!-- v6 -->
 <SuggestionGroup :items="items" @select="(event, item) => send(item.label)" />
 <PromptInput v-model="draft" @submit="(event, { value, references }) => send(value, references)" />
@@ -1054,6 +1062,8 @@ The `AttributeEditor` `row` slot also passes `move(event, offset)` for reorderab
 attributes and listeners onto the `Item` and drop the wrapper element. The codemod does not
 rewrite this, because the replacement depends on whether the child was a link or a button.
 
+<!-- snippet: partial -->
+
 ```vue
 <!-- v5 -->
 <Item as-child>
@@ -1066,7 +1076,9 @@ rewrite this, because the replacement depends on whether the child was a link or
     <Item.Content><Item.Title>workload_01</Item.Title></Item.Content>
   </button>
 </Item>
+```
 
+```vue
 <!-- v6 -->
 <Item href="https://example.com/docs">
   <Item.Content><Item.Title>Docs</Item.Title></Item.Content>
