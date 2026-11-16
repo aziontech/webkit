@@ -163,6 +163,32 @@ test('migrateSource flags a removed prop as manual work and leaves the tag alone
   )
 })
 
+test('migrateSource maps the removed section layouts and flags the removed media props', () => {
+  const v6 = loadMigration(6)
+  const sfc = [
+    '<script setup>',
+    "import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'",
+    "import HeroSection from '@aziontech/webkit/hero-section'",
+    "import MediaSplitSection from '@aziontech/webkit/media-split-section'",
+    "import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'",
+    '</script>',
+    '<template>',
+    '  <HeroSection variant="pixel-floor" title="T" />',
+    '  <ClosingCallToActionSection variant="split" title="A" title-muted="B" />',
+    '  <MediaSplitSection title="T" diagram="cache" />',
+    '  <MediaSplitStackSection variant="alternating" :bands="bands" />',
+    '</template>'
+  ].join('\n')
+  const { source, warnings } = migrateSource(sfc, v6)
+  assert.match(source, /<HeroSection variant="title-band" title="T" \/>/)
+  assert.match(source, /<ClosingCallToActionSection variant="panel" title="A" title-muted="B" \/>/)
+  for (const prop of ['titleMuted', 'diagram', 'variant'])
+    assert.ok(
+      warnings.some((w) => w.includes(`prop ${prop} was removed in v6`)),
+      `no MANUAL line for ${prop}`
+    )
+})
+
 test('migrateSource renames slots, events and sub-component props from # and @ keys', () => {
   const rules = {
     props: {

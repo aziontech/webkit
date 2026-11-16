@@ -1587,13 +1587,37 @@ lists it as manual work); page JSON that still names the old `_id` keeps renderi
 | `use-case-links`                      | `capability-grid-section` with `title-variant="left"`; items keep `href`                         |
 | `resource-grid`                       | `capability-grid-section` with `title-variant="horizontal"`; items keep `href`                   |
 | `content-columns`                     | `capability-grid-section`; `columns` is `3` or `4`                                               |
-| `code-split`                          | `media-split-section` with the same `codeTabs`, `defaultFile` and actions                        |
+| `code-split`                          | `feature-scroll-section`, one item per file with its `code` (a media band shows no code)         |
 | `sticky-scroll-code`                  | `feature-scroll-section`; each item keeps its `code`                                             |
 | `shell-mockup` (and `-root`, `-part`) | internal to `console-mockup`; show a console screen with `ConsoleMockup`                         |
 
-Their exported types map to the survivor's (`ArticleIndexBlogItem` → `ArticleIndexSectionItem`,
-`CodeSplitTab` → `MediaSplitSectionCodeTab`, …); `webkit migrate` rewrites them.
+Their exported types map to the survivor's (`ArticleIndexBlogItem` → `ArticleIndexSectionItem`, …);
+`webkit migrate` rewrites them. `CodeSplitTab` and `MediaSplitBandCodeTab` have no successor (code left
+the media band): type the files as `FeatureScrollSectionCode`.
 `sticky-carousel`'s header offset now follows `--layout-header-height` instead of a fixed `3.5rem`.
+
+### Marketing layouts and media removed in 6.0
+
+The owner's site review (round 2) removed layouts no page uses and limited what a media band shows.
+`webkit migrate` rewrites the values it can and lists the rest as MANUAL; page JSON keeps rendering,
+because `SitePage` translates each old entry as the table says.
+
+| Component                        | Removed                                                                     | Use                                                                                                                       | Codemod                          | Old page JSON renders as                                                          |
+| -------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | --------------------------------------------------------------------------------- |
+| `hero-section`                   | `variant="pixel-floor"`                                                     | `variant="title-band"` (every product page opens on the title band)                                                       | yes                              | `title-band`                                                                      |
+| `closing-call-to-action-section` | `variant="split"` (it was the default) and `titleMuted`                     | `variant="panel"`, now the default; write the whole headline in `title`                                                   | `split` yes, `titleMuted` MANUAL | `panel`, with `titleMuted` joined onto `title`                                    |
+| `media-split-stack-section`      | `variant` (`media-end`, `alternating`)                                      | nothing: every picture sits at the closing end                                                                            | MANUAL (drop the attribute)      | the run, every picture at the end                                                 |
+| `media-split-section`            | `codeTabs`, `defaultFile`, `copyAriaLabel`; type `MediaSplitSectionCodeTab` | `feature-scroll-section`, one item per file with `code: { fileName, code, language?, fileIcon?, copyAriaLabel? }`         | MANUAL                           | `feature-scroll-section`, one step per file, the first carrying the band's action |
+| `media-split-section`            | `diagram`                                                                   | `console-showcase-section` with `variant="diagram"` and the `Diagram` in its `scene` slot, or an illustration in the band | MANUAL                           | `console-showcase-section` `variant: 'diagram'`, the diagram in its `scene` slot  |
+| `media-split-stack-section`      | band `diagram`                                                              | give the band an illustration, an image or a scene                                                                        | MANUAL (data)                    | the band without its picture (a development warning names it)                     |
+| `network-section`                | an optional benefit `icon`                                                  | `NetworkSectionBenefit.icon` is required: give every benefit an Azion icon class                                          | MANUAL (data)                    | unchanged; a benefit with no icon draws no glyph                                  |
+
+- A media band's picture is required and is a drawn asset: an illustration, an image or a registered
+  scene (the console `widget` is one). `MediaSplitStackSectionBand` is now a union that requires one;
+  `MediaSplitSection` keeps flat props, so a band with no media (or only a `Diagram` scene) logs a
+  development warning.
+- `CapabilityGridSection` icons are all or none: a benefits grid gives every item an icon, a resource
+  list or text columns none. A grid that mixes them logs a development warning.
 
 ### Right-to-left
 

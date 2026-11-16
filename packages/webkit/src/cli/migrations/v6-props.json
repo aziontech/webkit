@@ -113,7 +113,14 @@
       "to": "variant",
       "values": {
         "centered": "center",
-        "centered-band": "center-band"
+        "centered-band": "center-band",
+        "pixel-floor": "title-band"
+      }
+    },
+    "variant": {
+      "to": "variant",
+      "values": {
+        "pixel-floor": "title-band"
       }
     },
     "tickerLabel": "marqueeLabel",
@@ -1571,7 +1578,21 @@
     "kind": "variant"
   },
   "closing-call-to-action-section": {
-    "kind": "variant"
+    "kind": {
+      "to": "variant",
+      "values": {
+        "split": "panel"
+      }
+    },
+    "variant": {
+      "to": "variant",
+      "values": {
+        "split": "panel"
+      }
+    },
+    "titleMuted": {
+      "removed": "the split layout is gone; write the whole headline in title (SitePage joins an old title and titleMuted with a space)."
+    }
   },
   "feature-tiles-section": {
     "kind": "variant"
@@ -1581,7 +1602,12 @@
     "quoteKind": "quoteVariant"
   },
   "media-split-stack-section": {
-    "kind": "variant"
+    "kind": {
+      "removed": "the alternating layout is gone and every picture sits at the closing end; drop the attribute."
+    },
+    "variant": {
+      "removed": "the alternating layout is gone and every picture sits at the closing end; drop the attribute."
+    }
   },
   "site-footer-section": {
     "kind": "variant"
@@ -1762,6 +1788,18 @@
     }
   },
   "media-split-section": {
+    "codeTabs": {
+      "removed": "a media band shows no code; put the claim and its files in FeatureScrollSection (one item per file, its code in item.code)."
+    },
+    "defaultFile": {
+      "removed": "a media band shows no code; FeatureScrollSection opens on its first step."
+    },
+    "copyAriaLabel": {
+      "removed": "a media band shows no code; set copyAriaLabel on each FeatureScrollSection item.code."
+    },
+    "diagram": {
+      "removed": "a media band shows no request-flow diagram; use ConsoleShowcaseSection with variant=\"diagram\" and the Diagram in its scene slot, or give the band an illustration, an image or a scene."
+    },
     "illustration": {
       "to": "illustration",
       "values": {
