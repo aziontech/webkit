@@ -26,9 +26,9 @@
    "file": "blocks/account/users/variants/error.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { UsersTeam, UsersUser } from './users.vue'\n\nconst DAY = 86_400_000\nconst referenceTime = Date.UTC(2026, 10, 10, 12)\n\nexport const sampleTeams: UsersTeam[] = [\n  { value: 'administrators', label: 'Administrators' },\n  { value: 'developers', label: 'Developers' },\n  { value: 'security', label: 'Security' },\n  { value: 'finance', label: 'Finance' },\n  { value: 'support', label: 'Support' }\n]\n\nexport const sampleUsers: UsersUser[] = [\n  {\n    id: 'u-1',\n    name: 'Avery Stone',\n    email: 'avery.stone@example.com',\n    owner: true,\n    role: 'Owner',\n    teams: ['administrators'],\n    status: 'Active',\n    lastActive: new Date(referenceTime - 0.02 * DAY)\n  },\n  {\n    id: 'u-2',\n    name: 'Jordan Reyes',\n    email: 'jordan.reyes@example.com',\n    owner: false,\n    role: 'Admin',\n    teams: ['administrators', 'security'],\n    status: 'Active',\n    lastActive: new Date(referenceTime - 0.1 * DAY)\n  },\n  {\n    id: 'u-3',\n    name: 'Priya Nair',\n    email: 'priya.nair@example.com',\n    owner: false,\n    role: 'Developer',\n    teams: ['developers'],\n    status: 'Active',\n    lastActive: new Date(referenceTime - 1 * DAY)\n  },\n  {\n    id: 'u-4',\n    name: '',\n    email: 'sam.okafor@example.com',\n    owner: false,\n    role: 'Developer',\n    teams: ['developers', 'support'],\n    status: 'Invited',\n    lastActive: null\n  },\n  {\n    id: 'u-5',\n    name: 'Lena Fischer',\n    email: 'lena.fischer@example.com',\n    owner: false,\n    role: 'Viewer',\n    teams: ['finance'],\n    status: 'Active',\n    lastActive: new Date(referenceTime - 3 * DAY)\n  },\n  {\n    id: 'u-6',\n    name: 'Marco Bianchi',\n    email: 'marco.bianchi@example.com',\n    owner: false,\n    role: 'Viewer',\n    teams: [],\n    status: 'Inactive',\n    lastActive: new Date(referenceTime - 64 * DAY)\n  }\n]"
- },
  "sfcFile": "blocks/account/users/users.vue",
- "guidelinesFile": "blocks/account/users/guidelines.md"
+ "guidelinesFile": "blocks/account/users/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/users/sample.ts"
+ }
 }

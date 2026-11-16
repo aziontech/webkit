@@ -16,9 +16,9 @@
    "file": "blocks/account/mfa-settings/variants/error.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { MfaSettingsMember } from './mfa-settings.vue'\n\nconst DAY = 86_400_000\nconst REFERENCE = Date.UTC(2026, 10, 10, 12)\n\nexport const sampleMembers: MfaSettingsMember[] = [\n  {\n    id: 'm-1',\n    name: 'Avery Stone',\n    email: 'avery.stone@example.com',\n    method: 'Authenticator app',\n    enabled: true,\n    since: new Date(REFERENCE - 210 * DAY)\n  },\n  {\n    id: 'm-2',\n    name: 'Jordan Reyes',\n    email: 'jordan.reyes@example.com',\n    method: 'Authenticator app',\n    enabled: true,\n    since: new Date(REFERENCE - 40 * DAY)\n  },\n  {\n    id: 'm-3',\n    name: 'Priya Nair',\n    email: 'priya.nair@example.com',\n    method: '',\n    enabled: false,\n    since: null\n  },\n  {\n    id: 'm-4',\n    name: 'Lena Fischer',\n    email: 'lena.fischer@example.com',\n    method: 'Authenticator app',\n    enabled: true,\n    since: new Date(REFERENCE - 6 * DAY)\n  },\n  {\n    id: 'm-5',\n    name: 'Marco Bianchi',\n    email: 'marco.bianchi@example.com',\n    method: '',\n    enabled: false,\n    since: null\n  }\n]"
- },
  "sfcFile": "blocks/account/mfa-settings/mfa-settings.vue",
- "guidelinesFile": "blocks/account/mfa-settings/guidelines.md"
+ "guidelinesFile": "blocks/account/mfa-settings/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/mfa-settings/sample.ts"
+ }
 }

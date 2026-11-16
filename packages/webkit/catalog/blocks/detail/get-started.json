@@ -6,9 +6,9 @@
    "file": "blocks/detail/get-started/variants/ci.vue"
   }
  ],
- "files": {
-  "sample.ts": "export const sampleResourceName = 'analytics-app'"
- },
  "sfcFile": "blocks/detail/get-started/get-started.vue",
- "guidelinesFile": "blocks/detail/get-started/guidelines.md"
+ "guidelinesFile": "blocks/detail/get-started/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/detail/get-started/sample.ts"
+ }
 }

@@ -36,9 +36,9 @@
    "file": "blocks/create/deploy-template/variants/install-integration.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { DeployTemplateTemplate } from './deploy-template.vue'\n\nexport const sampleTemplate: DeployTemplateTemplate = {\n  name: 'Nuxt E-commerce',\n  description: 'Launch a Nuxt e-commerce or content app in a few steps.',\n  icon: 'ai-color ai-nuxt',\n  provider: 'GitHub',\n  providerIcon: 'ai ai-github',\n  scope: 'acme',\n  path: 'templates/nuxt-ecommerce'\n}\n\nexport const sampleAccount = 'name@example.com'"
- },
  "sfcFile": "blocks/create/deploy-template/deploy-template.vue",
- "guidelinesFile": "blocks/create/deploy-template/guidelines.md"
+ "guidelinesFile": "blocks/create/deploy-template/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/create/deploy-template/sample.ts"
+ }
 }

@@ -51,9 +51,9 @@
    "file": "blocks/detail/resource-detail/variants/application-build.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { ResourceDetailResource } from './resource-detail.vue'\n\nconst referenceTime = Date.UTC(2026, 10, 10, 12)\n\nexport const sampleResource: ResourceDetailResource = {\n  name: 'analytics-app',\n  domain: 'analytics-app-z1x2c3.example.com',\n  deploymentId: '1213275262',\n  environment: 'Production',\n  status: 'Ready',\n  statusSeverity: 'success',\n  createdAt: new Date(referenceTime - 14 * 86_400_000),\n  createdBy: 'John Smith',\n  framework: 'Next.js',\n  frameworkIcon: 'ai-color ai-nextjs'\n}"
- },
  "sfcFile": "blocks/detail/resource-detail/resource-detail.vue",
- "guidelinesFile": "blocks/detail/resource-detail/guidelines.md"
+ "guidelinesFile": "blocks/detail/resource-detail/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/detail/resource-detail/sample.ts"
+ }
 }

@@ -1252,11 +1252,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## v-model
 
-| Model                      | Type             | Default | Emits                    | Notes                                                                                                                                                                                          |
-| -------------------------- | ---------------- | ------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:search-open`      | `boolean`        | `false` | `update:searchOpen`      | Whether the search palette is open; the header search and ⌘K / Ctrl K set it.                                                                                                                  |
-| `v-model:navigation-open`  | `boolean`        | `true`  | `update:navigationOpen`  | Whether the navigation rail is open from `lg`; `false` collapses it to the edge affordance that brings it back. No effect below `lg`, where the rail is a drawer.                              |
-| `v-model:navigation-width` | `number \| null` | `null`  | `update:navigationWidth` | The rail's width in px after the reader drags its edge; `null` uses the natural width (`var(--container-2xs)`). Clamped by `Sidebar` between `var(--container-3xs)` and `var(--container-sm)`. |
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the header search and ⌘K / Ctrl K set it. |
+| `v-model:navigation-open` | `boolean` | `true` | `update:navigationOpen` | Whether the navigation rail is open from `lg`; `false` collapses it to the edge affordance that brings it back. No effect below `lg`, where the rail is a drawer. |
+| `v-model:navigation-width` | `number \| null` | `null` | `update:navigationWidth` | The rail's width in px after the reader drags its edge; `null` uses the natural width (`var(--container-2xs)`). Clamped by `Sidebar` between `var(--container-3xs)` and `var(--container-sm)`. |
 
 ## States
 
@@ -2460,8 +2460,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## v-model
 
-| Model                 | Type      | Default | Emits               | Notes                                                                               |
-| --------------------- | --------- | ------- | ------------------- | ----------------------------------------------------------------------------------- |
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
 | `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the bar's search button and ⌘K / Ctrl K set it. |
 
 ## States
@@ -4401,9 +4401,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                                         |
-| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number` | `0`     | `update:modelValue` | Index of the tab shown, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first tab. A click, a hover (with `selectOn: 'hover'`) or the autoplay timer writes the new index back. |
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `number` | `0` | `update:modelValue` | Index of the tab shown, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first tab. A click, a hover (with `selectOn: 'hover'`) or the autoplay timer writes the new index back. |
 
 ## States
 
@@ -4760,9 +4760,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                 |
-| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number` | `0`     | `update:modelValue` | Index of the selected client, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first card. A click, an arrow key or the timer writes the new index back. |
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected client, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first card. A click, an arrow key or the timer writes the new index back. |
 
 ## States
 
@@ -6285,9 +6285,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                           |
-| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number` | `0`     | `update:modelValue` | Index of the selected article; left unbound the band starts on the first one. A click or an arrow key writes the new index back; an index past the ends is clamped to the wall. |
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected article; left unbound the band starts on the first one. A click or an arrow key writes the new index back; an index past the ends is clamped to the wall. |
 
 ## States
 
@@ -7067,9 +7067,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                       |
-| --------- | -------- | ------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number` | `0`     | `update:modelValue` | Index of the selected quote, passed through to `quote-tabs`; left unbound the band starts on the first quote. A click, an arrow key or the timer writes the new index back. |
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected quote, passed through to `quote-tabs`; left unbound the band starts on the first quote. A click, an arrow key or the timer writes the new index back. |
 
 ## States
 
@@ -11276,9 +11276,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## v-model
 
-| Model              | Type     | Default | Emits             | Notes                                                                                                                                                                                              |
-| ------------------ | -------- | ------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:language` | `string` | `''`    | `update:language` | The chosen option of the language select, one of `languages`. Empty shows the first option; choosing one emits it, so the page can switch its locale. Unbound, the select keeps its value locally. |
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model:language` | `string` | `''` | `update:language` | The chosen option of the language select, one of `languages`. Empty shows the first option; choosing one emits it, so the page can switch its locale. Unbound, the select keeps its value locally. |
 
 ## States
 

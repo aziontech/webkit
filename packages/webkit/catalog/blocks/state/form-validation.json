@@ -46,9 +46,9 @@
    "file": "blocks/state/form-validation/variants/section-reloaded.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { FormValidationValues } from './form-validation.vue'\nimport type { FormValidationOrigin } from './variants/section-rejected.vue'\n\nexport const sampleValues: FormValidationValues = {\n  key: 'API_BASE_URL',\n  value: 'https://api.example.com/v2',\n  environment: 'Production',\n  description: 'Base URL the checkout service calls.'\n}\n\nexport const sampleOrigins: FormValidationOrigin[] = [\n  { value: 'origin-web-prod', label: 'web-origin-prod', kind: 'HTTP' },\n  { value: 'origin-api-prod', label: 'api-origin-prod', kind: 'HTTP' },\n  { value: 'origin-assets', label: 'assets-storage', kind: 'Storage' }\n]\n\nexport const sampleReloadedOrigins: FormValidationOrigin[] = sampleOrigins.filter(\n  (origin) => origin.value !== 'origin-web-prod'\n)\n\nexport const sampleOriginError =\n  'Origin \"web-origin-prod\" no longer exists. Another user deleted it while you were filling in this form, so the service wasn\\'t created. Nothing else was lost: reload the origin list and select another one.'"
- },
  "sfcFile": "blocks/state/form-validation/form-validation.vue",
- "guidelinesFile": "blocks/state/form-validation/guidelines.md"
+ "guidelinesFile": "blocks/state/form-validation/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/state/form-validation/sample.ts"
+ }
 }

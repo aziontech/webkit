@@ -11,9 +11,9 @@
    "file": "blocks/detail/production-checklist/variants/drawer-detail.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { ProductionChecklistStep } from './production-checklist.vue'\n\nexport const sampleSteps: ProductionChecklistStep[] = [\n  {\n    id: 'domain',\n    icon: 'ai ai-globe',\n    title: 'Add a custom domain',\n    description:\n      'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',\n    actionLabel: 'Add Domain',\n    done: true,\n    doneNote: 'Serving shop.example.com.'\n  },\n  {\n    id: 'policy',\n    icon: 'ai ai-shield',\n    title: 'Enable a security policy',\n    description:\n      'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',\n    actionLabel: 'Attach Policy',\n    done: false,\n    doneNote: ''\n  },\n  {\n    id: 'customPage',\n    icon: 'ai ai-file',\n    title: 'Set custom error pages',\n    description: 'Answer 4xx and 5xx with your own page instead of the default response.',\n    actionLabel: 'Add Error Page',\n    done: false,\n    doneNote: ''\n  }\n]\n\nexport const sampleCompletedSteps: ProductionChecklistStep[] = [\n  { ...sampleSteps[0] },\n  { ...sampleSteps[1], done: true, doneNote: 'Protected by policy-production.' },\n  { ...sampleSteps[2], done: true, doneNote: 'Serving Branded 404.' }\n]"
- },
  "sfcFile": "blocks/detail/production-checklist/production-checklist.vue",
- "guidelinesFile": "blocks/detail/production-checklist/guidelines.md"
+ "guidelinesFile": "blocks/detail/production-checklist/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/detail/production-checklist/sample.ts"
+ }
 }

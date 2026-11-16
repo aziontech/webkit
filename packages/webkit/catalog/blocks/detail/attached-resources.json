@@ -1,8 +1,8 @@
 {
  "variants": [],
- "files": {
-  "sample.ts": "import type { AttachedResourcesDomain } from './attached-resources.vue'\n\nexport const sampleDomains: AttachedResourcesDomain[] = [\n  {\n    id: 'generated',\n    domain: 'web-app-7f3a.example.net',\n    environment: 'Production',\n    policy: 'Single',\n    certificate: 'Managed',\n    generated: true\n  },\n  {\n    id: 'shop',\n    domain: 'shop.example.com',\n    environment: 'Production',\n    policy: 'Single',\n    certificate: 'Managed',\n    generated: false\n  },\n  {\n    id: 'preview',\n    domain: 'preview.example.com',\n    environment: 'Stage',\n    policy: 'Versioned',\n    certificate: '*.example.com',\n    generated: false\n  }\n]"
- },
  "sfcFile": "blocks/detail/attached-resources/attached-resources.vue",
- "guidelinesFile": "blocks/detail/attached-resources/guidelines.md"
+ "guidelinesFile": "blocks/detail/attached-resources/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/detail/attached-resources/sample.ts"
+ }
 }

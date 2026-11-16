@@ -11,9 +11,9 @@
    "file": "blocks/edit/delete-dialog/variants/error.vue"
   }
  ],
- "files": {
-  "sample.ts": "export const sampleResourceName = 'resource-01'"
- },
  "sfcFile": "blocks/edit/delete-dialog/delete-dialog.vue",
- "guidelinesFile": "blocks/edit/delete-dialog/guidelines.md"
+ "guidelinesFile": "blocks/edit/delete-dialog/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/edit/delete-dialog/sample.ts"
+ }
 }

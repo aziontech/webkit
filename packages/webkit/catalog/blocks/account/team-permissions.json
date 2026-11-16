@@ -26,9 +26,9 @@
    "file": "blocks/account/team-permissions/variants/error.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { TeamPermissionsTeam } from './team-permissions.vue'\n\nexport const sampleTeams: TeamPermissionsTeam[] = [\n  {\n    id: 'team-1',\n    name: 'Administrators',\n    description: 'Full access to the account',\n    permissions: [\n      'applications.view',\n      'applications.edit',\n      'domains.view',\n      'domains.edit',\n      'firewall.view',\n      'firewall.edit',\n      'certificates.view',\n      'certificates.edit',\n      'storage.view',\n      'storage.edit',\n      'metrics.view',\n      'logs.view',\n      'billing.view',\n      'billing.edit',\n      'users.view',\n      'users.edit',\n      'tokens.edit'\n    ],\n    members: 3,\n    status: 'Active'\n  },\n  {\n    id: 'team-2',\n    name: 'Developers',\n    description: 'Build and deploy applications',\n    permissions: [\n      'applications.view',\n      'applications.edit',\n      'domains.view',\n      'storage.view',\n      'storage.edit',\n      'metrics.view',\n      'logs.view'\n    ],\n    members: 12,\n    status: 'Active'\n  },\n  {\n    id: 'team-3',\n    name: 'Security',\n    description: 'Firewall rules and certificates',\n    permissions: [\n      'firewall.view',\n      'firewall.edit',\n      'certificates.view',\n      'certificates.edit',\n      'logs.view'\n    ],\n    members: 4,\n    status: 'Active'\n  },\n  {\n    id: 'team-4',\n    name: 'Finance',\n    description: 'Invoices and payment methods',\n    permissions: ['billing.view', 'billing.edit'],\n    members: 2,\n    status: 'Active'\n  },\n  {\n    id: 'team-5',\n    name: 'Contractors',\n    description: 'Read-only access for audits',\n    permissions: ['applications.view', 'domains.view', 'metrics.view'],\n    members: 0,\n    status: 'Inactive'\n  }\n]"
- },
  "sfcFile": "blocks/account/team-permissions/team-permissions.vue",
- "guidelinesFile": "blocks/account/team-permissions/guidelines.md"
+ "guidelinesFile": "blocks/account/team-permissions/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/team-permissions/sample.ts"
+ }
 }

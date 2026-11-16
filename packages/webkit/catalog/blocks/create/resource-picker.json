@@ -26,9 +26,9 @@
    "file": "blocks/create/resource-picker/variants/optional-binding.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { ResourcePickerOption } from './resource-picker.vue'\n\nexport const sampleProjects: ResourcePickerOption[] = [\n  { value: 'web-app', label: 'web-app', description: 'Astro · acme/web-app' },\n  {\n    value: 'black-friday-2025',\n    label: 'black-friday-2025',\n    description: 'Next.js · acme/black-friday-2025'\n  },\n  {\n    value: 'black-friday-2026',\n    label: 'black-friday-2026',\n    description: 'Next.js · acme/black-friday-2026'\n  },\n  { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },\n  { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },\n  { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },\n  { value: 'hello-world', label: 'hello-world', description: 'JavaScript · acme/hello-world' },\n  { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },\n  { value: 'company-docs', label: 'company-docs', description: 'HTML · acme/company-docs' },\n  { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },\n  { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · acme/analytics-api' },\n  {\n    value: 'react-dashboard',\n    label: 'react-dashboard',\n    description: 'React · acme/react-dashboard'\n  },\n  { value: 'docs-portal', label: 'docs-portal', description: 'Vue · acme/docs-portal' },\n  { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · acme/ecommerce-v2' },\n  {\n    value: 'ecommerce-storefront',\n    label: 'ecommerce-storefront',\n    description: 'Nuxt · acme/ecommerce-storefront'\n  },\n  {\n    value: 'marketing-site',\n    label: 'marketing-site',\n    description: 'Astro · acme/marketing-site'\n  },\n  { value: 'blog-platform', label: 'blog-platform', description: 'Astro · acme/blog-platform' },\n  { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },\n  { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · acme/mobile-app' }\n]\n\nexport const sampleSelected = 'web-app'"
- },
  "sfcFile": "blocks/create/resource-picker/resource-picker.vue",
- "guidelinesFile": "blocks/create/resource-picker/guidelines.md"
+ "guidelinesFile": "blocks/create/resource-picker/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/create/resource-picker/sample.ts"
+ }
 }

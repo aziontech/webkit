@@ -46,9 +46,9 @@
    "file": "blocks/settings/settings-form/variants/profile-error.vue"
   }
  ],
- "files": {
-  "sample.ts": "import type { SettingsFormProfile } from './settings-form.vue'\n\nexport const sampleProfile: SettingsFormProfile = {\n  fullName: 'Alex Morgan',\n  email: '',\n  timezone: 'utc',\n  language: 'en',\n  productUpdates: true\n}"
- },
  "sfcFile": "blocks/settings/settings-form/settings-form.vue",
- "guidelinesFile": "blocks/settings/settings-form/guidelines.md"
+ "guidelinesFile": "blocks/settings/settings-form/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/settings/settings-form/sample.ts"
+ }
 }
