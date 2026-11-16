@@ -176,8 +176,8 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
     {
       variant: 'knockout',
       label: 'Knockout',
-      fill: 'bg-(--color-base-white)',
-      ink: 'text-(--color-base-black)'
+      fill: 'bg-(--primary)',
+      ink: 'text-(--primary-foreground)'
     }
   ]
 </script>

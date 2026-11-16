@@ -89,13 +89,13 @@
 
 ```vue
 <script setup>
-  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
+  import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
+  import Logo from '@aziontech/webkit/logo'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import Quote from '@aziontech/webkit/quote'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
@@ -119,7 +119,7 @@
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: nznLogo, alt: 'NZN', href: 'https://www.azion.com/en/success-case/nzn/' },
+        { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' },
         {
           src: itauLogo,
           alt: 'Itaú',
@@ -131,12 +131,17 @@
       <template #aside>
         <Quote
           variant="signed"
-          :logo="herosparkLogo"
-          logo-alt="HeroSpark"
-          text="Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development."
-          name="Mateus Leonardi"
-          job-title="CTO at HeroSpark"
-        />
+          text="Moving to the edge cut our infrastructure costs, made every page faster and freed more than 200 engineering hours a month for product work."
+          name="Priya Patel"
+          job-title="CTO at Acme Inc."
+        >
+          <template #mark>
+            <Logo
+              name="Acme Inc."
+              size="large"
+            />
+          </template>
+        </Quote>
       </template>
     </LogoWall>
   </RegistrationFrame>
@@ -151,8 +156,8 @@
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
+  import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
@@ -175,7 +180,7 @@
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: nznLogo, alt: 'NZN', href: 'https://www.azion.com/en/success-case/nzn/' },
+        { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' },
         {
           src: itauLogo,
           alt: 'Itaú',
@@ -195,7 +200,7 @@
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: nznLogo, alt: 'NZN', href: 'https://www.azion.com/en/success-case/nzn/' },
+        { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' },
         {
           src: itauLogo,
           alt: 'Itaú',
@@ -212,16 +217,16 @@
 
 ```vue
 <script setup>
-  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
+  import exameLogo from '@aziontech/webkit/assets/exame-extended-color.svg'
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import marisaLogo from '@aziontech/webkit/assets/marisa-extended-color.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import rennerLogo from '@aziontech/webkit/assets/renner-extended-color.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
+  import Logo from '@aziontech/webkit/logo'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import Quote from '@aziontech/webkit/quote'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
@@ -246,7 +251,7 @@
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: nznLogo, alt: 'NZN', href: 'https://www.azion.com/en/success-case/nzn/' },
+        { src: exameLogo, alt: 'Exame', href: 'https://www.azion.com/en/success-case/exame/' },
         {
           src: itauLogo,
           alt: 'Itaú',
@@ -261,12 +266,17 @@
       <template #aside>
         <Quote
           variant="signed"
-          :logo="herosparkLogo"
-          logo-alt="HeroSpark"
-          text="Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development."
-          name="Mateus Leonardi"
-          job-title="CTO at HeroSpark"
-        />
+          text="Moving to the edge cut our infrastructure costs, made every page faster and freed more than 200 engineering hours a month for product work."
+          name="Priya Patel"
+          job-title="CTO at Acme Inc."
+        >
+          <template #mark>
+            <Logo
+              name="Acme Inc."
+              size="large"
+            />
+          </template>
+        </Quote>
       </template>
     </LogoWall>
   </RegistrationFrame>

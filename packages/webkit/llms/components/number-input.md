@@ -99,7 +99,7 @@
 </script>
 
 <template>
-  <div class="w-[20rem]">
+  <div class="w-full max-w-80">
     <NumberInput
       v-model="value"
       :min="0"
@@ -124,7 +124,7 @@
 </script>
 
 <template>
-  <div class="flex w-[20rem] flex-col gap-(--spacing-md)">
+  <div class="flex w-full max-w-80 flex-col gap-(--spacing-md)">
     <NumberInput
       v-model="small"
       size="small"
@@ -164,7 +164,7 @@
 </script>
 
 <template>
-  <div class="w-[20rem]">
+  <div class="w-full max-w-80">
     <NumberInput
       v-model="value"
       aria-label="Quantity"
