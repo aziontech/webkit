@@ -520,7 +520,55 @@ test('declaredMajor reads the dependency range and ignores workspace links', () 
   }
   assert.equal(read('^5.11.0').major, 5)
   assert.equal(read('~3.9.4').major, 3)
+  assert.equal(read('>= 5.2.0 <6').major, 5)
+  assert.equal(read('5.x').major, 5)
+  assert.equal(read('^5.0.0 || ^6.0.0').major, 5)
+  assert.equal(read('npm:@aziontech/webkit@^5.4.0').major, 5)
   assert.equal(read('workspace:*'), null)
+  assert.equal(read('workspace:^5.1.0').major, 5)
+  assert.equal(read('latest'), null)
+})
+
+test('declaredMajor reads a tarball file name, never digits in the folders around it', () => {
+  const read = (range, installed) => {
+    const files = {
+      'package.json': JSON.stringify({ dependencies: { '@aziontech/webkit': range } })
+    }
+    if (installed)
+      files['node_modules/@aziontech/webkit/package.json'] = JSON.stringify({ version: installed })
+    const dir = project(files)
+    try {
+      return declaredMajor(dir)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+  const tarball = read('file:../../pkgs-r1/aziontech-webkit-5.12.3.tgz')
+  assert.equal(tarball.major, 5)
+  assert.equal(tarball.source, 'tarball')
+  assert.equal(read('file:../v1-builds/aziontech-webkit-6.0.0-rc.1.tgz').major, 6)
+  assert.equal(read('file:../pkgs-r1/webkit.tgz'), null)
+  assert.equal(read('file:../pkgs-r1/webkit.tgz', '5.12.3').major, 5)
+  assert.equal(read('link:../webkit2', '5.4.0').major, 5)
+  assert.equal(read('workspace:*', '6.1.0').major, 6)
+  assert.equal(read('file:../webkit-v3'), null)
+})
+
+test('migrate says so when the version is unknown instead of guessing', () => {
+  const dir = project({
+    'package.json': JSON.stringify({
+      dependencies: { '@aziontech/webkit': 'file:../pkgs-r1/webkit-build' }
+    }),
+    'src/App.vue': "<script setup>\nimport Button from '@aziontech/webkit/button'\n</script>"
+  })
+  try {
+    const results = planMigrate(dir, { dryRun: true })
+    const warnings = results.flatMap((r) => r.warnings).join('\n')
+    assert.match(warnings, /cannot tell which @aziontech\/webkit version .* pass --from <major>/)
+    assert.doesNotMatch(warnings, /v1|treating the project/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
 })
 
 test('an import that v6 does not export is MANUAL, and comments keep their words', () => {
