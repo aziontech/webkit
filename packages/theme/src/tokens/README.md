@@ -88,7 +88,7 @@ Plain JS objects with literal values. Theme-invariant.
 ```js
 // tokens/primitives/colors/brand.js
 export const brandPrimitives = {
-  primary: { 50: '#FFF5EF', 100: '#FFE7D8', /* … */ 500: '#FE601F', /* … */ 950: '#401602' },
+  primary: { 50: '#FFF5EF', 100: '#FFE7D8', /* … */ 500: '#F3652B', /* … */ 950: '#401602' },
   accent: { 50: '#F6F6FF', /* … */ 500: '#8A84EC', /* … */ 950: '#0B0A19' },
   absolute: { black: '#0A0A0A', white: '#FCFCFC' }
 }
@@ -288,7 +288,7 @@ Bundles with `fontSize: 'inherit'` are omitted from the Tailwind `fontSize` pres
 | Prefix                    | Looks up                                                                                               |
 | ------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `primitives.X.Y.Z`        | `tokens/primitives/colors/colors.js` tree (e.g., `primitives.gray.900`, `primitives.alpha.orange.100`) |
-| `brand.primary.primary-N` | `brandPrimitives.primary[N]` (e.g., `brand.primary.primary-500` → `#FE601F`)                           |
+| `brand.primary.primary-N` | `brandPrimitives.primary[N]` (e.g., `brand.primary.primary-500` → `#F3652B`)                           |
 | `brand.accent.accent-N`   | `brandPrimitives.accent[N]`                                                                            |
 | `brand.absolute.X`        | `brandPrimitives.absolute.X` (`black` / `white`)                                                       |
 | `theme.<group>.X`         | an earlier semantic token of the same variant (emitted as `var(--X)`)                                  |
