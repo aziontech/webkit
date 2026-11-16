@@ -3,18 +3,18 @@ name: media-split-stack-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 121f0137af0f3522f335447bd89fb475d194e3f088f5798e6efc797184710cd8
+checksum: 95bde5c7563c1cc95ef5eb5492165d47a1eb42c1ced3d9ff6efd3c04c2e6e6ac
 ---
 
 # MediaSplitStackSection — Component Spec
 
 ## Purpose
 
-A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup`, `diagram` and `button`. A band's picture is one of four things: a `ConsoleMockup` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. `variant` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
+A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup`, `diagram` and `button`. A band's picture is one of four things: a `ConsoleMockup` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. Every band sets its picture at the closing end, so the run reads down one edge.
 
 ## When to use
 
@@ -47,7 +47,6 @@ A run of large media-split bands that pile up under the site header as the page 
 
 <template>
   <MediaSplitStackSection
-    variant="alternating"
     eyebrow="Managed Infrastructure"
     title="Stop managing regions and capacity by hand"
     :bands="[
@@ -65,14 +64,13 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ## Props
 
-| Prop          | Type                            | Default       | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| ------------- | ------------------------------- | ------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`     | `MediaSplitStackSectionVariant` | `'media-end'` | false    | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band.                                                                                                                                                                                                                                                                                                                                                                              |
-| `anchor`      | `string`                        | `''`          | false    | In-page id set on the run so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `eyebrow`     | `string`                        | `''`          | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `title`       | `string`                        | `''`          | false    | Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`.                                                                                                                                                                                                                                                                                                                                              |
-| `description` | `string`                        | `''`          | false    | Supporting sentence under the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `bands`       | `MediaSplitStackSectionBand[]`  | `[]`          | false    | The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a `{ component, props? }` webkit scene asset, `widget` a `ConsoleMockup` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. |
+| Prop          | Type                           | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------- | ------------------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`      | `string`                       | `''`    | false    | In-page id set on the run so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `eyebrow`     | `string`                       | `''`    | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `title`       | `string`                       | `''`    | false    | Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`.                                                                                                                                                                                                                                                                                                                                              |
+| `description` | `string`                       | `''`    | false    | Supporting sentence under the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `bands`       | `MediaSplitStackSectionBand[]` | `[]`    | false    | The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a `{ component, props? }` webkit scene asset, `widget` a `ConsoleMockup` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. |
 
 ## Events
 
@@ -85,7 +83,6 @@ A run of large media-split bands that pile up under the site header as the page 
 ## States
 
 - Visual states: `default`; hovering a linked band reveals its link affordance (owned by `media-split`)
-- `data-variant` mirrors the `variant` prop
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
 - The header renders only when `title` is set; a band renders its button only when it has an `action`, links as a whole to its `href` (or its action's when it has none), and renders its media cell only when it has a picture; a band's `eyebrow` sits above its headline
 - Band headlines are `h2` when the run has no header and `h3` under the section title, so the outline never repeats a level
@@ -128,7 +125,7 @@ _none_
 
 ## Right-to-left
 
-- Layout: logical utilities only; `alternating` swaps the media side with the reading direction (owned by `media-split`).
+- Layout: logical utilities only; the closing end follows the reading direction (owned by `media-split`).
 - Icons: the button's trailing chevron mirrors (owned by `button`).
 - Keyboard: unchanged.
 - User data: none.
@@ -149,7 +146,6 @@ _none_
 ## Examples
 
 - Default — carries a section `description`, a band `eyebrow`, a band `href` distinct from its button and a live `scene`.
-- Types — composite story rendering both `variant` values stacked.
 - Product media — bands whose pictures are a `ConsoleMockup`, a `Diagram` and a framed image (justified: `widget`, `diagram` and `imageFramed` are three render paths the default does not reach).
 
 ## Constraints — DO NOT

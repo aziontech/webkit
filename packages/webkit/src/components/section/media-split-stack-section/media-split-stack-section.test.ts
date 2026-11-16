@@ -54,26 +54,11 @@ describe('MediaSplitStackSection', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['media-end', 'alternating'] as const)(
-    'mirrors variant=%s on data-variant',
-    (variant) => {
-      const { getByTestId } = run({ variant })
+  it('sets every picture at the closing end, with no alternating layout left', () => {
+    const { container, getByTestId } = run({ variant: 'alternating' })
 
-      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
-    }
-  )
-
-  it('defaults to the media-end variant with every picture at the closing end', () => {
-    const { container, getByTestId } = run()
-
-    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('media-end')
+    expect(getByTestId(TESTID).hasAttribute('data-variant')).toBe(false)
     expect(bandSides(container as HTMLElement)).toEqual(['media-end', 'media-end', 'media-end'])
-  })
-
-  it('alternates the media side band by band, starting at the opening end', () => {
-    const { container } = run({ variant: 'alternating' })
-
-    expect(bandSides(container as HTMLElement)).toEqual(['media-start', 'media-end', 'media-start'])
   })
 
   it('renders one band per entry, in order, each named by its title', () => {
@@ -198,14 +183,14 @@ describe('MediaSplitStackSection', () => {
     expect(queryAllByTestId(BAND_TESTID)).toHaveLength(0)
   })
 
-  it('has no a11y violations with the media-end variant', async () => {
+  it('has no a11y violations', async () => {
     const { container } = run()
 
     await expectNoA11yViolations(container)
   })
 
-  it('has no a11y violations with the alternating variant and a header', async () => {
-    const { container } = run({ variant: 'alternating', eyebrow: EYEBROW, title: TITLE })
+  it('has no a11y violations with a header', async () => {
+    const { container } = run({ eyebrow: EYEBROW, title: TITLE })
 
     await expectNoA11yViolations(container)
   })

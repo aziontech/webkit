@@ -61,10 +61,7 @@
   <SectionContainer max-width="site">
     <SectionGap hatch />
 
-    <MediaSplitStackSection
-      variant="media-end"
-      :bands="bands"
-    />
+    <MediaSplitStackSection :bands="bands" />
 
     <SectionGap hatch />
   </SectionContainer>

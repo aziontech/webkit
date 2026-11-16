@@ -401,6 +401,16 @@ describe('SitePage', () => {
     })
   })
 
+  it.each([
+    ['media-split-stack-section', { variant: 'alternating' }],
+    ['media-split-stack', { kind: 'alternating' }]
+  ])('renders a removed alternating run (%s) with every picture at the end', (id, props) => {
+    expect(resolveSectionEntry(id, { ...props, bands: [] })).toEqual({
+      id: 'media-split-stack-section',
+      props: { bands: [] }
+    })
+  })
+
   it('translates old props on a current _id and keeps a new prop that is already set', () => {
     expect(resolveSectionEntry('hero-section', { kind: 'centered-band', title: 'T' })).toEqual({
       id: 'hero-section',

@@ -338,9 +338,6 @@ const legacyProps: Record<string, Record<string, LegacyProp>> = {
       }
     }
   },
-  'media-split-stack-section': {
-    kind: 'variant'
-  },
   'network-section': {
     lead: 'claimsEyebrow',
     kind: 'variant'
@@ -366,7 +363,8 @@ const legacyShapes: Record<string, (props: SitePageSectionProps) => SitePageSect
   'closing-call-to-action-section': (p) =>
     p['titleMuted'] === undefined
       ? p
-      : { ...without(p, 'titleMuted'), title: joined(p['title'], p['titleMuted']) }
+      : { ...without(p, 'titleMuted'), title: joined(p['title'], p['titleMuted']) },
+  'media-split-stack-section': (p) => without(p, 'kind', 'variant')
 }
 
 const renameLegacyProps = (id: string, props: SitePageSectionProps): SitePageSectionProps => {

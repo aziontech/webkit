@@ -19,9 +19,6 @@
 
   export type { SectionTitleAction }
 
-  /** Layout of the run. */
-  export type MediaSplitStackSectionVariant = 'media-end' | 'alternating'
-
   /** A live scene drawn in a band's media cell. */
   export type MediaSplitStackSectionScene = SceneRef
 
@@ -56,8 +53,6 @@
   }
 
   export interface MediaSplitStackSectionProps {
-    /** Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. */
-    variant?: MediaSplitStackSectionVariant
     /** In-page id set on the run so a `#hash` link can scroll to it. */
     anchor?: string
     /** Eyebrow above the section title. */
@@ -71,7 +66,6 @@
   }
 
   const props = withDefaults(defineProps<MediaSplitStackSectionProps>(), {
-    variant: 'media-end',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -105,9 +99,6 @@
   const mediaPadded = (band: MediaSplitStackSectionBand, index: number) =>
     !scenes.value[index] &&
     Boolean(band.widget || band.diagram || (band.imageFramed && band.image && !band.illustration))
-
-  const mediaSide = (index: number) =>
-    props.variant === 'alternating' && index % 2 === 0 ? 'media-start' : 'media-end'
 </script>
 
 <template>
@@ -115,7 +106,6 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    :data-variant="variant"
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
@@ -140,7 +130,7 @@
           <MediaSplit
             v-for="(band, index) in bands"
             :key="band.title"
-            :variant="mediaSide(index)"
+            variant="media-end"
             divided
             :heading-level="hasHeader ? 3 : 2"
             align="center"

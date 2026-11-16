@@ -29,8 +29,5 @@
 </script>
 
 <template>
-  <MediaSplitStackSection
-    variant="alternating"
-    :bands="bands"
-  />
+  <MediaSplitStackSection :bands="bands" />
 </template>
