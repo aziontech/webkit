@@ -88,7 +88,7 @@ size and dates in tabular figures.
 `No verdict yet` / `Verdicts appear once the first item finishes its analysis.` in the donut,
 `No items yet` in sources, and `No matching items` / `Change the search or the filters.` in the table.
 
-### O. Verdict — `Table.CellStatus` (required)
+### O. Verdict — `TableCellStatus` (required)
 
 The verdict of each row, in the same hue as its donut slice.
 

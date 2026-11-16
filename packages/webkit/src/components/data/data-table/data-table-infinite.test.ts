@@ -135,7 +135,7 @@ describe('DataTable', () => {
       return { Host, data, live, loading }
     }
 
-    it('toggles live from Table.LiveButton and reflects it with aria-pressed', async () => {
+    it('toggles live from TableLiveButton and reflects it with aria-pressed', async () => {
       const user = userEvent.setup()
       const host = liveHost()
       const { getByTestId } = render(host.Host)
@@ -188,8 +188,8 @@ describe('DataTable', () => {
       )
     })
 
-    it('is attached to the compound as Table.LiveButton', () => {
-      expect(Table.LiveButton).toBe(TableLiveButton)
+    it('is its own import, not attached to the Table compound', () => {
+      expect((Table as Record<string, unknown>)['LiveButton']).toBeUndefined()
     })
   })
 

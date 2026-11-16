@@ -25,11 +25,11 @@ The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `
 
 ### C. Team table — `Card`, `DataTable`, `Table`, `Avatar`, `useCollection` (required)
 
-`DataTable` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `Table.CellLink` to the team's page and its description under it. Permissions: `Table.CellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `Table.CellStatus` (Active, Inactive).
+`DataTable` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `TableCellLink` to the team's page and its description under it. Permissions: `TableCellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `TableCellStatus` (Active, Inactive).
 
 ### D. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
-`Table.CellActions` named after the team: Edit and Duplicate, then Delete in its own group. Duplicate copies the permissions with no members and toasts. Delete asks in a `ConfirmDialog` that says how many members lose what the team grants.
+`TableCellActions` named after the team: Edit and Duplicate, then Delete in its own group. Duplicate copies the permissions with no members and toasts. Delete asks in a `ConfirmDialog` that says how many members lose what the team grants.
 
 ### E. No match and empty — `EmptyState` (required)
 
@@ -73,7 +73,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 ## Don't
 
-- Don't list permissions as a long paragraph in the table; use `Table.CellTags` with `+N`.
+- Don't list permissions as a long paragraph in the table; use `TableCellTags` with `+N`.
 - Don't offer an Edit checkbox for a resource that has no edit action; show a dash with a hidden "Not available".
 - Don't save a team with no permission; say so above the matrix.
 

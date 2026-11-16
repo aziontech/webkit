@@ -22,7 +22,11 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import { type TableColumn } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -600,7 +604,7 @@
                     </span>
                   </template>
                   <template #cell-id="{ row, value }">
-                    <Table.CellId
+                    <TableCellId
                       v-if="row.type === 'workspace'"
                       :value="value"
                       resource="workspace"
@@ -624,7 +628,7 @@
                     <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
                   </template>
                   <template #cell-status="{ value }">
-                    <Table.CellStatus
+                    <TableCellStatus
                       :label="value"
                       :severity="statusSeverity(value)"
                     />
@@ -650,7 +654,7 @@
                     </span>
                   </template>
                   <template #cell-labels="{ value }">
-                    <Table.CellTags
+                    <TableCellTags
                       :items="value ?? []"
                       icon="ai ai-tag"
                       :noun="{ one: 'label', other: 'labels' }"
@@ -660,7 +664,7 @@
                     <span class="sr-only">Actions</span>
                   </template>
                   <template #cell-actions="{ row }">
-                    <Table.CellActions
+                    <TableCellActions
                       :name="row.name"
                       @select="(_event, value) => onRowAction(value, row)"
                     >
@@ -684,7 +688,7 @@
                           label="Delete"
                         />
                       </DropdownMenu.Group>
-                    </Table.CellActions>
+                    </TableCellActions>
                   </template>
                 </DataTable>
               </template>

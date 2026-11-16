@@ -11,7 +11,11 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -280,7 +284,7 @@
                     variant="square"
                   />
                   <div class="flex min-w-0 flex-col">
-                    <Table.CellLink
+                    <TableCellLink
                       :label="row.name"
                       :href="`/account/teams/${row.id}`"
                       destination="Team settings"
@@ -292,7 +296,7 @@
                 </div>
               </template>
               <template #cell-permissionNames="{ value }">
-                <Table.CellTags
+                <TableCellTags
                   v-if="value.length < allPermissions.length"
                   :items="value"
                 />
@@ -306,7 +310,7 @@
                 <span class="tabular-nums">{{ value }}</span>
               </template>
               <template #cell-status="{ value }">
-                <Table.CellStatus
+                <TableCellStatus
                   :label="value"
                   :severity="statusSeverity(value)"
                 />
@@ -315,7 +319,7 @@
                 <span class="sr-only">Actions</span>
               </template>
               <template #cell-actions="{ row }">
-                <Table.CellActions
+                <TableCellActions
                   :name="row.name"
                   @select="(_event, value) => onAction(value, row)"
                 >
@@ -335,7 +339,7 @@
                       label="Delete"
                     />
                   </DropdownMenu.Group>
-                </Table.CellActions>
+                </TableCellActions>
               </template>
               <template #empty>
                 <EmptyState

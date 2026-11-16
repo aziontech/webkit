@@ -15,7 +15,11 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
@@ -247,20 +251,20 @@
                   :bordered="false"
                 >
                   <template #cell-name="{ row }">
-                    <Table.CellLink
+                    <TableCellLink
                       :label="row.name"
                       :to="`/resources/${row.id}`"
                       destination="Resources"
                     />
                   </template>
                   <template #cell-id="{ value }">
-                    <Table.CellId
+                    <TableCellId
                       :value="value"
                       resource="resource"
                     />
                   </template>
                   <template #cell-domain="{ row }">
-                    <Table.CellLink
+                    <TableCellLink
                       :label="row.domain"
                       :href="`https://${row.domain}`"
                       :more="
@@ -271,19 +275,19 @@
                     />
                   </template>
                   <template #cell-status="{ value }">
-                    <Table.CellStatus
+                    <TableCellStatus
                       :label="value"
                       :severity="value === 'Live' ? 'success' : 'neutral'"
                     />
                   </template>
                   <template #cell-modifiedAt="{ row }">
-                    <Table.CellTime
+                    <TableCellTime
                       :value="row.modifiedAt"
                       :author="row.owner"
                     />
                   </template>
                   <template #cell-actions="{ row }">
-                    <Table.CellActions
+                    <TableCellActions
                       :name="row.name"
                       @select="(_event, value) => onRowAction(value, row)"
                     >
@@ -331,7 +335,7 @@
                           /></template>
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
-                    </Table.CellActions>
+                    </TableCellActions>
                   </template>
                   <template #empty>
                     <EmptyState

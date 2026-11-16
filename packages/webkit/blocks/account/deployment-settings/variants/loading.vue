@@ -28,7 +28,10 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
@@ -937,13 +940,13 @@
                       <span class="truncate">{{ deploymentLabel(value) }}</span>
                     </template>
                     <template #cell-status="{ value }">
-                      <Table.CellStatus
+                      <TableCellStatus
                         :label="value"
                         :severity="value === 'Active' ? 'success' : 'neutral'"
                       />
                     </template>
                     <template #cell-updatedAt="{ row }">
-                      <Table.CellTime
+                      <TableCellTime
                         :value="row.updatedAt"
                         :author="row.system ? '' : row.updatedBy"
                       />
@@ -952,7 +955,7 @@
                       <span class="sr-only">Actions</span>
                     </template>
                     <template #cell-actions="{ row }">
-                      <Table.CellActions
+                      <TableCellActions
                         v-if="!row.system"
                         :name="row.name"
                         @select="(_event, value) => onAction(value, row)"
@@ -973,7 +976,7 @@
                             label="Delete"
                           />
                         </DropdownMenu.Group>
-                      </Table.CellActions>
+                      </TableCellActions>
                     </template>
                     <template #empty>
                       <EmptyState

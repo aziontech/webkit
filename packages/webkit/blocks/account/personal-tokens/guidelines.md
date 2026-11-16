@@ -25,11 +25,11 @@ The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `
 
 ### C. Token table — `Card`, `DataTable`, `Table`, `useCollection` (required)
 
-One `useCollection` over the rows, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`. Columns: Name, Description (muted; `No description` when empty), Status, Expires, Last used, Created, and the row menu. Status uses `Table.CellStatus`: Active (success), `Expires in N days` within 7 days (warning), Expired (danger), Revoked (secondary). Last used and Created use `Table.CellTime` (relative time, exact time on the tooltip, the creator's avatar on Created); a token never used reads `Never used`.
+One `useCollection` over the rows, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`. Columns: Name, Description (muted; `No description` when empty), Status, Expires, Last used, Created, and the row menu. Status uses `TableCellStatus`: Active (success), `Expires in N days` within 7 days (warning), Expired (danger), Revoked (secondary). Last used and Created use `TableCellTime` (relative time, exact time on the tooltip, the creator's avatar on Created); a token never used reads `Never used`.
 
 ### D. Row actions — `DropdownMenu` (required)
 
-`Table.CellActions` named after the token. A live token offers only Revoke; an expired or revoked one offers only Delete, which removes it from the list. A token cannot be edited or extended.
+`TableCellActions` named after the token. A live token offers only Revoke; an expired or revoked one offers only Delete, which removes it from the list. A token cannot be edited or extended.
 
 ### E. No match and empty — `EmptyState` (required)
 

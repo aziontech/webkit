@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: ab25f33b993e1aaae6b730bad48b771823c8e128257ade5fb1a819dc71b00ace
+checksum: 673f9471950c2246d8a65b9789bd49d423ba2ab3c522b40c6ab13a5f499f56d3
 created: 2026-11-12
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # SearchTrigger — Component Spec
@@ -18,7 +18,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 
 ## When to use
 
-- Use SearchTrigger only in the top bar to open the ⌘K palette (Command); search over one table is Table.Search.
+- Use SearchTrigger only in the top bar to open the ⌘K palette (Command); search over one table is TableSearch.
 - The search entry of every app header — console, demo, docs or site top bar (`AppHeader.End`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
 - Anywhere a shortcut-backed launcher should look like a field without being one.
 

@@ -1,6 +1,7 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableFilter from '@aziontech/webkit/table-filter'
   import { ref } from 'vue'
 
   const rows = [
@@ -45,13 +46,13 @@
   >
     <template #title>Workloads</template>
     <template #toolbar>
-      <Table.Filter
+      <TableFilter
         type="property"
         title="Filter workloads"
       />
     </template>
     <template #cell-status="{ value }">
-      <Table.CellStatus
+      <TableCellStatus
         :label="value"
         :severity="severityOf(value)"
       />

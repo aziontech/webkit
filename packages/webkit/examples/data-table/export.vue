@@ -1,6 +1,6 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
-  import Table from '@aziontech/webkit/table'
+  import TableExportButton from '@aziontech/webkit/table-export-button'
 
   const rows = [
     { id: '1001', name: 'Workload Alpha', status: 'Active', modified: 'Jan 1, 2026, 09:00 AM' },
@@ -24,7 +24,7 @@
     bordered
   >
     <template #toolbar>
-      <Table.Export />
+      <TableExportButton />
     </template>
   </DataTable>
 </template>

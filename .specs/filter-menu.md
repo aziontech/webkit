@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 10
 template: 2
-checksum: 020a210054ef1e869f4ea4b0b10a8fd72ee0c8ccc03547c7c937be087b114bc8
+checksum: ce32fd3e963b9caf0a581fa7984bd7effc3f2f8e2a0a719e09a307f802978b28
 created: 2026-11-14
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # FilterMenu — Component Spec
@@ -23,7 +23,7 @@ filter, and the panel's height follows each level. `FilterMenu.ChipGroup` shows 
 chips under the controls row: the field label in muted ink, an avatar stack, the first value and
 `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a
 `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself.
-Inside a DataTable, `Table.Filter type="menu"` renders it and `FilterMenu.ChipGroup` with no `fields`
+Inside a DataTable, `TableFilter type="menu"` renders it and `FilterMenu.ChipGroup` with no `fields`
 renders its chips, both mapped onto the table's `filters` model.
 
 It differs from `property-filter` (one text field that builds `property operator value` tokens and
@@ -39,13 +39,13 @@ combines them with operators and and/or): this menu offers only the values a fie
 ## When NOT to use
 
 - Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`. FilterMenu is for faceted picks from known values; PropertyFilter is for expression search.
-- A table that needs comparisons on numbers or text conditions → use `property-filter` (`Table.Filter type="property"` inside a DataTable).
+- A table that needs comparisons on numbers or text conditions → use `property-filter` (`TableFilter type="property"` inside a DataTable).
 - Two to four fixed choices always on screen → use `toggle-group` or selectable `chip`s.
 - A single search over names → use `input`, or `table-search` inside a table.
 
 ## Related
 
-- `data-table` — `Table.Filter type="menu"` and `FilterMenu.ChipGroup` (no `fields`) render this menu and its chips over the table's `filters` model.
+- `data-table` — `TableFilter type="menu"` and `FilterMenu.ChipGroup` (no `fields`) render this menu and its chips over the table's `filters` model.
 - `property-filter` — the token-based filter field for typed queries.
 - `popover` — the overlay the menu opens in.
 - `date-range-picker` — the range picker the custom date period uses.
@@ -123,7 +123,7 @@ console (`FilterMenu.ChipGroup: no FilterMenu has these fields.`). When the arra
 on purpose, the consumer calls the root's exposed `open(fieldId)`. **Inside a DataTable**, chips
 with no `fields` read the table context instead: their fields come from the table's
 `filterFields`, their value from its `filters` model, removing a chip removes that field's filter
-through the table (`filter-remove`), and activating one reopens `Table.Filter type="menu"` at the
+through the table (`filter-remove`), and activating one reopens `TableFilter type="menu"` at the
 field. That is the one applied-filters row of a table.
 
 - `filter-menu-chip-group/filter-menu-chip-group.vue` — One filled, clickable, removable `Chip` per applied field, in `fields` order, inside a `role="group"` named `Applied filters`. Each chip reads `<field label>` (muted) + up to three option avatars (when the picked options carry `avatar`) + the first value's label + `+N` (muted) when more values are picked. Chips enter, leave and reflow with a `TransitionGroup`. Renders nothing when no field is applied.
@@ -303,7 +303,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Default — a menu with an author field (avatars), a status field (`single`) and a date field, with its chips below and one filter applied.
 - Sizes — composite example rendering the trigger at every `size` side by side.
 
-The table pairing (`Table.Filter type="menu"` with `FilterMenu.ChipGroup` in the `filters` slot) is shown by the DataTable's Filter Menu example.
+The table pairing (`TableFilter type="menu"` with `FilterMenu.ChipGroup` in the `filters` slot) is shown by the DataTable's Filter Menu example.
 
 ## Constraints — DO NOT
 

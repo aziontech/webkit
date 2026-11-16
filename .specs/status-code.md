@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 19e9f4f45714ecb336dcadafbb35ed60ec8030711d47512f8843a0c663cf9c0b
+checksum: bf65f5fe28e8992779152ed1553626cfd72401076796e4cb0d5def28a48f9329
 created: 2026-11-14
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # StatusCode — Component Spec
@@ -25,7 +25,7 @@ StatusCode shows the HTTP status of a request, optionally preceded by its method
 
 ## When NOT to use
 
-- The status is a resource lifecycle (`Active`, `Pending`, `Failed`) → use `tag` or `Table.CellStatus`.
+- The status is a resource lifecycle (`Active`, `Pending`, `Failed`) → use `tag` or `TableCellStatus`.
 - The value is a security or incident level → use `severity-tag`.
 - A dot that says whether a service is up → use `status-indicator`.
 

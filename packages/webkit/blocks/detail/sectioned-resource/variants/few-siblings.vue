@@ -7,7 +7,10 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tabs from '@aziontech/webkit/tabs'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -212,26 +215,26 @@
                     :bordered="false"
                   >
                     <template #cell-name="{ row }">
-                      <Table.CellLink
+                      <TableCellLink
                         :label="row.name"
                         :to="`${base}/${page}/${row.id}`"
                         :destination="current.label"
                       />
                     </template>
                     <template #cell-id="{ value }">
-                      <Table.CellId
+                      <TableCellId
                         :value="value"
                         :resource="current.noun.toLowerCase()"
                       />
                     </template>
                     <template #cell-status="{ value }">
-                      <Table.CellStatus
+                      <TableCellStatus
                         :label="value"
                         :severity="value === 'Active' ? 'success' : 'neutral'"
                       />
                     </template>
                     <template #cell-modifiedAt="{ row }">
-                      <Table.CellTime
+                      <TableCellTime
                         :value="row.modifiedAt"
                         :author="row.owner"
                       />

@@ -356,6 +356,26 @@ export async function build() {
     return null
   }
 
+  const attachedCache = new Map()
+  function attachedTargets(c) {
+    if (attachedCache.has(c)) return attachedCache.get(c)
+    const index = exportsMap[`./${c}`] || ''
+    let found = null
+    if (/\/index\.ts$/.test(index)) {
+      const text = readFileSync(resolve(PKG_ROOT, index), 'utf-8')
+      const dir = dirname(index)
+      const files = new Map()
+      for (const m of text.matchAll(/^import\s+([A-Z][\w$]*)\s+from\s+'(\.[^']+)'/gm))
+        files.set(m[1], join(dir, m[2]).replace(/^(?!\.)/, './'))
+      const body = text.match(/Object\.assign\(\s*[\w$]+\s*,\s*\{([\s\S]*?)\}\s*\)/)?.[1] ?? ''
+      found = new Map()
+      for (const m of body.matchAll(/([A-Z][\w$]*)\s*:\s*([A-Z][\w$]*)/g))
+        if (files.has(m[2])) found.set(files.get(m[2]), m[1])
+    }
+    attachedCache.set(c, found)
+    return found
+  }
+
   const imports = {}
   for (const subpath of subpaths) {
     const target = exportsMap[`./${subpath}`]
@@ -381,6 +401,8 @@ export async function build() {
       entry.kind = 'subcomponent'
       entry.parent = parent
       entry.treeShakeableImport = importPath
+      const attached = attachedTargets(parent)
+      if (attached && !attached.has(target)) entry.attached = false
     } else if (subpath.includes('/')) {
       const seg = subpath.split('/')[0]
       entry.kind =

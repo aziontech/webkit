@@ -942,7 +942,7 @@ test('no-style-override', () => {
         filename: 'l4.vue'
       },
       {
-        code: `${imp('Table', 'table')}<template><Table max-height="100%" class="h-full min-h-0"><Table.Search class="flex-1" /></Table></template>`,
+        code: `<script setup>import DataTable from '@aziontech/webkit/data-table'\nimport TableSearch from '@aziontech/webkit/table-search'</script><template><DataTable max-height="100%" class="h-full min-h-0"><TableSearch class="flex-1" /></DataTable></template>`,
         filename: 'l5.vue'
       },
       {

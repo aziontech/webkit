@@ -40,13 +40,13 @@ The last toolbar control is `CollectionPreferences` with only its columns sectio
 
 A `Breadcrumb` of the folder path starts at the storage name; each crumb jumps back to that depth. Beside it the primary medium Add to files `SplitButton` offers Upload file and Add folder. It is the page's only primary action.
 
-### F. Cell recipes — `Table.CellTime` (optional)
+### F. Cell recipes — `TableCellTime` (optional)
 
-Folders sort first with a link-coloured folder glyph; the folder name is a `Button variant="link"` that opens it (a row click does the same for a pointer), and the `..` name is a link button named Go up to the parent folder; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
+Folders sort first with a link-coloured folder glyph; the folder name is a `Button variant="link"` that opens it (a row click does the same for a pointer), and the `..` name is a link button named Go up to the parent folder; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `TableCellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
 
-### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
+### G. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
-`Table.CellActions`, named after the file ("Actions for logo.svg"), opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
+`TableCellActions`, named after the file ("Actions for logo.svg"), opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
@@ -124,7 +124,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder and `..` names are buttons, so a keyboard user opens a folder or goes up with Tab and Enter; the row click is the pointer shortcut and the Open option in the row menu repeats it.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
-- `Table.CellTime` names the author and reads the absolute time to screen readers.
+- `TableCellTime` names the author and reads the absolute time to screen readers.
 - The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
 - `UploadProgress` is a region named File transfers with a polite status that announces each file finishing and the outcome; percentages are not announced. The toast repeats the outcome for people who collapsed the card.
 - In the upload dialog each refused file's reason is the `aria-describedby` of its Remove button, and removing a file moves focus to the next one.

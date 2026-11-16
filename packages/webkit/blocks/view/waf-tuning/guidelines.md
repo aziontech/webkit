@@ -26,9 +26,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `Input` (numeric; "Use a whole number." under it when it is not one), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
 
-### C. Matches table — `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Alert` (required)
+### C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 
-A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `Table.CellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
+A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `TableCellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
 ### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 

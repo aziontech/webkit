@@ -1,6 +1,6 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import { ref } from 'vue'
 
   const rules = ref([
@@ -27,7 +27,7 @@
     aria-label="Rules, in the order they run"
   >
     <template #cell-status="{ value }">
-      <Table.CellStatus
+      <TableCellStatus
         :label="value"
         :severity="value === 'Active' ? 'success' : 'neutral'"
       />

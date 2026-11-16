@@ -1,11 +1,11 @@
 # Rule: compound API — composition first, props for data, names from anatomy
 
-Composition (`structure: composition`) components in the webkit layer expose a **compound API**: every public sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Pagination.Button>`). The root itself stays importable two ways — as the **compound** (`@aziontech/webkit/table`, every sub-component attached) and as a **standalone, tree-shakeable root** (`@aziontech/webkit/table-root`, nothing attached). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.
+Composition (`structure: composition`) components in the webkit layer expose a **compound API**: every structural sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Pagination.Button>`). The root itself stays importable two ways — as the **compound** (`@aziontech/webkit/table`, every structural sub-component attached; companion parts are imported on their own, see below) and as a **standalone, tree-shakeable root** (`@aziontech/webkit/table-root`, nothing attached). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.
 
 It rests on three decisions, in priority order:
 
 1. **Anatomy is elements, not props.** The structural parts of a component (where things go) are sub-components the consumer composes by hand. Props are for **bulk data** (the data-driven `data` + `columns` model) and **scalar configuration** (`maxHeight`, `paginated`, `pageSize`) — never for things that have the shape of a slot.
-2. **Shared state flows through `provide`/`inject`,** surfaced as **context-aware sub-components** so the consumer wires nothing. `<Table.Search>` reads and drives the table's global filter through the injected context; it takes no `model-value` / `@update`.
+2. **Shared state flows through `provide`/`inject`,** surfaced as **context-aware sub-components** so the consumer wires nothing. `<TableSearch>` reads and drives the table's global filter through the injected context; it takes no `model-value` / `@update`.
 3. **Names come from the component's own anatomy,** not from a convention copied between components. `<Table.SortButton>`, not `<Table.Trigger>`.
 
 ## The compound API shape
@@ -83,7 +83,7 @@ Anything slot-shaped stays a slot/sub-component; do not collapse it into a confi
 <!-- ✅ Compose real elements -->
 <template #toolbar>
   <IconButton icon="ai ai-filter" />
-  <Table.Search placeholder="Search" />
+  <TableSearch placeholder="Search" />
 </template>
 
 <!-- ❌ Config-array for UI — inextensible on the first customization -->
@@ -92,13 +92,25 @@ Anything slot-shaped stays a slot/sub-component; do not collapse it into a confi
 
 Repeated **data** is the one thing that earns props (`:data` + `:columns`) — hand-authoring N rows as elements is the wrong trade. That data-driven mode renders through the same sub-components (our markup / tokens / a11y); it does not bypass them.
 
+## Companion parts — heavy features stay out of the compound
+
+The compound cannot be tree-shaken: `Object.assign` keeps every attached part in the bundle even when the page renders only the root. So the compound attaches the **structural** parts only. A part that composes another overlay or input component (a `Tooltip`, `DropdownMenu`, `Popover`, `Input`, `CopyButton`) to deliver a feature is a **companion part**: it lives in the component's folder, reads the same injected context, has its own flat export, and is **not** attached. The consumer imports it on its own.
+
+| Kind                                                 | Attached                                                                  | Example                                                              |
+| ---------------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Structural part (where things go)                    | yes, `<Table.Row>`                                                        | `Header`, `Body`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar` |
+| Companion part (a feature built on other components) | no, `import TableCellActions from '@aziontech/webkit/table-cell-actions'` | Table's cell presets and toolbar controls                            |
+
+A companion part is still documented in its root's spec, under Sub-components, marked as a companion. The catalog records it (`attached: false`) so the MCP offers the standalone import, never a dot-notation it does not have.
+
 ## When a sub-component earns its existence
 
 Interactivity alone does not justify a sub-component. A clickable row is `@click` fallthrough (or a `row-click` event in data-driven mode); a clickable cell is a `clickable` prop + composed content. A part becomes a sub-component only when it owns enough of its **own** markup, a11y, or state to stand alone (`SortButton`: glyph + three sort states + focus ring + touch target).
 
 ## Hard prohibitions
 
-- Do not export composition sub-components without also attaching them to the root compound (`index.ts` via `Object.assign`).
+- Do not export composition sub-components without also attaching them to the root compound (`index.ts` via `Object.assign`). The one exception is a companion part (above): it is exported and never attached.
+- Do not attach a part that composes an overlay or input component to the compound; make it a companion part, so the compound import stays as light as its structural parts.
 - Do not ship the compound `index.ts` root export without **also** adding the standalone `<name>-root` export pointing at the root `.vue`. The compound path retains every sub-component (`Object.assign`), so a root-only consumer has no tree-shakeable way in without the `-root` key.
 - Do not make the index a plain `index.js` — `vue-tsc` cannot derive types from it (no `allowJs`), so `<Root.Part>` ends up untyped. It must be `index.ts`.
 - Do not hand-write `index.d.ts` — it is gitignored and generated at publish time (by the publish workflow's `vue-tsc --declaration --emitDeclarationOnly` step) from `index.ts`, not committed or built in dev.

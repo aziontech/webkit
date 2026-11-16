@@ -5,16 +5,16 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 0415ff927b3f58e191e8b1f62d3f19ecb55cb6e47faed66dbf90df6e177c7248
+checksum: 392f273c24ba9d43083373cb5051c662f33f249bf821426d205a5b0bcee12a09
 created: 2026-11-14
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Timestamp — Component Spec
 
 ## Purpose
 
-Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates every minute. Activating it opens a small panel that lists the moment as UTC (ISO 8601), local time with its time zone, the reader's browser time when the app's time zone differs from it, the relative phrase and the raw value it was given, each with a copy button, so an operator can paste the exact value into a query or a ticket. It accepts a `Date`, an epoch in milliseconds or microseconds, or an ISO string, and reads the app-wide time zone from the nearest `WebkitProvider` (`time-zone`), so an app-level time zone picker changes every timestamp at once. Use it anywhere outside a table: log details, cards, side panels, activity lines. `Table.CellTime` keeps its own author-plus-relative-time layout and shares the parsing and the relative phrasing with Timestamp.
+Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates every minute. Activating it opens a small panel that lists the moment as UTC (ISO 8601), local time with its time zone, the reader's browser time when the app's time zone differs from it, the relative phrase and the raw value it was given, each with a copy button, so an operator can paste the exact value into a query or a ticket. It accepts a `Date`, an epoch in milliseconds or microseconds, or an ISO string, and reads the app-wide time zone from the nearest `WebkitProvider` (`time-zone`), so an app-level time zone picker changes every timestamp at once. Use it anywhere outside a table: log details, cards, side panels, activity lines. `TableCellTime` keeps its own author-plus-relative-time layout and shares the parsing and the relative phrasing with Timestamp.
 
 ## When to use
 
@@ -25,14 +25,14 @@ Timestamp shows one moment — when a request ran, a deployment finished, a key 
 
 ## When NOT to use
 
-- A table column of modification times with the author → use `Table.CellTime` in a `#cell-<id>` slot.
+- A table column of modification times with the author → use `TableCellTime` in a `#cell-<id>` slot.
 - A date the person edits → use `date-picker` (one date) or `date-range-picker` (a range).
 - A duration (`1.2 s`, `3 days`) → plain text formatted with `useLocale().formatNumber`; Timestamp is a point in time.
 
 ## Related
 
 - `webkit-provider` — `time-zone` sets the zone every Timestamp below it reads; `now` fixes the reference time of relative phrases.
-- `table` — `Table.CellTime` is the table preset for modification times; it shares Timestamp's parsing and relative phrasing.
+- `table` — `TableCellTime` is the table preset for modification times; it shares Timestamp's parsing and relative phrasing.
 - `copy-button` — the copy control on every row of the panel.
 - `popover` — the panel Timestamp opens.
 

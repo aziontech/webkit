@@ -1,4 +1,4 @@
-/** A value Timestamp and Table.CellTime accept as a moment. */
+/** A value Timestamp and TableCellTime accept as a moment. */
 export type TimestampValue = string | number | Date | null | undefined
 
 /** Formats a relative time in whole units, like `useLocale().formatRelativeTime`. */

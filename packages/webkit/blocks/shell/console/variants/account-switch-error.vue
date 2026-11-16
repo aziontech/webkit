@@ -21,7 +21,8 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Table from '@aziontech/webkit/table'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
@@ -718,7 +719,7 @@
                     </div>
                   </template>
                   <template #cell-typeLabel="{ row }">
-                    <Table.CellStatus
+                    <TableCellStatus
                       :label="row.typeLabel"
                       :icon="row.typeIcon"
                       :variant="row.typeVariant"
@@ -726,13 +727,13 @@
                     />
                   </template>
                   <template #cell-id="{ value }">
-                    <Table.CellId
+                    <TableCellId
                       :value="value"
                       resource="account"
                     />
                   </template>
                   <template #cell-clientId="{ value }">
-                    <Table.CellId
+                    <TableCellId
                       :value="value"
                       resource="client"
                     />

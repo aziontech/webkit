@@ -121,7 +121,7 @@ denied, over budget), each with its delta and a `Hint`; pass `inverse` on every 
 is bad. Outcomes over time are stacked bars, one series per exclusive outcome in its status color
 (allowed success, blocked danger, held warning) — here the color means a state. Three `BarList`s rank
 by actor, by category and by destination, largest first. The request log `DataTable` lists time,
-actor, outcome (a `Table.CellStatus` in the same hue as its series), category, a `SeverityTag`,
+actor, outcome (a `TableCellStatus` in the same hue as its series), category, a `SeverityTag`,
 destination, method and the rule that decided it; outcome and severity are two different facts.
 
 ## Do

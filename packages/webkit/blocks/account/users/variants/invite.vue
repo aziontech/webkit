@@ -27,7 +27,10 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -497,13 +500,13 @@
                 </Tooltip>
               </template>
               <template #cell-status="{ value }">
-                <Table.CellStatus
+                <TableCellStatus
                   :label="value"
                   :severity="statusSeverity(value)"
                 />
               </template>
               <template #cell-lastActive="{ row }">
-                <Table.CellTime
+                <TableCellTime
                   v-if="row.lastActive"
                   :value="row.lastActive"
                 />
@@ -517,7 +520,7 @@
                 <span class="sr-only">Actions</span>
               </template>
               <template #cell-actions="{ row }">
-                <Table.CellActions
+                <TableCellActions
                   :name="displayName(row)"
                   @select="(_event, value) => onAction(value, row)"
                 >
@@ -552,7 +555,7 @@
                       "
                     />
                   </DropdownMenu.Group>
-                </Table.CellActions>
+                </TableCellActions>
               </template>
               <template #empty>
                 <EmptyState
@@ -733,7 +736,7 @@
               <KeyValueList.Item label="Teams">{{ teamsLabel(pending.teams) }}</KeyValueList.Item>
               <KeyValueList.Item label="Status">{{ pending.status }}</KeyValueList.Item>
               <KeyValueList.Item label="Last active">
-                <Table.CellTime
+                <TableCellTime
                   v-if="pending.lastActive"
                   :value="pending.lastActive"
                 />

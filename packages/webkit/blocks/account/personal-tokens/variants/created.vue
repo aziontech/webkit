@@ -27,7 +27,10 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
@@ -438,13 +441,13 @@
                 >
               </template>
               <template #cell-status="{ row }">
-                <Table.CellStatus
+                <TableCellStatus
                   :label="row.status"
                   :severity="statusOf(row).severity"
                 />
               </template>
               <template #cell-lastUsedAt="{ value }">
-                <Table.CellTime
+                <TableCellTime
                   v-if="value"
                   :value="value"
                 />
@@ -455,7 +458,7 @@
                 >
               </template>
               <template #cell-createdAt="{ row }">
-                <Table.CellTime
+                <TableCellTime
                   :value="row.createdAt"
                   :author="row.createdBy"
                 />
@@ -464,7 +467,7 @@
                 <span class="sr-only">Actions</span>
               </template>
               <template #cell-actions="{ row }">
-                <Table.CellActions
+                <TableCellActions
                   :name="row.name"
                   @select="(_event, value) => onAction(value, row)"
                 >
@@ -486,7 +489,7 @@
                       label="Delete"
                     />
                   </DropdownMenu.Group>
-                </Table.CellActions>
+                </TableCellActions>
               </template>
               <template #empty>
                 <EmptyState

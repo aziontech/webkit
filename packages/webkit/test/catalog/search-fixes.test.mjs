@@ -35,7 +35,13 @@ function fixture() {
         purpose: 'Ranked bars.'
       }),
       table: component('table', { purpose: 'Records in rows.' }),
-      'table-search': { import: `${P}table-search`, kind: 'subcomponent', parent: 'table' }
+      'table-row': { import: `${P}table-row`, kind: 'subcomponent', parent: 'table' },
+      'table-search': {
+        import: `${P}table-search`,
+        kind: 'subcomponent',
+        parent: 'table',
+        attached: false
+      }
     },
     blocks: {
       'view/table-view': {
@@ -79,11 +85,22 @@ test('equal scores break by product surface, then by use in blocks', () => {
 })
 
 test('a compound part is searchable and says which root it composes inside', () => {
+  const [best] = searchComponents(catalog, 'table row').matches
+  assert.equal(best.name, 'table-row')
+  assert.equal(best.parent, 'table')
+  assert.equal(best.compoundBinding, 'Table.Row')
+  assert.match(best.hint, /compose it inside Table as Table\.Row/)
+})
+
+test('a part the compound does not attach is offered as its own import, never as dot-notation', () => {
   const [best] = searchComponents(catalog, 'table search').matches
   assert.equal(best.name, 'table-search')
   assert.equal(best.parent, 'table')
-  assert.equal(best.compoundBinding, 'Table.Search')
-  assert.match(best.hint, /compose it inside Table as Table\.Search/)
+  assert.equal(best.compoundBinding, undefined)
+  assert.match(
+    best.hint,
+    /not attached to the Table compound: import it from '@aziontech\/webkit\/table-search'/
+  )
 })
 
 test('a part ranks below its root when the request does not name the root', () => {

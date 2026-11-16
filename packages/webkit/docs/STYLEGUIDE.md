@@ -566,7 +566,7 @@ export default Object.assign(Table, { Row: TableRow })
 - Anatomy is **elements, not props**: structural parts are sub-components the consumer
   composes; props are for bulk data (`data` + `columns`) and scalar config — never
   config-arrays of UI.
-- Shared state flows through context composables (§9) so `<Table.Search>` wires nothing.
+- Shared state flows through context composables (§9) so `<TableSearch>` wires nothing.
 - A part earns sub-component status only when it owns its own markup/a11y/state.
 
 **Enforced by:** catalog drift check (CI) + review; phantom imports blocked by

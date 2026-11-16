@@ -30,7 +30,9 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -757,14 +759,14 @@
                 </template>
 
                 <template #cell-id="{ value }">
-                  <Table.CellId
+                  <TableCellId
                     :value="value"
                     resource="variable"
                   />
                 </template>
 
                 <template #cell-value="{ row }">
-                  <Table.CellLink
+                  <TableCellLink
                     :label="displayValue(row)"
                     :copyable="!row.secret"
                     :copy-value="row.value"
@@ -810,7 +812,7 @@
                 </template>
 
                 <template #cell-actions="{ row }">
-                  <Table.CellActions
+                  <TableCellActions
                     :name="row.key"
                     @select="(_event, value) => onRowAction(value, row)"
                   >
@@ -852,7 +854,7 @@
                         </template>
                       </DropdownMenu.Item>
                     </DropdownMenu.Group>
-                  </Table.CellActions>
+                  </TableCellActions>
                 </template>
 
                 <template #empty>

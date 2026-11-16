@@ -17,7 +17,7 @@
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
   import SplitButton from '@aziontech/webkit/split-button'
-  import Table from '@aziontech/webkit/table'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -727,7 +727,7 @@
                               <span class="text-body-sm text-(--text-muted)">{{ value }}</span>
                             </template>
                             <template #cell-modifiedAt="{ row }">
-                              <Table.CellTime
+                              <TableCellTime
                                 v-if="row.modifiedAt"
                                 :value="row.modifiedAt"
                                 :author="row.author"

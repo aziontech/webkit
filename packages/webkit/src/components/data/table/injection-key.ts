@@ -32,7 +32,7 @@ export type TableFilterOperator =
 /** A filterable value; arrays back the `in` / `not-in` (multi-select) operators. */
 export type TableFilterValue = string | number | boolean | Array<string | number>
 
-/** One field `Table.Filter` offers: a facet in the menu, a property in the property filter. */
+/** One field `TableFilter` offers: a facet in the menu, a property in the property filter. */
 export interface TableFilterField {
   /** Matches a column id / accessorKey so client-side filtering can target the column. */
   id: string
@@ -44,7 +44,7 @@ export interface TableFilterField {
   options?: { label: string; value: string | number | boolean }[]
 }
 
-/** What Table.Filter hosts: the FilterMenu (facets) or the PropertyFilter (typed conditions). */
+/** What TableFilter hosts: the FilterMenu (facets) or the PropertyFilter (typed conditions). */
 export type TableFilterType = 'menu' | 'property'
 
 /** One committed filter condition (a chip). */
@@ -106,11 +106,11 @@ export interface TableContext {
   clearSelection: () => void
   /** Loading flag (data-driven); toolbar controls reflect it. */
   loading: ComputedRef<boolean>
-  /** Live tail state (backs the `live` model); Table.LiveButton reflects it. */
+  /** Live tail state (backs the `live` model); TableLiveButton reflects it. */
   live?: ComputedRef<boolean>
-  /** Turns the live tail on or off (Table.LiveButton). */
+  /** Turns the live tail on or off (TableLiveButton). */
   setLive?: (value: boolean) => void
-  /** Fields Table.Filter offers when it has no `fields` of its own. */
+  /** Fields TableFilter offers when it has no `fields` of its own. */
   filterFields: ComputedRef<TableFilterField[]>
   /** Committed structured filters (backs the `filters` model). */
   appliedFilters: ComputedRef<TableAppliedFilter[]>
@@ -120,7 +120,7 @@ export interface TableContext {
   removeFilter: (event: Event, filter: TableAppliedFilter) => void
   /** Clear structured filters and the global search text. */
   clearFilters: () => void
-  /** Filter the user asked to edit; Table.Filter watches this to reopen the menu at its field. */
+  /** Filter the user asked to edit; TableFilter watches this to reopen the menu at its field. */
   editingFilter: Ref<TableAppliedFilter | null>
   /** Request editing a committed filter (sets `editingFilter`). */
   editFilter: (filter: TableAppliedFilter) => void
