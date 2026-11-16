@@ -226,7 +226,7 @@
   const confirmOpen = ref(false)
   const reverting = ref(false)
   const addVersionHostEl = ref<HTMLElement | null>(null)
-  let runTimer = 0
+  let runTimer: ReturnType<typeof setTimeout> | undefined
 
   const tagFor = (entry: VersionEntry): VersionEntry['tag'] => {
     if (entry.state === 'draft') return entry.tag

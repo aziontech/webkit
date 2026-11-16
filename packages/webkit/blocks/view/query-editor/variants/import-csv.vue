@@ -278,7 +278,7 @@
     Object.keys(rowSelection.value).filter((key) => rowSelection.value[key])
   )
   const deleting = ref(false)
-  let deleteTimer = 0
+  let deleteTimer: ReturnType<typeof setTimeout> | undefined
   const deleteSelected = () => {
     const table = tables.value.find((item) => item.id === selectedTable.value?.id)
     if (!table || !selectedKeys.value.length || deleting.value) return
@@ -346,7 +346,7 @@
   const importMapping = ref<Record<string, string>>({})
   const importSubmitted = ref(false)
   const importing = ref(false)
-  let importTimer = 0
+  let importTimer: ReturnType<typeof setTimeout> | undefined
 
   const splitCsvLine = (line: string) => {
     const cells: string[] = []
