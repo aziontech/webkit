@@ -932,3 +932,68 @@ test('migrateSource maps a Toaster corner onto the logical position', () => {
   assert.match(source, /<Toaster position="top-center" \/>/)
   assert.equal(migrateSource(source, v6).source, source)
 })
+
+test('DocStep inside DocSteps becomes DocSteps.Step, and the import follows', () => {
+  const v6 = loadMigration(6)
+  const withRoot = [
+    '<script setup>',
+    "  import DocStep from '@aziontech/webkit/doc-step'",
+    "  import DocSteps from '@aziontech/webkit/doc-steps'",
+    '</script>',
+    '<template>',
+    '  <DocSteps>',
+    '    <DocStep title="Install">',
+    '      <p>npm i</p>',
+    '    </DocStep>',
+    '    <DocStep title="Deploy" />',
+    '  </DocSteps>',
+    '</template>'
+  ].join('\n')
+  const one = migrateSource(withRoot, v6, { fromMajor: 5 })
+  assert.deepEqual(one.warnings, [])
+  assert.doesNotMatch(one.source, /doc-step'/)
+  assert.match(
+    one.source,
+    /<DocSteps\.Step title="Install">\n {6}<p>npm i<\/p>\n {4}<\/DocSteps\.Step>/
+  )
+  assert.match(one.source, /<DocSteps\.Step title="Deploy" \/>/)
+  assert.equal(one.source.split("from '@aziontech/webkit/doc-steps'").length, 2)
+  assert.equal(migrateSource(one.source, v6, { fromMajor: 5 }).source, one.source)
+
+  const kebab = [
+    '<script setup>',
+    "import DocStep from '@aziontech/webkit/doc-step'",
+    '</script>',
+    '<template><doc-steps><doc-step title="A">x</doc-step></doc-steps></template>'
+  ].join('\n')
+  const two = migrateSource(kebab, v6, { fromMajor: 5 })
+  assert.deepEqual(two.warnings, [])
+  assert.match(two.source, /^import DocSteps from '@aziontech\/webkit\/doc-steps'$/m)
+  assert.match(two.source, /<doc-steps><DocSteps\.Step title="A">x<\/DocSteps\.Step><\/doc-steps>/)
+})
+
+test('DocStep stays MANUAL when migrate cannot prove it sits inside DocSteps', () => {
+  const v6 = loadMigration(6)
+  const loose = [
+    '<script setup>',
+    "import DocStep from '@aziontech/webkit/doc-step'",
+    "import DocSteps from '@aziontech/webkit/doc-steps'",
+    '</script>',
+    '<template>',
+    '  <DocSteps><DocStep title="A" /></DocSteps>',
+    '  <DocStep title="B" />',
+    '</template>'
+  ].join('\n')
+  const scripted = [
+    '<script setup>',
+    "import DocStep from '@aziontech/webkit/doc-step'",
+    'const step = DocStep',
+    '</script>',
+    '<template><DocSteps><DocStep title="A" /></DocSteps></template>'
+  ].join('\n')
+  for (const sfc of [loose, scripted]) {
+    const { source, warnings } = migrateSource(sfc, v6, { fromMajor: 5 })
+    assert.equal(source, sfc)
+    assert.ok(warnings.some((w) => /doc-step was removed in v6/.test(w)))
+  }
+})

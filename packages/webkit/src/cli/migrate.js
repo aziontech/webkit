@@ -30,6 +30,7 @@ export function loadMigration(version) {
     types: base.types || {},
     named: base.named || {},
     members: base.members || {},
+    attached: base.attached || {},
     legacy: base.legacy || null,
     exports: exportList(),
     props: readJson(join(MIGRATIONS_DIR, `v${version}-props.json`)),
@@ -499,13 +500,88 @@ function addStandaloneImports(source, moved) {
   return out
 }
 
+function lineOfStatement(source, statement) {
+  const at = source.indexOf(statement)
+  const start = source.lastIndexOf('\n', at) + 1
+  const newline = source.indexOf('\n', at + statement.length)
+  const end = newline < 0 ? source.length : newline + 1
+  const alone =
+    /^[ \t]*$/.test(source.slice(start, at)) &&
+    /^;?[ \t]*\r?\n?$/.test(source.slice(at + statement.length, end))
+  return { at, start, end, alone }
+}
+
+function insideEveryTime(source, childRe, parentRe) {
+  const events = [
+    ...[...source.matchAll(parentRe)].map((m) => ({ m, parent: true })),
+    ...[...source.matchAll(childRe)].map((m) => ({ m, parent: false }))
+  ].sort((a, b) => a.m.index - b.m.index)
+  let depth = 0
+  for (const { m, parent } of events) {
+    const closing = m[1] === '/'
+    if (!parent) {
+      if (depth <= 0) return false
+      continue
+    }
+    if (closing) depth -= 1
+    else if (source[scanTag(source, m.index + m[0].length) - 1] !== '/') depth += 1
+  }
+  return true
+}
+
+export function attachToCompound(source, attached = {}) {
+  let out = source
+  const changes = []
+  for (const [subpath, { root, member }] of Object.entries(attached)) {
+    const imports = webkitImports(out)
+    const own = imports.find((imp) => imp.subpath === subpath)
+    if (!own || own.named.length || own.names.length !== 1) continue
+    const local = own.names[0]
+    const rootImport = imports.find(
+      (imp) => imp.subpath === root && imp.names.length > imp.named.length
+    )
+    const parent = rootImport ? rootImport.names[0] : pascalCase(root)
+    const tag = (name) =>
+      new RegExp(`<(/?)(${escapeRe(name)}|${escapeRe(kebab(name))})(?=[\\s/>])`, 'g')
+    const childRe = tag(local)
+    const line = lineOfStatement(out, own.statement)
+    if (!line.alone) continue
+    const rest = (out.slice(0, line.start) + out.slice(line.end))
+      .replace(/<!--[\s\S]*?-->/g, '')
+      .replace(childRe, '')
+    if (new RegExp(`(?<![\\w$.-])${escapeRe(local)}(?![\\w$])`).test(rest)) continue
+    if (
+      !rootImport &&
+      new RegExp(`(?<![\\w$.-])${escapeRe(parent)}(?![\\w$])`).test(rest.replace(tag(parent), ''))
+    )
+      continue
+    if (!insideEveryTime(out, childRe, tag(parent))) continue
+    const importLine = out.slice(line.start, line.end)
+    out =
+      out.slice(0, line.start) +
+      (rootImport
+        ? ''
+        : importLine.replace(own.statement, `import ${parent} from '${PREFIX}${root}'`)) +
+      out.slice(line.end)
+    out = out.replace(childRe, (all, slash) => `<${slash}${parent}.${member}`)
+    changes.push(`<${local}> (${PREFIX}${subpath}) → <${parent}.${member}>`)
+  }
+  return { source: out, changes }
+}
+
 export function migrateSource(input, migration, { fromMajor = null, declaredMajor = null } = {}) {
   const { props, types } = migration
   const tokenPass = migrateTokens(input, migration.tokens)
   const lintPass = migrateLintRules(tokenPass.source, migration.lint)
   const iconPass = migrateIcons(lintPass.source, migration.icons, { fromMajor, declaredMajor })
-  const source = iconPass.source
-  const changes = [...tokenPass.changes, ...lintPass.changes, ...iconPass.changes]
+  const attachPass = attachToCompound(iconPass.source, migration.attached)
+  const source = attachPass.source
+  const changes = [
+    ...tokenPass.changes,
+    ...lintPass.changes,
+    ...iconPass.changes,
+    ...attachPass.changes
+  ]
   const warnings = [...tokenPass.warnings, ...iconPass.warnings]
   const subpaths = referencedSubpaths(source)
   if (!subpaths.size) return { source, changes, warnings }
