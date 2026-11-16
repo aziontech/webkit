@@ -56,9 +56,12 @@ test('diff reports identical copies with exit 0 and edits as a unified diff with
     const json = cliJson(dir, 'diff', 'delete-dialog')
     assert.equal(json.code, 1)
     assert.equal(json.json.differs, true)
-    assert.equal(json.json.files[0].status, 'modified')
-    assert.equal(json.json.files[0].editedLocally, true)
-    assert.equal(json.json.files[0].upstreamChanged, false)
+    const edited = json.json.files.find((f) => f.path === 'src/views/delete-dialog.vue')
+    assert.equal(edited.status, 'modified')
+    assert.equal(edited.editedLocally, true)
+    assert.equal(edited.upstreamChanged, false)
+    const sample = json.json.files.find((f) => f.path === 'src/views/delete-dialog.sample.ts')
+    assert.equal(sample.status, 'identical')
   } finally {
     cleanup(dir)
   }
