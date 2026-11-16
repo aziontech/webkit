@@ -67,8 +67,7 @@ export async function measureFixture(dir) {
     build: {
       write: false,
       cssMinify: true,
-      lib: { entry: join(dir, 'src', 'main.js'), formats: ['es'], fileName: 'entry' },
-      rollupOptions: { external: ['vue'] }
+      rollupOptions: { input: join(dir, 'src', 'main.js'), external: ['vue'] }
     }
   })
   const outputs = (Array.isArray(result) ? result : [result]).flatMap((r) => r.output)
