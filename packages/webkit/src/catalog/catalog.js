@@ -61,7 +61,32 @@ function readPart(baseDir, file) {
   }
 }
 
+function readSource(baseDir, file) {
+  if (!baseDir || !file) return ''
+  try {
+    return readFileSync(join(baseDir, file), 'utf-8').replace(/\n$/, '')
+  } catch (err) {
+    warnOnce(`failed to read ${file} next to the webkit catalog (${err.message}).`)
+    return ''
+  }
+}
+
+export function hydratePart(part, readText) {
+  if (!part) return part
+  const { sfcFile, guidelinesFile, ...out } = part
+  if (sfcFile) out.sfc = readText(sfcFile)
+  if (guidelinesFile) out.guidelines = readText(guidelinesFile)
+  for (const key of ['variants', 'examples']) {
+    if (!Array.isArray(out[key])) continue
+    out[key] = out[key].map((x) =>
+      x.file && x.sfc === undefined ? { ...x, sfc: readText(x.file) } : x
+    )
+  }
+  return out
+}
+
 function build(json, baseDir) {
+  const source = (file) => readSource(baseDir, file)
   const imports = json.imports || {}
   const blocks = json.blocks || {}
   const blockCache = new Map()
@@ -122,7 +147,7 @@ function build(json, baseDir) {
       if (!meta.file) return meta
       if (!blockCache.has(id)) {
         const { file, ...rest } = meta
-        blockCache.set(id, { ...rest, ...(readPart(baseDir, file) || {}) })
+        blockCache.set(id, { ...rest, ...(hydratePart(readPart(baseDir, file), source) || {}) })
       }
       return blockCache.get(id)
     },
@@ -131,7 +156,10 @@ function build(json, baseDir) {
       if (!e) return []
       if (!e.examplesFile) return e.examples || []
       if (!exampleCache.has(sub)) {
-        exampleCache.set(sub, readPart(baseDir, e.examplesFile)?.examples || [])
+        exampleCache.set(
+          sub,
+          hydratePart(readPart(baseDir, e.examplesFile), source)?.examples || []
+        )
       }
       return exampleCache.get(sub)
     },

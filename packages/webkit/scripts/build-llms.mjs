@@ -5,6 +5,7 @@ import { dirname, join, posix, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { getSection, parseSpecFile } from '../../../.claude/hooks/lib/spec.mjs'
+import { hydratePart } from '../src/catalog/catalog.js'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const PKG_ROOT = resolve(SCRIPT_DIR, '..')
@@ -13,7 +14,10 @@ const OUT_DIR = resolve(PKG_ROOT, 'llms')
 const CATALOG_PATH = resolve(PKG_ROOT, 'catalog.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 
-export const FULL_BUDGET_BYTES = 3 * 1024 * 1024
+export const FULL_BUDGETS = {
+  'llms-full.txt': 2_080_000,
+  'llms-full-site.txt': 740_000
+}
 
 const SPEC_SECTIONS = [
   'Sub-components',
@@ -24,6 +28,8 @@ const SPEC_SECTIONS = [
   'Internationalization',
   'Responsive'
 ]
+
+const PAGE_ONLY_SECTIONS = ['Right-to-left', 'Internationalization', 'Responsive']
 
 const CATEGORY_TITLES = {
   action: 'Actions',
@@ -154,15 +160,38 @@ function binding(name) {
 const REPO_URL = 'https://github.com/aziontech/webkit/blob/main'
 
 function specLinks(md, names) {
-  return md.replace(/\]\((?!https?:|#|mailto:)([^)\s]+)\)/g, (m, target) => {
-    const [path, hash = ''] = target.split('#')
-    const resolved = posix.normalize(posix.join('.specs', path))
-    const spec = resolved.match(/^\.specs\/([a-z0-9-]+)\.md$/)
-    if (spec && names.has(spec[1])) return `](${spec[1]}.md${hash ? `#${hash}` : ''})`
-    if (/^\.\.\/(foundations|blocks)\/[^/].*\.md$/.test(path)) return m
-    if (resolved.startsWith('..')) return m
-    return `](${REPO_URL}/${resolved}${hash ? `#${hash}` : ''})`
-  })
+  return String(md)
+    .split(/(^\s*```[^\n]*\n[\s\S]*?^\s*```[^\n]*$)/m)
+    .map((chunk, i) => (i % 2 ? chunk : proseSpecLinks(chunk, names)))
+    .join('')
+}
+
+function apiJson(api, names) {
+  const linked = {}
+  for (const [key, value] of Object.entries(api)) {
+    linked[key] =
+      key === 'examples'
+        ? value.map((x) => ({ name: x.name, file: x.file }))
+        : JSON.parse(specLinks(JSON.stringify(value), names))
+  }
+  return JSON.stringify(linked, null, 1) + '\n'
+}
+
+function proseSpecLinks(md, names) {
+  return md.replace(
+    /\]\((?!https?:|#|mailto:|\/|components\/|blocks\/|foundations\/)([^)\s]+)\)/g,
+    (m, target) => {
+      const [path, hash = ''] = target.split('#')
+      const resolved = posix.normalize(posix.join('.specs', path))
+      const spec = resolved.match(/^\.specs\/([a-z0-9-]+)\.md$/)
+      if (spec && names.has(spec[1])) return `](${spec[1]}.md${hash ? `#${hash}` : ''})`
+      const api = path.match(/^([a-z0-9-]+)\.json$/)
+      if (api && names.has(api[1])) return m
+      if (/^\.\.\/(foundations|blocks)\/[^/].*\.md$/.test(path)) return m
+      if (resolved.startsWith('..')) return m
+      return `](${REPO_URL}/${resolved}${hash ? `#${hash}` : ''})`
+    }
+  )
 }
 
 function link(from, to) {
@@ -217,7 +246,10 @@ function loadCatalog() {
   )
 }
 
-export function catalogView(catalog, part) {
+const readSourceFile = (file) => readFileSync(resolve(PKG_ROOT, file), 'utf-8').replace(/\n$/, '')
+
+export function catalogView(catalog, readPart) {
+  const part = (file) => hydratePart(readPart(file), readSourceFile)
   const imports = Object.fromEntries(
     Object.entries(catalog.imports).map(([name, e]) => {
       const { docsFile, ...meta } = e
@@ -420,7 +452,7 @@ function componentApi(catalog, name) {
     assets: Object.entries(catalog.assets || {})
       .filter(([, meta]) => (meta.usedBy || []).includes(name))
       .map(([kind]) => ({ kind, page: assetPagePath(kind) })),
-    examples: catalog.examples(name).map((x) => ({ name: x.name, sfc: x.sfc })),
+    examples: catalog.examples(name).map((x) => ({ name: x.name, file: x.file, sfc: x.sfc })),
     docs: `components/${name}.md`
   }
 }
@@ -502,7 +534,7 @@ function componentPage(catalog, name, { full = true } = {}) {
     out.push('## Sub-component imports', '', bullets(api.subcomponents.map((s) => `\`${s}\``)), '')
   }
   for (const heading of SPEC_SECTIONS) {
-    if (!spec[heading]) continue
+    if (!spec[heading] || (!full && PAGE_ONLY_SECTIONS.includes(heading))) continue
     const text =
       !full && heading === 'Sub-components' ? firstSentences(spec[heading]) : spec[heading]
     out.push(
@@ -813,10 +845,17 @@ export function buildLlms(catalog = loadCatalog()) {
   const index = [header(catalog)]
   const fullParts = [
     `${header(catalog)}\n## How this file is cut\n\n${bullets([
-      'Each component appears with its first example only, its sub-component notes cut to their first sentence, and related names without links.',
+      'Each component appears with its first example only, its sub-component notes cut to their first sentence, related names without links, and without its right-to-left, internationalization and responsive notes.',
       'Each block appears with its guidelines, its building blocks as names and its variants as names; the code is on the block page.',
       `Classes on a component tag: ${allowedClasses({})} A component marked style seam says so on its own entry.`,
       'Every page under `llms/` is complete: open it (the path is in the comment above each entry) for every example, part and variant.'
+    ])}\n`
+  ]
+  const siteParts = [
+    `${header(catalog)}\n## How this file is cut\n\n${bullets([
+      'This file holds the components of the marketing and documentation sites (surface `site` and `docs`), cut like `llms-full.txt`: first example only, sub-component notes cut to their first sentence, related names without links, no right-to-left, internationalization and responsive notes.',
+      'Foundations, blocks and the product (`app`) components are in `llms-full.txt`.',
+      `Classes on a component tag: ${allowedClasses({})} A component marked style seam says so on its own entry.`
     ])}\n`
   ]
 
@@ -854,14 +893,12 @@ export function buildLlms(catalog = loadCatalog()) {
     index.push(`## Components: ${CATEGORY_TITLES[cat] ?? titleOf(cat)}`, '')
     for (const n of byCategory[cat]) {
       files[`components/${n}.md`] = componentPage(catalog, n)
-      files[`components/${n}.json`] = specLinks(
-        JSON.stringify(componentApi(catalog, n), null, 1) + '\n',
-        new Set(names)
-      )
+      files[`components/${n}.json`] = apiJson(componentApi(catalog, n), new Set(names))
       index.push(
         `- [${binding(n)}](components/${n}.md): ${firstSentence(catalog.imports[n].purpose)}`
       )
-      fullParts.push(
+      const surface = catalog.imports[n].surface ?? 'app'
+      ;(surface === 'app' ? fullParts : siteParts).push(
         `<!-- components/${n}.md -->\n\n${namesOnly(componentPage(catalog, n, { full: false }))}`
       )
     }
@@ -871,7 +908,8 @@ export function buildLlms(catalog = loadCatalog()) {
   index.push(
     '## Optional',
     '',
-    '- [llms-full.txt](llms-full.txt): every foundation, block and component page in one file, sized for one context window: block guidelines with their parts and variants as names and without their code, and the first example of each component (the pages above hold the code, every example and every detail).',
+    '- [llms-full.txt](llms-full.txt): every foundation, block and product (`app`) component page in one file: block guidelines with their parts and variants as names and without their code, and the first example of each component (the pages above hold the code, every example and every detail).',
+    '- [llms-full-site.txt](llms-full-site.txt): the same cut for the marketing and documentation site components (surface `site` and `docs`).',
     '- [catalog.json](../catalog.json): the machine catalog the pages are generated from (exports, props, tokens, blocks).',
     ''
   )
@@ -880,11 +918,13 @@ export function buildLlms(catalog = loadCatalog()) {
       .join('\n')
       .replace(/\n{3,}/g, '\n\n')
       .trimEnd() + '\n'
-  files['llms-full.txt'] =
-    fullParts
+  const joinParts = (parts) =>
+    parts
       .join('\n\n---\n\n')
       .replace(/\n{3,}/g, '\n\n')
       .trimEnd() + '\n'
+  files['llms-full.txt'] = joinParts(fullParts)
+  files['llms-full-site.txt'] = joinParts(siteParts)
   return files
 }
 
@@ -906,9 +946,10 @@ export function checkLlms(files = buildLlms()) {
     else if (readFileSync(abs, 'utf-8') !== text) drift.push(`stale llms/${file}`)
   }
   for (const file of listFiles(OUT_DIR)) if (!(file in files)) drift.push(`extra llms/${file}`)
-  const full = Buffer.byteLength(files['llms-full.txt'] ?? '')
-  if (full > FULL_BUDGET_BYTES)
-    drift.push(`llms-full.txt is ${full} bytes, over the ${FULL_BUDGET_BYTES} budget`)
+  for (const [file, budget] of Object.entries(FULL_BUDGETS)) {
+    const bytes = Buffer.byteLength(files[file] ?? '')
+    if (bytes > budget) drift.push(`${file} is ${bytes} bytes, over the ${budget} budget`)
+  }
   return drift
 }
 
@@ -925,7 +966,7 @@ export function writeLlms(files = buildLlms()) {
 export function summary(files) {
   const count = (re) => Object.keys(files).filter((f) => re.test(f)).length
   const kb = (f) => Math.round(Buffer.byteLength(files[f]) / 1024)
-  return `llms/ written: llms.txt (${kb('llms.txt')} KB), llms-full.txt (${kb('llms-full.txt')} KB), ${count(/^components\/.*\.md$/)} component pages + ${count(/\.json$/)} JSON, ${count(/^blocks\//)} block pages, ${count(/^foundations\//)} foundation pages`
+  return `llms/ written: llms.txt (${kb('llms.txt')} KB), llms-full.txt (${kb('llms-full.txt')} KB), llms-full-site.txt (${kb('llms-full-site.txt')} KB), ${count(/^components\/.*\.md$/)} component pages + ${count(/\.json$/)} JSON, ${count(/^blocks\//)} block pages, ${count(/^foundations\//)} foundation pages`
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -51,36 +51,52 @@ test('catalog.json stays under 1.35 MB once the SFCs, examples and component pro
   }
 })
 
-test('splitCatalog moves sfc, variants and guidelines and keeps everything else', () => {
+function dirBytes(path) {
+  return readdirSync(path, { withFileTypes: true }).reduce((sum, e) => {
+    const child = join(path, e.name)
+    return sum + (e.isDirectory() ? dirBytes(child) : statSync(child).size)
+  }, 0)
+}
+
+test('catalog/ stays under 1.3 MB because block and example sources are read from blocks/ and examples/', () => {
+  const bytes = dirBytes(fileURLToPath(new URL('../../catalog', import.meta.url)))
+  assert.ok(bytes < 1_300_000, `${bytes} bytes`)
+})
+
+test('splitCatalog points sfc, variants and guidelines at their shipped files and keeps everything else', () => {
   const { catalog, files } = splitCatalog({
     imports: {
       x: {
         import: 'x',
         purpose: 'P',
         useWhen: ['u'],
-        examples: [{ name: 'A', summary: '', sfc: '<template/>' }]
+        examples: [{ name: 'A', summary: '', file: 'examples/x/a.vue', sfc: '<template/>' }]
       }
     },
     blocks: {
       'a/b': {
         name: 'B',
+        source: 'blocks/a/b/b.vue',
         primary: 'Default',
         sfc: '<template/>',
         guidelines: '# B',
-        variants: [{ name: 'Empty', summary: 's', sfc: '<template/>' }]
+        variants: [
+          { name: 'Empty', summary: 's', file: 'blocks/a/b/variants/empty.vue', sfc: '<template/>' }
+        ]
       }
     }
   })
   assert.deepEqual(catalog.blocks['a/b'], {
     name: 'B',
+    source: 'blocks/a/b/b.vue',
     primary: 'Default',
     variants: [{ name: 'Empty' }],
     file: 'catalog/blocks/a/b.json'
   })
   assert.deepEqual(files['catalog/blocks/a/b.json'], {
-    sfc: '<template/>',
-    guidelines: '# B',
-    variants: [{ name: 'Empty', summary: 's', sfc: '<template/>' }]
+    sfcFile: 'blocks/a/b/b.vue',
+    guidelinesFile: 'blocks/a/b/guidelines.md',
+    variants: [{ name: 'Empty', summary: 's', file: 'blocks/a/b/variants/empty.vue' }]
   })
   assert.deepEqual(catalog.imports.x, {
     import: 'x',
@@ -88,7 +104,9 @@ test('splitCatalog moves sfc, variants and guidelines and keeps everything else'
     docsFile: 'catalog/components/x.json'
   })
   assert.deepEqual(files['catalog/components/x.json'], { purpose: 'P', useWhen: ['u'] })
-  assert.deepEqual(files['catalog/examples/x.json'].examples[0].name, 'A')
+  assert.deepEqual(files['catalog/examples/x.json'].examples, [
+    { name: 'A', summary: '', file: 'examples/x/a.vue' }
+  ])
 })
 
 test('get_block returns the same result from the split catalog as from one file', () => {

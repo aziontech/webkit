@@ -392,7 +392,10 @@ test('the catalog carries one pattern per block, each under one job group', () =
   )
   for (const p of Object.values(catalog.blocks)) {
     const part = JSON.parse(readFileSync(new URL(`../../${p.file}`, import.meta.url), 'utf-8'))
-    assert.ok(part.sfc.includes('<template>'))
+    assert.equal('sfc' in part, false)
+    assert.equal(part.sfcFile, p.source)
+    const sfc = readFileSync(new URL(`../../${part.sfcFile}`, import.meta.url), 'utf-8')
+    assert.ok(sfc.includes('<template>'))
     assert.equal('sfc' in p, false)
     assert.match(p.source, /^blocks\//)
     assert.equal('status' in p, false)

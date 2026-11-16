@@ -8,6 +8,7 @@ import { parseSpecFile, getSection } from '../../../.claude/hooks/lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/lib/prop-vocabulary.mjs'
 import { missingComponentDocs } from './lib/component-docs.mjs'
 import { kebab, readBlocks, readExamples } from './lib/blocks.mjs'
+import { GUIDELINE_FILE } from './lib/guidelines.mjs'
 import {
   buildLlms,
   catalogView,
@@ -93,10 +94,8 @@ const TOKEN_RULES = [
 ]
 
 function clean(cell) {
-  return String(cell ?? '')
-    .trim()
-    .replace(/^`|`$/g, '')
-    .trim()
+  const text = String(cell ?? '').trim()
+  return /^`[^`]*`$/.test(text) ? text.slice(1, -1).trim() : text
 }
 
 function splitRow(line) {
@@ -191,7 +190,7 @@ function bullets(section) {
     .split('\n')
     .map((l) => l.trim())
     .filter((l) => /^[-*]\s+/.test(l))
-    .map((l) => clean(l.replace(/^[-*]\s+/, '')))
+    .map((l) => l.replace(/^[-*]\s+/, '').trim())
     .filter((l) => l && l !== '_none_')
 }
 
@@ -768,6 +767,15 @@ export function splitCatalog(full) {
       if (BLOCK_HEAVY_KEYS.includes(k)) part[k] = v
       else meta[k] = v
     }
+    if (part.sfc !== undefined) {
+      delete part.sfc
+      part.sfcFile = p.source
+    }
+    if (part.guidelines !== undefined) {
+      delete part.guidelines
+      part.guidelinesFile = `blocks/${id}/${GUIDELINE_FILE}`
+    }
+    part.variants = (p.variants || []).map(({ sfc, ...v }) => v)
     meta.variants = (p.variants || []).map((v) => ({ name: v.name }))
     meta.file = file
     blocks[id] = meta
@@ -791,7 +799,7 @@ export function splitCatalog(full) {
     if (e.examples) {
       const file = `catalog/examples/${subpath}.json`
       meta.examplesFile = file
-      files[file] = { examples: e.examples }
+      files[file] = { examples: e.examples.map(({ sfc, ...x }) => x) }
     }
     if (Object.keys(prose).length) {
       const file = `catalog/components/${subpath}.json`

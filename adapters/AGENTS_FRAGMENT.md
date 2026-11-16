@@ -53,7 +53,8 @@ Every export and block carries a `surface`: `app` (console and apps), `site` (th
 `search_blocks` and `suggest_component` take `surface`). The search tools understand English,
 Portuguese and Spanish ("cadastro", "crear cuenta"). Without the MCP, read
 `node_modules/@aziontech/webkit/llms/llms.txt`: one Markdown page per block, component and
-foundation, a JSON API per component, and `llms-full.txt` with everything in one file.
+foundation, a JSON API per component, and `llms-full.txt` with the foundations, blocks and
+product components in one file (`llms-full-site.txt` for the site and docs components).
 
 ### Invariants — always follow
 

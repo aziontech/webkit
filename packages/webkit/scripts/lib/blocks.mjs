@@ -68,6 +68,7 @@ export function readBlocks(pkgRoot) {
     const variants = (block.variants || []).map((v) => ({
       name: v.name,
       summary: v.summary || '',
+      file: `blocks/${block.id}/${v.file}`,
       sfc: readText(join(dir, v.file))
     }))
     const imports = new Map()
@@ -117,6 +118,7 @@ export function readExamples(pkgRoot, knownSubpaths) {
       .map((e) => ({
         name: e.name,
         summary: e.summary || '',
+        file: `examples/${sub}/${e.file}`,
         sfc: readText(join(root, sub, e.file))
       }))
       .filter((e) => e.sfc && e.sfc.length <= EXAMPLE_MAX_CHARS)
