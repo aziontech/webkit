@@ -210,14 +210,14 @@
 
     <span
       v-if="showButtons"
-      class="relative z-(--z-control) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-input)"
+      class="relative z-(--z-control) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-input) pointer-coarse:w-20 pointer-coarse:flex-row-reverse"
     >
       <button
         type="button"
         tabindex="-1"
         :aria-label="t('numberInput.increment')"
         :disabled="isDisabled || readonly"
-        class="flex flex-1 items-center justify-center border-b border-(--border-input) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+        class="flex flex-1 items-center justify-center border-b border-(--border-input) pointer-coarse:border-b-0 pointer-coarse:border-s text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="onIncrement"
       >
         <i
