@@ -82,8 +82,9 @@ product components in one file (`llms-full-site.txt` for the site and docs compo
 - **Tokens only.** Color, typography, shape, spacing come from `@aziontech/theme`
   (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`) — never hex, `rgb`, `hsl`, or Tailwind palette.
 - **Never restyle a webkit component.** No `class`/`:class`/`style` on its tag — compose inside its
-  slots or use its props. The only exception is a static `class` of layout utilities:
-  `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
+  slots or use its props. The only exception is a static `class` of layout utilities (where the
+  box sits: size, flex and grid placement, order, logical margins; a `sm:`…`2xl:` prefix is fine):
+  `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `shrink-0`, `self-*`, `justify-self-*`, `place-self-*`, `order-*`, `col-span-*`, `col-start-*`, `col-end-*`, `row-span-*`, `row-start-*`, `row-end-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mb-*`, `ms-*`, `me-*`.
 - **Styles + theme.** Load `src/webkit.css` once at the app entry — it `@import`s the theme's
   Tailwind v4 stylesheet (tokens + `@import "tailwindcss"`), the fonts, and `./webkit.sources.css`,
   the list of WebKit files this app imports, so Tailwind compiles only their classes. Import
