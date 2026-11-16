@@ -322,7 +322,7 @@
                       <SettingsRow
                         stackable
                         title="Domain name"
-                        description="The root domain this zone answers for, without a subdomain. Pasting a zone file here imports its records instead."
+                        description="The root domain, without a subdomain. Paste a zone file to import it."
                       >
                         <Input
                           v-model="form.domain"
@@ -459,9 +459,10 @@
                   variant="outline"
                   size="medium"
                   icon="ai ai-upload"
+                  class="shrink-0"
                   @click="openImport"
                 />
-                <p class="min-w-0 text-body-sm text-(--text-muted)">
+                <p class="min-w-0 text-body-sm text-(--text-muted) max-sm:hidden">
                   or paste zone file contents in Domain name
                 </p>
                 <input
