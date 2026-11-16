@@ -240,6 +240,33 @@ describe('StickyStack', () => {
     }
   })
 
+  it('marks only the claims whose actions slot renders something', () => {
+    const { container } = render(StickyStack, {
+      props: { items: ITEMS },
+      slots: {
+        actions: ({ index }: { index: number }) =>
+          index === 1 ? h('a', { href: '#' }, 'Docs') : null
+      }
+    })
+    const rows = rowsOf(container)
+
+    expect(rows.map((row) => row.hasAttribute('data-actions'))).toEqual([false, true, false])
+    expect(rows[0].textContent).not.toContain('Docs')
+    expect(rows[1].textContent).toContain('Docs')
+  })
+
+  it('tightens the rows from six claims up', () => {
+    const many = [...ITEMS, ...ITEMS].map((item, index) => ({
+      ...item,
+      title: `${item.title} ${index}`
+    }))
+    const few = render(StickyStack, { props: { items: ITEMS } })
+    const dense = render(StickyStack, { props: { items: many } })
+
+    expect(rowsOf(few.container).some((row) => row.hasAttribute('data-dense'))).toBe(false)
+    expect(rowsOf(dense.container).every((row) => row.hasAttribute('data-dense'))).toBe(true)
+  })
+
   it('keeps every claim in the accessibility tree while the band rests', async () => {
     const { container } = render(StickyStack, { props: { items: ITEMS } })
     for (const item of ITEMS) {
