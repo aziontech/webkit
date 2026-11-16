@@ -542,6 +542,14 @@ describe('Command', () => {
       await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
     })
 
+    it('the close button closes and returns focus to the opener', async () => {
+      const { getByTestId } = await openPalette()
+      await userEvent.click(byTestId('command__close')!)
+      await settle()
+      expect(byTestId('command')?.getAttribute('data-state')).toBe('closed')
+      await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
+    })
+
     it('Tab stays inside the palette', async () => {
       await openPalette()
       await userEvent.keyboard('{Tab}')
