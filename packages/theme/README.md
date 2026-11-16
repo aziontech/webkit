@@ -193,6 +193,24 @@ Use them directly:
 
 Utility equivalents are generated in the same stylesheet (e.g. `@utility text-default`), so `class="text-default"` works wherever Tailwind runs.
 
+### Contrast
+
+Every documented colour pair passes WCAG 2.1 AA and APCA (0.0.98G-4g): Lc 75 for body text, Lc 60
+for other text, Lc 45 for icons, Lc 30 for solid marks and Lc 15 for borders. `test/apca-contrast.test.mjs`
+checks the pairs in both themes; the accepted exceptions and their reasons are listed in the consumer
+rule `rules/webkit-tokens.md` (§ "Contrast: APCA and WCAG 2").
+
+### Chart palettes
+
+The theme ships one chart palette, the values of the `--chart-*` tokens; it ships no alternates.
+An app that offers other palettes (the Azion console API does) sets only these variables on a
+dashboard root, with a light and a dark value each: `--chart-series-1`…`--chart-series-8`,
+`--chart-sequential-1`…`--chart-sequential-7` and `--chart-diverging-negative` / `-neutral` /
+`-positive`. Status, severity, Other, grid, axis, label, crosshair and tooltip variables are fixed.
+Every value must pass the checks `test/chart-role.test.mjs` and `test/apca-contrast.test.mjs` run on the default (3:1 and APCA Lc 30
+on the chart surfaces, eight distinct series, the same hue family in both themes); a ninth series
+folds into `--chart-series-other`. The full contract is in `rules/webkit-tokens.md` § "Chart palettes".
+
 ### Variables removed in 6.0
 
 Nothing in WebKit read these, so 6.0 removes them. Replace any use in your own CSS:

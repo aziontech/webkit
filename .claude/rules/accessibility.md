@@ -28,6 +28,12 @@ A component in this package is accessible **by construction**, not by the consum
 
 - Every motion-bearing class pairs with **`motion-reduce:`** (`motion-reduce:transition-none` / `motion-reduce:animate-none`). No animation is exempt (see [`styling.md`](./styling.md) and the animation catalog in [`tokens.md`](../docs/DESIGN.md)).
 
+### Contrast — WCAG 2.1 AA and APCA, both
+
+Since 2026-11-14 every colour pair in the theme passes **both** WCAG 2.1 AA (4.5:1 text, 3:1 large text, icons and UI marks) **and** APCA 0.0.98G-4g at these `|Lc|` targets: **Lc 75** body text, **Lc 60** other text, **Lc 45** icons, **Lc 30** solid marks (dots, bars, chart series, the focus ring), **Lc 15** borders and dividers. A component picks its colours from token pairs that already pass — never a pair the theme does not document.
+
+The accepted exceptions are recorded once, with their reasons, in [`rules/webkit-tokens.md`](../../rules/webkit-tokens.md) § "Contrast: APCA and WCAG 2": the black label on the primary orange button (Lc 46.6, to match the logo), the dark dividers `--border-default` `#2B2B2B` / `--border-muted` `#242424` (the original look; field outlines stay `--border-input` `#535353`) and the `Eyebrow` logo orange in dark (`--text-brand`, about Lc 44). Do not "fix" them, and do not add one without the design owner's decision.
+
 ## Hard prohibitions
 
 - Do not add `role`/ARIA to fake an interactive element when a native one fits.
@@ -36,6 +42,7 @@ A component in this package is accessible **by construction**, not by the consum
 - Do not use a raw color for the focus ring — use the ring token.
 - Do not open an overlay without trapping focus and restoring it to the trigger on close.
 - Do not ship a motion class without its `motion-reduce:` fallback.
+- Do not introduce a colour pair that misses its APCA target or WCAG 2.1 AA, unless the design owner accepted it and it is in the exceptions table.
 - Do not name the accessible-name prop `aria-label` — use `ariaLabel` (see [`prop-vocabulary.md`](./prop-vocabulary.md)).
 - Do not declare `ariaLabel` required, and do not teach the camelCase `ariaLabel=` attribute or a `vueCompilerOptions.htmlAttributes` override — consumers write `aria-label="…"`.
 
@@ -45,6 +52,8 @@ A component in this package is accessible **by construction**, not by the consum
 - **Automated a11y (`axe`)** runs in every component test (`expectNoA11yViolations`), in the a11y harness over every block and example (`src/test/a11y-blocks-*.test.ts`, `src/test/a11y-known.json` stays empty) and on a sample of docs routes (`pnpm test:docs:smoke`). Contrast and focus rings are checked with the theme in the styled visual suite (`apps/visual`). Behavioural a11y (focus, keyboard, restore) is still also checked in review.
 - **`webkit/require-accessible-name`** (ESLint, `error` in both presets) flags an `IconButton` or `ButtonGroup` with neither `aria-label` nor `aria-labelledby`; `test/copyable/fixtures/icon-button-name.vue` and `button-group-name.vue` proves the kebab form type-checks under create-vue compiler options; `scripts/codemod-kebab-aria-label.mjs` rewrites camelCase `ariaLabel=` attributes to the kebab form.
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** enforces the `ariaLabel` naming; the spec's a11y section (role + keyboard map) is required by [`.specs/_template.md`](../../.specs/_template.md).
+
+- **APCA** — [`packages/theme/test/apca-contrast.test.mjs`](../../packages/theme/test/apca-contrast.test.mjs) computes APCA 0.0.98G-4g Lc for every documented token pair (text on the surfaces, `-foreground` on its fill, icons, marks, borders) in both themes, in the theme tests of the `governance.yml` build job. It fails a pair below target that is not in the exceptions table, an exception that now passes, and an exception missing from `rules/webkit-tokens.md`. WCAG 3:1 for chart and severity marks is `chart-role.test.mjs` / `severity-role.test.mjs`.
 
 ## Why this rule exists
 

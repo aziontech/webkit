@@ -1180,6 +1180,58 @@ export function checkModelShapes(rel, props, models) {
   return out
 }
 
+export const PHYSICAL_EDGE_TYPES = Object.freeze([
+  'NetworkMapFade',
+  'NetworkMapPosition',
+  'ConsoleMockupShellFade',
+  'TextureFade',
+  'RegistrationFrameSide',
+  'RegistrationFrameCorner',
+  'RegistrationFrameMarks'
+])
+
+const PHYSICAL_WORD = /^(?:[a-z]+-)?(?:left|right)$/
+
+export function physicalSideMembers(typeText, script = '', types = new Map()) {
+  const local = collectTypes(script)
+  const seen = new Set()
+  const found = []
+  const walk = (text, depth) => {
+    if (depth > 8) return
+    for (const m of String(text ?? '').matchAll(/'([^']*)'|"([^"]*)"|\b([A-Z][\w$]*)\b/g)) {
+      if (m[3]) {
+        const name = m[3]
+        if (PHYSICAL_EDGE_TYPES.includes(name) || seen.has(name)) continue
+        seen.add(name)
+        const def = local.get(name) ?? types.get(name)
+        if (def) walk(def, depth + 1)
+        continue
+      }
+      const word = m[1] ?? m[2]
+      if (PHYSICAL_WORD.test(word) && !found.includes(word)) found.push(word)
+    }
+  }
+  walk(typeText, 0)
+  return found
+}
+
+export function checkPhysicalSides(rel, props, script = '', types = new Map()) {
+  const out = []
+  for (const p of props) {
+    const words = physicalSideMembers(p.type, script, types)
+    if (!words.length) continue
+    out.push(
+      v(
+        'prop-value',
+        rel,
+        1,
+        `prop "${p.name}" names physical sides (${words.map((w) => `'${w}'`).join(', ')}) — use start/end so it flips in right-to-left; only a picture's own edges (${PHYSICAL_EDGE_TYPES.join(', ')}) keep left/right (${RULE_DOC}).`
+      )
+    )
+  }
+  return out
+}
+
 export function checkSfcVocabulary(rel, text, component, ctx = {}, root = component) {
   const out = []
   let sfc
@@ -1201,6 +1253,7 @@ export function checkSfcVocabulary(rel, text, component, ctx = {}, root = compon
     out.push(v(x.rule, rel, 1, x.message))
   out.push(...checkAxisTypeNames(rel, [...sfc.props, ...models], component, script))
   out.push(...checkModelShapes(rel, sfc.props, models))
+  out.push(...checkPhysicalSides(rel, [...sfc.props, ...models], script, ctx.types))
   for (const x of checkEventVocabulary(sfc.emits, { stage: 'all' }))
     out.push(v(x.rule, rel, 1, x.message))
   for (const x of checkSlotVocabulary(sfc.slots)) out.push(v(x.rule, rel, 1, x.message))

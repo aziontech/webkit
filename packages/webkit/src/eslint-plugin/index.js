@@ -146,6 +146,11 @@ plugin.configs = {
 export default plugin
 export { rules }
 export {
+  CHART_PALETTE_VARIABLES,
+  isChartPaletteClass,
+  isChartPaletteVariable
+} from './lib/chart-palette.js'
+export {
   logicalClass,
   mirroredGradient,
   physicalDirectionClasses

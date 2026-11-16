@@ -58,8 +58,13 @@ validated for color-vision separation and 3:1 contrast in both themes:
 
 - **Categorical** (distinct series, no order): `--chart-series-1` … `--chart-series-8`, in a fixed
   order that is the same in both themes. A ninth series folds into `--chart-series-other`; never
-  generate or reuse a hue. Series 4 is an orange hue: when a view also shows severity, color the
-  severity with `--severity-*` / `--chart-status-*`, never with a series slot.
+  generate or reuse a hue.
+- **Severity never takes a series slot.** A severity scale (critical, high, medium, low) is coloured
+  with `--severity-*` (or `--chart-status-*` for a state), never with `--chart-series-*`, and a series
+  never borrows a severity colour. `--severity-high` and `--chart-series-4` are both orange: the
+  design owner accepted that look (2026-11-16), so a "High" bar next to series 4 stays as it is —
+  the legend and the label tell them apart. Do not move either token or re-order the series to
+  avoid it.
 - **Sequential** (magnitude, e.g. a heatmap): `--chart-sequential-1` (lowest) … `--chart-sequential-7`.
 - **Diverging** (+/- around a midpoint): `--chart-diverging-negative` (orange), `--chart-diverging-neutral`,
   `--chart-diverging-positive` (blue).
@@ -78,6 +83,45 @@ const SERIES = [1, 2, 3, 4, 5, 6, 7, 8].map((slot) => `var(--chart-series-${slot
 // change so the canvas repaints in the new theme (see /webkit-theming-dark-mode).
 const read = (v: string) => getComputedStyle(document.documentElement).getPropertyValue(v).trim()
 const seriesColors = () => SERIES.map((s) => read(s.slice(4, -1)))
+```
+
+## Other palettes — the console API sets the variables, WebKit ships one
+
+WebKit ships a single chart palette (the `--chart-*` token values) and no alternates. A product that
+lets a customer pick a palette (the Azion console API) re-colours a dashboard by setting the palette
+variables on the dashboard's root element; every chart inside reads them by inheritance. Never add a
+palette to `@aziontech/theme` or hand-pick colours per chart.
+
+- **Settable**: `--chart-series-1` … `--chart-series-8`, `--chart-sequential-1` … `--chart-sequential-7`,
+  `--chart-diverging-negative` / `-neutral` / `-positive`. **Fixed**: `--chart-series-other`,
+  `--chart-status-*`, `--severity-*`, grid, axis, label, crosshair and tooltip.
+- A palette sets a **light and a dark** value for every variable it sets, and every series value
+  passes the default's checks: 3:1 and APCA Lc 30 on `--bg-surface`, `--bg-canvas` and
+  `--chart-tooltip-bg`, eight distinct colours, the same hue family in both themes.
+- At most eight series: a ninth folds into `--chart-series-other`; a palette never adds a slot.
+- On a webkit tag (a chart, a dashboard grid, a page component), set them as a static `style`, an object-literal `:style` or `[--chart-series-1:…]`
+  classes; `webkit/no-style-override` allows exactly these variables and nothing else
+  (`CHART_PALETTE_VARIABLES`). The contract is `webkit-tokens.md` § "Chart palettes".
+
+```vue
+<script setup lang="ts">
+  import DonutChart from '@aziontech/webkit/donut-chart'
+
+  const palette = ['var(--color-violet-600)', 'var(--color-green-700)']
+  const series = [
+    { id: 'cached', name: 'Cached', values: [48210] },
+    { id: 'origin', name: 'Origin', values: [9370] }
+  ]
+</script>
+
+<template>
+  <DonutChart
+    :style="{ '--chart-series-1': palette[0], '--chart-series-2': palette[1] }"
+    :series="series"
+    total-label="Requests"
+    aria-label="Requests by source"
+  />
+</template>
 ```
 
 ## States — a chart is a data-backed view
@@ -174,10 +218,13 @@ above rather than eyeballing one mode.
 - A KPI row that reads as one band is a `StatTileGroup`, never tiles in a hand-built card with dividers.
 - Every chart color is a `--chart-*` token — **never** a hex, rgb/hsl, Tailwind-palette literal, or a
   hand-picked `--color-*` step.
+- Another palette only re-sets the palette variables on a dashboard root, in both themes; status,
+  severity, Other and chrome colours stay fixed, and WebKit ships no alternate palette.
 - SVG marks take the `var()` string directly; canvas marks resolve computed values and **re-read on a
   `data-theme` change** so the canvas repaints in the new theme.
 - `--chart-status-*` means status only — never a categorical accent; series slots follow
   declaration order and never cycle.
+- Severity never takes a series slot, and a series never takes a severity colour.
 - Every chart renders loading, empty, and error inside its own box (`Skeleton` / `EmptyState` /
   `Alert`) — no blank async rectangle.
 - `tabular-nums` on every figure that stacks in a column or updates in place.

@@ -216,7 +216,7 @@ The trigger logic now lives in the orchestrator command [`.claude/commands/compo
 - **shadcn-vue patterns** (see COMPONENT_REQUIREMENTS § 2.5-2.9):
   - **Available today** (use immediately): `data-state`/`data-disabled`/`data-orientation` on root and stateful sub-components; variant unions exported as named types (`export type ButtonVariant = ...`); `cn` helper from `@aziontech/webkit/utils/cn` for class merging; `<name>.figma.ts` Code Connect mappings (config at `packages/webkit/figma.config.json`; publishing requires `FIGMA_ACCESS_TOKEN`); `userEvent` from `@testing-library/user-event` in browser tests.
   - **No `asChild` / `as`** (`.claude/rules/root-element.md`; `webkit/no-polymorphic-as-prop` blocks it): link-or-button switches on `href`, and overlay Trigger parts forward onto the control in their slot. No Slot helper exists or is planned.
-- WCAG 2.1 AA: visible focus, full keyboard navigation, minimum ARIA, contrast >=4.5:1 / >=3:1, `motion-reduce:*` on animated components, touch target >=40x40px.
+- WCAG 2.1 AA: visible focus, full keyboard navigation, minimum ARIA, contrast >=4.5:1 / >=3:1 and APCA (Lc 75 body text, 60 other text, 45 icons, 30 marks, 15 borders; exceptions in `rules/webkit-tokens.md`), `motion-reduce:*` on animated components, touch target >=40x40px.
 - Light/dark validated by the styled visual suite (`apps/visual`) and the docs site's theme switch.
 - Each new public component (including each Composition Pattern sub-component) receives its own flat entry in `packages/webkit/package.json#exports` (`./<name>`, never `./<category>/<name>`), a `.size-limit.json` budget for the root, and appears in an example.
 

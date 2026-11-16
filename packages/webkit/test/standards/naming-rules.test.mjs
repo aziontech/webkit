@@ -5,6 +5,7 @@ import test from 'node:test'
 
 import {
   NAMING_STAGED_BLOCKS,
+  PHYSICAL_EDGE_TYPES,
   RULES,
   addedViolations,
   checkAxisTypes,
@@ -612,6 +613,57 @@ test('prop-value: unions resolve through imported aliases and Exclude/Extract', 
   assert.equal(checkFile(rel, imported, withTypes).filter((x) => x.rule === 'prop-value').length, 1)
   const clean = imported.replace(" | 'error'", '')
   assert.equal(checkFile(rel, clean, withTypes).filter((x) => x.rule === 'prop-value').length, 0)
+})
+
+test('prop-value: a public prop union never names physical sides outside the picture-edge allowlist', () => {
+  assert.equal(valueHits(BTN, "interface Props { edge?: 'left' | 'right' }").length, 1)
+  assert.equal(
+    valueHits(
+      BTN,
+      "type ButtonCorner = 'top-left' | 'bottom-right'\ninterface Props { corner?: ButtonCorner }"
+    ).length,
+    1,
+    'a corner word through a local alias fires'
+  )
+  assert.equal(
+    valueHits(
+      BTN,
+      "type ButtonEdges = 'all' | ButtonEdge[]\ntype ButtonEdge = 'top' | 'left'\ninterface Props { edges?: boolean | ButtonEdges }"
+    ).length,
+    1,
+    'a nested alias and an array still fire'
+  )
+  assert.equal(valueHits(BTN, "interface Props { edge?: 'start' | 'end' }").length, 0)
+  const map = `${C}/content/network-map/network-map.vue`
+  assert.equal(
+    valueHits(
+      map,
+      "export type NetworkMapFade = 'none' | 'left' | 'right'\ninterface Props { fade?: NetworkMapFade }"
+    ).length,
+    0,
+    'a picture edge on the allowlist stays silent'
+  )
+  const frame = `${C}/layout/registration-frame/registration-frame.vue`
+  assert.equal(
+    valueHits(
+      frame,
+      "export type RegistrationFrameSide = 'top' | 'right' | 'bottom' | 'left'\nexport type RegistrationFrameSides = 'all' | 'none' | RegistrationFrameSide | RegistrationFrameSide[]\ninterface Props { borders?: RegistrationFrameSides; flush?: boolean | RegistrationFrameSides }"
+    ).length,
+    0,
+    'a union built from an allowlisted side stays silent'
+  )
+  assert.equal(
+    valueHits(
+      frame,
+      "export type RegistrationFrameSide = 'top' | 'left'\ninterface Props { borders?: RegistrationFrameSide | 'right' }"
+    ).length,
+    1,
+    'a physical word added beside the allowlisted type still fires'
+  )
+  assert.deepEqual(
+    PHYSICAL_EDGE_TYPES.filter((t) => /Fade$|Side$/.test(t)),
+    ['NetworkMapFade', 'ConsoleMockupShellFade', 'TextureFade', 'RegistrationFrameSide']
+  )
 })
 
 test('prop-value: size unions are ordered subsets of the size scale, also through an alias', () => {

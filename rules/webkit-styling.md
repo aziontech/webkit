@@ -50,7 +50,7 @@ Write a token value with Tailwind v4's **paren shorthand**, not the bracket form
 
 Two cases **stay in brackets** — the paren form silently emits no CSS for them:
 
-- **Custom-property declarations:** `[--row-bg:var(--bg-surface)]` (there is no paren shorthand for declaring a property).
+- **Custom-property declarations:** `[--row-bg:var(--bg-surface)]` (there is no paren shorthand for declaring a property). On a webkit tag the only custom properties you may declare are the chart palette variables (`webkit-style-override.md`).
 - **Expression values:** anything more than a lone var — `w-[calc(var(--a)*2)]`, gradients, box-shadows, or a **var with a fallback** (`bg-[var(--x,var(--y))]`). Leave these bracketed; converting them drops the style with no error.
 
 ## Correct

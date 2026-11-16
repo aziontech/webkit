@@ -948,6 +948,19 @@ test('no-style-override', () => {
       {
         code: `${imp('Button', 'button')}<template><Button class="min-w-36 grow basis-1/3" /></template>`,
         filename: 'l6.vue'
+      },
+      // the console API's chart palette contract: only the --chart-* palette variables
+      {
+        code: `${imp('Table', 'table')}<template><Table style="--chart-series-1: var(--palette-1); --chart-sequential-7: var(--palette-ramp-7); --chart-diverging-neutral: var(--palette-mid)" /></template>`,
+        filename: 'p1.vue'
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table :style="{ '--chart-series-1': palette.series[0], '--chart-series-8': palette.series[7] }" /></template>`,
+        filename: 'p2.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full [--chart-series-2:var(--palette-2)]" /></template>`,
+        filename: 'p3.vue'
       }
     ],
     invalid: [
@@ -979,6 +992,46 @@ test('no-style-override', () => {
       {
         code: `${imp('Button', 'button')}<template><Button style="color:red" /></template>`,
         filename: 'h.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      // outside the palette contract: status, axis and Other stay fixed
+      {
+        code: `${imp('Table', 'table')}<template><Table style="--chart-series-1: var(--palette-1); --chart-status-danger: var(--x)" /></template>`,
+        filename: 'p4.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table :style="{ '--chart-axis': 'var(--x)' }" /></template>`,
+        filename: 'p5.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table :style="palette" /></template>`,
+        filename: 'p6.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table :style="{ ...palette, '--chart-series-1': 'var(--x)' }" /></template>`,
+        filename: 'p7.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="[--chart-series-other:var(--x)] [--chart-series-9:var(--y)]" /></template>`,
+        filename: 'p8.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: {
+              classes: '[--chart-series-other:var(--x)] [--chart-series-9:var(--y)]',
+              tag: 'Button',
+              allowed: ALLOWED_LAYOUT.join(', ')
+            }
+          }
+        ]
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table style="--chart-series-1: var(--palette-1); padding: 0" /></template>`,
+        filename: 'p9.vue',
         errors: [{ messageId: 'override' }]
       },
       // dot-notation sub-component of an imported compound
