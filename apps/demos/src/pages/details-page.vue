@@ -14,7 +14,9 @@
   const route = useRoute()
   const router = useRouter()
   const record = computed(() => findResource(route.params.id))
-  const tab = ref<ResourceDetailTab>('overview')
+  const TABS: ResourceDetailTab[] = ['overview', 'versions', 'build', 'deployments']
+  const requested = String(globalThis.history?.state?.tab ?? '') as ResourceDetailTab
+  const tab = ref<ResourceDetailTab>(TABS.includes(requested) ? requested : 'overview')
 
   const resource = computed<ResourceDetailResource>(() => {
     const found = record.value
