@@ -20,8 +20,8 @@
   "For a lead form with several fields → use `hero-form-section`."
  ],
  "related": [
-  "closing-call-to-action` — the closing band whose ask is a link action.",
-  "alert` — renders the success and failure messages."
+  "`closing-call-to-action` — the closing band whose ask is a link action.",
+  "`alert` — renders the success and failure messages."
  ],
  "bestPractices": [
   "Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.",
@@ -107,15 +107,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import NewsletterSection from '@aziontech/webkit/newsletter-section'\n  import { ref } from 'vue'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n\n  const subscribedEmail = ref('')\n\n  const onSubmit = (event, values) => {\n    subscribedEmail.value = values.email\n  }\n</script>\n\n<template>\n  <NewsletterSection\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    :submitted=\"subscribedEmail !== ''\"\n    @submit=\"onSubmit\"\n  />\n</template>"
+   "file": "examples/newsletter-section/default.vue"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import NewsletterSection from '@aziontech/webkit/newsletter-section'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n</script>\n\n<template>\n  <NewsletterSection\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    :loading=\"true\"\n  />\n</template>"
+   "file": "examples/newsletter-section/loading.vue"
   },
   {
    "name": "Submitted",
-   "sfc": "<script setup>\n  import NewsletterSection from '@aziontech/webkit/newsletter-section'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n</script>\n\n<template>\n  <NewsletterSection\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    :submitted=\"true\"\n  />\n</template>"
+   "file": "examples/newsletter-section/submitted.vue"
   }
  ],
  "docs": "components/newsletter-section.md"

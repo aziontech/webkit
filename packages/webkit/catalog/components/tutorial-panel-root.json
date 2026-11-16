@@ -15,10 +15,10 @@
   "An empty page that needs one call to action → use `empty-state`."
  ],
  "related": [
-  "hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.",
-  "help-panel` — the parts the panel draws with; use it alone for help without a guided run.",
-  "popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.",
-  "drawer` — the host of the tools region on narrow screens; the panel goes inside it."
+  "`hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.",
+  "`help-panel` — the parts the panel draws with; use it alone for help without a guided run.",
+  "`popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.",
+  "`drawer` — the host of the tools region on narrow screens; the panel goes inside it."
  ],
  "bestPractices": [
   "Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.",

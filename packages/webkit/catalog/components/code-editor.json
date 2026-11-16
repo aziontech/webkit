@@ -16,11 +16,11 @@
   "A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both)."
  ],
  "related": [
-  "code-block` — read-only snippets with copy; same syntax colour tokens.",
-  "textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
-  "field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
-  "toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
-  "log-viewer` — output of a run next to the editor."
+  "`code-block` — read-only snippets with copy; same syntax colour tokens.",
+  "`textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
+  "`field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
+  "`toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
+  "`log-viewer` — output of a run next to the editor."
  ],
  "bestPractices": [
   "Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.",

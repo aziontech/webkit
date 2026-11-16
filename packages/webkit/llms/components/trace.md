@@ -4,7 +4,7 @@
 
 - Import: `import Trace from '@aziontech/webkit/trace'`
 - Category: code · Surface: app · Structure: monolithic
-- API as JSON: [trace.json](https://github.com/aziontech/webkit/blob/main/.specs/trace.json)
+- API as JSON: [trace.json](trace.json)
 
 ## When to use
 

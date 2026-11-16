@@ -4,7 +4,7 @@
 
 - Import: `import Button from '@aziontech/webkit/button'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [button.json](https://github.com/aziontech/webkit/blob/main/.specs/button.json)
+- API as JSON: [button.json](button.json)
 
 ## When to use
 
@@ -18,11 +18,11 @@
 ## Do
 
 - Keep one `variant="primary"` per view or region; use `danger` only for destructive actions.
-- variant="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
+- `variant="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
 - Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
 - Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
 - Put brand or product marks in the `leading` slot; `icon` takes an Azion icon class.
-- label` is required and is the accessible name; never pass an empty string to get an icon-only control.
+- `label` is required and is the accessible name; never pass an empty string to get an icon-only control.
 
 ## Don’t
 

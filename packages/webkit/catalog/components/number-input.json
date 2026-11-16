@@ -8,7 +8,7 @@
   "The user picks from a fixed set of numbers → use `select`."
  ],
  "related": [
-  "input` — free-text sibling with the same field API."
+  "`input` — free-text sibling with the same field API."
  ],
  "bestPractices": [
   "Set `min` / `max` / `step` to constrain input rather than validating after the fact.",

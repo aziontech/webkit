@@ -4,7 +4,7 @@
 
 - Import: `import Tag from '@aziontech/webkit/tag'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [tag.json](https://github.com/aziontech/webkit/blob/main/.specs/tag.json)
+- API as JSON: [tag.json](tag.json)
 
 ## When to use
 

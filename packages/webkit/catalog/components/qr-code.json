@@ -10,8 +10,8 @@
   "A long payload (over a few hundred characters) → link to it; a dense code is hard to scan from a screen."
  ],
  "related": [
-  "copy-button` — the typed alternative beside the code.",
-  "otp-input` — the 6-digit code the app shows after the scan."
+  "`copy-button` — the typed alternative beside the code.",
+  "`otp-input` — the 6-digit code the app shows after the scan."
  ],
  "bestPractices": [
   "Always give the code a typed alternative next to it: the setup key or the link as text.",

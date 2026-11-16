@@ -5,7 +5,7 @@
 - Import: `import FilterMenuRoot from '@aziontech/webkit/filter-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import FilterMenu from '@aziontech/webkit/filter-menu'`
 - Category: data · Surface: app · Structure: composition
-- API as JSON: [filter-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/filter-menu.json)
+- API as JSON: [filter-menu.json](filter-menu.json)
 
 ## When to use
 

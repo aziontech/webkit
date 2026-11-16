@@ -9,9 +9,9 @@
   "On the marketing site → use `Hero` or a page section."
  ],
  "related": [
-  "DocPageHeader` — the article masthead.",
-  "CopyPromptButton` — the second action of the row.",
-  "DocAgentCard` — the agent card that usually opens the first section under the hero."
+  "`DocPageHeader` — the article masthead.",
+  "`CopyPromptButton` — the second action of the row.",
+  "`DocAgentCard` — the agent card that usually opens the first section under the hero."
  ],
  "bestPractices": [
   "Keep the title short (`Welcome to Azion Docs`) and the deck to one or two sentences.",

@@ -13,10 +13,10 @@
   "For a set of figures that fits the row → use `stats` or `logo-wall`, which wrap instead of scrolling."
  ],
  "related": [
-  "bento-grid` — the framed grid, when everything should be visible at once.",
-  "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
-  "feature-item` — the usual slide content.",
-  "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
+  "`bento-grid` — the framed grid, when everything should be visible at once.",
+  "`logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
+  "`feature-item` — the usual slide content.",
+  "`scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
  ],
  "bestPractices": [
   "Never put essential content in a carousel. A slide past the first is content a reader may never see.",

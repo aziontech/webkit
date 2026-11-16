@@ -4,7 +4,7 @@
 
 - Import: `import OtpInput from '@aziontech/webkit/otp-input'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [otp-input.json](https://github.com/aziontech/webkit/blob/main/.specs/otp-input.json)
+- API as JSON: [otp-input.json](otp-input.json)
 
 ## When to use
 
@@ -14,7 +14,7 @@
 
 ## Do
 
-- Label it with what the code is and where it comes from: `Authentication code`, and a description `The 6-digit code from your authenticator app.
+- Label it with what the code is and where it comes from: `Authentication code`, and a description `The 6-digit code from your authenticator app.`
 - Submit on `complete` only when the code is the last thing to fill; keep a Verify button for keyboard users and for a failed attempt.
 - After a rejected code, mark it `invalid`, clear it, and keep focus in it.
 - Use `group="3"` for codes people read aloud or copy from a phone; it draws a separator between groups and does not change the value.
@@ -37,7 +37,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `length` | `number` | `6` | false | How many characters the code has; one box each. |
-| `mode` | `'numeric' \| 'alphanumeric'` | `'numeric'` | false | numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. |
+| `mode` | `'numeric' \| 'alphanumeric'` | `'numeric'` | false | `numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. |
 | `group` | `number` | `0` | false | Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none. |
 | `disabled` | `boolean` | `false` | false | Disables the field while a code is being checked. |
 | `invalid` | `boolean` | `false` | false | Danger borders on every box and `aria-invalid`; set after a rejected code. |

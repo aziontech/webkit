@@ -10,10 +10,10 @@
   "A single content box → use `card`."
  ],
  "related": [
-  "use-collection` — filters, pages and selects; `cardListProps` is the binding.",
-  "table` — the same collection as rows; same item and selection model.",
-  "property-filter`, `collection-preferences`, `pagination` — the controls around it.",
-  "card` — one standalone card."
+  "`use-collection` — filters, pages and selects; `cardListProps` is the binding.",
+  "`table` — the same collection as rows; same item and selection model.",
+  "`property-filter`, `collection-preferences`, `pagination` — the controls around it.",
+  "`card` — one standalone card."
  ],
  "bestPractices": [
   "Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.",

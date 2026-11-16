@@ -4,7 +4,7 @@
 
 - Import: `import SiteFooter from '@aziontech/webkit/site-footer'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [site-footer.json](https://github.com/aziontech/webkit/blob/main/.specs/site-footer.json)
+- API as JSON: [site-footer.json](site-footer.json)
 
 ## When to use
 

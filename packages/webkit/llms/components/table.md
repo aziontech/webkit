@@ -5,7 +5,7 @@
 - Import: `import TableRoot from '@aziontech/webkit/table-root'`
 - Compound import (dot notation, not tree-shakeable): `import Table from '@aziontech/webkit/table'`
 - Category: data · Surface: app · Structure: composition
-- API as JSON: [table.json](https://github.com/aziontech/webkit/blob/main/.specs/table.json)
+- API as JSON: [table.json](table.json)
 
 ## When to use
 

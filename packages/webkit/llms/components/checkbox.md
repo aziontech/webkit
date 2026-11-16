@@ -4,7 +4,7 @@
 
 - Import: `import Checkbox from '@aziontech/webkit/checkbox'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [checkbox.json](https://github.com/aziontech/webkit/blob/main/.specs/checkbox.json)
+- API as JSON: [checkbox.json](checkbox.json)
 
 ## When to use
 
@@ -17,7 +17,7 @@
 
 - Leave `value` unset for a plain true/false model. With `value`, the checkbox adds or removes it in an array model, or sets a scalar model to `value` (checked) and `null` (unchecked).
 - Give every checkbox an accessible name: point a `label` element's `for` at the `id` you pass (or wrap it in a `Field`), or pass `aria-label` (attributes land on the inner input).
-- indeterminate` only changes the visual and sets the native `indeterminate` property (exposed as mixed); the parent computes it and decides what a click does.
+- `indeterminate` only changes the visual and sets the native `indeterminate` property (exposed as mixed); the parent computes it and decides what a click does.
 - Use `readonly` for a value that cannot change in this context and `disabled` for an option that is unavailable.
 
 ## Don’t

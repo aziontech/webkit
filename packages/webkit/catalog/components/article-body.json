@@ -8,8 +8,8 @@
   "For a closing row of related articles → use `article-cards`."
  ],
  "related": [
-  "doc-prose` — the reading-measure typography the body renders in.",
-  "doc-on-this-page` — the outline rail fed by the body's headings."
+  "`doc-prose` — the reading-measure typography the body renders in.",
+  "`doc-on-this-page` — the outline rail fed by the body's headings."
  ],
  "bestPractices": [
   "Write the body as plain blocks — headings, paragraphs and `-` lists separated by blank lines; inline markdown is rendered as text.",

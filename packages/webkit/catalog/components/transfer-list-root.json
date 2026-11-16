@@ -12,9 +12,9 @@
   "A handful of fixed options → use a horizontal `field` with a `checkbox` for each."
  ],
  "related": [
-  "multi-select` — compact dropdown for multi-pick when the remaining pool does not need to stay visible.",
-  "table` — row selection over tabular data.",
-  "checkbox` — independent boolean or small-set multi-pick."
+  "`multi-select` — compact dropdown for multi-pick when the remaining pool does not need to stay visible.",
+  "`table` — row selection over tabular data.",
+  "`checkbox` — independent boolean or small-set multi-pick."
  ],
  "bestPractices": [
   "Set `item-key` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.",

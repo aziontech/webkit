@@ -4,7 +4,7 @@
 
 - Import: `import CopyButton from '@aziontech/webkit/copy-button'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [copy-button.json](https://github.com/aziontech/webkit/blob/main/.specs/copy-button.json)
+- API as JSON: [copy-button.json](copy-button.json)
 
 ## When to use
 

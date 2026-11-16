@@ -5,7 +5,7 @@
 - Import: `import MultiSelectRoot from '@aziontech/webkit/multi-select-root'`
 - Compound import (dot notation, not tree-shakeable): `import MultiSelect from '@aziontech/webkit/multi-select'`
 - Category: input · Surface: app · Structure: composition
-- API as JSON: [multi-select.json](https://github.com/aziontech/webkit/blob/main/.specs/multi-select.json)
+- API as JSON: [multi-select.json](multi-select.json)
 
 ## When to use
 
@@ -18,12 +18,12 @@
 
 ## Do
 
-- modelValue` is always an array; start it as `[]`, never `null`.
+- `modelValue` is always an array; start it as `[]`, never `null`.
 - Pass `displayValue` to summarise long selections (e.g. "3 regions") instead of a list that overflows the trigger.
 - Keep each option's `value` stable and unique; selection is matched by value.
 - Put a search input in the `search` slot and a create action in the `footer` slot of `MultiSelect.Content` — or set `searchable` (and `allowCustom`) to type in the trigger itself; do not combine the two.
 - With `variant="chips"`, set `chipLimit` when the field sits in a dense row; leave it `0` in a form so every chip wraps and stays removable.
-- create` only reports the typed value: add the new option to your list and its value to the model in the handler.
+- `create` only reports the typed value: add the new option to your list and its value to the model in the handler.
 - For a server-side search, set `:filter="false"`, fetch on `search`, and drive `loading` and `error` from the request.
 
 ## Don’t

@@ -4,7 +4,7 @@
 
 - Import: `import Avatar from '@aziontech/webkit/avatar'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [avatar.json](https://github.com/aziontech/webkit/blob/main/.specs/avatar.json)
+- API as JSON: [avatar.json](avatar.json)
 
 ## When to use
 
@@ -18,7 +18,7 @@
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
 - Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `ai ai-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
-- size` maps to 24 / 32 / 48 px with `medium` as the default; `variant` is `circle` (default) or `square`.
+- `size` maps to 24 / 32 / 48 px with `medium` as the default; `variant` is `circle` (default) or `square`.
 
 ## Don’t
 

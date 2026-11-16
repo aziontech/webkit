@@ -4,7 +4,7 @@
 
 - Import: `import DateRangePicker from '@aziontech/webkit/date-range-picker'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [date-range-picker.json](https://github.com/aziontech/webkit/blob/main/.specs/date-range-picker.json)
+- API as JSON: [date-range-picker.json](date-range-picker.json)
 
 ## When to use
 

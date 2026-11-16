@@ -20,8 +20,8 @@
   "A bounded region that scrolls → use `scroll-area`."
  ],
  "related": [
-  "section-gap` — the frame that divides page sections, with its own rules and vertical air.",
-  "scroll-area` — scrolling container; Separator adds no scrolling."
+  "`section-gap` — the frame that divides page sections, with its own rules and vertical air.",
+  "`scroll-area` — scrolling container; Separator adds no scrolling."
  ],
  "bestPractices": [
   "Size a vertical divider through its wrapper (`flex h-4 items-center`); its own `h-full` beats a height class passed to it, and in an `items-center` row it collapses to zero height.",
@@ -64,15 +64,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Separator from '@aziontech/webkit/separator'\n</script>\n\n<template>\n  <Separator orientation=\"horizontal\" />\n</template>"
+   "file": "examples/separator/default.vue"
   },
   {
    "name": "WithLabel",
-   "sfc": "<script setup>\n  import Separator from '@aziontech/webkit/separator'\n</script>\n\n<template>\n  <Separator\n    orientation=\"horizontal\"\n    label=\"OR\"\n  />\n</template>"
+   "file": "examples/separator/with-label.vue"
   },
   {
    "name": "Orientations",
-   "sfc": "<script setup>\n  import Separator from '@aziontech/webkit/separator'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-8\">\n    <div class=\"w-[160px]\">\n      <Separator orientation=\"horizontal\" />\n    </div>\n    <div class=\"flex items-center justify-center h-[80px]\">\n      <Separator orientation=\"vertical\" />\n    </div>\n  </div>\n</template>"
+   "file": "examples/separator/orientations.vue"
   }
  ],
  "docs": "components/separator.md"

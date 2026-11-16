@@ -19,9 +19,9 @@
   "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
  ],
  "related": [
-  "response-loading` — loading without a trace.",
-  "tool-call` — what the agent did, rather than what it thought.",
-  "streaming-response` — renders a Markdown trace inside the slot."
+  "`response-loading` — loading without a trace.",
+  "`tool-call` — what the agent did, rather than what it thought.",
+  "`streaming-response` — renders a Markdown trace inside the slot."
  ],
  "bestPractices": [
   "Keep it collapsed in chat; open it by default only where reasoning is the point (an editor, a review).",
@@ -85,11 +85,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Reasoning from '@aziontech/webkit/reasoning'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <Reasoning :duration=\"14\">\n      <p>The reader asks why the cache hit ratio of storefront dropped this week.</p>\n      <p>\n        Checking the cache settings of <code>storefront</code>: query strings are part of the cache\n        key, and a campaign started on Monday adds <code>utm_source</code> to every link.\n      </p>\n      <p>Each campaign link is a new cache key, so most requests miss the cache.</p>\n    </Reasoning>\n  </div>\n</template>"
+   "file": "examples/reasoning/default.vue"
   },
   {
    "name": "Streaming",
-   "sfc": "<script setup>\n  import Reasoning from '@aziontech/webkit/reasoning'\n  import { onBeforeUnmount, onMounted, ref } from 'vue'\n\n  const steps = [\n    'Reading the error rate of the workload over the last hour.',\n    'The 502 responses started at 14:05, when the origin certificate expired.',\n    'Checking whether a renewed certificate is already uploaded.'\n  ]\n\n  const shown = ref([])\n  const streaming = ref(true)\n  let timer\n\n  function stop() {\n    clearInterval(timer)\n    streaming.value = false\n  }\n\n  onMounted(() => {\n    timer = setInterval(() => {\n      if (shown.value.length < steps.length) shown.value = steps.slice(0, shown.value.length + 1)\n      else stop()\n    }, 1500)\n  })\n  onBeforeUnmount(() => clearInterval(timer))\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <Reasoning\n      :streaming=\"streaming\"\n      default-open\n      skippable\n      @skip=\"stop\"\n    >\n      <p\n        v-for=\"step in shown\"\n        :key=\"step\"\n      >\n        {{ step }}\n      </p>\n    </Reasoning>\n  </div>\n</template>"
+   "file": "examples/reasoning/streaming.vue"
   }
  ],
  "docs": "components/reasoning.md"

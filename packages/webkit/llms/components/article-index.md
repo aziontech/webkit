@@ -4,7 +4,7 @@
 
 - Import: `import ArticleIndex from '@aziontech/webkit/article-index'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [article-index.json](https://github.com/aziontech/webkit/blob/main/.specs/article-index.json)
+- API as JSON: [article-index.json](article-index.json)
 
 ## When to use
 

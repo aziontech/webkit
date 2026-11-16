@@ -11,8 +11,8 @@
   "A status or category of the card (expired, default) → use `Tag` beside the plate."
  ],
  "related": [
-  "brand` — the same idea for the Azion lockup: an inline mark, sized by token.",
-  "tag` — put `Default` or `Expired` next to the plate, not inside it."
+  "`brand` — the same idea for the Azion lockup: an inline mark, sized by token.",
+  "`tag` — put `Default` or `Expired` next to the plate, not inside it."
  ],
  "bestPractices": [
   "Pass the brand as the payment API returns it; the plate normalizes `American Express`, `american_express`, `Diners Club` and casing.",

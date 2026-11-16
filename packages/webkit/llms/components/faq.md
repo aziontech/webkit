@@ -4,7 +4,7 @@
 
 - Import: `import Faq from '@aziontech/webkit/faq'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [faq.json](https://github.com/aziontech/webkit/blob/main/.specs/faq.json)
+- API as JSON: [faq.json](faq.json)
 
 ## When to use
 
@@ -16,7 +16,7 @@
 
 ## Do
 
-- framed` decides who draws the rule. On, the band draws its own registration frame. Off, the rule and the corner marks belong to the `section-module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
+- `framed` decides who draws the rule. On, the band draws its own registration frame. Off, the rule and the corner marks belong to the `section-module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep the band to the questions a reader actually asks before buying; a FAQ is objection handling, not a manual.
 - Write each `question` as the reader would ask it, in their words rather than the product's.
 - Keep answers to a couple of sentences and link out for the rest — use the `answer` slot when an answer needs a link or richer content.

@@ -26,15 +26,15 @@
   "It is hierarchical navigation with expandable rows → use `sidebar-menu`."
  ],
  "related": [
-  "tabs` — switches between panels in place; one panel visible, headers in a row.",
-  "faq` — the marketing FAQ band that composes `accordion` with a heading column and hairline register.",
-  "sidebar-menu` — expanding rows for navigation, not for revealing content."
+  "`tabs` — switches between panels in place; one panel visible, headers in a row.",
+  "`faq` — the marketing FAQ band that composes `accordion` with a heading column and hairline register.",
+  "`sidebar-menu` — expanding rows for navigation, not for revealing content."
  ],
  "bestPractices": [
   "Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.",
   "Bind `v-model` to a string in `type=\"single\"` and to an array in `type=\"multiple\"`; set `collapsible` to `false` only when one item must always stay open.",
   "Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.",
-  "Accordion.Content` applies no padding; pad the content you put inside it.",
+  "`Accordion.Content` applies no padding; pad the content you put inside it.",
   "Set `size` and `icon-position` on the root, not per item — they are provided to every item through context."
  ],
  "props": [
@@ -94,15 +94,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Accordion from '@aziontech/webkit/accordion'\n</script>\n\n<template>\n  <Accordion\n    type=\"single\"\n    collapsible\n    default-value=\"overview\"\n    size=\"medium\"\n    icon-position=\"trailing\"\n    class=\"w-full max-w-[40rem]\"\n  >\n    <Accordion.Item value=\"overview\">\n      <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n      <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n    </Accordion.Item>\n    <Accordion.Item value=\"pricing\">\n      <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n      <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n    </Accordion.Item>\n    <Accordion.Item value=\"support\">\n      <Accordion.Trigger>Enterprise support</Accordion.Trigger>\n      <Accordion.Content>Available on Business and Enterprise plans.</Accordion.Content>\n    </Accordion.Item>\n  </Accordion>\n</template>"
+   "file": "examples/accordion/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Accordion from '@aziontech/webkit/accordion'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-8 w-full max-w-[40rem]\">\n    <Accordion\n      type=\"single\"\n      collapsible\n      default-value=\"overview\"\n      size=\"medium\"\n    >\n      <Accordion.Item value=\"overview\">\n        <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n        <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n      </Accordion.Item>\n      <Accordion.Item value=\"pricing\">\n        <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n        <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n      </Accordion.Item>\n    </Accordion>\n    <Accordion\n      type=\"single\"\n      collapsible\n      default-value=\"overview\"\n      size=\"large\"\n    >\n      <Accordion.Item value=\"overview\">\n        <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n        <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n      </Accordion.Item>\n      <Accordion.Item value=\"pricing\">\n        <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n        <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n      </Accordion.Item>\n    </Accordion>\n  </div>\n</template>"
+   "file": "examples/accordion/sizes.vue"
   },
   {
    "name": "IconPosition",
-   "sfc": "<script setup>\n  import Accordion from '@aziontech/webkit/accordion'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-8 w-full max-w-[40rem]\">\n    <Accordion\n      type=\"single\"\n      collapsible\n      default-value=\"overview\"\n      icon-position=\"trailing\"\n    >\n      <Accordion.Item value=\"overview\">\n        <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n        <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n      </Accordion.Item>\n      <Accordion.Item value=\"pricing\">\n        <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n        <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n      </Accordion.Item>\n    </Accordion>\n    <Accordion\n      type=\"single\"\n      collapsible\n      default-value=\"overview\"\n      icon-position=\"leading\"\n    >\n      <Accordion.Item value=\"overview\">\n        <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n        <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n      </Accordion.Item>\n      <Accordion.Item value=\"pricing\">\n        <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n        <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n      </Accordion.Item>\n    </Accordion>\n  </div>\n</template>"
+   "file": "examples/accordion/icon-position.vue"
   }
  ],
  "docs": "components/accordion.md"

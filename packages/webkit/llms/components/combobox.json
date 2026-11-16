@@ -25,11 +25,11 @@
   "Key/value pairs or tags → use `attribute-editor` or `tag-editor` (their key cells may hold a Combobox)."
  ],
  "related": [
-  "select` — closed list, button trigger, no free entry.",
-  "input` — the field Combobox is built on; use it alone when there are no suggestions.",
-  "field` — label, description and error around the Combobox; it reads id, invalid, disabled and required from it.",
-  "command` — palette of actions, not a form value.",
-  "property-filter` — token-based filtering with the same listbox look."
+  "`select` — closed list, button trigger, no free entry.",
+  "`input` — the field Combobox is built on; use it alone when there are no suggestions.",
+  "`field` — label, description and error around the Combobox; it reads id, invalid, disabled and required from it.",
+  "`command` — palette of actions, not a form value.",
+  "`property-filter` — token-based filtering with the same listbox look."
  ],
  "bestPractices": [
   "Put the Combobox in a `Field` so it gets a visible label; use `ariaLabel` only where no label can be shown.",
@@ -177,15 +177,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Combobox from '@aziontech/webkit/combobox'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const name = ref('API_URL')\n\n  const options = [\n    { value: 'API_URL', description: 'Suggested' },\n    { value: 'API_TOKEN', description: 'Suggested' },\n    { value: 'NODE_ENV', description: 'System' },\n    { value: 'LOG_LEVEL' },\n    { value: 'CACHE_TTL' }\n  ]\n</script>\n\n<template>\n  <Field class=\"max-w-(--container-xs)\">\n    <Field.Label>Variable name</Field.Label>\n    <Combobox\n      v-model=\"name\"\n      :options=\"options\"\n      placeholder=\"Search or type a name\"\n      clearable\n    />\n    <Field.Description>Pick a known variable or type a new one.</Field.Description>\n  </Field>\n</template>"
+   "file": "examples/combobox/default.vue"
   },
   {
    "name": "Groups",
-   "sfc": "<script setup>\n  import Combobox from '@aziontech/webkit/combobox'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const header = ref('')\n\n  const options = [\n    { value: 'X-Request-Id', group: 'Recent' },\n    { value: 'X-Tenant', group: 'Recent' },\n    { value: 'Cache-Control', group: 'Standard' },\n    { value: 'Content-Type', group: 'Standard' },\n    { value: 'Authorization', group: 'Standard', disabled: true, description: 'Managed' }\n  ]\n</script>\n\n<template>\n  <Field class=\"max-w-(--container-xs)\">\n    <Field.Label>Request header</Field.Label>\n    <Combobox\n      v-model=\"header\"\n      :options=\"options\"\n      placeholder=\"Header name\"\n    />\n  </Field>\n</template>"
+   "file": "examples/combobox/groups.vue"
   },
   {
    "name": "Server",
-   "sfc": "<script setup>\n  import Combobox from '@aziontech/webkit/combobox'\n  import Field from '@aziontech/webkit/field'\n  import { onBeforeUnmount, ref } from 'vue'\n\n  const regions = [\n    { value: 'sa-east', label: 'South America (São Paulo)' },\n    { value: 'us-east', label: 'US East (Virginia)' },\n    { value: 'us-west', label: 'US West (Oregon)' },\n    { value: 'eu-west', label: 'Europe (Frankfurt)' },\n    { value: 'ap-south', label: 'Asia Pacific (Singapore)' }\n  ]\n\n  const region = ref('')\n  const options = ref(regions)\n  const loading = ref(false)\n  let timer\n\n  const search = (text) => {\n    clearTimeout(timer)\n    loading.value = true\n    timer = setTimeout(() => {\n      const needle = text.trim().toLowerCase()\n      options.value = regions.filter((item) => item.label.toLowerCase().includes(needle))\n      loading.value = false\n    }, 400)\n  }\n\n  onBeforeUnmount(() => clearTimeout(timer))\n</script>\n\n<template>\n  <Field class=\"max-w-(--container-xs)\">\n    <Field.Label>Region</Field.Label>\n    <Combobox\n      v-model=\"region\"\n      :options=\"options\"\n      :filter=\"false\"\n      :allow-custom=\"false\"\n      :loading=\"loading\"\n      placeholder=\"Search regions\"\n      @search=\"search\"\n    />\n    <Field.Description>Only listed regions are accepted.</Field.Description>\n  </Field>\n</template>"
+   "file": "examples/combobox/server.vue"
   }
  ],
  "docs": "components/combobox.md"

@@ -10,8 +10,8 @@
   "The user can select or remove it (filters, multi-select values) → use `chip`."
  ],
  "related": [
-  "badge` — denser count/short-label indicator with no icon affordance.",
-  "chip` — interactive/removable token."
+  "`badge` — denser count/short-label indicator with no icon affordance.",
+  "`chip` — interactive/removable token."
  ],
  "bestPractices": [
   "Colour comes from `variant` or `severity`; the optional icon is decorative — keep it `aria-hidden`.",

@@ -4,7 +4,7 @@
 
 - Import: `import StickyStack from '@aziontech/webkit/sticky-stack'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [sticky-stack.json](https://github.com/aziontech/webkit/blob/main/.specs/sticky-stack.json)
+- API as JSON: [sticky-stack.json](sticky-stack.json)
 
 ## When to use
 

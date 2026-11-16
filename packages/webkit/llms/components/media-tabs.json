@@ -22,10 +22,10 @@
   "For switching a page's content between peer views the reader navigates → use `tabs`, which is a real ARIA tab set."
  ],
  "related": [
-  "media-split` — one claim, one picture, no selection.",
-  "illustration` — the official scene a tab's `media` slot usually holds.",
-  "registration-frame` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.",
-  "section-title` — the heading above the band; this component carries no title of its own."
+  "`media-split` — one claim, one picture, no selection.",
+  "`illustration` — the official scene a tab's `media` slot usually holds.",
+  "`registration-frame` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.",
+  "`section-title` — the heading above the band; this component carries no title of its own."
  ],
  "bestPractices": [
   "Write the tabs as peers. A reader arrives mid-rotation, so no row may depend on the row above it.",
@@ -127,15 +127,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTabs from '@aziontech/webkit/media-tabs'\n\n  const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']\n\n  const items = [\n    {\n      title: 'Run AI models close to users',\n      description:\n        'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.'\n    },\n    {\n      title: 'Watch every inference as it happens',\n      description:\n        'Tokens, latency and error rate per model arrive as the traffic does, with no agent to install and no sampling window to wait out.'\n    },\n    {\n      title: 'Ship a model the way you ship code',\n      description:\n        'One command puts a new revision in every location at once, and the one before it stays a rollback away.'\n    }\n  ]\n</script>\n\n<template>\n  <MediaTabs :items=\"items\">\n    <template #media=\"{ index }\">\n      <Illustration :name=\"scenes[index]\" />\n    </template>\n  </MediaTabs>\n</template>"
+   "file": "examples/media-tabs/default.vue"
   },
   {
    "name": "Positions",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTabs from '@aziontech/webkit/media-tabs'\n\n  const scenes = [\n    'ai-applications',\n    'live-debugging',\n    'deploy-secure-mcp-server',\n    'modern-frontends',\n    'content-and-media-delivery'\n  ]\n\n  const items = [\n    {\n      title: 'Run AI models close to users',\n      description: 'Answer in under 30 ms from the location closest to the user who asked.'\n    },\n    {\n      title: 'Watch every request live',\n      description: 'Traces arrive as the traffic does, with no agent to install.'\n    },\n    {\n      title: 'Deploy secure MCP servers',\n      description: 'Put a server next to every user, behind the same policies.'\n    },\n    {\n      title: 'Ship modern frontends',\n      description: 'Render pages beside the reader and keep the origin quiet.'\n    },\n    {\n      title: 'Deliver media at scale',\n      description: 'Serve video and images from a cache that is already warm.'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <MediaTabs\n      tabs-side=\"start\"\n      :autoplay=\"false\"\n      :items=\"items\"\n    >\n      <template #media=\"{ index }\">\n        <Illustration :name=\"scenes[index]\" />\n      </template>\n    </MediaTabs>\n    <MediaTabs\n      tabs-side=\"end\"\n      :autoplay=\"false\"\n      :items=\"items\"\n    >\n      <template #media=\"{ index }\">\n        <Illustration :name=\"scenes[index]\" />\n      </template>\n    </MediaTabs>\n    <MediaTabs\n      tabs-side=\"top\"\n      :autoplay=\"false\"\n      :items=\"items\"\n    >\n      <template #media=\"{ index }\">\n        <Illustration :name=\"scenes[index]\" />\n      </template>\n    </MediaTabs>\n    <MediaTabs\n      tabs-side=\"bottom\"\n      :autoplay=\"false\"\n      :items=\"items\"\n    >\n      <template #media=\"{ index }\">\n        <Illustration :name=\"scenes[index]\" />\n      </template>\n    </MediaTabs>\n  </div>\n</template>"
+   "file": "examples/media-tabs/positions.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTabs from '@aziontech/webkit/media-tabs'\n\n  const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']\n\n  const items = [\n    {\n      title: 'Run AI models close to users',\n      description:\n        'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.'\n    },\n    {\n      title: 'Watch every inference as it happens',\n      description:\n        'Tokens, latency and error rate per model arrive as the traffic does, with no agent to install and no sampling window to wait out.'\n    },\n    {\n      title: 'Ship a model the way you ship code',\n      description:\n        'One command puts a new revision in every location at once, and the one before it stays a rollback away.'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <MediaTabs\n      size=\"small\"\n      :autoplay=\"false\"\n      :items=\"items\"\n    >\n      <template #media=\"{ index }\">\n        <Illustration :name=\"scenes[index]\" />\n      </template>\n    </MediaTabs>\n    <MediaTabs\n      size=\"medium\"\n      :autoplay=\"false\"\n      :items=\"items\"\n    >\n      <template #media=\"{ index }\">\n        <Illustration :name=\"scenes[index]\" />\n      </template>\n    </MediaTabs>\n    <MediaTabs\n      size=\"large\"\n      :autoplay=\"false\"\n      :items=\"items\"\n    >\n      <template #media=\"{ index }\">\n        <Illustration :name=\"scenes[index]\" />\n      </template>\n    </MediaTabs>\n  </div>\n</template>"
+   "file": "examples/media-tabs/sizes.vue"
   }
  ],
  "docs": "components/media-tabs.md"

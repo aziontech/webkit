@@ -12,9 +12,9 @@
   "A plain description of an action already labelled by a control → use `tooltip` directly on that control."
  ],
  "related": [
-  "tooltip` — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.",
-  "field-description` — persistent guidance under a field; the right choice when the text must always be visible.",
-  "Field.Label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component."
+  "`tooltip` — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.",
+  "`field-description` — persistent guidance under a field; the right choice when the text must always be visible.",
+  "`Field.Label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component."
  ],
  "bestPractices": [
   "One sentence, ending in a period. If it needs two, it belongs in `field-description` or a `popover`.",

@@ -4,14 +4,14 @@
 
 - Import: `import Brand from '@aziontech/webkit/brand'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [brand.json](https://github.com/aziontech/webkit/blob/main/.specs/brand.json)
+- API as JSON: [brand.json](brand.json)
 
 ## When to use
 
 - Use Brand only for the Azion logo.
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
-- variant="reduced"` where space is tight (collapsed sidebar, mobile header).
-- variant="extended"` in marketing layouts that carry the tagline.
+- `variant="reduced"` where space is tight (collapsed sidebar, mobile header).
+- `variant="extended"` in marketing layouts that carry the tagline.
 
 ## Do
 

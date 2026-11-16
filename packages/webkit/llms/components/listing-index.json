@@ -22,9 +22,9 @@
   "For a card grid of customer stories with search and facets → use `story-index`."
  ],
  "related": [
-  "table` — the composed rows and cells the listing renders from the small breakpoint up.",
-  "item` — the list rows the listing renders below the small breakpoint.",
-  "empty-state` — the state shown when the search and facets match nothing."
+  "`table` — the composed rows and cells the listing renders from the small breakpoint up.",
+  "`item` — the list rows the listing renders below the small breakpoint.",
+  "`empty-state` — the state shown when the search and facets match nothing."
  ],
  "bestPractices": [
   "Name the first column after what the row is (`Role`); it is the row's link, and the second column describes the row on phones.",
@@ -146,7 +146,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ListingIndex from '@aziontech/webkit/listing-index'\n</script>\n\n<template>\n  <ListingIndex\n    title=\"Open positions\"\n    :columns=\"[\n      { key: 'role', label: 'Role', grow: 2 },\n      { key: 'team', label: 'Team and location', grow: 2 },\n      { key: 'type', label: 'Work type', align: 'end' }\n    ]\"\n    :data=\"[\n      {\n        href: '/careers/software-engineer-go',\n        group: 'Engineering',\n        values: {\n          role: 'Software Engineer (Go)',\n          team: 'Engineering · San Francisco',\n          type: 'Hybrid · Full-time'\n        },\n        facets: { area: ['Engineering'], location: ['San Francisco'] }\n      },\n      {\n        href: '/careers/grc-analyst',\n        group: 'Security',\n        values: {\n          role: 'GRC Analyst (Governance, Risk & Compliance)',\n          team: 'Compliance and Corporate IT · San Francisco / New York',\n          type: 'Hybrid · Full-time'\n        },\n        facets: { area: ['Security'], location: ['San Francisco', 'New York'] }\n      }\n    ]\"\n    :groups=\"['Engineering', 'Security']\"\n    :facets=\"[\n      {\n        id: 'area',\n        label: 'Department',\n        allLabel: 'All departments',\n        options: [\n          { value: 'Engineering', label: 'Engineering' },\n          { value: 'Security', label: 'Security' }\n        ]\n      },\n      {\n        id: 'location',\n        label: 'Location',\n        allLabel: 'All locations',\n        options: [\n          { value: 'New York', label: 'New York, United States' },\n          { value: 'San Francisco', label: 'San Francisco, United States' }\n        ]\n      }\n    ]\"\n    :sorts=\"[\n      { value: 'newest', label: 'Newest posted', by: '' },\n      { value: 'title', label: 'Title (A–Z)', by: 'role' }\n    ]\"\n    sort-aria-label=\"Sort positions\"\n    search-placeholder=\"Search by title, team, or location\"\n    search-short-placeholder=\"Search positions\"\n    search-aria-label=\"Search positions\"\n    empty-title=\"Nothing here yet\"\n    empty-description=\"No open positions match your search.\"\n    empty-action-label=\"View all open positions\"\n  />\n</template>"
+   "file": "examples/listing-index/default.vue"
   }
  ],
  "docs": "components/listing-index.md"

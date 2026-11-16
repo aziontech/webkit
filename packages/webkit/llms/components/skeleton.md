@@ -4,7 +4,7 @@
 
 - Import: `import Skeleton from '@aziontech/webkit/skeleton'`
 - Category: feedback · Surface: app · Structure: monolithic
-- API as JSON: [skeleton.json](https://github.com/aziontech/webkit/blob/main/.specs/skeleton.json)
+- API as JSON: [skeleton.json](skeleton.json)
 
 ## When to use
 

@@ -4,7 +4,7 @@
 
 - Import: `import SubjectGrid from '@aziontech/webkit/subject-grid'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [subject-grid.json](https://github.com/aziontech/webkit/blob/main/.specs/subject-grid.json)
+- API as JSON: [subject-grid.json](subject-grid.json)
 
 ## When to use
 

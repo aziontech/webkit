@@ -11,8 +11,8 @@
   "For cells that each carry their own action or copy button — use `FeatureWidgets`."
  ],
  "related": [
-  "FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.",
-  "FeatureTiles` — tiles with illustrations."
+  "`FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.",
+  "`FeatureTiles` — tiles with illustrations."
  ],
  "bestPractices": [
   "Three or six items at three columns, four or eight at four, so rows stay full.",

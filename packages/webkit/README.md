@@ -66,7 +66,8 @@ reviewed layout and writes the right import, prop, and token on the first try.
 No MCP? The package ships the same content as plain files for any agent or reader:
 `node_modules/@aziontech/webkit/llms/llms.txt` (in the [llms.txt](https://llmstxt.org) format)
 links one Markdown page per block, component and foundation, a JSON API per component
-(`llms/components/<name>.json`), and `llms-full.txt` holds every page in one file. They are
+(`llms/components/<name>.json`), `llms-full.txt` holds the foundations, blocks and product
+components in one file and `llms-full-site.txt` the site and docs components. They are
 generated from `catalog.json` (`pnpm --filter @aziontech/webkit build:llms`).
 
 ### 1 · Install

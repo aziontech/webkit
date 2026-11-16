@@ -4,7 +4,7 @@
 
 - Import: `import Conversation from '@aziontech/webkit/conversation'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [conversation.json](https://github.com/aziontech/webkit/blob/main/.specs/conversation.json)
+- API as JSON: [conversation.json](conversation.json)
 
 ## When to use
 
@@ -38,7 +38,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the message log. Empty uses the locale catalog (`Conversation`). |
-| `layout` | `'split' \| 'start'` | `'split'` | false | split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). |
+| `layout` | `'split' \| 'start'` | `'split'` | false | `split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). |
 
 ## Slots
 

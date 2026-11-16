@@ -14,10 +14,10 @@
   "A grid of client marks → use `LogoWall`; it renders each mark and can render `Logo` in its `mark` slot."
  ],
  "related": [
-  "brand` — the Azion lockup; `Logo` is everyone else's.",
-  "payment-brand` — card-network plates, drawn in tokens.",
-  "logo-wall` — the grid that lays marks out; `Logo` draws one mark.",
-  "avatar` — a person's or an organization's picture with initials."
+  "`brand` — the Azion lockup; `Logo` is everyone else's.",
+  "`payment-brand` — card-network plates, drawn in tokens.",
+  "`logo-wall` — the grid that lays marks out; `Logo` draws one mark.",
+  "`avatar` — a person's or an organization's picture with initials."
  ],
  "bestPractices": [
   "Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.",

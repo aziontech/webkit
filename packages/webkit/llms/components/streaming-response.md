@@ -4,7 +4,7 @@
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [streaming-response.json](https://github.com/aziontech/webkit/blob/main/.specs/streaming-response.json)
+- API as JSON: [streaming-response.json](streaming-response.json)
 
 ## When to use
 

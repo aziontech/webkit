@@ -4,7 +4,7 @@
 
 - Import: `import DocCardGroup from '@aziontech/webkit/doc-card-group'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-card-group.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-card-group.json)
+- API as JSON: [doc-card-group.json](doc-card-group.json)
 
 ## When to use
 
@@ -25,9 +25,9 @@
 
 ## Related
 
-- DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.
-- RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.
-- DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder.
+- `DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.
+- `RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.
+- `DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder.
 
 ## Props
 

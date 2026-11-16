@@ -13,10 +13,10 @@
   "For a bordered box around arbitrary content → use `registration-frame`."
  ],
  "related": [
-  "hero` — the full-bleed opening band above this column; its `border-b` is this column's top edge.",
-  "section-module` — the brick stacked inside this column.",
-  "card-grid` — the hairline cell grid a module's body holds.",
-  "registration-frame` — the registration frame a module wraps its body in."
+  "`hero` — the full-bleed opening band above this column; its `border-b` is this column's top edge.",
+  "`section-module` — the brick stacked inside this column.",
+  "`card-grid` — the hairline cell grid a module's body holds.",
+  "`registration-frame` — the registration frame a module wraps its body in."
  ],
  "bestPractices": [
   "Leave `padded` off for a stack of modules: each brick owns its own padding, and column padding would double it and pull the bricks off the frame.",

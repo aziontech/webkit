@@ -25,9 +25,9 @@
   "For a logo row with no quotation → compose the marks directly; a `quote` without `text` is not a logo wall."
  ],
  "related": [
-  "stats` — the numeric form of the same proof band.",
-  "card-grid` — the uniform grid a row of peer quotes is laid out on; `bento-grid` when one quote is given more weight than its neighbours.",
-  "avatar` — the person's likeness, composed by the `highlight` register when a `photo` is given."
+  "`stats` — the numeric form of the same proof band.",
+  "`card-grid` — the uniform grid a row of peer quotes is laid out on; `bento-grid` when one quote is given more weight than its neighbours.",
+  "`avatar` — the person's likeness, composed by the `highlight` register when a `photo` is given."
  ],
  "bestPractices": [
   "Keep `text` to one or two sentences. A testimonial that needs a paragraph is a case study, and belongs behind a link.",
@@ -119,15 +119,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'\n  import Quote from '@aziontech/webkit/quote'\n</script>\n\n<template>\n  <Quote\n    text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n    name=\"Allan Monteiro\"\n    job-title=\"CISO & Head of Technology at Magalu\"\n    :logo=\"magaluLogo\"\n  />\n</template>"
+   "file": "examples/quote/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'\n  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'\n  import Quote from '@aziontech/webkit/quote'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <Quote\n      variant=\"inline\"\n      text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n      name=\"Allan Monteiro\"\n      job-title=\"CISO & Head of Technology at Magalu\"\n      :logo=\"magaluLogo\"\n    />\n    <Quote\n      variant=\"signed\"\n      text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n      name=\"Allan Monteiro\"\n      job-title=\"CISO & Head of Technology at Magalu\"\n      :logo=\"magaluLogo\"\n    />\n    <Quote\n      variant=\"highlight\"\n      text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n      name=\"Allan Monteiro\"\n      job-title=\"CISO & Head of Technology at Magalu\"\n      :photo=\"placeholderImage\"\n      :logo=\"magaluLogo\"\n    />\n  </div>\n</template>"
+   "file": "examples/quote/variants.vue"
   },
   {
    "name": "WithoutLogo",
-   "sfc": "<script setup>\n  import Quote from '@aziontech/webkit/quote'\n</script>\n\n<template>\n  <Quote\n    text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n    name=\"Allan Monteiro\"\n    job-title=\"CISO & Head of Technology at Magalu\"\n  />\n</template>"
+   "file": "examples/quote/without-logo.vue"
   }
  ],
  "docs": "components/quote.md"

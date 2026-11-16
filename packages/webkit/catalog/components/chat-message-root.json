@@ -10,11 +10,11 @@
   "A comment thread between people → not this component; it carries AI semantics (feedback thumbs, regenerate)."
  ],
  "related": [
-  "conversation` — the log that holds messages, sets alignment and announces finished ones.",
-  "streaming-response` — the safe Markdown renderer for assistant content.",
-  "reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
-  "copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
-  "response-loading` — what `pending` renders."
+  "`conversation` — the log that holds messages, sets alignment and announces finished ones.",
+  "`streaming-response` — the safe Markdown renderer for assistant content.",
+  "`reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
+  "`copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
+  "`response-loading` — what `pending` renders."
  ],
  "bestPractices": [
   "Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.",

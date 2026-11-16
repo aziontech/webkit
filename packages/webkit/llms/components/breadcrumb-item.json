@@ -21,14 +21,14 @@
   "It is a navigation row in an app menu → use `sidebar-menu`."
  ],
  "related": [
-  "breadcrumb` — the trail root; renders `breadcrumb-item` for each entry of `items` and re-exports it as `Breadcrumb.Item`.",
-  "link` — a general-purpose link without the segment's ghost hover and current-page treatment."
+  "`breadcrumb` — the trail root; renders `breadcrumb-item` for each entry of `items` and re-exports it as `Breadcrumb.Item`.",
+  "`link` — a general-purpose link without the segment's ghost hover and current-page treatment."
  ],
  "bestPractices": [
   "Set `active` on the last segment only; it renders a `span` with `aria-current=\"page\"`, drops out of the tab order and ignores `href`.",
   "Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.",
   "Use `show-icon` together with `icon` (an Azion icon class; empty shows `ai ai-box`); `icon` alone renders nothing.",
-  "disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it."
+  "`disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it."
  ],
  "props": [
   {
@@ -87,15 +87,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n  />\n</template>"
+   "file": "examples/breadcrumb-item/default.vue"
   },
   {
    "name": "Active",
-   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Current Page\"\n    active\n  />\n</template>"
+   "file": "examples/breadcrumb-item/active.vue"
   },
   {
    "name": "WithIcon",
-   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n    show-icon\n    icon=\"ai ai-box\"\n  />\n</template>"
+   "file": "examples/breadcrumb-item/with-icon.vue"
   }
  ],
  "docs": "components/breadcrumb-item.md"

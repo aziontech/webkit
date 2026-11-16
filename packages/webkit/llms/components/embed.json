@@ -22,9 +22,9 @@
   "For content we own and could render directly — an embed is a last resort, not a layout tool."
  ],
  "related": [
-  "doc-frame` — the documentation frame for stills and clips, not third-party documents.",
-  "registration-frame` — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.",
-  "media-split` — when the embed is one half of a copy-and-media band."
+  "`doc-frame` — the documentation frame for stills and clips, not third-party documents.",
+  "`registration-frame` — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.",
+  "`media-split` — when the embed is one half of a copy-and-media band."
  ],
  "bestPractices": [
   "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
@@ -63,11 +63,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Embed from '@aziontech/webkit/embed'\n</script>\n\n<template>\n  <Embed\n    src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n    title=\"A placeholder document standing in for an embedded demo\"\n    ratio=\"video\"\n  />\n</template>"
+   "file": "examples/embed/default.vue"
   },
   {
    "name": "Ratios",
-   "sfc": "<script setup>\n  import Embed from '@aziontech/webkit/embed'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a 16:9 frame\"\n      ratio=\"video\"\n    />\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a square frame\"\n      ratio=\"square\"\n    />\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a 21:9 frame\"\n      ratio=\"wide\"\n    />\n  </div>\n</template>"
+   "file": "examples/embed/ratios.vue"
   }
  ],
  "docs": "components/embed.md"

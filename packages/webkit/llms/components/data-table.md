@@ -4,7 +4,7 @@
 
 - Import: `import DataTable from '@aziontech/webkit/data-table'`
 - Category: data · Surface: app · Structure: monolithic
-- API as JSON: [data-table.json](https://github.com/aziontech/webkit/blob/main/.specs/data-table.json)
+- API as JSON: [data-table.json](data-table.json)
 
 ## When to use
 
@@ -100,12 +100,12 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `row-click` | `(event: MouseEvent, row: TRow)` | Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record. |
-| `filter-apply` | `(event: Event, filters: TableAppliedFilter[])` | Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`. |
+| `filter-apply` | `(event: Event, filters: TableAppliedFilter[])` | `Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`. |
 | `filter-remove` | `(event: Event, filter: TableAppliedFilter)` | One applied filter was removed (a `FilterMenu.ChipGroup` chip). |
 | `refresh` | `(event: Event)` | Refresh requested; the app refetches. `event` is the click of `Table.RefreshButton`, or `new Event('refresh')` when `reload()` is called. |
 | `export` | `(event: Event, rows: TRow[])` | Export requested with the resolved rows; `event` is the click of `Table.Export`, or `new Event('export')` when `exportCsv()` is called; a consumer may handle it server-side (otherwise the built-in CSV util downloads). |
-| `reorder` | `(event: KeyboardEvent \| PointerEvent, payload: { from: number; to: number; row: TRow })` | reorderable`: a row moved from index `from` to index `to` of `data`. |
-| `load-more` | `(event: Event)` | moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true. |
+| `reorder` | `(event: KeyboardEvent \| PointerEvent, payload: { from: number; to: number; row: TRow })` | `reorderable`: a row moved from index `from` to index `to` of `data`. |
+| `load-more` | `(event: Event)` | `moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true. |
 
 ## Slots
 

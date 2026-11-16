@@ -20,13 +20,13 @@
   "The empty body of a data-driven `table` → use the `table` `empty` slot, which already renders this block by default."
  ],
  "related": [
-  "skeleton` — the loading placeholder shown before the empty state is known.",
-  "alert` — inline severity banner, not a zero-data block.",
-  "table` — renders an empty-state block in its `empty` slot.",
-  "button` — the usual content of the `actions` slot."
+  "`skeleton` — the loading placeholder shown before the empty state is known.",
+  "`alert` — inline severity banner, not a zero-data block.",
+  "`table` — renders an empty-state block in its `empty` slot.",
+  "`button` — the usual content of the `actions` slot."
  ],
  "bestPractices": [
-  "title` is required. Say what is missing (\"No domains yet\"), not that something went wrong.",
+  "`title` is required. Say what is missing (\"No domains yet\"), not that something went wrong.",
   "Keep the `actions` slot to one primary action, plus an optional documentation link.",
   "Leave the actions at their own width, centred, on every screen size (the design sample's look). Do not add `w-full` to a button in the slot to make it span a phone screen.",
   "Use the `icon` prop for the standard featured-icon tile. Use the `icon` slot only for custom art, and omit both when the context already explains the state.",
@@ -92,15 +92,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import EmptyState from '@aziontech/webkit/empty-state'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <EmptyState\n    title=\"No resource yet\"\n    description=\"Get started by creating your first resource.\"\n    icon=\"ai ai-inbox\"\n  >\n    <template #actions>\n      <div class=\"flex gap-(--spacing-3)\">\n        <Button\n          variant=\"secondary\"\n          label=\"Secondary Item\"\n        />\n        <Button\n          variant=\"outline\"\n          label=\"Create Item\"\n        />\n      </div>\n      <Link\n        label=\"Docs\"\n        icon=\"ai ai-arrow-right\"\n        size=\"medium\"\n        href=\"#\"\n      />\n    </template>\n  </EmptyState>\n</template>"
+   "file": "examples/empty-state/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import EmptyState from '@aziontech/webkit/empty-state'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-(--spacing-xl)\">\n    <EmptyState\n      v-for=\"size in ['small', 'medium']\"\n      :key=\"size\"\n      :size=\"size\"\n      title=\"No resource yet\"\n      description=\"Get started by creating your first resource.\"\n      icon=\"ai ai-inbox\"\n    >\n      <template #actions>\n        <div class=\"flex gap-(--spacing-3)\">\n          <Button\n            variant=\"secondary\"\n            label=\"Secondary Item\"\n          />\n          <Button\n            variant=\"outline\"\n            label=\"Create Item\"\n          />\n        </div>\n        <Link\n          label=\"Docs\"\n          icon=\"ai ai-arrow-right\"\n          size=\"medium\"\n          href=\"#\"\n        />\n      </template>\n    </EmptyState>\n  </div>\n</template>"
+   "file": "examples/empty-state/sizes.vue"
   },
   {
    "name": "Icon",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import EmptyState from '@aziontech/webkit/empty-state'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <EmptyState\n    title=\"No resource yet\"\n    description=\"Get started by creating your first resource.\"\n    icon=\"ai ai-inbox\"\n  >\n    <template #actions>\n      <div class=\"flex gap-(--spacing-3)\">\n        <Button\n          variant=\"secondary\"\n          label=\"Secondary Item\"\n        />\n        <Button\n          variant=\"outline\"\n          label=\"Create Item\"\n        />\n      </div>\n      <Link\n        label=\"Docs\"\n        icon=\"ai ai-arrow-right\"\n        size=\"medium\"\n        href=\"#\"\n      />\n    </template>\n  </EmptyState>\n</template>"
+   "file": "examples/empty-state/icon.vue"
   }
  ],
  "docs": "components/empty-state.md"

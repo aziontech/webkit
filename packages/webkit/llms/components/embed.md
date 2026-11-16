@@ -4,7 +4,7 @@
 
 - Import: `import Embed from '@aziontech/webkit/embed'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [embed.json](https://github.com/aziontech/webkit/blob/main/.specs/embed.json)
+- API as JSON: [embed.json](embed.json)
 
 ## When to use
 

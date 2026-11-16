@@ -8,9 +8,9 @@
   "A single source → cite it inline with a link; a list of one is noise."
  ],
  "related": [
-  "citation` — the inline `[n]` that points here.",
-  "streaming-response` — renders the citations; share the `anchor`.",
-  "chat-message` — sources sit inside the assistant message, under the response."
+  "`citation` — the inline `[n]` that points here.",
+  "`streaming-response` — renders the citations; share the `anchor`.",
+  "`chat-message` — sources sit inside the assistant message, under the response."
  ],
  "bestPractices": [
   "Order items as the response first cites them, so `[1]` is item 1.",

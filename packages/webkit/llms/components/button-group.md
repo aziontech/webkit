@@ -4,7 +4,7 @@
 
 - Import: `import ButtonGroup from '@aziontech/webkit/button-group'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [button-group.json](https://github.com/aziontech/webkit/blob/main/.specs/button-group.json)
+- API as JSON: [button-group.json](button-group.json)
 
 ## When to use
 

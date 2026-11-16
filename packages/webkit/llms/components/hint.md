@@ -4,7 +4,7 @@
 
 - Import: `import Hint from '@aziontech/webkit/hint'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [hint.json](https://github.com/aziontech/webkit/blob/main/.specs/hint.json)
+- API as JSON: [hint.json](hint.json)
 
 ## When to use
 
@@ -30,8 +30,8 @@
 ## Related
 
 - [tooltip](tooltip.md) — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.
-- field-description` — persistent guidance under a field; the right choice when the text must always be visible.
-- Field.Label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component.
+- `field-description` — persistent guidance under a field; the right choice when the text must always be visible.
+- `Field.Label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component.
 
 ## Props
 

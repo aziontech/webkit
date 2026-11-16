@@ -5,7 +5,7 @@
 - Import: `import InputGroupRoot from '@aziontech/webkit/input-group-root'`
 - Compound import (dot notation, not tree-shakeable): `import InputGroup from '@aziontech/webkit/input-group'`
 - Category: input · Surface: app · Structure: composition
-- API as JSON: [input-group.json](https://github.com/aziontech/webkit/blob/main/.specs/input-group.json)
+- API as JSON: [input-group.json](input-group.json)
 
 ## When to use
 
@@ -16,7 +16,7 @@
 
 - Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.
 - Set the same `size` on the group and on its child controls so heights line up.
-- disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` styles the group only; set it on the input or on the enclosing `Field`. Inside a `Field`, the Field's state reaches the root and the controls the same way.
+- `disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` styles the group only; set it on the input or on the enclosing `Field`. Inside a `Field`, the Field's state reaches the root and the controls the same way.
 - Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string.
 - The root is `role="group"`; label the inner input itself, or give the group an `aria-label`.
 

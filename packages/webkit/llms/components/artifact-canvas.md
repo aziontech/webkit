@@ -4,7 +4,7 @@
 
 - Import: `import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [artifact-canvas.json](https://github.com/aziontech/webkit/blob/main/.specs/artifact-canvas.json)
+- API as JSON: [artifact-canvas.json](artifact-canvas.json)
 
 ## When to use
 

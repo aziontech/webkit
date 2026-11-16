@@ -5,7 +5,7 @@
 - Import: `import ToastRoot from '@aziontech/webkit/toast-root'`
 - Compound import (dot notation, not tree-shakeable): `import Toast from '@aziontech/webkit/toast'`
 - Category: feedback · Surface: app · Structure: composition
-- API as JSON: [toast.json](https://github.com/aziontech/webkit/blob/main/.specs/toast.json)
+- API as JSON: [toast.json](toast.json)
 
 ## Setup
 
@@ -24,7 +24,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 - Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon and how it is announced: `toast.error` (severity `danger`) interrupts the screen reader through the Toaster's assertive live region, every other type waits its turn in the polite one. Both regions are fixed, so no region ever switches between polite and assertive (switching made screen readers drop or repeat the stack).
 - Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).
 - A toast with an `action` (or `actions`) stays at least 10 s unless it sets its own `duration`, so a keyboard or screen-reader user has time to reach the action.
-- duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.
+- `duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.
 - Use `toast.progress(message, value, { id })` when the percentage is known; keep calling it with the same `id` as the value moves (the card updates in place, no new announcement per step), and finish with `toast.success` or `toast.error` on that `id`. Use `toast.loading` when it is not known. Give a long operation a Cancel `action`.
 - Don't make a toast the only path to an important action. It auto-dismisses and never takes focus.
 

@@ -5,7 +5,7 @@
 - Import: `import AppHeaderRoot from '@aziontech/webkit/app-header-root'`
 - Compound import (dot notation, not tree-shakeable): `import AppHeader from '@aziontech/webkit/app-header'`
 - Category: layout · Surface: app · Structure: composition
-- API as JSON: [app-header.json](https://github.com/aziontech/webkit/blob/main/.specs/app-header.json)
+- API as JSON: [app-header.json](app-header.json)
 
 ## When to use
 
@@ -50,7 +50,7 @@
 | --- | --- | --- |
 | `default` | — | Root: compose `Container` (or `Start` + `Brand`), `Center`, and `End` sub-components. |
 | `default` | — | Each sub-component (incl. `Container`) exposes `default` for region content. |
-| `default` | — | app-header-brand` exposes `default` for logo markup. |
+| `default` | — | `app-header-brand` exposes `default` for logo markup. |
 
 ## Sub-components
 

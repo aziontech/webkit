@@ -4,7 +4,7 @@
 
 - Import: `import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-on-this-page.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-on-this-page.json)
+- API as JSON: [doc-on-this-page.json](doc-on-this-page.json)
 
 ## When to use
 
@@ -26,9 +26,9 @@
 
 ## Related
 
-- DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.
-- DocPreviousNext` — navigation between documents, where this is navigation within one.
-- use-heading-navigation` — the composable a page uses to receive a rail activation and scroll its own container.
+- `DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.
+- `DocPreviousNext` — navigation between documents, where this is navigation within one.
+- `use-heading-navigation` — the composable a page uses to receive a rail activation and scroll its own container.
 
 ## Props
 

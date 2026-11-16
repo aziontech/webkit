@@ -10,8 +10,8 @@
   "Moving between views or panels → use `tabs`."
  ],
  "related": [
-  "toggle-group` — the generic mutually exclusive option group, with labels and sizes.",
-  "switch` — boolean toggle for a single setting."
+  "`toggle-group` — the generic mutually exclusive option group, with labels and sizes.",
+  "`switch` — boolean toggle for a single setting."
  ],
  "bestPractices": [
   "Bind with `v-model` and apply the mode in the app (for example a `data-theme` attribute, resolving `system` from `prefers-color-scheme`); the component has no side effects.",

@@ -22,21 +22,21 @@
   "A documentation page heading → use `doc-page-header`."
  ],
  "related": [
-  "section-header` — the h2 band heading inside a page.",
-  "page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.",
-  "breadcrumb` — the usual content of the `breadcrumbs` slot.",
-  "tag` — the usual content of the `meta` slot (a status, an environment, a version).",
-  "button` — the usual content of the `actions` slot (outlined, `size=\"medium\"`)."
+  "`section-header` — the h2 band heading inside a page.",
+  "`page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.",
+  "`breadcrumb` — the usual content of the `breadcrumbs` slot.",
+  "`tag` — the usual content of the `meta` slot (a status, an environment, a version).",
+  "`button` — the usual content of the `actions` slot (outlined, `size=\"medium\"`)."
  ],
  "bestPractices": [
   "One PageHeader per page; it renders the page's only h1.",
   "Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.",
   "Do not set `class=\"w-full\"` on the action buttons; the header makes them full width on a phone.",
   "Set `titleId` when a form or landmark names itself with `aria-labelledby`.",
-  "breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.",
-  "icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.",
-  "meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.",
-  "tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both."
+  "`breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.",
+  "`icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.",
+  "`meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.",
+  "`tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both."
  ],
  "props": [
   {
@@ -106,15 +106,15 @@
  "examples": [
   {
    "name": "ListPage",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <PageHeader\n    title=\"Resources\"\n    description=\"View and manage your resources.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Documentation\"\n        icon=\"ai ai-book\"\n        variant=\"outline\"\n        size=\"medium\"\n        href=\"https://example.com/docs/resources\"\n        target=\"_blank\"\n      />\n      <Button\n        label=\"Create Resource\"\n        icon=\"ai ai-plus\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n    </template>\n  </PageHeader>\n</template>"
+   "file": "examples/page-header/default.vue"
   },
   {
    "name": "SettingsPage",
-   "sfc": "<script setup>\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <PageHeader\n    title=\"Settings\"\n    description=\"Core configuration for this resource.\"\n    size=\"small\"\n  />\n</template>"
+   "file": "examples/page-header/settings-page.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <PageHeader\n      title=\"Start a new project\"\n      description=\"Start from a repository or use a framework template.\"\n      size=\"large\"\n    />\n    <PageHeader\n      title=\"Resources\"\n      description=\"View and manage your resources.\"\n    />\n    <PageHeader\n      title=\"Settings\"\n      description=\"Core configuration for this resource.\"\n      size=\"small\"\n    />\n  </div>\n</template>"
+   "file": "examples/page-header/sizes.vue"
   }
  ],
  "docs": "components/page-header.md"

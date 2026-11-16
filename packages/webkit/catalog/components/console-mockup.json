@@ -14,8 +14,8 @@
   "A screenshot or clip in documentation → use `doc-frame`."
  ],
  "related": [
-  "illustration` — the same closed-registry pattern for static scenes.",
-  "texture` — the texture a full-screen widget grounds itself with through `texture`."
+  "`illustration` — the same closed-registry pattern for static scenes.",
+  "`texture` — the texture a full-screen widget grounds itself with through `texture`."
  ],
  "bestPractices": [
   "Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.",

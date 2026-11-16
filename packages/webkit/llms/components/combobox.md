@@ -4,7 +4,7 @@
 
 - Import: `import Combobox from '@aziontech/webkit/combobox'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [combobox.json](https://github.com/aziontech/webkit/blob/main/.specs/combobox.json)
+- API as JSON: [combobox.json](combobox.json)
 
 ## When to use
 

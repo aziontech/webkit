@@ -11,11 +11,11 @@
   "For an icon-only toolbar action that is not search → use `IconButton`."
  ],
  "related": [
-  "Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.",
-  "Kbd` — draws the keycap with the OS-aware modifier glyph.",
-  "IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.",
-  "Tooltip` — shows the label over the folded magnifier on hover and focus.",
-  "AppHeader` — the bar it sits in, usually in `AppHeader.End`."
+  "`Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.",
+  "`Kbd` — draws the keycap with the OS-aware modifier glyph.",
+  "`IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.",
+  "`Tooltip` — shows the label over the folded magnifier on hover and focus.",
+  "`AppHeader` — the bar it sits in, usually in `AppHeader.End`."
  ],
  "bestPractices": [
   "Wire `@open` to the same state the shortcut opens (`<Command v-model:open=\"open\">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.",

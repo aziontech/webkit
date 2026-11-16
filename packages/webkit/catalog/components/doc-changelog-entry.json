@@ -10,9 +10,9 @@
   "To generate a feed. Mintlify's `rss` prop is deliberately absent — this layer renders pages and generates nothing, so the prop would be inert."
  ],
  "related": [
-  "DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.",
-  "Tag` — renders the entry's tags row (`severity=\"neutral\"`): small and rounded in the label column, medium with the default shape under a `title`.",
-  "use-heading-navigation` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNavigation`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over."
+  "`DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.",
+  "`Tag` — renders the entry's tags row (`severity=\"neutral\"`): small and rounded in the label column, medium with the default shape under a `title`.",
+  "`use-heading-navigation` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNavigation`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over."
  ],
  "bestPractices": [
   "Put the date (or release name) in `label` and the version in `description` — the left edge is what a reader scans, so the label carries the identity.",

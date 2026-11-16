@@ -4,7 +4,7 @@
 
 - Import: `import PlanFeatureList from '@aziontech/webkit/plan-feature-list'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [plan-feature-list.json](https://github.com/aziontech/webkit/blob/main/.specs/plan-feature-list.json)
+- API as JSON: [plan-feature-list.json](plan-feature-list.json)
 
 ## When to use
 

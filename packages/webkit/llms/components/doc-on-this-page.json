@@ -20,9 +20,9 @@
   "For an outline deeper than a couple of levels; the indent is legible for two, not for five."
  ],
  "related": [
-  "DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.",
-  "DocPreviousNext` — navigation between documents, where this is navigation within one.",
-  "use-heading-navigation` — the composable a page uses to receive a rail activation and scroll its own container."
+  "`DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.",
+  "`DocPreviousNext` — navigation between documents, where this is navigation within one.",
+  "`use-heading-navigation` — the composable a page uses to receive a rail activation and scroll its own container."
  ],
  "bestPractices": [
   "Feed it depth 2 and 3 only; the rail indents each level by 8px and a third level reads as noise.",
@@ -72,11 +72,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'\n</script>\n\n<template>\n  <DocOnThisPage\n    :items=\"[\n      { id: 'deploy', text: 'Deploy an application', depth: 2 },\n      { id: 'what-you-get', text: 'What you get', depth: 3 },\n      { id: 'build-command', text: 'Build command', depth: 3 },\n      { id: 'bind-a-domain', text: 'Bind a domain', depth: 2 }\n    ]\"\n    active-id=\"what-you-get\"\n    :groups=\"[\n      {\n        label: 'Repository',\n        links: [\n          { label: 'View source', href: 'https://github.com/aziontech', icon: 'ai ai-github' }\n        ]\n      }\n    ]\"\n    @select=\"(event, item) => scrollToHeading(item.id)\"\n  />\n</template>"
+   "file": "examples/doc-on-this-page/default.vue"
   },
   {
    "name": "Nesting",
-   "sfc": "<script setup>\n  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'\n</script>\n\n<template>\n  <div class=\"max-w-64\">\n    <DocOnThisPage\n      :items=\"[\n        { id: 'overview', text: 'Overview', depth: 2 },\n        { id: 'templates', text: 'Templates', depth: 3 },\n        { id: 'presets', text: 'Framework presets', depth: 3 },\n        { id: 'domains', text: 'Domains', depth: 2 },\n        { id: 'certificates', text: 'Certificates', depth: 3 }\n      ]\"\n      active-id=\"presets\"\n      :groups=\"[\n        {\n          label: 'Repository',\n          links: [\n            { label: 'View source', href: 'https://github.com/aziontech', icon: 'ai ai-github' }\n          ]\n        },\n        {\n          label: 'Community',\n          links: [\n            { label: 'Discord', href: 'https://discord.gg', icon: 'ai ai-comments' },\n            { label: 'Forum', href: 'https://forum.example', icon: 'ai ai-users' }\n          ]\n        }\n      ]\"\n    />\n  </div>\n</template>"
+   "file": "examples/doc-on-this-page/nesting.vue"
   }
  ],
  "docs": "components/doc-on-this-page.md"

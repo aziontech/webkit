@@ -4,7 +4,7 @@
 
 - Import: `import DocPrompt from '@aziontech/webkit/doc-prompt'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-prompt.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-prompt.json)
+- API as JSON: [doc-prompt.json](doc-prompt.json)
 
 ## When to use
 
@@ -31,8 +31,8 @@
 ## Related
 
 - [copy-button](copy-button.md) — the control DocPrompt composes. Reach for it directly when the value being copied has no block of its own.
-- DocCallout` — draws attention to prose the reader should _read_; DocPrompt is for text the reader should _use_.
-- DocProse` — the contract around it. The prompt marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
+- `DocCallout` — draws attention to prose the reader should _read_; DocPrompt is for text the reader should _use_.
+- `DocProse` — the contract around it. The prompt marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
 
 ## Props
 

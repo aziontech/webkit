@@ -14,11 +14,11 @@
   "The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor."
  ],
  "related": [
-  "copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.",
-  "code-editor` — the editable surface; its diff mode is for editing beside an original, while a read-only diff is this block.",
-  "log-viewer` — terminal-style viewer for CI and deploy logs.",
-  "media-split-section` — page section that sets one claim beside a code sample (`codeTabs`).",
-  "scroll-area` — the scroll container the code region runs in."
+  "`copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.",
+  "`code-editor` — the editable surface; its diff mode is for editing beside an original, while a read-only diff is this block.",
+  "`log-viewer` — terminal-style viewer for CI and deploy logs.",
+  "`media-split-section` — page section that sets one claim beside a code sample (`codeTabs`).",
+  "`scroll-area` — the scroll container the code region runs in."
  ],
  "bestPractices": [
   "Put the source on each tab's `code`. There is no top-level `code` prop, and a tab without a `value` or a `code` is dropped.",

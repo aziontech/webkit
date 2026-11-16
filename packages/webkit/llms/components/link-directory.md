@@ -5,7 +5,7 @@
 - Import: `import LinkDirectoryRoot from '@aziontech/webkit/link-directory-root'`
 - Compound import (dot notation, not tree-shakeable): `import LinkDirectory from '@aziontech/webkit/link-directory'`
 - Category: marketing · Surface: site · Structure: composition
-- API as JSON: [link-directory.json](https://github.com/aziontech/webkit/blob/main/.specs/link-directory.json)
+- API as JSON: [link-directory.json](link-directory.json)
 
 ## When to use
 

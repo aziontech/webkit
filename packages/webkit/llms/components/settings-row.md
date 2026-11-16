@@ -4,7 +4,7 @@
 
 - Import: `import SettingsRow from '@aziontech/webkit/settings-row'`
 - Category: layout · Surface: app · Structure: monolithic
-- API as JSON: [settings-row.json](https://github.com/aziontech/webkit/blob/main/.specs/settings-row.json)
+- API as JSON: [settings-row.json](settings-row.json)
 
 ## When to use
 
@@ -35,7 +35,7 @@
 
 - [settings-section](settings-section.md) — the band the card of rows sits in.
 - [item](item.md) — the row primitive it renders; place rows in an `Item.List` inside the card.
-- field-error` — the required or invalid message under the control.
+- `field-error` — the required or invalid message under the control.
 
 ## Props
 

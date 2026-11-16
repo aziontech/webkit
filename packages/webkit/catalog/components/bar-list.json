@@ -11,9 +11,9 @@
   "One value against a limit (quota, usage) → use `progress`."
  ],
  "related": [
-  "chart` — horizontal bars with an axis, for comparing several series per category.",
-  "donut-chart` — the share view of the same breakdown when the parts sum to a whole.",
-  "chart-card` — the box a BarList sits in on a dashboard."
+  "`chart` — horizontal bars with an axis, for comparing several series per category.",
+  "`donut-chart` — the share view of the same breakdown when the parts sum to a whole.",
+  "`chart-card` — the box a BarList sits in on a dashboard."
  ],
  "bestPractices": [
   "Keep it to about ten rows; fold the tail into an \"Other\" row in the data rather than scrolling.",

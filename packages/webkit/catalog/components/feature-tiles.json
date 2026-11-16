@@ -9,8 +9,8 @@
   "For a scroll-driven walkthrough with one screen per feature → use `feature-scroll`."
  ],
  "related": [
-  "media-tile` — the picture-over-copy cell each tile is rendered with.",
-  "feature-widgets` — the sibling band whose cells carry an action each."
+  "`media-tile` — the picture-over-copy cell each tile is rendered with.",
+  "`feature-widgets` — the sibling band whose cells carry an action each."
  ],
  "bestPractices": [
   "Match the tile count to the variant: four tiles for `artwork`, three for `illustrated`.",

@@ -14,12 +14,12 @@
   "For switching a page's content between views → use `tabs`."
  ],
  "related": [
-  "quote` — the `highlight` register this band renders for the selected client.",
-  "logo-wall` — the same framed client cells, as links out rather than as a selector.",
-  "card-grid` — the framed grid the cards are laid out on.",
-  "registration-frame` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.",
-  "client-quotes` — the page-section band of customer quotes browsed by client.",
-  "media-tabs` — the same timer and progress hairline, for claims paired with a medium."
+  "`quote` — the `highlight` register this band renders for the selected client.",
+  "`logo-wall` — the same framed client cells, as links out rather than as a selector.",
+  "`card-grid` — the framed grid the cards are laid out on.",
+  "`registration-frame` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.",
+  "`client-quotes` — the page-section band of customer quotes browsed by client.",
+  "`media-tabs` — the same timer and progress hairline, for claims paired with a medium."
  ],
  "bestPractices": [
   "Give the wall a full row: six clients fill it from `lg` up and three from below `sm`, so six or twelve leave no empty cell.",

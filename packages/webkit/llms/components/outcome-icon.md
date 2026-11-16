@@ -4,7 +4,7 @@
 
 - Import: `import OutcomeIcon from '@aziontech/webkit/outcome-icon'`
 - Category: feedback · Surface: app · Structure: monolithic
-- API as JSON: [outcome-icon.json](https://github.com/aziontech/webkit/blob/main/.specs/outcome-icon.json)
+- API as JSON: [outcome-icon.json](outcome-icon.json)
 
 ## When to use
 

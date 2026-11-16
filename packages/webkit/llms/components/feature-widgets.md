@@ -4,7 +4,7 @@
 
 - Import: `import FeatureWidgets from '@aziontech/webkit/feature-widgets'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [feature-widgets.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-widgets.json)
+- API as JSON: [feature-widgets.json](feature-widgets.json)
 
 ## When to use
 

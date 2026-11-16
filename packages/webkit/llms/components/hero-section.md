@@ -4,7 +4,7 @@
 
 - Import: `import HeroSection from '@aziontech/webkit/hero-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [hero-section.json](https://github.com/aziontech/webkit/blob/main/.specs/hero-section.json)
+- API as JSON: [hero-section.json](hero-section.json)
 
 ## When to use
 
@@ -29,7 +29,7 @@
 ## Related
 
 - [hero](hero.md) — the band primitive every layout is rendered with.
-- hero-title` — the headline block rendered inside it.
+- `hero-title` — the headline block rendered inside it.
 - [hero-form-section](hero-form-section.md) — the opening band with a lead form beside the copy.
 - [flow-diagram](flow-diagram.md) — the diagram primitive the `levels` topology is drawn with.
 - [feature-item](feature-item.md) — the icon, heading and sentence each argument of `items` is rendered with.

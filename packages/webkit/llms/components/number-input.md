@@ -4,7 +4,7 @@
 
 - Import: `import NumberInput from '@aziontech/webkit/number-input'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [number-input.json](https://github.com/aziontech/webkit/blob/main/.specs/number-input.json)
+- API as JSON: [number-input.json](number-input.json)
 
 ## When to use
 

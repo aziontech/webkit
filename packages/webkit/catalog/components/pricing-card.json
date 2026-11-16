@@ -12,10 +12,10 @@
   "The card holds general content rather than a price → use `card`."
  ],
  "related": [
-  "currency-amount` — typesets the amount inside the card; use it directly for prices outside a tier card.",
-  "pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.",
-  "plan-comparison` — the matrix that sits under the plan cards.",
-  "card` — generic bordered card with header, content and footer regions."
+  "`currency-amount` — typesets the amount inside the card; use it directly for prices outside a tier card.",
+  "`pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.",
+  "`plan-comparison` — the matrix that sits under the plan cards.",
+  "`card` — generic bordered card with header, content and footer regions."
  ],
  "bestPractices": [
   "In a row of tiers, set `equalHeight` on every card so each caveat reserves the same band and the feature lists start on one line.",

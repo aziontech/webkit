@@ -4,7 +4,7 @@
 
 - Import: `import ContactHub from '@aziontech/webkit/contact-hub'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [contact-hub.json](https://github.com/aziontech/webkit/blob/main/.specs/contact-hub.json)
+- API as JSON: [contact-hub.json](contact-hub.json)
 
 ## When to use
 

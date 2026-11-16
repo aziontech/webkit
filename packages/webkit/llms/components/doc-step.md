@@ -4,7 +4,7 @@
 
 - Import: `import DocStep from '@aziontech/webkit/doc-step'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-step.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-step.json)
+- API as JSON: [doc-step.json](doc-step.json)
 
 ## When to use
 
@@ -24,8 +24,8 @@
 
 ## Related
 
-- DocSteps` — the sibling root that numbers this; it provides the context this step registers with.
-- DocProse` — the step heading marks itself `data-doc-chrome`, so prose rules stop at its edge.
+- `DocSteps` — the sibling root that numbers this; it provides the context this step registers with.
+- `DocProse` — the step heading marks itself `data-doc-chrome`, so prose rules stop at its edge.
 
 ## Props
 

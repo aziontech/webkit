@@ -19,16 +19,16 @@
   "The input needs addons other than the dial code → use `input-group` and compose it yourself."
  ],
  "related": [
-  "field` — wraps the control with its label, description and error.",
-  "input-group` — the container this control renders around the dial-code select and the input.",
-  "select` — the dial-code picker inside the group."
+  "`field` — wraps the control with its label, description and error.",
+  "`input-group` — the container this control renders around the dial-code select and the input.",
+  "`select` — the dial-code picker inside the group."
  ],
  "bestPractices": [
   "Put it in a `Field` with a `Field.Label`; the label targets the tel input.",
-  "v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.",
+  "`v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.",
   "Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
-  "v-model:country` defaults to `'US'`; seed it with the user's country when you know it.",
-  "searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
+  "`v-model:country` defaults to `'US'`; seed it with the user's country when you know it.",
+  "`searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
  ],
  "props": [
   {
@@ -129,7 +129,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import PhoneInput from '@aziontech/webkit/phone-input'\n  import { ref } from 'vue'\n\n  const digits = ref('')\n  const country = ref('US')\n  const phone = ref(null)\n</script>\n\n<template>\n  <Field\n    required\n    class=\"max-w-(--container-xs)\"\n  >\n    <Field.Label>Phone</Field.Label>\n    <PhoneInput\n      v-model=\"digits\"\n      v-model:country=\"country\"\n      name=\"phone\"\n      @phone-change=\"phone = $event\"\n    />\n    <Field.Description>We'll use this to send the verification code.</Field.Description>\n  </Field>\n</template>"
+   "file": "examples/phone-input/default.vue"
   }
  ],
  "docs": "components/phone-input.md"

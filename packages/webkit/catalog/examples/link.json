@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "Default large link to an off-site page; the `_blank` target adds the external-link icon.",
-   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    size=\"large\"\n    href=\"https://example.com/docs\"\n    target=\"_blank\"\n  />\n</template>"
+   "file": "examples/link/default.vue"
   },
   {
    "name": "Sizes",
    "summary": "All size variants side by side.",
-   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Link\n      size=\"large\"\n      label=\"Learn more\"\n      icon=\"ai ai-external-link\"\n    />\n    <Link\n      size=\"medium\"\n      label=\"Learn more\"\n      icon=\"ai ai-external-link\"\n    />\n    <Link\n      size=\"small\"\n      label=\"Learn more\"\n      icon=\"ai ai-external-link\"\n    />\n  </div>\n</template>"
+   "file": "examples/link/sizes.vue"
   },
   {
    "name": "Disabled",
    "summary": "Disabled state; interaction is blocked and the disabled tokens apply.",
-   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    icon=\"ai ai-external-link\"\n    disabled\n  />\n</template>"
+   "file": "examples/link/disabled.vue"
   }
  ]
 }

@@ -4,7 +4,7 @@
 
 - Import: `import ArticleBody from '@aziontech/webkit/article-body'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [article-body.json](https://github.com/aziontech/webkit/blob/main/.specs/article-body.json)
+- API as JSON: [article-body.json](article-body.json)
 
 ## When to use
 

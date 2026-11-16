@@ -4,7 +4,7 @@
 
 - Import: `import CallToAction from '@aziontech/webkit/call-to-action'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [call-to-action.json](https://github.com/aziontech/webkit/blob/main/.specs/call-to-action.json)
+- API as JSON: [call-to-action.json](call-to-action.json)
 
 ## When to use
 
@@ -20,7 +20,7 @@
 
 ## Do
 
-- framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
+- `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
 - Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.
 - Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
@@ -28,7 +28,7 @@
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
 - In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.
 - In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.
-- lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-2xl` the other two use. In `split` that larger number is the _floor_ of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-2xl` stops reading as a floor and starts reading as a hole.
+- `lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-2xl` the other two use. In `split` that larger number is the _floor_ of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-2xl` stops reading as a floor and starts reading as a hole.
 - In `primary`, the band is centred and carries `title` and `description` only; `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
 - In `primary`, compose one `texture` into `background` — `pixelate` at `small` with `fade="bottom"` — and a `marquee` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.
 - In `primary`, give the marquee enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.

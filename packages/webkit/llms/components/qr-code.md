@@ -4,7 +4,7 @@
 
 - Import: `import QrCode from '@aziontech/webkit/qr-code'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [qr-code.json](https://github.com/aziontech/webkit/blob/main/.specs/qr-code.json)
+- API as JSON: [qr-code.json](qr-code.json)
 
 ## When to use
 

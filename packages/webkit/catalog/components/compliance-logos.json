@@ -7,7 +7,7 @@
   "For client logos → use `logo-wall-section` or `client-mosaic`."
  ],
  "related": [
-  "media-split` — the copy-beside-media band this section renders through."
+  "`media-split` — the copy-beside-media band this section renders through."
  ],
  "bestPractices": [
   "Four or five certifications plus the link cell fill two rows of three.",

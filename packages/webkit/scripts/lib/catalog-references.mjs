@@ -30,7 +30,10 @@ export function retiredReferenceNames(migration, blockAliases = {}) {
 
 function relatedName(text) {
   const s = String(text).trim()
-  if (s.startsWith('`')) return s.slice(1).split('`')[0]
+  if (s.startsWith('`')) {
+    const name = s.slice(1).split('`')[0].trim()
+    return KEBAB.test(name) ? name : null
+  }
   const head = s.split('`')[0].trim()
   return s.includes('`') && KEBAB.test(head) ? head : null
 }

@@ -1415,6 +1415,55 @@
       "query": "página de solução",
       "top1": "shell/site",
       "top3": ["shell/site"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "a dropdown to pick one region from a list",
+      "top1": "select",
+      "top3": ["select"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "pick a region",
+      "top1": "select",
+      "top3": ["select"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "user avatar menu in the header",
+      "top1": "console-layout",
+      "top3": ["console-layout", "dropdown-menu"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "code snippet with copy button",
+      "top1": "code-block",
+      "top3": ["code-block"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "tag input for adding multiple emails",
+      "top1": "tag-editor",
+      "top3": ["tag-editor", "multi-select"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "login with API token",
+      "top1": "auth/sign-in",
+      "top3": ["auth/sign-in"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "confirm delete",
+      "top1": "confirm-dialog",
+      "top3": ["confirm-dialog", "edit/delete-dialog"]
     }
   ]
 }

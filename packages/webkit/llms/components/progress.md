@@ -4,7 +4,7 @@
 
 - Import: `import Progress from '@aziontech/webkit/progress'`
 - Category: feedback · Surface: app · Structure: monolithic
-- API as JSON: [progress.json](https://github.com/aziontech/webkit/blob/main/.specs/progress.json)
+- API as JSON: [progress.json](progress.json)
 
 ## When to use
 
@@ -37,7 +37,7 @@
 | --- | --- | --- | --- | --- |
 | `value` | `number` | `0` | false | Current progress, relative to `max`. |
 | `max` | `number` | `100` | false | Upper bound; percentage = `value / max * 100`. |
-| `variant` | `ProgressVariant` (`'rounded' \| 'flat'`)` | `'flat'` | false | Track and fill corner-radius variant. |
+| `variant` | ``ProgressVariant` (`'rounded' \| 'flat'`)` | `'flat'` | false | Track and fill corner-radius variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Bar height token. |
 | `indeterminate` | `boolean` | `false` | false | Loading state; animates a sliding segment and ignores `value`. |
 

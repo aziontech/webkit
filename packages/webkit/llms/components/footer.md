@@ -5,7 +5,7 @@
 - Import: `import FooterRoot from '@aziontech/webkit/footer-root'`
 - Compound import (dot notation, not tree-shakeable): `import Footer from '@aziontech/webkit/footer'`
 - Category: layout · Surface: app · Structure: composition
-- API as JSON: [footer.json](https://github.com/aziontech/webkit/blob/main/.specs/footer.json)
+- API as JSON: [footer.json](footer.json)
 
 ## When to use
 
@@ -57,8 +57,8 @@
 | `language` | — | Root: the language select. Rendered _before_ `status` when stacked and _after_ it from `md`, per the two Figma variants. |
 | `brand` | — | Root: the brand lockup of the signature band. |
 | `tagline` | — | Root: the one-line tagline; the footer wraps it in the `.text-heading-xl` measure. |
-| `default` | — | footer-column`: its `Footer.Link` items. |
-| `default` | — | footer-link`: the link label. |
+| `default` | — | `footer-column`: its `Footer.Link` items. |
+| `default` | — | `footer-link`: the link label. |
 
 ## Sub-component imports
 

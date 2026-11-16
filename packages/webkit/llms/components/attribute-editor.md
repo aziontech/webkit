@@ -4,7 +4,7 @@
 
 - Import: `import AttributeEditor from '@aziontech/webkit/attribute-editor'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [attribute-editor.json](https://github.com/aziontech/webkit/blob/main/.specs/attribute-editor.json)
+- API as JSON: [attribute-editor.json](attribute-editor.json)
 
 ## When to use
 
@@ -41,7 +41,7 @@
 - [input](input.md) — the default control of a cell; any control can replace it through `cell-<key>`.
 - [button](button.md), `icon-button` — Add and Remove.
 - [separator](separator.md) — the "or" between groups in grouped mode.
-- edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
+- `edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
 
 ## Props
 

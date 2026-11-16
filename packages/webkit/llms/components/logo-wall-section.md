@@ -4,7 +4,7 @@
 
 - Import: `import LogoWallSection from '@aziontech/webkit/logo-wall-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [logo-wall-section.json](https://github.com/aziontech/webkit/blob/main/.specs/logo-wall-section.json)
+- API as JSON: [logo-wall-section.json](logo-wall-section.json)
 
 ## When to use
 

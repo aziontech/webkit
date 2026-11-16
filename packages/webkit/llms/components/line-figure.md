@@ -4,7 +4,7 @@
 
 - Import: `import LineFigure from '@aziontech/webkit/line-figure'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [line-figure.json](https://github.com/aziontech/webkit/blob/main/.specs/line-figure.json)
+- API as JSON: [line-figure.json](line-figure.json)
 
 ## When to use
 
@@ -29,9 +29,9 @@
 
 ## Related
 
-- Illustration` — static art from the registry.
-- ConsoleMockup` — product scenes.
-- EmptyState` — can carry a figure in its art slot.
+- `Illustration` — static art from the registry.
+- `ConsoleMockup` — product scenes.
+- `EmptyState` — can carry a figure in its art slot.
 
 ## Props
 

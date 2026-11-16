@@ -19,13 +19,13 @@
   "The headline figures are not money (throughput, uptime, points of presence) → use `stats`."
  ],
  "related": [
-  "pricing-card` — composes CurrencyAmount for its price, `medium` or `large` depending on `slotPosition`.",
-  "stats` — display-scale figures for metrics that aren't money.",
-  "stats-section` — page section of big figures with their own prefix and unit."
+  "`pricing-card` — composes CurrencyAmount for its price, `medium` or `large` depending on `slotPosition`.",
+  "`stats` — display-scale figures for metrics that aren't money.",
+  "`stats-section` — page section of big figures with their own prefix and unit."
  ],
  "bestPractices": [
   "Pass `value` already formatted as a string (`'1,250.00'`). The component does no number or locale formatting.",
-  "prefix` defaults to `'$'`; set `prefix=\"\"` to drop the symbol. The suffix renders only when `suffix` is set.",
+  "`prefix` defaults to `'$'`; set `prefix=\"\"` to drop the symbol. The suffix renders only when `suffix` is set.",
   "Pick `size` by reading distance, not by available space: `small` in tables and lists, `medium` (the default) on cards, `large` only for a headline price.",
   "Don't restyle the parts with classes; each size takes its typography from the `text-amount-*` and `text-label-code-*` tokens."
  ],
@@ -66,11 +66,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CurrencyAmount from '@aziontech/webkit/currency-amount'\n</script>\n\n<template>\n  <CurrencyAmount\n    value=\"20\"\n    prefix=\"$\"\n    suffix=\"per month\"\n    size=\"small\"\n  />\n</template>"
+   "file": "examples/currency-amount/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import CurrencyAmount from '@aziontech/webkit/currency-amount'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-6\">\n    <CurrencyAmount\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"per month\"\n      size=\"small\"\n    />\n    <CurrencyAmount\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"per month\"\n      size=\"medium\"\n    />\n    <CurrencyAmount\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"per month\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+   "file": "examples/currency-amount/sizes.vue"
   }
  ],
  "docs": "components/currency-amount.md"

@@ -25,12 +25,12 @@
   "A long list of commands or navigation → use `dropdown-menu`."
  ],
  "related": [
-  "icon-button` — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.",
-  "toggle-group` — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).",
-  "split-button` — one main action plus a menu, with a visible text label.",
-  "dropdown-menu` — the menu behind menu items and the More actions overflow.",
-  "tooltip` — the visible name of each icon.",
-  "code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
+  "`icon-button` — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.",
+  "`toggle-group` — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).",
+  "`split-button` — one main action plus a menu, with a visible text label.",
+  "`dropdown-menu` — the menu behind menu items and the More actions overflow.",
+  "`tooltip` — the visible name of each icon.",
+  "`code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
  ],
  "bestPractices": [
   "Give the toolbar an `aria-label` that names the surface (\"Editor actions\"), and every item a `label` that says what it does (\"Copy code\", not \"Copy\"). Write the kebab attribute (`aria-label`, `:aria-label` when the name changes, `aria-labelledby` when a visible heading already names the surface), never the camelCase `ariaLabel` attribute.",
@@ -103,11 +103,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ButtonGroup from '@aziontech/webkit/button-group'\n  import { computed, ref } from 'vue'\n\n  const wrap = ref(false)\n  const last = ref('')\n\n  const items = [\n    { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },\n    { id: 'format', label: 'Format document', icon: 'ai ai-align-left' },\n    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-move-horizontal' },\n    {\n      id: 'download',\n      type: 'menu',\n      label: 'Download',\n      icon: 'ai ai-download',\n      options: [\n        { id: 'download-js', label: 'Download as .js' },\n        { id: 'download-zip', label: 'Download as .zip' }\n      ]\n    }\n  ]\n\n  const resolved = computed(() =>\n    items.map((item) => (item.type === 'toggle' ? { ...item, pressed: wrap.value } : item))\n  )\n\n  const onToggle = (event, { id, pressed }) => {\n    if (id === 'wrap') wrap.value = pressed\n    last.value = `${id}: ${pressed ? 'on' : 'off'}`\n  }\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-sm)\">\n    <ButtonGroup\n      :items=\"resolved\"\n      aria-label=\"Editor actions\"\n      @click=\"(_event, id) => (last = id)\"\n      @toggle=\"onToggle\"\n    />\n    <p\n      class=\"m-0 text-body-sm text-(--text-muted)\"\n      aria-live=\"polite\"\n    >\n      Last action: {{ last || 'none' }}\n    </p>\n  </div>\n</template>"
+   "file": "examples/button-group/default.vue"
   },
   {
    "name": "WithOverflow",
-   "sfc": "<script setup>\n  import ButtonGroup from '@aziontech/webkit/button-group'\n  import { computed, ref } from 'vue'\n\n  const pinned = ref(true)\n\n  const items = computed(() => [\n    { id: 'refresh', label: 'Refresh', icon: 'ai ai-refresh' },\n    {\n      id: 'pin',\n      type: 'toggle',\n      label: 'Pin to home',\n      icon: 'ai ai-star',\n      pressedIcon: 'ai ai-star-fill',\n      pressed: pinned.value\n    },\n    { id: 'share', label: 'Share', icon: 'ai ai-share' },\n    { id: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' },\n    { id: 'archive', label: 'Archive', icon: 'ai ai-inbox', disabled: true },\n    {\n      id: 'export',\n      type: 'menu',\n      label: 'Export',\n      icon: 'ai ai-file-export',\n      options: [\n        { id: 'export-csv', label: 'Export as CSV' },\n        { id: 'export-json', label: 'Export as JSON' }\n      ]\n    }\n  ])\n</script>\n\n<template>\n  <ButtonGroup\n    :items=\"items\"\n    :visible-count=\"3\"\n    variant=\"outline\"\n    size=\"small\"\n    aria-label=\"Record actions\"\n    @toggle=\"(event, { pressed }) => (pinned = pressed)\"\n  />\n</template>"
+   "file": "examples/button-group/with-overflow.vue"
   }
  ],
  "docs": "components/button-group.md"

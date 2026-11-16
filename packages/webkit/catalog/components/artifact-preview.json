@@ -9,9 +9,9 @@
   "Uploads the reader attached → `file-dropzone` items or chips in `PromptInput`'s attachments."
  ],
  "related": [
-  "code-block` — the usual inline preview body.",
-  "drawer` — where an `open` artifact is shown in full.",
-  "chat-message` — artifacts stack under the response, not inside its bubble."
+  "`code-block` — the usual inline preview body.",
+  "`drawer` — where an `open` artifact is shown in full.",
+  "`chat-message` — artifacts stack under the response, not inside its bubble."
  ],
  "bestPractices": [
   "Stack artifacts below the message text, one card each; do not nest them in the bubble.",

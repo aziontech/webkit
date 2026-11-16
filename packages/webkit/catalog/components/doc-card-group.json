@@ -9,9 +9,9 @@
   "As a general-purpose layout grid for application screens; it is documentation chrome, tied to the `DocProse` ladder."
  ],
  "related": [
-  "DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.",
-  "RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.",
-  "DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder."
+  "`DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.",
+  "`RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.",
+  "`DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder."
  ],
  "bestPractices": [
   "Pick `columns` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.",

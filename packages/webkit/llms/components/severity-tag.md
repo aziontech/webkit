@@ -4,7 +4,7 @@
 
 - Import: `import SeverityTag from '@aziontech/webkit/severity-tag'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [severity-tag.json](https://github.com/aziontech/webkit/blob/main/.specs/severity-tag.json)
+- API as JSON: [severity-tag.json](severity-tag.json)
 
 ## When to use
 

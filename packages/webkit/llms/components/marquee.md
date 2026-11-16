@@ -4,7 +4,7 @@
 
 - Import: `import Marquee from '@aziontech/webkit/marquee'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [marquee.json](https://github.com/aziontech/webkit/blob/main/.specs/marquee.json)
+- API as JSON: [marquee.json](marquee.json)
 
 ## When to use
 

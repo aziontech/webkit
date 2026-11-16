@@ -4,7 +4,7 @@
 
 - Import: `import Sources from '@aziontech/webkit/sources'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [sources.json](https://github.com/aziontech/webkit/blob/main/.specs/sources.json)
+- API as JSON: [sources.json](sources.json)
 
 ## When to use
 

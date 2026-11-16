@@ -4,7 +4,7 @@
 
 - Import: `import PlatformDirectory from '@aziontech/webkit/platform-directory'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [platform-directory.json](https://github.com/aziontech/webkit/blob/main/.specs/platform-directory.json)
+- API as JSON: [platform-directory.json](platform-directory.json)
 
 ## When to use
 

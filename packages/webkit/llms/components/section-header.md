@@ -4,7 +4,7 @@
 
 - Import: `import SectionHeader from '@aziontech/webkit/section-header'`
 - Category: layout · Surface: app · Structure: monolithic
-- API as JSON: [section-header.json](https://github.com/aziontech/webkit/blob/main/.specs/section-header.json)
+- API as JSON: [section-header.json](section-header.json)
 
 ## When to use
 

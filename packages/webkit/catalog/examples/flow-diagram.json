@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "A sequential flow of nodes joined by connectors.",
-   "sfc": "<script setup>\n  import FlowDiagram from '@aziontech/webkit/flow-diagram'\n</script>\n\n<template>\n  <FlowDiagram align=\"center\">\n    <FlowDiagram.Node>Source</FlowDiagram.Node>\n    <FlowDiagram.Node>Transform</FlowDiagram.Node>\n    <FlowDiagram.Node>Deliver</FlowDiagram.Node>\n  </FlowDiagram>\n</template>"
+   "file": "examples/flow-diagram/default.vue"
   },
   {
    "name": "Parallel",
    "summary": "A parallel group fans out from the previous node and back into the next.",
-   "sfc": "<script setup>\n  import FlowDiagram from '@aziontech/webkit/flow-diagram'\n</script>\n\n<template>\n  <FlowDiagram align=\"center\">\n    <FlowDiagram.Node>Start</FlowDiagram.Node>\n    <FlowDiagram.Parallel>\n      <FlowDiagram.Node>Branch A</FlowDiagram.Node>\n      <FlowDiagram.Node>Branch B</FlowDiagram.Node>\n      <FlowDiagram.Node>Branch C</FlowDiagram.Node>\n    </FlowDiagram.Parallel>\n    <FlowDiagram.Node>End</FlowDiagram.Node>\n  </FlowDiagram>\n</template>"
+   "file": "examples/flow-diagram/parallel.vue"
   },
   {
    "name": "Branches",
    "summary": "A leading parallel fans in and a trailing parallel fans out — connectors route correctly at the edges of the sequence.",
-   "sfc": "<script setup>\n  import FlowDiagram from '@aziontech/webkit/flow-diagram'\n</script>\n\n<template>\n  <FlowDiagram align=\"center\">\n    <FlowDiagram.Parallel>\n      <FlowDiagram.Node>HTTP Trigger</FlowDiagram.Node>\n      <FlowDiagram.Node>Cron Trigger</FlowDiagram.Node>\n    </FlowDiagram.Parallel>\n    <FlowDiagram.Node>Process Request</FlowDiagram.Node>\n    <FlowDiagram.Parallel>\n      <FlowDiagram.Node>Log Analytics</FlowDiagram.Node>\n      <FlowDiagram.Node>Update Cache</FlowDiagram.Node>\n      <FlowDiagram.Node>Send Notification</FlowDiagram.Node>\n    </FlowDiagram.Parallel>\n    <FlowDiagram.Node>Complete</FlowDiagram.Node>\n  </FlowDiagram>\n</template>"
+   "file": "examples/flow-diagram/branches.vue"
   }
  ]
 }

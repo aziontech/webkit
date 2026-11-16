@@ -11,9 +11,9 @@
   "Free-text tags or labels → use `tag-editor` or `chip`."
  ],
  "related": [
-  "file-dropzone` — receives dropped files; the group lists them.",
-  "upload-progress` — the floating card for transfers that keep running after the dialog closes. Split: FileTokenGroup lists the files picked in a form, before and while they are sent, and dies with the form; UploadProgress tracks transfers that outlive the dialog, with Cancel and Retry. Both draw a file row with a progress bar; when a transfer must survive navigation, hand it to UploadProgress instead of keeping the token.",
-  "chip` — a removable label without file details."
+  "`file-dropzone` — receives dropped files; the group lists them.",
+  "`upload-progress` — the floating card for transfers that keep running after the dialog closes. Split: FileTokenGroup lists the files picked in a form, before and while they are sent, and dies with the form; UploadProgress tracks transfers that outlive the dialog, with Cancel and Retry. Both draw a file row with a progress bar; when a transfer must survive navigation, hand it to UploadProgress instead of keeping the token.",
+  "`chip` — a removable label without file details."
  ],
  "bestPractices": [
   "Keep the refused files in the list with their error, so the person sees why and can remove them; do not drop them silently.",

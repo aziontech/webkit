@@ -4,7 +4,7 @@
 
 - Import: `import DocPageHeader from '@aziontech/webkit/doc-page-header'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-page-header.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-page-header.json)
+- API as JSON: [doc-page-header.json](doc-page-header.json)
 
 ## When to use
 
@@ -28,9 +28,9 @@
 
 ## Related
 
-- DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.
-- DocOnThisPage` — the rail beside the body, which lists those `h2`s.
-- Button` / `Tooltip` / `Separator` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them.
+- `DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.
+- `DocOnThisPage` — the rail beside the body, which lists those `h2`s.
+- `Button` / `Tooltip` / `Separator` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them.
 
 ## Props
 

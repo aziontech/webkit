@@ -22,10 +22,10 @@
   "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it, inside the positioned ancestor."
  ],
  "related": [
-  "hero` — the band whose `background` slot this is composed into.",
-  "registration-frame` — structural rules and corner marks, not decoration.",
-  "section-gap` — the hatched rhythm band between sections.",
-  "hero` — the marketing band that paints this texture behind its own copy."
+  "`hero` — the band whose `background` slot this is composed into.",
+  "`registration-frame` — structural rules and corner marks, not decoration.",
+  "`section-gap` — the hatched rhythm band between sections.",
+  "`hero` — the marketing band that paints this texture behind its own copy."
  ],
  "bestPractices": [
   "Give the layer a positioned ancestor (`relative`) that also clips it; it fills that box and nothing else.",
@@ -64,15 +64,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Texture from '@aziontech/webkit/texture'\n</script>\n\n<template>\n  <div class=\"relative h-80 w-full overflow-hidden bg-(--bg-canvas)\">\n    <Texture\n      variant=\"dots\"\n      size=\"medium\"\n      fade=\"none\"\n    />\n  </div>\n</template>"
+   "file": "examples/texture/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import Texture from '@aziontech/webkit/texture'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <Texture variant=\"dots\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <Texture variant=\"grid\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <Texture variant=\"lines\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <Texture variant=\"dither\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <Texture variant=\"pixelate\" />\n    </div>\n  </div>\n</template>"
+   "file": "examples/texture/variants.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Texture from '@aziontech/webkit/texture'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <Texture size=\"small\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <Texture size=\"medium\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <Texture size=\"large\" />\n    </div>\n  </div>\n</template>"
+   "file": "examples/texture/sizes.vue"
   }
  ],
  "docs": "components/texture.md"

@@ -8,8 +8,8 @@
   "For the full list of articles → use `article-index`."
  ],
  "related": [
-  "article-cards` — the closing row of related articles.",
-  "card-grid` — the frame grid the wall of titles sits on."
+  "`article-cards` — the closing row of related articles.",
+  "`card-grid` — the frame grid the wall of titles sits on."
  ],
  "bestPractices": [
   "Feature three to five articles; the wall sets one column per article from `lg`, so five sit in one row of five as on azion.com's blog.",

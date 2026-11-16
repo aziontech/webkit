@@ -21,11 +21,11 @@
   "For an icon-only toolbar action that is not search → use `IconButton`."
  ],
  "related": [
-  "Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.",
-  "Kbd` — draws the keycap with the OS-aware modifier glyph.",
-  "IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.",
-  "Tooltip` — shows the label over the folded magnifier on hover and focus.",
-  "AppHeader` — the bar it sits in, usually in `AppHeader.End`."
+  "`Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.",
+  "`Kbd` — draws the keycap with the OS-aware modifier glyph.",
+  "`IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.",
+  "`Tooltip` — shows the label over the folded magnifier on hover and focus.",
+  "`AppHeader` — the bar it sits in, usually in `AppHeader.End`."
  ],
  "bestPractices": [
   "Wire `@open` to the same state the shortcut opens (`<Command v-model:open=\"open\">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.",
@@ -79,15 +79,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Command from '@aziontech/webkit/command'\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n  const pages = ['Workloads', 'Applications', 'Functions', 'Firewall']\n</script>\n\n<template>\n  <SearchTrigger @open=\"open = true\" />\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"meta+k\"\n    @select=\"open = false\"\n  >\n    <Command.Input placeholder=\"Search pages\" />\n    <Command.List>\n      <Command.Empty>No results.</Command.Empty>\n      <Command.Group label=\"Pages\">\n        <Command.Item\n          v-for=\"page in pages\"\n          :key=\"page\"\n          :value=\"page\"\n          >{{ page }}</Command.Item\n        >\n      </Command.Group>\n    </Command.List>\n  </Command>\n</template>"
+   "file": "examples/search-trigger/default.vue"
   },
   {
    "name": "Collapsible",
-   "sfc": "<script setup>\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      class=\"@container w-64 rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger collapsible />\n    </div>\n    <div\n      class=\"@container w-full max-w-3xl rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger\n        collapsible\n        label=\"Search docs\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/search-trigger/collapsible.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n</script>\n\n<template>\n  <SearchTrigger disabled />\n</template>"
+   "file": "examples/search-trigger/disabled.vue"
   }
  ],
  "docs": "components/search-trigger.md"

@@ -5,7 +5,7 @@
 - Import: `import ConsoleLayoutRoot from '@aziontech/webkit/console-layout-root'`
 - Compound import (dot notation, not tree-shakeable): `import ConsoleLayout from '@aziontech/webkit/console-layout'`
 - Category: layout · Surface: app · Structure: composition
-- API as JSON: [console-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/console-layout.json)
+- API as JSON: [console-layout.json](console-layout.json)
 
 ## When to use
 
@@ -40,11 +40,11 @@
 
 ## Related
 
-- AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
-- Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
-- SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
-- Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).
-- shell/console` — the block that shows this layout with sample console navigation.
+- `AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
+- `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
+- `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
+- `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).
+- `shell/console` — the block that shows this layout with sample console navigation.
 
 ## Props
 
@@ -82,7 +82,7 @@
 | `notifications` | — | Flash messages (`Alert`) above the page, kept in view while the page scrolls. |
 | `tools` | — | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`. |
 | `search` | { query: string } | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette. |
-| `account-menu` | — | DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`. |
+| `account-menu` | — | `DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`. |
 
 ## Sub-component imports
 

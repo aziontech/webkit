@@ -4,7 +4,7 @@
 
 - Import: `import CompetitorComparison from '@aziontech/webkit/competitor-comparison'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [competitor-comparison.json](https://github.com/aziontech/webkit/blob/main/.specs/competitor-comparison.json)
+- API as JSON: [competitor-comparison.json](competitor-comparison.json)
 
 ## When to use
 

@@ -23,9 +23,9 @@
   "Marketing pricing cards on the site → use `pricing-card` / `pricing-plans`, which carry their own feature lists."
  ],
  "related": [
-  "key-value-list` — the plan facts that sit next to the feature list in a billing card.",
-  "card` — the surface the list sits in; PlanFeatureList brings no surface of its own.",
-  "outcome-icon` — the mark for a step that finished, which this check is not."
+  "`key-value-list` — the plan facts that sit next to the feature list in a billing card.",
+  "`card` — the surface the list sits in; PlanFeatureList brings no surface of its own.",
+  "`outcome-icon` — the mark for a step that finished, which this check is not."
  ],
  "bestPractices": [
   "Keep each label to a few words in title case or sentence case, one capability per row; put the detail in `description`, not in the label.",
@@ -63,15 +63,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'\n\n  const features = [\n    { label: 'Unlimited Applications' },\n    { label: 'Unlimited Workloads' },\n    { label: 'Custom Domains' },\n    { label: 'Priority Support' }\n  ]\n</script>\n\n<template>\n  <PlanFeatureList\n    :items=\"features\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+   "file": "examples/plan-feature-list/default.vue"
   },
   {
    "name": "Columns",
-   "sfc": "<script setup>\n  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'\n\n  const features = [\n    { label: 'Unlimited Applications' },\n    { label: 'Unlimited Workloads' },\n    { label: 'Custom Domains' },\n    { label: 'Priority Support' },\n    { label: 'Real-Time Metrics' },\n    { label: 'Data Stream' },\n    { label: 'Web Application Firewall' },\n    { label: 'Team Permissions' }\n  ]\n</script>\n\n<template>\n  <PlanFeatureList\n    :items=\"features\"\n    :columns=\"2\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+   "file": "examples/plan-feature-list/columns.vue"
   },
   {
    "name": "WithDescriptions",
-   "sfc": "<script setup>\n  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'\n\n  const features = [\n    {\n      label: 'Unlimited Applications',\n      description: 'Deploy as many applications as your projects need.'\n    },\n    {\n      label: 'Custom Domains',\n      description: 'Serve every application from your own domain, with managed certificates.'\n    },\n    {\n      label: 'Priority Support',\n      description: 'Reach the support team by chat and get an answer within one business day.'\n    }\n  ]\n</script>\n\n<template>\n  <PlanFeatureList\n    :items=\"features\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+   "file": "examples/plan-feature-list/with-descriptions.vue"
   }
  ],
  "docs": "components/plan-feature-list.md"

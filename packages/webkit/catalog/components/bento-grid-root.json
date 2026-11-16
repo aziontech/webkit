@@ -13,10 +13,10 @@
   "For a list of questions → use `faq`."
  ],
  "related": [
-  "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
-  "stats` — the same collapsed-rule grid, specialised for figures.",
-  "media-split` — the two-column band when there is one claim, not several.",
-  "registration-frame` — the frame each cell is drawn with."
+  "`card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
+  "`stats` — the same collapsed-rule grid, specialised for figures.",
+  "`media-split` — the two-column band when there is one claim, not several.",
+  "`registration-frame` — the frame each cell is drawn with."
  ],
  "bestPractices": [
   "Size the mosaic so the cells fill the rectangle: count the tracks (`columns` × rows) and check the spans add up, or the grid ends on a gap of bare canvas.",

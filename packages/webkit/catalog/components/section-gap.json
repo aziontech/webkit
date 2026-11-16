@@ -12,10 +12,10 @@
   "When the gap must hold content (a headline, a CTA) → use `section-title`, or a `registration-frame` you fill yourself."
  ],
  "related": [
-  "registration-frame` — the frame this component configures; reach for it directly when the gap needs content or different rules.",
-  "texture` — the layer that paints the ruling, composed here at its `lines` kind.",
-  "section-title` — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.",
-  "separator` — a hairline with no vertical air."
+  "`registration-frame` — the frame this component configures; reach for it directly when the gap needs content or different rules.",
+  "`texture` — the layer that paints the ruling, composed here at its `lines` kind.",
+  "`section-title` — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.",
+  "`separator` — a hairline with no vertical air."
  ],
  "bestPractices": [
   "Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.",

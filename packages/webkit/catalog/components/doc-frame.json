@@ -12,8 +12,8 @@
   "For a gallery or carousel; the frame holds one piece of media at a time."
  ],
  "related": [
-  "DocProse` — the page contract around it. The frame marks itself `data-doc-block`, so it takes the block rung of the prose ladder, and its caption and hint arrive unclassed for the page to style.",
-  "DocCallout` — the other block-level interruption; a callout carries words, a frame carries media."
+  "`DocProse` — the page contract around it. The frame marks itself `data-doc-block`, so it takes the block rung of the prose ladder, and its caption and hint arrive unclassed for the page to style.",
+  "`DocCallout` — the other block-level interruption; a callout carries words, a frame carries media."
  ],
  "bestPractices": [
   "Always pass `alt` for a still or a clip: it labels the media, names the zoom trigger, and titles the full-screen dialog.",

@@ -11,9 +11,9 @@
   "A numbered set of instructions in documentation → use `doc-steps`."
  ],
  "related": [
-  "diagram` — marketing architecture drawings from a closed library or a one-off spec; `flow-diagram` is the in-product, hand-composed pipeline.",
-  "doc-steps` — an ordered walkthrough of text steps joined by a rail, not connected nodes.",
-  "table` — records without ordered or branching relationships."
+  "`diagram` — marketing architecture drawings from a closed library or a one-off spec; `flow-diagram` is the in-product, hand-composed pipeline.",
+  "`doc-steps` — an ordered walkthrough of text steps joined by a rail, not connected nodes.",
+  "`table` — records without ordered or branching relationships."
  ],
  "bestPractices": [
   "Write steps as direct children of `FlowDiagram` in flow order; connectors are drawn between siblings, so wrapping nodes in extra elements breaks the chain.",

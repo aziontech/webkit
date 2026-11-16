@@ -4,7 +4,7 @@
 
 - Import: `import DocSteps from '@aziontech/webkit/doc-steps'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-steps.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-steps.json)
+- API as JSON: [doc-steps.json](doc-steps.json)
 
 ## When to use
 
@@ -27,9 +27,9 @@
 
 ## Related
 
-- DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.
-- Stepper` — the app's interactive step rail. Both number their steps with the same shared step registry (`useStepRegistry`), which reads the order from the page, so a step inserted between two others takes its place in the count.
-- DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder.
+- `DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.
+- `Stepper` — the app's interactive step rail. Both number their steps with the same shared step registry (`useStepRegistry`), which reads the order from the page, so a step inserted between two others takes its place in the count.
+- `DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder.
 
 ## Slots
 

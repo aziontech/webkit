@@ -21,7 +21,7 @@
   "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it."
  ],
  "related": [
-  "registration-frame` — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor."
+  "`registration-frame` — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor."
  ],
  "bestPractices": [
   "Give the layer a positioned ancestor (`relative overflow-hidden`); it fills that box and nothing else.",
@@ -33,7 +33,7 @@
   "Leave `animated` off by default; turn it on for the one band per page whose subject is the network.",
   "To nudge the map or let it run off the band, set `offsetX` / `offsetY` (for example `:offset-x=\"0.15\"` to bleed right, `:offset-y=\"-0.1\"` to bleed up) instead of offsetting the layer.",
   "The landmass is the design's pixel map cell for cell (4,987 cells on a 10-unit grid), and the default `medium` density lights the design's PoP field exactly: 172 cells, each metro a capital with up to two satellites, pulsing in the design's three phases. `low` lights the capitals alone (71); `high` adds 31 outlying PoPs.",
-  "asia` and `oceania` hold no PoPs — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone."
+  "`asia` and `oceania` hold no PoPs — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone."
  ],
  "props": [
   {
@@ -114,15 +114,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import NetworkMap from '@aziontech/webkit/network-map'\n</script>\n\n<template>\n  <div class=\"relative h-80 w-full overflow-hidden bg-(--bg-canvas)\">\n    <NetworkMap\n      region=\"world\"\n      density=\"medium\"\n      :opacity=\"0.4\"\n      position=\"center\"\n      :scale=\"0.85\"\n      fade=\"none\"\n    />\n  </div>\n</template>"
+   "file": "examples/network-map/default.vue"
   },
   {
    "name": "Regions",
-   "sfc": "<script setup>\n  import NetworkMap from '@aziontech/webkit/network-map'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3\">\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">world</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"world\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">atlantic</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"atlantic\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">americas</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"americas\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">north-america</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"north-america\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">south-america</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"south-america\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">europe</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"europe\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">africa</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"africa\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">asia</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"asia\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">oceania</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap region=\"oceania\" />\n      </div>\n    </div>\n  </div>\n</template>"
+   "file": "examples/network-map/regions.vue"
   },
   {
    "name": "Densities",
-   "sfc": "<script setup>\n  import NetworkMap from '@aziontech/webkit/network-map'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">none</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap density=\"none\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">low</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap density=\"low\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">medium</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap density=\"medium\" />\n      </div>\n    </div>\n    <div class=\"flex flex-col gap-(--spacing-xs)\">\n      <span class=\"text-label-sm text-(--text-muted)\">high</span>\n      <div class=\"relative h-64 w-full overflow-hidden bg-(--bg-canvas)\">\n        <NetworkMap density=\"high\" />\n      </div>\n    </div>\n  </div>\n</template>"
+   "file": "examples/network-map/densities.vue"
   }
  ],
  "docs": "components/network-map.md"

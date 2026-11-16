@@ -4,7 +4,7 @@
 
 - Import: `import ListingIndex from '@aziontech/webkit/listing-index'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [listing-index.json](https://github.com/aziontech/webkit/blob/main/.specs/listing-index.json)
+- API as JSON: [listing-index.json](listing-index.json)
 
 ## When to use
 

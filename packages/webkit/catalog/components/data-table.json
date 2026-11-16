@@ -17,15 +17,15 @@
   "The same records as a grid of cards → use `card-list` (same collection, card layout)."
  ],
  "related": [
-  "table` — the parts DataTable renders through, and the hand-composed table for small static content; its toolbar parts and cell presets go in DataTable's slots.",
-  "data-grid` — the editable, spreadsheet-like grid; use it when cells are edited in place.",
-  "pagination` — the page strip; a `paginated` DataTable renders and wires it in the footer.",
-  "listing-table` — marketing section that composes `table` for a linked preview of a list.",
-  "empty-state` — the pattern behind the table's default `empty` slot; override the slot for resource-specific copy and actions.",
-  "item` — list rows without a column structure.",
-  "filter-menu` — Use FilterMenu when people filter by picking known values per field (status, region, owner) and see them as chips — the default console list filter; `Table.Filter` hosts it by default.",
-  "property-filter` — Use PropertyFilter when people type queries with operators (Status = Active, Requests > 100) or free text they want to keep; `Table.Filter type=\"property\"` hosts it wired to the table (AND only).",
-  "collection-preferences` — Use CollectionPreferences for every 'how this list looks' setting: page size, visible and ordered columns, density, wrap; with no `columns` inside the toolbar it edits this table's columns."
+  "`table` — the parts DataTable renders through, and the hand-composed table for small static content; its toolbar parts and cell presets go in DataTable's slots.",
+  "`data-grid` — the editable, spreadsheet-like grid; use it when cells are edited in place.",
+  "`pagination` — the page strip; a `paginated` DataTable renders and wires it in the footer.",
+  "`listing-table` — marketing section that composes `table` for a linked preview of a list.",
+  "`empty-state` — the pattern behind the table's default `empty` slot; override the slot for resource-specific copy and actions.",
+  "`item` — list rows without a column structure.",
+  "`filter-menu` — Use FilterMenu when people filter by picking known values per field (status, region, owner) and see them as chips — the default console list filter; `Table.Filter` hosts it by default.",
+  "`property-filter` — Use PropertyFilter when people type queries with operators (Status = Active, Requests > 100) or free text they want to keep; `Table.Filter type=\"property\"` hosts it wired to the table (AND only).",
+  "`collection-preferences` — Use CollectionPreferences for every 'how this list looks' setting: page size, visible and ordered columns, density, wrap; with no `columns` inside the toolbar it edits this table's columns."
  ],
  "bestPractices": [
   "For repeated data, pass `data` + `columns` and customize cells with the `cell-<columnId>` / `header-<columnId>` slots instead of composing N rows by hand. Compose `Table` by hand only for small, static tables.",

@@ -5,7 +5,7 @@
 - Import: `import DialogRoot from '@aziontech/webkit/dialog-root'`
 - Compound import (dot notation, not tree-shakeable): `import Dialog from '@aziontech/webkit/dialog'`
 - Category: overlay · Surface: app · Structure: composition
-- API as JSON: [dialog.json](https://github.com/aziontech/webkit/blob/main/.specs/dialog.json)
+- API as JSON: [dialog.json](dialog.json)
 
 ## When to use
 

@@ -12,10 +12,10 @@
   "An action row above a list of records → use the `toolbar` slot of `table`."
  ],
  "related": [
-  "site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.",
-  "navigation-menu` — the dropdown navigation that usually goes in `AppHeader.Center`.",
-  "brand` — the Azion lockup to place inside `AppHeader.Brand`.",
-  "console-layout` — the console layout template that composes the header with the sidebar and the page."
+  "`site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.",
+  "`navigation-menu` — the dropdown navigation that usually goes in `AppHeader.Center`.",
+  "`brand` — the Azion lockup to place inside `AppHeader.Brand`.",
+  "`console-layout` — the console layout template that composes the header with the sidebar and the page."
  ],
  "bestPractices": [
   "Keep the default `variant=\"content\"` for app shells; use `variant=\"site\"` only on framed marketing pages.",

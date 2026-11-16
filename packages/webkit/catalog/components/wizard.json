@@ -14,11 +14,11 @@
   "Numbered instructions inside documentation → use `doc-steps` + `doc-step`."
  ],
  "related": [
-  "stepper` — the rail this component composes. Reach for it alone when the footer and gating must be",
-  "tabs` — unordered peer views with no completion state.",
-  "dialog` — a single, short decision on an overlay.",
-  "drawer` — a single-step create or edit form beside the page.",
-  "alert` — the inline error to show inside a step when Next is blocked."
+  "`stepper` — the rail this component composes. Reach for it alone when the footer and gating must be",
+  "`tabs` — unordered peer views with no completion state.",
+  "`dialog` — a single, short decision on an overlay.",
+  "`drawer` — a single-step create or edit form beside the page.",
+  "`alert` — the inline error to show inside a step when Next is blocked."
  ],
  "bestPractices": [
   "Keep step state in the consumer (refs or a form store). Only the active step renders its content, so a",

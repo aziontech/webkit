@@ -12,11 +12,11 @@
   "A narrow screen: show the same canvas in a full-height `Drawer` instead of a side pane (see Responsive)."
  ],
  "related": [
-  "artifact-preview` — the card in the message; its Open opens this canvas.",
-  "response-branches` — the version pager the toolbar reuses.",
-  "resizable` — the split the owner puts the canvas in (pane, handle, collapse).",
-  "chat-message`, `conversation` — the thread beside the canvas.",
-  "copy-button` — the Copy control."
+  "`artifact-preview` — the card in the message; its Open opens this canvas.",
+  "`response-branches` — the version pager the toolbar reuses.",
+  "`resizable` — the split the owner puts the canvas in (pane, handle, collapse).",
+  "`chat-message`, `conversation` — the thread beside the canvas.",
+  "`copy-button` — the Copy control."
  ],
  "bestPractices": [
   "Open the canvas from `ArtifactPreview`'s Open, then call `focus()` so the reader lands on its title; on Close return focus to the Open that opened it.",

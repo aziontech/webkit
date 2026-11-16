@@ -8,8 +8,8 @@
   "For a quotation → use `client-quotes` or `logo-wall-section` `variant=\"quote\"`."
  ],
  "related": [
-  "client-mosaic` — the bento sibling.",
-  "logo-wall` — the single-mark wall each column's face is rendered with."
+  "`client-mosaic` — the bento sibling.",
+  "`logo-wall` — the single-mark wall each column's face is rendered with."
  ],
  "bestPractices": [
   "Three cells for `reveal=\"always\"` (the grid is three columns from the large breakpoint); three or four for `reveal=\"hover\"`, which shares the row between them.",

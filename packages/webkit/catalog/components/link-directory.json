@@ -15,11 +15,11 @@
   "For the headings of the page currently being read → use `doc-on-this-page`."
  ],
  "related": [
-  "card-grid` — the equal-cell grid whose `divider` register draws its rules the same way; reach for it when the cells are cards rather than columns of links.",
-  "bento-grid` — unequal cells on the same shared rules.",
-  "navigation-menu` — the same anatomy inside an overlay, with a trigger and a panel.",
-  "footer` — the other place a directory of links is laid out in columns.",
-  "section-module` / `registration-frame` — the frame this block is normally dropped into."
+  "`card-grid` — the equal-cell grid whose `divider` register draws its rules the same way; reach for it when the cells are cards rather than columns of links.",
+  "`bento-grid` — unequal cells on the same shared rules.",
+  "`navigation-menu` — the same anatomy inside an overlay, with a trigger and a panel.",
+  "`footer` — the other place a directory of links is laid out in columns.",
+  "`section-module` / `registration-frame` — the frame this block is normally dropped into."
  ],
  "bestPractices": [
   "Name the block with `ariaLabel`. It is a `nav` landmark, and a page carrying more than one needs every one of them named.",

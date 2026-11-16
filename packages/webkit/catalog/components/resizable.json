@@ -13,9 +13,9 @@
   "The panel is one scrolling region with no movable edge → use `scroll-area`."
  ],
  "related": [
-  "sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
-  "scroll-area` — one region that scrolls. A pane usually contains one.",
-  "drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
+  "`sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
+  "`scroll-area` — one region that scrolls. A pane usually contains one.",
+  "`drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
  ],
  "bestPractices": [
   "Give exactly ONE pane in a group no `basis`. That pane absorbs the remaining space, so the group always fills its container and the reader never sees a gap or a scrollbar they did not cause.",

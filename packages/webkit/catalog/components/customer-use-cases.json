@@ -11,8 +11,8 @@
   "Inside another band's cell → compose `feature-item` directly."
  ],
  "related": [
-  "feature-item` — the icon, title and description cell each use case is rendered with.",
-  "card-grid` — the frame grid this band lays its cells in."
+  "`feature-item` — the icon, title and description cell each use case is rendered with.",
+  "`card-grid` — the frame grid this band lays its cells in."
  ],
  "bestPractices": [
   "Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.",

@@ -4,7 +4,7 @@
 
 - Import: `import ScrollArea from '@aziontech/webkit/scroll-area'`
 - Category: layout · Surface: app · Structure: monolithic
-- API as JSON: [scroll-area.json](https://github.com/aziontech/webkit/blob/main/.specs/scroll-area.json)
+- API as JSON: [scroll-area.json](scroll-area.json)
 
 ## When to use
 

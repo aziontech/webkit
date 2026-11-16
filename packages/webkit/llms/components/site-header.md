@@ -4,7 +4,7 @@
 
 - Import: `import SiteHeader from '@aziontech/webkit/site-header'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [site-header.json](https://github.com/aziontech/webkit/blob/main/.specs/site-header.json)
+- API as JSON: [site-header.json](site-header.json)
 
 ## When to use
 

@@ -4,7 +4,7 @@
 
 - Import: `import StatusCode from '@aziontech/webkit/status-code'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [status-code.json](https://github.com/aziontech/webkit/blob/main/.specs/status-code.json)
+- API as JSON: [status-code.json](status-code.json)
 
 ## When to use
 

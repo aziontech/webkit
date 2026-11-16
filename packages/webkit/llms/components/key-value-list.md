@@ -5,7 +5,7 @@
 - Import: `import KeyValueListRoot from '@aziontech/webkit/key-value-list-root'`
 - Compound import (dot notation, not tree-shakeable): `import KeyValueList from '@aziontech/webkit/key-value-list'`
 - Category: content · Surface: app · Structure: composition
-- API as JSON: [key-value-list.json](https://github.com/aziontech/webkit/blob/main/.specs/key-value-list.json)
+- API as JSON: [key-value-list.json](key-value-list.json)
 
 ## When to use
 
@@ -58,7 +58,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance. |
+| `default` | — | `KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance. |
 
 ## Sub-component imports
 

@@ -4,7 +4,7 @@
 
 - Import: `import ClientQuotes from '@aziontech/webkit/client-quotes'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [client-quotes.json](https://github.com/aziontech/webkit/blob/main/.specs/client-quotes.json)
+- API as JSON: [client-quotes.json](client-quotes.json)
 
 ## When to use
 

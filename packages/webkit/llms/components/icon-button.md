@@ -4,7 +4,7 @@
 
 - Import: `import IconButton from '@aziontech/webkit/icon-button'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [icon-button.json](https://github.com/aziontech/webkit/blob/main/.specs/icon-button.json)
+- API as JSON: [icon-button.json](icon-button.json)
 
 ## When to use
 

@@ -11,8 +11,8 @@
   "For an application surface — use `Card`, which is the console's carded surface."
  ],
  "related": [
-  "DocCardGroup` — the frame and grid this is a cell of; a card outside one has no cell ring.",
-  "DocItem` — the row counterpart. A card claims a whole tile; a row claims one line."
+  "`DocCardGroup` — the frame and grid this is a cell of; a card outside one has no cell ring.",
+  "`DocItem` — the row counterpart. A card claims a whole tile; a row claims one line."
  ],
  "bestPractices": [
   "Keep the title to a noun phrase and let the copy carry the verb.",

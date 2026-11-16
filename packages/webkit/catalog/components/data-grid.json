@@ -12,10 +12,10 @@
   "Key and value pairs shown for reading → use `key-value-list`."
  ],
  "related": [
-  "data-table` — the read-and-act table (sorting, filters, paging, toolbar parts); DataGrid is its editable counterpart.",
-  "table` — the parts and tokens DataGrid shares its look with.",
-  "attribute-editor` — a few rows of the same fields inside a form.",
-  "collection-preferences` — the display preferences of a list; DataGrid's column widths are dragged in place instead."
+  "`data-table` — the read-and-act table (sorting, filters, paging, toolbar parts); DataGrid is its editable counterpart.",
+  "`table` — the parts and tokens DataGrid shares its look with.",
+  "`attribute-editor` — a few rows of the same fields inside a form.",
+  "`collection-preferences` — the display preferences of a list; DataGrid's column widths are dragged in place instead."
  ],
  "bestPractices": [
   "Give every row a stable id under `row-key` (default `'id'`): the cursor, the selection and the edits follow it.",

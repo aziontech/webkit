@@ -21,9 +21,9 @@
   "Free-text tags or labels → use `tag-editor` or `chip`."
  ],
  "related": [
-  "file-dropzone` — receives dropped files; the group lists them.",
-  "upload-progress` — the floating card for transfers that keep running after the dialog closes. Split: FileTokenGroup lists the files picked in a form, before and while they are sent, and dies with the form; UploadProgress tracks transfers that outlive the dialog, with Cancel and Retry. Both draw a file row with a progress bar; when a transfer must survive navigation, hand it to UploadProgress instead of keeping the token.",
-  "chip` — a removable label without file details."
+  "`file-dropzone` — receives dropped files; the group lists them.",
+  "`upload-progress` — the floating card for transfers that keep running after the dialog closes. Split: FileTokenGroup lists the files picked in a form, before and while they are sent, and dies with the form; UploadProgress tracks transfers that outlive the dialog, with Cancel and Retry. Both draw a file row with a progress bar; when a transfer must survive navigation, hand it to UploadProgress instead of keeping the token.",
+  "`chip` — a removable label without file details."
  ],
  "bestPractices": [
   "Keep the refused files in the list with their error, so the person sees why and can remove them; do not drop them silently.",
@@ -95,15 +95,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n  import FileTokenGroup from '@aziontech/webkit/file-token-group'\n  import { ref } from 'vue'\n\n  const LIMIT = 300 * 1024 * 1024\n\n  const inputEl = ref(null)\n  const items = ref([\n    { file: { name: 'logo.svg', size: 4210, type: 'image/svg+xml' } },\n    { file: { name: 'index.html', size: 18432, type: 'text/html' } },\n    { file: { name: 'site-backup.tar', size: 412_000_000 }, error: 'Larger than 300 MB' },\n    { file: { name: 'notes.txt', size: 0, type: 'text/plain' }, warning: 'This file is empty' }\n  ])\n\n  const toItem = (file) => ({\n    file,\n    error: file.size > LIMIT ? 'Larger than 300 MB' : undefined,\n    warning: file.size === 0 ? 'This file is empty' : undefined\n  })\n\n  const add = (files) => {\n    items.value = [...items.value, ...Array.from(files).map(toItem)]\n  }\n\n  const onPick = (event) => {\n    add(event.target.files ?? [])\n    event.target.value = ''\n  }\n\n  const remove = (index) => {\n    items.value = items.value.filter((_, position) => position !== index)\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-md) flex-col gap-(--spacing-sm)\">\n    <FileDropzone\n      description=\"Up to 300 MB per file.\"\n      @drop=\"(event, files) => add(files)\"\n    >\n      <Button\n        label=\"Browse files\"\n        variant=\"secondary\"\n        size=\"medium\"\n        @click=\"inputEl?.click()\"\n      />\n    </FileDropzone>\n    <input\n      ref=\"inputEl\"\n      type=\"file\"\n      multiple\n      class=\"hidden\"\n      aria-hidden=\"true\"\n      tabindex=\"-1\"\n      @change=\"onPick\"\n    />\n    <FileTokenGroup\n      :items=\"items\"\n      @remove=\"(_event, { index }) => remove(index)\"\n    />\n  </div>\n</template>"
+   "file": "examples/file-token-group/default.vue"
   },
   {
    "name": "Uploading",
-   "sfc": "<script setup>\n  import FileTokenGroup from '@aziontech/webkit/file-token-group'\n\n  const items = [\n    {\n      file: { name: 'hero.webp', size: 1_482_000, type: 'image/webp', lastModified: 1762790400000 },\n      loading: false\n    },\n    {\n      file: { name: 'app.js', size: 248_320, type: 'text/javascript' },\n      loading: true,\n      progress: 64\n    },\n    { file: { name: 'styles.css', size: 52_100, type: 'text/css' }, loading: true },\n    {\n      file: { name: 'archive.zip', size: 512_000_000, type: 'application/zip' },\n      error: 'Larger than 300 MB'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <FileTokenGroup\n      :items=\"items\"\n      show-file-last-modified\n      aria-label=\"Files to upload\"\n    />\n  </div>\n</template>"
+   "file": "examples/file-token-group/uploading.vue"
   },
   {
    "name": "Horizontal",
-   "sfc": "<script setup>\n  import FileTokenGroup from '@aziontech/webkit/file-token-group'\n  import { ref } from 'vue'\n\n  const items = ref(\n    ['robots.txt', 'favicon.ico', 'sitemap.xml', 'manifest.json', 'og-image.png', 'fonts.css'].map(\n      (name, index) => ({ file: { name, size: 1024 * (index + 2) } })\n    )\n  )\n\n  const remove = (index) => {\n    items.value = items.value.filter((_, position) => position !== index)\n  }\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-lg)\">\n    <FileTokenGroup\n      :items=\"items\"\n      orientation=\"horizontal\"\n      :limit=\"3\"\n      @remove=\"(_event, { index }) => remove(index)\"\n    />\n  </div>\n</template>"
+   "file": "examples/file-token-group/horizontal.vue"
   }
  ],
  "docs": "components/file-token-group.md"

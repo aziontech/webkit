@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "One entry inside its group, open on first render with `default-open`. It has no appearance of its own outside a DocAccordionGroup.",
-   "sfc": "<script setup>\n  import DocAccordion from '@aziontech/webkit/doc-accordion'\n  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'\n</script>\n\n<template>\n  <DocAccordionGroup>\n    <DocAccordion\n      title=\"Can I keep a stale object while the origin is down?\"\n      default-open\n    >\n      <p>\n        Yes. Turn on stale cache and the last good copy is served until the origin answers again.\n      </p>\n    </DocAccordion>\n  </DocAccordionGroup>\n</template>"
+   "file": "examples/doc-accordion/default.vue"
   }
  ]
 }

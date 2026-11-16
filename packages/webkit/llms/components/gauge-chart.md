@@ -4,7 +4,7 @@
 
 - Import: `import GaugeChart from '@aziontech/webkit/gauge-chart'`
 - Category: chart · Surface: app · Structure: monolithic
-- API as JSON: [gauge-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/gauge-chart.json)
+- API as JSON: [gauge-chart.json](gauge-chart.json)
 
 ## When to use
 

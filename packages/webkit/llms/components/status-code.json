@@ -20,9 +20,9 @@
   "A dot that says whether a service is up → use `status-indicator`."
  ],
  "related": [
-  "tag` — the surface StatusCode composes; use it directly for statuses that are not HTTP codes.",
-  "table` — place StatusCode inside a `#cell-<id>` slot of a request log.",
-  "severity-tag` — ordered severity levels with a bar glyph."
+  "`tag` — the surface StatusCode composes; use it directly for statuses that are not HTTP codes.",
+  "`table` — place StatusCode inside a `#cell-<id>` slot of a request log.",
+  "`severity-tag` — ordered severity levels with a bar glyph."
  ],
  "bestPractices": [
   "Pass the status as it comes from the log (`404` or `'404'`); the component derives the colour, so do not pick a colour per row.",
@@ -59,15 +59,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import StatusCode from '@aziontech/webkit/status-code'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <StatusCode\n      :code=\"101\"\n      method=\"GET\"\n    />\n    <StatusCode\n      :code=\"200\"\n      method=\"GET\"\n    />\n    <StatusCode\n      :code=\"301\"\n      method=\"GET\"\n    />\n    <StatusCode\n      :code=\"404\"\n      method=\"POST\"\n    />\n    <StatusCode\n      :code=\"503\"\n      method=\"PUT\"\n    />\n    <StatusCode :code=\"201\" />\n    <StatusCode code=\"n/a\" />\n  </div>\n</template>"
+   "file": "examples/status-code/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import StatusCode from '@aziontech/webkit/status-code'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <StatusCode\n      :code=\"429\"\n      method=\"POST\"\n      size=\"small\"\n    />\n    <StatusCode\n      :code=\"429\"\n      method=\"POST\"\n      size=\"medium\"\n    />\n  </div>\n</template>"
+   "file": "examples/status-code/sizes.vue"
   },
   {
    "name": "Request log",
-   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import StatusCode from '@aziontech/webkit/status-code'\n\n  const rows = [\n    { id: 'r1', time: '12:04:31', method: 'GET', status: 200, path: '/', duration: '38 ms' },\n    {\n      id: 'r2',\n      time: '12:04:29',\n      method: 'GET',\n      status: 304,\n      path: '/assets/app.js',\n      duration: '4 ms'\n    },\n    {\n      id: 'r3',\n      time: '12:04:27',\n      method: 'POST',\n      status: 503,\n      path: '/api/orders',\n      duration: '1.2 s'\n    },\n    {\n      id: 'r4',\n      time: '12:04:22',\n      method: 'GET',\n      status: 200,\n      path: '/api/products',\n      duration: '61 ms'\n    },\n    {\n      id: 'r5',\n      time: '12:04:19',\n      method: 'DELETE',\n      status: 404,\n      path: '/api/carts/42',\n      duration: '12 ms'\n    },\n    { id: 'r6', time: '12:04:15', method: 'GET', status: 200, path: '/docs', duration: '45 ms' }\n  ]\n\n  const columns = [\n    { accessorKey: 'time', header: 'Time', minWidth: 96 },\n    { accessorKey: 'status', header: 'Status', minWidth: 120 },\n    { accessorKey: 'path', header: 'Path', grow: 3, principal: true },\n    { accessorKey: 'duration', header: 'Duration', minWidth: 96, align: 'end' }\n  ]\n</script>\n\n<template>\n  <DataTable\n    :data=\"rows\"\n    :columns=\"columns\"\n    density=\"compact\"\n    aria-label=\"Requests to app.example.com\"\n  >\n    <template #cell-status=\"{ row }\">\n      <StatusCode\n        :code=\"row.status\"\n        :method=\"row.method\"\n      />\n    </template>\n  </DataTable>\n</template>"
+   "file": "examples/status-code/request-log.vue"
   }
  ],
  "docs": "components/status-code.md"

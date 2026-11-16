@@ -4,7 +4,7 @@
 
 - Import: `import PhotoMarquee from '@aziontech/webkit/photo-marquee'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [photo-marquee.json](https://github.com/aziontech/webkit/blob/main/.specs/photo-marquee.json)
+- API as JSON: [photo-marquee.json](photo-marquee.json)
 
 ## When to use
 

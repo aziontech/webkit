@@ -4,7 +4,7 @@
 
 - Import: `import ResponseBranches from '@aziontech/webkit/response-branches'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [response-branches.json](https://github.com/aziontech/webkit/blob/main/.specs/response-branches.json)
+- API as JSON: [response-branches.json](response-branches.json)
 
 ## When to use
 

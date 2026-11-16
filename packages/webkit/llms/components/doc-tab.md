@@ -4,7 +4,7 @@
 
 - Import: `import DocTab from '@aziontech/webkit/doc-tab'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-tab.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-tab.json)
+- API as JSON: [doc-tab.json](doc-tab.json)
 
 ## When to use
 
@@ -21,7 +21,7 @@
 
 ## Related
 
-- DocTabs`.
+- `DocTabs`.
 
 ## Props
 

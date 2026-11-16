@@ -11,10 +11,10 @@
   "Measurable progress → use `progress`."
  ],
  "related": [
-  "badge` — filled count indicator, usually overlaid on an icon or avatar.",
-  "tag` — labelled chip for categories and statuses.",
-  "spinner` — replaces the dot while `loading` is true.",
-  "progress` — continuous progress instead of a discrete state."
+  "`badge` — filled count indicator, usually overlaid on an icon or avatar.",
+  "`tag` — labelled chip for categories and statuses.",
+  "`spinner` — replaces the dot while `loading` is true.",
+  "`progress` — continuous progress instead of a discrete state."
  ],
  "bestPractices": [
   "Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.",

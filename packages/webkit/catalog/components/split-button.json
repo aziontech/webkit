@@ -11,9 +11,9 @@
   "Picking one of a few visible, mutually exclusive options → use `toggle-group`."
  ],
  "related": [
-  "button` — the primary segment; `variant` here is limited to `primary`, `secondary` and `outline`.",
-  "dropdown-menu` — the overlay menu the toggle composes; use it alone when there is no default action.",
-  "icon-button` — the chevron toggle segment."
+  "`button` — the primary segment; `variant` here is limited to `primary`, `secondary` and `outline`.",
+  "`dropdown-menu` — the overlay menu the toggle composes; use it alone when there is no default action.",
+  "`icon-button` — the chevron toggle segment."
  ],
  "bestPractices": [
   "Give every `items` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.",

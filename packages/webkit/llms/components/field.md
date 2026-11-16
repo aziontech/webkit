@@ -5,7 +5,7 @@
 - Import: `import FieldRoot from '@aziontech/webkit/field-root'`
 - Compound import (dot notation, not tree-shakeable): `import Field from '@aziontech/webkit/field'`
 - Category: input · Surface: app · Structure: composition
-- API as JSON: [field.json](https://github.com/aziontech/webkit/blob/main/.specs/field.json)
+- API as JSON: [field.json](field.json)
 
 ## When to use
 
@@ -48,7 +48,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | Field.Label`, the control, `Field.Description`, `Field.Error` (or `Field.Content` beside the control in a horizontal field). |
+| `default` | — | `Field.Label`, the control, `Field.Description`, `Field.Error` (or `Field.Content` beside the control in a horizontal field). |
 
 ## Sub-component imports
 

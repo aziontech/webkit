@@ -10,9 +10,9 @@
   "The user must choose from a fixed set → use `select` / `multi-select`."
  ],
  "related": [
-  "textarea` — multi-line free text.",
-  "number-input` — numeric input with stepper semantics.",
-  "field` — wraps this input with label, description and error; the input reads its id, `aria-describedby` and state from it."
+  "`textarea` — multi-line free text.",
+  "`number-input` — numeric input with stepper semantics.",
+  "`field` — wraps this input with label, description and error; the input reads its id, `aria-describedby` and state from it."
  ],
  "bestPractices": [
   "Wrap it in `Field` when you need a label, helper text, or validation message.",

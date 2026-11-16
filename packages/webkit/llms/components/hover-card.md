@@ -5,7 +5,7 @@
 - Import: `import HoverCardRoot from '@aziontech/webkit/hover-card-root'`
 - Compound import (dot notation, not tree-shakeable): `import HoverCard from '@aziontech/webkit/hover-card'`
 - Category: overlay · Surface: app · Structure: composition
-- API as JSON: [hover-card.json](https://github.com/aziontech/webkit/blob/main/.specs/hover-card.json)
+- API as JSON: [hover-card.json](hover-card.json)
 
 ## When to use
 
@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `placement` | `HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)` | `'bottom'` | false | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
+| `placement` | ``HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)` | `'bottom'` | false | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
 | `offset` | `number` | `8` | false | Pixel gap between the trigger and the card. |
 | `openDelay` | `number` | `500` | false | Milliseconds the pointer or focus must stay on the trigger before the card opens. |
 | `closeDelay` | `number` | `300` | false | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes. |

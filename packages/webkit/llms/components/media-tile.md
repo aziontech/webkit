@@ -4,7 +4,7 @@
 
 - Import: `import MediaTile from '@aziontech/webkit/media-tile'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [media-tile.json](https://github.com/aziontech/webkit/blob/main/.specs/media-tile.json)
+- API as JSON: [media-tile.json](media-tile.json)
 
 ## When to use
 

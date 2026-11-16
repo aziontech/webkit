@@ -4,7 +4,7 @@
 
 - Import: `import DocProse from '@aziontech/webkit/doc-prose'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-prose.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-prose.json)
+- API as JSON: [doc-prose.json](doc-prose.json)
 
 ## When to use
 
@@ -26,8 +26,8 @@
 
 ## Related
 
-- DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.
-- DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge.
+- `DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.
+- `DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge.
 
 ## Slots
 

@@ -4,7 +4,7 @@
 
 - Import: `import ProcessScroll from '@aziontech/webkit/process-scroll'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [process-scroll.json](https://github.com/aziontech/webkit/blob/main/.specs/process-scroll.json)
+- API as JSON: [process-scroll.json](process-scroll.json)
 
 ## When to use
 
@@ -24,7 +24,7 @@
 
 ## Related
 
-- Texture`, `RegistrationFrame`, `SectionTitle`.
+- `Texture`, `RegistrationFrame`, `SectionTitle`.
 
 ## Props
 

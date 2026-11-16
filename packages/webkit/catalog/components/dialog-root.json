@@ -9,8 +9,8 @@
   "It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`."
  ],
  "related": [
-  "drawer` — edge-anchored panel for secondary tasks / long content.",
-  "dropdown-menu` — trigger-anchored menu for actions/options."
+  "`drawer` — edge-anchored panel for secondary tasks / long content.",
+  "`dropdown-menu` — trigger-anchored menu for actions/options."
  ],
  "bestPractices": [
   "Do not add an overlay, a portal or a close button by hand: `Dialog.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default). Set `:closable=\"false\"` only when the dialog must be answered through its footer actions.",

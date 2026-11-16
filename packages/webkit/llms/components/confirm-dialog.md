@@ -4,7 +4,7 @@
 
 - Import: `import ConfirmDialog from '@aziontech/webkit/confirm-dialog'`
 - Category: overlay · Surface: app · Structure: monolithic
-- API as JSON: [confirm-dialog.json](https://github.com/aziontech/webkit/blob/main/.specs/confirm-dialog.json)
+- API as JSON: [confirm-dialog.json](confirm-dialog.json)
 
 ## When to use
 
@@ -16,7 +16,7 @@
 ## Do
 
 - The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.
-- variant="danger"` only when the outcome removes or discards something; a commit is `primary`.
+- `variant="danger"` only when the outcome removes or discards something; a commit is `primary`.
 - Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.
 - Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`.
 

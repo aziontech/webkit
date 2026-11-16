@@ -26,11 +26,11 @@
   "A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both)."
  ],
  "related": [
-  "code-block` — read-only snippets with copy; same syntax colour tokens.",
-  "textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
-  "field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
-  "toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
-  "log-viewer` — output of a run next to the editor."
+  "`code-block` — read-only snippets with copy; same syntax colour tokens.",
+  "`textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
+  "`field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
+  "`toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
+  "`log-viewer` — output of a run next to the editor."
  ],
  "bestPractices": [
   "Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.",
@@ -194,15 +194,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CodeEditor from '@aziontech/webkit/code-editor'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const code = ref(`export default async function handler(request) {\n  const url = new URL(request.url)\n  const name = url.searchParams.get('name')\n  return new Response(\\`Hello, \\${name}\\`)\n}\n`)\n\n  const markers = [\n    { line: 3, severity: 'warning', message: 'name can be null; give it a default value.' },\n    { line: 4, severity: 'info', message: 'Set a Content-Type header on the response.' }\n  ]\n</script>\n\n<template>\n  <Field>\n    <Field.Label>Function code</Field.Label>\n    <CodeEditor\n      v-model=\"code\"\n      language=\"javascript\"\n      :markers=\"markers\"\n      height=\"14rem\"\n    />\n    <Field.Description>Runs on every request that reaches this function.</Field.Description>\n  </Field>\n</template>"
+   "file": "examples/code-editor/default.vue"
   },
   {
    "name": "Monaco",
-   "sfc": "<script setup>\n  import CodeEditor from '@aziontech/webkit/code-editor'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const loadMonaco = async () => {\n    const [{ default: EditorWorker }, { default: JsonWorker }, { default: TsWorker }] =\n      await Promise.all([\n        import('monaco-editor/editor/editor.worker?worker'),\n        import('monaco-editor/languages/features/json/json.worker?worker'),\n        import('monaco-editor/languages/features/typescript/ts.worker?worker')\n      ])\n    globalThis.MonacoEnvironment = {\n      getWorker: (_id, label) => {\n        if (label === 'json') return new JsonWorker()\n        if (label === 'typescript' || label === 'javascript') return new TsWorker()\n        return new EditorWorker()\n      }\n    }\n    return import('monaco-editor')\n  }\n\n  const handler = ref(`async function handleRequest(request) {\n  const token = request.headers.get('authorization')\n  if (!token) return new Response('Unauthorized', { status: 401 })\n  return fetch(request)\n}\n\naddEventListener('fetch', (event) => {\n  event.respondWith(handleRequest(event.request))\n})\n`)\n\n  const original = `{\n  \"cache\": {\n    \"ttl\": 60,\n    \"bypass\": false\n  }\n}\n`\n\n  const code = ref(`{\n  \"cache\": {\n    \"ttl\": 300,\n    \"bypass\": false,\n    \"stale\": true\n  }\n}\n`)\n\n  const markers = [\n    {\n      line: 5,\n      column: 5,\n      endColumn: 12,\n      severity: 'warning',\n      message: '\"stale\" serves expired content while the cache revalidates.'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <Field>\n      <Field.Label>Cache settings</Field.Label>\n      <CodeEditor\n        v-model=\"code\"\n        :loader=\"loadMonaco\"\n        language=\"json\"\n        path=\"cache.json\"\n        :markers=\"markers\"\n        height=\"12rem\"\n      />\n    </Field>\n    <CodeEditor\n      v-model=\"code\"\n      :original=\"original\"\n      :loader=\"loadMonaco\"\n      language=\"json\"\n      diff\n      height=\"12rem\"\n      aria-label=\"Cache settings, compared with the saved version\"\n    />\n    <CodeEditor\n      v-model=\"handler\"\n      :loader=\"loadMonaco\"\n      language=\"javascript\"\n      path=\"handler.js\"\n      pad-line-numbers\n      height=\"12rem\"\n      aria-label=\"Function code\"\n    />\n  </div>\n</template>"
+   "file": "examples/code-editor/monaco.vue"
   },
   {
    "name": "WithToolbar",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CodeEditor from '@aziontech/webkit/code-editor'\n  import ToggleGroup from '@aziontech/webkit/toggle-group'\n  import { computed, ref } from 'vue'\n\n  const documents = [\n    { label: 'Code', value: 'code' },\n    { label: 'Arguments', value: 'arguments' }\n  ]\n  const active = ref('code')\n  const files = ref({\n    code: `export default function handler(request, args) {\n  return new Response(args.greeting)\n}\n`,\n    arguments: `{\n  \"greeting\": \"Hello\"\n}\n`\n  })\n  const value = computed({\n    get: () => files.value[active.value],\n    set: (next) => {\n      files.value[active.value] = next\n    }\n  })\n  const markers = computed(() =>\n    active.value === 'arguments' && !value.value.includes('\"greeting\"')\n      ? [{ line: 1, severity: 'error', message: 'Add the greeting argument.' }]\n      : []\n  )\n</script>\n\n<template>\n  <CodeEditor\n    v-model=\"value\"\n    :language=\"active === 'code' ? 'javascript' : 'json'\"\n    :markers=\"markers\"\n    pad-line-numbers\n    height=\"12rem\"\n    aria-label=\"Function editor\"\n  >\n    <template #toolbar>\n      <ToggleGroup\n        v-model=\"active\"\n        :options=\"documents\"\n        size=\"small\"\n        aria-label=\"Editor document\"\n      />\n      <span class=\"min-w-0 flex-1 truncate text-body-xs text-(--text-muted)\">\n        {{ active === 'code' ? 'JavaScript, running on request' : 'Defaults for each instance' }}\n      </span>\n      <Button\n        label=\"Run\"\n        variant=\"secondary\"\n        size=\"small\"\n        icon=\"ai ai-play\"\n      />\n    </template>\n  </CodeEditor>\n</template>"
+   "file": "examples/code-editor/with-toolbar.vue"
   }
  ],
  "docs": "components/code-editor.md"

@@ -14,13 +14,13 @@
   "A list of items with no key/value relation → use a plain list or `item`."
  ],
  "related": [
-  "table` — many subjects, one row each; KeyValueList describes one subject.",
-  "card` — the surface a KeyValueList usually sits in; KeyValueList brings no surface of its own.",
-  "copy-button` — the trailing copy affordance for IDs and keys inside a value.",
-  "status-indicator`, `tag` — status and category values.",
-  "link` — a value that navigates (a domain, a linked resource).",
-  "hint` — the info glyph composed into an Item's `info` slot.",
-  "skeleton` — rendered in place of each value while the root is `loading`."
+  "`table` — many subjects, one row each; KeyValueList describes one subject.",
+  "`card` — the surface a KeyValueList usually sits in; KeyValueList brings no surface of its own.",
+  "`copy-button` — the trailing copy affordance for IDs and keys inside a value.",
+  "`status-indicator`, `tag` — status and category values.",
+  "`link` — a value that navigates (a domain, a linked resource).",
+  "`hint` — the info glyph composed into an Item's `info` slot.",
+  "`skeleton` — rendered in place of each value while the root is `loading`."
  ],
  "bestPractices": [
   "Keep keys short nouns in sentence case (\"Created\", \"Region\"), never sentences or trailing colons.",

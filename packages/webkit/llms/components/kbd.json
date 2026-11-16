@@ -19,8 +19,8 @@
   "You need an interactive control that fires on click → use `button` / `icon-button`; Kbd is a presentational hint only."
  ],
  "related": [
-  "command` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.",
-  "badge` — compact non-interactive indicator for counts/status; Kbd is specifically for keyboard keys."
+  "`command` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.",
+  "`badge` — compact non-interactive indicator for counts/status; Kbd is specifically for keyboard keys."
  ],
  "bestPractices": [
   "Keep the default slot to a single key or glyph (`K`, `7`, `Enter`, `Esc`, `/`); avoid lowercase words or sentences.",
@@ -101,15 +101,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Kbd from '@aziontech/webkit/kbd'\n</script>\n\n<template>\n  <Kbd meta>K</Kbd>\n</template>"
+   "file": "examples/kbd/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Kbd from '@aziontech/webkit/kbd'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Kbd\n      meta\n      size=\"small\"\n      >K</Kbd\n    >\n    <Kbd\n      meta\n      size=\"medium\"\n      >K</Kbd\n    >\n  </div>\n</template>"
+   "file": "examples/kbd/sizes.vue"
   },
   {
    "name": "Keys",
-   "sfc": "<script setup>\n  import Kbd from '@aziontech/webkit/kbd'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm) text-body-sm text-(--text-default)\">\n    <div class=\"flex flex-wrap items-center gap-(--spacing-xs)\">\n      <Kbd :keys=\"['meta', 'shift', 'p']\" />\n      <Kbd\n        :keys=\"['meta', 'shift', 'p']\"\n        variant=\"separate\"\n      />\n    </div>\n    <div class=\"flex flex-wrap items-center gap-(--spacing-xs)\">\n      <Kbd\n        :keys=\"['arrow-up', 'arrow-down']\"\n        variant=\"separate\"\n        size=\"small\"\n      />\n      <span>to navigate</span>\n      <Kbd\n        key-name=\"return\"\n        size=\"small\"\n      />\n      <span>to select</span>\n      <Kbd\n        key-name=\"escape\"\n        size=\"small\"\n      />\n      <span>to close</span>\n    </div>\n    <div class=\"flex flex-wrap items-center gap-(--spacing-xs)\">\n      <Kbd\n        :keys=\"['arrow-left', 'arrow-right']\"\n        variant=\"separate\"\n      />\n      <span>to switch tabs</span>\n    </div>\n  </div>\n</template>"
+   "file": "examples/kbd/keys.vue"
   }
  ],
  "docs": "components/kbd.md"

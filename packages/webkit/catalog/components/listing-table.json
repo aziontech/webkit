@@ -8,8 +8,8 @@
   "For a comparison of plans or features → use the pricing matrix."
  ],
  "related": [
-  "table` — the composition table the wide layout renders.",
-  "listing-index` — the full listing this band links into."
+  "`table` — the composition table the wide layout renders.",
+  "`listing-index` — the full listing this band links into."
  ],
  "bestPractices": [
   "Keep three columns at most; the first names the row and the second describes it on phones.",

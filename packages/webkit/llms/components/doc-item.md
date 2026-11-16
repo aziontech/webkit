@@ -4,7 +4,7 @@
 
 - Import: `import DocItem from '@aziontech/webkit/doc-item'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-item.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-item.json)
+- API as JSON: [doc-item.json](doc-item.json)
 
 ## When to use
 
@@ -26,9 +26,9 @@
 
 ## Related
 
-- DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.
-- Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.
-- RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
+- `DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.
+- `Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.
+- `RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
 
 ## Props
 

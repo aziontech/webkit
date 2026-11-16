@@ -10,8 +10,8 @@
   "A searchable table of records → `TableRoot`."
  ],
  "related": [
-  "conversation` — shows the conversation the history selects.",
-  "drawer` — holds the history on narrow screens."
+  "`conversation` — shows the conversation the history selects.",
+  "`drawer` — holds the history on narrow screens."
  ],
  "bestPractices": [
   "Title each conversation from its first prompt, short; the full title shows on hover through `title`.",

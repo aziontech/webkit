@@ -25,11 +25,11 @@
   "For the grid that lays the tiles out, or a framed cell that wraps media _and_ copy together → use `card-grid`."
  ],
  "related": [
-  "card-grid` — the grid that lays a row of tiles out; use its `gap` register, whose gutters keep every tile's frame its own.",
-  "feature-item` — the heading-led claim, for a band whose items belong in the outline.",
-  "media-split` — one scene beside one block of copy, across the whole band.",
-  "registration-frame` — the frame this tile draws around its media.",
-  "illustration` — the scene the frame usually holds; unnamed, it renders the placeholder that reserves a tile's space."
+  "`card-grid` — the grid that lays a row of tiles out; use its `gap` register, whose gutters keep every tile's frame its own.",
+  "`feature-item` — the heading-led claim, for a band whose items belong in the outline.",
+  "`media-split` — one scene beside one block of copy, across the whole band.",
+  "`registration-frame` — the frame this tile draws around its media.",
+  "`illustration` — the scene the frame usually holds; unnamed, it renders the placeholder that reserves a tile's space."
  ],
  "bestPractices": [
   "End the lead with a full stop. It runs into the sentence that follows it, so the stop is what separates them — the component adds no punctuation of its own.",
@@ -118,15 +118,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTile from '@aziontech/webkit/media-tile'\n</script>\n\n<template>\n  <MediaTile\n    title=\"AI workloads.\"\n    description=\"Run tasks with reduced latency and higher concurrency, delivering faster, scalable results for all users.\"\n  >\n    <template #media>\n      <Illustration name=\"ai-applications\" />\n    </template>\n  </MediaTile>\n</template>"
+   "file": "examples/media-tile/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import CardGridRoot from '@aziontech/webkit/card-grid-root'\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTile from '@aziontech/webkit/media-tile'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-8\">\n    <CardGridRoot\n      variant=\"gap\"\n      :columns=\"2\"\n    >\n      <MediaTile\n        variant=\"frame\"\n        title=\"Framed.\"\n        description=\"The frame wraps the media alone, and the caption sits under it on the page column.\"\n      >\n        <template #media>\n          <Illustration name=\"ai-applications\" />\n        </template>\n      </MediaTile>\n      <MediaTile\n        variant=\"frame\"\n        title=\"One frame per tile.\"\n        description=\"The gutters of the gap register keep every frame its own, marks included.\"\n      >\n        <template #media>\n          <Illustration name=\"distributed-apis\" />\n        </template>\n      </MediaTile>\n    </CardGridRoot>\n    <CardGridRoot\n      variant=\"divider\"\n      :columns=\"2\"\n    >\n      <MediaTile\n        variant=\"plain\"\n        title=\"Plain.\"\n        description=\"No rules of its own: the tile is the cell, filled and inset, and the grid draws the seam.\"\n      >\n        <template #media>\n          <Illustration name=\"modern-frontends\" />\n        </template>\n      </MediaTile>\n      <MediaTile\n        variant=\"plain\"\n        title=\"One rule per seam.\"\n        description=\"The divider register rules every column, so a frame here would double each line.\"\n      >\n        <template #media>\n          <Illustration name=\"runtime\" />\n        </template>\n      </MediaTile>\n    </CardGridRoot>\n  </div>\n</template>"
+   "file": "examples/media-tile/variants.vue"
   },
   {
    "name": "Unpadded",
-   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTile from '@aziontech/webkit/media-tile'\n</script>\n\n<template>\n  <MediaTile\n    title=\"AI workloads.\"\n    description=\"Run tasks with reduced latency and higher concurrency, delivering faster, scalable results for all users.\"\n    :padded=\"false\"\n  >\n    <template #media>\n      <Illustration name=\"ai-applications\" />\n    </template>\n  </MediaTile>\n</template>"
+   "file": "examples/media-tile/unpadded.vue"
   }
  ],
  "docs": "components/media-tile.md"

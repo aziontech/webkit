@@ -14,12 +14,12 @@
   "For tabular data a reader scans row by row → use `table`."
  ],
  "related": [
-  "bento-grid` — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.",
-  "feature-item` — the glyph, headline and sentence a `frame` cell usually holds.",
-  "section-module` — the band whose body holds this grid.",
-  "section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.",
-  "registration-frame` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.",
-  "card` — a padded card surface, the usual child of a `gap` grid."
+  "`bento-grid` — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.",
+  "`feature-item` — the glyph, headline and sentence a `frame` cell usually holds.",
+  "`section-module` — the band whose body holds this grid.",
+  "`section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.",
+  "`registration-frame` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.",
+  "`card` — a padded card surface, the usual child of a `gap` grid."
  ],
  "bestPractices": [
   "**Do** hand the grid however many cells the content has. The default `balanced` layout takes the fewest rows `columns` allows and the narrowest track count that keeps them, so a count that splits evenly fills every row; a short last row keeps the track width and starts at the start edge, its trailing tracks left empty, as azion.com lays out its grids (compliance badges, the use-case grid). Under `columns: 3` that is 1 → one full-width cell, 2 → halves, 3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 6 → 3 + 3, 7 → 3 + 3 + 1; under `columns: 4`, 4 → four across, 5 → 3 + 2, 6 → 3 + 3, 7 → 4 + 3; under `columns: 5`, 5 → five across. Below `lg` the same rule runs against two columns (`sm`) and against `mobileColumns` (phone), so 4 cells are 2 × 2 on a tablet and four across from `lg`.",

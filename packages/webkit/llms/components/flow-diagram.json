@@ -25,9 +25,9 @@
   "A numbered set of instructions in documentation → use `doc-steps`."
  ],
  "related": [
-  "diagram` — marketing architecture drawings from a closed library or a one-off spec; `flow-diagram` is the in-product, hand-composed pipeline.",
-  "doc-steps` — an ordered walkthrough of text steps joined by a rail, not connected nodes.",
-  "table` — records without ordered or branching relationships."
+  "`diagram` — marketing architecture drawings from a closed library or a one-off spec; `flow-diagram` is the in-product, hand-composed pipeline.",
+  "`doc-steps` — an ordered walkthrough of text steps joined by a rail, not connected nodes.",
+  "`table` — records without ordered or branching relationships."
  ],
  "bestPractices": [
   "Write steps as direct children of `FlowDiagram` in flow order; connectors are drawn between siblings, so wrapping nodes in extra elements breaks the chain.",
@@ -58,15 +58,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import FlowDiagram from '@aziontech/webkit/flow-diagram'\n</script>\n\n<template>\n  <FlowDiagram align=\"center\">\n    <FlowDiagram.Node>Source</FlowDiagram.Node>\n    <FlowDiagram.Node>Transform</FlowDiagram.Node>\n    <FlowDiagram.Node>Deliver</FlowDiagram.Node>\n  </FlowDiagram>\n</template>"
+   "file": "examples/flow-diagram/default.vue"
   },
   {
    "name": "Parallel",
-   "sfc": "<script setup>\n  import FlowDiagram from '@aziontech/webkit/flow-diagram'\n</script>\n\n<template>\n  <FlowDiagram align=\"center\">\n    <FlowDiagram.Node>Start</FlowDiagram.Node>\n    <FlowDiagram.Parallel>\n      <FlowDiagram.Node>Branch A</FlowDiagram.Node>\n      <FlowDiagram.Node>Branch B</FlowDiagram.Node>\n      <FlowDiagram.Node>Branch C</FlowDiagram.Node>\n    </FlowDiagram.Parallel>\n    <FlowDiagram.Node>End</FlowDiagram.Node>\n  </FlowDiagram>\n</template>"
+   "file": "examples/flow-diagram/parallel.vue"
   },
   {
    "name": "Branches",
-   "sfc": "<script setup>\n  import FlowDiagram from '@aziontech/webkit/flow-diagram'\n</script>\n\n<template>\n  <FlowDiagram align=\"center\">\n    <FlowDiagram.Parallel>\n      <FlowDiagram.Node>HTTP Trigger</FlowDiagram.Node>\n      <FlowDiagram.Node>Cron Trigger</FlowDiagram.Node>\n    </FlowDiagram.Parallel>\n    <FlowDiagram.Node>Process Request</FlowDiagram.Node>\n    <FlowDiagram.Parallel>\n      <FlowDiagram.Node>Log Analytics</FlowDiagram.Node>\n      <FlowDiagram.Node>Update Cache</FlowDiagram.Node>\n      <FlowDiagram.Node>Send Notification</FlowDiagram.Node>\n    </FlowDiagram.Parallel>\n    <FlowDiagram.Node>Complete</FlowDiagram.Node>\n  </FlowDiagram>\n</template>"
+   "file": "examples/flow-diagram/branches.vue"
   }
  ],
  "docs": "components/flow-diagram.md"

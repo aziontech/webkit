@@ -24,9 +24,9 @@
   "The only place a piece of information appears. Hover and focus are not available everywhere; the card must repeat what the destination already shows."
  ],
  "related": [
-  "tooltip` — plain-text hint, same hover-and-focus model, no rich content.",
-  "popover` — click-opened panel with focus management for interactive content; same positioning.",
-  "avatar`, `tag` — typical content of a card."
+  "`tooltip` — plain-text hint, same hover-and-focus model, no rich content.",
+  "`popover` — click-opened panel with focus management for interactive content; same positioning.",
+  "`avatar`, `tag` — typical content of a card."
  ],
  "bestPractices": [
   "Wrap a link or a button: the trigger must be focusable on its own so keyboard users get the card too.",
@@ -37,7 +37,7 @@
  "props": [
   {
    "name": "placement",
-   "type": "HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
+   "type": "`HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
    "default": "'bottom'",
    "required": "false",
    "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."
@@ -98,15 +98,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Avatar from '@aziontech/webkit/avatar'\n  import HoverCard from '@aziontech/webkit/hover-card'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <p class=\"text-body-sm text-(--text-default)\">\n    Deployed by\n    <HoverCard>\n      <HoverCard.Trigger>\n        <Link\n          href=\"https://example.com/people/jane-doe\"\n          label=\"Jane Doe\"\n          size=\"small\"\n        />\n      </HoverCard.Trigger>\n      <HoverCard.Content>\n        <div class=\"flex items-center gap-(--spacing-sm)\">\n          <Avatar label=\"Jane Doe\" />\n          <div class=\"flex flex-col\">\n            <span class=\"text-label-md text-(--text-default)\">Jane Doe</span>\n            <span class=\"text-body-sm text-(--text-muted)\">jane.doe@example.com</span>\n          </div>\n        </div>\n        <p class=\"text-body-sm text-(--text-default)\">\n          Owner of production and staging. Joined Acme in March 2024.\n        </p>\n      </HoverCard.Content>\n    </HoverCard>\n    two hours ago.\n  </p>\n</template>"
+   "file": "examples/hover-card/default.vue"
   },
   {
    "name": "ResourcePreview",
-   "sfc": "<script setup>\n  import HoverCard from '@aziontech/webkit/hover-card'\n  import Link from '@aziontech/webkit/link'\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-sm) flex-col gap-(--spacing-xs) pb-48\">\n    <span class=\"text-label-sm text-(--text-muted)\">Application</span>\n    <HoverCard\n      default-open\n      placement=\"bottom-start\"\n    >\n      <HoverCard.Trigger>\n        <Link\n          href=\"https://example.com/applications/acme-store\"\n          label=\"acme-store\"\n          size=\"small\"\n        />\n      </HoverCard.Trigger>\n      <HoverCard.Content>\n        <div class=\"flex items-center justify-between gap-(--spacing-sm)\">\n          <span class=\"text-label-md text-(--text-default)\">acme-store</span>\n          <Tag\n            label=\"Active\"\n            severity=\"success\"\n            size=\"small\"\n          />\n        </div>\n        <dl class=\"grid grid-cols-2 gap-(--spacing-xs) text-body-sm\">\n          <dt class=\"text-(--text-muted)\">Region</dt>\n          <dd class=\"text-(--text-default)\">United States</dd>\n          <dt class=\"text-(--text-muted)\">Last deploy</dt>\n          <dd class=\"text-(--text-default)\">2026-11-12 14:30 UTC</dd>\n          <dt class=\"text-(--text-muted)\">Domain</dt>\n          <dd class=\"text-(--text-default)\"><bdi>app.example.com</bdi></dd>\n        </dl>\n      </HoverCard.Content>\n    </HoverCard>\n  </div>\n</template>"
+   "file": "examples/hover-card/resource-preview.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import HoverCard from '@aziontech/webkit/hover-card'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <p class=\"text-body-sm text-(--text-default)\">\n    Deployed by\n    <HoverCard disabled>\n      <HoverCard.Trigger>\n        <Link\n          href=\"https://example.com/people/jane-doe\"\n          label=\"Jane Doe\"\n          size=\"small\"\n        />\n      </HoverCard.Trigger>\n      <HoverCard.Content>\n        <p class=\"text-body-sm text-(--text-default)\">Owner of production.</p>\n      </HoverCard.Content>\n    </HoverCard>\n    two hours ago.\n  </p>\n</template>"
+   "file": "examples/hover-card/disabled.vue"
   }
  ],
  "docs": "components/hover-card.md"

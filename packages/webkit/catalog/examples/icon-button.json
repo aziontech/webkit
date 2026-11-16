@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "Default primary icon button at large size.",
-   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <IconButton\n    variant=\"primary\"\n    size=\"large\"\n    icon=\"ai ai-plus\"\n    aria-label=\"Add\"\n  />\n</template>"
+   "file": "examples/icon-button/default.vue"
   },
   {
    "name": "Variants",
    "summary": "All variants side by side.",
-   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      variant=\"primary\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      variant=\"secondary\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      variant=\"outline\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      variant=\"ghost\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      variant=\"danger\"\n      icon=\"ai ai-trash\"\n      aria-label=\"Delete\"\n    />\n  </div>\n</template>"
+   "file": "examples/icon-button/variants.vue"
   },
   {
    "name": "Sizes",
    "summary": "All size variants side by side.",
-   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      size=\"small\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"medium\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"large\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n  </div>\n</template>"
+   "file": "examples/icon-button/sizes.vue"
   }
  ]
 }

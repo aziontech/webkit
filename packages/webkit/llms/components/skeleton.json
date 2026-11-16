@@ -21,10 +21,10 @@
   "A settled state such as Active or Failed → use `status-indicator`."
  ],
  "related": [
-  "progress` — measured or indeterminate progress of a task, not a placeholder.",
-  "spinner` — compact busy glyph for buttons and inline status.",
-  "empty-state` — what replaces the skeleton when the request returns nothing.",
-  "table` — its `loading` prop renders skeleton rows for you."
+  "`progress` — measured or indeterminate progress of a task, not a placeholder.",
+  "`spinner` — compact busy glyph for buttons and inline status.",
+  "`empty-state` — what replaces the skeleton when the request returns nothing.",
+  "`table` — its `loading` prop renders skeleton rows for you."
  ],
  "bestPractices": [
   "Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.",
@@ -69,15 +69,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <Skeleton\n    variant=\"rectangle\"\n    width=\"240px\"\n    height=\"100px\"\n    animated\n  />\n</template>"
+   "file": "examples/skeleton/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Skeleton\n      variant=\"rectangle\"\n      width=\"240px\"\n      height=\"100px\"\n    />\n    <Skeleton\n      variant=\"circle\"\n      width=\"100px\"\n      height=\"100px\"\n    />\n  </div>\n</template>"
+   "file": "examples/skeleton/variants.vue"
   },
   {
    "name": "OnSurfaces",
-   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-2 gap-(--spacing-md)\">\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-canvas) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-canvas</span>\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-surface</span>\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-raised) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-surface-raised</span>\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-overlay) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-default)\">--bg-surface-overlay</span>\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/skeleton/on-surfaces.vue"
   }
  ],
  "docs": "components/skeleton.md"

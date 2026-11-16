@@ -5,7 +5,7 @@
 - Import: `import ItemRoot from '@aziontech/webkit/item-root'`
 - Compound import (dot notation, not tree-shakeable): `import Item from '@aziontech/webkit/item'`
 - Category: content · Surface: app · Structure: composition
-- API as JSON: [item.json](https://github.com/aziontech/webkit/blob/main/.specs/item.json)
+- API as JSON: [item.json](item.json)
 
 ## When to use
 
@@ -17,7 +17,7 @@
 ## Do
 
 - Use `Item.Group` off-card and `Item.List` inside a `card` with `:padded="false"`; both force their child items' `variant` (`inline` in a group, `default` in a list), so do not set `variant` on rows inside them.
-- Item.List` draws its own dividers — do not add `Item.Separator` inside it.
+- `Item.List` draws its own dividers — do not add `Item.Separator` inside it.
 - With `href` or `clickable` the whole row is one focusable control with the row's hover, active and focus ring, so do not also put buttons or links inside that row.
 - Set `Item.Media` `type="icon"` for a glyph and `type="image"` for a picture; the frame sizes and clips the content.
 - Use `size="small"` for dense lists; `medium` is the default.

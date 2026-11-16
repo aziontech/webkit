@@ -17,7 +17,7 @@
   "Outside `DocTabs` — it renders no tab of its own."
  ],
  "related": [
-  "DocTabs`."
+  "`DocTabs`."
  ],
  "bestPractices": [
   "A short title: the platform or tool name."
@@ -44,7 +44,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocTab from '@aziontech/webkit/doc-tab'\n  import DocTabs from '@aziontech/webkit/doc-tabs'\n</script>\n\n<template>\n  <DocTabs>\n    <DocTab title=\"Console\">\n      <p>Open the application, then Settings, then Domains.</p>\n    </DocTab>\n    <DocTab title=\"CLI\">\n      <p>Run the link command from the project folder.</p>\n    </DocTab>\n  </DocTabs>\n</template>"
+   "file": "examples/doc-tab/default.vue"
   }
  ],
  "docs": "components/doc-tab.md"

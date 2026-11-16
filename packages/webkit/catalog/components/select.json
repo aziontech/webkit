@@ -13,10 +13,10 @@
   "The list triggers actions or navigation instead of holding a value → use `dropdown-menu`."
  ],
  "related": [
-  "field` — label, this select, and description/error, with the wiring done.",
-  "multi-select` — multi-only variant with checkbox rows and an array model.",
-  "dropdown-menu` — action menu that reports the chosen option as an event and holds no form value.",
-  "input-group` — joins a select to an input, such as currency plus amount."
+  "`field` — label, this select, and description/error, with the wiring done.",
+  "`multi-select` — multi-only variant with checkbox rows and an array model.",
+  "`dropdown-menu` — action menu that reports the chosen option as an event and holds no form value.",
+  "`input-group` — joins a select to an input, such as currency plus amount."
  ],
  "bestPractices": [
   "Render `Select.Trigger` and `Select.Content` inside the root; the parts read the root's context and throw outside it.",

@@ -23,10 +23,10 @@
   "The choice is submitted with a form instead of applied immediately → use `checkbox`."
  ],
  "related": [
-  "field` — a horizontal `Field` gives the switch its label and description; a `Field.Label` wrapping it is a card-style option.",
-  "input-group` — a text input with a trailing switch addon that enables it, inside a `Field`.",
-  "checkbox` — boolean selection submitted with a form.",
-  "item` — list row whose title names a bare switch."
+  "`field` — a horizontal `Field` gives the switch its label and description; a `Field.Label` wrapping it is a card-style option.",
+  "`input-group` — a text input with a trailing switch addon that enables it, inside a `Field`.",
+  "`checkbox` — boolean selection submitted with a form.",
+  "`item` — list row whose title names a bare switch."
  ],
  "bestPractices": [
   "The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.",
@@ -85,15 +85,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const modelValue = ref(false)\n</script>\n\n<template>\n  <Switch\n    v-model=\"modelValue\"\n    aria-label=\"Toggle setting\"\n  />\n</template>"
+   "file": "examples/switch/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const defaultOff = ref(false)\n  const defaultOn = ref(true)\n  const privacyOff = ref(false)\n  const privacyOn = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-4)\">\n    <Switch\n      v-model=\"defaultOff\"\n      variant=\"default\"\n      aria-label=\"Default off\"\n    />\n    <Switch\n      v-model=\"defaultOn\"\n      variant=\"default\"\n      aria-label=\"Default on\"\n    />\n    <Switch\n      v-model=\"privacyOff\"\n      variant=\"privacy\"\n      aria-label=\"Privacy off\"\n    />\n    <Switch\n      v-model=\"privacyOn\"\n      variant=\"privacy\"\n      aria-label=\"Privacy on\"\n    />\n  </div>\n</template>"
+   "file": "examples/switch/variants.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const lockedOff = ref(false)\n  const lockedOn = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-4)\">\n    <Switch\n      v-model=\"lockedOff\"\n      disabled\n      aria-label=\"Locked off\"\n    />\n    <Switch\n      v-model=\"lockedOn\"\n      disabled\n      aria-label=\"Locked on\"\n    />\n  </div>\n</template>"
+   "file": "examples/switch/disabled.vue"
   }
  ],
  "docs": "components/switch.md"

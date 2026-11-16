@@ -21,9 +21,9 @@
   "A message with text and actions → use `alert` or `toast`."
  ],
  "related": [
-  "status-indicator` — a coloured dot with a label, for live states.",
-  "tag` — a labelled pill for a state.",
-  "toast` — reports the outcome of an async action wherever the user is."
+  "`status-indicator` — a coloured dot with a label, for live states.",
+  "`tag` — a labelled pill for a state.",
+  "`toast` — reports the outcome of an async action wherever the user is."
  ],
  "bestPractices": [
   "Pair the mark with words that say the same thing; the mark is not the only cue.",
@@ -67,15 +67,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import OutcomeIcon from '@aziontech/webkit/outcome-icon'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-lg)\">\n    <OutcomeIcon severity=\"success\" />\n    <OutcomeIcon severity=\"danger\" />\n    <OutcomeIcon severity=\"warning\" />\n    <OutcomeIcon severity=\"neutral\" />\n  </div>\n</template>"
+   "file": "examples/outcome-icon/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import OutcomeIcon from '@aziontech/webkit/outcome-icon'\n</script>\n\n<template>\n  <ul class=\"flex flex-col gap-(--spacing-md)\">\n    <li class=\"flex items-center gap-(--spacing-xs) text-body-sm text-(--text-default)\">\n      <OutcomeIcon\n        size=\"small\"\n        aria-label=\"Done\"\n      />\n      Add a custom domain\n    </li>\n    <li class=\"flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)\">\n      <OutcomeIcon aria-label=\"Deployed\" />\n      web-app is live in Production\n    </li>\n    <li class=\"flex flex-col items-start gap-(--spacing-sm)\">\n      <OutcomeIcon\n        size=\"large\"\n        aria-label=\"Deployed\"\n      />\n      <span class=\"text-heading-sm text-(--text-default)\">Service deployed</span>\n    </li>\n  </ul>\n</template>"
+   "file": "examples/outcome-icon/sizes.vue"
   },
   {
    "name": "Animated",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import OutcomeIcon from '@aziontech/webkit/outcome-icon'\n  import { computed, ref } from 'vue'\n\n  const severity = ref('neutral')\n\n  const message = computed(\n    () =>\n      ({\n        neutral: 'web-app has not been deployed yet.',\n        success: 'web-app is live in Production.',\n        danger: \"web-app wasn't deployed. The routing rules were refused.\"\n      })[severity.value]\n  )\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-md)\">\n    <div class=\"flex items-center gap-(--spacing-sm)\">\n      <OutcomeIcon\n        :severity=\"severity\"\n        size=\"large\"\n        animated\n      />\n      <p\n        class=\"text-body-sm text-(--text-default)\"\n        role=\"status\"\n      >\n        {{ message }}\n      </p>\n    </div>\n    <div class=\"flex flex-wrap gap-(--spacing-xs)\">\n      <Button\n        label=\"Finish with success\"\n        variant=\"outline\"\n        size=\"small\"\n        @click=\"severity = 'success'\"\n      />\n      <Button\n        label=\"Finish with a failure\"\n        variant=\"outline\"\n        size=\"small\"\n        @click=\"severity = 'danger'\"\n      />\n    </div>\n  </div>\n</template>"
+   "file": "examples/outcome-icon/animated.vue"
   }
  ],
  "docs": "components/outcome-icon.md"

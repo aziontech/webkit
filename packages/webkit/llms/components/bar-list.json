@@ -21,9 +21,9 @@
   "One value against a limit (quota, usage) → use `progress`."
  ],
  "related": [
-  "chart` — horizontal bars with an axis, for comparing several series per category.",
-  "donut-chart` — the share view of the same breakdown when the parts sum to a whole.",
-  "chart-card` — the box a BarList sits in on a dashboard."
+  "`chart` — horizontal bars with an axis, for comparing several series per category.",
+  "`donut-chart` — the share view of the same breakdown when the parts sum to a whole.",
+  "`chart-card` — the box a BarList sits in on a dashboard."
  ],
  "bestPractices": [
   "Keep it to about ten rows; fold the tail into an \"Other\" row in the data rather than scrolling.",
@@ -139,15 +139,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import BarList from '@aziontech/webkit/bar-list'\n\n  const items = [\n    { name: '/home', value: 843 },\n    { name: '/documentation', value: 384 },\n    { name: '/blocks', value: 108 },\n    { name: '/imprint', value: 46 },\n    { name: '/cancellation', value: 3 }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <BarList\n      aria-label=\"Top paths\"\n      :items=\"items\"\n    />\n  </div>\n</template>"
+   "file": "examples/bar-list/default.vue"
   },
   {
    "name": "Interactive",
-   "sfc": "<script setup>\n  import BarList from '@aziontech/webkit/bar-list'\n  import { ref } from 'vue'\n\n  const items = [\n    { name: '/home', value: 843 },\n    { name: '/documentation', value: 384 },\n    { name: '/blocks', value: 108 },\n    { name: '/imprint', value: 46 },\n    { name: '/cancellation', value: 3 }\n  ]\n\n  const linkedItems = items.map((item) => ({\n    ...item,\n    href: `#/analytics?path=${item.name}`\n  }))\n\n  const selected = ref('none')\n\n  const onItemClick = (event, item) => {\n    selected.value = item.name\n  }\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-xl) md:grid-cols-2\">\n    <BarList\n      aria-label=\"Top paths, linked\"\n      :items=\"linkedItems\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-sm)\">\n      <BarList\n        aria-label=\"Top paths\"\n        :items=\"items\"\n        clickable\n        @item-click=\"onItemClick\"\n      />\n      <p class=\"text-body-sm text-(--text-muted)\">Selected: {{ selected }}</p>\n    </div>\n  </div>\n</template>"
+   "file": "examples/bar-list/interactive.vue"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import BarList from '@aziontech/webkit/bar-list'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <BarList\n      aria-label=\"Top paths\"\n      loading\n    />\n  </div>\n</template>"
+   "file": "examples/bar-list/loading.vue"
   }
  ],
  "docs": "components/bar-list.md"

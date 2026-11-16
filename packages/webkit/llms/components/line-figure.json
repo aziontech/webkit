@@ -21,9 +21,9 @@
   "Inside dense application screens."
  ],
  "related": [
-  "Illustration` — static art from the registry.",
-  "ConsoleMockup` — product scenes.",
-  "EmptyState` — can carry a figure in its art slot."
+  "`Illustration` — static art from the registry.",
+  "`ConsoleMockup` — product scenes.",
+  "`EmptyState` — can carry a figure in its art slot."
  ],
  "bestPractices": [
   "One figure per view; two figures answering the pointer compete.",
@@ -80,15 +80,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n</script>\n\n<template>\n  <div class=\"max-w-(--container-sm)\">\n    <LineFigure name=\"cache-ttl\" />\n  </div>\n</template>"
+   "file": "examples/line-figure/default.vue"
   },
   {
    "name": "Play",
-   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n  import { ref } from 'vue'\n\n  const reading = ref('')\n</script>\n\n<template>\n  <div class=\"flex max-w-(--container-sm) flex-col gap-(--spacing-sm)\">\n    <LineFigure\n      name=\"lb-rotor\"\n      play\n      :intensity=\"0.8\"\n      @read=\"reading = $event\"\n    />\n    <p\n      class=\"m-0 text-body-sm text-(--text-muted)\"\n      aria-live=\"polite\"\n    >\n      {{ reading }}\n    </p>\n  </div>\n</template>"
+   "file": "examples/line-figure/play.vue"
   },
   {
    "name": "Gallery",
-   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n\n  const names = [\n    'azion-404',\n    'build-terminal',\n    'secure-shield',\n    'infra-workloads',\n    'ai-versioning',\n    'store-replicas',\n    'observe-stream',\n    'platform-edge',\n    'cache-ttl',\n    'lb-rotor',\n    'ddos-flood',\n    'bot-lineup',\n    'dns-lookup',\n    'metrics-gauge',\n    'image-variants',\n    'orchestrator-scale',\n    'functions-invoke',\n    'applications-rules',\n    'object-storage-bucket',\n    'deployments-release',\n    'variables-keys',\n    'connectors-link',\n    'custom-pages-status',\n    'certificates-chain',\n    'network-lists-gate'\n  ]\n</script>\n\n<template>\n  <ul class=\"m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 md:grid-cols-4\">\n    <li\n      v-for=\"name in names\"\n      :key=\"name\"\n      class=\"flex flex-col gap-(--spacing-xs)\"\n    >\n      <LineFigure :name=\"name\" />\n      <span class=\"text-label-code-sm text-(--text-muted)\">{{ name }}</span>\n    </li>\n  </ul>\n</template>"
+   "file": "examples/line-figure/gallery.vue"
   }
  ],
  "docs": "components/line-figure.md"

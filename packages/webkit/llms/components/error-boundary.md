@@ -4,7 +4,7 @@
 
 - Import: `import ErrorBoundary from '@aziontech/webkit/error-boundary'`
 - Category: feedback · Surface: app · Structure: monolithic
-- API as JSON: [error-boundary.json](https://github.com/aziontech/webkit/blob/main/.specs/error-boundary.json)
+- API as JSON: [error-boundary.json](error-boundary.json)
 
 ## When to use
 

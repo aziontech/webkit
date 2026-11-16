@@ -13,10 +13,10 @@
   "Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`."
  ],
  "related": [
-  "alert` — the built-in fallback; also what a failed request shows inside a region that rendered fine.",
-  "empty-state` — a common custom fallback for a card-sized region.",
-  "skeleton` — what the region shows while it loads; the boundary only covers the failed case.",
-  "toast` — reports the outcome of an action; never use it for a region that failed to render."
+  "`alert` — the built-in fallback; also what a failed request shows inside a region that rendered fine.",
+  "`empty-state` — a common custom fallback for a card-sized region.",
+  "`skeleton` — what the region shows while it loads; the boundary only covers the failed case.",
+  "`toast` — reports the outcome of an action; never use it for a region that failed to render."
  ],
  "bestPractices": [
   "Wrap regions, not the whole app. One boundary per card, panel or route body keeps the blast radius small.",

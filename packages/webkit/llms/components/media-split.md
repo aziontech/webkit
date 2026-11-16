@@ -4,7 +4,7 @@
 
 - Import: `import MediaSplit from '@aziontech/webkit/media-split'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [media-split.json](https://github.com/aziontech/webkit/blob/main/.specs/media-split.json)
+- API as JSON: [media-split.json](media-split.json)
 
 ## When to use
 

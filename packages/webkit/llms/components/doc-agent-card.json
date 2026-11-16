@@ -19,10 +19,10 @@
   "On an article page → put `CopyPromptButton` in `DocPageHeader`'s meta actions instead."
  ],
  "related": [
-  "CopyPromptButton` — the left column's action.",
-  "DocHero` — the masthead above it on a docs home.",
-  "DocCardGroup` — the Console / CLI / API cards that follow it; both share `RegistrationFrame`'s corner marks.",
-  "Texture` — the `dither` halftone behind the guided action."
+  "`CopyPromptButton` — the left column's action.",
+  "`DocHero` — the masthead above it on a docs home.",
+  "`DocCardGroup` — the Console / CLI / API cards that follow it; both share `RegistrationFrame`'s corner marks.",
+  "`Texture` — the `dither` halftone behind the guided action."
  ],
  "bestPractices": [
   "Pass the exact prompt in `prompt`; leave the strings to the catalog unless the product differs.",
@@ -105,11 +105,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocAgentCard from '@aziontech/webkit/doc-agent-card'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <DocAgentCard\n    :prompt=\"prompt\"\n    action-href=\"#\"\n  />\n</template>"
+   "file": "examples/doc-agent-card/default.vue"
   },
   {
    "name": "Narrow",
-   "sfc": "<script setup>\n  import DocAgentCard from '@aziontech/webkit/doc-agent-card'\n\n  const prompt = 'Set up the Azion CLI and link this project to my Azion account.'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-sm)\">\n    <DocAgentCard\n      :prompt=\"prompt\"\n      action-href=\"#\"\n    />\n  </div>\n</template>"
+   "file": "examples/doc-agent-card/narrow.vue"
   }
  ],
  "docs": "components/doc-agent-card.md"

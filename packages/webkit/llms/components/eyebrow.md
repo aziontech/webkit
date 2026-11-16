@@ -4,7 +4,7 @@
 
 - Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [eyebrow.json](https://github.com/aziontech/webkit/blob/main/.specs/eyebrow.json)
+- API as JSON: [eyebrow.json](eyebrow.json)
 
 ## When to use
 
@@ -32,7 +32,7 @@
 ## Related
 
 - [section-title](section-title.md) — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix="//"` and `cursor`.
-- hero-title` — the hero copy block; renders its `eyebrow` as an Eyebrow closed by the cursor, with `single-line` turned off.
+- `hero-title` — the hero copy block; renders its `eyebrow` as an Eyebrow closed by the cursor, with `single-line` turned off.
 - [tag](tag.md) — a compact label attached to an item, not a heading companion.
 - [badge](badge.md) — a compact count or status indicator.
 

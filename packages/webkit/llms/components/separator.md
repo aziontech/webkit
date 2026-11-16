@@ -4,7 +4,7 @@
 
 - Import: `import Separator from '@aziontech/webkit/separator'`
 - Category: layout · Surface: app · Structure: monolithic
-- API as JSON: [separator.json](https://github.com/aziontech/webkit/blob/main/.specs/separator.json)
+- API as JSON: [separator.json](separator.json)
 
 ## When to use
 

@@ -4,7 +4,7 @@
 
 - Import: `import Stats from '@aziontech/webkit/stats'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [stats.json](https://github.com/aziontech/webkit/blob/main/.specs/stats.json)
+- API as JSON: [stats.json](stats.json)
 
 ## When to use
 

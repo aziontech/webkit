@@ -4,7 +4,7 @@
 
 - Import: `import Textarea from '@aziontech/webkit/textarea'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [textarea.json](https://github.com/aziontech/webkit/blob/main/.specs/textarea.json)
+- API as JSON: [textarea.json](textarea.json)
 
 ## When to use
 
@@ -14,7 +14,7 @@
 
 - Give it a sensible default size; avoid auto-growing beyond the viewport.
 - Set `autoResize` on a field whose length varies a lot (a prompt, a comment, a commit message): it starts at `minRows` lines and grows as the person types. Always set `maxRows` with it, so a long paste scrolls inside the field instead of pushing the page down.
-- autoResize` turns the drag handle off; pick one or the other, never both.
+- `autoResize` turns the drag handle off; pick one or the other, never both.
 - Wrap it in a `Field` for the label, description and error.
 - Set `monospace` on a value that is code: a pasted zone file, a certificate, a JSON or YAML snippet, a list of IPs. Pair it with `:spellcheck="false"`. Prose (a description, a message) stays in the sans face.
 - A value people edit as code with highlighting and line numbers belongs in `CodeEditor`; `monospace` is for a plain paste box.

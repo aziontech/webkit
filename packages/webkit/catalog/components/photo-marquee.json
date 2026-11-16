@@ -8,7 +8,7 @@
   "For quotes → use `recognition-marquee`."
  ],
  "related": [
-  "recognition-marquee` — the sibling strip of quotes with the same loop."
+  "`recognition-marquee` — the sibling strip of quotes with the same loop."
  ],
  "bestPractices": [
   "Give every photo its `width` and `height` so the strip reserves each slot before the picture loads.",

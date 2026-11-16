@@ -4,7 +4,7 @@
 
 - Import: `import DocPreviousNext from '@aziontech/webkit/doc-previous-next'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-previous-next.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-previous-next.json)
+- API as JSON: [doc-previous-next.json](doc-previous-next.json)
 
 ## When to use
 
@@ -26,8 +26,8 @@
 
 ## Related
 
-- Pagination` — the data counterpart; numbered pages over a collection, not two named documents.
-- DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages.
+- `Pagination` — the data counterpart; numbered pages over a collection, not two named documents.
+- `DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages.
 
 ## Props
 

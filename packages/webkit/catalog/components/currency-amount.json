@@ -9,13 +9,13 @@
   "The headline figures are not money (throughput, uptime, points of presence) → use `stats`."
  ],
  "related": [
-  "pricing-card` — composes CurrencyAmount for its price, `medium` or `large` depending on `slotPosition`.",
-  "stats` — display-scale figures for metrics that aren't money.",
-  "stats-section` — page section of big figures with their own prefix and unit."
+  "`pricing-card` — composes CurrencyAmount for its price, `medium` or `large` depending on `slotPosition`.",
+  "`stats` — display-scale figures for metrics that aren't money.",
+  "`stats-section` — page section of big figures with their own prefix and unit."
  ],
  "bestPractices": [
   "Pass `value` already formatted as a string (`'1,250.00'`). The component does no number or locale formatting.",
-  "prefix` defaults to `'$'`; set `prefix=\"\"` to drop the symbol. The suffix renders only when `suffix` is set.",
+  "`prefix` defaults to `'$'`; set `prefix=\"\"` to drop the symbol. The suffix renders only when `suffix` is set.",
   "Pick `size` by reading distance, not by available space: `small` in tables and lists, `medium` (the default) on cards, `large` only for a headline price.",
   "Don't restyle the parts with classes; each size takes its typography from the `text-amount-*` and `text-label-code-*` tokens."
  ]

@@ -7,7 +7,7 @@
   "Outside a `DocAccordionGroup` — it renders no trigger of its own."
  ],
  "related": [
-  "DocAccordionGroup` — the group that reads it."
+  "`DocAccordionGroup` — the group that reads it."
  ],
  "bestPractices": [
   "Keep the title a question; keep the body prose."

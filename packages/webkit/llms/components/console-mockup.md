@@ -4,7 +4,7 @@
 
 - Import: `import ConsoleMockup from '@aziontech/webkit/console-mockup'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [console-mockup.json](https://github.com/aziontech/webkit/blob/main/.specs/console-mockup.json)
+- API as JSON: [console-mockup.json](console-mockup.json)
 
 ## When to use
 

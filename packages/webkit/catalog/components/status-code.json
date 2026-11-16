@@ -10,9 +10,9 @@
   "A dot that says whether a service is up → use `status-indicator`."
  ],
  "related": [
-  "tag` — the surface StatusCode composes; use it directly for statuses that are not HTTP codes.",
-  "table` — place StatusCode inside a `#cell-<id>` slot of a request log.",
-  "severity-tag` — ordered severity levels with a bar glyph."
+  "`tag` — the surface StatusCode composes; use it directly for statuses that are not HTTP codes.",
+  "`table` — place StatusCode inside a `#cell-<id>` slot of a request log.",
+  "`severity-tag` — ordered severity levels with a bar glyph."
  ],
  "bestPractices": [
   "Pass the status as it comes from the log (`404` or `'404'`); the component derives the colour, so do not pick a colour per row.",

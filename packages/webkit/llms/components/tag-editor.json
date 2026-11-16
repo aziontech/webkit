@@ -21,10 +21,10 @@
   "Picking from a fixed list of labels → use `multi-select`."
  ],
  "related": [
-  "attribute-editor` — the rows, Add, Remove, limit text, focus and announcements underneath.",
-  "input` — key and value controls; suggestions come from a native `datalist`.",
-  "tag` — how the saved tags read outside the editor.",
-  "state/form-validation` (SectionRejected) — the rule for server errors passed through `errors`."
+  "`attribute-editor` — the rows, Add, Remove, limit text, focus and announcements underneath.",
+  "`input` — key and value controls; suggestions come from a native `datalist`.",
+  "`tag` — how the saved tags read outside the editor.",
+  "`state/form-validation` (SectionRejected) — the rule for server errors passed through `errors`."
  ],
  "bestPractices": [
   "Mark saved tags with `existing: true`: their key is read-only, and Remove marks them `markedForRemoval` (Undo puts them back) so the save request knows what to delete.",
@@ -112,11 +112,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import TagEditor from '@aziontech/webkit/tag-editor'\n  import { ref } from 'vue'\n\n  const tags = ref([\n    { key: 'team', value: 'payments', existing: true },\n    { key: 'cost-center', value: 'cc-1042', existing: true },\n    { key: 'environment', value: 'staging' }\n  ])\n\n  const keySuggestions = ['team', 'cost-center', 'environment', 'owner', 'project']\n  const valueSuggestions = { environment: ['production', 'staging', 'preview'] }\n</script>\n\n<template>\n  <TagEditor\n    v-model:tags=\"tags\"\n    :key-suggestions=\"keySuggestions\"\n    :value-suggestions=\"valueSuggestions\"\n    aria-label=\"Resource tags\"\n  />\n</template>"
+   "file": "examples/tag-editor/default.vue"
   },
   {
    "name": "Validation",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import TagEditor from '@aziontech/webkit/tag-editor'\n  import { ref } from 'vue'\n\n  const tags = ref([\n    { key: 'owner', value: 'platform-team', existing: true, markedForRemoval: true },\n    { key: 'acme:managed', value: 'true' },\n    { key: 'region', value: 'sa-east' },\n    { key: 'region', value: 'us-east' }\n  ])\n\n  const editorEl = ref(null)\n  const valid = ref(true)\n  const save = () => {\n    valid.value = editorEl.value?.validate() ?? false\n  }\n</script>\n\n<template>\n  <form\n    class=\"flex flex-col gap-(--spacing-md)\"\n    novalidate\n    @submit.prevent=\"save\"\n  >\n    <TagEditor\n      ref=\"editorEl\"\n      v-model:tags=\"tags\"\n      :limit=\"5\"\n      reserved-prefix=\"acme:\"\n      aria-label=\"Resource tags\"\n    />\n    <div>\n      <Button\n        type=\"submit\"\n        label=\"Save tags\"\n        variant=\"primary\"\n        size=\"medium\"\n      />\n    </div>\n  </form>\n</template>"
+   "file": "examples/tag-editor/validation.vue"
   }
  ],
  "docs": "components/tag-editor.md"

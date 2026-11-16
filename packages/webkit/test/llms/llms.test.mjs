@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { posix } from 'node:path'
 import test from 'node:test'
 
-const { assetPagePath, buildLlms, checkLlms, FULL_BUDGET_BYTES, undocumentedExports } =
+const { assetPagePath, buildLlms, checkLlms, FULL_BUDGETS, undocumentedExports } =
   await import('../../scripts/build-llms.mjs')
 
 const catalog = JSON.parse(readFileSync(new URL('../../catalog.json', import.meta.url), 'utf-8'))
@@ -50,6 +50,53 @@ test('every link in llms.txt and in the pages resolves to a generated file', () 
   assert.deepEqual(missing, [])
 })
 
+function prose(text) {
+  return text.replace(/^\s*```[\s\S]*?^\s*```/gm, '').replace(/`[^`\n]*`/g, '')
+}
+
+function shipped(path) {
+  const rules = pkg.files.filter((f) => !/[*{]/.test(f))
+  const covers = (rule) => path === rule || path.startsWith(`${rule}/`)
+  return (
+    rules.some((r) => !r.startsWith('!') && covers(r)) &&
+    !rules.some((r) => r.startsWith('!') && covers(r.slice(1)))
+  )
+}
+
+test('every relative link in llms/ resolves to a file the published package includes', () => {
+  const dead = []
+  for (const [file, text] of Object.entries(files)) {
+    if (!file.endsWith('.md') && file !== 'llms.txt') continue
+    for (const m of prose(text).matchAll(/\]\(([^)\s]+)\)/g)) {
+      const href = m[1].split('#')[0]
+      if (!href || /^[a-z]+:/.test(href)) continue
+      const target = posix.normalize(posix.join('llms', posix.dirname(file), href))
+      const ok = target.startsWith('llms/')
+        ? target.slice(5) in files
+        : existsSync(new URL(`../../${target}`, import.meta.url)) && shipped(target)
+      if (!ok) dead.push(`${file} → ${m[1]}`)
+    }
+  }
+  assert.deepEqual(dead, [])
+})
+
+test('every repository link in llms/ points at a file that exists', () => {
+  const repo = 'https://github.com/aziontech/webkit/blob/main/'
+  const dead = new Set()
+  for (const [file, text] of Object.entries(files)) {
+    for (const m of prose(text).matchAll(/\]\((https:\/\/github\.com\/aziontech\/webkit\/blob\/main\/[^)\s#]+)/g)) {
+      const path = m[1].slice(repo.length)
+      if (!existsSync(new URL(`../../../../${path}`, import.meta.url))) dead.add(`${file} → ${path}`)
+    }
+  }
+  assert.deepEqual([...dead], [])
+})
+
+test('a component page links its API JSON to the file beside it', () => {
+  assert.match(files['components/dialog.md'], /API as JSON: \[dialog\.json\]\(dialog\.json\)/)
+  assert.ok(files['components/dialog.json'])
+})
+
 test('every component has a page and a JSON API, and every block and foundation a page', () => {
   for (const n of components) {
     assert.ok(files[`components/${n}.md`], n)
@@ -93,12 +140,20 @@ test('a block page carries guidelines, variants and the primary SFC', () => {
   assert.match(page, /## Code \(`Login`\)\n\n```vue\n<script setup( lang="ts")?>/)
 })
 
-test('llms-full.txt holds every page and stays under its size budget', () => {
+test('llms-full.txt and llms-full-site.txt hold every page between them, split by surface, under their budgets', () => {
   const full = files['llms-full.txt']
-  assert.ok(Buffer.byteLength(full) <= FULL_BUDGET_BYTES)
-  for (const file of Object.keys(files).filter((f) => f.endsWith('.md'))) {
-    assert.ok(full.includes(`<!-- ${file} -->`), file)
+  const site = files['llms-full-site.txt']
+  for (const [file, budget] of Object.entries(FULL_BUDGETS)) {
+    assert.ok(Buffer.byteLength(files[file]) <= budget, `${file} over ${budget}`)
   }
+  for (const file of Object.keys(files).filter((f) => f.endsWith('.md'))) {
+    const name = file.match(/^components\/([a-z0-9-]+)\.md$/)?.[1]
+    const surface = name ? (catalog.imports[name]?.surface ?? 'app') : 'app'
+    const [home, other] = surface === 'app' ? [full, site] : [site, full]
+    assert.ok(home.includes(`<!-- ${file} -->`), file)
+    assert.ok(!other.includes(`<!-- ${file} -->`), `${file} appears twice`)
+  }
+  assert.match(files['llms.txt'], /\(llms-full-site\.txt\)/)
 })
 
 test('llms-full.txt cuts repeats and detail, the per-page files keep them', () => {

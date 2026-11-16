@@ -9,9 +9,9 @@
   "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
  ],
  "related": [
-  "response-loading` — loading without a trace.",
-  "tool-call` — what the agent did, rather than what it thought.",
-  "streaming-response` — renders a Markdown trace inside the slot."
+  "`response-loading` — loading without a trace.",
+  "`tool-call` — what the agent did, rather than what it thought.",
+  "`streaming-response` — renders a Markdown trace inside the slot."
  ],
  "bestPractices": [
   "Keep it collapsed in chat; open it by default only where reasoning is the point (an editor, a review).",

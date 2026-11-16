@@ -22,9 +22,9 @@
   "It is a static descriptive label/category with no interaction → use `tag`."
  ],
  "related": [
-  "badge` — static count/short-value indicator.",
-  "tag` — static labelled status/category chip.",
-  "tooltip` — composed by the remove control to name what it removes."
+  "`badge` — static count/short-value indicator.",
+  "`tag` — static labelled status/category chip.",
+  "`tooltip` — composed by the remove control to name what it removes."
  ],
  "bestPractices": [
   "When removable, expose an accessible remove control with a clear label.",
@@ -116,15 +116,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <Chip\n    label=\"Label\"\n    variant=\"filled\"\n    size=\"medium\"\n  />\n</template>"
+   "file": "examples/chip/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Chip\n      label=\"Production\"\n      variant=\"filled\"\n      size=\"medium\"\n      removable\n    />\n    <Chip\n      label=\"Status\"\n      variant=\"outline\"\n      size=\"medium\"\n      clickable\n    />\n    <Chip\n      label=\"Add filter\"\n      variant=\"dashed\"\n      size=\"medium\"\n      clickable\n    />\n  </div>\n</template>"
+   "file": "examples/chip/variants.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Chip\n      label=\"Small\"\n      size=\"small\"\n    />\n    <Chip\n      label=\"Medium\"\n      size=\"medium\"\n    />\n  </div>\n</template>"
+   "file": "examples/chip/sizes.vue"
   }
  ],
  "docs": "components/chip.md"

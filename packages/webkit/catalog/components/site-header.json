@@ -9,9 +9,9 @@
   "For an in-page list of links → use `navigation-menu` or `sidebar-menu` directly."
  ],
  "related": [
-  "app-header` — the bar primitive the navigation is rendered in.",
-  "navigation-menu` — the mega-menu the bar opens from `xl` up.",
-  "sidebar-menu` — the drill-down tree the sheet carries below `xl`."
+  "`app-header` — the bar primitive the navigation is rendered in.",
+  "`navigation-menu` — the mega-menu the bar opens from `xl` up.",
+  "`sidebar-menu` — the drill-down tree the sheet carries below `xl`."
  ],
  "bestPractices": [
   "Keep a panel to one, two or four columns; only the four-column panel is stretched to the page column.",

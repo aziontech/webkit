@@ -26,12 +26,12 @@
   "For tabular data a reader scans row by row → use `table`."
  ],
  "related": [
-  "bento-grid` — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.",
-  "feature-item` — the glyph, headline and sentence a `frame` cell usually holds.",
-  "section-module` — the band whose body holds this grid.",
-  "section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.",
-  "registration-frame` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.",
-  "card` — a padded card surface, the usual child of a `gap` grid."
+  "`bento-grid` — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.",
+  "`feature-item` — the glyph, headline and sentence a `frame` cell usually holds.",
+  "`section-module` — the band whose body holds this grid.",
+  "`section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.",
+  "`registration-frame` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.",
+  "`card` — a padded card surface, the usual child of a `gap` grid."
  ],
  "bestPractices": [
   "**Do** hand the grid however many cells the content has. The default `balanced` layout takes the fewest rows `columns` allows and the narrowest track count that keeps them, so a count that splits evenly fills every row; a short last row keeps the track width and starts at the start edge, its trailing tracks left empty, as azion.com lays out its grids (compliance badges, the use-case grid). Under `columns: 3` that is 1 → one full-width cell, 2 → halves, 3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 6 → 3 + 3, 7 → 3 + 3 + 1; under `columns: 4`, 4 → four across, 5 → 3 + 2, 6 → 3 + 3, 7 → 4 + 3; under `columns: 5`, 5 → five across. Below `lg` the same rule runs against two columns (`sm`) and against `mobileColumns` (phone), so 4 cells are 2 × 2 on a tablet and four across from `lg`.",
@@ -101,15 +101,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CardGridRoot from '@aziontech/webkit/card-grid-root'\n</script>\n\n<template>\n  <CardGridRoot :columns=\"3\">\n    <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">One</div>\n    <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">Two</div>\n    <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">Three</div>\n  </CardGridRoot>\n</template>"
+   "file": "examples/card-grid/default.vue"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import CardGridCell from '@aziontech/webkit/card-grid-cell'\n  import CardGridRoot from '@aziontech/webkit/card-grid-root'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <CardGridRoot\n      variant=\"gap\"\n      :columns=\"3\"\n    >\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">gap</div>\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">gap</div>\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">gap</div>\n    </CardGridRoot>\n    <CardGridRoot\n      variant=\"divider\"\n      :columns=\"3\"\n    >\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">divider</div>\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">divider</div>\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">divider</div>\n    </CardGridRoot>\n    <CardGridRoot\n      variant=\"frame\"\n      :columns=\"3\"\n    >\n      <CardGridCell variant=\"canvas\">frame</CardGridCell>\n      <CardGridCell variant=\"canvas\">frame</CardGridCell>\n      <CardGridCell variant=\"canvas\">frame</CardGridCell>\n    </CardGridRoot>\n  </div>\n</template>"
+   "file": "examples/card-grid/variants.vue"
   },
   {
    "name": "Columns",
-   "sfc": "<script setup>\n  import CardGridRoot from '@aziontech/webkit/card-grid-root'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <CardGridRoot\n      variant=\"divider\"\n      :columns=\"2\"\n    >\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">1</div>\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">2</div>\n    </CardGridRoot>\n    <CardGridRoot\n      variant=\"divider\"\n      :columns=\"4\"\n    >\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">1</div>\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">2</div>\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">3</div>\n      <div class=\"bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)\">4</div>\n    </CardGridRoot>\n  </div>\n</template>"
+   "file": "examples/card-grid/columns.vue"
   }
  ],
  "docs": "components/card-grid.md"

@@ -4,7 +4,7 @@
 
 - Import: `import Slider from '@aziontech/webkit/slider'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [slider.json](https://github.com/aziontech/webkit/blob/main/.specs/slider.json)
+- API as JSON: [slider.json](slider.json)
 
 ## When to use
 
@@ -35,7 +35,7 @@
 
 - [number-input](number-input.md) — exact numeric entry; pair it next to a slider when the user needs both coarse dragging and an exact value.
 - [field](field.md) — `Field.Label` names the slider; point its `for` at the slider's `id` (the `id` attribute lands on the native input).
-- field-error` — description or error message under the slider in a field layout.
+- `field-error` — description or error message under the slider in a field layout.
 - [toggle-group](toggle-group.md) — a few discrete, named choices instead of a continuous range.
 - [progress](progress.md) — displays a fraction; it is not interactive.
 

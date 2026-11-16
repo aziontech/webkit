@@ -4,7 +4,7 @@
 
 - Import: `import DocCallout from '@aziontech/webkit/doc-callout'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-callout.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-callout.json)
+- API as JSON: [doc-callout.json](doc-callout.json)
 
 ## When to use
 
@@ -27,8 +27,8 @@
 
 ## Related
 
-- Alert` — the webkit surface this renders on; reach for it directly outside documentation prose.
-- DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
+- `Alert` — the webkit surface this renders on; reach for it directly outside documentation prose.
+- `DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
 
 ## Props
 

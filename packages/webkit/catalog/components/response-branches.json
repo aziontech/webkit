@@ -11,8 +11,8 @@
   "Different documents side by side → use `Tabs`."
  ],
  "related": [
-  "chat-message` — the message whose body the branches wrap; its actions hold Regenerate.",
-  "streaming-response` — a new version streams in the slot while the pager already counts it."
+  "`chat-message` — the message whose body the branches wrap; its actions hold Regenerate.",
+  "`streaming-response` — a new version streams in the slot while the pager already counts it."
  ],
  "bestPractices": [
   "Move to the new version when Regenerate finishes (set `v-model` to the last index) so the person sees what they asked for.",

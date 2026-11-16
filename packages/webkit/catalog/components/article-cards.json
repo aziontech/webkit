@@ -9,8 +9,8 @@
   "For one featured article selected from a wall → use `article-highlight`."
  ],
  "related": [
-  "card-grid` — the frame grid the cards sit on.",
-  "article-highlight` — the blog's opening band."
+  "`card-grid` — the frame grid the cards sit on.",
+  "`article-highlight` — the blog's opening band."
  ],
  "bestPractices": [
   "Give a card either `image` or `mark`; the mark is drawn only when there is no cover.",

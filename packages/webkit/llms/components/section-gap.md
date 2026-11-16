@@ -4,7 +4,7 @@
 
 - Import: `import SectionGap from '@aziontech/webkit/section-gap'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [section-gap.json](https://github.com/aziontech/webkit/blob/main/.specs/section-gap.json)
+- API as JSON: [section-gap.json](section-gap.json)
 
 ## When to use
 

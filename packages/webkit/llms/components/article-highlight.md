@@ -4,7 +4,7 @@
 
 - Import: `import ArticleHighlight from '@aziontech/webkit/article-highlight'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [article-highlight.json](https://github.com/aziontech/webkit/blob/main/.specs/article-highlight.json)
+- API as JSON: [article-highlight.json](article-highlight.json)
 
 ## When to use
 

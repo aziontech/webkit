@@ -4,7 +4,7 @@
 
 - Import: `import StatusIndicator from '@aziontech/webkit/status-indicator'`
 - Category: feedback · Surface: app · Structure: monolithic
-- API as JSON: [status-indicator.json](https://github.com/aziontech/webkit/blob/main/.specs/status-indicator.json)
+- API as JSON: [status-indicator.json](status-indicator.json)
 
 ## When to use
 
@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `severity` | `Severity` (`'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'`)` | `'success'` | false | Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`). |
+| `severity` | ``Severity` (`'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'`)` | `'success'` | false | Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`). |
 | `loading` | `boolean` | `false` | false | Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled. |
 | `label` | `string` | `''` | false | Visible label text. Empty uses the locale catalog (`Status`). |
 

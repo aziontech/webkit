@@ -4,7 +4,7 @@
 
 - Import: `import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [copy-prompt-button.json](https://github.com/aziontech/webkit/blob/main/.specs/copy-prompt-button.json)
+- API as JSON: [copy-prompt-button.json](copy-prompt-button.json)
 
 ## When to use
 
@@ -30,12 +30,12 @@
 
 ## Related
 
-- DocPrompt` — the prompt rendered in full, with a copy control.
-- DocAgentCard` — the docs-home card that places this button in its left column.
-- DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.
-- CopyButton` — the icon-only copy control; this button shares its clipboard fallback.
-- HighlightButton` — the AI-flow button whose glow, gradient and scrim this chip shares.
-- Logo` — draws an agent mark from its asset file in the chip's ink.
+- `DocPrompt` — the prompt rendered in full, with a copy control.
+- `DocAgentCard` — the docs-home card that places this button in its left column.
+- `DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.
+- `CopyButton` — the icon-only copy control; this button shares its clipboard fallback.
+- `HighlightButton` — the AI-flow button whose glow, gradient and scrim this chip shares.
+- `Logo` — draws an agent mark from its asset file in the chip's ink.
 
 ## Props
 

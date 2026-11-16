@@ -22,13 +22,13 @@
   "A settings save that needs no decision → use `save-bar`."
  ],
  "related": [
-  "dialog` — the overlay it composes; use it directly for anything that is not a yes-or-no decision.",
-  "button` — the trigger and the actions.",
-  "save-bar` — the unsaved-changes bar this dialog guards."
+  "`dialog` — the overlay it composes; use it directly for anything that is not a yes-or-no decision.",
+  "`button` — the trigger and the actions.",
+  "`save-bar` — the unsaved-changes bar this dialog guards."
  ],
  "bestPractices": [
   "The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.",
-  "variant=\"danger\"` only when the outcome removes or discards something; a commit is `primary`.",
+  "`variant=\"danger\"` only when the outcome removes or discards something; a commit is `primary`.",
   "Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.",
   "Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`."
  ],
@@ -138,15 +138,15 @@
  "examples": [
   {
    "name": "Confirm",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Remove domain\"\n    description=\"shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response.\"\n    confirm-label=\"Remove Domain\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Remove domain\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+   "file": "examples/confirm-dialog/default.vue"
   },
   {
    "name": "DiscardChanges",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Unsaved changes\"\n    description=\"This page has changes you haven't saved. If you leave now, they're discarded.\"\n    cancel-label=\"Keep editing\"\n    confirm-label=\"Discard changes\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Leave page\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+   "file": "examples/confirm-dialog/discard-changes.vue"
   },
   {
    "name": "RunAgain",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Clear cached content again?\"\n    description=\"This clears the same 2 URLs from the Edge cache again. Each object is fetched from your origin on its next request.\"\n    confirm-label=\"Clear again\"\n    variant=\"primary\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Run again\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+   "file": "examples/confirm-dialog/run-again.vue"
   }
  ],
  "docs": "components/confirm-dialog.md"

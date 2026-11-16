@@ -4,7 +4,7 @@
 
 - Import: `import DocFrame from '@aziontech/webkit/doc-frame'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-frame.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-frame.json)
+- API as JSON: [doc-frame.json](doc-frame.json)
 
 ## When to use
 
@@ -29,8 +29,8 @@
 
 ## Related
 
-- DocProse` — the page contract around it. The frame marks itself `data-doc-block`, so it takes the block rung of the prose ladder, and its caption and hint arrive unclassed for the page to style.
-- DocCallout` — the other block-level interruption; a callout carries words, a frame carries media.
+- `DocProse` — the page contract around it. The frame marks itself `data-doc-block`, so it takes the block rung of the prose ladder, and its caption and hint arrive unclassed for the page to style.
+- `DocCallout` — the other block-level interruption; a callout carries words, a frame carries media.
 
 ## Props
 

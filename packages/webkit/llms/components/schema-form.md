@@ -4,7 +4,7 @@
 
 - Import: `import SchemaForm from '@aziontech/webkit/schema-form'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [schema-form.json](https://github.com/aziontech/webkit/blob/main/.specs/schema-form.json)
+- API as JSON: [schema-form.json](schema-form.json)
 
 ## When to use
 

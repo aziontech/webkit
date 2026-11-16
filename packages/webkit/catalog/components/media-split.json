@@ -18,12 +18,12 @@
   "For a picture with no explanation → use `illustration` directly."
  ],
  "related": [
-  "section-title` — the copy-only section header.",
-  "feature-item` — the smaller unit when a page needs several claims rather than one.",
-  "illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
-  "texture` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
-  "registration-frame` — the frame the band is drawn with. With `framed` on, or inside a `section-stack`, each of the band's two cells is its own `registration-frame`.",
-  "section-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
+  "`section-title` — the copy-only section header.",
+  "`feature-item` — the smaller unit when a page needs several claims rather than one.",
+  "`illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
+  "`texture` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
+  "`registration-frame` — the frame the band is drawn with. With `framed` on, or inside a `section-stack`, each of the band's two cells is its own `registration-frame`.",
+  "`section-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
  ],
  "bestPractices": [
   "By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",

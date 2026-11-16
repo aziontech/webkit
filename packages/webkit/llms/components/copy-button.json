@@ -21,9 +21,9 @@
   "A full code sample with its own copy control → use `code-block`."
  ],
  "related": [
-  "icon-button` — the control it composes; `variant` and `size` are forwarded to it.",
-  "tooltip` — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.",
-  "code-block` — already embeds a copy-button for its content."
+  "`icon-button` — the control it composes; `variant` and `size` are forwarded to it.",
+  "`tooltip` — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.",
+  "`code-block` — already embeds a copy-button for its content."
  ],
  "bestPractices": [
   "Pass the exact text in `value`; an empty `value` makes the click a no-op.",
@@ -89,11 +89,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    aria-label=\"Copy URL\"\n  />\n</template>"
+   "file": "examples/copy-button/default.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    aria-label=\"Copy URL\"\n    disabled\n  />\n</template>"
+   "file": "examples/copy-button/disabled.vue"
   }
  ],
  "docs": "components/copy-button.md"

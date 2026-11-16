@@ -4,7 +4,7 @@
 
 - Import: `import MediaSplitSection from '@aziontech/webkit/media-split-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [media-split-section.json](https://github.com/aziontech/webkit/blob/main/.specs/media-split-section.json)
+- API as JSON: [media-split-section.json](media-split-section.json)
 
 ## When to use
 
@@ -51,7 +51,7 @@
 | `linked` | `boolean` | `true` | false | Links the whole band to a lone action; turn it off when the media holds controls of its own. |
 | `scene` | `MediaSplitSectionScene` | `undefined` | false | Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media. |
 | `codeTabs` | `MediaSplitSectionCodeTab[]` | `[]` | false | Files of the code sample drawn in the media cell when no scene is set, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark beside the tab label. A tab without `code` is skipped. |
-| `defaultFile` | `string` | `''` | false | value` of the code tab open first; empty, or a value no tab carries, opens the first tab. |
+| `defaultFile` | `string` | `''` | false | `value` of the code tab open first; empty, or a value no tab carries, opens the first tab. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the code sample's copy button; empty keeps the code block's own. |
 | `widget` | `ConsoleMockupName` | `undefined` | false | Name of the product console widget drawn in the media cell when neither a scene nor code is set. |
 | `diagram` | `DiagramName` | `undefined` | false | Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set. |

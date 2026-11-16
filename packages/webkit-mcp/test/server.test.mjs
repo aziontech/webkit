@@ -99,5 +99,30 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
   })
   const answer = JSON.parse(call.result.content[0].text)
   assert.equal(answer.importPath, '@aziontech/webkit/button')
+  const page = async (args) =>
+    JSON.parse(
+      (await server.request('tools/call', { name: 'list_components', arguments: args })).result
+        .content[0].text
+    )
+  const first = await page({})
+  assert.equal(first.components.length, 60)
+  assert.ok(first.count > 60)
+  assert.equal(first.nextCursor, '60')
+  const second = await page({ cursor: first.nextCursor })
+  assert.equal(second.components[0].name > first.components[59].name, true)
+  assert.ok(Buffer.byteLength(JSON.stringify(first)) < 20_000)
+
+  const block = JSON.parse(
+    (
+      await server.request('tools/call', {
+        name: 'get_block',
+        arguments: { id: 'dashboard/analytics-dashboard', sections: ['guidelines'] }
+      })
+    ).result.content[0].text
+  )
+  assert.equal('sfc' in block, false)
+  assert.ok(block.guidelines)
+  assert.deepEqual(block.omitted, ['sfc'])
+
   assert.match(server.stderr(), /webkit-mcp ready \(webkit \d+\.\d+\.\d+, \d+ exports\)/)
 })

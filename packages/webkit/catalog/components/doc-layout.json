@@ -9,12 +9,12 @@
   "A docs landing page with no rail (the docs home) → render it with `DocHero` and the sections, without this layout, or pass an empty `navigation` and `outline`."
  ],
  "related": [
-  "DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.",
-  "DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.",
-  "DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.",
-  "Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.",
-  "SearchTrigger`, `Command` — the header search and the palette it opens.",
-  "shell/docs` — the block that shows this layout with a sample docs tree."
+  "`DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.",
+  "`DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.",
+  "`DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.",
+  "`Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.",
+  "`SearchTrigger`, `Command` — the header search and the palette it opens.",
+  "`shell/docs` — the block that shows this layout with a sample docs tree."
  ],
  "bestPractices": [
   "Compose the layout once, in the app's root; each route renders only its article. Never put a header, a rail or an inner scroll area in a page.",

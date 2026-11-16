@@ -9,8 +9,8 @@
   "For small reasons in a grid → use `feature-tiles`."
  ],
  "related": [
-  "section-stack` — the sticky run the bands pile up in.",
-  "media-split` — the band each entry renders through."
+  "`section-stack` — the sticky run the bands pile up in.",
+  "`media-split` — the band each entry renders through."
  ],
  "bestPractices": [
   "Give a band one picture: `widget` (a `ConsoleMockup` name — the product's console screen), `diagram` (a `Diagram` name — its request flow), `illustration` (a registry name, with `illustrationLabel`) or `image` (a URL, with `imageAlt` when it says something). When several are set the first in that order wins; a band with none renders without its media cell.",

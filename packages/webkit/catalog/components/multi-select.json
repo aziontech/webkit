@@ -16,20 +16,20 @@
   "Free-form tags with no list of options to pick from → use `tag-editor`."
  ],
  "related": [
-  "select` — single-choice counterpart.",
-  "field` — wraps this control with its label, description and error; it hands the trigger its id and state.",
-  "transfer-list` — dual-list transfer for building larger subsets.",
-  "checkbox` — the indicator every option row renders.",
-  "combobox` — single-value field with typed text; `searchable`, `allowCustom`, `filter`, `loading` and `emptyTitle` share its meaning.",
-  "chip` — each selected value in `variant=\"chips\"`."
+  "`select` — single-choice counterpart.",
+  "`field` — wraps this control with its label, description and error; it hands the trigger its id and state.",
+  "`transfer-list` — dual-list transfer for building larger subsets.",
+  "`checkbox` — the indicator every option row renders.",
+  "`combobox` — single-value field with typed text; `searchable`, `allowCustom`, `filter`, `loading` and `emptyTitle` share its meaning.",
+  "`chip` — each selected value in `variant=\"chips\"`."
  ],
  "bestPractices": [
-  "modelValue` is always an array; start it as `[]`, never `null`.",
+  "`modelValue` is always an array; start it as `[]`, never `null`.",
   "Pass `displayValue` to summarise long selections (e.g. \"3 regions\") instead of a list that overflows the trigger.",
   "Keep each option's `value` stable and unique; selection is matched by value.",
   "Put a search input in the `search` slot and a create action in the `footer` slot of `MultiSelect.Content` — or set `searchable` (and `allowCustom`) to type in the trigger itself; do not combine the two.",
   "With `variant=\"chips\"`, set `chipLimit` when the field sits in a dense row; leave it `0` in a form so every chip wraps and stays removable.",
-  "create` only reports the typed value: add the new option to your list and its value to the model in the handler.",
+  "`create` only reports the typed value: add the new option to your list and its value to the model in the handler.",
   "For a server-side search, set `:filter=\"false\"`, fetch on `search`, and drive `loading` and `error` from the request."
  ]
 }

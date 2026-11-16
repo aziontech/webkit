@@ -21,10 +21,10 @@
   "A form → this card only approves or denies."
  ],
  "related": [
-  "tool-call` — the record of the call after it is approved (or `denied`).",
-  "confirm-dialog` — confirmation of the reader's own destructive action.",
-  "code-block`, `key-value-list` — what will run, in the body.",
-  "chat-message` — the assistant acknowledges the decision in the next message."
+  "`tool-call` — the record of the call after it is approved (or `denied`).",
+  "`confirm-dialog` — confirmation of the reader's own destructive action.",
+  "`code-block`, `key-value-list` — what will run, in the body.",
+  "`chat-message` — the assistant acknowledges the decision in the next message."
  ],
  "bestPractices": [
   "Title is a question naming the action and target; put tool and command names in backticks (code).",
@@ -53,14 +53,14 @@
    "type": "'pending' | 'approved' | 'denied' | 'expired'",
    "default": "'pending'",
    "required": "false",
-   "doc": "pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text."
+   "doc": "`pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text."
   },
   {
    "name": "variant",
    "type": "'default' | 'danger'",
    "default": "'default'",
    "required": "false",
-   "doc": "danger` for an action that cannot be undone: the approve button turns destructive."
+   "doc": "`danger` for an action that cannot be undone: the approve button turns destructive."
   },
   {
    "name": "confirmationPhrase",
@@ -115,15 +115,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Allow `azion deploy --env production`?\"\n      description=\"Deploys the current build of storefront to production. The previous version stays available for rollback.\"\n      approve-label=\"Deploy\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    >\n      <CodeBlock\n        :tabs=\"[\n          {\n            label: 'Shell',\n            value: 'cmd',\n            code: 'azion deploy --env production --workload storefront',\n            language: 'bash'\n          }\n        ]\"\n        :show-line-numbers=\"false\"\n      />\n    </ToolApproval>\n  </div>\n</template>"
+   "file": "examples/tool-approval/default.vue"
   },
   {
    "name": "Irreversible",
-   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Delete the domain `www.example.com`?\"\n      description=\"The domain stops answering at once and its certificate is revoked. This cannot be undone.\"\n      variant=\"danger\"\n      confirmation-phrase=\"www.example.com\"\n      approve-label=\"Delete\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    />\n  </div>\n</template>"
+   "file": "examples/tool-approval/irreversible.vue"
   },
   {
    "name": "Resolved",
-   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <ToolApproval\n      title=\"Allow `purge_urls`?\"\n      description=\"Purges https://www.example.com/styles.css from every edge location.\"\n      status=\"approved\"\n    />\n    <ToolApproval\n      title=\"Approve deployment to production?\"\n      description=\"Deploys the current build of storefront to production.\"\n      status=\"denied\"\n    />\n    <ToolApproval\n      title=\"Allow `delete_cache_rule`?\"\n      description=\"Removes the rule that caches images for one day.\"\n      status=\"expired\"\n    />\n  </div>\n</template>"
+   "file": "examples/tool-approval/resolved.vue"
   }
  ],
  "docs": "components/tool-approval.md"

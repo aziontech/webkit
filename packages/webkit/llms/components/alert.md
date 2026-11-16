@@ -4,7 +4,7 @@
 
 - Import: `import Alert from '@aziontech/webkit/alert'`
 - Category: feedback · Surface: app · Structure: monolithic
-- API as JSON: [alert.json](https://github.com/aziontech/webkit/blob/main/.specs/alert.json)
+- API as JSON: [alert.json](alert.json)
 
 ## When to use
 
@@ -32,7 +32,7 @@
 ## Related
 
 - [toast](toast.md) — overlay stack raised imperatively, auto-dismissing and not anchored to content.
-- field-error` — field-level guidance and errors below an input.
+- `field-error` — field-level guidance and errors below an input.
 - [doc-callout](doc-callout.md) — docs admonition rendered on the `Alert` surface.
 - [empty-state](empty-state.md) — a full zero-data block, not a status banner.
 

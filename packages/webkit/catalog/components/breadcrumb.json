@@ -12,9 +12,9 @@
   "It is the previous / next pair at the end of a docs page → use `doc-previous-next`."
  ],
  "related": [
-  "breadcrumb-item` — the single segment this component renders; use it alone only inside a hand-composed trail.",
-  "navigation-menu` — top-level navigation with dropdown panels, not a location trail.",
-  "link` — a standalone link; a breadcrumb segment is a link with the trail's muted / current styling."
+  "`breadcrumb-item` — the single segment this component renders; use it alone only inside a hand-composed trail.",
+  "`navigation-menu` — top-level navigation with dropdown panels, not a location trail.",
+  "`link` — a standalone link; a breadcrumb segment is a link with the trail's muted / current styling."
  ],
  "bestPractices": [
   "Prefer `items`; only `items` mode collapses the middle segments into an overflow menu when its own box is narrower than 768px. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.",

@@ -4,7 +4,7 @@
 
 - Import: `import FaqSection from '@aziontech/webkit/faq-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [faq-section.json](https://github.com/aziontech/webkit/blob/main/.specs/faq-section.json)
+- API as JSON: [faq-section.json](faq-section.json)
 
 ## When to use
 
@@ -76,7 +76,7 @@
       {
         question: 'Which frameworks are compatible?',
         answer:
-          'Azion is compatible with modern frameworks such as Next.js, React, Vue, Astro, Angular, Nuxt, Svelte, and others, so you can reuse your current stack without a full rewrite. See the full [frameworks compatibility list](https://github.com/aziontech/webkit/blob/main/.specs/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).'
+          'Azion is compatible with modern frameworks such as Next.js, React, Vue, Astro, Angular, Nuxt, Svelte, and others, so you can reuse your current stack without a full rewrite. See the full [frameworks compatibility list](/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).'
       },
       {
         question: 'How do preview deployments work?',

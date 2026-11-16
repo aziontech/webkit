@@ -10,13 +10,13 @@
   "Marketing figures on a site band → use `stats`."
  ],
  "related": [
-  "chart` — the full history behind a tile.",
-  "chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.",
-  "stats` — the marketing figure band, with no delta and no live data.",
-  "spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.",
-  "tag` — the delta renders as a `Tag`; the empty band's \"No data\" is a `Tag` too.",
-  "separator` — carries the \"No data\" `Tag` across the empty band.",
-  "stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview."
+  "`chart` — the full history behind a tile.",
+  "`chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.",
+  "`stats` — the marketing figure band, with no delta and no live data.",
+  "`spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.",
+  "`tag` — the delta renders as a `Tag`; the empty band's \"No data\" is a `Tag` too.",
+  "`separator` — carries the \"No data\" `Tag` across the empty band.",
+  "`stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview."
  ],
  "bestPractices": [
   "Name the comparison period in `deltaLabel` (\"vs previous 24 hours\"); a bare percentage is ambiguous.",

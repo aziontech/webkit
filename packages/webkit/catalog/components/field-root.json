@@ -13,8 +13,8 @@
   "A static key/value read-out → use `key-value-list`."
  ],
  "related": [
-  "input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.",
-  "phone-input`, `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`."
+  "`input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.",
+  "`phone-input`, `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`."
  ],
  "bestPractices": [
   "Put the state on the `Field`, not on the control: `<Field invalid>` sets `aria-invalid` on the control and the invalid tone on `Field.Description`.",

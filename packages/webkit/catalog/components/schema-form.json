@@ -13,12 +13,12 @@
   "A single choice or value → use the control directly inside a `field`."
  ],
  "related": [
-  "field` — the wrapper every generated field uses; SchemaForm adds no field chrome of its own.",
-  "input`, `select`, `switch`, `textarea`, `password-input` — the controls it renders per type and format.",
-  "combobox`, `multi-select` — the controls of a field whose choices come from `ui[path].options`.",
-  "accordion` — folds a collapsed section.",
-  "attribute-editor` — user-defined key/value rows; SchemaForm uses it for string maps and for the Add and Remove of a repeat.",
-  "code-editor` — the JSON view of the same value, when the user prefers to type it."
+  "`field` — the wrapper every generated field uses; SchemaForm adds no field chrome of its own.",
+  "`input`, `select`, `switch`, `textarea`, `password-input` — the controls it renders per type and format.",
+  "`combobox`, `multi-select` — the controls of a field whose choices come from `ui[path].options`.",
+  "`accordion` — folds a collapsed section.",
+  "`attribute-editor` — user-defined key/value rows; SchemaForm uses it for string maps and for the Add and Remove of a repeat.",
+  "`code-editor` — the JSON view of the same value, when the user prefers to type it."
  ],
  "bestPractices": [
   "Give every property a `title` and a one-sentence `description`; the key is only the fallback label.",

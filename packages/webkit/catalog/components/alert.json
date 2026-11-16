@@ -12,10 +12,10 @@
   "A promotional band between page sections → use `call-to-action` with `variant=\"announcement\"`."
  ],
  "related": [
-  "toast` — overlay stack raised imperatively, auto-dismissing and not anchored to content.",
-  "field-error` — field-level guidance and errors below an input.",
-  "doc-callout` — docs admonition rendered on the `Alert` surface.",
-  "empty-state` — a full zero-data block, not a status banner."
+  "`toast` — overlay stack raised imperatively, auto-dismissing and not anchored to content.",
+  "`field-error` — field-level guidance and errors below an input.",
+  "`doc-callout` — docs admonition rendered on the `Alert` surface.",
+  "`empty-state` — a full zero-data block, not a status banner."
  ],
  "bestPractices": [
   "Pick `severity` by meaning. `danger` and `warning` render with `role=\"alert\"`.",

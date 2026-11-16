@@ -4,7 +4,7 @@
 
 - Import: `import ClientStoryColumns from '@aziontech/webkit/client-story-columns'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [client-story-columns.json](https://github.com/aziontech/webkit/blob/main/.specs/client-story-columns.json)
+- API as JSON: [client-story-columns.json](client-story-columns.json)
 
 ## When to use
 

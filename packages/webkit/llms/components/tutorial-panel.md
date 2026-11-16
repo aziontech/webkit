@@ -5,7 +5,7 @@
 - Import: `import TutorialPanelRoot from '@aziontech/webkit/tutorial-panel-root'`
 - Compound import (dot notation, not tree-shakeable): `import TutorialPanel from '@aziontech/webkit/tutorial-panel'`
 - Category: content · Surface: app · Structure: composition
-- API as JSON: [tutorial-panel.json](https://github.com/aziontech/webkit/blob/main/.specs/tutorial-panel.json)
+- API as JSON: [tutorial-panel.json](tutorial-panel.json)
 
 ## When to use
 

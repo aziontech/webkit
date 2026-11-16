@@ -4,7 +4,7 @@
 
 - Import: `import BarList from '@aziontech/webkit/bar-list'`
 - Category: chart · Surface: app · Structure: monolithic
-- API as JSON: [bar-list.json](https://github.com/aziontech/webkit/blob/main/.specs/bar-list.json)
+- API as JSON: [bar-list.json](bar-list.json)
 
 ## When to use
 

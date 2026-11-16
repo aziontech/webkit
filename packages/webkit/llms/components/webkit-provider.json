@@ -21,9 +21,9 @@
   "Only flipping the layout for a right-to-left language → still use the provider with that locale; `dir` follows it."
  ],
  "related": [
-  "use-locale` — the composable components use to read the active locale, translate a key and format with `Intl`; use it in your own components to match WebKit's formatting.",
-  "pagination` — reads its labels and the \"Showing x to y of z\" line from the catalog.",
-  "confirm-dialog` — reads Confirm and Cancel from the catalog when no label is passed."
+  "`use-locale` — the composable components use to read the active locale, translate a key and format with `Intl`; use it in your own components to match WebKit's formatting.",
+  "`pagination` — reads its labels and the \"Showing x to y of z\" line from the catalog.",
+  "`confirm-dialog` — reads Confirm and Cancel from the catalog when no label is passed."
  ],
  "bestPractices": [
   "Mount one `WebkitProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.",
@@ -90,15 +90,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ptBR } from '@aziontech/webkit/locales/pt-BR'\n  import PaginationRoot from '@aziontech/webkit/pagination-root'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const open = ref(false)\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    :catalogs=\"{ 'pt-BR': ptBR }\"\n  >\n    <div class=\"flex flex-col gap-(--spacing-md)\">\n      <PaginationRoot\n        v-model:page=\"page\"\n        :total=\"120\"\n      />\n      <ConfirmDialog\n        v-model:open=\"open\"\n        title=\"Remover domínio\"\n        description=\"shop.example.com deixa de responder por este recurso.\"\n        size=\"small\"\n        @confirm=\"open = false\"\n      >\n        <template #trigger>\n          <Button\n            label=\"Remover domínio\"\n            variant=\"outline\"\n            size=\"medium\"\n          />\n        </template>\n      </ConfirmDialog>\n    </div>\n  </WebkitProvider>\n</template>"
+   "file": "examples/webkit-provider/default.vue"
   },
   {
    "name": "CustomMessages",
-   "sfc": "<script setup>\n  import { ptBR } from '@aziontech/webkit/locales/pt-BR'\n  import PaginationRoot from '@aziontech/webkit/pagination-root'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n\n  const messages = {\n    pagination: { info: '{start}–{end} de {total} domínios' }\n  }\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    :catalogs=\"{ 'pt-BR': ptBR }\"\n    :messages=\"messages\"\n  >\n    <PaginationRoot :total=\"48\" />\n  </WebkitProvider>\n</template>"
+   "file": "examples/webkit-provider/custom-messages.vue"
   },
   {
    "name": "Rtl",
-   "sfc": "<script setup>\n  import PaginationRoot from '@aziontech/webkit/pagination-root'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n</script>\n\n<template>\n  <WebkitProvider locale=\"ar\">\n    <PaginationRoot :total=\"48\" />\n  </WebkitProvider>\n</template>"
+   "file": "examples/webkit-provider/rtl.vue"
   }
  ],
  "docs": "components/webkit-provider.md"

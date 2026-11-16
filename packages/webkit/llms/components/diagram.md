@@ -4,7 +4,7 @@
 
 - Import: `import Diagram from '@aziontech/webkit/diagram'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [diagram.json](https://github.com/aziontech/webkit/blob/main/.specs/diagram.json)
+- API as JSON: [diagram.json](diagram.json)
 
 ## When to use
 

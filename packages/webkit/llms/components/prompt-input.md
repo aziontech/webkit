@@ -4,7 +4,7 @@
 
 - Import: `import PromptInput from '@aziontech/webkit/prompt-input'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [prompt-input.json](https://github.com/aziontech/webkit/blob/main/.specs/prompt-input.json)
+- API as JSON: [prompt-input.json](prompt-input.json)
 
 ## When to use
 

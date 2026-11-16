@@ -4,7 +4,7 @@
 
 - Import: `import DocHeading from '@aziontech/webkit/doc-heading'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-heading.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-heading.json)
+- API as JSON: [doc-heading.json](doc-heading.json)
 
 ## When to use
 
@@ -25,9 +25,9 @@
 
 ## Related
 
-- DocOnThisPage` — the rail that points at the ids.
-- useHeadingNavigation` — the page-provided scroll handler.
-- DocProse` — skips `[data-doc-anchor]` in its link rules.
+- `DocOnThisPage` — the rail that points at the ids.
+- `useHeadingNavigation` — the page-provided scroll handler.
+- `DocProse` — skips `[data-doc-anchor]` in its link rules.
 
 ## Props
 

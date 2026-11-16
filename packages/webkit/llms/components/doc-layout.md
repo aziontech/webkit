@@ -4,7 +4,7 @@
 
 - Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-layout.json)
+- API as JSON: [doc-layout.json](doc-layout.json)
 
 ## When to use
 
@@ -29,12 +29,12 @@
 
 ## Related
 
-- DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.
-- DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.
-- DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
-- Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
-- SearchTrigger`, `Command` — the header search and the palette it opens.
-- shell/docs` — the block that shows this layout with a sample docs tree.
+- `DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.
+- `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.
+- `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
+- `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
+- `SearchTrigger`, `Command` — the header search and the palette it opens.
+- `shell/docs` — the block that shows this layout with a sample docs tree.
 
 ## Props
 

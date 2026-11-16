@@ -4,7 +4,7 @@
 
 - Import: `import PasswordInput from '@aziontech/webkit/password-input'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [password-input.json](https://github.com/aziontech/webkit/blob/main/.specs/password-input.json)
+- API as JSON: [password-input.json](password-input.json)
 
 ## When to use
 

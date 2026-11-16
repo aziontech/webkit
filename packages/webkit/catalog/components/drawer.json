@@ -13,8 +13,8 @@
   "It needs tabs, a breadcrumb or its own navigation, or a third drawer would stack → it is a page."
  ],
  "related": [
-  "dialog` — centered, blocking modal for focused tasks/confirmations.",
-  "sidebar` — persistent (non-overlay) side navigation."
+  "`dialog` — centered, blocking modal for focused tasks/confirmations.",
+  "`sidebar` — persistent (non-overlay) side navigation."
  ],
  "bestPractices": [
   "Pick the edge (side) intentionally and keep it consistent across the app.",

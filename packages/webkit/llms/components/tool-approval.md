@@ -4,7 +4,7 @@
 
 - Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [tool-approval.json](https://github.com/aziontech/webkit/blob/main/.specs/tool-approval.json)
+- API as JSON: [tool-approval.json](tool-approval.json)
 
 ## When to use
 
@@ -40,8 +40,8 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `—` | true | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code. |
 | `description` | `string` | `''` | false | One or two sentences on what will happen and to what; backticks render as code. |
-| `status` | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false | pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text. |
-| `variant` | `'default' \| 'danger'` | `'default'` | false | danger` for an action that cannot be undone: the approve button turns destructive. |
+| `status` | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text. |
+| `variant` | `'default' \| 'danger'` | `'default'` | false | `danger` for an action that cannot be undone: the approve button turns destructive. |
 | `confirmationPhrase` | `string` | `''` | false | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
 | `approveLabel` | `string` | `''` | false | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`). |
 | `denyLabel` | `string` | `''` | false | Text of the deny button. Empty uses the locale catalog (`Deny`). |

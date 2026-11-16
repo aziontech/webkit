@@ -4,7 +4,7 @@
 
 - Import: `import TagEditor from '@aziontech/webkit/tag-editor'`
 - Category: input · Surface: app · Structure: monolithic
-- API as JSON: [tag-editor.json](https://github.com/aziontech/webkit/blob/main/.specs/tag-editor.json)
+- API as JSON: [tag-editor.json](tag-editor.json)
 
 ## When to use
 
@@ -32,7 +32,7 @@
 - [attribute-editor](attribute-editor.md) — the rows, Add, Remove, limit text, focus and announcements underneath.
 - [input](input.md) — key and value controls; suggestions come from a native `datalist`.
 - [tag](tag.md) — how the saved tags read outside the editor.
-- state/form-validation` (SectionRejected) — the rule for server errors passed through `errors`.
+- `state/form-validation` (SectionRejected) — the rule for server errors passed through `errors`.
 
 ## Props
 

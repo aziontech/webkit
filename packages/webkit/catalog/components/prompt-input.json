@@ -10,10 +10,10 @@
   "A command palette → `command`."
  ],
  "related": [
-  "textarea` — the form control; this one has no visible label and submits on Enter.",
-  "conversation` — the log above it; only the log scrolls.",
-  "suggestion-group` — prompts the reader can send without typing.",
-  "file-dropzone`, `chip` — what attachment flows compose into the `attachments` slot."
+  "`textarea` — the form control; this one has no visible label and submits on Enter.",
+  "`conversation` — the log above it; only the log scrolls.",
+  "`suggestion-group` — prompts the reader can send without typing.",
+  "`file-dropzone`, `chip` — what attachment flows compose into the `attachments` slot."
  ],
  "bestPractices": [
   "Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.",

@@ -4,7 +4,7 @@
 
 - Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [conversation-history.json](https://github.com/aziontech/webkit/blob/main/.specs/conversation-history.json)
+- API as JSON: [conversation-history.json](conversation-history.json)
 
 ## When to use
 

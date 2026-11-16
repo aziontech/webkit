@@ -20,8 +20,8 @@
   "Moving between views or panels → use `tabs`."
  ],
  "related": [
-  "toggle-group` — the generic mutually exclusive option group, with labels and sizes.",
-  "switch` — boolean toggle for a single setting."
+  "`toggle-group` — the generic mutually exclusive option group, with labels and sizes.",
+  "`switch` — boolean toggle for a single setting."
  ],
  "bestPractices": [
   "Bind with `v-model` and apply the mode in the app (for example a `data-theme` attribute, resolving `system` from `prefers-color-scheme`); the component has no side effects.",
@@ -58,11 +58,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n  import { ref } from 'vue'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher v-model=\"theme\" />\n</template>"
+   "file": "examples/theme-switcher/default.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n  import { ref } from 'vue'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher\n    v-model=\"theme\"\n    disabled\n  />\n</template>"
+   "file": "examples/theme-switcher/disabled.vue"
   }
  ],
  "docs": "components/theme-switcher.md"

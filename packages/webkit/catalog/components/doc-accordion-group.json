@@ -11,9 +11,9 @@
   "Inside an application screen — use `Accordion` directly."
  ],
  "related": [
-  "DocAccordion` — the entry it reads.",
-  "Accordion` — the design-system surface it renders on.",
-  "Faq` — the marketing FAQ band."
+  "`DocAccordion` — the entry it reads.",
+  "`Accordion` — the design-system surface it renders on.",
+  "`Faq` — the marketing FAQ band."
  ],
  "bestPractices": [
   "Write each title as the full question the reader would ask.",

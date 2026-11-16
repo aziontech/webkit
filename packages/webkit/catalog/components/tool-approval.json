@@ -11,10 +11,10 @@
   "A form → this card only approves or denies."
  ],
  "related": [
-  "tool-call` — the record of the call after it is approved (or `denied`).",
-  "confirm-dialog` — confirmation of the reader's own destructive action.",
-  "code-block`, `key-value-list` — what will run, in the body.",
-  "chat-message` — the assistant acknowledges the decision in the next message."
+  "`tool-call` — the record of the call after it is approved (or `denied`).",
+  "`confirm-dialog` — confirmation of the reader's own destructive action.",
+  "`code-block`, `key-value-list` — what will run, in the body.",
+  "`chat-message` — the assistant acknowledges the decision in the next message."
  ],
  "bestPractices": [
   "Title is a question naming the action and target; put tool and command names in backticks (code).",

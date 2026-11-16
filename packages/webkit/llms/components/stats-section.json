@@ -20,8 +20,8 @@
   "For a single figure inside another band → use `stats` directly."
  ],
  "related": [
-  "stats` — the figure row this band frames.",
-  "network-section` — the band that pairs claims with client outcomes."
+  "`stats` — the figure row this band frames.",
+  "`network-section` — the band that pairs claims with client outcomes."
  ],
  "bestPractices": [
   "Keep `value` short and the unit in `suffix`, so the figure reads at a glance.",
@@ -50,7 +50,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import StatsSection from '@aziontech/webkit/stats-section'\n</script>\n\n<template>\n  <StatsSection\n    :items=\"[\n      { value: '100', suffix: 'ms', label: 'Median response, worldwide' },\n      { value: '24', suffix: '/7', label: 'Support on every plan' },\n      { value: '99.99', suffix: '%', label: 'Availability, contractual' }\n    ]\"\n  />\n</template>"
+   "file": "examples/stats-section/default.vue"
   }
  ],
  "docs": "components/stats-section.md"

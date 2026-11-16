@@ -4,7 +4,7 @@
 
 - Import: `import SaveBar from '@aziontech/webkit/save-bar'`
 - Category: layout · Surface: app · Structure: monolithic
-- API as JSON: [save-bar.json](https://github.com/aziontech/webkit/blob/main/.specs/save-bar.json)
+- API as JSON: [save-bar.json](save-bar.json)
 
 ## When to use
 
@@ -19,7 +19,7 @@
 - Say what changed and when it takes effect in the status sentence; keep it to one line.
 - Disable Discard and set `loading` on Save while saving.
 - Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant="centered"`.
-- floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
+- `floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
 
 ## Don’t
 

@@ -8,8 +8,8 @@
   "For price cards with a billing-period toggle → use `pricing-plans`."
  ],
  "related": [
-  "pricing-plans` — the plan cards this matrix sits under.",
-  "competitor-comparison` — Azion against one competitor."
+  "`pricing-plans` — the plan cards this matrix sits under.",
+  "`competitor-comparison` — Azion against one competitor."
  ],
  "bestPractices": [
   "Give every plan a stable `id`; the narrow-screen picker selects by it.",

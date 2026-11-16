@@ -11,14 +11,14 @@
   "A default action with related alternatives in a menu → use `split-button`."
  ],
  "related": [
-  "button` — the default action control; adds `variant`, `iconPosition`, `animated`, `type` and a `leading` slot that this component does not have.",
-  "icon-button` — icon-only action when there is no room for a label."
+  "`button` — the default action control; adds `variant`, `iconPosition`, `animated`, `type` and a `leading` slot that this component does not have.",
+  "`icon-button` — icon-only action when there is no room for a label."
  ],
  "bestPractices": [
   "Use at most one per view; the glow loses its meaning when it repeats.",
   "Keep the label short and verb-led, and pair it with a leading `icon` (for example `ai ai-sparkles`).",
   "It always renders `type=\"button\"`; use `button` with `type=\"submit\"` to submit a form.",
-  "disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.",
+  "`disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.",
   "The glow stops under reduced motion, so never use it to convey state."
  ]
 }

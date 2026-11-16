@@ -20,9 +20,9 @@
   "A discrete state with no quantity, such as Active or Failed → use `status-indicator`."
  ],
  "related": [
-  "skeleton` — reserves the layout of loading content instead of showing task progress.",
-  "spinner` — compact, always-indeterminate busy glyph.",
-  "status-indicator` — labelled dot for a settled or transitional state."
+  "`skeleton` — reserves the layout of loading content instead of showing task progress.",
+  "`spinner` — compact, always-indeterminate busy glyph.",
+  "`status-indicator` — labelled dot for a settled or transitional state."
  ],
  "bestPractices": [
   "Pass `value` on the scale of `max`, for example `:value=\"3\" :max=\"5\"` for steps. Don't convert it to a percentage yourself.",
@@ -47,7 +47,7 @@
   },
   {
    "name": "variant",
-   "type": "ProgressVariant` (`'rounded' | 'flat'`)",
+   "type": "`ProgressVariant` (`'rounded' | 'flat'`)",
    "default": "'flat'",
    "required": "false",
    "doc": "Track and fill corner-radius variant."
@@ -74,15 +74,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <Progress :value=\"60\" />\n</template>"
+   "file": "examples/progress/default.vue"
   },
   {
    "name": "Shapes",
-   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      variant=\"rounded\"\n    />\n    <Progress\n      :value=\"60\"\n      variant=\"flat\"\n    />\n  </div>\n</template>"
+   "file": "examples/progress/shapes.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      size=\"small\"\n    />\n    <Progress\n      :value=\"60\"\n      size=\"medium\"\n    />\n    <Progress\n      :value=\"60\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+   "file": "examples/progress/sizes.vue"
   }
  ],
  "docs": "components/progress.md"

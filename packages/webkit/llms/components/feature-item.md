@@ -4,7 +4,7 @@
 
 - Import: `import FeatureItem from '@aziontech/webkit/feature-item'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [feature-item.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-item.json)
+- API as JSON: [feature-item.json](feature-item.json)
 
 ## When to use
 

@@ -4,7 +4,7 @@
 
 - Import: `import PropertyFilter from '@aziontech/webkit/property-filter'`
 - Category: data · Surface: app · Structure: monolithic
-- API as JSON: [property-filter.json](https://github.com/aziontech/webkit/blob/main/.specs/property-filter.json)
+- API as JSON: [property-filter.json](property-filter.json)
 
 ## When to use
 
@@ -36,7 +36,7 @@
 
 ## Related
 
-- use-collection` — applies the query; `propertyFilterProps` is the binding.
+- `use-collection` — applies the query; `propertyFilterProps` is the binding.
 - [table](table.md) — the collection it usually filters.
 - [card-list](card-list.md) — the card form of a collection.
 - [collection-preferences](collection-preferences.md) — the panel that sits beside it in the controls row.
@@ -51,7 +51,7 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the field. Empty uses the locale catalog. |
 | `freeText` | `boolean` | `true` | false | Accepts typed text with no property as a free-text token. |
 | `disabled` | `boolean` | `false` | false | Disables the field and the tokens. |
-| `mode` | `'tokens' \| 'query'` | `'tokens'` | false | tokens` turns each choice into a token; `query` edits one query string. |
+| `mode` | `'tokens' \| 'query'` | `'tokens'` | false | `tokens` turns each choice into a token; `query` edits one query string. |
 | `validate` | `(text: string) => string` | `undefined` | false | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check. |
 | `suggest` | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]` | `undefined` | false | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. |
 | `grouped` | `boolean` | `false` | false | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one. |

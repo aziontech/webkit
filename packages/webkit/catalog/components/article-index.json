@@ -9,9 +9,9 @@
   "For a closing row of related articles → use `article-cards`."
  ],
  "related": [
-  "article-highlight` — the band that opens the blog above this list.",
-  "story-index` — the card-grid library with search and facets.",
-  "listing-index` — the filterable list of job rows."
+  "`article-highlight` — the band that opens the blog above this list.",
+  "`story-index` — the card-grid library with search and facets.",
+  "`listing-index` — the filterable list of job rows."
  ],
  "bestPractices": [
   "With `filters=\"category-search\"`, list the articles newest first and file every article under at least one of `categories`; keep the category list short enough to scroll on one row.",

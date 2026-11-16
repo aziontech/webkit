@@ -4,7 +4,7 @@
 
 - Import: `import PlanComparison from '@aziontech/webkit/plan-comparison'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [plan-comparison.json](https://github.com/aziontech/webkit/blob/main/.specs/plan-comparison.json)
+- API as JSON: [plan-comparison.json](plan-comparison.json)
 
 ## When to use
 

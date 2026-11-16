@@ -20,8 +20,8 @@
   "A long payload (over a few hundred characters) → link to it; a dense code is hard to scan from a screen."
  ],
  "related": [
-  "copy-button` — the typed alternative beside the code.",
-  "otp-input` — the 6-digit code the app shows after the scan."
+  "`copy-button` — the typed alternative beside the code.",
+  "`otp-input` — the 6-digit code the app shows after the scan."
  ],
  "bestPractices": [
   "Always give the code a typed alternative next to it: the setup key or the link as text.",
@@ -65,11 +65,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n  import QrCode from '@aziontech/webkit/qr-code'\n\n  const account = 'jane.doe@example.com'\n  const secret = 'JBSWY3DPEHPK3PXP'\n  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-md)\">\n    <QrCode\n      :value=\"uri\"\n      :aria-label=\"`QR code to add ${account} to an authenticator app`\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-2xs)\">\n      <p class=\"text-label-sm text-(--text-default)\">Can't scan the code?</p>\n      <div class=\"flex items-center gap-(--spacing-xs)\">\n        <code\n          class=\"text-label-code text-(--text-default)\"\n          dir=\"ltr\"\n          >{{ secret.match(/.{1,4}/g).join(' ') }}</code\n        >\n        <CopyButton\n          :value=\"secret\"\n          aria-label=\"Copy setup key\"\n          copied-label=\"Setup key copied\"\n          size=\"small\"\n        />\n      </div>\n    </div>\n  </div>\n</template>"
+   "file": "examples/qr-code/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import QrCode from '@aziontech/webkit/qr-code'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-(--spacing-lg)\">\n    <QrCode\n      v-for=\"size in ['small', 'medium', 'large']\"\n      :key=\"size\"\n      value=\"https://www.azion.com/en/documentation/\"\n      :size=\"size\"\n      :aria-label=\"`QR code, ${size}, to the Azion documentation`\"\n    />\n  </div>\n</template>"
+   "file": "examples/qr-code/sizes.vue"
   }
  ],
  "docs": "components/qr-code.md"

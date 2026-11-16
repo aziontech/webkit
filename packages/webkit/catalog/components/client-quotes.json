@@ -10,7 +10,7 @@
   "For a scrolling strip of analyst recognitions → use `recognition-marquee`."
  ],
  "related": [
-  "quote-tabs` — the tabbed quote carousel this band frames."
+  "`quote-tabs` — the tabbed quote carousel this band frames."
  ],
  "bestPractices": [
   "Three to six items; the tabs need room for each client's mark.",

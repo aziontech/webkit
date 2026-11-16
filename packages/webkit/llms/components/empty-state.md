@@ -4,7 +4,7 @@
 
 - Import: `import EmptyState from '@aziontech/webkit/empty-state'`
 - Category: feedback · Surface: app · Structure: monolithic
-- API as JSON: [empty-state.json](https://github.com/aziontech/webkit/blob/main/.specs/empty-state.json)
+- API as JSON: [empty-state.json](empty-state.json)
 
 ## When to use
 
@@ -13,7 +13,7 @@
 
 ## Do
 
-- title` is required. Say what is missing ("No domains yet"), not that something went wrong.
+- `title` is required. Say what is missing ("No domains yet"), not that something went wrong.
 - Keep the `actions` slot to one primary action, plus an optional documentation link.
 - Leave the actions at their own width, centred, on every screen size (the design sample's look). Do not add `w-full` to a button in the slot to make it span a phone screen.
 - Use the `icon` prop for the standard featured-icon tile. Use the `icon` slot only for custom art, and omit both when the context already explains the state.

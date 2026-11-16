@@ -23,15 +23,15 @@
   "Only one option of the set may be chosen → use `radio-group`."
  ],
  "related": [
-  "field` — `orientation=\"horizontal\"` puts the checkbox beside its label and description (the default inside forms); a `Field.Label` wrapping that Field turns it into a bordered choice card.",
-  "switch` — on/off toggle for settings that take effect immediately.",
-  "multi-select` — renders this checkbox in every option row; use it when the option list is long.",
-  "data-table` — uses this checkbox for row selection and the select-all header."
+  "`field` — `orientation=\"horizontal\"` puts the checkbox beside its label and description (the default inside forms); a `Field.Label` wrapping that Field turns it into a bordered choice card.",
+  "`switch` — on/off toggle for settings that take effect immediately.",
+  "`multi-select` — renders this checkbox in every option row; use it when the option list is long.",
+  "`data-table` — uses this checkbox for row selection and the select-all header."
  ],
  "bestPractices": [
   "Leave `value` unset for a plain true/false model. With `value`, the checkbox adds or removes it in an array model, or sets a scalar model to `value` (checked) and `null` (unchecked).",
   "Give every checkbox an accessible name: point a `label` element's `for` at the `id` you pass (or wrap it in a `Field`), or pass `aria-label` (attributes land on the inner input).",
-  "indeterminate` only changes the visual and sets the native `indeterminate` property (exposed as mixed); the parent computes it and decides what a click does.",
+  "`indeterminate` only changes the visual and sets the native `indeterminate` property (exposed as mixed); the parent computes it and decides what a click does.",
   "Use `readonly` for a value that cannot change in this context and `disabled` for an option that is unavailable."
  ],
  "props": [
@@ -92,15 +92,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    id=\"webkit-checkbox\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
+   "file": "examples/checkbox/default.vue"
   },
   {
    "name": "Indeterminate",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    indeterminate\n    id=\"webkit-checkbox-indeterminate\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
+   "file": "examples/checkbox/indeterminate.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(true)\n  const unchecked = ref(false)\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-4)\">\n    <Checkbox\n      v-model=\"checked\"\n      disabled\n      id=\"webkit-checkbox-disabled-on\"\n      aria-label=\"Disabled checked\"\n    />\n    <Checkbox\n      v-model=\"unchecked\"\n      disabled\n      id=\"webkit-checkbox-disabled-off\"\n      aria-label=\"Disabled unchecked\"\n    />\n  </div>\n</template>"
+   "file": "examples/checkbox/disabled.vue"
   }
  ],
  "docs": "components/checkbox.md"

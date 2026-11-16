@@ -22,10 +22,10 @@
   "An action row above a list of records → use the `toolbar` slot of `table`."
  ],
  "related": [
-  "site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.",
-  "navigation-menu` — the dropdown navigation that usually goes in `AppHeader.Center`.",
-  "brand` — the Azion lockup to place inside `AppHeader.Brand`.",
-  "console-layout` — the console layout template that composes the header with the sidebar and the page."
+  "`site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.",
+  "`navigation-menu` — the dropdown navigation that usually goes in `AppHeader.Center`.",
+  "`brand` — the Azion lockup to place inside `AppHeader.Brand`.",
+  "`console-layout` — the console layout template that composes the header with the sidebar and the page."
  ],
  "bestPractices": [
   "Keep the default `variant=\"content\"` for app shells; use `variant=\"site\"` only on framed marketing pages.",
@@ -66,7 +66,7 @@
   {
    "name": "default",
    "scope": "—",
-   "notes": "app-header-brand` exposes `default` for logo markup."
+   "notes": "`app-header-brand` exposes `default` for logo markup."
   }
  ],
  "styleSeam": false,
@@ -74,15 +74,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import AppHeader from '@aziontech/webkit/app-header'\n  import Default from '@aziontech/webkit/svg/azion/default'\n</script>\n\n<template>\n  <AppHeader aria-label=\"Global header\">\n    <AppHeader.Start>\n      <AppHeader.Brand>\n        <a\n          href=\"/\"\n          aria-label=\"Azion home\"\n        >\n          <Default />\n        </a>\n      </AppHeader.Brand>\n    </AppHeader.Start>\n    <AppHeader.Center />\n    <AppHeader.End />\n  </AppHeader>\n</template>"
+   "file": "examples/app-header/default.vue"
   },
   {
    "name": "ContentZone",
-   "sfc": "<script setup>\n  import AppHeader from '@aziontech/webkit/app-header'\n  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col bg-(--bg-canvas)\">\n    <AppHeader aria-label=\"Console header\">\n      <AppHeader.Start>\n        <div class=\"flex w-full min-w-0 items-center gap-(--spacing-xs)\">\n          <Breadcrumb :items=\"[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]\" />\n        </div>\n      </AppHeader.Start>\n      <AppHeader.Center />\n      <AppHeader.End>\n        <Button\n          label=\"Create\"\n          variant=\"secondary\"\n          size=\"medium\"\n          icon=\"ai ai-circle-plus\"\n        />\n      </AppHeader.End>\n    </AppHeader>\n    <div class=\"layout-boundary\">\n      <h1 class=\"text-heading-xl text-(--text-default)\">Custom Pages</h1>\n      <p class=\"text-body-md text-(--text-muted)\">\n        Manage the pages served for an error or a maintenance window.\n      </p>\n    </div>\n  </div>\n</template>"
+   "file": "examples/app-header/content-zone.vue"
   },
   {
    "name": "SitePlacement",
-   "sfc": "<script setup>\n  import AppHeader from '@aziontech/webkit/app-header'\n  import Brand from '@aziontech/webkit/brand'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col bg-(--bg-canvas)\">\n    <AppHeader\n      variant=\"site\"\n      aria-label=\"Azion\"\n    >\n      <AppHeader.Brand>\n        <a\n          href=\"/\"\n          aria-label=\"Azion home\"\n          ><Brand\n            variant=\"default\"\n            size=\"small\"\n        /></a>\n      </AppHeader.Brand>\n      <AppHeader.Center>\n        <div class=\"flex w-full min-w-0 items-center\">\n          <a\n            class=\"text-label-md text-(--text-default) no-underline\"\n            href=\"/pricing\"\n            >Pricing</a\n          >\n        </div>\n      </AppHeader.Center>\n      <AppHeader.End>\n        <Button\n          label=\"Start for Free\"\n          variant=\"primary\"\n          size=\"medium\"\n        />\n      </AppHeader.End>\n    </AppHeader>\n    <section\n      class=\"mx-auto w-full max-w-(--layout-measure-site) px-(--layout-boundary-inline) py-(--spacing-xl)\"\n    >\n      <h1 class=\"text-heading-xl text-(--text-default)\">\n        Distributed infrastructure for modern workloads\n      </h1>\n      <p class=\"text-body-md text-(--text-muted)\">\n        The page frame is one rung narrower than the bar above it: the two share an inset until the\n        window passes their caps.\n      </p>\n    </section>\n  </div>\n</template>"
+   "file": "examples/app-header/site-placement.vue"
   }
  ],
  "docs": "components/app-header.md"

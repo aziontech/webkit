@@ -4,7 +4,7 @@
 
 - Import: `import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [media-split-stack-section.json](https://github.com/aziontech/webkit/blob/main/.specs/media-split-stack-section.json)
+- API as JSON: [media-split-stack-section.json](media-split-stack-section.json)
 
 ## When to use
 

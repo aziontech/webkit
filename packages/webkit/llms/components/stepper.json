@@ -25,10 +25,10 @@
   "A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow-diagram`."
  ],
  "related": [
-  "doc-steps` — the same numbered-dot shape for prose; static, never current, never navigable.",
-  "tabs` — peer views with no order and no completion.",
-  "progress` — continuous progress with no named steps.",
-  "flow-diagram` — a machine's stages, reported rather than navigated."
+  "`doc-steps` — the same numbered-dot shape for prose; static, never current, never navigable.",
+  "`tabs` — peer views with no order and no completion.",
+  "`progress` — continuous progress with no named steps.",
+  "`flow-diagram` — a machine's stages, reported rather than navigated."
  ],
  "bestPractices": [
   "Give every step a title that names the decision (`Where it runs`), not the control (`Select`).",
@@ -66,15 +66,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('configure')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Create network list\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Where it runs\"\n      description=\"The firewall that reads this list.\"\n      status=\"success\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Configure\"\n      description=\"Name it and add the addresses.\"\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Rules\"\n      description=\"What the firewall does with a match.\"\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Review\"\n      description=\"Check the list before it goes live.\"\n    />\n  </Stepper>\n</template>"
+   "file": "examples/stepper/default.vue"
   },
   {
    "name": "States",
-   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('configure')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Step statuses\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Complete\"\n      description=\"The owner marked this step as answered.\"\n      status=\"success\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Current\"\n      description=\"The step the reader is on.\"\n    />\n    <Stepper.Step\n      value=\"addresses\"\n      title=\"Error\"\n      description=\"Two addresses are not valid IPv4 ranges.\"\n      status=\"error\"\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Loading\"\n      description=\"Checking the rules against the firewall.\"\n      status=\"running\"\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Upcoming\"\n      description=\"Not reached yet.\"\n    />\n  </Stepper>\n</template>"
+   "file": "examples/stepper/states.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('host')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Create network list\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Where it runs\"\n      description=\"The firewall that reads this list.\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Configure\"\n      description=\"Name it and add the addresses.\"\n      disabled\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Rules\"\n      description=\"What the firewall does with a match.\"\n      disabled\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Review\"\n      description=\"Check the list before it goes live.\"\n      disabled\n    />\n  </Stepper>\n</template>"
+   "file": "examples/stepper/disabled.vue"
   }
  ],
  "docs": "components/stepper.md"

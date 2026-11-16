@@ -10,8 +10,8 @@
   "For a lead form with several fields → use `hero-form-section`."
  ],
  "related": [
-  "closing-call-to-action` — the closing band whose ask is a link action.",
-  "alert` — renders the success and failure messages."
+  "`closing-call-to-action` — the closing band whose ask is a link action.",
+  "`alert` — renders the success and failure messages."
  ],
  "bestPractices": [
   "Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.",

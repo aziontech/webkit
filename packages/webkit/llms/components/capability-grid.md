@@ -4,7 +4,7 @@
 
 - Import: `import CapabilityGrid from '@aziontech/webkit/capability-grid'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [capability-grid.json](https://github.com/aziontech/webkit/blob/main/.specs/capability-grid.json)
+- API as JSON: [capability-grid.json](capability-grid.json)
 
 ## When to use
 
@@ -28,8 +28,8 @@
 
 ## Related
 
-- FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.
-- FeatureTiles` — tiles with illustrations.
+- `FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.
+- `FeatureTiles` — tiles with illustrations.
 
 ## Props
 

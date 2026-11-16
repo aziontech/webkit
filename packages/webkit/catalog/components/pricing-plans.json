@@ -8,8 +8,8 @@
   "To compare Azion with one competitor → use `competitor-comparison`."
  ],
  "related": [
-  "pricing-card` — the card each plan renders with.",
-  "plan-comparison` — the matrix that sits under these cards."
+  "`pricing-card` — the card each plan renders with.",
+  "`plan-comparison` — the matrix that sits under these cards."
  ],
  "bestPractices": [
   "Give every plan one price per period, matched by `period`; a price without a `period` applies to every period.",

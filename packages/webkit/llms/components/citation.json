@@ -18,9 +18,9 @@
   "Footnotes in documentation → `doc-prose` conventions."
  ],
  "related": [
-  "sources` — the list citations point at.",
-  "streaming-response` — renders citations from `[n]` in Markdown.",
-  "tooltip` — shows the source title."
+  "`sources` — the list citations point at.",
+  "`streaming-response` — renders citations from `[n]` in Markdown.",
+  "`tooltip` — shows the source title."
  ],
  "bestPractices": [
   "Number in order of first use: [1], [2], [3].",
@@ -56,7 +56,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Citation from '@aziontech/webkit/citation'\n</script>\n\n<template>\n  <p class=\"max-w-(--container-md) text-body-md text-(--text-default)\">\n    A purge reaches every edge location in a few seconds\n    <Citation\n      :index=\"1\"\n      title=\"Real-Time Purge\"\n      href=\"https://www.azion.com/en/documentation/\"\n    />, and cached objects are fetched again from the origin on the next request\n    <Citation\n      :index=\"2\"\n      title=\"Cache settings\"\n      href=\"#cache-answer-source-2\"\n    />.\n  </p>\n</template>"
+   "file": "examples/citation/default.vue"
   }
  ],
  "docs": "components/citation.md"

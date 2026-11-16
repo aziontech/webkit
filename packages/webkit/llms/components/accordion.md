@@ -5,7 +5,7 @@
 - Import: `import AccordionRoot from '@aziontech/webkit/accordion-root'`
 - Compound import (dot notation, not tree-shakeable): `import Accordion from '@aziontech/webkit/accordion'`
 - Category: content · Surface: app · Structure: composition
-- API as JSON: [accordion.json](https://github.com/aziontech/webkit/blob/main/.specs/accordion.json)
+- API as JSON: [accordion.json](accordion.json)
 
 ## When to use
 
@@ -19,7 +19,7 @@
 - Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.
 - Bind `v-model` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
 - Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
-- Accordion.Content` applies no padding; pad the content you put inside it.
+- `Accordion.Content` applies no padding; pad the content you put inside it.
 - Set `size` and `icon-position` on the root, not per item — they are provided to every item through context.
 
 ## Don’t

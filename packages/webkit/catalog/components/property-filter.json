@@ -14,10 +14,10 @@
   "Faceted picks from a known set of values per field (status, region, owner), shown as chips → use `filter-menu`. PropertyFilter is for expression search: typed tokens, operators, free text and a query people keep as text."
  ],
  "related": [
-  "use-collection` — applies the query; `propertyFilterProps` is the binding.",
-  "table` — the collection it usually filters.",
-  "card-list` — the card form of a collection.",
-  "collection-preferences` — the panel that sits beside it in the controls row."
+  "`use-collection` — applies the query; `propertyFilterProps` is the binding.",
+  "`table` — the collection it usually filters.",
+  "`card-list` — the card form of a collection.",
+  "`collection-preferences` — the panel that sits beside it in the controls row."
  ],
  "bestPractices": [
   "Give every property with a closed set of values its `options`, so values are suggested and tokens print labels.",

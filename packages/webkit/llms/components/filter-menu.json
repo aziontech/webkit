@@ -25,11 +25,11 @@
   "A single search over names → use `input`, or `table-search` inside a table."
  ],
  "related": [
-  "data-table` — `Table.Filter type=\"menu\"` and `FilterMenu.ChipGroup` (no `fields`) render this menu and its chips over the table's `filters` model.",
-  "property-filter` — the token-based filter field for typed queries.",
-  "popover` — the overlay the menu opens in.",
-  "date-range-picker` — the range picker the custom date period uses.",
-  "chip` — each applied filter in `FilterMenu.ChipGroup`."
+  "`data-table` — `Table.Filter type=\"menu\"` and `FilterMenu.ChipGroup` (no `fields`) render this menu and its chips over the table's `filters` model.",
+  "`property-filter` — the token-based filter field for typed queries.",
+  "`popover` — the overlay the menu opens in.",
+  "`date-range-picker` — the range picker the custom date period uses.",
+  "`chip` — each applied filter in `FilterMenu.ChipGroup`."
  ],
  "bestPractices": [
   "Put the Filter button first in the controls row, before the search field, and `FilterMenu.ChipGroup` on its own row below the controls.",
@@ -96,11 +96,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import FilterMenu from '@aziontech/webkit/filter-menu'\n  import { ref } from 'vue'\n\n  const fields = [\n    {\n      id: 'owner',\n      label: 'Author',\n      options: [\n        { value: 'jane', label: 'Jane Doe', avatar: '' },\n        { value: 'john', label: 'John Smith', avatar: '' },\n        { value: 'priya', label: 'Priya Patel', avatar: '' }\n      ]\n    },\n    {\n      id: 'status',\n      label: 'Status',\n      type: 'single',\n      options: [\n        { value: 'live', label: 'Live' },\n        { value: 'inactive', label: 'Inactive' }\n      ]\n    },\n    { id: 'modified', label: 'Last modified', type: 'date' }\n  ]\n\n  const filters = ref({ owner: ['jane', 'priya'] })\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <FilterMenu\n      v-model=\"filters\"\n      :fields=\"fields\"\n    />\n    <FilterMenu.ChipGroup\n      v-model=\"filters\"\n      :fields=\"fields\"\n    />\n  </div>\n</template>"
+   "file": "examples/filter-menu/default.vue"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import FilterMenu from '@aziontech/webkit/filter-menu-root'\n  import { ref } from 'vue'\n\n  const fields = [\n    {\n      id: 'status',\n      label: 'Status',\n      options: [\n        { value: 'live', label: 'Live' },\n        { value: 'inactive', label: 'Inactive' }\n      ]\n    }\n  ]\n\n  const small = ref({ status: ['live'] })\n  const medium = ref({ status: ['live'] })\n  const large = ref({ status: ['live'] })\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-md)\">\n    <FilterMenu\n      v-model=\"small\"\n      :fields=\"fields\"\n      size=\"small\"\n    />\n    <FilterMenu\n      v-model=\"medium\"\n      :fields=\"fields\"\n      size=\"medium\"\n    />\n    <FilterMenu\n      v-model=\"large\"\n      :fields=\"fields\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+   "file": "examples/filter-menu/sizes.vue"
   }
  ],
  "docs": "components/filter-menu.md"

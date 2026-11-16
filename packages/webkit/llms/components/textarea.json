@@ -18,12 +18,12 @@
   "The value is strictly numeric → use `number-input`."
  ],
  "related": [
-  "input` — single-line sibling with the same field API."
+  "`input` — single-line sibling with the same field API."
  ],
  "bestPractices": [
   "Give it a sensible default size; avoid auto-growing beyond the viewport.",
   "Set `autoResize` on a field whose length varies a lot (a prompt, a comment, a commit message): it starts at `minRows` lines and grows as the person types. Always set `maxRows` with it, so a long paste scrolls inside the field instead of pushing the page down.",
-  "autoResize` turns the drag handle off; pick one or the other, never both.",
+  "`autoResize` turns the drag handle off; pick one or the other, never both.",
   "Wrap it in a `Field` for the label, description and error.",
   "Set `monospace` on a value that is code: a pasted zone file, a certificate, a JSON or YAML snippet, a list of IPs. Pair it with `:spellcheck=\"false\"`. Prose (a description, a message) stays in the sans face.",
   "A value people edit as code with highlighting and line numbers belongs in `CodeEditor`; `monospace` is for a plain paste box.",
@@ -115,15 +115,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Textarea from '@aziontech/webkit/textarea'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <Textarea\n    v-model=\"value\"\n    placeholder=\"Write your message\"\n  />\n</template>"
+   "file": "examples/textarea/default.vue"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import Textarea from '@aziontech/webkit/textarea'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <Textarea\n    v-model=\"value\"\n    placeholder=\"Placeholder\"\n    disabled\n  />\n</template>"
+   "file": "examples/textarea/disabled.vue"
   },
   {
    "name": "Invalid",
-   "sfc": "<script setup>\n  import Textarea from '@aziontech/webkit/textarea'\n  import { ref } from 'vue'\n\n  const value = ref('Text Filled')\n</script>\n\n<template>\n  <Textarea\n    v-model=\"value\"\n    aria-label=\"Description\"\n    invalid\n  />\n</template>"
+   "file": "examples/textarea/invalid.vue"
   }
  ],
  "docs": "components/textarea.md"

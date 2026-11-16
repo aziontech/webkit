@@ -12,8 +12,8 @@
   "For copy beside one piece of media in a hand-built SFC that needs the `media` slot → use `media-split`."
  ],
  "related": [
-  "media-split` — the band primitive the section is rendered with.",
-  "media-split-stack-section` — the stacked sibling for a run of claims."
+  "`media-split` — the band primitive the section is rendered with.",
+  "`media-split-stack-section` — the stacked sibling for a run of claims."
  ],
  "bestPractices": [
   "Give the band exactly one media: `scene`, `codeTabs`, `widget` (a `ConsoleMockup` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.",

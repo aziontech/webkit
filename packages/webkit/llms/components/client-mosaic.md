@@ -4,7 +4,7 @@
 
 - Import: `import ClientMosaic from '@aziontech/webkit/client-mosaic'`
 - Category: section · Surface: site · Structure: monolithic
-- API as JSON: [client-mosaic.json](https://github.com/aziontech/webkit/blob/main/.specs/client-mosaic.json)
+- API as JSON: [client-mosaic.json](client-mosaic.json)
 
 ## When to use
 

@@ -11,9 +11,9 @@
   "Navigation between pages of the app → use `sidebar` or `navigation-menu`."
  ],
  "related": [
-  "tabs` — the tablist it renders; pass one `Tabs.Trigger` per section in the default slot.",
-  "page-header` — the page heading under the strip.",
-  "tag` and `button` — the usual content of the `actions` slot."
+  "`tabs` — the tablist it renders; pass one `Tabs.Trigger` per section in the default slot.",
+  "`page-header` — the page heading under the strip.",
+  "`tag` and `button` — the usual content of the `actions` slot."
  ],
  "bestPractices": [
   "Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content`: the page renders the active section itself from the `v-model` value.",

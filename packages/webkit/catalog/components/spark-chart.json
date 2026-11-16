@@ -11,9 +11,9 @@
   "Up/down status over discrete periods → use `tracker`."
  ],
  "related": [
-  "stat-tile` — the KPI tile that renders its sparkline with SparkChart.",
-  "chart` — the full history with axes, tooltip and legend.",
-  "tracker` — a strip of status blocks rather than a measured shape."
+  "`stat-tile` — the KPI tile that renders its sparkline with SparkChart.",
+  "`chart` — the full history with axes, tooltip and legend.",
+  "`tracker` — a strip of status blocks rather than a measured shape."
  ],
  "bestPractices": [
   "Pair it with the number it describes; a spark alone has no scale and says nothing exact.",

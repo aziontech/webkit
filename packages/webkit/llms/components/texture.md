@@ -4,7 +4,7 @@
 
 - Import: `import Texture from '@aziontech/webkit/texture'`
 - Category: marketing · Surface: site · Structure: monolithic
-- API as JSON: [texture.json](https://github.com/aziontech/webkit/blob/main/.specs/texture.json)
+- API as JSON: [texture.json](texture.json)
 
 ## When to use
 

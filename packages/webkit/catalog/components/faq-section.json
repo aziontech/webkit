@@ -10,8 +10,8 @@
   "For a single highlighted question with an action → use `call-to-action`."
  ],
  "related": [
-  "faq` — the framed accordion band this section renders.",
-  "closing-call-to-action` — the band that usually follows it."
+  "`faq` — the framed accordion band this section renders.",
+  "`closing-call-to-action` — the band that usually follows it."
  ],
  "bestPractices": [
   "Use one FAQ section per page and give it `anchor: 'faq'` so a page can link straight to it.",

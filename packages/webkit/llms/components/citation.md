@@ -4,7 +4,7 @@
 
 - Import: `import Citation from '@aziontech/webkit/citation'`
 - Category: ai · Surface: app · Structure: monolithic
-- API as JSON: [citation.json](https://github.com/aziontech/webkit/blob/main/.specs/citation.json)
+- API as JSON: [citation.json](citation.json)
 
 ## When to use
 

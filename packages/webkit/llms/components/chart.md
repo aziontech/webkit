@@ -5,7 +5,7 @@
 - Import: `import ChartRoot from '@aziontech/webkit/chart-root'`
 - Compound import (dot notation, not tree-shakeable): `import Chart from '@aziontech/webkit/chart'`
 - Category: chart · Surface: app · Structure: composition
-- API as JSON: [chart.json](https://github.com/aziontech/webkit/blob/main/.specs/chart.json)
+- API as JSON: [chart.json](chart.json)
 
 ## When to use
 

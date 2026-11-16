@@ -4,7 +4,7 @@
 
 - Import: `import ToggleGroup from '@aziontech/webkit/toggle-group'`
 - Category: action · Surface: app · Structure: monolithic
-- API as JSON: [toggle-group.json](https://github.com/aziontech/webkit/blob/main/.specs/toggle-group.json)
+- API as JSON: [toggle-group.json](toggle-group.json)
 
 ## When to use
 
@@ -43,7 +43,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `options` | `ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean }`)` | `[]` | false | Segmented choices shown as a mutually exclusive group. |
+| `options` | ``ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean }`)` | `[]` | false | Segmented choices shown as a mutually exclusive group. |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no visible group label is associated. |
 | `defaultValue` | `string` | `undefined` | false | Initial selection when `v-model` is not set. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token, on the same 28 / 32 / 40 rhythm every other control uses. |
