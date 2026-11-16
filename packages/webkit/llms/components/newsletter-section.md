@@ -58,6 +58,7 @@
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
 - `failed` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
 - `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
+- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
 
 ## Accessibility
 

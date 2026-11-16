@@ -223,7 +223,7 @@ The frame is static apart from its resize handles.
           <template #aside>
             <Button
               variant="outline"
-              label="Talk to a specialist"
+              label="Talk to sales"
             />
           </template>
         </CallToAction>
@@ -346,7 +346,7 @@ The frame is static apart from its resize handles.
             <template #aside>
               <Button
                 variant="outline"
-                label="Talk to a specialist"
+                label="Talk to sales"
               />
             </template>
           </CallToAction>

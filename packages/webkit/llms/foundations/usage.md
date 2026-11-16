@@ -118,6 +118,10 @@ Structure and states first, polish last:
 - **Polish:** `/webkit-motion-polish` → `/webkit-final-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
 - **Adopting WebKit in an existing app:** `/webkit-adoption`
+- **A whole product screen, end to end:** `/webkit-product-screens` (the routing table: which skill
+  or rule owns each design problem, and what enforces it)
+- **An Azion web page (site, product or Solution page, campaign):** `/webkit-site-pages`, under rule
+  `webkit-site-pages` (the Web Design Guide, SD-01 to SD-25)
 - **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
   lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 

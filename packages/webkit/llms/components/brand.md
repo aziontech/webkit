@@ -18,6 +18,10 @@
 - Choose the lockup with `variant` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
 - Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
+- Take the logo only from Brand, never from a copied SVG file or a website URL.
+- Keep clear contrast between the logo and its background, and clear space around it; never shrink it below the `small` size.
+- Do not set the logo next to text or interface elements in the brand primary colour: the signature lockup already carries it.
+- Black and white versions of the logo do not exist yet: ask the Design team for them, never recolour a copy.
 
 ## Don’t
 

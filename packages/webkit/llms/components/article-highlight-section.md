@@ -56,6 +56,7 @@
 - Direction: `data-direction` on the panel is `forward` or `back` (from the arrow key, the autoplay step, or the index change) and drives an out-in slide of the panel's article, mirrored under `rtl`
 - Fill: `data-fill` is set; from `lg` the band's height is the viewport minus `var(--layout-header-height)` and the section gaps, the panel takes the free height and its cover drops its fixed aspect; under 50 rem of viewport height the copy tightens and the deck hides
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
+- A wall title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays the tab's accessible name, with no `title` attribute.
 
 ## Accessibility
 

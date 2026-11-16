@@ -9,7 +9,7 @@
 ## When to use
 
 - A product page listing what the product does, three or six at a time.
-- Use cases or resources that each link to their own page: give each item an `href` (and no `icon` for a resource list).
+- Use cases or resources that each link to their own page, on a hub or landing page: give each item an `href` (and no `icon` for a resource list).
 - A bare grid (no title) under a band that already has its heading.
 
 ## Do
@@ -23,6 +23,7 @@
 
 - For capabilities with art — use `FeatureTilesSection` or `BentoGrid`.
 - For use cases whose band title sits in the first grid cell with one action — use `CustomerUseCasesSection`.
+- For the use cases of a product page — not on product pages; use `CustomerUseCasesSection` with exactly four items. The linked use-case grid belongs on hub and landing pages.
 - For cells that each carry their own action or copy button — use `FeatureWidgetsSection`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

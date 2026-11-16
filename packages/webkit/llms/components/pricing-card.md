@@ -135,7 +135,7 @@
       value="Custom"
       prefix=""
       suffix=""
-      action-label="Talk to a specialist"
+      action-label="Talk to sales"
     />
   </div>
 </template>

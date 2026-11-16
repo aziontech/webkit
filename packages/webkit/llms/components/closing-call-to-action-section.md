@@ -112,7 +112,7 @@ No built-in strings of its own: every visible text is a prop from the page JSON,
   }
 
   const secondaryAction = {
-    label: 'Talk to a specialist',
+    label: 'Talk to sales',
     href: 'https://www.azion.com/en/contact/',
     trailing: true
   }
@@ -153,7 +153,7 @@ No built-in strings of its own: every visible text is a prop from the page JSON,
         href: 'https://console.azion.com/signup?tck=build_cta'
       }"
       :secondary-action="{
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: 'https://www.azion.com/en/contact/',
         trailing: true
       }"

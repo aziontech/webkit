@@ -180,7 +180,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
       </AppHeader.Center>
       <AppHeader.End>
         <Button
-          label="Start for Free"
+          label="Start for free"
           variant="primary"
           size="medium"
         />

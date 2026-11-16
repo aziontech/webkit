@@ -54,13 +54,15 @@
 - Closing rule: when neither the last band nor the table carries a closing link, the last row draws a bottom rule (`data-closing`) so the table never ends open
 - Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
+- Category row: a group row whose values are all empty is a category heading. It opens its own `tbody` with one `th scope="rowgroup"` spanning every column (label, hint and tag included) and renders no value cells; the rows after it belong to that `tbody` until the next category. A group row that carries values stays a feature row.
+- The feature column head (`columnLabel`) is start-aligned, like the row labels under it.
 - Empty: when no plan has a name the band renders nothing but its root
 
 ## Accessibility
 
 - Visible focus: owned by the composed `select`, `input`, `button`, `icon-button` and `link`.
 - Keyboard map: `Tab` reaches the picker (below `lg`), each plan button, each hint button and the closing link; the picker's keyboard map is `select`'s and its search field takes typing while the list is open; `Enter` or `Space` on a hint button opens its popover and `Escape` closes it, returning focus to the button (`popover`'s map).
-- ARIA: the table carries a `caption`, `scope="col"` plan heads, a `scope="colgroup"` head per band and a `scope="row"` head per feature, so each value is announced with its row and plan. The included and not-included marks are `aria-hidden` and carry their label as `sr-only` text (the tooltip repeats it for pointer users); each hint button is named `About <label>` from the locale catalog and its popover is titled by the label; the picker's search field is named `Search <picker name>` and its no-match line is a `status`; the accent bar is decorative; the plan names stay readable to screen readers below `lg`.
+- ARIA: the table carries a `caption`, `scope="col"` plan heads, a `scope="rowgroup"` head opening each band `tbody` and each category `tbody`, and a `scope="row"` head per feature, so each value is announced with its row and plan. The included and not-included marks are `aria-hidden` and carry their label as `sr-only` text (the tooltip repeats it for pointer users); each hint button is named `About <label>` from the locale catalog and its popover is titled by the label; the picker's search field is named `Search <picker name>` and its no-match line is a `status`; the accent bar is decorative; the plan names stay readable to screen readers below `lg`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the composed controls carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the plan buttons and the picker are `large`.
@@ -203,7 +205,7 @@
       description: 'Ideal for teams that need support from specialists.',
       highlighted: false,
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '/contact'
       }
     },
@@ -213,7 +215,7 @@
       description: 'Ideal for organizations that require advanced support and ongoing services.',
       highlighted: true,
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '/contact'
       }
     },
@@ -224,7 +226,7 @@
         'Ideal for mission-critical operations that need priority and proactive support.',
       highlighted: false,
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '/contact'
       }
     }

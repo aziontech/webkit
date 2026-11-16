@@ -46,6 +46,7 @@
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
+- A card title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays in the accessibility tree, with no `title` attribute.
 
 ## Accessibility
 

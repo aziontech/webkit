@@ -117,7 +117,7 @@
       description:
         'Deploy your first application in minutes, or talk to an expert about your architecture.',
       primaryAction: { label: 'Start for free', href: '/signup' },
-      secondaryAction: { label: 'Talk to a specialist', href: '/contact', trailing: true }
+      secondaryAction: { label: 'Talk to sales', href: '/contact', trailing: true }
     }"
   />
 </template>

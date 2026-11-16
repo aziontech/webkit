@@ -53,6 +53,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 - Put text on a fill with that fill's pair: every fill colour has a `-foreground` text colour (`--primary` / `--primary-foreground`, `--danger` / `--danger-foreground`); the inverted surface `--bg-contrast` takes `--text-contrast`.
 - Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `2xs…2xl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
+- Let the class pick the family: headings, body copy and buttons are sans (`text-heading-*`, `text-body-*`, `text-button-*`); eyebrows, big numbers and code are mono (`text-overline-*`, `text-big-number-*`, `text-label-code-*`, `text-body-code-sm`). The heading and big-number classes change size by breakpoint, so a page never sets its own type scale.
 - Import the styles once, near your app entry: `import './webkit.css'` (the theme, `@aziontech/theme/fonts.css` for the Azion font faces, and `./webkit.sources.css`, the WebKit files Tailwind compiles; `npx @aziontech/webkit init` writes it) and `import '@aziontech/icons'` for icons.
 
 ## Do not
@@ -75,7 +76,7 @@ use it, so you can check a choice against a real one.
 | Second action | `--secondary`, `--secondary-foreground` | `Button variant="secondary"`, `IconButton`, `Badge variant="secondary"` |
 | Brand text and tint | `--text-primary`, `--primary-mask`, `--primary-selected` | the required asterisk in `FieldLabel`, `Tag variant="highlight"`, `RadioGroup` selected card |
 | Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` and `TopologyDiagram` edges and ports |
-| Brand marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | `Eyebrow` text in the logo orange (`--text-brand`: the logo orange in dark, the darker primary-700 in light where the logo orange is under 4.5:1 on white) and its blinking cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
+| Brand marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | `Eyebrow` text in the logo orange (`--text-brand`: the logo orange `#F3652B` in light and dark, an owner-accepted contrast exception below) and its blinking cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
 | Selected item | `--bg-selected`, `--border-selected` | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders |
 | Selected tab | `--secondary-mask` | the sliding indicator in `Tabs` |
 | Hover and press | `--bg-hover`, `--bg-active`, `--bg-mask` | every interactive component (`--bg-mask` is the hover layer on `Button variant="outline"` and `variant="ghost"`) |
@@ -115,10 +116,11 @@ Exceptions (the one list; `accepted` means the owner chose the look, `open` wait
 | `--primary-foreground` on `--primary` | light, dark | 46.6 | accepted | The black label on the logo orange `#F3652B` matches the logo (2026-11-14). WCAG 6.71:1 passes. |
 | `--border-default` on the surfaces | dark | 0 | accepted | Dark dividers keep the original `#2B2B2B` look (2026-11-16). Form outlines stay `--border-input` `#535353`. |
 | `--border-muted` on the surfaces | dark | 0 | accepted | Dark muted dividers keep the original `#242424` look (2026-11-16). |
-| `--text-brand` on the surfaces | dark | 43.5–44.3 | accepted | The `Eyebrow` label stays the logo orange `#F3652B` in dark. Light uses primary-700 `#B03C02` and passes. |
-| `--border-muted` on `--bg-canvas` | light | 13.3 | open | Light muted divider on the page canvas. |
-| `--text-muted` on `--bg-surface-raised` | dark | 59.9 | open | Dark muted text in menus and popovers. |
-| `--border-input` on `--bg-surface-raised` | dark | 14.6 | open | Dark field outline inside a raised panel. |
+| `--text-brand` on the surfaces | dark | 43.5–44.3 | accepted | The `Eyebrow` label stays the logo orange `#F3652B` in dark. WCAG 5.5:1 passes. |
+| `--text-brand` on the surfaces | light | 51.5–57.5 | accepted | brand: the eyebrow matches the logo orange; owner decision 2026-11-16. Fails both APCA (Lc 60) and WCAG 2 AA (2.9–3.1:1, needs 4.5:1). axe skips `color-contrast` on the Eyebrow label only, listed in `packages/webkit/src/test/a11y-accepted.json`. |
+| `--border-muted` on `--bg-canvas` | light | 13.3 | accepted | Light muted divider on the page canvas, target Lc 15: kept as is (owner decision 2026-11-16). |
+| `--text-muted` on `--bg-surface-raised` | dark | 59.9 | accepted | Dark muted text in menus and popovers, target Lc 60: kept as is (owner decision 2026-11-16). |
+| `--border-input` on `--bg-surface-raised` | dark | 14.6 | accepted | Dark field outline inside a raised panel, target Lc 15: kept as is (owner decision 2026-11-16). |
 
 Do not "fix" an accepted pair; do not add a pair to this list without the design owner's decision.
 
@@ -1327,6 +1329,62 @@ const hintId = useId() // stable id for the ARIA association
 
 ---
 
+<!-- foundations/site-pages.md -->
+
+# Site pages (Web Design Guide)
+
+> The Web Design Guide, SD-01 to SD-25 (SD-07 headline lines, SD-04 action labels): sections, heroes, line budgets and assets of every Azion web page.
+
+## Index
+
+| ID | Rule |
+| --- | --- |
+| SD-01 | Sections come only from the WebKit page sections |
+| SD-02 | A page starts from the section's own site JSON |
+| SD-03 | Section copy is frozen until someone asks |
+| SD-04 | Action labels come from the WebKit list |
+| SD-05 | A band hero is followed by no gap |
+| SD-06 | The client marquee belongs to the screen hero |
+| SD-07 | A short headline breaks in two lines, a long one in three |
+| SD-08 | Retired; the ID is not reused |
+| SD-09 | Every hero has an eyebrow with the `//` prefix |
+| SD-10 | Section eyebrows are optional and plain |
+| SD-11 | A band no section covers becomes a section first |
+| SD-12 | Creative pages keep the content base |
+| SD-13 | Assets come from the WebKit asset bank |
+| SD-14 | Brand marks in colour first |
+| SD-15 | The page speaks the project language |
+| SD-16 | Marketing facts come from the knowledge base |
+| SD-17 | Product names and terms follow the knowledge base |
+| SD-18 | Pick an illustration by what it draws, not by its name |
+| SD-19 | A missing illustration is reported, not approximated |
+| SD-20 | Illustrations side by side carry the same visual weight |
+| SD-21 | A framed box checks its containers before drawing its edges |
+| SD-22 | A product page follows the product pattern |
+| SD-23 | A Solution page follows the Solution pattern |
+| SD-24 | Copy fits its rendered line budget |
+| SD-25 | A section prop holds plain text, never markdown |
+
+## Where the content comes from
+
+WebKit owns the design: which sections a page uses, the hero, the frame, the assets, the action
+labels. Marketing owns the content, in its own toolkit, and WebKit only points there:
+
+| Content | Source (marketing) |
+| --- | --- |
+| Positioning, claims, metrics, use cases, personas, customers | the `azion-kb` knowledge base (`product-marketing/`, `gtm-definitions/`) |
+| Voice, headline patterns, every label not listed in SD-04 | the `azion-brand-voice` skill |
+| Product names | `azion-kb` `company-definitions/product-naming.md` |
+| Required, forbidden and deprecated terms; editorial style | `azion-kb` `brand-guidelines/terminology.md`, `editorial-style.md` |
+| Translation into pt-BR and es | the `translate-content` skill |
+
+When this rule and any other design document disagree about a design decision, this rule wins
+and the other document is fixed.
+
+Each rule in full, with Incorrect, Correct, Why and Exceptions: `foundations/site-pages.md`.
+
+---
+
 <!-- foundations/usage.md -->
 
 # Using WebKit in an app
@@ -1449,6 +1507,10 @@ Structure and states first, polish last:
 - **Polish:** `/webkit-motion-polish` → `/webkit-final-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
 - **Adopting WebKit in an existing app:** `/webkit-adoption`
+- **A whole product screen, end to end:** `/webkit-product-screens` (the routing table: which skill
+  or rule owns each design problem, and what enforces it)
+- **An Azion web page (site, product or Solution page, campaign):** `/webkit-site-pages`, under rule
+  `webkit-site-pages` (the Web Design Guide, SD-01 to SD-25)
 - **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
   lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 
@@ -8284,7 +8346,7 @@ What each part takes: [blocks/shell/site.md](blocks/shell/site.md).
 ## Copy
 
 - **Hero title:** the outcome in sentence case, under ten words. **Eyebrow:** the product name: `Functions`.
-- **Hero actions:** match the bar's wording and capitalization (`Start for free`, `Talk to a specialist`).
+- **Hero actions:** match the bar's wording and capitalization (`Start for free`, `Talk to sales`).
 - **Figures:** a number and a short noun phrase.
 - **Palette placeholder:** `Search azion.com`.
 
@@ -15662,6 +15724,10 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 - Choose the lockup with `variant` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
 - Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
+- Take the logo only from Brand, never from a copied SVG file or a website URL.
+- Keep clear contrast between the logo and its background, and clear space around it; never shrink it below the `small` size.
+- Do not set the logo next to text or interface elements in the brand primary colour: the signature lockup already carries it.
+- Black and white versions of the logo do not exist yet: ask the Design team for them, never recolour a copy.
 
 ## Don’t
 
@@ -15931,7 +15997,7 @@ The frame is static apart from its resize handles.
           <template #aside>
             <Button
               variant="outline"
-              label="Talk to a specialist"
+              label="Talk to sales"
             />
           </template>
         </CallToAction>
@@ -16225,7 +16291,7 @@ The frame is static apart from its resize handles.
 
 # Eyebrow
 
-> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange in dark, a darker step in light so the small label keeps 4.5:1), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 - Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
@@ -16280,7 +16346,7 @@ The frame is static apart from its resize handles.
 - Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
-- Test ids: root `eyebrow` (consumer `data-testid` wins).
+- Test ids: root `eyebrow` (consumer `data-testid` wins); the label `<root>__label`.
 - Reflow: the root is capped at the width of its container, and a label that does not fit wraps instead of overflowing at any width, at 200% zoom and with translated copy (no viewport breakpoint involved).
 
 ## Accessibility
@@ -16288,7 +16354,7 @@ The frame is static apart from its resize handles.
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast ≥4.5:1 (text): the label uses `var(--text-brand)` (`primary-700` in light, 4.77:1 or more on every light surface, because the logo orange is about 3.1:1 on white; the logo orange `primary-500` in dark, 5.5:1 or more on every dark surface) and the prefix `var(--text-default)` on the surface the consumer places it on.
+- Contrast: the prefix uses `var(--text-default)` (≥4.5:1). The label uses `var(--text-brand)`, the logo orange `primary-500` in both themes: 5.5:1 or more on every dark surface, but about 2.9–3.1:1 on the light surfaces, under WCAG 2 AA 4.5:1 and APCA Lc 60. This is an owner-accepted brand exception (the eyebrow matches the logo orange; owner decision 2026-11-16), recorded in `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"; the automated axe checks skip `color-contrast` on the `<root>__label` part in light only.
 - `motion-reduce:animate-none` on the cursor's `animate-blink`.
 - Touch target: not applicable (non-interactive).
 
@@ -26264,7 +26330,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <Footer.Link href="/legal">Legal</Footer.Link>
     </Footer.Column>
     <Footer.Column title="Support">
-      <Footer.Link href="/contact">Talk to a specialist</Footer.Link>
+      <Footer.Link href="/contact">Talk to sales</Footer.Link>
       <Footer.Link href="/support">Help center</Footer.Link>
       <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
     </Footer.Column>

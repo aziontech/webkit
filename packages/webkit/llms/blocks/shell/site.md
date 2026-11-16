@@ -81,7 +81,7 @@ A row of headline figures inside a `RegistrationFrame`.
 ## Copy
 
 - **Hero title:** the outcome in sentence case, under ten words. **Eyebrow:** the product name: `Functions`.
-- **Hero actions:** match the bar's wording and capitalization (`Start for free`, `Talk to a specialist`).
+- **Hero actions:** match the bar's wording and capitalization (`Start for free`, `Talk to sales`).
 - **Figures:** a number and a short noun phrase.
 - **Palette placeholder:** `Search azion.com`.
 
@@ -585,7 +585,7 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
             href="https://console.azion.com/signup"
           />
           <Button
-            label="Talk to a specialist"
+            label="Talk to sales"
             variant="outline"
             size="large"
             href="/en/contact-sales/"

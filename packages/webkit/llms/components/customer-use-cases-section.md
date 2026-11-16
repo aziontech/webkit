@@ -9,12 +9,12 @@
 ## When to use
 
 - Use CustomerUseCasesSection when the band's title sits in the first grid cell with one action.
-- On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.
+- On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for. It is the one use-case band of a product page.
 - Whenever a page needs three to six short, icon-led use cases with one link out to the documentation.
 
 ## Do
 
-- Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.
+- On a product page give exactly four `items`; the first cell spans two rows at `lg`, so four cases fill the grid exactly. Elsewhere keep to four or so.
 - Write `title` as the heading the page's outline needs; it is the band's `h2`.
 - Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as "go".
 - Leave `eyebrow` as the product name; it is the overline the reader scans first.
@@ -47,6 +47,7 @@
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the title cell, not the frame — because a use-case band with no use cases is absent from the page, not an `empty-state`
 - The title cell spans two rows from `lg`, so four items fill a three-column grid exactly
+- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
 
 ## Accessibility
 

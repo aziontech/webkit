@@ -13,10 +13,17 @@
  "useWhen": [
   "Use HeroSection for every marketing page opening; pick the layout with `variant`.",
   "To open a home, solution, product, listing or contact page with its headline and main actions; add `items` for a grid of arguments under it, or `levels` with `variant=\"copy-on-top-art\"` for a topology under the copy.",
-  "Rendering page JSON, or you need a whole band with no custom content → the section (`hero-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`)."
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`hero-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).",
+  "Pick the layout by page type (azion.com):",
+  "Home and the product index page: `center` with the client marquee (`marqueeMarks`). No other page type opens with it.",
+  "Every product page: `title-band` with `size=\"large\"`.",
+  "Compliance, Recognitions, Support, Careers and Resource Hub: `center-band`.",
+  "Blog: `title-band` with `size=\"medium\"`, followed by a `small` `section-gap`.",
+  "Any other page: `title-band`."
  ],
  "avoidWhen": [
   "When the page exists to capture a lead and the form sits above the fold → use `hero-form-section`.",
+  "`center` with the client marquee on any page other than Home and the product index page → use `title-band` (or `center-band` on the pages listed under When to use).",
   "In a hand-built SFC that needs slots HeroSection does not offer → use the `hero` primitive.",
   "For a band inside the page column → use `section-module` or a sibling section."
  ],
@@ -30,7 +37,7 @@
  "bestPractices": [
   "Use `title-band` with `size=\"large\"` for a product page and `size=\"medium\"` for a page whose bands start right under the headline.",
   "Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.",
-  "Leave `titleLength` at `short` for a headline of up to about seven words: like azion.com, the `center`, `title-band` and `center-band` layouts set it on a narrower measure than the sentence under it, so \"Certifications and Compliance\" breaks over two lines. Use `long` only for a headline that would run to three lines.",
+  "Leave `titleLength` at `short` for a headline of up to about 50 characters (about seven words): like azion.com, the `center`, `title-band` and `center-band` layouts set it on a narrower measure than the sentence under it, so \"Certifications and Compliance\" breaks over two lines. Use `long` for a headline of about 51 to 90 characters, which would run to three lines on the short measure. Rewrite a headline longer than about 90 characters; count the string as rendered, in each locale.",
   "Leave `headerOffset` at its default under `SiteHeaderSection`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length."
  ],
  "props": [

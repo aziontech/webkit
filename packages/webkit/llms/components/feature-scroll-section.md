@@ -10,7 +10,7 @@
 
 - Use FeatureScrollSection for the product-page walkthrough, one pinned screen (scene or code) per feature.
 - To walk through four to six capabilities of one product, each with a picture of its own.
-- To walk through capabilities each shown by the file you would write: give each item a `code` sample.
+- To walk through capabilities each shown by the file you would write: give each item a `code` sample. It is the only code slot of a product page.
 
 ## Do
 
@@ -21,7 +21,7 @@
 ## Don’t
 
 - For three reasons with no scroll story → use `feature-tiles-section`.
-- For one claim beside one code sample → use `media-split-section` with `codeTabs`.
+- For one claim beside one code sample → use `media-split-section` with `codeTabs`, but not on product pages, where code goes here.
 - In a hand-built SFC that needs its own media slot → use `sticky-stack` directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

@@ -2834,7 +2834,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       <Button label="Start for free" />
       <Button
         variant="outline"
-        label="Talk to a specialist"
+        label="Talk to sales"
       />
     </template>
   </CallToAction>
@@ -4921,6 +4921,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.
+- On the Blog, the gap right after the `title-band` hero (`size="medium"`) is `small`, so the article highlight reads as part of the opening.
 - Do not override the height from the call site. The steps are multiples of `--spacing-2xl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.
 - Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.
 - Let it carry the shared rule: it renders `flush`, so its top rule is subtracted and the section above supplies it instead of doubling it. It still ticks every corner (`marks="all"`): the shared rule is given away, the registration mark is not.
@@ -5320,7 +5321,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Site Page
 
-> The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently. It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it. **Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/section/` except `site-header-section` and `site-footer-section` (the frame, which `shell/site` owns) to a `() => import('../../section/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry. **Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-section`; `'closing-call-to-action-agents'` → `closing-call-to-action-section` `variant: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery-section` `closing: true`; `'customer-spotlight'` → `client-story-columns-section` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll-section` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll-section`; `'compare-support-tiers'` → `plan-comparison-section` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index-section` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid-section`; `'code-split'` → `media-split-section`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. This is the only alias the package keeps: no retired export or prop is re-exported. **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-section` drew from a private map) and with `Diagram`, `ConsoleMockup` and `Illustration`, the components a scene slot already takes. `media-split-section` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there. **Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `site-page`.
+> The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently. It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it. **Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/section/` except `site-header-section` and `site-footer-section` (the frame, which `shell/site` owns) to a `() => import('../../section/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry. **Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-section`; `'closing-call-to-action-agents'` → `closing-call-to-action-section` `variant: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery-section` `closing: true`; `'customer-spotlight'` → `client-story-columns-section` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll-section` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll-section`; `'compare-support-tiers'` → `plan-comparison-section` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index-section` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid-section`; `'code-split'` → `media-split-section`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. Renamed props travel the same way: before any alias transform, `resolveSectionEntry` translates the section's old prop names and values from the 6.0 rename map (`src/cli/migrations/v6-props.json`, copied into the same file and kept in step by the component test), for every entry whether its `_id` is retired or current, so `{ _id: 'hero-band', props: { kind: 'centered' } }` renders `hero-section` with `variant: 'center'`; an old name is dropped only when its new name is not already set. This is the only alias the package keeps: no retired export or prop is re-exported. **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-section` drew from a private map) and with `Diagram`, `ConsoleMockup` and `Illustration`, the components a scene slot already takes. `media-split-section` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there. **Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `site-page`.
 
 - Import: `import SitePage from '@aziontech/webkit/site-page'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -5380,6 +5381,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - No state of its own; each section owns its states (`loading`, `submitted`, `error` on a form band come from its `props`).
 - An unknown `_id` or scene name renders nothing in its place and warns once per name in development.
 - A retired `_id` renders with its successor through `sitePageSectionAliases`, with the props transform applied.
+- An old prop name or value of a section (`kind: 'centered'` on a hero) renders as its 6.0 successor (`variant: 'center'`).
 - Closing bands: a closing band followed directly by another is bound with `hatch: false` (an explicit `hatch` in its `props` is overridden), so stacked closings share the lower band's closing frame; a `closing-call-to-action-section` with `variant: 'frame'` takes no gap before it; when the last column entry is a closing band that draws its frame, the trailing gap is omitted.
 - A section or scene still loading renders nothing in its place until its chunk arrives.
 - A section or scene whose chunk fails to load (network failure, deploy skew) or takes longer than 10 s renders nothing in its place, the rest of the page keeps rendering, and a development warning names the `_id` or scene; it does not retry (`defineAsyncComponent` with `timeout` and `onError`).
@@ -5980,6 +5982,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Copy-page menu: the `link` entry copies the URL; the `markdown` entry opens the page as plain-text markdown in a new tab; an entry whose `value` is a key of `assistants` opens that template in a new tab with `{prompt}` replaced by the encoded prompt `Read <article.href> so I can ask questions about it.`
 - Byline: with `authors`, overlapping large avatars (photo, or initials without one) lead the byline; with `author`, the names sit above the date and read time
 - Prose: fenced code blocks render as `pre`/`code`; numbered lists as `ol`; a full `http` link opens in a new tab
+- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
 
 ## Accessibility
 
@@ -6102,6 +6105,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
+- A card title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays in the accessibility tree, with no `title` attribute.
 
 ## Accessibility
 
@@ -6222,6 +6226,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Direction: `data-direction` on the panel is `forward` or `back` (from the arrow key, the autoplay step, or the index change) and drives an out-in slide of the panel's article, mirrored under `rtl`
 - Fill: `data-fill` is set; from `lg` the band's height is the viewport minus `var(--layout-header-height)` and the section gaps, the panel takes the free height and its cover drops its fixed aspect; under 50 rem of viewport height the copy tightens and the deck hides
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
+- A wall title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays the tab's accessible name, with no `title` attribute.
 
 ## Accessibility
 
@@ -6462,7 +6467,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## When to use
 
 - A product page listing what the product does, three or six at a time.
-- Use cases or resources that each link to their own page: give each item an `href` (and no `icon` for a resource list).
+- Use cases or resources that each link to their own page, on a hub or landing page: give each item an `href` (and no `icon` for a resource list).
 - A bare grid (no title) under a band that already has its heading.
 
 ## Do
@@ -6476,6 +6481,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - For capabilities with art — use `FeatureTilesSection` or `BentoGrid`.
 - For use cases whose band title sits in the first grid cell with one action — use `CustomerUseCasesSection`.
+- For the use cases of a product page — not on product pages; use `CustomerUseCasesSection` with exactly four items. The linked use-case grid belongs on hub and landing pages.
 - For cells that each carry their own action or copy button — use `FeatureWidgetsSection`.
 
 ## Related
@@ -7278,7 +7284,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   }
 
   const secondaryAction = {
-    label: 'Talk to a specialist',
+    label: 'Talk to sales',
     href: 'https://www.azion.com/en/contact/',
     trailing: true
   }
@@ -7985,12 +7991,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## When to use
 
 - Use CustomerUseCasesSection when the band's title sits in the first grid cell with one action.
-- On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.
+- On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for. It is the one use-case band of a product page.
 - Whenever a page needs three to six short, icon-led use cases with one link out to the documentation.
 
 ## Do
 
-- Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.
+- On a product page give exactly four `items`; the first cell spans two rows at `lg`, so four cases fill the grid exactly. Elsewhere keep to four or so.
 - Write `title` as the heading the page's outline needs; it is the band's `h2`.
 - Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as "go".
 - Leave `eyebrow` as the product name; it is the overline the reader scans first.
@@ -8022,6 +8028,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the title cell, not the frame — because a use-case band with no use cases is absent from the page, not an `empty-state`
 - The title cell spans two rows from `lg`, so four items fill a three-column grid exactly
+- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
 
 ## Accessibility
 
@@ -8180,7 +8187,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Use FeatureScrollSection for the product-page walkthrough, one pinned screen (scene or code) per feature.
 - To walk through four to six capabilities of one product, each with a picture of its own.
-- To walk through capabilities each shown by the file you would write: give each item a `code` sample.
+- To walk through capabilities each shown by the file you would write: give each item a `code` sample. It is the only code slot of a product page.
 
 ## Do
 
@@ -8191,7 +8198,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Don’t
 
 - For three reasons with no scroll story → use `feature-tiles-section`.
-- For one claim beside one code sample → use `media-split-section` with `codeTabs`.
+- For one claim beside one code sample → use `media-split-section` with `codeTabs`, but not on product pages, where code goes here.
 - In a hand-built SFC that needs its own media slot → use `sticky-stack` directly.
 
 ## Related
@@ -8929,17 +8936,24 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Use HeroSection for every marketing page opening; pick the layout with `variant`.
 - To open a home, solution, product, listing or contact page with its headline and main actions; add `items` for a grid of arguments under it, or `levels` with `variant="copy-on-top-art"` for a topology under the copy.
 - Rendering page JSON, or you need a whole band with no custom content → the section (`hero-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).
+- Pick the layout by page type (azion.com):
+- Home and the product index page: `center` with the client marquee (`marqueeMarks`). No other page type opens with it.
+- Every product page: `title-band` with `size="large"`.
+- Compliance, Recognitions, Support, Careers and Resource Hub: `center-band`.
+- Blog: `title-band` with `size="medium"`, followed by a `small` `section-gap`.
+- Any other page: `title-band`.
 
 ## Do
 
 - Use `title-band` with `size="large"` for a product page and `size="medium"` for a page whose bands start right under the headline.
 - Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.
-- Leave `titleLength` at `short` for a headline of up to about seven words: like azion.com, the `center`, `title-band` and `center-band` layouts set it on a narrower measure than the sentence under it, so "Certifications and Compliance" breaks over two lines. Use `long` only for a headline that would run to three lines.
+- Leave `titleLength` at `short` for a headline of up to about 50 characters (about seven words): like azion.com, the `center`, `title-band` and `center-band` layouts set it on a narrower measure than the sentence under it, so "Certifications and Compliance" breaks over two lines. Use `long` for a headline of about 51 to 90 characters, which would run to three lines on the short measure. Rewrite a headline longer than about 90 characters; count the string as rendered, in each locale.
 - Leave `headerOffset` at its default under `SiteHeaderSection`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length.
 
 ## Don’t
 
 - When the page exists to capture a lead and the form sits above the fold → use `hero-form-section`.
+- `center` with the client marquee on any page other than Home and the product index page → use `title-band` (or `center-band` on the pages listed under When to use).
 - In a hand-built SFC that needs slots HeroSection does not offer → use the `hero` primitive.
 - For a band inside the page column → use `section-module` or a sibling section.
 
@@ -9831,7 +9845,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
 - Use MediaSplitSection for one marketing claim beside its picture, scene or code.
 - To make one point beside one picture and move on (a values statement, a single product claim).
-- To set a claim beside the code that delivers it (`codeTabs`), with the files in a tab strip.
+- To set a claim beside the code that delivers it (`codeTabs`), with the files in a tab strip, on any page but a product page.
 
 ## Do
 
@@ -9848,6 +9862,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Don’t
 
 - For several claims stacked one after the other → use `media-split-stack-section`.
+- For code on a product page → not on product pages; `feature-scroll-section` is the only code slot of a product page.
 - For a full-width terminal session with no copy column → use `cli-terminal-section`.
 - For copy beside one piece of media in a hand-built SFC that needs the `media` slot → use `media-split`.
 
@@ -10273,6 +10288,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
 - `failed` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
 - `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
+- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
 
 ## Accessibility
 
@@ -10495,13 +10511,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Closing rule: when neither the last band nor the table carries a closing link, the last row draws a bottom rule (`data-closing`) so the table never ends open
 - Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
+- Category row: a group row whose values are all empty is a category heading. It opens its own `tbody` with one `th scope="rowgroup"` spanning every column (label, hint and tag included) and renders no value cells; the rows after it belong to that `tbody` until the next category. A group row that carries values stays a feature row.
+- The feature column head (`columnLabel`) is start-aligned, like the row labels under it.
 - Empty: when no plan has a name the band renders nothing but its root
 
 ## Accessibility
 
 - Visible focus: owned by the composed `select`, `input`, `button`, `icon-button` and `link`.
 - Keyboard map: `Tab` reaches the picker (below `lg`), each plan button, each hint button and the closing link; the picker's keyboard map is `select`'s and its search field takes typing while the list is open; `Enter` or `Space` on a hint button opens its popover and `Escape` closes it, returning focus to the button (`popover`'s map).
-- ARIA: the table carries a `caption`, `scope="col"` plan heads, a `scope="colgroup"` head per band and a `scope="row"` head per feature, so each value is announced with its row and plan. The included and not-included marks are `aria-hidden` and carry their label as `sr-only` text (the tooltip repeats it for pointer users); each hint button is named `About <label>` from the locale catalog and its popover is titled by the label; the picker's search field is named `Search <picker name>` and its no-match line is a `status`; the accent bar is decorative; the plan names stay readable to screen readers below `lg`.
+- ARIA: the table carries a `caption`, `scope="col"` plan heads, a `scope="rowgroup"` head opening each band `tbody` and each category `tbody`, and a `scope="row"` head per feature, so each value is announced with its row and plan. The included and not-included marks are `aria-hidden` and carry their label as `sr-only` text (the tooltip repeats it for pointer users); each hint button is named `About <label>` from the locale catalog and its popover is titled by the label; the picker's search field is named `Search <picker name>` and its no-match line is a `status`; the accent bar is decorative; the plan names stay readable to screen readers below `lg`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the composed controls carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the plan buttons and the picker are `large`.
@@ -10901,7 +10919,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         }
       ],
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '#contact'
       }
     }
@@ -11865,7 +11883,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       description:
         'Deploy your first application in minutes, or talk to an expert about your architecture.',
       primaryAction: { label: 'Start for free', href: '/signup' },
-      secondaryAction: { label: 'Talk to a specialist', href: '/contact', trailing: true }
+      secondaryAction: { label: 'Talk to sales', href: '/contact', trailing: true }
     }"
   />
 </template>
@@ -11963,7 +11981,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     title="Quick Start with Templates"
     description="Launch storefronts faster with pre-built templates and starter kits. Deploy complete projects in seconds with popular frameworks."
     :primary-action="{ label: 'Start for free', href: '/signup' }"
-    :secondary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
+    :secondary-action="{ label: 'Talk to sales', href: '/contact', trailing: true }"
     :templates="[
       {
         title: 'AI Inference Starter Kit',

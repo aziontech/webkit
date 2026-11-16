@@ -206,7 +206,7 @@
         }
       ],
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '#contact'
       }
     }
