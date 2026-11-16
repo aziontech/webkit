@@ -75,6 +75,37 @@ describe('Table', () => {
       expect(view.container.querySelector('.ai-external-link')).toBeNull()
     })
 
+    it('CellLink: the external mark appears only on an address outside the app', () => {
+      const mark = (props: Record<string, unknown>) => {
+        const view = render(TableCellLink, { props: { label: 'site-assets', ...props } })
+        const link = view.getByTestId('table-cell-link__link')
+        const result = {
+          mark: link.querySelector('.ai-external-link') !== null,
+          target: link.getAttribute('target'),
+          newTab: (link.textContent ?? '').includes('(opens in a new tab)')
+        }
+        cleanup()
+        return result
+      }
+      expect(mark({ href: 'https://example.com/docs' })).toEqual({
+        mark: true,
+        target: '_blank',
+        newTab: true
+      })
+      expect(mark({ href: '//cdn.example.com/site-assets' }).mark).toBe(true)
+      expect(mark({ to: '/storage/site-assets' })).toEqual({
+        mark: false,
+        target: null,
+        newTab: false
+      })
+      expect(mark({ to: { name: 'bucket' }, href: '' }).mark).toBe(false)
+      expect(mark({ href: '/storage/site-assets' })).toEqual({
+        mark: false,
+        target: null,
+        newTab: false
+      })
+    })
+
     it('CellLink: an in-app route uses a registered RouterLink, else a plain href', () => {
       const view = render(TableCellLink, { props: { label: 'storefront', to: '/workloads/1' } })
       expect(view.getByRole('link').getAttribute('href')).toBe('/workloads/1')
