@@ -9,7 +9,8 @@
     <span class="text-label-sm text-(--text-muted)">Application</span>
     <HoverCard
       default-open
-      placement="bottom-start"
+      side="bottom"
+      align="start"
     >
       <HoverCard.Trigger>
         <Link

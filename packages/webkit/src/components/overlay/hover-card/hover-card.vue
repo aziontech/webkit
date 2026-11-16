@@ -4,10 +4,10 @@
   import { useControllable } from '../../../composables/use-controllable'
   import { usePlacement } from '../../../composables/use-placement'
   import { triggerControl } from '../../../utils/trigger-control'
-  import type { HoverCardPlacement, HoverCardPlacementSide } from './injection-key'
+  import type { HoverCardAlign, HoverCardSide } from './injection-key'
   import { HOVER_CARD_FOCUSABLE, HoverCardInjectionKey } from './injection-key'
 
-  export type { HoverCardPlacement, HoverCardPlacementSide } from './injection-key'
+  export type { HoverCardAlign, HoverCardSide } from './injection-key'
 
   defineOptions({
     name: 'HoverCard',
@@ -19,10 +19,12 @@
   }>()
 
   export interface HoverCardProps {
-    /** Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. */
-    placement?: HoverCardPlacement
+    /** Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. */
+    side?: HoverCardSide | 'auto'
+    /** Alignment along the trigger edge. */
+    align?: HoverCardAlign
     /** Pixel gap between the trigger and the card. */
-    offset?: number
+    sideOffset?: number
     /** Milliseconds the pointer or focus must stay on the trigger before the card opens. */
     openDelay?: number
     /** Milliseconds after the pointer or focus leaves the trigger and the card before the card closes. */
@@ -34,8 +36,9 @@
   }
 
   const props = withDefaults(defineProps<HoverCardProps>(), {
-    placement: 'bottom',
-    offset: 8,
+    side: 'bottom',
+    align: 'center',
+    sideOffset: 8,
     openDelay: 500,
     closeDelay: 300,
     disabled: false,
@@ -68,16 +71,15 @@
 
   const isOpenRef = computed(() => isOpenState.value && !props.disabled)
 
-  const { resolvedPlacement, panelStyle } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: triggerEl,
     panelRef: panelEl,
     isOpen: isOpenRef,
-    placement: () => props.placement,
-    offset: () => props.offset,
+    side: () => props.side,
+    align: () => props.align,
+    sideOffset: () => props.sideOffset,
     onDismiss: () => setOpen(false)
   })
-
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as HoverCardPlacementSide)
 
   function clearTimers() {
     if (openTimer !== undefined) clearTimeout(openTimer)
@@ -146,7 +148,8 @@
     testId: testId.value,
     contentId: `${uid}-hover-card`,
     isOpen: isOpenRef,
-    placement: resolvedPlacementRef,
+    side: resolvedSide,
+    align: resolvedAlign,
     panelStyle,
     triggerEl,
     panelEl,
