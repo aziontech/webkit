@@ -650,3 +650,31 @@ test('every block carries one surface of catalog.surfaces', () => {
   assert.equal(catalog.block('shell/site').surface, 'site')
   assert.equal(catalog.block('shell/docs').surface, 'docs')
 })
+
+test('searchBlocks cards are summary-first: one sentence and the first intents, get_block has the rest', () => {
+  for (const card of searchBlocks(catalog, '').matches) {
+    assert.ok(card.intents.length <= 5, card.id)
+    assert.doesNotMatch(card.summary, /[.!?]\s+\S/, card.id)
+  }
+})
+
+test('listComponents pages with limit and cursor', () => {
+  const all = listComponents(catalog)
+  const first = listComponents(catalog, { limit: 10 })
+  const second = listComponents(catalog, { limit: 10, cursor: first.nextCursor })
+  assert.equal(first.components.length, 10)
+  assert.equal(first.count, all.count)
+  assert.deepEqual([...first.components, ...second.components], all.components.slice(0, 20))
+  assert.equal(listComponents(catalog, { limit: all.count }).nextCursor, undefined)
+})
+
+test('getBlock returns only the sections asked for and names the rest', () => {
+  const only = getBlock(catalog, 'view/table-view', { sections: ['guidelines'] })
+  assert.equal('sfc' in only, false)
+  assert.ok(only.guidelines)
+  assert.deepEqual(only.omitted, ['sfc'])
+  const sfc = getBlock(catalog, 'view/table-view', { sections: ['sfc'] })
+  assert.equal('guidelines' in sfc, false)
+  assert.match(sfc.sfc, /<template>/)
+  assert.equal('omitted' in getBlock(catalog, 'view/table-view'), false)
+})

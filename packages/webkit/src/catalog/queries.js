@@ -48,7 +48,7 @@ function componentCard(catalog, name) {
   }
 }
 
-export function listComponents(catalog, { category, surface } = {}) {
+export function listComponents(catalog, { category, surface, limit, cursor } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const wanted = category ? String(category).toLowerCase() : null
   const wantedSurface = surface ? String(surface).toLowerCase() : null
@@ -58,6 +58,10 @@ export function listComponents(catalog, { category, surface } = {}) {
     .filter((sub) => !wantedSurface || catalog.getEntry(sub)?.surface === wantedSurface)
     .map((sub) => componentCard(catalog, sub))
     .sort((a, b) => a.name.localeCompare(b.name))
+  const start = Math.max(0, Number.parseInt(cursor ?? '0', 10) || 0)
+  const size = limit > 0 ? Math.floor(limit) : components.length
+  const page = components.slice(start, start + size)
+  const next = start + page.length
   return {
     ok: true,
     available: true,
@@ -65,7 +69,9 @@ export function listComponents(catalog, { category, surface } = {}) {
     count: components.length,
     ...(wanted ? { category: wanted } : {}),
     ...(wantedSurface ? { surface: wantedSurface } : {}),
-    components
+    ...(start || next < components.length ? { cursor: String(start) } : {}),
+    ...(next < components.length ? { nextCursor: String(next) } : {}),
+    components: page
   }
 }
 
@@ -891,13 +897,21 @@ export function expandQuery(query) {
   return { q, groups, generic, phrases: [q, ...groups.flat()], words }
 }
 
+const CARD_INTENTS = 5
+
+function firstSentence(text) {
+  const s = String(text || '').trim()
+  const m = s.match(/^[\s\S]*?[.!?](?=\s|$)/)
+  return (m ? m[0] : s).trim()
+}
+
 function blockCard(id, p, score) {
   return {
     id,
     name: p.name,
-    summary: p.summary,
+    summary: firstSentence(p.summary),
     ...(p.guidelinesSummary ? { guidelinesSummary: p.guidelinesSummary } : {}),
-    intents: p.intents || [],
+    intents: (p.intents || []).slice(0, CARD_INTENTS),
     components: p.components || [],
     skills: p.skills || [],
     ...(p.steps ? { steps: p.steps } : {}),
@@ -1026,7 +1040,11 @@ function movedNote(moved, p) {
   return `Block "${moved.from}" was renamed in WebKit v6: it is now "${moved.id}"${state}. Use the new id.`
 }
 
-export function getBlock(catalog, id, { variant } = {}) {
+const BLOCK_SECTIONS = ['sfc', 'guidelines']
+
+export function getBlock(catalog, id, { variant, sections } = {}) {
+  const wanted = Array.isArray(sections) && sections.length ? sections : BLOCK_SECTIONS
+  const omitted = BLOCK_SECTIONS.filter((k) => !wanted.includes(k))
   if (!catalog.available) return NOT_AVAILABLE
   const blocks = catalog.blocks || {}
   const key = String(id || '').trim()
@@ -1085,12 +1103,18 @@ export function getBlock(catalog, id, { variant } = {}) {
     ...(p.kind === 'fragment' ? { kind: 'fragment', fragmentNote: FRAGMENT_NOTE } : {}),
     ...(moved ? { movedFrom: moved.from, note: movedNote(moved, p) } : {}),
     variant: chosen ? chosen.name : p.primary,
-    sfc: chosen ? chosen.sfc : p.sfc,
+    ...(wanted.includes('sfc') ? { sfc: chosen ? chosen.sfc : p.sfc } : {}),
     variants: [
       { name: p.primary, summary: 'primary' },
       ...(p.variants || []).map((v) => ({ name: v.name, summary: v.summary }))
     ],
-    ...(p.guidelines ? { guidelines: p.guidelines } : {}),
+    ...(p.guidelines && wanted.includes('guidelines') ? { guidelines: p.guidelines } : {}),
+    ...(omitted.length
+      ? {
+          omitted,
+          omittedNote: `Call get_block again with sections ${JSON.stringify(omitted)} for the rest.`
+        }
+      : {}),
     howToUse: p.guidelines
       ? "Read `guidelines` first: when to use this screen and when not, what each building block is for, do and don't, the copy rules and the accessibility rules. Then copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes), following the guidelines. Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills."
       : 'Copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes). Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills.'

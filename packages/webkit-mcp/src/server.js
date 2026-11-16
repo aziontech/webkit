@@ -33,8 +33,10 @@ function serverVersion() {
   }
 }
 
+const LIST_LIMIT = 60
+
 function json(result) {
-  return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+  return { content: [{ type: 'text', text: JSON.stringify(result) }] }
 }
 
 async function main() {
@@ -67,7 +69,8 @@ async function main() {
         'List every renderable @aziontech/webkit component (compact cards: name, category, ' +
         'surface, structure, import, tree-shakeable import, PascalCase binding). Optionally filter ' +
         'by category or by surface: "app" (console and apps), "site" (the azion.com site: ' +
-        'sections, bands, brand assets) or "docs" (the documentation site).',
+        'sections, bands, brand assets) or "docs" (the documentation site). Returns ' +
+        `${LIST_LIMIT} cards per page; pass the answer's \`nextCursor\` as \`cursor\` for the next page.`,
       inputSchema: {
         category: z
           .string()
@@ -76,10 +79,22 @@ async function main() {
         surface: z
           .enum(['app', 'site', 'docs'])
           .optional()
-          .describe('Restrict to one surface. Console screens use "app" only.')
+          .describe('Restrict to one surface. Console screens use "app" only.'),
+        cursor: z
+          .string()
+          .optional()
+          .describe('The `nextCursor` of the previous page. Omit for the first page.'),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(300)
+          .optional()
+          .describe(`Cards per page (default ${LIST_LIMIT}).`)
       }
     },
-    async ({ category, surface }) => json(listComponents(catalog, { category, surface }))
+    async ({ category, surface, cursor, limit }) =>
+      json(listComponents(catalog, { category, surface, cursor, limit: limit ?? LIST_LIMIT }))
   )
 
   tool(
@@ -234,9 +249,9 @@ async function main() {
       description:
         'Find the reviewed block for an intent ("login", "sign up", "account settings", ' +
         '"delete dialog", "tela de login"). Blocks are whole screens built from WebKit ' +
-        'components: start every screen from one. Returns ranked ids with their intents, components, ' +
-        'skills, steps and `guidelinesSummary` (the job the screen serves). An empty query lists ' +
-        'every block.',
+        'components: start every screen from one. Returns ranked ids with a one-line summary, the ' +
+        'first intents, components, skills, steps and `guidelinesSummary` (the job the screen ' +
+        'serves); get_block has the detail. An empty query lists every block.',
       inputSchema: {
         query: z
           .string()
@@ -267,17 +282,23 @@ async function main() {
         'The whole block: a runnable SFC (script setup + template) with the webkit imports, the ' +
         'components it uses, the skills to follow, its steps, the other variants (states) of ' +
         "the same screen and its `guidelines` (when to use, building blocks, do and don't, copy, " +
-        'accessibility). Read the guidelines, copy the SFC and change only the content. A pre-v6 id (e.g. ' +
+        'accessibility). Read the guidelines, copy the SFC and change only the content. Pass ' +
+        '`sections: ["guidelines"]` to read the guidelines first and fetch the SFC with ' +
+        '`sections: ["sfc"]` after. A pre-v6 id (e.g. ' +
         '"platform/lists/table-view") resolves to its new block and carries a `note`.',
       inputSchema: {
         id: z.string().describe('Block id from search_blocks, e.g. "view/table-view".'),
         variant: z
           .string()
           .optional()
-          .describe('A variant name from the block, e.g. "IncorrectCredentials".')
+          .describe('A variant name from the block, e.g. "IncorrectCredentials".'),
+        sections: z
+          .array(z.enum(['sfc', 'guidelines']))
+          .optional()
+          .describe('Return only these heavy parts. Omit for both.')
       }
     },
-    async ({ id, variant }) => json(getBlock(catalog, id, { variant }))
+    async ({ id, variant, sections }) => json(getBlock(catalog, id, { variant, sections }))
   )
 
   tool(
