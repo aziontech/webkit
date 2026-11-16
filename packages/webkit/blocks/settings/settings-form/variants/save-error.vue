@@ -4,7 +4,7 @@
 
 <template>
   <SettingsForm
-    :default-draft="{ email: 'alex.morgan@example.com' }"
+    :default-draft="{ timezone: 'america-new_york' }"
     error="The request didn't reach the server. Your changes are kept."
   />
 </template>

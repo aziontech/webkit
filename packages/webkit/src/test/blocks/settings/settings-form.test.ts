@@ -6,6 +6,8 @@ import SettingsForm from '../../../../blocks/settings/settings-form/settings-for
 import Profile from '../../../../blocks/settings/settings-form/variants/profile.vue'
 import Failed from '../../../../blocks/settings/settings-form/variants/profile-error.vue'
 import Loading from '../../../../blocks/settings/settings-form/variants/profile-loading.vue'
+import SaveError from '../../../../blocks/settings/settings-form/variants/save-error.vue'
+import Saving from '../../../../blocks/settings/settings-form/variants/saving.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
@@ -127,4 +129,13 @@ describe('settings/settings-form', () => {
       email: 'alex.morgan@example.com'
     })
   })
+
+  it.each([Saving, SaveError])(
+    'opens a save state dirty with the editable email empty',
+    (Variant) => {
+      const view = render(Variant)
+      expect((view.getByLabelText('Email') as HTMLInputElement).value).toBe('')
+      expect(view.getByText('(UTC-05:00) New York')).toBeTruthy()
+    }
+  )
 })
