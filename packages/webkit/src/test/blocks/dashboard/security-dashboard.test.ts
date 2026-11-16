@@ -2,6 +2,9 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
+import Security, {
+  type SecuritySourceIp
+} from '../../../../blocks/dashboard/security-dashboard/security-dashboard.vue'
 import SecurityByActor from '../../../../blocks/dashboard/security-dashboard/variants/by-actor.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -41,5 +44,54 @@ describe('dashboard/security-dashboard#ByActor', () => {
     const view = render(SecurityByActor)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
     expect(view.emitted('refresh')?.length).toBe(1)
+  })
+})
+
+describe('dashboard/security-dashboard', () => {
+  it('renders the source IPs it is given instead of the sample', () => {
+    const row: SecuritySourceIp = {
+      id: '198.51.100.7',
+      remoteAddress: '198.51.100.7',
+      asn: 'AS64510 Acme network',
+      country: 'United States',
+      category: 'SQL injection',
+      requests: 42
+    }
+    const view = render(Security, { props: { sourceIps: [row] } })
+    const table = byTestId('data-table', view.container)
+    expect(table?.textContent).toContain('198.51.100.7')
+    expect(table?.textContent).not.toContain('203.0.113.42')
+  })
+
+  it('shows the add rule set empty state when every region is empty', () => {
+    const view = render(Security, {
+      props: {
+        matchedRequests: { labels: [], series: [] },
+        categories: [],
+        countries: [],
+        sourceIps: [],
+        attention: []
+      }
+    })
+    expect(view.container.textContent).toContain('No security rules protect your services')
+    expect(view.queryByRole('button', { name: 'Expand Matched requests over time' })).toBeNull()
+  })
+
+  it('disables the card actions while loading', () => {
+    const view = render(Security, { props: { loading: true } })
+    const expand = view.getByRole('button', {
+      name: 'Expand Matched requests over time'
+    }) as HTMLButtonElement
+    expect(expand.disabled).toBe(true)
+    expect(view.container.textContent).not.toContain('3 open')
+  })
+
+  it('names what failed in each card and emits retry', async () => {
+    const view = render(Security, { props: { error: 'Check your connection and retry.' } })
+    expect(view.container.textContent).toContain(
+      "Couldn't load top source IPs by blocked requests. Check your connection and retry."
+    )
+    await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
+    expect(view.emitted('retry')).toHaveLength(1)
   })
 })

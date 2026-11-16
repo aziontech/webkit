@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Card from '@aziontech/webkit/card'
   import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'
@@ -19,125 +20,142 @@
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
-  type Verdict = 'clean' | 'suspicious' | 'flagged' | 'pending'
-  type SubmissionSource = 'inline' | 'api' | 'upload' | 'scheduled'
+  import { sampleSources, sampleSubmissions, sampleSummary, sampleVerdictSplit } from './sample'
 
-  interface Submission {
+  /** The verdict an item received; pending while its analysis runs. */
+  export type ScanResultsVerdict = 'clean' | 'suspicious' | 'flagged' | 'pending'
+  /** Where an item came from. */
+  export type ScanResultsSource = 'inline' | 'api' | 'upload' | 'scheduled'
+
+  /** One row of the Submissions table. */
+  export interface ScanResultsSubmission {
+    /** Stable key. */
     id: string
+    /** File name. */
     name: string
-    verdict: Verdict
+    /** The verdict it received. */
+    verdict: ScanResultsVerdict
+    /** What the analysis classified it as; a dash while pending. */
     category: string
+    /** Risk score from 0 to 100; null while pending. */
     score: number | null
+    /** File type in words. */
     type: string
+    /** Size in bytes. */
     size: number
-    source: SubmissionSource
+    /** Where it came from. */
+    source: ScanResultsSource
+    /** Who sent it first. */
     submitter: string
+    /** When it was seen last, as an ISO-like date and time. */
     lastSeen: string
   }
 
-  const loading = false
+  /** The figures of the summary tiles and the Held and flagged card. */
+  export interface ScanResultsSummary {
+    /** Items sent for analysis in the period. */
+    submitted: number
+    /** Items waiting for a verdict now. */
+    analyzing: number
+    /** Items submitted in the last 24 hours. */
+    last24h: number
+    /** Items flagged as harmful. */
+    flagged: number
+    /** Deliveries held for a verdict now. */
+    held: number
+    /** Deliveries held in the last 24 hours. */
+    heldLast24h: number
+    /** Early delivery alerts nobody has reviewed. */
+    alertsOpen: number
+    /** Every early delivery alert in the period. */
+    alertsTotal: number
+  }
+
+  export interface ScanResultsDashboardProps {
+    /** The summary figures. Left out, the sample renders. */
+    summary?: ScanResultsSummary
+    /** One donut slice per verdict. Left out, the sample renders. */
+    verdictSplit?: ChartSeries[]
+    /** One bar per source. Left out, the sample renders. */
+    sources?: BarListItem[]
+    /** The Submissions rows, filtered in the browser; pass an empty list when none exists. Left out, the sample renders. */
+    submissions?: ScanResultsSubmission[]
+    /** The period is loading. */
+    loading?: boolean
+    /** Why the period could not load, shown after what did not load in each danger alert. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<ScanResultsDashboardProps>(), {
+    summary: undefined,
+    verdictSplit: undefined,
+    sources: undefined,
+    submissions: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+  }>()
+
+  const blocked = computed(() => props.loading || props.error !== '')
+  const summary = computed<ScanResultsSummary | null>(
+    () => props.summary ?? (blocked.value ? null : sampleSummary)
+  )
+  const verdictSplit = computed(
+    () => props.verdictSplit ?? (blocked.value ? [] : sampleVerdictSplit)
+  )
+  const sourceItems = computed(() => props.sources ?? (blocked.value ? [] : sampleSources))
+  const submissions = computed(() => props.submissions ?? (blocked.value ? [] : sampleSubmissions))
+
   const search = ref('')
   const status = ref('all')
   const verdict = ref('all')
   const source = ref('all')
 
-  const summary = {
-    held: 9,
-    heldLast24h: 46,
-    alertsOpen: 3,
-    alertsTotal: 14
-  }
-
-  const figures = [
+  const figures: {
+    key: keyof ScanResultsSummary
+    label: string
+    description: string
+  }[] = [
     {
-      id: 'submitted',
+      key: 'submitted',
       label: 'Submitted',
-      description: 'Items sent for analysis in the selected period.',
-      value: 18420
+      description: 'Items sent for analysis in the selected period.'
     },
     {
-      id: 'analyzing',
+      key: 'analyzing',
       label: 'In analysis',
-      description: 'Items waiting for a verdict right now.',
-      value: 37
+      description: 'Items waiting for a verdict right now.'
     },
     {
-      id: 'last-24h',
+      key: 'last24h',
       label: 'Last 24 hours',
-      description: 'Items submitted in the last 24 hours.',
-      value: 1284
+      description: 'Items submitted in the last 24 hours.'
     },
     {
-      id: 'flagged',
+      key: 'flagged',
       label: 'Flagged',
-      description: 'Items whose verdict marks them as harmful.',
-      value: 212
+      description: 'Items whose verdict marks them as harmful.'
     },
     {
-      id: 'held',
+      key: 'held',
       label: 'Held for a verdict',
-      description: 'Deliveries paused until their analysis finishes.',
-      value: 9
+      description: 'Deliveries paused until their analysis finishes.'
     },
     {
-      id: 'alerts',
+      key: 'alertsOpen',
       label: 'Open alerts',
-      description: 'Items delivered before they were flagged that nobody has reviewed yet.',
-      value: 3
+      description: 'Items delivered before they were flagged that nobody has reviewed yet.'
     }
   ]
 
-  const verdictSplit: ChartSeries[] = [
-    {
-      id: 'clean',
-      name: 'Clean',
-      color: 'success',
-      values: [16930]
-    },
-    {
-      id: 'suspicious',
-      name: 'Suspicious',
-      color: 'warning',
-      values: [1241]
-    },
-    {
-      id: 'flagged',
-      name: 'Flagged',
-      color: 'danger',
-      values: [212]
-    },
-    {
-      id: 'pending',
-      name: 'Pending',
-      color: 'other',
-      values: [37]
-    }
-  ]
-
-  const sourceItems: BarListItem[] = [
-    {
-      id: 'inline',
-      name: 'Inline scan',
-      value: 11640
-    },
-    {
-      id: 'api',
-      name: 'API submission',
-      value: 4380
-    },
-    {
-      id: 'upload',
-      name: 'Manual upload',
-      value: 1620
-    },
-    {
-      id: 'scheduled',
-      name: 'Scheduled scan',
-      value: 780
-    }
-  ]
-
-  const verdicts: Record<Verdict, { label: string; severity: TagSeverity; color: ChartColor }> = {
+  const verdicts: Record<
+    ScanResultsVerdict,
+    { label: string; severity: TagSeverity; color: ChartColor }
+  > = {
     clean: {
       label: 'Clean',
       severity: 'success',
@@ -160,7 +178,7 @@
     }
   }
 
-  const sources: Record<SubmissionSource, string> = {
+  const sourceLabels: Record<ScanResultsSource, string> = {
     inline: 'Inline scan',
     api: 'API submission',
     upload: 'Manual upload',
@@ -224,157 +242,10 @@
     }
   ]
 
-  const submissions: Submission[] = [
-    {
-      id: 'submission-01',
-      name: 'quarterly-report.pdf',
-      verdict: 'clean',
-      category: 'Document',
-      score: 4,
-      type: 'PDF',
-      size: 2480000,
-      source: 'inline',
-      submitter: 'ava.wilson',
-      lastSeen: '2026-11-10 13:42'
-    },
-    {
-      id: 'submission-02',
-      name: 'installer-setup.exe',
-      verdict: 'flagged',
-      category: 'Trojan',
-      score: 96,
-      type: 'Executable',
-      size: 18300000,
-      source: 'inline',
-      submitter: 'mark.chen',
-      lastSeen: '2026-11-10 13:18'
-    },
-    {
-      id: 'submission-03',
-      name: 'invoice-0425.docm',
-      verdict: 'suspicious',
-      category: 'Macro',
-      score: 71,
-      type: 'Office document',
-      size: 184000,
-      source: 'upload',
-      submitter: 'lisa.martin',
-      lastSeen: '2026-11-10 12:57'
-    },
-    {
-      id: 'submission-04',
-      name: 'build-artifacts.zip',
-      verdict: 'pending',
-      category: '—',
-      score: null,
-      type: 'Archive',
-      size: 46700000,
-      source: 'api',
-      submitter: 'ci-runner',
-      lastSeen: '2026-11-10 12:51'
-    },
-    {
-      id: 'submission-05',
-      name: 'team-photo.png',
-      verdict: 'clean',
-      category: 'Image',
-      score: 1,
-      type: 'Image',
-      size: 3120000,
-      source: 'inline',
-      submitter: 'sam.okafor',
-      lastSeen: '2026-11-10 12:33'
-    },
-    {
-      id: 'submission-06',
-      name: 'update-helper.dll',
-      verdict: 'flagged',
-      category: 'Ransomware',
-      score: 99,
-      type: 'Library',
-      size: 912000,
-      source: 'api',
-      submitter: 'ci-runner',
-      lastSeen: '2026-11-10 11:46'
-    },
-    {
-      id: 'submission-07',
-      name: 'pricing-model.xlsx',
-      verdict: 'clean',
-      category: 'Spreadsheet',
-      score: 6,
-      type: 'Office document',
-      size: 640000,
-      source: 'upload',
-      submitter: 'priya.nair',
-      lastSeen: '2026-11-10 11:20'
-    },
-    {
-      id: 'submission-08',
-      name: 'run-me.sh',
-      verdict: 'suspicious',
-      category: 'Script',
-      score: 63,
-      type: 'Script',
-      size: 4200,
-      source: 'inline',
-      submitter: 'david.kim',
-      lastSeen: '2026-11-10 10:58'
-    },
-    {
-      id: 'submission-09',
-      name: 'meeting-notes.txt',
-      verdict: 'clean',
-      category: 'Text',
-      score: 0,
-      type: 'Text',
-      size: 12800,
-      source: 'scheduled',
-      submitter: 'scheduler',
-      lastSeen: '2026-11-10 10:12'
-    },
-    {
-      id: 'submission-10',
-      name: 'browser-extension.crx',
-      verdict: 'suspicious',
-      category: 'Adware',
-      score: 58,
-      type: 'Extension',
-      size: 1740000,
-      source: 'inline',
-      submitter: 'mark.chen',
-      lastSeen: '2026-11-10 09:47'
-    },
-    {
-      id: 'submission-11',
-      name: 'backup-2026-11.tar.gz',
-      verdict: 'pending',
-      category: '—',
-      score: null,
-      type: 'Archive',
-      size: 128000000,
-      source: 'scheduled',
-      submitter: 'scheduler',
-      lastSeen: '2026-11-10 09:30'
-    },
-    {
-      id: 'submission-12',
-      name: 'driver-package.msi',
-      verdict: 'clean',
-      category: 'Installer',
-      score: 9,
-      type: 'Installer',
-      size: 22600000,
-      source: 'api',
-      submitter: 'ci-runner',
-      lastSeen: '2026-11-10 08:54'
-    }
-  ]
-
   const submissionColumns: TableColumn[] = [
     {
-      id: 'name',
       accessorKey: 'name',
+      id: 'name',
       header: 'Name',
       align: 'start',
       sortable: true,
@@ -382,64 +253,64 @@
       grow: 2
     },
     {
-      id: 'verdict',
       accessorKey: 'verdict',
+      id: 'verdict',
       header: 'Verdict',
       align: 'start',
       sortable: true,
       minWidth: 112
     },
     {
-      id: 'category',
       accessorKey: 'category',
+      id: 'category',
       header: 'Category',
       align: 'start',
       sortable: true,
       minWidth: 112
     },
     {
-      id: 'score',
       accessorKey: 'score',
+      id: 'score',
       header: 'Score',
       align: 'end',
       sortable: true,
       minWidth: 80
     },
     {
-      id: 'type',
       accessorKey: 'type',
+      id: 'type',
       header: 'Type',
       align: 'start',
       sortable: true,
       minWidth: 128
     },
     {
-      id: 'size',
       accessorKey: 'size',
+      id: 'size',
       header: 'Size',
       align: 'end',
       sortable: true,
       minWidth: 88
     },
     {
-      id: 'source',
       accessorKey: 'source',
+      id: 'source',
       header: 'Source',
       align: 'start',
       sortable: true,
       minWidth: 128
     },
     {
-      id: 'submitter',
       accessorKey: 'submitter',
+      id: 'submitter',
       header: 'First submitter',
       align: 'start',
       sortable: true,
       minWidth: 128
     },
     {
-      id: 'lastSeen',
       accessorKey: 'lastSeen',
+      id: 'lastSeen',
       header: 'Last seen',
       align: 'start',
       sortable: true,
@@ -448,7 +319,7 @@
   ]
 
   const rows = computed(() =>
-    submissions.filter(
+    submissions.value.filter(
       (row) =>
         (status.value === 'all' ||
           (status.value === 'analyzing') === (row.verdict === 'pending')) &&
@@ -495,6 +366,7 @@
             variant="outline"
             size="medium"
             aria-label="Refresh"
+            @click="(event: MouseEvent) => emit('refresh', event)"
           />
         </template>
       </PageHeader>
@@ -505,12 +377,12 @@
         >
           <li
             v-for="figure in figures"
-            :key="figure.id"
+            :key="figure.key"
             class="flex min-w-0 flex-col"
           >
             <StatTile
               :label="figure.label"
-              :value="figure.value"
+              :value="error ? null : (summary?.[figure.key] ?? null)"
               :format-value="formatters.compact"
               :loading="loading"
             >
@@ -533,7 +405,15 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load verdicts. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <DonutChart
+              v-else
               :series="verdictSplit"
               :format-value="formatters.compact"
               size="small"
@@ -556,7 +436,15 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load sources. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <BarList
+              v-else
               :items="sourceItems"
               :format-value="formatters.compact"
               empty-title="No items yet"
@@ -569,8 +457,15 @@
         <div class="lg:col-span-4">
           <Card title="Held and flagged">
             <template #default>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="`Couldn't load held and flagged submissions. ${error}`"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <div
-                v-if="loading"
+                v-else-if="loading || !summary"
                 aria-busy="true"
                 class="flex flex-col gap-(--spacing-sm)"
               >
@@ -633,8 +528,15 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load submissions. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <div
-              v-if="loading || submissions.length"
+              v-else-if="loading || submissions.length"
               class="flex min-w-0 flex-col gap-(--spacing-sm)"
             >
               <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
@@ -763,7 +665,7 @@
                   <span class="tabular-nums">{{ formatters.size(row.size) }}</span>
                 </template>
                 <template #cell-source="{ row }">
-                  {{ sources[row.source] }}
+                  {{ sourceLabels[row.source] }}
                 </template>
                 <template #cell-lastSeen="{ row }">
                   <time

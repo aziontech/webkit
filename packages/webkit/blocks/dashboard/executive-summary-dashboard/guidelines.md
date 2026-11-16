@@ -87,6 +87,58 @@ One `Item` per note: author, role, date and the note itself.
 
 The author's initials beside each note.
 
+### O. Load failure — `Alert` (required)
+
+When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+
+## Data
+
+The block takes its figures and records through props and emits every action; it fetches nothing. `ExecutiveSummaryDashboardProps` and the record types (`ExecutiveSummaryDashboardKpis`, `ExecutiveSummaryDashboardGoal`, `ExecutiveSummaryDashboardTrends`, `ExecutiveSummaryDashboardNote`) are exported from `executive-summary-dashboard.vue`, and `sample.ts` holds the sample quarter the block renders when a data prop is left out (and never while `loading` or `error` is set).
+
+| Prop              | Type                              | What it does                                                                                                                                                            |
+| ----------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kpis`            | `ExecutiveSummaryDashboardKpis`   | The value and delta of each scorecard tile, by metric (`revenue`, `active-users`, `retention`, `nps`, `uptime`, `cost-per-request`). A metric left out reads as a dash. |
+| `goals`           | `ExecutiveSummaryDashboardGoal[]` | The quarter goals with their current figure, target and status. `[]` shows No goal results.                                                                             |
+| `labels`          | `string[]`                        | The month labels of the trend charts.                                                                                                                                   |
+| `trends`          | `ExecutiveSummaryDashboardTrends` | Each trend card's monthly values and change tag, by metric. A metric left out shows the card's empty state.                                                             |
+| `notes`           | `ExecutiveSummaryDashboardNote[]` | The notes from the leads, newest first. `[]` shows No notes.                                                                                                            |
+| `loading`         | `boolean`                         | The quarter is loading; tiles and charts show their skeleton, goals and commentary hold skeleton rows, Export disables.                                                 |
+| `error`           | `string`                          | Why the quarter could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                                                |
+| `v-model:quarter` | `string`                          | The selected quarter (`Q3 2026` down to `Q3 2025`); default `Q3 2026`. Refetch when it changes.                                                                         |
+
+| Event            | Payload   | When                                                                      |
+| ---------------- | --------- | ------------------------------------------------------------------------- |
+| `retry`          | `(event)` | Retry in any card's error alert.                                          |
+| `export`         | `(event)` | Export in the header; the block downloads the scorecard and goals as CSV. |
+| `update:quarter` | `(value)` | The reader picked another quarter.                                        |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import ExecutiveSummaryDashboard from './executive-summary-dashboard.vue'
+
+  const quarter = ref('Q3 2026')
+  const { data, pending, error, refresh } = useExecutiveSummary(quarter)
+</script>
+
+<template>
+  <ExecutiveSummaryDashboard
+    v-model:quarter="quarter"
+    :kpis="data?.kpis ?? {}"
+    :goals="data?.goals ?? []"
+    :labels="data?.labels ?? []"
+    :trends="data?.trends ?? {}"
+    :notes="data?.notes ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep every trend card the same size and form so shapes compare.
@@ -118,10 +170,10 @@ The author's initials beside each note.
 
 ## States
 
-- Default: the reported quarter.
-- Loading: tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
-- Empty: a quarter with nothing reported; tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
-- Error: the request for the quarter failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Default: the reported quarter (`v-model:quarter`).
+- Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
+- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
+- Error: the request for the quarter failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
 
 ## Related
 

@@ -27,6 +27,7 @@
     "name": "Default",
     "file": "breakdown-dashboard.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Loading",

@@ -92,6 +92,54 @@ size and dates in tabular figures.
 
 The verdict of each row, in the same hue as its donut slice.
 
+### P. Load failure — `Alert` (required)
+
+With `error` set, a danger `Alert` with Retry takes the place of each card's content, naming what did
+not load (`Couldn't load verdicts.`); the tiles read as a dash.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `ScanResultsSubmission`, `ScanResultsSummary`, `ScanResultsVerdict`, `ScanResultsSource` and `ScanResultsDashboardProps` are exported from `scan-results-dashboard.vue`, and `sample.ts` holds the sample figures, splits and submissions the block renders when a data prop is left out (and never while `loading` or `error` is set).
+
+| Prop           | Type                      | What it does                                                                                                  |
+| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `summary`      | `ScanResultsSummary`      | The six tiles and the Held and flagged card. All zeros is the nothing-submitted state.                        |
+| `verdictSplit` | `ChartSeries[]`           | One donut slice per verdict, each with its status color. `[]` shows `No verdict yet`.                         |
+| `sources`      | `BarListItem[]`           | One bar per source. `[]` shows `No items yet`.                                                                |
+| `submissions`  | `ScanResultsSubmission[]` | The Submissions rows; the search and the filters run on them in the browser. `[]` shows `No items yet`.       |
+| `loading`      | `boolean`                 | The period is loading: every region shows its Skeleton.                                                       |
+| `error`        | `string`                  | Why the request failed, shown after `Couldn't load verdicts.` (sources, submissions…) in each danger `Alert`. |
+
+| Event     | Payload   | When                              |
+| --------- | --------- | --------------------------------- |
+| `refresh` | `(event)` | Refresh in the page heading.      |
+| `retry`   | `(event)` | Retry in any of the error alerts. |
+
+The `Held deliveries` and `Early delivery alerts` links point at `#held` and `#alerts`; point them at your pages. To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import ScanResultsDashboard from './scan-results-dashboard.vue'
+
+  const { data, pending, error, refresh } = useScanResults()
+</script>
+
+<template>
+  <ScanResultsDashboard
+    :summary="data?.summary"
+    :verdict-split="data?.verdicts ?? []"
+    :sources="data?.sources ?? []"
+    :submissions="data?.submissions ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep verdict colors identical in the donut and the table.
@@ -124,9 +172,9 @@ The verdict of each row, in the same hue as its donut slice.
 ## States
 
 - Default: results with verdicts, exceptions and the submissions table.
-- Loading: tiles, donut and bar list render their own `Skeleton`, the summary card holds Skeleton lines and the table shows Skeleton rows.
-- Empty: nothing submitted yet; tiles read zero, verdicts and sources keep their box with an `EmptyState`, and the Submissions card drops the filters and the table for one `EmptyState`.
-- Error: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Loading: `loading`; tiles, donut and bar list render their own `Skeleton`, the summary card holds Skeleton lines and the table shows Skeleton rows.
+- Empty: nothing submitted yet (a zero `summary`, `[]` splits and `submissions`); tiles read zero, verdicts and sources keep their box with an `EmptyState`, and the Submissions card drops the filters and the table for one `EmptyState`.
+- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

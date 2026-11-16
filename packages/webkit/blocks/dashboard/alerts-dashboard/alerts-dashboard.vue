@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Card from '@aziontech/webkit/card'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
@@ -16,48 +17,118 @@
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
-  type FigureFormat = 'count' | 'percentage'
-  type AlertStatus = 'Open' | 'Investigating'
+  import {
+    sampleAlerts,
+    sampleEntities,
+    sampleKpis,
+    sampleLabels,
+    sampleOpenByLevel,
+    sampleSeries,
+    sampleTypes
+  } from './sample'
 
-  interface Figure {
-    id: string
-    label: string
-    description: string
+  /** A summary tile. */
+  export type AlertsDashboardMetric = 'open' | 'critical-high' | 'raised' | 'false-positives'
+
+  /** The figure a summary tile shows. */
+  export interface AlertsDashboardKpi {
+    /** The figure for the period; null reads as a dash. */
     value: number | null
+    /** Percent change against the previous period; null hides the delta. */
     delta: number | null
-    inverse: boolean
-    format: FigureFormat
   }
 
-  interface LevelCount {
+  /** The figures of the summary tiles, by metric; a metric left out reads as a dash. */
+  export type AlertsDashboardKpis = Partial<Record<AlertsDashboardMetric, AlertsDashboardKpi>>
+
+  /** One row of Open by severity. */
+  export interface AlertsDashboardLevelCount {
+    /** The severity level. */
     id: SeverityTagLevel
+    /** Open alerts at this level. */
     count: number
   }
 
-  interface Entity {
+  /** One row of Highest risk. */
+  export interface AlertsDashboardEntity {
+    /** Stable key. */
     id: string
+    /** The user, device or service account. */
     name: string
+    /** What kind of entity it is, shown as a neutral tag. */
     type: string
+    /** Risk score from 0 to 100. */
     score: number
+    /** The severity of its worst open alert. */
     level: SeverityTagLevel
+    /** How many alerts name it and are open. */
     alerts: number
   }
 
-  interface AlertRow {
+  /** Where an open alert stands. */
+  export type AlertsDashboardAlertStatus = 'Open' | 'Investigating'
+
+  /** One row of Open alerts. */
+  export interface AlertsDashboardAlert {
+    /** Stable key. */
     id: string
+    /** The severity level. */
     level: SeverityTagLevel
+    /** Sort key of the level, 5 for critical down to 1 for info. */
     rank: number
+    /** What raised it. */
     title: string
+    /** The entity it names. */
     entity: string
+    /** When it was opened, already formatted. */
     opened: string
-    status: AlertStatus
+    /** Where it stands. */
+    status: AlertsDashboardAlertStatus
   }
 
-  const loading = false
+  export interface AlertsDashboardProps {
+    /** The summary tile figures. Left out, the sample renders. */
+    kpis?: AlertsDashboardKpis
+    /** The day labels of Alerts per day. Left out, the sample renders. */
+    labels?: string[]
+    /** Alerts per day, one series per severity level. Left out, the sample renders. */
+    series?: ChartSeries[]
+    /** Open alerts by severity level. Left out, the sample renders. */
+    openByLevel?: AlertsDashboardLevelCount[]
+    /** Alerts raised in the period, by type. Left out, the sample renders. */
+    types?: BarListItem[]
+    /** The entities with the highest risk score. Left out, the sample renders. */
+    entities?: AlertsDashboardEntity[]
+    /** Every open alert, most severe first. Left out, the sample renders. */
+    alerts?: AlertsDashboardAlert[]
+    /** The period is loading: every region shows its skeleton. */
+    loading?: boolean
+    /** Why the period could not load, after the name of each region in its danger alert. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<AlertsDashboardProps>(), {
+    kpis: undefined,
+    labels: undefined,
+    series: undefined,
+    openByLevel: undefined,
+    types: undefined,
+    entities: undefined,
+    alerts: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+  }>()
+
+  const period = defineModel<string>('period', { default: '30d' })
+
+  type FigureFormat = 'count' | 'percentage'
+
   const comparison = 'vs previous period'
-  const period = ref('30d')
   const activeIndex = ref<number | null>(null)
-  const openTotal = 42
 
   const periods = [
     {
@@ -79,244 +150,51 @@
       periods.find((option) => option.value === period.value)?.label.toLowerCase() ?? 'this period'
   )
 
-  const figures: Figure[] = [
+  const tiles: {
+    metric: AlertsDashboardMetric
+    label: string
+    description: string
+    format: FigureFormat
+  }[] = [
     {
-      id: 'open',
+      metric: 'open',
       label: 'Open',
       description: 'Alerts nobody has closed yet, at any severity.',
-      value: 42,
-      delta: 10.5,
-      inverse: true,
       format: 'count'
     },
     {
-      id: 'critical-high',
+      metric: 'critical-high',
       label: 'Critical or high open',
       description: 'Open alerts at the two highest severity levels.',
-      value: 9,
-      delta: 28.6,
-      inverse: true,
       format: 'count'
     },
     {
-      id: 'raised',
+      metric: 'raised',
       label: 'Alerts in the period',
       description: 'Every alert raised in the period, open or closed.',
-      value: 1231,
-      delta: 4.2,
-      inverse: true,
       format: 'count'
     },
     {
-      id: 'false-positives',
+      metric: 'false-positives',
       label: 'False positives',
       description: 'Share of the alerts closed in the period that were marked as false positives.',
-      value: 6,
-      delta: -14.3,
-      inverse: true,
       format: 'percentage'
     }
   ]
 
-  const labels = [
-    'Oct 12',
-    'Oct 13',
-    'Oct 14',
-    'Oct 15',
-    'Oct 16',
-    'Oct 17',
-    'Oct 18',
-    'Oct 19',
-    'Oct 20',
-    'Oct 21',
-    'Oct 22',
-    'Oct 23',
-    'Oct 24',
-    'Oct 25',
-    'Oct 26',
-    'Oct 27',
-    'Oct 28',
-    'Oct 29',
-    'Oct 30',
-    'Oct 31',
-    'Nov 1',
-    'Nov 2',
-    'Nov 3',
-    'Nov 4',
-    'Nov 5',
-    'Nov 6',
-    'Nov 7',
-    'Nov 8',
-    'Nov 9',
-    'Nov 10'
-  ]
-
-  const series: ChartSeries[] = [
-    {
-      id: 'critical',
-      name: 'Critical',
-      color: 'severity-critical',
-      values: [
-        1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 1, 1, 1, 1, 1, 2
-      ]
-    },
-    {
-      id: 'high',
-      name: 'High',
-      color: 'severity-high',
-      values: [
-        3, 3, 3, 4, 5, 5, 5, 4, 3, 2, 2, 2, 2, 3, 4, 4, 3, 3, 2, 2, 2, 6, 8, 9, 5, 5, 4, 3, 3, 3
-      ]
-    },
-    {
-      id: 'medium',
-      name: 'Medium',
-      color: 'severity-medium',
-      values: [
-        10, 8, 7, 7, 7, 9, 10, 10, 9, 7, 5, 3, 3, 4, 6, 8, 9, 8, 7, 5, 5, 10, 13, 17, 11, 12, 11,
-        10, 8, 7
-      ]
-    },
-    {
-      id: 'low',
-      name: 'Low',
-      color: 'severity-low',
-      values: [
-        17, 15, 12, 10, 9, 9, 11, 13, 14, 13, 11, 8, 5, 4, 6, 8, 11, 13, 13, 12, 10, 15, 15, 18, 13,
-        16, 17, 17, 15, 12
-      ]
-    },
-    {
-      id: 'info',
-      name: 'Info',
-      color: 'severity-info',
-      values: [
-        22, 22, 20, 17, 13, 11, 10, 12, 15, 16, 17, 14, 11, 7, 6, 6, 9, 13, 16, 18, 17, 26, 22, 20,
-        12, 15, 19, 22, 22, 20
-      ]
-    }
-  ]
-
-  const openByLevel: LevelCount[] = [
-    {
-      id: 'critical',
-      count: 3
-    },
-    {
-      id: 'high',
-      count: 6
-    },
-    {
-      id: 'medium',
-      count: 14
-    },
-    {
-      id: 'low',
-      count: 11
-    },
-    {
-      id: 'info',
-      count: 8
-    }
-  ]
-
-  const types: BarListItem[] = [
-    {
-      id: 'unusual-location',
-      name: 'Sign-in from an unusual location',
-      value: 214
-    },
-    {
-      id: 'failed-sign-ins',
-      name: 'Repeated failed sign-ins',
-      value: 188
-    },
-    {
-      id: 'new-device',
-      name: 'Sign-in from a new device',
-      value: 141
-    },
-    {
-      id: 'off-hours',
-      name: 'Access outside working hours',
-      value: 97
-    },
-    {
-      id: 'mass-download',
-      name: 'Mass download',
-      value: 63
-    },
-    {
-      id: 'new-destination',
-      name: 'Data sent to a new destination',
-      value: 41
-    },
-    {
-      id: 'privilege-change',
-      name: 'Privilege change',
-      value: 22
-    },
-    {
-      id: 'impossible-travel',
-      name: 'Impossible travel',
-      value: 9
-    }
-  ]
-
-  const entities: Entity[] = [
-    {
-      id: 'entity-01',
-      name: 'ava.wilson',
-      type: 'User',
-      score: 92,
-      level: 'critical',
-      alerts: 4
-    },
-    {
-      id: 'entity-02',
-      name: 'build-runner-07',
-      type: 'Service account',
-      score: 84,
-      level: 'high',
-      alerts: 3
-    },
-    {
-      id: 'entity-03',
-      name: 'laptop-0418',
-      type: 'Device',
-      score: 77,
-      level: 'high',
-      alerts: 2
-    },
-    {
-      id: 'entity-04',
-      name: 'mark.chen',
-      type: 'User',
-      score: 63,
-      level: 'medium',
-      alerts: 3
-    },
-    {
-      id: 'entity-05',
-      name: 'reporting-api',
-      type: 'Service account',
-      score: 58,
-      level: 'medium',
-      alerts: 1
-    },
-    {
-      id: 'entity-06',
-      name: 'lisa.martin',
-      type: 'User',
-      score: 41,
-      level: 'low',
-      alerts: 2
-    }
-  ]
+  const blocked = computed(() => props.loading || props.error !== '')
+  const kpis = computed(() => props.kpis ?? (blocked.value ? {} : sampleKpis))
+  const labels = computed(() => props.labels ?? (blocked.value ? [] : sampleLabels))
+  const series = computed(() => props.series ?? (blocked.value ? [] : sampleSeries))
+  const openByLevel = computed(() => props.openByLevel ?? (blocked.value ? [] : sampleOpenByLevel))
+  const types = computed(() => props.types ?? (blocked.value ? [] : sampleTypes))
+  const entities = computed(() => props.entities ?? (blocked.value ? [] : sampleEntities))
+  const alerts = computed(() => props.alerts ?? (blocked.value ? [] : sampleAlerts))
+  const openTotal = computed(() => openByLevel.value.reduce((sum, level) => sum + level.count, 0))
+  const failed = (region: string) => `Couldn't load ${region}. ${props.error}`
 
   const entityColumns: TableColumn[] = [
     {
-      id: 'name',
       accessorKey: 'name',
       header: 'Entity',
       align: 'start',
@@ -324,14 +202,12 @@
       grow: 2
     },
     {
-      id: 'type',
       accessorKey: 'type',
       header: 'Type',
       align: 'start',
       minWidth: 136
     },
     {
-      id: 'score',
       accessorKey: 'score',
       header: 'Risk score',
       align: 'start',
@@ -339,7 +215,6 @@
       minWidth: 160
     },
     {
-      id: 'alerts',
       accessorKey: 'alerts',
       header: 'Open alerts',
       align: 'end',
@@ -348,128 +223,16 @@
     }
   ]
 
-  const alerts: AlertRow[] = [
-    {
-      id: 'alert-01',
-      level: 'critical',
-      rank: 5,
-      title: 'Data sent to a new destination',
-      entity: 'ava.wilson',
-      opened: 'Nov 10, 09:42',
-      status: 'Open'
-    },
-    {
-      id: 'alert-02',
-      level: 'critical',
-      rank: 5,
-      title: 'Impossible travel',
-      entity: 'ava.wilson',
-      opened: 'Nov 10, 07:15',
-      status: 'Investigating'
-    },
-    {
-      id: 'alert-03',
-      level: 'critical',
-      rank: 5,
-      title: 'Privilege change',
-      entity: 'build-runner-07',
-      opened: 'Nov 9, 22:08',
-      status: 'Open'
-    },
-    {
-      id: 'alert-04',
-      level: 'high',
-      rank: 4,
-      title: 'Mass download',
-      entity: 'laptop-0418',
-      opened: 'Nov 9, 18:31',
-      status: 'Investigating'
-    },
-    {
-      id: 'alert-05',
-      level: 'high',
-      rank: 4,
-      title: 'Repeated failed sign-ins',
-      entity: 'build-runner-07',
-      opened: 'Nov 9, 16:02',
-      status: 'Open'
-    },
-    {
-      id: 'alert-06',
-      level: 'high',
-      rank: 4,
-      title: 'Sign-in from a new device',
-      entity: 'mark.chen',
-      opened: 'Nov 9, 11:47',
-      status: 'Open'
-    },
-    {
-      id: 'alert-07',
-      level: 'medium',
-      rank: 3,
-      title: 'Access outside working hours',
-      entity: 'reporting-api',
-      opened: 'Nov 9, 03:20',
-      status: 'Open'
-    },
-    {
-      id: 'alert-08',
-      level: 'medium',
-      rank: 3,
-      title: 'Sign-in from an unusual location',
-      entity: 'mark.chen',
-      opened: 'Nov 8, 21:55',
-      status: 'Open'
-    },
-    {
-      id: 'alert-09',
-      level: 'medium',
-      rank: 3,
-      title: 'Repeated failed sign-ins',
-      entity: 'lisa.martin',
-      opened: 'Nov 8, 14:09',
-      status: 'Investigating'
-    },
-    {
-      id: 'alert-10',
-      level: 'low',
-      rank: 2,
-      title: 'Sign-in from a new device',
-      entity: 'lisa.martin',
-      opened: 'Nov 8, 09:36',
-      status: 'Open'
-    },
-    {
-      id: 'alert-11',
-      level: 'low',
-      rank: 2,
-      title: 'Access outside working hours',
-      entity: 'laptop-0418',
-      opened: 'Nov 7, 23:12',
-      status: 'Open'
-    },
-    {
-      id: 'alert-12',
-      level: 'info',
-      rank: 1,
-      title: 'Sign-in from an unusual location',
-      entity: 'mark.chen',
-      opened: 'Nov 7, 10:48',
-      status: 'Open'
-    }
-  ]
-
   const alertColumns: TableColumn[] = [
     {
-      id: 'severity',
       accessorKey: 'rank',
+      id: 'severity',
       header: 'Severity',
       align: 'start',
       sortable: true,
       minWidth: 120
     },
     {
-      id: 'title',
       accessorKey: 'title',
       header: 'Alert',
       align: 'start',
@@ -477,21 +240,18 @@
       grow: 2
     },
     {
-      id: 'entity',
       accessorKey: 'entity',
       header: 'Entity',
       align: 'start',
       minWidth: 160
     },
     {
-      id: 'opened',
       accessorKey: 'opened',
       header: 'Opened',
       align: 'start',
       minWidth: 136
     },
     {
-      id: 'status',
       accessorKey: 'status',
       header: 'Status',
       align: 'start',
@@ -499,7 +259,7 @@
     }
   ]
 
-  const statusSeverity: Record<AlertStatus, TagSeverity> = {
+  const statusSeverity: Record<AlertsDashboardAlertStatus, TagSeverity> = {
     Open: 'neutral',
     Investigating: 'info'
   }
@@ -549,21 +309,21 @@
       <section aria-label="Summary">
         <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
           <li
-            v-for="figure in figures"
-            :key="figure.id"
+            v-for="tile in tiles"
+            :key="tile.metric"
             class="flex min-w-0 flex-col"
           >
             <StatTile
-              :label="figure.label"
-              :value="figure.value"
-              :format-value="formatters[figure.format]"
-              :delta="figure.delta"
+              :label="tile.label"
+              :value="kpis[tile.metric]?.value ?? null"
+              :format-value="formatters[tile.format]"
+              :delta="kpis[tile.metric]?.delta ?? null"
               :delta-label="comparison"
-              :inverse="figure.inverse"
+              inverse
               :loading="loading"
             >
               <template #aside>
-                <Hint :content="figure.description" />
+                <Hint :content="tile.description" />
               </template>
             </StatTile>
           </li>
@@ -581,7 +341,15 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="failed('alerts per day')"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <Chart
+              v-else
               v-model:active-index="activeIndex"
               :series="series"
               :labels="labels"
@@ -608,8 +376,15 @@
         <div class="lg:col-span-4">
           <Card title="Open by severity">
             <template #default>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="failed('open alerts by severity')"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <ul
-                v-if="loading"
+                v-else-if="loading"
                 aria-busy="true"
                 class="flex flex-col gap-(--spacing-md)"
               >
@@ -667,7 +442,15 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="failed('alerts by type')"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <BarList
+              v-else
               :items="types"
               :format-value="formatters.count"
               empty-title="No alerts in this period"
@@ -687,8 +470,15 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="failed('highest risk')"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <DataTable
-              v-if="loading || entities.length"
+              v-else-if="loading || entities.length"
               :data="entities"
               :columns="entityColumns"
               row-key="id"
@@ -735,8 +525,15 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="failed('open alerts')"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <DataTable
-              v-if="loading || alerts.length"
+              v-else-if="loading || alerts.length"
               :data="alerts"
               :columns="alertColumns"
               row-key="id"

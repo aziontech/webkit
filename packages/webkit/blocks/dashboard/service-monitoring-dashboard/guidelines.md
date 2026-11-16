@@ -78,6 +78,58 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 `No traffic yet` / `Latency appears here once a service serves requests.` in the charts, and
 `No open alerts` / `Alerts appear here when a service crosses a threshold.` in the rail.
 
+### L. Load failure — `Alert` (required)
+
+With `error` set, a danger `Alert` takes the place of each chart and of the rail, naming what did not
+load (`Couldn't load latency.`) with Retry.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `ServiceMonitoringService`, `ServiceMonitoringSeriesData`, `ServiceMonitoringAlert`, `ServiceMonitoringWindow` and `ServiceMonitoringDashboardProps` are exported from `service-monitoring-dashboard.vue`, and `sample.ts` holds the sample services, series and alerts the block renders when a data prop is left out (and never while `loading` or `error` is set).
+
+| Prop / model     | Type                          | What it does                                                                                                   |
+| ---------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `services`       | `ServiceMonitoringService[]`  | One tile per service. A service with `latency: null` shows a dash and no state.                                |
+| `latency`        | `ServiceMonitoringSeriesData` | The `p50`, `p95` and `p99` lines over the window. No series is the `No traffic yet` empty chart.               |
+| `errorRate`      | `ServiceMonitoringSeriesData` | The `Status 4xx` and `Status 5xx` lines over the window.                                                       |
+| `alerts`         | `ServiceMonitoringAlert[]`    | The open alerts in the rail. Pass `[]` for `No open alerts`.                                                   |
+| `loading`        | `boolean`                     | The window is loading: the tiles, both charts and the rail hold Skeletons; the window switch stays usable.     |
+| `error`          | `string`                      | Why the request failed, shown after `Couldn't load latency.` (error rate, open alerts) in each danger `Alert`. |
+| `v-model:window` | `'1h' \| '6h' \| '24h'`       | The window every tile and chart reads; refetch when it changes. Defaults to `24h`.                             |
+
+| Event   | Payload   | When                              |
+| ------- | --------- | --------------------------------- |
+| `retry` | `(event)` | Retry in any of the error alerts. |
+
+Each alert row links to `/alerts/<id>`; point it at your alert page. To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import ServiceMonitoringDashboard, {
+    type ServiceMonitoringWindow
+  } from './service-monitoring-dashboard.vue'
+
+  const range = ref<ServiceMonitoringWindow>('24h')
+  const { data, pending, error, refresh } = useServiceMetrics(range)
+</script>
+
+<template>
+  <ServiceMonitoringDashboard
+    v-model:window="range"
+    :services="data?.services ?? []"
+    :latency="data?.latency"
+    :error-rate="data?.errorRate"
+    :alerts="data?.alerts ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Write the service state in words in every tile.
@@ -113,9 +165,9 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 ## States
 
 - Default: services reporting, both charts populated, open alerts in the rail.
-- Loading: every tile, both charts and the rail hold Skeletons; the window switch stays usable.
-- Empty: no traffic yet; tiles show a dash, both charts say metrics appear once a service serves requests, and the rail reads `No open alerts`.
-- Error: the request failed; tiles show a dash, and both charts and the alert rail show a danger `Alert` that names what did not load and offers Retry.
+- Loading: `loading`; every tile, both charts and the rail hold Skeletons; the window switch stays usable.
+- Empty: no traffic yet (`latency: null` per service, no series, `alerts: []`); tiles show a dash, both charts say metrics appear once a service serves requests, and the rail reads `No open alerts`.
+- Error: `error`; tiles show a dash, and both charts and the alert rail show a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

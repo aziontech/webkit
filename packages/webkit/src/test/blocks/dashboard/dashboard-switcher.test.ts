@@ -1,7 +1,9 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import Switcher from '../../../../blocks/dashboard/dashboard-switcher/dashboard-switcher.vue'
+import Switcher, {
+  type DashboardSwitcherView
+} from '../../../../blocks/dashboard/dashboard-switcher/dashboard-switcher.vue'
 import SwitcherEmpty from '../../../../blocks/dashboard/dashboard-switcher/variants/empty.vue'
 import SwitcherFailed from '../../../../blocks/dashboard/dashboard-switcher/variants/error.vue'
 import SwitcherOwnPeriod from '../../../../blocks/dashboard/dashboard-switcher/variants/own-period.vue'
@@ -55,5 +57,56 @@ describe('dashboard/dashboard-switcher', () => {
     const view = render(SwitcherEmpty)
     expect(view.container.textContent).toContain('No data in this period')
     expect(buttonByText('Retry', view.container)).toBeUndefined()
+  })
+
+  it('renders the views and data it is given instead of the sample', () => {
+    const views: DashboardSwitcherView[] = [
+      {
+        value: 'checkout',
+        label: 'Checkout',
+        group: 'Acme',
+        figures: [{ id: 'orders', label: 'Orders', hint: 'Orders placed.', format: 'count' }],
+        chart: {
+          title: 'Orders over time',
+          hint: 'Orders per hour.',
+          form: 'line',
+          format: 'count'
+        },
+        breakdown: { title: 'Top stores', hint: 'Stores with the most orders.', format: 'count' }
+      }
+    ]
+    const view = render(Switcher, {
+      props: {
+        views,
+        view: 'checkout',
+        data: {
+          figures: { orders: { value: 1200, delta: 2, trend: [1, 2] } },
+          labels: [],
+          series: [],
+          breakdown: [{ name: 'acme-store', value: 640 }]
+        }
+      }
+    })
+    expect(view.container.textContent).toContain('Orders over time')
+    expect(view.container.textContent).toContain('acme-store')
+    expect(view.container.textContent).not.toContain('Requests over time')
+  })
+
+  it('emits refresh and retry instead of faking a request', async () => {
+    const view = render(Switcher, { props: { error: 'Check your connection and retry.' } })
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    expect(view.emitted('refresh')).toHaveLength(1)
+    await fireEvent.click(buttonByText('Retry', view.container)!)
+    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.container.textContent).toContain(
+      "Couldn't load requests over time. Check your connection and retry."
+    )
+  })
+
+  it('seeds the FilterMenu chip and the comparison from the period model', () => {
+    const view = render(Switcher, { props: { period: '7d' } })
+    const chip = byTestId('filter-menu-chip-group__chip-period', view.container)!
+    expect(chip.textContent).toContain('Last 7 days')
+    expect(view.container.textContent).toContain('vs previous 7 days')
   })
 })
