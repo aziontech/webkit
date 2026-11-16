@@ -143,7 +143,7 @@ describe('FeatureTiles', () => {
     const { container, getAllByTestId } = band()
 
     expect(getAllByTestId(TILE_TESTID)).toHaveLength(artworkTiles.length)
-    expect(tileLeads(container)).toEqual(artworkTiles.map((tile) => tile.title))
+    expect(tileLeads(container as HTMLElement)).toEqual(artworkTiles.map((tile) => tile.title))
   })
 
   it('renders an artwork tile as an image from its url', () => {
@@ -180,7 +180,7 @@ describe('FeatureTiles', () => {
 
     const tiles = getAllByTestId(TILE_TESTID)
     expect(tiles).toHaveLength(illustratedTiles.length)
-    expect(tileLeads(container)).toEqual(illustratedTiles.map((tile) => tile.title))
+    expect(tileLeads(container as HTMLElement)).toEqual(illustratedTiles.map((tile) => tile.title))
     tiles.forEach((tile) => {
       expect(tile.querySelector('img')).toBeNull()
     })

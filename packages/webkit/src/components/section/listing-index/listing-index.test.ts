@@ -3,12 +3,12 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import ListingIndex from './listing-index.vue'
+import ListingIndex, { type ListingIndexColumn } from './listing-index.vue'
 
 const TESTID = 'listing-index'
 const TITLE = 'Open positions'
 
-const columns = [
+const columns: ListingIndexColumn[] = [
   { key: 'role', label: 'Role', grow: 2 },
   { key: 'team', label: 'Team and location', grow: 2 },
   { key: 'type', label: 'Work type', align: 'end' }

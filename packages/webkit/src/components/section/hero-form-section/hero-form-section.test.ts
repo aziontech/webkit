@@ -3,7 +3,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import HeroFormSection from './hero-form-section.vue'
+import HeroFormSection, { type HeroFormSectionField } from './hero-form-section.vue'
 
 const TESTID = 'hero-form-section'
 const TITLE = 'Talk to our sales team'
@@ -21,7 +21,7 @@ const items = [
   { icon: 'ai ai-build-pillar', title: 'Modernize applications', description: 'Ship in minutes.' }
 ]
 
-const fields = [
+const fields: HeroFormSectionField[] = [
   { name: 'firstname', type: 'text', label: 'First name', half: true, required: true },
   { name: 'lastname', type: 'text', label: 'Last name', half: true },
   { name: 'email', type: 'email', label: 'Work email', required: true },

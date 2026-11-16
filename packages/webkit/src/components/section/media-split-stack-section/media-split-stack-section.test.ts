@@ -67,13 +67,13 @@ describe('MediaSplitStackSection', () => {
     const { container, getByTestId } = run()
 
     expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('media-end')
-    expect(bandSides(container)).toEqual(['media-end', 'media-end', 'media-end'])
+    expect(bandSides(container as HTMLElement)).toEqual(['media-end', 'media-end', 'media-end'])
   })
 
   it('alternates the media side band by band, starting at the opening end', () => {
     const { container } = run({ variant: 'alternating' })
 
-    expect(bandSides(container)).toEqual(['media-start', 'media-end', 'media-start'])
+    expect(bandSides(container as HTMLElement)).toEqual(['media-start', 'media-end', 'media-start'])
   })
 
   it('renders one band per entry, in order, each named by its title', () => {

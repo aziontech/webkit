@@ -84,7 +84,7 @@ describe('RecognitionMarquee', () => {
 
     for (const item of items) {
       expect(getAllByText(item.text)).toHaveLength(2)
-      expect(outsideCopy(container, item.text)).toHaveLength(1)
+      expect(outsideCopy(container as HTMLElement, item.text)).toHaveLength(1)
     }
   })
 

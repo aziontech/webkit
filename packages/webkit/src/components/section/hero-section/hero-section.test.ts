@@ -2,7 +2,7 @@ import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import HeroSection from './hero-section.vue'
+import HeroSection, { type HeroSectionLevel } from './hero-section.vue'
 
 const TESTID = 'hero-section'
 const HERO_TESTID = 'hero'
@@ -16,7 +16,7 @@ const MARKS = ['global-fashion-group', 'herospark', 'itau']
 const NODE_TESTID = 'flow-diagram-node'
 const CELL_TESTID = 'card-grid-cell'
 
-const levels = [
+const levels: HeroSectionLevel[] = [
   {
     nodes: [
       {
