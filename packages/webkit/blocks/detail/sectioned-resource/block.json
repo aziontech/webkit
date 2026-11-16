@@ -44,7 +44,7 @@
     },
     {
       "name": "FewSiblings",
-      "summary": "The Network security tab with 6 sibling pages: no local navigation. A medium `ToggleGroup` labelled Network security switches between them above the list, the alternative rule 4 prescribes for 7 or fewer siblings.",
+      "summary": "The Network security tab with 6 sibling pages: no local navigation. From `@3xl` of the tab body a medium `ToggleGroup` labelled Network security switches between them above the list, the alternative rule 4 prescribes for 7 or fewer siblings; below `@3xl` it folds into the same medium `Select`.",
       "file": "variants/few-siblings.vue"
     }
   ]
