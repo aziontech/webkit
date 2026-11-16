@@ -175,6 +175,7 @@
   )
   const selectTable = (id: string) => {
     selectedTableId.value = id
+    if (narrowViewport()) leftOpen.value = false
   }
   const onTableAction = (event: Event, value: unknown, table: QueryEditorTable) => {
     if (value === 'delete') emit('delete-table', event, table)
@@ -198,9 +199,10 @@
   })
 
   const leftWidth = ref(288)
+  const narrowViewport = () => Boolean(globalThis.matchMedia?.('(width < 48rem)').matches)
   const leftOpen = ref(true)
   onMounted(() => {
-    if (globalThis.matchMedia?.('(width < 48rem)').matches) leftOpen.value = false
+    if (narrowViewport()) leftOpen.value = false
   })
 
   const tableView = ref<QueryEditorTableView>(props.defaultTableView)
@@ -660,8 +662,17 @@ LIMIT 3;`
             class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
           >
             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <Button
+                v-if="!leftOpen"
+                label="Tables"
+                icon="ai ai-table"
+                variant="outline"
+                size="small"
+                class="shrink-0 md:hidden"
+                @click="leftOpen = true"
+              />
               <i
-                class="ai ai-table shrink-0 text-(--text-muted)"
+                class="ai ai-table shrink-0 text-(--text-muted) max-md:hidden"
                 aria-hidden="true"
               />
               <span class="truncate text-heading-2xs text-(--text-default)">{{
@@ -1007,6 +1018,15 @@ LIMIT 3;`
         <div
           class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
         >
+          <Button
+            v-if="!leftOpen"
+            label="History"
+            icon="ai ai-history"
+            variant="outline"
+            size="medium"
+            class="shrink-0 md:hidden"
+            @click="leftOpen = true"
+          />
           <Button
             label="Run query"
             variant="primary"
