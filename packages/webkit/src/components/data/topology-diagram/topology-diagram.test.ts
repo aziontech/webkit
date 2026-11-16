@@ -136,7 +136,7 @@ describe('TopologyDiagram', () => {
     expect(link).toHaveAttribute('data-testid', 'topology-diagram__node-link')
     expect(link.querySelector('.ai-external-link')).toHaveAttribute('aria-hidden', 'true')
     const plain = render(TopologyDiagram, { props: { levels } })
-    expect(within(plain.container).queryByRole('link')).toBeNull()
+    expect(within(plain.container as HTMLElement).queryByRole('link')).toBeNull()
     expect(plain.container.querySelector('.ai-external-link')).toBeNull()
   })
 

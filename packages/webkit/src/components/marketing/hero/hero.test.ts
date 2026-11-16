@@ -306,7 +306,7 @@ describe('Hero', () => {
 
   it('ignores the removed carousel props', () => {
     const { queryByTestId } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Old label' },
+      attrs: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Old label' },
       slots: { default: '<h1>Headline</h1>' }
     })
     expect(queryByTestId('marquee')).toBeNull()

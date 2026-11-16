@@ -11,7 +11,7 @@ import { en, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import { buildNodes, expand, getAt, seedDefaults, setAt, validateNode } from './schema'
-import SchemaForm from './schema-form.vue'
+import SchemaForm, { type SchemaFormProps } from './schema-form.vue'
 
 const schema = {
   type: 'object' as const,
@@ -246,7 +246,7 @@ describe('SchemaForm', () => {
     await expectNoA11yViolations(container)
   })
 
-  const bound = (props: Record<string, unknown>, start: Record<string, unknown> = {}) => {
+  const bound = (props: SchemaFormProps, start: Record<string, unknown> = {}) => {
     const model = ref<Record<string, unknown>>(start)
     const form = ref<InstanceType<typeof SchemaForm> | null>(null)
     const view = render(

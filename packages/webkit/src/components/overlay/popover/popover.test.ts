@@ -672,7 +672,7 @@ describe('Popover', () => {
       // mount glue re-renders the story right after mount, and a click landing on
       // the pre-settle instance is discarded with it (flaky). Controlled args are
       // race-free; the click path is covered by the direct compound tests above.
-      const { getByRole } = render(Default, { props: { open: true } })
+      const { getByRole } = render(Default, { attrs: { open: true } })
 
       await waitFor(() => expect(panel()).not.toBeNull())
       expect(getByRole('button', { name: 'Open popover' })).toBeTruthy()

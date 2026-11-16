@@ -15,6 +15,7 @@ import StreamingResponse from '../components/ai/streaming-response/streaming-res
 import BarList from '../components/chart/bar-list/bar-list.vue'
 import Chart from '../components/chart/chart'
 import DonutChart from '../components/chart/donut-chart/donut-chart.vue'
+import type { ChartSeries, ChartSlot } from '../components/chart/lib/types'
 import MapChart from '../components/chart/map-chart/map-chart.vue'
 import { MAP_CHART_COUNTRIES } from '../components/chart/map-chart/map-chart-countries'
 import Tracker from '../components/chart/tracker/tracker.vue'
@@ -31,9 +32,9 @@ import ItemTitle from '../components/content/item/item-title.vue'
 import KeyValueList from '../components/content/key-value-list/key-value-list.vue'
 import KeyValueListItem from '../components/content/key-value-list/key-value-list-item/key-value-list-item.vue'
 import Timestamp from '../components/content/timestamp/timestamp.vue'
-import CardList from '../components/data/card-list/card-list.vue'
-import DataGrid from '../components/data/data-grid/data-grid.vue'
-import DataTable from '../components/data/data-table/data-table.vue'
+import CardListRoot from '../components/data/card-list/card-list.vue'
+import DataGridRoot from '../components/data/data-grid/data-grid.vue'
+import DataTableRoot from '../components/data/data-table/data-table.vue'
 import FilterMenu from '../components/data/filter-menu/filter-menu.vue'
 import PropertyFilter from '../components/data/property-filter/property-filter.vue'
 import TableCellLink from '../components/data/table/table-cell-link/table-cell-link.vue'
@@ -49,9 +50,10 @@ import UploadProgress, {
   type UploadProgressItem
 } from '../components/feedback/upload-progress/upload-progress.vue'
 import Combobox from '../components/input/combobox/combobox.vue'
-import MultiSelect from '../components/input/multi-select'
+import MultiSelectRoot from '../components/input/multi-select'
+import type { SchemaFormSchema } from '../components/input/schema-form/schema'
 import SchemaForm from '../components/input/schema-form/schema-form.vue'
-import Select from '../components/input/select'
+import SelectRoot from '../components/input/select'
 import DropdownMenu, {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -67,6 +69,13 @@ import WebkitProvider from '../components/provider/webkit-provider/webkit-provid
 import ListingIndex from '../components/section/listing-index/listing-index.vue'
 import ListingTable from '../components/section/listing-table/listing-table.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
+import { hostable } from './hostable'
+
+const DataGrid = hostable(DataGridRoot)
+const DataTable = hostable(DataTableRoot)
+const MultiSelect = hostable(MultiSelectRoot)
+const Select = hostable(SelectRoot)
+const CardList = hostable(CardListRoot)
 
 type Scenario = keyof typeof budgets.scenarios
 type Phase = 'mount' | 'update'
@@ -129,7 +138,7 @@ const series = (n: number, seed: number) =>
 function chartCase(): Case {
   const n = 10_000
   const labels = Array.from({ length: n }, (_, i) => `t${i}`)
-  const data = ref([
+  const data = ref<ChartSeries[]>([
     { id: 'allowed', name: 'Allowed', color: 'success', values: series(n, 0) },
     { id: 'blocked', name: 'Blocked', color: 'danger', values: series(n, 1) }
   ])
@@ -164,7 +173,7 @@ function chartCase(): Case {
 function chartHoverCase(): Case {
   const n = 10_000
   const labels = Array.from({ length: n }, (_, i) => i)
-  const data = [
+  const data: ChartSeries[] = [
     { id: 'allowed', name: 'Allowed', color: 'success', values: series(n, 0) },
     { id: 'blocked', name: 'Blocked', color: 'danger', values: series(n, 1) },
     { id: 'cached', name: 'Cached', color: 'info', values: series(n, 2) }
@@ -256,7 +265,7 @@ function treeMultiSelectCase(): Case {
   }
 }
 
-function selectCase(multiple: boolean): Case {
+function selectCase(multiple: boolean, preselected = false): Case {
   const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
   const open = ref(false)
   const search = ref('')
@@ -274,7 +283,13 @@ function selectCase(multiple: boolean): Case {
         h(
           Root,
           {
-            modelValue: multiple ? [] : '',
+            modelValue: preselected
+              ? multiple
+                ? options.slice(990).map((o) => o.value)
+                : 'v999'
+              : multiple
+                ? []
+                : '',
             open: open.value,
             'onUpdate:open': (v: boolean) => (open.value = v)
           },
@@ -402,11 +417,16 @@ function barListCase(): Case {
 }
 
 function logViewerCase(): Case {
-  const kinds = ['text', 'success', 'warning', 'text'] as const
+  const kinds = [
+    { type: 'text' },
+    { type: 'success' },
+    { type: 'text', level: 'warn' },
+    { type: 'text' }
+  ] as const
   const lines = Array.from({ length: 10_000 }, (_, i) => ({
     id: String(i),
     time: '13:47:33',
-    type: kinds[i % kinds.length],
+    ...kinds[i % kinds.length],
     message: `Line ${i}: request handled in ${i % 97} ms`
   }))
   const search = ref('')
@@ -483,7 +503,7 @@ function codeBlockCase(): Case {
         h(CodeBlock, {
           tabs,
           modelValue: active.value,
-          'onUpdate:modelValue': (v: string) => (active.value = v),
+          'onUpdate:modelValue': (v: string | undefined) => (active.value = v ?? ''),
           showLineNumbers: true
         })
     }),
@@ -965,7 +985,7 @@ function listingIndexCase(): Case {
   }))
   const facets = [
     {
-      key: 'industry',
+      id: 'industry',
       label: 'Industry',
       allLabel: 'All industries',
       options: Array.from({ length: 7 }, (_, i) => ({
@@ -1013,7 +1033,7 @@ function comboboxCase(): Case {
 }
 
 function schemaFormCase(): Case {
-  const properties: Record<string, unknown> = {}
+  const properties: Record<string, SchemaFormSchema> = {}
   for (let i = 0; i < 200; i++) {
     properties[`field${i}`] =
       i % 4 === 0
@@ -1028,7 +1048,7 @@ function schemaFormCase(): Case {
             ? { type: 'boolean', title: `Field ${i}` }
             : { type: 'string', title: `Field ${i}`, maxLength: 80 }
   }
-  const schema = { type: 'object', properties }
+  const schema: SchemaFormSchema = { type: 'object', properties }
   const value = ref<Record<string, unknown>>({})
   return {
     mount: () => ({
@@ -1048,7 +1068,7 @@ function schemaFormCase(): Case {
 function scatterCase(): Case {
   const n = 10_000
   const labels = Array.from({ length: n }, (_, i) => `t${i}`)
-  const data = [{ id: 'latency', name: 'Latency', color: 1, values: series(n, 0) }]
+  const data: ChartSeries[] = [{ id: 'latency', name: 'Latency', color: 1, values: series(n, 0) }]
   const active = ref<number | null>(null)
   return {
     mount: () => ({
@@ -1076,11 +1096,11 @@ function scatterCase(): Case {
 function barCase(): Case {
   const n = 1000
   const labels = Array.from({ length: n }, (_, i) => `c${i}`)
-  const data = ref(
+  const data = ref<ChartSeries[]>(
     [0, 1, 2].map((slot) => ({
       id: `s${slot}`,
       name: `Series ${slot}`,
-      color: slot + 1,
+      color: (slot + 1) as ChartSlot,
       values: series(n, slot)
     }))
   )

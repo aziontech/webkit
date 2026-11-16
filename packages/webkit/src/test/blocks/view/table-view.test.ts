@@ -17,14 +17,16 @@ describe('view/table-view block', () => {
     )
     await fireEvent.click(head!.querySelector('button')!)
     await waitFor(() =>
-      expect(['resource-01', 'resource-10']).toContain(resourceNames(view.container)[0])
+      expect(['resource-01', 'resource-10']).toContain(
+        resourceNames(view.container as HTMLElement)[0]
+      )
     )
-    const first = resourceNames(view.container)[0]
+    const first = resourceNames(view.container as HTMLElement)[0]
     const expected = Array.from(
       { length: 10 },
       (_, i) => `resource-${String(i + 1).padStart(2, '0')}`
     )
-    expect(resourceNames(view.container)).toEqual(
+    expect(resourceNames(view.container as HTMLElement)).toEqual(
       first === 'resource-01' ? expected : [...expected].reverse()
     )
   })

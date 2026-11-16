@@ -128,8 +128,8 @@ describe('Chip', () => {
       await fireEvent.click(getByTestId('chip__remove'))
 
       expect(emitted('remove')).toHaveLength(1)
-      expect(emitted('remove')[0][0]).toBeInstanceOf(Event)
-      expect(emitted('remove')[0][1]).toBe('Dismiss me')
+      expect(emitted<unknown[]>('remove')[0][0]).toBeInstanceOf(Event)
+      expect(emitted<unknown[]>('remove')[0][1]).toBe('Dismiss me')
     })
 
     it('STAYS MOUNTED after remove — presence belongs to the consumer', async () => {
@@ -197,7 +197,7 @@ describe('Chip', () => {
 
       await fireEvent.click(root)
       expect(emitted('click')).toHaveLength(1)
-      expect(emitted('click')[0][1]).toBe('Pick me')
+      expect(emitted<unknown[]>('click')[0][1]).toBe('Pick me')
     })
 
     it.each([['Enter'], [' ']])('activates on %s from the keyboard', async (key) => {
@@ -253,8 +253,8 @@ describe('Chip', () => {
       await fireEvent.click(getByTestId('chip'))
 
       expect(emitted('click')).toHaveLength(1)
-      expect(emitted('click')[0][0]).toBeInstanceOf(Event)
-      expect(emitted('click')[0][1]).toBe('Env')
+      expect(emitted<unknown[]>('click')[0][0]).toBeInstanceOf(Event)
+      expect(emitted<unknown[]>('click')[0][1]).toBe('Env')
     })
 
     it.each([['Enter'], [' ']])('toggles on %s from the keyboard', async (key) => {

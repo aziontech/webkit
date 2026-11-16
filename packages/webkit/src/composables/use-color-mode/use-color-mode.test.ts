@@ -79,7 +79,7 @@ describe('the theme stylesheet', () => {
     const style = injectThemeCss()
     const root = document.documentElement
     const canvas = () => getComputedStyle(root).getPropertyValue('--bg-canvas').trim()
-    const { light, dark } = compileThemeVars()
+    const { light, dark } = compileThemeVars() as Record<'light' | 'dark', Record<string, string>>
     try {
       await commands.emulateMedia({ colorScheme: 'dark' })
       expect(canvas()).toBe(dark['--bg-canvas'])

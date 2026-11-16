@@ -4,7 +4,7 @@ import { type Component, defineComponent, h, ref } from 'vue'
 
 import Pagination from '../components/data/pagination/pagination.vue'
 import PhoneInput from '../components/input/phone-input/phone-input.vue'
-import Select from '../components/input/select/select.vue'
+import SelectRoot from '../components/input/select/select.vue'
 import SelectContent from '../components/input/select/select-content/select-content.vue'
 import SelectItem from '../components/input/select/select-item/select-item.vue'
 import SelectTrigger from '../components/input/select/select-trigger/select-trigger.vue'
@@ -25,6 +25,9 @@ import PopoverContent from '../components/overlay/popover/popover-content/popove
 import PopoverTrigger from '../components/overlay/popover/popover-trigger/popover-trigger.vue'
 import Tooltip from '../components/overlay/tooltip/tooltip.vue'
 import WebkitProvider from '../components/provider/webkit-provider/webkit-provider.vue'
+import { hostable } from './hostable'
+
+const Select = hostable(SelectRoot)
 
 const modules = {
   ...import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),

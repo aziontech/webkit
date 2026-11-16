@@ -148,12 +148,16 @@ describe('LogViewer', () => {
       it('sets data-bordered by default and drops it when bordered is false', () => {
         const bordered = render(LogViewer, { props: { lines: LINES } })
         expect(
-          within(bordered.container).getByTestId('log-viewer').getAttribute('data-bordered')
+          within(bordered.container as HTMLElement)
+            .getByTestId('log-viewer')
+            .getAttribute('data-bordered')
         ).toBe('true')
 
         const flush = render(LogViewer, { props: { lines: LINES, bordered: false } })
         expect(
-          within(flush.container).getByTestId('log-viewer').hasAttribute('data-bordered')
+          within(flush.container as HTMLElement)
+            .getByTestId('log-viewer')
+            .hasAttribute('data-bordered')
         ).toBe(false)
       })
 
@@ -443,7 +447,7 @@ describe('LogViewer', () => {
       ]
 
       const renderLevels = (props: { disabled?: boolean } = {}) => {
-        const level = ref('')
+        const level = ref<'' | LogViewerLineLevel>('')
         const onCopy = vi.fn()
         const view = render(
           defineComponent({
@@ -455,7 +459,7 @@ describe('LogViewer', () => {
                   levels: ['debug', 'info', 'warn', 'error'],
                   disabled: props.disabled ?? false,
                   level: level.value,
-                  'onUpdate:level': (next: string) => (level.value = next),
+                  'onUpdate:level': (next: '' | LogViewerLineLevel) => (level.value = next),
                   onCopy
                 },
                 () => [h(LogViewerHeader), h(LogViewerContent)]
@@ -613,7 +617,7 @@ describe('LogViewer', () => {
 
     describe('one severity axis', () => {
       it('counts and filters a warn line through the level toggle', async () => {
-        const level = ref<'' | 'warn'>('')
+        const level = ref<'' | LogViewerLineLevel>('')
         const view = render(
           defineComponent({
             setup: () => () =>
@@ -623,7 +627,7 @@ describe('LogViewer', () => {
                   lines: LINES,
                   levels: ['warn'],
                   level: level.value,
-                  'onUpdate:level': (v: '' | 'warn') => (level.value = v)
+                  'onUpdate:level': (v: '' | LogViewerLineLevel) => (level.value = v)
                 },
                 () => [h(LogViewerHeader), h(LogViewerContent)]
               )

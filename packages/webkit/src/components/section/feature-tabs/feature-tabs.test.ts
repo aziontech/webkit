@@ -82,17 +82,17 @@ describe('FeatureTabs', () => {
   it('renders one tab per entry, in order', () => {
     const { container } = band()
 
-    expect(tabButtons(container).map((button) => button.textContent?.trim())).toEqual(
-      tabs.map((tab) => tab.title)
-    )
+    expect(
+      tabButtons(container as HTMLElement).map((button) => button.textContent?.trim())
+    ).toEqual(tabs.map((tab) => tab.title))
   })
 
   it('moves the active tab on click', async () => {
     const { container } = band()
 
-    expect(tabButtons(container)[0]?.getAttribute('aria-current')).toBe('true')
-    await fireEvent.click(tabButtons(container)[2] as HTMLButtonElement)
-    expect(tabButtons(container)[2]?.getAttribute('aria-current')).toBe('true')
+    expect(tabButtons(container as HTMLElement)[0]?.getAttribute('aria-current')).toBe('true')
+    await fireEvent.click(tabButtons(container as HTMLElement)[2] as HTMLButtonElement)
+    expect(tabButtons(container as HTMLElement)[2]?.getAttribute('aria-current')).toBe('true')
   })
 
   it('links the primary action from the section title', () => {
@@ -187,7 +187,9 @@ describe('FeatureTabs', () => {
       const { container } = band(props)
       vi.advanceTimersByTime(ms)
       await nextTick()
-      return tabButtons(container).findIndex((button) => button.getAttribute('aria-current'))
+      return tabButtons(container as HTMLElement).findIndex((button) =>
+        button.getAttribute('aria-current')
+      )
     }
 
     it('holds each tab for autoplayInterval', async () => {

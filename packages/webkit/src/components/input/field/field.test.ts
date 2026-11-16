@@ -12,11 +12,12 @@ import Horizontal from '../../../../examples/field/horizontal.vue'
 import InputGroupExample from '../../../../examples/field/input-group.vue'
 import RequiredAndDisabled from '../../../../examples/field/required-and-disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { hostable } from '../../../test/hostable'
 import Checkbox from '../checkbox/checkbox.vue'
 import Input from '../input/input.vue'
 import InputGroup from '../input-group/input-group.vue'
 import InputGroupInput from '../input-group/input-group-input/input-group-input.vue'
-import Select from '../select/select.vue'
+import SelectRoot from '../select/select.vue'
 import SelectContent from '../select/select-content/select-content.vue'
 import SelectItem from '../select/select-item/select-item.vue'
 import SelectTrigger from '../select/select-trigger/select-trigger.vue'
@@ -33,6 +34,8 @@ import Field, {
   FieldSet,
   FieldTitle
 } from './index'
+
+const Select = hostable(SelectRoot)
 
 const components = {
   Field,

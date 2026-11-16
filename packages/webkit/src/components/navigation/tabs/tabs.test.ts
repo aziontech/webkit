@@ -213,7 +213,7 @@ describe('Tabs', () => {
 
         await fireEvent.click(getByRole('button'))
 
-        const events = emitted().click
+        const events = emitted<unknown[]>().click
         expect(events).toHaveLength(1)
         expect(events[0][0]).toBeInstanceOf(MouseEvent)
       })
@@ -240,7 +240,7 @@ describe('Tabs', () => {
 
         await fireEvent.click(close)
 
-        const closeEvents = emitted().close
+        const closeEvents = emitted<unknown[]>().close
         expect(closeEvents).toHaveLength(1)
         expect(closeEvents[0][0]).toBeInstanceOf(MouseEvent)
         // @click.stop on the close box stops propagation → the tab click is not emitted.
@@ -255,7 +255,7 @@ describe('Tabs', () => {
 
         await fireEvent.keyDown(tab, { key: 'Delete' })
         expect(emitted().close).toHaveLength(1)
-        expect(emitted().close[0][0]).toBeInstanceOf(KeyboardEvent)
+        expect(emitted<unknown[]>().close[0][0]).toBeInstanceOf(KeyboardEvent)
 
         await rerender({ value: 'a', label: 'Alpha', closable: false })
         await fireEvent.keyDown(tab, { key: 'Delete' })

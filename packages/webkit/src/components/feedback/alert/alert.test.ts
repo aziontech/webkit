@@ -201,7 +201,7 @@ describe('Alert', () => {
 
       expect(emitted('action')).toHaveLength(1)
       // Payload is the native MouseEvent forwarded from the button click.
-      expect(emitted('action')[0][0]).toBeInstanceOf(Event)
+      expect(emitted<unknown[]>('action')[0][0]).toBeInstanceOf(Event)
     })
 
     it('does not render the action button when actionLabel is empty', () => {

@@ -167,13 +167,16 @@ describe('Item', () => {
         expect(getByTestId('item-media').getAttribute('data-type')).toBe('default')
       })
 
-      it.each([['icon'], ['image']])('ItemMedia reflects type="%s" on data-type', (variant) => {
-        const { getByTestId } = render(Item.Media, {
-          props: { type: variant },
-          slots: { default: '<span>m</span>' }
-        })
-        expect(getByTestId('item-media').getAttribute('data-type')).toBe(variant)
-      })
+      it.each([['icon'], ['image']] as const)(
+        'ItemMedia reflects type="%s" on data-type',
+        (variant) => {
+          const { getByTestId } = render(Item.Media, {
+            props: { type: variant },
+            slots: { default: '<span>m</span>' }
+          })
+          expect(getByTestId('item-media').getAttribute('data-type')).toBe(variant)
+        }
+      )
     })
 
     describe('href and clickable — the row renders its own interactive root', () => {

@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import ArchitectureTabs from './architecture-tabs.vue'
+import ArchitectureTabs, { type ArchitectureTabsTab } from './architecture-tabs.vue'
 
 const TESTID = 'architecture-tabs'
 const EYEBROW = 'Routing'
@@ -11,7 +11,7 @@ const TITLE = 'Every AI request through one control point'
 const DESCRIPTION = 'Every client calls one endpoint.'
 const primaryAction = { label: 'Docs', href: '/docs', trailing: true }
 
-const tabs = [
+const tabs: ArchitectureTabsTab[] = [
   {
     value: 'request-path',
     title: 'Request path',
@@ -96,9 +96,9 @@ describe('ArchitectureTabs', () => {
   it('renders one tab per entry, in order', () => {
     const { container } = band()
 
-    expect(tabButtons(container).map((button) => button.textContent?.trim())).toEqual(
-      tabs.map((tab) => tab.title)
-    )
+    expect(
+      tabButtons(container as HTMLElement).map((button) => button.textContent?.trim())
+    ).toEqual(tabs.map((tab) => tab.title))
   })
 
   it('forwards the tabs side to the tab row', () => {
@@ -132,11 +132,11 @@ describe('ArchitectureTabs', () => {
   it('moves the active tab on click', async () => {
     const { container } = band()
 
-    const buttons = tabButtons(container)
+    const buttons = tabButtons(container as HTMLElement)
     expect(buttons[0]?.getAttribute('aria-current')).toBe('true')
     await fireEvent.click(buttons[1] as HTMLButtonElement)
-    expect(tabButtons(container)[1]?.getAttribute('aria-current')).toBe('true')
-    expect(tabButtons(container)[0]?.hasAttribute('aria-current')).toBe(false)
+    expect(tabButtons(container as HTMLElement)[1]?.getAttribute('aria-current')).toBe('true')
+    expect(tabButtons(container as HTMLElement)[0]?.hasAttribute('aria-current')).toBe(false)
   })
 
   it('links the primary action', () => {
@@ -171,7 +171,9 @@ describe('ArchitectureTabs', () => {
       const { container } = band(props)
       vi.advanceTimersByTime(ms)
       await nextTick()
-      return tabButtons(container).findIndex((button) => button.getAttribute('aria-current'))
+      return tabButtons(container as HTMLElement).findIndex((button) =>
+        button.getAttribute('aria-current')
+      )
     }
 
     it('holds each tab for autoplayInterval', async () => {

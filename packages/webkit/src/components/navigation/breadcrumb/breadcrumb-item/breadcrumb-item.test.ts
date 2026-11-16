@@ -129,7 +129,7 @@ describe('BreadcrumbItem', () => {
 
       await fireEvent.click(getByTestId(TESTID))
 
-      const events = emitted().click
+      const events = emitted<unknown[]>().click
       expect(events).toHaveLength(1)
       expect(events[0][0]).toBeInstanceOf(MouseEvent)
     })

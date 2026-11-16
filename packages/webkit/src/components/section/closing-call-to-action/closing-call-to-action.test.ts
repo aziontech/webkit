@@ -4,7 +4,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import ClosingCallToAction from './closing-call-to-action.vue'
+import ClosingCallToAction, {
+  type ClosingCallToActionAudience,
+  type ClosingCallToActionProps
+} from './closing-call-to-action.vue'
 import ClosingCallToActionAudiences from './parts/closing-call-to-action-audiences.vue'
 
 const TESTID = 'closing-call-to-action'
@@ -208,7 +211,7 @@ describe('ClosingCallToAction', () => {
   const PROMPT = 'Connect Azion MCP: https://mcp.azion.com'
   const SENTENCE = 'A person and an agent ship the same way.'
 
-  const audiences = [
+  const audiences: ClosingCallToActionAudience[] = [
     {
       value: 'humans',
       label: 'For humans',
@@ -225,7 +228,7 @@ describe('ClosingCallToAction', () => {
     }
   ]
 
-  const audienceProps = {
+  const audienceProps: ClosingCallToActionProps = {
     variant: 'primary',
     anchor: 'contact',
     title: 'Built by you, or your agents.',

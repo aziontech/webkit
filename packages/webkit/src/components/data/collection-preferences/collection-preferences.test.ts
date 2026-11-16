@@ -6,8 +6,11 @@ import { defineComponent, h, nextTick } from 'vue'
 import Default from '../../../../examples/collection-preferences/default.vue'
 import InADrawer from '../../../../examples/collection-preferences/in-a-drawer.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import DataTable from '../data-table/data-table.vue'
+import { hostable } from '../../../test/hostable'
+import DataTableRoot from '../data-table/data-table.vue'
 import CollectionPreferences from './collection-preferences.vue'
+
+const DataTable = hostable(DataTableRoot)
 
 const settle = async () => {
   await nextTick()
@@ -68,7 +71,7 @@ describe('CollectionPreferences', () => {
     await fireEvent.click(switches[1] as HTMLElement)
     expect(view.emitted()['update:preferences']).toBeUndefined()
     await fireEvent.click(panel.getByRole('button', { name: 'Confirm' }))
-    const value = view.emitted()['update:preferences']?.[0]?.[0]
+    const value = view.emitted<unknown[]>()['update:preferences']?.[0]?.[0]
     expect(value).toMatchObject({
       pageSize: 25,
       density: 'compact',
@@ -92,7 +95,7 @@ describe('CollectionPreferences', () => {
     await fireEvent.click(panel.getByRole('radio', { name: '25 items' }))
     await fireEvent.click(panel.getByRole('button', { name: 'Cancel' }))
     expect(view.emitted()['cancel']).toHaveLength(1)
-    expect(view.emitted()['cancel']?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(view.emitted<unknown[]>()['cancel']?.[0]?.[0]).toBeInstanceOf(MouseEvent)
     expect(view.emitted()['update:preferences']).toBeUndefined()
   })
 
@@ -106,7 +109,7 @@ describe('CollectionPreferences', () => {
     await userEvent.click(panel.getByRole('button', { name: 'Confirm' }))
     const payload = view.emitted()['confirm']?.[0] as unknown[]
     expect(payload[0]).toBeInstanceOf(MouseEvent)
-    expect(payload[1]).toEqual(view.emitted()['update:preferences']?.[0]?.[0])
+    expect(payload[1]).toEqual(view.emitted<unknown[]>()['update:preferences']?.[0]?.[0])
     expect(payload[1]).toMatchObject({ pageSize: 25 })
   })
 
@@ -129,7 +132,7 @@ describe('CollectionPreferences', () => {
     await settle()
     within(dialog()).getByRole('button', { name: 'Cancel' }).focus()
     await userEvent.keyboard('{Enter}')
-    expect(second.emitted()['cancel']?.[0]?.[0]).toBeInstanceOf(Event)
+    expect(second.emitted<unknown[]>()['cancel']?.[0]?.[0]).toBeInstanceOf(Event)
   })
 
   it('keeps a locked column on and hides empty sections', async () => {
@@ -197,9 +200,9 @@ describe('CollectionPreferences', () => {
     expect(rows[1]?.contains(document.activeElement)).toBe(true)
     await fireEvent.click(panel.getByRole('button', { name: 'Confirm' }))
     expect(
-      (view.emitted()['update:preferences']?.[0]?.[0] as { columns: { id: string }[] }).columns.map(
-        (column) => column.id
-      )
+      (
+        view.emitted<unknown[]>()['update:preferences']?.[0]?.[0] as { columns: { id: string }[] }
+      ).columns.map((column) => column.id)
     ).toEqual(['name', 'region', 'status'])
   })
 

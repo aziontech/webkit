@@ -96,7 +96,7 @@ describe('Eyebrow', () => {
     ['//', 'DOUBLE SLASH'],
     ['<>', 'ANGLE'],
     ['</>', 'CLOSING']
-  ])('renders the slot content for prefix %j', (prefix, label) => {
+  ] as const)('renders the slot content for prefix %j', (prefix, label) => {
     const { getByText } = render(Eyebrow, {
       props: { prefix },
       slots: { default: label }

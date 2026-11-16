@@ -10,7 +10,7 @@ import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import Field from '../field/field.vue'
 import FieldDescription from '../field/field-description/field-description.vue'
 import FieldLabel from '../field/field-label/field-label.vue'
-import DatePicker from './index'
+import DatePicker, { type DatePickerValue } from './index'
 
 // A fixed anchor keeps every assertion deterministic — the visible month is
 // seeded from the committed value when the popover opens, so October 2026 is
@@ -225,7 +225,7 @@ describe('DatePicker', () => {
 
       await fireEvent.click(within(popover).getByTestId('date-picker__apply'))
 
-      const events = emitted()['update:modelValue']
+      const events = emitted<unknown[]>()['update:modelValue']
       expect(events).toHaveLength(1)
       expect((events[0][0] as Date).getDate()).toBe(12)
 
@@ -269,7 +269,7 @@ describe('DatePicker', () => {
       expect(within(popover).queryByLabelText('End')).toBeNull()
       await fireEvent.click(findDayButton(popover, 12))
 
-      const value = emitted()['update:modelValue'][0][0]
+      const value = emitted<unknown[]>()['update:modelValue'][0][0]
       expect(value).toBeInstanceOf(Date)
       expect(getByTestId('date-picker').querySelector('[aria-haspopup="menu"]')).toBeNull()
     })
@@ -282,7 +282,7 @@ describe('DatePicker', () => {
       const popover = await openDatePicker(getByTestId)
       await fireEvent.click(findDayButton(popover, 15))
 
-      const events = emitted()['update:modelValue']
+      const events = emitted<unknown[]>()['update:modelValue']
       expect(events).toHaveLength(1)
 
       const payload = events[0][0] as Date
@@ -424,7 +424,7 @@ describe('DatePicker', () => {
       findDayButton(popover, 12).focus()
       await userEvent.keyboard('{Enter}')
 
-      const payload = emitted()['update:modelValue'][0][0] as Date
+      const payload = emitted<unknown[]>()['update:modelValue'][0][0] as Date
       expect(payload).toBeInstanceOf(Date)
       expect(payload.getDate()).toBe(12)
     })
@@ -439,7 +439,7 @@ describe('DatePicker', () => {
       findDayButton(popover, 20).focus()
       await userEvent.keyboard(' ')
 
-      const payload = emitted()['update:modelValue'][0][0] as Date
+      const payload = emitted<unknown[]>()['update:modelValue'][0][0] as Date
       expect(payload.getDate()).toBe(20)
     })
 
@@ -548,7 +548,7 @@ describe('DatePicker', () => {
 
       await fireEvent.click(clear)
 
-      const events = emitted()['update:modelValue']
+      const events = emitted<unknown[]>()['update:modelValue']
       expect(events).toHaveLength(1)
       expect(events[0][0]).toBeNull()
     })
@@ -694,7 +694,7 @@ describe('DatePicker', () => {
 
   describe('in another locale', () => {
     const inLocale = (locale: string, props: Record<string, unknown>) => {
-      const model = ref<unknown>(props['modelValue'] ?? null)
+      const model = ref<DatePickerValue>((props['modelValue'] as DatePickerValue) ?? null)
       const component = defineComponent({
         setup: () => () =>
           h(
@@ -705,7 +705,7 @@ describe('DatePicker', () => {
                 h(DatePicker, {
                   ...props,
                   modelValue: model.value,
-                  'onUpdate:modelValue': (value: unknown) => (model.value = value)
+                  'onUpdate:modelValue': (value: DatePickerValue) => (model.value = value)
                 })
             }
           )
@@ -769,7 +769,7 @@ describe('DatePicker', () => {
       await waitFor(() => expect(getPopover()).toBeNull())
       expect(getByTestId('date-picker').getAttribute('data-state')).toBe('closed')
       expect(trigger.textContent).not.toBe(placeholder)
-      expect((emitted()['update:modelValue'][0][0] as Date).getDate()).toBe(15)
+      expect((emitted<unknown[]>()['update:modelValue'][0][0] as Date).getDate()).toBe(15)
       expect(emitted()['update:open']).toEqual([[true], [false]])
     })
 

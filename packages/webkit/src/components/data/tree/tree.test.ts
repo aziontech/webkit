@@ -193,7 +193,7 @@ describe('Tree', () => {
     node(view.container, CONFIG.id).focus()
     await userEvent.keyboard('{Enter}')
     await userEvent.keyboard(' ')
-    const clicks = view.emitted()['item-click'] ?? []
+    const clicks = view.emitted<unknown[]>()['item-click'] ?? []
     expect(clicks).toHaveLength(2)
     expect(clicks[0]?.[0]).toBeInstanceOf(KeyboardEvent)
     expect(clicks[0]?.[1]).toEqual(CONFIG)
@@ -203,7 +203,7 @@ describe('Tree', () => {
   it('emits item-click with the event first and the node second on a row click', async () => {
     const view = mount()
     await userEvent.click(view.getByText('azion.config.js'))
-    const clicks = view.emitted()['item-click'] ?? []
+    const clicks = view.emitted<unknown[]>()['item-click'] ?? []
     expect(clicks).toHaveLength(1)
     expect(clicks[0]?.[0]).toBeInstanceOf(MouseEvent)
     expect(clicks[0]?.[1]).toEqual(CONFIG)

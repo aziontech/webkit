@@ -9,10 +9,13 @@ import Disabled from '../../../../examples/radio-group/disabled.vue'
 import Horizontal from '../../../../examples/radio-group/horizontal.vue'
 import InField from '../../../../examples/radio-group/in-field.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { hostable } from '../../../test/hostable'
 import Field from '../field/field.vue'
 import FieldError from '../field/field-error/field-error.vue'
 import FieldTitle from '../field/field-title/field-title.vue'
-import RadioGroup, { RadioGroupItem } from './index'
+import RadioGroupRoot, { RadioGroupItem } from './index'
+
+const RadioGroup = hostable(RadioGroupRoot)
 
 const host = (template: string, setup: () => Record<string, unknown> = () => ({})) =>
   render(

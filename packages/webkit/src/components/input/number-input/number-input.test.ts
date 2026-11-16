@@ -8,7 +8,10 @@ import Invalid from '../../../../examples/number-input/invalid.vue'
 import Optional from '../../../../examples/number-input/optional.vue'
 import Sizes from '../../../../examples/number-input/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import NumberInput from './number-input.vue'
+import { hostable } from '../../../test/hostable'
+import NumberInputRoot from './number-input.vue'
+
+const NumberInput = hostable(NumberInputRoot)
 
 describe('NumberInput', () => {
   it('renders the input with the default data-testid and type=number', () => {

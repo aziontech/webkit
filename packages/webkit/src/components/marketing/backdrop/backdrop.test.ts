@@ -9,7 +9,7 @@ import Backdrop from './backdrop.vue'
 
 describe('Backdrop', () => {
   it('draws the backdrop from variant and ignores the removed art prop', () => {
-    const { getByTestId } = render(Backdrop, { props: { art: 'globe' } })
+    const { getByTestId } = render(Backdrop, { attrs: { art: 'globe' } })
     expect(getByTestId('backdrop')).toHaveAttribute('data-variant', 'map')
     expect(getByTestId('backdrop')).not.toHaveAttribute('data-art')
   })

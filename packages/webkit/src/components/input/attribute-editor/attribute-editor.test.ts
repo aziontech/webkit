@@ -9,7 +9,10 @@ import EmptyAndDisabled from '../../../../examples/attribute-editor/empty-and-di
 import Groups from '../../../../examples/attribute-editor/groups.vue'
 import Reorderable from '../../../../examples/attribute-editor/reorderable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import AttributeEditor, { type AttributeEditorItem } from './attribute-editor.vue'
+import { hostable } from '../../../test/hostable'
+import AttributeEditorRoot, { type AttributeEditorItem } from './attribute-editor.vue'
+
+const AttributeEditor = hostable(AttributeEditorRoot)
 
 const definition = [
   { key: 'key', label: 'Key' },
@@ -78,7 +81,7 @@ describe('AttributeEditor', () => {
       })
       await fireEvent.click(view.getByTestId('attribute-editor__add'))
       expect(view.getAllByTestId('attribute-editor__row')).toHaveLength(2)
-      expect(view.emitted('update:items')?.[0]?.[0]).toHaveLength(2)
+      expect(view.emitted<unknown[]>('update:items')?.[0]?.[0]).toHaveLength(2)
     })
 
     it('starts empty and adds rows with no items passed at all', async () => {

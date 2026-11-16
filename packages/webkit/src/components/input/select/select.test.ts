@@ -8,7 +8,10 @@ import Disabled from '../../../../examples/select/disabled.vue'
 import Ghost from '../../../../examples/select/ghost.vue'
 import Groups from '../../../../examples/select/groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import Select, { SelectContent, SelectGroup, SelectItem, SelectTrigger } from './index'
+import { hostable } from '../../../test/hostable'
+import SelectRoot, { SelectContent, SelectGroup, SelectItem, SelectTrigger } from './index'
+
+const Select = hostable(SelectRoot)
 
 const OPTIONS = [
   { value: 'opt-1', label: 'Option 1' },

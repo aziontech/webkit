@@ -17,7 +17,7 @@ const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data
 
 describe('ConfirmDialog', () => {
   it('opens at the medium width by default', async () => {
-    const { getByTestId } = within(render(Default).container)
+    const { getByTestId } = within(render(Default).container as HTMLElement)
 
     await fireEvent.click(getByTestId('confirm-dialog__trigger'))
     await settle()
@@ -29,7 +29,7 @@ describe('ConfirmDialog', () => {
   })
 
   it('stays closed until the trigger is activated, then teleports the dialog to body', async () => {
-    const { getByTestId } = within(render(Default).container)
+    const { getByTestId } = within(render(Default).container as HTMLElement)
 
     expect(byTestId('confirm-dialog__panel')).toBeNull()
 
@@ -136,7 +136,7 @@ describe('ConfirmDialog', () => {
   })
 
   it('replaces the buttons with the actions slot', async () => {
-    const { getByTestId } = within(render(SaveOrDiscard).container)
+    const { getByTestId } = within(render(SaveOrDiscard).container as HTMLElement)
 
     await fireEvent.click(getByTestId('confirm-dialog__trigger'))
     await settle()

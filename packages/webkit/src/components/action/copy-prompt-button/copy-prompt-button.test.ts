@@ -101,7 +101,7 @@ describe('CopyPromptButton', () => {
     })
     await user.click(await findByRole('button', { name: 'Dismiss' }))
     expect(emitted('close')).toHaveLength(1)
-    expect(emitted('close')![0][0]).toBeInstanceOf(MouseEvent)
+    expect(emitted<unknown[]>('close')![0][0]).toBeInstanceOf(MouseEvent)
     expect(queryByTestId('copy-prompt-button')).toBeNull()
     expect(queryByTestId('copy-prompt-button__frame')).toBeNull()
   })

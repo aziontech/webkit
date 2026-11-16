@@ -107,7 +107,7 @@ describe('SectionTitle', () => {
 
       expect(heading).toHaveTextContent('Everything runs at the edge')
       expect(paragraph).toHaveTextContent('One platform.')
-      expect(heading.compareDocumentPosition(paragraph) & 4).toBe(4)
+      expect(heading!.compareDocumentPosition(paragraph as HTMLElement) & 4).toBe(4)
     }
   )
 

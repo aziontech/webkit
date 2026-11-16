@@ -7,7 +7,11 @@ import { defineComponent, h } from 'vue'
 import Split from '../../../../examples/key-value-list/split.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { useKeyValueListContext } from './composables/use-key-value-list-context'
-import KeyValueList, { KeyValueListGroup, KeyValueListItem } from './index'
+import KeyValueList, {
+  type KeyValueListColumns,
+  KeyValueListGroup,
+  KeyValueListItem
+} from './index'
 
 const Facts = defineComponent({
   components: { KeyValueList, KeyValueListItem },
@@ -270,7 +274,7 @@ describe('KeyValueList', () => {
   }
 
   describe('columns follow the box', () => {
-    const columnsIn = (width: number, columns: number) => {
+    const columnsIn = (width: number, columns: KeyValueListColumns) => {
       const view = render(KeyValueList, {
         props: { columns },
         slots: {

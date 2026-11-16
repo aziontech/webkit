@@ -237,7 +237,7 @@ describe('Footer', () => {
     // container — the default scope is document.body, which would see four columns.
     it('keeps every band in both placements — the frame changes, the content does not', () => {
       for (const { container } of [renderComposed(), renderComposedSite()]) {
-        const scope = within(container)
+        const scope = within(container as HTMLElement)
         expect(scope.getAllByTestId('footer-column')).toHaveLength(2)
         expect(scope.getByTestId('footer__social')).toBeTruthy()
         expect(scope.getByTestId('footer__status')).toBeTruthy()

@@ -170,6 +170,9 @@ jobs:
       - name: TypeScript check
         run: pnpm run typecheck:webkit
 
+      - name: Tests TypeScript check
+        run: pnpm run typecheck:webkit:tests
+
       - name: Docs site TypeScript check
         run: pnpm run typecheck:docs
 

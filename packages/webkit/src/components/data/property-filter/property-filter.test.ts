@@ -340,7 +340,7 @@ describe('PropertyFilter', () => {
           operation: 'or'
         }
       })
-      expect(view.emitted()['submit']?.at(-1)?.[0]).toBeInstanceOf(KeyboardEvent)
+      expect(view.emitted<unknown[]>()['submit']?.at(-1)?.[0]).toBeInstanceOf(KeyboardEvent)
       await fireEvent.update(input, 'status = Active AND requests > 1 OR edge')
       await fireEvent.keyDown(input, { key: 'Enter' })
       expect(lastSubmit(view.emitted())?.query).toBeNull()

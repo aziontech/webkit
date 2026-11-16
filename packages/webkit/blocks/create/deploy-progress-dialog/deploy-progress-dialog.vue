@@ -91,7 +91,7 @@
   const filter = ref('all')
   const settledOnce = ref(false)
 
-  let stepTimer = 0
+  let stepTimer: ReturnType<typeof setTimeout> | undefined
 
   const counts = computed(() => {
     const total = items.length

@@ -41,7 +41,7 @@ describe('MediaTile', () => {
     })
 
     expect(getByTestId(TESTID).tagName).toBe('FIGURE')
-    expect(captionOf(container)).toBeInTheDocument()
+    expect(captionOf(container as HTMLElement)).toBeInTheDocument()
   })
 
   it('runs the lead into the body as one caption string', () => {
@@ -49,7 +49,7 @@ describe('MediaTile', () => {
       props: { title: TITLE, description: DESCRIPTION }
     })
 
-    expect(captionOf(container)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
+    expect(captionOf(container as HTMLElement)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
   })
 
   it('renders the lead as the caption strong', () => {
@@ -63,7 +63,7 @@ describe('MediaTile', () => {
   it('renders the lead alone when no body is given', () => {
     const { container, getByTestId } = render(MediaTile, { props: { title: TITLE } })
 
-    expect(captionOf(container)?.textContent).toBe(TITLE)
+    expect(captionOf(container as HTMLElement)?.textContent).toBe(TITLE)
     expect(getByTestId(TESTID)).not.toHaveAttribute('data-described')
   })
 
@@ -81,7 +81,7 @@ describe('MediaTile', () => {
       slots: { default: 'Scheduled close to the request that needs them.' }
     })
 
-    expect(captionOf(container)?.textContent).toBe(
+    expect(captionOf(container as HTMLElement)?.textContent).toBe(
       `${TITLE} Scheduled close to the request that needs them.`
     )
     expect(queryByText(DESCRIPTION)).toBeNull()
@@ -199,7 +199,7 @@ describe('MediaTile', () => {
       props: { title: TITLE, description: DESCRIPTION, variant: 'plain' }
     })
 
-    expect(captionOf(container)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
+    expect(captionOf(container as HTMLElement)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
   })
 
   it('has no a11y violations as a plain tile', async () => {

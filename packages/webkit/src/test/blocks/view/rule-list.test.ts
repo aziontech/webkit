@@ -26,7 +26,7 @@ describe('view/rule-list block', () => {
     await waitFor(() =>
       expect(view.container.textContent).toContain('Moved Docs rewrite to position 4 of 5.')
     )
-    expect(requestNames(view.container).slice(0, 5)).toEqual([
+    expect(requestNames(view.container as HTMLElement).slice(0, 5)).toEqual([
       'Default rule',
       'Maintenance page',
       'Redirect www',
@@ -48,7 +48,7 @@ describe('view/rule-list block', () => {
     await fireEvent.keyDown(view.getByRole('button', { name: /^Reorder Maintenance page/ }), {
       key: 'Home'
     })
-    expect(requestNames(view.container)[0]).toBe('Default rule')
+    expect(requestNames(view.container as HTMLElement)[0]).toBe('Default rule')
     const up = view.getByRole('button', {
       name: 'Move Default rule down. The default rule runs first and stays first.'
     })
@@ -64,7 +64,7 @@ describe('view/rule-list block', () => {
   it('moves a rule one place with Move down, announces it in its phase and keeps focus', async () => {
     const view = render(RulesList)
     await fireEvent.click(view.getByRole('button', { name: 'Move Maintenance page down' }))
-    expect(requestNames(view.container).slice(0, 3)).toEqual([
+    expect(requestNames(view.container as HTMLElement).slice(0, 3)).toEqual([
       'Default rule',
       'Redirect www',
       'Maintenance page'
@@ -87,7 +87,10 @@ describe('view/rule-list block', () => {
     expect(view.container.textContent).toMatch(/3\s+changes to the rules, not saved yet\./)
     await fireEvent.click(view.getByRole('button', { name: 'Discard' }))
     expect(view.queryByRole('button', { name: 'Review changes' })).toBeNull()
-    expect(namesIn(view.container, 're-c')).toEqual(['Cache bypass', 'Compress assets'])
+    expect(namesIn(view.container as HTMLElement, 're-c')).toEqual([
+      'Cache bypass',
+      'Compress assets'
+    ])
     await waitFor(() =>
       expect(view.getByTestId('rule-list__announcer').textContent).toContain('Changes discarded.')
     )
@@ -124,7 +127,7 @@ describe('view/rule-list block', () => {
     field.focus()
     await fireEvent.update(field, '2')
     await fireEvent.keyDown(field, { key: 'Enter' })
-    expect(requestNames(view.container).slice(0, 3)).toEqual([
+    expect(requestNames(view.container as HTMLElement).slice(0, 3)).toEqual([
       'Default rule',
       'Docs rewrite',
       'Maintenance page'
@@ -148,11 +151,11 @@ describe('view/rule-list block', () => {
     await fireEvent.update(field, '5')
     await fireEvent.keyDown(field, { key: 'Escape' })
     await fireEvent.blur(field)
-    expect(requestNames(view.container)[2]).toBe('Redirect www')
+    expect(requestNames(view.container as HTMLElement)[2]).toBe('Redirect www')
     expect((view.getByRole('textbox', { name }) as HTMLInputElement).value).toBe('3')
     await fireEvent.update(view.getByRole('textbox', { name }), 'x')
     await fireEvent.blur(view.getByRole('textbox', { name }))
-    expect(requestNames(view.container)[2]).toBe('Redirect www')
+    expect(requestNames(view.container as HTMLElement)[2]).toBe('Redirect www')
   })
 
   it('disables the position of the locked rule with its reason', () => {

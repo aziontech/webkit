@@ -209,7 +209,7 @@ describe('Pagination', () => {
           props: { total: 30, pageSize: 10, page: 1 }
         })
         await fireEvent.click(getByRole('button', { name: 'Page 2' }))
-        const next = emitted()['update:page'][0][0] as number
+        const next = emitted<unknown[]>()['update:page'][0][0] as number
         expect(next).toBe(2)
 
         await rerender({ total: 30, pageSize: 10, page: next })
@@ -253,7 +253,7 @@ describe('Pagination', () => {
         expect(btn.getAttribute('type')).toBe('button')
         await fireEvent.click(btn)
         expect(emitted().click).toBeTruthy()
-        expect(emitted().click[0][0]).toBeInstanceOf(MouseEvent)
+        expect(emitted<unknown[]>().click[0][0]).toBeInstanceOf(MouseEvent)
       })
 
       it('active -> aria-current="page" and data-active', () => {

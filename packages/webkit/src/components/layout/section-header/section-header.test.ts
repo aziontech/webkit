@@ -9,7 +9,7 @@ import SectionHeader from './section-header.vue'
 describe('SectionHeader', () => {
   it('renders the title as an h2 with the default testid', () => {
     const { getByTestId, getByRole } = within(
-      render(SectionHeader, { props: { title: 'Payment methods' } }).container
+      render(SectionHeader, { props: { title: 'Payment methods' } }).container as HTMLElement
     )
 
     expect(getByTestId('section-header').tagName).toBe('HEADER')
@@ -21,19 +21,22 @@ describe('SectionHeader', () => {
       render(SectionHeader, {
         props: { title: 'Payment methods' },
         attrs: { 'data-testid': 'billing-methods' }
-      }).container
+      }).container as HTMLElement
     )
 
     expect(getByTestId('billing-methods__title')).toBeTruthy()
   })
 
   it('renders the copy-link button and the h2 id only with an anchor', () => {
-    const bare = within(render(SectionHeader, { props: { title: 'General' } }).container)
+    const bare = within(
+      render(SectionHeader, { props: { title: 'General' } }).container as HTMLElement
+    )
     expect(bare.queryByTestId('section-header__copy-link')).toBeNull()
     expect(bare.getByRole('heading', { level: 2 }).id).toBe('')
 
     const anchored = within(
-      render(SectionHeader, { props: { title: 'General', anchor: 'general' } }).container
+      render(SectionHeader, { props: { title: 'General', anchor: 'general' } })
+        .container as HTMLElement
     )
     expect(anchored.getByRole('heading', { level: 2 }).id).toBe('general')
     expect(anchored.getByRole('button', { name: 'Copy link to the General section' })).toBeTruthy()
@@ -41,7 +44,7 @@ describe('SectionHeader', () => {
 
   it.each(['small', 'medium'] as const)('mirrors size=%s onto data-size', (size) => {
     const { getByTestId } = within(
-      render(SectionHeader, { props: { title: 'General', size } }).container
+      render(SectionHeader, { props: { title: 'General', size } }).container as HTMLElement
     )
 
     expect(getByTestId('section-header__title').getAttribute('data-size')).toBe(size)
@@ -50,7 +53,9 @@ describe('SectionHeader', () => {
   })
 
   it('renders description and actions only when given', () => {
-    const bare = within(render(SectionHeader, { props: { title: 'General' } }).container)
+    const bare = within(
+      render(SectionHeader, { props: { title: 'General' } }).container as HTMLElement
+    )
     expect(bare.queryByTestId('section-header__description')).toBeNull()
     expect(bare.queryByTestId('section-header__actions')).toBeNull()
 
@@ -58,15 +63,19 @@ describe('SectionHeader', () => {
       render(SectionHeader, {
         props: { title: 'General', description: 'Who you are.' },
         slots: { actions: '<button type="button">Update</button>' }
-      }).container
+      }).container as HTMLElement
     )
     expect(full.getByTestId('section-header__description').textContent?.trim()).toBe('Who you are.')
     expect(full.getByRole('button', { name: 'Update' })).toBeTruthy()
   })
 
   it('renders the examples', () => {
-    expect(within(render(Default).container).getByRole('button', { name: 'Update' })).toBeTruthy()
-    expect(within(render(Sizes).container).getAllByRole('heading', { level: 2 })).toHaveLength(2)
+    expect(
+      within(render(Default).container as HTMLElement).getByRole('button', { name: 'Update' })
+    ).toBeTruthy()
+    expect(
+      within(render(Sizes).container as HTMLElement).getAllByRole('heading', { level: 2 })
+    ).toHaveLength(2)
   })
 
   it('has no accessibility violations', async () => {

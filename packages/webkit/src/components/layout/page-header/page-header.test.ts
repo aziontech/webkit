@@ -13,7 +13,7 @@ import PageHeader from './page-header.vue'
 describe('PageHeader', () => {
   it('renders a header landmark with the title as the h1 and the default testid', () => {
     const { getByTestId, getByRole } = within(
-      render(PageHeader, { props: { title: 'Resources' } }).container
+      render(PageHeader, { props: { title: 'Resources' } }).container as HTMLElement
     )
 
     expect(getByTestId('page-header').tagName).toBe('HEADER')
@@ -25,7 +25,7 @@ describe('PageHeader', () => {
       render(PageHeader, {
         props: { title: 'Resources', description: 'All of them.' },
         attrs: { 'data-testid': 'resources-header' }
-      }).container
+      }).container as HTMLElement
     )
 
     expect(getByTestId('resources-header__title').textContent?.trim()).toBe('Resources')
@@ -34,7 +34,7 @@ describe('PageHeader', () => {
 
   it.each(['small', 'medium', 'large'] as const)('mirrors size=%s onto data-size', (size) => {
     const { getByTestId } = within(
-      render(PageHeader, { props: { title: 'Resources', size } }).container
+      render(PageHeader, { props: { title: 'Resources', size } }).container as HTMLElement
     )
 
     expect(getByTestId('page-header').getAttribute('data-size')).toBe(size)
@@ -42,13 +42,17 @@ describe('PageHeader', () => {
   })
 
   it('defaults to the medium size', () => {
-    const { getByTestId } = within(render(PageHeader, { props: { title: 'Resources' } }).container)
+    const { getByTestId } = within(
+      render(PageHeader, { props: { title: 'Resources' } }).container as HTMLElement
+    )
 
     expect(getByTestId('page-header').getAttribute('data-size')).toBe('medium')
   })
 
   it('renders the description and actions regions only when given', () => {
-    const bare = within(render(PageHeader, { props: { title: 'Resources' } }).container)
+    const bare = within(
+      render(PageHeader, { props: { title: 'Resources' } }).container as HTMLElement
+    )
     expect(bare.queryByTestId('page-header__description')).toBeNull()
     expect(bare.queryByTestId('page-header__actions')).toBeNull()
 
@@ -59,7 +63,7 @@ describe('PageHeader', () => {
           description: 'Read the <a href="#docs">docs</a>.',
           actions: '<button type="button">Create Resource</button>'
         }
-      }).container
+      }).container as HTMLElement
     )
     expect(full.getByTestId('page-header__description').querySelector('a')).toBeTruthy()
     expect(full.getByRole('button', { name: 'Create Resource' })).toBeTruthy()
@@ -67,24 +71,25 @@ describe('PageHeader', () => {
 
   it('sets titleId on the h1 so a landmark can reference it', () => {
     const { getByRole } = within(
-      render(PageHeader, { props: { title: 'Profile', titleId: 'profile-title' } }).container
+      render(PageHeader, { props: { title: 'Profile', titleId: 'profile-title' } })
+        .container as HTMLElement
     )
 
     expect(getByRole('heading', { level: 1 }).id).toBe('profile-title')
   })
 
   it('renders the examples', () => {
-    const def = within(render(Default).container)
+    const def = within(render(Default).container as HTMLElement)
     expect(def.getAllByRole('link').length + def.getAllByRole('button').length).toBe(2)
 
-    const sizes = within(render(Sizes).container)
+    const sizes = within(render(Sizes).container as HTMLElement)
     expect(sizes.getAllByTestId('page-header').map((el) => el.dataset['size'])).toEqual([
       'large',
       'medium',
       'small'
     ])
 
-    const rich = within(render(RichDescription).container)
+    const rich = within(render(RichDescription).container as HTMLElement)
     expect(rich.getAllByRole('button')).toHaveLength(2)
   })
 
@@ -129,7 +134,7 @@ describe('PageHeader', () => {
   describe('regions', () => {
     it('renders no region wrapper when no region slot is filled', () => {
       const { queryByTestId } = within(
-        render(PageHeader, { props: { title: 'Resources' } }).container
+        render(PageHeader, { props: { title: 'Resources' } }).container as HTMLElement
       )
 
       for (const part of ['breadcrumbs', 'icon', 'meta', 'tabs']) {
@@ -148,7 +153,7 @@ describe('PageHeader', () => {
             actions: '<button type="button">Deploy</button>',
             tabs: '<div role="tablist"><button role="tab" aria-selected="true">Overview</button></div>'
           }
-        }).container
+        }).container as HTMLElement
       )
 
       const order = ['breadcrumbs', 'icon', 'title', 'meta', 'actions', 'tabs'].map((part) =>
@@ -167,7 +172,7 @@ describe('PageHeader', () => {
         render(PageHeader, {
           props: { title: 'acme-store' },
           slots: { icon: '<i class="ai ai-box"></i>' }
-        }).container
+        }).container as HTMLElement
       )
 
       expect(getByTestId('page-header__icon')).toHaveAttribute('aria-hidden', 'true')
@@ -175,7 +180,7 @@ describe('PageHeader', () => {
 
     it('renders the DetailPage example with its trail, tags and tabs and no a11y violations', async () => {
       const { container } = render(DetailPage)
-      const view = within(container)
+      const view = within(container as HTMLElement)
 
       expect(view.getByRole('heading', { level: 1 }).textContent?.trim()).toBe('acme-store')
       expect(view.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources')

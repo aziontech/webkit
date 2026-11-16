@@ -3,14 +3,14 @@ import { describe, expect, it } from 'vitest'
 
 import Code from '../../../../examples/feature-scroll/code.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import FeatureScroll from './feature-scroll.vue'
+import FeatureScroll, { type FeatureScrollItem } from './feature-scroll.vue'
 
 const TESTID = 'feature-scroll'
 const EYEBROW = 'Workloads'
 const TITLE = 'Everything a workload does, one screen at a time'
 const DESCRIPTION = 'Scroll through the console a workload is run from.'
 
-const items = [
+const items: FeatureScrollItem[] = [
   {
     title: 'Every workload on one list',
     description: 'See each workload with its domain, status and last deployment.',
@@ -147,7 +147,7 @@ describe('FeatureScroll', () => {
   })
 
   it('draws an item scene in place of its illustration, in the grid and in the stack', async () => {
-    const sceneItems = [
+    const sceneItems: FeatureScrollItem[] = [
       {
         title: 'Keys at the edge',
         description: 'Read and write keys from a function.',
@@ -172,7 +172,9 @@ describe('FeatureScroll', () => {
     const { queryByTestId } = render(FeatureScroll, {
       props: {
         title: TITLE,
-        items: [{ title: 'Unknown', description: 'No scene.', scene: { component: 'Nope' } }]
+        items: JSON.parse(
+          '[{ "title": "Unknown", "description": "No scene.", "scene": { "component": "Nope" } }]'
+        ) as FeatureScrollItem[]
       }
     })
 

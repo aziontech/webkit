@@ -207,8 +207,8 @@
   const failNext = ref(SCENARIO.failFirstRun)
   const resourcesHeadingEl = ref<HTMLElement | null>(null)
 
-  let impactTimer = 0
-  let runTimer = 0
+  let impactTimer: ReturnType<typeof setTimeout> | undefined
+  let runTimer: ReturnType<typeof setTimeout> | undefined
 
   const plural = (count: number, one: string, other: string) =>
     `${count} ${count === 1 ? one : other}`

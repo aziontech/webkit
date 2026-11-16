@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, type PropType, ref } from 'vue'
 
 import CheckableOptions from '../../../../examples/dropdown-menu/checkable-options.vue'
 import Default from '../../../../examples/dropdown-menu/default.vue'
@@ -14,11 +14,15 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenu, {
   DropdownMenuGroup,
   DropdownMenuItem,
+  type DropdownMenuItemValue,
+  type DropdownMenuPlacement,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from './index'
+
+type SelectHandler = (event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => void
 
 /**
  * A realistic composed tree mirroring how a consumer wires the compound:
@@ -31,10 +35,10 @@ const Host = defineComponent({
   props: {
     open: { type: Boolean, default: undefined },
     disabled: { type: Boolean, default: false },
-    placement: { type: String, default: 'bottom-start' },
+    placement: { type: String as PropType<DropdownMenuPlacement>, default: 'bottom-start' },
     grouped: { type: Boolean, default: false },
-    onSelect: { type: Function, default: undefined },
-    'onUpdate:open': { type: Function, default: undefined }
+    onSelect: { type: Function as PropType<SelectHandler>, default: undefined },
+    'onUpdate:open': { type: Function as PropType<(open: boolean) => void>, default: undefined }
   },
   setup(props) {
     return () =>
@@ -793,7 +797,7 @@ describe('DropdownMenu', () => {
 
   const SubHost = defineComponent({
     props: {
-      onSelect: { type: Function, default: undefined }
+      onSelect: { type: Function as PropType<SelectHandler>, default: undefined }
     },
     setup(props) {
       return () =>

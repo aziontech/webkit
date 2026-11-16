@@ -320,7 +320,7 @@ describe('PasswordInput', () => {
   it('renders the Default story fixture cleanly', async () => {
     // The story documents the bare field (its label is the form-field layer's job), so
     // the accessible name is supplied here rather than baked into the canonical story.
-    const { getByTestId, container } = render(Default, { props: { 'aria-label': 'Password' } })
+    const { getByTestId, container } = render(Default, { attrs: { 'aria-label': 'Password' } })
 
     expect(getByTestId('password-input')).toBeTruthy()
     await expectNoA11yViolations(container)

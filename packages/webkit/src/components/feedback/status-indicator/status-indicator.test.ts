@@ -106,8 +106,8 @@ describe('StatusIndicator', () => {
     expect(getByTestId('status-indicator').classList.contains('consumer-class')).toBe(true)
   })
 
-  it.each([...STATUSES])('has no a11y violations for status "%s"', async (status) => {
-    const { container } = render(StatusIndicator, { props: { status, label: 'Status' } })
+  it.each([...STATUSES])('has no a11y violations for severity "%s"', async (severity) => {
+    const { container } = render(StatusIndicator, { props: { severity, label: 'Status' } })
 
     await expectNoA11yViolations(container)
   })

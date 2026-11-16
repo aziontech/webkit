@@ -12,15 +12,15 @@ import WithHint from '../../../../examples/settings-row/with-hint.vue'
 import WithMessage from '../../../../examples/settings-row/with-message.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ItemList from '../../content/item/item-list.vue'
-import SettingsRow from './settings-row.vue'
+import SettingsRow, { type SettingsRowProps } from './settings-row.vue'
 
-const inList = (props: Record<string, unknown>, slots: Record<string, string> = {}) =>
+const inList = (props: SettingsRowProps, slots: Record<string, string> = {}) =>
   defineComponent({
     setup: () => () =>
       h(ItemList, null, {
         default: () =>
           h(SettingsRow, props, {
-            default: () => h('input', { 'aria-label': String(props['title']) }),
+            default: () => h('input', { 'aria-label': props.title }),
             ...Object.fromEntries(
               Object.entries(slots).map(([name, html]) => [
                 name,
@@ -34,7 +34,7 @@ const inList = (props: Record<string, unknown>, slots: Record<string, string> = 
 describe('SettingsRow', () => {
   it('renders the title, description and control with the default testid', () => {
     const { getByTestId, getByRole } = within(
-      render(inList({ title: 'Name', description: 'A unique name.' })).container
+      render(inList({ title: 'Name', description: 'A unique name.' })).container as HTMLElement
     )
 
     expect(getByTestId('settings-row')).toBeTruthy()
@@ -52,14 +52,14 @@ describe('SettingsRow', () => {
               default: () => h(SettingsRow, { title: 'Name', 'data-testid': 'name-row' })
             })
         })
-      ).container
+      ).container as HTMLElement
     )
 
     expect(getByTestId('name-row__title').textContent?.trim()).toBe('Name')
   })
 
   it('omits the description when none is given', () => {
-    const { queryByTestId } = within(render(inList({ title: 'Name' })).container)
+    const { queryByTestId } = within(render(inList({ title: 'Name' })).container as HTMLElement)
 
     expect(queryByTestId('settings-row__description')).toBeNull()
   })
@@ -67,7 +67,9 @@ describe('SettingsRow', () => {
   it.each(['field', 'compact', 'stacked'] as const)(
     'mirrors variant=%s onto data-row-variant',
     (variant) => {
-      const { getByTestId } = within(render(inList({ title: 'Name', variant })).container)
+      const { getByTestId } = within(
+        render(inList({ title: 'Name', variant })).container as HTMLElement
+      )
 
       expect(getByTestId('settings-row').getAttribute('data-row-variant')).toBe(variant)
       expect(getByTestId('settings-row__control').getAttribute('data-variant')).toBe(variant)
@@ -75,23 +77,27 @@ describe('SettingsRow', () => {
   )
 
   it.each([0, 1, 2] as const)('mirrors depth=%s onto data-depth', (depth) => {
-    const { getByTestId } = within(render(inList({ title: 'Name', depth })).container)
+    const { getByTestId } = within(
+      render(inList({ title: 'Name', depth })).container as HTMLElement
+    )
 
     expect(getByTestId('settings-row').getAttribute('data-depth')).toBe(String(depth))
   })
 
   it('sets data-stackable only when stackable is on', () => {
-    const off = within(render(inList({ title: 'Name' })).container)
+    const off = within(render(inList({ title: 'Name' })).container as HTMLElement)
     expect(off.getByTestId('settings-row').hasAttribute('data-stackable')).toBe(false)
 
-    const on = within(render(inList({ title: 'Address', stackable: true })).container)
+    const on = within(
+      render(inList({ title: 'Address', stackable: true })).container as HTMLElement
+    )
     expect(on.getByTestId('settings-row').hasAttribute('data-stackable')).toBe(true)
   })
 
   it('renders a Hint beside the title when hint is set', () => {
     const hint = 'The edge serves the cached copy until this many seconds pass.'
     const { getByTestId, getByRole } = within(
-      render(inList({ title: 'Cache TTL', hint })).container
+      render(inList({ title: 'Cache TTL', hint })).container as HTMLElement
     )
 
     const glyph = getByTestId('settings-row__hint__trigger')
@@ -100,7 +106,9 @@ describe('SettingsRow', () => {
   })
 
   it('renders no Hint when hint is empty', () => {
-    const { queryByTestId, queryByRole } = within(render(inList({ title: 'Name' })).container)
+    const { queryByTestId, queryByRole } = within(
+      render(inList({ title: 'Name' })).container as HTMLElement
+    )
 
     expect(queryByTestId('settings-row__hint__trigger')).toBeNull()
     expect(queryByRole('button')).toBeNull()
@@ -109,7 +117,9 @@ describe('SettingsRow', () => {
   it('keeps the whole description in the DOM for assistive technology', () => {
     const description =
       'The first sentence says what it does. The second adds detail. The third adds even more detail that a two-line clamp would hide on screen.'
-    const { getByTestId } = within(render(inList({ title: 'Name', description })).container)
+    const { getByTestId } = within(
+      render(inList({ title: 'Name', description })).container as HTMLElement
+    )
 
     expect(getByTestId('settings-row__description').textContent?.trim()).toBe(description)
   })
@@ -118,7 +128,7 @@ describe('SettingsRow', () => {
     const { getByTestId } = within(
       render(
         inList({ title: 'Name' }, { title: '<b>Name</b>', description: '<a href="#x">Docs</a>' })
-      ).container
+      ).container as HTMLElement
     )
 
     expect(getByTestId('settings-row__title').querySelector('b')).toBeTruthy()
@@ -126,16 +136,26 @@ describe('SettingsRow', () => {
   })
 
   it('renders the examples', () => {
-    expect(within(render(Default).container).getAllByTestId('settings-row')).toHaveLength(3)
-    expect(within(render(CompactRows).container).getAllByRole('switch')).toHaveLength(2)
-    expect(within(render(WithMessage).container).getByText('This field is required.')).toBeTruthy()
-    const depths = within(render(Nested).container)
+    expect(
+      within(render(Default).container as HTMLElement).getAllByTestId('settings-row')
+    ).toHaveLength(3)
+    expect(
+      within(render(CompactRows).container as HTMLElement).getAllByRole('switch')
+    ).toHaveLength(2)
+    expect(
+      within(render(WithMessage).container as HTMLElement).getByText('This field is required.')
+    ).toBeTruthy()
+    const depths = within(render(Nested).container as HTMLElement)
       .getAllByTestId('settings-row')
       .map((el) => el.dataset['depth'])
     expect(depths).toEqual(['0', '0', '1', '1', '1', '2'])
-    expect(within(render(Stackable).container).getAllByRole('textbox')).toHaveLength(2)
+    expect(within(render(Stackable).container as HTMLElement).getAllByRole('textbox')).toHaveLength(
+      2
+    )
     expect(
-      within(render(WithHint).container).getAllByTestId('settings-row__hint__trigger')
+      within(render(WithHint).container as HTMLElement).getAllByTestId(
+        'settings-row__hint__trigger'
+      )
     ).toHaveLength(2)
   })
 

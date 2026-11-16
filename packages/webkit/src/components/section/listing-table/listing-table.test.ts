@@ -3,12 +3,12 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import ListingTable from './listing-table.vue'
+import ListingTable, { type ListingTableColumn } from './listing-table.vue'
 
 const TESTID = 'listing-table'
 const TITLE = 'Latest roles'
 
-const columns = [
+const columns: ListingTableColumn[] = [
   { key: 'role', label: 'Role', grow: 2 },
   { key: 'team', label: 'Team and location', grow: 2 },
   { key: 'type', label: 'Work type', align: 'end' }
