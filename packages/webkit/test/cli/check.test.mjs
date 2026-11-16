@@ -181,7 +181,10 @@ test('check passes bound values a migrated app reads from variables, and warns o
     const migration = by(cliJson(dir, 'check', '--no-lint').json, 'migration')
     assert.equal(migration.length, 1)
     assert.equal(migration[0].severity, 'warn')
-    assert.match(migration[0].message, /:severity="level" is bound to a value migrate cannot read/)
+    assert.match(
+      migration[0].message,
+      /^v5 value to review: .*:severity="level" is bound to a value migrate cannot read/
+    )
     const dry = cli(dir, 'migrate', 'v6', '--dry-run')
     assert.match(dry.stdout, /^ {2}REVIEW: .*:severity="level"/m)
     assert.doesNotMatch(dry.stdout, /MANUAL/)

@@ -75,7 +75,7 @@ function migrationFindings(rel, source, migration) {
         severity:
           /^(PrimeIcons class|Azion icon)/.test(w) || REVIEW_WARNING.test(w) ? 'warn' : 'error',
         file: rel,
-        message: `v5 API to replace by hand: ${w} (MIGRATION_V6.md).`
+        message: `${REVIEW_WARNING.test(w) ? 'v5 value to review' : 'v5 API to replace by hand'}: ${w} (MIGRATION_V6.md).`
       }))
   ]
 }
