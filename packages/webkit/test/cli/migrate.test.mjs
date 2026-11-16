@@ -26,6 +26,7 @@ import {
   planMigrate,
   renameSubpath
 } from '../../src/cli/migrate.js'
+import { findComments } from '../../src/eslint-plugin/lib/comment-scan.js'
 
 const PKG = join(dirname(fileURLToPath(import.meta.url)), '../..')
 
@@ -996,4 +997,19 @@ test('DocStep stays MANUAL when migrate cannot prove it sits inside DocSteps', (
     assert.equal(source, sfc)
     assert.ok(warnings.some((w) => /doc-step was removed in v6/.test(w)))
   }
+})
+
+test('the webkit-migrate-ok marker is a tool directive, so the comments rule lets it through', () => {
+  const text =
+    '<template>\n  <!-- webkit-migrate-ok -->\n  <Tag :severity="level" />\n</template>\n'
+  assert.deepEqual(
+    findComments('src/views/a.vue', text).map((c) => c.kind),
+    ['directive']
+  )
+  assert.deepEqual(
+    findComments('src/views/a.vue', '<template><!-- webkit-migrate-ok, checked --></template>').map(
+      (c) => c.kind
+    ),
+    ['prose']
+  )
 })
