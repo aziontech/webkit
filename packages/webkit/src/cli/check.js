@@ -5,7 +5,7 @@ import { physicalDirectionClasses } from '../eslint-plugin/lib/direction-classes
 import { blockDrift } from './blocks.js'
 import { cssScanFindings, stylelintFindings } from './css-check.js'
 import { planDoctor } from './doctor.js'
-import { loadMigration, migrateSource } from './migrate.js'
+import { loadMigration, migrateSource, REVIEW_WARNING } from './migrate.js'
 import { runNavigationCheck } from './navigation-check.js'
 import { ESLINT_CONFIG_CANDIDATES, firstExisting } from './plan.js'
 import { resolveEslintBin, runESLint } from './report.js'
@@ -73,9 +73,7 @@ function migrationFindings(rel, source, migration) {
       .map((w) => ({
         source: 'migration',
         severity:
-          /^(PrimeIcons class|Azion icon)/.test(w) || /migrate cannot read/.test(w)
-            ? 'warn'
-            : 'error',
+          /^(PrimeIcons class|Azion icon)/.test(w) || REVIEW_WARNING.test(w) ? 'warn' : 'error',
         file: rel,
         message: `v5 API to replace by hand: ${w} (MIGRATION_V6.md).`
       }))

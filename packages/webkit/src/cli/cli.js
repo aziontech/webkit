@@ -6,7 +6,7 @@ import { runCanary } from './canary.js'
 import { exitCodeFor, formatCheck, runCheck, withNavigation } from './check.js'
 import { planSources, SOURCES_FILE, writeSources } from './css-sources.js'
 import { planDoctor } from './doctor.js'
-import { planMigrate, SUPPORTED_VERSIONS } from './migrate.js'
+import { planMigrate, REVIEW_WARNING, SUPPORTED_VERSIONS } from './migrate.js'
 import { parseUrls } from './navigation-check.js'
 import { planInit } from './plan.js'
 import { formatSearch, formatView, runSearch, runView } from './query.js'
@@ -406,16 +406,20 @@ function runMigrate(projectDir, target, { dryRun, from }) {
   const results = planMigrate(projectDir, { version, dryRun, fromMajor })
   let changed = 0
   let manual = 0
+  let review = 0
   for (const { file, changes, warnings } of results) {
+    const toReview = warnings.filter((w) => REVIEW_WARNING.test(w))
     if (changes.length) changed += 1
-    if (warnings.length) manual += 1
+    if (warnings.length > toReview.length) manual += 1
+    else if (toReview.length) review += 1
     process.stdout.write(`${file}\n`)
     for (const c of changes)
       process.stdout.write(`  ${dryRun ? 'would change' : 'changed'}: ${c}\n`)
-    for (const w of warnings) process.stdout.write(`  MANUAL: ${w}\n`)
+    for (const w of warnings)
+      process.stdout.write(`  ${REVIEW_WARNING.test(w) ? 'REVIEW' : 'MANUAL'}: ${w}\n`)
   }
   process.stdout.write(
-    `\n${changed} file(s) ${dryRun ? 'to rewrite' : 'rewritten'}, ${manual} file(s) need a manual change. See MIGRATION_V6.md.\n`
+    `\n${changed} file(s) ${dryRun ? 'to rewrite' : 'rewritten'}, ${manual} file(s) need a manual change${review ? `, ${review} more to review` : ''}. See MIGRATION_V6.md.\n`
   )
   return 0
 }

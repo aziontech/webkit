@@ -13,6 +13,7 @@ const SOURCE_EXT = /\.(vue|ts|tsx|js|jsx|mjs|cjs|css|scss|html)$/
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', '.nuxt', '.output', 'coverage'])
 
 export const SUPPORTED_VERSIONS = [6]
+export const REVIEW_WARNING = /migrate cannot read/
 
 const readJson = (file) => (existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : {})
 

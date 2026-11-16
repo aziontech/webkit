@@ -182,6 +182,10 @@ test('check passes bound values a migrated app reads from variables, and warns o
     assert.equal(migration.length, 1)
     assert.equal(migration[0].severity, 'warn')
     assert.match(migration[0].message, /:severity="level" is bound to a value migrate cannot read/)
+    const dry = cli(dir, 'migrate', 'v6', '--dry-run')
+    assert.match(dry.stdout, /^ {2}REVIEW: .*:severity="level"/m)
+    assert.doesNotMatch(dry.stdout, /MANUAL/)
+    assert.match(dry.stdout, /0 file\(s\) need a manual change, 1 more to review/)
   } finally {
     cleanup(dir)
   }
