@@ -1,7 +1,12 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTags from '@aziontech/webkit/table-cell-tags'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const HOUR = 3_600_000
@@ -66,20 +71,20 @@
       aria-label="Workloads"
     >
       <template #cell-name="{ row }">
-        <Table.CellLink
+        <TableCellLink
           :label="row.name"
           :to="`/workloads/${row.id}`"
           destination="Workloads"
         />
       </template>
       <template #cell-id="{ value }">
-        <Table.CellId
+        <TableCellId
           :value="value"
           resource="workload"
         />
       </template>
       <template #cell-repository="{ value }">
-        <Table.CellLink
+        <TableCellLink
           v-if="value"
           icon="ai ai-github"
           :label="value"
@@ -92,13 +97,13 @@
         >
       </template>
       <template #cell-status="{ value }">
-        <Table.CellStatus
+        <TableCellStatus
           :label="value"
           :severity="statusSeverity(value)"
         />
       </template>
       <template #cell-domains="{ row }">
-        <Table.CellLink
+        <TableCellLink
           :label="row.domains[0]"
           :href="`https://${row.domains[0]}`"
           :more="row.domains.slice(1).map((label) => ({ label, href: `https://${label}` }))"
@@ -107,10 +112,10 @@
         />
       </template>
       <template #cell-tags="{ value }">
-        <Table.CellTags :items="value" />
+        <TableCellTags :items="value" />
       </template>
       <template #cell-updatedAt="{ row }">
-        <Table.CellTime
+        <TableCellTime
           :value="row.updatedAt"
           :author="row.updatedBy"
         />
@@ -119,7 +124,7 @@
         <span class="sr-only">Actions</span>
       </template>
       <template #cell-actions="{ row }">
-        <Table.CellActions
+        <TableCellActions
           :name="row.name"
           @select="(event, value) => onAction(event, value, row)"
         >
@@ -139,7 +144,7 @@
               label="Delete"
             />
           </DropdownMenu.Group>
-        </Table.CellActions>
+        </TableCellActions>
       </template>
     </DataTable>
   </WebkitProvider>

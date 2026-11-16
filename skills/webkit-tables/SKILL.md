@@ -1,8 +1,8 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, type:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.ChipGroup and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, type:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.ChipGroup and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — TableCellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), TableCellId, TableCellStatus (one chip per row), TableCellTags, TableCellTime (avatar + relative time) and TableCellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
 ---
@@ -47,9 +47,10 @@ internals — compose inside its slots.
 
 `DataTable` (`@aziontech/webkit/data-table`) is the data-driven table: `DataTable :data :columns`
 renders the header, rows, selection, paging and states, and carries the `@tanstack/vue-table` engine.
-`Table` (`@aziontech/webkit/table`) is the compound of parts DataTable renders through: import it for
-the toolbar parts (`Table.Search`, `Table.Export`) and the cell presets (`Table.CellStatus`) you put in
-DataTable's slots; the compound does not load the engine. Composing rows by hand from the parts
+The toolbar controls (`TableSearch`, `TableExportButton`) and the cell presets (`TableCellStatus`) you
+put in DataTable's slots are each their own import (`@aziontech/webkit/table-search`,
+`@aziontech/webkit/table-cell-status`), so a screen pays only for the ones it renders. `Table`
+(`@aziontech/webkit/table`) is the compound of structural parts DataTable renders through; composing rows by hand from the parts
 (`Table.Header`, `Table.Row`, `Table.Cell`) is for a component author building a new table primitive.
 A screen or block never composes rows from them, even a short static list: a hand-composed table loses
 the column model, the cell slots and the opt-in stacked layout.
@@ -63,7 +64,7 @@ sort, the page, the selection and the saved preferences. One `v-bind` carries al
 ```vue
 <script setup>
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import DataTable from '@aziontech/webkit/data-table'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
@@ -85,7 +86,7 @@ sort, the page, the selection and the saved preferences. One `v-bind` carries al
     :bordered="false"
   >
     <template #cell-status="{ value }">
-      <Table.CellStatus
+      <TableCellStatus
         :label="value"
         :severity="statusSeverity(value)"
       />
@@ -101,7 +102,8 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
 
 ```vue
 <script setup>
-  import Table from '@aziontech/webkit/table'
+  import DataTable from '@aziontech/webkit/data-table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
 </script>
 
 <template>
@@ -119,7 +121,7 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
     @row-click="openApp"
   >
     <template #cell-status="{ value }">
-      <Table.CellStatus
+      <TableCellStatus
         :label="value"
         :severity="statusSeverity(value)"
       />
@@ -128,9 +130,10 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
 </template>
 ```
 
-- Each column renders through its `#cell-<accessorKey>` slot with a cell preset (`Table.CellStatus`
-  here; see Cell recipes), which is also why the import is the `table` compound. A table with no
-  cell slots and no toolbar imports only `@aziontech/webkit/data-table`.
+- Each column renders through its `#cell-<accessorKey>` slot with a cell preset (`TableCellStatus`
+  here; see Cell recipes). Every cell preset and toolbar control is its own import
+  (`@aziontech/webkit/table-cell-status`, `@aziontech/webkit/table-search`, …): the `table` compound
+  carries only the structural parts, so a DataTable never needs it.
 - In a `lang="ts"` component DataTable is generic over its rows: type the data
   (`ref<Application[]>([])`, `useCollection<Application>(…)`) and every slot scope follows —
   `#cell-status="{ row, value }"` gives `row: Application` and `value: Application['status']`, the
@@ -178,7 +181,7 @@ surface (a drawer, a panel) and does not page through a collection.
 
 The toolbar is a fixed, ordered set of context-aware controls in the `#toolbar` slot; the
 applied-filter chips render in `#filters` via `FilterMenu.ChipGroup` (with no `fields`, it reads the
-table). `filterFields` (`{ id, label, type, options? }`) drives `Table.Filter`, which hosts one of the
+table). `filterFields` (`{ id, label, type, options? }`) drives `TableFilter`, which hosts one of the
 two filters, picked by data shape: `type="menu"` (the default) is the `FilterMenu` of facets picked
 from known values, and `type="property"` is a `PropertyFilter` for typed conditions with operators
 (it shows its own tokens, so it needs no chips row). Columns are chosen in `CollectionPreferences`
@@ -191,14 +194,14 @@ An applied filter is a `Chip` of the default `variant="filled"` (the grey `--bg-
 ```vue
 <template #toolbar>
   <div class="flex w-full items-center gap-(--spacing-xs)">
-    <Table.Filter />
-    <Table.Search
+    <TableFilter />
+    <TableSearch
       size="large"
       placeholder="Search..."
       class="flex-1"
     />
-    <Table.RefreshButton />
-    <Table.Export />
+    <TableRefreshButton />
+    <TableExportButton />
     <CollectionPreferences :sections="['columns']" />
   </div>
 </template>
@@ -208,7 +211,7 @@ An applied filter is a `Chip` of the default `variant="filled"` (the grey `--bg-
 </template>
 ```
 
-Order left→right: **Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences**. `Table.Search`
+Order left→right: **Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences**. `TableSearch`
 drives the global filter through the injected table context — it takes no `v-model` (compound API).
 
 ### Refresh — the button, when it last updated, and auto-refresh
@@ -220,16 +223,16 @@ refresh, says when it last loaded, and only refreshes by itself when the reader 
 <template #toolbar>
   <div class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
     <span class="shrink-0">Updated</span>
-    <Table.CellTime :value="updatedAt" />
+    <TableCellTime :value="updatedAt" />
   </div>
-  <Table.RefreshButton :loading="refreshing" />
+  <TableRefreshButton :loading="refreshing" />
 </template>
 ```
 
-1. **Keep the rows on screen while refreshing.** Pass `loading` to `Table.RefreshButton` (it spins
+1. **Keep the rows on screen while refreshing.** Pass `loading` to `TableRefreshButton` (it spins
    and cannot fire twice) and keep the table's own `loading` for a first load with nothing to show;
    the skeleton replacing rows the reader was reading is a jump, not feedback.
-2. **Say when it last updated**, relative, beside the button: `Updated` plus `Table.CellTime`. It
+2. **Say when it last updated**, relative, beside the button: `Updated` plus `TableCellTime`. It
    re-renders every minute and carries the absolute time on its tooltip.
 3. **Auto-refresh is off by default on a list** and the reader turns it on (a `Switch` in the toolbar
    or in `CollectionPreferences`). Turn it on by default only on a live view (a deploy in progress,
@@ -284,7 +287,7 @@ actions share the first line, and every other column becomes a line of **label �
 - With `stackable`, keep `principal: true` on the column that names the row (it is the card title) and
   give a column `label` when its `header` is a slot, so the stacked line has a label.
 - The toolbar is a container too (`@container/table`): below `@md` of the table the toolbar slot
-  drops under the title and wraps. Keep `Table.Search` `flex-1` so it takes the free line.
+  drops under the title and wraps. Keep `TableSearch` `flex-1` so it takes the free line.
 - A hand-composed table (`Table.Header` / `Table.Row` without `columns`) never stacks.
 
 ### Thousands of rows — `virtual`
@@ -338,9 +341,9 @@ save call.
 ## Cell recipes
 
 Render each column with `#cell-<accessorKey>` (`#cell-actions` for the action column). The recurring
-cells are **presets** on the `Table` compound (`Table.CellLink`, `Table.CellId`, `Table.CellStatus`,
-`Table.CellTags`, `Table.CellTime`, `Table.CellActions`; also importable one by one as
-`@aziontech/webkit/table-cell-<name>`): use them instead of re-typing the markup, so a cell type looks
+cells are **presets** (`TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTags`,
+`TableCellTime`, `TableCellActions`), each imported from its own entry
+(`@aziontech/webkit/table-cell-<name>`, not attached to the `Table` compound): use them instead of re-typing the markup, so a cell type looks
 identical across every table. `examples/table/cell-presets.vue` shows all of them in one table.
 
 ### Principal / name cell — icon + truncate + hover-underline
@@ -414,12 +417,12 @@ colour _is_ the information.
 </template>
 ```
 
-A status cell is `Table.CellStatus` (below).
+A status cell is `TableCellStatus` (below).
 
-### Cross-resource link — `Table.CellLink`
+### Cross-resource link — `TableCellLink`
 
 A name that opens **something other than this row** — the workload a deployment belongs to, the
-function an instance runs, the site a domain serves — is `Table.CellLink`, in a table cell and in a
+function an instance runs, the site a domain serves — is `TableCellLink`, in a table cell and in a
 detail panel alike. It carries three rules, and each is a real bug when a hand-made copy skips one:
 
 1. **Every external mark says where it goes.** The glyph announces the name leaves; the **tooltip
@@ -431,7 +434,7 @@ detail panel alike. It carries three rules, and each is a real bug when a hand-m
 
 ```vue
 <template #cell-workload="{ row }">
-  <Table.CellLink
+  <TableCellLink
     :label="row.workload.name"
     :to="`/workloads/${row.workload.id}`"
     destination="Workloads"
@@ -450,7 +453,7 @@ detail panel alike. It carries three rules, and each is a real bug when a hand-m
   icon size, underline at rest, tooltip or none), and a `Tooltip` trigger in a flex cell needs
   `shrink!` to let the name truncate, which the preset already sets.
 
-### Domain cell — `Table.CellLink` with `more` and `copyable`
+### Domain cell — `TableCellLink` with `more` and `copyable`
 
 The copy button never sits flush against the domain (its x-position would then vary per row with
 the domain's length). `copyable` pins it to the cell's end edge, the link truncates and the cell
@@ -459,7 +462,7 @@ fills its column, so every copy button lines up. `more` puts the other domains b
 
 ```vue
 <template #cell-domains="{ row }">
-  <Table.CellLink
+  <TableCellLink
     :label="row.domains[0]"
     :href="`https://${row.domains[0]}`"
     :more="row.domains.slice(1).map((label: string) => ({ label, href: `https://${label}` }))"
@@ -480,38 +483,38 @@ When a cell holds a primary value plus more of the same kind, show the primary a
 (`12 domains`, `10 of 34 domains`), a search box past 7 items, Load more in batches of 10, a no-match
 line quoting the query, a polite status region, and a reset when it closes. Pass only the hidden items
 and a `noun`; an item with `href` opens in a new tab, and the `item` slot takes a router link.
-`Table.CellLink` (`more`) and `Table.CellTags` already use it.
+`TableCellLink` (`more`) and `TableCellTags` already use it.
 
-### Tags — `Table.CellTags`
+### Tags — `TableCellTags`
 
 A list of tags shows as many as fit the cell and moves the rest behind `+N`; it measures itself, so
 the same column reads well at every width. Tags are rounded and neutral (a category, not a status).
 
 ```vue
 <template #cell-tags="{ value }">
-  <Table.CellTags :items="value" />
+  <TableCellTags :items="value" />
 </template>
 ```
 
-### Identifier — `Table.CellId`
+### Identifier — `TableCellId`
 
 An ID, token or other copyable value uses the **text-then-copy** shape with the copy button pinned to
 the end edge, named after what it copies (`resource="workload"` → `Copy workload ID`):
 
 ```vue
 <template #cell-id="{ value }">
-  <Table.CellId
+  <TableCellId
     :value="value"
     resource="workload"
   />
 </template>
 ```
 
-### Status — `Table.CellStatus`
+### Status — `TableCellStatus`
 
 ```vue
 <template #cell-status="{ value }">
-  <Table.CellStatus
+  <TableCellStatus
     :label="value"
     :severity="statusSeverity(value)"
   />
@@ -521,15 +524,15 @@ the end edge, named after what it copies (`resource="workload"` → `Copy worklo
 `statusSeverity` is one shared helper per status set (see the chip rules above). An empty value
 renders a muted dash.
 
-### Last modified — `Table.CellTime`
+### Last modified — `TableCellTime`
 
 A "Last modified" / "Updated" / "Deployed" column shows **a relative time** ("2 hours ago"), never a
 raw absolute date. Two shapes, both from the console:
 
 - **Who and when are separate facts** (a deployments list, a resource index whose reference shows a
   `Last Editor` column): a `Last Editor` column with an `Avatar` and the person's name in its cell slot,
-  then the time column with `Table.CellTime` and no `author`.
-- **One column** where the screen has room for only one: `Table.CellTime` with `author`, which puts the
+  then the time column with `TableCellTime` and no `author`.
+- **One column** where the screen has room for only one: `TableCellTime` with `author`, which puts the
   author's avatar before the time.
 
 With `author`, the name is on the avatar's tooltip (an email reads as a name: `jane.doe@example.com` → `Jane Doe`); the absolute
@@ -543,23 +546,23 @@ and the browser read different clocks, so hydration mismatches across a minute b
 
 ```vue
 <template #cell-updatedAt="{ row }">
-  <Table.CellTime
+  <TableCellTime
     :value="row.updatedAt"
     :author="row.updatedBy"
   />
 </template>
 ```
 
-### Actions — `Table.CellActions`
+### Actions — `TableCellActions`
 
-The trailing `type: 'action'` column renders `Table.CellActions`: an outlined ellipsis trigger named
+The trailing `type: 'action'` column renders `TableCellActions`: an outlined ellipsis trigger named
 `Actions for <row name>` (so a screen reader's button list tells the rows apart) opening a
 `DropdownMenu`. Destructive options go in their own last `DropdownMenu.Group`. Give the column a
 visually hidden header (`#header-actions` → `<span class="sr-only">Actions</span>`).
 
 ```vue
 <template #cell-actions="{ row }">
-  <Table.CellActions
+  <TableCellActions
     :name="row.name"
     @select="(event, value) => onRowAction(event, value, row)"
   >
@@ -579,7 +582,7 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
         label="Delete"
       />
     </DropdownMenu.Group>
-  </Table.CellActions>
+  </TableCellActions>
 </template>
 ```
 
@@ -597,17 +600,17 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 - [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.ChipGroup` (menu kind).
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
-- [ ] Every name that leaves the screen is `Table.CellLink` (12px `ai-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
+- [ ] Every name that leaves the screen is `TableCellLink` (12px `ai-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
 - [ ] Only **one** status chip per row (plus at most one category chip and a `Current` marker), and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
-- [ ] Domain cell = `Table.CellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
+- [ ] Domain cell = `TableCellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
 - [ ] In a 320 px box the grid scrolls sideways inside the table (no `stackable` on a console list) and the toolbar wraps.
 - [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
-- [ ] Every copyable ID or token is `Table.CellId`: text then a copy button pinned to the end, named after what it copies.
-- [ ] "Last modified" / "Deployed" cell = `Table.CellTime` (relative time, `author` only when there is no `Last Editor` column); no raw absolute date.
-- [ ] Overflow is an `OverflowCount` (`+N` with summary, search past 7, Load more), or `Table.CellTags` for tags; never a wrapped inline list.
-- [ ] Status via `Table.CellStatus :severity` from one shared helper, never a raw color; long text `truncate`s inside `min-w-0`.
-- [ ] Row actions are `Table.CellActions :name` (trigger named after the row), destructive options in their own last group.
-- [ ] A list whose rows change on their own: `Table.RefreshButton :loading` keeps the rows, an `Updated` time sits beside it, and auto-refresh follows the six refresh rules.
+- [ ] Every copyable ID or token is `TableCellId`: text then a copy button pinned to the end, named after what it copies.
+- [ ] "Last modified" / "Deployed" cell = `TableCellTime` (relative time, `author` only when there is no `Last Editor` column); no raw absolute date.
+- [ ] Overflow is an `OverflowCount` (`+N` with summary, search past 7, Load more), or `TableCellTags` for tags; never a wrapped inline list.
+- [ ] Status via `TableCellStatus :severity` from one shared helper, never a raw color; long text `truncate`s inside `min-w-0`.
+- [ ] Row actions are `TableCellActions :name` (trigger named after the row), destructive options in their own last group.
+- [ ] A list whose rows change on their own: `TableRefreshButton :loading` keeps the rows, an `Updated` time sits beside it, and auto-refresh follows the six refresh rules.
 - [ ] Order that is data → `reorderable` + `v-model:data`; no sort offered on that table.
 - [ ] Interactive controls in non-action cells use `@click.stop` when the table has `@row-click`.
 

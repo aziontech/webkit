@@ -117,13 +117,13 @@
       loading?: boolean
       /** Message of a failed load, shown in place of the rows (the `error` slot replaces it). Empty shows the rows. */
       error?: string
-      /** Fields Table.Filter offers, as facets in the menu or as properties in the property filter. */
+      /** Fields TableFilter offers, as facets in the menu or as properties in the property filter. */
       filterFields?: TableFilterField[]
       /** Uncontrolled snapshot seed applied once on mount (per-concern v-model wins over it). */
       defaultSnapshot?: Partial<TableStateSnapshot>
-      /** Default filename for Table.Export and exportCsv(). */
+      /** Default filename for TableExportButton and exportCsv(). */
       exportFilename?: string
-      /** Rows Table.Export and exportCsv() write for the `filtered` and `all` scopes in place of the rows the table holds; useCollection binds every match, not only the page. */
+      /** Rows TableExportButton and exportCsv() write for the `filtered` and `all` scopes in place of the rows the table holds; useCollection binds every match, not only the page. */
       exportRows?: (scope: 'filtered' | 'all') => TRow[] | Promise<TRow[]>
       /** Opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone. */
       stackable?: boolean
@@ -214,7 +214,7 @@
   /** Keys of the open tree rows (v-model:openKeys). */
   const openKeys = defineModel<string[]>('openKeys')
 
-  /** Live tail: while true new rows are expected on top; the table scrolls to the newest row and marks the first row older than the live start. Bound with v-model:live; Table.LiveButton toggles it. */
+  /** Live tail: while true new rows are expected on top; the table scrolls to the newest row and marks the first row older than the live start. Bound with v-model:live; TableLiveButton toggles it. */
   const live = defineModel<boolean>('live', { default: false })
 
   defineSlots<

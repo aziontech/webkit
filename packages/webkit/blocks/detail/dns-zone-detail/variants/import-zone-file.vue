@@ -31,7 +31,9 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -788,7 +790,7 @@ legacy  IN HINFO "PC" "Linux"`
                     <span class="min-w-0 truncate">{{ value }}</span>
                   </template>
                   <template #cell-id="{ value }">
-                    <Table.CellId
+                    <TableCellId
                       :value="value"
                       resource="record"
                     />
@@ -801,7 +803,7 @@ legacy  IN HINFO "PC" "Linux"`
                     />
                   </template>
                   <template #cell-value="{ value }">
-                    <Table.CellLink
+                    <TableCellLink
                       :label="value"
                       copyable
                       @click.stop
@@ -817,7 +819,7 @@ legacy  IN HINFO "PC" "Linux"`
                     <span class="min-w-0 truncate">{{ value }}</span>
                   </template>
                   <template #cell-actions="{ row }">
-                    <Table.CellActions :name="row.name">
+                    <TableCellActions :name="row.name">
                       <DropdownMenuGroup>
                         <DropdownMenuItem
                           value="edit"
@@ -842,7 +844,7 @@ legacy  IN HINFO "PC" "Linux"`
                           /></template>
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
-                    </Table.CellActions>
+                    </TableCellActions>
                   </template>
                   <template #empty>
                     <EmptyState

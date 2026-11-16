@@ -73,8 +73,8 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
   aside (label, figure, unit; no delta and no sparkline), and the window they cover as a muted caption
   aligned to the end (`Jul 14, 2026, 6:56 PM – Jul 14, 2026, 7:56 PM UTC`).
 - **Resources**: an `h2` with a `Hint`, then an unpadded `Card` around a compact `DataTable` of the
-  resources changed last (name, domain as `Table.CellLink`, status as a small `Tag`, `Table.CellTime`
-  with the author, `Table.CellActions`), and a `View all DNS zones` `Link` in the card footer.
+  resources changed last (name, domain as `TableCellLink`, status as a small `Tag`, `TableCellTime`
+  with the author, `TableCellActions`), and a `View all DNS zones` `Link` in the card footer.
 - **Recent activity**: an unpadded `Card` around a compact `DataTable` of the last five operations
   (date, operation, type, resource, author email); `Created` and `Deleted` read as small success and
   danger `Tag`s, any other operation as plain text. `View all activity` in the footer.

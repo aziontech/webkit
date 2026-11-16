@@ -955,7 +955,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "8.4 KB"
+    "limit": "10.1 KB"
   },
   {
     "name": "file-dropzone",
@@ -1572,8 +1572,7 @@
   {
     "name": "table",
     "path": "src/components/data/table/index.ts",
-    "limit": "49.3 KB",
-    "entryOnly": true
+    "limit": "7.4 KB"
   },
   {
     "name": "table-header",

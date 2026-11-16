@@ -770,3 +770,41 @@ test('a removed compound member is reported as manual work and left in place', (
   assert.equal(source, sfc)
   assert.ok(warnings.some((w) => w.startsWith('<NavigationMenu.Portal> was removed in v6')))
 })
+
+test('a Table preset or toolbar control moves to its own import, and an unused compound import goes', () => {
+  const v6 = loadMigration(6)
+  const kept = [
+    '<script setup>',
+    "  import Table from '@aziontech/webkit/table'",
+    '</script>',
+    '<template>',
+    '  <Table><Table.Body><Table.Row><Table.Cell><Table.CellStatus label="Active" /></Table.Cell></Table.Row></Table.Body></Table>',
+    '</template>'
+  ].join('\n')
+  const first = migrateSource(kept, v6).source
+  assert.match(
+    first,
+    /import Table from '@aziontech\/webkit\/table'\n {2}import TableCellStatus from '@aziontech\/webkit\/table-cell-status'/
+  )
+  assert.match(first, /<Table\.Cell><TableCellStatus label="Active" \/><\/Table\.Cell>/)
+  assert.equal(migrateSource(first, v6).source, first)
+
+  const slots = [
+    '<script setup>',
+    "import DataTable from '@aziontech/webkit/data-table'",
+    "import Table from '@aziontech/webkit/table'",
+    'const toolbar = () => h(Table.Export)',
+    '</script>',
+    '<template>',
+    '  <DataTable title="Table preferences"><template #toolbar><Table.Search /></template></DataTable>',
+    '</template>'
+  ].join('\n')
+  const { source } = migrateSource(slots, v6)
+  assert.doesNotMatch(source, /@aziontech\/webkit\/table'/)
+  assert.match(
+    source,
+    /import TableExportButton from '@aziontech\/webkit\/table-export-button'\nimport TableSearch from '@aziontech\/webkit\/table-search'/
+  )
+  assert.match(source, /h\(TableExportButton\)/)
+  assert.match(source, /<TableSearch \/>/)
+})

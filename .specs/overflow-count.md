@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 882252a232b442c24ec5462ea2ea2100237879b14508922fe9e3a5223021ec89
+checksum: f60db82f49ac8c87add6c837c4c75dbc94758f8a3445f468ad0c3e13fe1f94c7
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # OverflowCount — Component Spec
@@ -31,7 +31,7 @@ A small `+N` chip that stands for the items a slot cannot show, and opens a popo
 
 ## Related
 
-- `table` — `Table.CellTags` and `Table.CellLink` put this chip after the values they fit.
+- `table` — `TableCellTags` and `TableCellLink` put this chip after the values they fit.
 - `tag` — the chip is a small secondary `Tag`.
 - `popover` — the list opens in a `Popover`.
 

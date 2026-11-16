@@ -74,7 +74,7 @@
     },
     {
       "name": "Refresh",
-      "summary": "The refresh pattern: `Table.RefreshButton` with `loading` spins while the current rows stay on screen, an `Updated` line beside it uses `Table.CellTime` (relative, absolute on the tooltip, re-rendered every minute), and auto-refresh is off by default, runs every 30 seconds when turned on and skips a tick while the tab is hidden.",
+      "summary": "The refresh pattern: `TableRefreshButton` with `loading` spins while the current rows stay on screen, an `Updated` line beside it uses `TableCellTime` (relative, absolute on the tooltip, re-rendered every minute), and auto-refresh is off by default, runs every 30 seconds when turned on and skips a tick while the tab is hidden.",
       "file": "refresh.vue"
     },
     {
@@ -89,12 +89,12 @@
     },
     {
       "name": "PropertyFilter",
-      "summary": "`Table.Filter type=\"property\"` hosts a `PropertyFilter` over the table's filter fields: type a property, an operator and a value (Status = Active, Name contains api) and each token becomes one of the table's `filters`, combined with AND. One filter is applied, so the field opens on its token; remove it and every row returns.",
+      "summary": "`TableFilter type=\"property\"` hosts a `PropertyFilter` over the table's filter fields: type a property, an operator and a value (Status = Active, Name contains api) and each token becomes one of the table's `filters`, combined with AND. One filter is applied, so the field opens on its token; remove it and every row returns.",
       "file": "property-filter.vue"
     },
     {
       "name": "FilterMenu",
-      "summary": "`Table.Filter` (the menu type, the default) opens the drill-in `FilterMenu` over the table's filter fields (Status picks one value, Region several, Last modified a period or a custom range) and each pick writes the table's `filters`; `FilterMenu.ChipGroup` in the `filters` slot shows the applied fields as chips, linked to the table with no wiring. Beside it, `CollectionPreferences` with only its columns section reads the table's columns from context: Name cannot hide, so it stays locked, and Confirm writes the visible columns and their order back to the table.",
+      "summary": "`TableFilter` (the menu type, the default) opens the drill-in `FilterMenu` over the table's filter fields (Status picks one value, Region several, Last modified a period or a custom range) and each pick writes the table's `filters`; `FilterMenu.ChipGroup` in the `filters` slot shows the applied fields as chips, linked to the table with no wiring. Beside it, `CollectionPreferences` with only its columns section reads the table's columns from context: Name cannot hide, so it stays locked, and Confirm writes the visible columns and their order back to the table.",
       "file": "filter-menu.vue"
     },
     {
@@ -109,7 +109,7 @@
     },
     {
       "name": "Export",
-      "summary": "`Table.Export` in the toolbar writes the visible, ordered and filtered rows as CSV, named by `export-filename`.",
+      "summary": "`TableExportButton` in the toolbar writes the visible, ordered and filtered rows as CSV, named by `export-filename`.",
       "file": "export.vue"
     },
     {
@@ -124,7 +124,7 @@
     },
     {
       "name": "LiveTail",
-      "summary": "`Table.LiveButton` toggles `v-model:live`: while live the app prepends new requests, the table stays on the newest row and a line marks the first request older than the moment live started.",
+      "summary": "`TableLiveButton` toggles `v-model:live`: while live the app prepends new requests, the table stays on the newest row and a line marks the first request older than the moment live started.",
       "file": "live-tail.vue"
     }
   ]

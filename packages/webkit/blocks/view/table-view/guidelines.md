@@ -43,13 +43,13 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 `Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
-### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
+### F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 
-Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last modified is `Table.CellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
+Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `TableCellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `TableCellId` (copy button named after the resource). The domain is `TableCellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `TableCellStatus`. Last modified is `TableCellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
-### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
+### G. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
-`Table.CellActions` (an ellipsis button named after the row, e.g. "Actions for resource-01") opens a menu: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
+`TableCellActions` (an ellipsis button named after the row, e.g. "Actions for resource-01") opens a menu: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 

@@ -20,8 +20,11 @@ import Table from '../table/index'
 import TableBody from '../table/table-body/table-body.vue'
 import TableCaption from '../table/table-caption/table-caption.vue'
 import TableCell from '../table/table-cell/table-cell.vue'
+import TableExportButton from '../table/table-export-button/table-export-button.vue'
+import TableFilter from '../table/table-filter/table-filter.vue'
 import TableHeadCell from '../table/table-head-cell/table-head-cell.vue'
 import TableHeader from '../table/table-header/table-header.vue'
+import TableRefreshButton from '../table/table-refresh-button/table-refresh-button.vue'
 import TableRow from '../table/table-row/table-row.vue'
 import TableSearch from '../table/table-search/table-search.vue'
 import DataTableRoot from './data-table.vue'
@@ -409,7 +412,7 @@ describe('DataTable', () => {
 
   describe('TableSearch — context-aware global filter (provide/inject)', () => {
     it('reads and drives the injected table global filter, emitting update:globalFilter', async () => {
-      // Table.Search sits in the toolbar slot; it reads ctx.table (data-driven)
+      // TableSearch sits in the toolbar slot; it reads ctx.table (data-driven)
       // and calls setGlobalFilter, which flows back out as update:globalFilter.
       const Tree = defineComponent({
         components: { DataTable, Table, TableSearch },
@@ -951,7 +954,7 @@ describe('DataTable', () => {
             h(
               DataTable,
               { ...collection.tableProps.value, onExport },
-              { toolbar: () => h(Table.Export) }
+              { toolbar: () => h(TableExportButton) }
             )
         }
       })
@@ -1067,7 +1070,7 @@ describe('DataTable', () => {
           ariaLabel: 'People'
         },
         slots: {
-          toolbar: () => h(Table.Filter, { type: type }),
+          toolbar: () => h(TableFilter, { type: type }),
           filters: () => h(FilterMenu.ChipGroup)
         }
       })
@@ -1114,7 +1117,7 @@ describe('DataTable', () => {
     })
   })
 
-  describe('Table.Filter (menu) and FilterMenu.ChipGroup in a DataTable', () => {
+  describe('TableFilter (menu) and FilterMenu.ChipGroup in a DataTable', () => {
     const panel = (): HTMLElement | null =>
       document.body.querySelector<HTMLElement>('[data-testid="table-filter__panel"]')
     const menuTrigger = (): HTMLButtonElement =>
@@ -1211,7 +1214,7 @@ describe('DataTable', () => {
                 'onUpdate:filters': (next: unknown[]) => (filters.value = next),
                 onFilterApply: (...args: unknown[]) => applies.push(args)
               },
-              { toolbar: () => h(Table.Filter) }
+              { toolbar: () => h(TableFilter) }
             )
         })
       )
@@ -1450,7 +1453,7 @@ describe('DataTable', () => {
       expect(tableEl.value?.getSnapshot().pageSize).toBe(25)
     })
 
-    it('emits refresh from Table.RefreshButton through the root', async () => {
+    it('emits refresh from TableRefreshButton through the root', async () => {
       const refreshes: unknown[][] = []
       const view = render(
         defineComponent({
@@ -1458,7 +1461,7 @@ describe('DataTable', () => {
             h(
               DataTable,
               { columns, data: rows, onRefresh: (...args: unknown[]) => refreshes.push(args) },
-              { toolbar: () => h(Table.RefreshButton) }
+              { toolbar: () => h(TableRefreshButton) }
             )
         })
       )
@@ -1467,7 +1470,7 @@ describe('DataTable', () => {
       expect(refreshes[0][0]).toBeInstanceOf(MouseEvent)
     })
 
-    it('names Table.Search from the locale catalog and an ariaLabel', () => {
+    it('names TableSearch from the locale catalog and an ariaLabel', () => {
       const view = render(
         defineComponent({
           setup: () => () =>

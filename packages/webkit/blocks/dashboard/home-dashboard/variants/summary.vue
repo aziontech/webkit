@@ -7,7 +7,9 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -281,7 +283,7 @@
                 :bordered="false"
               >
                 <template #cell-domain="{ row }">
-                  <Table.CellLink
+                  <TableCellLink
                     :label="row.domain"
                     :href="`https://${row.domain}`"
                     copyable
@@ -295,13 +297,13 @@
                   />
                 </template>
                 <template #cell-lastModified="{ row }">
-                  <Table.CellTime
+                  <TableCellTime
                     :value="row.modifiedAt"
                     :author="row.author"
                   />
                 </template>
                 <template #cell-actions="{ row }">
-                  <Table.CellActions
+                  <TableCellActions
                     :name="row.name"
                     @select="(_event, value) => onZoneAction(value, row)"
                   >
@@ -321,7 +323,7 @@
                         label="Delete"
                       />
                     </DropdownMenuGroup>
-                  </Table.CellActions>
+                  </TableCellActions>
                 </template>
               </DataTable>
             </template>

@@ -610,6 +610,14 @@ function searchCard(catalog, sub) {
   const e = catalog.getEntry(sub)
   if (e?.kind !== 'subcomponent' || !e.parent) return card
   const parent = pascalCase(e.parent)
+  if (e.attached === false) {
+    return {
+      ...card,
+      kind: 'subcomponent',
+      parent: e.parent,
+      hint: `${card.binding} goes inside ${parent} but is not attached to the ${parent} compound: import it from '${card.import}'.`
+    }
+  }
   const compound = partBinding(e.parent, sub)
   return {
     ...card,

@@ -626,7 +626,7 @@
       }
     },
     "count": {
-      "removed": "Table.Filter hosts FilterMenu or PropertyFilter, which count the applied filters themselves"
+      "removed": "TableFilter hosts FilterMenu or PropertyFilter, which count the applied filters themselves"
     }
   },
   "date-picker": {

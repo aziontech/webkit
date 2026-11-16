@@ -16,7 +16,7 @@
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
@@ -828,7 +828,7 @@
               :loading="loading"
             >
               <template #cell-outcome="{ row }">
-                <Table.CellStatus
+                <TableCellStatus
                   :label="outcomeTag(row.outcome).label"
                   :severity="outcomeTag(row.outcome).severity"
                 />

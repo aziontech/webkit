@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Table, { type DropdownMenuItemValue as TableActionValue } from '@aziontech/webkit/table'
+  import { type DropdownMenuItemValue as TableActionValue } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import { ref } from 'vue'
 
   const chosen = ref<DropdownMenuItemValue>('')
@@ -20,14 +21,14 @@
       <DropdownMenu.Item value="edit">Edit</DropdownMenu.Item>
     </DropdownMenu.Group>
   </DropdownMenu>
-  <Table.CellActions
+  <TableCellActions
     name="storefront"
     @select="onAction"
   >
     <DropdownMenu.Group>
       <DropdownMenu.Item :value="1">Delete</DropdownMenu.Item>
     </DropdownMenu.Group>
-  </Table.CellActions>
+  </TableCellActions>
   <!-- @vue-expect-error the select payload is a string or a number, never a boolean -->
   <DropdownMenu @select="(_event, value: boolean) => value" />
 </template>

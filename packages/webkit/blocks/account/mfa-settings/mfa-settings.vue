@@ -14,7 +14,10 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
@@ -330,7 +333,7 @@
                   </div>
                 </template>
                 <template #cell-status="{ row }">
-                  <Table.CellStatus
+                  <TableCellStatus
                     :label="row.status"
                     :severity="row.enabled ? 'success' : 'warning'"
                   />
@@ -339,7 +342,7 @@
                   <span class="truncate text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
                 </template>
                 <template #cell-since="{ row }">
-                  <Table.CellTime
+                  <TableCellTime
                     v-if="row.since"
                     :value="row.since"
                   />
@@ -353,7 +356,7 @@
                   <span class="sr-only">Actions</span>
                 </template>
                 <template #cell-actions="{ row }">
-                  <Table.CellActions
+                  <TableCellActions
                     :name="row.name"
                     @select="(_event, value) => onAction(value, row)"
                   >
@@ -371,7 +374,7 @@
                         label="Send setup reminder"
                       />
                     </DropdownMenu.Group>
-                  </Table.CellActions>
+                  </TableCellActions>
                 </template>
                 <template #empty>
                   <EmptyState

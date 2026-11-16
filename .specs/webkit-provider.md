@@ -3,10 +3,10 @@ name: webkit-provider
 category: provider
 structure: monolithic
 status: implemented
-checksum: ac11a3749bb6547fdf2c441ac5262dbf65bcde6043c2d5b253a5c6fdb6f4ff23
+checksum: 1a7ac07917b2d86d56c4c9338bd780937399b3d3aa04365dd4e9773a435080fa
 spec_version: 5
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # WebkitProvider — Component Spec
@@ -40,7 +40,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 - Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.
 - Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left (a device locale does so only when its catalog is registered, so English text never reads right-to-left).
-- Leave `now` unset in an app: relative times then read the real clock and `Table.CellTime` re-renders every minute. Set it to a fixed moment where the text must not depend on when it renders: an example or a test (`const NOW = Date.UTC(2026, 10, 10, 12)`, sample dates counted back from it), or a server render whose markup the browser hydrates. Never compute that moment from `Date.now()` / `new Date()` in setup: the server and the browser read different clocks.
+- Leave `now` unset in an app: relative times then read the real clock and `TableCellTime` re-renders every minute. Set it to a fixed moment where the text must not depend on when it renders: an example or a test (`const NOW = Date.UTC(2026, 10, 10, 12)`, sample dates counted back from it), or a server render whose markup the browser hydrates. Never compute that moment from `Date.now()` / `new Date()` in setup: the server and the browser read different clocks.
 
 ## Usage
 
@@ -69,7 +69,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 | `catalogs` | `Record<string, Messages>` | `undefined` | false    | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English.                                                                                                                    |
 | `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                                                                                                                                             |
 | `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left).                                                                                                                                                                      |
-| `now`      | `string \| number \| Date` | `undefined` | false    | Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute. |
+| `now`      | `string \| number \| Date` | `undefined` | false    | Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute. |
 | `timeZone` | `string`                   | `''`        | false    | IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone.                                    |
 
 ## Events
@@ -117,7 +117,7 @@ _none_
 - CustomMessages — `messages` overrides one built-in string; justified because the override is the provider's second job.
 - Rtl — `locale="ar"` turns the subtree right-to-left; justified because `dir` is derived from the locale.
 - DeviceLocale — no `locale`: a DateRangePicker prints dates in the device's language and format while its `v-model` keeps ISO 8601 instants; justified because following the device is the provider's default.
-- `now` is shown by `table/cell-presets` (a fixed reference around a table whose `Table.CellTime` cells count back from it), not by a provider example of its own.
+- `now` is shown by `table/cell-presets` (a fixed reference around a table whose `TableCellTime` cells count back from it), not by a provider example of its own.
 - `timeZone` is shown by `timestamp/time-zone` (a time zone picker bound to the provider around a few timestamps), not by a provider example of its own.
 
 ## Constraints — DO NOT

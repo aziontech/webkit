@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 71caf895b9e84307d5cd1476fa1d90e0fa5ac2bbc1015e92a7ec231c1b0fa0a0
+checksum: ee1bb99820c08ebce1cabe1e6de2c381244cc6aa4bf8a5daaa61ff06dfdf85c7
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Button — Component Spec
@@ -30,7 +30,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 - The control is icon-only → use `icon-button`.
 - One default action with related alternatives in an attached menu → use `split-button`.
 - A standalone navigation link with a trailing icon and a ghost hover → use `link`.
-- Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `variant="link"` Button is for an action with no destination.
+- Link-looking text that goes to a URL in a table cell → `TableCellLink`; a `variant="link"` Button is for an action with no destination.
 - A hand-written `<button class="text-(--text-link) …">` → use `variant="link"`.
 - The single AI or highlight entry point that must stand out from every other action → use `highlight-button`.
 

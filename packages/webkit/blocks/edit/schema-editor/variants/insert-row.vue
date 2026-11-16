@@ -24,7 +24,7 @@
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -727,7 +727,7 @@
             <span class="text-body-sm text-(--text-muted)">{{ value || 'None' }}</span>
           </template>
           <template #cell-actions="{ row }">
-            <Table.CellActions
+            <TableCellActions
               :name="row.name"
               @select="(_event, value) => onColumnAction(value, row)"
             >
@@ -743,7 +743,7 @@
                   /></template>
                 </DropdownMenu.Item>
               </DropdownMenu.Group>
-            </Table.CellActions>
+            </TableCellActions>
           </template>
         </DataTable>
       </template>

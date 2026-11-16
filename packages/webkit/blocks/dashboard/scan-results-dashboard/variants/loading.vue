@@ -14,7 +14,7 @@
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
@@ -751,7 +751,7 @@
                   </div>
                 </template>
                 <template #cell-verdict="{ row }">
-                  <Table.CellStatus
+                  <TableCellStatus
                     :label="verdicts[row.verdict].label"
                     :severity="verdicts[row.verdict].severity"
                   />

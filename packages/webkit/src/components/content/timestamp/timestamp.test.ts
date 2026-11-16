@@ -158,7 +158,7 @@ describe('Timestamp', () => {
     expect(screen.getByRole('button', { name: 'Copiar Relativo' })).toBeInTheDocument()
   })
 
-  it('shares parsing and relative phrasing with Table.CellTime', () => {
+  it('shares parsing and relative phrasing with TableCellTime', () => {
     expect(toDate(null)).toBeNull()
     expect(toDate('1794657871000')?.toISOString()).toBe('2026-11-14T12:04:31.000Z')
     const format = (value: number | Date, unit?: Intl.RelativeTimeFormatUnit) =>

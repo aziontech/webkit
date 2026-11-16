@@ -16,7 +16,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import Table from '@aziontech/webkit/table'
+  import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -335,19 +335,19 @@
                 <span class="tabular-nums">{{ formatHits(value) }}</span>
               </template>
               <template #cell-ips="{ value }">
-                <Table.CellTags
+                <TableCellTags
                   :items="value"
                   :noun="{ one: 'IP address', other: 'IP addresses' }"
                 />
               </template>
               <template #cell-countries="{ value }">
-                <Table.CellTags
+                <TableCellTags
                   :items="value"
                   :noun="{ one: 'country', other: 'countries' }"
                 />
               </template>
               <template #cell-paths="{ value }">
-                <Table.CellTags
+                <TableCellTags
                   :items="value"
                   :noun="{ one: 'path', other: 'paths' }"
                 />

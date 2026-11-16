@@ -8,7 +8,7 @@
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -262,7 +262,7 @@
                       aria-label="Applications running this integration"
                     >
                       <template #cell-state="{ row }">
-                        <Table.CellStatus
+                        <TableCellStatus
                           :label="outdated(row.application) ? 'Update available' : 'Up to date'"
                           :severity="outdated(row.application) ? 'warning' : 'success'"
                         />

@@ -5,7 +5,7 @@
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
 
@@ -82,7 +82,7 @@
             </span>
           </template>
           <template #cell-actions="{ row }">
-            <Table.CellActions
+            <TableCellActions
               v-if="!row.generated"
               :name="row.domain"
             >
@@ -110,7 +110,7 @@
                   /></template>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-            </Table.CellActions>
+            </TableCellActions>
           </template>
         </DataTable>
 

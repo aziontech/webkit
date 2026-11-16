@@ -14,7 +14,10 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
@@ -334,7 +337,7 @@
                     </span>
                   </template>
                   <template #cell-id="{ value }">
-                    <Table.CellId
+                    <TableCellId
                       :value="value"
                       resource="deployment"
                     />
@@ -355,7 +358,7 @@
                     </span>
                   </template>
                   <template #cell-project="{ row }">
-                    <Table.CellLink
+                    <TableCellLink
                       :label="row.project"
                       :to="`/projects/${row.projectId}`"
                       destination="Projects"
@@ -371,13 +374,13 @@
                     />
                   </template>
                   <template #cell-deployedAt="{ row }">
-                    <Table.CellTime
+                    <TableCellTime
                       :value="row.deployedAt"
                       :author="row.author"
                     />
                   </template>
                   <template #cell-actions="{ row }">
-                    <Table.CellActions
+                    <TableCellActions
                       :name="row.version"
                       @select="(_event, value) => onRowAction(value, row)"
                     >
@@ -414,7 +417,7 @@
                           /></template>
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
-                    </Table.CellActions>
+                    </TableCellActions>
                   </template>
                   <template #empty>
                     <EmptyState

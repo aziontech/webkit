@@ -38,7 +38,7 @@
   const setFilter = (value: string) => ctx?.table.value?.setGlobalFilter(value)
 
   if (!ctx) {
-    console.warn('[webkit] Table.Search renders outside a Table and filters nothing.')
+    console.warn('[webkit] TableSearch renders outside a Table and filters nothing.')
   }
 </script>
 

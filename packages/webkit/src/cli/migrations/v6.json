@@ -1249,6 +1249,41 @@
       "Icon": {
         "removed": "delete it: NavigationMenu.Trigger renders its own chevron"
       }
+    },
+    "table": {
+      "CellStatus": {
+        "standalone": "table-cell-status"
+      },
+      "CellLink": {
+        "standalone": "table-cell-link"
+      },
+      "CellId": {
+        "standalone": "table-cell-id"
+      },
+      "CellTime": {
+        "standalone": "table-cell-time"
+      },
+      "CellTags": {
+        "standalone": "table-cell-tags"
+      },
+      "CellActions": {
+        "standalone": "table-cell-actions"
+      },
+      "Search": {
+        "standalone": "table-search"
+      },
+      "Filter": {
+        "standalone": "table-filter"
+      },
+      "Export": {
+        "standalone": "table-export-button"
+      },
+      "RefreshButton": {
+        "standalone": "table-refresh-button"
+      },
+      "LiveButton": {
+        "standalone": "table-live-button"
+      }
     }
   }
 }

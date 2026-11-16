@@ -31,13 +31,13 @@ While MFA is optional and someone has no factor, a warning `Alert` counts them (
 
 The `view/table-view` controls row, as on every account list: a `PropertyFilter` over Name, Email, MFA status and Method (`v-bind="propertyFilterProps"`), then Refresh and Download CSV as outlined `IconButton`s in a `Tooltip`, and `CollectionPreferences` for page size and columns. Download CSV is disabled when no row matches.
 
-### E. People table — `DataTable`, `Table`, `Avatar`, `EmptyState`, `useCollection` (required)
+### E. People table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
 
-A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it), MFA as `Table.CellStatus` (Enabled success, Not set up warning), Method, and Set up as `Table.CellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
+A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it), MFA as `TableCellStatus` (Enabled success, Not set up warning), Method, and Set up as `TableCellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
 
 ### F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
-`Table.CellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
+`TableCellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
 
 ### G. Load failure and outcomes — `Alert` (required)
 

@@ -87,10 +87,10 @@ Highest risk pairs each entity with its risk score and the `SeverityTag` of its 
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.
 Figures use tabular numbers.
 
-### M. Alert status — `Table`, `Tag` (required)
+### M. Alert status — `TableCellStatus`, `Tag` (required)
 
 The status of an alert in the Open alerts table (`Open`, `Investigating`). It is a state,
-so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The alert type beside it stays a plain neutral `Tag`: it is a category, not a state.
+so it is a `TableCellStatus` (one semantic `Tag`), separate from severity. The alert type beside it stays a plain neutral `Tag`: it is a category, not a state.
 
 ## Do
 

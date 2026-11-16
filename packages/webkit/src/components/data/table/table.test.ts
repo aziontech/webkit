@@ -13,7 +13,6 @@ import TableFooter from './table-footer/table-footer.vue'
 import TableHeadCell from './table-head-cell/table-head-cell.vue'
 import TableHeader from './table-header/table-header.vue'
 import TableRow from './table-row/table-row.vue'
-import TableSearch from './table-search/table-search.vue'
 import TableSortButton from './table-sort-button/table-sort-button.vue'
 import TableToolbar from './table-toolbar/table-toolbar.vue'
 
@@ -38,7 +37,24 @@ describe('Table', () => {
         expect(Table.Cell).toBe(TableCell)
         expect(Table.SortButton).toBe(TableSortButton)
         expect(Table.Toolbar).toBe(TableToolbar)
-        expect(Table.Search).toBe(TableSearch)
+      })
+
+      it('attaches only the structural parts, so the compound loads no preset or toolbar control', () => {
+        expect(
+          Object.keys(Table)
+            .filter((key) => /^[A-Z]/.test(key))
+            .sort()
+        ).toEqual([
+          'Body',
+          'Caption',
+          'Cell',
+          'Footer',
+          'HeadCell',
+          'Header',
+          'Row',
+          'SortButton',
+          'Toolbar'
+        ])
       })
     })
 

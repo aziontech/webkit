@@ -11,7 +11,7 @@
   import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
@@ -755,7 +755,7 @@
                 />
               </template>
               <template #cell-status="{ row }">
-                <Table.CellStatus
+                <TableCellStatus
                   :label="row.status"
                   :severity="statusSeverity[row.status]"
                 />

@@ -91,7 +91,7 @@ export interface UseCollectionOptions<
   items?: MaybeRefOrGetter<readonly T[]>
   /** Server mode: loads one page for the current filter, sort and page. */
   fetch?: (params: CollectionFetchParams) => Promise<CollectionFetchResult<T>>
-  /** Server mode: loads every item an export writes (`Table.Export`, `exportCsv()`, `exportItems`); without it the loaded page is exported. */
+  /** Server mode: loads every item an export writes (`TableExportButton`, `exportCsv()`, `exportItems`); without it the loaded page is exported. */
   exportAll?: (params: CollectionExportParams) => Promise<T[]>
   /** Field that identifies an item (selection, row keys). */
   itemKey?: keyof T & string

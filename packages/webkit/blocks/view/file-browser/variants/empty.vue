@@ -16,7 +16,8 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import SplitButton from '@aziontech/webkit/split-button'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import TableSearch from '@aziontech/webkit/table-search'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, useId } from 'vue'
@@ -391,7 +392,7 @@
               </template>
 
               <template #cell-modifiedAt="{ row }">
-                <Table.CellTime
+                <TableCellTime
                   v-if="row.modifiedAt"
                   :value="row.modifiedAt"
                   :author="row.author"
@@ -399,7 +400,7 @@
               </template>
 
               <template #cell-actions="{ row }">
-                <Table.CellActions
+                <TableCellActions
                   v-if="row.kind !== 'parent'"
                   :name="row.name"
                   @select="(_event, value) => onRowAction(value, row)"
@@ -442,7 +443,7 @@
                       /></template>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
-                </Table.CellActions>
+                </TableCellActions>
               </template>
 
               <template #empty>

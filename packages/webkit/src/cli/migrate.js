@@ -429,6 +429,52 @@ export function referencedSubpaths(source) {
   return new Set([...source.matchAll(SUBPATH_LITERAL)].map((m) => m[2]))
 }
 
+function addStandaloneImports(source, moved) {
+  if (!moved.length) return source
+  let out = source
+  const imported = new Set(webkitImports(out).flatMap((imp) => imp.names))
+  for (const binding of new Set(moved.map((m) => m.binding))) {
+    const own = webkitImports(out).find((imp) => imp.names.includes(binding))
+    if (!own) continue
+    const lines = moved
+      .filter((m) => m.binding === binding && !imported.has(m.local))
+      .map((m) => m.subpath)
+      .filter((subpath, i, all) => all.indexOf(subpath) === i)
+      .sort()
+      .map((subpath) => {
+        imported.add(pascalCase(subpath))
+        return `import ${pascalCase(subpath)} from '${PREFIX}${subpath}'`
+      })
+    const at = out.indexOf(own.statement)
+    const lineStart = out.lastIndexOf('\n', at) + 1
+    const indent = out.slice(lineStart, at).match(/^[ \t]*/)[0]
+    const end = at + own.statement.length
+    const newline = out.indexOf('\n', end)
+    const lineEnd = newline < 0 ? out.length : newline
+    const insert = lines.map((line) => `\n${indent}${line}`).join('')
+    out = out.slice(0, lineEnd) + insert + out.slice(lineEnd)
+    const rest = out.slice(0, lineStart) + out.slice(lineEnd)
+    const name = escapeRe(binding)
+    const code = rest
+      .replace(/<!--[\s\S]*?-->/g, '')
+      .replace(new RegExp(`(["'])(?!${name}\\1)[^"'\\n]*\\1`, 'g'), '""')
+    const stillUsed =
+      new RegExp(`(?<![\\w$.-])${name}(?![\\w$])`).test(code) ||
+      new RegExp(`</?(${name}|${escapeRe(kebab(binding))})(?=[\\s/>.])`).test(rest)
+    if (stillUsed) continue
+    if (own.names.length === 1) {
+      out = out.slice(0, lineStart) + out.slice(lineEnd + 1)
+    } else {
+      const statement = own.statement.replace(
+        new RegExp(`^import\\s+${escapeRe(binding)}\\s*,\\s*`),
+        'import '
+      )
+      out = out.slice(0, at) + statement + out.slice(end)
+    }
+  }
+  return out
+}
+
 export function migrateSource(input, migration, { fromMajor = null, declaredMajor = null } = {}) {
   const { props, types } = migration
   const tokenPass = migrateTokens(input, migration.tokens)
@@ -511,12 +557,20 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
     changes.push(`${from} → ${to}`)
   }
 
+  const standaloneImports = []
   for (const [binding, base] of bindingToSubpath) {
     const renames = (migration.members || {})[base]
     if (!renames) continue
     for (const [from, to] of Object.entries(renames)) {
       const re = new RegExp(`(?<![\\w$.])${escapeRe(binding)}\\.${escapeRe(from)}(?![\\w$])`, 'g')
       if (!re.test(out)) continue
+      if (typeof to === 'object' && to.standalone) {
+        const local = pascalCase(to.standalone)
+        out = replaceOutsideComments(out, re, () => local)
+        standaloneImports.push({ binding, base, local, subpath: to.standalone })
+        changes.push(`${binding}.${from} → ${local}`)
+        continue
+      }
       if (typeof to === 'object') {
         warnings.push(`<${binding}.${from}> was removed in v6: ${to.removed}`)
         continue
@@ -526,6 +580,8 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
       changes.push(`${binding}.${from} → ${next}`)
     }
   }
+
+  out = addStandaloneImports(out, standaloneImports)
 
   for (const [binding, base] of bindingToSubpath) {
     const tagRe = new RegExp(

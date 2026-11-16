@@ -1,5 +1,15 @@
 <script setup lang="ts">
-  import { computed, inject, onMounted, onUpdated, ref, useId, watch } from 'vue'
+  import {
+    computed,
+    type FunctionalComponent,
+    h,
+    inject,
+    onMounted,
+    onUpdated,
+    ref,
+    useId,
+    watch
+  } from 'vue'
 
   import Skeleton from '../../../feedback/skeleton/skeleton.vue'
   import { TreeInjectionKey } from '../injection-key'
@@ -18,9 +28,11 @@
     setsize: number
     /** Renders the trailing actions region. */
     actionable?: boolean
+    /** Renders the row alone, indented by its level, with its children as later rows of a flat list. */
+    flat?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), { actionable: false })
+  const props = withDefaults(defineProps<Props>(), { actionable: false, flat: false })
 
   defineSlots<{
     /** Label region of the row. */
@@ -34,6 +46,15 @@
   const ctx = context
 
   const labelId = useId()
+
+  const INDENT_CLASS = 'ms-(--spacing-md) border-s border-(--border-muted)'
+
+  const Indent: FunctionalComponent<{ depth: number }> = (indent, { slots }) =>
+    indent.depth > 0
+      ? h('div', { role: 'none', 'data-tree-indent': '', class: INDENT_CLASS }, [
+          h(Indent, { depth: indent.depth - 1 }, slots)
+        ])
+      : slots['default']?.()
 
   const children = computed(() => props.item.children ?? [])
   const isParent = computed(() => props.item.lazy === true || children.value.length > 0)
@@ -128,137 +149,139 @@
     v-bind="grid ? { role: 'none' } : focusAttrs"
     class="m-0 list-none p-0 focus-visible:outline-none"
   >
-    <div
-      v-bind="grid ? focusAttrs : {}"
-      data-slot="tree-row"
-      :data-state="state"
-      :data-selected="selected || null"
-      :data-disabled="item.disabled || null"
-      class="group/tree-row relative isolate flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 active:before:bg-(--bg-active) motion-reduce:before:transition-none data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-default [:focus-visible>&]:ring-2 [:focus-visible>&]:ring-(--ring-color) [:focus-visible>&]:ring-offset-1 [:focus-visible>&]:ring-offset-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-    >
-      <span
-        :role="grid ? 'gridcell' : undefined"
-        :tabindex="grid ? -1 : undefined"
-        data-slot="tree-cell"
-        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-      >
-        <span class="flex w-4 shrink-0 items-center justify-center self-stretch">
-          <button
-            v-if="isParent"
-            type="button"
-            tabindex="-1"
-            aria-hidden="true"
-            data-slot="tree-toggle"
-            :data-testid="`${ctx.testId.value}__toggle`"
-            :data-state="state"
-            class="flex h-full w-full cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
-            @mousedown.prevent
-            @click="onToggle"
-          >
-            <i
-              :data-state="state"
-              class="ai ai-chevron-right leading-none transition-[rotate] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-90 rtl:-scale-x-100 rtl:data-[state=open]:-rotate-90"
-            />
-          </button>
-        </span>
-        <span
-          :id="labelId"
-          class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
-        >
-          <input
-            v-if="renaming"
-            :ref="mountRenameField"
-            type="text"
-            data-slot="tree-rename"
-            :data-testid="`${ctx.testId.value}__rename`"
-            :value="item.label"
-            :aria-label="ctx.renameLabel(item.label)"
-            class="h-6 min-w-0 flex-1 rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-            @keydown="onRenameKeydown"
-            @blur="commitRename"
-          />
-          <slot
-            v-else
-            name="item"
-            :item="item"
-            :level="level"
-            :expanded="expanded"
-          />
-        </span>
-      </span>
-      <span
-        v-if="actionable"
-        ref="actionsEl"
-        :role="grid ? 'gridcell' : undefined"
-        data-slot="tree-actions"
-        class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"
-        @mousedown.self.prevent
-      >
-        <slot
-          name="actions"
-          :item="item"
-          :level="level"
-        />
-      </span>
-    </div>
-    <ul
-      v-if="expanded"
-      :role="grid ? 'none' : 'group'"
-      :aria-busy="(!grid && item.loading) || undefined"
-      class="m-0 ms-(--spacing-md) list-none border-s border-(--border-muted) p-0"
-    >
-      <li
-        v-if="item.loading"
-        role="none"
-        :data-testid="`${ctx.testId.value}__loading`"
-        class="m-0 flex min-h-8 list-none items-center gap-(--spacing-xs) px-(--spacing-xs) ps-[calc(var(--spacing-xs)+1rem+var(--spacing-xs))]"
+    <Indent :depth="flat ? level - 1 : 0">
+      <div
+        v-bind="grid ? focusAttrs : {}"
+        data-slot="tree-row"
+        :data-state="state"
+        :data-selected="selected || null"
+        :data-disabled="item.disabled || null"
+        class="group/tree-row relative isolate flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 active:before:bg-(--bg-active) motion-reduce:before:transition-none data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-default [:focus-visible>&]:ring-2 [:focus-visible>&]:ring-(--ring-color) [:focus-visible>&]:ring-offset-1 [:focus-visible>&]:ring-offset-(--bg-canvas) [:focus-visible>[data-tree-indent]_&]:ring-2 [:focus-visible>[data-tree-indent]_&]:ring-(--ring-color) [:focus-visible>[data-tree-indent]_&]:ring-offset-1 [:focus-visible>[data-tree-indent]_&]:ring-offset-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
       >
         <span
-          :role="grid ? 'row' : undefined"
-          :aria-busy="grid || undefined"
-          :aria-level="grid ? level + 1 : undefined"
-          class="flex min-w-0 flex-1 items-center"
+          :role="grid ? 'gridcell' : undefined"
+          :tabindex="grid ? -1 : undefined"
+          data-slot="tree-cell"
+          class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         >
-          <span
-            :role="grid ? 'gridcell' : undefined"
-            class="flex min-w-0 flex-1 items-center"
-          >
-            <Skeleton
-              variant="rectangle"
-              width="60%"
-              height="1rem"
+          <span class="flex w-4 shrink-0 items-center justify-center self-stretch">
+            <button
+              v-if="isParent"
+              type="button"
+              tabindex="-1"
               aria-hidden="true"
-            />
-            <span
-              role="status"
-              class="sr-only"
-              >{{ ctx.loadingLabel.value }}</span
+              data-slot="tree-toggle"
+              :data-testid="`${ctx.testId.value}__toggle`"
+              :data-state="state"
+              class="flex h-full w-full cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
+              @mousedown.prevent
+              @click="onToggle"
             >
+              <i
+                :data-state="state"
+                class="ai ai-chevron-right leading-none transition-[rotate] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-90 rtl:-scale-x-100 rtl:data-[state=open]:-rotate-90"
+              />
+            </button>
+          </span>
+          <span
+            :id="labelId"
+            class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+          >
+            <input
+              v-if="renaming"
+              :ref="mountRenameField"
+              type="text"
+              data-slot="tree-rename"
+              :data-testid="`${ctx.testId.value}__rename`"
+              :value="item.label"
+              :aria-label="ctx.renameLabel(item.label)"
+              class="h-6 min-w-0 flex-1 rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+              @keydown="onRenameKeydown"
+              @blur="commitRename"
+            />
+            <slot
+              v-else
+              name="item"
+              :item="item"
+              :level="level"
+              :expanded="expanded"
+            />
           </span>
         </span>
-      </li>
-      <TreeNode
-        v-for="(child, index) in item.loading ? [] : children"
-        :key="child.id"
-        :item="child"
-        :level="level + 1"
-        :posinset="index + 1"
-        :setsize="children.length"
-        :actionable="actionable"
-      >
-        <template #item="scope">
-          <slot
-            name="item"
-            v-bind="scope"
-          />
-        </template>
-        <template #actions="scope">
+        <span
+          v-if="actionable"
+          ref="actionsEl"
+          :role="grid ? 'gridcell' : undefined"
+          data-slot="tree-actions"
+          class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"
+          @mousedown.self.prevent
+        >
           <slot
             name="actions"
-            v-bind="scope"
+            :item="item"
+            :level="level"
           />
-        </template>
-      </TreeNode>
-    </ul>
+        </span>
+      </div>
+      <ul
+        v-if="expanded && (!flat || item.loading)"
+        :role="grid ? 'none' : 'group'"
+        :aria-busy="(!grid && item.loading) || undefined"
+        class="m-0 ms-(--spacing-md) list-none border-s border-(--border-muted) p-0"
+      >
+        <li
+          v-if="item.loading"
+          role="none"
+          :data-testid="`${ctx.testId.value}__loading`"
+          class="m-0 flex min-h-8 list-none items-center gap-(--spacing-xs) px-(--spacing-xs) ps-[calc(var(--spacing-xs)+1rem+var(--spacing-xs))]"
+        >
+          <span
+            :role="grid ? 'row' : undefined"
+            :aria-busy="grid || undefined"
+            :aria-level="grid ? level + 1 : undefined"
+            class="flex min-w-0 flex-1 items-center"
+          >
+            <span
+              :role="grid ? 'gridcell' : undefined"
+              class="flex min-w-0 flex-1 items-center"
+            >
+              <Skeleton
+                variant="rectangle"
+                width="60%"
+                height="1rem"
+                aria-hidden="true"
+              />
+              <span
+                role="status"
+                class="sr-only"
+                >{{ ctx.loadingLabel.value }}</span
+              >
+            </span>
+          </span>
+        </li>
+        <TreeNode
+          v-for="(child, index) in item.loading || flat ? [] : children"
+          :key="child.id"
+          :item="child"
+          :level="level + 1"
+          :posinset="index + 1"
+          :setsize="children.length"
+          :actionable="actionable"
+        >
+          <template #item="scope">
+            <slot
+              name="item"
+              v-bind="scope"
+            />
+          </template>
+          <template #actions="scope">
+            <slot
+              name="actions"
+              v-bind="scope"
+            />
+          </template>
+        </TreeNode>
+      </ul>
+    </Indent>
   </li>
 </template>

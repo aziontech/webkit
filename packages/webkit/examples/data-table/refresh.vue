@@ -1,7 +1,9 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import TableRefreshButton from '@aziontech/webkit/table-refresh-button'
   import { onBeforeUnmount, ref, watch } from 'vue'
 
   const AUTO_REFRESH_MS = 30_000
@@ -68,7 +70,7 @@
     <template #toolbar>
       <div class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
         <span class="shrink-0">Updated</span>
-        <Table.CellTime :value="updatedAt" />
+        <TableCellTime :value="updatedAt" />
       </div>
       <div class="flex items-center gap-(--spacing-xs) text-body-sm text-(--text-default)">
         <Switch
@@ -77,10 +79,10 @@
         />
         <span aria-hidden="true">Auto-refresh</span>
       </div>
-      <Table.RefreshButton :loading="refreshing" />
+      <TableRefreshButton :loading="refreshing" />
     </template>
     <template #cell-status="{ value }">
-      <Table.CellStatus
+      <TableCellStatus
         :label="value"
         :severity="severityOf(value)"
       />

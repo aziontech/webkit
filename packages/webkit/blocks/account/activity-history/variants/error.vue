@@ -15,7 +15,8 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
@@ -400,7 +401,7 @@
                 </div>
               </template>
               <template #cell-at="{ value }">
-                <Table.CellTime :value="value" />
+                <TableCellTime :value="value" />
               </template>
               <template #empty>
                 <EmptyState

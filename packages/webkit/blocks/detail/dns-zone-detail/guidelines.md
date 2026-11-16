@@ -45,17 +45,17 @@ The Records tab opens with a small `PageHeader` titled Records with a one-senten
 
 One row above the table: a `PropertyFilter` ("Filter records") that takes free text or a property token (Name, Type, Policy, Value), then outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` for page size and visible columns. `useCollection` owns the filter, sort, page and column state: the filter rewinds to the first page, ID is hidden by default and Name cannot be hidden. It is the same recipe as `view/table-view`.
 
-### H. Records table — `Card`, `DataTable`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
+### H. Records table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Tag` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound to `useCollection`'s `tableProps` (row key, sorting, pages of 10 and the column visibility) and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description stay blank when they do not apply; no dash, no "None".
+`Card :padded="false"` around `DataTable :bordered="false"` bound to `useCollection`'s `tableProps` (row key, sorting, pages of 10 and the column visibility) and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `TableCellId` ("Copy record ID") and Value is `TableCellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `TableCellActions` named after the record. Weight and Description stay blank when they do not apply; no dash, no "None".
 
 ### I. Empty and no-match — `EmptyState`, `Button` (required)
 
 The table's `#empty` slot tells the two cases apart through `useCollection`'s `status`. A filter that matches nothing shows "No matching records" with Clear filters; a zone with no records shows "No records yet" with Add Record and Import zone file.
 
-### J. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
+### J. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
-`Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
+`TableCellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
 
 ## Do
 

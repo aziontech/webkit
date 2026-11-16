@@ -23,7 +23,7 @@
     messages?: PartialMessages
     /** Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left). */
     dir?: DirectionSetting
-    /** Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute. */
+    /** Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute. */
     now?: string | number | Date
     /** IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone. */
     timeZone?: string

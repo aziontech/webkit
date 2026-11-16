@@ -21,7 +21,9 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -510,7 +512,7 @@
                     <span class="min-w-0 truncate">{{ value }}</span>
                   </template>
                   <template #cell-id="{ value }">
-                    <Table.CellId
+                    <TableCellId
                       :value="value"
                       resource="record"
                     />
@@ -523,7 +525,7 @@
                     />
                   </template>
                   <template #cell-value="{ value }">
-                    <Table.CellLink
+                    <TableCellLink
                       :label="value"
                       copyable
                       @click.stop
@@ -539,7 +541,7 @@
                     <span class="min-w-0 truncate">{{ value }}</span>
                   </template>
                   <template #cell-actions="{ row }">
-                    <Table.CellActions :name="row.name">
+                    <TableCellActions :name="row.name">
                       <DropdownMenuGroup>
                         <DropdownMenuItem
                           value="edit"
@@ -564,7 +566,7 @@
                           /></template>
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
-                    </Table.CellActions>
+                    </TableCellActions>
                   </template>
                   <template #empty>
                     <EmptyState

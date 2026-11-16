@@ -2,7 +2,8 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import DataTable from '@aziontech/webkit/data-table'
   import FilterMenu from '@aziontech/webkit/filter-menu'
-  import Table from '@aziontech/webkit/table'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableFilter from '@aziontech/webkit/table-filter'
   import { ref } from 'vue'
 
   const rows = [
@@ -70,14 +71,14 @@
   >
     <template #title>Workloads</template>
     <template #toolbar>
-      <Table.Filter />
+      <TableFilter />
       <CollectionPreferences :sections="['columns']" />
     </template>
     <template #filters>
       <FilterMenu.ChipGroup />
     </template>
     <template #cell-status="{ value }">
-      <Table.CellStatus
+      <TableCellStatus
         :label="value"
         :severity="severityOf(value)"
       />

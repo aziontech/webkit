@@ -1025,12 +1025,13 @@ takes `data` + `columns` moved to `DataTable`:
 ```diff
 - import Table from '@aziontech/webkit/table'
 - import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
-+ import Table from '@aziontech/webkit/table' // still the parts: Table.Search, Table.CellStatus, …
 + import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
++ import TableSearch from '@aziontech/webkit/table-search'
 
 - <Table :data="rows" :columns="columns" paginated>
 + <DataTable :data="rows" :columns="columns" paginated>
-    <template #toolbar><Table.Search /></template>
+-   <template #toolbar><Table.Search /></template>
++   <template #toolbar><TableSearch /></template>
 - </Table>
 + </DataTable>
 ```
@@ -1049,6 +1050,17 @@ takes `data` + `columns` moved to `DataTable`:
   `Table.Header`'s `kind` (use `density`). `useCollection().tableProps` now binds `pageSizeOptions`.
 - The codemod cannot tell a data-driven `<Table>` from a composed one; move the tags that pass
   `:data`, `:columns` or `v-bind="tableProps"` by hand.
+- The cell presets and toolbar controls are no longer attached to the `Table` compound, which now
+  carries only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`,
+  `Cell`, `SortButton`, `Toolbar`), so `import Table from '@aziontech/webkit/table'` costs what its
+  parts cost (6.7 KB gzip, down from 39 KB). Import each preset or control from its own entry; the
+  codemod rewrites the tags and `h()` calls, adds the imports and drops a `Table` import nothing
+  uses any more:
+
+  | v5                                                                                                            | v6                                                                                                                                              |
+  | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `Table.CellStatus`, `Table.CellLink`, `Table.CellId`, `Table.CellTime`, `Table.CellTags`, `Table.CellActions` | `TableCellStatus` (`@aziontech/webkit/table-cell-status`), `TableCellLink`, `TableCellId`, `TableCellTime`, `TableCellTags`, `TableCellActions` |
+  | `Table.Search`, `Table.Filter`, `Table.Export`, `Table.RefreshButton`, `Table.LiveButton`                     | `TableSearch` (`@aziontech/webkit/table-search`), `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`                   |
 
 ### Two table filters and one column chooser
 
@@ -1884,6 +1896,10 @@ folder.
   100 as they scroll near view. Tests that count every rendered option, line or log row of a long
   list see only the first chunks; scroll the list, or press an arrow key in a `Select` list, which
   mounts every option.
+- A `Tree` of more than 300 nodes renders its visible rows as one flat list (no `role="group"`;
+  each treeitem keeps `aria-level`, `aria-setsize` and `aria-posinset`) and mounts them in chunks
+  of 100 as they scroll near view. Tests of a large tree see the first chunk and the tab stop's
+  row; scroll the tree, or move focus with the keyboard, which mounts the target row.
 - `Chart` keeps an even sample of at most 1,000 rows in its visually hidden data table; `tableView`
   still shows every row.
 
