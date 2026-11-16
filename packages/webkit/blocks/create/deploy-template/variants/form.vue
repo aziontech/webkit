@@ -434,7 +434,7 @@
                                         @click="revealed[field.name] = !revealed[field.name]"
                                       />
                                     </Tooltip>
-                                    <InputGroupAddon>
+                                    <InputGroupAddon class="max-sm:hidden">
                                       <Tooltip
                                         :content="
                                           field.secret
@@ -457,6 +457,13 @@
                                       </Tooltip>
                                     </InputGroupAddon>
                                   </InputGroupRoot>
+                                  <p class="text-body-xs text-(--text-muted) sm:hidden">
+                                    {{
+                                      field.secret
+                                        ? 'The template keeps this value secret.'
+                                        : 'The template stores this value as plain text.'
+                                    }}
+                                  </p>
                                 </div>
                                 <Field.Error v-if="errorOf(field)">{{
                                   errorOf(field)
