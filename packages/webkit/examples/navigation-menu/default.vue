@@ -7,7 +7,7 @@
   <div class="min-h-screen bg-(--bg-canvas) text-(--text-default)">
     <header class="border-b border-solid border-(--border-default)">
       <div
-        class="mx-auto w-full max-w-(--layout-measure-site) px-(--spacing-md) py-(--spacing-md) sm:px-(--spacing-lg)"
+        class="@container mx-auto w-full max-w-(--layout-measure-site) px-(--spacing-md) py-(--spacing-md) sm:px-(--spacing-lg)"
       >
         <NavigationMenu
           :delay="50"
@@ -91,7 +91,7 @@
               </NavigationMenu.Item>
             </NavigationMenu.List>
 
-            <div class="ms-auto hidden items-center gap-(--spacing-xs) sm:flex">
+            <div class="ms-auto hidden items-center gap-(--spacing-xs) @min-[24rem]:flex">
               <NavigationMenu.Trigger href="https://example.com/contact/">
                 Contact
               </NavigationMenu.Trigger>
