@@ -78,7 +78,7 @@ The `webkit` CLI ships inside the `@aziontech/webkit` package — there is no se
 npx @aziontech/webkit init
 ```
 
-`init` reads the project before it writes anything, never clobbers a file, and is safe to re-run. It records `@aziontech/webkit`, `@aziontech/theme` and `@aziontech/icons` (plus the lint peers) in `package.json`, writes the ESLint, Stylelint and PostCSS configs, creates `src/webkit.css` as the single CSS entry, registers the webkit MCP server in `.mcp.json` so AI tools get the component catalog, adds a lint-on-commit hook, and prepends the entry imports to `src/main.*`. Preview the whole plan with `--dry-run`, and use `-y` for CI or scripted runs.
+`init` reads the project before it writes anything, never clobbers a file, and is safe to re-run. It records `@aziontech/webkit`, `@aziontech/theme` and `@aziontech/icons` (plus the lint peers) in `package.json`, writes the ESLint, Stylelint and PostCSS configs, creates `src/webkit.css` as the single CSS entry (with `src/webkit.sources.css`, the WebKit files the app imports, so the stylesheet holds only their classes; init adds the `@aziontech/webkit/vite-plugin` plugin to `vite.config` to keep that list current), registers the webkit MCP server in `.mcp.json` so AI tools get the component catalog, adds a lint-on-commit hook, and prepends the entry imports to `src/main.*`. Preview the whole plan with `--dry-run`, and use `-y` for CI or scripted runs.
 
 `init` records the dependencies but does not install them — run your package manager afterwards, then confirm the wiring:
 

@@ -30,7 +30,7 @@ Options:
 5. Adds a `prepare` script (`husky`) to `package.json` and writes `.husky/pre-commit` to lint on commit. Running the package-manager install runs `prepare`, which activates the hooks.
 6. Copies the Claude Code bundle (rules, the `webkit-usage` skill, agents) into `.claude/` — only files that are missing, never overwriting local edits.
 7. Appends a `@aziontech/webkit` fragment to `CLAUDE.md`, guarded by a marker so it is added once.
-8. If a `src/main.ts` / `src/main.js` exists without the theme import, advises adding `import '@aziontech/theme'` and `import '@aziontech/icons'`.
+8. Writes `src/webkit.css` (theme, fonts, `@aziontech/webkit/styles` and `./webkit.sources.css`) and `src/webkit.sources.css` (the WebKit files the app imports), adds `webkit()` from `@aziontech/webkit/vite-plugin` to an existing `vite.config`, and prepends `import './webkit.css'` and `import '@aziontech/icons'` to `src/main.*`.
 
 ## Idempotency
 

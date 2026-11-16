@@ -163,7 +163,8 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/icon-button` -> `IconButton`.
 - ✅ One `WebkitProvider` at the app root with the user's locale and the catalogs of every language the app offers.
 - ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`).
-- ✅ `import '@aziontech/theme'`, `import '@aziontech/theme/fonts.css'` (unless the app hosts its own fonts) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
+- ✅ `import './webkit.css'` (the theme, the fonts and `./webkit.sources.css`, as `webkit init` writes it) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
+- ✅ `webkit()` from `@aziontech/webkit/vite-plugin` in `vite.config`: it keeps `src/webkit.sources.css`, the WebKit files Tailwind compiles, in step with your imports. Without Vite, run `npx @aziontech/webkit css` after adding or removing a WebKit import.
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
 - ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, and `ai-color ai-<name>` for a colour brand icon. WebKit 6 uses only the Azion set: write `ai ai-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
@@ -268,10 +269,13 @@ site: your app does not serve it (lint `webkit/no-root-relative-asset`).
 
 ```ts
 // src/main.ts
-import '@aziontech/theme'
-import '@aziontech/theme/fonts.css' // the Azion font faces; leave out when the app hosts its own fonts
+import './webkit.css' // the theme, the fonts and the WebKit files this app imports
 import '@aziontech/icons'
 ```
+
+`src/webkit.css` imports `./webkit.sources.css`, one `@source` per WebKit file the app imports, so
+the stylesheet holds only the classes of the components you use. A bare `import '@aziontech/theme'`
+compiles no component class: the components render unstyled.
 
 ## Quality Checklist
 
@@ -283,5 +287,5 @@ Before you finish UI work in this project:
 - [ ] Icons imported individually; the whole set is never bulk-imported.
 - [ ] Root-only usage takes the `-root` path; heavy overlays are lazy-loaded.
 - [ ] No custom component reinvents something webkit already provides (checked via MCP or `catalog.json`).
-- [ ] `@aziontech/theme` and `@aziontech/icons` are imported once at the app entry.
+- [ ] `./webkit.css` and `@aziontech/icons` are imported once at the app entry, and `npx @aziontech/webkit css --check` passes (the Vite plugin keeps it so).
 - [ ] `WebkitProvider` wraps the app once with the user's locale, and `catalogs` registers every non-English language the app offers.

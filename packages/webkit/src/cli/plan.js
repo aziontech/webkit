@@ -4,6 +4,7 @@ import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
 import { LEGACY_MARKER, listBundle } from './bundle.js'
+import { planSources, SOURCES_FILE, SOURCES_IMPORT } from './css-sources.js'
 import { planSync } from './sync.js'
 import { brokenVueTscIn, VUE_TSC_BROKEN, VUE_TSC_KNOWN_GOOD, vueTscState } from './toolchain.js'
 
@@ -40,8 +41,8 @@ const DEV_DEPS = [
 ]
 
 const STYLE_DEV_DEPS = [
-  { dep: 'tailwindcss', version: '^4.0.0' },
-  { dep: '@tailwindcss/postcss', version: '^4.0.0' }
+  { dep: 'tailwindcss', version: '^4.1.0' },
+  { dep: '@tailwindcss/postcss', version: '^4.1.0' }
 ]
 
 const CLAUDE_BUNDLE = listBundle()
@@ -74,7 +75,25 @@ function read(path) {
   return existsSync(path) ? readFileSync(path, 'utf8') : null
 }
 
-const VITE_CONFIG_CANDIDATES = [
+export const VITE_PLUGIN_SPECIFIER = '@aziontech/webkit/vite-plugin'
+export const VITE_PLUGIN_IMPORT = `import webkit from '${VITE_PLUGIN_SPECIFIER}'`
+
+export function patchViteConfig(src) {
+  if (src.includes(VITE_PLUGIN_SPECIFIER)) return src
+  const plugins = /\bplugins\s*:\s*\[(\s*)/.exec(src)
+  if (!plugins) return null
+  const space = plugins[1]
+  const at = plugins.index + plugins[0].length
+  const inserted = space.includes('\n') ? `webkit(),${space}` : 'webkit(), '
+  const withPlugin = `${src.slice(0, at)}${inserted}${src.slice(at)}`
+  const imports = [...withPlugin.matchAll(/^import\b[^;]*?['"][^'"\n]+['"];?[ \t]*$/gm)]
+  const last = imports.at(-1)
+  if (!last) return `${VITE_PLUGIN_IMPORT}\n${withPlugin}`
+  const end = last.index + last[0].length
+  return `${withPlugin.slice(0, end)}\n${VITE_PLUGIN_IMPORT}${withPlugin.slice(end)}`
+}
+
+export const VITE_CONFIG_CANDIDATES = [
   'vite.config.ts',
   'vite.config.js',
   'vite.config.mts',
@@ -193,8 +212,18 @@ function styleEntryContent() {
    hosts its own font files. */
 @import '@aziontech/theme/fonts.css';
 
-/* webkit is consumed as source — this registers it with Tailwind so its component classes compile. */
+/* The base rules WebKit components share. */
 @import '@aziontech/webkit/styles';
+
+/* The WebKit files this app imports, so Tailwind compiles only the classes they use. The
+   Vite plugin (@aziontech/webkit/vite-plugin) rewrites it when your imports change; without
+   Vite, run \`npx @aziontech/webkit css\` after adding or removing a WebKit import. */
+${SOURCES_IMPORT}
+
+/* The AI guidance files are full of example classes that are not your UI: keep them out of the scan. */
+@source not '../.claude';
+@source not '../CLAUDE.md';
+@source not '../AGENTS.md';
 
 /* Text rendering. The type ladder is drawn at these settings, so they are the design
    system's default — and they live here, in your file, so you can change them. */
@@ -380,6 +409,37 @@ function vueTscActions(projectDir) {
   ]
 }
 
+function vitePluginActions(projectDir) {
+  const cfg = firstExisting(projectDir, VITE_CONFIG_CANDIDATES)
+  if (!cfg) {
+    return [
+      {
+        type: 'advise',
+        message: `No Vite config found. Run \`npx @aziontech/webkit css\` after you add or remove a WebKit import: it rewrites ${SOURCES_FILE}, the list of WebKit files Tailwind compiles (doctor and check fail when it is stale).`
+      }
+    ]
+  }
+  const src = read(join(projectDir, cfg)) || ''
+  const patched = patchViteConfig(src)
+  if (patched === src) return []
+  if (patched === null) {
+    return [
+      {
+        type: 'advise',
+        message: `Add the WebKit plugin to ${cfg} so ${SOURCES_FILE} follows your imports:\n${VITE_PLUGIN_IMPORT}\n// plugins: [webkit(), …]`
+      }
+    ]
+  }
+  return [
+    {
+      type: 'write',
+      path: cfg,
+      description: `add the WebKit Vite plugin (${VITE_PLUGIN_SPECIFIER})`,
+      content: patched
+    }
+  ]
+}
+
 export function planInit(projectDir, opts = {}) {
   const actions = []
   const severity = opts.recommended ? 'recommended' : 'strict'
@@ -431,6 +491,12 @@ export function planInit(projectDir, opts = {}) {
     content: styleEntryContent(),
     skipIfExists: true
   })
+  actions.push({
+    type: 'write',
+    path: SOURCES_FILE,
+    content: planSources(projectDir).content
+  })
+  actions.push(...vitePluginActions(projectDir))
 
   const existingEslint = firstExisting(projectDir, ESLINT_CONFIG_CANDIDATES)
   if (existingEslint) {

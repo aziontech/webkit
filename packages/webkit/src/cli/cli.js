@@ -4,6 +4,7 @@ import { applyPlan } from './apply.js'
 import { applyAdd, MANIFEST, planAdd, planDiff } from './blocks.js'
 import { runCanary } from './canary.js'
 import { exitCodeFor, formatCheck, runCheck, withNavigation } from './check.js'
+import { planSources, SOURCES_FILE, writeSources } from './css-sources.js'
 import { planDoctor } from './doctor.js'
 import { planMigrate, SUPPORTED_VERSIONS } from './migrate.js'
 import { parseUrls } from './navigation-check.js'
@@ -24,6 +25,7 @@ Usage:
   npx @aziontech/webkit view <id> [--variant <name>] [--example <name>] [--json]
   npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint] [--url <url,...>]
   npx @aziontech/webkit doctor
+  npx @aziontech/webkit css [--check]
   npx @aziontech/webkit report [options] [patterns...]
   npx @aziontech/webkit canary
   npx @aziontech/webkit sync [options]
@@ -40,6 +42,10 @@ Commands:
   check           CI gate: doctor + v5 names + unknown imports + ESLint + Stylelint
                    + block drift.
   doctor          Check the wiring is healthy; report resolved dependency versions.
+  css             Rewrite src/webkit.sources.css, the WebKit files Tailwind compiles,
+                   from this app's @aziontech/webkit imports (the Vite plugin,
+                   @aziontech/webkit/vite-plugin, does it on every dev and build). --check writes nothing and
+                   exits 1 when the file is stale.
   report          Measure webkit adoption via this project's own ESLint.
   canary          Prove the design-system lint rules still reach this project.
   sync            Reconcile the copied .claude/ bundle + CLAUDE.md fragment against
@@ -103,6 +109,7 @@ const COMMANDS = new Set([
   'view',
   'check',
   'doctor',
+  'css',
   'report',
   'canary',
   'sync',
@@ -410,6 +417,35 @@ const json = (value) => process.stdout.write(`${JSON.stringify(value, null, 2)}\
 const useColor = () =>
   !process.env.NO_COLOR && (Boolean(process.env.FORCE_COLOR) || Boolean(process.stdout.isTTY))
 
+function runCss(projectDir, parsed) {
+  const plan = planSources(projectDir)
+  const summary = `${plan.files.length} WebKit file(s) for ${plan.subpaths.length} import(s)`
+  if (!plan.resolved && plan.subpaths.length) {
+    process.stderr.write(
+      `@aziontech/webkit is not installed here, so ${SOURCES_FILE} cannot list the files of ${plan.subpaths.length} import(s). Install it first.\n`
+    )
+    return 1
+  }
+  if (parsed.check) {
+    process.stdout.write(`${SOURCES_FILE}: ${plan.stale ? 'stale' : 'current'} — ${summary}\n`)
+    return plan.stale ? 1 : 0
+  }
+  if (parsed.dryRun) {
+    process.stdout.write(`${plan.stale ? 'would write' : 'current'} ${SOURCES_FILE} — ${summary}\n`)
+    return 0
+  }
+  const written = writeSources(plan)
+  process.stdout.write(`${written ? 'wrote' : 'current'} ${SOURCES_FILE} — ${summary}\n`)
+  return 0
+}
+
+function refreshSourcesAfterAdd(projectDir) {
+  const plan = planSources(projectDir)
+  if (plan.current === null || !plan.resolved) return
+  if (writeSources(plan))
+    process.stdout.write(`updated ${SOURCES_FILE} — ${plan.files.length} WebKit file(s)\n`)
+}
+
 function runAdd(projectDir, id, parsed) {
   if (!id) {
     process.stderr.write('Usage: npx @aziontech/webkit add <block-id> (find one with `search`)\n')
@@ -423,6 +459,7 @@ function runAdd(projectDir, id, parsed) {
     force: parsed.force
   })
   const written = plan.ok && !parsed.dryRun ? applyAdd(projectDir, plan) : []
+  if (written.length && !parsed.json) refreshSourcesAfterAdd(projectDir)
   if (parsed.json) {
     json({
       ok: plan.ok,
@@ -580,6 +617,7 @@ async function run(argv) {
     return runDoctor(projectDir)
   }
 
+  if (command === 'css') return runCss(projectDir, parsed)
   if (command === 'add') return runAdd(projectDir, parsed.args[0], parsed)
   if (command === 'diff') return runDiff(projectDir, parsed.args[0], parsed)
   if (command === 'search' || command === 'view') return runQuery(projectDir, command, parsed)

@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url'
 const PKG_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const THEME_SRC = join(PKG_ROOT, '..', 'theme', 'src')
 const STYLES = join(PKG_ROOT, 'src', 'styles.css')
+const STYLES_ALL = join(PKG_ROOT, 'src', 'styles', 'all.css')
 const requireFromWebkit = createRequire(join(PKG_ROOT, 'package.json'))
 
 const flipped = [...new Set(readFileSync(STYLES, 'utf8').match(/\.ai-[a-z-]+/g))]
@@ -20,7 +21,7 @@ async function buildConsumerCss() {
   try {
     writeFileSync(
       join(dir, 'app.css'),
-      `@import '${requireFromWebkit.resolve('tailwindcss/index.css')}';\n@import '${STYLES}';\n`
+      `@import '${requireFromWebkit.resolve('tailwindcss/index.css')}';\n@import '${STYLES_ALL}';\n`
     )
     writeFileSync(join(dir, 'main.js'), "import './app.css'\n")
     writeFileSync(

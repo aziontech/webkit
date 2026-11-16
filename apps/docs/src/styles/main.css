@@ -1,5 +1,6 @@
 @import 'tailwindcss/utilities' source(none);
 @reference "@aziontech/theme";
+@import '@aziontech/webkit/styles/all';
 @source '../';
 @source '../../../../packages/webkit/blocks';
 @source '../../../../packages/webkit/examples';
