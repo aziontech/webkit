@@ -80,6 +80,45 @@ const read = (v: string) => getComputedStyle(document.documentElement).getProper
 const seriesColors = () => SERIES.map((s) => read(s.slice(4, -1)))
 ```
 
+## Other palettes — the console API sets the variables, WebKit ships one
+
+WebKit ships a single chart palette (the `--chart-*` token values) and no alternates. A product that
+lets a customer pick a palette (the Azion console API) re-colours a dashboard by setting the palette
+variables on the dashboard's root element; every chart inside reads them by inheritance. Never add a
+palette to `@aziontech/theme` or hand-pick colours per chart.
+
+- **Settable**: `--chart-series-1` … `--chart-series-8`, `--chart-sequential-1` … `--chart-sequential-7`,
+  `--chart-diverging-negative` / `-neutral` / `-positive`. **Fixed**: `--chart-series-other`,
+  `--chart-status-*`, `--severity-*`, grid, axis, label, crosshair and tooltip.
+- A palette sets a **light and a dark** value for every variable it sets, and every series value
+  passes the default's checks: 3:1 and APCA Lc 30 on `--bg-surface`, `--bg-canvas` and
+  `--chart-tooltip-bg`, eight distinct colours, the same hue family in both themes.
+- At most eight series: a ninth folds into `--chart-series-other`; a palette never adds a slot.
+- On a webkit tag (a chart, a dashboard grid, a page component), set them as a static `style`, an object-literal `:style` or `[--chart-series-1:…]`
+  classes; `webkit/no-style-override` allows exactly these variables and nothing else
+  (`CHART_PALETTE_VARIABLES`). The contract is `webkit-tokens.md` § "Chart palettes".
+
+```vue
+<script setup lang="ts">
+  import DonutChart from '@aziontech/webkit/donut-chart'
+
+  const palette = ['var(--color-violet-600)', 'var(--color-green-700)']
+  const series = [
+    { id: 'cached', name: 'Cached', values: [48210] },
+    { id: 'origin', name: 'Origin', values: [9370] }
+  ]
+</script>
+
+<template>
+  <DonutChart
+    :style="{ '--chart-series-1': palette[0], '--chart-series-2': palette[1] }"
+    :series="series"
+    total-label="Requests"
+    aria-label="Requests by source"
+  />
+</template>
+```
+
 ## States — a chart is a data-backed view
 
 A chart fetches, so it owns the full state surface, rendered **in the chart's own box** (never a
@@ -174,6 +213,8 @@ above rather than eyeballing one mode.
 - A KPI row that reads as one band is a `StatTileGroup`, never tiles in a hand-built card with dividers.
 - Every chart color is a `--chart-*` token — **never** a hex, rgb/hsl, Tailwind-palette literal, or a
   hand-picked `--color-*` step.
+- Another palette only re-sets the palette variables on a dashboard root, in both themes; status,
+  severity, Other and chrome colours stay fixed, and WebKit ships no alternate palette.
 - SVG marks take the `var()` string directly; canvas marks resolve computed values and **re-read on a
   `data-theme` change** so the canvas repaints in the new theme.
 - `--chart-status-*` means status only — never a categorical accent; series slots follow

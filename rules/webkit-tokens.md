@@ -77,6 +77,30 @@ Exceptions (the one list; `accepted` means the owner chose the look, `open` wait
 
 Do not "fix" an accepted pair; do not add a pair to this list without the design owner's decision.
 
+## Chart palettes
+
+WebKit ships **one** chart palette: the values of the `--chart-*` tokens. There are no alternate
+palettes in `@aziontech/theme`. An app that offers other palettes (the console API's palette picker)
+sets these variables on the dashboard's root element, and every chart inside re-colours:
+
+| A palette may set                                                                       | A palette never sets                                                                                   |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `--chart-series-1` … `--chart-series-8`                                                 | `--chart-series-other` (the grey a ninth series folds into)                                            |
+| `--chart-sequential-1` (lowest) … `--chart-sequential-7`                                | `--chart-status-*` and `--severity-*` (they mean a state)                                              |
+| `--chart-diverging-negative`, `--chart-diverging-neutral`, `--chart-diverging-positive` | `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*` (the chrome) |
+
+- **Both themes.** A palette supplies a light and a dark value for every variable it sets (set the
+  dark values under `[data-theme='dark']`); a half palette breaks the theme switch.
+- **Same checks as the default.** Every series value clears 3:1 (WCAG) and Lc 30 (APCA) on
+  `--bg-surface`, `--bg-canvas` and `--chart-tooltip-bg` in its theme, the eight series are eight
+  distinct colours, and a series keeps its hue family across the theme switch. These are the checks
+  `packages/theme/test/chart-role.test.mjs` and `apca-contrast.test.mjs` run on the default.
+- **Eight series, then Other.** A palette has at most eight series; a chart with more folds the
+  rest into `--chart-series-other`. A palette never adds `--chart-series-9`.
+- **Where.** On your own root element, or on a webkit tag as a static `style`, an object-literal
+  `:style` or `[--chart-series-1:…]` classes; `webkit/no-style-override` allows exactly these
+  variables (`CHART_PALETTE_VARIABLES` in `@aziontech/webkit/eslint-plugin`) and nothing else.
+
 ## Use a variant only when the component has it
 
 A token pair is not a variant. `--accent` and `--accent-foreground` exist, but `Button` has no accent

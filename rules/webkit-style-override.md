@@ -23,6 +23,26 @@ Any other class on the same tag still fails, and so does a bound `:class` or a v
 `@aziontech/webkit/eslint-plugin`; the MCP's `get_component` (`allowedClasses`) and
 `validate_usage` (with `component`) read the same list.
 
+## The second exception: the chart palette variables
+
+A dashboard may re-colour its charts by setting the **chart palette variables** on a container,
+including a webkit tag (`DashboardGrid`, `ChartCard`, a page component): the charts inside read them
+by inheritance. This is how the console API offers palettes other than the default. Exactly these
+variables are allowed, nothing else on the same attribute:
+
+- `--chart-series-1` … `--chart-series-8`
+- `--chart-sequential-1` … `--chart-sequential-7`
+- `--chart-diverging-negative`, `--chart-diverging-neutral`, `--chart-diverging-positive`
+
+Write them as a static `style` (`style="--chart-series-1: var(--palette-1)"`), an object-literal
+`:style` whose keys are all palette variables (`:style="{ '--chart-series-1': palette[0] }"`), or
+`[--chart-series-1:…]` classes beside the layout utilities. A bound `:style="palette"` or a spread
+cannot be checked and stays blocked: spell the keys out, or set the variables on your own wrapper
+element (never checked). `--chart-series-other`, `--chart-status-*`, the severity, grid, axis, label,
+crosshair and tooltip variables are fixed: they mean a state or draw the chart's chrome. The list is
+the `CHART_PALETTE_VARIABLES` export of `@aziontech/webkit/eslint-plugin`; the full palette contract
+is in `webkit-tokens.md` § "Chart palettes".
+
 ## Do
 
 - Compose your own markup **inside the component's slots** — your elements, your classes:
@@ -41,6 +61,8 @@ Any other class on the same tag still fails, and so does a bound `:class` or a v
 - Never mix a layout utility with anything else (`<Button class="w-full mt-4" />`): put the
   spacing on a wrapper element.
 - Never `<Dialog style="width: 800px" />` — same.
+- Never set a `--chart-*` variable outside the palette list on a webkit tag (`--chart-status-danger`,
+  `--chart-axis`): status and chrome colours are fixed.
 - Never wrap a webkit component in a styled element just to force different spacing/colors
   through inheritance or CSS descendant selectors targeting its internals.
 - Never `!important` against a webkit class, and never target its `data-testid`/internal

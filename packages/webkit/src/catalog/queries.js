@@ -1,3 +1,4 @@
+import { isChartPaletteClass } from '../eslint-plugin/lib/chart-palette.js'
 import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../eslint-plugin/lib/layout-classes.js'
 import {
   COMPONENT_TERMS,
@@ -824,7 +825,7 @@ export function validateUsage(catalog, { import: importPath, classes, component 
     const key = String(component).trim()
     const entry = catalog.getEntry(key)
     if (entry && !entry.styleSeam) {
-      const rejected = nonLayoutClasses(classes)
+      const rejected = nonLayoutClasses(classes).filter((cls) => !isChartPaletteClass(cls))
       if (rejected.length) {
         problems.push({
           kind: 'style-override',
