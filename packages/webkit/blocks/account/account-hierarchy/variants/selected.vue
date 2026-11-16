@@ -178,16 +178,21 @@
     { id: 'actions', type: 'action', hideable: false }
   ]
 
-  const expanded = ref<Record<string, boolean>>({ 'org-1001': true, 'grp-2101': true })
-  const tableExpanded = computed<true | Record<string, boolean>>({
-    get: () => (needle.value ? true : expanded.value),
+  const expanded = ref<string[]>(['org-1001', 'grp-2101'])
+  const parentIds = computed(() => [
+    ...new Set(resources.value.map((item) => item.parentId).filter((id) => id !== null))
+  ])
+  const tableExpanded = computed<string[]>({
+    get: () => (needle.value ? parentIds.value : expanded.value),
     set: (value) => {
-      if (value !== true) expanded.value = value
+      if (!needle.value) expanded.value = value
     }
   })
-  const selection = ref<Record<string, boolean>>({ 'ws-30418': true })
+  const selection = ref<string[]>(['ws-30418'])
 
-  const selected = computed(() => resources.value.filter((item) => selection.value[item.id]))
+  const selected = computed(() =>
+    resources.value.filter((item) => selection.value.includes(item.id))
+  )
   const selectedCount = computed(() => selected.value.length)
   const focused = computed(() => (selectedCount.value === 1 ? selected.value[0] : null))
   const clearSelection = () => {
@@ -289,7 +294,7 @@
     resources.value = resources.value.map((item) =>
       ids.has(item.id) ? { ...item, parentId: target.id } : item
     )
-    expanded.value = { ...expanded.value, [target.id]: true }
+    expanded.value = [...new Set([...expanded.value, target.id])]
     moveOpen.value = false
     toast.success(`${plural(ids.size, 'resource', 'resources')} moved to ${target.name}.`, {
       description: 'Role bindings inherited from the old parent no longer apply.',

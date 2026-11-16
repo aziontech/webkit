@@ -45,7 +45,8 @@ describe('FilePreview', () => {
       '{\n  "a": 1,\n  "b": [\n    2\n  ]\n}'
     )
     const broken = within(
-      render(FilePreview, { props: { fileName: 'b.json', content: '{"a":' } }).container
+      render(FilePreview, { props: { fileName: 'b.json', content: '{"a":' } })
+        .container as HTMLElement
     )
     expect(broken.getByTestId(`${TEST_ID}__text`).textContent).toBe('{"a":')
   })
@@ -64,7 +65,9 @@ describe('FilePreview', () => {
     })
     await waitFor(() => expect(view.getByTestId(TEST_ID).getAttribute('data-type')).toBe('unknown'))
     expect(view.getByText('No preview for this file type')).toBeTruthy()
-    const noSrc = within(render(FilePreview, { props: { fileName: 'photo.png' } }).container)
+    const noSrc = within(
+      render(FilePreview, { props: { fileName: 'photo.png' } }).container as HTMLElement
+    )
     expect(noSrc.getByTestId(`${TEST_ID}__unsupported`)).toBeTruthy()
   })
 
@@ -110,7 +113,7 @@ describe('FilePreview', () => {
     expect(loading.queryByTestId(`${TEST_ID}__text`)).toBeNull()
     await expectNoA11yViolations(loading.container)
 
-    const failed = within(render(ErrorExample).container)
+    const failed = within(render(ErrorExample).container as HTMLElement)
     expect(failed.getByText('The preview could not load')).toBeTruthy()
     expect(failed.getByText(/Access denied \(403\)/)).toBeTruthy()
     expect(failed.getByRole('button', { name: 'Download' })).toBeTruthy()
@@ -119,7 +122,7 @@ describe('FilePreview', () => {
   it('emits download with the click event', async () => {
     const view = render(FilePreview, { props: { fileName: 'a.txt', content: 'x' } })
     await fireEvent.click(view.getByRole('button', { name: 'Download' }))
-    const emitted = view.emitted()['download']
+    const emitted = view.emitted<unknown[]>()['download']
     expect(emitted).toHaveLength(1)
     expect(emitted![0]![0]).toBeInstanceOf(MouseEvent)
   })

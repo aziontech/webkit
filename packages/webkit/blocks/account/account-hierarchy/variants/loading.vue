@@ -294,7 +294,7 @@
     resources.value = resources.value.map((item) =>
       ids.has(item.id) ? { ...item, parentId: target.id } : item
     )
-    expanded.value = { ...expanded.value, [target.id]: true }
+    expanded.value = [...new Set([...expanded.value, target.id])]
     moveOpen.value = false
     toast.success(`${plural(ids.size, 'resource', 'resources')} moved to ${target.name}.`, {
       description: 'Role bindings inherited from the old parent no longer apply.',
