@@ -372,7 +372,7 @@ describe('Breadcrumb', () => {
         await fireEvent.click(getByTestId('solo'))
 
         expect(emitted().click).toHaveLength(1)
-        expect(emitted().click[0][0]).toBeInstanceOf(MouseEvent)
+        expect(emitted<unknown[]>().click[0][0]).toBeInstanceOf(MouseEvent)
       })
     })
 

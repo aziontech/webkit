@@ -127,8 +127,8 @@ describe('Link', () => {
     expect(focused).toBe(1)
   })
 
-  it('omits the trailing icon when showIcon is false', () => {
-    const { queryByTestId } = render(Link, { props: { showIcon: false } })
+  it('omits the trailing icon when no icon is set and the target stays in the tab', () => {
+    const { queryByTestId } = render(Link, { props: { icon: '', target: '_self' } })
 
     expect(queryByTestId('link__icon')).toBeNull()
   })
@@ -138,7 +138,7 @@ describe('Link', () => {
 
     await fireEvent.click(getByTestId('link'))
 
-    const clicks = emitted().click
+    const clicks = emitted<unknown[]>().click
     expect(clicks).toHaveLength(1)
     expect(clicks[0][0]).toBeInstanceOf(MouseEvent)
   })

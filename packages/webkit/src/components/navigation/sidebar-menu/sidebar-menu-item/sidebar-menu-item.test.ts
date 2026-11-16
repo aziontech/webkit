@@ -55,7 +55,7 @@ describe('SidebarMenuItem', () => {
 
     await fireEvent.click(getByTestId('sidebar-menu-item__button'))
 
-    const events = emitted().click
+    const events = emitted<unknown[]>().click
     expect(events).toHaveLength(1)
     expect(events[0][0]).toBeInstanceOf(MouseEvent)
   })
@@ -142,7 +142,7 @@ describe('SidebarMenuItem', () => {
 
     await fireEvent.click(getByTestId('sidebar-menu-item__link'))
 
-    const events = emitted().click
+    const events = emitted<unknown[]>().click
     expect(events).toHaveLength(1)
     expect(events[0][0]).toBeInstanceOf(MouseEvent)
   })

@@ -36,7 +36,9 @@ const harness = (initial: string, testId?: string) => {
 describe('PageTabs', () => {
   it('renders the strip with a tablist and the default testid', () => {
     const { Harness } = harness('overview')
-    const { getByTestId, getByRole, getAllByRole } = within(render(Harness).container)
+    const { getByTestId, getByRole, getAllByRole } = within(
+      render(Harness).container as HTMLElement
+    )
 
     expect(getByTestId('page-tabs')).toBeTruthy()
     expect(getByRole('tablist')).toBeTruthy()
@@ -45,14 +47,14 @@ describe('PageTabs', () => {
 
   it('honours a consumer data-testid', () => {
     const { Harness } = harness('overview', 'service-tabs')
-    const { getByTestId } = within(render(Harness).container)
+    const { getByTestId } = within(render(Harness).container as HTMLElement)
 
     expect(getByTestId('service-tabs__tabs')).toBeTruthy()
   })
 
   it('reflects v-model and updates it when a tab is picked', async () => {
     const { Harness, value } = harness('overview')
-    const { getByRole } = within(render(Harness).container)
+    const { getByRole } = within(render(Harness).container as HTMLElement)
 
     expect(getByRole('tab', { name: 'Overview' }).getAttribute('aria-selected')).toBe('true')
 
@@ -63,15 +65,19 @@ describe('PageTabs', () => {
   })
 
   it('renders the actions region only when given', () => {
-    expect(within(render(Default).container).queryByTestId('page-tabs__actions')).toBeNull()
+    expect(
+      within(render(Default).container as HTMLElement).queryByTestId('page-tabs__actions')
+    ).toBeNull()
 
-    const actions = within(render(WithActions).container).getByTestId('page-tabs__actions')
+    const actions = within(render(WithActions).container as HTMLElement).getByTestId(
+      'page-tabs__actions'
+    )
     expect(within(actions).getByRole('button', { name: 'Deploy' })).toBeTruthy()
   })
 
   it('lines the tab row up with the full width by default', () => {
     const { Harness } = harness('overview')
-    const { getByTestId } = within(render(Harness).container)
+    const { getByTestId } = within(render(Harness).container as HTMLElement)
 
     expect(getByTestId('page-tabs').getAttribute('data-column')).toBe('full')
   })
@@ -81,7 +87,7 @@ describe('PageTabs', () => {
       render(PageTabs, {
         props: { column },
         slots: { default: () => h(TabsTrigger, { value: 'overview', label: 'Overview' }) }
-      }).container
+      }).container as HTMLElement
     )
 
     expect(getByTestId('page-tabs').getAttribute('data-column')).toBe(column)
@@ -89,7 +95,7 @@ describe('PageTabs', () => {
   })
 
   it('renders the form column example with its tabs', () => {
-    const { getByTestId, getAllByRole } = within(render(FormColumn).container)
+    const { getByTestId, getAllByRole } = within(render(FormColumn).container as HTMLElement)
 
     expect(getByTestId('page-tabs').getAttribute('data-column')).toBe('form')
     expect(getAllByRole('tab')).toHaveLength(3)
