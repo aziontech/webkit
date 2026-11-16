@@ -13,15 +13,18 @@ import {
 /**
  * @typedef {object} WebkitPluginOptions
  * @property {string} [file]
+ * @property {number} [settle]
  */
 
-const readText = (file) => {
+const read = (file) => {
   try {
     return readFileSync(file, 'utf8')
   } catch {
-    return ''
+    return null
   }
 }
+
+const drops = (prev, next) => prev.some((sub) => !next.includes(sub))
 
 /**
  * @param {WebkitPluginOptions} [options]
@@ -29,8 +32,10 @@ const readText = (file) => {
  */
 export default function webkit(options = {}) {
   const file = options.file ?? SOURCES_FILE
+  const settle = options.settle ?? 80
   let root = process.cwd()
   const byFile = new Map()
+  const timers = new Map()
   let key = null
 
   const union = () => [...new Set([...byFile.values()].flat())].sort()
@@ -42,19 +47,50 @@ export default function webkit(options = {}) {
     writeSources(planSources(root, { file, subpaths }))
   }
   const index = () => {
-    byFile.clear()
-    for (const f of appSourceFiles(root)) byFile.set(f, webkitSubpaths(readText(f)))
+    const files = appSourceFiles(root)
+    const present = new Set(files)
+    for (const f of [...byFile.keys()]) if (!present.has(f)) byFile.delete(f)
+    for (const f of files) {
+      const text = read(f)
+      if (text === null) continue
+      const next = webkitSubpaths(text)
+      if (text.trim() === '' && byFile.get(f)?.length) continue
+      byFile.set(f, next)
+    }
+  }
+  const schedule = (abs, task) => {
+    clearTimeout(timers.get(abs))
+    timers.set(
+      abs,
+      setTimeout(() => {
+        timers.delete(abs)
+        task()
+      }, settle)
+    )
+  }
+  const settleFile = (abs, confirm = null) => {
+    const text = read(abs)
+    const prev = byFile.get(abs) ?? []
+    if (text === null) {
+      if (confirm === null) return schedule(abs, () => settleFile(abs, 'missing'))
+      if (confirm === 'missing' && byFile.delete(abs)) sync()
+      return
+    }
+    const next = webkitSubpaths(text)
+    const shrinks = drops(prev, next)
+    if (shrinks && text !== confirm) return schedule(abs, () => settleFile(abs, text))
+    byFile.set(abs, next)
+    sync()
   }
   const onChange = (path) => {
     const abs = resolve(path)
     if (!isAppSource(root, abs)) return
-    byFile.set(abs, webkitSubpaths(readText(abs)))
-    sync()
+    schedule(abs, () => settleFile(abs))
   }
   const onUnlink = (path) => {
     const abs = resolve(path)
-    if (!byFile.delete(abs)) return
-    sync()
+    if (!byFile.has(abs)) return
+    schedule(abs, () => settleFile(abs))
   }
 
   return {
@@ -65,10 +101,18 @@ export default function webkit(options = {}) {
       index()
       sync(true)
     },
+    buildStart() {
+      index()
+      sync()
+    },
     configureServer(server) {
       server.watcher.on('add', onChange)
       server.watcher.on('change', onChange)
       server.watcher.on('unlink', onUnlink)
+    },
+    buildEnd() {
+      for (const timer of timers.values()) clearTimeout(timer)
+      timers.clear()
     }
   }
 }

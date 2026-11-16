@@ -122,7 +122,8 @@ export default defineConfig({ plugins: [webkit(), vue()] })
 classes of the files it scans, so `src/webkit.sources.css` lists the WebKit files your app imports
 (each component plus what it imports itself), one `@source` per file. The Vite plugin
 `@aziontech/webkit/vite-plugin` writes it on every dev start and build and rewrites it when you
-add or remove a WebKit import; without Vite, run `npx @aziontech/webkit css` after the change
+add or remove a WebKit import (it waits for a changed file to settle, so a formatter rewriting the
+file never drops its components, and re-scans the whole app when a build starts); without Vite, run `npx @aziontech/webkit css` after the change
 (`webkit doctor` and `webkit check` fail while the list is stale). Your stylesheet then holds only
 the classes of what you use: about 10 KB gzipped for a Button-only app, about 23 KB for a console
 screen with a table, dialog, select, tabs and chart, instead of 77 KB for the whole library. An app
