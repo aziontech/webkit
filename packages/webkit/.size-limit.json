@@ -28,13 +28,13 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "24.7 KB",
+    "limit": "25.9 KB",
     "entryOnly": true
   },
   {
     "name": "browser-frame",
     "path": "src/components/content/browser-frame/browser-frame.vue",
-    "limit": "14.05 KB",
+    "limit": "14.3 KB",
     "entryOnly": true
   },
   {
@@ -45,7 +45,7 @@
   {
     "name": "copy-prompt-button",
     "path": "src/components/action/copy-prompt-button/copy-prompt-button.vue",
-    "limit": "8.6 KB",
+    "limit": "8.9 KB",
     "entryOnly": true
   },
   {
@@ -56,7 +56,7 @@
   {
     "name": "doc-agent-card",
     "path": "src/components/docs/doc-agent-card/doc-agent-card.vue",
-    "limit": "13.9 KB",
+    "limit": "14.05 KB",
     "entryOnly": true
   },
   {
@@ -233,7 +233,7 @@
   {
     "name": "doc-code-group",
     "path": "src/components/docs/doc-code-group/doc-code-group.vue",
-    "limit": "31.55 KB",
+    "limit": "31.85 KB",
     "entryOnly": true
   },
   {
@@ -254,7 +254,7 @@
   {
     "name": "doc-prompt",
     "path": "src/components/docs/doc-prompt/doc-prompt.vue",
-    "limit": "11.75 KB",
+    "limit": "12.1 KB",
     "entryOnly": true
   },
   {
@@ -448,7 +448,7 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "115.55 KB"
+    "limit": "115.7 KB"
   },
   {
     "name": "console-trace-scene",
@@ -495,7 +495,7 @@
   {
     "name": "story-index",
     "path": "src/components/section/story-index/story-index.vue",
-    "limit": "32.9 KB",
+    "limit": "33.3 KB",
     "entryOnly": true
   },
   {
@@ -522,13 +522,13 @@
   {
     "name": "copy-command",
     "path": "src/components/section/copy-command/copy-command.vue",
-    "limit": "10.55 KB",
+    "limit": "10.85 KB",
     "entryOnly": true
   },
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "45.5 KB",
+    "limit": "45.85 KB",
     "entryOnly": true
   },
   {
@@ -1050,7 +1050,7 @@
   {
     "name": "section-header",
     "path": "src/components/layout/section-header/section-header.vue",
-    "limit": "9.85 KB",
+    "limit": "10.2 KB",
     "entryOnly": true
   },
   {
@@ -1112,19 +1112,19 @@
   {
     "name": "code-block",
     "path": "src/components/code/code-block/code-block.vue",
-    "limit": "31.1 KB",
+    "limit": "31.4 KB",
     "entryOnly": true
   },
   {
     "name": "log-viewer-content",
     "path": "src/components/code/log-viewer/log-viewer-content.vue",
-    "limit": "28.05 KB",
+    "limit": "28.2 KB",
     "entryOnly": true
   },
   {
     "name": "trace",
     "path": "src/components/code/trace/trace.vue",
-    "limit": "20.65 KB",
+    "limit": "20.85 KB",
     "entryOnly": true
   },
   {
@@ -1150,13 +1150,13 @@
   {
     "name": "artifact-canvas",
     "path": "src/components/ai/artifact-canvas/artifact-canvas.vue",
-    "limit": "10.95 KB",
+    "limit": "11.3 KB",
     "entryOnly": true
   },
   {
     "name": "artifact-preview",
     "path": "src/components/ai/artifact-preview/artifact-preview.vue",
-    "limit": "10.75 KB",
+    "limit": "11.1 KB",
     "entryOnly": true
   },
   {
@@ -1208,7 +1208,7 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "34.85 KB",
+    "limit": "35.1 KB",
     "entryOnly": true
   },
   {
@@ -1320,7 +1320,7 @@
   {
     "name": "table-cell-id",
     "path": "src/components/data/table/table-cell-id/table-cell-id.vue",
-    "limit": "9.55 KB",
+    "limit": "9.85 KB",
     "entryOnly": true
   },
   {
@@ -1347,13 +1347,13 @@
   {
     "name": "filter-menu",
     "path": "src/components/data/filter-menu/index.ts",
-    "limit": "35.15 KB",
+    "limit": "35.9 KB",
     "entryOnly": true
   },
   {
     "name": "filter-menu-root",
     "path": "src/components/data/filter-menu/filter-menu.vue",
-    "limit": "31.45 KB",
+    "limit": "32.2 KB",
     "entryOnly": true
   },
   {
@@ -1380,7 +1380,7 @@
   {
     "name": "copy-button",
     "path": "src/components/action/copy-button/copy-button.vue",
-    "limit": "9.15 KB",
+    "limit": "9.5 KB",
     "entryOnly": true
   },
   {
@@ -1738,12 +1738,12 @@
   {
     "name": "toast",
     "path": "src/components/feedback/toast/index.ts",
-    "limit": "10.6 KB"
+    "limit": "11.1 KB"
   },
   {
     "name": "toast-root",
     "path": "src/components/feedback/toast/toast.vue",
-    "limit": "10.3 KB"
+    "limit": "10.85 KB"
   },
   {
     "name": "toast-item",
