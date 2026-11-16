@@ -105,7 +105,7 @@ test('migrateSource turns kind into variant (the look) or type (the sort of part
   assert.match(source, /<Button :variant="primary \? 'primary' : 'ghost'" label="Back" \/>/)
   assert.match(source, /<Table\.Cell type="checkbox" \/>/)
   assert.match(source, /<Pagination\.Button type="next" \/>/)
-  assert.match(source, /<ConsoleShowcase title-variant="left" \/>/)
+  assert.match(source, /<ConsoleShowcase title-align="left" \/>/)
   assert.match(source, /<Skeleton aria-label="one kind of row" variant="circle" \/>/)
   assert.equal(migrateSource(source, v6).source, source)
 })

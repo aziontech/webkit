@@ -1119,8 +1119,8 @@ function mapChartCase(): Case {
             regions,
             points,
             ariaLabel: 'Requests by location',
-            activeId: active.value,
-            'onUpdate:activeId': (v: string | null) => (active.value = v)
+            activeKey: active.value,
+            'onUpdate:activeKey': (v: string | null) => (active.value = v)
           })
         ])
     }),

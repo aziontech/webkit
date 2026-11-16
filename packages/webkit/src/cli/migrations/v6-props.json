@@ -497,7 +497,8 @@
         "outlined": "outline",
         "transparent": "ghost"
       }
-    }
+    },
+    "selected": "selectedKey"
   },
   "textarea": {
     "resizable": "resize"
@@ -766,14 +767,16 @@
       "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
     },
     "kind": "variant",
-    "titleKind": "titleVariant"
+    "titleKind": "titleAlign",
+    "titleVariant": "titleAlign"
   },
   "console-showcase": {
     "actions": {
       "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
     },
     "kind": "variant",
-    "titleKind": "titleVariant"
+    "titleKind": "titleAlign",
+    "titleVariant": "titleAlign"
   },
   "chat-message": {
     "state": {
@@ -793,7 +796,12 @@
   },
   "tool-approval": {
     "state": "status",
-    "kind": "variant"
+    "kind": {
+      "to": "variant",
+      "values": {
+        "default": "primary"
+      }
+    }
   },
   "tool-call": {
     "state": "status"
@@ -813,7 +821,8 @@
     "#right": "end"
   },
   "tutorial-panel-provider": {
-    "@finish": "complete"
+    "@finish": "complete",
+    "active": "activeKey"
   },
   "topology-diagram": {
     "expanded": "openKeys"
@@ -1002,7 +1011,8 @@
   "tree": {
     "selectedIds": "selectedKeys",
     "@item-dblclick": "item-double-click",
-    "expanded": "openKeys"
+    "expanded": "openKeys",
+    "selected": "selectedKey"
   },
   "card-list": {
     "trackBy": "itemKey",
@@ -1024,11 +1034,17 @@
   },
   "data-table": {
     "enableSorting": "sortable",
-    "enableRowSelection": "selectable"
+    "enableRowSelection": "selectable",
+    "rowSelection": "selectedKeys",
+    "expanded": "openKeys",
+    "pagination": "page",
+    "state": "snapshot",
+    "initialState": "defaultSnapshot"
   },
   "data-grid": {
     "enableRowSelection": "selectable",
-    "@row-delete": "row-remove"
+    "@row-delete": "row-remove",
+    "rowSelection": "selectedKeys"
   },
   "table-sort-button": {
     "direction": "sortDirection",
@@ -1098,43 +1114,47 @@
   },
   "section-title": {
     "kind": {
-      "to": "variant",
-      "values": {
-        "centered": "center",
-        "left": "start",
-        "horizontal": "split"
-      }
-    }
-  },
-  "section-module": {
-    "kind": {
-      "to": "variant",
-      "values": {
-        "centered": "center",
-        "left": "start",
-        "horizontal": "split"
-      }
-    }
-  },
-  "article-cards": {
-    "kind": {
-      "to": "variant",
-      "values": {
-        "left": "start",
-        "centered": "center"
-      }
-    }
-  },
-  "feature-widgets": {
-    "titleKind": {
-      "to": "titleVariant",
+      "to": "align",
       "values": {
         "centered": "center",
         "left": "start",
         "horizontal": "split"
       }
     },
-    "kind": "variant"
+    "variant": "align"
+  },
+  "section-module": {
+    "kind": {
+      "to": "align",
+      "values": {
+        "centered": "center",
+        "left": "start",
+        "horizontal": "split"
+      }
+    },
+    "variant": "align"
+  },
+  "article-cards": {
+    "kind": {
+      "to": "align",
+      "values": {
+        "left": "start",
+        "centered": "center"
+      }
+    },
+    "variant": "align"
+  },
+  "feature-widgets": {
+    "titleKind": {
+      "to": "titleAlign",
+      "values": {
+        "centered": "center",
+        "left": "start",
+        "horizontal": "split"
+      }
+    },
+    "kind": "variant",
+    "titleVariant": "titleAlign"
   },
   "sticky-stack": {
     "@index-change": "active-index-change"
@@ -1314,7 +1334,8 @@
   },
   "process-scroll": {
     "kind": "variant",
-    "titleKind": "titleVariant"
+    "titleKind": "titleAlign",
+    "titleVariant": "titleAlign"
   },
   "table-cell": {
     "kind": "type"
@@ -1370,5 +1391,17 @@
   "template-gallery": {
     "tickerLabel": "marqueeLabel",
     "tickerMarks": "marqueeMarks"
+  },
+  "map-chart": {
+    "activeId": "activeKey"
+  },
+  "trace": {
+    "selected": "selectedKey"
+  },
+  "command": {
+    "page": "pageKey"
+  },
+  "command-root": {
+    "page": "pageKey"
   }
 }
