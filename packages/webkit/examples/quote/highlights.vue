@@ -1,14 +1,20 @@
 <script setup>
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import Logo from '@aziontech/webkit/logo'
   import Quote from '@aziontech/webkit/quote'
 </script>
 
 <template>
   <Quote
-    text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
-    :highlights="['high availability', 'hundreds of global-scale applications']"
-    name="Allan Monteiro"
-    job-title="CISO & Head of Technology at Magalu"
-    :logo="magaluLogo"
-  />
+    text="Acme keeps hundreds of storefront applications available through every launch week and holiday sale, with no capacity planning."
+    :highlights="['hundreds of storefront applications', 'no capacity planning']"
+    name="Priya Patel"
+    job-title="CTO at Acme Inc."
+  >
+    <template #mark>
+      <Logo
+        name="Acme Inc."
+        size="large"
+      />
+    </template>
+  </Quote>
 </template>

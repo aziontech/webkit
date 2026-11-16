@@ -4,8 +4,8 @@
 
 <template>
   <Quote
-    text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
-    name="Allan Monteiro"
-    job-title="CISO & Head of Technology at Magalu"
+    text="Acme keeps hundreds of storefront applications available through every launch week and holiday sale, with no capacity planning."
+    name="Priya Patel"
+    job-title="CTO at Acme Inc."
   />
 </template>
