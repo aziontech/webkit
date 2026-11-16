@@ -13,6 +13,8 @@ export const MARKET_ALIASES = {
   cta: 'call-to-action',
   datatable: 'data-table',
   'feature-grid': 'capability-grid',
+  'file-viewer': 'file-preview',
+  'image-viewer': 'file-preview',
   'input-otp': 'otp-input',
   kebab: 'dropdown-menu',
   keyboard: 'kbd',

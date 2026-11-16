@@ -146,5 +146,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - `detail/resource-detail` — the storage resource's own details and settings.
 - `detail/dns-zone-detail` — records of a resource, not files.
 - `FileTokenGroup`, `FileDropzone` and `UploadProgress` — the upload pieces; see their component docs.
+- `FilePreview` — the preview of one file (image, text, JSON or a no-preview fallback, with Download) for the detail pane or drawer a file row opens; the app passes the object URL or the text it fetched.
+- `skills/webkit-azion-api` — calling the Storage API from the browser through a proxy, with the person's token.
 - `state/async-submit` — the rule for long actions; storage transfers follow it with item actions instead of Edit and Redeploy.
 - `DataTable` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.
