@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import HighlightButton from '@aziontech/webkit/highlight-button'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -62,7 +62,7 @@
     class="min-h-dvh"
   >
     <RouterView v-if="focused" />
-    <ConsoleLayout
+    <ConsoleLayoutRoot
       v-else
       :navigation="navigation"
       :breadcrumbs="breadcrumbs"
@@ -245,7 +245,7 @@
 
       <RouterView />
       <RouterView name="dialog" />
-    </ConsoleLayout>
+    </ConsoleLayoutRoot>
     <DemoBar />
     <Toaster position="bottom-end" />
   </WebkitProvider>

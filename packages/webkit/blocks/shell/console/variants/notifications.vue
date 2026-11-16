@@ -4,7 +4,9 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import HighlightButton from '@aziontech/webkit/highlight-button'
@@ -18,6 +20,8 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { computed, ref } from 'vue'
+
+  const emit = defineEmits<{ 'sign-out': [event: MouseEvent | KeyboardEvent] }>()
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -279,16 +283,21 @@
       item.id === id ? { ...item, read: true } : item
     )
   }
+
+  const onAccountSelect = (event: MouseEvent | KeyboardEvent, value: string | number) => {
+    if (value === 'logout') emit('sign-out', event)
+  }
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     v-model:tools-open="notificationsOpen"
     :navigation="navigation"
     :account="account"
     active-id="applications"
     tools-label="Notifications"
     @search-select="onSearchSelect"
+    @account-select="onAccountSelect"
   >
     <template #actions="{ compact }">
       <template v-if="compact">
@@ -651,6 +660,6 @@
         </Card>
       </div>
     </div>
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
   <Toaster position="bottom-end" />
 </template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
   import PageHeader from '@aziontech/webkit/page-header'
 
   const navigation: ConsoleLayoutNavGroup[] = [
@@ -17,7 +19,7 @@
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     :navigation="navigation"
     active-id="workloads"
   >
@@ -74,5 +76,5 @@
         />
       </div>
     </div>
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
 </template>

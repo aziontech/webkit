@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
   import Resizable from '@aziontech/webkit/resizable'
 
   const navigation: ConsoleLayoutNavGroup[] = [
@@ -15,7 +17,7 @@
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     :navigation="navigation"
     :breadcrumbs="[{ label: 'Functions', href: '/functions' }, { label: 'edge-auth' }]"
     active-id="functions"
@@ -64,5 +66,5 @@
         </Resizable>
       </div>
     </div>
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
 </template>
