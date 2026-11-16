@@ -34,13 +34,15 @@ test('the codemod renames each type to its final name, never to a deprecated ali
 const guide = readFileSync(join(PKG, 'MIGRATION_V6.md'), 'utf8')
 
 test('MIGRATION_V6.md names every deprecated type and every retired illustration name', () => {
+  const props = JSON.parse(readFileSync(join(PKG, 'src/cli/migrations/v6-props.json'), 'utf8'))
+  const retired = Object.keys(props.illustration.name.values)
   const registry = readFileSync(join(PKG, 'src/assets/illustrations/registry.ts'), 'utf8')
-  const aliases = registry
-    .slice(registry.indexOf('illustrationAssetAliases'))
-    .split('} as const')[0]
-    .matchAll(/^\s*'([a-z0-9-]+)':/gm)
-  const names = [...deprecatedTypes, ...[...aliases].map((match) => match[1])]
-  assert.ok(names.length >= 8)
+  assert.ok(retired.length >= 8)
+  assert.deepEqual(
+    retired.filter((name) => registry.includes(`'${name}'`)),
+    []
+  )
+  const names = [...deprecatedTypes, ...retired]
   assert.deepEqual(
     names.filter((name) => !guide.includes(`\`${name}\``)),
     []

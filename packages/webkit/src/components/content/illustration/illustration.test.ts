@@ -10,7 +10,6 @@ import {
   normalizeIllustrationColor
 } from '../../../assets/illustrations/palette'
 import {
-  illustrationAssetAliases,
   illustrationAssetNames,
   loadIllustrationPlaceholder,
   resolveIllustrationAsset,
@@ -248,27 +247,24 @@ describe('Illustration', () => {
     warn.mockRestore()
   })
 
-  it('keeps every retired page-data name as an alias of a registered scene, never as a scene of its own', () => {
-    for (const [retired, current] of Object.entries(illustrationAssetAliases)) {
-      expect(illustrationAssetNames).toContain(current)
-      expect(illustrationAssetNames).not.toContain(retired)
-      expect(shippedDrawings).not.toContain(retired)
-      expect(resolveIllustrationAssetName(retired)).toBe(current)
-      expect(resolveIllustrationAsset(retired)).toBe(resolveIllustrationAsset(current))
-    }
+  it.each([
+    'build-databases-from-code',
+    'distributed-sql-for-resilient-global-reads',
+    'enable-owasp-protection-with-customizable-rules',
+    'reputation-intelligence-for-enhanced-protection',
+    'saas-platforms',
+    'stay-in-control',
+    'stream-security-events-for-investigation-and-response',
+    'white-gloves-when-it-matters'
+  ])('no longer resolves the scene name %s that 6.0 renamed', async (retired) => {
+    expect(resolveIllustrationAssetName(retired)).toBeNull()
+    expect(resolveIllustrationAsset(retired)).toBeNull()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const view = render(Illustration, { props: { name: retired } })
+    await drawsScene(view, await placeholderScene())
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining(retired))
+    warn.mockRestore()
   })
-
-  it.each(Object.entries(illustrationAssetAliases))(
-    'still draws the renamed scene for the retired page-data name %s',
-    async (retired, current) => {
-      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      const view = render(Illustration, { props: { name: retired } })
-      await drawsScene(view, await sceneOf(current))
-      expect((await root(view)).getAttribute('data-placeholder')).toBeNull()
-      expect(warn).not.toHaveBeenCalled()
-      warn.mockRestore()
-    }
-  )
 
   it('does not mark a registered scene as placeheld', async () => {
     const el = await root(render(Illustration, { props: { name: 'runtime' } }))
