@@ -179,7 +179,7 @@ building blocks it calls.
 3. **Parallel discovery** — `figma-extractor`, `reuse-auditor`, then `token-mapper`.
 4. **Reconciliation** (blocking) — every token in spec exists in DESIGN.md; every Figma region is covered by the spec.
 5. **component-scaffolder** — writes the `.vue` (plus `index.ts` and the `-root` export for composition) and the flat entry in `packages/webkit/package.json#exports`; components ship no `package.json` of their own. Hooks fire on each Write.
-6. **test + examples** — the co-located `<name>.test.ts` and `examples/<name>/` with the examples the spec lists (Default + per kind + per size + Disabled).
+6. **test + examples** — the co-located `<name>.test.ts` and `examples/<name>/` with the examples the spec lists (Default + per variant + per size + Disabled).
 7. **code-connect-writer** — skips if `@figma/code-connect` missing.
 8. **echo-reporter** (cross-check) — independent parser; disagreement with the hook marks the run degraded.
 9. **component-validate** — `pnpm lint:webkit && type-check && type-coverage && test:ssr`.
@@ -224,7 +224,7 @@ The trigger logic now lives in the orchestrator command [`.claude/commands/compo
 ### 11.5) Examples
 
 `packages/webkit/examples/<name>/examples.json` lists the examples (`name`, `summary`, `file`) and
-each `.vue` is a copyable SFC with real `@aziontech/webkit/*` imports: Default + per `kind` + per
+each `.vue` is a copyable SFC with real `@aziontech/webkit/*` imports: Default + per `variant` + per
 `size` + Disabled + Loading + composition / controlled when the spec lists them. The docs site
 renders each beside its source; the first is screenshotted in light and dark by `apps/visual`.
 
