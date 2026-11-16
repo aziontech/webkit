@@ -240,6 +240,76 @@ describe('Select', () => {
       expect(valueSpan.textContent?.trim()).toBe('Pick one')
     })
 
+    describe('empty-string value', () => {
+      const BlankHost = defineComponent({
+        props: {
+          initial: { type: String, default: '' },
+          withBlank: { type: Boolean, default: true },
+          startOpen: { type: Boolean, default: false },
+          displayValue: { type: Function, default: undefined }
+        },
+        setup(props) {
+          const value = ref(props.initial)
+          const open = ref(props.startOpen)
+          const options = props.withBlank ? [{ value: '', label: 'Auto' }, ...OPTIONS] : OPTIONS
+          return () =>
+            h(
+              Select,
+              {
+                placeholder: 'Order by',
+                name: 'order',
+                modelValue: value.value,
+                open: open.value,
+                displayValue: props.displayValue as ((v: string) => string) | undefined,
+                'onUpdate:modelValue': (v: unknown) => (value.value = v as string),
+                'onUpdate:open': (v: boolean) => (open.value = v)
+              },
+              () => [
+                h(SelectTrigger, { 'aria-label': 'Order by' }),
+                h(SelectContent, null, () =>
+                  options.map((o) => h(SelectItem, { key: o.value, value: o.value }, () => o.label))
+                )
+              ]
+            )
+        }
+      })
+
+      it('shows the label of an option whose value is the empty string', async () => {
+        const { getByTestId } = render(BlankHost)
+        await vi.waitFor(() => {
+          const valueSpan = getByTestId('select-trigger__value')
+          expect(valueSpan.getAttribute('data-filled')).toBe('true')
+          expect(valueSpan.textContent?.trim()).toBe('Auto')
+        })
+        expect(getByTestId('select').hasAttribute('data-filled')).toBe(true)
+      })
+
+      it('selects the empty-string option after another value was picked', async () => {
+        const { getByTestId } = render(BlankHost, { props: { initial: 'opt-1', startOpen: true } })
+        await fireEvent.click(getOptions()[0])
+        const valueSpan = getByTestId('select-trigger__value')
+        expect(valueSpan.textContent?.trim()).toBe('Auto')
+        expect(valueSpan.getAttribute('data-filled')).toBe('true')
+      })
+
+      it('calls displayValue for the empty-string option', async () => {
+        const { getByTestId } = render(BlankHost, {
+          props: { displayValue: (v: string) => (v === '' ? 'Automatic' : v) }
+        })
+        await vi.waitFor(() =>
+          expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('Automatic')
+        )
+      })
+
+      it('keeps the placeholder for an empty string when no option has that value', async () => {
+        const { getByTestId } = render(BlankHost, { props: { withBlank: false } })
+        await nextTick()
+        const valueSpan = getByTestId('select-trigger__value')
+        expect(valueSpan.getAttribute('data-filled')).toBe('false')
+        expect(valueSpan.textContent?.trim()).toBe('Order by')
+      })
+    })
+
     // ---- Overlay open/close: trigger drives context -> Content teleports -------
     it('opens the Teleported listbox on trigger click and closes on second click', async () => {
       const { getByTestId } = render(Host)

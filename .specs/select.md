@@ -3,13 +3,13 @@ name: select
 category: input
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 2feea5cae45788789191790dbe5aa7530c27673bcffd5787e4778d574361ab30
+checksum: 29e397a3765803d070bc6748f500c56db404b2ec3cbe3be65bcf05badecd3a34
 created: 2026-06-15
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Select — Component Spec
@@ -115,6 +115,8 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 | Model          | Type      | Default     | Emits               | Notes                                                                                                                                                                         |
 | -------------- | --------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`      | `TValue`  | `undefined` | `update:modelValue` | The selection via `defineModel`: the one picked value. Its type flows to `displayValue` and `update:modelValue`. Fires when an option is selected. Uncontrolled when unbound. |
+
+**Empty value.** `undefined` and `null` mean no selection: the trigger shows the placeholder. `''` is a selection when an option has `value=""` (an `Auto` or `Any` choice): the trigger shows that option's label (or `displayValue('')`), `data-filled` is set and a named field submits `''`. With no such option, `''` means no selection, so a model seeded with `ref('')` still shows the placeholder.
 | `v-model:open` | `boolean` | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                    |
 
 ## Events

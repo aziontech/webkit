@@ -103,21 +103,20 @@
     setOpen(false)
   }
 
-  const filled = computed(() => {
-    const current = model.value
-    return current !== undefined && current !== '' && current !== null
-  })
-
   const labels = shallowReactive(new Map<unknown, string>())
   const registerLabel = (value: unknown, label: string) => {
     if (label && labels.get(value) !== label) labels.set(value, label)
   }
-  const selectedValues = (): unknown[] => {
-    const current = model.value
-    return current === undefined || current === null || current === '' ? [] : [current]
-  }
+  const blankPicked = computed(() => model.value === '' && labels.has(''))
+  const filled = computed(
+    () =>
+      (model.value !== undefined && model.value !== null && model.value !== '') || blankPicked.value
+  )
+  const selectedValues = (): unknown[] => (filled.value ? [model.value] : [])
   const labelsPending = computed(
-    () => !props.displayValue && selectedValues().some((value) => !labels.has(value))
+    () =>
+      (model.value === '' && !labels.has('')) ||
+      (!props.displayValue && selectedValues().some((value) => !labels.has(value)))
   )
 
   const displayValueComputed = computed((): string => {
