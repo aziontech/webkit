@@ -24,6 +24,7 @@
     "name": "Service",
     "file": "deploy-drawer.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Building",

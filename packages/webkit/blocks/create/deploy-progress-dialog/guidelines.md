@@ -43,7 +43,43 @@ Retry failed (outlined) appears only when the run settled with failures; the pri
 
 ### Outcome toast — through `toast`
 
-One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes the run through props and emits every action; it runs no deploy and fakes no progress. `DeployProgressDialogItem` and `DeployProgressDialogProps` are exported from `deploy-progress-dialog.vue`, and `sample.ts` holds the sample runs (`sampleRunningItems` renders when `items` is left out; `sampleDeployedItems` and `samplePartialItems` are what the variants pass). The page updates each row's `status` as the deploy reports it; the title, the bar, the filter counts and the toast follow from the rows.
+
+| Prop           | Type                         | What it does                                                                                                       |
+| -------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `items`        | `DeployProgressDialogItem[]` | Every Deployment Setting of the run with its `status` (queued, deploying, done, failed) and the failure `message`. |
+| `resourceName` | `string`                     | The resource being deployed, the page heading and the toast description.                                           |
+| `v-model:open` | `boolean`                    | Whether the dialog shows; `true` by default, Hide and Close set it to `false`.                                     |
+
+| Event      | Payload          | When                                                       |
+| ---------- | ---------------- | ---------------------------------------------------------- |
+| `retry`    | `(event, items)` | Retry failed; `items` are the failed rows to deploy again. |
+| `redeploy` | `(event)`        | Redeploy in the outcome toast; deploy every setting again. |
+
+To go live, render the block from a page that owns the deploy and pass its rows as they change:
+
+```vue
+<script setup lang="ts">
+  import DeployProgressDialog from './deploy-progress-dialog.vue'
+
+  const { settings, retry, redeploy } = useDeployRun(deploymentId)
+</script>
+
+<template>
+  <DeployProgressDialog
+    :items="settings"
+    resource-name="web-app"
+    @retry="(event, failed) => retry(failed)"
+    @redeploy="redeploy"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -76,10 +112,10 @@ One toast id for the run: `toast.loading` with "It keeps running if you leave." 
 
 ## States
 
-- Running: two settled, one deploying, two queued; advances to its outcome.
+- Running: `items` has two settled, one deploying and two queued; it advances as the page updates their `status`.
 - Drop: the confirm that starts a drop-to-deploy run.
-- PartialError: settled with one failure, Retry failed, error toast.
-- Success: every setting deployed, success toast.
+- PartialError: `items` settled with one failed row and its `message`; Retry failed, error toast.
+- Success: every row in `items` is done; success toast.
 
 ## Related
 

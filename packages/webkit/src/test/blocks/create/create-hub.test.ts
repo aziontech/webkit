@@ -2,13 +2,11 @@ import { fireEvent, render, screen, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import CreateHub from '../../../../blocks/create/create-hub/create-hub.vue'
+import { sampleAccounts } from '../../../../blocks/create/create-hub/sample'
 import CreateHubConnected from '../../../../blocks/create/create-hub/variants/connected.vue'
-import CreateHubLoadFailed from '../../../../blocks/create/create-hub/variants/load-error.vue'
 import CreateHubLoading from '../../../../blocks/create/create-hub/variants/repositories-loading.vue'
 import { expectNoA11yViolations } from '../../axe'
-import { useToastRegion } from '../../toast-region'
 
-useToastRegion()
 describe('create-hub', () => {
   it('links every template tile and keeps the heading outline, with no button roles', async () => {
     const view = render(CreateHub)
@@ -62,11 +60,33 @@ describe('create-hub', () => {
   })
 
   it('replaces the list with a Retry alert when the repositories fail to load', async () => {
-    const view = render(CreateHubLoadFailed)
-    expect(screen.getByText(/didn't load/)).toBeTruthy()
+    const view = render(CreateHub, {
+      props: { accounts: sampleAccounts, error: "The repositories didn't load." }
+    })
+    expect(screen.getByText("The repositories didn't load.")).toBeTruthy()
+    expect(screen.queryByRole('list', { name: 'Repositories in jane-doe' })).toBeNull()
     await fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
-    expect(within(view.container as HTMLElement).getByRole('status').textContent).toContain(
-      'Loading repositories'
-    )
+    expect(view.emitted('retry')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+  })
+
+  it('renders the repositories it is given and emits import with the repository', async () => {
+    const repository = { name: 'acme-store', age: '1 hour ago', icon: 'ai ai-code' }
+    const view = render(CreateHub, {
+      props: { accounts: [{ label: 'acme', value: 'acme' }], repositories: [repository] }
+    })
+    const list = screen.getByRole('list', { name: 'Repositories in acme' })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(1)
+    expect(screen.queryByRole('button', { name: 'Import docs-site' })).toBeNull()
+    await fireEvent.click(screen.getByRole('button', { name: 'Import acme-store' }))
+    const [event, payload] = view.emitted('import')?.[0] ?? []
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(payload).toEqual(repository)
+  })
+
+  it('emits connect from Continue with GitHub and shows the connect error it is given', async () => {
+    const view = render(CreateHub, { props: { connectError: 'GitHub did not answer.' } })
+    expect(screen.getByText('GitHub did not answer.')).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: 'Continue with GitHub' }))
+    expect(view.emitted('connect')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
   })
 })

@@ -15,21 +15,32 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  type DeployStatus = 'queued' | 'deploying' | 'done' | 'failed'
+  import { sampleRunningItems } from './sample'
 
-  interface Scenario {
-    settled: number
-    failing: string[]
+  /** Where one Deployment Setting is in the run. */
+  export type DeployProgressDialogStatus = 'queued' | 'deploying' | 'done' | 'failed'
+
+  /** One Deployment Setting the run deploys. */
+  export interface DeployProgressDialogItem {
+    /** Stable key. */
+    id: string
+    /** The Deployment Setting name. */
+    name: string
+    /** The environments and projects it reaches, already phrased. */
+    environments: string
+    /** Where it is in the run. */
+    status: DeployProgressDialogStatus
+    /** Why it failed, shown under the row; empty otherwise. */
+    message?: string
   }
 
-  interface DeployItem {
-    id: string
-    name: string
-    environments: string
-    status: DeployStatus
-    message: string
+  export interface DeployProgressDialogProps {
+    /** The resource being deployed, shown as the page heading. */
+    resourceName?: string
+    /** Every Deployment Setting of the run with its status. Left out, the sample renders. */
+    items?: DeployProgressDialogItem[]
   }
 
   interface StatusMeta {
@@ -37,72 +48,48 @@
     severity: TagSeverity
   }
 
-  const SCENARIO: Scenario = {
-    settled: 2,
-    failing: []
-  }
+  const props = withDefaults(defineProps<DeployProgressDialogProps>(), {
+    resourceName: 'web-app',
+    items: undefined
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent, items: DeployProgressDialogItem[]]
+    redeploy: [event: MouseEvent]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: true })
 
   const RUN_TOAST = 'deploy-progress-dialog-run'
-  const STEP_MS = 1400
 
-  const settings = [
-    {
-      id: 'production-settings',
-      name: 'production-settings',
-      environments: 'Production and Preview · 3 projects'
-    },
-    {
-      id: 'storefront-settings',
-      name: 'storefront-settings',
-      environments: 'Production · 2 projects'
-    },
-    { id: 'docs-settings', name: 'docs-settings', environments: 'Production · 1 project' },
-    { id: 'staging-settings', name: 'staging-settings', environments: 'Staging · 2 projects' },
-    { id: 'preview-settings', name: 'preview-settings', environments: 'Preview · 1 project' }
-  ]
-
-  const FAILURE = 'A rule points at an integration that does not exist, so it kept its version.'
-
-  const STATUS_TAG: Record<DeployStatus, StatusMeta> = {
+  const STATUS_TAG: Record<DeployProgressDialogStatus, StatusMeta> = {
     queued: { label: 'Queued', severity: 'neutral' },
     deploying: { label: 'Deploying', severity: 'info' },
     done: { label: 'Done', severity: 'success' },
     failed: { label: 'Failed', severity: 'danger' }
   }
 
-  const MARK: Partial<Record<DeployStatus, OutcomeIconSeverity>> = {
+  const MARK: Partial<Record<DeployProgressDialogStatus, OutcomeIconSeverity>> = {
     done: 'success',
     failed: 'danger'
   }
 
-  const items = reactive(
-    settings.map((entry, index): DeployItem => ({
-      ...entry,
-      status: index < SCENARIO.settled ? outcomeOf(entry.id) : 'queued',
-      message: index < SCENARIO.settled && SCENARIO.failing.includes(entry.id) ? FAILURE : ''
-    }))
-  )
+  const items = computed<DeployProgressDialogItem[]>(() => props.items ?? sampleRunningItems)
 
-  function outcomeOf(id: string): DeployStatus {
-    return SCENARIO.failing.includes(id) ? 'failed' : 'done'
-  }
-
-  const open = ref(false)
   const filter = ref('all')
-  const settledOnce = ref(false)
-
-  let stepTimer = 0
 
   const counts = computed(() => {
-    const total = items.length
-    const done = items.filter((item) => item.status === 'done').length
-    const failed = items.filter((item) => item.status === 'failed').length
+    const total = items.value.length
+    const done = items.value.filter((item) => item.status === 'done').length
+    const failed = items.value.filter((item) => item.status === 'failed').length
     return { total, done, failed, settled: done + failed }
   })
 
   const running = computed(() => counts.value.settled < counts.value.total)
 
-  const activeName = computed(() => items.find((item) => item.status === 'deploying')?.name ?? '')
+  const activeName = computed(
+    () => items.value.find((item) => item.status === 'deploying')?.name ?? ''
+  )
 
   const percent = computed(() =>
     counts.value.total ? Math.round((counts.value.settled / counts.value.total) * 100) : 0
@@ -116,10 +103,10 @@
   ])
 
   const visibleItems = computed(() => {
-    if (filter.value === 'all') return items
+    if (filter.value === 'all') return items.value
     if (filter.value === 'deploying')
-      return items.filter((item) => item.status === 'deploying' || item.status === 'queued')
-    return items.filter((item) => item.status === filter.value)
+      return items.value.filter((item) => item.status === 'deploying' || item.status === 'queued')
+    return items.value.filter((item) => item.status === filter.value)
   })
 
   const noun = (count: number) => (count === 1 ? 'Deployment Setting' : 'Deployment Settings')
@@ -148,94 +135,55 @@
     open.value = true
   }
 
+  const redeploy = (event: MouseEvent) => {
+    filter.value = 'all'
+    open.value = true
+    emit('redeploy', event)
+  }
+
+  const retryFailed = (event: MouseEvent) => {
+    const failed = items.value.filter((item) => item.status === 'failed')
+    filter.value = 'all'
+    emit('retry', event, failed)
+  }
+
   const report = () => {
     const { total, done, failed } = counts.value
+    if (running.value) {
+      toast.loading(title.value, {
+        description: `${props.resourceName} to every project these settings reach. It keeps running if you leave.`,
+        id: RUN_TOAST
+      })
+      return
+    }
     const actions = [
       { label: 'Edit', onClick: edit },
       { label: 'Redeploy', onClick: redeploy }
     ]
     if (failed) {
       toast.error(`Deployed ${done} of ${total} ${noun(total)}.`, {
-        id: RUN_TOAST,
         description: `${failed} failed and kept its version. The ones that succeeded stay live.`,
         duration: 0,
         closable: true,
-        actions
+        actions,
+        id: RUN_TOAST
       })
       return
     }
     toast.success(`Deployed ${total} ${noun(total)}.`, {
-      id: RUN_TOAST,
-      description: 'web-app serves every project they reach.',
+      description: `${props.resourceName} serves every project they reach.`,
       duration: 0,
       closable: true,
-      actions
+      actions,
+      id: RUN_TOAST
     })
   }
 
-  const step = () => {
-    const active = items.find((item) => item.status === 'deploying')
-    if (active) {
-      active.status = outcomeOf(active.id)
-      active.message = active.status === 'failed' ? FAILURE : ''
-    }
-    const next = items.find((item) => item.status === 'queued')
-    if (next) {
-      next.status = 'deploying'
-      stepTimer = setTimeout(step, STEP_MS)
-      return
-    }
-    settledOnce.value = true
-    report()
-  }
+  watch(running, report)
 
-  const run = () => {
-    clearTimeout(stepTimer)
-    if (!running.value) {
-      settledOnce.value = true
-      report()
-      return
-    }
-    toast.loading(title.value, {
-      id: RUN_TOAST,
-      description: 'web-app to every project these settings reach. It keeps running if you leave.'
-    })
-    const next = items.find((item) => item.status === 'queued')
-    if (next) next.status = 'deploying'
-    stepTimer = setTimeout(step, STEP_MS)
-  }
-
-  const redeploy = () => {
-    items.forEach((item) => {
-      item.status = 'queued'
-      item.message = ''
-    })
-    SCENARIO.failing.splice(0)
-    filter.value = 'all'
-    settledOnce.value = false
-    open.value = true
-    run()
-  }
-
-  const retryFailed = () => {
-    items.forEach((item) => {
-      if (item.status !== 'failed') return
-      item.status = 'queued'
-      item.message = ''
-    })
-    SCENARIO.failing.splice(0)
-    filter.value = 'all'
-    settledOnce.value = false
-    run()
-  }
-
-  onMounted(() => {
-    open.value = true
-    run()
-  })
+  onMounted(report)
 
   onBeforeUnmount(() => {
-    clearTimeout(stepTimer)
     toast.dismiss(RUN_TOAST)
   })
 </script>
@@ -243,7 +191,7 @@
 <template>
   <div class="layout-column-form layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)">
     <header class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-      <h1 class="text-balance text-heading-lg text-(--text-default)">web-app</h1>
+      <h1 class="text-balance text-heading-lg text-(--text-default)">{{ resourceName }}</h1>
       <p class="text-body-md text-(--text-muted)">
         Deploys to {{ items.length }} {{ noun(items.length) }}, each going live on its own.
       </p>
@@ -269,7 +217,7 @@
               v-if="!running"
               :severity="outcomeSeverity"
               size="large"
-              :animated="settledOnce"
+              animated
               :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
               class="shrink-0"
             />
@@ -321,7 +269,7 @@
                     v-if="MARK[item.status]"
                     :severity="MARK[item.status]"
                     size="small"
-                    :animated="settledOnce || running"
+                    animated
                     :aria-label="STATUS_TAG[item.status].label"
                   />
                   <i

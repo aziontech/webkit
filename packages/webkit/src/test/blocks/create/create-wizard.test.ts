@@ -43,14 +43,50 @@ describe('create-wizard', () => {
     expect(screen.getByRole('button', { name: 'Next' })).toBeTruthy()
   })
 
-  it('creates from Review with a loading submit and a toast, and edits Name on General', async () => {
-    render(Review)
-    const create = await screen.findByRole('button', { name: 'Create Access List' })
-    await fireEvent.click(create)
-    await waitFor(() => expect(create.getAttribute('aria-busy')).toBe('true'), wait)
-    await waitFor(() => expect(screen.getByText('office-ranges created.')).toBeTruthy(), wait)
+  it('emits submit with the values from Review, and edits Name on General', async () => {
+    const view = render(MultipageCreate, {
+      props: {
+        defaultStep: 'review',
+        defaultPolicy: 'acme-production',
+        defaultValues: { name: 'office-ranges', items: '13335\n13335\n64512' }
+      }
+    })
+    await fireEvent.click(await screen.findByRole('button', { name: 'Create Access List' }))
+    const [event, values] = view.emitted('submit')?.[0] ?? []
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(values).toEqual({
+      name: 'office-ranges',
+      type: 'asn',
+      items: '13335\n64512',
+      policy: 'acme-production',
+      enableModule: false
+    })
     await fireEvent.click(screen.getByRole('button', { name: 'Edit name' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'General' }, wait)).toBeTruthy()
+  })
+
+  it('lists the policies it is given and spins the submit while loading', async () => {
+    const view = render(MultipageCreate, {
+      props: {
+        policies: [
+          { value: 'docs-site', label: 'docs-site', description: 'acme-docs', ready: true }
+        ]
+      }
+    })
+    expect(screen.getByRole('button', { name: /docs-site/ })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /acme-staging/ })).toBeNull()
+    view.unmount()
+    const busy = render(MultipageCreate, {
+      props: {
+        defaultStep: 'review',
+        defaultValues: { name: 'office-ranges', items: '13335' },
+        loading: true
+      }
+    })
+    const create = await screen.findByRole('button', { name: 'Create Access List' }, wait)
+    expect(create.getAttribute('aria-busy')).toBe('true')
+    await fireEvent.click(create)
+    expect(busy.emitted('submit')).toBeUndefined()
   })
 
   it('runs on the Wizard: Next needs an answer, and a host with the module off adds a step', async () => {

@@ -31,6 +31,7 @@
     "name": "Default",
     "file": "create-hub.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Connected",

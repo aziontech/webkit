@@ -65,6 +65,72 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 
 In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` picks Server certificate (certificate and private key) or Trusted CA (certificate only), and the section hint follows it. The certificate is a required `Field` with a code-font `Textarea` for the PEM text and an outlined Upload file `Button` beside its label that reads a .pem, .crt or .cer file into the same field and announces the file it loaded. As soon as the text holds a certificate, a details panel reads it in the browser: Issued to, Issued by, Valid from and Expires in a two-column `KeyValueList`, the expiry carrying a `StatusIndicator` (success with the days left, warning within 30 days with a line saying to renew it, danger once expired), and a note when intermediate certificates follow. Text that is not a PEM certificate, an expired certificate and a missing or malformed private key are errors under their fields, shown only after Save, with focus on the first. The private key's description says it is stored encrypted and never shown again. Save closes the drawer and raises a success toast with the expiry date.
 
+## Data
+
+The block takes its option lists, its starting values and the save state through props and emits the values; it fetches and saves nothing. `CreateDrawerProps`, `CreateDrawerValues`, `CreateDrawerEnvironment` and `CreateDrawerCertificate` are exported from `create-drawer.vue`, and `sample.ts` holds the environments and certificates the block renders when those props are left out.
+
+| Prop                    | Type                          | What it does                                                                                   |
+| ----------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------- |
+| `environments`          | `CreateDrawerEnvironment[]`   | Every environment of the account, listed in the Environment select.                            |
+| `connectedEnvironments` | `string[]`                    | The environments the resource already publishes to; picking another one says it connects it.   |
+| `certificates`          | `CreateDrawerCertificate[]`   | The certificates Bring my own domain can pick; the one covering the address is preselected.    |
+| `defaultValues`         | `Partial<CreateDrawerValues>` | The values the form opens on (the edited domain); every open resets to them.                   |
+| `title`                 | `string`                      | The trigger label, drawer title and form name (`Add Domain`).                                  |
+| `description`           | `string`                      | The muted line under the title.                                                                |
+| `submitLabel`           | `string`                      | The footer button label; empty uses `title`.                                                   |
+| `open` (`v-model:open`) | `boolean`                     | Whether the drawer is open; the page closes it after a successful save.                        |
+| `defaultOpen`           | `boolean`                     | Opens the drawer on mount.                                                                     |
+| `loading`               | `boolean`                     | The save is in flight: the fieldset locks and the footer button spins.                         |
+| `error`                 | `string`                      | Why the save failed, shown in the danger `Alert` with Retry above the footer; the values stay. |
+
+| Event         | Payload           | When                                                                                     |
+| ------------- | ----------------- | ---------------------------------------------------------------------------------------- |
+| `submit`      | `(event, values)` | A valid Add Domain, or Retry in the error alert; `values` adds `host`, the full address. |
+| `update:open` | `(open)`          | The trigger, the close button, the overlay or Escape.                                    |
+
+The `trigger` slot replaces the Add button (an environment menu, a row menu) and receives `open` to call.
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { toast } from '@aziontech/webkit/toast'
+  import { ref } from 'vue'
+
+  import CreateDrawer, { type CreateDrawerSubmission } from './create-drawer.vue'
+
+  const { environments, certificates, connected } = useDomainOptions()
+  const { create, pending } = useCreateDomain()
+  const open = ref(false)
+  const error = ref('')
+
+  const save = async (_event: Event, values: CreateDrawerSubmission) => {
+    error.value = ''
+    try {
+      await create(values)
+      open.value = false
+      toast.success(`${values.host} added.`)
+    } catch {
+      error.value = `${values.host} wasn't added. The request timed out; your values are kept.`
+    }
+  }
+</script>
+
+<template>
+  <CreateDrawer
+    v-model:open="open"
+    :environments="environments"
+    :connected-environments="connected"
+    :certificates="certificates"
+    :loading="pending"
+    :error="error"
+    @submit="save"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Open on a blank form every time, or on the edited item's values, and clear every error on open.
@@ -107,16 +173,16 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 
 ## States
 
-- Default: Add Domain opened from the resource's Settings tab, blank, on the free domain option.
-- AddEnvironment: the same form opened from the environment menu, titled and saved as Add Environment.
-- EditDomain: opened from a domain row menu on www.example.com, with the Certificate select showing the covering wildcard.
+- Default: Add Domain opened from the resource's Settings tab, blank, on the free domain option; `loading` spins the button while the page saves.
+- AddEnvironment: the same form opened from the environment menu (the `trigger` slot), titled and saved as Add Environment (`title`).
+- EditDomain: opened from a domain row menu on www.example.com (`defaultValues`, `title`, `submitLabel`), with the Certificate select showing the covering wildcard.
 - AddRecord: the DNS zone record form; Name and Value are flagged as required only after an empty Add Record.
 - ItemRows: Add Origin on the Origins page of the storefront resource, a large drawer whose sections are `Item` rows in flush cards, saved together by one Add Origin.
 - NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 - Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
 - CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at medium size above that drawer and selects the new environment back.
-- SaveError: Add Domain after a failed save: the drawer stays open with acme-store and Production kept, the fieldset released, and a danger Alert with Retry above the footer.
+- SaveError: Add Domain after a failed save (`error` set, `defaultOpen`, `defaultValues`): the drawer stays open with acme-store and Production kept, the fieldset released, and a danger Alert with Retry above the footer.
 - FunctionInstance: Add Function Instance (or Edit from a row) with a Function `Select`, a Name, and the arguments as a `SchemaForm` of the chosen function's schema with a Fields or JSON `ToggleGroup`; the JSON `CodeEditor` marks a parse error, and required arguments are flagged only after submit.
 
 ## Related

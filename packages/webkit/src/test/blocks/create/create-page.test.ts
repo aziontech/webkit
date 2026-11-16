@@ -22,15 +22,35 @@ afterEach(() => {
 const recordRows = () =>
   within(screen.getByRole('list', { name: 'Imported records' })).queryAllByRole('listitem')
 describe('create-page', () => {
-  it('creates the domain with a loading submit and a toast, and offers no inert Import', async () => {
-    render(SinglePageCreate)
+  it('emits submit with the trimmed values, and offers no inert Import', async () => {
+    const view = render(SinglePageCreate)
     expect(screen.queryByRole('button', { name: 'Import' })).toBeNull()
-    await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'acme-domain')
+    await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), ' acme-domain ')
     await fireEvent.update(screen.getByRole('textbox', { name: 'Domain name' }), 'example.com')
+    await fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+    const [event, values] = view.emitted('submit')?.[0] ?? []
+    expect(event).toBeInstanceOf(Event)
+    expect(values).toEqual({
+      name: 'acme-domain',
+      domain: 'example.com',
+      dnssec: false,
+      active: true
+    })
+  })
+
+  it('starts from the values it is given, locks while loading and shows the error', async () => {
+    const view = render(SinglePageCreate, {
+      props: { defaultValues: { name: 'docs-site', domain: 'example.org' }, loading: true }
+    })
+    expect((screen.getByRole('textbox', { name: 'Name' }) as HTMLInputElement).value).toBe(
+      'docs-site'
+    )
     const save = screen.getByRole('button', { name: 'Save' })
+    expect(save.getAttribute('aria-busy')).toBe('true')
     await fireEvent.click(save)
-    await waitFor(() => expect(save.getAttribute('aria-busy')).toBe('true'), wait)
-    await waitFor(() => expect(screen.getByText('example.com created.')).toBeTruthy(), wait)
+    expect(view.emitted('submit')).toBeUndefined()
+    await view.rerender({ loading: false, error: 'The service did not answer.' })
+    await waitFor(() => expect(screen.getByText('The service did not answer.')).toBeTruthy(), wait)
   })
 
   it('gives Create Service a page heading and one h2 per group', () => {
