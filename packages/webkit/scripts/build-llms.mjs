@@ -228,6 +228,62 @@ function partNames(md, heading, more) {
   )
 }
 
+const tableCells = (line) =>
+  line
+    .replace(/\\\|/g, '\u0000')
+    .split('|')
+    .slice(1, -1)
+    .map((c) => c.trim().replace(/\u0000/g, '\\|'))
+
+function compactTables(md) {
+  let fence = false
+  return String(md)
+    .split('\n')
+    .map((line) => {
+      if (/^\s*```/.test(line)) fence = !fence
+      if (fence || !/^\|.*\|\s*$/.test(line)) return line
+      const cells = tableCells(line)
+      const row = cells.every((c) => /^:?-+:?$/.test(c))
+        ? cells.map((c) => c.replace(/-+/, '---'))
+        : cells
+      return `| ${row.join(' | ')} |`
+    })
+    .join('\n')
+}
+
+function sectionAsNames(md, heading, more) {
+  const lines = String(md).split('\n')
+  const start = lines.findIndex((l) => l.trim() === heading)
+  if (start === -1) return md
+  const out = lines.slice(0, start + 1)
+  let fence = false
+  let cut = false
+  let i = start + 1
+  for (; i < lines.length; i++) {
+    if (!fence && /^#{1,2}\s/.test(lines[i])) break
+    if (/^\s*```/.test(lines[i])) {
+      if (!fence && /:\s*$/.test(out.at(-1) ?? '')) out.pop()
+      else if (!fence && !out.at(-1)?.trim() && /:\s*$/.test(out.at(-2) ?? '')) out.splice(-2)
+      fence = !fence
+      cut = true
+      continue
+    }
+    if (fence) continue
+    if (/^\|/.test(lines[i])) {
+      const rows = []
+      while (i < lines.length && /^\|/.test(lines[i])) rows.push(tableCells(lines[i++]))
+      i--
+      const [head, , ...body] = rows
+      out.push(`${head[0]}: ${body.map((r) => r[0]).join(', ')}.`)
+      cut = true
+      continue
+    }
+    out.push(lines[i])
+  }
+  if (cut) out.push('', more, '')
+  return [...out, ...lines.slice(i)].join('\n')
+}
+
 function firstSentences(md) {
   let fence = false
   return String(md)
@@ -601,10 +657,14 @@ function blockPage(catalog, id, { full = true } = {}) {
     out.push(
       full
         ? guidelines
-        : partNames(
-            guidelines,
-            '## Building blocks',
-            `What each part takes: [blocks/${id}.md](blocks/${id}.md).`
+        : sectionAsNames(
+            partNames(
+              guidelines,
+              '## Building blocks',
+              `What each part takes: [blocks/${id}.md](blocks/${id}.md).`
+            ),
+            '## Data',
+            `What each prop and event does, and the go-live code: [blocks/${id}.md](blocks/${id}.md).`
           ),
       ''
     )
@@ -922,8 +982,7 @@ export function buildLlms(catalog = loadCatalog()) {
       .replace(/\n{3,}/g, '\n\n')
       .trimEnd() + '\n'
   const joinParts = (parts) =>
-    parts
-      .join('\n\n---\n\n')
+    compactTables(parts.join('\n\n---\n\n'))
       .replace(/\n{3,}/g, '\n\n')
       .trimEnd() + '\n'
   files['llms-full.txt'] = joinParts(fullParts)
