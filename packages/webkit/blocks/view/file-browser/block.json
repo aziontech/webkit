@@ -31,6 +31,7 @@
     "name": "Default",
     "file": "file-browser.vue"
   },
+  "files": ["sample.ts", "azion-storage.ts"],
   "variants": [
     {
       "name": "InsideAFolder",

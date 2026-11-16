@@ -4,95 +4,171 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import Combobox from '@aziontech/webkit/combobox'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Field from '@aziontech/webkit/field'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import SplitButton from '@aziontech/webkit/split-button'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
   import TableSearch from '@aziontech/webkit/table-search'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, useId } from 'vue'
+  import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { computed, nextTick, ref, useId, watch } from 'vue'
 
-  type FileEntry = { size: string; ext: string; lastModified: string }
-  type FolderEntry = { children: FolderTree }
-  type TreeEntry = FileEntry | FolderEntry
+  import { sampleFolders, sampleStorageName } from './sample'
 
-  interface FolderTree {
-    [name: string]: TreeEntry
+  /** Whether an entry is a folder or a file. */
+  export type FileBrowserEntryKind = 'folder' | 'file'
+
+  /** One entry of the open folder. */
+  export interface FileBrowserEntry {
+    /** Name inside the open folder; a folder name ends in a slash. */
+    name: string
+    /** Whether the entry is a folder or a file. */
+    kind: FileBrowserEntryKind
+    /** Size of a file in bytes; Size sorts on it. */
+    bytes?: number
+    /** When a file changed last, as an ISO time. */
+    modifiedAt?: string
+    /** Who changed a file last, shown beside the time. */
+    editor?: string
   }
 
-  type RowKind = 'folder' | 'file' | 'parent'
+  /** One file in the transfer card. */
+  export interface FileBrowserTransfer extends UploadProgressItem {
+    /** The folder path the file goes to; Open folder opens it. */
+    target?: string
+  }
+
+  /** What the transfer card is running. */
+  export type FileBrowserTransferOperation = 'upload' | 'move'
+
+  /** What the upload dialog or a page drop sends. */
+  export interface FileBrowserUpload {
+    /** The files to send; a folder upload keeps each path in webkitRelativePath. */
+    files: File[]
+    /** The folder path they go to. */
+    path: string
+  }
+
+  /** What the Move dialog sends. */
+  export interface FileBrowserMove {
+    /** The files to move, all in the open folder. */
+    entries: FileBrowserEntry[]
+    /** The normalised destination folder path; empty is the storage root. */
+    destination: string
+  }
+
+  export interface FileBrowserProps {
+    /** The storage name, the page heading and the first crumb. Left out, the sample name. */
+    storageName?: string
+    /** The entries of the open folder. Left out, the sample folder at the path renders. */
+    entries?: FileBrowserEntry[]
+    /** Every folder path the Move dialog offers. Left out, the folders among the entries. */
+    destinations?: string[]
+    /** The listing is loading: the table shows its loading rows and Refresh spins. */
+    loading?: boolean
+    /** Why the folder could not load; a danger alert with Retry replaces the table. */
+    error?: string
+    /** Files can be selected and moved: a checkbox column, a selection bar and Move in the row menu. */
+    movable?: boolean
+    /** Opens the Move dialog on mount for the selected files. */
+    defaultMoveOpen?: boolean
+    /** The files in the floating transfer card; empty hides it. */
+    transfers?: FileBrowserTransfer[]
+    /** What the transfer card is running. */
+    transferOperation?: FileBrowserTransferOperation
+  }
+
+  type RowKind = FileBrowserEntryKind | 'parent'
 
   interface FileRow {
-    id: string
     name: string
+    id: string
     kind: RowKind
     icon?: string
     size: string
     bytes: number
     modifiedAt?: string
     author?: string
+    entry?: FileBrowserEntry
   }
 
-  const folderPath = ref<string[]>([])
-  const rootName = 'acme-assets'
+  type UploadMode = 'files' | 'folder'
 
-  const file = (size: string, ext: string): FileEntry => ({
-    size,
-    ext,
-    lastModified: '2026-06-22T19:21:21Z'
+  type PickedFile = FileTokenGroupItem & { file: File }
+
+  const props = withDefaults(defineProps<FileBrowserProps>(), {
+    storageName: undefined,
+    entries: undefined,
+    destinations: undefined,
+    loading: false,
+    error: '',
+    movable: false,
+    defaultMoveOpen: false,
+    transfers: undefined,
+    transferOperation: 'upload'
   })
 
-  const SITE_BUILD = {
-    'assets/': { children: {} },
-    'css/': { children: {} },
-    'images/': { children: {} },
-    'js/': { children: {} },
-    'favicon.svg': file('1.25 KB', 'svg'),
-    '404.html': file('17.75 KB', 'html'),
-    'index.html': file('6.03 KB', 'html'),
-    'index.json': file('183.1 KB', 'json'),
-    'nunito-sans-bold-italic.woff2': file('49.46 KB', 'woff2'),
-    'nunito-sans-bold.woff2': file('47.14 KB', 'woff2'),
-    'nunito-sans-italic.woff2': file('49.62 KB', 'woff2'),
-    'nunito-sans-regular.woff2': file('47.07 KB', 'woff2'),
-    'project.json': file('1.01 KB', 'json')
-  } satisfies FolderTree
+  const emit = defineEmits<{
+    open: [event: Event, entry: FileBrowserEntry]
+    download: [event: Event, entry: FileBrowserEntry]
+    delete: [event: Event, entry: FileBrowserEntry]
+    upload: [event: Event, payload: FileBrowserUpload]
+    'add-folder': [event: MouseEvent | KeyboardEvent]
+    move: [event: Event, payload: FileBrowserMove]
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'cancel-transfer': [event: MouseEvent, id?: string]
+    'retry-transfer': [event: MouseEvent, id?: string]
+    'close-transfer': [event: MouseEvent]
+  }>()
 
-  const tree: FolderTree = {
-    '20260622162046/': { children: SITE_BUILD },
-    '20260610093012/': { children: SITE_BUILD },
-    'logs/': {
-      children: {
-        'access.log': file('2.4 MB', 'log'),
-        'error.log': file('128 KB', 'log')
-      }
+  const path = defineModel<string>('path', { default: '' })
+  const selection = defineModel<string[]>('selection', { default: () => [] })
+
+  const rootName = computed(() => props.storageName ?? sampleStorageName)
+  const folderPath = computed(() => path.value.match(/[^/]+\//g) ?? [])
+
+  const source = computed<FileBrowserEntry[]>(
+    () => props.entries ?? (props.loading || props.error ? [] : (sampleFolders[path.value] ?? []))
+  )
+  const items = ref<FileBrowserEntry[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
     },
-    'robots.txt': file('64 B', 'txt')
-  }
-
-  const people = [
-    'Ethan Brooks',
-    'Jordan Kim',
-    'Taylor Reed',
-    'John Smith',
-    'Sam Lee',
-    'Priya Patel',
-    'Chris Taylor',
-    'Riley Carter'
-  ]
+    { immediate: true }
+  )
 
   const GLYPHS: Record<string, string> = {
     svg: 'ai ai-image',
+    webp: 'ai ai-image',
+    png: 'ai ai-image',
+    mp4: 'ai ai-video',
     html: 'ai ai-code',
+    js: 'ai ai-code',
+    css: 'ai ai-code',
     json: 'ai ai-database',
     woff2: 'ai ai-star',
     log: 'ai ai-align-left',
@@ -115,85 +191,46 @@
 
   const addToFilesActions = [
     { label: 'Upload file', value: 'upload', icon: 'ai ai-upload' },
+    { label: 'Upload folder', value: 'upload-folder', icon: 'ai ai-folder-open' },
     { label: 'Add folder', value: 'folder', icon: 'ai ai-folder-plus' }
   ]
 
-  const sizeBytes = (size: string) => {
-    const match = /^([\d.]+)\s*(B|KB|MB)$/.exec(size)
-    if (!match) return 0
-    const unit: Record<string, number> = { B: 1, KB: 1024, MB: 1024 * 1024 }
-    return Number(match[1]) * unit[match[2]]
+  const LIMIT = 300 * 1024 * 1024
+  const formatBytes = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${Number((bytes / 1024).toFixed(2))} KB`
+    return `${Number((bytes / 1024 / 1024).toFixed(2))} MB`
   }
+  const extensionOf = (name: string) => name.split('.').pop()?.toLowerCase() ?? ''
+  const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
 
-  const removed = ref<string[]>([])
-  const pending = ref<FileRow | null>(null)
-  const deleteOpen = ref(false)
-  const confirmation = ref('')
-  const confirmLabelId = useId()
-  const entryPath = (name: string) => [...folderPath.value, name].join('')
-  const canDelete = computed(
-    () => pending.value !== null && confirmation.value.trim() === pending.value.name
-  )
-
-  const onRowAction = (value: DropdownMenuItemValue, row: FileRow) => {
-    if (value === 'open') enterFolder(row.name)
-    if (value !== 'delete') return
-    pending.value = row
-    confirmation.value = ''
-    deleteOpen.value = true
-  }
-
-  const confirmDelete = () => {
-    if (!canDelete.value || !pending.value) return
-    removed.value = [...removed.value, entryPath(pending.value.name)]
-    deleteOpen.value = false
-  }
-
-  const tableEl = ref<TableExposed<FileRow> | null>(null)
-  const isFolder = (entry: TreeEntry | undefined): entry is FolderEntry =>
-    Boolean(entry && 'children' in entry)
-  const isFileEntry = (pair: [string, TreeEntry]): pair is [string, FileEntry] => !isFolder(pair[1])
-  const childrenOf = (entry: TreeEntry | undefined) =>
-    isFolder(entry) ? entry.children : undefined
-
-  const currentFolder = computed<FolderTree>(() => {
-    let node: FolderTree | undefined = tree
-    for (const segment of folderPath.value) {
-      node = childrenOf(node?.[segment])
-      if (!node) return {}
+  const toRow = (kind: RowKind, name: string, entry?: FileBrowserEntry): FileRow => {
+    const file = kind === 'file'
+    return {
+      name,
+      id: name,
+      kind,
+      icon: file ? (GLYPHS[extensionOf(name)] ?? 'ai ai-file') : undefined,
+      size: file ? formatBytes(entry?.bytes ?? 0) : '-',
+      bytes: file ? (entry?.bytes ?? 0) : 0,
+      modifiedAt: file ? entry?.modifiedAt : undefined,
+      author: file ? entry?.editor : undefined,
+      entry
     }
-    return node
-  })
+  }
 
   const rows = computed<FileRow[]>(() => {
-    const entries = Object.entries(currentFolder.value).filter(
-      ([name]) => !removed.value.includes(entryPath(name))
-    )
-    const folders = entries
-      .filter(([, entry]) => isFolder(entry))
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([name]): FileRow => ({ id: name, name, kind: 'folder', size: '-', bytes: 0 }))
-    const files = entries
-      .filter(isFileEntry)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([name, entry], index): FileRow => ({
-        id: name,
-        name,
-        kind: 'file',
-        icon: GLYPHS[entry.ext] ?? 'ai ai-file',
-        size: entry.size,
-        bytes: sizeBytes(entry.size),
-        modifiedAt: entry.lastModified,
-        author: people[index % people.length]
-      }))
-    const list: FileRow[] = [...folders, ...files]
-    if (folderPath.value.length) {
-      list.unshift({ id: '..', name: '..', kind: 'parent', size: '-', bytes: 0 })
-    }
+    const ofKind = (kind: FileBrowserEntryKind) =>
+      items.value
+        .filter((entry) => entry.kind === kind)
+        .map((entry) => toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, entry))
+        .sort((a, b) => a.name.localeCompare(b.name))
+    const list: FileRow[] = [...ofKind('folder'), ...ofKind('file')]
+    if (folderPath.value.length) list.unshift(toRow('parent', '..'))
     return list
   })
 
-  const sorting = ref<{ id: string; desc: boolean }[]>([])
+  const sorting = ref<{ desc: boolean; id: string }[]>([])
   const compareFiles = (id: string) => (a: FileRow, b: FileRow) => {
     if (id === 'bytes') return a.bytes - b.bytes
     if (id === 'modifiedAt') return Date.parse(a.modifiedAt ?? '') - Date.parse(b.modifiedAt ?? '')
@@ -205,60 +242,298 @@
     const direction = sort.desc ? -1 : 1
     const ordered = (kind: RowKind, id: string) =>
       rows.value
-        .filter((row) => row.kind === kind)
+        .filter((item) => item.kind === kind)
         .sort((a, b) => direction * compareFiles(id)(a, b))
     return [
-      ...rows.value.filter((row) => row.kind === 'parent'),
+      ...rows.value.filter((item) => item.kind === 'parent'),
       ...ordered('folder', sort.id === 'name' ? 'name' : ''),
       ...ordered('file', sort.id)
     ]
   })
 
   const search = ref('')
+  const tableEl = ref<TableExposed<FileRow> | null>(null)
 
-  const enterFolder = (name: string) => {
-    folderPath.value = [...folderPath.value, name]
+  const rowSelection = computed<Record<string, boolean>>({
+    get: () => Object.fromEntries(selection.value.map((name) => [name, true])),
+    set: (next) => {
+      selection.value = Object.keys(next).filter((name) => next[name])
+    }
+  })
+  const isFile = (item: FileRow) => item.kind === 'file'
+
+  const openFolder = (target: string) => {
+    path.value = target
+    selection.value = []
   }
-  const goUp = () => {
-    folderPath.value = folderPath.value.slice(0, -1)
+  const goUp = () => openFolder(folderPath.value.slice(0, -1).join(''))
+  const openEntry = (event: Event, item: FileRow) => {
+    if (!item.entry) return
+    if (item.kind === 'folder') openFolder(path.value + item.name)
+    emit('open', event, item.entry)
   }
-  const onRowClick = (_event: MouseEvent, row: FileRow) => {
-    if (row.kind === 'parent') goUp()
-    if (row.kind === 'folder') enterFolder(row.name)
+  const onRowClick = (event: MouseEvent, item: FileRow) => {
+    if (item.kind === 'parent') goUp()
+    else openEntry(event, item)
   }
 
   const pathCrumbs = computed(() => [
-    { label: rootName, href: '0' },
+    { label: rootName.value, href: '0' },
     ...folderPath.value.map((segment, index) => ({ label: segment, href: String(index + 1) }))
   ])
   const onCrumb = (event: MouseEvent, href: string) => {
     event.preventDefault()
     const depth = Number(href)
-    if (Number.isFinite(depth)) folderPath.value = folderPath.value.slice(0, depth)
+    if (Number.isFinite(depth)) openFolder(folderPath.value.slice(0, depth).join(''))
   }
 
-  const loading = ref(false)
-  let refreshTimer: ReturnType<typeof setTimeout> | undefined
-  const refresh = () => {
-    if (loading.value) return
-    loading.value = true
-    clearTimeout(refreshTimer)
-    refreshTimer = setTimeout(() => {
-      loading.value = false
-    }, 700)
+  const refresh = (event: MouseEvent) => {
+    if (!props.loading) emit('refresh', event)
+  }
+
+  const pending = ref<FileRow | null>(null)
+  const deleteOpen = ref(false)
+  const confirmation = ref('')
+  const confirmLabelId = useId()
+  const canDelete = computed(
+    () => pending.value !== null && confirmation.value.trim() === pending.value.name
+  )
+
+  const onRowAction = (event: Event, value: DropdownMenuItemValue, item: FileRow) => {
+    if (value === 'open') openEntry(event, item)
+    if (value === 'download' && item.entry) emit('download', event, item.entry)
+    if (value === 'move') openMove([item])
+    if (value !== 'delete') return
+    pending.value = item
+    confirmation.value = ''
+    deleteOpen.value = true
+  }
+
+  const confirmDelete = (event: Event) => {
+    const entry = pending.value?.entry
+    if (!canDelete.value || !entry) return
+    items.value = items.value.filter((item) => item !== entry)
+    deleteOpen.value = false
+    emit('delete', event, entry)
+  }
+
+  const destinationPaths = computed(
+    () =>
+      props.destinations ??
+      (props.entries
+        ? props.entries
+            .filter((entry) => entry.kind === 'folder')
+            .map((entry) => path.value + folderName(entry.name))
+        : Object.keys(sampleFolders).filter(Boolean))
+  )
+  const destinationOptions = computed(() => [
+    { value: '/', label: '/', description: 'Storage root' },
+    ...destinationPaths.value.map((value) => ({ value }))
+  ])
+
+  const moveOpen = ref(false)
+  const moving = ref<FileRow[]>([])
+  const destination = ref('')
+  const destinationError = ref('')
+  const selectionHostEl = ref<HTMLElement | null>(null)
+
+  const moveTitle = computed(() =>
+    moving.value.length === 1 ? `Move ${moving.value[0].name}` : `Move ${moving.value.length} files`
+  )
+  const movingSize = computed(() =>
+    formatBytes(moving.value.reduce((sum, item) => sum + item.bytes, 0))
+  )
+
+  const openMove = (selected: FileRow[]) => {
+    moving.value = selected.filter((item) => item.kind === 'file')
+    if (!moving.value.length) return
+    destination.value = ''
+    destinationError.value = ''
+    moveOpen.value = true
+  }
+  const hasSelectedFiles = (selectedRows: FileRow[]) =>
+    selectedRows.some((item) => item.kind === 'file')
+
+  const normalize = (raw: string) => {
+    const target = raw.trim().replace(/\/+/g, '/').replace(/^\//, '')
+    return target && !target.endsWith('/') ? `${target}/` : target
+  }
+
+  const validate = () => {
+    const raw = destination.value.trim()
+    const target = normalize(raw)
+    if (/[^ -~]/.test(raw)) {
+      destinationError.value = 'Use letters, numbers, dots, hyphens and slashes only.'
+    } else if (target.split('/').includes('..')) {
+      destinationError.value = 'A destination cannot go up with "..". Type the full path.'
+    } else if (target === path.value) {
+      destinationError.value = 'The files are already in this folder. Pick another one.'
+    } else {
+      destinationError.value = ''
+    }
+    return destinationError.value ? null : target
+  }
+
+  const confirmMove = (event: Event) => {
+    const target = validate()
+    if (target === null) return
+    const entries = moving.value.flatMap((item) => (item.entry ? [item.entry] : []))
+    emit('move', event, { entries, destination: target })
+    selection.value = []
+    moveOpen.value = false
+  }
+
+  const uploadOpen = ref(false)
+  const picked = ref<PickedFile[]>([])
+  const pickerInputEl = ref<HTMLInputElement | null>(null)
+  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const uploadMode = ref<UploadMode>('files')
+  const addHostEl = ref<HTMLElement | null>(null)
+
+  const toPicked = (file: File): PickedFile => ({
+    file,
+    error: file.size > LIMIT ? 'Larger than 300 MB, the limit per file' : undefined,
+    warning: file.size === 0 ? 'This file is empty' : undefined
+  })
+  const pickable = computed(() => picked.value.filter((item) => !item.error))
+  const addPicked = (files: FileList | File[]) => {
+    picked.value = [...picked.value, ...Array.from(files).map(toPicked)]
+  }
+  const onPick = (event: Event) => {
+    const input = event.target as HTMLInputElement
+    addPicked(input.files ?? [])
+    input.value = ''
+  }
+  const removePicked = (index: number) => {
+    picked.value = picked.value.filter((_, position) => position !== index)
+  }
+  const openUpload = (mode: UploadMode = 'files') => {
+    picked.value = []
+    uploadMode.value = mode
+    uploadOpen.value = true
+  }
+  const onAddClick = () => openUpload()
+  const onAddItem = (event: MouseEvent | KeyboardEvent, item: SplitButtonItem) => {
+    if (item.value === 'upload') openUpload()
+    if (item.value === 'upload-folder') openUpload('folder')
+    if (item.value === 'folder') emit('add-folder', event)
+  }
+
+  const startUpload = (event: MouseEvent) => {
+    if (!pickable.value.length) return
+    emit('upload', event, { files: pickable.value.map((item) => item.file), path: path.value })
+    uploadOpen.value = false
+  }
+
+  const onPageDrop = (event: DragEvent, files: File[]) => {
+    const accepted = files.filter((file) => file.size <= LIMIT)
+    if (accepted.length) emit('upload', event, { files: accepted, path: path.value })
+    const refused = files.filter((file) => file.size > LIMIT)
+    if (refused.length) {
+      toast.error(`${refused[0].name} is larger than 300 MB.`, {
+        description: 'Files over the limit per file were left out of the upload.',
+        position: 'top-right'
+      })
+    }
+  }
+
+  const transferItems = computed<FileBrowserTransfer[]>(() => props.transfers ?? [])
+  const transferExpanded = ref(true)
+  const lastTarget = computed(
+    () => transferItems.value.find((item) => item.status === 'success')?.target ?? ''
+  )
+
+  const closeTransfer = async (event: MouseEvent) => {
+    const moved = props.transferOperation === 'move'
+    emit('close-transfer', event)
+    await nextTick()
+    const host = moved ? selectionHostEl.value : addHostEl.value
+    host?.querySelector<HTMLElement>(moved ? 'input, button' : 'button')?.focus()
+  }
+
+  if (props.defaultMoveOpen) {
+    openMove(selection.value.flatMap((name) => rows.value.filter((item) => item.id === name)))
   }
 </script>
 
 <template>
   <div class="layout-boundary">
     <div class="flex h-full min-h-0 flex-col">
-      <section class="flex min-h-0 flex-col">
+      <section
+        key="section-error"
+        v-if="error"
+        class="flex min-h-0 flex-col"
+      >
+        <Card>
+          <template #default>
+            <div class="flex w-full flex-col gap-(--spacing-sm)">
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <i
+                  class="ai ai-database shrink-0 text-body-lg text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                <h1 class="min-w-0 truncate text-heading-2xs text-(--text-default)">
+                  {{ rootName }}
+                </h1>
+              </div>
+              <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
+                <div class="min-w-0">
+                  <Breadcrumb
+                    :items="pathCrumbs"
+                    class="w-full"
+                    @navigate="onCrumb"
+                  />
+                </div>
+                <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+                  <Tooltip content="Refresh">
+                    <IconButton
+                      icon="ai ai-refresh"
+                      variant="outline"
+                      size="medium"
+                      aria-label="Refresh"
+                      @click="refresh"
+                    />
+                  </Tooltip>
+                  <SplitButton
+                    label="Add to files"
+                    icon="ai ai-plus"
+                    variant="primary"
+                    size="medium"
+                    :items="addToFilesActions"
+                    disabled
+                  />
+                </div>
+              </div>
+              <Alert
+                severity="danger"
+                :label="error"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
+            </div>
+          </template>
+        </Card>
+      </section>
+      <section
+        key="section-files"
+        v-else
+        class="relative flex min-h-0 flex-col"
+      >
+        <FileDropzone
+          variant="overlay"
+          :title="`Drop files to upload them to ${folderPath.length ? folderPath.at(-1) : rootName}`"
+          description="Up to 300 MB per file."
+          @drop="onPageDrop"
+        />
         <Card :padded="false">
           <template #default>
             <DataTable
               ref="tableEl"
               v-model:sorting="sorting"
               v-model:global-filter="search"
+              v-model:row-selection="rowSelection"
+              :selectable="movable"
+              :row-selectable="isFile"
               :data="sortedRows"
               :columns="columns"
               row-key="id"
@@ -272,8 +547,11 @@
               export-filename="files.csv"
               @row-click="onRowClick"
             >
-              <template #toolbar>
-                <div class="flex w-full flex-col gap-(--spacing-sm)">
+              <template #toolbar="{ selectedRows, selectedCount, clearSelection }">
+                <div
+                  ref="selectionHostEl"
+                  class="flex w-full flex-col gap-(--spacing-sm)"
+                >
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
                       class="ai ai-database shrink-0 text-body-lg text-(--text-muted)"
@@ -332,39 +610,70 @@
                         @navigate="onCrumb"
                       />
                     </div>
-                    <SplitButton
-                      label="Add to files"
-                      icon="ai ai-plus"
-                      variant="primary"
-                      size="medium"
-                      :items="addToFilesActions"
+                    <div
+                      ref="addHostEl"
                       class="shrink-0"
+                    >
+                      <SplitButton
+                        label="Add to files"
+                        icon="ai ai-plus"
+                        variant="primary"
+                        size="medium"
+                        :items="addToFilesActions"
+                        @click="onAddClick"
+                        @item-click="onAddItem"
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    v-if="movable && selectedCount"
+                    class="flex w-full flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-control) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
+                  >
+                    <span class="text-label-sm text-(--text-default)"
+                      >{{ selectedCount }} selected</span
+                    >
+                    <Button
+                      label="Clear selection"
+                      variant="ghost"
+                      size="small"
+                      @click="clearSelection()"
                     />
+                    <div class="ms-auto flex items-center gap-(--spacing-xs)">
+                      <Button
+                        label="Move"
+                        icon="ai ai-arrow-right-left"
+                        variant="outline"
+                        size="small"
+                        :disabled="!hasSelectedFiles(selectedRows)"
+                        @click="openMove(selectedRows)"
+                      />
+                    </div>
                   </div>
                 </div>
               </template>
 
-              <template #cell-name="{ value, row }">
+              <template #cell-name="{ value, row: item }">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
-                    v-if="row.kind === 'parent'"
+                    v-if="item.kind === 'parent'"
                     class="ai ai-folder-open shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <i
-                    v-else-if="row.kind === 'folder'"
+                    v-else-if="item.kind === 'folder'"
                     class="ai ai-folder shrink-0 text-body-lg text-(--text-link)"
                     aria-hidden="true"
                   />
                   <i
                     v-else
-                    :class="row.icon"
+                    :class="item.icon"
                     class="shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <Button
                     key="button-1"
-                    v-if="row.kind === 'parent'"
+                    v-if="item.kind === 'parent'"
                     variant="link"
                     label=".."
                     aria-label="Go up to the parent folder"
@@ -372,11 +681,11 @@
                   />
                   <Button
                     key="button-2"
-                    v-else-if="row.kind === 'folder'"
+                    v-else-if="item.kind === 'folder'"
                     variant="link"
                     :label="value"
                     class="min-w-0"
-                    @click.stop="enterFolder(row.name)"
+                    @click.stop="(event: MouseEvent) => openEntry(event, item)"
                   />
                   <span
                     v-else
@@ -386,27 +695,27 @@
                 </div>
               </template>
 
-              <template #cell-bytes="{ row }">
-                <span class="text-(--text-muted)">{{ row.size }}</span>
+              <template #cell-bytes="{ row: item }">
+                <span class="text-(--text-muted)">{{ item.size }}</span>
               </template>
 
-              <template #cell-modifiedAt="{ row }">
+              <template #cell-modifiedAt="{ row: item }">
                 <Table.CellTime
-                  v-if="row.modifiedAt"
-                  :value="row.modifiedAt"
-                  :author="row.author"
+                  v-if="item.modifiedAt"
+                  :value="item.modifiedAt"
+                  :author="item.author"
                 />
               </template>
 
-              <template #cell-actions="{ row }">
+              <template #cell-actions="{ row: item }">
                 <Table.CellActions
-                  v-if="row.kind !== 'parent'"
-                  :name="row.name"
-                  @select="(_event, value) => onRowAction(value, row)"
+                  v-if="item.kind !== 'parent'"
+                  :name="item.name"
+                  @select="(event, value) => onRowAction(event, value, item)"
                 >
                   <DropdownMenuGroup>
                     <DropdownMenuItem
-                      v-if="row.kind === 'folder'"
+                      v-if="item.kind === 'folder'"
                       key="open"
                       value="open"
                       label="Open"
@@ -426,6 +735,18 @@
                       <template #leading
                         ><i
                           class="ai ai-download"
+                          aria-hidden="true"
+                      /></template>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      v-if="movable && item.kind === 'file'"
+                      key="move"
+                      value="move"
+                      label="Move"
+                    >
+                      <template #leading
+                        ><i
+                          class="ai ai-arrow-right-left"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuItem>
@@ -477,6 +798,8 @@
                       variant="secondary"
                       size="medium"
                       :items="addToFilesActions"
+                      @click="onAddClick"
+                      @item-click="onAddItem"
                     />
                   </template>
                 </EmptyState>
@@ -533,5 +856,190 @@
         />
       </template>
     </ConfirmDialog>
+    <Dialog
+      v-model:open="uploadOpen"
+      size="medium"
+    >
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <DialogTitle>{{
+              uploadMode === 'folder' ? 'Upload folder' : 'Upload files'
+            }}</DialogTitle>
+            <DialogDescription>
+              {{ uploadMode === 'folder' ? 'The folder and its subfolders go' : 'Files go' }} to
+              {{ path || rootName }}. A file with the same path is replaced.
+            </DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelBody>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <FileDropzone
+              :directories="uploadMode === 'folder'"
+              :title="uploadMode === 'folder' ? 'Drop a folder to upload' : undefined"
+              description="Up to 300 MB per file."
+              @drop="(_event, files) => addPicked(files)"
+            >
+              <Button
+                key="button-1"
+                v-if="uploadMode === 'folder'"
+                label="Browse folder"
+                variant="secondary"
+                size="medium"
+                icon="ai ai-folder-open"
+                @click="folderInputEl?.click()"
+              />
+              <Button
+                key="button-2"
+                v-else
+                label="Browse files"
+                variant="secondary"
+                size="medium"
+                @click="pickerInputEl?.click()"
+              />
+            </FileDropzone>
+            <input
+              ref="pickerInputEl"
+              type="file"
+              multiple
+              class="hidden"
+              aria-hidden="true"
+              tabindex="-1"
+              @change="onPick"
+            />
+            <input
+              ref="folderInputEl"
+              type="file"
+              webkitdirectory
+              class="hidden"
+              aria-hidden="true"
+              tabindex="-1"
+              @change="onPick"
+            />
+            <FileTokenGroup
+              v-if="picked.length"
+              :items="picked"
+              :limit="5"
+              aria-label="Files to upload"
+              @remove="(_event, { index }) => removePicked(index)"
+            />
+          </div>
+        </PanelBody>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              variant="outline"
+              size="medium"
+              @click="uploadOpen = false"
+            />
+            <Button
+              :label="pickable.length > 1 ? `Upload ${pickable.length} files` : 'Upload file'"
+              variant="primary"
+              size="medium"
+              icon="ai ai-upload"
+              :disabled="!pickable.length"
+              @click="startUpload"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
+    </Dialog>
+    <Dialog
+      v-model:open="moveOpen"
+      size="medium"
+    >
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <DialogTitle>{{ moveTitle }}</DialogTitle>
+            <DialogDescription>
+              {{ moving.length === 1 ? '1 file' : `${moving.length} files` }}, {{ movingSize }},
+              from {{ path || rootName }}. Pick a folder or type a new path; leave it empty for the
+              storage root.
+            </DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelBody>
+          <form
+            class="flex flex-col gap-(--spacing-md)"
+            novalidate
+            @submit.prevent="confirmMove"
+          >
+            <ul
+              aria-label="Files to move"
+              class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
+            >
+              <li
+                v-for="item in moving"
+                :key="item.name"
+                class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
+              >
+                <i
+                  class="ai ai-file shrink-0 text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                <span class="min-w-0 truncate">{{ item.name }}</span>
+                <span class="ms-auto shrink-0 text-(--text-muted)">{{ item.size }}</span>
+              </li>
+            </ul>
+            <Field :invalid="!!destinationError">
+              <Field.Label>Destination folder</Field.Label>
+              <Combobox
+                v-model="destination"
+                :options="destinationOptions"
+                placeholder="/ (storage root)"
+                size="large"
+                clearable
+                @update:model-value="destinationError = ''"
+              />
+              <Field.Description
+                >A folder that does not exist yet is created with the move.</Field.Description
+              >
+              <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
+            </Field>
+          </form>
+        </PanelBody>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              variant="outline"
+              size="medium"
+              @click="moveOpen = false"
+            />
+            <Button
+              :label="moving.length === 1 ? 'Move file' : `Move ${moving.length} files`"
+              variant="primary"
+              size="medium"
+              @click="confirmMove"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
+    </Dialog>
+    <UploadProgress
+      v-if="transferItems.length"
+      v-model:open="transferExpanded"
+      :items="transferItems"
+      :operation="transferOperation"
+      :cancelable="transferOperation === 'upload'"
+      @cancel="(event, id) => emit('cancel-transfer', event, id)"
+      @retry="(event, id) => emit('retry-transfer', event, id)"
+      @close="closeTransfer"
+    >
+      <template
+        v-if="transferOperation === 'upload'"
+        #actions
+      >
+        <Button
+          v-if="transferItems.some((item) => item.status === 'success')"
+          label="Open folder"
+          variant="secondary"
+          size="small"
+          @click="openFolder(lastTarget)"
+        />
+      </template>
+    </UploadProgress>
   </div>
 </template>
