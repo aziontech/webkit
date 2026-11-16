@@ -1,11 +1,18 @@
 import { spawnSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync, realpathSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
 import { LEGACY_MARKER, listBundle } from './bundle.js'
 import { planSync } from './sync.js'
-import { brokenVueTscIn, VUE_TSC_BROKEN, VUE_TSC_KNOWN_GOOD, vueTscState } from './toolchain.js'
+import {
+  brokenVueTscIn,
+  depDecision,
+  VUE_TSC_BROKEN,
+  VUE_TSC_KNOWN_GOOD,
+  vueTscState
+} from './toolchain.js'
 
 const OWN = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'))
 
@@ -315,21 +322,32 @@ export function rawColourStylesheets(projectDir) {
   return found.sort()
 }
 
-const NOT_A_REPO_NOTE =
-  'This folder is not a git repository yet, so husky cannot install the pre-commit hook (the install prints ".git can\'t be found"). After `git init`, run `npx husky` once (or your package manager install again) to activate .husky/pre-commit — `npx @aziontech/webkit doctor` reports it until then.'
+export const NO_GIT_HOOKS_NOTE =
+  'Not a git repository, so no pre-commit hook was added (husky, "prepare", .husky/pre-commit). After `git init`, run `npx @aziontech/webkit init` again to add it.'
 
-function huskyActions(projectDir) {
-  const git = gitState(projectDir)
+export function wantsGitHooks(projectDir, git = gitState(projectDir)) {
+  return git.repo || existsSync(join(projectDir, '.husky/pre-commit'))
+}
+
+function huskyActions(projectDir, git) {
   if (!git.available) {
     return [
       {
         type: 'advise',
         message:
-          'git was not found, so the pre-commit hook cannot be activated. Install git, then run `git init` (if needed) and `npx husky` to activate .husky/pre-commit.'
+          'git was not found, so the pre-commit hook cannot be activated. Install git, then run `npx husky` to activate .husky/pre-commit.'
       }
     ]
   }
-  if (!git.repo) return [{ type: 'advise', message: NOT_A_REPO_NOTE }]
+  if (!git.repo) {
+    return [
+      {
+        type: 'advise',
+        message:
+          'This folder is not a git repository yet, so husky cannot activate .husky/pre-commit. After `git init`, run `npx husky` once.'
+      }
+    ]
+  }
   if (git.huskyActive) return []
   if (!git.atRoot) {
     const rel = relative(git.root, projectDir).split('\\').join('/')
@@ -367,17 +385,122 @@ function vueTscActions(projectDir) {
   if (!broken.length) return []
   return [
     {
-      type: 'add-dep',
-      dep: 'vue-tsc',
-      version: VUE_TSC_KNOWN_GOOD,
-      dev: state.field === 'devDependencies',
-      replace: state.declared
-    },
-    {
       type: 'advise',
-      message: `vue-tsc "${state.declared}" can resolve to a broken release, so it is pinned to ${VUE_TSC_KNOWN_GOOD}: ${why(broken)}. Relax the pin once a fixed vue-tsc ships.`
+      message: `vue-tsc "${state.declared}" was left as it is, but it can resolve to a release with a known bug: ${why(broken)}. If \`vue-tsc -b\` reports it, pin the last good release: \`npm i -D vue-tsc@${VUE_TSC_KNOWN_GOOD}\`.`
     }
   ]
+}
+
+function readPackage(projectDir) {
+  try {
+    return JSON.parse(read(join(projectDir, 'package.json')) || '{}') || {}
+  } catch {
+    return {}
+  }
+}
+
+function depAction(pkg, dep, version, dev) {
+  const field = pkg.dependencies?.[dep]
+    ? 'dependencies'
+    : pkg.devDependencies?.[dep]
+      ? 'devDependencies'
+      : null
+  const declared = field ? pkg[field][dep] : null
+  const action = { type: 'add-dep', dep, version, dev: field ? field === 'devDependencies' : dev }
+  const decision = depDecision(declared, version)
+  if (decision === 'keep') action.keep = declared
+  if (decision === 'upgrade') action.replace = declared
+  return action
+}
+
+const STARTER_STYLESHEETS = [
+  {
+    from: 'create-vite',
+    specifier: './style.css',
+    files: {
+      'src/style.css': [
+        '02fb08272a1d4747',
+        '0f29d4c90c7a4926',
+        '15877ce57b486ea7',
+        '6ca1092afaa18583',
+        '7f76c00cc590b832',
+        'a7999da7bebc5519',
+        'f96b2ff1e5661fb6'
+      ]
+    }
+  },
+  {
+    from: 'create-vue',
+    specifier: './assets/main.css',
+    files: {
+      'src/assets/main.css': ['03b7adab212b10f5', 'abd78dde8ddb0a4d'],
+      'src/assets/base.css': ['237fb2ce404c4510', '424c9a4bc7e76dd5']
+    }
+  }
+]
+
+const fingerprint = (text) =>
+  createHash('sha256').update(text.replace(/\r\n/g, '\n').trimEnd()).digest('hex').slice(0, 16)
+
+const REFERENCE_EXTENSIONS = /\.(vue|[cm]?[jt]sx?|html|css|scss)$/
+
+function referencedElsewhere(projectDir, needle, skip) {
+  const walk = (rel) => {
+    let entries = []
+    try {
+      entries = readdirSync(join(projectDir, rel || '.'), { withFileTypes: true })
+    } catch {
+      return false
+    }
+    for (const entry of entries) {
+      if (entry.name.startsWith('.') || BUILD_OUTPUT_DIRS.includes(entry.name)) continue
+      const child = rel ? `${rel}/${entry.name}` : entry.name
+      if (entry.isDirectory()) {
+        if (walk(child)) return true
+      } else if (REFERENCE_EXTENSIONS.test(entry.name) && !skip.includes(child)) {
+        if ((read(join(projectDir, child)) || '').includes(needle)) return true
+      }
+    }
+    return false
+  }
+  return walk('')
+}
+
+export function starterStylesheet(projectDir, entry) {
+  if (!entry) return null
+  const src = read(join(projectDir, entry)) || ''
+  for (const starter of STARTER_STYLESHEETS) {
+    const escaped = starter.specifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const line = new RegExp(`^[ \\t]*import\\s+['"]${escaped}['"];?[ \\t]*$`, 'm').exec(src)?.[0]
+    if (!line) continue
+    const files = Object.keys(starter.files).filter((rel) => existsSync(join(projectDir, rel)))
+    if (!files.includes(Object.keys(starter.files)[0])) continue
+    const pristine = files.every((rel) =>
+      starter.files[rel].includes(fingerprint(read(join(projectDir, rel)) || ''))
+    )
+    const needle = starter.specifier.replace(/^\.\//, '')
+    const used = referencedElsewhere(projectDir, needle, [entry, ...files])
+    return { ...starter, entry, line, files, untouched: pristine && !used, used }
+  }
+  return null
+}
+
+function preCommitAction(projectDir) {
+  const existingHook = read(join(projectDir, '.husky/pre-commit'))
+  if (
+    existingHook &&
+    existingHook.includes(LEGACY_HUSKY_HOOK_MARKER) &&
+    !existingHook.includes(HUSKY_HOOK_MARKER)
+  ) {
+    return { type: 'write', path: '.husky/pre-commit', content: upgradeLegacyHook(existingHook) }
+  }
+  return {
+    type: 'append',
+    path: '.husky/pre-commit',
+    content: HUSKY_PRECOMMIT,
+    marker: HUSKY_HOOK_MARKER,
+    mode: 0o755
+  }
 }
 
 export function planInit(projectDir, opts = {}) {
@@ -386,17 +509,22 @@ export function planInit(projectDir, opts = {}) {
   const icons = opts.icons !== false
   const wireEntry = opts.wireEntry !== false
 
+  const pkg = readPackage(projectDir)
+  const git = gitState(projectDir)
+  const gitHooks = wantsGitHooks(projectDir, git)
+
   const runtimeDeps = icons ? [...RUNTIME_DEPS, ICONS_DEP] : RUNTIME_DEPS
   for (const dep of runtimeDeps) {
-    actions.push({ type: 'add-dep', dep, version: DEP_VERSION(dep), dev: false })
+    actions.push(depAction(pkg, dep, DEP_VERSION(dep), false))
   }
   for (const dep of DEV_DEPS) {
-    actions.push({ type: 'add-dep', dep, version: DEP_VERSION(dep), dev: true })
+    if (dep === 'husky' && !gitHooks) continue
+    actions.push(depAction(pkg, dep, DEP_VERSION(dep), true))
   }
   const tailwindVite = usesTailwindVitePlugin(projectDir)
   for (const { dep, version } of STYLE_DEV_DEPS) {
     if (tailwindVite && dep === '@tailwindcss/postcss') continue
-    actions.push({ type: 'add-dep', dep, version, dev: true })
+    actions.push(depAction(pkg, dep, version, true))
   }
   actions.push(...vueTscActions(projectDir))
   actions.push({
@@ -505,16 +633,10 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  const existingPrepare = (() => {
-    const raw = read(join(projectDir, 'package.json'))
-    if (!raw) return undefined
-    try {
-      return JSON.parse(raw)?.scripts?.prepare
-    } catch {
-      return undefined
-    }
-  })()
-  if (existingPrepare && existingPrepare !== 'husky') {
+  const existingPrepare = pkg.scripts?.prepare
+  if (!gitHooks) {
+    actions.push({ type: 'advise', message: NO_GIT_HOOKS_NOTE })
+  } else if (existingPrepare && existingPrepare !== 'husky') {
     actions.push({
       type: 'advise',
       message:
@@ -530,39 +652,43 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  const existingHook = read(join(projectDir, '.husky/pre-commit'))
-  if (
-    existingHook &&
-    existingHook.includes(LEGACY_HUSKY_HOOK_MARKER) &&
-    !existingHook.includes(HUSKY_HOOK_MARKER)
-  ) {
+  if (gitHooks) actions.push(preCommitAction(projectDir), ...huskyActions(projectDir, git))
+
+  const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
+  const starter = starterStylesheet(projectDir, entry)
+  const removesStarter = Boolean(starter?.untouched && wireEntry)
+  if (removesStarter) {
     actions.push({
-      type: 'write',
-      path: '.husky/pre-commit',
-      content: upgradeLegacyHook(existingHook)
+      type: 'remove-starter',
+      path: entry,
+      line: starter.line,
+      files: starter.files,
+      replacement: "import './webkit.css'"
     })
-  } else {
+  } else if (starter) {
+    const reason = starter.untouched
+      ? 'it is the untouched starter, but --no-entry keeps init out of your entry'
+      : starter.used
+        ? 'another file imports it too'
+        : 'you changed it'
     actions.push({
-      type: 'append',
-      path: '.husky/pre-commit',
-      content: HUSKY_PRECOMMIT,
-      marker: HUSKY_HOOK_MARKER,
-      mode: 0o755
+      type: 'advise',
+      message: `${starter.files.join(' and ')} (the ${starter.from} starter stylesheet, imported in ${entry}) was left in place because ${reason}. Its global rules (body margin and colours, #app width) fight the WebKit theme: delete ${starter.files.length === 1 ? 'it' : 'them'} and the \`${starter.line.trim()}\` line when you no longer need them.`
     })
   }
-  actions.push(...huskyActions(projectDir))
 
-  const rawStylesheets = rawColourStylesheets(projectDir)
+  const rawStylesheets = rawColourStylesheets(projectDir).filter(
+    (rel) => !(removesStarter && starter.files.includes(rel))
+  )
   if (rawStylesheets.length) {
     actions.push({
       type: 'advise',
-      message: `${rawStylesheets.join(', ')} ${rawStylesheets.length === 1 ? 'uses' : 'use'} raw colours (hex, rgb or hsl — a starter template's stylesheet usually does), so the pre-commit stylelint rejects ${rawStylesheets.length === 1 ? 'it' : 'them'} and your first commit fails. Replace the values with theme tokens (var(--bg-canvas), var(--text-default)…), or delete the starter stylesheet and its import, before committing.`
+      message: `${rawStylesheets.join(', ')} ${rawStylesheets.length === 1 ? 'uses' : 'use'} raw colours (hex, rgb or hsl — a starter template's stylesheet usually does), so the webkit stylelint${gitHooks ? ' in the pre-commit hook' : ''} rejects ${rawStylesheets.length === 1 ? 'it' : 'them'}. Replace the values with theme tokens (var(--bg-canvas), var(--text-default)…), or delete the starter stylesheet and its import.`
     })
   }
 
   actions.push(...planSync(projectDir).actions)
 
-  const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   const entryImports = ["import './webkit.css'"]
   if (icons) entryImports.push("import '@aziontech/icons'")
   if (entry && wireEntry) {

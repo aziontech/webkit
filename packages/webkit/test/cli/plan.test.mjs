@@ -1,5 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -19,13 +20,16 @@ import { FRAGMENT_START } from '../../src/cli/bundle.js'
 const MAIN_TS =
   "import { createApp } from 'vue'\nimport App from './App.vue'\ncreateApp(App).mount('#app')\n"
 
-function makeProject() {
+const hasGit = !spawnSync('git', ['--version']).error
+
+function makeProject({ git = false } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'webkit-cli-'))
   writeFileSync(
     join(dir, 'package.json'),
     JSON.stringify({ name: 'demo', version: '1.0.0' }, null, 2)
   )
   mkdirSync(join(dir, 'src'))
+  if (git) spawnSync('git', ['init', '-q'], { cwd: dir })
   return dir
 }
 
@@ -33,36 +37,40 @@ function findAddDeps(plan) {
   return plan.filter((a) => a.type === 'add-dep').map((a) => a.dep)
 }
 
-test('planInit records the runtime and dev dependencies', () => {
-  const dir = makeProject()
-  try {
-    const plan = planInit(dir, {})
-    const deps = findAddDeps(plan)
-    for (const d of ['@aziontech/webkit', '@aziontech/theme', '@aziontech/icons']) {
-      assert.ok(deps.includes(d), `missing runtime dep ${d}`)
+test(
+  'planInit records the runtime and dev dependencies',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const dir = makeProject({ git: true })
+    try {
+      const plan = planInit(dir, {})
+      const deps = findAddDeps(plan)
+      for (const d of ['@aziontech/webkit', '@aziontech/theme', '@aziontech/icons']) {
+        assert.ok(deps.includes(d), `missing runtime dep ${d}`)
+      }
+      // The eslint plugin + stylelint config ship inside @aziontech/webkit now, so they
+      // are NOT separate deps; only the tooling peers are added.
+      for (const d of ['eslint', 'stylelint', 'vue-eslint-parser', 'husky']) {
+        assert.ok(deps.includes(d), `missing dev dep ${d}`)
+      }
+      assert.ok(
+        !deps.includes('@aziontech/eslint-plugin-webkit'),
+        'must not add a separate eslint-plugin package'
+      )
+      assert.ok(
+        !deps.includes('@aziontech/stylelint-config-webkit'),
+        'must not add a separate stylelint-config package'
+      )
+      // Dev flag is set correctly.
+      const dev = plan.find((a) => a.type === 'add-dep' && a.dep === 'eslint')
+      assert.equal(dev.dev, true)
+      const runtime = plan.find((a) => a.type === 'add-dep' && a.dep === '@aziontech/webkit')
+      assert.equal(runtime.dev, false)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
     }
-    // The eslint plugin + stylelint config ship inside @aziontech/webkit now, so they
-    // are NOT separate deps; only the tooling peers are added.
-    for (const d of ['eslint', 'stylelint', 'vue-eslint-parser', 'husky']) {
-      assert.ok(deps.includes(d), `missing dev dep ${d}`)
-    }
-    assert.ok(
-      !deps.includes('@aziontech/eslint-plugin-webkit'),
-      'must not add a separate eslint-plugin package'
-    )
-    assert.ok(
-      !deps.includes('@aziontech/stylelint-config-webkit'),
-      'must not add a separate stylelint-config package'
-    )
-    // Dev flag is set correctly.
-    const dev = plan.find((a) => a.type === 'add-dep' && a.dep === 'eslint')
-    assert.equal(dev.dev, true)
-    const runtime = plan.find((a) => a.type === 'add-dep' && a.dep === '@aziontech/webkit')
-    assert.equal(runtime.dev, false)
-  } finally {
-    rmSync(dir, { recursive: true, force: true })
   }
-})
+)
 
 test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () => {
   const dir = makeProject()
@@ -314,26 +322,30 @@ test('an existing stylelint config is advised, not overwritten', () => {
   }
 })
 
-test('planInit adds the husky "prepare" script and a shim-free pre-commit hook', () => {
-  const dir = makeProject()
-  try {
-    const plan = planInit(dir, {})
-    const prepare = plan.find((a) => a.type === 'merge-json' && a.path === 'package.json')
-    assert.ok(prepare, 'expected a package.json merge for the prepare script')
-    assert.equal(prepare.merge.scripts.prepare, 'husky')
+test(
+  'planInit adds the husky "prepare" script and a shim-free pre-commit hook',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const dir = makeProject({ git: true })
+    try {
+      const plan = planInit(dir, {})
+      const prepare = plan.find((a) => a.type === 'merge-json' && a.path === 'package.json')
+      assert.ok(prepare, 'expected a package.json merge for the prepare script')
+      assert.equal(prepare.merge.scripts.prepare, 'husky')
 
-    const hook = plan.find((a) => a.type === 'append' && a.path === '.husky/pre-commit')
-    assert.ok(hook, 'expected the husky pre-commit hook')
-    assert.doesNotMatch(
-      hook.content,
-      /husky\.sh/,
-      'must not use the removed husky v8 bootstrap shim'
-    )
-    assert.match(hook.content, /npx eslint/)
-  } finally {
-    rmSync(dir, { recursive: true, force: true })
+      const hook = plan.find((a) => a.type === 'append' && a.path === '.husky/pre-commit')
+      assert.ok(hook, 'expected the husky pre-commit hook')
+      assert.doesNotMatch(
+        hook.content,
+        /husky\.sh/,
+        'must not use the removed husky v8 bootstrap shim'
+      )
+      assert.match(hook.content, /npx eslint/)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
   }
-})
+)
 
 test('planInit merges the webkit MCP server into .mcp.json', () => {
   const dir = makeProject()
@@ -480,55 +492,59 @@ test('planInit fences the CLAUDE.md fragment instead of appending it once', () =
   }
 })
 
-test('applyPlan writes the expected files and is idempotent on a second run', () => {
-  const dir = makeProject()
-  try {
-    // First run.
-    applyPlan(dir, planInit(dir, {}))
+test(
+  'applyPlan writes the expected files and is idempotent on a second run',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const dir = makeProject({ git: true })
+    try {
+      // First run.
+      applyPlan(dir, planInit(dir, {}))
 
-    // Files landed on disk.
-    assert.ok(existsSync(join(dir, 'eslint.config.mjs')))
-    assert.ok(existsSync(join(dir, '.stylelintrc.json')))
-    assert.ok(existsSync(join(dir, '.mcp.json')))
-    assert.ok(existsSync(join(dir, '.husky/pre-commit')))
-    assert.ok(existsSync(join(dir, '.claude/rules/webkit-imports.md')))
-    assert.ok(existsSync(join(dir, 'CLAUDE.md')))
+      // Files landed on disk.
+      assert.ok(existsSync(join(dir, 'eslint.config.mjs')))
+      assert.ok(existsSync(join(dir, '.stylelintrc.json')))
+      assert.ok(existsSync(join(dir, '.mcp.json')))
+      assert.ok(existsSync(join(dir, '.husky/pre-commit')))
+      assert.ok(existsSync(join(dir, '.claude/rules/webkit-imports.md')))
+      assert.ok(existsSync(join(dir, 'CLAUDE.md')))
 
-    // package.json got the deps.
-    const pkg1 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
-    assert.ok(pkg1.dependencies['@aziontech/webkit'])
-    assert.ok(pkg1.devDependencies['eslint'])
+      // package.json got the deps.
+      const pkg1 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
+      assert.ok(pkg1.dependencies['@aziontech/webkit'])
+      assert.ok(pkg1.devDependencies['eslint'])
 
-    // .mcp.json has exactly one webkit server.
-    const mcp1 = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
-    assert.equal(Object.keys(mcp1.mcpServers).length, 1)
-    assert.ok(mcp1.mcpServers[MCP_SERVER_NAME])
+      // .mcp.json has exactly one webkit server.
+      const mcp1 = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+      assert.equal(Object.keys(mcp1.mcpServers).length, 1)
+      assert.ok(mcp1.mcpServers[MCP_SERVER_NAME])
 
-    const claude1 = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
-    const fenceCount1 = claude1.split(FRAGMENT_START).length - 1
-    assert.equal(fenceCount1, 1)
+      const claude1 = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
+      const fenceCount1 = claude1.split(FRAGMENT_START).length - 1
+      assert.equal(fenceCount1, 1)
 
-    // Second run — must not clobber or duplicate.
-    applyPlan(dir, planInit(dir, {}))
+      // Second run — must not clobber or duplicate.
+      applyPlan(dir, planInit(dir, {}))
 
-    // .mcp.json still has exactly one webkit server.
-    const mcp2 = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
-    assert.equal(Object.keys(mcp2.mcpServers).length, 1)
-    assert.deepEqual(mcp2, mcp1, '.mcp.json changed on the second run')
+      // .mcp.json still has exactly one webkit server.
+      const mcp2 = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+      assert.equal(Object.keys(mcp2.mcpServers).length, 1)
+      assert.deepEqual(mcp2, mcp1, '.mcp.json changed on the second run')
 
-    // CLAUDE.md fenced block present exactly once (no duplication), content unchanged.
-    const claude2 = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
-    const fenceCount2 = claude2.split(FRAGMENT_START).length - 1
-    assert.equal(fenceCount2, 1, 'CLAUDE fragment duplicated on the second run')
-    assert.equal(claude2, claude1, 'CLAUDE.md changed on the second run')
+      // CLAUDE.md fenced block present exactly once (no duplication), content unchanged.
+      const claude2 = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
+      const fenceCount2 = claude2.split(FRAGMENT_START).length - 1
+      assert.equal(fenceCount2, 1, 'CLAUDE fragment duplicated on the second run')
+      assert.equal(claude2, claude1, 'CLAUDE.md changed on the second run')
 
-    // Dependency versions unchanged (no re-pin).
-    const pkg2 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
-    assert.deepEqual(pkg2, pkg1, 'package.json changed on the second run')
-  } finally {
-    rmSync(dir, { recursive: true, force: true })
+      // Dependency versions unchanged (no re-pin).
+      const pkg2 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
+      assert.deepEqual(pkg2, pkg1, 'package.json changed on the second run')
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
   }
-})
+)
 
 test('applyPlan migrates a pre-existing legacy CLAUDE.md marker into a fenced block', () => {
   const dir = makeProject()
@@ -638,22 +654,77 @@ test('applyPlan refuses to overwrite a malformed package.json (no data loss)', (
   }
 })
 
-test('applyPlan preserves an existing pinned dependency version', () => {
+test('applyPlan keeps a dependency at a compatible or newer version and never downgrades it', () => {
+  const dir = makeProject()
+  try {
+    const pkgPath = join(dir, 'package.json')
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
+    pkg.dependencies = { tailwindcss: '^4.9.0', vue: '^3.5.0' }
+    pkg.devDependencies = {
+      eslint: '^10.0.0',
+      stylelint: '^17.0.0',
+      'postcss-html': 'workspace:*'
+    }
+    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+
+    const plan = planInit(dir, {})
+    const tailwind = plan.find((a) => a.type === 'add-dep' && a.dep === 'tailwindcss')
+    assert.equal(tailwind.keep, '^4.9.0')
+    assert.equal(tailwind.dev, false, 'kept in the field it already lives in')
+    const results = applyPlan(dir, plan)
+
+    const after = JSON.parse(readFileSync(pkgPath, 'utf8'))
+    assert.equal(after.devDependencies.eslint, '^10.0.0', 'a newer major is never downgraded')
+    assert.equal(after.devDependencies.stylelint, '^17.0.0', 'a compatible range is kept')
+    assert.equal(after.devDependencies['postcss-html'], 'workspace:*')
+    assert.equal(after.dependencies.tailwindcss, '^4.9.0')
+    assert.equal(after.devDependencies.tailwindcss, undefined, 'no duplicate entry')
+    const kept = results.find((r) => r.action.dep === 'eslint')
+    assert.equal(kept.result, 'skipped')
+    assert.match(kept.detail, /eslint@\^10\.0\.0 kept \(WebKit needs \^9/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan raises a dependency older than WebKit needs and says so', () => {
   const dir = makeProject()
   try {
     const pkgPath = join(dir, 'package.json')
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
     pkg.dependencies = { '@aziontech/webkit': '^1.2.3' }
+    pkg.devDependencies = { tailwindcss: '^3.4.0' }
     writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
 
-    applyPlan(dir, planInit(dir, {}))
+    const results = applyPlan(dir, planInit(dir, {}))
 
     const after = JSON.parse(readFileSync(pkgPath, 'utf8'))
-    assert.equal(
-      after.dependencies['@aziontech/webkit'],
-      '^1.2.3',
-      'must not re-pin an existing dep'
-    )
+    const wanted = _internals.DEP_VERSION('@aziontech/webkit')
+    assert.equal(after.dependencies['@aziontech/webkit'], wanted)
+    assert.equal(after.devDependencies.tailwindcss, '^4.0.0')
+    const raised = results.find((r) => r.action.dep === 'tailwindcss')
+    assert.match(raised.detail, /tailwindcss@\^4\.0\.0 \(was \^3\.4\.0, older than WebKit needs\)/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit skips the git hooks outside a git repository and says how to add them', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    assert.ok(!findAddDeps(plan).includes('husky'), 'husky is not added')
+    assert.ok(!plan.some((a) => a.type === 'merge-json' && a.path === 'package.json'))
+    assert.ok(!plan.some((a) => a.path === '.husky/pre-commit'))
+    const notes = plan.filter((a) => a.type === 'advise' && /git init/.test(a.message))
+    assert.equal(notes.length, 1)
+    assert.match(notes[0].message, /npx @aziontech\/webkit init/)
+
+    applyPlan(dir, plan)
+    const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
+    assert.equal(pkg.scripts?.prepare, undefined)
+    assert.equal(pkg.devDependencies.husky, undefined)
+    assert.ok(!existsSync(join(dir, '.husky')))
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

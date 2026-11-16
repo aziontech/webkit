@@ -202,27 +202,49 @@ test('doctor warns about a whole-tree hook and about build output that is not ig
   }
 })
 
-test('init outside a git repository advises git init + npx husky, and doctor reports it', () => {
+test('init outside a git repository skips the git hooks, and doctor does not warn about them', () => {
   const dir = makeApp()
   try {
     const plan = planInit(dir, {})
     assert.ok(!plan.some((a) => a.type === 'activate-hooks'))
-    const note = plan.find((a) => a.type === 'advise' && /not a git repository/.test(a.message))
-    assert.ok(note, 'expected the not-a-git-repository note')
-    assert.match(note.message, /git init/)
-    assert.match(note.message, /npx husky/)
+    assert.ok(!plan.some((a) => a.type === 'add-dep' && a.dep === 'husky'))
+    assert.ok(!plan.some((a) => a.path === '.husky/pre-commit'))
+    const notes = plan.filter((a) => a.type === 'advise' && /git init/.test(a.message))
+    assert.equal(notes.length, 1, 'one note about the skipped hooks')
+    assert.match(notes[0].message, /^Not a git repository/)
 
     applyPlan(dir, plan)
     const report = planDoctor(dir)
     const hooks = report.find((c) => c.check === 'git hooks')
-    assert.equal(hooks.status, 'warn')
+    assert.equal(hooks.status, 'ok')
     assert.match(hooks.detail, /not a git repository/)
     assert.equal(report.find((c) => c.check === 'build output ignored').status, 'ok')
-    assert.equal(report.find((c) => c.check === 'pre-commit hook').status, 'ok')
+    assert.ok(!report.some((c) => c.check === 'pre-commit hook'))
+    assert.ok(!report.some((c) => c.status === 'warn' && /husky|hook/.test(c.check)))
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+test(
+  'init after git init adds the hooks it skipped before',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const dir = makeApp()
+    try {
+      applyPlan(dir, planInit(dir, {}))
+      assert.ok(!existsSync(join(dir, '.husky/pre-commit')))
+      assert.equal(git(dir, 'init', '-q').status, 0)
+      applyPlan(dir, planInit(dir, {}))
+      const pkg = readJson(join(dir, 'package.json'))
+      assert.equal(pkg.scripts.prepare, 'husky')
+      assert.ok(pkg.devDependencies.husky)
+      assert.ok(readFileSync(join(dir, '.husky/pre-commit'), 'utf8').includes(HUSKY_HOOK_MARKER))
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+)
 
 test(
   'init inside a git repository activates the husky hooks once husky is installed',
@@ -301,6 +323,107 @@ test('init and doctor flag a starter stylesheet with raw colours before the firs
     writeFileSync(join(dir, 'src/style.css'), ':root {\n  color: var(--text-default);\n}\n')
     assert.ok(!planInit(dir, {}).some((a) => a.type === 'advise' && /raw colours/.test(a.message)))
     assert.ok(!planDoctor(dir).some((c) => c.check === 'raw colours in styles'))
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+const STARTERS = join(PKG_ROOT, 'test/cli/fixtures/starters')
+const starter = (name) => readFileSync(join(STARTERS, `${name}.css.txt`), 'utf8')
+const VITE_MAIN =
+  "import { createApp } from 'vue'\nimport './style.css'\nimport App from './App.vue'\n\ncreateApp(App).mount('#app')\n"
+const VUE_MAIN =
+  "import './assets/main.css'\n\nimport { createApp } from 'vue'\nimport App from './App.vue'\n\ncreateApp(App).mount('#app')\n"
+
+test('init replaces an untouched create-vite starter stylesheet with the WebKit one', () => {
+  const dir = makeApp({ 'src/main.ts': VITE_MAIN, 'src/style.css': starter('create-vite-style') })
+  try {
+    const plan = planInit(dir, {})
+    const remove = plan.find((a) => a.type === 'remove-starter')
+    assert.deepEqual(remove.files, ['src/style.css'])
+    assert.ok(!plan.some((a) => a.type === 'advise' && /raw colours/.test(a.message)))
+
+    const results = applyPlan(dir, plan)
+    assert.ok(!existsSync(join(dir, 'src/style.css')))
+    const main = readFileSync(join(dir, 'src/main.ts'), 'utf8')
+    assert.equal(
+      main,
+      "import '@aziontech/icons'\nimport { createApp } from 'vue'\nimport './webkit.css'\nimport App from './App.vue'\n\ncreateApp(App).mount('#app')\n"
+    )
+    const done = results.find((r) => r.action.type === 'remove-starter')
+    assert.match(done.detail, /removed src\/style\.css/)
+    assert.ok(!planDoctor(dir).some((c) => c.check === 'raw colours in styles'))
+    assert.equal(planDoctor(dir).find((c) => c.check === 'styles import').status, 'ok')
+
+    applyPlan(dir, planInit(dir, {}))
+    assert.equal(
+      readFileSync(join(dir, 'src/main.ts'), 'utf8'),
+      main,
+      'a second run changes nothing'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('init removes the untouched create-vue main.css and base.css', () => {
+  const dir = makeApp({
+    'src/main.ts': VUE_MAIN,
+    'src/assets/main.css': starter('create-vue-main'),
+    'src/assets/base.css': starter('create-vue-base')
+  })
+  try {
+    applyPlan(dir, planInit(dir, { icons: false }))
+    assert.ok(!existsSync(join(dir, 'src/assets/main.css')))
+    assert.ok(!existsSync(join(dir, 'src/assets/base.css')))
+    assert.match(
+      readFileSync(join(dir, 'src/main.ts'), 'utf8'),
+      /^import '\.\/webkit\.css'\n\nimport \{ createApp \}/
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('init keeps a starter stylesheet you changed, or one another file imports, and warns', () => {
+  const edited = makeApp({
+    'src/main.ts': VITE_MAIN,
+    'src/style.css': `${starter('create-vite-style')}\n.brand { color: var(--primary); }\n`
+  })
+  const shared = makeApp({
+    'src/main.ts': VUE_MAIN,
+    'src/assets/main.css': starter('create-vue-main'),
+    'src/assets/base.css': starter('create-vue-base'),
+    'cypress/support/component.ts': "import '@/assets/main.css'\n"
+  })
+  try {
+    for (const [dir, file, reason] of [
+      [edited, 'src/style.css', /you changed it/],
+      [shared, 'src/assets/main.css', /another file imports it/]
+    ]) {
+      const plan = planInit(dir, {})
+      assert.ok(!plan.some((a) => a.type === 'remove-starter'))
+      const note = plan.find((a) => a.type === 'advise' && /starter stylesheet/.test(a.message))
+      assert.match(note.message, reason)
+      applyPlan(dir, plan)
+      assert.ok(existsSync(join(dir, file)))
+      assert.match(
+        readFileSync(join(dir, 'src/main.ts'), 'utf8'),
+        /import '\.\/(style|assets\/main)\.css'/
+      )
+    }
+  } finally {
+    rmSync(edited, { recursive: true, force: true })
+    rmSync(shared, { recursive: true, force: true })
+  }
+})
+
+test('init --no-entry leaves the starter stylesheet and the entry alone', () => {
+  const dir = makeApp({ 'src/main.ts': VITE_MAIN, 'src/style.css': starter('create-vite-style') })
+  try {
+    applyPlan(dir, planInit(dir, { wireEntry: false }))
+    assert.ok(existsSync(join(dir, 'src/style.css')))
+    assert.equal(readFileSync(join(dir, 'src/main.ts'), 'utf8'), VITE_MAIN)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

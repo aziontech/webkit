@@ -16,7 +16,8 @@ import {
   rawColourStylesheets,
   read,
   STYLELINT_CONFIG_CANDIDATES,
-  usesTailwindVitePlugin
+  usesTailwindVitePlugin,
+  wantsGitHooks
 } from './plan.js'
 import { planSync, resolveBundleRoot } from './sync.js'
 import { brokenVueTscIn, VUE_TSC_BROKEN, VUE_TSC_KNOWN_GOOD, vueTscState } from './toolchain.js'
@@ -68,6 +69,44 @@ function installedVersion(projectDir, dep) {
     return JSON.parse(readFileSync(pkgPath, 'utf8')).version || null
   } catch {
     return null
+  }
+}
+
+function checkGitHooks(projectDir, pkg, git, add) {
+  const prepare = pkg?.scripts?.prepare
+  add(
+    'husky prepare script',
+    prepare === 'husky' ? 'ok' : 'warn',
+    prepare === 'husky'
+      ? 'scripts.prepare = husky'
+      : 'missing scripts.prepare="husky" — git hooks will not activate on install.'
+  )
+
+  const hook = read(join(projectDir, '.husky/pre-commit'))
+  const hasHook = Boolean(hook && /stylelint/.test(hook))
+  const legacyHook = Boolean(hook && hook.includes(LEGACY_HUSKY_HOOK_MARKER))
+  add(
+    'pre-commit hook',
+    hasHook && !legacyHook ? 'ok' : 'warn',
+    !hasHook
+      ? 'no .husky/pre-commit lint block — commits are not linted locally.'
+      : legacyHook
+        ? '.husky/pre-commit lints the whole tree, build output included (`npx stylelint "**/*…"`), so the first commit after a build fails on compiled CSS — re-run `npx @aziontech/webkit init` to lint `src/` only.'
+        : '.husky/pre-commit lints on commit'
+  )
+
+  if (hasHook) {
+    add(
+      'git hooks',
+      git.huskyActive ? 'ok' : 'warn',
+      !git.available
+        ? 'git was not found — the pre-commit hook cannot run.'
+        : !git.repo
+          ? 'not a git repository — the pre-commit hook cannot run. After `git init`, run `npx husky` once to activate it.'
+          : git.huskyActive
+            ? `core.hooksPath = ${git.hooksPath}`
+            : `the pre-commit hook is not active (core.hooksPath is ${git.hooksPath ? `"${git.hooksPath}"` : 'unset'}) — run \`npx husky\` once (husky skips activation when the install runs before \`git init\`).`
+    )
   }
 }
 
@@ -181,40 +220,14 @@ export function planDoctor(projectDir) {
     }
   }
 
-  const prepare = pkg?.scripts?.prepare
-  add(
-    'husky prepare script',
-    prepare === 'husky' ? 'ok' : 'warn',
-    prepare === 'husky'
-      ? 'scripts.prepare = husky'
-      : 'missing scripts.prepare="husky" — git hooks will not activate on install.'
-  )
-
-  const hook = read(join(projectDir, '.husky/pre-commit'))
-  const hasHook = Boolean(hook && /stylelint/.test(hook))
-  const legacyHook = Boolean(hook && hook.includes(LEGACY_HUSKY_HOOK_MARKER))
-  add(
-    'pre-commit hook',
-    hasHook && !legacyHook ? 'ok' : 'warn',
-    !hasHook
-      ? 'no .husky/pre-commit lint block — commits are not linted locally.'
-      : legacyHook
-        ? '.husky/pre-commit lints the whole tree, build output included (`npx stylelint "**/*…"`), so the first commit after a build fails on compiled CSS — re-run `npx @aziontech/webkit init` to lint `src/` only.'
-        : '.husky/pre-commit lints on commit'
-  )
-
-  if (hasHook) {
-    const git = gitState(projectDir)
+  const git = gitState(projectDir)
+  if (wantsGitHooks(projectDir, git) || pkg?.scripts?.prepare === 'husky') {
+    checkGitHooks(projectDir, pkg, git, add)
+  } else {
     add(
       'git hooks',
-      git.huskyActive ? 'ok' : 'warn',
-      !git.available
-        ? 'git was not found — the pre-commit hook cannot run.'
-        : !git.repo
-          ? 'not a git repository — the pre-commit hook cannot run. After `git init`, run `npx husky` once to activate it.'
-          : git.huskyActive
-            ? `core.hooksPath = ${git.hooksPath}`
-            : `the pre-commit hook is not active (core.hooksPath is ${git.hooksPath ? `"${git.hooksPath}"` : 'unset'}) — run \`npx husky\` once (husky skips activation when the install runs before \`git init\`).`
+      'ok',
+      'not a git repository, so init added no pre-commit hook. After `git init`, run `npx @aziontech/webkit init` again to add it.'
     )
   }
 

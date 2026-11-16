@@ -345,7 +345,9 @@ function printPlan(plan) {
       case 'add-dep': {
         const { dev } = action
         process.stdout.write(
-          `PLAN   add-dep ${dev ? '(dev) ' : ''}${action.dep}@${action.version}${action.replace ? ` (replaces ${action.replace})` : ''}\n`
+          action.keep
+            ? `PLAN   keep ${dev ? '(dev) ' : ''}${action.dep}@${action.keep} (WebKit needs ${action.version})\n`
+            : `PLAN   add-dep ${dev ? '(dev) ' : ''}${action.dep}@${action.version}${action.replace ? ` (replaces ${action.replace})` : ''}\n`
         )
         break
       }
@@ -360,6 +362,11 @@ function printPlan(plan) {
         break
       case 'patch-entry':
         process.stdout.write(`PLAN   patch ${action.path} (${action.imports.join(' · ')})\n`)
+        break
+      case 'remove-starter':
+        process.stdout.write(
+          `PLAN   remove the starter ${action.files.join(', ')} and its import in ${action.path}\n`
+        )
         break
       case 'fence':
         process.stdout.write(`PLAN   fence ${action.path}\n`)

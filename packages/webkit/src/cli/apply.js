@@ -5,6 +5,7 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  rmSync,
   writeFileSync
 } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -63,14 +64,18 @@ function applyAddDep(projectDir, action) {
   pkg[field] = pkg[field] || {}
   const current = pkg[field][action.dep]
   if (current && (current === action.version || current !== action.replace)) {
-    return { action, result: 'skipped', detail: `${action.dep} already present` }
+    return {
+      action,
+      result: 'skipped',
+      detail: `${field}.${action.dep}@${current} kept (WebKit needs ${action.version})`
+    }
   }
   pkg[field][action.dep] = action.version
   writeJson(pkgPath, pkg)
   return {
     action,
     result: 'written',
-    detail: `${field}.${action.dep}@${action.version}${current ? ` (was ${current})` : ''}`
+    detail: `${field}.${action.dep}@${action.version}${current ? ` (was ${current}, older than WebKit needs)` : ''}`
   }
 }
 
@@ -145,6 +150,29 @@ function applyPatchEntry(projectDir, action) {
     action,
     result: 'merged',
     detail: `${action.path}: added ${missing.map((l) => l.match(/['"]([^'"]+)['"]/)?.[1] || l).join(', ')}`
+  }
+}
+
+function applyRemoveStarter(projectDir, action) {
+  const target = join(projectDir, action.path)
+  const src = existsSync(target) ? readFileSync(target, 'utf8') : ''
+  if (!src.includes(action.line)) {
+    return {
+      action,
+      result: 'skipped',
+      detail: `${action.path} no longer imports the starter stylesheet`
+    }
+  }
+  const lines = src.split('\n')
+  const at = lines.indexOf(action.line)
+  if (lines.some((l) => l.trim() === action.replacement)) lines.splice(at, 1)
+  else lines[at] = action.replacement
+  writeFileSync(target, lines.join('\n'), 'utf8')
+  for (const rel of action.files) rmSync(join(projectDir, rel), { force: true })
+  return {
+    action,
+    result: 'merged',
+    detail: `${action.path}: replaced the starter stylesheet import with ${action.replacement.match(/['"]([^'"]+)['"]/)?.[1]} and removed ${action.files.join(', ')}`
   }
 }
 
@@ -232,6 +260,9 @@ export function applyPlan(projectDir, plan) {
         break
       case 'patch-entry':
         results.push(applyPatchEntry(projectDir, action))
+        break
+      case 'remove-starter':
+        results.push(applyRemoveStarter(projectDir, action))
         break
       case 'fence':
         results.push(applyFence(projectDir, action))

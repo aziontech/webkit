@@ -37,16 +37,17 @@ test('rangeAdmits matches the ranges package managers resolve', () => {
   assert.equal(rangeAdmits('^2.0.0', '3.3.14'), false)
 })
 
-test('init pins a vue-tsc range that admits the broken release', () => {
+test('init never rewrites the vue-tsc version and advises the known-good pin instead', () => {
   const dir = makeProject({ devDependencies: { 'vue-tsc': '^3.3.14', typescript: '~5.9.3' } })
   try {
     const plan = planInit(dir, { wireEntry: false })
-    const pin = plan.find((a) => a.type === 'add-dep' && a.dep === 'vue-tsc')
-    assert.equal(pin.version, VUE_TSC_KNOWN_GOOD)
-    assert.ok(plan.some((a) => a.type === 'advise' && a.message.includes('vue-tsc')))
+    assert.ok(!plan.some((a) => a.type === 'add-dep' && a.dep === 'vue-tsc'))
+    const note = plan.find((a) => a.type === 'advise' && a.message.includes('vue-tsc'))
+    assert.match(note.message, /left as it is/)
+    assert.ok(note.message.includes(`vue-tsc@${VUE_TSC_KNOWN_GOOD}`))
     applyPlan(dir, plan)
     const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
-    assert.equal(pkg.devDependencies['vue-tsc'], VUE_TSC_KNOWN_GOOD)
+    assert.equal(pkg.devDependencies['vue-tsc'], '^3.3.14')
     assert.equal(pkg.devDependencies.typescript, '~5.9.3')
   } finally {
     rmSync(dir, { recursive: true, force: true })
