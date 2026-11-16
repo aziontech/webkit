@@ -43,6 +43,7 @@
     "lint:webkit:style": "stylelint \"packages/webkit/**/*.{css,scss,vue}\"",
     "lint:webkit:style:fix": "stylelint \"packages/webkit/**/*.{css,scss,vue}\" --fix",
     "typecheck:webkit": "pnpm --filter @aziontech/webkit run typecheck",
+    "typecheck:webkit:tests": "pnpm --filter @aziontech/webkit run typecheck:tests",
     "check:webkit:type-coverage": "pnpm --filter @aziontech/webkit run check:type-coverage",
     "test:webkit": "pnpm --filter @aziontech/webkit run test",
     "test:webkit:coverage": "pnpm --filter @aziontech/webkit run test:coverage",
@@ -51,7 +52,7 @@
     "format:webkit": "pnpm --filter @aziontech/webkit run format",
     "check:webkit:format": "pnpm --filter @aziontech/webkit run check:format",
     "check:audit": "pnpm audit",
-    "gates": "pnpm run lint:webkit && pnpm run lint:webkit:style && pnpm run check:webkit:format && pnpm run typecheck:webkit && pnpm run typecheck:docs && pnpm run check:webkit:type-coverage && pnpm run check:audit"
+    "gates": "pnpm run lint:webkit && pnpm run lint:webkit:style && pnpm run check:webkit:format && pnpm run typecheck:webkit && pnpm run typecheck:webkit:tests && pnpm run typecheck:docs && pnpm run check:webkit:type-coverage && pnpm run check:audit"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
