@@ -3,20 +3,20 @@ name: eyebrow
 category: content
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 95ef82086e800fc03ea305e99efd22561ed186afb38fc91eb70912f8824f2867
+checksum: c6a2acda5bbbc037e3c03b334ec748a50fdb45faa6e16696345a284da9e43881
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Eyebrow — Component Spec
 
 ## Purpose
 
-Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand primary color, optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the logo orange (`--primary`), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 ## When to use
 
@@ -99,15 +99,15 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)                                           |
-| --------------------------- | ----------------------------------------------------------- |
-| typography (prefix, label)  | `.text-overline-md` with `font-medium`                      |
-| text (prefix)               | `var(--text-default)` (`text-(--text-default)`)             |
-| text (label)                | `var(--text-primary)` (`text-(--text-primary)`)             |
-| cursor surface              | `var(--accent)`                                             |
-| cursor size                 | `w-1` · `h-5`                                               |
-| gap (prefix, label, cursor) | `var(--spacing-2xs)`                                        |
-| padding.x                   | `var(--spacing-2xs)` start and end (`pr-0` with the cursor) |
+| Region                      | Token (DESIGN.md)                                                     |
+| --------------------------- | --------------------------------------------------------------------- |
+| typography (prefix, label)  | `.text-overline-md` with `font-medium`                                |
+| text (prefix)               | `var(--text-default)` (`text-(--text-default)`)                       |
+| text (label)                | `var(--primary)` (`text-(--primary)`), the logo orange in both themes |
+| cursor surface              | `var(--brand-blue)`, the brand blue in both themes                    |
+| cursor size                 | `w-1` · `h-5`                                                         |
+| gap (prefix, label, cursor) | `var(--spacing-2xs)`                                                  |
+| padding.x                   | `var(--spacing-2xs)` start and end (`pr-0` with the cursor)           |
 
 ## Theme gaps
 

@@ -158,9 +158,18 @@ describe('Eyebrow', () => {
     it('paints the label and the prefix through real token utilities', () => {
       const view = render(Eyebrow, { props: { prefix: '//' }, slots: { default: 'LABEL' } })
 
-      expect(view.getByText('LABEL').className).toContain('text-(--text-primary)')
+      expect(view.getByText('LABEL').className).toContain('text-(--primary)')
       expect(view.getByText('//').className).toContain('text-(--text-default)')
       expect(view.getByText('LABEL').className).not.toMatch(/(^|\s)text-primary(\s|$)/)
+    })
+
+    it('draws the cursor in the brand blue', () => {
+      const { container } = render(Eyebrow, {
+        props: { cursor: true },
+        slots: { default: 'LABEL' }
+      })
+
+      expect(container.querySelector('.animate-blink')?.className).toContain('bg-(--brand-blue)')
     })
   })
 })

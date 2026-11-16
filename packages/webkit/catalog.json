@@ -98,6 +98,8 @@
    "--border-width-3",
    "--border-width-4",
    "--border-width-default",
+   "--brand-blue",
+   "--brand-blue-foreground",
    "--breakpoint-2xl",
    "--breakpoint-lg",
    "--breakpoint-md",
@@ -867,6 +869,10 @@
     "--border-width-3",
     "--border-width-4",
     "--border-width-default"
+   ],
+   "brand": [
+    "--brand-blue",
+    "--brand-blue-foreground"
    ],
    "breakpoint": [
     "--breakpoint-2xl",

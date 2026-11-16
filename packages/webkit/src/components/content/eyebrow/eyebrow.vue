@@ -44,13 +44,13 @@
     >
       {{ prefix }}
     </span>
-    <span class="min-w-0 text-pretty text-(--text-primary) font-medium uppercase text-overline-md">
+    <span class="min-w-0 text-pretty text-(--primary) font-medium uppercase text-overline-md">
       <slot />
     </span>
     <span
       v-if="cursor"
       aria-hidden="true"
-      class="w-1 h-5 shrink-0 relative bg-(--accent) animate-blink motion-reduce:animate-none"
+      class="w-1 h-5 shrink-0 relative bg-(--brand-blue) animate-blink motion-reduce:animate-none"
     />
   </div>
 </template>
