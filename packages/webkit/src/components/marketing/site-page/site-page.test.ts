@@ -385,6 +385,22 @@ describe('SitePage', () => {
     })
   })
 
+  it.each([
+    ['closing-call-to-action-section', { variant: 'split' }],
+    ['closing-call-to-action', { kind: 'split' }],
+    ['closing-call-to-action-section', {}]
+  ])('renders a removed split close (%s) as a panel with one headline', (id, props) => {
+    expect(
+      resolveSectionEntry(id, { ...props, title: 'Build once.', titleMuted: 'Run everywhere.' })
+    ).toEqual({
+      id: 'closing-call-to-action-section',
+      props: {
+        ...(Object.keys(props).length ? { variant: 'panel' } : {}),
+        title: 'Build once. Run everywhere.'
+      }
+    })
+  })
+
   it('translates old props on a current _id and keeps a new prop that is already set', () => {
     expect(resolveSectionEntry('hero-section', { kind: 'centered-band', title: 'T' })).toEqual({
       id: 'hero-section',

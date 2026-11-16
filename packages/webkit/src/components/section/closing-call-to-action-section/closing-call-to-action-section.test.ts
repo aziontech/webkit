@@ -12,7 +12,6 @@ import ClosingCallToActionSectionAudiences from './parts/closing-call-to-action-
 
 const TESTID = 'closing-call-to-action-section'
 const TITLE = 'Build once.'
-const TITLE_MUTED = 'Run everywhere.'
 const DESCRIPTION = 'Get a faster path to launch, lower latency, and less infrastructure overhead.'
 const primaryAction = { label: 'Start for free', href: '/signup' }
 const secondaryAction = { label: 'Talk to sales', href: '/contact', trailing: true }
@@ -22,7 +21,6 @@ const band = (props: Record<string, unknown> = {}) =>
     props: {
       eyebrow: 'Build',
       title: TITLE,
-      titleMuted: TITLE_MUTED,
       description: DESCRIPTION,
       primaryAction,
       secondaryAction,
@@ -47,7 +45,7 @@ describe('ClosingCallToActionSection', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['split', 'panel'] as const)(
+  it.each(['panel', 'primary'] as const)(
     'mirrors variant=%s on the band and its call to action',
     (variant) => {
       const { getByTestId } = band({ variant })
@@ -57,10 +55,19 @@ describe('ClosingCallToActionSection', () => {
     }
   )
 
-  it('defaults to the split variant', () => {
+  it('defaults to the panel variant, with no split layout left', () => {
     const { getByTestId } = band()
 
-    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('split')
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('panel')
+    expect(getByTestId('call-to-action').getAttribute('data-variant')).toBe('panel')
+  })
+
+  it('sets the secondary action beside the primary one, not in an aside cell', () => {
+    const { getByRole } = band()
+
+    const primary = getByRole('link', { name: primaryAction.label })
+    const secondary = getByRole('link', { name: secondaryAction.label })
+    expect(primary.parentElement).toBe(secondary.parentElement)
   })
 
   it('sets the anchor as the band id', () => {
@@ -83,17 +90,7 @@ describe('ClosingCallToActionSection', () => {
     expect(getByTestId(TESTID).tagName).toBe('DIV')
   })
 
-  it('draws the muted line in split and not in panel', () => {
-    const { getByRole, unmount } = band()
-
-    expect(getByRole('heading', { level: 2 }).textContent).toContain(TITLE_MUTED)
-    unmount()
-
-    const panel = band({ variant: 'panel' })
-    expect(panel.getByRole('heading', { level: 2 }).textContent).not.toContain(TITLE_MUTED)
-  })
-
-  it.each(['split', 'panel', 'primary'] as const)('renders both actions in %s', (variant) => {
+  it.each(['panel', 'primary'] as const)('renders both actions in %s', (variant) => {
     const { getByRole } = band({ variant })
 
     expect(getByRole('link', { name: primaryAction.label }).getAttribute('href')).toBe(
@@ -104,12 +101,11 @@ describe('ClosingCallToActionSection', () => {
     )
   })
 
-  it('mirrors variant=primary on data-variant and draws neither the eyebrow nor the muted line', () => {
+  it('mirrors variant=primary on data-variant and draws no eyebrow', () => {
     const { getByTestId, getByRole, queryByText } = band({ variant: 'primary' })
 
     expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('primary')
     expect(getByRole('heading', { level: 2 }).textContent).toContain(TITLE)
-    expect(getByRole('heading', { level: 2 }).textContent).not.toContain(TITLE_MUTED)
     expect(queryByText('Build')).toBeNull()
   })
 
@@ -167,7 +163,7 @@ describe('ClosingCallToActionSection', () => {
     expect(getByTestId(TESTID).querySelector('[data-hatch="true"]')).not.toBeNull()
   })
 
-  it.each(['split', 'panel', 'primary'] as const)(
+  it.each(['panel', 'primary'] as const)(
     'renders the command as a copyable shell line before the actions in %s',
     async (variant) => {
       const { findByRole, getByRole, getAllByRole } = band({
@@ -199,14 +195,11 @@ describe('ClosingCallToActionSection', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.each(['split', 'panel', 'primary'] as const)(
-    'has no a11y violations in %s',
-    async (variant) => {
-      const { container } = band({ variant })
+  it.each(['panel', 'primary'] as const)('has no a11y violations in %s', async (variant) => {
+    const { container } = band({ variant })
 
-      await expectNoA11yViolations(container)
-    }
-  )
+    await expectNoA11yViolations(container)
+  })
 
   const PROMPT = 'Connect Azion MCP: https://mcp.azion.com'
   const SENTENCE = 'A person and an agent ship the same way.'

@@ -325,7 +325,7 @@ export const VARIANT_EXTRAS = {
   'card-grid': ['gap', 'divider', 'frame', 'surface', 'canvas', 'none'],
   carousel: ['strip', 'cards'],
   chip: ['filled', 'dashed'],
-  'closing-call-to-action-section': ['split', 'panel', 'frame'],
+  'closing-call-to-action-section': ['panel', 'frame'],
   'console-mockup': ['window', 'bare'],
   'console-showcase-section': ['console', 'diagram'],
   'doc-callout': ['note', 'info', 'tip', 'check', 'warning'],

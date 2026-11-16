@@ -15,11 +15,10 @@
 
 <template>
   <ClosingCallToActionSection
-    variant="split"
+    variant="panel"
     anchor="contact"
     eyebrow="Build"
-    title="Build once."
-    title-muted="Run everywhere."
+    title="Build once. Run everywhere."
     description="Get a faster path to launch, lower latency, and less infrastructure overhead."
     :primary-action="primaryAction"
     :secondary-action="secondaryAction"

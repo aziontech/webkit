@@ -255,7 +255,8 @@ const legacyProps: Record<string, Record<string, LegacyProp>> = {
     titleVariant: 'titleAlign'
   },
   'closing-call-to-action-section': {
-    kind: 'variant'
+    kind: { to: 'variant', values: { split: 'panel' } },
+    variant: { to: 'variant', values: { split: 'panel' } }
   },
   'console-showcase-section': {
     kind: 'variant',
@@ -358,7 +359,17 @@ const legacyProps: Record<string, Record<string, LegacyProp>> = {
   }
 }
 
-const translateLegacyProps = (id: string, props: SitePageSectionProps): SitePageSectionProps => {
+const joined = (...parts: unknown[]): string =>
+  parts.filter((part) => typeof part === 'string' && part.length > 0).join(' ')
+
+const legacyShapes: Record<string, (props: SitePageSectionProps) => SitePageSectionProps> = {
+  'closing-call-to-action-section': (p) =>
+    p['titleMuted'] === undefined
+      ? p
+      : { ...without(p, 'titleMuted'), title: joined(p['title'], p['titleMuted']) }
+}
+
+const renameLegacyProps = (id: string, props: SitePageSectionProps): SitePageSectionProps => {
   const renames = Object.prototype.hasOwnProperty.call(legacyProps, id)
     ? legacyProps[id]
     : undefined
@@ -379,6 +390,14 @@ const translateLegacyProps = (id: string, props: SitePageSectionProps): SitePage
       next = { ...without(next, from), [to]: mapped }
   }
   return next
+}
+
+const translateLegacyProps = (id: string, props: SitePageSectionProps): SitePageSectionProps => {
+  const shape = Object.prototype.hasOwnProperty.call(legacyShapes, id)
+    ? legacyShapes[id]
+    : undefined
+  const renamed = renameLegacyProps(id, props)
+  return shape ? shape(renamed) : renamed
 }
 
 export function resolveSectionEntry(
