@@ -1,7 +1,3 @@
-@import 'tailwindcss/utilities' source(none);
-@reference "@aziontech/theme";
-@source '../';
-
 html,
 body {
   min-height: 100%;
