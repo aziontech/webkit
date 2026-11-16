@@ -1,8 +1,9 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import Analytics from '../../../blocks/dashboard/analytics-dashboard/analytics-dashboard.vue'
+import AnalyticsMetrics from '../../../blocks/dashboard/analytics-dashboard/variants/metrics.vue'
 import AnalyticsUsage from '../../../blocks/dashboard/analytics-dashboard/variants/usage.vue'
 import Composition from '../../../blocks/dashboard/breakdown-dashboard/breakdown-dashboard.vue'
 import CompositionEmpty from '../../../blocks/dashboard/breakdown-dashboard/variants/empty.vue'
@@ -140,5 +141,48 @@ describe('dashboard/analytics-dashboard data', () => {
     })
     await userEvent.click(option)
     await waitFor(() => expect(view.emitted('update:period')).toEqual([['7d']]))
+  })
+})
+
+describe('dashboard/analytics-dashboard Copy query', () => {
+  const copied = async (Block: object, trigger: string, props = {}) => {
+    const write = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined)
+    const view = render(Block, { props })
+    await pickMenuOption(view.getByRole('button', { name: trigger }), 'Copy query')
+    await waitFor(() => expect(write).toHaveBeenCalled())
+    const query = String(write.mock.calls[0][0])
+    write.mockRestore()
+    return query
+  }
+
+  it('copies a query the Real-Time Metrics API accepts', async () => {
+    const hosts = await copied(Analytics, 'More options for Top hosts', {
+      range: { begin: '2026-11-13T11:00:00.000Z', end: '2026-11-14T10:59:59.000Z' }
+    })
+    expect(hosts).toContain('workloadMetrics(')
+    expect(hosts).toContain('groupBy: [host, configurationId]')
+    expect(hosts).toContain('orderBy: [sum_DESC]')
+    expect(hosts).toContain('begin: "2026-11-13T11:00:00", end: "2026-11-14T10:59:59"')
+    expect(hosts).not.toMatch(/httpMetrics|requests_DESC|\bservice\b|Z"/)
+    cleanup()
+    const countries = await copied(Analytics, 'More options for Requests by country')
+    expect(countries).toContain('groupBy: [geolocCountryName]')
+    expect(countries).not.toMatch(/\bcountry\b/)
+    cleanup()
+    const series = await copied(Analytics, 'More options for Requests over time')
+    expect(series).toContain('groupBy: [ts]')
+    expect(series).toContain('orderBy: [ts_ASC]')
+  })
+
+  it('groups every variant query and orders by the sum', async () => {
+    const usage = await copied(AnalyticsUsage, 'More options for Usage by project')
+    expect(usage).toContain('workloadMetrics(')
+    expect(usage).toContain('orderBy: [sum_DESC]')
+    expect(usage).toContain('groupBy: [configurationId]')
+    cleanup()
+    const metrics = await copied(AnalyticsMetrics, 'More options for Requests')
+    expect(metrics).toContain('workloadMetrics(')
+    expect(metrics).toContain('groupBy: [ts]')
+    expect(metrics).not.toContain('httpMetrics')
   })
 })

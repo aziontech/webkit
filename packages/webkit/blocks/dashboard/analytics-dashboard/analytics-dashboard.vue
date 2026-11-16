@@ -310,20 +310,24 @@
 
   interface CardQuery {
     dataset: string
-    fields: string[]
+    limit: number
+    groupBy: string[]
     orderBy: string
   }
+
+  const apiTime = (iso: string) => iso.replace(/(\.\d+)?Z$/, '')
 
   const cardQuery = (report: CardQuery) =>
     [
       'query {',
       `  ${report.dataset}(`,
-      '    limit: 5000',
+      `    limit: ${report.limit}`,
+      `    filter: { tsRange: { begin: "${apiTime(range.value.begin)}", end: "${apiTime(range.value.end)}" } }`,
       '    aggregate: { sum: requests }',
-      `    filter: { tsRange: { begin: "${range.value.begin}", end: "${range.value.end}" } }`,
+      `    groupBy: [${report.groupBy.join(', ')}]`,
       `    orderBy: [${report.orderBy}]`,
       '  ) {',
-      ...report.fields.map((field) => `    ${field}`),
+      ...[...report.groupBy, 'sum'].map((field) => `    ${field}`),
       '  }',
       '}'
     ].join('\n')
@@ -340,21 +344,24 @@
   }
 
   const queries: Record<AnalyticsDashboardCardId, CardQuery> = {
-    requests: { dataset: 'httpMetrics', fields: ['ts', 'requests'], orderBy: 'ts_ASC' },
+    requests: { dataset: 'workloadMetrics', limit: 10000, groupBy: ['ts'], orderBy: 'ts_ASC' },
     'status-codes': {
-      dataset: 'httpMetrics',
-      fields: ['ts', 'status', 'requests'],
+      dataset: 'workloadMetrics',
+      limit: 10000,
+      groupBy: ['ts', 'status'],
       orderBy: 'ts_ASC'
     },
     countries: {
-      dataset: 'httpMetrics',
-      fields: ['country', 'requests'],
-      orderBy: 'requests_DESC'
+      dataset: 'workloadMetrics',
+      limit: 10,
+      groupBy: ['geolocCountryName'],
+      orderBy: 'sum_DESC'
     },
     hosts: {
-      dataset: 'httpMetrics',
-      fields: ['host', 'service', 'requests'],
-      orderBy: 'requests_DESC'
+      dataset: 'workloadMetrics',
+      limit: 1000,
+      groupBy: ['host', 'configurationId'],
+      orderBy: 'sum_DESC'
     }
   }
 

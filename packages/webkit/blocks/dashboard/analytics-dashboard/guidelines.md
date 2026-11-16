@@ -78,8 +78,9 @@ after it failed there is nothing to enlarge, so Expand is disabled.
 ### I. More options — `DropdownMenu`, `toast` (optional)
 
 `Copy query` and `Export CSV`. Secondary actions go here so the header stays one line. Copy query
-writes the GraphQL query behind the card (dataset, sum aggregation, the period as `tsRange`, the
-order and the fields) to the clipboard and confirms with a success toast (`Query copied.`), or an
+writes the Real-Time Metrics GraphQL query behind the card (dataset `workloadMetrics`, the period
+as `tsRange`, `aggregate: { sum: requests }`, the `groupBy` dimensions, the order and the fields) to
+the clipboard and confirms with a success toast (`Query copied.`), or an
 error toast when the clipboard is not available. Export CSV serializes the card's rows with
 `toCsv` and saves them with `downloadCsv` from `@aziontech/webkit/utils/csv` as
 `<card>-last-24-hours.csv`, then confirms with `CSV exported.` and the file name. Export CSV is
@@ -174,6 +175,22 @@ The block takes its figures through props and emits its actions; it fetches noth
 | `update:period` | `(value)` | The Period `Select` changed.     |
 | `retry`         | `(event)` | Retry in any card's error alert. |
 
+The queries the card menus copy run as-is against the Azion Real-Time Metrics API
+(`POST /v4/metrics/graphql`). What the API expects, so a live page asks for the right shapes:
+
+| Card                | Query                                                                                                                               | Maps to                                                          |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Requests over time  | `workloadMetrics(aggregate: { sum: requests }, groupBy: [ts], orderBy: [ts_ASC]) { ts sum }`                                        | `requestSeries`                                                  |
+| Status codes        | `workloadMetrics(aggregate: { sum: requests }, groupBy: [ts, status], orderBy: [ts_ASC]) { ts status sum }`                         | `statusSeries`                                                   |
+| Requests by country | `workloadMetrics(aggregate: { sum: requests }, groupBy: [geolocCountryName], orderBy: [sum_DESC]) { geolocCountryName sum }`        | `countries.country`                                              |
+| Top hosts           | `workloadMetrics(aggregate: { sum: requests }, groupBy: [host, configurationId], orderBy: [sum_DESC]) { host configurationId sum }` | `hosts`: `host`, `service` (the configuration's name, or its id) |
+
+- Every query takes `limit` and `filter: { tsRange: { begin, end } }`; an aggregate needs `groupBy`, and a ranked list orders by the aggregate (`sum_DESC`), never by the measured field (`requests_DESC` is rejected).
+- Timestamps are ISO 8601 in UTC **without** the trailing `Z` (`2026-11-13T11:00:00`); the block strips a `Z` and milliseconds from `range` before it writes the query.
+- `resample: { function: sum, points: 96 }` returns a fixed number of points for a time series, so a long period does not come back as thousands of rows.
+- One query returns at most 10,000 rows (`limit: 10000`).
+- Data transferred is `aggregate: { sum: bytesSent }`; the Functions product reads `functionsMetrics` (`sum: invocations`) and Edge DNS reads `idnsQueriesMetrics`.
+
 Copy query and Export CSV run in the browser on the figures the block holds. To go live, render the block from a page that owns the request and pass what it returns:
 
 ```vue
@@ -183,7 +200,7 @@ Copy query and Export CSV run in the browser on the figures the block holds. To 
   import AnalyticsDashboard from './analytics-dashboard.vue'
 
   const period = ref('24h')
-  const { data, pending, error, refresh } = useHttpMetrics(period)
+  const { data, pending, error, refresh } = useWorkloadMetrics(period)
 </script>
 
 <template>

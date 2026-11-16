@@ -84,6 +84,7 @@
     label: string
     description: string
     dataset: string
+    measure: string
     tiles: Tile[]
     panels: Panel[]
     views?: View[]
@@ -292,7 +293,8 @@
       id: 'applications',
       label: 'Applications',
       description: 'Requests, data transferred, cache and errors across your applications.',
-      dataset: 'httpMetrics',
+      dataset: 'workloadMetrics',
+      measure: 'requests',
       views: [
         {
           id: 'overview',
@@ -396,7 +398,8 @@
       id: 'functions',
       label: 'Functions',
       description: 'Invocations, errors and duration of your functions.',
-      dataset: 'functionMetrics',
+      dataset: 'functionsMetrics',
+      measure: 'invocations',
       tiles: [
         {
           id: 'invocations',
@@ -477,7 +480,8 @@
       id: 'firewall',
       label: 'Firewall',
       description: 'Requests allowed, denied and rate limited by your firewalls.',
-      dataset: 'firewallMetrics',
+      dataset: 'workloadMetrics',
+      measure: 'requests',
       views: [
         {
           id: 'overview',
@@ -576,7 +580,8 @@
       id: 'dns',
       label: 'DNS',
       description: 'Queries your hosted zones answered, and how they were answered.',
-      dataset: 'dnsMetrics',
+      dataset: 'idnsQueriesMetrics',
+      measure: 'requests',
       tiles: [
         {
           id: 'queries',
@@ -664,7 +669,8 @@
       id: 'data-stream',
       label: 'Data stream',
       description: 'Records collected and delivered to your endpoints.',
-      dataset: 'dataStreamMetrics',
+      dataset: 'dataStreamedMetrics',
+      measure: 'requests',
       tiles: [
         {
           id: 'collected',
@@ -874,16 +880,25 @@
     activeIndex.value = null
   }
 
-  const cardQuery = (fields: string[], orderBy: string) =>
+  const apiFields: Record<string, string> = {
+    asn: 'geolocAsn',
+    country: 'geolocCountryName',
+    region: 'geolocRegionName'
+  }
+
+  const apiTime = (iso: string) => iso.replace(/(\.\d+)?Z$/, '')
+
+  const cardQuery = (groupBy: string[], orderBy: string, limit: number) =>
     [
       'query {',
       `  ${product.value.dataset}(`,
-      '    limit: 5000',
-      '    aggregate: { sum: requests }',
-      `    filter: { tsRange: { begin: "${currentPeriod.value.begin}", end: "${currentPeriod.value.end}" } }`,
+      `    limit: ${limit}`,
+      `    filter: { tsRange: { begin: "${apiTime(currentPeriod.value.begin)}", end: "${apiTime(currentPeriod.value.end)}" } }`,
+      `    aggregate: { sum: ${product.value.measure} }`,
+      `    groupBy: [${groupBy.join(', ')}]`,
       `    orderBy: [${orderBy}]`,
       '  ) {',
-      ...fields.map((field) => `    ${field}`),
+      ...[...groupBy, 'sum'].map((field) => `    ${field}`),
       '  }',
       '}'
     ].join('\n')
@@ -907,7 +922,7 @@
 
   const onPanelOption = (panel: { id: string; series: ChartSeries[] }, value: string | number) => {
     if (value === 'query') {
-      copyQuery(cardQuery(['ts', ...panel.series.map((entry) => entry.id)], 'ts_ASC'))
+      copyQuery(cardQuery(['ts'], 'ts_ASC', 10000))
       return
     }
     exportCsv(
@@ -927,8 +942,12 @@
     if (value === 'query') {
       copyQuery(
         cardQuery(
-          breakdown.columns.map((column) => column.id ?? ''),
-          'requests_DESC'
+          breakdown.columns
+            .map((column) => column.id ?? '')
+            .filter((id) => id !== 'requests')
+            .map((id) => apiFields[id] ?? id),
+          'sum_DESC',
+          1000
         )
       )
       return

@@ -315,24 +315,26 @@
   ]
 
   interface CardQuery {
-    dataset: string
-    fields: string[]
+    measure: string
+    limit: number
+    groupBy: string[]
     orderBy: string
   }
 
-  const periodStart = '2026-11-13T00:00:00Z'
-  const periodEnd = '2026-11-13T23:59:59Z'
+  const periodStart = '2026-11-13T00:00:00'
+  const periodEnd = '2026-11-13T23:59:59'
 
   const cardQuery = (report: CardQuery) =>
     [
       'query {',
-      `  ${report.dataset}(`,
-      '    limit: 5000',
-      '    aggregate: { sum: requests }',
+      '  workloadMetrics(',
+      `    limit: ${report.limit}`,
       `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    aggregate: { sum: ${report.measure} }`,
+      `    groupBy: [${report.groupBy.join(', ')}]`,
       `    orderBy: [${report.orderBy}]`,
       '  ) {',
-      ...report.fields.map((field) => `    ${field}`),
+      ...[...report.groupBy, 'sum'].map((field) => `    ${field}`),
       '  }',
       '}'
     ].join('\n')
@@ -351,21 +353,14 @@
   type CardId = 'comparison' | 'projects' | 'usage'
 
   const queries: Record<CardId, CardQuery> = {
-    comparison: {
-      dataset: 'usageMetrics',
-      fields: ['ts', 'dataTransferred', 'previousDataTransferred'],
-      orderBy: 'ts_ASC'
-    },
+    comparison: { measure: 'bytesSent', limit: 10000, groupBy: ['ts'], orderBy: 'ts_ASC' },
     projects: {
-      dataset: 'usageMetrics',
-      fields: ['project', 'dataTransferred'],
-      orderBy: 'dataTransferred_DESC'
+      measure: 'bytesSent',
+      limit: 10,
+      groupBy: ['configurationId'],
+      orderBy: 'sum_DESC'
     },
-    usage: {
-      dataset: 'usageMetrics',
-      fields: ['project', 'requests', 'dataTransferred'],
-      orderBy: 'requests_DESC'
-    }
+    usage: { measure: 'requests', limit: 1000, groupBy: ['configurationId'], orderBy: 'sum_DESC' }
   }
 
   interface CardReport extends CardQuery {
