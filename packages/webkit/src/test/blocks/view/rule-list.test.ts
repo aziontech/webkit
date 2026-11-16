@@ -1,5 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 
 import RulesList from '../../../../blocks/view/rule-list/rule-list.vue'
 import EditRule from '../../../../blocks/view/rule-list/variants/edit-rule.vue'
@@ -16,6 +17,13 @@ const namesIn = (root: HTMLElement, phase: string) =>
 const requestNames = (root: HTMLElement) =>
   Array.from(root.querySelectorAll('[data-rule-name]')).map((a) => a.textContent?.trim())
 describe('view/rule-list block', () => {
+  beforeEach(async () => {
+    await page.viewport(1280, 900)
+  })
+  afterEach(async () => {
+    await page.viewport(414, 896)
+  })
+
   it('moves a rule with the arrow keys on its Table grip, announces it and keeps focus on the moved rule', async () => {
     const view = render(RulesList)
     const grip = view.getByRole('button', { name: 'Reorder Docs rewrite, position 5 of 5' })
@@ -309,5 +317,32 @@ describe('view/rule-list block', () => {
     expect(view.getByRole('button', { name: 'Add Rule' }).hasAttribute('disabled')).toBe(true)
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
+  })
+
+  it('folds the position controls into a Move menu on a phone and moves the rule from it', async () => {
+    await page.viewport(390, 844)
+    const view = render(RulesList)
+    const trigger = await waitFor(() =>
+      view.getByRole('button', { name: 'Move Docs rewrite, position 5 of 5' })
+    )
+    expect(view.queryByRole('textbox', { name: /^Position of Docs rewrite/ })).toBeNull()
+    await fireEvent.click(trigger)
+    const up = await waitFor(() => {
+      const item = Array.from(document.body.querySelectorAll('[role="menuitem"]')).find((node) =>
+        node.textContent?.includes('Move up')
+      )
+      expect(item).toBeTruthy()
+      return item as HTMLElement
+    })
+    await fireEvent.click(up)
+    await waitFor(() =>
+      expect(requestNames(view.container as HTMLElement).slice(0, 5)).toEqual([
+        'Default rule',
+        'Maintenance page',
+        'Redirect www',
+        'Docs rewrite',
+        'API gateway'
+      ])
+    )
   })
 })
