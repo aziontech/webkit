@@ -1,0 +1,31 @@
+@font-face {
+  font-display: swap;
+  font-family: 'Proto Mono';
+  font-style: normal;
+  font-weight: 300;
+  src: url('./ProtoMono-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Proto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./ProtoMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Proto Mono';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./ProtoMono-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Proto Mono';
+  font-style: normal;
+  font-weight: 600;
+  src: url('./ProtoMono-SemiBold.woff2') format('woff2');
+}

@@ -34,10 +34,17 @@ import '@aziontech/theme'
 import '@aziontech/theme/fonts.css'
 ```
 
-`@aziontech/theme/fonts.css` holds the `@font-face` declarations for the Azion type system
-(Rubik, Roboto, Roboto Mono, Noto Sans Arabic…), served from `fonts.azion.com`. Leave it out when
-your app hosts its own font files or its Content Security Policy blocks that host; the font stacks
-then fall back to your faces or the system ones.
+`@aziontech/theme/fonts.css` holds the `@font-face` declarations for the Azion type system: Rubik
+(the sans), Roboto Mono (code) and Noto Sans Arabic (Arabic script only). The woff2 files ship inside
+the package (`fonts/`, each family with its SIL Open Font License), so your bundler copies them next
+to your app and nothing loads from another host. Rubik and Roboto Mono are variable fonts subset to
+Latin and Latin Extended; each face carries a `unicode-range`, so a page downloads only the files its
+text needs. Leave the import out when your app hosts its own font files; the font stacks then fall
+back to your faces or the system ones.
+
+The display stack starts with Proto Mono, a commercial typeface the package cannot redistribute. An
+app licensed for it declares its own `@font-face` for `'Proto Mono'`; every other app gets Roboto
+Mono, the next face in the stack.
 
 The main import provides:
 

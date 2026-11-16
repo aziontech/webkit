@@ -1,4 +1,5 @@
 import './webkit.css'
+import '../../../assets/fonts/proto-mono/proto-mono-woff2.css'
 import './styles/main.css'
 import '@aziontech/icons'
 
