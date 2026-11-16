@@ -52,7 +52,7 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 | `styling.md`             | **Classes inline on the root.** No JS class presets, no `<style>` block, variants via `data-*`     |
 | `component-structure.md` | Fixed folder layout + `<script setup>` section order                                               |
 | `props.md`               | Typed `interface Props` + `withDefaults` + JSDoc; exported variant unions                          |
-| `prop-vocabulary.md`     | One canonical name/type/default per concept (`kind`, `size`, `disabled`…)                          |
+| `prop-vocabulary.md`     | One canonical name/type/default per concept (`variant`, `size`, `disabled`…)                       |
 | `v-model.md`             | Two-way values via `defineModel` — controlled + uncontrolled, one macro                            |
 | `emits.md`               | Typed `defineEmits`, kebab names, model vs. activation                                             |
 | `event-payloads.md`      | Activation events emit `(event, item)` — DOM event first                                           |

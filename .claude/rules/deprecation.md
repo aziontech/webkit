@@ -35,7 +35,7 @@ WebKit 6.0 is the one **clean-break major**: every name marked `@deprecated` bef
 - The `@deprecated` tag **names the replacement** and the **removal version** — a deprecation with no exit is just a warning that never ends.
 - The deprecated part **keeps working** for its cycle; do not change its behaviour, only annotate it.
 - **`catalog.json`** carries the deprecation (surfaced by the MCP) so AI-written consumer code is steered off the deprecated part before removal.
-- Removal is a **`major`** commit, marked `BREAKING CHANGE:`, updating the spec, the story, and the exports map in the same change (see [`migration.md`](./migration.md) and [`event-payloads.md`](./event-payloads.md) for the same "reshape = breaking" discipline).
+- Removal is a **`major`** commit, marked `BREAKING CHANGE:`, updating the spec, the examples, and the exports map in the same change (see [`migration.md`](./migration.md) and [`event-payloads.md`](./event-payloads.md) for the same "reshape = breaking" discipline).
 
 ## Hard prohibitions
 

@@ -36,7 +36,7 @@ Two shapes are allowed for the second argument, never mixed within one event:
 
 ## Ordering is deliberate — and breaking
 
-`event` goes first so the signature is uniform across the system and reads like a native listener (`(event, …extra)`). There is **no non-breaking way** to move the event to the front of an event that previously emitted `(item)` or `(item, event)` — the argument at position 0 changes. Reshaping an existing event's payload is therefore a **breaking change** (major bump). Do it deliberately, mark the commit `BREAKING CHANGE:`, and update the component's spec Events table, its examples, and the "Show code" snippet in the same change.
+`event` goes first so the signature is uniform across the system and reads like a native listener (`(event, …extra)`). There is **no non-breaking way** to move the event to the front of an event that previously emitted `(item)` or `(item, event)` — the argument at position 0 changes. Reshaping an existing event's payload is therefore a **breaking change** (major bump). Do it deliberately, mark the commit `BREAKING CHANGE:`, and update the component's spec Events table, and its examples in the same change.
 
 ## What this means in practice
 
@@ -88,8 +88,8 @@ The examples' `@event` handlers use the `(event, item)` signature, so the code s
 - Do not bury the `event` inside a payload object; promote it to the first positional argument.
 - Do not pass the same datum both positionally and inside a payload object (no duplication).
 - Do not add a DOM `event` to a model/value event (`update:*`, `value-change`, `sort`, `toggle`) — those emit their value.
-- Do not reshape an event's payload without marking the change breaking and updating the spec, `argTypes`, and "Show code" together.
+- Do not reshape an event's payload without marking the change breaking and updating the spec's Events table and the examples together.
 
 ## Why this rule exists
 
-Event payloads had drifted apart: `split-button/click` emitted `(event, item)`, `split-button/item-click` emitted `(item)`, `table/row-click` emitted `(row)`, and `dropdown/select` buried the event inside `{ value, event }`. A consumer could not write one handler shape across the system, and half the events forced a reach back into `event.target` to learn what was clicked. Fixing the order once, everywhere, makes every activation handler `(event, item) => …` and every "Show code" snippet honest.
+Event payloads had drifted apart: `split-button/click` emitted `(event, item)`, `split-button/item-click` emitted `(item)`, `table/row-click` emitted `(row)`, and `dropdown/select` buried the event inside `{ value, event }`. A consumer could not write one handler shape across the system, and half the events forced a reach back into `event.target` to learn what was clicked. Fixing the order once, everywhere, makes every activation handler `(event, item) => …` and every example on the docs site honest.

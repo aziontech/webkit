@@ -68,7 +68,7 @@ function directionViolations() {
   const keys = []
   for (const dir of DIRECTION_DIRS) {
     for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
-      if (!/\.(vue|ts|js)$/.test(abs) || /\.(test|stories)\.ts$/.test(abs)) continue
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
       const rel = relative(ROOT, abs).split('\\').join('/')
       const messages = linter.verify(readFileSync(abs, 'utf-8'), config, { filename: abs })
       for (const m of messages) {
@@ -98,7 +98,7 @@ function clockViolations() {
   const keys = []
   for (const dir of CLOCK_DIRS) {
     for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
-      if (!/\.(vue|ts|js)$/.test(abs) || /\.(test|stories)\.ts$/.test(abs)) continue
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
       const source = readFileSync(abs, 'utf-8')
       if (!/\bDate\b/.test(source)) continue
       const rel = relative(ROOT, abs).split('\\').join('/')
@@ -129,7 +129,7 @@ function viewportHeightViolations() {
   const keys = []
   for (const dir of PAGE_BODY_DIRS) {
     for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
-      if (!/\.(vue|ts|js)$/.test(abs) || /\.(test|stories)\.ts$/.test(abs)) continue
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
       const source = readFileSync(abs, 'utf-8')
       if (!/100[dsl]?vh/.test(source)) continue
       const rel = relative(ROOT, abs).split('\\').join('/')

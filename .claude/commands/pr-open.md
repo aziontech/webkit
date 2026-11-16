@@ -75,4 +75,4 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 - The base branch is always `main`.
 - A major bump is never decided by the command. Every commit and PR passes the version gate (step 1b); a `major` needs the user's explicit yes first.
 - Commit and push only as part of this command (running it is the authorization). Do not commit unrelated changes.
-- Keep imports/exports in the public flat form per [`.claude/rules/imports.md`](../rules/imports.md) when the diff touches `package.json#exports` or stories.
+- Keep imports/exports in the public flat form per [`.claude/rules/imports.md`](../rules/imports.md) when the diff touches `package.json#exports` or examples.

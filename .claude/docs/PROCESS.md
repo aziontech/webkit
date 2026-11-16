@@ -38,15 +38,15 @@ A component is never written directly. It goes **spec → approval → generatio
 CI → review → release**, and every step is either automated or blocking. The pipeline
 exists so the standard is applied _by construction_, not remembered by discipline.
 
-| #   | Stage            | Trigger                       | Output                                  | Blocks when                                       |
-| --- | ---------------- | ----------------------------- | --------------------------------------- | ------------------------------------------------- |
-| 1   | Specify          | `/spec-create <name>`         | `.specs/<name>.md` (`status: draft`)    | —                                                 |
-| 2   | Approve          | `spec-validate`               | `status: approved` + body checksum      | schema/Constraints invalid                        |
-| 3   | Generate         | `/component-create <name>`    | `.vue` + exports + story + Code Connect | spec missing/tampered, any phase fails            |
-| 4   | Write-time gates | every `Write`/`Edit`          | approved or `exit 2`                    | off-token, off-spec, phantom import, broken story |
-| 5   | PR + CI          | `/branch-create` + `/pr-open` | PR to `main`                            | any governance job fails                          |
-| 6   | Review           | PR                            | 2 approvals (technical + design)        | review-only surfaces off-pattern                  |
-| 7   | Release          | merge to `main`               | release-please Release PR per package   | commit type ⇄ bump divergence                     |
+| #   | Stage            | Trigger                       | Output                                            | Blocks when                                       |
+| --- | ---------------- | ----------------------------- | ------------------------------------------------- | ------------------------------------------------- |
+| 1   | Specify          | `/spec-create <name>`         | `.specs/<name>.md` (`status: draft`)              | —                                                 |
+| 2   | Approve          | `spec-validate`               | `status: approved` + body checksum                | schema/Constraints invalid                        |
+| 3   | Generate         | `/component-create <name>`    | `.vue` + exports + test + examples + Code Connect | spec missing/tampered, any phase fails            |
+| 4   | Write-time gates | every `Write`/`Edit`          | approved or `exit 2`                              | off-token, off-spec, phantom import, missing test |
+| 5   | PR + CI          | `/branch-create` + `/pr-open` | PR to `main`                                      | any governance job fails                          |
+| 6   | Review           | PR                            | 2 approvals (technical + design)                  | review-only surfaces off-pattern                  |
+| 7   | Release          | merge to `main`               | release-please Release PR per package             | commit type ⇄ bump divergence                     |
 
 ### Stage 1 — Specify
 
@@ -493,7 +493,7 @@ How **this repo** authors, documents, and releases; they never ship to consumers
 | Standard                                     | One line                                                                                 |
 | -------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | [no-invention](../rules/no-invention.md)     | the spec is a sealed contract; anything missing → `BLOCKED`, not invented                |
-| [naming](../rules/naming.md)                 | one kebab name across spec, folder, export, `defineOptions`, testid, story binding       |
+| [naming](../rules/naming.md)                 | one kebab name across spec, folder, export, `defineOptions`, testid, example binding     |
 | [imports](../rules/imports.md)               | flat public export (`@aziontech/webkit/<name>`); category only in the folder             |
 | [compound-api](../rules/compound-api.md)     | composition = compound `index.ts` + tree-shakeable `-root` export                        |
 | [dependencies](../rules/dependencies.md)     | CSS-only positioning/animation; granted exceptions listed in the rule                    |
@@ -501,7 +501,7 @@ How **this repo** authors, documents, and releases; they never ship to consumers
 | [release-types](../rules/release-types.md)   | commit type ⇄ version bump identical across 4 sources                                    |
 | [git-workflow](../rules/git-workflow.md)     | branches/PRs only via `/branch-create` + `/pr-open`, base `main`                         |
 | [bundle-budget](../rules/bundle-budget.md)   | size-limit per entry; tree-shaking preserved                                             |
-| [testing](../rules/testing.md)               | one `<name>.test.ts` per component — Vitest browser mode, story fixture, axe             |
+| [testing](../rules/testing.md)               | one `<name>.test.ts` per component — Vitest browser mode, example fixtures, axe          |
 | [authoring-docs](../rules/authoring-docs.md) | skills/agents carry conforming frontmatter + `enforced_by`; no source file as an example |
 
 ---

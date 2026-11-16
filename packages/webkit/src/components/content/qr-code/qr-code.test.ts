@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { cleanup, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'

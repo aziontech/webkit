@@ -18,7 +18,7 @@ standard code. This is the entry-point map; each area links to its own index.
 │   ├── enforce-component-create.mjs  # authoring only via the pipeline
 │   └── lib/              # shared, single-source engines
 │       ├── standards.mjs         #   the registry: rule ↔ enforcement + scope (general/webkit)
-│       ├── authoring-checks.mjs  #   construction checks (one of FOUR shared engines: authoring, token, spec, story)
+│       ├── authoring-checks.mjs  #   construction checks (one of the shared engines: authoring, token, spec, naming)
 │       ├── prop-vocabulary.mjs   #   canonical prop dictionary
 │       ├── spec.mjs              #   SFC/spec parsing
 │       └── legacy-components.json #   grandfather list

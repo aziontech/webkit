@@ -19,7 +19,7 @@ Convert an approved `.specs/<name>.md` into:
 - (Composition only) `packages/webkit/src/components/<category>/<name>/index.ts` — the **compound API** that attaches every sub-component to the root (`<Root.Part>`) via `Object.assign`; because it is a `.ts` file, `vue-tsc` generates the adjacent `index.d.ts` (do not hand-write it — `.d.ts` is gitignored). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 - New entry/entries in `packages/webkit/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./dialog-trigger`) regardless of the folder nesting. For composition, the **root** export points at `index.ts` (the compound), **plus** a standalone `./<name>-root` export pointing at the root `.vue` for tree-shaking — see [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 
-Nothing else. The story, the Code Connect file, and the validation pass live in other skills.
+Nothing else. The test, the examples, the Code Connect file, and the validation pass live in other skills.
 
 **Folder layout — composition pattern (canonical, one folder per part):**
 
@@ -254,7 +254,7 @@ export default Object.assign(Dialog, {
 
    For a **composition** root, expand the starter to render a realistic composed tree (root + its sub-components) instead of the bare root, since the root alone may render empty. Still a floor — the author fills events / `provide`-`inject` / `v-model`.
 
-7. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
+7. **Stop.** Do not write the test or the examples. Do not write the `.figma.ts`. Do not run any pnpm command.
 
 ## Outputs
 
@@ -313,4 +313,4 @@ export default Object.assign(Dialog, {
 - [ ] `defineOptions.name` is PascalCase and matches the directory.
 - [ ] `data-testid` fallback equals `'<name>'` on the root and each sub-component's own name on it (`'<name>-<part>'`); inner elements use `${testId}__<part>`.
 - [ ] Starter `<name>.test.ts` written next to the root `.vue` (render + `data-testid` fallback + consumer override + axe; required props filled from the spec) — satisfies `enforce-test-exists.mjs`.
-- [ ] No story file written, no `.figma.ts` written, no pnpm command run.
+- [ ] No test or example written, no `.figma.ts` written, no pnpm command run.

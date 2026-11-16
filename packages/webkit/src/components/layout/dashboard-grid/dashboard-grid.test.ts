@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { h, nextTick, ref } from 'vue'
@@ -228,9 +230,11 @@ describe('DashboardGrid', () => {
     expect(order(layout)).toEqual(['requests', 'regions', 'errors'])
   })
 
-  it('collapses to one column in a narrow container', () => {
+  it('lays out its columns in a wide container and collapses to one in a narrow one', () => {
+    const wide = mount().view.getByTestId('dashboard-grid__grid')
+    expect(getComputedStyle(wide).gridTemplateColumns.split(' ')).toHaveLength(12)
     const { view } = mount({ style: 'width: 360px' })
-    const grid = view.getByTestId('dashboard-grid__grid')
+    const grid = view.getAllByTestId('dashboard-grid__grid').at(-1)!
     expect(getComputedStyle(grid).gridTemplateColumns.split(' ')).toHaveLength(1)
   })
 
