@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <div class="flex items-start gap-2 w-[320px]">
+  <div class="flex w-full max-w-80 items-start gap-(--spacing-xs)">
     <Input
       type="email"
       autocomplete="email"

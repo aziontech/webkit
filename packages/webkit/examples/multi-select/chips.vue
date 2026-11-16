@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <div style="width: 320px">
+  <div class="w-full max-w-80">
     <MultiSelect
       v-model="value"
       variant="chips"
