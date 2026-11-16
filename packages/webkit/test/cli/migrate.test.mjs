@@ -231,6 +231,33 @@ test('migrateSource moves a static value to another prop from a moves map', () =
   assert.equal(migrateSource(source, { ...migration, ...rules }).source, source)
 })
 
+test('migrateSource splits an overlay placement into side and align, logical sides included', () => {
+  const { props } = loadMigration(6)
+  const sfc = [
+    '<script setup>',
+    "import Popover from '@aziontech/webkit/popover'",
+    "import Tooltip from '@aziontech/webkit/tooltip'",
+    "import DropdownMenu from '@aziontech/webkit/dropdown-menu'",
+    '</script>',
+    '<template>',
+    '  <Popover placement="bottom-end" :offset="8" />',
+    '  <Popover placement="right-start" />',
+    '  <Popover placement="auto" />',
+    '  <Tooltip placement="left" />',
+    "  <Tooltip :placement=\"rtl ? 'left' : 'right'\" />",
+    '  <DropdownMenu placement="top-start" offset="2" />',
+    '</template>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, { ...migration, props })
+  assert.match(source, /<Popover side="bottom" align="end" :side-offset="8" \/>/)
+  assert.match(source, /<Popover side="end" align="start" \/>/)
+  assert.match(source, /<Popover side="auto" \/>/)
+  assert.match(source, /<Tooltip side="start" \/>/)
+  assert.match(source, /<Tooltip :side="rtl \? 'start' : 'end'" \/>/)
+  assert.match(source, /<DropdownMenu side="top" align="start" side-offset="2" \/>/)
+  assert.equal(migrateSource(source, { ...migration, props }).source, source)
+})
+
 test('migrateTestIds maps category test ids to the component name, parts included', () => {
   const { testids } = loadMigration(6)
   const spec = [

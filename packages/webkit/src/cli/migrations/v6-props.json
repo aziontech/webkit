@@ -198,7 +198,49 @@
     "@open-change-complete": "open-transition-end"
   },
   "popover": {
-    "width": "size"
+    "width": "size",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
   },
   "progress": {
     "shape": "variant",
@@ -714,7 +756,49 @@
     "tickerMarks": "marqueeMarks"
   },
   "popover-root": {
-    "width": "size"
+    "width": "size",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
   },
   "backdrop": {
     "art": "variant",
@@ -923,11 +1007,95 @@
   },
   "dropdown-menu": {
     "#top": "header",
-    "#bottom": "footer"
+    "#bottom": "footer",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
   },
   "dropdown-menu-root": {
     "#top": "header",
-    "#bottom": "footer"
+    "#bottom": "footer",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
   },
   "dropdown-menu-group": {
     "#top": "header",
@@ -965,10 +1133,24 @@
     "level": "headingLevel"
   },
   "tooltip": {
-    "text": "content"
+    "text": "content",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
   },
   "hint": {
-    "text": "content"
+    "text": "content",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
   },
   "command-group": {
     "heading": "label"
@@ -1370,5 +1552,93 @@
   "template-gallery": {
     "tickerLabel": "marqueeLabel",
     "tickerMarks": "marqueeMarks"
+  },
+  "hover-card": {
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
+  },
+  "hover-card-root": {
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
   }
 }
