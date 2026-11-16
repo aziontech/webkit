@@ -6,6 +6,11 @@
    "file": "blocks/dashboard/analytics-dashboard/variants/loading.vue"
   },
   {
+   "name": "Refetching",
+   "summary": "The period reloads over figures already shown (a new period, a Refresh): the tiles, charts and table keep their data and every chart holds its previous render at reduced opacity, so nothing jumps to a Skeleton.",
+   "file": "blocks/dashboard/analytics-dashboard/variants/refetching.vue"
+  },
+  {
    "name": "Empty",
    "summary": "No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded.",
    "file": "blocks/dashboard/analytics-dashboard/variants/empty.vue"

@@ -231,8 +231,8 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
     latency: number | null
     /** Change of p95 latency against the previous window, in percent. */
     delta: number | null
-    /** p95 latency over the window, for the sparkline. */
-    trend: number[]
+    /** p95 latency over the window, for the sparkline, null for an interval with no data. */
+    trend: (number | null)[]
   }
 
   /** The series of one chart over the window. */

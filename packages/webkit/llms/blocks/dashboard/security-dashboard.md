@@ -318,8 +318,8 @@ Each variant is the same screen in another state: `get_block("dashboard/security
     value: number | null
     /** Change against the previous period, in percent; null hides it. */
     delta: number | null
-    /** The figure over the period, for the sparkline. */
-    trend: number[]
+    /** The figure over the period, for the sparkline, null for an interval with no data. */
+    trend: (number | null)[]
   }
 
   /** The three summary tiles. */

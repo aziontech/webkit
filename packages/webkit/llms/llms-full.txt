@@ -75,7 +75,7 @@ use it, so you can check a choice against a real one.
 | Second action | `--secondary`, `--secondary-foreground` | `Button variant="secondary"`, `IconButton`, `Badge variant="secondary"` |
 | Brand text and tint | `--text-primary`, `--primary-mask`, `--primary-selected` | the required asterisk in `FieldLabel`, `Tag variant="highlight"`, `RadioGroup` selected card |
 | Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` and `TopologyDiagram` edges and ports |
-| Brand marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | `Eyebrow` text in the logo orange (`--text-brand`: the logo orange in dark, the darker primary-700 in light where the logo orange is under 4.5:1 on white) and its blinking cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
+| Brand marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | `Eyebrow` text in the logo orange (`--text-brand`: the logo orange `#F3652B` in light and dark, an owner-accepted contrast exception below) and its blinking cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
 | Selected item | `--bg-selected`, `--border-selected` | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders |
 | Selected tab | `--secondary-mask` | the sliding indicator in `Tabs` |
 | Hover and press | `--bg-hover`, `--bg-active`, `--bg-mask` | every interactive component (`--bg-mask` is the hover layer on `Button variant="outline"` and `variant="ghost"`) |
@@ -115,10 +115,11 @@ Exceptions (the one list; `accepted` means the owner chose the look, `open` wait
 | `--primary-foreground` on `--primary` | light, dark | 46.6 | accepted | The black label on the logo orange `#F3652B` matches the logo (2026-11-14). WCAG 6.71:1 passes. |
 | `--border-default` on the surfaces | dark | 0 | accepted | Dark dividers keep the original `#2B2B2B` look (2026-11-16). Form outlines stay `--border-input` `#535353`. |
 | `--border-muted` on the surfaces | dark | 0 | accepted | Dark muted dividers keep the original `#242424` look (2026-11-16). |
-| `--text-brand` on the surfaces | dark | 43.5–44.3 | accepted | The `Eyebrow` label stays the logo orange `#F3652B` in dark. Light uses primary-700 `#B03C02` and passes. |
-| `--border-muted` on `--bg-canvas` | light | 13.3 | open | Light muted divider on the page canvas. |
-| `--text-muted` on `--bg-surface-raised` | dark | 59.9 | open | Dark muted text in menus and popovers. |
-| `--border-input` on `--bg-surface-raised` | dark | 14.6 | open | Dark field outline inside a raised panel. |
+| `--text-brand` on the surfaces | dark | 43.5–44.3 | accepted | The `Eyebrow` label stays the logo orange `#F3652B` in dark. WCAG 5.5:1 passes. |
+| `--text-brand` on the surfaces | light | 51.5–57.5 | accepted | brand: the eyebrow matches the logo orange; owner decision 2026-11-16. Fails both APCA (Lc 60) and WCAG 2 AA (2.9–3.1:1, needs 4.5:1). axe skips `color-contrast` on the Eyebrow label only, listed in `packages/webkit/src/test/a11y-accepted.json`. |
+| `--border-muted` on `--bg-canvas` | light | 13.3 | accepted | Light muted divider on the page canvas, target Lc 15: kept as is (owner decision 2026-11-16). |
+| `--text-muted` on `--bg-surface-raised` | dark | 59.9 | accepted | Dark muted text in menus and popovers, target Lc 60: kept as is (owner decision 2026-11-16). |
+| `--border-input` on `--bg-surface-raised` | dark | 14.6 | accepted | Dark field outline inside a raised panel, target Lc 15: kept as is (owner decision 2026-11-16). |
 
 Do not "fix" an accepted pair; do not add a pair to this list without the design owner's decision.
 
@@ -1402,7 +1403,8 @@ confirmation"), or the `webkit` MCP `search_blocks`. Read the best one with
 `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state): it copies the SFC
 into the views directory, checks its imports, records it in `webkit.blocks.json` and prints the
 route entry. `npx @aziontech/webkit diff <block-id>` later shows what you changed against the
-canonical block. Before adapting it, read the guidelines (`view`, or the `guidelines` field
+canonical block, and `npx @aziontech/webkit remove <block-id>` (`--dry-run` first) deletes a copy you
+no longer need with its `webkit.blocks.json` entry, then lists the imports left to remove. Before adapting it, read the guidelines (`view`, or the `guidelines` field
 `get_block` returns): when to use the screen and when another block fits better, what each building block (A,
 B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
 matches your case, switch to the block it names. Then change only the content of the copy,
@@ -1456,9 +1458,14 @@ Structure and states first, polish last:
 
 Do not guess a component name or import path. Look it up.
 
-1. Ask the webkit MCP. The server exposes tools grounded in the exact webkit version this project installed:
-   - `suggest_component` — describe what you need in plain words; it returns the matching component(s).
-   - Import/validation tools — confirm a subpath is real and get the canonical path.
+1. Ask the webkit MCP. The server exposes tools grounded in the exact webkit version this project installed. Arguments are JSON fields of the call; required ones are in bold, and `surface` is `app`, `site` or `docs` (console screens: `app`):
+   - `search_blocks` — **`query`** (the screen in plain words), `surface`, `fragments` (boolean). Start every screen here.
+   - `get_block` — **`id`**, `variant`, `sections` (`["guidelines"]` or `["sfc"]`).
+   - `suggest_component` — **`need`** (what you are building, e.g. `"a ranked top list"`), `surface`; the block, section or component that fits, with alternatives.
+   - `search_components` — **`query`**, `surface`.
+   - `get_component`, `get_import`, `get_usage_example`, `get_best_practices` — **`name`** (kebab-case, e.g. `"bar-list"`).
+   - `list_components` — `category`, `surface`, `cursor`, `limit`; `list_categories` — none; `list_tokens` — `category`; `list_assets` — `kind`, `query`.
+   - `validate_usage` — `import`, `classes`, `component`: confirm a subpath is real and a class string is allowed.
 2. No MCP? Read `node_modules/@aziontech/webkit/llms/llms.txt`. It links one Markdown page per block (`llms/blocks/<id>.md`: guidelines, variants, the primary SFC), per component (`llms/components/<name>.md`: props, events, slots, examples, accessibility, do and don't, with the same data as JSON in `<name>.json`) and per foundation (`llms/foundations/`: tokens, color, typography, spacing, motion, i18n, RTL, devices). `llms-full.txt` is every page in one file.
 3. Read the catalog directly. `node_modules/@aziontech/webkit/catalog.json` has an `imports` object; every key is a real published subpath (`button`, `empty-state`, `table`, ...). If a subpath is not a key there, it does not exist.
 
@@ -1514,7 +1521,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ Barrel import: `import { Button } from '@aziontech/webkit'` (no barrel exists).
 - ❌ Binding that disagrees with the path: `import Chip from '@aziontech/webkit/chips'`.
 - ❌ Hardcoded color: `#fff`, `rgb(...)`, `hsl(...)`, `text-[#1e40af]`, or raw Tailwind palette (`bg-blue-600`).
-- ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only layout utilities may sit on the tag: `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
+- ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only layout utilities (size, flex and grid placement, order, logical margins) may sit on the tag, each optionally behind a breakpoint prefix (`sm:` to `2xl:`): `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `shrink-0`, `self-*`, `justify-self-*`, `place-self-*`, `order-*`, `col-span-*`, `col-start-*`, `col-end-*`, `row-span-*`, `row-start-*`, `row-end-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mb-*`, `ms-*`, `me-*`.
 - ❌ An illustration, diagram, figure or mark name guessed from a file in `src/` or from the page title: an unknown illustration renders a "PLACE DESIGN ASSET" placeholder, an unknown diagram or figure draws nothing.
 - ❌ `ai-cor ai-<name>`, `ai-<name>-cor` or `ai ai-<name>-cor` for a colour icon: none is a class in WebKit 6. Use `ai-color ai-<name>`.
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.
@@ -3290,7 +3297,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - Surface: app
 - Source: `blocks/auth/sign-in/sign-in.vue` in `@aziontech/webkit`
 - MCP: `get_block("auth/sign-in")`
-- Components: Alert, AppHeader, Avatar, Brand, Button, Card, CopyButton, Field, `FieldError`, IconButton, Input, Item, KeyValueList, OtpInput, PageHeader, PasswordInput, PasswordRequirements, QrCode, Separator, Skeleton, Tag, Tooltip
+- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, CopyButton, Field, `FieldError`, IconButton, Input, Item, KeyValueList, OtpInput, PageHeader, PasswordInput, PasswordRequirements, QrCode, Separator, Skeleton, Tag, Tooltip
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -3335,17 +3342,23 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - O. Last used — `Tag` (email step only)
 - P. Card heading — `PageHeader` (required)
 - Q. Provider placeholder — `Skeleton` (while `providersLoading`)
-- R. Personal token — `PasswordInput` (PersonalToken and RejectedToken)
+- R. Personal token — `PasswordInput` (PersonalToken, RejectedToken and NoAccessToken)
 
 What each part takes: [blocks/auth/sign-in.md](blocks/auth/sign-in.md).
 
 ## Data
 
-The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInFailure` and `SignInNoticeKind` are exported from `sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken and RejectedToken are their own card, not the primary with props: they take no account fields and emit `sign-in` with `(event, token)`.
+The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInFailure` and `SignInNoticeKind` are exported from `sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken, RejectedToken and NoAccessToken render their own card, `token-sign-in.vue` (listed in `files`), not the primary: it takes no account fields, and its contract is below the primary's.
 
 Prop: `step` (`v-model:step`), `defaultValues`, `loading`, `error`, `notice`, `providersLoading`, `homeHref`, `docsHref`, `signUpHref`, `termsHref`, `privacyHref`.
 
 Event: `provider-click`, `continue`, `submit`, `reset-request`, `resend`, `password-reset`.
+
+The token card, `token-sign-in.vue` (`TokenSignInProps` and `TokenSignInFailure` are exported from it):
+
+Prop: `loading`, `error`, `remember` (`v-model:remember`), `homeHref`, `docsHref`.
+
+Event: `sign-in`, `update:remember`.
 
 What each prop and event does, and the go-live code: [blocks/auth/sign-in.md](blocks/auth/sign-in.md).
 
@@ -3406,7 +3419,7 @@ What each prop and event does, and the go-live code: [blocks/auth/sign-in.md](bl
 - **Scope rows:** title starts with a verb (`Read your workloads`, `Deploy your applications`), the description says what is in and, when it matters, what is not: `Names, domains and status. Not their settings or secrets.`
 - **Consent actions:** `Deny` and `Allow`. Outcomes: `Access granted. Returning to Acme Deploy.` / `Access denied. Returning to Acme Deploy with no access to your account.`
 - **Device actions:** `Cancel` and `Confirm`. Outcomes: `Device connected. Go back to your terminal; you can close this tab.` / `Request cancelled. The device was not connected.`
-- **Personal token:** heading `Sign in with a personal token`; lead `Paste a personal token from your Azion account. It is sent only to the Azion API.`; rejected `Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.`; unreachable `We could not reach Azion to check the token. Your entry is kept.`
+- **Personal token:** heading `Sign in with a personal token`; lead `Paste a personal token from your Azion account. It is sent only to the Azion API.`; rejected `Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.`; no access `This token is valid but cannot read what this app needs. Create a token with access to the account and paste it here.`; rate limited `Azion is limiting requests from this token. Wait a moment and retry.`; unreachable `We could not reach Azion to check the token. Your entry is kept.`; option `Remember for this tab` / `Closing the tab signs you out.`
 - **Device code errors:** `Enter the code your terminal shows.`, `Enter all 8 characters of the code.`, `That code is not valid or has expired. Check your terminal, or start the sign-in again there.`
 
 ## Accessibility
@@ -3443,8 +3456,9 @@ What each prop and event does, and the go-live code: [blocks/auth/sign-in.md](bl
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
 - DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValueList`, the account and the two scopes, Cancel / Confirm. `The code does not match? Enter the code from your terminal` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
 
-- PersonalToken: sign in with an Azion personal token. One masked, monospace field with show and hide, a link to how tokens are made, required and no-spaces checks, then a check against the API: rejected is a danger notice with the field cleared, no answer a warning with Retry, accepted emits `sign-in` `(event, token)`.
-- RejectedToken: the PersonalToken card after a 401, the danger notice under the heading and the empty field focused.
+- PersonalToken: sign in with an Azion personal token. One masked, monospace field with show and hide, a link to how tokens are made, required and no-spaces checks, Remember for this tab (off), then `sign-in` `(event, token)`; the app answers with `loading` and `error`.
+- RejectedToken: `error="rejected"`, the card after a 401, the danger notice under the heading and the empty field focused.
+- NoAccessToken: `error="no-access"`, the card after a 403, a danger notice that asks for a token with access, the empty field focused.
 
 ## Related
 
@@ -3464,7 +3478,7 @@ What each prop and event does, and the go-live code: [blocks/auth/sign-in.md](bl
 
 ## Variants
 
-`Login` (primary) · `SignUp` · `SessionExpired` · `ProvidersLoading` · `Submitting` · `CheckInbox` · `IncorrectCredentials` · `ServiceUnavailable` · `ServerError` · `Timeout` · `EmailAlreadyRegistered` · `MfaSetup` · `MfaCode` · `OauthConsent` · `DeviceAuthorization` · `PersonalToken` · `RejectedToken`. Code: [blocks/auth/sign-in.md](blocks/auth/sign-in.md), `get_block("auth/sign-in", { variant })`.
+`Login` (primary) · `SignUp` · `SessionExpired` · `ProvidersLoading` · `Submitting` · `CheckInbox` · `IncorrectCredentials` · `ServiceUnavailable` · `ServerError` · `Timeout` · `EmailAlreadyRegistered` · `MfaSetup` · `MfaCode` · `OauthConsent` · `DeviceAuthorization` · `PersonalToken` · `RejectedToken` · `NoAccessToken`. Code: [blocks/auth/sign-in.md](blocks/auth/sign-in.md), `get_block("auth/sign-in", { variant })`.
 
 ---
 
@@ -4823,7 +4837,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/alerts-da
 - Surface: app
 - Source: `blocks/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/analytics-dashboard")`
-- Components: Alert, Chart, ChartCard, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Link, PageHeader, PageTabs, `PanelBody`, `PanelHeader`, Select, StatTile, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `utils/csv`
+- Components: Alert, Chart, ChartCard, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Link, PageHeader, PageTabs, `PanelBody`, `PanelHeader`, Select, StatTile, StatTileGroup, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -4857,7 +4871,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## Building blocks
 
 - A. Page heading and period — `PageHeader`, `Select` (required)
-- B. KPI row — `StatTile` (required)
+- B. KPI row — `StatTileGroup`, `StatTile` (required)
 - C. Metric definitions — `Hint` (required)
 - D. Cards — `ChartCard` (required)
 - E. Aggregation and variation — `Tag` (required)
@@ -4881,9 +4895,20 @@ What each part takes: [blocks/dashboard/analytics-dashboard.md](blocks/dashboard
 
 The block takes its figures through props and emits its actions; it fetches nothing. `AnalyticsDashboardProps` and the record types (`AnalyticsDashboardKpis`, `AnalyticsDashboardCountry`, `AnalyticsDashboardHost`, `AnalyticsDashboardChanges`, `AnalyticsDashboardRange`) are exported from `analytics-dashboard.vue`, and `sample.ts` holds the sample figures the block renders when a data prop is left out (and never while `loading` or `error` is set). The tile labels, hints and formats, the card titles and the period options stay in the SFC.
 
-Prop: `v-model:period`, `kpis`, `intervals`, `requestSeries`, `statusSeries`, `countries`, `hosts`, `changes`, `range`, `defaultExpanded`, `loading`, `error`.
+Prop: `v-model:period`, `kpis`, `intervals`, `requestSeries`, `statusSeries`, `countries`, `hosts`, `changes`, `range`, `defaultExpanded`, `loading`, `error`, `refetching`.
 
 Event: `update:period`, `retry`.
+
+The queries the card menus copy run as-is against the Azion Real-Time Metrics API
+(`POST /v4/metrics/graphql`). What the API expects, so a live page asks for the right shapes:
+
+Card: Requests over time, Status codes, Requests by country, Top hosts.
+
+- Every query takes `limit` and `filter: { tsRange: { begin, end } }`; an aggregate needs `groupBy`, and a ranked list orders by the aggregate (`sum_DESC`), never by the measured field (`requests_DESC` is rejected).
+- Timestamps are ISO 8601 in UTC **without** the trailing `Z` (`2026-11-13T11:00:00`); the block strips a `Z` and milliseconds from `range` before it writes the query.
+- `resample: { function: sum, points: 96 }` returns a fixed number of points for a time series, so a long period does not come back as thousands of rows.
+- One query returns at most 10,000 rows (`limit: 10000`).
+- Data transferred is `aggregate: { sum: bytesSent }`; the Functions product reads `functionsMetrics` (`sum: invocations`) and Edge DNS reads `idnsQueriesMetrics`.
 
 Then delete `sample.ts` and its import.
 
@@ -4936,6 +4961,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/analytics
 
 - Default: the populated dashboard for the period (`kpis`, `intervals`, `requestSeries`, `statusSeries`, `countries`, `hosts`, `changes`).
 - Loading: `loading`; every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
+- Refetching: `refetching`; the period reloads (a new period, a Refresh) over figures already shown: the tiles, charts and table keep their data and every chart holds its previous render at reduced opacity until the new figures arrive. Use `loading` only for the first response.
 - Empty: `kpis` is `{}` and the series and rows are `[]`; no traffic in the period, tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
 - Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards, and products with sub-dashboards switch them with a `ToggleGroup`, adding breakdown table cards.
 - Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
@@ -4956,7 +4982,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/analytics
 
 ## Variants
 
-`Default` (primary) · `Loading` · `Empty` · `Error` · `Metrics` · `Expanded` · `MetricsOverview` · `Usage`. Code: [blocks/dashboard/analytics-dashboard.md](blocks/dashboard/analytics-dashboard.md), `get_block("dashboard/analytics-dashboard", { variant })`.
+`Default` (primary) · `Loading` · `Refetching` · `Empty` · `Error` · `Metrics` · `Expanded` · `MetricsOverview` · `Usage`. Code: [blocks/dashboard/analytics-dashboard.md](blocks/dashboard/analytics-dashboard.md), `get_block("dashboard/analytics-dashboard", { variant })`.
 
 ---
 
@@ -8030,7 +8056,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - Surface: app
 - Source: `blocks/shell/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/console")`
-- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, ConsoleLayout, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellStatus`, Tabs, Tag, ThemeSwitcher, Toast, Tooltip, `use-color-mode`
+- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellStatus`, Tabs, Tag, ThemeSwitcher, Toast, Tooltip, `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -8052,7 +8078,7 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ## Building blocks
 
-- A. Shell — `ConsoleLayout` (required)
+- A. Shell — `ConsoleLayoutRoot` (required)
 - B. Actions — `Button` (required)
 - C. Agent — `HighlightButton` (required)
 - D. Hints — `Tooltip` (required)
@@ -8066,9 +8092,19 @@ The application shell every signed-in page renders inside. The user browses and 
 
 What each part takes: [blocks/shell/console.md](blocks/shell/console.md).
 
+## Data
+
+The shell takes no props: `navigation`, `account` and the recents are its own constants, which the app replaces with its navigation file and signed-in user. It emits one event:
+
+Event: `sign-out`.
+
+Handle it where the session lives: clear the token (`sessionStorage.removeItem`, the in-memory ref) and route to sign-in (`router.push('/login')`). When this block is the app's `App.vue`, there is no parent to listen, so either mount it with the handler (`createApp(App, { onSignOut })`) or render it from a thin `App.vue` (`<ConsoleShell @sign-out="signOut" />`). Never leave Log out as a menu item that does nothing.
+
+What each prop and event does, and the go-live code: [blocks/shell/console.md](blocks/shell/console.md).
+
 ## Do
 
-- Compose `ConsoleLayout` once in `App.vue` and render every browse page through its default slot; replace this block's stand-in body with `<RouterView />`.
+- Compose `ConsoleLayoutRoot` once in `App.vue` and render every browse page through its default slot; replace this block's stand-in body with `<RouterView />`.
 - Keep the navigation in one data file shared by the app; the rail and the palette both read it.
 - Give every row an `href` (never `to` or `path`); derive a static `breadcrumbs` trail from the route.
 - Let a detail page set its own trail, control crumb included, with `ConsoleLayout.Breadcrumb`.
@@ -14394,7 +14430,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Separator` carrying a "No data" `Tag`)
+- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
@@ -16225,7 +16261,7 @@ The frame is static apart from its resize handles.
 
 # Eyebrow
 
-> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange in dark, a darker step in light so the small label keeps 4.5:1), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 - Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
@@ -16280,7 +16316,7 @@ The frame is static apart from its resize handles.
 - Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
-- Test ids: root `eyebrow` (consumer `data-testid` wins).
+- Test ids: root `eyebrow` (consumer `data-testid` wins); the label `<root>__label`.
 - Reflow: the root is capped at the width of its container, and a label that does not fit wraps instead of overflowing at any width, at 200% zoom and with translated copy (no viewport breakpoint involved).
 
 ## Accessibility
@@ -16288,7 +16324,7 @@ The frame is static apart from its resize handles.
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast ≥4.5:1 (text): the label uses `var(--text-brand)` (`primary-700` in light, 4.77:1 or more on every light surface, because the logo orange is about 3.1:1 on white; the logo orange `primary-500` in dark, 5.5:1 or more on every dark surface) and the prefix `var(--text-default)` on the surface the consumer places it on.
+- Contrast: the prefix uses `var(--text-default)` (≥4.5:1). The label uses `var(--text-brand)`, the logo orange `primary-500` in both themes: 5.5:1 or more on every dark surface, but about 2.9–3.1:1 on the light surfaces, under WCAG 2 AA 4.5:1 and APCA Lc 60. This is an owner-accepted brand exception (the eyebrow matches the logo orange; owner decision 2026-11-16), recorded in `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"; the automated axe checks skip `color-contrast` on the `<root>__label` part in light only.
 - `motion-reduce:animate-none` on the cursor's `animate-blink`.
 - Touch target: not applicable (non-interactive).
 
@@ -25767,7 +25803,9 @@ packages/webkit/src/components/layout/console-layout/
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import HighlightButton from '@aziontech/webkit/highlight-button'
@@ -25838,7 +25876,7 @@ packages/webkit/src/components/layout/console-layout/
 </script>
 
 <template>
-  <ConsoleLayout
+  <ConsoleLayoutRoot
     :navigation="navigation"
     :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
     :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
@@ -25915,7 +25953,7 @@ packages/webkit/src/components/layout/console-layout/
         />
       </div>
     </div>
-  </ConsoleLayout>
+  </ConsoleLayoutRoot>
 </template>
 ```
 
