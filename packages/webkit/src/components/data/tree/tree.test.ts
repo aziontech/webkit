@@ -702,7 +702,12 @@ describe('Tree', () => {
     })
 
     it('renders the selected node deep in the tree, so it holds the one tab stop', () => {
-      const view = mount({ items: FOLDERS, openKeys: OPEN, selectable: true, selected: 'f15/c10' })
+      const view = mount({
+        items: FOLDERS,
+        openKeys: OPEN,
+        selectable: true,
+        selectedKey: 'f15/c10'
+      })
       expect(tabStops(view.container)).toEqual(['f15/c10'])
       expect(node(view.container, 'f15/c10').getAttribute('aria-selected')).toBe('true')
     })
