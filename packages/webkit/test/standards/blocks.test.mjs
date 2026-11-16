@@ -305,7 +305,7 @@ const toastSfc = (imports, template) =>
 
 test('rendersToastRegion finds a Toaster under any binding, and ignores toast calls and other parts', () => {
   const named = "import { toast, Toaster } from '@aziontech/webkit/toast'"
-  assert.equal(rendersToastRegion(toastSfc([named], '<Toaster position="bottom-right" />')), true)
+  assert.equal(rendersToastRegion(toastSfc([named], '<Toaster position="bottom-end" />')), true)
   assert.equal(rendersToastRegion(toastSfc([named], '<Toaster>\n</Toaster>')), true)
   assert.equal(
     rendersToastRegion(

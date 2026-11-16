@@ -427,7 +427,7 @@
     if (refused.length) {
       toast.error(`${refused[0].name} is larger than 300 MB.`, {
         description: 'Files over the limit per file were left out of the upload.',
-        position: 'top-right'
+        position: 'top-end'
       })
     }
   }

@@ -247,6 +247,6 @@
       <RouterView name="dialog" />
     </ConsoleLayout>
     <DemoBar />
-    <Toaster position="bottom-right" />
+    <Toaster position="bottom-end" />
   </WebkitProvider>
 </template>

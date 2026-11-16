@@ -10,7 +10,7 @@
 
 <template>
   <Toaster
-    position="bottom-right"
+    position="bottom-end"
     closable
   />
   <Button

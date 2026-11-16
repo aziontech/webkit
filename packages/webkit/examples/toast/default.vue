@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
+  <Toaster position="bottom-end" />
   <Button
     label="Show toast"
     @click="show"

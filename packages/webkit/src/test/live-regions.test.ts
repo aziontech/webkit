@@ -49,7 +49,7 @@ describe('live regions', () => {
   it('async-submit announces the result once, through the app Toaster region', async () => {
     render(
       defineComponent({
-        setup: () => () => [h(Toaster, { position: 'bottom-right' }), h(AsyncSubmitSucceeded)]
+        setup: () => () => [h(Toaster, { position: 'bottom-end' }), h(AsyncSubmitSucceeded)]
       })
     )
     await waitFor(() => expect(regionsSaying('is live.').length).toBeGreaterThan(0))

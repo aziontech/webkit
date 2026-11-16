@@ -788,6 +788,6 @@
       </DialogContent>
     </Dialog>
 
-    <Toaster position="bottom-right" />
+    <Toaster position="bottom-end" />
   </div>
 </template>

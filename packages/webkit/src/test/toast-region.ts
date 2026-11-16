@@ -9,7 +9,7 @@ import { toast, ToastPlugin } from '../components/feedback/toast'
 
 export function mountToastRegion(): () => void {
   const app = createApp({ render: () => null })
-  app.use(ToastPlugin, { position: 'bottom-right' })
+  app.use(ToastPlugin, { position: 'bottom-end' })
   app.mount(document.createElement('div'))
   return () => {
     toast.dismiss()

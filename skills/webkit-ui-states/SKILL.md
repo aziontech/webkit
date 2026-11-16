@@ -427,7 +427,7 @@ For `/webkit-ui-states <file>`, list gaps grouped by view / flow. Each:
   behavior: Report request errors — the failure is silent; the user sees a spinner that never clears.
   fix: toast.error("Request failed.", { description: e.message, action: { label: "Retry", onClick } }); release the lock in finally.
 
-✗ DeployPage.vue:212  <Toaster position="bottom-right" /> in a page
+✗ DeployPage.vue:212  <Toaster position="bottom-end" /> in a page
   behavior: One toast region — a page's Toaster is inert, or silences every toast after the user leaves the page.
   fix: delete it and keep the toast calls; the app mounts the region once (ToastPlugin or one Toaster in App.vue).
 ```

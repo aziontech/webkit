@@ -5,9 +5,9 @@ import type { Severity } from '../../../../utils/severity'
 /** Colour meaning of a toast, reflected via `data-severity`. */
 export type ToastSeverity = Severity
 
-/** Corner (or edge-center) a toast (or the whole Toaster) is anchored to. */
+/** Corner (or edge-center) a toast (or the whole Toaster) is anchored to; `start` and `end` follow the reading direction. */
 export type ToastPosition =
-  'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+  'top-start' | 'top-center' | 'top-end' | 'bottom-start' | 'bottom-center' | 'bottom-end'
 
 /** An inline action affordance rendered as a text button inside the toast. */
 export interface ToastAction {

@@ -11,6 +11,7 @@
     watch
   } from 'vue'
 
+  import { useDirection } from '../../../composables/use-direction'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Progress from '../progress/progress.vue'
@@ -32,11 +33,11 @@
   })
 
   export interface ToastProps {
-    /** Default corner (or edge-center) toasts anchor to; a per-toast `position` overrides it. */
+    /** Default corner (or edge-center) toasts anchor to; `start` and `end` follow the reading direction, and a per-toast `position` overrides it. */
     position?: ToastPosition
     /** Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. */
     duration?: number
-    /** Maximum simultaneously visible toasts per corner before the rest queue behind. */
+    /** Maximum simultaneously visible toasts per position before the rest queue behind. */
     max?: number
     /** Keep the stack permanently expanded (otherwise it expands on hover). */
     expand?: boolean
@@ -45,7 +46,7 @@
   }
 
   const props = withDefaults(defineProps<ToastProps>(), {
-    position: 'bottom-right',
+    position: 'bottom-end',
     duration: 4000,
     max: 3,
     expand: false,
@@ -64,6 +65,12 @@
     (ms: number) => store.setDefaultDuration(ms),
     { immediate: true }
   )
+
+  const portalLocale = usePortalLocale()
+  const documentDirection = useDirection(() =>
+    typeof document === 'undefined' ? null : document.body
+  )
+  const direction = computed(() => portalLocale.value.dir ?? documentDirection.value)
 
   const toasterReg = registerToaster()
   const isActive = computed(() => toasterReg.isActive())
@@ -220,12 +227,12 @@
   }
 
   const POSITIONS: ToastPosition[] = [
-    'top-left',
+    'top-start',
     'top-center',
-    'top-right',
-    'bottom-left',
+    'top-end',
+    'bottom-start',
     'bottom-center',
-    'bottom-right'
+    'bottom-end'
   ]
 
   const regions = computed<Region[]>(() => {
@@ -321,6 +328,9 @@
     const pos = region.position
     const top = isTopPos(pos)
     const center = pos.endsWith('center')
+    const rtl = direction.value === 'rtl'
+    const leftSide = pos.endsWith(rtl ? 'end' : 'start')
+    const rightSide = pos.endsWith(rtl ? 'start' : 'end')
     const vis = region.live.slice(0, visibleCount.value)
     const frontHeight = heights.value[region.live[0]?.entry.id] ?? 0
 
@@ -342,8 +352,8 @@
       maxWidth: 'calc(100vw - 2 * var(--spacing-md))',
       top: top ? 'var(--spacing-md)' : 'auto',
       bottom: top ? 'auto' : 'calc(var(--spacing-md) + var(--toast-offset-bottom, 0%))',
-      left: center ? '50%' : pos.endsWith('left') ? 'var(--spacing-md)' : 'auto',
-      right: pos.endsWith('right') ? 'var(--spacing-md)' : 'auto',
+      left: center ? '50%' : leftSide ? 'var(--spacing-md)' : 'auto',
+      right: rightSide ? 'var(--spacing-md)' : 'auto',
       transform: center ? 'translateX(-50%)' : 'none',
       height
     }
@@ -413,7 +423,6 @@
     }
   }
 
-  const portalLocale = usePortalLocale()
   const { t } = useTranslate({ toast: en.toast })
   const regionLabel = computed(() => t('toast.region', { hotkey: 'Alt+T' }))
 </script>

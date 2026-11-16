@@ -652,5 +652,5 @@
       </div>
     </div>
   </ConsoleLayout>
-  <Toaster position="bottom-right" />
+  <Toaster position="bottom-end" />
 </template>

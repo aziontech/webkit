@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
+  <Toaster position="bottom-end" />
   <div class="flex flex-wrap justify-center gap-2">
     <Button
       label="Default"

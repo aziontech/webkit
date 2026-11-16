@@ -3,17 +3,17 @@
   import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const positions = [
-    'top-left',
+    'top-start',
     'top-center',
-    'top-right',
-    'bottom-left',
+    'top-end',
+    'bottom-start',
     'bottom-center',
-    'bottom-right'
+    'bottom-end'
   ]
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
+  <Toaster position="bottom-end" />
   <div class="flex flex-wrap justify-center gap-2">
     <Button
       v-for="p in positions"

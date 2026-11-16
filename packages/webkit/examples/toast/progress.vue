@@ -45,7 +45,7 @@
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
+  <Toaster position="bottom-end" />
   <Button
     label="Upload file"
     @click="upload"
