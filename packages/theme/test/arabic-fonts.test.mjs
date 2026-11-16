@@ -16,7 +16,7 @@ test('the sans stack falls back to an Arabic-capable face right after Rubik', ()
 
 test('Noto Sans Arabic is declared, limited to the Arabic ranges', () => {
   const face = fontsCss.match(/@font-face\s*{[^}]*'Noto Sans Arabic'[^}]*}/)?.[0] ?? '';
-  assert.match(face, /cdn\.jsdelivr\.net\/gh\/google\/fonts@main\/ofl\/notosansarabic\//);
+  assert.match(face, /url\('\.\.\/fonts\/noto-sans-arabic\/[^']+\.woff2'\)/);
   assert.match(face, /unicode-range:[^;]*U\+0600-06FF/);
 });
 
@@ -26,5 +26,5 @@ test('Arabic, Persian and Urdu text get a taller default line height, even witho
 
 test('the font faces ship in their own entry, so an app that hosts its fonts can skip them', () => {
   assert.doesNotMatch(globalsCss, /@font-face/);
-  assert.match(fontsCss, /font-family: '?Roboto'?;/);
+  assert.match(fontsCss, /font-family: Rubik;/);
 });

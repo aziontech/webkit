@@ -750,10 +750,16 @@ The theme that ships with WebKit 6 changes three things your app can see:
   no flash. An app that never checked its screens in dark keeps the old look with one attribute:
   `<html data-theme="light">`. `data-theme="dark"` pins dark; `ThemeSwitcher` and `useColorMode()`
   already default to `system`.
-- **Fonts are their own file.** `@import '@aziontech/theme'` no longer loads the Azion fonts from
-  `fonts.azion.com`. Add `@import '@aziontech/theme/fonts.css';` next to it (or
+- **Fonts are their own file, and they ship in the package.** `@import '@aziontech/theme'` no longer
+  loads the Azion fonts. Add `@import '@aziontech/theme/fonts.css';` next to it (or
   `import '@aziontech/theme/fonts.css'` in `main.ts`) to keep them; leave it out if your app hosts its
-  own fonts. `npx @aziontech/webkit init` writes the line.
+  own fonts. `npx @aziontech/webkit init` writes the line. The woff2 files now come from
+  `@aziontech/theme/fonts/` (your bundler copies them), not from `fonts.azion.com` or jsDelivr, so
+  drop those hosts from your Content Security Policy's `font-src`. `fonts.css` declares only the faces
+  the tokens use: Rubik, Roboto Mono and Noto Sans Arabic. The `Roboto`, `Roboto Condensed` and
+  `Titillium Web` faces are gone; an app that still sets them declares its own `@font-face`. Proto Mono,
+  first in the display stack, is a commercial face the package cannot redistribute: an app licensed
+  for it declares its own `@font-face`, and every other app renders display text in Roboto Mono.
 - **Removed variables** (nothing in WebKit read them). Replace any use in your own CSS:
 
   | Removed                                            | Use instead                                                                     |

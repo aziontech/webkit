@@ -76,6 +76,6 @@ jobs:
 
       - name: Publish to npm
         working-directory: packages/icons
-        run: npm publish ./dist --provenance --access public
+        run: npm publish --provenance --access public
         env:
           NPM_CONFIG_PROVENANCE: true

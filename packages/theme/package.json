@@ -38,6 +38,7 @@
   "files": [
     "src/",
     "dist/",
+    "fonts/",
     "LICENSE"
   ],
   "types": "./dist/globals.d.ts",
@@ -50,6 +51,7 @@
       "types": "./dist/fonts.d.ts",
       "default": "./dist/fonts.css"
     },
+    "./fonts/*": "./fonts/*",
     "./animations": "./src/tokens/primitives/animations/animate.js",
     "./colors": "./src/tokens/primitives/colors/colors.js",
     "./layout": "./src/tokens/semantic/layout.js",

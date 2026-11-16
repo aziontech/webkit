@@ -92,9 +92,7 @@ flowchart TD
 2. **Clean** — wipe & recreate `dist/`.
 3. **Fonts** — `build-woff2.mjs` runs **fantasticon** for `ai` (per `fantasticon.config.mjs`): emits `azionicons.woff2` + `azionicons.css` from the `templates/css.hbs` Handlebars template. **Colored icons are not touched here.**
 4. **Barrel** — write `index.css` = `@import` of `azionicons.css` + **`azionicons-color.css`**.
-5. **`dist/package.json`** — publishable manifest with the `exports` map (`.`, `./azionicons`, `./azionicons-color`, `./catalog`, `./color-catalog`).
-6. **Copy** `LICENSE` + `README.md`.
-7. **Catalogs + colored CSS** — runs three scripts in sequence:
+5. **Catalogs + colored CSS** — runs three scripts in sequence:
    - `build-catalog.mjs` → `catalog.json` (mono `ai`; **name + class only, no SVG bytes**)
    - `build-color-catalog.mjs` → `color-catalog.json` (colored; **inline SVG strings**)
    - `build-color-css.mjs` → `azionicons-color.css` (colored; **data-URI `background-image`**)

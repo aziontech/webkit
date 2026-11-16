@@ -1,5 +1,6 @@
 import '@aziontech/theme'
 import '@aziontech/theme/fonts.css'
+import '../../../assets/fonts/proto-mono/proto-mono-woff2.css'
 import './styles/main.css'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
