@@ -93,6 +93,12 @@ export const FOUNDATIONS: FoundationPage[] = [
     markdown: 'rules/webkit-accessibility.md'
   },
   {
+    slug: 'site-pages',
+    title: 'Site pages',
+    summary: 'The Web Design Guide: SD-01 to SD-25 for every Azion web page.',
+    markdown: 'rules/webkit-site-pages.md'
+  },
+  {
     slug: 'azion-api',
     title: 'Calling the Azion API',
     summary: 'CORS, a dev proxy and an edge proxy, and where the personal token lives.',

@@ -870,6 +870,13 @@ function foundations(catalog) {
       body: [rule('webkit-accessibility')]
     },
     {
+      slug: 'site-pages',
+      title: 'Site pages (Web Design Guide)',
+      summary:
+        'SD-01 to SD-25: the sections, heroes, action labels, line budgets and assets of every Azion web page.',
+      body: [rule('webkit-site-pages')]
+    },
+    {
       slug: 'usage',
       title: 'Using WebKit in an app',
       summary:

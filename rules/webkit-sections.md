@@ -5,6 +5,9 @@ complete webkit component published at `@aziontech/webkit/<name>`, where `<name>
 the site JSON. The site places it from
 JSON. Never rebuild a band from primitives when a section exists.
 
+Which sections a page uses, in which order, with which hero, labels and assets is the Web Design
+Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/webkit-site-pages`.
+
 ## Do
 
 - Find the section with the webkit MCP: `suggest_component` with the band's purpose ("pricing page",
