@@ -40,13 +40,13 @@ describe('function-editor#Arguments', () => {
     )
   })
 
-  const argumentsProps = { defaultDocument: 'arguments', defaultExpanded: ['field-1'] } as const
+  const argumentsProps = { defaultDocument: 'arguments' as const, defaultOpenKeys: ['field-1'] }
 
   it('emits submit with the values, then toasts when loading ends', async () => {
     const view = render(FunctionEditor, { props: argumentsProps })
     await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
     await fireEvent.click(await waitFor(() => buttonIn(document, 'Save')))
-    const emitted = view.emitted('submit') as [Event, FunctionEditorValues][]
+    const emitted = view.emitted<unknown[]>('submit') as [Event, FunctionEditorValues][]
     expect(emitted).toHaveLength(1)
     expect(emitted[0][0]).toBeInstanceOf(Event)
     expect(emitted[0][1].name).toBe('image-optimizer')
@@ -75,7 +75,7 @@ describe('function-editor#Arguments', () => {
     )
     expect(buttonIn(document, 'Discard').disabled).toBe(false)
     await fireEvent.click(buttonIn(document, 'Discard'))
-    expect(view.emitted('discard')).toHaveLength(1)
+    expect(view.emitted<unknown[]>('discard')).toHaveLength(1)
   })
 })
 

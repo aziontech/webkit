@@ -78,7 +78,7 @@ The block takes the saved service and the request state through props and emits 
 | `defaultDraft`    | `Partial<FunctionEditorService>` | Unsaved edits the editor opens with, so the save bar is up.                                         |
 | `defaultTab`      | `'code' \| 'settings'`           | The tab the page opens on.                                                                          |
 | `defaultDocument` | `'code' \| 'arguments'`          | The document of the Code tab the page opens on.                                                     |
-| `defaultExpanded` | `string[]`                       | Ids of the fields that open expanded.                                                               |
+| `defaultOpenKeys` | `string[]`                       | Ids of the fields that open expanded.                                                               |
 | `loading`         | `boolean`                        | The save is in flight; when it ends with no `error` the editor takes the draft as saved and toasts. |
 | `error`           | `string`                         | Why the save failed, shown in the danger `Alert` of the save bar.                                   |
 
@@ -159,7 +159,7 @@ Then delete `sample.ts` and its import.
 ## States
 
 - Code: the default, `defaultTab` `code`: the Code tab with the Code document filling the editor pane.
-- Arguments: `defaultDocument` `arguments` with `defaultExpanded`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
+- Arguments: `defaultDocument` `arguments` with `defaultOpenKeys`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
 - NoArguments: a `service` with an empty schema and `fields` `[]`: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
 - Settings: `defaultTab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.

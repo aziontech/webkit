@@ -5,6 +5,6 @@
 <template>
   <FunctionEditor
     default-document="arguments"
-    :default-expanded="['field-1']"
+    :default-open-keys="['field-1']"
   />
 </template>

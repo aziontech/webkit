@@ -110,7 +110,7 @@
     /** The document the Code tab opens on. */
     defaultDocument?: FunctionEditorDocument
     /** Ids of the fields that open expanded. */
-    defaultExpanded?: string[]
+    defaultOpenKeys?: string[]
     /** The save is in flight: the save bar stays, Save spins, Discard and the editors lock. */
     loading?: boolean
     /** Why the save failed, shown in a danger alert in the save bar; the edits are kept. */
@@ -123,7 +123,7 @@
     defaultDraft: () => ({}),
     defaultTab: 'code',
     defaultDocument: 'code',
-    defaultExpanded: () => [],
+    defaultOpenKeys: () => [],
     loading: false,
     error: ''
   })
@@ -184,7 +184,7 @@
   const activeDocument = ref<string>(props.defaultDocument)
   const form = reactive<FunctionEditorService>({ ...savedService.value })
   const draftFields = ref<SchemaField[]>(structuredClone(toRaw(savedFields.value)))
-  const expanded = ref(new Set<string>(props.defaultExpanded))
+  const expanded = ref(new Set<string>(props.defaultOpenKeys))
   const touched = ref(new Set<string>())
   const schemaWidth = ref(420)
   const schemaExpanded = ref(true)
