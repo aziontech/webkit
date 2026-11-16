@@ -19,6 +19,7 @@ export interface UseLazyChunksOptions {
 export interface UseLazyChunksReturn {
   split: <T>(items: readonly T[]) => LazyChunk<T>[]
   observe: (el: unknown, index: number) => void
+  reveal: (indexes: number[]) => void
   revealAll: () => void
 }
 
@@ -134,5 +135,5 @@ export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunksRetur
     heights.clear()
   })
 
-  return { split, observe, revealAll }
+  return { split, observe, reveal, revealAll }
 }

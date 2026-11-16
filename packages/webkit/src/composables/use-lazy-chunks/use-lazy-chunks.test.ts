@@ -46,6 +46,20 @@ describe('useLazyChunks', () => {
     expect(ready.split([1, 2, 3, 4, 5, 6, 7, 8, 9]).every((c) => c.mounted)).toBe(true)
   })
 
+  it('mounts only the chunks passed to reveal', () => {
+    let api: UseLazyChunks | null = null
+    withChunks((value) => {
+      api = value
+    })
+    const ready = api as unknown as UseLazyChunks
+    ready.reveal([2])
+    expect(ready.split([1, 2, 3, 4, 5, 6, 7, 8, 9]).map((c) => c.mounted)).toEqual([
+      true,
+      false,
+      true
+    ])
+  })
+
   it('mounts a chunk whose placeholder scrolls into view', async () => {
     const view = render(
       defineComponent({

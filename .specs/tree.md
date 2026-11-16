@@ -3,11 +3,11 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: ae2e44aa4776796932249ed1c4111ef1d0013547e4cd3eb7672173955ecc28f1
-spec_version: 11
+checksum: 35372bc8425353f7b94c5537f9ee5ea7e0661af581f83d79b85b7534ebda549a
+spec_version: 12
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Tree — Component Spec
@@ -187,7 +187,7 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Structure (WAI-ARIA tree pattern): the tree is a `<ul role="tree">` named by `ariaLabel` (or `tree.label` when it is empty), inside the root wrapper that carries `data-testid` and `$attrs`. Each node is an `<li role="treeitem">` with `aria-level` (1-based), `aria-setsize` and `aria-posinset` (among its siblings), and `aria-labelledby` pointing at its label region (ids from `useId()`), so the name excludes the children and the actions. A parent carries `aria-expanded="true|false"` and, when expanded, renders its children in a nested `<ul role="group">` inside its `<li>`. Leaves carry no `aria-expanded`.
+- Structure (WAI-ARIA tree pattern): the tree is a `<ul role="tree">` named by `ariaLabel` (or `tree.label` when it is empty), inside the root wrapper that carries `data-testid` and `$attrs`. Each node is an `<li role="treeitem">` with `aria-level` (1-based), `aria-setsize` and `aria-posinset` (among its siblings), and `aria-labelledby` pointing at its label region (ids from `useId()`), so the name excludes the children and the actions. A parent carries `aria-expanded="true|false"` and, when expanded, renders its children in a nested `<ul role="group">` inside its `<li>`. Leaves carry no `aria-expanded`. A tree of more than 300 nodes renders its visible nodes as one flat list of treeitems instead (no `role="group"`; the indent guides are `role="none"` wrappers inside each row), mounted in chunks as they near the viewport: every rendered treeitem keeps `aria-level`, `aria-setsize` and `aria-posinset`, so a screen reader still hears the full tree, as the WAI-ARIA tree pattern requires when not every node is in the DOM.
 - Selection: while `selectable`, every treeitem carries `aria-selected="true|false"`; otherwise none does. With `selectable="multiple"` the tree carries `aria-multiselectable="true"`.
 - Disabled: a disabled node carries `aria-disabled="true"`.
 - Roving tabindex: exactly one treeitem has `tabindex="0"`, every other `-1`. The tab stop is the selected node when it is visible, else the last focused node when visible, else the first node. When the tab-stop node is hidden by a collapse (from the keyboard or from a `v-model:open-keys` change), the tab stop moves to its nearest visible ancestor. Clicking a row moves the tab stop and focus to it.
@@ -263,7 +263,8 @@ Decisions taken in this draft that a reviewer should confirm before approval:
 
 ## Performance
 
-- Collapsed children are not rendered, so the cost is the visible rows: the `tree-5k` budget (5k nodes, two folders expanded) and `tree-5k-multi-select` (1k visible rows, select all 5k ids) in `perf-budgets.json`.
+- Collapsed children are not rendered, so the cost is the visible rows: the `tree-5k-collapsed` budget (5k nodes, two folders expanded) and `tree-5k-multi-select` (1k visible rows, select all 5k ids) in `perf-budgets.json`.
+- A tree of more than 300 nodes renders its visible rows flat, in chunks of 100 (`useLazyChunks`, as `card-list` and `conversation-history` do): the first chunk mounts, each later chunk is an `aria-hidden` placeholder of its estimated height (32 px a row) that mounts as it nears the viewport and then stays. The chunk holding the tab stop is always mounted, and a key that moves focus past the rendered rows (`ArrowDown`, `End`, type-ahead) mounts the target's chunk first. 1,000 expanded nodes mount about 100 rows (`tree-1k-expanded`); 5k expanded nodes, `tree-5k-expanded`. A tree of 300 nodes or fewer renders every visible row, nested.
 - Multi-selection is a `Set` lookup per row; range selection walks the visible list once. A Shift+click across 1.2k visible nodes is covered by the component test.
 - The loading row and the rename field render only for the node that needs them.
 

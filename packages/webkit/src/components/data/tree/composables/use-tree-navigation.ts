@@ -20,6 +20,7 @@ export interface UseTreeNavigationOptions<T> {
 
 export interface UseTreeNavigationReturn<T> {
   visible: Readonly<Ref<readonly string[]>>
+  count: Readonly<Ref<number>>
   tabStop: Readonly<Ref<string>>
   entry: (id: string) => TreeNavigationEntry<T> | undefined
   isParent: (id: string) => boolean
@@ -65,6 +66,8 @@ export function useTreeNavigation<T extends TreeNavigationItem<T>>(
   })
 
   const visibleSet = computed(() => new Set(visible.value))
+
+  const count = computed(() => index.value.size)
 
   const nearestVisible = (id: string): string => {
     let current = index.value.get(id)
@@ -118,6 +121,7 @@ export function useTreeNavigation<T extends TreeNavigationItem<T>>(
 
   return {
     visible: readonly(visible),
+    count: readonly(count),
     tabStop: readonly(tabStop),
     entry,
     isParent,

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, nextTick, onBeforeUpdate, provide, ref, useAttrs } from 'vue'
+  import { computed, nextTick, onBeforeUpdate, provide, ref, useAttrs, watch } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -116,6 +117,16 @@
 
   const treeEl = ref<globalThis.HTMLElement | null>(null)
 
+  const FLAT_THRESHOLD = 300
+  const CHUNK_SIZE = 100
+  const ROW_HEIGHT = 32
+
+  const { split, observe, reveal } = useLazyChunks({
+    rowHeight: ROW_HEIGHT,
+    chunkSize: CHUNK_SIZE,
+    threshold: FLAT_THRESHOLD
+  })
+
   const SKELETON_WIDTHS = ['100%', '80%', '64%', '48%', '32%']
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tree')
@@ -142,6 +153,76 @@
   function isExpanded(id: string) {
     return navigation.isParent(id) && expandedSet.value.has(id)
   }
+
+  type TreeRow = { item: TreeItem; level: number; posinset: number; setsize: number }
+  type TreeEntry =
+    | (TreeRow & { key: string; placeholder?: undefined })
+    | { key: number; placeholder: true; chunk: number; height: number }
+
+  const flat = computed(() => navigation.count.value > FLAT_THRESHOLD)
+
+  const flatRows = computed<TreeRow[]>(() => {
+    if (!flat.value) return []
+    const open = expandedSet.value
+    const rows: TreeRow[] = []
+    const walk = (nodes: TreeItem[], level: number) => {
+      nodes.forEach((item, position) => {
+        rows.push({ item, level, posinset: position + 1, setsize: nodes.length })
+        const children = item.children ?? []
+        const parent = item.lazy === true || children.length > 0
+        if (parent && open.has(item.id) && !item.loading) walk(children, level + 1)
+      })
+    }
+    walk(props.items, 1)
+    return rows
+  })
+
+  const rowIndex = computed(
+    () => new Map(flatRows.value.map((row, position) => [row.item.id, position]))
+  )
+
+  const entries = computed<TreeEntry[]>(() => {
+    if (!flat.value) {
+      return props.items.map((item, position) => ({
+        key: item.id,
+        item,
+        level: 1,
+        posinset: position + 1,
+        setsize: props.items.length
+      }))
+    }
+    return split(flatRows.value).flatMap<TreeEntry>((chunk) =>
+      chunk.mounted
+        ? chunk.items.map((row) => ({ ...row, key: row.item.id }))
+        : [
+            {
+              key: -1 - chunk.index,
+              placeholder: true,
+              chunk: chunk.index,
+              height: chunk.estimatedHeight
+            }
+          ]
+    )
+  })
+
+  function revealRow(id: string) {
+    const position = rowIndex.value.get(id)
+    if (position === undefined) return false
+    reveal([Math.floor(position / CHUNK_SIZE)])
+    return true
+  }
+
+  watch(
+    [() => flatRows.value.length, () => navigation.tabStop.value],
+    ([count], previous) => {
+      const shown = previous?.[0] ?? 0
+      if (shown > 0 && shown <= FLAT_THRESHOLD && count > FLAT_THRESHOLD) {
+        reveal(Array.from({ length: Math.ceil(shown / CHUNK_SIZE) }, (_, chunk) => chunk))
+      }
+      revealRow(navigation.tabStop.value)
+    },
+    { immediate: true }
+  )
 
   function isSelected(id: string) {
     if (mode.value === 'multiple') return selectedSet.value.has(id)
@@ -203,12 +284,25 @@
     setExpanded(id, !isExpanded(id))
   }
 
+  function withRow(id: string, run: (row: globalThis.HTMLElement) => void) {
+    const target = rowElement(id)
+    if (target) {
+      run(target)
+      return
+    }
+    if (!revealRow(id)) return
+    nextTick(() => {
+      const mounted = rowElement(id)
+      if (mounted) run(mounted)
+    })
+  }
+
   function focusItem(id: string) {
     if (!id || !treeEl.value) return
-    const target = rowElement(id)
-    if (!target) return
-    navigation.setFocused(id)
-    target.focus()
+    withRow(id, (target) => {
+      navigation.setFocused(id)
+      target.focus()
+    })
   }
 
   function activate(event: MouseEvent | KeyboardEvent, id: string) {
@@ -301,10 +395,13 @@
     if (at === -1) return
     const moveRow = (offset: 1 | -1) => {
       const next = navigation.sibling(id, offset)
-      const target = cellsOf(rowElement(next))
-      if (!next || target.length === 0) return
-      navigation.setFocused(next)
-      target[Math.min(at, target.length - 1)]?.focus()
+      if (!next) return
+      withRow(next, (nextRow) => {
+        const target = cellsOf(nextRow)
+        if (target.length === 0) return
+        navigation.setFocused(next)
+        target[Math.min(at, target.length - 1)]?.focus()
+      })
     }
     switch (logicalArrowKey(event.key, eventDirection(event))) {
       case 'ArrowRight':
@@ -518,50 +615,64 @@
       @keydown="onKeydown"
       @focusin="onFocusin"
     >
-      <TreeNode
-        v-for="(root, position) in items"
-        :key="root.id"
-        :item="root"
-        :level="1"
-        :posinset="position + 1"
-        :setsize="items.length"
-        :actionable="!!$slots['actions']"
+      <template
+        v-for="entry in entries"
+        :key="entry.key"
       >
-        <template #item="scope">
-          <ItemOutlet
-            v-if="$slots['item']"
-            :scope="scope"
-          />
-          <template v-else>
-            <span
-              v-if="scope.item.icon"
-              aria-hidden="true"
-              class="flex size-4 shrink-0 items-center justify-center text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
-            >
-              <i
-                :class="scope.item.icon"
-                class="leading-none"
-              />
-            </span>
-            <span class="flex min-w-0 flex-1 items-baseline gap-(--spacing-2xs)">
+        <li
+          v-if="entry.placeholder"
+          :ref="(el) => observe(el, entry.chunk)"
+          role="none"
+          aria-hidden="true"
+          :data-chunk="entry.chunk"
+          class="m-0 list-none p-0"
+          :style="{ height: `${entry.height}px` }"
+        />
+        <TreeNode
+          v-else
+          :item="entry.item"
+          :level="entry.level"
+          :posinset="entry.posinset"
+          :setsize="entry.setsize"
+          :flat="flat"
+          :actionable="!!$slots['actions']"
+        >
+          <template #item="scope">
+            <ItemOutlet
+              v-if="$slots['item']"
+              :scope="scope"
+            />
+            <template v-else>
               <span
-                class="min-w-0 truncate text-label-md text-(--text-default) group-data-[disabled]/tree-row:text-(--text-disabled)"
+                v-if="scope.item.icon"
+                aria-hidden="true"
+                class="flex size-4 shrink-0 items-center justify-center text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
               >
-                {{ scope.item.label }}
+                <i
+                  :class="scope.item.icon"
+                  class="leading-none"
+                />
               </span>
-              <span
-                v-if="scope.item.description"
-                class="min-w-0 truncate text-label-sm text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
-              >
-                {{ scope.item.description }}
+              <span class="flex min-w-0 flex-1 items-baseline gap-(--spacing-2xs)">
+                <span
+                  class="min-w-0 truncate text-label-md text-(--text-default) group-data-[disabled]/tree-row:text-(--text-disabled)"
+                >
+                  {{ scope.item.label }}
+                </span>
+                <span
+                  v-if="scope.item.description"
+                  class="min-w-0 truncate text-label-sm text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
+                >
+                  {{ scope.item.description }}
+                </span>
               </span>
-            </span>
+            </template>
           </template>
-        </template>
-        <template #actions="scope">
-          <ActionsOutlet :scope="scope" />
-        </template>
-      </TreeNode>
+          <template #actions="scope">
+            <ActionsOutlet :scope="scope" />
+          </template>
+        </TreeNode>
+      </template>
     </component>
   </div>
 </template>

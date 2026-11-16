@@ -636,10 +636,107 @@ describe('Tree', () => {
       const onIds = vi.fn()
       const view = mount({ items: big, selectable: 'multiple', 'onUpdate:selectedKeys': onIds })
       await user.click(rowOf(view.container, 'n0'))
+      view.container.querySelector('[data-chunk="11"]')!.scrollIntoView()
+      await vi.waitFor(() => node(view.container, 'n1199'))
       await user.keyboard('{Shift>}')
       await user.click(rowOf(view.container, 'n1199'))
       await user.keyboard('{/Shift}')
       expect(onIds.mock.calls.at(-1)?.[0]).toHaveLength(1200)
+    })
+  })
+
+  describe('large trees', () => {
+    const FOLDERS: TreeItem[] = Array.from({ length: 20 }, (_, f) => ({
+      id: `f${f}`,
+      label: `folder-${f}`,
+      icon: 'ai ai-folder',
+      children: Array.from({ length: 49 }, (_, c) => ({
+        id: `f${f}/c${c}`,
+        label: `file-${c}.txt`,
+        description: `${c} KB`
+      }))
+    }))
+    const OPEN = FOLDERS.map((folder) => folder.id)
+    const treeitems = (container: Element) =>
+      Array.from(container.querySelectorAll<HTMLElement>('[role="treeitem"]'))
+
+    it('renders the rows near the viewport of 1,000 expanded nodes and holds the rest in sized placeholders', () => {
+      const view = mount({ items: FOLDERS, openKeys: OPEN })
+      const rows = treeitems(view.container)
+      expect(rows).toHaveLength(100)
+      expect(view.container.querySelectorAll('[role="group"]')).toHaveLength(0)
+      const placeholders = view.container.querySelectorAll('[data-chunk]')
+      expect(placeholders).toHaveLength(9)
+      expect(placeholders[0]!.getAttribute('aria-hidden')).toBe('true')
+    })
+
+    it('keeps the level, position and set size of every rendered node, so the full tree is announced', () => {
+      const view = mount({ items: FOLDERS, openKeys: OPEN })
+      const first = node(view.container, 'f0')
+      expect([first.getAttribute('aria-level'), first.getAttribute('aria-setsize')]).toEqual([
+        '1',
+        '20'
+      ])
+      const child = node(view.container, 'f1/c3')
+      expect([
+        child.getAttribute('aria-level'),
+        child.getAttribute('aria-posinset'),
+        child.getAttribute('aria-setsize')
+      ]).toEqual(['2', '4', '49'])
+    })
+
+    it('mounts the next rows when End or ArrowDown leaves the rendered ones', async () => {
+      const user = userEvent.setup()
+      const view = mount({ items: FOLDERS, openKeys: OPEN })
+      node(view.container, 'f0').focus()
+      await user.keyboard('{End}')
+      await vi.waitFor(() =>
+        expect(document.activeElement?.getAttribute('data-item-id')).toBe('f19/c48')
+      )
+      node(view.container, 'f1/c48').focus()
+      await user.keyboard('{ArrowDown}')
+      await vi.waitFor(() =>
+        expect(document.activeElement?.getAttribute('data-item-id')).toBe('f2')
+      )
+      expect(tabStops(view.container)).toEqual(['f2'])
+    })
+
+    it('renders the selected node deep in the tree, so it holds the one tab stop', () => {
+      const view = mount({ items: FOLDERS, openKeys: OPEN, selectable: true, selected: 'f15/c10' })
+      expect(tabStops(view.container)).toEqual(['f15/c10'])
+      expect(node(view.container, 'f15/c10').getAttribute('aria-selected')).toBe('true')
+    })
+
+    it('collapses and expands from the keyboard, and keeps focus on the parent', async () => {
+      const user = userEvent.setup()
+      const onOpen = vi.fn()
+      const view = mount({ items: FOLDERS, openKeys: OPEN, 'onUpdate:openKeys': onOpen })
+      node(view.container, 'f0').focus()
+      await user.keyboard('{ArrowLeft}')
+      expect(onOpen.mock.calls.at(-1)?.[0]).not.toContain('f0')
+      await view.rerender({ openKeys: onOpen.mock.calls.at(-1)?.[0] })
+      expect(node(view.container, 'f0').getAttribute('aria-expanded')).toBe('false')
+      expect(document.activeElement).toBe(node(view.container, 'f0'))
+    })
+
+    it('has no axe violations, as a tree and as a treegrid with row actions', async () => {
+      const view = mount({ items: FOLDERS, openKeys: OPEN, selectable: 'multiple' })
+      await expectNoA11yViolations(view.container)
+      view.unmount()
+      const grid = mount(
+        { items: FOLDERS, openKeys: OPEN },
+        { slots: { actions: '<button type="button">Rename</button>' } }
+      )
+      expect(grid.container.querySelectorAll('[role="row"]')).toHaveLength(100)
+      await expectNoA11yViolations(grid.container)
+    })
+
+    it('stays nested when it holds 300 nodes or fewer', () => {
+      const small = FOLDERS.slice(0, 6)
+      const view = mount({ items: small, openKeys: small.map((folder) => folder.id) })
+      expect(treeitems(view.container)).toHaveLength(300)
+      expect(view.container.querySelectorAll('[role="group"]')).toHaveLength(6)
+      expect(view.container.querySelectorAll('[data-chunk]')).toHaveLength(0)
     })
   })
 
