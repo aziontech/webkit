@@ -8,11 +8,14 @@
 
 <template>
   <div class="grid grid-cols-2 gap-(--spacing-xl) place-items-center min-h-[24rem]">
-    <DropdownMenuRoot placement="bottom-start">
+    <DropdownMenuRoot
+      side="bottom"
+      align="start"
+    >
       <DropdownMenuTrigger>
         <Button
           variant="outline"
-          label="bottom-start"
+          label="bottom · start"
         />
       </DropdownMenuTrigger>
       <DropdownMenuGroup>
@@ -27,11 +30,14 @@
       </DropdownMenuGroup>
     </DropdownMenuRoot>
 
-    <DropdownMenuRoot placement="bottom-end">
+    <DropdownMenuRoot
+      side="bottom"
+      align="end"
+    >
       <DropdownMenuTrigger>
         <Button
           variant="outline"
-          label="bottom-end"
+          label="bottom · end"
         />
       </DropdownMenuTrigger>
       <DropdownMenuGroup>
@@ -46,11 +52,14 @@
       </DropdownMenuGroup>
     </DropdownMenuRoot>
 
-    <DropdownMenuRoot placement="top-start">
+    <DropdownMenuRoot
+      side="top"
+      align="start"
+    >
       <DropdownMenuTrigger>
         <Button
           variant="outline"
-          label="top-start"
+          label="top · start"
         />
       </DropdownMenuTrigger>
       <DropdownMenuGroup>
@@ -65,11 +74,14 @@
       </DropdownMenuGroup>
     </DropdownMenuRoot>
 
-    <DropdownMenuRoot placement="top-end">
+    <DropdownMenuRoot
+      side="top"
+      align="end"
+    >
       <DropdownMenuTrigger>
         <Button
           variant="outline"
-          label="top-end"
+          label="top · end"
         />
       </DropdownMenuTrigger>
       <DropdownMenuGroup>

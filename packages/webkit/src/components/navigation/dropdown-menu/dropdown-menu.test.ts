@@ -31,7 +31,8 @@ const Host = defineComponent({
   props: {
     open: { type: Boolean, default: undefined },
     disabled: { type: Boolean, default: false },
-    placement: { type: String, default: 'bottom-start' },
+    side: { type: String, default: 'bottom' },
+    align: { type: String, default: 'start' },
     grouped: { type: Boolean, default: false },
     onSelect: { type: Function, default: undefined },
     'onUpdate:open': { type: Function, default: undefined }
@@ -43,7 +44,8 @@ const Host = defineComponent({
         {
           open: props.open,
           disabled: props.disabled,
-          placement: props.placement,
+          side: props.side,
+          align: props.align,
           onSelect: props.onSelect,
           'onUpdate:open': props['onUpdate:open']
         },
@@ -138,7 +140,8 @@ describe('DropdownMenu', () => {
       const root = getByTestId('dropdown-menu')
       expect(root.tagName).toBe('DIV')
       expect(root.getAttribute('data-state')).toBe('closed')
-      expect(root.getAttribute('data-placement')).toBe('bottom-start')
+      expect(root.getAttribute('data-side')).toBe('bottom')
+      expect(root.getAttribute('data-align')).toBe('start')
       expect(root.hasAttribute('data-disabled')).toBe(false)
     })
 
@@ -147,9 +150,10 @@ describe('DropdownMenu', () => {
       expect(getByTestId('dropdown-menu').getAttribute('data-disabled')).toBe('true')
     })
 
-    it('reflects the placement prop on data-placement', () => {
-      const { getByTestId } = render(Host, { props: { placement: 'top-end' } })
-      expect(getByTestId('dropdown-menu').getAttribute('data-placement')).toBe('top-end')
+    it('reflects the side and align props on data-side and data-align', () => {
+      const { getByTestId } = render(Host, { props: { side: 'top', align: 'end' } })
+      expect(getByTestId('dropdown-menu').getAttribute('data-side')).toBe('top')
+      expect(getByTestId('dropdown-menu').getAttribute('data-align')).toBe('end')
     })
 
     // ---- Trigger anatomy + a11y wiring (context-driven) -----------------------
@@ -434,13 +438,48 @@ describe('DropdownMenu', () => {
     })
 
     // ---- Enum smoke floor -----------------------------------------------------
-    it.each(['bottom-start', 'bottom-end', 'top-start', 'top-end'] as const)(
-      'mirrors placement=%s onto the root data-placement',
-      (placement) => {
-        const { getByTestId } = render(Host, { props: { placement } })
-        expect(getByTestId('dropdown-menu').getAttribute('data-placement')).toBe(placement)
-      }
-    )
+    it.each([
+      ['bottom', 'start'],
+      ['bottom', 'end'],
+      ['top', 'start'],
+      ['top', 'end'],
+      ['end', 'center'],
+      ['start', 'center']
+    ] as const)('mirrors side=%s align=%s onto the root', (side, align) => {
+      const { getByTestId } = render(Host, { props: { side, align } })
+      expect(getByTestId('dropdown-menu').getAttribute('data-side')).toBe(side)
+      expect(getByTestId('dropdown-menu').getAttribute('data-align')).toBe(align)
+    })
+
+    describe('text direction', () => {
+      const EdgeHost = (dir: 'ltr' | 'rtl', edge: 'left' | 'right') =>
+        defineComponent({
+          setup() {
+            return () =>
+              h('div', { dir, style: `position:fixed;top:200px;${edge}:0` }, [
+                h(DropdownMenu, { open: true, side: 'start', align: 'start' }, () => [
+                  h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+                  h(DropdownMenuGroup, null, () => [
+                    h(DropdownMenuItem, { value: 'profile', label: 'Profile' })
+                  ])
+                ])
+              ])
+          }
+        })
+
+      it('resolves side=start to the right under rtl, so a trigger on the right edge flips to end', async () => {
+        render(EdgeHost('rtl', 'right'))
+        await waitFor(() => expect(getPanel()).not.toBeNull())
+        await waitFor(() => expect(getPanel()!.getAttribute('data-side')).toBe('end'))
+      })
+
+      it('keeps side=start under rtl when the trigger sits on the left edge', async () => {
+        render(EdgeHost('rtl', 'left'))
+        await waitFor(() => expect(getPanel()?.style.translate ?? '').not.toMatch(/-9999|^$/))
+        expect(getPanel()!.getAttribute('data-side')).toBe('start')
+        expect(getPanel()!.getAttribute('data-align')).toBe('start')
+      })
+    })
 
     // ---- Story smoke: composed stories render through the real compound -------
     it('renders the Default story (closed) with its trigger', () => {

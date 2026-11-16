@@ -1,15 +1,12 @@
 import { type InjectionKey, type Ref } from 'vue'
 
-import type {
-  MenuContext,
-  MenuOptionValue,
-  MenuPlacement
-} from '../../../composables/use-menu-root'
+import type { MenuContext, MenuOptionValue } from '../../../composables/use-menu-root'
 
-export type DropdownMenuPlacementSide = MenuPlacement
+/** Side of the trigger the panel opens on; `start` and `end` follow the text direction. */
+export type DropdownMenuSide = 'top' | 'bottom' | 'start' | 'end'
 
-/** Prop-level placement; `'auto'` lets the dropdown pick the best fit at open time. */
-export type DropdownMenuPlacement = DropdownMenuPlacementSide | 'auto'
+/** Alignment of the panel along the trigger edge. */
+export type DropdownMenuAlign = 'start' | 'center' | 'end'
 
 export type DropdownMenuItemValue = MenuOptionValue
 

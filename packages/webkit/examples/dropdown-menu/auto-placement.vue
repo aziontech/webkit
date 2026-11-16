@@ -11,12 +11,12 @@
     <p
       class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
     >
-      All four triggers use <code>placement="auto"</code>.<br />
+      All four triggers use <code>side="auto"</code>.<br />
       Each panel resolves to the best-fitting corner based on its position in the viewport.
     </p>
 
     <div class="absolute top-(--spacing-md) start-(--spacing-md)">
-      <DropdownMenuRoot placement="auto">
+      <DropdownMenuRoot side="auto">
         <DropdownMenuTrigger>
           <Button
             variant="outline"
@@ -37,7 +37,7 @@
     </div>
 
     <div class="absolute top-(--spacing-md) end-(--spacing-md)">
-      <DropdownMenuRoot placement="auto">
+      <DropdownMenuRoot side="auto">
         <DropdownMenuTrigger>
           <Button
             variant="outline"
@@ -58,7 +58,7 @@
     </div>
 
     <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
-      <DropdownMenuRoot placement="auto">
+      <DropdownMenuRoot side="auto">
         <DropdownMenuTrigger>
           <Button
             variant="outline"
@@ -79,7 +79,7 @@
     </div>
 
     <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
-      <DropdownMenuRoot placement="auto">
+      <DropdownMenuRoot side="auto">
         <DropdownMenuTrigger>
           <Button
             variant="outline"
