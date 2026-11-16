@@ -4,10 +4,15 @@ import { defineComponent, h, ref } from 'vue'
 
 import Default from '../../../../examples/transfer-list/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import TransferList, { TransferListControls, TransferListSource, TransferListTarget } from './index'
+import TransferList, {
+  TransferListControls,
+  TransferListSource,
+  TransferListTarget,
+  type TransferListValue
+} from './index'
 
 // A small, stable dataset: three available (source), one selected (target).
-const makeModel = () => [
+const makeModel = (): TransferListValue => [
   [
     { id: 1, label: 'Edge Functions' },
     { id: 2, label: 'WAF' },
@@ -605,32 +610,32 @@ describe('TransferList', () => {
 
     it('keeps one tab stop per list and moves it with the arrows, Home and End', async () => {
       const view = render(Harness())
-      const options = sourceOptions(view.container)
+      const options = sourceOptions(view.container as HTMLElement)
       expect(options.map((option) => option.tabIndex)).toEqual([0, -1, -1])
       options[0]!.focus()
       await fireEvent.keyDown(options[0]!, { key: 'ArrowDown' })
       await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(document.activeElement).toBe(sourceOptions(view.container)[1])
-      expect(sourceOptions(view.container).map((option) => option.tabIndex)).toEqual([-1, 0, -1])
+      expect(document.activeElement).toBe(sourceOptions(view.container as HTMLElement)[1])
+      expect(sourceOptions(view.container as HTMLElement).map((option) => option.tabIndex)).toEqual(
+        [-1, 0, -1]
+      )
       await fireEvent.keyDown(document.activeElement!, { key: 'End' })
       await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(document.activeElement).toBe(sourceOptions(view.container)[2])
+      expect(document.activeElement).toBe(sourceOptions(view.container as HTMLElement)[2])
       await fireEvent.keyDown(document.activeElement!, { key: 'Home' })
       await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(document.activeElement).toBe(sourceOptions(view.container)[0])
+      expect(document.activeElement).toBe(sourceOptions(view.container as HTMLElement)[0])
     })
 
     it('extends the selection with Shift and the arrows', async () => {
       const view = render(Harness())
-      const options = sourceOptions(view.container)
+      const options = sourceOptions(view.container as HTMLElement)
       options[0]!.focus()
       await fireEvent.keyDown(options[0]!, { key: 'ArrowDown', shiftKey: true })
       await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(sourceOptions(view.container).map((o) => o.getAttribute('aria-selected'))).toEqual([
-        'true',
-        'true',
-        'false'
-      ])
+      expect(
+        sourceOptions(view.container as HTMLElement).map((o) => o.getAttribute('aria-selected'))
+      ).toEqual(['true', 'true', 'false'])
     })
 
     it('keys the selection by itemKey, so it follows the record when the list changes', async () => {
@@ -657,10 +662,10 @@ describe('TransferList', () => {
         `
         })
       )
-      await fireEvent.click(sourceOptions(view.container)[1]!)
+      await fireEvent.click(sourceOptions(view.container as HTMLElement)[1]!)
       model.value = [[{ id: 9, label: 'Logs' }, ...model.value[0]!], model.value[1]!]
       await new Promise((resolve) => setTimeout(resolve, 0))
-      const selected = sourceOptions(view.container).filter(
+      const selected = sourceOptions(view.container as HTMLElement).filter(
         (option) => option.getAttribute('aria-selected') === 'true'
       )
       expect(selected.map((option) => option.textContent?.trim())).toEqual(['WAF'])
@@ -668,14 +673,14 @@ describe('TransferList', () => {
 
     it('has no dataKey prop: a data-key attribute stays an attribute', () => {
       const view = render(Keyed(''), { attrs: { 'data-key': 'id' } })
-      expect(sourceOptions(view.container)).toHaveLength(3)
+      expect(sourceOptions(view.container as HTMLElement)).toHaveLength(3)
       expect(view.getByTestId('transfer-list').getAttribute('data-key')).toBe('id')
     })
 
     it('shows an empty state in a list with no items', async () => {
       const view = render(Harness())
       await fireEvent.click(
-        within(view.container).getByRole('button', { name: 'Move all to target' })
+        within(view.container as HTMLElement).getByRole('button', { name: 'Move all to target' })
       )
       const empty = view.getByTestId('transfer-list-source__empty')
       expect(empty.textContent).toContain('No items')

@@ -14,6 +14,7 @@ import StackedRows from '../../../../examples/data-table/stacked-rows.vue'
 import WithCheckboxes from '../../../../examples/data-table/with-checkboxes.vue'
 import { useCollection } from '../../../composables/use-collection'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { hostable } from '../../../test/hostable'
 import FilterMenu from '../filter-menu/index'
 import Table from '../table/index'
 import TableBody from '../table/table-body/table-body.vue'
@@ -23,7 +24,9 @@ import TableHeadCell from '../table/table-head-cell/table-head-cell.vue'
 import TableHeader from '../table/table-header/table-header.vue'
 import TableRow from '../table/table-row/table-row.vue'
 import TableSearch from '../table/table-search/table-search.vue'
-import DataTable from './data-table.vue'
+import DataTableRoot from './data-table.vue'
+
+const DataTable = hostable(DataTableRoot)
 
 // A small, stable dataset used across data-driven tests.
 const rows = [
@@ -458,11 +461,11 @@ describe('DataTable', () => {
         })
 
       const bare = render(treeWith(''))
-      const defaulted = within(bare.container).getByTestId('table-search')
+      const defaulted = within(bare.container as HTMLElement).getByTestId('table-search')
       expect(defaulted.closest('[data-size]')?.getAttribute('data-size')).toBe('small')
 
       const overridden = render(treeWith('size="large"'))
-      const large = within(overridden.container).getByTestId('table-search')
+      const large = within(overridden.container as HTMLElement).getByTestId('table-search')
       expect(large.closest('[data-size]')?.getAttribute('data-size')).toBe('large')
     })
   })
@@ -1168,11 +1171,17 @@ describe('DataTable', () => {
       const { container } = render(FilterMenuExample)
       await ready()
       await waitFor(() =>
-        expect(visibleNames(container)).toEqual(['storefront', 'docs-portal', 'checkout-api'])
+        expect(visibleNames(container as HTMLElement)).toEqual([
+          'storefront',
+          'docs-portal',
+          'checkout-api'
+        ])
       )
       await openField('status')
       await fireEvent.click(option('Active'))
-      await waitFor(() => expect(visibleNames(container)).toEqual(['storefront', 'docs-portal']))
+      await waitFor(() =>
+        expect(visibleNames(container as HTMLElement)).toEqual(['storefront', 'docs-portal'])
+      )
     })
 
     it('writes in, eq, within and between filters with the event first on apply', async () => {
@@ -1278,7 +1287,7 @@ describe('DataTable', () => {
 
     it('lists the table columns with the locked one and writes visibility back on Confirm', async () => {
       const view = render(FilterMenuExample)
-      await waitFor(() => expect(headers(view.container)).toContain('Status'))
+      await waitFor(() => expect(headers(view.container as HTMLElement)).toContain('Status'))
       const columns = await open(view)
       const rows = within(columns).getAllByTestId('collection-preferences__column')
       expect(rows.map((row) => row.textContent)).toEqual(
@@ -1289,8 +1298,8 @@ describe('DataTable', () => {
       const status = rows.find((row) => row.textContent?.includes('Status')) as HTMLElement
       await userEvent.click(within(status).getByRole('switch'))
       await userEvent.click(within(document.body).getByTestId('collection-preferences__confirm'))
-      await waitFor(() => expect(headers(view.container)).not.toContain('Status'))
-      expect(headers(view.container)).toContain('Name')
+      await waitFor(() => expect(headers(view.container as HTMLElement)).not.toContain('Status'))
+      expect(headers(view.container as HTMLElement)).toContain('Name')
       expect(view.emitted()).toBeTruthy()
     })
 
@@ -1307,14 +1316,14 @@ describe('DataTable', () => {
 
     it('compacts the header with density', () => {
       const dense = render(DataTable, { props: { columns, data: rows, density: 'compact' } })
-      expect(headCells(dense.container).every((cell) => cell.hasAttribute('data-compact'))).toBe(
-        true
-      )
+      expect(
+        headCells(dense.container as HTMLElement).every((cell) => cell.hasAttribute('data-compact'))
+      ).toBe(true)
       dense.unmount()
       const roomy = render(DataTable, { props: { columns, data: rows } })
-      expect(headCells(roomy.container).some((cell) => cell.hasAttribute('data-compact'))).toBe(
-        false
-      )
+      expect(
+        headCells(roomy.container as HTMLElement).some((cell) => cell.hasAttribute('data-compact'))
+      ).toBe(false)
     })
 
     it('offers pageSizeOptions in the footer, 10 to 100 by default', () => {
@@ -1328,12 +1337,12 @@ describe('DataTable', () => {
       const next = render(DataTable, {
         props: { columns, data: many, paginated: true, pageSizeOptions: [5, 15], pageSize: 5 }
       })
-      expect(sizes(next.container)).toEqual(['5', '15'])
+      expect(sizes(next.container as HTMLElement)).toEqual(['5', '15'])
       next.unmount()
       const standard = render(DataTable, {
         props: { columns, data: many, paginated: true, pageSize: 10 }
       })
-      expect(sizes(standard.container)).toEqual(['10', '25', '50', '100'])
+      expect(sizes(standard.container as HTMLElement)).toEqual(['10', '25', '50', '100'])
     })
 
     it('moves pages through the footer and emits update:pagination', async () => {

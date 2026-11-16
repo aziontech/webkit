@@ -4,7 +4,10 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import TreeRows from '../../../../examples/data-table/tree-rows.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import DataTable from './data-table.vue'
+import { hostable } from '../../../test/hostable'
+import DataTableRoot from './data-table.vue'
+
+const DataTable = hostable(DataTableRoot)
 
 type Node = { id: string; name: string; children?: Node[] }
 

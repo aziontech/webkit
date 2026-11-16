@@ -7,8 +7,11 @@ import Default from '../../../../examples/data-grid/default.vue'
 import Readonly from '../../../../examples/data-grid/readonly.vue'
 import RowSelection from '../../../../examples/data-grid/row-selection.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import DataGrid from './data-grid.vue'
+import { hostable } from '../../../test/hostable'
+import DataGridRoot from './data-grid.vue'
 import type { DataGridColumn } from './types'
+
+const DataGrid = hostable(DataGridRoot)
 
 type Row = { id: string; name: string; plan: string; seats: number | null; active: boolean }
 
@@ -344,7 +347,7 @@ describe('DataGrid', () => {
     expect(cell(0, 'plan').hasAttribute('data-frozen')).toBe(false)
     const empty = render(DataGrid, { props: { columns, modelValue: [], ariaLabel: 'Empty' } })
     expect(empty.getByTestId('data-grid__empty').textContent).toContain('No rows yet')
-    const grid = within(empty.container).getByRole('grid')
+    const grid = within(empty.container as HTMLElement).getByRole('grid')
     expect(grid.getAttribute('aria-rowcount')).toBe('1')
     expect(within(grid).getAllByRole('row')).toHaveLength(1)
     await expectNoA11yViolations(empty.container)

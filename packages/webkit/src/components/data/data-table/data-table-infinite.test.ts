@@ -6,9 +6,12 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import InfiniteLoading from '../../../../examples/data-table/infinite-loading.vue'
 import LiveTail from '../../../../examples/data-table/live-tail.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { hostable } from '../../../test/hostable'
 import Table from '../table/index'
 import TableLiveButton from '../table/table-live-button/table-live-button.vue'
-import DataTable from './data-table.vue'
+import DataTableRoot from './data-table.vue'
+
+const DataTable = hostable(DataTableRoot)
 
 interface Item {
   id: string

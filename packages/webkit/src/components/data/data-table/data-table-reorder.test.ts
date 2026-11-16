@@ -4,9 +4,12 @@ import { defineComponent, h, ref } from 'vue'
 
 import ReorderableRows from '../../../../examples/data-table/reorderable-rows.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { hostable } from '../../../test/hostable'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
-import DataTable from './data-table.vue'
+import DataTableRoot from './data-table.vue'
+
+const DataTable = hostable(DataTableRoot)
 
 type Row = { id: string; name: string }
 
