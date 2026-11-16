@@ -16,6 +16,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
+  import { copyText } from '@aziontech/webkit/utils/clipboard'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
@@ -924,14 +925,13 @@
     ].join('\n')
 
   const copyQuery = async (query: string) => {
-    try {
-      await globalThis.navigator.clipboard.writeText(query)
-      toast.success('Query copied.', {
-        description: 'Paste it into any GraphQL client that sends your token.'
-      })
-    } catch {
+    if (!(await copyText(query))) {
       toast.error('The query could not be copied.')
+      return
     }
+    toast.success('Query copied.', {
+      description: 'Paste it into any GraphQL client that sends your token.'
+    })
   }
 
   const exportCsv = (id: string, columns: CsvColumn[], rows: object[]) => {

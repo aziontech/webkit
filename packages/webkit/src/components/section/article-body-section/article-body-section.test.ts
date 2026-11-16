@@ -209,6 +209,7 @@ describe('ArticleBodySection', () => {
     vi.spyOn(globalThis.navigator, 'clipboard', 'get').mockReturnValue({
       writeText: vi.fn().mockRejectedValue(new Error('denied'))
     } as unknown as Clipboard)
+    vi.spyOn(document, 'execCommand').mockReturnValue(false)
     const error = vi.spyOn(toast, 'error')
     const { getByRole } = band()
 

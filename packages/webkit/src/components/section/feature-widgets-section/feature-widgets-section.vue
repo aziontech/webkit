@@ -4,6 +4,7 @@
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { copyText } from '../../../utils/clipboard'
   import Button from '../../action/button/button.vue'
   import HighlightButton from '../../action/highlight-button/highlight-button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
@@ -114,11 +115,7 @@
   const doneLabel = computed(() => props.copiedLabel || t('common.copied'))
 
   const copyPrompt = async (index: number, text: string) => {
-    try {
-      await globalThis.navigator.clipboard.writeText(text)
-    } catch {
-      return
-    }
+    if (!(await copyText(text))) return
     copied.value = index
     clearTimeout(copiedTimer)
     copiedTimer = setTimeout(() => (copied.value = -1), 2000)

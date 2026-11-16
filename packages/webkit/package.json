@@ -2417,6 +2417,10 @@
       "types": "./types/utils/cn.d.ts",
       "default": "./src/utils/cn.ts"
     },
+    "./utils/clipboard": {
+      "types": "./types/utils/clipboard.d.ts",
+      "default": "./src/utils/clipboard.ts"
+    },
     "./utils/csv": {
       "types": "./types/utils/csv.d.ts",
       "default": "./src/utils/csv.ts"
@@ -3983,6 +3987,9 @@
       ],
       "utils/cn": [
         "./types/utils/cn.d.ts"
+      ],
+      "utils/clipboard": [
+        "./types/utils/clipboard.d.ts"
       ],
       "utils/csv": [
         "./types/utils/csv.d.ts"

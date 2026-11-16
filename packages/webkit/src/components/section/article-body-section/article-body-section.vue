@@ -4,6 +4,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { copyText } from '../../../utils/clipboard'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import type { SplitButtonItem } from '../../action/split-button/split-button.vue'
   import SplitButton from '../../action/split-button/split-button.vue'
@@ -289,9 +290,7 @@
       .join('\n\n')
 
   const copy = async (message: string, text: string): Promise<void> => {
-    try {
-      await globalThis.navigator.clipboard.writeText(text)
-    } catch {
+    if (!(await copyText(text))) {
       toast.error(t('articleBodySection.copyFailed'), {
         description: t('articleBodySection.copyFailedHint')
       })

@@ -96,6 +96,7 @@ describe('DocProse', () => {
 
     it('says what still works when the clipboard is refused', async () => {
       stubClipboard(vi.fn().mockRejectedValue(new Error('denied')))
+      vi.spyOn(document, 'execCommand').mockReturnValue(false)
       const { getByText } = render(DocProse, {
         slots: { default: '<p>Run <code>azion deploy</code> to publish.</p>' }
       })
@@ -105,6 +106,7 @@ describe('DocProse', () => {
 
     it('names the copy shortcut of the platform when the clipboard is refused', async () => {
       const writeText = vi.fn().mockRejectedValue(new Error('denied'))
+      vi.spyOn(document, 'execCommand').mockReturnValue(false)
       vi.stubGlobal('navigator', {
         platform: 'Win32',
         userAgent: 'Windows',

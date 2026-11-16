@@ -161,6 +161,7 @@ describe('CopyPromptButton', () => {
 
   it('opens the manual-copy fallback when the clipboard refuses', async () => {
     vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new DOMException('denied'))
+    vi.spyOn(document, 'execCommand').mockReturnValue(false)
     const { getByRole, emitted } = render(CopyPromptButton, { props: { value: PROMPT } })
     await fireEvent.click(getByRole('button'))
     await waitFor(() => expect(document.body.querySelector('[role="dialog"]')).not.toBeNull())

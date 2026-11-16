@@ -26961,6 +26961,12 @@
    "kind": "util",
    "treeShakeableImport": "@aziontech/webkit/utils/cn"
   },
+  "utils/clipboard": {
+   "import": "@aziontech/webkit/utils/clipboard",
+   "target": "./src/utils/clipboard.ts",
+   "kind": "util",
+   "treeShakeableImport": "@aziontech/webkit/utils/clipboard"
+  },
   "utils/csv": {
    "import": "@aziontech/webkit/utils/csv",
    "target": "./src/utils/csv.ts",
@@ -31363,6 +31369,7 @@
     "ToggleGroup",
     "Tooltip",
     "use-locale",
+    "utils/clipboard",
     "utils/csv"
    ],
    "imports": [
@@ -31393,6 +31400,7 @@
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/utils/clipboard",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
@@ -32070,6 +32078,7 @@
     "ToggleGroup",
     "Tooltip",
     "use-locale",
+    "utils/clipboard",
     "utils/csv"
    ],
    "imports": [
@@ -32104,6 +32113,7 @@
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/utils/clipboard",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",

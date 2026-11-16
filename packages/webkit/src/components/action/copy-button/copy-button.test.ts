@@ -167,8 +167,23 @@ describe('CopyButton', () => {
   })
 
   describe('clipboard blocked', () => {
+    it('copies through the selection path when the clipboard API refuses, without the popover', async () => {
+      vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new DOMException('denied'))
+      const execCommand = vi.spyOn(document, 'execCommand').mockReturnValue(true)
+      const { getByRole, emitted } = render(CopyButton, { props: { value: 'azion-token-123' } })
+      await fireEvent.click(getByRole('button', { name: 'Copy' }))
+
+      await waitFor(() => expect(emitted().copy).toBeTruthy())
+      expect(execCommand).toHaveBeenCalledWith('copy')
+      expect((emitted().copy as [MouseEvent, string][])[0][1]).toBe('azion-token-123')
+      expect(getByRole('button', { name: 'Copied' })).toBeTruthy()
+      expect(document.body.querySelector('[role="dialog"]')).toBeNull()
+      expect(document.body.querySelector('textarea')).toBeNull()
+    })
+
     it('opens the manual-copy popover with the value selected and does not emit copy', async () => {
       vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new DOMException('denied'))
+      vi.spyOn(document, 'execCommand').mockReturnValue(false)
       const { getByRole, emitted, unmount } = render(CopyButton, {
         props: { value: 'azion-token-123' }
       })
@@ -201,6 +216,7 @@ describe('CopyButton', () => {
 
     it('reads the fallback strings from the locale catalog', async () => {
       vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new DOMException('denied'))
+      vi.spyOn(document, 'execCommand').mockReturnValue(false)
       const view = render(WebkitProvider, {
         props: { locale: 'pt-BR', catalogs: LOCALES },
         slots: { default: () => h(CopyButton, { value: 'x' }) }

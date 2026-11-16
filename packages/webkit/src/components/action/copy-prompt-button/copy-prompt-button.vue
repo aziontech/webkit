@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { copyText } from '../../../utils/clipboard'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({ name: 'CopyPromptButton', inheritAttrs: false })
@@ -93,9 +94,7 @@
 
   async function onClick(event: MouseEvent) {
     if (props.disabled || !props.value || typeof globalThis.navigator === 'undefined') return
-    try {
-      await globalThis.navigator.clipboard.writeText(props.value)
-    } catch {
+    if (!(await copyText(props.value))) {
       fallbackRequested.value = true
       fallbackOpen.value = true
       return

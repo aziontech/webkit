@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 37c2f82736afdf369e5387059f5453a1c6af3324b2b6f11ef37c2049c18e979f
+checksum: 9e2209b7a63e1ec215cdbfa38b21859f86625142a54172893e112b78b937cf24
 created: 2026-06-02
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Copy Button — Component Spec
@@ -69,7 +69,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 - `data-state` mirrors `idle` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
-- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from `copyButton.fallbackTitle`, `fallbackField` and `fallbackHint`.
+- Fallback: the button first writes with `navigator.clipboard.writeText`; when that API is missing (a page served over plain `http`) or rejects, it copies silently through a hidden selected field, the browser's older copy path, and confirms as usual. Only when both fail (permission denied, unfocused document) does the button load a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from `copyButton.fallbackTitle`, `fallbackField` and `fallbackHint`.
 
 ## Motion & Animations
 

@@ -3,6 +3,7 @@
 
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { copyText } from '../../../utils/clipboard'
 
   defineOptions({ name: 'DocProse', inheritAttrs: false })
 
@@ -78,10 +79,9 @@
     if (!text) return
     tipForEl.value = chip
     anchorTip(chip)
-    try {
-      await globalThis.navigator.clipboard.writeText(text)
+    if (await copyText(text)) {
       tipState.value = 'copied'
-    } catch {
+    } else {
       tipState.value = 'manual'
       globalThis.getSelection()?.selectAllChildren(chip)
     }
