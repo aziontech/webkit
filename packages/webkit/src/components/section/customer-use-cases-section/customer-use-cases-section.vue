@@ -54,8 +54,6 @@
   const attrs = useAttrs()
   const headingId = useId()
 
-  const EYEBROW_PREFIX = '//' as const
-
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'customer-use-cases-section'
   )
@@ -96,7 +94,6 @@
             <div class="flex h-full flex-col items-start gap-(--spacing-md)">
               <Eyebrow
                 v-if="eyebrow"
-                :prefix="EYEBROW_PREFIX"
                 cursor
               >
                 {{ eyebrow }}

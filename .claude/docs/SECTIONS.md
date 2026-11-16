@@ -82,6 +82,8 @@ Which sections a page type opens with and which bands it uses for a given job. A
 | Solution hubs and landing pages                          | `variant: 'title-band'`                                                 | `capability-grid-section` with an `href` per item for use cases or resources that link to their own page          | `center` with the marquee                                                                                               |
 | Any other page                                           | `variant: 'title-band'`                                                 | —                                                                                                                 | `center` with the marquee                                                                                               |
 
+The `//` eyebrow prefix belongs to the hero and the pricing sections (`hero-section` and `plan-comparison-section`, the Pricing matrix) only; every other section's eyebrow is plain text.
+
 ## What a section component is
 
 - **Props only.** The props are exactly the keys of `props` in the section's `examples/<name>/site-*.json` — nothing more, nothing less — so `v-bind="section.props"` is the whole API. No slots, and no events except a form's `submit` (below). Interaction the block needs (tabs, filters, load-more, copy-to-clipboard) is local state inside the component.

@@ -79,8 +79,6 @@
   const email = ref('')
   const invalidMessage = ref('')
 
-  const EYEBROW_PREFIX = '//' as const
-
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'newsletter-section'
   )
@@ -138,7 +136,6 @@
           <div class="flex flex-col gap-(--spacing-lg)">
             <Eyebrow
               v-if="eyebrow"
-              :prefix="EYEBROW_PREFIX"
               cursor
               >{{ eyebrow }}</Eyebrow
             >

@@ -208,4 +208,12 @@ describe('NewsletterSection', () => {
     const failed = band({ failed: true })
     await expectNoA11yViolations(failed.container)
   })
+
+  it('renders the eyebrow as plain text, with no // prefix', () => {
+    const { getByTestId } = band()
+    const eyebrow = getByTestId(TESTID).querySelector('[data-testid$="eyebrow"]') as HTMLElement
+
+    expect(eyebrow.textContent?.trim()).toBe('Stay up to date')
+    expect(eyebrow.textContent).not.toContain('//')
+  })
 })

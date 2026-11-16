@@ -3,11 +3,11 @@ name: article-body-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: a7044ce3623ce5f918717e8a0d6951b2412660ba829b4a59d741cda38e86e922
+checksum: 41fdbc9cb19336126682d52ec3d7ade71ca8a883709e28f7e14cebfe0def03bf
 ---
 
 # ArticleBodySection — Component Spec
@@ -101,6 +101,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 - Copy-page menu: the `link` entry copies the URL; the `markdown` entry opens the page as plain-text markdown in a new tab; an entry whose `value` is a key of `assistants` opens that template in a new tab with `{prompt}` replaced by the encoded prompt `Read <article.href> so I can ask questions about it.`
 - Byline: with `authors`, overlapping large avatars (photo, or initials without one) lead the byline; with `author`, the names sit above the date and read time
 - Prose: fenced code blocks render as `pre`/`code`; numbered lists as `ol`; a full `http` link opens in a new tab
+- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
 
 ## Motion & Animations
 

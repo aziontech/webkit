@@ -3,10 +3,10 @@ name: newsletter-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: ac8be55fd4cc5ab5320fa20af92b1a4a21ccf851d2c6baf404f8cda4b1285a5f
+checksum: 6fae93e8dc28811afda1b0e5fdb671c111b2229b5e1f16c4f2417040303df2e3
 template: 2
 ---
 
@@ -118,6 +118,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
 - `failed` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
 - `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
+- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
 
 ## Motion & Animations
 

@@ -354,4 +354,12 @@ describe('ArticleBodySection', () => {
 
     await expectNoA11yViolations(container)
   })
+
+  it('renders the eyebrow as plain text, with no // prefix', () => {
+    const { getByTestId } = band()
+    const eyebrow = getByTestId(TESTID).querySelector('[data-testid$="eyebrow"]') as HTMLElement
+
+    expect(eyebrow.textContent?.trim()).toBe('Blog')
+    expect(eyebrow.textContent).not.toContain('//')
+  })
 })

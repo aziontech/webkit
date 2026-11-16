@@ -4,10 +4,10 @@ category: section
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 7
+spec_version: 8
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: b1b4656301483e2436e35683078aa2996ce9aeac0875dec603a910c5a1c7bbb1
+checksum: 530bccaf4acb01208cfe1082ea13f41ec936d13db22b805efaaa1034aa8949c5
 ---
 
 # CustomerUseCasesSection — Component Spec
@@ -93,6 +93,7 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the title cell, not the frame — because a use-case band with no use cases is absent from the page, not an `empty-state`
 - The title cell spans two rows from `lg`, so four items fill a three-column grid exactly
+- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
 
 ## Motion & Animations
 
