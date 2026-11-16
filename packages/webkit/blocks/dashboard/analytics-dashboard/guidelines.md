@@ -34,11 +34,13 @@ Title `Analytics` and one sentence on what the page shows, over the rest of the 
 delta (`vs previous 7 days`) and the period in the exported CSV file name
 (`requests-last-7-days.csv`). No card has a period control of its own.
 
-### B. KPI row — `StatTile` (required)
+### B. KPI row — `StatTileGroup`, `StatTile` (required)
 
-Four tiles: `Requests`, `Data transferred`, `Success rate`, `Status 5xx`. Each shows the period total,
-a sparkline and the change against the previous period. `Status 5xx` passes `inverse`, because a rise
-is a regression.
+Four tiles: `Requests`, `Data transferred`, `Success rate`, `Status 5xx`, the cells of one
+`StatTileGroup` (`aria-label="Key figures"`): it draws the card and the dividers, stacks the cells in a
+narrow box and keeps every cell of a row the same height, whether or not a tile has a change figure or a
+sparkline. Each shows the period total, a sparkline (a `null` point is a gap) and the change against the
+previous period. `Status 5xx` passes `inverse`, because a rise is a regression.
 
 ### C. Metric definitions — `Hint` (required)
 
@@ -155,20 +157,21 @@ Retry in place of its chart or table, naming what did not load
 
 The block takes its figures through props and emits its actions; it fetches nothing. `AnalyticsDashboardProps` and the record types (`AnalyticsDashboardKpis`, `AnalyticsDashboardCountry`, `AnalyticsDashboardHost`, `AnalyticsDashboardChanges`, `AnalyticsDashboardRange`) are exported from `analytics-dashboard.vue`, and `sample.ts` holds the sample figures the block renders when a data prop is left out (and never while `loading` or `error` is set). The tile labels, hints and formats, the card titles and the period options stay in the SFC.
 
-| Prop              | Type                             | What it does                                                                                                   |
-| ----------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `v-model:period`  | `string`                         | The selected period (`1h`, `24h`, `7d`, `30d`); defaults to `24h`. Refetch when it changes.                    |
-| `kpis`            | `AnalyticsDashboardKpis`         | The value, delta and sparkline of each tile, keyed by tile id; a tile left out reads as a dash. `{}` is empty. |
-| `intervals`       | `ChartLabel[]`                   | One label per interval of the two time series (a string, a number or a `Date`).                                |
-| `requestSeries`   | `ChartSeries[]`                  | The Requests over time series.                                                                                 |
-| `statusSeries`    | `ChartSeries[]`                  | The Status codes series, one per status class.                                                                 |
-| `countries`       | `AnalyticsDashboardCountry[]`    | The Requests by country bars, top countries first.                                                             |
-| `hosts`           | `AnalyticsDashboardHost[]`       | The Top hosts rows; searched, sorted and paged in the browser.                                                 |
-| `changes`         | `AnalyticsDashboardChanges`      | The change tags of the two time-series cards, in percent; `null` hides a tag.                                  |
-| `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                           |
-| `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                        |
-| `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.       |
-| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.    |
+| Prop              | Type                             | What it does                                                                                                                                           |
+| ----------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model:period`  | `string`                         | The selected period (`1h`, `24h`, `7d`, `30d`); defaults to `24h`. Refetch when it changes.                                                            |
+| `kpis`            | `AnalyticsDashboardKpis`         | The value, delta and sparkline (`(number \| null)[]`, `null` is a gap) of each tile, keyed by tile id; a tile left out reads as a dash. `{}` is empty. |
+| `intervals`       | `ChartLabel[]`                   | One label per interval of the two time series (a string, a number or a `Date`).                                                                        |
+| `requestSeries`   | `ChartSeries[]`                  | The Requests over time series.                                                                                                                         |
+| `statusSeries`    | `ChartSeries[]`                  | The Status codes series, one per status class.                                                                                                         |
+| `countries`       | `AnalyticsDashboardCountry[]`    | The Requests by country bars, top countries first.                                                                                                     |
+| `hosts`           | `AnalyticsDashboardHost[]`       | The Top hosts rows; searched, sorted and paged in the browser.                                                                                         |
+| `changes`         | `AnalyticsDashboardChanges`      | The change tags of the two time-series cards, in percent; `null` hides a tag.                                                                          |
+| `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                                                                   |
+| `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                                                                |
+| `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.                                               |
+| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.                                            |
+| `refetching`      | `boolean`                        | The period is reloading over figures already shown: the data stays and every chart holds its previous render at reduced opacity.                       |
 
 | Event           | Payload   | When                             |
 | --------------- | --------- | -------------------------------- |
@@ -214,7 +217,8 @@ Copy query and Export CSV run in the browser on the figures the block holds. To 
     :hosts="data?.hosts ?? []"
     :changes="data?.changes"
     :range="data?.range"
-    :loading="pending"
+    :loading="pending && !data"
+    :refetching="pending && !!data"
     :error="error ? 'Check your connection and retry.' : ''"
     @retry="refresh"
   />
@@ -270,6 +274,7 @@ Then delete `sample.ts` and its import.
 
 - Default: the populated dashboard for the period (`kpis`, `intervals`, `requestSeries`, `statusSeries`, `countries`, `hosts`, `changes`).
 - Loading: `loading`; every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
+- Refetching: `refetching`; the period reloads (a new period, a Refresh) over figures already shown: the tiles, charts and table keep their data and every chart holds its previous render at reduced opacity until the new figures arrive. Use `loading` only for the first response.
 - Empty: `kpis` is `{}` and the series and rows are `[]`; no traffic in the period, tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
 - Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards, and products with sub-dashboards switch them with a `ToggleGroup`, adding breakdown table cards.
 - Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.

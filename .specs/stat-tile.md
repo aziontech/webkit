@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 7c7932ad6cec60014884174315926dca0d7a321638756ea957b561247f43f28a
-spec_version: 6
+checksum: 0a91ca92715dd617581e1a428b5597689c8578d41a3fb0bce702a3f8664f00e5
+spec_version: 7
 created: 2026-10-20
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # StatTile — Component Spec
@@ -97,7 +97,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Separator` carrying a "No data" `Tag`)
+- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row

@@ -186,3 +186,35 @@ describe('dashboard/analytics-dashboard Copy query', () => {
     expect(metrics).not.toContain('httpMetrics')
   })
 })
+
+describe('dashboard/analytics-dashboard data shapes', () => {
+  it('keeps the figures while refetching and marks every chart as refetching', async () => {
+    const view = render(Analytics, {
+      props: {
+        refetching: true,
+        hosts: [{ id: 'store', host: 'store.example.com', service: 'Acme Store', requests: 42 }]
+      }
+    })
+    await waitFor(() => expect(view.container.textContent).toContain('store.example.com'))
+    const charts = view.container.querySelectorAll('[data-refetching]')
+    expect(charts.length).toBeGreaterThanOrEqual(3)
+    for (const chart of charts) expect(chart.getAttribute('aria-busy')).toBe('true')
+    expect(view.container.querySelector('[data-loading]')).toBeNull()
+  })
+
+  it('takes null gaps in a trend and sets the KPI tiles as the cells of one group', () => {
+    const view = render(Analytics, {
+      props: {
+        kpis: {
+          requests: { value: 1234, delta: 2, trend: [1, null, 3, 4] },
+          'data-transferred': { value: 99, delta: null, trend: [] }
+        }
+      }
+    })
+    const group = view.getByRole('group', { name: 'Key figures' })
+    const tiles = group.querySelectorAll('[data-testid="stat-tile"]')
+    expect(tiles).toHaveLength(4)
+    for (const tile of tiles) expect(tile.hasAttribute('data-grouped')).toBe(true)
+    expect(group.querySelector('[data-testid="stat-tile__sparkline"]')).toBeTruthy()
+  })
+})

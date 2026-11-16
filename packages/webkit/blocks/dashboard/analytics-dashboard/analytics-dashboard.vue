@@ -17,6 +17,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
@@ -46,8 +47,8 @@
     value: number | null
     /** Change against the previous period, in percent; null hides the delta. */
     delta: number | null
-    /** The sparkline, one value per interval; empty hides it. */
-    trend: number[]
+    /** The sparkline, one value per interval, null for an interval with no data; empty hides it. */
+    trend: (number | null)[]
   }
 
   /** The KPI figures by tile; a tile left out reads as a dash. */
@@ -117,6 +118,8 @@
     loading?: boolean
     /** Why the period could not load; each card shows it in a danger alert with Retry. */
     error?: string
+    /** The period is reloading over figures already shown: the data stays and every chart holds its previous render at reduced opacity. */
+    refetching?: boolean
   }
 
   const props = withDefaults(defineProps<AnalyticsDashboardProps>(), {
@@ -130,7 +133,8 @@
     range: undefined,
     defaultExpanded: '',
     loading: false,
-    error: ''
+    error: '',
+    refetching: false
   })
 
   const emit = defineEmits<{ retry: [event: MouseEvent] }>()
@@ -487,28 +491,24 @@
           </Select>
         </template>
       </PageHeader>
-      <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
-        <li
+      <StatTileGroup aria-label="Key figures">
+        <StatTile
           v-for="figure in figures"
           :key="figure.id"
-          class="flex min-w-0 flex-col"
+          :label="figure.label"
+          :value="figure.value"
+          :format-value="formatters[figure.format]"
+          :delta="figure.delta"
+          :delta-label="periodComparison"
+          :inverse="figure.inverse"
+          :trend="figure.trend"
+          :loading="loading"
         >
-          <StatTile
-            :label="figure.label"
-            :value="figure.value"
-            :format-value="formatters[figure.format]"
-            :delta="figure.delta"
-            :delta-label="periodComparison"
-            :inverse="figure.inverse"
-            :trend="figure.trend"
-            :loading="loading"
-          >
-            <template #aside>
-              <Hint :content="figure.description" />
-            </template>
-          </StatTile>
-        </li>
-      </ul>
+          <template #aside>
+            <Hint :content="figure.description" />
+          </template>
+        </StatTile>
+      </StatTileGroup>
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
@@ -598,6 +598,7 @@
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :loading="loading"
+              :refetching="refetching"
             >
               <Chart.Grid />
               <Chart.Axis type="y" />
@@ -697,6 +698,7 @@
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :loading="loading"
+              :refetching="refetching"
             >
               <Chart.Grid />
               <Chart.Axis type="y" />
@@ -785,6 +787,7 @@
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :loading="loading"
+              :refetching="refetching"
             >
               <Chart.Grid />
               <Chart.Axis type="y" />
@@ -951,6 +954,7 @@
               :labels="labels"
               :format-value="formatters.count"
               :height="420"
+              :refetching="refetching"
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :aria-label="expandedReport.label"
@@ -971,6 +975,7 @@
               :labels="labels"
               :format-value="formatters.count"
               :height="420"
+              :refetching="refetching"
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :aria-label="expandedReport.label"
@@ -995,6 +1000,7 @@
               orientation="horizontal"
               :format-value="formatters.count"
               :height="420"
+              :refetching="refetching"
               empty-title="No traffic yet"
               empty-description="Metrics appear here once a service serves requests."
               :aria-label="expandedReport.label"

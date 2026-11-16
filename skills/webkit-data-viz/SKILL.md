@@ -171,9 +171,11 @@ a rise is bad.
 
 ### KPI strips — one card, `StatTileGroup`
 
-An overview's usage row reads as **one card split into cells**, not as separate tiles. Put the tiles in
-a `StatTileGroup`: it draws the card and the dividers, stacks the cells in a narrow box and puts them
-in one row in a wide one, and each tile aligns its delta to the end of its cell. Never hand-build the
+An overview's usage row, and a dashboard's KPI row over its charts (`dashboard/analytics-dashboard`),
+reads as **one card split into cells**, not as separate tiles. Put the tiles in a `StatTileGroup`: it
+draws the card and the dividers, stacks the cells in a narrow box and puts them in one row in a wide
+one, keeps every cell of a row the same height when one tile has no change figure or no sparkline, and
+each tile aligns its delta to the end of its cell. Never hand-build the
 card, the grid or the `nth-child` dividers.
 
 ```vue
@@ -184,13 +186,31 @@ card, the grid or the `nth-child` dividers.
 
 <template>
   <StatTileGroup aria-label="Usage">
-    <StatTile label="Data transferred" :value="842" unit="GB" :delta="12.4" />
-    <StatTile label="Requests / second" :value="1240" unit="/s" :delta="3.8" />
-    <StatTile label="Data offload" :value="70" unit="%" :delta="-1.5" inverse />
+    <StatTile
+      label="Data transferred"
+      :value="842"
+      unit="GB"
+      :delta="12.4"
+    />
+    <StatTile
+      label="Requests / second"
+      :value="1240"
+      unit="/s"
+      :delta="3.8"
+    />
+    <StatTile
+      label="Data offload"
+      :value="70"
+      unit="%"
+      :delta="-1.5"
+      inverse
+    />
   </StatTileGroup>
 </template>
 ```
 
+- A `trend` takes `(number | null)[]`: `null` is an interval with no data and draws as a gap. A tile
+  whose `value` is `null` shows a dash over a "No data" band, never a made-up curve.
 - Pass the delta as the raw percentage (`12.4`): the tile prints at most two decimals and drops
   trailing zeros (`+12.4%`). Put the unit in `unit` (`GB`, `/s`, `%`): it renders smaller, muted and
   sans beside the figure, never in the figure's face.
