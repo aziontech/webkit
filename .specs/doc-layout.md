@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: b3da9752ff0753a4d5748d42864246e607fafe83d5b58061279b532cc01e16d0
+checksum: b3c0c15cb03b68a37173e81db732b4083e18634fe73db498484caa55268633c4
 created: 2026-11-12
 last_updated: 2026-11-16
 ---
@@ -203,7 +203,7 @@ A page (the route's component) is only its article; its anchored headings fill t
 
 ## Performance
 
-- Bundle budget: 65 KB gzip for `./doc-layout` in `.size-limit.json` (63.6 KB measured; it pulls `AppHeader`, `NavigationMenu`, `Sidebar`, `SidebarMenu`, `Drawer`, `DocOnThisPage` and `Command`).
+- Bundle budget: 68.4 KB gzip for `./doc-layout` in `.size-limit.json` (68.35 KB measured; it pulls `AppHeader`, `NavigationMenu`, `Sidebar`, `SidebarMenu`, `Drawer`, `DocOnThisPage` and `Command`).
 - Runtime budget: the rail's pointer listeners exist only while dragging (owned by `Sidebar`); one passive `scroll` listener (throttled to one read per animation frame); heading registration is one entry per anchored heading, ordered by document position when the outline is read; one `popstate` listener without a router.
 - Heavy parts: none beyond the composed components.
 

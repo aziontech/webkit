@@ -2,7 +2,7 @@
 name: webkit-layout
 description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, the control cap inside an item-group field row, and the device contract (viewport breakpoints for the shell, container queries for anything that can sit in a drawer, split view or card, touch targets, reflow at 320 px). Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-16
 scope: general
 enforced_by: [webkit-styling, webkit-tokens, webkit-direction, ui-verify, review]
 ---
@@ -53,7 +53,8 @@ component, composed once in `App.vue` around `RouterView`:
   `<main>` and pads nothing: the page body carries its own boundary and measure
   (`layout-boundary` + `layout-column` on a list or form; a detail page opens flush on `PageTabs`).
 - **Site:** `SiteLayout` — `SiteHeader`, the page's sections in its `<main>`, `SiteFooter` last.
-- **Docs:** `DocLayout` — sticky header and rails around the article; the document scrolls.
+- **Docs:** `DocLayout` — sticky header and rails around the article; the document scrolls. The
+  article's anchored `DocHeading`s fill the outline rail on their own; the page passes nothing up.
 
 A page never renders `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeader`, `SiteFooter`, a `Command`
 palette or a second `<main>`. A copied block that still inlines a shell gives you its `<main>`'s

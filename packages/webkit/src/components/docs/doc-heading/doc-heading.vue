@@ -33,17 +33,17 @@
 
   const target = computed(() => props.anchor)
 
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const text = ref('')
 
   const readText = () => {
-    text.value = root.value?.textContent?.trim() ?? ''
+    text.value = rootEl.value?.textContent?.trim() ?? ''
   }
 
   onMounted(readText)
   onUpdated(readText)
 
-  useHeadingOutline(root, () =>
+  useHeadingOutline(rootEl, () =>
     target.value && (props.level === 2 || props.level === 3)
       ? { id: target.value, text: text.value || props.label, depth: props.level }
       : null
@@ -55,7 +55,7 @@
 <template>
   <component
     :is="`h${level}`"
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :id="target || undefined"
     :data-doc-heading="level"

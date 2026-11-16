@@ -3,7 +3,7 @@ name: webkit-usage
 description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a block, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 enforced_by:
   [
     webkit-imports,
@@ -54,8 +54,12 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeader` and `SiteFooter` data. The
   site is dark: `<html data-theme="dark">`. `SiteFooter` binds its language select with
   `v-model:language`; switch the locale from that value.
-- **Docs:** `DocLayout` — the docs tree, section links, `outline` (the article's headings), and
-  `actions`, `navigation-footer`, `aside`, `footer` slots. The document scrolls. A drill row
+- **Docs:** `DocLayout` — the docs tree, section links, `outline-groups`, and `actions`,
+  `navigation-footer`, `aside`, `footer` slots. The document scrolls. The page feeds the "On this
+  page" rail by itself: every `DocHeading` with an `anchor` (level 2 or 3) and every
+  `DocChangelogEntry` registers with the layout, in document order, so App.vue passes nothing per
+  page and a page never renders `DocLayout`; a page with no anchored heading (the docs home) shows no
+  outline rail and no `aside`. A drill row
   (`type: 'drill'`) opens in place and the rail's Back reads `Back to Docs` (`rootLabel` renames it);
   never add a hand-made Back row.
 
@@ -65,7 +69,11 @@ A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `Sit
 `SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
 create flow (`create/*`, headed by the `top-bar/creation-bar` bar) or a
 signed-out screen (`auth/sign-in`): route it outside the layout (a route meta `App.vue` reads), and
-it keeps its own bar and `<main>` (`webkit-navigation`).
+it keeps its own bar and `<main>` (`webkit-navigation`). An app with two surfaces (a marketing site
+and its docs) does the same: `App.vue` picks `SiteLayout` or `DocLayout` from a route meta
+(`meta: { layout: 'docs' }`) around one `RouterView`, and every page stays a body. The `shell/docs`
+variants are such bodies: `webkit add shell/docs --variant Article` copies the shell (your App.vue
+or docs layout) and the page side by side.
 
 ## A screen begins from a block
 

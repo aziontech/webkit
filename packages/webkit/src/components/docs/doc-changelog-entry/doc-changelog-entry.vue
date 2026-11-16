@@ -50,16 +50,16 @@
     () => props.anchor || slugify(props.title ? `${props.label} ${props.title}` : props.label)
   )
 
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
-  useHeadingOutline(root, () =>
+  useHeadingOutline(rootEl, () =>
     anchorId.value ? { id: anchorId.value, text: props.title || props.label, depth: 2 } : null
   )
 </script>
 
 <template>
   <section
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :id="anchorId"
     data-doc-block
