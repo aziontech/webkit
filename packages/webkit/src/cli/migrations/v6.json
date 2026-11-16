@@ -1470,5 +1470,11 @@
         "standalone": "table-live-button"
       }
     }
+  },
+  "attached": {
+    "doc-step": {
+      "root": "doc-steps",
+      "member": "Step"
+    }
   }
 }

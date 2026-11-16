@@ -46,13 +46,19 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
 
 It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
 does not export. A renamed value is rewritten in a static attribute (`severity="error"`) and in a
-bound single literal (`:severity="'error'"`); any other bound expression
-(`:severity="ok ? 'info' : 'error'"`, `:severity="level"`) is left as it is and listed as `MANUAL`,
-because its strings may be your own values.
+bound single literal (`:severity="'error'"`). A bound expression whose strings are all v6 values
+(`:severity="ok ? 'success' : 'neutral'"`) is left alone; one that holds an old value
+(`:severity="ok ? 'info' : 'error'"`) is listed as `MANUAL`, because its strings may be your own
+values; one with no strings at all (`:severity="level"`) is listed once to review, and
+`webkit check` reports it as a warning. Put `<!-- webkit-migrate-ok -->` on the line above the tag
+once you have checked it (also for an old value kept only in a comparison, such as
+`x === 'error' ? 'danger' : 'info'`), and neither `migrate` nor `check` lists it again.
 
-The codemod rewrites v5 code. It reads the version your `package.json` declares (or, once you have
-bumped it, recognizes a v3 project by its v3-only imports such as `inputtext` or `plugin`); pass
-`--from 3` or `--from 5` to say it yourself. On a v3 project it moves the native components off
+The codemod rewrites v5 code. It reads the version your `package.json` declares: a semver range,
+the version in an `aziontech-webkit-<version>.tgz` tarball name, or the installed copy in
+`node_modules` for a `file:`, `link:` or `workspace:` dependency (or, once you have bumped it,
+recognizes a v3 project by its v3-only imports such as `inputtext` or `plugin`). When it cannot
+tell, it says so; pass `--from 3` or `--from 5` to say it yourself. On a v3 project it moves the native components off
 their category paths (`actions/button` → `button`, `content/card-box` → `card`,
 `actions/segmented-button` → `toggle-group`, …) and lists every PrimeVue-era import (`dropdown`,
 `divider`, `inputtext`, `field-text`, `use-toast`, …) as `MANUAL` with its v6 replacement, since the
@@ -909,7 +915,9 @@ source, so every app shipped the classes of every component (77 KB gzipped of CS
 app). In v6 neither scans WebKit: `src/webkit.css` imports `./webkit.sources.css`, a generated list
 with one `@source` per WebKit file the app imports, and the Button-only app ships about 10 KB.
 
-- Run `npx @aziontech/webkit init` again (it rewrites nothing you edited), or by hand add
+- Run `npx @aziontech/webkit init` again: an untouched v5 `src/webkit.css` is replaced with the
+  v6 one, and an edited one keeps your edits and gets only the lines it lacks (the
+  `./webkit.sources.css` import and the three `@source not` lines). Or by hand add
   `@import './webkit.sources.css';` to `src/webkit.css` after `@import '@aziontech/webkit/styles';`,
   and `webkit()` from `@aziontech/webkit/vite-plugin` to the `plugins` of `vite.config`. The plugin
   writes the list on every dev start and build. Without Vite, run `npx @aziontech/webkit css` after
@@ -1028,7 +1036,9 @@ The codemod lists the import as `MANUAL`.
 `DocStep` is now `DocSteps.Step`: `@aziontech/webkit/doc-steps` is a compound and `doc-step` has
 no standalone export, since a step only renders inside `DocSteps`. Drop the `doc-step` import and
 write `<DocSteps.Step title>`; Markdown sources (`<Steps><Step>`) need no change. The step's test id
-is `doc-steps-step` (was `documentation-doc-step`). The codemod lists the import as `MANUAL`.
+is `doc-steps-step` (was `documentation-doc-step`). The codemod rewrites each `<DocStep>` that sits
+inside a `DocSteps` to `<DocSteps.Step>` and swaps the import for `doc-steps`; it lists the import as
+`MANUAL` only when a step is outside a `DocSteps` or the binding is used in the script.
 
 `DocCardGroup` takes `columns` (was `cols`); in Markdown, `DocMarkdown` still reads
 `<CardGroup cols>` as `columns`, so existing docs sources render unchanged.
