@@ -40,7 +40,7 @@ A `Card` whose header holds the `Subscription plan` heading and the outlined `Ch
 
 A small `SectionHeader` `Invoices` over the table-view controls row: `PropertyFilter` bound with `v-bind="propertyFilterProps"` (Invoice ID free text, Plan, Cycle and Status with options), then Refresh (`Refresh invoices`) and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 10, 25 or 50; columns), saved under `storageKey`.
 
-### G. Invoices table — `DataTable`, `Table`, `useCollection` (required)
+### G. Invoices table — `DataTable`, `TableCellActions`, `TableCellStatus`, `useCollection` (required)
 
 One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `CurrencyAmount`, Payment method with its plate, Status as `TableCellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
 

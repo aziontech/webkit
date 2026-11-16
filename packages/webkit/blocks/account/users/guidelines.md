@@ -24,7 +24,7 @@ Title `Users` and one sentence that says access comes from teams. Actions: Docum
 
 The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, email, role and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, and is disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden while the list failed to load.
 
-### C. Users table — `Card`, `DataTable`, `Table`, `Avatar`, `Tag`, `useCollection` (required)
+### C. Users table — `Card`, `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `Tag`, `useCollection` (required)
 
 `DataTable` with `v-bind="tableProps"` in a flush `Card`, sortable by name, role and status. Name: a square `Avatar` with the initials and the name (or the email while the invitation is pending). Email in its own column, left to right in every language. Role is a small `Tag`: Owner (highlight), Admin (info), Developer and Viewer (secondary). Status is `TableCellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `TableCellTime`, or `Not signed in yet` for an invitation.
 

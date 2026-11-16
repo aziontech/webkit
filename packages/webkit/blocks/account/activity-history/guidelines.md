@@ -31,7 +31,7 @@ The period comes first in the reader's mind and is filtered before the collectio
 
 Refresh and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 25, 50 or 100; columns), saved under `storageKey`.
 
-### E. Event table — `Card`, `DataTable`, `Table`, `Tag`, `CopyButton`, `useCollection` (required)
+### E. Event table — `Card`, `DataTable`, `TableCellTime`, `Tag`, `CopyButton`, `useCollection` (required)
 
 One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `TableCellTime` (relative, exact time on the tooltip).
 

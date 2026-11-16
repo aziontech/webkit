@@ -23,7 +23,7 @@ Title `Personal tokens` and one sentence that says what a token does and that it
 
 The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when the account has no token.
 
-### C. Token table — `Card`, `DataTable`, `Table`, `useCollection` (required)
+### C. Token table — `Card`, `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `useCollection` (required)
 
 One `useCollection` over the rows, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`. Columns: Name, Description (muted; `No description` when empty), Status, Expires, Last used, Created, and the row menu. Status uses `TableCellStatus`: Active (success), `Expires in N days` within 7 days (warning), Expired (danger), Revoked (secondary). Last used and Created use `TableCellTime` (relative time, exact time on the tooltip, the creator's avatar on Created); a token never used reads `Never used`.
 

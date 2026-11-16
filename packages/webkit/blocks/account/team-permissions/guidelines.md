@@ -23,7 +23,7 @@ Title `Teams and permissions` and the sentence that states the model. Actions: D
 
 The table-view controls row (`view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when there is no team.
 
-### C. Team table — `Card`, `DataTable`, `Table`, `Avatar`, `useCollection` (required)
+### C. Team table — `Card`, `DataTable`, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, `Avatar`, `useCollection` (required)
 
 `DataTable` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `TableCellLink` to the team's page and its description under it. Permissions: `TableCellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `TableCellStatus` (Active, Inactive).
 
@@ -55,7 +55,7 @@ Variants CreateTeam and EditTeam only; they add `AppHeader`, `Brand` and `Breadc
 
 Creating or editing a team is a full page in the creation frame of `create/create-page`, not a page body in `ConsoleLayout`: a `AppHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and nothing on the right: the frame is for one task, so it carries no account control that does nothing. The form scrolls in the `main` under it, and its `SaveBar variant="centered"` floats at the bottom of that scroll region on both pages.
 
-### J. Permission matrix — `Table`, `EmptyState` (CreateTeam, EditTeam)
+### J. Permission matrix — `EmptyState` (CreateTeam, EditTeam)
 
 The matrix is the `Table` compound composed by hand, `bordered`: `aria-label="Permissions granted by this team"` names it, `Table.Header` holds Resource, View and Edit as `Table.HeadCell`s, and each area is one `Table.Body` whose first `Table.Row` carries the area's group `Checkbox` and whose next rows are the resources, with a `Checkbox` per action in a centred `Table.Cell` (a dash for an action the resource does not have). When the filter matches nothing, a small `EmptyState` (`No matching permissions`) with Clear filter takes the table's place.
 

@@ -36,7 +36,7 @@ A `SettingsSection` around a flush `Card` with one collapsible `Accordion` item,
 
 The table-view controls row (`view/table-view`): a `PropertyFilter` over name, reach (Shared, Dedicated, Unused), binding policy and status, Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` for page size and visible columns.
 
-### F. Deployment Settings table — `DataTable`, `Table`, `Card`, `Tag`, `DropdownMenu`, `ConfirmDialog`, `EmptyState`, `useCollection` (required)
+### F. Deployment Settings table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Card`, `Tag`, `DropdownMenu`, `ConfirmDialog`, `EmptyState`, `useCollection` (required)
 
 `DataTable` with `v-bind="tableProps"` in a flush `Card`, newest change first. Name, with a `System` `Tag` on Default; Services, the count with a `Shared` `Tag` when more than one service uses it and the service names on a `Tooltip`; Type (System or Custom, hidden by default); Binding policy; Deployment policy; Status as `TableCellStatus`; Last modified as `TableCellTime` with the author. `TableCellActions` named after the setting, absent on Default: Edit, Clone (a copy named `<name>-copy` with no environment), then Delete in its own group, which asks in a `ConfirmDialog` that says how many services fall back to Default. `No matching Deployment Settings` with Clear filters sits in the table's `#empty` slot.
 
