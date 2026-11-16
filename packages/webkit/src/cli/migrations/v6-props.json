@@ -880,7 +880,10 @@
     }
   },
   "doc-layout": {
-    "navigationExpanded": "navigationOpen"
+    "navigationExpanded": "navigationOpen",
+    "outline": {
+      "removed": "delete the prop: give each section DocHeading an anchor (level 2 or 3) inside the page and the layout lists it in the On this page rail by itself; a page with no anchored heading shows no outline rail"
+    }
   },
   "app-layout": {
     "navigationLabel": "navigationAriaLabel"

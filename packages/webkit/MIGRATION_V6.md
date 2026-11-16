@@ -899,6 +899,20 @@ The codemod lists the import as `MANUAL`.
 key and test id moved with it: override `docPreviousNext.*` instead of `docPagination.*`, and select
 `doc-previous-next` instead of `documentation-doc-pagination`.
 
+`DocLayout` drops `outline`: the page fills the "On this page" rail itself. Every `DocHeading` with an
+`anchor` at level 2 or 3, and every `DocChangelogEntry`, rendered in the layout's default slot
+registers with the layout in document order, so compose `DocLayout` once in `App.vue` and delete the
+`:outline` binding and the hand-kept list; a heading without `anchor` stays out of the rail. The end
+rail, and the `aside` slot with it, now renders only on a page that has an outline. A custom heading
+joins the rail with `useHeadingOutline(el, { id, text, depth })` from `use-heading-navigation`. The
+codemod lists `outline` as `MANUAL`.
+
+The `shell/docs` variants (Article, Reference, Landing, AgentSetup, AgentGuide) are page bodies: only
+the `<article>`, with no `DocLayout`, header, rail or footer. Keep the shell (`shell/docs`, the
+primary) as `App.vue` with `<RouterView />` in its slot and route to the copied page; a page copied
+from an earlier version that still renders its own `DocLayout` keeps only its `<article>`. The
+Landing headings carry no `anchor`, so the docs home shows no outline rail.
+
 ### Page fragments are components now
 
 Markup that every screen used to copy is now a component. Screens copied from v5 keep working; replace
