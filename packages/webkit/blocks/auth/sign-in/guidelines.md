@@ -9,7 +9,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - Any signed-out step that asks for credentials (sign in, MFA, set a new password).
 - The OAuth authorize screen (`OauthConsent`): a third-party app asks to act on the signed-in account, and the person allows or denies the scopes it lists.
 - Device and CLI sign-in (`DeviceAuthorization`): a terminal or a device without a browser printed a code, and the person confirms it here.
-- An app with no accounts of its own that calls the Azion API with the person's personal token (`PersonalToken`): an internal console, a dashboard, a storage browser.
+- An app with no accounts of its own that calls the Azion API with the person's personal token (PersonalToken): an internal console, a dashboard, a storage browser.
 
 ## When not to use
 
@@ -98,11 +98,11 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 `size="small"`, the step's title and its lead (`Welcome back` / `Sign in to your account.`). The same part on every screen of the block, primary and variants, so the card always opens on one `h1`.
 
-### Q. Personal token — `PasswordInput` (`PersonalToken`, `RejectedToken`)
+### Q. Personal token — `PasswordInput` (PersonalToken and RejectedToken)
 
 For an app that signs in with an Azion personal token instead of an account. One `Field` labelled `Personal token` over a `PasswordInput` with `monospace`, `autocomplete="off"`, `spellcheck="false"` and the show and hide toggle it ships, a `Field.Description` that links to how a token is created (a real Azion documentation link, `target="_blank"`), and a `Field.Error` for the client checks: empty (`Paste your personal token.`) and inner spaces (`A token has no spaces. Copy it again from Personal tokens.`). The card has no Google or GitHub buttons and no steps.
 
-The block checks the token once against the API (the demo's `checkToken` stub: a token under 32 characters is rejected, `9…9` does not answer) and then emits `sign-in` with `(event, token)`, the token trimmed. It stores nothing: keeping the token for the session (memory or `sessionStorage`, never `localStorage` or a cookie the app's server can read) and attaching it to requests is the app's job; see `skills/webkit-azion-api`. A 401 or 403 is a danger notice with no action, the field cleared and focused (`RejectedToken`); no answer is a warning notice with Retry and the entry kept.
+The block checks the token once against the API (the demo's `checkToken` stub: a token under 32 characters is rejected, `9…9` does not answer) and then emits `sign-in` with `(event, token)`, the token trimmed. It stores nothing: keeping the token for the session (memory or `sessionStorage`, never `localStorage` or a cookie the app's server can read) and attaching it to requests is the app's job; see `skills/webkit-azion-api`. A 401 or 403 is a danger notice with no action, the field cleared and focused (RejectedToken); no answer is a warning notice with Retry and the entry kept.
 
 ## Do
 
