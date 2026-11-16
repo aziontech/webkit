@@ -1,7 +1,7 @@
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { defineComponent, h, nextTick } from 'vue'
+import { defineComponent, h, nextTick, type PropType } from 'vue'
 
 import Default from '../../../../examples/hover-card/default.vue'
 import Disabled from '../../../../examples/hover-card/disabled.vue'
@@ -19,7 +19,7 @@ const Host = defineComponent({
   props: {
     openDelay: { type: Number, default: 0 },
     closeDelay: { type: Number, default: 0 },
-    'onUpdate:open': { type: Function, default: undefined }
+    'onUpdate:open': { type: Function as PropType<(open: boolean) => void>, default: undefined }
   },
   setup: (props) => () =>
     h('div', [
