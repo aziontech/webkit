@@ -22,8 +22,8 @@
     {
       variant: 'knockout',
       label: 'Knockout',
-      fill: 'bg-(--color-base-white)',
-      ink: 'text-(--color-base-black)'
+      fill: 'bg-(--primary)',
+      ink: 'text-(--primary-foreground)'
     }
   ]
 </script>
