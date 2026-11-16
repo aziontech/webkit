@@ -71,9 +71,9 @@ Exceptions (the one list; `accepted` means the owner chose the look, `open` wait
 | `--border-default` on the surfaces        | dark        | 0         | accepted | Dark dividers keep the original `#2B2B2B` look (2026-11-16). Form outlines stay `--border-input` `#535353`. |
 | `--border-muted` on the surfaces          | dark        | 0         | accepted | Dark muted dividers keep the original `#242424` look (2026-11-16).                                          |
 | `--text-brand` on the surfaces            | dark        | 43.5–44.3 | accepted | The `Eyebrow` label stays the logo orange `#F3652B` in dark. Light uses primary-700 `#B03C02` and passes.   |
-| `--border-muted` on `--bg-canvas`         | light       | 13.3      | open     | Light muted divider on the page canvas.                                                                     |
-| `--text-muted` on `--bg-surface-raised`   | dark        | 59.9      | open     | Dark muted text in menus and popovers.                                                                      |
-| `--border-input` on `--bg-surface-raised` | dark        | 14.6      | open     | Dark field outline inside a raised panel.                                                                   |
+| `--border-muted` on `--bg-canvas`         | light       | 13.3      | accepted | Light muted divider on the page canvas, target Lc 15: kept as is (owner decision 2026-11-16).               |
+| `--text-muted` on `--bg-surface-raised`   | dark        | 59.9      | accepted | Dark muted text in menus and popovers, target Lc 60: kept as is (owner decision 2026-11-16).                |
+| `--border-input` on `--bg-surface-raised` | dark        | 14.6      | accepted | Dark field outline inside a raised panel, target Lc 15: kept as is (owner decision 2026-11-16).             |
 
 Do not "fix" an accepted pair; do not add a pair to this list without the design owner's decision.
 

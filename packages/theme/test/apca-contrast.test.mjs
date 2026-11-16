@@ -89,25 +89,28 @@ const EXCEPTIONS = [
       'Eyebrow label in the logo orange #F3652B in dark, about Lc 44; the owner wants the logo orange'
   },
   {
-    status: 'open',
+    status: 'accepted',
     themes: ['light'],
     fg: '--border-muted',
     bg: ['--bg-canvas'],
-    reason: 'light muted divider on the canvas, Lc 13.3; waits for an owner decision'
+    reason:
+      'light muted divider on the canvas, Lc 13.3 (target 15); kept as is, owner decision 2026-11-16'
   },
   {
-    status: 'open',
+    status: 'accepted',
     themes: ['dark'],
     fg: '--text-muted',
     bg: ['--bg-surface-raised'],
-    reason: 'dark muted text on a raised surface, Lc 59.9; waits for an owner decision'
+    reason:
+      'dark muted text on a raised surface, Lc 59.9 (target 60); kept as is, owner decision 2026-11-16'
   },
   {
-    status: 'open',
+    status: 'accepted',
     themes: ['dark'],
     fg: '--border-input',
     bg: ['--bg-surface-raised'],
-    reason: 'dark field outline on a raised surface, Lc 14.6; waits for an owner decision'
+    reason:
+      'dark field outline on a raised surface, Lc 14.6 (target 15); kept as is, owner decision 2026-11-16'
   }
 ]
 
@@ -196,11 +199,14 @@ test('every exception is recorded with its reason in rules/webkit-tokens.md', ()
   assert.ok(section.length > 0 && doc.includes('## Contrast: APCA and WCAG 2'))
   for (const e of EXCEPTIONS) {
     assert.ok(e.reason.length > 20, `${e.fg} needs a reason`)
-    const row = section
+    const rows = section
       .split('\n')
-      .find((line) => line.includes(`\`${e.fg}\``) && line.includes(e.status))
-    assert.ok(row, `${e.fg} (${e.status}) is missing from the exceptions table`)
+      .filter((line) => line.includes(`\`${e.fg}\``) && line.includes(`| ${e.status}`))
+    assert.ok(rows.length, `${e.fg} (${e.status}) is missing from the exceptions table`)
     for (const variant of e.themes)
-      assert.ok(row.includes(variant), `${e.fg} row does not name ${variant}`)
+      assert.ok(
+        rows.some((row) => row.includes(variant)),
+        `${e.fg} row does not name ${variant}`
+      )
   }
 })
