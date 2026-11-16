@@ -4256,7 +4256,7 @@ What each prop and event does, and the go-live code: [blocks/create/deploy-progr
 - Let each Deployment Setting settle on its own and keep the ones that succeeded live.
 - Say why a row failed on the row itself.
 - Offer Retry failed for the failed rows only.
-- Report the outcome through the toast as well, so the user can close the dialog.
+- Report the run through the toast while the dialog is hidden, so the user can hide it and leave; never raise the toast over the open dialog.
 
 ## Don't
 
@@ -4284,8 +4284,8 @@ What each prop and event does, and the go-live code: [blocks/create/deploy-progr
 
 - Running: `items` has two settled, one deploying and two queued; it advances as the page updates their `status`.
 - Drop: the confirm that starts a drop-to-deploy run.
-- PartialError: `items` settled with one failed row and its `message`; Retry failed, error toast.
-- Success: every row in `items` is done; success toast.
+- PartialError: `items` settled with one failed row and its `message`; Retry failed. The dialog shows the outcome, so no toast covers it; the error toast appears only for a run that settles while the dialog is hidden.
+- Success: every row in `items` is done; the dialog shows the outcome, and the success toast appears only for a run that settles while the dialog is hidden.
 
 ## Related
 
@@ -7335,7 +7335,7 @@ What each prop and event does, and the go-live code: [blocks/edit/delete-dialog.
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
