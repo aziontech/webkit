@@ -210,6 +210,7 @@
                 <template #default>
                   <Item.List>
                     <SettingsRow
+                      stackable
                       title="Name"
                       description="Give a unique and descriptive name to identify the service."
                     >
@@ -245,7 +246,10 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingsRow title="Protocol usage">
+                    <SettingsRow
+                      stackable
+                      title="Protocol usage"
+                    >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.protocolUsage"
@@ -264,7 +268,10 @@
                         </RadioGroup>
                       </div>
                     </SettingsRow>
-                    <SettingsRow title="HTTP ports">
+                    <SettingsRow
+                      stackable
+                      title="HTTP ports"
+                    >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <MultiSelect
@@ -302,6 +309,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      stackable
                       title="HTTPS ports"
                       description="Applies when the service serves HTTPS traffic."
                     >
@@ -338,6 +346,7 @@
                 <template #default>
                   <Item.List>
                     <SettingsRow
+                      stackable
                       title="Origin type"
                       description="The origin type is pre-defined and can't be customized."
                     >
@@ -352,6 +361,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      stackable
                       title="Protocol policy"
                       description="Select the protocol used between the cache servers and the origin."
                     >
@@ -373,6 +383,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      stackable
                       title="Address"
                       description="Define an origin for the content in FQDN format or an IPv4/IPv6 address."
                     >
@@ -397,6 +408,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      stackable
                       title="Host header"
                       description="Identify a virtualhost sent in the Host header to the origin."
                     >
@@ -433,7 +445,10 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingsRow title="Browser cache settings">
+                    <SettingsRow
+                      stackable
+                      title="Browser cache settings"
+                    >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.browserCache"
@@ -453,6 +468,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      stackable
                       title="Maximum TTL"
                       description="In seconds."
                     >
@@ -466,7 +482,10 @@
                         />
                       </div>
                     </SettingsRow>
-                    <SettingsRow title="Cache Settings">
+                    <SettingsRow
+                      stackable
+                      title="Cache Settings"
+                    >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.cache"
@@ -486,6 +505,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      stackable
                       title="Maximum TTL"
                       description="In seconds. Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds."
                     >

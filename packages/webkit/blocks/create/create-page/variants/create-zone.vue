@@ -297,6 +297,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        stackable
                         title="Name"
                         description="Identifies the zone in this list. It is not the domain."
                       >
@@ -319,6 +320,7 @@
                         >
                       </SettingsRow>
                       <SettingsRow
+                        stackable
                         title="Domain name"
                         description="The root domain this zone answers for, without a subdomain. Pasting a zone file here imports its records instead."
                       >
