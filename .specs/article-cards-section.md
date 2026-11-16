@@ -3,11 +3,11 @@ name: article-cards-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 2ac36a7cebcb8c23518d9443902431b6ecebdf0da1278b15842762bc5a52981f
+checksum: b27bf37bc87ec1ce1ae4450e0476b2319d0e72e687b5dfe8dbbc5510890c8eaf
 ---
 
 # ArticleCardsSection — Component Spec
@@ -89,6 +89,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
+- A card title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays in the accessibility tree, with no `title` attribute.
 
 ## Motion & Animations
 

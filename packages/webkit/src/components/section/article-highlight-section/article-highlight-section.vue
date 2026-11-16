@@ -361,7 +361,7 @@
                   @keydown="onKeydown($event, index)"
                 >
                   <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
-                  <span class="line-clamp-3 text-balance text-heading-2xs text-(--text-default)">
+                  <span class="line-clamp-2 text-balance text-heading-2xs text-(--text-default)">
                     {{ item.title }}
                   </span>
                 </button>

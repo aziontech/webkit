@@ -3,11 +3,11 @@ name: article-highlight-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 3981050c4c9e7113fb627be37db44ca467901ddf1e573bc6e78c7ac09600918c
+checksum: bfebefc69f99a1686fcf68aae0c49c8c5c1ce5e5f51c85313a9305de84030a7d
 ---
 
 # ArticleHighlightSection — Component Spec
@@ -99,6 +99,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 - Direction: `data-direction` on the panel is `forward` or `back` (from the arrow key, the autoplay step, or the index change) and drives an out-in slide of the panel's article, mirrored under `rtl`
 - Fill: `data-fill` is set; from `lg` the band's height is the viewport minus `var(--layout-header-height)` and the section gaps, the panel takes the free height and its cover drops its fixed aspect; under 50 rem of viewport height the copy tightens and the deck hides
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
+- A wall title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays the tab's accessible name, with no `title` attribute.
 
 ## Motion & Animations
 

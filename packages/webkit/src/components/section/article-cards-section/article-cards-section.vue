@@ -145,7 +145,7 @@
                 />
               </span>
               <span class="flex flex-1 flex-col gap-(--spacing-sm) p-(--spacing-xl)">
-                <h3 class="m-0 text-balance text-heading-sm text-(--text-default)">
+                <h3 class="m-0 line-clamp-2 text-balance text-heading-sm text-(--text-default)">
                   {{ item.title }}
                   <span
                     v-if="item.target === '_blank'"
