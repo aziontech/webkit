@@ -1253,6 +1253,9 @@ no longer a `role="status"` live region (announce a change you need heard throug
 384 / 672 / 1024 px); `Alert` `close` and `ErrorBoundary` `retry` now pass the triggering event
 (handlers that take no argument keep working).
 
+`Alert` has a `title` prop: it draws a bold heading line over the copy. A `title="…"` you set to get
+the browser's hover tooltip now shows on the alert instead; move hover text to a `Tooltip`.
+
 ### `Dialog` and `Drawer`: overlay and close button by default
 
 A dialog or drawer used to need four hand-assembled pieces (`DialogPortal`, `DialogOverlay`,
@@ -1318,6 +1321,11 @@ Actions default to `large` and everything else to `medium`. These defaults moved
 | `ConfirmDialog`  | `small`    | `medium`   |
 | `CurrencyAmount` | `small`    | `medium`   |
 | `HeroTitle`      | `large`    | `medium`   |
+| `Drawer`         | `medium`   | `large`    |
+
+`Drawer` is the one exception to the house rule: the first drawer of a flow is the large one, so a
+bare `<Drawer>` now opens at `large`. A drawer stacked on top of another (or the AI assistant
+drawer) passes `size="medium"`.
 
 ### Tag and StatusIndicator colours
 
@@ -1682,6 +1690,8 @@ group the rows with `SidebarMenu.Group` inside a `SidebarMenu` (`label`, rows as
 
 - `TagEditor` reserves no key prefix by default (`reservedPrefix` was `'azion:'`). Pass
   `reserved-prefix="azion:"` where the platform reserves it.
+- `PhoneInput` opens on the United States (`country` was `'BR'`). Seed the ref you bind to
+  `v-model:country` with `'BR'` (or the person's country) where the field should start elsewhere.
 
 Optional text props that defaulted to `undefined` now default to `''`, and an empty string means
 "not set", so the rendered output does not change. Code that reads the prop, or compares it with
