@@ -193,6 +193,13 @@ Use them directly:
 
 Utility equivalents are generated in the same stylesheet (e.g. `@utility text-default`), so `class="text-default"` works wherever Tailwind runs.
 
+### Contrast
+
+Every documented colour pair passes WCAG 2.1 AA and APCA (0.0.98G-4g): Lc 75 for body text, Lc 60
+for other text, Lc 45 for icons, Lc 30 for solid marks and Lc 15 for borders. `test/apca-contrast.test.mjs`
+checks the pairs in both themes; the accepted exceptions and their reasons are listed in the consumer
+rule `rules/webkit-tokens.md` (§ "Contrast: APCA and WCAG 2").
+
 ### Variables removed in 6.0
 
 Nothing in WebKit read these, so 6.0 removes them. Replace any use in your own CSS:
