@@ -1,7 +1,13 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import DeploymentLogs from '../../../../blocks/detail/deployment-logs/deployment-logs.vue'
+import DeploymentLogs, {
+  type DeploymentLogsStep
+} from '../../../../blocks/detail/deployment-logs/deployment-logs.vue'
+import {
+  sampleFailedSteps,
+  sampleSucceededSteps
+} from '../../../../blocks/detail/deployment-logs/sample'
 import DeploymentDetail from '../../../../blocks/detail/deployment-logs/variants/deployment-detail.vue'
 import DeploymentError from '../../../../blocks/detail/deployment-logs/variants/deployment-error.vue'
 import DeploymentQueued from '../../../../blocks/detail/deployment-logs/variants/deployment-queued.vue'
@@ -72,6 +78,44 @@ describe('detail/deployment-logs', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Redeploy' }))
     expect(view.queryByLabelText('Log view')).toBeNull()
     expect(view.container.textContent).toContain('Redeploying')
+  })
+
+  it('renders the steps it is given instead of the sample and reports the open step', async () => {
+    const steps: DeploymentLogsStep[] = [
+      {
+        id: 'fetch',
+        title: 'Fetch source',
+        description: 'Source pulled from acme/store',
+        status: 'success',
+        duration: '2s',
+        lines: [{ id: '0', time: '09:00:01', type: 'success', message: 'Source pulled' }]
+      },
+      {
+        id: 'compile',
+        title: 'Compile',
+        description: 'Compiling the storefront',
+        status: 'running',
+        duration: '5s',
+        lines: [{ id: '0', time: '09:00:03', type: 'text', message: 'Compiling 12 modules' }]
+      }
+    ]
+    const view = render(DeploymentLogs, { props: { steps } })
+    const root = view.container as HTMLElement
+    expect(within(root).getByRole('status').textContent).toMatch(/1\/2 steps\s*Compile/)
+    expect(root.textContent).not.toContain('Access token')
+    await fireEvent.click(within(root).getByText('Fetch source'))
+    expect(view.emitted('update:openStep')?.at(-1)).toEqual(['fetch'])
+  })
+
+  it('reads the outcome of a settled run from the step statuses', () => {
+    const failed = render(DeploymentLogs, { props: { steps: sampleFailedSteps, duration: '9s' } })
+    expect(failed.container.textContent).toContain('Failed on Routing Rules')
+    expect(failed.container.textContent).toContain('Failed after 9s')
+    expect(failed.container.textContent).not.toMatch(/\d\/8 steps/)
+    failed.unmount()
+    const done = render(DeploymentLogs, { props: { steps: sampleSucceededSteps, duration: '9s' } })
+    expect(done.container.textContent).toContain('Completed')
+    expect(done.container.textContent).toContain('Deployed in 9s')
   })
 
   it('DeploymentQueued shows a not-started state with no view switch', () => {

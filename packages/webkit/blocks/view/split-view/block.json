@@ -41,6 +41,7 @@
     "name": "Default",
     "file": "split-view.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Filtered",

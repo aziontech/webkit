@@ -24,9 +24,9 @@ The user started a deployment and wants to know where it is, whether it went liv
 
 `LogViewer.Steps` (`@aziontech/webkit/log-viewer`, or `@aziontech/webkit/log-viewer-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogViewer` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogViewer`.
 
-### B. Toolbar row — `LogViewer.Steps` header slot (required)
+### B. Toolbar row — `LogViewer.Steps` header slot, `Tag` (required)
 
-The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome Tag and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogViewer`, nothing from steps that never ran.
+The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome `Tag` (Completed, or Failed on the failed step's title) and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogViewer`, nothing from steps that never ran.
 
 ## Create-flow card (InCreateFlow, InCreateFlowError)
 
@@ -35,6 +35,36 @@ The `header` slot starts the toolbar row with a level-2 "Deployment logs" headin
 ## Deployment page (DeploymentDetail, DeploymentError, DeploymentQueued)
 
 A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger with Redeploy; info while queued), the Deployment details card with every fact and its Deployment Settings band, then the Deployment logs card. The logs card header carries the duration or the status and the Phased or Complete switch; the steps drop their own toolbar row and progress. Visit stays disabled until the deployment is live. A queued run shows a not-started `EmptyState` in place of the steps, with no switch.
+
+## Data
+
+The block takes the run through props; it fetches nothing and has no actions of its own. `DeploymentLogsStep` and `DeploymentLogsProps` are exported from `deployment-logs.vue`, and `sample.ts` holds the sample runs (running, succeeded, failed) the block renders when `steps` is left out. Running or settled, the outcome, the counts, the open step and the step tags all follow from the step statuses.
+
+| Prop / model        | Type                   | What it does                                                                                                                                       |
+| ------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `steps`             | `DeploymentLogsStep[]` | The steps in run order, each with its status and lines. A `running` or `pending` step keeps the run in flight; an `error` step is where it failed. |
+| `duration`          | `string`               | How long the settled run took, shown as Deployed in or Failed after. Empty shows no time.                                                          |
+| `v-model:view`      | `DeploymentLogsView`   | `phased` (one log per step) or `complete` (every line as one log). Starts at `phased`.                                                             |
+| `v-model:open-step` | `string`               | Key of the open step. Unbound, the running step opens, else the failed one, else the last.                                                         |
+
+To go live, pass the steps the deployment API streams and refresh them as lines arrive:
+
+```vue
+<script setup lang="ts">
+  import DeploymentLogs from './deployment-logs.vue'
+
+  const { data } = useDeploymentRun(deploymentId)
+</script>
+
+<template>
+  <DeploymentLogs
+    :steps="data?.steps ?? []"
+    :duration="data?.duration ?? ''"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -75,11 +105,11 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 
 ## States
 
-- Running: the run is in flight; the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
-- Success: every step checked, the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
-- Error: the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
-- ContinuousLog: a finished run in the Complete view, every line as one `LogViewer` with its copy button.
-- ContinuousLogError: the failed run in the Complete view, the lines up to the error and nothing from the skipped steps.
+- Running: the run is in flight (a step is `running` or `pending`); the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
+- Success: every step checked (every `steps` status is `success`, `duration` set), the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
+- Error: a step has status `error`; the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
+- ContinuousLog: a finished run in the Complete view (`view` is `complete`), every line as one `LogViewer` with its copy button.
+- ContinuousLogError: the failed run in the Complete view (`view` is `complete`), the lines up to the error and nothing from the skipped steps.
 - InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
 - InCreateFlowError: the create-flow card after a failure, the switch in the header, the failed step open and Edit and Redeploy in the footer.
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.

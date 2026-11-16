@@ -36,9 +36,9 @@ A medium search `Input` across events, hosts, paths and addresses, then outlined
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, each an option `Item` (`clickable`, `variant="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
-### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState` (required)
+### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState`, `Alert` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window. When `error` is set, a danger `Alert` with the message and Retry takes the place of the summary, the chart and the table; the fields panel stays.
 
 ### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -73,6 +73,69 @@ Above the controls row, one tab per open investigation; each keeps its own filte
 Variant EventDocument only; it adds `CopyButton` to the page.
 
 The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` chip with the other filters. Copy copies the fields shown as JSON; the full JSON document stays below.
+
+## Data
+
+The block takes its events through props and emits every action; it fetches nothing. `SplitViewEvent`, `SplitViewField`, `SplitViewBucket`, `SplitViewProps` and the other types are exported from `split-view.vue`, and `sample.ts` holds the sample events, fields and clock the block renders when `events` is left out (and never while `loading` or `error` is set). The filters (the period included), the search and the page are models the page can own, so it can run them on the server.
+
+| Prop / model              | Type                       | What it does                                                                                                                                                                                                                                                                                  |
+| ------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `events`                  | `SplitViewEvent[]`         | The events: `id`, `at`, `source`, `level`, `message` and one key per field. Pass `[]` for a workspace with no traffic.                                                                                                                                                                        |
+| `fields`                  | `SplitViewField[]`         | The fields, in order; the columns, the fields panel and the document follow them. Core fields stay shown, and the first columns are `host`, `status` and `remoteAddress` when the fields have them, else the first three others; `time` and `sourceLabel` are derived from `at` and `source`. |
+| `categories`              | `SplitViewFieldCategory[]` | The groups of the fields panel, in order. Left out with `fields` given, one group per `category` the fields name.                                                                                                                                                                             |
+| `buckets`                 | `SplitViewBucket[]`        | The volume chart bars, per level. Left out, the block counts them from the events in the period.                                                                                                                                                                                              |
+| `summary`                 | `SplitViewSummary`         | Events, Errors and Avg request time. Left out, counted from the events that match.                                                                                                                                                                                                            |
+| `total`                   | `number`                   | Server mode: every match on the server. `events` is then the page the server filtered, the block does not filter, search or slice it, and the pages follow `pagination`.                                                                                                                      |
+| `now`                     | `Date`                     | Where relative periods end (Last hour ends now). Left out, the sample clock; a live page passes the time of its request.                                                                                                                                                                      |
+| `moreRows`, `loadingMore` | `boolean`                  | More events exist after the last one, and the next ones are loading; the table offers to load more and emits `load-more`.                                                                                                                                                                     |
+| `loading`                 | `boolean`                  | A request is in flight: `Skeleton`s hold the summary and the chart, the table shows its loading rows and Refresh spins.                                                                                                                                                                       |
+| `error`                   | `string`                   | Why the events failed to load, shown in the danger `Alert` with Retry that replaces the log.                                                                                                                                                                                                  |
+| `v-model:filters`         | `SplitViewFilters`         | Applied values per field id, as `FilterMenu` writes them. `period` holds the range: `15m`, `1h`, `6h`, `24h` or `{ start, end }` (the chart brush writes one). Starts at `24h`.                                                                                                               |
+| `v-model:search`          | `string`                   | The search text.                                                                                                                                                                                                                                                                              |
+| `v-model:pagination`      | `SplitViewPagination`      | `{ pageIndex, pageSize }` of the table, back to the first page when the filters or the search change.                                                                                                                                                                                         |
+
+| Event       | Payload           | When                                                        |
+| ----------- | ----------------- | ----------------------------------------------------------- |
+| `refresh`   | `(event)`         | Refresh in the controls row.                                |
+| `retry`     | `(event)`         | Retry in the error alert.                                   |
+| `select`    | `(event, record)` | An event was opened, from its detail button or a row click. |
+| `load-more` | `(event)`         | The end of the loaded events neared, with `moreRows` set.   |
+
+To go live, render the block from a page that owns the query and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+  import SplitView, { type SplitViewFilters } from './split-view.vue'
+
+  const filters = ref<SplitViewFilters>({ period: ['24h'] })
+  const search = ref('')
+  const pagination = ref({ pageIndex: 0, pageSize: 25 })
+  const { data, pending, error, refresh } = useEvents({ filters, search, pagination })
+  const loadError = "Couldn't load events. Check your connection and retry."
+</script>
+
+<template>
+  <SplitView
+    v-model:filters="filters"
+    v-model:search="search"
+    v-model:pagination="pagination"
+    :events="data?.events ?? []"
+    :fields="data?.fields"
+    :buckets="data?.buckets"
+    :summary="data?.summary"
+    :total="data?.total"
+    :now="data?.requestedAt"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import, and give `fields` its own list. A log that streams instead of paging passes `moreRows` and appends the next events on `load-more`.
 
 ## Do
 
@@ -126,11 +189,11 @@ The document lists every field of the event. Search in this event narrows the li
 
 ## States
 
-- Default: live traffic with the summary, the chart and the log filled, and no filters applied; while Refresh runs the summary values and the chart show `Skeleton`s and the table its loading rows.
-- Loading: the first load; `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
-- Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a `FilterMenu.ChipGroup` chip.
-- Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
-- Error: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry, which reruns the request like Refresh.
+- Default: live traffic with the summary, the chart and the log filled, and no filters applied; while the page refreshes (`loading` with `events`) the summary values and the chart show `Skeleton`s and the table its loading rows.
+- Loading: the first load (`loading` with no `events`); `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
+- Filtered: errors from the Security and Access Control sources (`v-model:filters` seeded with them); the Filter button counts three fields and each shows as a `FilterMenu.ChipGroup` chip.
+- Empty: a workspace with no traffic yet (`events` is `[]`); the summary reads zero, the chart is flat and the log shows No events yet.
+- Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
 - Sessions: three investigation tabs, API errors active.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.
