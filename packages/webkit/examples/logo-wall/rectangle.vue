@@ -1,11 +1,11 @@
 <script setup>
+  import exameLogo from '@aziontech/webkit/assets/exame-extended-color.svg'
   import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import marisaLogo from '@aziontech/webkit/assets/marisa-extended-color.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import rennerLogo from '@aziontech/webkit/assets/renner-extended-color.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
@@ -33,7 +33,7 @@
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: nznLogo, alt: 'NZN', href: 'https://www.azion.com/en/success-case/nzn/' },
+        { src: exameLogo, alt: 'Exame', href: 'https://www.azion.com/en/success-case/exame/' },
         {
           src: itauLogo,
           alt: 'Itaú',

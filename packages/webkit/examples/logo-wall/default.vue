@@ -4,8 +4,8 @@
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
+  import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import Quote from '@aziontech/webkit/quote'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
@@ -29,7 +29,7 @@
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: nznLogo, alt: 'NZN', href: 'https://www.azion.com/en/success-case/nzn/' },
+        { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' },
         {
           src: itauLogo,
           alt: 'Itaú',
