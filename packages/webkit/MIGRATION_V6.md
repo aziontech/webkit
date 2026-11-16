@@ -807,8 +807,9 @@ and `.ts` sources (`default`).
 
 Keep `vue-tsc` off 3.3.14: that release types every template expression after a static attribute
 containing `//` on a component (`href="https://…"`) as a ref ("Property 'value' does not exist").
-`webkit init` pins `vue-tsc` to 3.3.13 when your range admits 3.3.14, and `webkit doctor` warns
-when 3.3.14 is installed.
+`webkit init` leaves your `vue-tsc` version as it is and prints the pin
+(`npm i -D vue-tsc@3.3.13`) when your range admits 3.3.14, and `webkit doctor` warns when 3.3.14
+is installed.
 
 ### `vee-validate` is no longer a dependency; `@aziontech/webkit/vite` is removed
 
