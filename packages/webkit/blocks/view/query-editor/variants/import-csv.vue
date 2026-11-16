@@ -273,10 +273,7 @@
         )
     )
   })
-  const rowSelection = ref<Record<string, boolean>>({})
-  const selectedKeys = computed(() =>
-    Object.keys(rowSelection.value).filter((key) => rowSelection.value[key])
-  )
+  const selectedKeys = ref<string[]>([])
   const deleting = ref(false)
   let deleteTimer = 0
   const deleteSelected = () => {
@@ -289,7 +286,7 @@
     deleteTimer = setTimeout(() => {
       deleting.value = false
       table.rows = table.rows.filter((row) => !keys.has(row.__k))
-      rowSelection.value = {}
+      selectedKeys.value = []
       toast.success(
         `${keys.size} ${keys.size === 1 ? 'row' : 'rows'} deleted from ${table.name}.`,
         {
@@ -321,7 +318,7 @@
     { id: '__actions', type: 'action', hideable: false }
   ])
   watch(selectedTableId, () => {
-    rowSelection.value = {}
+    selectedKeys.value = []
   })
   const SKIP = '__skip'
   const CSV_ON_START = {
@@ -547,7 +544,7 @@
   readCsv(CSV_ON_START.file, CSV_ON_START.text)
   const editorMarkers = computed<CodeEditorMarker[]>(() =>
     results.value?.type === 'error' && results.value.line
-      ? [{ line: results.value.line, severity: 'error', message: results.value.text }]
+      ? [{ line: results.value.line, severity: 'danger', message: results.value.text }]
       : []
   )
   const isNull = (value: unknown) => value === null || value === undefined || value === ''
@@ -1070,7 +1067,7 @@ LIMIT 3;`
 
             <div class="min-h-0 flex-1 overflow-auto">
               <DataTable
-                v-model:row-selection="rowSelection"
+                v-model:selected-keys="selectedKeys"
                 :data="filteredRows"
                 :columns="dataColumns"
                 row-key="__k"

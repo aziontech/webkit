@@ -3,11 +3,12 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import type { Severity } from '../../../utils/severity'
   import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import { MESSAGE_DISMISS_MS } from './presets/transitions'
 
-  export type AlertSeverity = 'info' | 'success' | 'warning' | 'danger'
+  export type AlertSeverity = Exclude<Severity, 'neutral'>
   export type AlertSize = 'small' | 'medium'
 
   defineOptions({

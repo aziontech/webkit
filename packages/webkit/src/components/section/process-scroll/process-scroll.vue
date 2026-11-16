@@ -5,8 +5,8 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type {
-    SectionTitleDescriptionWidth,
-    SectionTitleVariant
+    SectionTitleAlign,
+    SectionTitleDescriptionWidth
   } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Texture from '../../marketing/texture/texture.vue'
@@ -27,7 +27,7 @@
     /** Eyebrow above the title. */
     eyebrow?: string
     /** Alignment of the section title over the card row. */
-    titleVariant?: SectionTitleVariant
+    titleAlign?: SectionTitleAlign
     /** Headline of the band, rendered as its `h2`; the band renders nothing when empty. */
     title?: string
     /** Paragraph beside the headline. */
@@ -47,7 +47,7 @@
   const props = withDefaults(defineProps<ProcessScrollProps>(), {
     anchor: '',
     eyebrow: '',
-    titleVariant: 'split',
+    titleAlign: 'split',
     title: '',
     description: '',
     descriptionWidth: 'narrow',
@@ -104,7 +104,7 @@
       >
         <template #header>
           <SectionTitle
-            :variant="titleVariant"
+            :align="titleAlign"
             :eyebrow="eyebrow"
             :title="title"
             :description="description"

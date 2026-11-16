@@ -41,7 +41,7 @@ export default {
   }${
     variant && variant !== 'center'
       ? figma.code`
-  variant="${variant}"`
+  align="${variant}"`
       : ''
   }
 >${

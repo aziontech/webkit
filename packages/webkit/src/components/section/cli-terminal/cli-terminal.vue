@@ -119,7 +119,7 @@
           class="contents [--section-title-headline-span:2] [--section-title-headline-max:var(--container-xl)]"
         >
           <SectionTitle
-            variant="split"
+            align="split"
             padding="small"
             :eyebrow="eyebrow"
             :title="title"

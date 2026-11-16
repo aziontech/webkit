@@ -131,7 +131,7 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
     target: 'capability-grid',
     props: (p) => ({
       ...p,
-      titleVariant: 'split',
+      titleAlign: 'split',
       items: records(p['items']).filter((item) => Boolean(item['title']))
     })
   },
@@ -141,14 +141,14 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
       ...without(p, 'items', 'headerOffset'),
       steps: records(p['items']),
       pinned: true,
-      titleVariant: 'center',
+      titleAlign: 'center',
       ...(p['headerOffset'] ? { headerOffset: p['headerOffset'] } : {})
     })
   },
   'sticky-scroll-code': { target: 'feature-scroll' },
   'use-case-links': {
     target: 'capability-grid',
-    props: (p) => ({ ...p, titleVariant: 'start' })
+    props: (p) => ({ ...p, titleAlign: 'start' })
   },
   'client-mosaic-columns': { target: 'client-story-columns' },
   'closing-call-to-action-newsletter': { target: 'newsletter-section' },

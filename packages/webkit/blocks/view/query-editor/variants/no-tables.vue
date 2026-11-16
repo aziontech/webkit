@@ -137,7 +137,7 @@
         )
     )
   })
-  const rowSelection = ref<Record<string, boolean>>({})
+  const selectedKeys = ref<string[]>([])
   const dataColumns = computed<TableColumn[]>(() => [
     ...(selectedTable.value?.columns ?? []).map((column) => ({
       id: column.name,
@@ -149,11 +149,11 @@
     { id: '__actions', type: 'action', hideable: false }
   ])
   watch(selectedTableId, () => {
-    rowSelection.value = {}
+    selectedKeys.value = []
   })
   const editorMarkers = computed<CodeEditorMarker[]>(() =>
     results.value?.type === 'error' && results.value.line
-      ? [{ line: results.value.line, severity: 'error', message: results.value.text }]
+      ? [{ line: results.value.line, severity: 'danger', message: results.value.text }]
       : []
   )
   const isNull = (value: unknown) => value === null || value === undefined || value === ''
@@ -673,7 +673,7 @@ LIMIT 3;`
 
             <div class="min-h-0 flex-1 overflow-auto">
               <DataTable
-                v-model:row-selection="rowSelection"
+                v-model:selected-keys="selectedKeys"
                 :data="filteredRows"
                 :columns="dataColumns"
                 row-key="__k"

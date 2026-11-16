@@ -21,7 +21,7 @@ import {
   type NavigationMenuPopoverSize,
   useNavigationMenuViewportSize
 } from './use-navigation-menu-viewport-size'
-import { type TransitionStatus, useTransitionStatus } from './use-transition-status'
+import { type TransitionPhase, useTransitionStatus } from './use-transition-status'
 
 export type NavigationMenuItemValue = string | number
 export type NavigationMenuActivationDirection = 'left' | 'right' | 'up' | 'down' | null
@@ -53,7 +53,7 @@ export interface UseNavigationMenuRootReturn {
   popupEl: Readonly<Ref<HTMLElement | null>>
   currentContentEl: Readonly<Ref<HTMLElement | null>>
   popupMounted: Readonly<Ref<boolean>>
-  popupTransitionStatus: Readonly<Ref<TransitionStatus>>
+  popupTransitionStatus: Readonly<Ref<TransitionPhase>>
   popupSize: Readonly<Ref<NavigationMenuPopoverSize | null>>
   instant: Readonly<Ref<boolean>>
   setViewportTargetEl: (element: HTMLElement | null) => void

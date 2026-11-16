@@ -28,7 +28,7 @@
         >
           <template #header>
             <SectionTitle
-              variant="split"
+              align="split"
               eyebrow="Platform"
               title="Build, secure and deliver from one platform"
               description="Run your applications, protect them and cache their responses on the same distributed network."

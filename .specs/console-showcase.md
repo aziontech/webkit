@@ -3,11 +3,11 @@ name: console-showcase
 category: section
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
-checksum: 550ca0e5ec984255fafbb880883ef78107d01c49b64bb00e691f82b0a0067ec9
+checksum: f8f1279b52367db3d295c633e0235b712a50108755efd49efa5c3910ab7c0b33
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # ConsoleShowcase — Component Spec
@@ -66,7 +66,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 | Prop              | Type                     | Default      | Required | JSDoc                                                                                                                          |
 | ----------------- | ------------------------ | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `variant`         | `'console' \| 'diagram'` | `'console'`  | false    | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
-| `titleVariant`    | `SectionTitleVariant`    | `'center'`   | false    | Layout of the headline block.                                                                                                  |
+| `titleAlign`      | `SectionTitleAlign`      | `'center'`   | false    | Layout of the headline block.                                                                                                  |
 | `titlePadding`    | `SectionTitlePadding`    | `'medium'`   | false    | Vertical padding of the headline block.                                                                                        |
 | `size`            | `SectionTitleSize`       | `'medium'`   | false    | Step of the headline on the heading scale.                                                                                     |
 | `anchor`          | `string`                 | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                       |

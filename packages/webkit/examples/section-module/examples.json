@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Variants",
+      "name": "Alignments",
       "summary": "The three header layouts, stacked — they differ only in where the copy sits.",
-      "file": "variants.vue"
+      "file": "alignments.vue"
     },
     {
       "name": "Divided",

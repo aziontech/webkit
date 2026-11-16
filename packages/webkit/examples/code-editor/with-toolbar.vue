@@ -27,7 +27,7 @@
   })
   const markers = computed(() =>
     active.value === 'arguments' && !value.value.includes('"greeting"')
-      ? [{ line: 1, severity: 'error', message: 'Add the greeting argument.' }]
+      ? [{ line: 1, severity: 'danger', message: 'Add the greeting argument.' }]
       : []
   )
 </script>

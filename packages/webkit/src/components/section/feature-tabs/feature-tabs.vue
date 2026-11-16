@@ -114,7 +114,7 @@
         #header
       >
         <SectionTitle
-          variant="split"
+          align="split"
           :eyebrow="eyebrow"
           :title="title"
           :description="description"

@@ -82,7 +82,7 @@
         #header
       >
         <SectionTitle
-          variant="split"
+          align="split"
           :title="title"
           :description="description"
           :description-width="descriptionWidth"

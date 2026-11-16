@@ -7,14 +7,14 @@
   defineOptions({ name: 'SeverityTag', inheritAttrs: false })
 
   /** The findings scale (critical to info), ordered from most to least severe; distinct from the shared status `Severity` scale. */
-  export type SeverityTagLevel = 'critical' | 'high' | 'medium' | 'low' | 'info'
+  export type SeverityTagSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 
   /** Size token. */
   export type SeverityTagSize = 'small' | 'medium'
 
   export interface SeverityTagProps {
     /** Severity level; sets how many glyph bars fill, their colour and the default label. */
-    severity?: SeverityTagLevel
+    severity?: SeverityTagSeverity
     /** Text of the tag. Empty uses the locale catalog (`Critical`, `High`, `Medium`, `Low`, `Info`). */
     label?: string
     /** Size token; `medium` is 24px tall, `small` is 20px. */

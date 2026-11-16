@@ -2,10 +2,10 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { nextTick, ref } from 'vue'
 
+import Kinds from '../../../../examples/section-title/alignments.vue'
 import Default from '../../../../examples/section-title/default.vue'
 import DescriptionWidths from '../../../../examples/section-title/description-widths.vue'
 import Sizes from '../../../../examples/section-title/sizes.vue'
-import Kinds from '../../../../examples/section-title/variants.vue'
 import WithActions from '../../../../examples/section-title/with-actions.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
@@ -30,19 +30,16 @@ describe('SectionTitle', () => {
     expect(root).toHaveAttribute('data-borders', 'bottom')
   })
 
-  it.each(['center', 'start', 'split'] as const)(
-    'reflects variant="%s" on data-variant',
-    (variant) => {
-      const { getByTestId } = render(SectionTitle, { props: { ...props, variant: variant } })
+  it.each(['center', 'start', 'split'] as const)('reflects align="%s" on data-align', (align) => {
+    const { getByTestId } = render(SectionTitle, { props: { ...props, align } })
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-variant', variant)
-    }
-  )
+    expect(getByTestId(TESTID)).toHaveAttribute('data-align', align)
+  })
 
-  it('defaults to the centered variant', () => {
+  it('defaults to the centered alignment', () => {
     const { getByTestId } = render(SectionTitle, { props })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'center')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'center')
   })
 
   it.each(['small', 'medium', 'large'] as const)('reflects size="%s" on data-size', (size) => {
@@ -73,7 +70,7 @@ describe('SectionTitle', () => {
     'reflects descriptionWidth="%s" on data-description-width',
     (descriptionWidth) => {
       const { getByTestId } = render(SectionTitle, {
-        props: { ...props, variant: 'split', descriptionWidth }
+        props: { ...props, align: 'split', descriptionWidth }
       })
 
       expect(getByTestId(TESTID)).toHaveAttribute('data-description-width', descriptionWidth)
@@ -96,10 +93,10 @@ describe('SectionTitle', () => {
   )
 
   it.each(['center', 'start', 'split'] as const)(
-    'keeps the headline before its description in DOM order when variant="%s"',
-    (variant) => {
+    'keeps the headline before its description in DOM order when align="%s"',
+    (align) => {
       const { container } = render(SectionTitle, {
-        props: { ...props, variant: variant, eyebrow: 'Platform', description: 'One platform.' }
+        props: { ...props, align, eyebrow: 'Platform', description: 'One platform.' }
       })
 
       const heading = container.querySelector('h2')
@@ -168,7 +165,7 @@ describe('SectionTitle', () => {
       attrs: { 'data-testid': 'my-section-title' }
     })
 
-    expect(getByTestId('my-section-title')).toHaveAttribute('data-variant', 'center')
+    expect(getByTestId('my-section-title')).toHaveAttribute('data-align', 'center')
   })
 
   it('has no a11y violations with the full copy block', async () => {
@@ -182,14 +179,14 @@ describe('SectionTitle', () => {
     it('renders the Default story fixture', () => {
       const { getByTestId, getByRole } = render(Default)
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'center')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'center')
       expect(getByRole('heading', { level: 2 })).toHaveTextContent('Everything runs at the edge')
     })
 
     it('renders the Kinds story with one header per layout', () => {
       const { getAllByTestId } = render(Kinds)
 
-      expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-variant'))).toEqual([
+      expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-align'))).toEqual([
         'center',
         'start',
         'split'
@@ -219,7 +216,7 @@ describe('SectionTitle', () => {
       const { getAllByTestId } = render(DescriptionWidths)
       const roots = getAllByTestId(TESTID)
 
-      expect(roots.map((el) => el.getAttribute('data-variant'))).toEqual(['split', 'split'])
+      expect(roots.map((el) => el.getAttribute('data-align'))).toEqual(['split', 'split'])
       expect(roots.map((el) => el.getAttribute('data-description-width'))).toEqual([
         'narrow',
         'wide'

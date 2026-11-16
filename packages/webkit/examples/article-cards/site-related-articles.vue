@@ -40,7 +40,7 @@
     <SectionGap hatch />
 
     <ArticleCards
-      variant="start"
+      align="start"
       title="Related Articles"
       :items="items"
       aria-label="Related Articles"

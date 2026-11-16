@@ -68,16 +68,16 @@ describe('ArticleCards', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['start', 'center'] as const)('mirrors variant=%s on data-variant', (variant) => {
-    const { getByTestId } = band({ variant })
+  it.each(['start', 'center'] as const)('mirrors align=%s on data-align', (align) => {
+    const { getByTestId } = band({ align })
 
-    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
+    expect(getByTestId(TESTID).getAttribute('data-align')).toBe(align)
   })
 
-  it('defaults to the left variant', () => {
+  it('defaults to the start alignment', () => {
     const { getByTestId } = band()
 
-    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('start')
+    expect(getByTestId(TESTID).getAttribute('data-align')).toBe('start')
   })
 
   it('names the section by its title and renders it as the h2', () => {
@@ -88,7 +88,7 @@ describe('ArticleCards', () => {
   })
 
   it('renders the eyebrow over the heading', () => {
-    const { getByText } = band({ variant: 'center', eyebrow: EYEBROW })
+    const { getByText } = band({ align: 'center', eyebrow: EYEBROW })
 
     expect(getByText(EYEBROW)).toBeInTheDocument()
   })
@@ -172,14 +172,14 @@ describe('ArticleCards', () => {
     expect(internal.textContent).not.toContain('opens in a new tab')
   })
 
-  it('has no a11y violations with the left variant', async () => {
+  it('has no a11y violations with the start alignment', async () => {
     const { container } = band()
 
     await expectNoA11yViolations(container)
   })
 
-  it('has no a11y violations with the centered variant and client marks', async () => {
-    const { container } = band({ variant: 'center', eyebrow: EYEBROW, items: stories })
+  it('has no a11y violations with the centered alignment and client marks', async () => {
+    const { container } = band({ align: 'center', eyebrow: EYEBROW, items: stories })
 
     await expectNoA11yViolations(container)
   })

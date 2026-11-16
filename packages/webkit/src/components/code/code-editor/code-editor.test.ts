@@ -201,14 +201,14 @@ describe('CodeEditor', () => {
         modelValue: 'a\nbb\nccc',
         ariaLabel: 'Code',
         markers: [
-          { line: 3, column: 2, severity: 'error', message: 'Broken' },
+          { line: 3, column: 2, severity: 'danger', message: 'Broken' },
           { line: 2, severity: 'warning', message: 'Careful' }
         ]
       }
     })
     const lines = view.getByTestId('code-editor__gutter').querySelectorAll('li')
     expect(lines[1]?.getAttribute('data-severity')).toBe('warning')
-    expect(lines[2]?.getAttribute('data-severity')).toBe('error')
+    expect(lines[2]?.getAttribute('data-severity')).toBe('danger')
     expect(view.getByRole('status').textContent?.trim()).toBe('2 problems')
     const problems = view.getAllByTestId('code-editor__problem')
     expect(problems.map((p) => p.textContent?.replace(/\s+/g, ' ').trim())).toEqual([
@@ -364,7 +364,7 @@ describe('CodeEditor', () => {
     const fake = fakeMonaco()
     const onReady = vi.fn()
     const value = ref('let a = 1')
-    const markers = ref([{ line: 1, severity: 'error' as const, message: 'Nope' }])
+    const markers = ref([{ line: 1, severity: 'danger' as const, message: 'Nope' }])
     const view = render(
       defineComponent({
         setup: () => () =>
@@ -479,7 +479,7 @@ describe('CodeEditor', () => {
         'webkit'
       )
     ).toEqual([
-      { line: 2, column: 3, endLine: 2, endColumn: 9, severity: 'error', message: 'm2' },
+      { line: 2, column: 3, endLine: 2, endColumn: 9, severity: 'danger', message: 'm2' },
       { line: 3, column: 3, endLine: 3, endColumn: 9, severity: 'warning', message: 'm3' },
       { line: 4, column: 3, endLine: 4, endColumn: 9, severity: 'info', message: 'm4' }
     ])
@@ -593,7 +593,7 @@ describe('CodeEditor', () => {
           return () =>
             h(CodeEditor, {
               modelValue: 'a',
-              markers: [{ line: 1, severity: 'error', message: 'x' }]
+              markers: [{ line: 1, severity: 'danger', message: 'x' }]
             })
         }
       })

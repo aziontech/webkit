@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Variants",
+      "name": "Alignments",
       "summary": "The three layouts stacked. `center` and `start` share one column and differ only in alignment; `split` puts the headline and its description in a three-column grid, which is what makes a wide band read as one row instead of a tall stack.",
-      "file": "variants.vue"
+      "file": "alignments.vue"
     },
     {
       "name": "Sizes",

@@ -159,7 +159,7 @@
         #header
       >
         <SectionTitle
-          variant="start"
+          align="start"
           :eyebrow="eyebrow"
           :title="title"
         />

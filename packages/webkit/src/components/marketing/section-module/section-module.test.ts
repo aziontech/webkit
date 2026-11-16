@@ -13,7 +13,7 @@ describe('SectionModule', () => {
 
     expect(root).toBeInTheDocument()
     expect(root.tagName).toBe('SECTION')
-    expect(root).toHaveAttribute('data-variant', 'start')
+    expect(root).toHaveAttribute('data-align', 'start')
     expect(root).toHaveAttribute('data-divided')
     expect(root).toHaveAttribute('data-padded')
   })

@@ -324,7 +324,7 @@
       >
         <SectionTitle
           v-if="hasHeader"
-          variant="start"
+          align="start"
           :framed="false"
           :title="title"
           class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-2xl)"

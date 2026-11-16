@@ -13,7 +13,7 @@
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle, {
     type SectionTitleAction,
-    type SectionTitleVariant
+    type SectionTitleAlign
   } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
@@ -67,7 +67,7 @@
     /** Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
     secondaryAction?: SectionTitleAction
     /** Alignment of the section title over the grid: `center`, `start` or `split`. */
-    titleVariant?: SectionTitleVariant
+    titleAlign?: SectionTitleAlign
     /** Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. */
     columns?: FeatureWidgetsColumns
     /** Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. */
@@ -83,7 +83,7 @@
     description: '',
     primaryAction: undefined,
     secondaryAction: undefined,
-    titleVariant: 'center',
+    titleAlign: 'center',
     columns: 2,
     copiedLabel: '',
     items: () => []
@@ -143,7 +143,7 @@
         #header
       >
         <SectionTitle
-          :variant="titleVariant"
+          :align="titleAlign"
           :eyebrow="eyebrow"
           :title="title"
           :description="description"

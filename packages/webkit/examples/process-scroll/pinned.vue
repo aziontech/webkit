@@ -19,7 +19,7 @@
 <template>
   <ProcessScroll
     pinned
-    title-variant="center"
+    title-align="center"
     title="Hiring process"
     description="Every role goes through the same five stages, from the first request to the offer."
     :steps="steps"

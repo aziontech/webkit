@@ -8,7 +8,7 @@
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import SeverityTag, { type SeverityTagLevel } from '@aziontech/webkit/severity-tag'
+  import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
@@ -30,7 +30,7 @@
   }
 
   interface LevelCount {
-    id: SeverityTagLevel
+    id: SeverityTagSeverity
     count: number
   }
 
@@ -39,13 +39,13 @@
     name: string
     type: string
     score: number
-    level: SeverityTagLevel
+    level: SeverityTagSeverity
     alerts: number
   }
 
   interface AlertRow {
     id: string
-    level: SeverityTagLevel
+    level: SeverityTagSeverity
     rank: number
     title: string
     entity: string

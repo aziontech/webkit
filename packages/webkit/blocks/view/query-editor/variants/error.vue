@@ -292,7 +292,7 @@
 
   const editorMarkers = computed<CodeEditorMarker[]>(() =>
     results.value?.type === 'error' && results.value.line
-      ? [{ line: results.value.line, severity: 'error', message: results.value.text }]
+      ? [{ line: results.value.line, severity: 'danger', message: results.value.text }]
       : []
   )
   const applyTemplate = (sql: string) => {

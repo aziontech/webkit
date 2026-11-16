@@ -59,9 +59,9 @@ export type {
   ChartLabelScale,
   ChartPoint,
   ChartRange,
+  ChartSemanticSeverity,
   ChartSeries,
   ChartSeverity,
-  ChartStatus,
   ChartThreshold,
   ChartThresholdSeverity
 } from '../lib'

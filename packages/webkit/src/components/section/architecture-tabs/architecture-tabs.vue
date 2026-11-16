@@ -97,7 +97,7 @@
         #header
       >
         <SectionTitle
-          variant="split"
+          align="split"
           padding="small"
           :eyebrow="eyebrow"
           :title="title"

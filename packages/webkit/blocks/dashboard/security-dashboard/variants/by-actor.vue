@@ -14,7 +14,7 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SeverityTag, { type SeverityTagLevel } from '@aziontech/webkit/severity-tag'
+  import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -29,7 +29,7 @@
     actor: string
     outcome: Outcome
     category: string
-    severity: SeverityTagLevel
+    severity: SeverityTagSeverity
     destination: string
     method: string
     rule: string

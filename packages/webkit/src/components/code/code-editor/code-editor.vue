@@ -15,6 +15,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { diffLines } from '../../../utils/line-diff'
+  import type { Severity } from '../../../utils/severity'
   import {
     applyThemeOnce,
     CODE_EDITOR_THEME,
@@ -49,7 +50,7 @@
   } from './monaco'
 
   /** Severity of a diagnostic. */
-  export type CodeEditorMarkerSeverity = 'error' | 'warning' | 'info'
+  export type CodeEditorMarkerSeverity = Extract<Severity, 'info' | 'warning' | 'danger'>
 
   /** One diagnostic, with 1-based lines and columns. */
   export interface CodeEditorMarker {
@@ -181,7 +182,7 @@
   const isReadonly = computed(() => props.readonly || isDisabled.value)
 
   const markerByLine = computed(() => {
-    const rank = { error: 3, warning: 2, info: 1 }
+    const rank = { danger: 3, warning: 2, info: 1 }
     const map = new Map<number, CodeEditorMarkerSeverity>()
     for (const marker of props.markers) {
       const current = map.get(marker.line)
@@ -195,7 +196,7 @@
   )
 
   const severityLabel = (severity: CodeEditorMarkerSeverity) =>
-    severity === 'error'
+    severity === 'danger'
       ? t('codeEditor.error')
       : severity === 'warning'
         ? t('codeEditor.warning')
@@ -412,7 +413,7 @@
 
   const severityOf = (severity: CodeEditorMarkerSeverity) => {
     if (!api) return 0
-    if (severity === 'error') return api.MarkerSeverity.Error
+    if (severity === 'danger') return api.MarkerSeverity.Error
     if (severity === 'warning') return api.MarkerSeverity.Warning
     return api.MarkerSeverity.Info
   }
@@ -699,7 +700,7 @@
                     (diff && changesBySide[pane.main ? 'modified' : 'original'].get(index + 1)) ||
                     null
                   "
-                  class="relative min-w-[2ch] tabular-nums data-[change=added]:bg-(--success) data-[change=added]:text-(--success-foreground) data-[change=removed]:bg-(--danger) data-[change=removed]:text-(--danger-foreground) data-[severity]:font-medium data-[severity=error]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) forced-colors:data-[severity]:text-[Highlight]"
+                  class="relative min-w-[2ch] tabular-nums data-[change=added]:bg-(--success) data-[change=added]:text-(--success-foreground) data-[change=removed]:bg-(--danger) data-[change=removed]:text-(--danger-foreground) data-[severity]:font-medium data-[severity=danger]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) forced-colors:data-[severity]:text-[Highlight]"
                 >
                   {{ lineLabel(index + 1) }}
                 </li>
@@ -779,13 +780,13 @@
             <i
               :data-severity="marker.severity"
               :class="
-                marker.severity === 'error'
+                marker.severity === 'danger'
                   ? 'ai ai-circle-x'
                   : marker.severity === 'warning'
                     ? 'ai ai-triangle-alert'
                     : 'ai ai-circle-info'
               "
-              class="shrink-0 text-body-xs data-[severity=error]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground)"
+              class="shrink-0 text-body-xs data-[severity=danger]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground)"
               aria-hidden="true"
             />
             <span class="sr-only">{{ `${severityLabel(marker.severity)}: ` }}</span>

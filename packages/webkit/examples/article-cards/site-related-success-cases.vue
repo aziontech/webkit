@@ -51,7 +51,7 @@
     <SectionGap hatch />
 
     <ArticleCards
-      variant="start"
+      align="start"
       title="Related Success Cases"
       :items="items"
       aria-label="Related Success Cases"

@@ -3,11 +3,11 @@ name: section-module
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: da8f4cdd6b5b81b7a8065f74bceaef82068f8be3941c27c23d0142ea262d201f
+spec_version: 5
+checksum: fe9f5cf3f8c25bf900e330abdd65a9e2bea6c27213bb045a3e9ec59d1d6dc77d
 style_seam: true
 created: 2026-09-23
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Section Module — Component Spec
@@ -68,7 +68,7 @@ The brick of the page column: a section whose header row is divided from its bod
 | `title`       | `string`               | `''`      | false    | Headline of the module's header row, rendered as its `h2`.                            |
 | `description` | `string`               | `''`      | false    | Supporting sentence under the headline.                                               |
 | `eyebrow`     | `string`               | `''`      | false    | Short uppercase overline rendered above the headline.                                 |
-| `variant`     | `SectionModuleVariant` | `'start'` | false    | Layout of the default header row.                                                     |
+| `align`       | `SectionModuleAlign`   | `'start'` | false    | Layout of the default header row.                                                     |
 | `divided`     | `boolean`              | `true`    | false    | Draw the top rule that divides this module from the one above it.                     |
 | `padded`      | `boolean`              | `true`    | false    | Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. |
 
@@ -87,7 +87,7 @@ The brick of the page column: a section whose header row is divided from its bod
 ## States
 
 - Visual states: `default`
-- `data-variant` carries the header layout
+- `data-align` carries the header layout
 - `data-divided` present when the top rule is drawn
 - `data-padded` present when the body is padded
 
@@ -120,7 +120,7 @@ _none_
 ## Examples
 
 - Default
-- Variants — composite story rendering the header layouts side-by-side (justified: the layouts differ only in where the copy sits, which is legible only in comparison)
+- Alignments — composite story rendering the header layouts side-by-side (justified: the layouts differ only in where the copy sits, which is legible only in comparison)
 - Divided — a stack of two modules with the first undivided (justified: a shared edge is invisible on a single module, and the story is what proves the rule is drawn once)
 - Padded — the module with an edge-to-edge body (mutually-exclusive boolean state of the `padded` prop)
 

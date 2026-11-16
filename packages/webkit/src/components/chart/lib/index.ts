@@ -34,10 +34,10 @@ export type {
   ChartPoint,
   ChartPosition,
   ChartRange,
+  ChartSemanticSeverity,
   ChartSeries,
   ChartSeverity,
   ChartSlot,
-  ChartStatus,
   ChartThreshold,
   ChartThresholdSeverity,
   NormalizedSeries

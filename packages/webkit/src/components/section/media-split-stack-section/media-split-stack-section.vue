@@ -122,7 +122,7 @@
     <template v-if="hasBands">
       <SectionTitle
         v-if="hasHeader"
-        variant="center"
+        align="center"
         size="large"
         :eyebrow="eyebrow"
         :title="title"

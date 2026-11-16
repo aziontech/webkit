@@ -9,7 +9,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <ArticleCards
-      variant="start"
+      align="start"
       title="Related Articles"
       aria-label="Related Articles"
       :items="[
@@ -42,7 +42,7 @@
       ]"
     />
     <ArticleCards
-      variant="center"
+      align="center"
       eyebrow="Success cases"
       title="When our customers succeed, we succeed"
       aria-label="When our customers succeed, we succeed"

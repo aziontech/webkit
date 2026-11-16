@@ -122,7 +122,7 @@
         #header
       >
         <SectionTitle
-          variant="start"
+          align="start"
           :title="title"
         />
       </template>
