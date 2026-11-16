@@ -530,12 +530,13 @@
     expanded.value && active.value >= 0 ? `${uid}-option-${active.value}` : undefined
   )
 
-  const { panelStyle } = usePlacement({
+  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: fieldEl,
     panelRef: panelEl,
     isOpen: expanded,
-    placement: 'bottom-start',
-    offset: 4,
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 4,
     matchTriggerWidth: true
   })
 
@@ -755,6 +756,8 @@
           :aria-label="t('propertyFilter.suggestions')"
           :aria-busy="valueRows === 'loading' || undefined"
           :data-testid="`${testId}__suggestions`"
+          :data-side="resolvedSide"
+          :data-align="resolvedAlign"
           :style="panelStyle"
           class="fixed z-(--z-control-overlay) flex max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
         >
