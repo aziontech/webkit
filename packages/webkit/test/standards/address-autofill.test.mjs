@@ -15,8 +15,7 @@ const TOKENS = {
 
 const FORMS = [
   'change-plan-drawer/change-plan-drawer.vue',
-  'change-plan-drawer/variants/checkout.vue',
-  'onboarding-form/variants/plan.vue'
+  'onboarding-form/onboarding-form.vue'
 ]
 
 const fieldTokens = (source) => {
