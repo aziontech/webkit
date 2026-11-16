@@ -89,8 +89,8 @@ describe('Chart', () => {
     expect(bars[0]?.getAttribute('fill')).toBe('var(--chart-series-3)')
   })
 
-  it('folds every series past the sixth into Other', async () => {
-    const many: ChartSeries[] = Array.from({ length: 8 }, (_, index) => ({
+  it('folds every series past the eighth into Other', async () => {
+    const many: ChartSeries[] = Array.from({ length: 10 }, (_, index) => ({
       id: `host-${index}`,
       name: `Host ${index + 1}`,
       values: [index + 1, index + 2, index + 3, index + 4]
@@ -107,11 +107,13 @@ describe('Chart', () => {
       'var(--chart-series-4)',
       'var(--chart-series-5)',
       'var(--chart-series-6)',
+      'var(--chart-series-7)',
+      'var(--chart-series-8)',
       'var(--chart-series-other)'
     ])
     const items = view.getAllByTestId('chart-legend__item')
-    expect(items).toHaveLength(7)
-    expect(items[6]?.textContent).toContain('Other')
+    expect(items).toHaveLength(9)
+    expect(items[8]?.textContent).toContain('Other')
   })
 
   it('honours a status color for a series whose color means a state', async () => {

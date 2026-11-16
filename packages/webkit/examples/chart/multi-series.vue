@@ -55,6 +55,16 @@
       id: 'auth.example.com',
       name: 'auth.example.com',
       values: [20, 22, 21, 24, 25, 23, 26, 28, 27, 29, 30, 31]
+    },
+    {
+      id: 'media.example.com',
+      name: 'media.example.com',
+      values: [14, 15, 16, 15, 17, 18, 17, 19, 20, 19, 21, 22]
+    },
+    {
+      id: 'mail.example.com',
+      name: 'mail.example.com',
+      values: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14]
     }
   ]
 </script>

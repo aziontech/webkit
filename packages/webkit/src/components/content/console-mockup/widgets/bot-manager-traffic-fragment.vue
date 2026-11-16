@@ -108,7 +108,7 @@
                       :stroke-dashoffset="arc.offset"
                       :data-slice="arc.key"
                       :data-dimmed="dimmed(arc.key) || null"
-                      class="text-(--border-default) transition-opacity duration-moderate-02 ease-productive-entrance data-dimmed:opacity-30 data-[slice=bad-bot]:text-(--primary) data-[slice=good-bot]:text-(--text-default) data-[slice=legitimate]:text-(--text-muted) motion-reduce:transition-none"
+                      class="text-(--border-default) transition-opacity duration-moderate-02 ease-productive-entrance data-dimmed:opacity-30 data-[slice=bad-bot]:text-(--chart-series-1) data-[slice=good-bot]:text-(--text-default) data-[slice=legitimate]:text-(--text-muted) motion-reduce:transition-none"
                     />
                   </svg>
                   <span class="grid place-items-center text-center">
@@ -139,7 +139,7 @@
                   >
                     <span
                       :data-slice="slice.key"
-                      class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--border-default) data-[slice=bad-bot]:bg-(--primary) data-[slice=good-bot]:bg-(--text-default) data-[slice=legitimate]:bg-(--text-muted)"
+                      class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--border-default) data-[slice=bad-bot]:bg-(--chart-series-1) data-[slice=good-bot]:bg-(--text-default) data-[slice=legitimate]:bg-(--text-muted)"
                     />
                     <span class="min-w-0 flex-1 truncate text-body-sm text-(--text-default)">
                       {{ slice.label }}

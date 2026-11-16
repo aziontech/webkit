@@ -19,7 +19,7 @@
     },
     {
       "name": "MultiSeries",
-      "summary": "Eight hosts. The first six take the six series slots in order and the last two fold into Other, so no hue is ever generated or reused. Toggle a host in the legend: the others keep their colors.",
+      "summary": "Ten hosts. The first eight take the eight series slots in order and the last two fold into Other, so no hue is ever generated or reused. Toggle a host in the legend: the others keep their colors.",
       "file": "multi-series.vue"
     },
     {

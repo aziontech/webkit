@@ -124,7 +124,7 @@ brandPrimitives.primary[500] // '#F3652B'
 brandPrimitives.absolute.white // '#FFFFFF'
 ```
 
-Available palettes: `base`, `blue`, `gray`, `slate`, `orange`, `violet`, `yellow`, `green`, `red` — plus the `brand` and `alpha` groups.
+Available palettes: `base`, `blue`, `gray`, `indigo`, `slate`, `orange`, `violet`, `yellow`, `green`, `red` — plus the `brand` and `alpha` groups, and `chart`: the light and dark tone of each series hue that no palette step holds. `chart` resolves only through the `--chart-series-*` roles and ships no `--color-chart-*` variable.
 
 ### Motion primitives
 

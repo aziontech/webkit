@@ -3,10 +3,10 @@ name: spark-chart
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-10
-last_updated: 2026-11-15
-checksum: d972dcea4b3be4e4097398108c64f09ec5fd80f559f72000e0a2ec269910ec01
+last_updated: 2026-11-16
+checksum: 8156e87658adafa6b1fea309397dcc67f5479345eb486a1b8c78852bdc743c04
 ---
 
 # SparkChart — Component Spec
@@ -58,7 +58,7 @@ A word-sized chart: one series drawn as an area, a line or bars, with no axes, g
 | ----------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------- |
 | `values`    | `(number \| null)[]`             | `[]`       | false    | The series, oldest first; null leaves a gap.                                           |
 | `type`      | `'area' \| 'line' \| 'bar'`      | `'area'`   | false    | Mark drawn for the series.                                                             |
-| `color`     | `ChartColor`                     | `1`        | false    | Hue of the mark: a categorical slot (1–6), `other`, or a status.                       |
+| `color`     | `ChartColor`                     | `1`        | false    | Hue of the mark: a categorical slot (1–8), `other`, or a status.                       |
 | `size`      | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Height: 32, 48 or 64 pixels. Width follows the container.                              |
 | `fromZero`  | `boolean`                        | `false`    | false    | Starts the value range at zero instead of the lowest value; bars always start at zero. |
 | `ariaLabel` | `string`                         | `''`       | false    | Accessible name; when set the chart is an image, when empty it is decorative.          |
@@ -90,7 +90,7 @@ _No slots._
 
 | Region | Token (DESIGN.md)                                                                                                                                                                                                         |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| mark   | the `color` role (`var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`) |
+| mark   | the `color` role (`var(--chart-series-1)` … `var(--chart-series-8)`, `var(--chart-series-other)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`) |
 
 ## Theme gaps
 

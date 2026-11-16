@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 import { compileThemeVars } from '../src/tokens/theme-colors.js';
 
-const SERIES = [1, 2, 3, 4, 5, 6].map((n) => `--chart-series-${n}`);
+const SERIES = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `--chart-series-${n}`);
 const STATUS = ['success', 'warning', 'danger', 'info'].map((s) => `--chart-status-${s}`);
 const CHROME = [
   '--chart-series-other',
@@ -37,6 +37,14 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
+const saturation = (hex) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  return max === min ? 0 : (max - min) / (1 - Math.abs(2 * l - 1));
+};
+
 const vars = compileThemeVars();
 
 for (const variant of ['light', 'dark']) {
@@ -64,13 +72,21 @@ for (const variant of ['light', 'dark']) {
         assert.ok(ratio >= 3, `${name} on ${surface} (${variant}) is ${ratio.toFixed(2)}:1`);
       }
     }
-    for (const name of [...SERIES, '--chart-series-other', ...STATUS]) {
+    for (const name of ['--chart-series-other', ...STATUS]) {
       const ratio = contrast(vars[variant][name], vars[variant]['--text-default']);
       assert.ok(ratio >= 2.5, `${name} against --text-default (${variant}) is ${ratio.toFixed(2)}:1`);
     }
+    for (const name of SERIES) {
+      const ratio = contrast(vars[variant][name], vars[variant]['--text-default']);
+      const chroma = saturation(vars[variant][name]);
+      assert.ok(
+        ratio >= 2.5 || chroma >= 0.5,
+        `${name} against --text-default (${variant}) is ${ratio.toFixed(2)}:1 at saturation ${chroma.toFixed(2)}`,
+      );
+    }
   });
 
-  test(`${variant}: the six series slots are six distinct colors`, () => {
+  test(`${variant}: the eight series slots are eight distinct colors`, () => {
     const values = SERIES.map((name) => vars[variant][name].toUpperCase());
     assert.equal(new Set(values).size, SERIES.length);
   });

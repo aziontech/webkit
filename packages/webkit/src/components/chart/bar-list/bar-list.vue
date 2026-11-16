@@ -30,7 +30,7 @@
     items?: BarListItem[]
     /** Row order; none keeps the order of items. */
     sort?: BarListSort
-    /** Hue of the bars: a categorical slot (1 to 6), other, or a status. The fill is that hue tinted over the surface. */
+    /** Hue of the bars: a categorical slot (1 to 8), other, or a status. The fill is that hue tinted over the surface. */
     color?: ChartColor
     /** Renders rows without an href as buttons that emit item-click. */
     clickable?: boolean

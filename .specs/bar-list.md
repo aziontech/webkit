@@ -3,10 +3,10 @@ name: bar-list
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-10
-last_updated: 2026-11-15
-checksum: f30507f5a6a77ecc0a56b427f4402e261a757d8e8c0d415206893c39899ff021
+last_updated: 2026-11-16
+checksum: a294c4025d0cce406c39a970147a449d6dc73e99cd7bfc3c17d345f0c055e5f5
 ---
 
 # BarList — Component Spec
@@ -69,7 +69,7 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
 | ------------------ | --------------------------------------- | --------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `items`            | `BarListItem[]`                         | `[]`            | false    | Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link.                                                                                       |
 | `sort`             | `'descending' \| 'ascending' \| 'none'` | `'descending'`  | false    | Row order; `none` keeps the order of `items`.                                                                                                                                                                          |
-| `color`            | `ChartColor`                            | `1`             | false    | Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface.                                                                                                         |
+| `color`            | `ChartColor`                            | `1`             | false    | Hue of the bars: a categorical slot (1–8), `other`, or a status. The fill is that hue tinted over the surface.                                                                                                         |
 | `clickable`        | `boolean`                               | `false`         | false    | Renders rows without an `href` as buttons that emit `item-click`.                                                                                                                                                      |
 | `formatValue`      | `(value: number) => string`             | `formatCompact` | false    | Formats the value column.                                                                                                                                                                                              |
 | `loading`          | `boolean`                               | `false`         | false    | Renders Skeleton rows in place of the list.                                                                                                                                                                            |
@@ -114,7 +114,7 @@ The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `
 
 | Region    | Token (DESIGN.md)                                                                                                                                  |
 | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| bar fill  | the `color` role (`var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)`, `var(--chart-status-*)`) tinted over the surface |
+| bar fill  | the `color` role (`var(--chart-series-1)` … `var(--chart-series-8)`, `var(--chart-series-other)`, `var(--chart-status-*)`) tinted over the surface |
 | name      | `.text-label-md`, `var(--text-default)`                                                                                                            |
 | value     | `.text-label-md`, `tabular-nums`, `var(--text-default)`                                                                                            |
 | row hover | `var(--bg-hover)`                                                                                                                                  |

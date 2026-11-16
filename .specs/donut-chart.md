@@ -3,10 +3,10 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: implemented
-checksum: 673001db4b6412a810110f1754913c94dcdfb985d28c9281323a152a927bde3a
-spec_version: 3
+checksum: eaf56e38d6c8a308ac5de955c10129bc5b58f6cb80cde8bcb035b04bbf8cb7ce
+spec_version: 4
 created: 2026-10-20
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # DonutChart — Component Spec
@@ -124,7 +124,7 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
 
 | Region                       | Token (DESIGN.md)                                                                                                      |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| slices                       | `var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)`                                         |
+| slices                       | `var(--chart-series-1)` … `var(--chart-series-8)`, `var(--chart-series-other)`                                         |
 | status slices                | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)` |
 | slice gap                    | `var(--bg-surface)`                                                                                                    |
 | center value                 | `.text-big-number-sm`, `tabular-nums`                                                                                  |
