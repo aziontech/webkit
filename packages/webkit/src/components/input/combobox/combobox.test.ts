@@ -297,6 +297,11 @@ describe('Combobox', () => {
     await fireEvent.focus(input)
     await fireEvent.keyDown(input, { key: 'ArrowDown' })
     expect(input.getAttribute('aria-activedescendant')).toBe(optionEls()[0]?.id)
+    const listbox = document.getElementById(
+      input.getAttribute('aria-controls') ?? ''
+    ) as HTMLElement
+    expect(listbox.getAttribute('data-side')).toBe('bottom')
+    expect(listbox.getAttribute('data-align')).toBe('start')
     view.unmount()
   })
 
