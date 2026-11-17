@@ -232,8 +232,32 @@
       "default": "./src/components/ai/conversation-history/conversation-history.vue"
     },
     "./prompt-input": {
+      "types": "./types/components/ai/prompt-input/index.d.ts",
+      "default": "./src/components/ai/prompt-input/index.ts"
+    },
+    "./prompt-input-root": {
       "types": "./types/components/ai/prompt-input/prompt-input.vue.d.ts",
       "default": "./src/components/ai/prompt-input/prompt-input.vue"
+    },
+    "./prompt-input-attach-button": {
+      "types": "./types/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue.d.ts",
+      "default": "./src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue"
+    },
+    "./prompt-input-dictate-button": {
+      "types": "./types/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue.d.ts",
+      "default": "./src/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue"
+    },
+    "./prompt-input-model-picker": {
+      "types": "./types/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue.d.ts",
+      "default": "./src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue"
+    },
+    "./prompt-input-context-picker": {
+      "types": "./types/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue.d.ts",
+      "default": "./src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue"
+    },
+    "./prompt-input-tools": {
+      "types": "./types/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue.d.ts",
+      "default": "./src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue"
     },
     "./reasoning": {
       "types": "./types/components/ai/reasoning/reasoning.vue.d.ts",
@@ -2626,7 +2650,25 @@
         "./types/components/ai/conversation-history/conversation-history.vue.d.ts"
       ],
       "prompt-input": [
+        "./types/components/ai/prompt-input/index.d.ts"
+      ],
+      "prompt-input-root": [
         "./types/components/ai/prompt-input/prompt-input.vue.d.ts"
+      ],
+      "prompt-input-attach-button": [
+        "./types/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue.d.ts"
+      ],
+      "prompt-input-dictate-button": [
+        "./types/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue.d.ts"
+      ],
+      "prompt-input-model-picker": [
+        "./types/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue.d.ts"
+      ],
+      "prompt-input-context-picker": [
+        "./types/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue.d.ts"
+      ],
+      "prompt-input-tools": [
+        "./types/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue.d.ts"
       ],
       "reasoning": [
         "./types/components/ai/reasoning/reasoning.vue.d.ts"

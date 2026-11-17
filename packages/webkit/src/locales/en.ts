@@ -1199,7 +1199,34 @@ export const promptInput = {
     other: '{count} suggestions'
   },
   noMatch: 'No matches',
-  menuReferences: 'References'
+  menuReferences: 'References',
+  voice: 'Start voice conversation',
+  attach: 'Attach files',
+  drop: 'Drop files to attach',
+  rejectedAccept: {
+    one: '{count} file not added: not an accepted type',
+    other: '{count} files not added: not an accepted type'
+  },
+  rejectedSize: {
+    one: '{count} file not added: larger than {size}',
+    other: '{count} files not added: larger than {size}'
+  },
+  rejectedCount: {
+    one: '{count} file not added: up to {max} files',
+    other: '{count} files not added: up to {max} files'
+  },
+  dictate: 'Dictate',
+  dictateStop: 'Stop dictation',
+  listening: 'Listening',
+  dictationEnded: 'Dictation stopped',
+  dictationBlocked: 'Microphone access is blocked',
+  dictationFailed: 'Dictation stopped. Try again',
+  model: 'Model',
+  mode: 'Mode',
+  context: 'Choose context',
+  contextRemove: 'Remove context',
+  tools: 'Tools',
+  toolsEnabled: 'Enabled tools'
 } as const
 
 export const reasoning = {

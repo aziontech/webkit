@@ -206,6 +206,7 @@ export const DOMAIN_PARTS = {
   item: ['actions', 'media'],
   'log-viewer': ['steps'],
   pagination: ['button', 'size'],
+  'prompt-input': ['button', 'picker', 'tools'],
   resizable: ['handle', 'pane'],
   'sidebar-menu': ['back', 'sub'],
   stepper: ['step'],

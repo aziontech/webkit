@@ -1,13 +1,15 @@
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/vue'
+import { render, screen } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent as keys } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import DefaultExample from '../../../../examples/prompt-input/default.vue'
 import ShortcutMenus from '../../../../examples/prompt-input/shortcut-menus.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import PromptInputCompound from './index'
 import PromptInput from './prompt-input.vue'
 
 function harness(props: Record<string, unknown> = {}, slots: Record<string, () => unknown> = {}) {
@@ -275,6 +277,376 @@ describe('PromptInput', () => {
         )
       ).toBe(false)
       expect(queryByTestId('probe')).toBeNull()
+    })
+  })
+
+  describe('composition', () => {
+    const P = PromptInputCompound
+    type Scope = Record<string, ReturnType<typeof ref<unknown>>>
+    type Slots = Record<string, () => unknown>
+
+    const sample = (name: string, type = 'text/plain', size = 10) =>
+      new File(['x'.repeat(size)], name, { type })
+
+    function composer(
+      state: Record<string, unknown>,
+      build: (
+        scope: Scope,
+        record: (name: string, ...args: unknown[]) => void
+      ) => {
+        props?: Record<string, unknown>
+        slots?: Slots
+      }
+    ) {
+      const events: { name: string; args: unknown[] }[] = []
+      const record = (name: string, ...args: unknown[]) => events.push({ name, args })
+      const scope = Object.fromEntries(
+        Object.entries(state).map(([key, value]) => [key, ref<unknown>(value)])
+      ) as Scope
+      const Host = defineComponent({
+        setup: () => () => {
+          const { props = {}, slots = {} } = build(scope, record)
+          return h(P, props, slots)
+        }
+      })
+      return { ...render(Host), events, scope }
+    }
+
+    const bind = (scope: Scope, key: string, model = 'modelValue') => ({
+      [model]: scope[key]!.value,
+      [`onUpdate:${model}`]: (next: unknown) => (scope[key]!.value = next)
+    })
+    const names = (value: unknown) => (value as { file: File }[]).map((item) => item.file.name)
+
+    function drop(target: Element, files: File[], type: 'dragenter' | 'drop' = 'drop') {
+      const transfer = new DataTransfer()
+      for (const file of files) transfer.items.add(file)
+      target.dispatchEvent(
+        new DragEvent(type, { bubbles: true, cancelable: true, dataTransfer: transfer })
+      )
+    }
+
+    it('attaches every part to the compound root', () => {
+      expect(PromptInputCompound).toBe(PromptInput)
+      for (const part of ['AttachButton', 'DictateButton', 'ModelPicker', 'ContextPicker', 'Tools'])
+        expect(PromptInputCompound).toHaveProperty(part)
+    })
+
+    it('throws when a part is rendered outside a PromptInput', () => {
+      expect(() => render(P.AttachButton)).toThrow(/within a PromptInput/)
+    })
+
+    it('picks files with the attach button and submits them with the text', async () => {
+      const { getByRole, getByTestId, findByTestId, events, scope } = composer(
+        { files: [] },
+        (scope, record) => ({
+          props: {
+            ...bind(scope, 'files', 'files'),
+            onSubmit: (event: Event, payload: unknown) => record('submit', event, payload)
+          },
+          slots: { actions: () => h(P.AttachButton) }
+        })
+      )
+      expect(getByRole('button', { name: 'Attach files' })).toBeTruthy()
+      const input = getByTestId('prompt-input-attach-button__input') as HTMLInputElement
+      expect(input).toHaveAttribute('multiple')
+      const transfer = new DataTransfer()
+      transfer.items.add(sample('notes.txt'))
+      input.files = transfer.files
+      input.dispatchEvent(new Event('change', { bubbles: true }))
+      await nextTick()
+      expect(names(scope.files!.value)).toEqual(['notes.txt'])
+      expect(await findByTestId('prompt-input__files')).toBeTruthy()
+      await userEvent.click(getByRole('button', { name: 'Submit' }))
+      const submit = events.find((event) => event.name === 'submit')
+      expect(names((submit?.args[1] as { files: unknown }).files)).toEqual(['notes.txt'])
+    })
+
+    it('takes dropped and pasted files only with an attach button', async () => {
+      const without = composer({ files: [] }, (scope) => ({
+        props: bind(scope, 'files', 'files')
+      }))
+      drop(without.getByTestId('prompt-input__box'), [sample('a.txt')])
+      await nextTick()
+      expect(without.scope.files!.value).toEqual([])
+      without.unmount()
+
+      const { getByTestId, queryByTestId, getByRole, scope } = composer({ files: [] }, (scope) => ({
+        props: bind(scope, 'files', 'files'),
+        slots: { actions: () => h(P.AttachButton) }
+      }))
+      const box = getByTestId('prompt-input__box')
+      drop(box, [sample('a.txt')], 'dragenter')
+      await nextTick()
+      expect(box).toHaveAttribute('data-dragging')
+      expect(getByTestId('prompt-input__drop')).toHaveTextContent('Drop files to attach')
+      drop(box, [sample('a.txt')])
+      await nextTick()
+      expect(box).not.toHaveAttribute('data-dragging')
+      expect(queryByTestId('prompt-input__drop')).toBeNull()
+
+      const transfer = new DataTransfer()
+      transfer.items.add(sample('shot.png', 'image/png'))
+      getByRole('textbox').dispatchEvent(
+        new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: transfer })
+      )
+      await nextTick()
+      expect(names(scope.files!.value)).toEqual(['a.txt', 'shot.png'])
+    })
+
+    it('rejects files past accept, maxFileSize and maxFiles, and says why', async () => {
+      const { getByTestId, events, scope } = composer({ files: [] }, (scope, record) => ({
+        props: {
+          ...bind(scope, 'files', 'files'),
+          accept: '.txt',
+          maxFileSize: 100,
+          maxFiles: 2,
+          onReject: (event: Event, payload: unknown) => record('reject', event, payload)
+        },
+        slots: { actions: () => h(P.AttachButton) }
+      }))
+      drop(getByTestId('prompt-input__box'), [
+        sample('a.txt'),
+        sample('b.png', 'image/png'),
+        sample('big.txt', 'text/plain', 500),
+        sample('c.txt'),
+        sample('d.txt')
+      ])
+      await nextTick()
+      expect(names(scope.files!.value)).toEqual(['a.txt', 'c.txt'])
+      expect(events.every((event) => event.args[0] instanceof DragEvent)).toBe(true)
+      expect(
+        events.map((event) => {
+          const payload = event.args[1] as { reason: string; files: File[] }
+          return [payload.reason, payload.files.map((file) => file.name)]
+        })
+      ).toEqual([
+        ['accept', ['b.png']],
+        ['max-file-size', ['big.txt']],
+        ['max-files', ['d.txt']]
+      ])
+      const line = getByTestId('prompt-input__rejected')
+      expect(line).toHaveAttribute('aria-live', 'polite')
+      expect(line).toHaveTextContent('1 file not added: not an accepted type')
+      expect(line).toHaveTextContent('1 file not added: larger than 100')
+      expect(line).toHaveTextContent('1 file not added: up to 2 files')
+    })
+
+    it('blocks submit while a file is uploading or failed, and allows files without text', async () => {
+      const { getByRole, scope } = composer(
+        { files: [{ file: { name: 'a.txt' }, loading: true }] },
+        (scope) => ({ props: bind(scope, 'files', 'files') })
+      )
+      expect(getByRole('button', { name: 'Submit' })).toBeDisabled()
+      scope.files!.value = [{ file: { name: 'a.txt' }, error: 'Failed' }]
+      await nextTick()
+      expect(getByRole('button', { name: 'Submit' })).toBeDisabled()
+      scope.files!.value = [{ file: { name: 'a.txt' } }]
+      await nextTick()
+      expect(getByRole('button', { name: 'Submit' })).toBeEnabled()
+    })
+
+    it('shows the voice control while there is nothing to send, then Submit', async () => {
+      const { getByRole, queryByRole, events, scope } = composer({ text: '' }, (scope, record) => ({
+        props: {
+          ...bind(scope, 'text'),
+          voice: true,
+          'onVoice-start': (event: Event) => record('voice', event)
+        }
+      }))
+      await userEvent.click(getByRole('button', { name: 'Start voice conversation' }))
+      expect(events.map((event) => event.name)).toEqual(['voice'])
+      expect(events[0]!.args[0]).toBeInstanceOf(MouseEvent)
+      expect(queryByRole('button', { name: 'Submit' })).toBeNull()
+      scope.text!.value = 'Hello'
+      await nextTick()
+      expect(queryByRole('button', { name: 'Start voice conversation' })).toBeNull()
+      expect(getByRole('button', { name: 'Submit' })).toBeEnabled()
+    })
+
+    it('moves focus to the text area when the focused control swaps', async () => {
+      const { getByRole, scope } = composer({ text: 'Hello' }, (scope) => ({
+        props: { ...bind(scope, 'text'), voice: true, onSubmit: () => (scope.text!.value = '') }
+      }))
+      await userEvent.click(getByRole('button', { name: 'Submit' }))
+      await nextTick()
+      await nextTick()
+      expect(scope.text!.value).toBe('')
+      expect(getByRole('button', { name: 'Start voice conversation' })).toBeTruthy()
+      expect(document.activeElement).toBe(getByRole('textbox'))
+    })
+
+    it('renders the end and footer slots and disables them with the composer', () => {
+      const { getByTestId, getByRole } = composer({}, () => ({
+        props: { disabled: true },
+        slots: {
+          end: () => h('button', { type: 'button' }, 'End'),
+          footer: () => h('button', { type: 'button' }, 'Footer')
+        }
+      }))
+      expect(getByTestId('prompt-input__footer')).toHaveAttribute('disabled')
+      expect(getByRole('button', { name: 'Footer' })).toBeDisabled()
+      expect(getByRole('button', { name: 'End' })).toBeDisabled()
+    })
+
+    it('picks a model and a mode from the model picker', async () => {
+      const { findByTestId, scope } = composer({ model: 'sol', mode: 'low' }, (scope) => ({
+        slots: {
+          end: () =>
+            h(P.ModelPicker, {
+              ...bind(scope, 'model'),
+              ...bind(scope, 'mode', 'mode'),
+              modeLabel: 'Effort',
+              models: [
+                { value: 'sol', label: 'Sol 6.1', description: 'Everyday' },
+                { value: 'terra', label: 'Terra 6.1' }
+              ],
+              modes: [
+                { value: 'low', label: 'Low' },
+                { value: 'high', label: 'High' }
+              ]
+            })
+        }
+      }))
+      const trigger = await findByTestId('prompt-input-model-picker')
+      expect(trigger).toHaveTextContent('Sol 6.1')
+      expect(trigger).toHaveTextContent('Low')
+      expect(trigger).toHaveAttribute('aria-haspopup', 'menu')
+      await userEvent.click(trigger)
+      await userEvent.click(await screen.findByRole('menuitemradio', { name: /Terra 6\.1/ }))
+      await userEvent.click(screen.getByRole('menuitemradio', { name: 'High' }))
+      expect(scope.model!.value).toBe('terra')
+      expect(scope.mode!.value).toBe('high')
+      await keys.keyboard('{Escape}')
+    })
+
+    it('chooses and removes a context from the context picker', async () => {
+      const { findByTestId, scope } = composer({ project: '' }, (scope) => ({
+        slots: {
+          footer: () =>
+            h(P.ContextPicker, {
+              ...bind(scope, 'project'),
+              placeholder: 'Choose project',
+              options: [{ value: 'acme-store', label: 'acme-store' }]
+            })
+        }
+      }))
+      const trigger = await findByTestId('prompt-input-context-picker')
+      expect(trigger).toHaveTextContent('Choose project')
+      await userEvent.click(trigger)
+      await userEvent.click(await screen.findByRole('menuitem', { name: /acme-store/ }))
+      expect(scope.project!.value).toBe('acme-store')
+      await nextTick()
+      expect(trigger).toHaveTextContent('acme-store')
+      await userEvent.click(trigger)
+      await userEvent.click(await screen.findByRole('menuitem', { name: 'Remove context' }))
+      expect(scope.project!.value).toBe('')
+    })
+
+    it('turns tools on from the menu and off from their chips', async () => {
+      const { getByRole, findByRole, scope } = composer({ tools: [] }, (scope) => ({
+        slots: {
+          footer: () =>
+            h(P.Tools, {
+              ...bind(scope, 'tools'),
+              label: 'Plugins',
+              tools: [
+                { value: 'search', label: 'Web search' },
+                { value: 'research', label: 'Deep research' }
+              ]
+            })
+        }
+      }))
+      await userEvent.click(await findByRole('button', { name: 'Plugins' }))
+      await userEvent.click(await screen.findByRole('menuitemcheckbox', { name: /Deep research/ }))
+      await userEvent.click(screen.getByRole('menuitemcheckbox', { name: /Web search/ }))
+      expect(scope.tools!.value).toEqual(['search', 'research'])
+      await keys.keyboard('{Escape}')
+      expect(getByRole('list', { name: 'Enabled tools' })).toHaveTextContent('Web search')
+      await userEvent.click(getByRole('button', { name: /Remove Web search/ }))
+      expect(scope.tools!.value).toEqual(['research'])
+    })
+
+    it('toggles listening with an app transcriber and announces it', async () => {
+      const { getByRole, getByTestId, scope } = composer({ on: false }, (scope) => ({
+        slots: {
+          end: () => h(P.DictateButton, { ...bind(scope, 'on', 'listening'), transcriber: 'app' })
+        }
+      }))
+      await userEvent.click(getByRole('button', { name: 'Dictate' }))
+      expect(scope.on!.value).toBe(true)
+      expect(getByTestId('prompt-input-dictate-button__status')).toHaveTextContent('Listening')
+      await userEvent.click(getByRole('button', { name: 'Stop dictation' }))
+      expect(scope.on!.value).toBe(false)
+      expect(getByTestId('prompt-input-dictate-button__status')).toHaveTextContent(
+        'Dictation stopped'
+      )
+    })
+
+    it('writes the browser transcript into the prompt, and hides without speech recognition', async () => {
+      const scope = window as unknown as Record<string, unknown>
+      const saved = [scope.SpeechRecognition, scope.webkitSpeechRecognition]
+      scope.SpeechRecognition = undefined
+      scope.webkitSpeechRecognition = undefined
+      const hidden = composer({}, () => ({ slots: { end: () => h(P.DictateButton) } }))
+      await nextTick()
+      expect(hidden.queryByTestId('prompt-input-dictate-button')).toBeNull()
+      hidden.unmount()
+
+      const created: {
+        onresult: ((event: unknown) => void) | null
+        onend: (() => void) | null
+        lang: string
+      }[] = []
+      scope.SpeechRecognition = class {
+        lang = ''
+        continuous = false
+        interimResults = false
+        onresult: ((event: unknown) => void) | null = null
+        onerror = null
+        onend: (() => void) | null = null
+        constructor() {
+          created.push(this)
+        }
+        start() {}
+        stop() {
+          this.onend?.()
+        }
+        abort() {}
+      }
+      const {
+        getByRole,
+        getByTestId,
+        scope: state
+      } = composer({ text: 'Hello' }, (scope) => ({
+        props: bind(scope, 'text'),
+        slots: { end: () => h(P.DictateButton, { lang: 'en-US' }) }
+      }))
+      await nextTick()
+      await userEvent.click(getByRole('button', { name: 'Dictate' }))
+      expect(created[0]!.lang).toBe('en-US')
+      const result = (transcript: string, isFinal: boolean) =>
+        Object.assign([{ transcript }], { isFinal })
+      created[0]!.onresult!({ resultIndex: 0, results: [result('world', false)] })
+      await nextTick()
+      expect(state.text!.value).toBe('Hello world')
+      created[0]!.onresult!({ resultIndex: 0, results: [result('world again', true)] })
+      await userEvent.click(getByRole('button', { name: 'Stop dictation' }))
+      expect(state.text!.value).toBe('Hello world again')
+      expect(getByTestId('prompt-input-dictate-button__status')).toHaveTextContent(
+        'Dictation stopped'
+      )
+      scope.SpeechRecognition = saved[0]
+      scope.webkitSpeechRecognition = saved[1]
+    })
+
+    it('renders the full composer example with no axe violations', async () => {
+      const { container, getByRole, findByRole } = render(DefaultExample)
+      expect(getByRole('button', { name: 'Start voice conversation' })).toBeTruthy()
+      expect(getByRole('button', { name: 'Attach files' })).toBeTruthy()
+      expect(await findByRole('button', { name: /Choose project/ })).toBeTruthy()
+      expect(await findByRole('button', { name: /Sol 6\.1/ })).toBeTruthy()
+      await expectNoA11yViolations(container)
     })
   })
 })

@@ -61,7 +61,34 @@ export const es: Messages = {
       other: '{count} sugerencias'
     },
     noMatch: 'Sin resultados',
-    menuReferences: 'Referencias'
+    menuReferences: 'Referencias',
+    voice: 'Iniciar conversación por voz',
+    attach: 'Adjuntar archivos',
+    drop: 'Suelta los archivos para adjuntarlos',
+    rejectedAccept: {
+      one: '{count} archivo no añadido: tipo no aceptado',
+      other: '{count} archivos no añadidos: tipo no aceptado'
+    },
+    rejectedSize: {
+      one: '{count} archivo no añadido: mayor que {size}',
+      other: '{count} archivos no añadidos: mayores que {size}'
+    },
+    rejectedCount: {
+      one: '{count} archivo no añadido: hasta {max} archivos',
+      other: '{count} archivos no añadidos: hasta {max} archivos'
+    },
+    dictate: 'Dictar',
+    dictateStop: 'Detener el dictado',
+    listening: 'Escuchando',
+    dictationEnded: 'Dictado detenido',
+    dictationBlocked: 'El acceso al micrófono está bloqueado',
+    dictationFailed: 'El dictado se detuvo. Inténtalo de nuevo',
+    model: 'Modelo',
+    mode: 'Modo',
+    context: 'Elegir contexto',
+    contextRemove: 'Quitar contexto',
+    tools: 'Herramientas',
+    toolsEnabled: 'Herramientas activadas'
   },
   reasoning: {
     thinking: 'Pensando',

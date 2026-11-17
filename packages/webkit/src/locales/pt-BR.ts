@@ -61,7 +61,34 @@ export const ptBR: Messages = {
       other: '{count} sugestões'
     },
     noMatch: 'Nenhum resultado',
-    menuReferences: 'Referências'
+    menuReferences: 'Referências',
+    voice: 'Iniciar conversa por voz',
+    attach: 'Anexar arquivos',
+    drop: 'Solte os arquivos para anexar',
+    rejectedAccept: {
+      one: '{count} arquivo não adicionado: tipo não aceito',
+      other: '{count} arquivos não adicionados: tipo não aceito'
+    },
+    rejectedSize: {
+      one: '{count} arquivo não adicionado: maior que {size}',
+      other: '{count} arquivos não adicionados: maiores que {size}'
+    },
+    rejectedCount: {
+      one: '{count} arquivo não adicionado: até {max} arquivos',
+      other: '{count} arquivos não adicionados: até {max} arquivos'
+    },
+    dictate: 'Ditar',
+    dictateStop: 'Parar o ditado',
+    listening: 'Ouvindo',
+    dictationEnded: 'Ditado encerrado',
+    dictationBlocked: 'O acesso ao microfone está bloqueado',
+    dictationFailed: 'O ditado parou. Tente de novo',
+    model: 'Modelo',
+    mode: 'Modo',
+    context: 'Escolher contexto',
+    contextRemove: 'Remover contexto',
+    tools: 'Ferramentas',
+    toolsEnabled: 'Ferramentas ativadas'
   },
   reasoning: {
     thinking: 'Pensando',

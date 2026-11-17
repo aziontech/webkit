@@ -1196,8 +1196,44 @@
   },
   {
     "name": "prompt-input",
+    "path": "src/components/ai/prompt-input/index.ts",
+    "limit": "12.4 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "7.15 KB",
+    "limit": "9.25 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "prompt-input-attach-button",
+    "path": "src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue",
+    "limit": "5.6 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "prompt-input-dictate-button",
+    "path": "src/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue",
+    "limit": "5.55 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "prompt-input-model-picker",
+    "path": "src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
+    "limit": "14.05 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "prompt-input-context-picker",
+    "path": "src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue",
+    "limit": "13.95 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "prompt-input-tools",
+    "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
+    "limit": "16.25 KB",
     "entryOnly": true
   },
   {

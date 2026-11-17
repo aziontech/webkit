@@ -4,7 +4,9 @@
     defineAsyncComponent,
     nextTick,
     onMounted,
+    provide,
     ref,
+    shallowRef,
     useAttrs,
     useId,
     watch
@@ -13,6 +15,9 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
+  import type { FileTokenGroupItem } from '../../input/file-token-group/file-token-group.vue'
+  import type { PromptInputAttachHandlers } from './injection-key'
+  import { PromptInputInjectionKey } from './injection-key'
 
   export type PromptInputStatus = 'ready' | 'pending' | 'streaming'
 
@@ -35,6 +40,12 @@
     label: string
   }
 
+  /** An attached file with the upload state the owner sets on it. */
+  export type PromptInputFile = FileTokenGroupItem
+
+  /** Why picked, dropped or pasted files were not attached. */
+  export type PromptInputRejectReason = 'accept' | 'max-files' | 'max-file-size'
+
   defineOptions({
     name: 'PromptInput',
     inheritAttrs: false
@@ -53,10 +64,18 @@
     maxRows?: number
     /** Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. */
     status?: PromptInputStatus
-    /** Disables the text area, the submit control and every control in the slots' row. */
+    /** Disables the text area, the submit control and every control in the slots' rows. */
     disabled?: boolean
     /** Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. */
     menus?: PromptInputMenu[]
+    /** File filter in the native accept syntax (extensions, MIME types, wildcards) for picked, dropped and pasted files. Empty accepts every file. */
+    accept?: string
+    /** Most files attached at once; files past it are rejected. `0` means no limit. */
+    maxFiles?: number
+    /** Largest file in bytes; larger files are rejected. `0` means no limit. */
+    maxFileSize?: number
+    /** Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`. */
+    voice?: boolean
   }
 
   const props = withDefaults(defineProps<PromptInputProps>(), {
@@ -67,33 +86,50 @@
     maxRows: 6,
     status: 'ready',
     disabled: false,
-    menus: () => []
+    menus: () => [],
+    accept: '',
+    maxFiles: 0,
+    maxFileSize: 0,
+    voice: false
   })
 
   const model = defineModel<string>({ default: '' })
   const references = defineModel<PromptInputReference[]>('references', { default: () => [] })
+  const files = defineModel<PromptInputFile[]>('files', { default: () => [] })
 
   const emit = defineEmits<{
-    /** The reader submitted a prompt (Enter or the Submit control); the payload holds the trimmed text and the references it carries. */
+    /** The reader submitted a prompt (Enter or the Submit control); the payload holds the trimmed text, the references it carries and the attached files. */
     submit: [
       event: MouseEvent | KeyboardEvent,
-      payload: { value: string; references: PromptInputReference[] }
+      payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] }
     ]
     /** The reader asked to stop the response being generated. */
     stop: [event: MouseEvent]
+    /** The reader pressed Start voice conversation; the app opens and owns the audio session. */
+    'voice-start': [event: MouseEvent]
+    /** Picked, dropped or pasted files were not attached, once per reason. */
+    reject: [event: Event, payload: { files: File[]; reason: PromptInputRejectReason }]
   }>()
 
   const slots = defineSlots<{
-    /** Attached files or context chips, shown above the text. */
+    /** Attached context the app draws itself, above the text, before the file tokens and the references. */
     attachments?(): unknown
-    /** Secondary controls at the inline start of the toolbar: attach, mode select, shortcuts. */
+    /** Controls at the inline start of the toolbar, such as PromptInput.AttachButton. */
     actions?(): unknown
+    /** Controls at the inline end of the toolbar, before Submit: PromptInput.ModelPicker, PromptInput.DictateButton. */
+    end?(): unknown
+    /** The secondary row under the box: PromptInput.ContextPicker, PromptInput.Tools, links. */
+    footer?(): unknown
     /** Constraint text under the input: a disclaimer or the shortcuts it accepts. */
     hint?(): unknown
   }>()
 
   const PromptInputReferences = defineAsyncComponent(
     () => import('./parts/prompt-input-references.vue')
+  )
+
+  const FileTokenGroup = defineAsyncComponent(
+    () => import('../../input/file-token-group/file-token-group.vue')
   )
 
   const attrs = useAttrs()
@@ -114,9 +150,31 @@
     props.maxLength > 0 ? Math.max(0, length.value - props.maxLength) : 0
   )
   const busy = computed<boolean>(() => props.status !== 'ready')
-  const canSubmit = computed<boolean>(
-    () => !props.disabled && !busy.value && overBy.value === 0 && model.value.trim().length > 0
+  const filesPending = computed<boolean>(() =>
+    files.value.some((item) => item.loading || !!item.error)
   )
+  const hasContent = computed<boolean>(
+    () => model.value.trim().length > 0 || files.value.length > 0
+  )
+  const canSubmit = computed<boolean>(
+    () =>
+      !props.disabled &&
+      !busy.value &&
+      overBy.value === 0 &&
+      hasContent.value &&
+      !filesPending.value
+  )
+  const showVoice = computed<boolean>(() => props.voice && !busy.value && !hasContent.value)
+
+  const attach = shallowRef<PromptInputAttachHandlers | null>(null)
+  const dragging = ref<boolean>(false)
+  const rejection = ref<string>('')
+  const controlEl = ref<HTMLElement | null>(null)
+  const control = computed<string>(() => {
+    if (busy.value) return 'stop'
+    if (showVoice.value) return 'voice'
+    return canSubmit.value ? 'submit' : 'submit-off'
+  })
   const describedBy = () => {
     const ids = [props.maxLength > 0 ? counterId : '', slots.hint ? hintId : ''].filter(Boolean)
     return ids.join(' ') || undefined
@@ -229,12 +287,19 @@
   function submit(event: MouseEvent | KeyboardEvent): void {
     if (!canSubmit.value) return
     const text = model.value.trim()
+    rejection.value = ''
     emit('submit', event, {
       value: text,
       references: references.value.filter((reference) =>
         text.includes(`${reference.trigger}${reference.label}`)
-      )
+      ),
+      files: files.value
     })
+  }
+
+  function removeFile(index: number): void {
+    files.value = files.value.filter((_item, position) => position !== index)
+    rejection.value = ''
   }
 
   function onKeydown(event: KeyboardEvent): void {
@@ -266,10 +331,50 @@
     textareaEl.value?.focus()
   }
 
+  provide(PromptInputInjectionKey, {
+    disabled: computed(() => props.disabled),
+    accept: computed(() => props.accept),
+    maxFiles: computed(() => props.maxFiles),
+    getText: () => model.value,
+    setText: (value: string) => {
+      model.value = value
+    },
+    maxFileSize: computed(() => props.maxFileSize),
+    fileCount: computed(() => files.value.length),
+    appendFiles: (added: File[]) => {
+      files.value = [...files.value, ...added.map((file) => ({ file }))]
+    },
+    reject: (event: Event, refused: File[], reason: PromptInputRejectReason) =>
+      emit('reject', event, { files: refused, reason }),
+    setRejection: (message: string) => {
+      rejection.value = message
+    },
+    setDragging: (value: boolean) => {
+      dragging.value = value
+    },
+    registerAttach: (handlers: PromptInputAttachHandlers) => {
+      attach.value = handlers
+      return () => {
+        if (attach.value === handlers) attach.value = null
+        dragging.value = false
+      }
+    },
+    focus
+  })
+
   watch(
     () => [model.value, props.minRows, props.maxRows],
     () => void nextTick(resize)
   )
+  watch(control, () => {
+    if (typeof document === 'undefined') return
+    const held = !!controlEl.value?.contains(document.activeElement)
+    if (!held) return
+    void nextTick(() => {
+      const active = document.activeElement as HTMLButtonElement | null
+      if (!active || active === document.body || active.disabled) focus()
+    })
+  })
   onMounted(resize)
 
   defineExpose({ focus })
@@ -287,14 +392,37 @@
     <div
       :data-invalid="overBy > 0 || null"
       :data-disabled="disabled || null"
+      :data-dragging="(dragging && !disabled) || null"
+      :data-testid="`${testId}__box`"
       class="relative flex w-full flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) data-[invalid]:border-(--danger-border) data-[disabled]:bg-(--bg-disabled)"
+      @dragenter="attach?.drag"
+      @dragover="attach?.drag"
+      @dragleave="attach?.drag"
+      @drop="attach?.drag"
     >
       <div
-        v-if="slots.attachments || references.length"
+        v-if="dragging && !disabled"
+        aria-hidden="true"
+        :data-testid="`${testId}__drop`"
+        class="pointer-events-none absolute inset-0 z-2 flex items-center justify-center rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-surface) text-label-md text-(--text-default) before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-selected) before:content-['']"
+      >
+        <span class="relative">{{ t('promptInput.drop') }}</span>
+      </div>
+      <div
+        v-if="slots.attachments || references.length || files.length"
         :data-testid="`${testId}__attachments`"
         class="flex flex-wrap gap-(--spacing-xs) px-(--spacing-xs) pt-(--spacing-2xs)"
       >
         <slot name="attachments" />
+        <FileTokenGroup
+          v-if="files.length"
+          :items="files"
+          orientation="horizontal"
+          :readonly="disabled"
+          :data-testid="`${testId}__files`"
+          class="w-full"
+          @remove="(_event: MouseEvent, payload: { index: number }) => removeFile(payload.index)"
+        />
         <PromptInputReferences
           v-if="references.length"
           :references="references"
@@ -361,6 +489,7 @@
         @keydown="onKeydown"
         @click="readQuery"
         @blur="query = null"
+        @paste="attach?.paste"
         @compositionstart="composing = true"
         @compositionend="composing = false"
       />
@@ -371,7 +500,17 @@
         >
           <slot name="actions" />
         </fieldset>
-        <div class="flex shrink-0 items-center gap-(--spacing-sm)">
+        <div
+          ref="controlEl"
+          class="flex min-w-0 shrink-0 items-center gap-(--spacing-sm)"
+        >
+          <fieldset
+            v-if="slots.end"
+            :disabled="disabled"
+            class="m-0 flex min-w-0 items-center gap-(--spacing-2xs) border-0 p-0"
+          >
+            <slot name="end" />
+          </fieldset>
           <span
             v-if="maxLength > 0"
             :id="counterId"
@@ -393,6 +532,17 @@
             @click="(event: MouseEvent) => emit('stop', event)"
           />
           <IconButton
+            v-else-if="showVoice"
+            key="voice"
+            icon="ai ai-headphones"
+            variant="primary"
+            size="medium"
+            :ariaLabel="t('promptInput.voice')"
+            :disabled="disabled"
+            :data-testid="`${testId}__voice`"
+            @click="(event: MouseEvent) => emit('voice-start', event)"
+          />
+          <IconButton
             v-else
             key="submit"
             icon="az az-arrow-up"
@@ -406,6 +556,21 @@
         </div>
       </div>
     </div>
+    <div
+      aria-live="polite"
+      :data-testid="`${testId}__rejected`"
+      class="px-(--spacing-xs) text-body-xs text-(--danger-foreground) empty:hidden"
+    >
+      {{ rejection }}
+    </div>
+    <fieldset
+      v-if="slots.footer"
+      :disabled="disabled"
+      :data-testid="`${testId}__footer`"
+      class="m-0 flex min-w-0 flex-wrap items-center gap-(--spacing-2xs) border-0 p-0"
+    >
+      <slot name="footer" />
+    </fieldset>
     <div
       v-if="slots.hint"
       :id="hintId"
