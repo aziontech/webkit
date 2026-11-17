@@ -3,10 +3,10 @@ name: file-dropzone
 category: input
 structure: monolithic
 status: implemented
-checksum: 19777114b3cd3b41f33ed327f1cb31c766df6eb6dd9e227509ae22a45eba4790
-spec_version: 6
+checksum: b072c82bce636a3466d0f9869df4a2dfb46e2c70f761b4f6b8a6d1f4ea88c9d9
+spec_version: 7
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # FileDropzone — Component Spec
@@ -157,7 +157,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 - `data-disabled` is present when the `disabled` prop is true. A disabled dropzone is always `data-state="idle"`.
 - `data-invalid` is present when the `invalid` prop is true.
 - **Inline / invalid**: the dashed border turns `--danger-border` while idle; the active state still wins while files are dragged over it. Overlay ignores `invalid`.
-- **Inline / idle**: dashed `--border-strong` border on a `--bg-surface` fill. Icon, title, description and slot are centered.
+- **Inline / idle**: dashed `--border-input` border (the field outline, so it reads like the other inputs and never glares) on a `--bg-surface` fill; on hover the dashes step up to `--border-strong`, as an input outline does. Icon, title, description and slot are centered.
 - **Inline / active**: the border turns `--border-selected` and the fill `--bg-selected`. Layout does not move (same border width in both states).
 - **Inline / disabled**: `--border-default` dashed border, `--bg-disabled` fill, icon, title and description in `--text-disabled`, `cursor-not-allowed`. The slot still renders, and the consumer disables its own Browse button.
 - **Overlay / idle**: not displayed (`v-show`). The root stays in the DOM so `data-testid` and `$attrs` are always present.
@@ -190,7 +190,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 | Region                           | Token (DESIGN.md)                                                                              |
 | -------------------------------- | ---------------------------------------------------------------------------------------------- |
 | shape (both variants)            | `var(--shape-card)`                                                                            |
-| inline border (idle)             | `var(--border-strong)`                                                                         |
+| inline border (idle)             | `var(--border-input)`, hover `var(--border-strong)`                                            |
 | inline / overlay border (active) | `var(--border-selected)`                                                                       |
 | inline border (disabled)         | `var(--border-default)`                                                                        |
 | inline border (invalid)          | `var(--danger-border)`                                                                         |
