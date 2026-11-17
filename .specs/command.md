@@ -3,11 +3,11 @@ name: command
 category: overlay
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 13
 template: 2
-checksum: ddf5c0b16722f44611a32eddd22fe16d6a92e0ed328d6fb8a23ece2dcfbf7f73
+checksum: e25139390c5ee72c68dbe6bdacff2e7052e29ac260bffc5b2e7dca0960b7d5ce
 created: 2026-07-23
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Command Menu — Component Spec
@@ -208,6 +208,7 @@ packages/webkit/src/components/overlay/command/
 - `data-ranked` on the list and on each group while the query is not empty; `data-leading` on the group ranked first
 - `data-page` on the input bar names the open nested page (absent on the first page)
 - `empty`: when the filter yields no visible items, the `Empty` part renders in place of the list rows
+- Position: from `md` up the panel is anchored near the top of the viewport (`md:items-start md:pt-[15dvh]` on the Dialog content, horizontally centred), not centred vertically, so its top edge and the search field stay put while the list grows and shrinks as you type. Below `md` the panel is the Dialog's sheet.
 
 ## Motion & Animations
 
@@ -285,7 +286,7 @@ _none_
 
 ## Responsive
 
-- The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`.
+- The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet.
 - The back control truncates a long page heading (`truncate`, `max-w-[40%]`) so the field keeps room to type.
 - Touch: rows are full-width ≥32px; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate.
 
