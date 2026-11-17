@@ -212,7 +212,7 @@ const SPEC_SECTIONS = [
 function specSections(name: string): Record<string, string> {
   const file = join(SPECS, `${name.replace(/\//g, '-')}.md`)
   if (!existsSync(file)) return {}
-  const source = stripFrontMatter(readFileSync(file, 'utf8'))
+  const source = stripFrontMatter(readFileSync(file, 'utf8')).replace(/<!--[\s\S]*?-->\n?/g, '')
   const out: Record<string, string> = {}
   const parts = source.split(/^## /m).slice(1)
   for (const part of parts) {
@@ -254,7 +254,9 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
     purpose: inline(entry.purpose),
     useWhen: ((entry.useWhen as string[]) ?? []).map(inline),
     avoidWhen: ((entry.avoidWhen as string[]) ?? []).map(inline),
-    related: ((entry.related as string[]) ?? []).map((item) => inline(`\`${item}`)),
+    related: ((entry.related as string[]) ?? []).map((item) =>
+      inline(item.startsWith('`') ? item : `\`${item}`)
+    ),
     bestPractices: ((entry.bestPractices as string[]) ?? []).map(inline),
     props: rows(entry.props),
     events: rows(entry.events),
