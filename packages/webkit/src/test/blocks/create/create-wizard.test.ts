@@ -28,7 +28,7 @@ describe('create-wizard#CreateAndDeploy', () => {
     expect(
       await screen.findByRole('heading', { level: 2, name: 'Domain and deployment' })
     ).toBeTruthy()
-    await fireEvent.update(screen.getByRole('textbox', { name: 'Domain prefix' }), 'my-first-app')
+    await fireEvent.update(screen.getByRole('textbox', { name: /^Domain prefix\b/ }), 'my-first-app')
     const submit = screen.getByRole('button', { name: 'Create and deploy' })
     await fireEvent.click(submit)
     await waitFor(() => expect(submit.getAttribute('aria-busy')).toBe('true'), wait)

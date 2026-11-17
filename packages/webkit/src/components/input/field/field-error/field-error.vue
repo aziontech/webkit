@@ -30,8 +30,13 @@
     data-slot="field-error"
     data-type="invalid"
     :data-testid="testId"
-    class="inline-flex items-center text-label-sm text-(--danger-foreground)"
+    class="inline-flex items-center gap-(--spacing-2xs) text-label-sm text-(--text-danger)"
   >
+    <i
+      class="az az-circle-alert flex shrink-0 items-center"
+      aria-hidden="true"
+      :data-testid="`${testId}__icon`"
+    />
     <span :data-testid="`${testId}__text`"><slot /></span>
   </p>
 </template>

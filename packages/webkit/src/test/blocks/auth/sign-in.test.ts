@@ -47,10 +47,10 @@ describe('auth/sign-in#ProvidersLoading', () => {
   it('keeps email sign-in usable while the providers load', async () => {
     const view = render(ProvidersLoading)
 
-    await fireEvent.update(view.getByLabelText('Email'), 'jane.doe@example.com')
+    await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
     await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
 
-    await waitFor(() => expect(view.getByLabelText('Password')).toBeTruthy())
+    await waitFor(() => expect(view.getByLabelText(/^Password\b/)).toBeTruthy())
     expect(view.getByText('jane.doe@example.com')).toBeTruthy()
   })
 })
@@ -62,10 +62,10 @@ describe('auth/sign-in#Login', () => {
     expect(view.getByRole('button', { name: 'Continue with Google' })).toBeTruthy()
     expect(view.queryByRole('status', { name: 'Preparing sign-in providers' })).toBeNull()
 
-    await fireEvent.update(view.getByLabelText('Email'), 'jane.doe@example.com')
+    await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
     await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
 
-    await waitFor(() => expect(view.getByLabelText('Password')).toBeTruthy())
+    await waitFor(() => expect(view.getByLabelText(/^Password\b/)).toBeTruthy())
     await expectNoA11yViolations(view.container)
   })
 })
@@ -203,11 +203,11 @@ describe('auth#MfaSetup', () => {
 describe('auth/sign-in', () => {
   it('emits submit with the credentials and follows the request state it is given', async () => {
     const view = render(Login)
-    await fireEvent.update(view.getByLabelText('Email'), 'jane.doe@example.com')
+    await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
     await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
-    await waitFor(() => expect(view.getByLabelText('Password')).toBeTruthy())
+    await waitFor(() => expect(view.getByLabelText(/^Password\b/)).toBeTruthy())
     expect(view.emitted<unknown[]>('continue')?.[0]?.[1]).toBe('jane.doe@example.com')
-    await fireEvent.update(view.getByLabelText('Password'), 'correct-horse-battery')
+    await fireEvent.update(view.getByLabelText(/^Password\b/), 'correct-horse-battery')
     await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
     const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
     expect(event).toBeInstanceOf(Event)
@@ -231,8 +231,8 @@ describe('auth/sign-in', () => {
     await waitFor(() =>
       expect(view.getByText('Incorrect email or password. Check both and try again.')).toBeTruthy()
     )
-    expect((view.getByLabelText('Password') as HTMLInputElement).value).toBe('')
-    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText('Password')))
+    expect((view.getByLabelText(/^Password\b/) as HTMLInputElement).value).toBe('')
+    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText(/^Password\b/)))
   })
 
   it('shows a free error message with Retry and emits the provider and the links it is given', async () => {
@@ -280,8 +280,8 @@ describe('auth/sign-in', () => {
   it('IncorrectCredentials: the two-step card on its password step, notice under the heading', () => {
     const view = render(IncorrectCredentials)
     expect(view.getByRole('heading', { level: 1, name: 'Welcome back' })).toBeTruthy()
-    expect(view.getByLabelText('Password')).toBeTruthy()
-    expect(view.queryByLabelText('Email')).toBeNull()
+    expect(view.getByLabelText(/^Password\b/)).toBeTruthy()
+    expect(view.queryByLabelText(/^Email\b/)).toBeNull()
     expect(view.getByText('Incorrect email or password. Check both and try again.')).toBeTruthy()
     expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
   })
@@ -337,7 +337,7 @@ describe('auth/sign-in#PersonalToken', () => {
 
   it('labels the token field, hides it by default and links to where tokens are made', async () => {
     const view = render(PersonalToken)
-    const input = view.getByLabelText('Personal token') as HTMLInputElement
+    const input = view.getByLabelText(/^Personal token\b/) as HTMLInputElement
 
     expect(input.tagName).toBe('INPUT')
     expect(input.type).toBe('password')
@@ -362,9 +362,9 @@ describe('auth/sign-in#PersonalToken', () => {
   it('emits any well-formed token, short or all nines, and fakes no answer', async () => {
     const view = render(TokenSignIn)
 
-    await fireEvent.update(view.getByLabelText('Personal token'), '  short-token  ')
+    await fireEvent.update(view.getByLabelText(/^Personal token\b/), '  short-token  ')
     await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
-    await fireEvent.update(view.getByLabelText('Personal token'), '999999')
+    await fireEvent.update(view.getByLabelText(/^Personal token\b/), '999999')
     await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
 
     const calls = view.emitted()['sign-in'] as [Event, string][]
@@ -377,11 +377,11 @@ describe('auth/sign-in#PersonalToken', () => {
   it('locks the field and spins Sign in while loading, then shows the rejection the app answers', async () => {
     const view = render(TokenSignIn, { props: { loading: true } })
     expect(view.getByRole('form').getAttribute('aria-busy')).toBe('true')
-    expect(view.getByLabelText('Personal token').matches(':disabled')).toBe(true)
+    expect(view.getByLabelText(/^Personal token\b/).matches(':disabled')).toBe(true)
 
     await view.rerender({ loading: false, error: 'rejected' })
     await waitFor(() => expect(view.getByText(/Azion did not accept this token/)).toBeTruthy())
-    expect((view.getByLabelText('Personal token') as HTMLInputElement).value).toBe('')
+    expect((view.getByLabelText(/^Personal token\b/) as HTMLInputElement).value).toBe('')
     expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
   })
 
@@ -391,11 +391,11 @@ describe('auth/sign-in#PersonalToken', () => {
     ['The API answered 502.', /The API answered 502\./]
   ])('keeps the entry and re-sends it from Retry on %s', async (error, copy) => {
     const view = render(TokenSignIn)
-    await fireEvent.update(view.getByLabelText('Personal token'), VALID)
+    await fireEvent.update(view.getByLabelText(/^Personal token\b/), VALID)
     await view.rerender({ error })
 
     expect(view.getByText(copy)).toBeTruthy()
-    expect((view.getByLabelText('Personal token') as HTMLInputElement).value).toBe(VALID)
+    expect((view.getByLabelText(/^Personal token\b/) as HTMLInputElement).value).toBe(VALID)
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
     const calls = view.emitted()['sign-in'] as [Event, string][]
     expect(calls.at(-1)?.[1]).toBe(VALID)
@@ -418,7 +418,7 @@ describe('auth/sign-in#PersonalToken', () => {
     const view = render(RejectedToken)
 
     expect(view.getByText(/Azion did not accept this token/)).toBeTruthy()
-    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText('Personal token')))
+    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText(/^Personal token\b/)))
     await expectNoA11yViolations(view.container)
   })
 
@@ -427,7 +427,7 @@ describe('auth/sign-in#PersonalToken', () => {
 
     expect(view.getByText(/valid but cannot read what this app needs/)).toBeTruthy()
     expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
-    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText('Personal token')))
+    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText(/^Personal token\b/)))
     await expectNoA11yViolations(view.container)
   })
 })

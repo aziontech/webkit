@@ -8,7 +8,7 @@
     inheritAttrs: false
   })
 
-  type FieldDescriptionTone = 'helper' | 'invalid' | 'required' | 'disabled'
+  type FieldDescriptionTone = 'helper' | 'invalid' | 'disabled'
 
   defineSlots<{
     default(): unknown
@@ -25,7 +25,6 @@
     if (!field) return 'helper'
     if (field.disabled.value) return 'disabled'
     if (field.invalid.value && !field.hasError.value) return 'invalid'
-    if (field.required.value) return 'required'
     return 'helper'
   })
 
@@ -39,7 +38,7 @@
     data-slot="field-description"
     :data-type="type"
     :data-testid="testId"
-    class="inline-flex items-center text-label-sm data-[type=helper]:text-(--text-muted) data-[type=disabled]:text-(--text-muted) data-[type=invalid]:text-(--danger-foreground) data-[type=required]:text-(--warning-foreground) data-[type=disabled]:gap-(--spacing-2xs)"
+    class="inline-flex items-center text-label-sm data-[type=helper]:text-(--text-muted) data-[type=disabled]:text-(--text-muted) data-[type=invalid]:text-(--text-danger) data-[type=disabled]:gap-(--spacing-2xs)"
   >
     <i
       v-if="type === 'disabled'"

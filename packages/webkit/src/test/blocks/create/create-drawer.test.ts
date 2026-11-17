@@ -165,10 +165,10 @@ describe('create-drawer#CreateEnvironment', () => {
     const cidrs = panel.getByRole('textbox', { name: 'IP addresses and CIDR ranges' })
     await fireEvent.update(cidrs, '203.0.113.0/24\n198.51.100.300')
     await fireEvent.click(panel.getByRole('switch', { name: /Branch tracking/ }))
-    expect((panel.getByRole('textbox', { name: 'Branch match' }) as HTMLInputElement).value).toBe(
+    expect((panel.getByRole('textbox', { name: /^Branch match\b/ }) as HTMLInputElement).value).toBe(
       'main'
     )
-    await fireEvent.update(panel.getByRole('textbox', { name: 'Name' }), 'Preview')
+    await fireEvent.update(panel.getByRole('textbox', { name: /^Name\b/ }), 'Preview')
     expect(panel.queryByText(/Invalid IPv4 address/)).toBeNull()
     await fireEvent.click(panel.getByRole('button', { name: 'Create Environment' }))
     expect(panel.getByText('An environment with this name already exists.')).toBeTruthy()
@@ -189,7 +189,7 @@ describe('create-drawer#CreateEnvironment', () => {
       expect(dialogs()).toHaveLength(2)
       return lastDialog()
     })
-    await fireEvent.update(within(stacked).getByRole('textbox', { name: 'Name' }), 'Canary')
+    await fireEvent.update(within(stacked).getByRole('textbox', { name: /^Name\b/ }), 'Canary')
     await fireEvent.click(within(stacked).getByRole('button', { name: 'Create Environment' }))
     await waitFor(() => expect(dialogs()).toHaveLength(1), wait)
     expect(within(domain).getByRole('combobox', { name: /^Environment/ }).textContent).toContain(
@@ -208,11 +208,11 @@ describe('create-drawer#FunctionInstance', () => {
     })
     const panel = within(drawer)
     expect(panel.queryByRole('heading', { name: /Arguments/ })).toBeNull()
-    await fireEvent.click(panel.getByRole('combobox', { name: 'Function' }))
+    await fireEvent.click(panel.getByRole('combobox', { name: /^Function\b/ }))
     await fireEvent.click(await screen.findByRole('option', { name: 'image-resizer' }))
     expect(panel.getByRole('heading', { name: /Arguments/ })).toBeTruthy()
     expect(panel.getByLabelText(/Width/)).toBeTruthy()
-    await fireEvent.update(panel.getByRole('textbox', { name: 'Name' }), 'thumbnails')
+    await fireEvent.update(panel.getByRole('textbox', { name: /^Name\b/ }), 'thumbnails')
     expect(panel.queryByText('This field is required.')).toBeNull()
     await fireEvent.click(panel.getByRole('button', { name: 'Add Function Instance' }))
     await waitFor(() => expect(panel.getByText('This field is required.')).toBeTruthy())

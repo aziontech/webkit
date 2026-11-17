@@ -188,7 +188,7 @@ describe('Field', () => {
     expect(getByRole('textbox').getAttribute('aria-invalid')).toBe('true')
   })
 
-  it('tones the description from the field state', async () => {
+  it('tones the description from the field state, keeping a required field neutral', async () => {
     const state = ref<Record<string, boolean>>({})
     const { getByTestId } = mount(
       '<Field v-bind="state"><Input /><FieldDescription>Note</FieldDescription></Field>',
@@ -198,7 +198,7 @@ describe('Field', () => {
     expect(description()).toBe('helper')
     state.value = { required: true }
     await nextTick()
-    expect(description()).toBe('required')
+    expect(description()).toBe('helper')
     state.value = { invalid: true }
     await nextTick()
     expect(description()).toBe('invalid')
@@ -214,6 +214,16 @@ describe('Field', () => {
     await nextTick()
     expect(getByTestId('field-description').getAttribute('data-type')).toBe('helper')
     expect(getByTestId('field-error').getAttribute('data-type')).toBe('invalid')
+  })
+
+  it('leads the error with a hidden danger icon and keeps it out of the message', () => {
+    const { getByTestId, getByRole } = mount(
+      '<Field><Input /><FieldError>Enter a name.</FieldError></Field>'
+    )
+    const icon = getByTestId('field-error__icon')
+    expect(icon.classList.contains('az-circle-alert')).toBe(true)
+    expect(icon.getAttribute('aria-hidden')).toBe('true')
+    expect(getByRole('alert').textContent?.trim()).toBe('Enter a name.')
   })
 
   it('wires the Select trigger as the control and isolates its inner parts', async () => {

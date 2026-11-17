@@ -3,8 +3,8 @@ name: input
 category: input
 structure: monolithic
 status: implemented
-spec_version: 9
-checksum: 4034a07214c5b9a03a841f5c9b852fb584c33449ab1633d87eba4923ae4b001f
+spec_version: 10
+checksum: 4251864bd6830255c00602ed427d998805ab671999665721c979c0b548e34f0f
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -116,7 +116,7 @@ _none_
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
-- `data-required` mirrors the `required` prop; drives the warning-border treatment
+- `data-required` mirrors the `required` prop; it draws no border of its own: the Required marker on the wrapping `Field.Label` says a field is required, and a missing value is shown as `invalid` after a failed submit
 - `data-leading` / `data-trailing` mirror slot presence (driven by `$slots.leading` / `$slots.trailing`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
@@ -140,7 +140,6 @@ _none_
 | border (default)                     | `var(--border-default)`                                                                                             |
 | border (hover)                       | `var(--border-strong)`                                                                                              |
 | border (invalid)                     | `var(--danger-border)`                                                                                              |
-| border (required)                    | `var(--warning-border)`                                                                                             |
 | ring (focus)                         | `var(--ring-color)`                                                                                                 |
 | ring offset (focus)                  | `var(--input-ring-offset, var(--bg-canvas))` — host-tunable via the inherited `--input-ring-offset` custom property |
 | spacing (horizontal padding)         | `var(--spacing-sm)`                                                                                                 |

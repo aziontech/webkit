@@ -475,8 +475,8 @@
                 <Field
                   v-for="field in form.fields"
                   :key="field.name"
-                  :required="emptyRequired(field)"
-                  :invalid="malformed(field)"
+                  :required="field.required"
+                  :invalid="emptyRequired(field) || malformed(field)"
                   :disabled="loading"
                   :data-wide="field.type === 'file' || null"
                   class="min-w-0 sm:data-[wide]:col-span-2"

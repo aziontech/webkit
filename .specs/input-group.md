@@ -3,11 +3,11 @@ name: input-group
 category: input
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 5313da226a79bc97028fb9a0017a0de4ceb351670f576242ae966604dfef76aa
+checksum: 532f252cb50256dd91ed9784c5ad5a49c15a0f6b510b9490b2a195e65b30662d
 created: 2026-07-01
 last_updated: 2026-11-17
 ---
@@ -38,7 +38,7 @@ Composition container that joins an input primitive with any number of adjacent 
 
 - Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.
 - Set the same `size` on the group and on its child controls so heights line up.
-- `disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` styles the group only; set it on the input or on the enclosing `Field`. Inside a `Field`, the Field's state reaches the root and the controls the same way.
+- `disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` only mirrors to `data-required` on the group; set it on the input or on the enclosing `Field`, whose label carries the Required marker. Inside a `Field`, the Field's state reaches the root and the controls the same way.
 - Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string. An `Input` placed in the group loses its own border and radius (the group reads its `data-slot="input"`), so the group's frame and its dividers stay the only lines: the group never doubles a line.
 - The root is `role="group"`; label the inner input itself, or give the group an `aria-label`.
 
@@ -155,7 +155,7 @@ Root props:
 | ---------- | -------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `size`     | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`Input`, `Select`) — set the same `size` on child controls to keep them visually aligned.  |
 | `invalid`  | `boolean`                        | `false`    | false    | Renders the error border and marks the field controls inside invalid (`aria-invalid` on the input, never on the `role="group"` root, where ARIA does not allow it).                                                                           |
-| `required` | `boolean`                        | `false`    | false    | Renders the required (warning) border. `aria-required` is not allowed on `role="group"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field).                                                             |
+| `required` | `boolean`                        | `false`    | false    | Mirrors to `data-required` on the group and draws no border of its own. `aria-required` is not allowed on `role="group"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field).                            |
 | `disabled` | `boolean`                        | `false`    | false    | Renders the disabled visual, sets `aria-disabled="true"` on the root and disables the field controls inside (`InputGroup.Input`, `Input`, `Select`, …) through the Field context. A `Button` or `IconButton` inside needs its own `disabled`. |
 
 `InputGroup.Addon` props: _none_ — the sub-component is a pure presentational span whose content is the default slot. `v-bind="$attrs"` on its root lets the consumer pass `data-testid`, `aria-hidden`, `class` (merged via `cn`), etc.
@@ -180,8 +180,7 @@ Root props:
 - `data-disabled` mirrors the `disabled` prop; sets `aria-disabled="true"`
 - Border semantics mirror `input` (independent, not compound):
   - `data-invalid` → `var(--danger-border)`
-  - `data-required` → `var(--warning-border)`
-- Hover (only when not focus-within, not invalid, not required, not disabled): `border-(--border-strong)`
+- Hover (only when not focus-within, not invalid, not disabled): `border-(--border-strong)`
 - Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset (suppressed when `data-disabled`)
 - Disabled: `bg-(--bg-disabled)`, `text-(--text-disabled)`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
 - Child seams (applied by the root via Tailwind child selectors):
@@ -204,7 +203,6 @@ Root props:
 | root border (default)   | `var(--border-default)`                                                                    |
 | root border (hover)     | `var(--border-strong)`                                                                     |
 | root border (invalid)   | `var(--danger-border)`                                                                     |
-| root border (required)  | `var(--warning-border)`                                                                    |
 | root surface (disabled) | `var(--bg-disabled)`                                                                       |
 | root text (disabled)    | `var(--text-disabled)`                                                                     |
 | root border width       | `border` (Tailwind utility)                                                                |
@@ -247,7 +245,7 @@ Root props:
 - WithSelect — leading `<Select placeholder="USD" />` + middle input.
 - WithAll — addon + `<Select>` + input + `<Button>` (four children).
 - Invalid — `invalid=true` (danger border).
-- Required — `required=true` (warning border, always visible).
+- Required — a required group inside a `Field`: the label carries the Required marker and the border stays neutral.
 - Disabled — `disabled=true` (muted fill, not-allowed cursor, no focus ring).
 
 Justification for eleven stories (deviates from Default+Types+Sizes+state pattern): the component has no `variant`, so `Types` does not apply. `Sizes` documents the three-height axis. Four addon-composition stories (Default, WithAddonLeft, WithAddonRight, BothAddons) document the static-content path. Three integration stories (WithButton, WithSelect, WithAll) prove Button/Select-as-children — the whole point of v4. Three state stories exercise `Invalid`, `Required`, and `Disabled` — the visual signals the component can emit.

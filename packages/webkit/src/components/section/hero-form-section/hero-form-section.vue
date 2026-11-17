@@ -345,8 +345,8 @@
               <Field
                 v-for="field in fields"
                 :key="field.name"
-                :required="emptyRequired(field)"
-                :invalid="malformed(field)"
+                :required="field.required"
+                :invalid="emptyRequired(field) || malformed(field)"
                 :disabled="loading"
                 :data-half="field.half || null"
                 class="min-w-0 sm:col-span-2 sm:data-[half]:col-span-1"

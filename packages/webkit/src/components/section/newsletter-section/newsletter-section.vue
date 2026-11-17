@@ -188,8 +188,8 @@
               >
                 <div class="min-w-0 flex-1">
                   <Field
-                    :required="Boolean(invalidMessage) && !email.trim()"
-                    :invalid="Boolean(invalidMessage) && Boolean(email.trim())"
+                    required
+                    :invalid="Boolean(invalidMessage)"
                     :disabled="loading"
                   >
                     <Input

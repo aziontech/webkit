@@ -3,13 +3,13 @@ name: number-input
 category: input
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: e77e7cbb0d9af2f6011aae36ff8a1bae0356ded2b9d3c0c0fb8bd0c6b9b25605
+checksum: 64394f62b6f606e234606cabcf0ebfec059c5145a6f89c07bcdbdf30edefd3db
 created: 2026-06-22
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Input Number — Component Spec
@@ -142,7 +142,6 @@ An optional field binds a `number | null` model and sets `nullable`:
 | border             | `var(--border-default)` |
 | border (hover)     | `var(--border-strong)`  |
 | border (invalid)   | `var(--danger-border)`  |
-| border (required)  | `var(--warning-border)` |
 | surface (disabled) | `var(--bg-disabled)`    |
 | text (disabled)    | `var(--text-disabled)`  |
 

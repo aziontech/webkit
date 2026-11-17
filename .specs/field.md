@@ -3,10 +3,10 @@ name: field
 category: input
 structure: composition
 status: implemented
-spec_version: 8
-checksum: 2ecd22571a7af1851c17b9a71eecd7a5f42b0985dd1610a52ebf046d495d06f5
+spec_version: 9
+checksum: 71354584917d09af1c7a949d43105c135ff238469ef66a00fd17016c7d765777
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Field — Component Spec
@@ -37,6 +37,7 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 ## Best practices
 
 - Put the state on the `Field`, not on the control: `<Field invalid>` sets `aria-invalid` on the control and the invalid tone on `Field.Description`.
+- Set `required` on the `Field` from the first render, never only after a submit: it shows the Required marker on `Field.Label` and sets `required` on the control, and nothing turns a warning colour. A required field submitted empty is `invalid`, with a `Field.Error` that says what to enter; it turns red only then.
 - Let the Field own the ids. Pass an explicit `id` on the control and `for` on `Field.Label` only when another part of the page needs the id (focusing the first invalid field, an error summary link).
 - Render `Field.Description` for guidance and `Field.Error` for a validation message; both are announced through `aria-describedby`. `Field.Error` has `role="alert"`, so render it only when there is an error.
 - Choice cards: `<Field.Label><Field orientation="horizontal">control + Field.Content</Field></Field.Label>`. Never nest a choice card inside another `Field`; group cards with `Field.Set`.
@@ -112,9 +113,9 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
   - Events: _none_.
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
-- `field-description/field-description.vue` — guidance line in the label-sm text style; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (only when no `Field.Error` is mounted) > `required` > `helper`.
+- `field-description/field-description.vue` — guidance line in the label-sm text style; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (`--text-danger`, only when no `Field.Error` is mounted) > `helper` (`--text-muted`). A required field keeps the helper tone: the Required marker on `Field.Label` says it is required, and no control shows a warning colour for it.
   - Props: _none_. Events: _none_. Slots: `default`.
-- `field-error/field-error.vue` — validation message in the danger tone with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
+- `field-error/field-error.vue` — validation message in `--text-danger` led by an `az az-circle-alert` icon (`aria-hidden`, test id `${testId}__icon`), with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-group/field-group.vue` — vertical stack of fields; it is a `@container/field-group`, one of the containers `orientation="responsive"` can follow.
   - Props: _none_. Events: _none_. Slots: `default`.
@@ -195,7 +196,8 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 | title typography      | `.text-body-sm`          |
 | label text            | `var(--text-default)`    |
 | muted text            | `var(--text-muted)`      |
-| required marker       | `var(--primary)`         |
+| required marker       | `var(--text-primary)`    |
+| error text            | `var(--text-danger)`     |
 | card border           | `var(--border-muted)`    |
 | card selected border  | `var(--border-selected)` |
 | card selected surface | `var(--bg-selected)`     |

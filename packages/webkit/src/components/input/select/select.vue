@@ -31,7 +31,7 @@
       disabled?: boolean
       /** Marks the field read-only; selection visible, dropdown locked. */
       readonly?: boolean
-      /** Marks the field as required; applies the required (warning) border and sets aria-required on the trigger. */
+      /** Marks the field as required and sets aria-required on the trigger; it draws no border of its own. */
       required?: boolean
       /** Applies invalid border + ring tokens and aria-invalid on the trigger. */
       invalid?: boolean
