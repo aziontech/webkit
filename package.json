@@ -25,6 +25,7 @@
     "dev:docs": "pnpm build:icons && pnpm --filter @aziontech/webkit-docs run dev",
     "build:docs": "pnpm build:icons && pnpm --filter @aziontech/webkit-docs run build",
     "preview:docs": "pnpm --filter @aziontech/webkit-docs run preview",
+    "check:docs:links": "pnpm --filter @aziontech/webkit-docs run check:links",
     "test:docs:smoke": "pnpm --filter @aziontech/webkit-docs run test:smoke",
     "lint:docs": "pnpm --filter @aziontech/webkit-docs run lint",
     "typecheck:docs": "pnpm --filter @aziontech/webkit-docs run typecheck",

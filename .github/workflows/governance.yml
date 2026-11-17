@@ -231,6 +231,9 @@ jobs:
       - name: Build the docs site (every route prerendered)
         run: pnpm build:docs
 
+      - name: Check that every docs link resolves
+        run: pnpm check:docs:links
+
       - name: Build the demos
         run: pnpm build:demos
 
