@@ -96,7 +96,7 @@ const meta = {
     items: {
       control: 'object',
       description:
-        'The cells, in order; each is `{ title, description, illustration, action?, copy? }` where `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard.',
+        'The cells, in order; each is `{ title, description, illustration?, widget?, action?, copy? }` where `widget` names a console widget drawn instead of the illustration, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard.',
       table: {
         category: 'props',
         type: { summary: 'FeatureWidgetsItem[]' },
@@ -160,6 +160,62 @@ export const Default = {
           'The band as the Functions page places it: the overline, headline and lead centered over two calls to action, then three illustrated cells in a three-column bento grid — a copy button that puts a prompt on the clipboard for the agent path, and outlined link buttons for the Console and terminal paths. Edit the props in the Controls panel — a band with no items renders nothing at all.'
       },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const WIDGET_ITEMS = [
+  {
+    title: 'Score requests by threat family.',
+    description:
+      'WAF scores what each request carries, and you set the sensitivity of each threat family to raise protection where an application needs it.',
+    widget: 'waf-threat',
+    action: { label: 'Docs', href: '/site/docs' }
+  },
+  {
+    title: 'See before you block.',
+    description:
+      'Run a rule set in Logging to record what it would block on your real traffic, then switch to Blocking when the results look right.',
+    widget: 'waf-firewall-rule',
+    action: { label: 'Docs', href: '/site/docs' }
+  },
+  {
+    title: 'Fine-tune false positives.',
+    description:
+      'Turn a false positive into an exception for one rule, one path, and one field, so legitimate traffic flows while attacks keep being blocked.',
+    widget: 'waf-allowed-rule',
+    action: { label: 'Docs', href: '/site/docs' }
+  }
+]
+
+const WIDGETS_MARKUP = `<FeatureWidgets
+  eyebrow="Features"
+  title="Tune WAF to your traffic, then block"
+  :items="[
+    { title: 'Score requests by threat family.', description: '…', widget: 'waf-threat', action: { label: 'Docs', href: '/site/docs' } },
+    { title: 'See before you block.', description: '…', widget: 'waf-firewall-rule', action: { label: 'Docs', href: '/site/docs' } },
+    { title: 'Fine-tune false positives.', description: '…', widget: 'waf-allowed-rule', action: { label: 'Docs', href: '/site/docs' } }
+  ]"
+/>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FeatureWidgets>} */
+export const WithProductWidgets = {
+  render: Template,
+  args: {
+    eyebrow: 'Features',
+    title: 'Tune WAF to your traffic, then block',
+    description: '',
+    primaryAction: undefined,
+    secondaryAction: undefined,
+    items: WIDGET_ITEMS
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The cells draw console widgets instead of illustrations: each item names a `widget` from the product-widget registry, framed at the illustration aspect so the row keeps one height. A fragment plays its beat while the pointer or focus is in its cell.'
+      },
+      source: { code: toSfc(IMPORT, WIDGETS_MARKUP) }
     }
   }
 }

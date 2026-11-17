@@ -1,5 +1,5 @@
 import { fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import FeatureWidgets from './feature-widgets.vue'
@@ -169,6 +169,25 @@ describe('FeatureWidgets', () => {
       'href',
       terminalItem.action.href
     )
+  })
+
+  it('draws a console widget instead of the illustration for an item with a widget', () => {
+    const fixture = document.createElement('style')
+    fixture.textContent = `
+      [data-testid='${TESTID}__widget'] { position: relative; width: 480px; height: 240px; overflow: hidden }
+      [data-testid='content-shell-mockup'] { position: relative }
+      [data-testid='content-shell-mockup'] > :first-child { position: absolute }
+    `
+    document.head.appendChild(fixture)
+    onTestFinished(() => fixture.remove())
+
+    const { getAllByTestId } = band({
+      items: [{ ...consoleItem, widget: 'waf-threat' }, terminalItem]
+    })
+
+    const widgets = getAllByTestId(`${TESTID}__widget`)
+    expect(widgets).toHaveLength(1)
+    expect(widgets[0].querySelector('[data-name="waf-threat"]')).not.toBeNull()
   })
 
   it('renders only the section when items is empty', () => {
