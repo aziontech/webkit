@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocProse from '@aziontech/webkit/doc-prose'
@@ -145,11 +146,15 @@
           <RawHtml :html="doc.purpose" />
         </DocProse>
         <div class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2">
-          <div
+          <Card
+            key="use-when"
             v-if="doc.useWhen.length"
-            class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
           >
-            <h2 class="mb-(--spacing-sm) text-heading-xs">{{ t.whenToUse }}</h2>
+            <template #header>
+              <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
+                {{ t.whenToUse }}
+              </h2>
+            </template>
             <ul class="flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-sm">
               <RawHtml
                 v-for="line in doc.useWhen"
@@ -158,12 +163,16 @@
                 :html="line"
               />
             </ul>
-          </div>
-          <div
+          </Card>
+          <Card
+            key="avoid-when"
             v-if="doc.avoidWhen.length"
-            class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
           >
-            <h2 class="mb-(--spacing-sm) text-heading-xs">{{ t.whenNotToUse }}</h2>
+            <template #header>
+              <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
+                {{ t.whenNotToUse }}
+              </h2>
+            </template>
             <ul class="flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-sm">
               <RawHtml
                 v-for="line in doc.avoidWhen"
@@ -172,7 +181,7 @@
                 :html="line"
               />
             </ul>
-          </div>
+          </Card>
         </div>
         <div
           v-if="doc.related.length"
@@ -269,16 +278,19 @@
         id="do-dont"
         class="grid scroll-mt-20 grid-cols-1 gap-(--spacing-md) md:grid-cols-2"
       >
-        <div
+        <Card
+          key="do"
           v-if="doc.bestPractices.length"
-          class="rounded-(--shape-card) border border-(--success-border) p-(--spacing-md)"
         >
-          <h2 class="mb-(--spacing-sm) flex items-center gap-(--spacing-xs) text-heading-xs">
-            <i
-              class="az az-circle-check text-(--success)"
-              aria-hidden="true"
-            />{{ t.bestPractices }}
-          </h2>
+          <template #header>
+            <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
+              <i
+                class="az az-circle-check text-(--success)"
+                aria-hidden="true"
+              />
+              {{ t.bestPractices }}
+            </h2>
+          </template>
           <ul class="flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-sm">
             <RawHtml
               v-for="line in doc.bestPractices"
@@ -287,21 +299,24 @@
               :html="line"
             />
           </ul>
-        </div>
-        <div
+        </Card>
+        <Card
+          key="dont"
           v-if="dont"
-          class="rounded-(--shape-card) border border-(--danger-border) p-(--spacing-md)"
         >
-          <h2 class="mb-(--spacing-sm) flex items-center gap-(--spacing-xs) text-heading-xs">
-            <i
-              class="az az-circle-x text-(--danger)"
-              aria-hidden="true"
-            />{{ t.constraints }}
-          </h2>
+          <template #header>
+            <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
+              <i
+                class="az az-circle-x text-(--danger)"
+                aria-hidden="true"
+              />
+              {{ t.constraints }}
+            </h2>
+          </template>
           <DocProse>
             <RawHtml :html="dont" />
           </DocProse>
-        </div>
+        </Card>
       </section>
 
       <section

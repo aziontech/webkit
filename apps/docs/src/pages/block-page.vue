@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocProse from '@aziontech/webkit/doc-prose'
@@ -202,24 +204,32 @@
           <RawHtml :html="guidelines.intro" />
         </DocProse>
         <div class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2">
-          <div
+          <Card
+            key="use-when"
             v-if="useWhen"
-            class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
           >
-            <h2 class="mb-(--spacing-sm) text-heading-xs">{{ t.whenToUse }}</h2>
+            <template #header>
+              <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
+                {{ t.whenToUse }}
+              </h2>
+            </template>
             <DocProse>
               <RawHtml :html="useWhen" />
             </DocProse>
-          </div>
-          <div
+          </Card>
+          <Card
+            key="avoid-when"
             v-if="avoidWhen"
-            class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
           >
-            <h2 class="mb-(--spacing-sm) text-heading-xs">{{ t.whenNotToUse }}</h2>
+            <template #header>
+              <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
+                {{ t.whenNotToUse }}
+              </h2>
+            </template>
             <DocProse>
               <RawHtml :html="avoidWhen" />
             </DocProse>
-          </div>
+          </Card>
         </div>
         <div
           v-if="related"
@@ -282,22 +292,23 @@
         <h2 class="text-heading-md">{{ t.anatomy }}</h2>
         <template v-if="uses.length">
           <h3 class="text-heading-sm">{{ t.usedComponents }}</h3>
-          <ul class="flex flex-wrap gap-(--spacing-xs)">
+          <ul class="flex flex-wrap items-center gap-(--spacing-xs)">
             <li
               v-for="item in uses"
               :key="item.name"
             >
-              <a
+              <Button
                 v-if="item.linked"
                 :href="`/components/${item.name}`"
-                class="inline-flex rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                >{{ item.title }}</a
-              >
-              <span
+                :label="item.title"
+                variant="outline"
+                size="small"
+              />
+              <Tag
                 v-else
-                class="inline-flex rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm"
-                >{{ item.title }}</span
-              >
+                :label="item.title"
+                severity="neutral"
+              />
             </li>
           </ul>
         </template>
@@ -323,34 +334,40 @@
         id="do-dont"
         class="grid scroll-mt-20 grid-cols-1 gap-(--spacing-md) md:grid-cols-2"
       >
-        <div
+        <Card
+          key="do"
           v-if="doList"
-          class="rounded-(--shape-card) border border-(--success-border) p-(--spacing-md)"
         >
-          <h2 class="mb-(--spacing-sm) flex items-center gap-(--spacing-xs) text-heading-xs">
-            <i
-              class="az az-circle-check text-(--success)"
-              aria-hidden="true"
-            />{{ t.bestPractices }}
-          </h2>
+          <template #header>
+            <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
+              <i
+                class="az az-circle-check text-(--success)"
+                aria-hidden="true"
+              />
+              {{ t.bestPractices }}
+            </h2>
+          </template>
           <DocProse>
             <RawHtml :html="doList" />
           </DocProse>
-        </div>
-        <div
+        </Card>
+        <Card
+          key="dont"
           v-if="dontList"
-          class="rounded-(--shape-card) border border-(--danger-border) p-(--spacing-md)"
         >
-          <h2 class="mb-(--spacing-sm) flex items-center gap-(--spacing-xs) text-heading-xs">
-            <i
-              class="az az-circle-x text-(--danger)"
-              aria-hidden="true"
-            />{{ t.constraints }}
-          </h2>
+          <template #header>
+            <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
+              <i
+                class="az az-circle-x text-(--danger)"
+                aria-hidden="true"
+              />
+              {{ t.constraints }}
+            </h2>
+          </template>
           <DocProse>
             <RawHtml :html="dontList" />
           </DocProse>
-        </div>
+        </Card>
       </section>
 
       <section
