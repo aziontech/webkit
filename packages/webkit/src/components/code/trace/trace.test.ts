@@ -8,6 +8,7 @@ import Empty from '../../../../examples/trace/empty.vue'
 import Loading from '../../../../examples/trace/loading.vue'
 import Selected from '../../../../examples/trace/selected.vue'
 import SpanEvents from '../../../../examples/trace/span-events.vue'
+import Views from '../../../../examples/trace/views.vue'
 import WithError from '../../../../examples/trace/with-error.vue'
 import Zoom from '../../../../examples/trace/zoom.vue'
 import { BUILT_IN_CATALOGS, provideLocale } from '../../../composables/use-locale'
@@ -385,6 +386,93 @@ describe('Trace', () => {
       expect(onPath).toEqual(['root', 'auth', 'prices', 'prices-cache', 'prices-origin', 'render'])
       expect(view.getByTestId('trace__detail').textContent).toMatch(/On critical path\s*14 ms/)
       await expectNoA11yViolations(view.container)
+    })
+  })
+
+  describe('views', () => {
+    it('offers Waterfall, Timeline and Tree and emits the chosen view', async () => {
+      const view = render(Trace, { props: { spans } })
+      const group = view.getByRole('radiogroup', { name: 'View' })
+      const options = within(group).getAllByRole('radio')
+      expect(options.map((option) => option.textContent?.trim())).toEqual([
+        'Waterfall',
+        'Timeline',
+        'Tree'
+      ])
+      expect(options[0]?.getAttribute('aria-checked')).toBe('true')
+      expect(view.getByTestId('trace').getAttribute('data-view')).toBe('waterfall')
+      await fireEvent.click(options[1] as HTMLElement)
+      expect(view.emitted('update:view')?.at(-1)).toEqual(['timeline'])
+      expect(view.getByRole('listbox', { name: 'Trace' })).toBeTruthy()
+      expect(view.queryByRole('treegrid')).toBeNull()
+    })
+
+    it('packs each nesting level of the timeline into lanes of spans that do not overlap', () => {
+      const view = render(Trace, { props: { spans, view: 'timeline' } })
+      const lanes = view.getAllByTestId('trace__lane')
+      expect(lanes.map((lane) => within(lane).getAllByRole('option').length)).toEqual([1, 2, 1])
+      const options = view.getAllByRole('option')
+      expect(options.map((option) => option.getAttribute('data-span-id'))).toEqual([
+        'root',
+        'a',
+        'b',
+        'a1'
+      ])
+      expect(options[2]?.getAttribute('aria-label')).toBe('encode, +220 ms, 1.50 s, Failed')
+      expect(options[2]?.getAttribute('data-status')).toBe('error')
+      expect(options[0]?.getAttribute('tabindex')).toBe('0')
+    })
+
+    it('moves through the timeline in start order and selects with Enter', async () => {
+      const view = render(Trace, { props: { spans, view: 'timeline' } })
+      const option = (id: string) =>
+        view
+          .getAllByRole('option')
+          .find((el) => el.getAttribute('data-span-id') === id) as HTMLElement
+      option('root').focus()
+      await fireEvent.keyDown(option('root'), { key: 'ArrowRight' })
+      expect(document.activeElement).toBe(option('a'))
+      await fireEvent.keyDown(option('a'), { key: 'ArrowRight' })
+      expect(document.activeElement).toBe(option('a1'))
+      await fireEvent.keyDown(option('a1'), { key: 'End' })
+      expect(document.activeElement).toBe(option('b'))
+      await fireEvent.keyDown(option('b'), { key: 'Enter' })
+      expect(view.emitted('update:selectedKey')?.at(-1)).toEqual(['b'])
+      await view.rerender({ spans, view: 'timeline', selectedKey: 'b' })
+      expect(option('b').getAttribute('aria-selected')).toBe('true')
+      expect(view.getByTestId('trace__detail').textContent).toContain('encode')
+    })
+
+    it('dims the timeline bars that do not match the search', async () => {
+      const view = render(Trace, { props: { spans, view: 'timeline' } })
+      await fireEvent.update(view.getByRole('textbox', { name: 'Search spans' }), 'encode')
+      const dim = view
+        .getAllByRole('option')
+        .filter((option) => option.hasAttribute('data-dimmed'))
+        .map((option) => option.getAttribute('data-span-id'))
+      expect(dim).toEqual(['root', 'a', 'a1'])
+      await fireEvent.update(view.getByRole('textbox', { name: 'Search spans' }), 'nothing')
+      expect(view.queryByRole('listbox')).toBeNull()
+      expect(view.getByTestId('trace__empty').textContent).toContain('No span matches')
+    })
+
+    it('lists the tree with start and duration as text and no bars or minimap', () => {
+      const view = render(Trace, { props: { spans, view: 'tree', zoomable: true } })
+      expect(view.getByRole('treegrid')).toBeTruthy()
+      expect(view.queryAllByTestId('trace__bar')).toHaveLength(0)
+      expect(view.queryByTestId('trace__minimap')).toBeNull()
+      expect(view.queryByTestId('trace__axis')).toBeNull()
+      const times = view.getAllByTestId('trace__times')
+      expect(times[3]?.textContent).toMatch(/\+220 ms\s*1\.50 s/)
+    })
+
+    it('keeps the timeline and the tree free of accessibility violations', async () => {
+      const timeline = render(Views)
+      expect(timeline.getByRole('listbox')).toBeTruthy()
+      await expectNoA11yViolations(timeline.container)
+      timeline.unmount()
+      const tree = render(Trace, { props: { spans, view: 'tree', selectedKey: 'a' } })
+      await expectNoA11yViolations(tree.container)
     })
   })
 })

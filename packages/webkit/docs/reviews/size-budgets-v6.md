@@ -401,6 +401,11 @@ Budget-raise: locales-pt-BR 10.4 KB → 10.45 KB (measured 10.42 KB): the catalo
 Budget-raise: locales-es 10.5 KB → 10.55 KB (measured 10.54 KB): the same two DocFrame messages (2026-11-17).
 Budget-raise: trace 21.1 KB → 21.9 KB (measured 21.84 KB): the trace draws its critical path under the bars and shows self time and time on the path in the details (`highlightCriticalPath`, best-in-class tracing parity); the entry measured 21.13 KB before the change (2026-11-17).
 Budget-raise: console-trace-scene 69.35 KB → 70.1 KB (measured 70.09 KB): the scene renders a trace, which gained the critical path and self time (2026-11-17).
+Budget-raise: trace 21.9 KB → 36.1 KB (measured 36.05 KB): the toolbar holds a `ToggleGroup` that switches the Waterfall, Timeline and Tree views (owner request, 2026-11-17). Most of the growth is `tailwind-merge`, which `ToggleGroup` brings through `cn`; 51 components already import `cn` (ConsoleLayout and LogViewer among them), so in an app the shared chunk is already loaded and the trace adds about the toggle group's own code.
+Budget-raise: console-trace-scene 70.1 KB → 73.7 KB (measured 73.65 KB): the scene renders a trace, which gained the view switch (2026-11-17).
+Budget-raise: config-provider 11.25 KB → 11.35 KB (measured 11.31 KB): the English catalog it carries gained the trace's view, critical path and self time messages (2026-11-17).
+Budget-raise: locales-pt-BR 10.45 KB → 10.5 KB (measured 10.49 KB): the same trace messages (2026-11-17).
+Budget-raise: locales-es 10.6 KB → 10.65 KB (measured 10.62 KB): the same trace messages (2026-11-17).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.
 

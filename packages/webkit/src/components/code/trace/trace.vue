@@ -6,6 +6,7 @@
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import CopyButton from '../../action/copy-button/copy-button.vue'
+  import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import Tag from '../../content/tag/tag.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -22,6 +23,9 @@
 
   /** Visible window of the run clock: start and end in milliseconds. */
   export type TraceRange = [number, number]
+
+  /** How the spans are drawn: tree and bars, bars in lanes, or the tree with times as text. */
+  export type TraceView = 'waterfall' | 'timeline' | 'tree'
 
   export interface TraceSpan {
     /** Stable key of the span. */
@@ -47,6 +51,22 @@
     /** Moments inside the span, drawn as markers on its bar and listed in the details. */
     events?: TraceSpanEvent[]
   }
+
+  type Placed = {
+    span: TraceSpan
+    status: TraceSpanStatus
+    root: boolean
+    offset: number
+    width: number
+    wide: boolean
+    flip: boolean
+    outside: boolean
+    marks: { key: string; at: number }[]
+    critical: boolean
+    path: { key: string; offset: number; width: number }[]
+  }
+
+  type Lane = { key: string; items: Placed[] }
 
   type Row = {
     span: TraceSpan
@@ -109,6 +129,8 @@
 
   const range = defineModel<TraceRange | null>('range', { default: null })
 
+  const layout = defineModel<TraceView>('view', { default: 'waterfall' })
+
   const attrs = useAttrs()
   const { t, locale } = useTranslate({ trace: en.trace })
   const uid = useId()
@@ -156,7 +178,7 @@
   const clamp = (value: number, low: number, high: number): number =>
     Math.min(high, Math.max(low, value))
 
-  const view = computed<TraceRange>(() => {
+  const win = computed<TraceRange>(() => {
     const win = range.value
     if (!win) return [0, total.value]
     let low = clamp(Math.min(win[0], win[1]), 0, total.value)
@@ -168,7 +190,7 @@
     return [low, high]
   })
 
-  const zoomed = computed<boolean>(() => view.value[0] > 0 || view.value[1] < total.value)
+  const zoomed = computed<boolean>(() => win.value[0] > 0 || win.value[1] < total.value)
 
   const slowestId = computed<string>(() => {
     if (!props.highlightSlowest || props.spans.length < 2) return ''
@@ -237,6 +259,45 @@
     return keep
   })
 
+  const placeSpan = (span: TraceSpan, depth: number): Placed => {
+    const [low, high] = win.value
+    const length = high - low
+    const from = Math.max(span.start, low)
+    const to = Math.min(endOf(span), high)
+    const outside = to < from || span.start > high || endOf(span) < low
+    const offset = outside ? 0 : clamp((from - low) / length, 0, 1)
+    const width = outside ? 0 : Math.max((to - from) / length, 0.006)
+    const marks = (span.events ?? [])
+      .map((event, order) => ({ key: `${order}`, at: (event.at - low) / length }))
+      .filter((mark) => mark.at >= 0 && mark.at <= 1)
+    const status: TraceSpanStatus = span.status ?? 'success'
+    const stretches = criticalPath.value.get(span.id)
+    const path = (stretches ?? [])
+      .map(([a, b], order) => {
+        const lead = Math.max(a, low)
+        const tail = Math.min(b, high)
+        return {
+          key: `${order}`,
+          offset: clamp((lead - low) / length, 0, 1),
+          width: tail > lead ? Math.max((tail - lead) / length, 0.004) : 0
+        }
+      })
+      .filter((stretch) => stretch.width > 0)
+    return {
+      span,
+      status,
+      root: depth === 0 && status === 'success',
+      offset,
+      width,
+      wide: width >= 0.14,
+      flip: width < 0.14 && offset + width > 0.8,
+      outside,
+      marks,
+      critical: Boolean(stretches),
+      path
+    }
+  }
+
   const rows = computed<Row[]>(() => {
     const out: Row[] = []
     const walk = (parentId: string | null, depth: number): void => {
@@ -246,48 +307,14 @@
       siblings.forEach((span, index) => {
         const hasChildren = (childrenOf.value.get(span.id) ?? []).length > 0
         const expanded = hasChildren && (Boolean(shown.value) || !collapsed.value.has(span.id))
-        const [low, high] = view.value
-        const length = high - low
-        const from = Math.max(span.start, low)
-        const to = Math.min(span.start + span.duration, high)
-        const outside = to < from || span.start > high || span.start + span.duration < low
-        const offset = outside ? 0 : clamp((from - low) / length, 0, 1)
-        const width = outside ? 0 : Math.max((to - from) / length, 0.006)
-        const marks = (span.events ?? [])
-          .map((event, order) => ({ key: `${order}`, at: (event.at - low) / length }))
-          .filter((mark) => mark.at >= 0 && mark.at <= 1)
-        const status: TraceSpanStatus = span.status ?? 'success'
-        const root = depth === 0 && status === 'success'
-        const stretches = criticalPath.value.get(span.id)
-        const path = (stretches ?? [])
-          .map(([a, b], order) => {
-            const lead = Math.max(a, low)
-            const tail = Math.min(b, high)
-            return {
-              key: `${order}`,
-              offset: clamp((lead - low) / length, 0, 1),
-              width: tail > lead ? Math.max((tail - lead) / length, 0.004) : 0
-            }
-          })
-          .filter((stretch) => stretch.width > 0)
         out.push({
-          span,
+          ...placeSpan(span, depth),
           depth,
           parentId,
           hasChildren,
           expanded,
           posinset: index + 1,
-          setsize: siblings.length,
-          status,
-          root,
-          offset,
-          width,
-          wide: width >= 0.14,
-          flip: width < 0.14 && offset + width > 0.8,
-          outside,
-          marks,
-          critical: Boolean(stretches),
-          path
+          setsize: siblings.length
         })
         if (expanded) walk(span.id, depth + 1)
       })
@@ -295,6 +322,60 @@
     walk(null, 0)
     return out
   })
+
+  const lanes = computed<Lane[]>(() => {
+    if (layout.value !== 'timeline') return []
+    const levels: TraceSpan[][] = []
+    const visit = (parentId: string | null, depth: number): void => {
+      ;(childrenOf.value.get(parentId) ?? []).forEach((span) => {
+        ;(levels[depth] ??= []).push(span)
+        visit(span.id, depth + 1)
+      })
+    }
+    visit(null, 0)
+    const out: Lane[] = []
+    levels.forEach((level, depth) => {
+      const ends: number[] = []
+      const packed: TraceSpan[][] = []
+      ;[...level]
+        .sort((a, b) => a.start - b.start)
+        .forEach((span) => {
+          let lane = ends.findIndex((end) => end <= span.start)
+          if (lane < 0) {
+            lane = ends.length
+            packed.push([])
+          }
+          ends[lane] = endOf(span)
+          packed[lane]?.push(span)
+        })
+      packed.forEach((spans, lane) =>
+        out.push({ key: `${depth}-${lane}`, items: spans.map((span) => placeSpan(span, depth)) })
+      )
+    })
+    return out
+  })
+
+  const timelineOrder = computed<string[]>(() =>
+    lanes.value
+      .flatMap((lane, index) => lane.items.map((item) => ({ item, index })))
+      .sort((a, b) => a.item.span.start - b.item.span.start || a.index - b.index)
+      .map(({ item }) => item.span.id)
+  )
+
+  const anyMatch = computed<boolean>(() => !shown.value || shown.value.size > 0)
+
+  const hasContent = computed<boolean>(() =>
+    layout.value === 'timeline' ? props.spans.length > 0 && anyMatch.value : rows.value.length > 0
+  )
+
+  const dimmed = (span: TraceSpan): boolean => Boolean(term.value) && !matches(span)
+
+  const viewOptions = computed(() =>
+    (['waterfall', 'timeline', 'tree'] as const).map((value) => ({
+      value,
+      label: t(`trace.${value}`)
+    }))
+  )
 
   const secondsFormat = computed(
     () =>
@@ -311,12 +392,13 @@
       at,
       edge: at === 0 ? 'start' : at === 1 ? 'end' : null,
       density: at === 0.5 ? 'mid' : at === 0.25 || at === 0.75 ? 'quarter' : null,
-      label: formatDuration(view.value[0] + (view.value[1] - view.value[0]) * at)
+      label: formatDuration(win.value[0] + (win.value[1] - win.value[0]) * at)
     }))
   )
 
   const tabStop = computed<string>(() => {
-    const ids = rows.value.map((row) => row.span.id)
+    const ids =
+      layout.value === 'timeline' ? timelineOrder.value : rows.value.map((row) => row.span.id)
     if (ids.includes(focusedId.value)) return focusedId.value
     if (ids.includes(current.value)) return current.value
     return ids[0] ?? ''
@@ -380,8 +462,8 @@
   })
 
   const windowStyle = computed(() => ({
-    '--trace-window-start': String(view.value[0] / total.value),
-    '--trace-window-size': String((view.value[1] - view.value[0]) / total.value)
+    '--trace-window-start': String(win.value[0] / total.value),
+    '--trace-window-size': String((win.value[1] - win.value[0]) / total.value)
   }))
 
   const setWindow = (a: number, b: number): void => {
@@ -417,7 +499,7 @@
   const onTrackDown = (event: PointerEvent): void => {
     if (event.button !== 0) return
     const at = msAt(event)
-    const [low, high] = view.value
+    const [low, high] = win.value
     drag = {
       mode: zoomed.value && at >= low && at <= high ? 'pan' : 'draw',
       anchor: at,
@@ -428,7 +510,7 @@
 
   const onThumbDown = (event: PointerEvent, edge: Edge): void => {
     if (event.button !== 0) return
-    drag = { mode: edge, anchor: msAt(event), origin: [view.value[0], view.value[1]] }
+    drag = { mode: edge, anchor: msAt(event), origin: [win.value[0], win.value[1]] }
     capture(event)
   }
 
@@ -452,12 +534,12 @@
 
   const thumbLimits = (edge: Edge): [number, number] =>
     edge === 'start'
-      ? [0, view.value[1] - minSpan.value]
-      : [view.value[0] + minSpan.value, total.value]
+      ? [0, win.value[1] - minSpan.value]
+      : [win.value[0] + minSpan.value, total.value]
 
   const onThumbKey = (event: KeyboardEvent, edge: Edge): void => {
     const key = logicalArrowKey(event.key, dir.value)
-    const [low, high] = view.value
+    const [low, high] = win.value
     const [min, max] = thumbLimits(edge)
     const current = edge === 'start' ? low : high
     let next: number | null = null
@@ -481,7 +563,7 @@
   const thumbs = computed(() =>
     (['start', 'end'] as const).map((edge) => {
       const [min, max] = thumbLimits(edge)
-      const value = edge === 'start' ? view.value[0] : view.value[1]
+      const value = edge === 'start' ? win.value[0] : win.value[1]
       return {
         edge,
         label: edge === 'start' ? t('trace.zoomStart') : t('trace.zoomEnd'),
@@ -521,10 +603,7 @@
     collapsed.value = next
   }
 
-  const select = (row: Row): void => {
-    focusedId.value = row.span.id
-    setSelected(current.value === row.span.id ? '' : row.span.id)
-  }
+  const select = (row: Row): void => pick(row.span.id)
 
   const close = (): void => {
     const id = current.value
@@ -574,7 +653,7 @@
     return ''
   }
 
-  const rowLabel = (row: Row): string =>
+  const rowLabel = (row: Placed): string =>
     [
       row.span.name,
       row.span.service ?? '',
@@ -588,6 +667,29 @@
       .filter(Boolean)
       .join(', ')
 
+  const pick = (id: string): void => {
+    focusedId.value = id
+    setSelected(current.value === id ? '' : id)
+  }
+
+  const onBarKeydown = (event: KeyboardEvent, id: string): void => {
+    const order = timelineOrder.value
+    const index = order.indexOf(id)
+    const key = logicalArrowKey(event.key, dir.value)
+    let target: string | undefined
+    if (key === 'ArrowRight' || key === 'ArrowDown') target = order[index + 1]
+    else if (key === 'ArrowLeft' || key === 'ArrowUp') target = order[index - 1]
+    else if (key === 'Home') target = order[0]
+    else if (key === 'End') target = order[order.length - 1]
+    else if (key === 'Enter' || key === ' ') {
+      event.preventDefault()
+      pick(id)
+      return
+    } else return
+    event.preventDefault()
+    if (target) void focusRow(target)
+  }
+
   const detailId = `${uid}-detail`
 
   const LOADING_ROWS = 5
@@ -599,31 +701,62 @@
     :data-testid="testId"
     :data-bordered="bordered || null"
     :data-loading="loading || null"
+    :data-view="layout"
     :aria-busy="loading || undefined"
-    class="@container/trace flex w-full min-w-0 flex-col overflow-hidden bg-(--bg-surface) data-bordered:rounded-(--shape-card) data-bordered:border data-bordered:border-(--border-default)"
+    class="group/trace @container/trace flex w-full min-w-0 flex-col overflow-hidden bg-(--bg-surface) data-bordered:rounded-(--shape-card) data-bordered:border data-bordered:border-(--border-default)"
   >
     <div
-      class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted)"
+      class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-muted) p-(--spacing-xs)"
     >
-      <div class="border-e border-(--border-muted) p-(--spacing-xs)">
-        <Input
-          v-model="search"
-          size="medium"
-          :disabled="loading"
-          :placeholder="t('trace.search')"
-          :aria-label="t('trace.search')"
-          :data-testid="`${testId}__search`"
-          class="w-full"
-        >
-          <template #leading>
-            <i
-              class="az az-search text-(--text-muted)"
-              aria-hidden="true"
-            />
-          </template>
-        </Input>
+      <Input
+        v-model="search"
+        size="medium"
+        :disabled="loading"
+        :placeholder="t('trace.search')"
+        :aria-label="t('trace.search')"
+        :data-testid="`${testId}__search`"
+        class="max-w-80 min-w-0 flex-1 basis-40"
+      >
+        <template #leading>
+          <i
+            class="az az-search text-(--text-muted)"
+            aria-hidden="true"
+          />
+        </template>
+      </Input>
+      <ToggleGroup
+        v-model="layout"
+        :options="viewOptions"
+        size="medium"
+        :aria-label="t('trace.view')"
+        :data-testid="`${testId}__view`"
+        class="ms-auto shrink-0"
+      />
+    </div>
+
+    <div
+      :data-view="layout"
+      class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) data-[view=timeline]:grid-cols-1 data-[view=tree]:grid-cols-[minmax(0,1fr)_auto]"
+    >
+      <div
+        v-if="layout !== 'timeline'"
+        class="flex items-center border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+      >
+        <span class="text-label-sm text-(--text-muted)">{{ t('trace.span') }}</span>
       </div>
       <div
+        v-if="layout === 'tree'"
+        class="flex items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-xs)"
+      >
+        <span class="w-20 text-end text-label-sm text-(--text-muted)">{{
+          t('trace.startedAt')
+        }}</span>
+        <span class="w-20 text-end text-label-sm text-(--text-muted)">{{
+          t('trace.duration')
+        }}</span>
+      </div>
+      <div
+        v-else
         class="flex items-center px-(--spacing-md)"
         aria-hidden="true"
       >
@@ -648,13 +781,13 @@
     </div>
 
     <div
-      v-if="zoomable && spans.length"
+      v-if="zoomable && spans.length && layout !== 'tree'"
       :data-zoomed="zoomed || null"
       :data-testid="`${testId}__minimap`"
-      class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted)"
+      class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) group-data-[view=timeline]/trace:grid-cols-1"
     >
       <div
-        class="flex min-w-0 items-center gap-(--spacing-xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-2xs)"
+        class="flex min-w-0 items-center gap-(--spacing-xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-2xs) group-data-[view=timeline]/trace:border-e-0 group-data-[view=timeline]/trace:border-b"
       >
         <span class="truncate text-label-sm text-(--text-muted)">{{ t('trace.zoom') }}</span>
         <Button
@@ -715,8 +848,10 @@
 
     <div class="relative">
       <div
+        v-if="layout !== 'tree'"
         aria-hidden="true"
-        class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] pointer-events-none absolute inset-y-0 start-[calc(var(--trace-name)+var(--spacing-md))] end-(--spacing-md) hidden @xl/trace:block"
+        :data-view="layout"
+        class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] pointer-events-none absolute inset-y-0 start-[calc(var(--trace-name)+var(--spacing-md))] end-(--spacing-md) hidden @xl/trace:block data-[view=timeline]:start-(--spacing-md)"
       >
         <span class="absolute inset-y-0 start-1/4 w-px bg-(--border-muted)" />
         <span class="absolute inset-y-0 start-1/2 w-px bg-(--border-muted)" />
@@ -749,7 +884,81 @@
       </div>
 
       <div
-        v-else-if="rows.length"
+        v-else-if="layout === 'timeline' && hasContent"
+        ref="gridEl"
+        role="listbox"
+        :aria-label="ariaLabel || t('trace.label')"
+        :aria-describedby="detail ? detailId : undefined"
+        :data-testid="`${testId}__timeline`"
+        class="relative flex flex-col gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-sm)"
+      >
+        <div
+          v-for="lane in lanes"
+          :key="lane.key"
+          role="none"
+          :data-testid="`${testId}__lane`"
+          class="relative h-(--size-6) pointer-coarse:h-(--size-10)"
+        >
+          <template
+            v-for="item in lane.items"
+            :key="item.span.id"
+          >
+            <span
+              role="option"
+              :tabindex="item.span.id === tabStop ? 0 : -1"
+              :aria-selected="item.span.id === current"
+              :aria-label="rowLabel(item)"
+              :data-span-id="item.span.id"
+              :data-status="item.status"
+              :data-root="item.root || null"
+              :data-outside="item.outside || null"
+              :data-selected="item.span.id === current || null"
+              :data-slowest="item.span.id === slowestId || null"
+              :data-critical="item.critical || null"
+              :data-dimmed="dimmed(item.span) || null"
+              :data-testid="`${testId}__bar`"
+              :style="{
+                '--trace-span-offset': String(item.offset),
+                '--trace-span-width': String(item.width)
+              }"
+              class="absolute inset-y-0 start-[calc(var(--trace-span-offset)*100%)] flex w-[calc(var(--trace-span-width)*100%)] min-w-1 cursor-pointer items-center overflow-hidden rounded-(--shape-button) border transition-opacity duration-150 ease-out outline-offset-1 focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none motion-reduce:transition-none data-dimmed:opacity-40 data-outside:hidden data-selected:outline-2 data-selected:outline-(--border-selected) data-[status=error]:border-(--danger-border) data-[status=error]:bg-(--danger) data-[status=success]:border-(--success-border) data-[status=success]:bg-(--success) data-root:data-[status=success]:border-(--info-border) data-root:data-[status=success]:bg-(--info) data-[status=running]:border-(--warning-border) data-[status=running]:bg-(--warning)"
+              @click="pick(item.span.id)"
+              @focus="focusedId = item.span.id"
+              @keydown="onBarKeydown($event, item.span.id)"
+            >
+              <span
+                :data-status="item.status"
+                :data-root="item.root || null"
+                aria-hidden="true"
+                class="truncate px-(--spacing-xs) text-label-sm whitespace-nowrap tabular-nums data-[status=error]:text-(--danger-foreground) data-[status=success]:text-(--success-foreground) data-root:data-[status=success]:text-(--info-foreground) data-[status=running]:text-(--warning-foreground)"
+                ><bdi>{{ item.span.name }}</bdi> · {{ formatDuration(item.span.duration) }}</span
+              >
+            </span>
+            <span
+              v-for="stretch in item.path"
+              :key="`path-${item.span.id}-${stretch.key}`"
+              :style="{
+                '--trace-path-offset': String(stretch.offset),
+                '--trace-path-width': String(stretch.width)
+              }"
+              :data-testid="`${testId}__path`"
+              aria-hidden="true"
+              class="pointer-events-none absolute -bottom-1 start-[calc(var(--trace-path-offset)*100%)] h-0.5 w-[calc(var(--trace-path-width)*100%)] rounded-full bg-(--text-default)"
+            />
+            <span
+              v-for="mark in item.marks"
+              :key="`event-${item.span.id}-${mark.key}`"
+              :style="{ '--trace-event-at': String(mark.at) }"
+              :data-testid="`${testId}__event`"
+              aria-hidden="true"
+              class="pointer-events-none absolute -inset-y-0.5 start-[calc(var(--trace-event-at)*100%)] -ms-px w-0.5 rounded-full bg-(--text-default) ring-1 ring-(--bg-surface)"
+            />
+          </template>
+        </div>
+      </div>
+
+      <div
+        v-else-if="layout !== 'timeline' && rows.length"
         ref="gridEl"
         role="treegrid"
         :aria-label="ariaLabel || t('trace.label')"
@@ -778,7 +987,8 @@
             '--trace-span-width': String(row.width),
             '--trace-span-depth': String(row.depth)
           }"
-          class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out last:border-b-0 hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-selected:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+          :data-view="layout"
+          class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] data-[view=tree]:grid-cols-[minmax(0,1fr)_auto] items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out last:border-b-0 hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-selected:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
           @click="select(row)"
           @focus="focusedId = row.span.id"
           @keydown="onKeydown($event, index)"
@@ -842,6 +1052,23 @@
             </span>
           </span>
           <span
+            v-if="layout === 'tree'"
+            role="gridcell"
+            :data-testid="`${testId}__times`"
+            class="flex items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-xs) text-label-sm tabular-nums"
+          >
+            <span class="w-20 text-end text-(--text-muted)"
+              >+{{ formatDuration(row.span.start) }}</span
+            >
+            <span
+              :data-status="row.status"
+              :data-root="row.root || null"
+              class="w-20 text-end data-[status=error]:text-(--danger-foreground) data-[status=success]:text-(--text-default) data-[status=running]:text-(--warning-foreground)"
+              >{{ formatDuration(row.span.duration) }}</span
+            >
+          </span>
+          <span
+            v-else
             role="gridcell"
             class="flex items-center px-(--spacing-md) py-(--spacing-xs)"
           >

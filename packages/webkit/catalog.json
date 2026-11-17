@@ -10072,7 +10072,8 @@
    "treeShakeableImport": "@aziontech/webkit/trace",
    "models": [
     "selectedKey",
-    "range"
+    "range",
+    "view"
    ],
    "category": "code",
    "structure": "monolithic",
@@ -10139,6 +10140,13 @@
      "default": "null",
      "required": "false",
      "doc": "Two-way value (`v-model:range`)."
+    },
+    {
+     "name": "view",
+     "type": "TraceView",
+     "default": "'waterfall'",
+     "required": "false",
+     "doc": "Two-way value (`v-model:view`)."
     }
    ],
    "surface": "app",

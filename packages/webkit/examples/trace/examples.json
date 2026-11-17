@@ -41,6 +41,11 @@
       "name": "CriticalPath",
       "summary": "A checkout request that fans out to three fetches in parallel, with its critical path drawn under the bars: verify-session, then the price fetch through its cache miss and origin call, then render. The longest fetch, fetch-recommendations, is off the path, so shortening it would not make the request faster. The selected price fetch shows its self time and its time on the path.",
       "file": "critical-path.vue"
+    },
+    {
+      "name": "Views",
+      "summary": "The same checkout request in the view the reader picked, bound with `v-model:view` so the page keeps the choice: Timeline packs each nesting level into lanes of bars on one time axis, Waterfall (the default) draws the tree with a bar per row, and Tree lists the nesting with start and duration as text. The View switch in the toolbar changes it; search, selection and the details carry over.",
+      "file": "views.vue"
     }
   ]
 }

@@ -269,7 +269,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
+  import Trace, { type TraceSpan, type TraceView } from '@aziontech/webkit/trace'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
@@ -913,6 +913,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
   const documentEvent = ref<EventRow | null>(null)
+  const traceView = ref<TraceView>('waterfall')
   watch(selectedEvent, (event) => {
     if (event) documentEvent.value = event
   })
@@ -1783,6 +1784,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                       :key="documentEvent.id"
                       :spans="documentEvent.spans"
                       :bordered="false"
+                      v-model:view="traceView"
                       highlight-critical-path
                       :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
                       class="border-y border-(--border-muted)"
@@ -1873,6 +1875,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                 :key="documentEvent.id"
                 :spans="documentEvent.spans"
                 :bordered="false"
+                v-model:view="traceView"
                 highlight-critical-path
                 :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
                 class="border-y border-(--border-muted)"
