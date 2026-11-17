@@ -97,7 +97,7 @@
                     class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
                     aria-labelledby="oauth-consent-title"
                   >
-                    <div class="flex items-center gap-(--spacing-sm)">
+                    <div class="flex flex-col items-start gap-(--spacing-md)">
                       <Avatar
                         variant="square"
                         size="large"
@@ -105,7 +105,7 @@
                         :alt="client.name"
                       />
                       <PageHeader
-                        class="min-w-0 flex-1"
+                        class="w-full"
                         title-id="oauth-consent-title"
                         :title="`Authorize ${client.name}`"
                         :description="`${client.name} by ${client.publisher} (${client.site}) wants to access your account.`"
@@ -185,7 +185,7 @@
 
                     <p class="text-body-sm text-(--text-muted)">
                       Allowing sends you back to
-                      <span class="text-body-code-sm break-all text-(--text-default)">{{
+                      <span class="text-body-code-sm break-words text-(--text-default)">{{
                         client.redirect
                       }}</span
                       >. You can revoke access at any time in
