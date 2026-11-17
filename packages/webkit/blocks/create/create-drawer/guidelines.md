@@ -135,7 +135,7 @@ Then delete `sample.ts` and its import.
 
 - Open on a blank form every time, or on the edited item's values, and clear every error on open.
 - Lock the `fieldset` and pass `:disabled` to every control from the same flag while saving; release it on success and on failure.
-- Validate on submit only: an empty required field gets the amber required prompt after Save is pressed.
+- Validate on submit only: a required field shows the Required marker from the start, and turns `invalid` with a `Field.Error` only after Save is pressed with it empty.
 - Close the drawer on success and show the new item in the list behind it, with a toast that names it (every variant does).
 - On a failed save keep the drawer open with the values, release the fieldset and show a danger `Alert` with Retry above the footer (SaveError).
 - Stack a second, medium drawer for a missing item of the same resource, such as an origin for a rule, and select the new one back into the parent.
@@ -145,7 +145,7 @@ Then delete `sample.ts` and its import.
 
 - Don't create in a dialog, or open a page for an item that lives inside a resource.
 - Don't add Cancel next to the commit button.
-- Don't flag fields while the user is still typing, or show required and invalid on one field at once.
+- Don't flag fields while the user is still typing, or colour a required field before a failed submit.
 - Don't hide a required field inside a collapsed section.
 - Don't reset the form on close; the content would jump while the drawer slides out.
 - Don't deploy or publish as a side effect of Save.
@@ -176,7 +176,7 @@ Then delete `sample.ts` and its import.
 - Default: Add Domain opened from the resource's Settings tab, blank, on the free domain option; `loading` spins the button while the page saves.
 - AddEnvironment: the same form opened from the environment menu (the `trigger` slot), titled and saved as Add Environment (`title`).
 - EditDomain: opened from a domain row menu on www.example.com (`defaultValues`, `title`, `submitLabel`), with the Certificate select showing the covering wildcard.
-- AddRecord: the DNS zone record form; Name and Value are flagged as required only after an empty Add Record.
+- AddRecord: the DNS zone record form; Name and Value carry the Required marker from the start and turn invalid only after an empty Add Record.
 - ItemRows: Add Origin on the Origins page of the storefront resource, a large drawer whose sections are `Item` rows in flush cards, saved together by one Add Origin.
 - NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.

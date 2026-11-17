@@ -1,6 +1,6 @@
 ---
 name: webkit-form
-description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
+description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
 last_updated: 2026-11-17
 scope: general
@@ -56,10 +56,10 @@ in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInp
 `Field`**; leave a control bare only when no label belongs next to it.
 
 - **`Field` (preferred):** `<Field>` + `<Field.Label>` + the control + `<Field.Description>` /
-  `<Field.Error>`. State lives on the Field — `<Field :required :invalid :disabled>` — and the control
+  `<Field.Error>`. State lives on the Field — `<Field required :invalid :disabled>` — and the control
   reads its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from it; `Field.Label`
-  points `for` at the control and shows the Required tag; `Field.Description` takes the helper tone
-  (disabled → invalid → required → helper) from the Field. The accessible-name / error-association rules
+  points `for` at the control and shows the Required marker; `Field.Description` takes its tone
+  (disabled → invalid → helper) from the Field. The accessible-name / error-association rules
   below are satisfied **by construction**.
 - **Checkbox, switch:** `<Field orientation="horizontal">` with the control first and a
   `<Field.Content>` holding `Field.Label` + `Field.Description`.
@@ -82,19 +82,22 @@ in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInp
 <!-- ✅ Preferred — the Field owns label + description + validation wiring -->
 <Field required :invalid="!!errors.name">
   <Field.Label>Application name</Field.Label>
-  <Input v-model="form.name" name="name" />
-  <Field.Description>{{ errors.name || 'Shown in the dashboard.' }}</Field.Description>
+  <Input v-model="form.name" name="name" @update:model-value="errors.name = ''" />
+  <Field.Description>Shown in the dashboard.</Field.Description>
+  <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
 </Field>
 
 <!-- ⚠️ Loose — only when no Field fits; now YOU wire the label + aria-describedby -->
-<Field.Label for="app-name">Application name</Field.Label>
+<Field.Label for="app-name" required>Application name</Field.Label>
 <Input
   id="app-name"
   v-model="form.name"
-  aria-describedby="app-name-help"
+  required
   :invalid="!!errors.name"
+  :aria-describedby="errors.name ? 'app-name-error' : undefined"
+  @update:model-value="errors.name = ''"
 />
-<FieldError id="app-name-help">{{ errors.name || 'Shown in the dashboard.' }}</FieldError>
+<FieldError v-if="errors.name" id="app-name-error">{{ errors.name }}</FieldError>
 ```
 
 ## Label association — every control names itself (both approaches)
@@ -110,10 +113,10 @@ its state, and the group it belongs to. The mechanics differ per approach, the c
   `Item.Title` as the field name and gives the control an `aria-label`. A placeholder is **never** the
   label — it disappears on input and is not a reliable accessible name.
 - **Errors associated via `aria-describedby`.** The message carries an `id` and the control points
-  `aria-describedby` at it, so it is announced when focus lands; `:required` / `:invalid` set
+  `aria-describedby` at it, so it is announced when focus lands; `required` / `:invalid` set
   `aria-required` / `aria-invalid` — don't hand-roll them. Inside a `Field`, `Field.Description` /
   `Field.Error` register themselves and the control is described by them automatically; in an ItemGroup
-  you set `aria-describedby` on the control and the `id` on the `<FieldDescription>` yourself.
+  you set `aria-describedby` on the control and the `id` on the `<FieldError>` yourself.
 - **Groups in `<fieldset>` + `<legend>`.** Each section is a native `<fieldset>` with a `<legend>`
   (`sr-only` when a visible title already names it); a radio/checkbox set is its own `<fieldset>` whose
   `<legend>` is the question.
@@ -146,7 +149,7 @@ if a form seems to need a different rhythm, it's in the wrong container.
 form title (`text-heading-*` — `PageHeader` on a page, a `Card` title / `text-heading-sm`
 in a contained card, `DialogTitle` in a modal) → form description (`text-body-sm text-(--text-muted)`)
 → section title (`SettingsSection`, `text-heading-2xs`) or sub-heading (`text-heading-xs`) → **field label** (`Field.Label`,
-which carries the required tag) → control → **helper** (`FieldError` — guidance, or the required/invalid
+which carries the Required marker) → control → **helper** (`Field.Description` guidance, then `Field.Error` for the invalid
 feedback). A label is never smaller than its helper; a section title is never smaller than a field label.
 
 ## Form types — container and save model
@@ -505,7 +508,8 @@ Canonical pattern:
     :display-value="originLabel"
     :disabled="submitting"
     placeholder="Select an origin"
-    :required="!!errors.originId"
+    required
+    :invalid="!!errors.originId"
     @update:model-value="onOriginModel"
   >
     <Select.Trigger
@@ -608,7 +612,7 @@ Canonical pattern:
 ```vue
 <script setup>
   import Card from '@aziontech/webkit/card'
-  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import SettingsRow from '@aziontech/webkit/settings-row'
@@ -629,26 +633,24 @@ Canonical pattern:
             title="Name"
             description="A unique, descriptive name for the application."
           >
-            <!-- Control + feedback stack in the row's control column: the FieldDescription
-                 renders UNDER the control, only after a failed submit. An empty required
-                 field is amber `required` (a prompt, NOT an error); a filled-but-malformed
-                 value is red `invalid`. Emptiness picks the state — never both at once. -->
+            <!-- Control + feedback stack in the row's control column: `required` is static
+                 from the first render; a failed submit sets `invalid` for an empty or a
+                 malformed value, and the FieldError renders UNDER the control. -->
             <Input
               v-model="form.name"
               size="large"
               class="w-full"
               aria-label="Name"
-              :required="!!errors.name && !form.name.trim()"
-              :invalid="!!errors.name && !!form.name.trim()"
+              required
+              :invalid="!!errors.name"
               :aria-describedby="errors.name ? 'name-error' : undefined"
               @update:model-value="errors.name = ''"
             />
-            <FieldDescription
+            <FieldError
               v-if="errors.name"
               id="name-error"
-              :type="form.name.trim() ? 'invalid' : 'required'"
-              :label="errors.name"
-            />
+              >{{ errors.name }}</FieldError
+            >
           </SettingsRow>
           <SettingsRow
             title="Active"
@@ -674,19 +676,17 @@ Rules:
 - **Every row is a `SettingsRow`.** Do not hand-write the `Item` / `Item.Content` / `Item.Actions`
   markup of a settings row; the row owns its density (`Item size="small"`) and the control placement.
 - **`title` is the label; the control takes an `aria-label`** with the same text. No `<Field.Label>` inside a
-  row — validation feedback is the control's own `:required`/`:invalid` on submit.
+  row — the control takes `required` from the first render, and validation feedback is its own
+  `:invalid` on submit.
 - **The validation message renders as a `FieldError` under the control**, in the row's default slot
   after the control, shown only after a failed submit and linked to the control via
   `aria-describedby`. This is still the field saying what it needs, on the field — **not** a summary
   block or a `Alert` callout. `description` stays as the always-on guidance on the left.
-- **Required is NOT an error — pick the state by what failed.** An empty required field is a _prompt_:
-  `<FieldError type="required">` (amber) + the control's `:required` (amber). A field whose value is
-  present but malformed is an _error_: `<FieldError type="invalid">` (red) + the control's `:invalid`
-  (red). Never set both `:required` and `:invalid` at once — that yields an amber border with a red
-  helper. When one field can fail both ways, emptiness is the discriminator
-  (`:type="value.trim() ? 'invalid' : 'required'"`). Note `Select`/`MultiSelect` have no amber border,
-  so for an empty-required Select the amber `FieldError` (and `:required` for `aria-required`) carries
-  the cue — never colour it red.
+- **`required` is static; `invalid` is the only error state.** Set `required` on the control from the
+  first render (it sets `aria-required` and draws no colour). A failed submit sets `:invalid` for any
+  blocking problem — an empty required value or a malformed one — and the `<FieldError>` says what to
+  enter (`Enter a name.`, `This field is required.`). Only then does the field turn red. The same holds
+  for `Select` / `MultiSelect`: static `required`, `:invalid` bound to the error.
 - **Richer controls that don't fit a one-line row** (a radio group, a block of `Field` choice cards,
   a list editor) use `variant="stacked"`, not a squeezed right column.
 
@@ -716,11 +716,10 @@ matches the control `id`, the description is linked via `aria-describedby`, `req
 `aria-required`, and `invalid` sets `aria-invalid`. Stack the fields in a single column (`Field.Group`
 gives the `--spacing-lg` rhythm).
 
-The `required` tag on the label is **persistent** — it advertises the field is mandatory from first
-render, independent of validation. `Field.Label` shows the tag from the Field's own `required`, which
-also drives the field's amber state, so for the persistent tag set `required` on the `Field.Label` **itself** (always
-on) and bind the Field's `:required` to the
-post-submit empty state so only the amber (border + description) is revealed on submit. Canonical pattern:
+`required` is **static** — set it on the `Field` from the first render. `Field.Label` shows the Required
+marker (`*` + "(Required)") from it and the control gets `required` / `aria-required`; it draws no
+colour. A failed submit sets the Field's `:invalid` for any blocking problem, empty or malformed, and a
+`Field.Error` says what to enter. Canonical pattern:
 
 ```vue
 <script setup>
@@ -730,19 +729,13 @@ post-submit empty state so only the amber (border + description) is revealed on 
 
 <template>
   <Field.Group>
-    <!-- Field.Label required ALWAYS (its own prop). Empty → :required
-         (amber), the description flips to the required tone. A malformed value →
-         :invalid (red). Never both at once. `errors.name` holds the message
-         ("" = valid), so the description falls back to guidance when clear. -->
+    <!-- `required` is static; a failed submit sets `invalid` for an empty or a
+         malformed value. `errors.name` holds the message ("" = valid). -->
     <Field
-      :required="!!errors.name && !form.name.trim()"
-      :invalid="!!errors.name && !!form.name.trim()"
+      required
+      :invalid="!!errors.name"
     >
-      <Field.Label
-        for="app-name"
-        required
-        >Name</Field.Label
-      >
+      <Field.Label for="app-name">Name</Field.Label>
       <Input
         id="app-name"
         v-model="form.name"
@@ -750,16 +743,15 @@ post-submit empty state so only the amber (border + description) is revealed on 
         placeholder="my-application"
         @update:model-value="errors.name = ''"
       />
-      <Field.Description>{{
-        errors.name || 'A unique name for this application.'
-      }}</Field.Description>
+      <Field.Description>A unique name for this application.</Field.Description>
+      <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
     </Field>
   </Field.Group>
 </template>
 ```
 
-When the tag does not need to outlive validation (an optional field, or a field that is always
-required), `<Field required><Field.Label>Name</Field.Label>…</Field>` is all it takes.
+A `Field.Label` set apart from its control (no enclosing `Field`) takes its own `required` to show the
+marker.
 
 Parts of the `Field` compound (ask the webkit MCP `suggest_component`, or read
 `node_modules/@aziontech/webkit/catalog.json` (`imports`)): `Field.Label`, `Field.Description`,
@@ -772,30 +764,28 @@ Rules:
 
 - **Never a bare `Input` / `Textarea` next to a floating `<p>` "label".** Wrap it in a `Field`.
   A placeholder is **not** a label — it vanishes on input and is not a reliable accessible name.
-- **The description is the guidance region.** Feed it the field's guidance; on a failed submit swap it
-  for the message and flip the Field's state — `:required` (amber) for an empty field, `:invalid` (red)
-  for a malformed one. Never pass both `:required` and `:invalid` true together (amber border + red
-  helper). It's still the field's own description, not a second error node. Use `Field.Error` when the
-  message must sit beside a guidance description that stays visible.
+- **The description is the guidance region.** Feed it the field's guidance; on a failed submit set the
+  Field's `:invalid` (for an empty required value or a malformed one) and render the message in a
+  `Field.Error` beside it. `required` stays static and never colours the field.
 - **A `Select` in a `Field` is labelled on its trigger automatically**; outside a `Field`, see the next
   pattern.
 
 ## Composed Select — label the TRIGGER, not the wrapper
 
 Inside a `Field`, `Field.Label` already targets the trigger. When you render a `Field.Label` apart from a
-`Select` (the persistent-tag pattern, or no `Field`), the focusable
+`Select` (no enclosing `Field`), the focusable
 element is the **trigger** (a `role="combobox"` `<button>`), and `Select`'s `$attrs` land on its outer
 wrapper `<div>`, _not_ the button. So the `Field.Label`'s `for` and the `id` must go on **`<Select.Trigger>`**.
 Pointing `<label for>` at the `<Select>` wrapper labels nothing. This holds in **both** approaches.
 
 ```vue
-<!-- Field.Label required ALWAYS; empty-required → :required (amber semantics), not
-     :invalid (red). Select has no amber border, so pair with a FieldError. -->
+<!-- `required` is static; a failed submit sets `invalid` and shows a FieldError. -->
 <Field.Label for="app-country" required>Country</Field.Label>
 <Select
   v-model="form.country"
   placeholder="Select an option…"
-  :required="!!errors.country"
+  required
+  :invalid="!!errors.country"
   :display-value="labelOf(countries)"
   @update:model-value="errors.country = ''"
 >
@@ -865,34 +855,30 @@ Validation runs **on submit, once** — not on every keystroke, not on blur. The
 field's own state plus an on-field `FieldError`** — there is **no separate error-summary block and no
 `Alert` callout** for field validation; the field says what it needs, where it is.
 
-**Required is not an error.** Two failure kinds, two states:
+**`required` is static; `invalid` is the error.** Two settings, two jobs:
 
-- **Required-but-empty** → the amber `required` state (`:required` on the control, `FieldError
-type="required"`). It is a _prompt to fill_, not a rejection — never the red danger state.
-- **Filled-but-malformed** → the red `invalid` state (`:invalid` on the control, `FieldError
-type="invalid"`). The value is present and wrong.
+- **`required`** → set from the first render (on the `Field`, or on the control when there is no
+  `Field`). It shows the Required marker on `Field.Label`, sets `aria-required` and draws no colour.
+- **`invalid`** → set by a failed submit for **any** blocking problem: an empty required value or a
+  malformed one. The field turns red and a `FieldError` / `Field.Error` says what to enter.
 
 On a failed submit, **move focus to the first field in error** so keyboard and screen-reader users
 land on it. Never pre-disable the submit button to stop an incomplete form: let it submit and show
 the feedback.
 
-Never set both on one field at once (amber border + red helper is the bug this rule prevents). When a
-field can fail both ways, emptiness is the discriminator. Store a real message so the `FieldError` has
-something to show.
+Store a real message that says what to enter, so the `FieldError` has something to show.
 
-**Where a field has a `Field.Label`, its required tag is persistent** — it shows from first render, not just
-on a failed submit, so the user knows the field is mandatory before touching it. Only the field's amber
-state (border + helper) is revealed on submit. Because `Field.Label` couples the tag to the same
-`required` that colours the field, set `required` on the `Field.Label` itself (always on) instead of
-only on the `Field` (see Approach B). An **ItemGroup** has no `Field.Label`, so it has no persistent tag —
-its required feedback is the on-submit amber `FieldError` only.
+**Where a field has a `Field.Label`, its Required marker shows from the first render**, so the user knows
+the field is mandatory before touching it. Only the red `invalid` state is revealed on submit. An
+**ItemGroup** has no `Field.Label`, so it has no visible marker — the control still takes `required`,
+and a failed submit shows the `FieldError`.
 
 ```js
 const errors = reactive({ name: '', country: '' }) // "" = valid; populated ONLY by validate()
 const fieldRefs = reactive({ name: null, country: null }) // :ref="(el) => (fieldRefs.name = el)" on each control
 
 const validate = () => {
-  // Empty → a required prompt; a non-empty bad value → an invalid message.
+  // Empty or malformed → a message that says what to enter; both set invalid.
   errors.name = form.name.trim() ? '' : 'This field is required.'
   errors.country = form.country ? '' : 'This field is required.'
   return !errors.name && !errors.country
@@ -901,7 +887,7 @@ const validate = () => {
 const submit = async () => {
   if (submitting.value) return // re-entrancy lock
   if (!validate()) {
-    // errors now drive :required / :invalid; focus lands on the first field in error, no summary
+    // errors now drive :invalid; focus lands on the first field in error, no summary
     const first = Object.keys(errors).find((key) => errors[key])
     await nextTick()
     fieldRefs[first]?.$el?.querySelector('input, textarea, button')?.focus()
@@ -927,15 +913,14 @@ Rules:
 - **`<form novalidate @submit.prevent>`** — own the validation; the native bubble UI is inconsistent
   and unstyleable.
 - **Validate on submit only.** No live validation while the user types the first time.
-- **The feedback is `:required` OR `:invalid` bound to the error** (amber for empty, red for malformed —
-  never both), appearing only after a failed submit and clearing as the user edits
-  (`@update:model-value="errors.x = ''"`). Colour is never the only signal — the required tag / helper
-  text is the non-colour cue.
-- **The message lives on the field, as a `FieldDescription`.** In **Fields separated** it is the Field's
-  `Field.Description` (its tone flips to `required` when the Field is `:required`, `invalid` when it is
-  `:invalid`) or a `Field.Error`; in an **ItemGroup** it is a `<FieldError>` rendered under the control, its `type`
-  matching the failure (`required` amber / `invalid` red — see Approach A). Either way it is
-  `aria-describedby`-linked to the control and appears only after a failed submit.
+- **The feedback is `:invalid` bound to the error** (for an empty required value or a malformed one),
+  appearing only after a failed submit and clearing as the user edits
+  (`@update:model-value="errors.x = ''"`). `required` is static and draws no colour. Colour is never the
+  only signal — the error icon and message text are the non-colour cue.
+- **The message lives on the field, as a `FieldError`.** In **Fields separated** it is a `Field.Error`
+  inside the Field; in an **ItemGroup** it is a `<FieldError>` rendered under the control (see
+  Approach A). Its text is its default slot, in `--text-danger` after an `az az-circle-alert` icon.
+  Either way it is `aria-describedby`-linked to the control and appears only after a failed submit.
 - **No custom error-summary block** (`role="alert"` list of links) and **no `Alert` callout** for
   field validation. Those were removed on purpose: the field's own state + its `FieldError` is the feedback.
 - **Never `toast` a field error.** Missing/invalid input stays on the field. Toast is for
@@ -944,7 +929,7 @@ Rules:
 > **A server rejection scoped to one field is a different case**, and it is the one place a `Alert`
 > is right. The value is not malformed — the API rejected it (a referenced object was deleted, a name
 > is already taken), so it takes **both** surfaces: a `Alert` inside that field's own section _and_
-> the field's red `invalid` state (never the amber `required` prompt — the value is present). On a
+> the field's red `invalid` state. On a
 > long form, scroll-anchor the erroring section. The full placement table — field, section `Alert`,
 > toast, auth card, background-job toast — is **`/webkit-errors`**.
 
@@ -1005,8 +990,8 @@ created. Nothing else was lost: reload the origin list and select another one.`
 2. **The recovery action on that `Alert`** (`#actions` slot, `variant="secondary"`): `Reload origins`,
    with `loading` while it runs; meanwhile the field gives way to a `Skeleton` and Save is disabled.
 3. **The field turns `invalid`** with its own one-line reason under it (`This origin no longer
-exists.`), wired by `aria-describedby`. After the reload clears the stale value it turns `required`
-   (`Select an origin to continue.`) and the `Alert` closes.
+exists.`), wired by `aria-describedby`. After the reload clears the stale value its message becomes
+   `Select an origin to continue.` and the `Alert` closes.
 4. **The page takes the user there**: after the lock is released, scroll the section to the top of the
    scroll container (instant under `prefers-reduced-motion`) and focus the field with
    `preventScroll`. Every other entry is kept.
@@ -1079,7 +1064,7 @@ creation date, an e-mail that only support can change — is **read-only**, not 
 
 ## Disabled state — the disabled helper is optional context, not submit feedback
 
-A `FieldDescription` with `type="disabled"` (it prepends a lock glyph, muted text) is an **optional** element
+A `Field.Description` in a disabled `Field` (it takes the disabled tone: a lock glyph, muted text) is an **optional** element
 whose only job is to explain **why a field is disabled** and how to lift the lock. It is **not**
 validation feedback and it is **not** required by the submit lock. Two cases:
 
@@ -1105,10 +1090,10 @@ Rules:
 - **The submit lock needs no disabled-reason helper** — it's transient and the Save `:loading` covers it.
 - **A disabled helper is optional and explains the dependency**, never validation — it answers only
   "why is this locked and how do I unlock it".
-- **Don't fabricate a disabled explanation for a transient lock.** Reserve `type="disabled"` for a
+- **Don't fabricate a disabled explanation for a transient lock.** Reserve the disabled helper for a
   persistent, non-obvious dependency.
-- **A disabled field is never also `required`/`invalid`.** `disabled` wins the control's state (and the
-  `FieldError` `type`), so a locked field shows neither the amber required nor the red invalid cue.
+- **A disabled field is never also `invalid`.** `disabled` wins the field's state (and the
+  `Field.Description` tone), so a locked field never shows the red invalid cue.
 
 ## Choosing an approach
 
@@ -1184,15 +1169,14 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       takes an `aria-label` (no `<Field.Label>` inside an `Item`); in **Fields separated**, a real `Field.Label`
       with `for`→`id`, and a `Select` labels its trigger. No bare
       control with a floating `<p>` label, no placeholder-as-label.
-- [ ] Where a required field has a `Field.Label`, its required tag is **persistent** (always `required`, not
-      revealed on submit) — set `required` on the `Field.Label` itself, not only on the `Field`, so the tag
-      stays on while only the field's amber state is revealed on submit.
+- [ ] `required` is static from the first render (on the `Field`, or on the control when there is no
+      `Field`), so a `Field.Label` shows the Required marker before any submit; it draws no colour.
 - [ ] Each section is a native `<fieldset>` with an `sr-only` `<legend>`.
 - [ ] Validation runs on submit only; feedback is the field's state **and** an on-field `FieldError`
       message (`Field.Description` / `Field.Error` in Fields separated; a `<FieldError>` under the control in an
-      ItemGroup), bound to the error and cleared on edit. Required-but-empty uses the amber `required`
-      state/`type` (required is NOT an error); filled-but-malformed uses the red `invalid` state/`type`;
-      never both on one field. No error-summary block, no `Alert` callout for field validation.
+      ItemGroup), bound to the error and cleared on edit. A failed submit sets `invalid` for an empty
+      required value or a malformed one, and the message says what to enter. No error-summary block,
+      no `Alert` callout for field validation.
 - [ ] Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
       e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in
       error; submit is never pre-disabled.

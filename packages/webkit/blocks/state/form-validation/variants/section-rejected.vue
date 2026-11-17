@@ -64,7 +64,7 @@
   }
 
   export interface FormValidationSectionProps {
-    /** The origins the select offers; a chosen origin missing from the list is cleared and flagged required. Left out, the sample renders. */
+    /** The origins the select offers; a chosen origin missing from the list is cleared and the select turns invalid. Left out, the sample renders. */
     origins?: FormValidationOrigin[]
     /** Why the server refused the save; the danger Alert under the Origin heading says it and the select turns invalid. Left out, the sample message renders; pass an empty string for none. */
     originError?: string

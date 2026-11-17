@@ -194,9 +194,10 @@ interaction for the subtree, but each control renders its disabled _visual_ from
 fieldset alone leaves the form looking live mid-submit. The commit button carries `:loading`. Release
 on success **and** failure.
 
-Validation runs **on submit only**. An empty required field gets the amber `required` prompt; a value
-the endpoint cannot accept gets the red `invalid` error. Required is not an error, the two are never
-both on for one field, and nothing is judged while the reader is still typing. A request-level
+Validation runs **on submit only**. `required` is set from the first render and draws no colour; a
+failed submit sets the red `invalid` state on a field that is empty but required or holds a value the
+endpoint cannot accept, with a message that says what to enter. Nothing is judged while the reader is
+still typing, and editing a field clears its error. A request-level
 failure is a toast with a way to recover — never silent, and never a validation summary.
 
 ## 6. Picking an existing resource
@@ -259,6 +260,6 @@ would ship without search never exists.
 - [ ] Save creates and stops — no deploy, no publish, no charge as a side effect.
 - [ ] The success toast names the resource and offers a way to open it.
 - [ ] One `submitting` flag locks the fieldset AND every control; released in `finally`.
-- [ ] Validation on submit only; amber `required` vs red `invalid`, never both.
+- [ ] `required` static from the first render; validation on submit only sets `invalid` for an empty or a malformed value.
 - [ ] A reusable resource gets an Existing / New band; Existing is the default when any exist, and the segment is absent when none do.
 - [ ] Every pick of an existing resource (inline picker or `Select`) has search past 7, Load more, a no-match line, and shows a pre-chosen value on open.

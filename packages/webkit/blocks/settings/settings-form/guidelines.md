@@ -30,7 +30,7 @@ Each topic is a section with a `SectionHeader` at `size="small"` (so every topic
 
 ### C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
 
-One `SettingsRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `variant="compact"` row. Each control has an `aria-label` matching the row title. Required fields flag only after Save is pressed: the control turns `required` or `invalid` and a `FieldError` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
+One `SettingsRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `variant="compact"` row. Each control has an `aria-label` matching the row title. Required controls take `required` from the start; a failed Save turns the control `invalid` and a `FieldError` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
 
 ### D. Save — `SaveBar`, `Button` (required)
 
