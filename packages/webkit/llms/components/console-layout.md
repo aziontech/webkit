@@ -18,7 +18,7 @@
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
 - Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
 - Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
-- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumb`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `variant="ghost"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
+- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumb`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `variant="ghost"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place. While compact the crumbs are hidden, but the controls stay in the header in place of the brand, so a phone user always sees and can switch the environment.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-leading` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
@@ -43,7 +43,7 @@
 - `AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
 - `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
-- `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).
+- `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`); while compact, only a page's control crumbs.
 - `shell/console` — the block that shows this layout with sample console navigation.
 
 ## Props
@@ -52,7 +52,7 @@
 | --- | --- | --- | --- | --- |
 | `navigation` | `ConsoleLayoutNavGroup[]` | `[]` | false | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
-| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page. |
+| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | The trail shown in the header on wide layouts (hidden while compact); each is `{ label, href? }` and the last one is the current page. |
 | `home` | `string` | `'/'` | false | Where the brand mark links. |
 | `account` | `ConsoleLayoutAccount` | `undefined` | false | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`). |
@@ -117,7 +117,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## States
 
-- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand), the palette `open` / `closed`.
+- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand; when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
@@ -134,7 +134,7 @@ packages/webkit/src/components/layout/console-layout/
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
-- A page's control crumb is the last item of the header's `Breadcrumb` list; it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
+- A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
 
 ## Right-to-left
 
@@ -161,8 +161,8 @@ packages/webkit/src/components/layout/console-layout/
 
 ## Responsive
 
-- Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
-- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-leading` and the actions fit; the brand stays in the navigation drawer.
+- Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs; a page's control crumbs (the environment `Select`) stay, in place of the brand. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
+- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates; while compact the crumbs are hidden and the page's control crumbs stay, so the environment is never lost on a phone. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-leading` and the actions fit; the brand stays in the navigation drawer.
 - Rail header: `sidebar-header` sits under the wordmark at the rail's width; it is hidden with the rest of the rail content when the rail collapses, and in the compact drawer it renders with `compact: true`.
 - Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.
 - Reflow: no horizontal scroll at 320 px; the page body scrolls inside `AppLayout`'s content region.

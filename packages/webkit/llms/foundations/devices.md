@@ -22,8 +22,8 @@ ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and contain
 
 The components that live in panels already do this, so a page gets it for free: `Table` (the grid
 scrolls sideways inside its own viewport; `stackable` opts a short list into label/value cards),
-`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingsRow` (keeps its
-two columns, the description clamped; `stackable` moves a field under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
+`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingsRow` (a field moves
+under its copy on a phone, the description wraps in full; `stackable` stacks it in a drawer-width box too), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
 `Pagination` (the strip and page-size control wrap under the info text; the page list stays whole), `Wizard` (the rail hides when the
 wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer

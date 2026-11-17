@@ -1191,8 +1191,8 @@ ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and contain
 
 The components that live in panels already do this, so a page gets it for free: `Table` (the grid
 scrolls sideways inside its own viewport; `stackable` opts a short list into label/value cards),
-`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingsRow` (keeps its
-two columns, the description clamped; `stackable` moves a field under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
+`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingsRow` (a field moves
+under its copy on a phone, the description wraps in full; `stackable` stacks it in a drawer-width box too), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
 `Pagination` (the strip and page-size control wrap under the info text; the page list stays whole), `Wizard` (the rail hides when the
 wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer
@@ -8116,7 +8116,7 @@ What each prop and event does, and the go-live code: [blocks/shell/console.md](b
 ## States
 
 - ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) over the page body. The controls row and the table belong to `view/table-view`, which builds them from the Table toolbar parts; the shell does not draw them.
-- DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as `items`, then the environment in its slot, a `Select` with `variant="ghost"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The header hides that trail below 768 px, so the body repeats it under `md` in its own `nav` row (a ghost back `IconButton` to Applications, the application name, the same environment `Select` at full width) and Deploy always has its target in view. The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
+- DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as `items`, then the environment in its slot, a `Select` with `variant="ghost"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). While compact the header hides the crumbs but keeps the environment `Select` in place of the brand, so Deploy always has its target in view; the body repeats the rest of the trail under `md` in its own `nav` row named Application (a ghost back `IconButton` to Applications and the application name). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
 - Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list as `Item.List` of `Item` rows (`Item.Media type="icon"` toned through `data-type`, title, description, time, `Item.Actions`), five at a time with `Show older` for the rest: unread items marked with a `New` tag (and a visually hidden `Unread:` prefix), Edit and Redeploy on each deploy, Mark all as read, Clear all (it empties the list and toasts `Notifications cleared.` with Undo, which brings them back), and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
 - AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-leading` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `TableCellStatus`, ID and client ID as `TableCellId`. Each name is a `Button` with `variant="link"`. The table pages ten rows at a time (`paginated`), and while the list loads on open it shows the `Table` loading rows. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search. The search `Input` takes its `id` from `useId()` so the dialog can focus it on open.
 - AccountSwitchError: the AccountSwitch dialog when the account list fails to load. A danger `Alert` (`The account list could not be loaded.`, action `Retry`) takes the place of the account `Table` under the search; the search, the title and the footer stay. Retry loads the list again and shows the table.
@@ -25952,7 +25952,7 @@ Unbound, each one keeps its own local state.
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
 - Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
 - Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
-- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumb`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `variant="ghost"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
+- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumb`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `variant="ghost"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place. While compact the crumbs are hidden, but the controls stay in the header in place of the brand, so a phone user always sees and can switch the environment.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-leading` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
@@ -25976,7 +25976,7 @@ Unbound, each one keeps its own local state.
 - `AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
 - `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
-- `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).
+- `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`); while compact, only a page's control crumbs.
 - `shell/console` — the block that shows this layout with sample console navigation.
 
 ## Props
@@ -25985,7 +25985,7 @@ Unbound, each one keeps its own local state.
 | --- | --- | --- | --- | --- |
 | `navigation` | `ConsoleLayoutNavGroup[]` | `[]` | false | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
-| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page. |
+| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | The trail shown in the header on wide layouts (hidden while compact); each is `{ label, href? }` and the last one is the current page. |
 | `home` | `string` | `'/'` | false | Where the brand mark links. |
 | `account` | `ConsoleLayoutAccount` | `undefined` | false | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`). |
@@ -26050,7 +26050,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## States
 
-- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand), the palette `open` / `closed`.
+- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand; when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
@@ -26067,7 +26067,7 @@ packages/webkit/src/components/layout/console-layout/
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
-- A page's control crumb is the last item of the header's `Breadcrumb` list; it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
+- A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
 
 ## Examples
 
@@ -27323,7 +27323,7 @@ context, so a consumer never wires one part to the other.
 
 # Settings Row
 
-> One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the row keeps its two columns at every width (the description clamps to two lines); `stackable` opts a row into moving a `field` control under the copy in a narrow box.
+> One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the description always wraps in full, never truncated. In a narrow row (below `@md` of the row, a phone) a `field` control stacks under the copy at full width; a `compact` switch or button stays at the end side beside the wrapped copy. `stackable` moves the stacking point up to `@lg` for a field that needs the full measure in a drawer-width box.
 
 - Import: `import SettingsRow from '@aziontech/webkit/settings-row'`
 - Category: layout · Surface: app · Structure: monolithic
@@ -27339,12 +27339,12 @@ context, so a consumer never wires one part to the other.
 - Pick `variant` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.
 - Show a validation message only after Save was pressed.
 - Use `depth` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.
-- Keep the default two columns on a phone: the title and the clamped description sit on the start side, the control on the end side, both aligned to the top. This is the console layout at every width.
-- Set `stackable` only when the field needs the full measure to be usable in a narrow box (a long URL or a code value in a side drawer); never to fix a centred or cramped look.
+- Let the row stack on a phone: the title and the full description on top, a `field` control under them at full width. A `compact` switch or button keeps the end side, beside the wrapped copy.
+- Set `stackable` only when the field needs the full measure in a drawer-width box (a long URL or a code value in a side drawer), where a default row would still sit beside its copy; never to fix a centred or cramped look.
 - Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
 - Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `variant` and `stackable`.
 - Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
-- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description clamps to two lines, and the Hint glyph beside the title reveals the full text on hover or focus.
+- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until hover or focus.
 
 ## Don’t
 
@@ -27366,7 +27366,7 @@ context, so a consumer never wires one part to the other.
 | `description` | `string` | `''` | false | One sentence under the title that says what the setting does. |
 | `variant` | `'field' \| 'compact' \| 'stacked'` | `'field'` | false | Where the control sits relative to the copy. |
 | `depth` | `0 \| 1 \| 2` | `0` | false | Indent depth under a rule, for a setting that only applies when its parent is on. |
-| `stackable` | `boolean` | `false` | false | Below the md container of the row, move a field control under the copy at full width. |
+| `stackable` | `boolean` | `false` | false | Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. |
 | `hint` | `string` | `''` | false | Extra guidance in a Hint glyph beside the title; empty renders no glyph. |
 
 ## Slots
@@ -27382,14 +27382,14 @@ context, so a consumer never wires one part to the other.
 - Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
 - `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
-- Responsive: the row is the `@container/settings-row`. By default the row keeps its two columns at every width: the copy shrinks (the description clamps to two lines with an ellipsis) and a `field` control keeps the end cell, capped at the 3xs container. With `stackable`, below `@md` of the row a `field` control moves under the copy at full width.
+- Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
 
 ## Accessibility
 
 - Visible focus: owned by the control in the default slot.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
-- Truncation: the two-line clamp of the description is visual only; the full text stays in the DOM, so assistive technology reads all of it. For sighted users, `hint` is the way to the full explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
+- No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
 - Contrast ≥4.5:1 for the title and the muted description.
 
 ## Examples
@@ -30352,6 +30352,7 @@ packages/webkit/src/components/overlay/command/
 - `data-ranked` on the list and on each group while the query is not empty; `data-leading` on the group ranked first
 - `data-page` on the input bar names the open nested page (absent on the first page)
 - `empty`: when the filter yields no visible items, the `Empty` part renders in place of the list rows
+- Position: from `md` up the panel is anchored near the top of the viewport (`md:items-start md:pt-[15dvh]` on the Dialog content, horizontally centred), not centred vertically, so its top edge and the search field stay put while the list grows and shrinks as you type. Below `md` the panel is the Dialog's sheet.
 
 ## Accessibility
 
