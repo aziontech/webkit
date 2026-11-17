@@ -66,7 +66,7 @@
 
 - Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
 - Node card: `data-state` `open` | `closed`; `data-dashed` for a staged, unbound or pending node.
-- Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`ai ai-check`, primary, `Apply {kind}`) and **Cancel** (`ai ai-x`, `Cancel`). Apply emits `bind` and clears it; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
+- Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`az az-check`, primary, `Apply {kind}`) and **Cancel** (`az az-x`, `Cancel`). Apply emits `bind` and clears it; the node is controlled, so it then shows the `name` and `boundValue` its `levels` entry carries, and the app writes the applied value back in its `bind` handler (and clears it in `remove`) or the card returns to the previous binding; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
 - Connectors: dashed, flowing; faded never (no disabled nodes).
 
 ## Accessibility
@@ -117,7 +117,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
   import TopologyDiagram from '@aziontech/webkit/topology-diagram'
-  import { ref } from 'vue'
+  import { computed, reactive, ref } from 'vue'
 
   const policies = [
     { value: 'edge-guard', label: 'edge-guard' },
@@ -125,7 +125,14 @@
   ]
   const errorPages = [{ value: 'maintenance', label: 'maintenance' }]
 
-  const levels = [
+  const bound = reactive({ policy: 'edge-guard', 'error-page': '' })
+
+  const bindingFields = (value, unbound) =>
+    value
+      ? { name: value, boundValue: value, status: 'Active', severity: 'success', message: '' }
+      : { name: '', boundValue: '', status: '', severity: 'neutral', message: unbound }
+
+  const levels = computed(() => [
     {
       id: 'domains',
       label: 'Domains',
@@ -181,14 +188,11 @@
           id: 'policy',
           type: 'Policy',
           icon: 'az az-shield',
-          name: 'edge-guard',
-          status: 'Active',
-          severity: 'success',
           href: '#policy',
           bindable: true,
           bindOptions: policies,
-          boundValue: 'edge-guard',
           removable: true,
+          ...bindingFields(bound.policy, 'Requests reach the service without inspection.'),
           fields: [{ label: 'Rules', value: '12 rules, 3 rate limits' }]
         }
       ]
@@ -214,7 +218,8 @@
           terminal: true,
           bindable: true,
           bindOptions: errorPages,
-          message: 'Errors answer with the default page.'
+          removable: true,
+          ...bindingFields(bound['error-page'], 'Errors answer with the default page.')
         }
       ]
     },
@@ -275,10 +280,19 @@
         }
       ]
     }
-  ]
+  ])
 
   const openKeys = ref(['project'])
   const note = ref('')
+
+  const bind = (event, { id, value }) => {
+    bound[id] = value
+    note.value = `${value} bound to ${id}.`
+  }
+  const remove = (event, id) => {
+    bound[id] = ''
+    note.value = `Removed the ${id} binding.`
+  }
 </script>
 
 <template>
@@ -287,8 +301,8 @@
       <TopologyDiagram
         v-model:open-keys="openKeys"
         :levels="levels"
-        @bind="(event, { id, value }) => (note = `Bind ${value} to ${id}.`)"
-        @remove="(event, id) => (note = `Remove ${id}.`)"
+        @bind="bind"
+        @remove="remove"
         @create="(event, id) => (note = `Create a new ${id}.`)"
       >
         <template #actions="{ node }">

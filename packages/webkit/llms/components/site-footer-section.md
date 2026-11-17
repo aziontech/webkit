@@ -1,6 +1,6 @@
 # Site Footer Section
 
-> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row of small icon buttons; below `lg` it moves into the footer's signature band, centred under the social row, as the design sample draws it. The status indicator fills the footer's `status` slot and the language select its `language` slot, so the bottom bar lays them out as `footer` does. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.
+> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. The bottom bar is one row, as azion.com draws it: the Azion mark (the footer's `brand` slot) and the small social icon buttons at the start, the status indicator (`status`) and the language select with its globe (`language`) at the end; below `md` it stacks, the mark and icons over the status and language. In the `site` placement the footer spans the page like `site-header-section`, opening on a full-width rule with a corner mark at each end, with no side rules. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.
 
 - Import: `import SiteFooterSection from '@aziontech/webkit/site-footer-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -14,9 +14,9 @@
 
 ## Do
 
-- **Do** render it as the last child of the page shell, as is: it draws its own top rule, its frame and its closing bottom rule.
-- **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.
-- Use `variant: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.
+- **Do** render it as the last child of the page shell, as is: in `site` it draws its own full-width top rule with its corner marks.
+- **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double.
+- Use `variant: 'site'` under a marketing page, so the footer spans the page like its header and opens on its own rule; the page above must not draw a bottom rule of its own.
 - Keep four link columns so the grid fills at `md`.
 - Set `target: '_blank'` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph yourself.
 - Give every social link a `label` that names the network, since the button shows only the glyph.
@@ -36,7 +36,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `SiteFooterSectionVariant` | `'site'` | false | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. |
+| `variant` | `SiteFooterSectionVariant` | `'site'` | false | Where the footer sits: `site` spans the page like the site header under its own top rule, `content` runs the bands full bleed under a hairline. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`). |
 | `home` | `string` | `''` | false | Destination of the Azion mark; the mark is not rendered when empty. |
 | `homeAriaLabel` | `string` | `''` | false | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`). |
@@ -57,12 +57,12 @@
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the footer
-- The footer's signature band is `compact`: below `lg` it carries the Azion mark, centred; from `lg` the band is hidden and the mark leads the social row instead
+- The Azion mark opens the bottom bar at every width, in the footer's `brand` slot
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
 - A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `az az-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
-- Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
+- Server render and hydration: one mark, placed by CSS only, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Accessibility
 
@@ -75,7 +75,7 @@
 
 ## Right-to-left
 
-- Layout: logical utilities only (`me-` on the mark); the bottom bar's start and end follow the direction.
+- Layout: logical utilities only; the Azion mark stays at the start edge and the bottom bar's start and end follow the direction.
 - Icons: the external-link glyph, the social glyphs and the globe are not mirrored.
 - Keyboard: no arrow-key handling of its own; the select owns its arrows.
 - User data: none.
@@ -94,7 +94,7 @@
 ## Responsive
 
 - Container queries: none; the bottom bar switches at the `md` viewport breakpoint.
-- Narrow (below `lg`, 1024 px; the footer reads the viewport, not its container): the Azion mark leaves the social row for the signature band, centred under it; below `md` the status indicator and the language select share the bottom bar at its two ends and the columns stack as `footer` lays them out.
+- Narrow (below `md`, 768 px; the footer reads the viewport, not its container): the bottom bar stacks — the Azion mark and the social icons first, then the status indicator and the language select at its two ends — and the columns fold to two as `footer` lays them out.
 - Touch: the small social buttons (28 px) and the select follow `icon-button` and `select`; the column links (26 px apart) and the Azion mark link (16 px tall, clear of the social buttons) are smaller than 24 px and rely on the WCAG 2.5.8 spacing exception; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 

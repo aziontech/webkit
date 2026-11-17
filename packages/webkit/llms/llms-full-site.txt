@@ -859,7 +859,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The lightbox Teleports to `body` and locks body scroll while open, so assistive tech and the pointer agree on what is interactive.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on all frame chrome tokens.
 - Touch target: the zoom trigger is the whole picture; the close control is a padded button at the viewport corner.
-- Teleported content: the teleported zoom dialog binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported zoom dialog binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 
@@ -1182,7 +1182,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 # Doc Layout
 
-> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
+> The documentation chrome, composed once in the app: a sticky header (at the inline start the compact menu button, the Azion Docs mark and the section links; an empty `AppHeader.Center` spacer; at the inline end `SearchTrigger` and then the app's actions, the way most docs sites end their header with the search), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
 
 - Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -1962,7 +1962,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The chip copy adds **no tab stops**: it is a pointer shortcut over text that stays selectable the ordinary way, so a page of thirty chips does not become thirty stops. The tooltip is `role="tooltip"` and `pointer-events-none`.
 - `motion-reduce:transition-none` on the descendant link transition.
 - Touch target: not applicable; the container is not interactive.
-- Teleported content: the teleported copy tip binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported copy tip binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 
@@ -2355,7 +2355,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Related
 
 - `SiteHeaderSection` — the bar and its mega-menus; `navigation` is bound onto it.
-- `SiteFooterSection` — the footer; `footer` is bound onto it (`variant="site"` closes a framed page).
+- `SiteFooterSection` — the footer; `footer` is bound onto it. In `variant="site"` it spans the full width like the bar, with no side rules, and opens on a plain full-width rule, the same clean line as the bar's, with no corner marks.
 - `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
 - `Command` — the search palette the bar's search button opens.
 - `shell/site` — the block that shows this layout with the azion.com navigation and footer.
@@ -11169,7 +11169,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Site Footer Section
 
-> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row of small icon buttons; below `lg` it moves into the footer's signature band, centred under the social row, as the design sample draws it. The status indicator fills the footer's `status` slot and the language select its `language` slot, so the bottom bar lays them out as `footer` does. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.
+> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. The bottom bar is one row, as azion.com draws it: the Azion mark (the footer's `brand` slot) and the small social icon buttons at the start, the status indicator (`status`) and the language select with its globe (`language`) at the end; below `md` it stacks, the mark and icons over the status and language. In the `site` placement the footer spans the page like `site-header-section`, opening on a full-width rule with a corner mark at each end, with no side rules. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.
 
 - Import: `import SiteFooterSection from '@aziontech/webkit/site-footer-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -11182,9 +11182,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Do
 
-- **Do** render it as the last child of the page shell, as is: it draws its own top rule, its frame and its closing bottom rule.
-- **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.
-- Use `variant: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.
+- **Do** render it as the last child of the page shell, as is: in `site` it draws its own full-width top rule with its corner marks.
+- **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double.
+- Use `variant: 'site'` under a marketing page, so the footer spans the page like its header and opens on its own rule; the page above must not draw a bottom rule of its own.
 - Keep four link columns so the grid fills at `md`.
 - Set `target: '_blank'` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph yourself.
 - Give every social link a `label` that names the network, since the button shows only the glyph.
@@ -11203,7 +11203,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `SiteFooterSectionVariant` | `'site'` | false | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. |
+| `variant` | `SiteFooterSectionVariant` | `'site'` | false | Where the footer sits: `site` spans the page like the site header under its own top rule, `content` runs the bands full bleed under a hairline. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`). |
 | `home` | `string` | `''` | false | Destination of the Azion mark; the mark is not rendered when empty. |
 | `homeAriaLabel` | `string` | `''` | false | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`). |
@@ -11224,12 +11224,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the footer
-- The footer's signature band is `compact`: below `lg` it carries the Azion mark, centred; from `lg` the band is hidden and the mark leads the social row instead
+- The Azion mark opens the bottom bar at every width, in the footer's `brand` slot
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
 - A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `az az-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
-- Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
+- Server render and hydration: one mark, placed by CSS only, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Accessibility
 
