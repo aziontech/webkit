@@ -377,6 +377,22 @@ describe('CodeBlock', () => {
       expect(getByTestId('code-code-block__filename-label').textContent?.trim()).toBe('handler.js')
     })
 
+    it('keeps the label typography off the file icon so the icon font applies', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: {
+          tabs: [{ ...fileNameTab[0], fileIcon: 'ai ai-json' }],
+          defaultValue: 'file'
+        }
+      })
+
+      const holder = getByTestId('code-code-block__filename-icon')
+      const icon = holder.querySelector('i')
+
+      expect(holder.classList.contains('text-label-code-sm')).toBe(true)
+      expect(icon?.classList.contains('text-label-code-sm')).toBe(false)
+      expect(icon?.classList.contains('ai-json')).toBe(true)
+    })
+
     it('omits the filename bar when the active tab has no fileName', () => {
       const { queryByTestId } = render(CodeBlock, {
         props: { tabs: singleTab, defaultValue: 'only' }
@@ -649,6 +665,80 @@ describe('CodeBlock', () => {
       expect(highlightCodeLine('gql', '# requests per status')).toEqual([
         { text: '# requests per status', type: 'comment' }
       ])
+    })
+  })
+
+  describe('json highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'json') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads a key apart from its string value', () => {
+      const line = '  "name": "waf-to-siem",'
+
+      expect(typeOf(line, '"name"')).toBe('function')
+      expect(typeOf(line, '"waf-to-siem"')).toBe('string')
+      expect(typeOf(line, ':')).toBe('punctuation')
+    })
+
+    it('reads numbers and literals as values', () => {
+      expect(typeOf('  "enabled": true }', 'true')).toBe('type')
+      expect(typeOf('  "ttl": 3600,', '3600')).toBe('type')
+      expect(typeOf('  "parent": null', 'null')).toBe('type')
+    })
+
+    it('keeps a # or // inside a string as part of the value', () => {
+      expect(
+        highlightCodeLine('json', '  "url": "https://api.azion.com/v4#docs"').some(
+          (token) => token.type === 'comment'
+        )
+      ).toBe(false)
+    })
+  })
+
+  describe('sql highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'sql') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads keywords in any case, identifiers and strings', () => {
+      const line = "SELECT id, text FROM comments WHERE text = 'Hello'"
+
+      expect(typeOf(line, 'SELECT')).toBe('keyword')
+      expect(typeOf(line, 'FROM')).toBe('keyword')
+      expect(typeOf(line, 'comments')).toBe('identifier')
+      expect(typeOf(line, "'Hello'")).toBe('string')
+      expect(typeOf('select 1', 'select')).toBe('keyword')
+    })
+
+    it('reads column types, calls and a trailing -- comment', () => {
+      const line = 'CREATE TABLE docs (id INTEGER PRIMARY KEY, embedding F32_BLOB(4)) -- vectors'
+
+      expect(typeOf(line, 'INTEGER')).toBe('type')
+      expect(typeOf(line, 'F32_BLOB')).toBe('function')
+      expect(typeOf(line, '-- vectors')).toBe('comment')
+    })
+  })
+
+  describe('python highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'python') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads a definition, its name and a call', () => {
+      expect(typeOf('def list_objects(bucket):', 'def')).toBe('keyword')
+      expect(typeOf('def list_objects(bucket):', 'list_objects')).toBe('function')
+      expect(typeOf('class Storage:', 'Storage')).toBe('type')
+      expect(typeOf("    s3 = boto3.client('s3')", 'client')).toBe('function')
+    })
+
+    it('reads strings, literals, decorators and a comment', () => {
+      expect(typeOf("    s3 = boto3.client('s3')", "'s3'")).toBe('string')
+      expect(typeOf('print(f"{name} uploaded")', 'f"{name} uploaded"')).toBe('string')
+      expect(typeOf('    return None', 'None')).toBe('type')
+      expect(typeOf('@app.route("/")', '@app.route')).toBe('keyword')
+      expect(typeOf('total = 10 # objects', '# objects')).toBe('comment')
+    })
+
+    it('reads // as floor division, not a comment', () => {
+      expect(typeOf('pages = total // 100', '//')).toBe('punctuation')
     })
   })
 

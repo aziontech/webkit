@@ -1,9 +1,12 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
   import ButtonHighlight from '../../actions/button-highlight/button-highlight.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import ProductWidget, {
+    type ProductWidgetName
+  } from '../../content/product-widget/product-widget.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import BentoGrid from '../../marketing/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
@@ -42,8 +45,10 @@
     title: string
     /** The rest of the cell's sentence, after the lead. */
     description: string
-    /** Name of the illustration scene drawn above the sentence. */
-    illustration: string
+    /** Name of the illustration scene drawn above the sentence; ignored when `widget` is set. */
+    illustration?: string
+    /** Name of the console widget drawn above the sentence instead of an illustration. */
+    widget?: ProductWidgetName
     /** Outlined link button rendered at the foot of the cell; `{ label, href }`. */
     action?: FeatureWidgetsAction
     /** Copy button rendered at the foot of the cell; `{ label, text }` where `text` goes to the clipboard. */
@@ -65,7 +70,7 @@
     secondaryAction?: FeatureWidgetsAction
     /** Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. */
     columns?: FeatureWidgetsColumns
-    /** The cells, in order; each is `{ title, description, illustration, action?, copy? }` where `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard. */
+    /** The cells, in order; each is `{ title, description, illustration?, widget?, action?, copy? }` where `widget` names a console widget drawn instead of the illustration, where `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard. */
     items?: FeatureWidgetsItem[]
   }
 
@@ -89,6 +94,8 @@
   const hasItems = computed(() => props.items.length > 0)
 
   const hasHeader = computed(() => props.title.length > 0)
+
+  const hovered = ref<number | null>(null)
 
   const copyPrompt = (text: string) => {
     void navigator.clipboard?.writeText(text)
@@ -147,12 +154,31 @@
           :columns="columns"
         >
           <BentoGridCell
-            v-for="item in items"
+            v-for="(item, index) in items"
             :key="item.title"
             :padded="false"
           >
-            <div class="flex h-full w-full min-w-0 flex-col">
-              <Illustration :name="item.illustration" />
+            <div
+              class="flex h-full w-full min-w-0 flex-col"
+              @pointerenter="hovered = index"
+              @pointerleave="hovered = null"
+              @focusin="hovered = index"
+              @focusout="hovered = null"
+            >
+              <div
+                v-if="item.widget"
+                class="relative aspect-592/300 w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]"
+                :data-testid="`${testId}__widget`"
+              >
+                <ProductWidget
+                  :name="item.widget"
+                  :hover="hovered === index"
+                />
+              </div>
+              <Illustration
+                v-else
+                :name="item.illustration ?? ''"
+              />
               <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
                 <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                   <strong class="font-medium text-(--text-default)">{{ item.title }}</strong>
