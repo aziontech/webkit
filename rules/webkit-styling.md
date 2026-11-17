@@ -40,6 +40,27 @@ enforced in code review.
   `<script setup>` passed to `cn`.
 - No hardcoded colors (`#0a0a0a`, `bg-blue-600`) — lint blocks them; use tokens.
 
+## Never double a line
+
+Adjacent bordered surfaces share **exactly one hairline**. The outer frame belongs to the
+container; the parts inside it draw only the dividers between themselves. Two borders never
+sit flush side by side or 1px apart: no 2px seam where two parts meet, no frame drawn again
+just inside a container's frame.
+
+- Let the WebKit container draw the edge: an unpadded `SectionModule` body takes its top
+  from the header's rule and its sides from `SectionContainer`, and a `DocCardGroup` or
+  `RegistrationFrame` placed in it drops its own top and side rules. The module after a
+  band that closes on a rule (`SectionGap`, a framed grid) passes `:divided="false"`.
+- Inside a `Card`, a pane or an accordion, give a framed part `:bordered="false"`
+  (`CodeEditor`, `LogViewer`); inside an `InputGroup`, use `InputGroup.Input` (an `Input`
+  placed there loses its border too).
+- In your own lists, rule the seams between items (`not-last:border-b`), never under the
+  last item of a framed box; do not add `border-t` to the first child of a box whose header
+  already draws a bottom rule.
+- When two parts must both keep a rule, lay one exactly on the other (a `-mb-px` /
+  `-me-px` flush, a `ring-1` painted into the frame's pixel): the same pixel reads as one
+  line, touching pixels read as two.
+
 ## Token value syntax — the canonical `prop-(--token)` form
 
 Write a token value with Tailwind v4's **paren shorthand**, not the bracket form. This is the single canonical spelling the toolkit standardizes on — it matches what upstream v4 canonicalizes to, so your editor stops flagging every styled line.

@@ -88,9 +88,10 @@ export const STANDARDS = [
       { surface: 'lint', by: 'no-gap-after-closing-section' },
       { surface: 'lint', by: 'no-viewport-height-calc' },
       { surface: 'lint', by: 'no-output-in-command' },
-      { surface: 'lint', by: 'no-link-in-sentence' }
+      { surface: 'lint', by: 'no-link-in-sentence' },
+      { surface: 'ci', by: 'visual' }
     ],
-    note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook; consumers get the color/motion/override lints.'
+    note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook; consumers get the color/motion/override lints. Never double a line is a rendered property no static check can see: the visual job runs apps/visual/tests/doubled-lines.spec.ts (the findDoubledLines detector, once per page in the browser) over every first example, every block primary state and the docs home and foundation pages, and fails on any two visible borders flush or 1px apart.'
   },
   {
     id: 'dependencies',

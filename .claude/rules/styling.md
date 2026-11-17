@@ -269,6 +269,29 @@ Shipped in `Trace` (its name column stayed at 9rem in every panel) until 2026-11
 
 `rtl:-scale-x-100` is harmless (it sets the same scale), and a non-directional glyph (`ai-chevron-down`) may rotate freely. Shipped in `apps/docs` until 2026-11-17. The **`rtl-double-flip`** token check blocks it at write time and in the CI ratchet, over components and also `apps/docs/src`, `apps/demos/src`, `packages/webkit/blocks` and `packages/webkit/examples` (the only token check that runs outside components).
 
+## Never double a line
+
+Adjacent bordered surfaces share **exactly one hairline**. The outer frame belongs to the container; the parts inside it draw only the internal dividers between themselves. Two borders never sit flush side by side or 1px apart: no 2px seam where two parts meet, no frame drawn again just inside its container's frame.
+
+```html
+<!-- ❌ the header's bottom rule and the grid's own top rule stack into a 2px seam,
+        and the grid's side rules sit inside the column's -->
+<div class="border-x"> <header class="border-b">…</header> <div class="border">…</div> </div>
+
+<!-- ✅ the column draws the sides, the header the seam, the grid only its inner dividers -->
+<div class="border-x"> <header class="border-b">…</header> <div class="grid gap-px bg-(--border-default)">…</div> </div>
+```
+
+How the library keeps it, so a page composed from it inherits the single line:
+
+- **The container owns the outer edge.** `SectionContainer` draws the column's sides, `SectionTitle` the header's bottom rule; an unpadded `SectionModule` body marks itself `data-frame-edges`, and a `RegistrationFrame` placed directly in it (and the `DocCardGroup` built on one) drops its top and side rules and its top corner marks. `Card` frames its regions, `InputGroup` frames its controls and strips a nested `Input`'s border, the `Pagination` strip frames its current page.
+- **Parts draw dividers, not frames.** A list of items rules the seams between them (`not-last:border-b`), never under the last one; a header rules its bottom only when a body follows it.
+- **A frame that closes a band hands the next seam over.** A frame's bottom rule (`SectionGap`, a framed grid) is the next band's top edge, so the `SectionModule` after it passes `divided` as `false`.
+- **Drop the part's own frame when it sits in one.** `CodeEditor` and `LogViewer` take `:bordered="false"` inside a pane, card or accordion that already frames them.
+- **When two parts must both keep a rule, lay one exactly on the other** (`CardGrid`'s `flush`, a cell's `ring-1` painted into its frame's pixel). Coinciding on the same pixel reads as one line; touching or 1px apart reads as two.
+
+A static lint cannot see rendered borders, so this rule is gated where the CSS is real: the styled visual suite measures every page it visits and fails on a doubled line (see Enforcement).
+
 ## A zero length carries no unit
 
 A zero is the one value that is identical in every unit, so the unit is pure noise — and it makes the same zero read three different ways across the codebase (`0px` here, `0rem` there, `0em` in a token). **Write `0`.**
@@ -307,6 +330,7 @@ padding: 0 var(--spacing-md);
 
 ## Hard prohibitions
 
+- Never double a line — no two visible borders flush side by side or 1px apart. The container draws the outer frame; the parts inside draw only the dividers between themselves.
 - No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS). The single exception is inside `calc()`/`min()`/`max()`/`clamp()`, where CSS requires a unit and that unit is **`rem`**.
 - No malformed token shorthand — no whitespace inside the parens (`bg-(--token )`, `bg-( --token)`) and never the inverted `[--(token)]`. The style silently never applies; blocked by `dead-token-shorthand`.
 - No `const sharedClasses = [...]`, `const variantClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`. The whole "class map" pattern goes away.
@@ -403,6 +427,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
 - **The `rem`-in-math-function carve-out** is gated by the two engines we own — the `zero-unit-in-calc` token check and the same assertion in `build:tokens`. Stylelint's `length-zero-no-unit` deliberately skips math functions (a unit is required there), so it accepts `calc(100% - 0px)`; the token check is what makes that `0rem`.
+- **Never double a line** is gated by the `visual` CI job: [`apps/visual/tests/doubled-lines.spec.ts`](../../apps/visual/tests/doubled-lines.spec.ts) runs [`findDoubledLines`](../../apps/visual/tests/doubled-lines.ts) once per page in the browser — the first example of every component, the primary state of every block, and the docs home and foundation pages, at 390 and 1280 — and fails listing every pair of visible borders (non-zero width, opaque color, not inside a form control, not hidden or zero-size) that lie flush or 1px apart and overlap along at least 4px. [`apps/visual/scripts/doubled-lines.mjs`](../../apps/visual/scripts/doubled-lines.mjs) runs the same detector over every docs route, example and block state against a built docs site, for a full sweep before a PR.
 - A future PostToolUse hook may grep `.vue` files for `const \w+Classes\s*=\s*[\{[]` and emit `BLOCKED: forbidden class preset` — until then, `echo-reporter` flags the pattern.
 - `.claude/docs/COMPONENT_REQUIREMENTS.md` § 13.w "Styling discipline" supersedes any older example in the same file that still shows the JS-presets pattern. **The data-attribute approach is the canonical pattern for new components.**
 

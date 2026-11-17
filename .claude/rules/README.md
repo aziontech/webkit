@@ -17,7 +17,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [naming](./naming.md) | webkit | One standard for every name; old names never come back | naming gate · validate-naming · prop-vocabulary · no-deprecated-name |
 | [imports](./imports.md) | webkit | Flat public name; category in the folder only | references · 5 lint rules |
 | [compound-api](./compound-api.md) | webkit | `index.ts` compound + tree-shakeable `-root` | catalog-drift · review |
-| [styling](./styling.md) | general | Inline classes on the root; variants via `data-*` | validate-tokens · ratchet · lints |
+| [styling](./styling.md) | general | Inline classes on the root; variants via `data-*`; never double a line | validate-tokens · ratchet · lints · visual |
 | [dependencies](./dependencies.md) | webkit | No external positioning/animation libs | references · type-check (CI) |
 | [migration](./migration.md) | webkit | Rewrite inherited artifacts, never copy as-is | output checks · ratchet · review |
 | [release-types](./release-types.md) | webkit | Commit type → bump identical across 4 sources | commitlint |
