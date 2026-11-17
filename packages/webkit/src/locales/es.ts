@@ -936,6 +936,12 @@ export const es: Messages = {
     invalidNumber: 'Escribe un número',
     emptyTitle: 'Todavía no hay filas',
     emptyDescription: 'Agrega una fila para empezar a editar.',
+    pasted: { one: 'Se pegó {count} celda', other: 'Se pegaron {count} celdas' },
+    pastedSkipped: {
+      one: 'Se pegó {count} celda, {skipped} omitidas',
+      other: 'Se pegaron {count} celdas, {skipped} omitidas'
+    },
+    pasteReadonly: 'Solo lectura, no se pegó nada',
     true: 'Sí',
     false: 'No'
   },

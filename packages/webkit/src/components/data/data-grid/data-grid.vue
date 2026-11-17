@@ -204,15 +204,24 @@
     selectedKeys.value = allSelected.value ? [] : rows.value.map((row) => idOf(row))
   }
 
-  const write = (event: Event, index: number, column: DataGridColumn, value: unknown): void => {
-    const row = rows.value[index]
-    if (!row) return
-    const previous = record(row)[column.id]
-    if (Object.is(previous, value)) return
-    const next = { ...record(row), [column.id]: value } as TRow
-    rows.value = rows.value.map((entry, i) => (i === index ? next : entry))
-    emit('change', event, { row: next, columnId: column.id, value, previous })
+  type Edit = { index: number; column: DataGridColumn; value: unknown }
+  const apply = (event: Event, edits: Edit[]): void => {
+    const next = [...rows.value]
+    const changes: (Edit & { previous: unknown })[] = []
+    for (const edit of edits) {
+      const row = next[edit.index]
+      const previous = row && record(row)[edit.column.id]
+      if (!row || Object.is(previous, edit.value)) continue
+      next[edit.index] = { ...record(row), [edit.column.id]: edit.value } as TRow
+      changes.push({ ...edit, previous })
+    }
+    if (!changes.length) return
+    rows.value = next
+    for (const { index, column, value, previous } of changes)
+      emit('change', event, { row: next[index] as TRow, columnId: column.id, value, previous })
   }
+  const write = (event: Event, index: number, column: DataGridColumn, value: unknown): void =>
+    apply(event, [{ index, column, value }])
 
   const parse = (column: DataGridColumn, text: string): { value: unknown; valid: boolean } => {
     if (column.type === 'number') {
@@ -221,8 +230,16 @@
       return { value: number, valid: !Number.isNaN(number) }
     }
     if (column.type === 'select') {
-      const option = column.options?.find((entry) => String(entry.value) === text)
+      const option =
+        column.options?.find((entry) => String(entry.value) === text) ??
+        column.options?.find((entry) => entry.label.toLowerCase() === text.trim().toLowerCase())
       return { value: option?.value, valid: Boolean(option) }
+    }
+    if (column.type === 'boolean') {
+      const key = text.trim().toLowerCase()
+      const yes = ['true', '1', 'yes', t('dataGrid.true').toLowerCase()].includes(key)
+      const no = ['false', '0', 'no', t('dataGrid.false').toLowerCase()].includes(key)
+      return { value: yes, valid: yes || no }
     }
     return { value: text, valid: true }
   }
@@ -322,6 +339,61 @@
     event.clipboardData?.setData('text/plain', text)
     event.preventDefault()
     emit('copy', event, text)
+  }
+
+  const tsv = (text: string): string[][] => {
+    const lines: string[][] = [[]]
+    for (const [, quoted, plain, end] of text.matchAll(
+      /(?:"((?:[^"]|"")*)"|([^\t\r\n]*))(\t|\r?\n|\r|$)/g
+    )) {
+      lines.at(-1)?.push(quoted?.replaceAll('""', '"') ?? plain ?? '')
+      if (!end) break
+      if (end !== '\t') lines.push([])
+    }
+    if (lines.length > 1 && lines.at(-1)?.join('\t') === '') lines.pop()
+    return lines
+  }
+  const announcement = ref<string>('')
+  const announce = (text: string): void => {
+    announcement.value = ''
+    void nextTick(() => (announcement.value = text))
+  }
+  const onPaste = (event: ClipboardEvent): void => {
+    const text = event.clipboardData?.getData('text/plain') ?? ''
+    if (editing.value || !text || bounds.value.bottom < 0) return
+    event.preventDefault()
+    if (props.readonly) return announce(t('dataGrid.pasteReadonly'))
+    const block = tsv(text)
+    const { top, bottom, start, end } = bounds.value
+    const fill = block.length === 1 && block[0]?.length === 1
+    const row0 = Math.max(top, 0)
+    const col0 = Math.max(start, offset.value)
+    const height = fill ? bottom - row0 + 1 : block.length
+    const width = fill ? end - col0 + 1 : Math.max(...block.map((line) => line.length))
+    const last = {
+      row: Math.min(row0 + height, rows.value.length) - 1,
+      col: Math.min(col0 + width, colCount.value) - 1
+    }
+    if (last.row < row0 || last.col < col0) return
+    const edits: Edit[] = []
+    let skipped = 0
+    for (let r = row0; r <= last.row; r++)
+      for (let c = col0; c <= last.col; c++) {
+        const column = columnAt(c)
+        const value = fill ? block[0]?.[0] : block[r - row0]?.[c - col0]
+        if (!column || value === undefined) continue
+        const result = parse(column, value)
+        if (editable(column) && result.valid) edits.push({ index: r, column, value: result.value })
+        else skipped++
+      }
+    apply(event, edits)
+    active.value = { row: row0, col: col0 }
+    anchor.value = { ...last }
+    focusActive()
+    const count = edits.length
+    announce(
+      skipped ? t('dataGrid.pastedSkipped', { count, skipped }) : t('dataGrid.pasted', { count })
+    )
   }
 
   const focusHandle = (col: number): void => {
@@ -518,6 +590,7 @@
         :data-testid="`${testId}__grid`"
         class="flex w-max min-w-full flex-col"
         @copy="onCopy"
+        @paste="onPaste"
       >
         <div
           role="row"
@@ -704,6 +777,14 @@
           />
         </slot>
       </div>
+    </div>
+    <div
+      role="status"
+      aria-live="polite"
+      class="sr-only"
+      :data-testid="`${testId}__status`"
+    >
+      {{ announcement }}
     </div>
   </div>
 </template>

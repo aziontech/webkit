@@ -900,6 +900,12 @@ export const dataGrid = {
   invalidNumber: 'Enter a number',
   emptyTitle: 'No rows yet',
   emptyDescription: 'Add a row to start editing.',
+  pasted: { one: 'Pasted {count} cell', other: 'Pasted {count} cells' },
+  pastedSkipped: {
+    one: 'Pasted {count} cell, {skipped} skipped',
+    other: 'Pasted {count} cells, {skipped} skipped'
+  },
+  pasteReadonly: 'Read-only, nothing pasted',
   true: 'Yes',
   false: 'No'
 } as const

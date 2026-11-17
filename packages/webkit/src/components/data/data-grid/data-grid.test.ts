@@ -85,6 +85,14 @@ const mount = (extra: Record<string, unknown> = {}, dir = 'ltr') => {
   return { view, rows, selection, events, cell }
 }
 
+const paste = (target: HTMLElement, text: string): ClipboardEvent => {
+  const clipboardData = new DataTransfer()
+  clipboardData.setData('text/plain', text)
+  const event = new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData })
+  target.dispatchEvent(event)
+  return event
+}
+
 describe('DataGrid', () => {
   it('renders the grid pattern with a roving tab stop and the derived test id', async () => {
     const { view, cell } = mount()
@@ -297,6 +305,126 @@ describe('DataGrid', () => {
     expect(event).toBeInstanceOf(ClipboardEvent)
     expect(text).toBe('Acme Inc.\tpro\nJane Doe\tfree')
     expect(copy.clipboardData?.getData('text/plain')).toBe(text)
+  })
+
+  it('pastes a tab-separated block from the cursor in one write with a change per cell', async () => {
+    const { view, rows, events, cell } = mount()
+    const updates: Row[][] = []
+    const watched = render(DataGrid, {
+      props: {
+        columns,
+        modelValue: seed(),
+        ariaLabel: 'Watched',
+        'data-testid': 'watched',
+        'onUpdate:modelValue': (next: Row[]) => updates.push(next)
+      }
+    })
+    const before = seed()
+    const target = watched.getByTestId('watched__cell-1-name')
+    target.focus()
+    const event = paste(target, 'Alex Morgan\tpro\r\nJohn Smith\tBusiness\r\n')
+    expect(event.defaultPrevented).toBe(true)
+    expect(updates).toHaveLength(1)
+    expect(updates[0]?.[0]).toEqual(before[0])
+    expect(updates[0]?.[1]).toMatchObject({ name: 'Alex Morgan', plan: 'pro' })
+    expect(updates[0]?.[2]).toMatchObject({ name: 'John Smith', plan: 'free' })
+    watched.unmount()
+
+    cell(0, 'name').focus()
+    paste(cell(0, 'name'), 'Alex Morgan\tpro\nJohn Smith\tfree\n')
+    expect(rows.value[0]).toMatchObject({ name: 'Alex Morgan', plan: 'pro' })
+    expect(rows.value[1]).toMatchObject({ name: 'John Smith', plan: 'free' })
+    expect(rows.value[2]).toEqual(seed()[2])
+    const changes = events['change'] ?? []
+    expect(changes).toHaveLength(2)
+    expect(changes[0]?.[0]).toBeInstanceOf(ClipboardEvent)
+    expect(changes[0]?.[1]).toMatchObject({
+      columnId: 'name',
+      value: 'Alex Morgan',
+      previous: 'Acme Inc.',
+      row: rows.value[0]
+    })
+    expect(changes[1]?.[1]).toMatchObject({
+      columnId: 'name',
+      value: 'John Smith',
+      previous: 'Jane Doe'
+    })
+    await waitFor(() => expect(cell(1, 'plan').getAttribute('aria-selected')).toBe('true'))
+    expect(cell(2, 'name').getAttribute('aria-selected')).toBe('false')
+    await waitFor(() =>
+      expect(view.getByTestId('data-grid__status').textContent?.trim()).toBe('Pasted 4 cells')
+    )
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('anchors at the top-left of the range and clips the block at the last row and column', async () => {
+    const { view, rows, cell } = mount()
+    cell(2, 'active').focus()
+    await userEvent.keyboard('{Shift>}{ArrowUp}{/Shift}')
+    paste(cell(1, 'active'), 'yes\tX9\tspill\nno\tX8\tspill\nyes\tX7\tspill')
+    expect(rows.value[1]).toMatchObject({ active: true, id: '2' })
+    expect(rows.value[2]).toMatchObject({ active: false, id: '3' })
+    expect(rows.value).toHaveLength(3)
+    await waitFor(() => expect(cell(2, 'id').getAttribute('aria-selected')).toBe('true'))
+    expect(cell(1, 'active').getAttribute('aria-selected')).toBe('true')
+    expect(document.activeElement).toBe(cell(1, 'active'))
+    await waitFor(() =>
+      expect(view.getByTestId('data-grid__status').textContent?.trim()).toBe(
+        'Pasted 2 cells, 2 skipped'
+      )
+    )
+  })
+
+  it('fills every cell of a selected range with a single value', async () => {
+    const { rows, events, cell } = mount()
+    cell(0, 'seats').focus()
+    await userEvent.keyboard('{Shift>}{ArrowDown}{ArrowDown}{/Shift}')
+    paste(cell(2, 'seats'), '5\n')
+    expect(rows.value.map((row) => row.seats)).toEqual([5, 5, 5])
+    expect(events['change']).toHaveLength(3)
+  })
+
+  it('coerces values by column type and skips what does not fit', async () => {
+    const { view, rows, cell } = mount()
+    cell(0, 'name').focus()
+    paste(cell(0, 'name'), '"Acme ""West""\tInc."\tFREE\t1,5\tYES\t99\n\tgold\t\t0\t')
+    expect(rows.value[0]).toMatchObject({
+      name: 'Acme "West"\tInc.',
+      plan: 'free',
+      seats: 12,
+      active: true,
+      id: '1'
+    })
+    expect(rows.value[1]).toMatchObject({ name: '', plan: 'free', seats: null, active: false })
+    await waitFor(() =>
+      expect(view.getByTestId('data-grid__status').textContent?.trim()).toBe(
+        'Pasted 6 cells, 4 skipped'
+      )
+    )
+  })
+
+  it('pastes nothing while readonly and announces it', async () => {
+    const { view, rows, events, cell } = mount({ readonly: true })
+    cell(0, 'name').focus()
+    paste(cell(0, 'name'), 'Alex Morgan')
+    expect(rows.value).toEqual(seed())
+    expect(events['change']).toBeUndefined()
+    await waitFor(() =>
+      expect(view.getByTestId('data-grid__status').textContent?.trim()).toBe(
+        'Read-only, nothing pasted'
+      )
+    )
+  })
+
+  it('leaves a paste into an open editor to the editor', async () => {
+    const { view, rows, events, cell } = mount()
+    cell(0, 'name').focus()
+    await userEvent.keyboard('{Enter}')
+    const editor = await view.findByTestId('data-grid__editor')
+    const event = paste(editor, 'Alex\tMorgan')
+    expect(event.defaultPrevented).toBe(false)
+    expect(rows.value).toEqual(seed())
+    expect(events['change']).toBeUndefined()
   })
 
   it('selects rows with the checkbox column, Space and Select all', async () => {

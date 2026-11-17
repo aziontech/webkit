@@ -936,6 +936,12 @@ export const ptBR: Messages = {
     invalidNumber: 'Digite um número',
     emptyTitle: 'Nenhuma linha ainda',
     emptyDescription: 'Adicione uma linha para começar a editar.',
+    pasted: { one: '{count} célula colada', other: '{count} células coladas' },
+    pastedSkipped: {
+      one: '{count} célula colada, {skipped} ignoradas',
+      other: '{count} células coladas, {skipped} ignoradas'
+    },
+    pasteReadonly: 'Somente leitura, nada foi colado',
     true: 'Sim',
     false: 'Não'
   },

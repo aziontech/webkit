@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A customers grid with a text, a select, a number and a boolean column and a read-only ID, the first column frozen. Click a cell or move with the arrow keys, press Enter or start typing to edit, Enter to commit and move down, Escape to cancel; Space toggles Active; Shift with an arrow selects a range that Ctrl+C copies as tab-separated text.",
+      "summary": "A customers grid with a text, a select, a number and a boolean column and a read-only ID, the first column frozen. Click a cell or move with the arrow keys, press Enter or start typing to edit, Enter to commit and move down, Escape to cancel; Space toggles Active; Shift with an arrow selects a range that Ctrl+C copies as tab-separated text, and Ctrl+V pastes it back from the top-left cell of another range (a block copied from a spreadsheet works the same way; one value fills the whole selected range).",
       "file": "default.vue"
     },
     {

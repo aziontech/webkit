@@ -3,30 +3,30 @@ name: data-grid
 category: data
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 02e7d95d53e75ff9db3b7123b1f7d4c311657883491bd915ccccc4d8def0491c
+checksum: f031be9e265d5b1436d5d63116b6efae3e8d1ccb02ad86e55d0c1e2d9294dd3d
 created: 2026-11-15
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # DataGrid — Component Spec
 
 ## Purpose
 
-An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges and copy them, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role="grid"`, `gridcell`, one roving tab stop), not a read-only table.
+An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges, copy them and paste a block of cells from a spreadsheet, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role="grid"`, `gridcell`, one roving tab stop), not a read-only table.
 
 **Why a component of its own.** DataGrid is not an `editable` mode of `data-table` and is not composed from `table`'s parts, for three reasons. Table's parts render the **table** pattern (`role="table"`, `cell`, every link and button its own tab stop), while a grid needs `gridcell`s inside one roving tab stop with a cell cursor; switching the roles and the focus model inside the same parts would make every read-only table pay for it. In-cell editors must be borderless and fill the cell, so they are a bare `input` and `select` styled with the tokens, not the package's `Input` and `Select`, whose frames and overlays fight a 40 px cell. And DataGrid needs no sorting, filtering or paging engine: it loads no `@tanstack/vue-table` and no virtualization library, so an editing screen stays at about 9 KB.
 
-**The rows are the edited value.** Where `data-table` takes `data` and only emits `update:data` when rows are reordered, DataGrid's rows are what the person edits, so they are its `v-model`: every committed edit writes a new array with a copy of the edited row, and `change` reports the cell, the new value and the previous one. Adding and deleting rows are hooks: the grid emits `row-add` and `row-remove` and the app changes the rows. Thousands of rows scroll natively inside `maxHeight`, each row is laid out lazily with CSS `content-visibility: auto`, and each row re-renders only when its cells, its cursor or its range change.
+**The rows are the edited value.** Where `data-table` takes `data` and only emits `update:data` when rows are reordered, DataGrid's rows are what the person edits, so they are its `v-model`: every committed edit writes a new array with a copy of the edited row, and `change` reports the cell, the new value and the previous one. A paste is the same edit over many cells: one new array for the whole paste, one `change` per changed cell. Adding and deleting rows are hooks: the grid emits `row-add` and `row-remove` and the app changes the rows. Thousands of rows scroll natively inside `maxHeight`, each row is laid out lazily with CSS `content-visibility: auto`, and each row re-renders only when its cells, its cursor or its range change.
 
 ## When to use
 
 - Use DataGrid only when people edit many cells of many records in place, spreadsheet-style; for a short list of rows in a form use AttributeEditor, for read-and-act lists use DataTable (a hand-composed Table for small static ones).
-- A database table editor or the editable results of a query: typed cells (text, number, boolean, a choice), keyboard-first editing, copy of a cell range.
+- A database table editor or the editable results of a query: typed cells (text, number, boolean, a choice), keyboard-first editing, copy of a cell range and paste of a block copied from a spreadsheet.
 - Bulk corrections across rows, where opening a drawer per record would be slower than editing the cells.
 
 ## When NOT to use
@@ -49,7 +49,8 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 - Type each column (`text`, `number`, `boolean`, `select`) so the editor matches the value; mark computed or key columns `editable: false`.
 - Freeze the first column (`frozen-first-column`) when it names the row and the grid scrolls sideways.
 - Keep adding and deleting in the app: handle `row-add` and `row-remove`, then write the new rows to the `v-model`. Confirm a delete of more than a few rows in a `confirm-dialog`.
-- Use `readonly` while saving or for people who may not edit; the cursor, selection and copy still work.
+- Use `readonly` while saving or for people who may not edit; the cursor, selection and copy still work, and a paste writes nothing.
+- Save on `change`, not on `update:modelValue`, when each cell is stored on its own: a paste fires one `change` per changed cell, so a per-cell save keeps working.
 
 ## Usage
 
@@ -139,19 +140,19 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 
 ## v-model
 
-| Model                   | Type       | Default | Emits                 | Notes                                                                                                                                                |
-| ----------------------- | ---------- | ------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`               | `TRow[]`   | `[]`    | `update:modelValue`   | The rows. A committed edit writes a new array with a copy of the edited row.                                                                         |
-| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Keys of the selected rows, read from `rowKey` (the same shape as DataTable's `selectedKeys`). Space on the checkbox column and Select all change it. |
+| Model                   | Type       | Default | Emits                 | Notes                                                                                                                                                         |
+| ----------------------- | ---------- | ------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`               | `TRow[]`   | `[]`    | `update:modelValue`   | The rows. A committed edit writes a new array with a copy of the edited row; a paste writes one new array for the whole block, copying only the changed rows. |
+| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Keys of the selected rows, read from `rowKey` (the same shape as DataTable's `selectedKeys`). Space on the checkbox column and Select all change it.          |
 
 ## Events
 
-| Event        | Payload                                  | Notes                                                                                                               |
-| ------------ | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `change`     | `(event: Event, edit: DataGridCellEdit)` | A cell edit was committed (Enter, Tab, blur, a toggle); `edit` is `{ row, columnId, value, previous }`.             |
-| `row-add`    | `(event: Event)`                         | The `add` function of the toolbar slot ran; the app appends a row to the `v-model`.                                 |
-| `row-remove` | `(event: Event, rows: TRow[])`           | The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`.          |
-| `copy`       | `(event: ClipboardEvent, text: string)`  | Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), also written to the clipboard. |
+| Event        | Payload                                  | Notes                                                                                                                                                                          |
+| ------------ | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `change`     | `(event: Event, edit: DataGridCellEdit)` | A cell edit was committed (Enter, Tab, blur, a toggle), or once per changed cell of a paste (`event` is the `ClipboardEvent`); `edit` is `{ row, columnId, value, previous }`. |
+| `row-add`    | `(event: Event)`                         | The `add` function of the toolbar slot ran; the app appends a row to the `v-model`.                                                                                            |
+| `row-remove` | `(event: Event, rows: TRow[])`           | The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`.                                                                     |
+| `copy`       | `(event: ClipboardEvent, text: string)`  | Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), also written to the clipboard.                                                            |
 
 ## Slots
 
@@ -164,6 +165,7 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 
 - Visual states: `default`, `hover` (row), `focus-visible` (the cursor ring on the active cell or header), `selected` (cells in the range: `data-selected`, `aria-selected="true"`; rows checked: `data-state="selected"`), `editing` (`data-editing` on the cell with the editor open), `readonly` (`data-readonly` on the root; non-editable cells carry `aria-readonly`).
 - `invalid`: a number cell whose text is not a number stays in its editor on Enter or Tab, with `data-invalid` on the cell and the editor, `aria-invalid="true"` and `aria-describedby` pointing to a message (`dataGrid.invalidNumber`, `role="alert"`) under the cell; nothing is committed until the text parses or Escape restores the value. Blur with an invalid text discards it and keeps the previous value.
+- `paste`: Ctrl+V or Cmd+V on the cell cursor reads the `paste` event's `text/plain` (no clipboard permission prompt) as tab-separated text: rows by line break (CRLF or LF), cells by tab, one trailing line break ignored, and a cell wrapped in double quotes may hold tabs and line breaks (`""` is a quote), the way Excel and Google Sheets copy. The block is written from the top-left cell of the selected range (the cursor cell when there is no range), clipped at the last row and column (a paste never adds rows; rows are the app's, through `row-add`); a single value with a range of several cells selected fills every cell of the range. Each value is read the way an in-cell edit commits it: `number` parses a number (empty clears it), `boolean` takes `true` / `false`, `1` / `0`, `yes` / `no` or the localized Yes / No (case-insensitive), `select` takes an option value or an option label (case-insensitive), `text` takes the text as is (empty clears it). A value that does not fit, a cell of a non-editable column and every cell of a `readonly` grid are skipped and keep their value. Afterwards the selected range is the pasted area, the cursor on its top-left cell, and a polite status announces the result (`dataGrid.pasted`, `dataGrid.pastedSkipped`, `dataGrid.pasteReadonly`). While an in-cell editor is open the grid does not handle the paste, so the editor's native paste inserts the text; on the header row a paste does nothing.
 - `empty`: no rows, the `empty` slot (default `EmptyState`, `dataGrid.emptyTitle`) under the header, outside the grid's rows; the header and toolbar stay.
 - No `disabled` state: a grid people may not edit is `readonly` (the cursor, ranges and copy keep working). No `loading` or `error` state of its own: the app shows a `Skeleton` or an `Alert` around the grid while it loads; DataGrid never fetches.
 - `data-frozen="start"` on the first column's cells with `frozenFirstColumn`; `data-resizing` on a header while its width is dragged.
@@ -208,8 +210,9 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 
 - Pattern: the WAI-ARIA APG **data grid**. The grid element is `role="grid"` with `aria-rowcount` (rows + header) and `aria-colcount`, named by `ariaLabel`, or by an `aria-labelledby` / `aria-describedby` passed to DataGrid (both are forwarded to the grid element, not the frame), `aria-multiselectable="true"` (a cell range can always be selected) and `aria-readonly="true"` while `readonly`. Rows are `role="row"` with `aria-rowindex` (1-based, header is 1) and `aria-selected` when row selection is on; header cells `role="columnheader"`, body cells `role="gridcell"`, each with `aria-colindex`; every gridcell carries `aria-selected` (`true` in the range, `false` outside it) and a cell that cannot be edited `aria-readonly="true"`. The empty state renders outside the grid's rows, so `aria-rowcount` stays exact.
 - One tab stop: exactly one cell of the grid has `tabindex="0"` (the active cell, the first body cell at start; the header row is part of the cursor), every other cell, checkbox and resize handle `-1`. `Tab` enters the grid on the active cell and `Tab` / `Shift+Tab` leave it. The editor inside a cell takes focus while editing and returns it to the cell when it closes.
-- Keyboard map (cell cursor): `Arrow` keys move one cell, up into the header row and back (inline arrows follow the reading direction); `Home` / `End` the first / last cell of the row; `Ctrl+Home` / `Ctrl+End` the first / last cell of the grid; `PageUp` / `PageDown` ten rows; `Shift` with an arrow, `Home` or `End` extends the range over body cells; `Tab` / `Shift+Tab` leave the grid. `Enter` or `F2` opens the editor of a body cell and, on a header cell, moves focus to its resize handle; typing a character opens a text or number editor with that character (select and boolean cells do not open on typing); `Space` toggles a boolean cell, the row checkbox, or Select all on its header; `Delete` / `Backspace` clears an editable text or number cell; `Ctrl+C` / `Cmd+C` copies the range; `Ctrl+A` / `Cmd+A` selects every cell.
+- Keyboard map (cell cursor): `Arrow` keys move one cell, up into the header row and back (inline arrows follow the reading direction); `Home` / `End` the first / last cell of the row; `Ctrl+Home` / `Ctrl+End` the first / last cell of the grid; `PageUp` / `PageDown` ten rows; `Shift` with an arrow, `Home` or `End` extends the range over body cells; `Tab` / `Shift+Tab` leave the grid. `Enter` or `F2` opens the editor of a body cell and, on a header cell, moves focus to its resize handle; typing a character opens a text or number editor with that character (select and boolean cells do not open on typing); `Space` toggles a boolean cell, the row checkbox, or Select all on its header; `Delete` / `Backspace` clears an editable text or number cell; `Ctrl+C` / `Cmd+C` copies the range; `Ctrl+V` / `Cmd+V` pastes a tab-separated block from the top-left cell of the range, or fills the range with a single value (see States); `Ctrl+A` / `Cmd+A` selects every cell.
 - Keyboard map (editing): `Enter` commits and moves down; `Tab` / `Shift+Tab` commit and move to the next / previous cell (wrapping across rows), the one case where Tab moves inside the grid; `Escape` cancels and restores the value; blur commits. A select editor is a native `select`: its arrow keys change the choice without committing, and Enter, Tab or blur commit it. An invalid number keeps the editor open (see States).
+- Paste result: a visually hidden `role="status"` `aria-live="polite"` region outside the grid's rows announces `Pasted {count} cells`, `Pasted {count} cells, {skipped} skipped`, or `Read-only, nothing pasted`.
 - Row checkboxes are named after the row: `dataGrid.selectRow` (`Select row {row}`) filled with the first column's text, else the row key.
 - Resize handles are `role="separator"` with `aria-orientation="vertical"`, `aria-valuenow` (the width in px), `aria-valuemin` (`minWidth`, 64 by default), `aria-valuemax` (960) and a name (`dataGrid.resize`: `Resize Name`); they are reached with Enter from their header cell, `Arrow Left` / `Arrow Right` change the width by 16 px, and `Escape` or `Enter` return focus to the header cell.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` inset on the active cell or header; the editor uses the same ring (`--danger-border` while invalid).
@@ -219,16 +222,19 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 
 ## Internationalization
 
-| Key                         | English source                | Override prop |
-| --------------------------- | ----------------------------- | ------------- |
-| `dataGrid.selectAll`        | `Select all rows`             | —             |
-| `dataGrid.selectRow`        | `Select row`                  | —             |
-| `dataGrid.resize`           | `Resize {column}`             | —             |
-| `dataGrid.invalidNumber`    | `Enter a number`              | —             |
-| `dataGrid.emptyTitle`       | `No rows yet`                 | `empty` slot  |
-| `dataGrid.emptyDescription` | `Add a row to start editing.` | `empty` slot  |
-| `dataGrid.true`             | `Yes`                         | —             |
-| `dataGrid.false`            | `No`                          | —             |
+| Key                         | English source                                                                               | Override prop |
+| --------------------------- | -------------------------------------------------------------------------------------------- | ------------- |
+| `dataGrid.selectAll`        | `Select all rows`                                                                            | —             |
+| `dataGrid.selectRow`        | `Select row`                                                                                 | —             |
+| `dataGrid.resize`           | `Resize {column}`                                                                            | —             |
+| `dataGrid.invalidNumber`    | `Enter a number`                                                                             | —             |
+| `dataGrid.emptyTitle`       | `No rows yet`                                                                                | `empty` slot  |
+| `dataGrid.emptyDescription` | `Add a row to start editing.`                                                                | `empty` slot  |
+| `dataGrid.pasted`           | `Pasted {count} cells` (plural: `Pasted {count} cell`)                                       | —             |
+| `dataGrid.pastedSkipped`    | `Pasted {count} cells, {skipped} skipped` (plural: `Pasted {count} cell, {skipped} skipped`) | —             |
+| `dataGrid.pasteReadonly`    | `Read-only, nothing pasted`                                                                  | —             |
+| `dataGrid.true`             | `Yes`                                                                                        | —             |
+| `dataGrid.false`            | `No`                                                                                         | —             |
 
 - Formatting: `number` cells render with `Intl.NumberFormat` in the locale of the nearest `WebkitProvider`; the editor and the copied text use the raw number. Strings come from the locale catalog through `useTranslate` (`dataGrid` group).
 
@@ -248,7 +254,7 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 
 ## Performance
 
-- Bundle budget: the `data-grid` entry in `.size-limit.json` (9.3 KB gzip); it imports no table engine, so it does not add `@tanstack/vue-table` to a page, and a hand-composed `table` does not import it.
+- Bundle budget: the `data-grid` entry in `.size-limit.json` (10.25 KB gzip; paste added about 0.9 KB); it imports no table engine, so it does not add `@tanstack/vue-table` to a page, and a hand-composed `table` does not import it.
 - Runtime budget: the `data-grid-1k` scenario of `perf-budgets.json` (1,000 rows × 8 columns): mount, and 40 cursor moves with the arrow keys. Each body row is memoized (`v-memo` on its record, its selection, its cursor, range and editor state, the column widths and the columns), so a cursor move re-renders only the rows it leaves and enters.
 - Heavy parts: none: rows lay out lazily with `content-visibility: auto` and `contain-intrinsic-size`; no virtualization library.
 
@@ -256,7 +262,7 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 
 This component has no `variant`/`size`, so the canonical Types/Sizes examples do not apply.
 
-- Default — a customers grid with text, select, number and boolean columns, the first column frozen; justified as the baseline.
+- Default — a customers grid with text, select, number and boolean columns, the first column frozen, where a range is copied with Ctrl+C and pasted elsewhere with Ctrl+V (or a block pasted from a spreadsheet); justified as the baseline.
 - Row Selection — `selectable` with the toolbar's Add row and Delete rows wired to `row-add` / `row-remove`; justified because the add and delete hooks and the checkbox column are distinct behaviours.
 - Readonly — `readonly` while a save runs: the cursor and copy work, no editor opens; justified because `readonly` is a state the grid owns.
 
