@@ -60,6 +60,17 @@ export const avatar = {
   imageAlt: 'Avatar'
 } as const
 
+export const avatarGroup = {
+  people: {
+    one: '{count} person',
+    other: '{count} people'
+  },
+  more: {
+    one: '{count} more person',
+    other: '{count} more people'
+  }
+} as const
+
 export const barList = {
   emptyTitle: 'No data available',
   errorTitle: 'Could not load the data'
@@ -1384,6 +1395,7 @@ export const en = {
   artifactPreview,
   attributeEditor,
   avatar,
+  avatarGroup,
   barList,
   dashboardGrid,
   breadcrumb,

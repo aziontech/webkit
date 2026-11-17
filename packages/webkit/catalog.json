@@ -6471,6 +6471,54 @@
    "examplesFile": "catalog/examples/avatar.json",
    "docsFile": "catalog/components/avatar.json"
   },
+  "avatar-group": {
+   "import": "@aziontech/webkit/avatar-group",
+   "target": "./src/components/content/avatar-group/avatar-group.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/avatar-group",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "AvatarGroupItem[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "The people, in display order: `{ name, src?, label? }`; `name` is the accessible name, the hint and the initials."
+    },
+    {
+     "name": "max",
+     "type": "number",
+     "default": "4",
+     "required": "false",
+     "doc": "Avatars shown before the rest collapse into the `+N` button; `0` shows every avatar."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size of each avatar (24 / 32 / 48 px), the same steps as `Avatar`."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical'",
+     "default": "'horizontal'",
+     "required": "false",
+     "doc": "Direction the avatars stack and overlap in."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the group; empty uses the catalog count (`5 people`)."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/avatar-group.json",
+   "docsFile": "catalog/components/avatar-group.json"
+  },
   "badge": {
    "import": "@aziontech/webkit/badge",
    "target": "./src/components/content/badge/badge.vue",
