@@ -23,18 +23,6 @@
     component: MediaSplitBandSceneName
   }
 
-  /** A picture drawn in the media cell. */
-  export type MediaSplitBandImage = {
-    /** URL of the picture. */
-    src: string
-    /** Alternative text describing the picture; empty keeps it decorative. */
-    alt?: string
-    /** Intrinsic width of the picture, in pixels. */
-    width?: number
-    /** Intrinsic height of the picture, in pixels. */
-    height?: number
-  }
-
   /** A call to action under the copy. */
   export type MediaSplitBandAction = {
     /** Visible label of the action. */
@@ -56,11 +44,9 @@
     description?: string
     /** Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media. */
     size?: MediaSplitBandSize
-    /** Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`. */
+    /** Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `illustration`. */
     scene?: MediaSplitBandScene
-    /** Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. */
-    image?: MediaSplitBandImage
-    /** Registry name of the illustration drawn in the media cell when neither a scene nor an image is set. */
+    /** Registry name of the illustration drawn in the media cell when no scene is set. */
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
@@ -76,7 +62,6 @@
     description: '',
     size: 'medium',
     scene: undefined,
-    image: undefined,
     illustration: '',
     illustrationAriaLabel: '',
     primaryAction: undefined,
@@ -100,11 +85,7 @@
     props.scene ? (SCENES[props.scene.component] ?? null) : null
   )
 
-  const hasImage = computed(() => Boolean(props.image?.src))
-
-  const hasMedia = computed(
-    () => Boolean(sceneComponent.value) || hasImage.value || props.illustration.length > 0
-  )
+  const hasMedia = computed(() => Boolean(sceneComponent.value) || props.illustration.length > 0)
 
   const primary = computed(() =>
     props.primaryAction?.label && props.primaryAction.href ? props.primaryAction : null
@@ -150,17 +131,6 @@
           <component
             :is="sceneComponent"
             v-if="sceneComponent"
-          />
-          <img
-            v-else-if="hasImage"
-            :src="image?.src"
-            :alt="image?.alt ?? ''"
-            :width="image?.width"
-            :height="image?.height"
-            :aria-hidden="image?.alt ? undefined : 'true'"
-            loading="lazy"
-            decoding="async"
-            class="h-full w-full object-cover"
           />
           <Illustration
             v-else

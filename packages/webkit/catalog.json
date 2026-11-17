@@ -17973,10 +17973,10 @@
           "type": "FeatureTilesTile[]",
           "default": "[]",
           "required": "false",
-          "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale."
+          "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid and `scale` its media scale."
         }
       ],
-      "purpose": "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.",
+      "purpose": "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.",
       "useWhen": [
         "To state three or four reasons to buy, each with a picture, under a product or pricing argument."
       ],
@@ -17990,7 +17990,7 @@
       ],
       "bestPractices": [
         "Match the tile count to the kind: four tiles for `artwork`, three for `illustrated`.",
-        "Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.",
+        "Give every tile its art as `illustration`, a name of the illustration registry; `scale` sizes it inside its frame. A name the registry does not hold draws the placeholder scene and warns in the console.",
         "Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band."
       ]
     },
@@ -18813,21 +18813,14 @@
           "type": "MediaSplitBandScene",
           "default": "undefined",
           "required": "false",
-          "doc": "Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`."
-        },
-        {
-          "name": "image",
-          "type": "MediaSplitBandImage",
-          "default": "undefined",
-          "required": "false",
-          "doc": "Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`."
+          "doc": "Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `illustration`."
         },
         {
           "name": "illustration",
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Registry name of the illustration drawn in the media cell when neither a scene nor an image is set."
+          "doc": "Registry name of the illustration drawn in the media cell when no scene is set."
         },
         {
           "name": "illustrationAriaLabel",
@@ -18851,7 +18844,7 @@
           "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked."
         }
       ],
-      "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked.",
+      "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene or an illustration; with one action the whole band links to it, with two the band stays unlinked.",
       "useWhen": [
         "To make one point beside one picture and move on (a values statement, a single product claim)."
       ],
@@ -18864,9 +18857,9 @@
         "media-split-stack` — the stacked sibling for a run of claims."
       ],
       "bestPractices": [
-        "Give the band exactly one media: `scene`, `image` or `illustration`; when several are set the first of that order wins.",
-        "Use `size=\"large\"` for a band that carries only its headline and description.",
-        "Give an `image` its `width` and `height` so the page reserves its box before it loads."
+        "Give the band exactly one media: `scene`, or `illustration`, a name of the illustration registry. A name the registry does not hold draws the placeholder scene and warns in the console.",
+        "When both are set, `scene` wins over `illustration`.",
+        "Use `size=\"large\"` for a band that carries only its headline and description."
       ]
     },
     "media-split-stack": {
@@ -18904,7 +18897,7 @@
           "type": "MediaSplitStackBand[]",
           "default": "[]",
           "required": "false",
-          "doc": "The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows."
+          "doc": "The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action? }` where `illustration` is a registry name and `action` `{ label, href }` the outlined button and the link the whole band follows."
         }
       ],
       "purpose": "A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined \"learn more\" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration` and `button`. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.",
@@ -18920,7 +18913,7 @@
         "media-split` — the band each entry renders through."
       ],
       "bestPractices": [
-        "Give a band either `image` (a URL, with `imageAlt` when it says something) or `illustration` (a registry name, with `illustrationLabel`), not both; a band with neither renders without its media cell.",
+        "Give every band its art as `illustration`, a name of the illustration registry, with `illustrationLabel` when it says something; a band without one renders without its media cell. A name the registry does not hold draws the placeholder scene and warns in the console.",
         "Give every band an `action`; it is both the button and the link the whole band follows."
       ]
     },

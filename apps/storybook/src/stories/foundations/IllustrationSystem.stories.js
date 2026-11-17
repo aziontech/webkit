@@ -27,6 +27,7 @@ const ASSETS = [
   'azion-to-cloudflare',
   'azion-to-fastly',
   'azion-to-vercel',
+  'branches',
   'build-applications',
   'content-and-media-delivery',
   'content-and-media-delivery-globe',
@@ -42,6 +43,7 @@ const ASSETS = [
   'low-latency',
   'modern-frontends',
   'no-idle-no-waste',
+  'personal-tokens',
   'preview',
   'programmable-security',
   'protect-financial-applications',
@@ -50,6 +52,7 @@ const ASSETS = [
   'runtime',
   'saas-platforms',
   'stay-in-control',
+  'usage-chart',
   'white-gloves-when-it-matters'
 ]
 
