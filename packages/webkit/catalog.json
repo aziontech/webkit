@@ -108,8 +108,12 @@
    "--chart-axis",
    "--chart-crosshair",
    "--chart-diverging-negative",
+   "--chart-diverging-negative-2",
+   "--chart-diverging-negative-3",
    "--chart-diverging-neutral",
    "--chart-diverging-positive",
+   "--chart-diverging-positive-2",
+   "--chart-diverging-positive-3",
    "--chart-grid",
    "--chart-label",
    "--chart-sequential-1",
@@ -903,8 +907,12 @@
     "--chart-axis",
     "--chart-crosshair",
     "--chart-diverging-negative",
+    "--chart-diverging-negative-2",
+    "--chart-diverging-negative-3",
     "--chart-diverging-neutral",
     "--chart-diverging-positive",
+    "--chart-diverging-positive-2",
+    "--chart-diverging-positive-3",
     "--chart-grid",
     "--chart-label",
     "--chart-sequential-1",
@@ -1756,6 +1764,1692 @@
    "texture-wave-b": {
     "value": "textureWaveB 19s linear infinite",
     "useWhen": "The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction)."
+   }
+  },
+  "themes": [
+   "light",
+   "dark"
+  ],
+  "values": {
+   "--primary": {
+    "group": "primary",
+    "type": "color",
+    "light": "#F3652B",
+    "dark": "#F3652B",
+    "purpose": "The main action fill: the primary button, a checked checkbox, a progress fill."
+   },
+   "--primary-mask": {
+    "group": "primary",
+    "type": "color",
+    "light": "#FE601F33",
+    "dark": "#FE601F33",
+    "purpose": "A translucent primary tint behind brand-highlighted content."
+   },
+   "--primary-selected": {
+    "group": "primary",
+    "type": "color",
+    "light": "#FE601F33",
+    "dark": "#FE601F33",
+    "purpose": "The translucent primary tint of a selected brand card."
+   },
+   "--primary-foreground": {
+    "group": "primary",
+    "type": "color",
+    "light": "#000000",
+    "dark": "#000000",
+    "purpose": "Text and icons on a --primary fill."
+   },
+   "--secondary": {
+    "group": "secondary",
+    "type": "color",
+    "light": "#0A0A0A",
+    "dark": "#FFFFFF",
+    "purpose": "The second action fill: the secondary button and the icon button."
+   },
+   "--secondary-mask": {
+    "group": "secondary",
+    "type": "color",
+    "light": "#00000005",
+    "dark": "#FFFFFF1A",
+    "purpose": "The sliding indicator under the selected tab."
+   },
+   "--secondary-selected": {
+    "group": "secondary",
+    "type": "color",
+    "light": "#0A0A0A",
+    "dark": "#FFFFFF",
+    "purpose": "The selected day of a date picker, drawn in the secondary fill."
+   },
+   "--secondary-foreground": {
+    "group": "secondary",
+    "type": "color",
+    "light": "#FFFFFF",
+    "dark": "#000000",
+    "purpose": "Text and icons on a --secondary fill."
+   },
+   "--accent": {
+    "group": "accent",
+    "type": "color",
+    "light": "#005FCC",
+    "dark": "#99C9FF",
+    "purpose": "A live state or a connection, never an action: a switch on, a slider fill, diagram edges."
+   },
+   "--accent-mask": {
+    "group": "accent",
+    "type": "color",
+    "light": "#0072F51A",
+    "dark": "#0072F51A",
+    "purpose": "A translucent accent tint; defined, not used by any component yet."
+   },
+   "--accent-selected": {
+    "group": "accent",
+    "type": "color",
+    "light": "#005FCC",
+    "dark": "#99C9FF",
+    "purpose": "A selected accent mark; defined, not used by any component yet."
+   },
+   "--accent-foreground": {
+    "group": "accent",
+    "type": "color",
+    "light": "#FFFFFF",
+    "dark": "#000000",
+    "purpose": "Text and icons on an --accent fill."
+   },
+   "--brand-blue": {
+    "group": "accent",
+    "type": "color",
+    "light": "#0072F5",
+    "dark": "#0072F5",
+    "purpose": "The azion.com blue for brand marks only, such as the eyebrow cursor."
+   },
+   "--brand-blue-foreground": {
+    "group": "accent",
+    "type": "color",
+    "light": "#FFFFFF",
+    "dark": "#FFFFFF",
+    "purpose": "Text on a --brand-blue fill."
+   },
+   "--bg-canvas": {
+    "group": "background",
+    "type": "color",
+    "light": "#F5F5F5",
+    "dark": "#000000",
+    "purpose": "The page background behind every surface."
+   },
+   "--bg-surface": {
+    "group": "background",
+    "type": "color",
+    "light": "#FFFFFF",
+    "dark": "#0A0A0A",
+    "purpose": "Cards, panels and table bodies that sit on the canvas."
+   },
+   "--bg-surface-raised": {
+    "group": "background",
+    "type": "color",
+    "light": "#FFFFFF",
+    "dark": "#141414",
+    "purpose": "Menus, popovers and the chart tooltip that float above a surface."
+   },
+   "--bg-mask": {
+    "group": "background",
+    "type": "color",
+    "light": "#00000005",
+    "dark": "#FFFFFF0D",
+    "purpose": "The hover layer on outline and ghost buttons."
+   },
+   "--bg-surface-overlay": {
+    "group": "background",
+    "type": "color",
+    "light": "#FAFAFA",
+    "dark": "#4D4D4D",
+    "purpose": "A third surface step; defined, not used by any component yet; text on it is --text-default."
+   },
+   "--bg-placeholder": {
+    "group": "background",
+    "type": "color",
+    "light": "#00000014",
+    "dark": "#FFFFFF1A",
+    "purpose": "The translucent fill a loading placeholder reserves the space with."
+   },
+   "--bg-placeholder-highlight": {
+    "group": "background",
+    "type": "color",
+    "light": "#FFFFFF99",
+    "dark": "#FFFFFF1A",
+    "purpose": "The sweep that passes over a loading placeholder."
+   },
+   "--bg-hover": {
+    "group": "background",
+    "type": "color",
+    "light": "#00000014",
+    "dark": "#FFFFFF1A",
+    "purpose": "The hover fill of an interactive row, item or control."
+   },
+   "--bg-active": {
+    "group": "background",
+    "type": "color",
+    "light": "#00000005",
+    "dark": "#FFFFFF0D",
+    "purpose": "The pressed fill of an interactive row, item or control."
+   },
+   "--bg-backdrop": {
+    "group": "background",
+    "type": "color",
+    "light": "#000000CC",
+    "dark": "#000000CC",
+    "purpose": "The dimmed layer behind a dialog or drawer."
+   },
+   "--bg-selected": {
+    "group": "background",
+    "type": "color",
+    "light": "#E5E5E5",
+    "dark": "#2B2B2B",
+    "purpose": "The fill of a selected row, option or toggle."
+   },
+   "--bg-contrast": {
+    "group": "background",
+    "type": "color",
+    "light": "#141414",
+    "dark": "#FAFAFA",
+    "purpose": "The inverted surface of a tooltip or a contrast tag."
+   },
+   "--bg-disabled": {
+    "group": "background",
+    "type": "color",
+    "light": "#E5E5E5",
+    "dark": "#1A1A1A",
+    "purpose": "The fill of a disabled control."
+   },
+   "--border-default": {
+    "group": "border",
+    "type": "color",
+    "light": "#D1D1D1",
+    "dark": "#2B2B2B",
+    "purpose": "Dividers and the edge of cards, tables and panels."
+   },
+   "--border-muted": {
+    "group": "border",
+    "type": "color",
+    "light": "#DADADA",
+    "dark": "#242424",
+    "purpose": "Quieter dividers inside a framed surface."
+   },
+   "--border-input": {
+    "group": "border",
+    "type": "color",
+    "light": "#D1D1D1",
+    "dark": "#535353",
+    "purpose": "The resting and disabled outline of a field, select, checkbox, radio or switch."
+   },
+   "--border-strong": {
+    "group": "border",
+    "type": "color",
+    "light": "#000000",
+    "dark": "#FFFFFF",
+    "purpose": "A full-strength outline that must read before every other line."
+   },
+   "--border-selected": {
+    "group": "border",
+    "type": "color",
+    "light": "#F3652B",
+    "dark": "#F3652B",
+    "purpose": "The outline of a selected card, chip or option.",
+    "alias": {
+     "light": "--primary",
+     "dark": "--primary"
+    }
+   },
+   "--text-default": {
+    "group": "text",
+    "type": "color",
+    "light": "#141414",
+    "dark": "#FAFAFA",
+    "purpose": "Body text and headings on any surface."
+   },
+   "--text-muted": {
+    "group": "text",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#B2B2B2",
+    "purpose": "Secondary text: descriptions, captions, metadata."
+   },
+   "--text-disabled": {
+    "group": "text",
+    "type": "color",
+    "light": "#999999",
+    "dark": "#4D4D4D",
+    "purpose": "Text of a disabled control."
+   },
+   "--text-primary": {
+    "group": "text",
+    "type": "color",
+    "light": "#B03C02",
+    "dark": "#FFB180",
+    "purpose": "Brand-coloured text, such as the required asterisk on a field label."
+   },
+   "--text-brand": {
+    "group": "text",
+    "type": "color",
+    "light": "#F3652B",
+    "dark": "#F3652B",
+    "purpose": "The logo orange for brand labels such as the eyebrow; an accepted contrast exception."
+   },
+   "--text-link": {
+    "group": "text",
+    "type": "color",
+    "light": "#005FCC",
+    "dark": "#99C9FF",
+    "purpose": "Links in text and the link button."
+   },
+   "--text-link-hover": {
+    "group": "text",
+    "type": "color",
+    "light": "#004799",
+    "dark": "#99C9FF",
+    "purpose": "A link under the pointer."
+   },
+   "--text-contrast": {
+    "group": "text",
+    "type": "color",
+    "light": "#FAFAFA",
+    "dark": "#000000",
+    "purpose": "Text on the inverted --bg-contrast surface."
+   },
+   "--ring-color": {
+    "group": "ring",
+    "type": "color",
+    "light": "#666666",
+    "dark": "#808080",
+    "purpose": "The keyboard focus ring."
+   },
+   "--code-syntax-identifier": {
+    "group": "code-syntax",
+    "type": "color",
+    "light": "#141414",
+    "dark": "#FAFAFA",
+    "purpose": "Identifiers and plain code text."
+   },
+   "--code-syntax-line-number": {
+    "group": "code-syntax",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#999999",
+    "purpose": "Line numbers in the code gutter."
+   },
+   "--code-syntax-keyword": {
+    "group": "code-syntax",
+    "type": "color",
+    "light": "#004799",
+    "dark": "#99C9FF",
+    "purpose": "Language keywords."
+   },
+   "--code-syntax-punctuation": {
+    "group": "code-syntax",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#B2B2B2",
+    "purpose": "Brackets, operators and punctuation."
+   },
+   "--code-syntax-comment": {
+    "group": "code-syntax",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#999999",
+    "purpose": "Code comments."
+   },
+   "--code-syntax-function": {
+    "group": "code-syntax",
+    "type": "color",
+    "light": "#B03C02",
+    "dark": "#FFB180",
+    "purpose": "Function and method names."
+   },
+   "--code-syntax-type": {
+    "group": "code-syntax",
+    "type": "color",
+    "light": "#634B03",
+    "dark": "#FAD76B",
+    "purpose": "Type names and annotations."
+   },
+   "--code-syntax-string": {
+    "group": "code-syntax",
+    "type": "color",
+    "light": "#004799",
+    "dark": "#99C9FF",
+    "purpose": "String literals."
+   },
+   "--success": {
+    "group": "success",
+    "type": "color",
+    "light": "#78EDA2",
+    "dark": "#0A2916",
+    "purpose": "The box of a success message, tag or badge."
+   },
+   "--success-border": {
+    "group": "success",
+    "type": "color",
+    "light": "#22C55E66",
+    "dark": "#22C55E66",
+    "purpose": "The edge of a success box."
+   },
+   "--success-foreground": {
+    "group": "success",
+    "type": "color",
+    "light": "#0A2916",
+    "dark": "#52E086",
+    "purpose": "Text and icons on --success, and success icons on a surface."
+   },
+   "--success-mark": {
+    "group": "success",
+    "type": "color",
+    "light": "#16833F",
+    "dark": "#18B452",
+    "purpose": "A success mark standing on the page: the status dot, the outcome disc."
+   },
+   "--warning": {
+    "group": "warning",
+    "type": "color",
+    "light": "#FAD76B",
+    "dark": "#312602",
+    "purpose": "The box of a warning message, tag or badge."
+   },
+   "--warning-border": {
+    "group": "warning",
+    "type": "color",
+    "light": "#F7BD0880",
+    "dark": "#F7BD0880",
+    "purpose": "The edge of a warning box."
+   },
+   "--warning-foreground": {
+    "group": "warning",
+    "type": "color",
+    "light": "#312602",
+    "dark": "#F7BD08",
+    "purpose": "Text and icons on --warning, and warning icons on a surface."
+   },
+   "--warning-mark": {
+    "group": "warning",
+    "type": "color",
+    "light": "#947105",
+    "dark": "#C59707",
+    "purpose": "A warning mark standing on the page: the status dot, the outcome disc."
+   },
+   "--danger": {
+    "group": "danger",
+    "type": "color",
+    "light": "#F3A5A5",
+    "dark": "#5B0B0B",
+    "purpose": "The box of an error message, tag or badge, and the danger button."
+   },
+   "--danger-border": {
+    "group": "danger",
+    "type": "color",
+    "light": "#E51A1A66",
+    "dark": "#E51A1A66",
+    "purpose": "The edge of a danger box."
+   },
+   "--danger-foreground": {
+    "group": "danger",
+    "type": "color",
+    "light": "#2E0606",
+    "dark": "#F9D2D2",
+    "purpose": "Text and icons on --danger, and error icons on a surface."
+   },
+   "--danger-mark": {
+    "group": "danger",
+    "type": "color",
+    "light": "#E51A1A",
+    "dark": "#ED7878",
+    "purpose": "An error mark standing on the page: the status dot, the outcome disc."
+   },
+   "--info": {
+    "group": "info",
+    "type": "color",
+    "light": "#99C9FF",
+    "dark": "#001833",
+    "purpose": "The box of an informational message, tag or badge."
+   },
+   "--info-border": {
+    "group": "info",
+    "type": "color",
+    "light": "#0072F566",
+    "dark": "#0072F566",
+    "purpose": "The edge of an info box."
+   },
+   "--info-foreground": {
+    "group": "info",
+    "type": "color",
+    "light": "#003066",
+    "dark": "#99C9FF",
+    "purpose": "Text and icons on --info, and info icons on a surface."
+   },
+   "--info-mark": {
+    "group": "info",
+    "type": "color",
+    "light": "#0072F5",
+    "dark": "#3392FF",
+    "purpose": "An info mark standing on the page: the status dot, the outcome disc."
+   },
+   "--illustration-ground": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#F5F5F5",
+    "dark": "#000000",
+    "purpose": "The ground an illustration scene stands on.",
+    "alias": {
+     "light": "--bg-canvas",
+     "dark": "--bg-canvas"
+    }
+   },
+   "--illustration-surface": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#FFFFFF",
+    "dark": "#0A0A0A",
+    "purpose": "Panels drawn inside an illustration.",
+    "alias": {
+     "light": "--bg-surface",
+     "dark": "--bg-surface"
+    }
+   },
+   "--illustration-surface-raised": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#FFFFFF",
+    "dark": "#141414",
+    "purpose": "Raised panels drawn inside an illustration.",
+    "alias": {
+     "light": "--bg-surface-raised",
+     "dark": "--bg-surface-raised"
+    }
+   },
+   "--illustration-block": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#E5E5E5",
+    "dark": "#2B2B2B",
+    "purpose": "Filled blocks and placeholder bars in an illustration.",
+    "alias": {
+     "light": "--bg-selected",
+     "dark": "--bg-selected"
+    }
+   },
+   "--illustration-line": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#D1D1D1",
+    "dark": "#2B2B2B",
+    "purpose": "Outlines in an illustration.",
+    "alias": {
+     "light": "--border-default",
+     "dark": "--border-default"
+    }
+   },
+   "--illustration-line-muted": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#DADADA",
+    "dark": "#242424",
+    "purpose": "Quiet outlines and dividers in an illustration.",
+    "alias": {
+     "light": "--border-muted",
+     "dark": "--border-muted"
+    }
+   },
+   "--illustration-line-strong": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#999999",
+    "dark": "#4D4D4D",
+    "purpose": "Emphasised outlines in an illustration.",
+    "alias": {
+     "light": "--text-disabled",
+     "dark": "--text-disabled"
+    }
+   },
+   "--illustration-highlight": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#000000",
+    "dark": "#FFFFFF",
+    "purpose": "The one strongest line of an illustration.",
+    "alias": {
+     "light": "--border-strong",
+     "dark": "--border-strong"
+    }
+   },
+   "--illustration-ink": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#141414",
+    "dark": "#FAFAFA",
+    "purpose": "Text and glyphs drawn in an illustration.",
+    "alias": {
+     "light": "--text-default",
+     "dark": "--text-default"
+    }
+   },
+   "--illustration-ink-muted": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#B2B2B2",
+    "purpose": "Secondary text drawn in an illustration.",
+    "alias": {
+     "light": "--text-muted",
+     "dark": "--text-muted"
+    }
+   },
+   "--illustration-primary": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#F3652B",
+    "dark": "#F3652B",
+    "purpose": "The brand orange in an illustration.",
+    "alias": {
+     "light": "--primary",
+     "dark": "--primary"
+    }
+   },
+   "--illustration-accent": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#005FCC",
+    "dark": "#99C9FF",
+    "purpose": "Connections and live states in an illustration.",
+    "alias": {
+     "light": "--accent",
+     "dark": "--accent"
+    }
+   },
+   "--illustration-code-punctuation": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#B2B2B2",
+    "purpose": "Code punctuation drawn in an illustration.",
+    "alias": {
+     "light": "--code-syntax-punctuation",
+     "dark": "--code-syntax-punctuation"
+    }
+   },
+   "--illustration-code-keyword": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#004799",
+    "dark": "#99C9FF",
+    "purpose": "Code keywords drawn in an illustration.",
+    "alias": {
+     "light": "--code-syntax-keyword",
+     "dark": "--code-syntax-keyword"
+    }
+   },
+   "--illustration-success": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#0A2916",
+    "dark": "#52E086",
+    "purpose": "A success mark in an illustration.",
+    "alias": {
+     "light": "--success-foreground",
+     "dark": "--success-foreground"
+    }
+   },
+   "--illustration-success-surface": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#78EDA2",
+    "dark": "#0A2916",
+    "purpose": "A success box in an illustration.",
+    "alias": {
+     "light": "--success",
+     "dark": "--success"
+    }
+   },
+   "--illustration-danger": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#2E0606",
+    "dark": "#F9D2D2",
+    "purpose": "An error mark in an illustration.",
+    "alias": {
+     "light": "--danger-foreground",
+     "dark": "--danger-foreground"
+    }
+   },
+   "--illustration-warning": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#312602",
+    "dark": "#F7BD08",
+    "purpose": "A warning mark in an illustration.",
+    "alias": {
+     "light": "--warning-foreground",
+     "dark": "--warning-foreground"
+    }
+   },
+   "--illustration-warning-surface": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#FAD76B",
+    "dark": "#312602",
+    "purpose": "A warning box in an illustration.",
+    "alias": {
+     "light": "--warning",
+     "dark": "--warning"
+    }
+   },
+   "--illustration-info": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#003066",
+    "dark": "#99C9FF",
+    "purpose": "An info mark in an illustration.",
+    "alias": {
+     "light": "--info-foreground",
+     "dark": "--info-foreground"
+    }
+   },
+   "--illustration-info-surface": {
+    "group": "illustration",
+    "type": "color",
+    "light": "#99C9FF",
+    "dark": "#001833",
+    "purpose": "An info box in an illustration.",
+    "alias": {
+     "light": "--info",
+     "dark": "--info"
+    }
+   },
+   "--chart-series-other": {
+    "group": "chart",
+    "type": "color",
+    "light": "#808080",
+    "dark": "#808080",
+    "purpose": "The grey a ninth and later series fold into."
+   },
+   "--chart-axis": {
+    "group": "chart",
+    "type": "color",
+    "light": "#D1D1D1",
+    "dark": "#2B2B2B",
+    "purpose": "The axis baseline and ticks of a chart.",
+    "alias": {
+     "light": "--border-default",
+     "dark": "--border-default"
+    }
+   },
+   "--chart-label": {
+    "group": "chart",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#B2B2B2",
+    "purpose": "Axis labels and legend text of a chart.",
+    "alias": {
+     "light": "--text-muted",
+     "dark": "--text-muted"
+    }
+   },
+   "--chart-crosshair": {
+    "group": "chart",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#B2B2B2",
+    "purpose": "The crosshair that follows the pointer over a chart.",
+    "alias": {
+     "light": "--text-muted",
+     "dark": "--text-muted"
+    }
+   },
+   "--chart-tooltip-bg": {
+    "group": "chart",
+    "type": "color",
+    "light": "#FFFFFF",
+    "dark": "#141414",
+    "purpose": "The chart tooltip surface.",
+    "alias": {
+     "light": "--bg-surface-raised",
+     "dark": "--bg-surface-raised"
+    }
+   },
+   "--chart-tooltip-text": {
+    "group": "chart",
+    "type": "color",
+    "light": "#141414",
+    "dark": "#FAFAFA",
+    "purpose": "The values in a chart tooltip.",
+    "alias": {
+     "light": "--text-default",
+     "dark": "--text-default"
+    }
+   },
+   "--chart-tooltip-muted": {
+    "group": "chart",
+    "type": "color",
+    "light": "#535353",
+    "dark": "#D1D1D1",
+    "purpose": "Labels and secondary text in a chart tooltip.",
+    "alias": {
+     "light": "--text-muted"
+    }
+   },
+   "--chart-tooltip-border": {
+    "group": "chart",
+    "type": "color",
+    "light": "#D1D1D1",
+    "dark": "#2B2B2B",
+    "purpose": "The edge of the chart tooltip.",
+    "alias": {
+     "light": "--border-default",
+     "dark": "--border-default"
+    }
+   },
+   "--chart-grid": {
+    "group": "chart",
+    "type": "color",
+    "light": "#E5E5E5",
+    "dark": "#1A1A1A",
+    "purpose": "Gridlines behind chart marks, half the contrast of a border."
+   },
+   "--chart-series-1": {
+    "group": "chart",
+    "type": "color",
+    "light": "#0072F5",
+    "dark": "#2F86FF",
+    "purpose": "The first categorical series of a chart (blue)."
+   },
+   "--chart-series-2": {
+    "group": "chart",
+    "type": "color",
+    "light": "#0D9488",
+    "dark": "#14A08C",
+    "purpose": "The second categorical series of a chart (teal)."
+   },
+   "--chart-series-3": {
+    "group": "chart",
+    "type": "color",
+    "light": "#6D28D9",
+    "dark": "#8B5CF6",
+    "purpose": "The third categorical series of a chart (violet)."
+   },
+   "--chart-series-4": {
+    "group": "chart",
+    "type": "color",
+    "light": "#E8590C",
+    "dark": "#E65A1E",
+    "purpose": "The fourth categorical series of a chart (orange)."
+   },
+   "--chart-series-5": {
+    "group": "chart",
+    "type": "color",
+    "light": "#0891B2",
+    "dark": "#0EA5C6",
+    "purpose": "The fifth categorical series of a chart (cyan)."
+   },
+   "--chart-series-6": {
+    "group": "chart",
+    "type": "color",
+    "light": "#4338CA",
+    "dark": "#6366F1",
+    "purpose": "The sixth categorical series of a chart (indigo)."
+   },
+   "--chart-series-7": {
+    "group": "chart",
+    "type": "color",
+    "light": "#4D7C0F",
+    "dark": "#6AA51A",
+    "purpose": "The seventh categorical series of a chart (lime)."
+   },
+   "--chart-series-8": {
+    "group": "chart",
+    "type": "color",
+    "light": "#C026D3",
+    "dark": "#D946EF",
+    "purpose": "The eighth and last categorical series of a chart (fuchsia)."
+   },
+   "--chart-status-success": {
+    "group": "chart",
+    "type": "color",
+    "light": "#16833F",
+    "dark": "#18B452",
+    "purpose": "A chart series whose colour means success, such as served requests."
+   },
+   "--chart-status-warning": {
+    "group": "chart",
+    "type": "color",
+    "light": "#947105",
+    "dark": "#C59707",
+    "purpose": "A chart series whose colour means a warning."
+   },
+   "--chart-status-danger": {
+    "group": "chart",
+    "type": "color",
+    "light": "#E51A1A",
+    "dark": "#E74B4B",
+    "purpose": "A chart series whose colour means an error, such as blocked requests."
+   },
+   "--chart-status-info": {
+    "group": "chart",
+    "type": "color",
+    "light": "#0072F5",
+    "dark": "#3392FF",
+    "purpose": "A chart series whose colour means information."
+   },
+   "--chart-sequential-1": {
+    "group": "chart",
+    "type": "color",
+    "light": "#E0E7FF",
+    "dark": "#1E1B4B",
+    "purpose": "The lowest step of a sequential magnitude scale."
+   },
+   "--chart-sequential-2": {
+    "group": "chart",
+    "type": "color",
+    "light": "#C7D2FE",
+    "dark": "#312E81",
+    "purpose": "Step 2 of 7 of a sequential magnitude scale."
+   },
+   "--chart-sequential-3": {
+    "group": "chart",
+    "type": "color",
+    "light": "#A5B4FC",
+    "dark": "#3730A3",
+    "purpose": "Step 3 of 7 of a sequential magnitude scale."
+   },
+   "--chart-sequential-4": {
+    "group": "chart",
+    "type": "color",
+    "light": "#818CF8",
+    "dark": "#4F46E5",
+    "purpose": "Step 4 of 7 of a sequential magnitude scale."
+   },
+   "--chart-sequential-5": {
+    "group": "chart",
+    "type": "color",
+    "light": "#6366F1",
+    "dark": "#6366F1",
+    "purpose": "Step 5 of 7 of a sequential magnitude scale."
+   },
+   "--chart-sequential-6": {
+    "group": "chart",
+    "type": "color",
+    "light": "#4F46E5",
+    "dark": "#818CF8",
+    "purpose": "Step 6 of 7 of a sequential magnitude scale."
+   },
+   "--chart-sequential-7": {
+    "group": "chart",
+    "type": "color",
+    "light": "#4338CA",
+    "dark": "#A5B4FC",
+    "purpose": "The highest step of a sequential magnitude scale."
+   },
+   "--chart-diverging-negative": {
+    "group": "chart",
+    "type": "color",
+    "light": "#D94A03",
+    "dark": "#FF8E4D",
+    "purpose": "The negative end of a diverging scale (orange)."
+   },
+   "--chart-diverging-negative-2": {
+    "group": "chart",
+    "type": "color",
+    "light": "#C96746",
+    "dark": "#CD8157",
+    "purpose": "The second negative step of a seven-step diverging scale."
+   },
+   "--chart-diverging-negative-3": {
+    "group": "chart",
+    "type": "color",
+    "light": "#B57D6A",
+    "dark": "#9D725C",
+    "purpose": "The negative step next to the neutral in a seven-step diverging scale."
+   },
+   "--chart-diverging-neutral": {
+    "group": "chart",
+    "type": "color",
+    "light": "#ECECEC",
+    "dark": "#2B2B2B",
+    "purpose": "The midpoint of a diverging scale."
+   },
+   "--chart-diverging-positive-3": {
+    "group": "chart",
+    "type": "color",
+    "light": "#6E8CB8",
+    "dark": "#5D7EA7",
+    "purpose": "The positive step next to the neutral in a seven-step diverging scale."
+   },
+   "--chart-diverging-positive-2": {
+    "group": "chart",
+    "type": "color",
+    "light": "#4377C3",
+    "dark": "#4D89D2",
+    "purpose": "The second positive step of a seven-step diverging scale."
+   },
+   "--chart-diverging-positive": {
+    "group": "chart",
+    "type": "color",
+    "light": "#005FCC",
+    "dark": "#3392FF",
+    "purpose": "The positive end of a diverging scale (blue)."
+   },
+   "--severity-critical": {
+    "group": "severity",
+    "type": "color",
+    "light": "#B71515",
+    "dark": "#ED7878",
+    "purpose": "The critical bar of a severity tag."
+   },
+   "--severity-high": {
+    "group": "severity",
+    "type": "color",
+    "light": "#D94A03",
+    "dark": "#FF8E4D",
+    "purpose": "The high bar of a severity tag."
+   },
+   "--severity-medium": {
+    "group": "severity",
+    "type": "color",
+    "light": "#947105",
+    "dark": "#F7BD08",
+    "purpose": "The medium bar of a severity tag."
+   },
+   "--severity-low": {
+    "group": "severity",
+    "type": "color",
+    "light": "#005FCC",
+    "dark": "#66ADFF",
+    "purpose": "The low bar of a severity tag."
+   },
+   "--severity-info": {
+    "group": "severity",
+    "type": "color",
+    "light": "#808080",
+    "dark": "#999999",
+    "purpose": "An informational severity; defined, not used by any component yet."
+   },
+   "--spacing-2xl": {
+    "group": "spacing",
+    "type": "length",
+    "value": "2rem",
+    "purpose": "The largest gap, between marketing bands; grows at sm and xl.",
+    "breakpoints": {
+     "sm": "4rem",
+     "xl": "6rem"
+    }
+   },
+   "--spacing-xl": {
+    "group": "spacing",
+    "type": "length",
+    "value": "1.5rem",
+    "purpose": "The gap between page sections; grows at sm and xl.",
+    "breakpoints": {
+     "sm": "2rem",
+     "xl": "3rem"
+    }
+   },
+   "--spacing-lg": {
+    "group": "spacing",
+    "type": "length",
+    "value": "1rem",
+    "purpose": "Card padding and the page boundary inset; grows at sm.",
+    "breakpoints": {
+     "sm": "1.5rem"
+    }
+   },
+   "--spacing-md": {
+    "group": "spacing",
+    "type": "length",
+    "value": "1rem",
+    "purpose": "The gap between the parts of one section and the padding of a control."
+   },
+   "--spacing-sm": {
+    "group": "spacing",
+    "type": "length",
+    "value": "0.75rem",
+    "purpose": "The gap between related controls in a row."
+   },
+   "--spacing-xs": {
+    "group": "spacing",
+    "type": "length",
+    "value": "0.5rem",
+    "purpose": "The gap between the parts of one control, such as its label and its icon."
+   },
+   "--spacing-2xs": {
+    "group": "spacing",
+    "type": "length",
+    "value": "0.25rem",
+    "purpose": "The tightest gap: the padding and gaps inside a menu or list of options."
+   },
+   "--layout-boundary-inline": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--spacing-lg)",
+    "purpose": "The side inset of a page body."
+   },
+   "--layout-boundary-end": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--spacing-lg)",
+    "purpose": "The bottom inset of a page body."
+   },
+   "--layout-boundary-start": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--spacing-lg)",
+    "purpose": "The top inset of a page body."
+   },
+   "--layout-section-gap": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--spacing-xl)",
+    "purpose": "The gap between the sections of a parent."
+   },
+   "--layout-group-gap": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--spacing-md)",
+    "purpose": "The gap between the parts inside one section, and the floor between two regions."
+   },
+   "--layout-measure": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--container-7xl)",
+    "purpose": "The width cap of the standard data page column."
+   },
+   "--layout-measure-focused": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--container-4xl)",
+    "purpose": "The width cap of a single-task focused page."
+   },
+   "--layout-measure-form": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--container-4xl)",
+    "purpose": "The width cap of a settings or in-page edit form."
+   },
+   "--layout-measure-form-create": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--container-5xl)",
+    "purpose": "The width cap of a dedicated create page."
+   },
+   "--layout-measure-content": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--container-3xl)",
+    "purpose": "The width cap of a prose column, set by line length."
+   },
+   "--layout-measure-site": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--container-6xl)",
+    "purpose": "The frame of a marketing site page, shared by every section."
+   },
+   "--layout-measure-site-header": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--container-7xl)",
+    "purpose": "The column of the marketing site top bar."
+   },
+   "--layout-measure-control": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--container-3xs)",
+    "purpose": "The width of a form control in a form column; a create page widens it."
+   },
+   "--layout-header-height": {
+    "group": "layout",
+    "type": "length",
+    "value": "calc(var(--spacing) * 14)",
+    "purpose": "The height of the top header, which a full-height hero subtracts."
+   },
+   "--z-control": {
+    "group": "z-index",
+    "type": "number",
+    "value": "1",
+    "purpose": "Lifts a control above its neighbours, such as a focused input in a group."
+   },
+   "--z-control-overlay": {
+    "group": "z-index",
+    "type": "number",
+    "value": "1100",
+    "purpose": "The layer of overlays: menus, popovers, dialogs, toasts."
+   },
+   "--code-editor-line-height": {
+    "group": "code",
+    "type": "length",
+    "value": "1rem",
+    "purpose": "The line step of code in the code editor."
+   },
+   "--shape-flat": {
+    "group": "shape",
+    "type": "length",
+    "value": "0",
+    "purpose": "No rounding, for surfaces that meet an edge."
+   },
+   "--shape-card": {
+    "group": "shape",
+    "type": "length",
+    "value": "8px",
+    "purpose": "The corner radius of cards, panels and dialogs."
+   },
+   "--shape-button": {
+    "group": "shape",
+    "type": "length",
+    "value": "6px",
+    "purpose": "The corner radius of buttons."
+   },
+   "--shape-control": {
+    "group": "shape",
+    "type": "length",
+    "value": "6px",
+    "purpose": "The corner radius of inputs, chips and small surfaces."
+   },
+   "--border-width-default": {
+    "group": "shape",
+    "type": "length",
+    "value": "0.8px",
+    "purpose": "The hairline width of every border and divider."
+   },
+   "text-big-number-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "1.25rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
+    },
+    "purpose": "A numeric display in a stat card.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1.5rem"
+     },
+     "md": {
+      "font-size": "2.25rem"
+     }
+    }
+   },
+   "text-big-number-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "1rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
+    },
+    "purpose": "A compact numeric display.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1.25rem"
+     }
+    }
+   },
+   "text-big-number-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "1.5rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
+    },
+    "purpose": "The largest numeric display, such as a hero metric.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "2.25rem"
+     },
+     "md": {
+      "font-size": "3.5rem"
+     }
+    }
+   },
+   "text-amount-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1.875rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "letter-spacing": "-0.08em"
+    },
+    "purpose": "The largest price or amount.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "3rem"
+     },
+     "md": {
+      "font-size": "3.5rem"
+     }
+    }
+   },
+   "text-amount-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "letter-spacing": "-0.08em"
+    },
+    "purpose": "A price or amount in a card.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1.25rem"
+     },
+     "md": {
+      "font-size": "1.5rem"
+     }
+    }
+   },
+   "text-amount-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "1rem",
+     "line-height": "1.5",
+     "font-weight": "400",
+     "letter-spacing": "-0.08em"
+    },
+    "purpose": "A compact price or amount."
+   },
+   "text-heading-3xl": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1.875rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "letter-spacing": "-0.16rem"
+    },
+    "purpose": "The largest page heading, for a marketing hero.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "3rem"
+     },
+     "md": {
+      "font-size": "3.5rem"
+     }
+    }
+   },
+   "text-heading-2xl": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1.875rem",
+     "line-height": "1",
+     "font-weight": "400",
+     "letter-spacing": "-0.16rem"
+    },
+    "purpose": "A marketing section heading.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "2.25rem"
+     },
+     "md": {
+      "font-size": "3rem"
+     }
+    }
+   },
+   "text-heading-xl": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1.25rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "letter-spacing": "0"
+    },
+    "purpose": "A page title.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1.875rem"
+     },
+     "md": {
+      "font-size": "2.25rem"
+     }
+    }
+   },
+   "text-heading-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1.125rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "letter-spacing": "0"
+    },
+    "purpose": "A large section heading.",
+    "breakpoints": {
+     "md": {
+      "font-size": "1.875rem"
+     }
+    }
+   },
+   "text-heading-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1rem",
+     "line-height": "1.25",
+     "font-weight": "400",
+     "letter-spacing": "0"
+    },
+    "purpose": "A section heading.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1.25rem"
+     },
+     "md": {
+      "font-size": "1.5rem"
+     }
+    }
+   },
+   "text-heading-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "0.875rem",
+     "line-height": "1.375",
+     "font-weight": "400",
+     "letter-spacing": "0"
+    },
+    "purpose": "A subsection or dialog heading.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1rem"
+     },
+     "md": {
+      "font-size": "1.125rem"
+     }
+    }
+   },
+   "text-heading-xs": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1rem",
+     "line-height": "1.375",
+     "font-weight": "400",
+     "letter-spacing": "0"
+    },
+    "purpose": "A card title, a flat 16px."
+   },
+   "text-heading-2xs": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "0.875rem",
+     "line-height": "1.375",
+     "font-weight": "400",
+     "letter-spacing": "0"
+    },
+    "purpose": "A small title or a wordmark written in type, a flat 14px."
+   },
+   "text-label-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "1rem",
+     "line-height": "1.5",
+     "font-weight": "400",
+     "letter-spacing": "-0.025rem"
+    },
+    "purpose": "A large label of compact interface text."
+   },
+   "text-label-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "0.875rem",
+     "line-height": "1.5",
+     "font-weight": "400",
+     "letter-spacing": "-0.025rem"
+    },
+    "purpose": "Labels and compact interface text."
+   },
+   "text-label-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "0.75rem",
+     "line-height": "1.5",
+     "font-weight": "400",
+     "letter-spacing": "-0.025rem"
+    },
+    "purpose": "Small labels and metadata."
+   },
+   "text-label-code-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+     "font-size": "0.75rem",
+     "line-height": "1",
+     "font-weight": "400",
+     "letter-spacing": "0.025rem"
+    },
+    "purpose": "Monospace code lines and line numbers, one row per line."
+   },
+   "text-body-code-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "pretty",
+     "font-family": "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+     "font-size": "0.75rem",
+     "line-height": "1.625",
+     "font-weight": "400",
+     "letter-spacing": "0.025rem"
+    },
+    "purpose": "A monospace paragraph that wraps."
+   },
+   "text-label-code-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+     "font-size": "0.875rem",
+     "line-height": "1",
+     "font-weight": "400",
+     "letter-spacing": "0.025rem"
+    },
+    "purpose": "A monospace label such as a file name bar."
+   },
+   "text-label-code-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+     "font-size": "1rem",
+     "line-height": "1",
+     "font-weight": "400",
+     "letter-spacing": "0.025rem"
+    },
+    "purpose": "A large monospace label."
+   },
+   "text-body-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "pretty",
+     "font-size": "1rem",
+     "font-weight": "400",
+     "line-height": "1.375"
+    },
+    "purpose": "Lead paragraphs.",
+    "breakpoints": {
+     "md": {
+      "font-size": "1.125rem"
+     }
+    }
+   },
+   "text-body-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "pretty",
+     "font-size": "1rem",
+     "font-weight": "400",
+     "line-height": "1.375"
+    },
+    "purpose": "Body copy."
+   },
+   "text-body-prose-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "1rem",
+     "font-weight": "400",
+     "line-height": "1.625"
+    },
+    "purpose": "Long-form prose at a relaxed line height."
+   },
+   "text-body-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "pretty",
+     "font-size": "0.875rem",
+     "font-weight": "400",
+     "line-height": "1.375"
+    },
+    "purpose": "Secondary body copy and descriptions."
+   },
+   "text-body-xs": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "pretty",
+     "font-size": "0.75rem",
+     "font-weight": "400",
+     "line-height": "1.375"
+    },
+    "purpose": "Captions and helper text."
+   },
+   "text-body-2xs": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "pretty",
+     "font-size": "0.75rem",
+     "font-weight": "400",
+     "line-height": "1.5"
+    },
+    "purpose": "The smallest body text, such as footnotes."
+   },
+   "text-tag-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "0.75rem",
+     "line-height": "1.25",
+     "font-weight": "400"
+    },
+    "purpose": "The label of a small tag or badge."
+   },
+   "text-tag-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "0.75rem",
+     "line-height": "1.25",
+     "font-weight": "400"
+    },
+    "purpose": "The label of a tag or badge."
+   },
+   "text-overline-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace",
+     "font-size": "0.75rem",
+     "line-height": "1.375",
+     "letter-spacing": "0.1rem",
+     "text-transform": "uppercase"
+    },
+    "purpose": "An uppercase overline above a heading.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "0.875rem"
+     }
+    }
+   },
+   "text-overline-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace",
+     "font-size": "0.75rem",
+     "line-height": "1.375",
+     "letter-spacing": "0.1rem",
+     "text-transform": "uppercase"
+    },
+    "purpose": "A small uppercase overline or eyebrow."
+   },
+   "text-overline-xs": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace",
+     "font-size": "0.75rem",
+     "line-height": "1.375",
+     "letter-spacing": "0.1rem",
+     "text-transform": "uppercase"
+    },
+    "purpose": "The smallest uppercase overline."
+   },
+   "text-button-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
+     "font-size": "0.875rem",
+     "font-weight": "400",
+     "line-height": "1.25",
+     "letter-spacing": "0"
+    },
+    "purpose": "The label of a large button."
+   },
+   "text-button-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
+     "font-size": "0.75rem",
+     "font-weight": "400",
+     "line-height": "1.25",
+     "letter-spacing": "0"
+    },
+    "purpose": "The label of a medium or small button."
+   },
+   "text-link": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-size": "inherit",
+     "line-height": "inherit",
+     "color": "var(--text-link)",
+     "text-decoration-line": "underline",
+     "text-decoration-color": "color-mix(in srgb, currentColor 40%, transparent)",
+     "text-underline-offset": "0.15em",
+     "border-radius": "var(--shape-control)",
+     "transition": "all 110ms cubic-bezier(0.39, 0.57, 0.56, 1)"
+    },
+    "purpose": "An inline link inside body or heading copy; inherits the size."
    }
   }
  },

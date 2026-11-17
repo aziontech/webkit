@@ -578,6 +578,7 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 ## Related docs
 
 - Token architecture: `packages/theme/src/tokens/README.md`
+- Token values and purposes: the token export (`packages/theme/src/tokens/token-export.js`, purposes in `token-purpose.js`), shipped as `catalog.json#tokens.values` and the MCP `list_tokens`; every new semantic token needs a purpose
 - Component structure and API: [`COMPONENT_REQUIREMENTS.md`](./COMPONENT_REQUIREMENTS.md)
 - Docs foundations (typography catalog, parsed from the theme): `apps/docs/src/lib/foundations.ts`
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)

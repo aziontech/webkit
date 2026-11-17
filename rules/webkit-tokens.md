@@ -19,6 +19,36 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 - No off-scale magic numbers for spacing (`p-[13px]`) when a spacing token exists.
 - No zero with a length unit: write `0`, never `0px` / `0rem` / `0em`. A zero is identical in every unit, so the unit is noise — and it makes the same value read three different ways. This covers tokens, arbitrary values (`p-[0px]`), inline `style`, and authored CSS. Units that carry meaning at zero are fine: `0%`, `0s`, `0deg`, `0fr`. One exception: inside `calc()`/`min()`/`max()`/`clamp()` CSS requires a unit on the zero — there, write `0rem` (never `0px` / `0em`).
 
+## Values and purposes
+
+Every semantic token ships with its value and a one-line purpose: a colour has a light and a dark
+value, a length or type class has a base value and the breakpoints it steps to. Ask the MCP
+`list_tokens` (a group such as `bg` or `chart`, or one name such as `--bg-surface`), or read
+`tokens.values` in `catalog.json` or `llms/foundations/tokens.md`. Pick a token by its purpose, never
+by its value: two tokens can share a value today and part tomorrow.
+
+## Design intent
+
+The rules behind the groups, which no single token's purpose states:
+
+- **Surfaces stack in one order.** `--bg-canvas` is the page, `--bg-surface` sits on it (cards,
+  panels, tables) and `--bg-surface-raised` floats above a surface (menus, popovers, the chart
+  tooltip). A raised layer also takes a shadow through its variable, `shadow-(--shadow-md)`, never
+  Tailwind's `shadow-md`: the dark theme redefines every step.
+- **Placeholders are translucent.** A loading placeholder uses `--bg-placeholder` and its sweep
+  `--bg-placeholder-highlight`, never an opaque surface token: the translucent fill reads on every
+  surface, an opaque one only on the surface it was picked against.
+- **Two rhythm steps.** `--layout-section-gap` between the sections of a parent,
+  `--layout-group-gap` between the parts of one section; tighter `--spacing-*` steps only inside one
+  unit. The `--spacing-*` scale grows by breakpoint on its own, so never restate it per breakpoint.
+- **Radius by role.** `--shape-card` for cards, panels and dialogs, `--shape-button` for buttons,
+  `--shape-control` for fields and chips, `--shape-flat` for a surface that meets an edge.
+- **Type by role.** A text class carries family, size, line height and tracking, and steps up by
+  breakpoint (the headings and big numbers): choose the class for the job and never add a size,
+  `leading-*` or `tracking-*` beside it.
+- **Every colour token is a plain colour.** No token is an opacity or a `color-mix()` of another,
+  so canvas charts and contrast checks can read it; never fake a lighter step with `opacity`.
+
 ## Which color token does which job
 
 A color token names a job, not a hue. Use the component that already does the job, and pick a token

@@ -136,7 +136,7 @@ Do not guess a component name or import path. Look it up.
    - `suggest_component` — **`need`** (what you are building, e.g. `"a ranked top list"`), `surface`; the block, section or component that fits, with alternatives.
    - `search_components` — **`query`**, `surface`.
    - `get_component`, `get_import`, `get_usage_example`, `get_best_practices` — **`name`** (kebab-case, e.g. `"bar-list"`).
-   - `list_components` — `category`, `surface`, `cursor`, `limit`; `list_categories` — none; `list_tokens` — `category`; `list_assets` — `kind`, `query`.
+   - `list_components` — `category`, `surface`, `cursor`, `limit`; `list_categories` — none; `list_tokens` — `category` (a group such as `bg`, or one token name such as `--bg-surface`; each semantic token comes with its light and dark value and its purpose); `list_assets` — `kind`, `query`.
    - `validate_usage` — `import`, `classes`, `component`: confirm a subpath is real and a class string is allowed.
 2. No MCP? Read `node_modules/@aziontech/webkit/llms/llms.txt`. It links one Markdown page per block (`llms/blocks/<id>.md`: guidelines, variants, the primary SFC), per component (`llms/components/<name>.md`: props, events, slots, examples, accessibility, do and don't, with the same data as JSON in `<name>.json`) and per foundation (`llms/foundations/`: tokens, color, typography, spacing, motion, i18n, RTL, devices). `llms-full.txt` is every page in one file.
 3. Read the catalog directly. `node_modules/@aziontech/webkit/catalog.json` has an `imports` object; every key is a real published subpath (`button`, `empty-state`, `table`, ...). If a subpath is not a key there, it does not exist.
@@ -203,6 +203,10 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 ## Common Patterns
 
 ### Import + tokens
+
+Pick a token by its purpose, not its value: `list_tokens` gives every semantic token's light and
+dark value and a one-line purpose, and the rule `webkit-tokens` holds the design intent behind the
+groups (the surface order, the two rhythm steps, radius and type by role).
 
 Tokens style **your own** markup around a component. The component keeps its own look and changes
 it only through its props (`variant`, `size`); a class or style on its tag is restyling it (rule

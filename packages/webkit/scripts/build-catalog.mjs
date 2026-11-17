@@ -31,6 +31,7 @@ import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
 } from '../../theme/src/tokens/primitives/animations/animate.js'
+import { buildTokenExport } from '../../theme/src/tokens/token-export.js'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -761,7 +762,19 @@ function buildTokens() {
     }
   }
 
-  return { cssVars, typography, groups, animations, animationGuide }
+  const tokenExport = buildTokenExport()
+  const values = {}
+  for (const { name, ...entry } of tokenExport.tokens) values[name] = entry
+
+  return {
+    cssVars,
+    typography,
+    groups,
+    animations,
+    animationGuide,
+    themes: tokenExport.themes,
+    values
+  }
 }
 
 export function splitCatalog(full) {
