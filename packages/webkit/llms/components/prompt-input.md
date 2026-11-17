@@ -162,7 +162,7 @@ Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed
 
 ```vue
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import { onBeforeUnmount, ref } from 'vue'
 
   const prompt = ref('Why did my cache hit ratio drop?')
@@ -202,7 +202,7 @@ Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed
 
 ```vue
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import { ref } from 'vue'
 
   const prompt = ref(

@@ -4,7 +4,7 @@
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import ToolApproval, {
     type ToolApprovalStatus,
