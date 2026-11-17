@@ -216,10 +216,10 @@ test('container-query-on-container stays silent when the query sits on a child',
 
 test('rtl-double-flip fires when a directional icon also rotates under rtl', () => {
   for (const content of [
-    'class="ai ai-arrow-right rtl:rotate-180"',
-    'class="ai ai-chevron-left md:rtl:-rotate-180"',
-    "cn('rtl:rotate-180 ai ai-log-out', attrs.class)",
-    'class="ai ai-circle-arrow-left data-[open]:rtl:rotate-180"'
+    'class="az az-arrow-right rtl:rotate-180"',
+    'class="az az-chevron-left md:rtl:-rotate-180"',
+    "cn('rtl:rotate-180 az az-log-out', attrs.class)",
+    'class="az az-circle-arrow-left data-[open]:rtl:rotate-180"'
   ]) {
     assert.ok(ids(content).includes('rtl-double-flip'), `expected rtl-double-flip for: ${content}`)
   }
@@ -227,12 +227,12 @@ test('rtl-double-flip fires when a directional icon also rotates under rtl', () 
 
 test('rtl-double-flip stays silent on a single flip or a non-directional glyph', () => {
   for (const content of [
-    'class="ai ai-arrow-right rtl:-scale-x-100"',
-    'class="ai ai-chevron-down rtl:rotate-180"',
-    'class="ai ai-arrow-right"',
-    'class="ai ai-arrow-right-left rtl:rotate-180"',
-    'class="ai ai-arrow-right rtl:rotate-180x"',
-    '<i class="ai ai-arrow-right"></i><i class="ai ai-chevron-down rtl:rotate-180"></i>'
+    'class="az az-arrow-right rtl:-scale-x-100"',
+    'class="az az-chevron-down rtl:rotate-180"',
+    'class="az az-arrow-right"',
+    'class="az az-arrow-right-left rtl:rotate-180"',
+    'class="az az-arrow-right rtl:rotate-180x"',
+    '<i class="az az-arrow-right"></i><i class="az az-chevron-down rtl:rotate-180"></i>'
   ]) {
     assert.ok(
       !ids(content).includes('rtl-double-flip'),
@@ -249,7 +249,7 @@ test('rtl-double-flip covers exactly DIRECTIONAL_ICONS', async () => {
       `${icon} is directional but rtl-double-flip misses it`
     )
   }
-  for (const icon of ['ai-chevron-up', 'ai-arrow-up', 'ai-arrow-down', 'ai-refresh', 'ai-redo']) {
+  for (const icon of ['az-chevron-up', 'az-arrow-up', 'az-arrow-down', 'az-refresh', 'az-redo']) {
     assert.ok(!DIRECTIONAL_ICONS.has(icon))
     assert.ok(
       !ids(`class="ai ${icon} rtl:rotate-180"`).includes('rtl-double-flip'),
@@ -278,7 +278,7 @@ test('tokenChecksFor runs only the wide checks over blocks, examples and given e
   }
   assert.ok(
     !scanTokens(
-      'class="text-sm ai ai-arrow-right"',
+      'class="text-sm az az-arrow-right"',
       tokenChecksFor('packages/webkit/examples/a/a.vue')
     ).length
   )

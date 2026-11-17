@@ -18,7 +18,7 @@
         :size="size"
       />
       <IconButton
-        icon="ai ai-github"
+        icon="az az-github"
         variant="outline"
         :size="size"
         aria-label="GitHub"

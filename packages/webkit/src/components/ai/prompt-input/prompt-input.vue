@@ -534,7 +534,7 @@
           <IconButton
             v-else-if="showVoice"
             key="voice"
-            icon="ai ai-headphones"
+            icon="az az-headphones"
             variant="primary"
             size="medium"
             :ariaLabel="t('promptInput.voice')"

@@ -70,7 +70,7 @@
         v-bind="$attrs"
         variant="ghost"
         size="small"
-        icon="ai ai-chevron-down"
+        icon="az az-chevron-down"
         icon-position="trailing"
         :disabled="disabled || models.length === 0"
         :data-testid="testId"

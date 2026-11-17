@@ -117,7 +117,7 @@
           <Select.Trigger aria-label="Language">
             <template #leading>
               <i
-                class="ai ai-globe text-(--text-muted)"
+                class="az az-globe text-(--text-muted)"
                 aria-hidden="true"
               />
             </template>

@@ -71,7 +71,7 @@
         <Button
           variant="ghost"
           size="small"
-          icon="ai ai-wrench"
+          icon="az az-wrench"
           :label="label || t('promptInput.tools')"
           :disabled="disabled || tools.length === 0"
           :data-testid="`${testId}__trigger`"

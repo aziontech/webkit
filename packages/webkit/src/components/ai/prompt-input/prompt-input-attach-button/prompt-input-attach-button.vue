@@ -15,7 +15,7 @@
   export interface PromptInputAttachButtonProps {
     /** Accessible name of the control. Empty uses the locale catalog (`Attach files`). */
     ariaLabel?: string
-    /** Azion icon class of the glyph. Empty uses `ai ai-plus`. */
+    /** Azion icon class of the glyph. Empty uses `az az-plus`. */
     icon?: string
   }
 
@@ -105,7 +105,7 @@
 <template>
   <IconButton
     v-bind="$attrs"
-    :icon="icon || 'ai ai-plus'"
+    :icon="icon || 'az az-plus'"
     variant="ghost"
     size="medium"
     :ariaLabel="ariaLabel || t('promptInput.attach')"

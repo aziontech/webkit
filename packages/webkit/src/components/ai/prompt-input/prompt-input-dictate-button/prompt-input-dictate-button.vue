@@ -154,7 +154,7 @@
   <template v-if="available">
     <IconButton
       v-bind="$attrs"
-      :icon="listening ? 'ai ai-stop' : 'ai ai-microphone'"
+      :icon="listening ? 'az az-stop' : 'az az-microphone'"
       :variant="listening ? 'secondary' : 'ghost'"
       size="medium"
       :ariaLabel="listening ? t('promptInput.dictateStop') : ariaLabel || t('promptInput.dictate')"

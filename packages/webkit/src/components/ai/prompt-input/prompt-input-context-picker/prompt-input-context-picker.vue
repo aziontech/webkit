@@ -21,7 +21,7 @@
     options?: PromptInputMenuOption[]
     /** Text shown while nothing is chosen, such as `Choose project`. Empty uses the locale catalog (`Choose context`). */
     placeholder?: string
-    /** Azion icon class shown when the chosen option has none. Empty uses `ai ai-folder`. */
+    /** Azion icon class shown when the chosen option has none. Empty uses `az az-folder`. */
     icon?: string
   }
 
@@ -64,7 +64,7 @@
         v-bind="$attrs"
         variant="ghost"
         size="small"
-        :icon="chosen?.icon || icon || 'ai ai-folder'"
+        :icon="chosen?.icon || icon || 'az az-folder'"
         :label="chosen?.label || placeholder || t('promptInput.context')"
         :disabled="disabled || options.length === 0"
         :data-testid="testId"

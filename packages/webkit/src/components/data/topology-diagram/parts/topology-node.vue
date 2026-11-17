@@ -246,7 +246,7 @@
           <template v-if="pending">
             <Tooltip :content="applyLabel">
               <IconButton
-                icon="ai ai-check"
+                icon="az az-check"
                 variant="primary"
                 size="small"
                 :ariaLabel="applyLabel"
@@ -257,7 +257,7 @@
             </Tooltip>
             <Tooltip :content="t('topologyDiagram.cancel')">
               <IconButton
-                icon="ai ai-x"
+                icon="az az-x"
                 variant="outline"
                 size="small"
                 :ariaLabel="t('topologyDiagram.cancel')"

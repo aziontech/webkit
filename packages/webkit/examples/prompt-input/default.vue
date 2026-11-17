@@ -26,9 +26,9 @@
     { value: 'docs-site', label: 'docs-site', description: 'Product documentation' }
   ]
   const toolOptions = [
-    { value: 'search', label: 'Web search', icon: 'ai ai-globe' },
-    { value: 'images', label: 'Create images', icon: 'ai ai-image' },
-    { value: 'research', label: 'Deep research', icon: 'ai ai-sparkles' }
+    { value: 'search', label: 'Web search', icon: 'az az-globe' },
+    { value: 'images', label: 'Create images', icon: 'az az-image' },
+    { value: 'research', label: 'Deep research', icon: 'az az-sparkles' }
   ]
 
   function send(event, { value, files: sent }) {
@@ -69,7 +69,7 @@
         />
         <Button
           label="Files"
-          icon="ai ai-folder-open"
+          icon="az az-folder-open"
           variant="ghost"
           size="small"
         />
@@ -80,7 +80,7 @@
         />
         <Button
           label="Open desktop app"
-          icon="ai ai-desktop"
+          icon="az az-desktop"
           variant="ghost"
           size="small"
           href="https://example.com/download"
