@@ -210,7 +210,7 @@
     {
       "tool": "components",
       "query": "copy an API key",
-      "top1": "copy-button"
+      "top1": "copy-text"
     },
     {
       "tool": "components",
@@ -220,7 +220,7 @@
     {
       "tool": "components",
       "query": "copy text",
-      "top1": "copy-button"
+      "top1": "copy-text"
     },
     {
       "tool": "components",

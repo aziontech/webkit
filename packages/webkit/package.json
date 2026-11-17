@@ -3576,6 +3576,9 @@
       "link": [
         "./types/components/navigation/link/link.vue.d.ts"
       ],
+      "skip-link": [
+        "./types/components/navigation/skip-link/skip-link.vue.d.ts"
+      ],
       "sidebar-menu": [
         "./types/components/navigation/sidebar-menu/index.d.ts"
       ],
