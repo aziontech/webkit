@@ -540,7 +540,7 @@ const ASSET_KINDS = {
   brandMarks: {
     title: 'Brand marks',
     summary:
-      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name.',
+      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let WebKit ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in WebKit type and colour, until its owner grants the logo.',
     markers: ['assets/brands/registry.ts'],
     registry: 'src/assets/brands/registry.ts',
     unknown:
@@ -662,9 +662,17 @@ export function buildAssets(imports) {
       const labels = new Map(
         objectKeys(ASSET_KINDS.brandMarks.registry, 'brandMarkLabels').map((e) => [e.name, e.value])
       )
-      return objectKeys(ASSET_KINDS.brandMarks.registry, 'brandMarks')
-        .map(({ name }) => ({ name, label: labels.get(name) ?? name }))
-        .sort((a, b) => a.name.localeCompare(b.name))
+      return [
+        ...objectKeys(ASSET_KINDS.brandMarks.registry, 'brandMarks').map(({ name }) => ({
+          name,
+          label: labels.get(name) ?? name
+        })),
+        ...objectKeys(ASSET_KINDS.brandMarks.registry, 'brandWordmarks').map(({ name, value }) => ({
+          name,
+          label: value ?? name,
+          wordmark: true
+        }))
+      ].sort((a, b) => a.name.localeCompare(b.name))
     })(),
     icons: iconItems()
   }

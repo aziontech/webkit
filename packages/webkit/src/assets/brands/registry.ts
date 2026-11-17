@@ -133,11 +133,33 @@ export const brandMarkLabels: Record<BrandMarkName, string> = {
 
 export const brandMarkNames = Object.keys(brandMarks).sort() as BrandMarkName[]
 
+export const brandWordmarks = {
+  'amazon-kinesis': 'Amazon Kinesis',
+  'amazon-s3': 'Amazon S3',
+  bigquery: 'Google BigQuery',
+  datadog: 'Datadog',
+  'g2-high-performer': 'G2 High Performer',
+  'g2-leader': 'G2 Leader',
+  rust: 'Rust',
+  splunk: 'Splunk',
+  zoop: 'Zoop'
+} satisfies Record<string, string>
+
+/** A brand whose terms do not let WebKit ship its logo; it renders as its name in plain text. */
+export type BrandWordmarkName = keyof typeof brandWordmarks
+
+export const brandWordmarkNames = Object.keys(brandWordmarks).sort() as BrandWordmarkName[]
+
 export function resolveBrandMark(name: string): BrandMarkLoader | null {
   if (!Object.hasOwn(brandMarks, name)) return null
   return brandMarks[name as BrandMarkName]
 }
 
+export function isBrandWordmark(name: string): name is BrandWordmarkName {
+  return Object.hasOwn(brandWordmarks, name)
+}
+
 export function brandMarkLabel(name: string): string {
+  if (isBrandWordmark(name)) return brandWordmarks[name]
   return brandMarkLabels[name as BrandMarkName] ?? name
 }

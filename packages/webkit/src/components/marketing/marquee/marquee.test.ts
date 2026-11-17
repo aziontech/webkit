@@ -121,6 +121,25 @@ describe('Marquee', () => {
     expect(getAllByText('Contabilizei').length).toBeGreaterThan(0)
   })
 
+  it.each([
+    ['splunk', 'Splunk'],
+    ['bigquery', 'Google BigQuery'],
+    ['amazon-s3', 'Amazon S3'],
+    ['amazon-kinesis', 'Amazon Kinesis'],
+    ['zoop', 'Zoop'],
+    ['g2-leader', 'G2 Leader'],
+    ['rust', 'Rust'],
+    ['datadog', 'Datadog']
+  ])('writes the %s wordmark as its brand name in text, with no artwork', async (name, label) => {
+    const { container, getAllByText } = render(Marquee, { props: { marks: ['magalu', name] } })
+    await markFor(container, 'magalu')
+
+    expect(container.querySelector(`[data-mark="${name}"]`)).toBeNull()
+    expect(container.querySelector(`li[title="${label}"] svg, li[title="${label}"] img`)).toBeNull()
+    expect(getAllByText(label).length).toBeGreaterThan(0)
+    expect(container.textContent).not.toContain(name)
+  })
+
   it('renders the label as an overline and omits it when empty', () => {
     const { getAllByText, rerender, queryByText } = render(Marquee, {
       props: { marks: MARKS, label: 'Trusted by mission-critical workloads' }

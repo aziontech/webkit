@@ -5,6 +5,16 @@
    "label": "Agibank"
   },
   {
+   "name": "amazon-kinesis",
+   "label": "Amazon Kinesis",
+   "wordmark": true
+  },
+  {
+   "name": "amazon-s3",
+   "label": "Amazon S3",
+   "wordmark": true
+  },
+  {
    "name": "america-movil",
    "label": "América Móvil"
   },
@@ -33,6 +43,11 @@
    "label": "Azure"
   },
   {
+   "name": "bigquery",
+   "label": "Google BigQuery",
+   "wordmark": true
+  },
+  {
    "name": "caixa",
    "label": "Caixa"
   },
@@ -51,6 +66,11 @@
   {
    "name": "dafiti",
    "label": "Dafiti"
+  },
+  {
+   "name": "datadog",
+   "label": "Datadog",
+   "wordmark": true
   },
   {
    "name": "docusaurus",
@@ -91,6 +111,16 @@
   {
    "name": "g2",
    "label": "G2"
+  },
+  {
+   "name": "g2-high-performer",
+   "label": "G2 High Performer",
+   "wordmark": true
+  },
+  {
+   "name": "g2-leader",
+   "label": "G2 Leader",
+   "wordmark": true
   },
   {
    "name": "gartner",
@@ -221,6 +251,16 @@
    "label": "Renner"
   },
   {
+   "name": "rust",
+   "label": "Rust",
+   "wordmark": true
+  },
+  {
+   "name": "splunk",
+   "label": "Splunk",
+   "wordmark": true
+  },
+  {
    "name": "sqlite",
    "label": "SQLite"
   },
@@ -239,6 +279,11 @@
   {
    "name": "vue",
    "label": "Vue"
+  },
+  {
+   "name": "zoop",
+   "label": "Zoop",
+   "wordmark": true
   }
  ]
 }

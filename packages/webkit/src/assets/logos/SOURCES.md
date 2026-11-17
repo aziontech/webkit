@@ -76,3 +76,32 @@ Checked on 2026-11-12.
 | Zoop                                | No press kit and no published usage terms; the brand book PDF (https://www.zoop.com.br/Zoop-BrandBook.pdf) carries none in text. Needs Zoop's consent (marketing@zoop.com.br). | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | G2 Leader / High Performer badges   | Only the awardee may republish an earned badge, on its own website, with a backlink; redistributing badge files is not licensed.                                               | "If Client has earned a G2 Badge, Client may republish the badge on Client's website, provided that such republication contains a backlink to the G2 page for Client's applicable product or service." "Except as expressly permitted herein, G2 grants no license or right to Client to republish, share, duplicate, abridge or otherwise modify any G2 Content." — https://legal.g2.com/g2-profile-free-service-description; businesses must not "Republish, in whole or in part, any G2 Badge (except 'Users Love Us' badges) without a license." — https://legal.g2.com/community-guidelines |
 | Rust                                | The logo is CC-BY, but trademark use in commercial material needs permission (trademark@rust-lang.org).                                                                        | "Most non-commercial uses of the Rust/Cargo names and logos are allowed and do not require permission; most commercial uses require permission." — https://github.com/rust-lang/rust-artwork/blob/master/logo/README.md                                                                                                                                                                                                                                                                                                                                                                          |
+
+## Text wordmarks
+
+Owner decision of 2026-11-17: until a brand above grants its logo, WebKit names it in plain text.
+Each is an entry of `brandWordmarks` in `src/assets/brands/registry.ts`, offered under the same
+names as the marks with artwork (`Marquee` `marks`, `QuoteTabs` `mark`, the catalog's brand-mark
+list, where it carries `wordmark: true`). A wordmark is the brand's name set in WebKit's own font,
+type scale and text colour (`text-heading-2xs`, `var(--text-default)` in `Marquee`): it copies
+none of the brand's typeface, colours or shapes, so it ships no artwork and needs no licence. The
+name is used only to refer to the product, as each owner's terms allow.
+
+**Status: pending permission.** When an owner grants its logo, the file joins its registry with a
+row under Shipped and the name leaves `brandWordmarks`; call sites do not change.
+
+| Name                | Label             | Why text                                                     |
+| ------------------- | ----------------- | ------------------------------------------------------------ |
+| `splunk`            | Splunk            | Logo use needs partner status or written consent.            |
+| `bigquery`          | Google BigQuery   | Icons are licensed for diagrams and documentation only.      |
+| `amazon-s3`         | Amazon S3         | AWS allows its marks in plain text only.                     |
+| `amazon-kinesis`    | Amazon Kinesis    | Same as Amazon S3.                                           |
+| `zoop`              | Zoop              | No published terms as an integration mark; needs consent.    |
+| `g2-leader`         | G2 Leader         | Only the awardee may republish a badge, on its own website.  |
+| `g2-high-performer` | G2 High Performer | Same as G2 Leader.                                           |
+| `rust`              | Rust              | Commercial use of the logo needs permission.                 |
+| `datadog`           | Datadog           | One-ink rows recolour the mark; Datadog forbids recolouring. |
+
+The colour Datadog file under Shipped is unchanged, and so is the Zoop client logo on
+azion.com customer pages (`clients/zoop-extended-color.svg`); the wordmarks cover only the places
+those files cannot go.

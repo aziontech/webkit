@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 3496d095ec8ac6c710159a6426524a4efcd0a452d3c9fb01bdef8b38565a8660
+checksum: 43b1a3a324f1cfc715de6d5cc0e0125f476b15be598a9d3a1e7fb67efd9b4247
 created: 2026-09-23
 last_updated: 2026-11-16
 ---
@@ -39,7 +39,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Best practices
 
-- Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.
+- Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete. A brand whose terms refuse its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in one ink) is a registered text wordmark: name it like any mark (`splunk`, `amazon-s3`) and the row writes its proper name in the same fallback type, never the raw id.
 - Let `duration` derive itself. The component holds speed constant rather than duration (two seconds per mark, six per item, since a claim is read and a mark is not), so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.
 - Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.
 - Use `size="small"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.
@@ -152,6 +152,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 - Frameworks — the stack strip rather than the client strip (justified: the two registries are the component's whole reason for existing, and no arg on the Default story shows that a framework mark resolves the same way a client mark does)
 - Benefits — `items` instead of `marks` (justified: the claim row is a different cell shape, and no arg on the Default story reaches it without also swapping `marks`)
 - Fallback — a row mixing registered names with an unregistered one (justified: the typographic wordmark is a rendered state no prop can reach, and it is what lets a page name a company whose artwork has not landed)
+- Integrations — the Data Stream connectors, registered marks beside the text wordmarks of brands whose terms refuse their logo (justified: the wordmark entries are a registry population no other story shows, and they must read as a complete row)
 
 ## Constraints — DO NOT
 

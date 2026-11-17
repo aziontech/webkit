@@ -14,6 +14,9 @@ Budget-raise: carousel-root 3.85 KB → 4 KB (measured 3.90 KB): 6.0 B11 (compon
 Budget-raise: site-page 7.6 KB → 8.05 KB (measured 7.95 KB): 6.0 marketing near-copies folded into the page sections (v6/mkt).
 Budget-raise: quote 15 KB → 15.2 KB (measured 15.07 KB): 6.0 B11 (components follow the device locale, read on mount).
 Budget-raise: quote-tabs 23.6 KB → 23.85 KB (measured 23.72 KB): 6.0 B11 (components follow the device locale, read on mount).
+Budget-raise: marquee 7.65 KB → 7.8 KB (measured 7.69 KB): A15 text wordmarks for brands whose terms refuse their logo, in the brand-mark registry (owner 2026-11-17).
+Budget-raise: quote-tabs 23.85 KB → 24.05 KB (measured 23.91 KB): A15 text wordmarks for brands whose terms refuse their logo, in the brand-mark registry (owner 2026-11-17).
+Budget-raise: client-quotes-section 26.4 KB → 26.6 KB (measured 26.47 KB): A15 text wordmarks for brands whose terms refuse their logo, in the brand-mark registry, through QuoteTabs (owner 2026-11-17).
 Budget-raise: console-application-scene 114.1 KB → 115.4 KB (measured 115.28 KB): 6.0 approved proposals merged in v6/prop (CodeBlock line diffs, Table live tail, DropdownMenu sub-menus).
 Budget-raise: console-trace-scene 67 KB → 68.75 KB (measured 68.64 KB): 6.0 approved proposals merged in v6/prop (Trace minimap zoom, span events and slowest flag).
 Budget-raise: article-body 43.05 KB → 44.3 KB (measured 44.16 KB): 6.0 approved proposals merged in v6/prop (CodeBlock line diffs).

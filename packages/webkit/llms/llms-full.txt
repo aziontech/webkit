@@ -2031,15 +2031,15 @@ Descriptions: foundations/line-figures.md.
 
 > Client, analyst and framework marks drawn as theme-aware SVG.
 
-Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name.
+Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let WebKit ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in WebKit type and colour, until its owner grants the logo.
 
-60 names. These are the only values the components accept. An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark. The MCP tool `list_assets({ kind: "brandMarks" })` returns the same list (with a `query` to filter), and `catalog.json#assets.brandMarks` points at it as data.
+69 names. These are the only values the components accept. An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark. The MCP tool `list_assets({ kind: "brandMarks" })` returns the same list (with a `query` to filter), and `catalog.json#assets.brandMarks` points at it as data.
 
 Used by: ClientQuotesSection, Hero, HeroFormSection, HeroSection, Marquee, QuoteTabs, SitePage, TemplateGallerySection.
 
 ## Names
 
-`agibank` · `america-movil` · `angular` · `anthropic` · `astro` · `aws` · `axur` · `azure` · `caixa` · `cloudflare-workers` · `coca-cola` · `contabilizei` · `dafiti` · `docusaurus` · `drizzle` · `elastic` · `eleventy` · `equinix` · `exame` · `forrester` · `fourbank` · `frost-and-sullivan` · `g2` · `gartner` · `gatsby` · `gcp` · `gigaom` · `github` · `global-fashion-group` · `gpa` · `grafana` · `graphql` · `groq` · `herospark` · `hexo` · `hono` · `hugo` · `itau` · `jekyll` · `kafka` · `madeiramadeira` · `magalu` · `netshoes` · `nextjs` · `nodejs` · `nuxt` · `nzn` · `openai` · `preact` · `prime-video` · `qwik` · `radware` · `react` · `remix` · `renner` · `sqlite` · `terraform` · `vite` · `vitepress` · `vue`
+`agibank` · `amazon-kinesis` · `amazon-s3` · `america-movil` · `angular` · `anthropic` · `astro` · `aws` · `axur` · `azure` · `bigquery` · `caixa` · `cloudflare-workers` · `coca-cola` · `contabilizei` · `dafiti` · `datadog` · `docusaurus` · `drizzle` · `elastic` · `eleventy` · `equinix` · `exame` · `forrester` · `fourbank` · `frost-and-sullivan` · `g2` · `g2-high-performer` · `g2-leader` · `gartner` · `gatsby` · `gcp` · `gigaom` · `github` · `global-fashion-group` · `gpa` · `grafana` · `graphql` · `groq` · `herospark` · `hexo` · `hono` · `hugo` · `itau` · `jekyll` · `kafka` · `madeiramadeira` · `magalu` · `netshoes` · `nextjs` · `nodejs` · `nuxt` · `nzn` · `openai` · `preact` · `prime-video` · `qwik` · `radware` · `react` · `remix` · `renner` · `rust` · `splunk` · `sqlite` · `terraform` · `vite` · `vitepress` · `vue` · `zoop`
 
 Descriptions: foundations/brand-marks.md.
 
