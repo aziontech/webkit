@@ -464,6 +464,8 @@ export const ptBR: Messages = {
   docFrame: {
     zoom: 'Ver imagem em tela cheia',
     zoomNamed: 'Ver em tela cheia: {alt}',
+    pauseNamed: 'Pausar animação: {alt}',
+    playNamed: 'Reproduzir animação: {alt}',
     fullScreen: 'Tela cheia',
     zoomedImage: 'Imagem em tela cheia',
     closeFullScreen: 'Fechar tela cheia',

@@ -91,9 +91,17 @@
   const chosenPaused = ref<boolean | null>(null)
   const paused = computed(() => chosenPaused.value ?? reducedMotion.value)
   const playing = computed(() => mounted.value && autoplays.value && !paused.value)
-  const pauseLabel = computed(() =>
-    paused.value ? t('common.playAnimation') : t('common.pauseAnimation')
-  )
+  const clipName = computed(() => {
+    if (props.src) return props.alt
+    const clip = slotNodes.value.find(isAutoplayClip)
+    const name = clip?.props?.['aria-label'] ?? clip?.props?.['title']
+    return typeof name === 'string' ? name : ''
+  })
+  const pauseLabel = computed(() => {
+    const alt = clipName.value
+    if (paused.value) return alt ? t('docFrame.playNamed', { alt }) : t('common.playAnimation')
+    return alt ? t('docFrame.pauseNamed', { alt }) : t('common.pauseAnimation')
+  })
 
   const autoplayClipEls = () =>
     Array.from(surfaceEl.value?.querySelectorAll<HTMLVideoElement>('video[data-autoplay]') ?? [])

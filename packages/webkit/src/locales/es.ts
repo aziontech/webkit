@@ -464,6 +464,8 @@ export const es: Messages = {
   docFrame: {
     zoom: 'Ver imagen en pantalla completa',
     zoomNamed: 'Ver en pantalla completa: {alt}',
+    pauseNamed: 'Pausar animación: {alt}',
+    playNamed: 'Reproducir animación: {alt}',
     fullScreen: 'Pantalla completa',
     zoomedImage: 'Imagen en pantalla completa',
     closeFullScreen: 'Cerrar pantalla completa',

@@ -167,10 +167,25 @@ describe('DocFrame', () => {
       }
       const controls = pauseControls()
       expect(controls).toHaveLength(2)
-      for (const control of controls) {
-        expect(control.tagName).toBe('BUTTON')
-        expect(control.getAttribute('aria-label')).toBe('Pause animation')
-      }
+      for (const control of controls) expect(control.tagName).toBe('BUTTON')
+      expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
+        'Pause animation: Landing on step 3 of Create application',
+        'Pause animation: Opening the Rules engine tab'
+      ])
+    })
+
+    it('falls back to the bare label when the clip has no text', async () => {
+      render(DocFrame, { props: { src: placeholderClip, autoplay: true } })
+      await flush()
+      expect(pauseControls()[0]?.getAttribute('aria-label')).toBe('Pause animation')
+    })
+
+    it('names a hand-written clip by its title when it has no aria-label', async () => {
+      render(DocFrame, {
+        slots: { default: `<video autoplay src="${placeholderClip}" title="The loop"></video>` }
+      })
+      await flush()
+      expect(pauseControls()[0]?.getAttribute('aria-label')).toBe('Pause animation: The loop')
     })
 
     it('pauses and plays again from the keyboard, switching the label', async () => {
@@ -185,11 +200,11 @@ describe('DocFrame', () => {
       await userEvent.keyboard('{Enter}')
       await flush()
       expect(video.paused).toBe(true)
-      expect(control.getAttribute('aria-label')).toBe('Play animation')
+      expect(control.getAttribute('aria-label')).toBe('Play animation: The loop')
       await userEvent.keyboard(' ')
       await flush()
       expect(video.paused).toBe(false)
-      expect(control.getAttribute('aria-label')).toBe('Pause animation')
+      expect(control.getAttribute('aria-label')).toBe('Pause animation: The loop')
     })
 
     it('does not play under reduced motion and offers the play control', async () => {
@@ -200,7 +215,9 @@ describe('DocFrame', () => {
         for (const video of clips(container)) expect(video.paused).toBe(true)
         const controls = pauseControls()
         expect(controls).toHaveLength(2)
-        expect(controls[0]?.getAttribute('aria-label')).toBe('Play animation')
+        expect(controls[0]?.getAttribute('aria-label')).toBe(
+          'Play animation: Landing on step 3 of Create application'
+        )
         await userEvent.click(controls[0] as HTMLButtonElement)
         await flush()
         expect(clips(container)[0]?.paused).toBe(false)
