@@ -40,7 +40,7 @@
   const props = withDefaults(defineProps<Props>(), {
     variant: 'bare',
     chrome: false,
-    width: 600,
+    width: 860,
     fade: 'none',
     active: true,
     autoplayInterval: 120

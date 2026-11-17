@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { computed, createSSRApp, defineComponent, h, nextTick, onMounted, provide, ref } from 'vue'
 import { renderToString, type SSRContext } from 'vue/server-renderer'
 
@@ -457,6 +458,26 @@ describe('ConsoleMockup', () => {
       await userEvent.keyboard(' ')
       expect(control.getAttribute('aria-label')).toBe('Pause animation')
       await expect.poll(() => frame.textContent).not.toBe(held)
+    })
+
+    it('draws at the same scale as the other workload screens in one host from md up', async () => {
+      await page.viewport(1280, 900)
+      try {
+        const scaleOf = async (name: ConsoleMockupName) => {
+          const view = render(host({ name }))
+          const frame = await frameOf(view)
+          const plate = frame.firstElementChild as HTMLElement
+          const style = { width: plate.style.width, transform: plate.style.transform }
+          view.unmount()
+          return style
+        }
+        const logs = await scaleOf('workload-deploy-logs')
+        expect(logs).toEqual(await scaleOf('workloads-list'))
+        expect(logs).toEqual(await scaleOf('workload-deployments'))
+        expect(logs.width).toBe('860px')
+      } finally {
+        await page.viewport(414, 896)
+      }
     })
 
     it('carries a consumer test id onto the pause control', async () => {
