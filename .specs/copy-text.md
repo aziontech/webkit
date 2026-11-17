@@ -3,11 +3,11 @@ name: copy-text
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 87b02bd40408ab920012e41617d45a0a84b813b400b1ff90c2058f2f00b425f0
+checksum: 5c7b44a8fe9657d6cd0d6fd4eff4f398cfe21443f00235684a32a30f17d5b8d0
 created: 2026-11-16
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Copy Text — Component Spec
@@ -27,7 +27,7 @@ CopyText shows one code value (a CSS custom property, a utility class, a CNAME, 
 - An identifier inside a data table cell → use `table-cell-id`.
 - A multi-line snippet or a block of code → use `code-block`.
 - A keyboard shortcut → use `kbd`.
-- A secret that must stay masked until revealed → use `password` (read-only) with a `copy-button`.
+- A secret that must stay masked until revealed → use `password-input` (`readonly`) with a `copy-button`.
 
 ## Related
 

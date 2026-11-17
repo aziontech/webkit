@@ -9,7 +9,7 @@
   "An identifier inside a data table cell → use `table-cell-id`.",
   "A multi-line snippet or a block of code → use `code-block`.",
   "A keyboard shortcut → use `kbd`.",
-  "A secret that must stay masked until revealed → use `password` (read-only) with a `copy-button`."
+  "A secret that must stay masked until revealed → use `password-input` (`readonly`) with a `copy-button`."
  ],
  "related": [
   "`copy-button` — the control CopyText composes; use it alone when the value is not displayed.",

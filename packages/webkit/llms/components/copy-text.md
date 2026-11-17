@@ -25,7 +25,7 @@
 - An identifier inside a data table cell → use `table-cell-id`.
 - A multi-line snippet or a block of code → use `code-block`.
 - A keyboard shortcut → use `kbd`.
-- A secret that must stay masked until revealed → use `password` (read-only) with a `copy-button`.
+- A secret that must stay masked until revealed → use `password-input` (`readonly`) with a `copy-button`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
