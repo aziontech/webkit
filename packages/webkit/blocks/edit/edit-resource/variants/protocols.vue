@@ -270,8 +270,8 @@
                         placeholder="Select an HTTP port"
                         :display-value="portsLabel"
                         :disabled="saving"
-                        :required="errors.httpPorts?.type === 'required'"
-                        :invalid="errors.httpPorts?.type === 'invalid'"
+                        required
+                        :invalid="!!errors.httpPorts"
                         :aria-describedby="
                           errors.httpPorts ? 'protocols-httpPorts-message' : undefined
                         "
@@ -324,8 +324,8 @@
                         placeholder="Select an HTTPS port"
                         :display-value="portsLabel"
                         :disabled="saving"
-                        :required="errors.httpsPorts?.type === 'required'"
-                        :invalid="errors.httpsPorts?.type === 'invalid'"
+                        required
+                        :invalid="!!errors.httpsPorts"
                         :aria-describedby="
                           errors.httpsPorts ? 'protocols-httpsPorts-message' : undefined
                         "
@@ -378,8 +378,8 @@
                         placeholder="Select an HTTP/3 port"
                         :display-value="portsLabel"
                         :disabled="saving"
-                        :required="errors.http3Ports?.type === 'required'"
-                        :invalid="errors.http3Ports?.type === 'invalid'"
+                        required
+                        :invalid="!!errors.http3Ports"
                         :aria-describedby="
                           errors.http3Ports ? 'protocols-http3Ports-message' : undefined
                         "
@@ -524,7 +524,8 @@
                         placeholder="Select a trusted CA certificate"
                         :display-value="caLabel"
                         :disabled="saving"
-                        :required="errors.trustedCa?.type === 'required'"
+                        required
+                        :invalid="errors.trustedCa?.type === 'required'"
                         @update:model-value="pickCa"
                         @update:open="(open) => !open && (caQuery = '')"
                       >
@@ -694,8 +695,8 @@
                   class="w-full"
                   placeholder="partners-ca"
                   autocomplete="off"
-                  :required="uploadErrors.name?.type === 'required'"
-                  :invalid="uploadErrors.name?.type === 'invalid'"
+                  required
+                  :invalid="!!uploadErrors.name"
                   :aria-describedby="
                     uploadErrors.name ? 'protocols-upload-name-message' : undefined
                   "
@@ -716,8 +717,8 @@
                   class="w-full"
                   :rows="8"
                   placeholder="-----BEGIN CERTIFICATE-----"
-                  :required="uploadErrors.pem?.type === 'required'"
-                  :invalid="uploadErrors.pem?.type === 'invalid'"
+                  required
+                  :invalid="!!uploadErrors.pem"
                   :aria-describedby="uploadErrors.pem ? 'protocols-upload-pem-message' : undefined"
                 />
                 <FieldError

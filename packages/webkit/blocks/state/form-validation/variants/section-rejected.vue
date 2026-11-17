@@ -334,7 +334,8 @@
                             class="w-full"
                             aria-label="Name"
                             placeholder="My Service"
-                            :required="!!errors.name"
+                            required
+                            :invalid="!!errors.name"
                             :aria-describedby="errors.name ? 'ev-name-error' : undefined"
                             :disabled="submitting"
                             @update:model-value="errors.name = ''"
@@ -387,7 +388,8 @@
                             size="large"
                             class="w-full"
                             placeholder="Select ports"
-                            :required="!!errors.httpPorts"
+                            required
+                            :invalid="!!errors.httpPorts"
                             :display-value="portsLabel"
                             :disabled="submitting"
                             @update:model-value="errors.httpPorts = ''"
@@ -549,8 +551,8 @@
                               class="w-full"
                               placeholder="Select an origin"
                               :display-value="originLabel"
-                              :required="!!errors.originId && !form.originId"
-                              :invalid="!!errors.originId && !!form.originId"
+                              required
+                              :invalid="!!errors.originId"
                               :disabled="submitting"
                               @update:model-value="onOriginChange"
                             >
@@ -589,7 +591,8 @@
                             size="large"
                             class="w-full"
                             aria-label="Host header"
-                            :required="!!errors.hostHeader"
+                            required
+                            :invalid="!!errors.hostHeader"
                             :aria-describedby="
                               errors.hostHeader ? 'ev-hostHeader-error' : undefined
                             "

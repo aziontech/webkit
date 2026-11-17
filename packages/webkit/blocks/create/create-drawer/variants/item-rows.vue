@@ -162,8 +162,8 @@
                                 class="w-full"
                                 aria-label="Name"
                                 placeholder="my-origin"
-                                :required="!!errors.name && !form.name.trim()"
-                                :invalid="!!errors.name && !!form.name.trim()"
+                                required
+                                :invalid="!!errors.name"
                                 :aria-describedby="errors.name ? 'origin-name-error' : undefined"
                                 @update:model-value="errors.name = ''"
                               />
@@ -213,7 +213,8 @@
                               :disabled="submitting"
                               class="w-full"
                               placeholder="Select a protocol"
-                              :required="!!errors.protocol"
+                              required
+                              :invalid="!!errors.protocol"
                               :display-value="protocolLabel"
                               @update:model-value="errors.protocol = ''"
                             >

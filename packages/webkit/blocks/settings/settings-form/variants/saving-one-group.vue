@@ -83,7 +83,8 @@
                       :disabled="savingGeneral"
                       class="w-full"
                       aria-label="Full name"
-                      :required="generalSubmitted && nameEmpty"
+                      required
+                      :invalid="generalSubmitted && nameEmpty"
                       :aria-describedby="
                         generalSubmitted && nameEmpty ? 'group-full-name-error' : undefined
                       "

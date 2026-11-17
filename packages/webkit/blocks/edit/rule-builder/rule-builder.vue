@@ -655,7 +655,8 @@
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <Field
                   :disabled="submitting"
-                  :required="nameError"
+                  required
+                  :invalid="nameError"
                 >
                   <Field.Label for="rule-name">Name</Field.Label>
                   <Input
@@ -885,7 +886,8 @@
                               :aria-label="argument.label"
                               :placeholder="argument.placeholder"
                               :disabled="submitting"
-                              :required="argumentMissing(item, argument.field)"
+                              required
+                              :invalid="argumentMissing(item, argument.field)"
                             />
                             <div
                               v-else-if="argument?.kind === 'select'"
@@ -897,7 +899,8 @@
                                 class="w-full"
                                 :disabled="submitting"
                                 :placeholder="`Select a ${argument.label.toLowerCase()}`"
-                                :required="argumentMissing(item, argument.field)"
+                                required
+                                :invalid="argumentMissing(item, argument.field)"
                                 :display-value="(value) => optionLabelIn(argument.source, value)"
                               >
                                 <Select.Trigger :aria-label="argument.label" />
@@ -930,7 +933,8 @@
                                 :aria-label="part.label"
                                 :placeholder="part.placeholder"
                                 :disabled="submitting"
-                                :required="argumentMissing(item, part.field)"
+                                required
+                                :invalid="argumentMissing(item, part.field)"
                               />
                             </div>
                             <Input

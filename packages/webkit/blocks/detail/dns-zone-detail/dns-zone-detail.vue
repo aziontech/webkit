@@ -315,7 +315,8 @@
                           class="w-full"
                           aria-label="Name"
                           autocomplete="off"
-                          :required="!!errors.name"
+                          required
+                          :invalid="!!errors.name"
                           :aria-describedby="errors.name ? nameMessageId : undefined"
                           :disabled="saving"
                           @update:model-value="errors.name = ''"
@@ -337,7 +338,8 @@
                           class="w-full"
                           aria-label="Domain name"
                           autocomplete="off"
-                          :required="!!errors.domain"
+                          required
+                          :invalid="!!errors.domain"
                           :aria-describedby="errors.domain ? domainMessageId : undefined"
                           :disabled="saving"
                           @update:model-value="errors.domain = ''"

@@ -209,7 +209,8 @@
                             aria-label="Name"
                             autocomplete="off"
                             :disabled="saving"
-                            :required="nameError"
+                            required
+                            :invalid="nameError"
                             :aria-describedby="nameError ? 'waf-name-message' : undefined"
                           />
                           <FieldError

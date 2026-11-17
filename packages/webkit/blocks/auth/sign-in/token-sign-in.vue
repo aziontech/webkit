@@ -192,7 +192,7 @@
                     >
                       <legend class="sr-only">Personal token</legend>
                       <Field
-                        :required="!!tokenError"
+                        required
                         :invalid="!!tokenError"
                       >
                         <Field.Label for="personal-token">Personal token</Field.Label>

@@ -477,7 +477,10 @@
 
                       <div class="animate-fade-in motion-reduce:animate-none">
                         <div class="flex flex-col gap-(--spacing-lg)">
-                          <Field :required="organizationSubmitted && !fullName.trim()">
+                          <Field
+                            required
+                            :invalid="organizationSubmitted && !fullName.trim()"
+                          >
                             <Field.Label>Your full name</Field.Label>
                             <Input
                               v-model="fullName"
@@ -493,7 +496,10 @@
                             }}</Field.Description>
                           </Field>
 
-                          <Field :required="organizationSubmitted && !organizationName.trim()">
+                          <Field
+                            required
+                            :invalid="organizationSubmitted && !organizationName.trim()"
+                          >
                             <Field.Label>Organization name</Field.Label>
                             <Input
                               v-model="organizationName"

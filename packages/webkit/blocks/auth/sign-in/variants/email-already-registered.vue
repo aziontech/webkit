@@ -182,7 +182,10 @@
                   >
                     <legend class="sr-only">Account credentials</legend>
 
-                    <Field :required="!!errors.email && !email.trim()">
+                    <Field
+                      required
+                      :invalid="!!errors.email"
+                    >
                       <Field.Label for="signup-email">Work email</Field.Label>
                       <Input
                         id="signup-email"
@@ -193,8 +196,8 @@
                         autocomplete="email"
                         class="w-full"
                         placeholder="m@example.com"
-                        :required="!!errors.email && !email.trim()"
-                        :invalid="!!errors.email && !!email.trim()"
+                        required
+                        :invalid="!!errors.email"
                         :aria-describedby="errors.email ? 'signup-email-error' : undefined"
                         @update:model-value="onEmailInput"
                       />
@@ -206,8 +209,8 @@
                     </Field>
 
                     <Field
-                      :required="!!errors.password && !password"
-                      :invalid="!!errors.password && !!password"
+                      required
+                      :invalid="!!errors.password"
                     >
                       <Field.Label for="signup-password">Password</Field.Label>
                       <PasswordInput

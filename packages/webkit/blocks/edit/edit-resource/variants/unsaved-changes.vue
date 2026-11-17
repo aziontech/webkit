@@ -178,7 +178,8 @@
                             class="w-full"
                             aria-label="Name"
                             autocomplete="off"
-                            :required="nameError"
+                            required
+                            :invalid="nameError"
                             :aria-describedby="nameError ? 'resource-name-message' : undefined"
                           />
                           <FieldError

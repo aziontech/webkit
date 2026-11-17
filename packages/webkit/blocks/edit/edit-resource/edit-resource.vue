@@ -225,7 +225,8 @@
                               :disabled="saving"
                               class="w-full"
                               aria-label="Name"
-                              :required="nameError"
+                              required
+                              :invalid="nameError"
                               :aria-describedby="nameError ? 'resource-name-message' : undefined"
                             />
                             <FieldError

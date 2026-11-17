@@ -438,7 +438,8 @@
                                 aria-label="Name"
                                 placeholder="static-assets"
                                 autocomplete="off"
-                                :required="!!errors.name"
+                                required
+                                :invalid="!!errors.name"
                                 :aria-describedby="
                                   errors.name ? 'cache-setting-name-message' : undefined
                                 "

@@ -221,8 +221,8 @@
             :label="`A variable named ${form.key} already exists in this account, so it wasn't created. Your entries are kept: change the key and press Create again.`"
           />
           <Field
-            :required="missing('key')"
-            :invalid="invalid('key')"
+            required
+            :invalid="missing('key') || invalid('key')"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.key">Key</Field.Label>
@@ -239,8 +239,8 @@
             </Field.Description>
           </Field>
           <Field
-            :required="missing('value')"
-            :invalid="invalid('value')"
+            required
+            :invalid="missing('value') || invalid('value')"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.value">Value</Field.Label>
@@ -254,7 +254,8 @@
             </Field.Description>
           </Field>
           <Field
-            :required="missing('environment')"
+            required
+            :invalid="missing('environment')"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.environment">Environment</Field.Label>

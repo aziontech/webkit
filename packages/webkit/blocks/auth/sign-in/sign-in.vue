@@ -457,7 +457,10 @@
                         </div>
 
                         <div v-if="step === 'email'">
-                          <Field :required="!!errors.email && !email.trim()">
+                          <Field
+                            required
+                            :invalid="!!errors.email"
+                          >
                             <Field.Label for="login-email">Email</Field.Label>
                             <Input
                               id="login-email"
@@ -468,8 +471,8 @@
                               autocomplete="username"
                               class="w-full"
                               placeholder="m@example.com"
-                              :required="!!errors.email && !email.trim()"
-                              :invalid="!!errors.email && !!email.trim()"
+                              required
+                              :invalid="!!errors.email"
                               :aria-describedby="errors.email ? 'login-email-error' : undefined"
                               @update:model-value="errors.email = ''"
                             />
@@ -503,8 +506,8 @@
                           <div class="flex flex-col items-start gap-(--spacing-xs)">
                             <Field
                               class="w-full"
-                              :required="!!errors.password && !password"
-                              :invalid="!!errors.password && !!password"
+                              required
+                              :invalid="!!errors.password"
                             >
                               <Field.Label for="login-password">Password</Field.Label>
                               <PasswordInput
@@ -548,7 +551,10 @@
                             >
                           </div>
 
-                          <Field :required="!!errors.resetEmail && !resetEmail.trim()">
+                          <Field
+                            required
+                            :invalid="!!errors.resetEmail"
+                          >
                             <Field.Label for="reset-email">Email</Field.Label>
                             <Input
                               id="reset-email"
@@ -559,8 +565,8 @@
                               autocomplete="email"
                               class="w-full"
                               placeholder="m@example.com"
-                              :required="!!errors.resetEmail && !resetEmail.trim()"
-                              :invalid="!!errors.resetEmail && !!resetEmail.trim()"
+                              required
+                              :invalid="!!errors.resetEmail"
                               :aria-describedby="
                                 errors.resetEmail ? 'reset-email-error' : undefined
                               "
@@ -579,8 +585,8 @@
                           class="flex flex-col gap-(--spacing-lg)"
                         >
                           <Field
-                            :required="!!errors.newPassword && !newPassword"
-                            :invalid="!!errors.newPassword && !!newPassword"
+                            required
+                            :invalid="!!errors.newPassword"
                           >
                             <Field.Label for="new-password">New password</Field.Label>
                             <PasswordInput
@@ -598,8 +604,8 @@
                           </Field>
 
                           <Field
-                            :required="!!errors.confirmPassword && !confirmPassword"
-                            :invalid="!!errors.confirmPassword && !!confirmPassword"
+                            required
+                            :invalid="!!errors.confirmPassword"
                           >
                             <Field.Label for="confirm-password">Confirm password</Field.Label>
                             <PasswordInput

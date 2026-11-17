@@ -219,7 +219,8 @@
                             class="w-full"
                             aria-label="Name"
                             placeholder="My Service"
-                            :required="!!errors.name"
+                            required
+                            :invalid="!!errors.name"
                             :aria-describedby="errors.name ? 'app-name-error' : undefined"
                             @update:model-value="errors.name = ''"
                           />
@@ -276,7 +277,8 @@
                             size="large"
                             class="w-full"
                             placeholder="Select ports"
-                            :required="!!errors.httpPorts"
+                            required
+                            :invalid="!!errors.httpPorts"
                             :display-value="portsLabel(httpPortOptions)"
                             @update:model-value="errors.httpPorts = ''"
                           >
@@ -392,7 +394,8 @@
                             class="w-full"
                             aria-label="Address"
                             placeholder="example.com"
-                            :required="!!errors.address"
+                            required
+                            :invalid="!!errors.address"
                             :aria-describedby="errors.address ? 'app-address-error' : undefined"
                             @update:model-value="errors.address = ''"
                           />
@@ -416,7 +419,8 @@
                             size="large"
                             class="w-full"
                             aria-label="Host header"
-                            :required="!!errors.hostHeader"
+                            required
+                            :invalid="!!errors.hostHeader"
                             :aria-describedby="
                               errors.hostHeader ? 'app-hostHeader-error' : undefined
                             "

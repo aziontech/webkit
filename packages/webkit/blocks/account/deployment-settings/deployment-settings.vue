@@ -1095,8 +1095,8 @@
               >
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                   <Field
-                    :required="Boolean(nameError) && !draft.name.trim()"
-                    :invalid="Boolean(nameError) && Boolean(draft.name.trim())"
+                    required
+                    :invalid="Boolean(nameError)"
                   >
                     <Field.Label for="deployment-settings-name">Name</Field.Label>
                     <Input

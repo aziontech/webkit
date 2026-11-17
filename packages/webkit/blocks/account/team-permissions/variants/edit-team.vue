@@ -308,7 +308,10 @@
                 <Card>
                   <template #default>
                     <div class="flex flex-col gap-(--spacing-lg)">
-                      <Field :required="!!errors.name">
+                      <Field
+                        required
+                        :invalid="!!errors.name"
+                      >
                         <Field.Label for="team-name">Name</Field.Label>
                         <Input
                           id="team-name"

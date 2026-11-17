@@ -339,7 +339,10 @@
               hint="The function this instance runs, and the name it is listed under."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <Field :required="!!errors.functionId">
+                <Field
+                  required
+                  :invalid="!!errors.functionId"
+                >
                   <Field.Label for="instance-function">Function</Field.Label>
                   <Select
                     :model-value="form.functionId"
@@ -372,7 +375,10 @@
                       : 'Its arguments appear below once a function is chosen.')
                   }}</FieldError>
                 </Field>
-                <Field :required="!!errors.name">
+                <Field
+                  required
+                  :invalid="!!errors.name"
+                >
                   <Field.Label>Name</Field.Label>
                   <Input
                     v-model="form.name"

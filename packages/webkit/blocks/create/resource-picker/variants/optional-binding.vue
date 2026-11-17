@@ -199,7 +199,10 @@
                   v-if="mode === 'new'"
                   class="pb-(--spacing-md)"
                 >
-                  <Field :required="!!firewallPicker.message">
+                  <Field
+                    required
+                    :invalid="!!firewallPicker.message"
+                  >
                     <Field.Label
                       for="firewall-name"
                       hint="Created alongside the resource this flow provisions."

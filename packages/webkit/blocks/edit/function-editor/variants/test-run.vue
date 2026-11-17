@@ -1199,7 +1199,8 @@
                           class="w-full"
                           aria-label="Name"
                           autocomplete="off"
-                          :required="!!nameError"
+                          required
+                          :invalid="!!nameError"
                           :aria-describedby="nameError ? nameMessageId : undefined"
                           @update:model-value="nameError = ''"
                         />
