@@ -19,7 +19,7 @@ const bands = [
     action: { label: 'Learn more about apps', href: '/solutions/web-apps/' }
   },
   {
-    illustration: 'az-applications',
+    illustration: 'ai-applications',
     illustrationLabel: 'An AI agent served close to users',
     title: 'AI applications',
     description: 'Build and deploy AI agents.',
@@ -250,7 +250,7 @@ describe('MediaSplitStackSection', () => {
 
   it('prefers a widget over the illustration and the image of the same band', async () => {
     const { container, findByTestId } = run({
-      bands: [{ ...bands[0], illustration: 'az-applications', widget: 'kv-store-key' }]
+      bands: [{ ...bands[0], illustration: 'ai-applications', widget: 'kv-store-key' }]
     })
 
     await findByTestId('console-mockup', {}, { timeout: 5000 })
