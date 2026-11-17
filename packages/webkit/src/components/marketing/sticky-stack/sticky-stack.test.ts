@@ -37,7 +37,7 @@ function pinGeometry(): () => void {
   style.textContent = `
     body { margin: 0 }
     [data-testid="${TESTID}"] { display: block; position: relative; height: calc(100vh * ${SPAN}) }
-    [data-testid="${TESTID}"] > div:not([data-sticky-stack-anchor]) {
+    [data-testid="${TESTID}"] > div {
       position: sticky; top: 0; height: 100vh; overflow: hidden
     }
   `
@@ -265,6 +265,24 @@ describe('StickyStack', () => {
 
     expect(rowsOf(few.container).some((row) => row.hasAttribute('data-dense'))).toBe(false)
     expect(rowsOf(dense.container).every((row) => row.hasAttribute('data-dense'))).toBe(true)
+  })
+
+  it('opens the claim that was clicked, whatever the page scroll padding', async () => {
+    const release = pinGeometry()
+    document.documentElement.style.scrollPaddingTop = '78px'
+    try {
+      const { container } = render(StickyStack, { props: { items: ITEMS } })
+      await scrollTo(slice() * 0.2)
+
+      for (const index of [2, 0, 1, 2, 1]) {
+        rowsOf(container)[index].querySelector('button')?.click()
+        await scrollTo(globalThis.scrollY)
+        expect(activeTitle(container)).toBe(ITEMS[index].title)
+      }
+    } finally {
+      document.documentElement.style.scrollPaddingTop = ''
+      release()
+    }
   })
 
   it('keeps every claim in the accessibility tree while the band rests', async () => {
