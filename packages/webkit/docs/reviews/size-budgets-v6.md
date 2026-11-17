@@ -399,6 +399,8 @@ Budget-raise: popover 10.8 KB → 10.85 KB (measured 10.82 KB): the shared overl
 Budget-raise: doc-frame 8.2 KB → 8.3 KB (measured 8.26 KB): the autoplay pause control names its clip ("Pause animation: {alt}") so several frames on a page have distinct names (2026-11-17).
 Budget-raise: locales-pt-BR 10.4 KB → 10.45 KB (measured 10.42 KB): the catalog adds DocFrame's two named pause and play messages (2026-11-17).
 Budget-raise: locales-es 10.5 KB → 10.55 KB (measured 10.54 KB): the same two DocFrame messages (2026-11-17).
+Budget-raise: trace 21.1 KB → 21.9 KB (measured 21.84 KB): the trace draws its critical path under the bars and shows self time and time on the path in the details (`highlightCriticalPath`, best-in-class tracing parity); the entry measured 21.13 KB before the change (2026-11-17).
+Budget-raise: console-trace-scene 69.35 KB → 70.1 KB (measured 70.09 KB): the scene renders a trace, which gained the critical path and self time (2026-11-17).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.
 

@@ -1069,6 +1069,9 @@ export const trace = {
   zoomStart: 'Zoom start',
   zoomEnd: 'Zoom end',
   slowest: 'Slowest',
+  criticalPath: 'Critical path',
+  onCriticalPath: 'On critical path',
+  selfTime: 'Self time',
   events: 'Events',
   eventCount: {
     one: '{count} event',

@@ -1112,6 +1112,9 @@ export const ptBR: Messages = {
     zoomStart: 'Início do zoom',
     zoomEnd: 'Fim do zoom',
     slowest: 'Mais lento',
+    criticalPath: 'Caminho crítico',
+    onCriticalPath: 'No caminho crítico',
+    selfTime: 'Tempo próprio',
     events: 'Eventos',
     eventCount: {
       one: '{count} evento',

@@ -64,6 +64,8 @@
     flip: boolean
     outside: boolean
     marks: { key: string; at: number }[]
+    critical: boolean
+    path: { key: string; offset: number; width: number }[]
   }
 
   type Edge = 'start' | 'end'
@@ -88,6 +90,8 @@
     zoomable?: boolean
     /** Flags the span that took longest, other than the root, in its row and its details. */
     highlightSlowest?: boolean
+    /** Draws the critical path of the run under the bars and flags the spans on it in their rows and details. */
+    highlightCriticalPath?: boolean
   }
 
   const props = withDefaults(defineProps<TraceProps>(), {
@@ -96,7 +100,8 @@
     bordered: true,
     loading: false,
     zoomable: false,
-    highlightSlowest: false
+    highlightSlowest: false,
+    highlightCriticalPath: false
   })
 
   /** Id of the span whose details show under the waterfall. Supports v-model:selected-key. */
@@ -172,6 +177,47 @@
     return pool.reduce((best, span) => (span.duration > best.duration ? span : best)).id
   })
 
+  const endOf = (span: TraceSpan): number => span.start + span.duration
+
+  const criticalPath = computed<Map<string, TraceRange[]>>(() => {
+    const path = new Map<string, TraceRange[]>()
+    if (!props.highlightCriticalPath) return path
+    const latestFirst = (list: TraceSpan[]): TraceSpan[] =>
+      [...list].sort((a, b) => endOf(b) - endOf(a))
+    const follow = (span: TraceSpan, end: number): void => {
+      const own: TraceRange[] = []
+      let cursor = Math.min(end, endOf(span))
+      latestFirst(childrenOf.value.get(span.id) ?? []).forEach((child) => {
+        const reach = Math.min(endOf(child), endOf(span))
+        if (reach > cursor || reach <= span.start || child.start >= cursor) return
+        if (reach < cursor) own.push([reach, cursor])
+        follow(child, reach)
+        cursor = Math.max(child.start, span.start)
+      })
+      if (cursor > span.start) own.push([span.start, cursor])
+      path.set(span.id, own.reverse())
+    }
+    const roots = latestFirst(childrenOf.value.get(null) ?? [])
+    if (roots[0]) follow(roots[0], endOf(roots[0]))
+    return path
+  })
+
+  const selfTimeOf = (span: TraceSpan): number | null => {
+    const kids = childrenOf.value.get(span.id) ?? []
+    if (!kids.length) return null
+    let reach = span.start
+    let covered = 0
+    kids.forEach((child) => {
+      const from = Math.max(child.start, reach)
+      const to = Math.min(endOf(child), endOf(span))
+      if (to > from) {
+        covered += to - from
+        reach = to
+      }
+    })
+    return Math.max(0, span.duration - covered)
+  }
+
   const term = computed<string>(() => search.value.trim().toLocaleLowerCase())
 
   const matches = (span: TraceSpan): boolean =>
@@ -212,6 +258,18 @@
           .filter((mark) => mark.at >= 0 && mark.at <= 1)
         const status: TraceSpanStatus = span.status ?? 'success'
         const root = depth === 0 && status === 'success'
+        const stretches = criticalPath.value.get(span.id)
+        const path = (stretches ?? [])
+          .map(([a, b], order) => {
+            const lead = Math.max(a, low)
+            const tail = Math.min(b, high)
+            return {
+              key: `${order}`,
+              offset: clamp((lead - low) / length, 0, 1),
+              width: tail > lead ? Math.max((tail - lead) / length, 0.004) : 0
+            }
+          })
+          .filter((stretch) => stretch.width > 0)
         out.push({
           span,
           depth,
@@ -227,7 +285,9 @@
           wide: width >= 0.14,
           flip: width < 0.14 && offset + width > 0.8,
           outside,
-          marks
+          marks,
+          critical: Boolean(stretches),
+          path
         })
         if (expanded) walk(span.id, depth + 1)
       })
@@ -277,6 +337,14 @@
         value: t('trace.percent', { value: Math.round((span.duration / total.value) * 100) })
       }
     ]
+    const self = selfTimeOf(span)
+    if (self !== null)
+      facts.splice(2, 0, { label: t('trace.selfTime'), value: formatDuration(self) })
+    const stretches = criticalPath.value.get(span.id)
+    if (stretches) {
+      const onPath = stretches.reduce((sum, [a, b]) => sum + b - a, 0)
+      facts.push({ label: t('trace.onCriticalPath'), value: formatDuration(onPath) })
+    }
     if (span.service) facts.unshift({ label: t('trace.service'), value: span.service })
     return facts
   })
@@ -514,6 +582,7 @@
       formatDuration(row.span.duration),
       statusLabel(row.span.status),
       row.span.id === slowestId.value ? t('trace.slowest') : '',
+      row.critical ? t('trace.criticalPath') : '',
       row.span.events?.length ? t('trace.eventCount', { count: row.span.events.length }) : ''
     ]
       .filter(Boolean)
@@ -702,6 +771,7 @@
           :data-span-id="row.span.id"
           :data-selected="row.span.id === current || null"
           :data-slowest="row.span.id === slowestId || null"
+          :data-critical="row.critical || null"
           :data-testid="`${testId}__row`"
           :style="{
             '--trace-span-offset': String(row.offset),
@@ -751,10 +821,15 @@
               ><bdi>{{ row.span.service }}</bdi></span
             >
             <span
-              v-if="row.span.status === 'error' || row.span.id === slowestId"
+              v-if="row.span.status === 'error' || row.span.id === slowestId || row.critical"
               class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"
               aria-hidden="true"
             >
+              <i
+                v-if="row.critical"
+                class="az az-route text-(--text-default)"
+                :data-testid="`${testId}__critical`"
+              />
               <i
                 v-if="row.span.id === slowestId"
                 class="az az-clock text-(--text-default)"
@@ -788,6 +863,17 @@
                   >{{ formatDuration(row.span.duration) }}</span
                 >
               </span>
+              <span
+                v-for="stretch in row.path"
+                :key="`path-${stretch.key}`"
+                :style="{
+                  '--trace-path-offset': String(stretch.offset),
+                  '--trace-path-width': String(stretch.width)
+                }"
+                :data-testid="`${testId}__path`"
+                aria-hidden="true"
+                class="pointer-events-none absolute -bottom-1 start-[calc(var(--trace-path-offset)*100%)] h-0.5 w-[calc(var(--trace-path-width)*100%)] rounded-full bg-(--text-default)"
+              />
               <span
                 v-for="mark in row.marks"
                 :key="mark.key"
@@ -865,6 +951,14 @@
           size="small"
           :data-testid="`${testId}__slowest-tag`"
         />
+        <Tag
+          v-if="criticalPath.has(detail.id)"
+          key="critical"
+          severity="neutral"
+          :label="t('trace.criticalPath')"
+          size="small"
+          :data-testid="`${testId}__critical-tag`"
+        />
         <CopyButton
           :value="detail.name"
           :aria-label="t('trace.copyName')"
@@ -883,7 +977,9 @@
         </span>
       </div>
 
-      <dl class="m-0 grid grid-cols-2 gap-(--spacing-sm) @xl/trace:grid-cols-4">
+      <dl
+        class="m-0 grid grid-cols-2 gap-(--spacing-sm) @xl/trace:grid-cols-4 @3xl/trace:grid-cols-6"
+      >
         <div
           v-for="fact in detailFacts"
           :key="fact.label"

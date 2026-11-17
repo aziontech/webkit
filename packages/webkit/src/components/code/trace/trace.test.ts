@@ -2,6 +2,7 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
+import CriticalPath from '../../../../examples/trace/critical-path.vue'
 import Default from '../../../../examples/trace/default.vue'
 import Empty from '../../../../examples/trace/empty.vue'
 import Loading from '../../../../examples/trace/loading.vue'
@@ -335,6 +336,55 @@ describe('Trace', () => {
         'encode, +220 ms, 1.50 s, Failed, Slowest'
       )
       expect(view.getByTestId('trace__slowest-tag').textContent).toContain('Slowest')
+    })
+
+    it('walks the critical path back from the end through the child that finished last', () => {
+      const fanOut = [
+        { id: 'root', name: 'handler', start: 0, duration: 100 },
+        { id: 'long', parentId: 'root', name: 'long', start: 5, duration: 70 },
+        { id: 'late', parentId: 'root', name: 'late', start: 40, duration: 50 },
+        { id: 'late1', parentId: 'late', name: 'late-child', start: 45, duration: 20 }
+      ]
+      const plain = render(Trace, { props: { spans: fanOut } })
+      expect(plain.queryAllByTestId('trace__path')).toHaveLength(0)
+      expect(rows(plain).some((row) => row.hasAttribute('data-critical'))).toBe(false)
+      plain.unmount()
+      const view = render(Trace, {
+        props: { spans: fanOut, highlightCriticalPath: true, selectedKey: 'late' }
+      })
+      const onPath = rows(view)
+        .filter((row) => row.hasAttribute('data-critical'))
+        .map((row) => row.getAttribute('data-span-id'))
+      expect(onPath).toEqual(['root', 'late', 'late1'])
+      expect(rows(view)[2]?.getAttribute('aria-label')).toBe('late, +40 ms, 50 ms, Critical path')
+      const lateRow = rows(view)[2] as HTMLElement
+      const stretches = within(lateRow).getAllByTestId('trace__path')
+      expect(stretches.map((line) => line.style.getPropertyValue('--trace-path-offset'))).toEqual([
+        String(40 / 100),
+        String(65 / 100)
+      ])
+      expect(view.getByTestId('trace__critical-tag').textContent).toContain('Critical path')
+      const detail = view.getByTestId('trace__detail').textContent ?? ''
+      expect(detail).toMatch(/Self time\s*30 ms/)
+      expect(detail).toMatch(/On critical path\s*30 ms/)
+    })
+
+    it('shows self time only for a span with children', () => {
+      const leaf = render(Trace, { props: { spans, selectedKey: 'a1' } })
+      expect(leaf.getByTestId('trace__detail').textContent).not.toContain('Self time')
+      leaf.unmount()
+      const parent = render(Trace, { props: { spans, selectedKey: 'a' } })
+      expect(parent.getByTestId('trace__detail').textContent).toMatch(/Self time\s*180 ms/)
+    })
+
+    it('renders the critical path example with no accessibility violations', async () => {
+      const view = render(CriticalPath)
+      const onPath = rows(view)
+        .filter((row) => row.hasAttribute('data-critical'))
+        .map((row) => row.getAttribute('data-span-id'))
+      expect(onPath).toEqual(['root', 'auth', 'prices', 'prices-cache', 'prices-origin', 'render'])
+      expect(view.getByTestId('trace__detail').textContent).toMatch(/On critical path\s*14 ms/)
+      await expectNoA11yViolations(view.container)
     })
   })
 })

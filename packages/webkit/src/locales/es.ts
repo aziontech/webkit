@@ -1112,6 +1112,9 @@ export const es: Messages = {
     zoomStart: 'Inicio del zoom',
     zoomEnd: 'Fin del zoom',
     slowest: 'Más lento',
+    criticalPath: 'Ruta crítica',
+    onCriticalPath: 'En la ruta crítica',
+    selfTime: 'Tiempo propio',
     events: 'Eventos',
     eventCount: {
       one: '{count} evento',

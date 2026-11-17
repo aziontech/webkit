@@ -36,6 +36,11 @@
       "name": "SpanEvents",
       "summary": "Moments inside a span drawn as markers on its bar (a cache miss, the connection opening, the first byte), the slowest step flagged with a clock, and the selected span listing its events with their times in the details.",
       "file": "span-events.vue"
+    },
+    {
+      "name": "CriticalPath",
+      "summary": "A checkout request that fans out to three fetches in parallel, with its critical path drawn under the bars: verify-session, then the price fetch through its cache miss and origin call, then render. The longest fetch, fetch-recommendations, is off the path, so shortening it would not make the request faster. The selected price fetch shows its self time and its time on the path.",
+      "file": "critical-path.vue"
     }
   ]
 }
