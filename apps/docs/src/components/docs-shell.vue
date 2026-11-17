@@ -12,6 +12,7 @@
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
+  import SkipLink from '@aziontech/webkit/skip-link'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
@@ -61,11 +62,7 @@
 
 <template>
   <div class="flex min-h-screen w-full flex-col">
-    <a
-      href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:start-(--spacing-sm) focus:top-(--spacing-sm) focus:z-50 focus:rounded-(--shape-control) focus:bg-(--bg-surface) focus:px-(--spacing-sm) focus:py-(--spacing-xs)"
-      >Skip to content</a
-    >
+    <SkipLink />
     <div class="@container sticky top-0 z-40 w-full">
       <AppHeader :aria-label="t.navigation">
         <AppHeader.Start>
