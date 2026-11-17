@@ -1839,9 +1839,9 @@
       "types": "./types/components/feedback/spinner/spinner.vue.d.ts",
       "default": "./src/components/feedback/spinner/spinner.vue"
     },
-    "./webkit-provider": {
-      "types": "./types/components/provider/webkit-provider/webkit-provider.vue.d.ts",
-      "default": "./src/components/provider/webkit-provider/webkit-provider.vue"
+    "./config-provider": {
+      "types": "./types/components/provider/config-provider/config-provider.vue.d.ts",
+      "default": "./src/components/provider/config-provider/config-provider.vue"
     },
     "./svg/error-403": {
       "types": "./types/svg/error-403/error-403.vue.d.ts",
@@ -3855,8 +3855,8 @@
       "spinner": [
         "./types/components/feedback/spinner/spinner.vue.d.ts"
       ],
-      "webkit-provider": [
-        "./types/components/provider/webkit-provider/webkit-provider.vue.d.ts"
+      "config-provider": [
+        "./types/components/provider/config-provider/config-provider.vue.d.ts"
       ],
       "svg/error-403": [
         "./types/svg/error-403/error-403.vue.d.ts"

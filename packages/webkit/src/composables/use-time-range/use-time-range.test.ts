@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, effectScope, h, nextTick, ref } from 'vue'
 
 import DateRangePicker from '../../components/input/date-range-picker/date-range-picker.vue'
-import WebkitProvider from '../../components/provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../components/provider/config-provider/config-provider.vue'
 import { type DateRangeValue, TIME_RANGE_PRESETS, timeRangePreset, useTimeRange } from './index'
 
 const NOW = new Date('2026-11-16T12:00:00.000Z')
@@ -99,14 +99,14 @@ describe('useTimeRange', () => {
     expect(to.value?.getTime()).toBe(NOW.getTime() + HOUR)
   })
 
-  it('reads the WebkitProvider now when no clock is passed', () => {
+  it('reads the ConfigProvider now when no clock is passed', () => {
     const Probe = defineComponent({
       setup() {
         const { to } = useTimeRange(timeRangePreset('last-7-days'))
         return () => h('output', { 'data-testid': 'probe' }, to.value?.toISOString() ?? '')
       }
     })
-    const view = render(WebkitProvider, {
+    const view = render(ConfigProvider, {
       props: { now: NOW },
       slots: { default: () => h(Probe) }
     })

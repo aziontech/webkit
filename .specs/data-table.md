@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 0ccf09100d2b833984d4b314c464cc37449b992c786b7f5d3481aa4836faa58c
+checksum: d13a46fda745e6acc38617fe8e4c0b938ee6b531303eacac7330152ff302622e
 created: 2026-11-15
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # DataTable — Component Spec
@@ -27,7 +27,7 @@ The data-driven table: pass `data` + `columns` and it renders the header, rows, 
 
 **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives DataTable in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `page`, `pageSize`, `rowCount`, `pageSizeOptions`, `selectable`, `selectedKeys`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `TableExportButton` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none).
 
-**Cell presets and reordering.** The six `TableCell*` presets (each its own import, `@aziontech/webkit/table-cell-<name>`) render the cells every list repeats, each inside a `#cell-<id>` slot: `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
+**Cell presets and reordering.** The six `TableCell*` presets (each its own import, `@aziontech/webkit/table-cell-<name>`) render the cells every list repeats, each inside a `#cell-<id>` slot: `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
 
 ## When to use
 
@@ -64,7 +64,7 @@ The data-driven table: pass `data` + `columns` and it renders the header, rows, 
 - For repeated data, pass `data` + `columns` and customize cells with the `cell-<columnId>` / `header-<columnId>` slots instead of composing N rows by hand. Compose `Table` by hand only for small, static tables.
 - Give rows a stable id under `row-key` (default `'id'`); selection and `v-model:selected-keys` are keyed by it.
 - Mark the row-actions column `type: 'action'` so it pins to the trailing edge; give chip or short-token columns a `minWidth` rather than a fixed `width`.
-- Give `TableCellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `WebkitProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.
+- Give `TableCellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `ConfigProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.
 - Drive loading through the `loading` prop (skeleton rows, `aria-busy`) and keep the `empty` slot for no-data copy — do not swap the table for a spinner.
 - On a phone a console list keeps its grid and scrolls sideways (the default). Set `stackable` only for a short list read one record at a time on a narrow, phone-first surface (a marketing listing, a summary in a side panel), where a card per row reads better than a scroll; never on a resource index, a log or a list compared across columns.
 - Type the rows, not the slot: pass a typed `data` (`ref<Domain[]>([])`, or a literal array) and destructure `#cell-name="{ row, value }"` — `row` is a `Domain` and `value` is `Domain['name']`. Keep a column's `id` equal to its `accessorKey` (or leave `id` out) so the typed `value` is the field the cell shows. Do not annotate the slot scope by hand or cast `row as Domain`; a wrong field (`row.nmae`) should be a type error.
@@ -358,7 +358,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 | `dataTable.reorderColumn` / `reorderHandle` / `reorderHint` / `reorderLocked` / `reorderMoved` / `reorderDropped` / `reorderCancelled` | `Order`, the grip name, the hint, the lock reason and the move announcements | —             |
 | `dataTable.loadMore` / `dataTable.loadingMore` / `dataTable.noMoreRows`                                                                | `Load more` · `Loading more rows` · `No more rows`                           | —             |
 
-- The strings come from the locale catalog through `useTranslate` (`table` and `dataTable` groups) with the locale of the nearest `WebkitProvider`; the footer `Pagination` and the toolbar parts carry their own keys.
+- The strings come from the locale catalog through `useTranslate` (`table` and `dataTable` groups) with the locale of the nearest `ConfigProvider`; the footer `Pagination` and the toolbar parts carry their own keys.
 - Formatting: none in the root; cell values render as the app formats them (`TableCellTime` formats dates with `Intl.DateTimeFormat` / `Intl.RelativeTimeFormat`).
 
 ## Right-to-left

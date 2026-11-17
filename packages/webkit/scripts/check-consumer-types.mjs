@@ -20,7 +20,7 @@ export const APP_VUE = `<script setup lang="ts">
   import HeroSection from '@aziontech/webkit/hero-section'
   import SiteHeaderSection from '@aziontech/webkit/site-header-section'
   import Table from '@aziontech/webkit/table'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import { toast } from '@aziontech/webkit/toast'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { cn } from '@aziontech/webkit/utils/cn'
@@ -43,7 +43,7 @@ export const APP_VUE = `<script setup lang="ts">
 </script>
 
 <template>
-  <WebkitProvider>
+  <ConfigProvider>
     <SiteHeaderSection :menus="[]" />
     <!-- @vue-expect-error -->
     <SiteHeaderSection />
@@ -56,7 +56,7 @@ export const APP_VUE = `<script setup lang="ts">
       </Table.Body>
     </Table>
     <Button v-bind="saveProps" @click="notify" />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 `
 

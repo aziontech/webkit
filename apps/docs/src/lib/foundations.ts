@@ -69,7 +69,7 @@ export const FOUNDATIONS: FoundationPage[] = [
   {
     slug: 'internationalization',
     title: 'Languages',
-    summary: 'Built-in strings in English, Portuguese and Spanish through WebkitProvider.',
+    summary: 'Built-in strings in English, Portuguese and Spanish through ConfigProvider.',
     markdown: 'rules/webkit-strings.md',
     demo: 'locale'
   },

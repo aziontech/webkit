@@ -4,7 +4,7 @@ import { defineComponent, h, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import Kbd from './kbd.vue'
 
 // Starter suite emitted by the scaffold — a FLOOR, not the ceiling. Expand per
@@ -60,7 +60,7 @@ describe('Kbd', () => {
       defineComponent({
         setup: () => () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { catalogs: LOCALES, ...providerProps },
             { default: () => h(Kbd, props) }
           )

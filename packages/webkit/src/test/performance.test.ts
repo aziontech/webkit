@@ -65,7 +65,7 @@ import Command, {
   CommandItem,
   CommandList
 } from '../components/overlay/command'
-import WebkitProvider from '../components/provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../components/provider/config-provider/config-provider.vue'
 import ListingIndexSection from '../components/section/listing-index-section/listing-index-section.vue'
 import ListingTableSection from '../components/section/listing-table-section/listing-table-section.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
@@ -575,7 +575,7 @@ function timestampCase(): Case {
   return {
     mount: () => ({
       render: () =>
-        h(WebkitProvider, { now: start, timeZone: zone.value }, () =>
+        h(ConfigProvider, { now: start, timeZone: zone.value }, () =>
           h(
             'ul',
             values.map((value, i) =>

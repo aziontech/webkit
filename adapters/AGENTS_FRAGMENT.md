@@ -102,7 +102,7 @@ product components in one file (`llms-full-site.txt` for the site and docs compo
   and drag logic reads `useDirection` (`@aziontech/webkit/use-direction`); code, URLs and IDs
   inside text sit in `dir="ltr"` or `<bdi>` (rule `webkit-direction`).
 - **Built-in strings stay built in.** Never re-type a string a webkit component already ships
-  (close, pagination, calendar, keycaps, wizard steps): set `locale` on `WebkitProvider` and rename
+  (close, pagination, calendar, keycaps, wizard steps): set `locale` on `ConfigProvider` and rename
   one with its `messages` prop. Product copy follows `/webkit-microcopy` (rule `webkit-strings`).
 - **Small bundles.** A composition component is imported as its compound
   (`import Select from '@aziontech/webkit/select'`, then `<Select.Trigger>`). Only when you render the

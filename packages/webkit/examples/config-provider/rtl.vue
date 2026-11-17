@@ -1,10 +1,10 @@
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import PaginationRoot from '@aziontech/webkit/pagination-root'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 </script>
 
 <template>
-  <WebkitProvider locale="ar">
+  <ConfigProvider locale="ar">
     <PaginationRoot :total="48" />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

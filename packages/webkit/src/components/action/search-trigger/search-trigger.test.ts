@@ -10,7 +10,7 @@ import DisabledExample from '../../../../examples/search-trigger/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import Command from '../../overlay/command/command.vue'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import SearchTrigger from './search-trigger.vue'
 
 describe('SearchTrigger', () => {
@@ -223,7 +223,7 @@ describe('SearchTrigger', () => {
       const InProvider = defineComponent({
         setup: () => () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { catalogs: LOCALES, locale: 'pt-BR' },
             { default: () => h(SearchTrigger) }
           )

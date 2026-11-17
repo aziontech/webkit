@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import ConsoleLayoutRoot, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import HighlightButton from '@aziontech/webkit/highlight-button'
@@ -10,7 +11,6 @@
   import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -55,7 +55,7 @@
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :locale="settings.locale"
     :catalogs="catalogs"
     :dir="settings.dir"
@@ -249,5 +249,5 @@
     </ConsoleLayoutRoot>
     <DemoBar />
     <Toaster position="bottom-end" />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

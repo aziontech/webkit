@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, type PropType, ref } from 'vue'
 import Default from '../../../../examples/feedback-reason-dialog/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import FeedbackReasonDialog, {
   type FeedbackReasonDialogPayload,
   type FeedbackReasonDialogReason
@@ -112,7 +112,7 @@ describe('FeedbackReasonDialog', () => {
   })
 
   it('reads its strings from the locale catalog', async () => {
-    render(WebkitProvider, {
+    render(ConfigProvider, {
       props: { locale: 'pt-BR', catalogs: LOCALES },
       slots: { default: () => h(Harness) }
     })

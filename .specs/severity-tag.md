@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 5513e79982a0b8ddf9ab00476861f6538a7f3f31234039eaa19459ce8ff20822
+checksum: 1446642fd9935932f1eb7c71b7183ff9c7f242ee19ef3d33bc28ed121697d06a
 created: 2026-11-10
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # SeverityTag — Component Spec
@@ -36,7 +36,7 @@ SeverityTag labels an item with its place on an ordered severity scale: critical
 
 ## Best practices
 
-- Keep the default label (the level name from the locale catalog, translated under `WebkitProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.
+- Keep the default label (the level name from the locale catalog, translated under `ConfigProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.
 - Use one SeverityTag per row, in its own column, so the glyphs line up and the scale reads down the column.
 - Do not pair the tag with a toned `tag` for the same level; the glyph and the ramp already carry it.
 

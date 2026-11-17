@@ -8,7 +8,7 @@ import Default from '../../../../examples/qr-code/default.vue'
 import Sizes from '../../../../examples/qr-code/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import QrCode from './qr-code.vue'
 import { encodeQr } from './qr-encode'
 
@@ -92,7 +92,7 @@ describe('QrCode', () => {
   })
 
   it('reads the default name from the locale catalog', () => {
-    render(WebkitProvider, {
+    render(ConfigProvider, {
       props: { locale: 'pt-BR', catalogs: LOCALES },
       slots: { default: () => h(QrCode, { value: 'a' }) }
     })

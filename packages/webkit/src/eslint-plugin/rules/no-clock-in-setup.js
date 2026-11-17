@@ -53,7 +53,7 @@ export default {
     schema: [],
     messages: {
       clock:
-        '`{{call}}` reads the wall clock while the component renders, so the server and the browser can render different text (a hydration mismatch across a minute or day boundary). Count sample dates from a fixed reference (`const NOW = Date.UTC(2026, 10, 10, 12)`), give relative times that reference through `<WebkitProvider :now="NOW">`, and read the real clock only in `onMounted` or an event handler.'
+        '`{{call}}` reads the wall clock while the component renders, so the server and the browser can render different text (a hydration mismatch across a minute or day boundary). Count sample dates from a fixed reference (`const NOW = Date.UTC(2026, 10, 10, 12)`), give relative times that reference through `<ConfigProvider :now="NOW">`, and read the real clock only in `onMounted` or an event handler.'
     }
   },
   create(context) {

@@ -183,7 +183,7 @@ The toolkit is fail-open by design (a missing catalog disables the lint rules ra
 - **vue / tailwind version** — vue ^3.5 and Tailwind 4.1 or later installed (`WARN` when not installed, `FAIL` on another major);
 - **theme import** — `src/webkit.css` imports `@aziontech/theme` (`FAIL` = no tokens);
 - **lint plugin** — the ESLint config loads `@aziontech/webkit/eslint-plugin`;
-- **webkit provider** — a `WebkitProvider` is mounted somewhere in `src/` (`WARN`: locale and direction fall back to English, left to right);
+- **config provider** — a `ConfigProvider` is mounted somewhere in `src/` (`WARN`: locale and direction fall back to English, left to right);
 - **webkit catalog** resolvable (`FAIL` = lint rules are disabled — install webkit or set `WEBKIT_CATALOG_PATH`);
 - **eslint / stylelint config** present;
 - **webkit.css** registers webkit with Tailwind: `@import './webkit.sources.css'` (or `@aziontech/webkit/styles/all`, or an inline `@source`) — `FAIL` = unstyled components (since 6.0 `@aziontech/webkit/styles` alone scans nothing);

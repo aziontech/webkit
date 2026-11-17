@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 5fb0e00df9a737826ec69e59e1233d0a5502f2fdfd5ecd734ea05748b8ad917c
+checksum: b4e98c6df144fa3a61bf7ece56508c15c77f325ac01008ef19fb1636e09e9513
 created: 2026-06-25
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # MultiSelect — Component Spec
@@ -263,7 +263,7 @@ Chips, typed filter and a create row:
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
 - Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
-- Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Internationalization
 
@@ -285,7 +285,7 @@ Chips, typed filter and a create row:
 - Icons: the chevron is not mirrored.
 - Keyboard: `ArrowDown`/`ArrowUp` are not direction-dependent; `Backspace` removes the last value in reading order.
 - User data: chip labels and typed text use `dir="auto"` through `Chip` and the input.
-- Teleported content: see Accessibility — the panel binds `dir` and `lang` from the nearest `WebkitProvider`.
+- Teleported content: see Accessibility — the panel binds `dir` and `lang` from the nearest `ConfigProvider`.
 
 ## Responsive
 

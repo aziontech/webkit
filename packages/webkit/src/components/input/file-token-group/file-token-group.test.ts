@@ -9,7 +9,7 @@ import ReadOnly from '../../../../examples/file-token-group/readonly.vue'
 import Uploading from '../../../../examples/file-token-group/uploading.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import FileTokenGroup, { type FileTokenGroupItem } from './file-token-group.vue'
 
 const files = (): FileTokenGroupItem[] => [
@@ -150,7 +150,7 @@ describe('FileTokenGroup', () => {
     const Host = defineComponent({
       render: () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { locale: 'pt-BR', catalogs: LOCALES },
           { default: () => h(FileTokenGroup, { items: files() }) }
         )

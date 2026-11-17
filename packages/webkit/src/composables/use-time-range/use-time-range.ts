@@ -36,7 +36,7 @@ export function timeRangePreset(key: TimeRangePresetKey): DateRangeValue {
 
 /** Options of `useTimeRange`. */
 export interface UseTimeRangeOptions {
-  /** Reference clock. A ref or getter that changes re-resolves the range; unset reads the nearest WebkitProvider now, then the real clock. */
+  /** Reference clock. A ref or getter that changes re-resolves the range; unset reads the nearest ConfigProvider now, then the real clock. */
   now?: MaybeRefOrGetter<Date | number | undefined>
 }
 

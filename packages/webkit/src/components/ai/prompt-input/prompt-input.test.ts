@@ -8,7 +8,7 @@ import DefaultExample from '../../../../examples/prompt-input/default.vue'
 import ShortcutMenus from '../../../../examples/prompt-input/shortcut-menus.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import PromptInputCompound from './index'
 import PromptInput from './prompt-input.vue'
 
@@ -162,7 +162,7 @@ describe('PromptInput', () => {
     const { getByRole } = render(
       defineComponent({
         setup: () => () =>
-          h(WebkitProvider, { locale: 'es', catalogs: LOCALES }, { default: () => h(PromptInput) })
+          h(ConfigProvider, { locale: 'es', catalogs: LOCALES }, { default: () => h(PromptInput) })
       })
     )
     expect(getByRole('textbox')).toHaveAttribute('placeholder', 'Haz una pregunta')

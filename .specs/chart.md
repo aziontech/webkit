@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 0c8c5eebb6214271a1e0f83b9e1fafcd67eb5ed2c301446f81a87204fb66df7e
+checksum: e10c88b05e9fcebef1ca1ece4748a53beacb8411123dbb31c171e3c1d4c490c3
 spec_version: 14
 template: 2
 created: 2026-10-20
@@ -315,7 +315,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 | `chart.referenceLine`   | `{label} at {value}.`                          | —                     |
 | `chart.referenceBand`   | `{label} from {from} to {to}.`                 | —                     |
 
-- Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `WebkitProvider`.
+- Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `ConfigProvider`.
 
 ## Right-to-left
 

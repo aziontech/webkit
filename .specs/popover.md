@@ -7,9 +7,9 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 290060f85cbd84d9143e98ed327e352d08ffc2c3f3527864290cc8ccaee25aa9
+checksum: ab6abb7f0f6bead0255d887b3e1a484c12c16a01ac81fe142ae270a97a6cc6ed
 created: 2026-06-30
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Popover — Component Spec
@@ -257,7 +257,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled trigger state (validated via `--text-muted` / `--text-disabled` tokens).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/focus states.
 - Touch target ≥40×40 px on the trigger (consumer's element — flagged in docs); the close `IconButton` follows `IconButton`'s own target sizing.
-- Teleported content: the teleported `role="dialog"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported `role="dialog"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 - `PopoverHeader` keeps its `header` tag with `role="none"`, so an open popover does not expose a `banner` landmark (pinned by `src/test/screen-reader.test.ts`).
 
 ## Examples

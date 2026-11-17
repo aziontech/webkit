@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 97f30095608a42b20f483d41ef7cc440685d511abfb70c732507af8e9c06f18c
+checksum: 079e6025aeac0e78ed51545ba6b29c4190213b807de2e2d619e5420a9ae055f2
 created: 2026-11-15
 last_updated: 2026-11-17
 ---
@@ -237,7 +237,7 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 | `dataGrid.true`             | `Yes`                                                                                        | —             |
 | `dataGrid.false`            | `No`                                                                                         | —             |
 
-- Formatting: `number` cells render with `Intl.NumberFormat` in the locale of the nearest `WebkitProvider`; the editor and the copied text use the raw number. Strings come from the locale catalog through `useTranslate` (`dataGrid` group).
+- Formatting: `number` cells render with `Intl.NumberFormat` in the locale of the nearest `ConfigProvider`; the editor and the copied text use the raw number. Strings come from the locale catalog through `useTranslate` (`dataGrid` group).
 
 ## Right-to-left
 

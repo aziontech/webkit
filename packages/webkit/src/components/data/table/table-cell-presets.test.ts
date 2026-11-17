@@ -7,7 +7,7 @@ import Refresh from '../../../../examples/data-table/refresh.vue'
 import CellPresets from '../../../../examples/table/cell-presets.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import TableCellActions from './table-cell-actions/table-cell-actions.vue'
 import TableCellId from './table-cell-id/table-cell-id.vue'
 import TableCellLink from './table-cell-link/table-cell-link.vue'
@@ -196,7 +196,7 @@ describe('Table', () => {
       const Host = defineComponent({
         render: () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { locale: 'pt-BR', catalogs: LOCALES },
             { default: () => h(TableCellTime, { value: new Date(Date.now() - 2 * 3_600_000) }) }
           )
@@ -211,7 +211,7 @@ describe('Table', () => {
       const Host = defineComponent({
         render: () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { now: now.value },
             {
               default: () => [
@@ -238,7 +238,7 @@ describe('Table', () => {
       const App = defineComponent({
         render: () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { now: NOW },
             { default: () => h(TableCellTime, { value: new Date(NOW - 26 * 3_600_000) }) }
           )

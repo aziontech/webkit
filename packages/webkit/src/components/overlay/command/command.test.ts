@@ -5,7 +5,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import Command from './command.vue'
 import CommandEmpty from './command-empty/command-empty.vue'
 import CommandGroup from './command-group/command-group.vue'
@@ -450,10 +450,10 @@ describe('Command', () => {
   describe('key names follow the locale', () => {
     const localized = (locale: string) =>
       defineComponent({
-        components: { WebkitProvider, Command, CommandInput, CommandList, CommandItem },
+        components: { ConfigProvider, Command, CommandInput, CommandList, CommandItem },
         setup: () => ({ open: ref(true), locale, catalogs: LOCALES }),
         template: `
-        <WebkitProvider :locale="locale" :catalogs="catalogs">
+        <ConfigProvider :locale="locale" :catalogs="catalogs">
           <Command v-model:open="open">
             <CommandInput placeholder="Search" />
             <CommandList>
@@ -461,7 +461,7 @@ describe('Command', () => {
               <CommandItem value="pause" shortcut="space">Pause</CommandItem>
             </CommandList>
           </Command>
-        </WebkitProvider>
+        </ConfigProvider>
       `
       })
 

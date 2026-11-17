@@ -3,10 +3,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createSSRApp, defineComponent, h, nextTick, ref } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
-import CustomMessages from '../../../../examples/webkit-provider/custom-messages.vue'
-import Default from '../../../../examples/webkit-provider/default.vue'
-import DeviceLocale from '../../../../examples/webkit-provider/device-locale.vue'
-import Rtl from '../../../../examples/webkit-provider/rtl.vue'
+import CustomMessages from '../../../../examples/config-provider/custom-messages.vue'
+import Default from '../../../../examples/config-provider/default.vue'
+import DeviceLocale from '../../../../examples/config-provider/device-locale.vue'
+import Rtl from '../../../../examples/config-provider/rtl.vue'
 import { useLocale } from '../../../composables/use-locale'
 import { ptBR } from '../../../locales/pt-BR'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -17,13 +17,13 @@ import Dialog from '../../overlay/dialog/dialog.vue'
 import DialogClose from '../../overlay/dialog/dialog-close.vue'
 import DialogContent from '../../overlay/dialog/dialog-content.vue'
 import DialogTitle from '../../overlay/dialog/dialog-title.vue'
-import WebkitProvider from './webkit-provider.vue'
+import ConfigProvider from './config-provider.vue'
 
 const catalogs = { 'pt-BR': ptBR }
 
 const withProvider = (props: Record<string, unknown>, child: () => ReturnType<typeof h>) =>
   defineComponent({
-    setup: () => () => h(WebkitProvider, { catalogs, ...props }, { default: child })
+    setup: () => () => h(ConfigProvider, { catalogs, ...props }, { default: child })
   })
 
 const settle = async () => {
@@ -35,36 +35,36 @@ afterEach(async () => {
   await settle()
 })
 
-describe('WebkitProvider', () => {
+describe('ConfigProvider', () => {
   describe('root element', () => {
     it('renders a wrapper carrying lang, dir and the default testid', () => {
       const { getByTestId } = render(withProvider({ locale: 'pt-BR' }, () => h('span', 'x')))
-      const root = getByTestId('webkit-provider')
+      const root = getByTestId('config-provider')
       expect(root.getAttribute('lang')).toBe('pt-BR')
       expect(root.getAttribute('dir')).toBe('ltr')
     })
 
     it('defaults to the device locale (pinned to en-US in this suite), left to right', () => {
-      const { getByTestId } = render(WebkitProvider)
-      expect(getByTestId('webkit-provider').getAttribute('lang')).toBe('en-US')
-      expect(getByTestId('webkit-provider').getAttribute('dir')).toBe('ltr')
+      const { getByTestId } = render(ConfigProvider)
+      expect(getByTestId('config-provider').getAttribute('lang')).toBe('en-US')
+      expect(getByTestId('config-provider').getAttribute('dir')).toBe('ltr')
     })
 
     it('derives dir="rtl" from an Arabic, Hebrew, Persian or Urdu locale', () => {
       for (const locale of ['ar', 'he-IL', 'fa', 'ur-PK']) {
         const { getAllByTestId, unmount } = render(withProvider({ locale }, () => h('span')))
-        expect(getAllByTestId('webkit-provider')[0]?.getAttribute('dir')).toBe('rtl')
+        expect(getAllByTestId('config-provider')[0]?.getAttribute('dir')).toBe('rtl')
         unmount()
       }
     })
 
     it('an explicit dir wins over the locale', () => {
       const { getByTestId } = render(withProvider({ locale: 'ar', dir: 'ltr' }, () => h('span')))
-      expect(getByTestId('webkit-provider').getAttribute('dir')).toBe('ltr')
+      expect(getByTestId('config-provider').getAttribute('dir')).toBe('ltr')
     })
 
     it('forwards consumer attributes to the wrapper', () => {
-      const { getByTestId } = render(WebkitProvider, {
+      const { getByTestId } = render(ConfigProvider, {
         attrs: { class: 'app-root', 'data-testid': 'root' }
       })
       expect(getByTestId('root').className).toContain('app-root')
@@ -151,7 +151,7 @@ describe('WebkitProvider', () => {
           withProvider({ locale: 'pt-BR', catalogs: {} }, () => h(Pagination, { total: 5 }))
         )
         expect(view.getByLabelText('Next page')).toBeTruthy()
-        expect(view.getByTestId('webkit-provider').getAttribute('lang')).toBe('pt-BR')
+        expect(view.getByTestId('config-provider').getAttribute('lang')).toBe('pt-BR')
         expect(warn.mock.calls.map((c) => String(c[0])).join('\n')).toContain(
           '@aziontech/webkit/locales/pt-BR'
         )
@@ -229,7 +229,7 @@ describe('WebkitProvider', () => {
       const Host = defineComponent({
         setup: () => () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { locale: locale.value, catalogs },
             { default: () => h(Pagination, { total: 5 }) }
           )
@@ -279,7 +279,7 @@ describe('WebkitProvider', () => {
         }
       })
       const Host = defineComponent({
-        setup: () => () => h(WebkitProvider, { now: now.value }, { default: () => h(Probe) })
+        setup: () => () => h(ConfigProvider, { now: now.value }, { default: () => h(Probe) })
       })
       render(Host)
       const l = helpers as unknown as ReturnType<typeof useLocale>
@@ -314,7 +314,7 @@ describe('WebkitProvider', () => {
 
     it('Rtl turns the subtree right to left', () => {
       const { getByTestId } = render(Rtl)
-      expect(getByTestId('webkit-provider').getAttribute('dir')).toBe('rtl')
+      expect(getByTestId('config-provider').getAttribute('dir')).toBe('rtl')
     })
 
     it('DeviceLocale prints the range for the device and keeps ISO instants in the value', async () => {
@@ -322,7 +322,7 @@ describe('WebkitProvider', () => {
       try {
         const view = render(DeviceLocale)
         await settle()
-        expect(view.getByTestId('webkit-provider').getAttribute('lang')).toBe('pt-BR')
+        expect(view.getByTestId('config-provider').getAttribute('lang')).toBe('pt-BR')
         expect(view.container.textContent).toContain('nov.')
         expect(view.container.textContent).toContain(
           'Sent to the server: 2026-11-10T12:00:00.000Z to 2026-11-10T18:30:00.000Z'

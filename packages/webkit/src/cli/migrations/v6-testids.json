@@ -411,5 +411,5 @@
   "sections-template-gallery": "template-gallery-section",
   "sections-use-cases": "customer-use-cases-section",
   "utils-spinner": "spinner",
-  "utils-webkit-provider": "webkit-provider"
+  "utils-webkit-provider": "config-provider"
 }

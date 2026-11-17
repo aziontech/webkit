@@ -8,7 +8,7 @@ template: 2
 figma:
   url: <https://figma.com/design/...>
   node_id: <e.g. 10:42>
-checksum: a96fab27115eca203399795410d2c0c32ef312a713c30f239af715302847fba4
+checksum: 9f6a5dfc5b1dde68851607a090f837d733fdc4a3fb7a847083aa781c187133ca
 created: <YYYY-MM-DD>
 last_updated: 2026-11-15
 ---
@@ -264,7 +264,7 @@ export default Object.assign(Root, { Part: RootPart })
      List every built-in string the component renders or announces (visible text, aria-label,
      aria-live text, placeholder, title) as a message key, its English source and the
      prop that overrides it. Dates, numbers, currency, relative time and plurals go through
-     `Intl` with the locale from `WebkitProvider`. Write "No built-in strings" when that is true. -->
+     `Intl` with the locale from `ConfigProvider`. Write "No built-in strings" when that is true. -->
 
 | Key | English source | Override prop |
 |---|---|---|

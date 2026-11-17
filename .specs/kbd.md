@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 24ba92bfdc200a69ed5e5cdba70b3fff5b7c67b39594641d262bed14d12078ce
+checksum: 3508d907df160df542ce66cc1b98fd74ec26af1d477ebf39df263320475e4174
 created: 2026-07-23
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Kbd — Component Spec
@@ -35,7 +35,7 @@ Kbd renders keyboard input — a single key or a shortcut combination — as a c
 
 - Keep the default slot to a single key or glyph (`K`, `7`, `Enter`, `Esc`, `/`); avoid lowercase words or sentences.
 - Pass modifiers as boolean props rather than hardcoding `⌘`/`⇧` so the glyph adapts to the OS.
-- Name a key with `key-name` (`<Kbd key-name="escape" />`) instead of typing `Esc` or `Enter`: the text comes from the locale catalog (`kbd.*`), so it follows `WebkitProvider` (`Espaço` in pt-BR, `Intro` in es) and a consumer renames it with `messages` (`{ kbd: { ctrl: 'Strg' } }`). The macOS symbols `⌘`, `⌃`, `⌥` and `⇧` are never translated.
+- Name a key with `key-name` (`<Kbd key-name="escape" />`) instead of typing `Esc` or `Enter`: the text comes from the locale catalog (`kbd.*`), so it follows `ConfigProvider` (`Espaço` in pt-BR, `Intro` in es) and a consumer renames it with `messages` (`{ kbd: { ctrl: 'Strg' } }`). The macOS symbols `⌘`, `⌃`, `⌥` and `⇧` are never translated.
 - Place surrounding punctuation outside the element, not inside the keycap.
 - Use `keys` when the shortcut comes from data (a command list, a settings table); use the boolean props when you write it by hand. Pick `variant="separate"` for a sequence pressed key by key or for arrow pairs (`↑` `↓` to navigate), `combined` for a chord pressed at once.
 - Name the Return key `return` (`↵`) in compact hints (a footer "↵ to select"); keep `enter` (`Enter`) where the word reads better.

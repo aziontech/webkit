@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 864319620b839cf4f0ab95f32e77dcc7a0bb4c694f2736248bab040a2a013b32
+checksum: fb23c0139f2b070a87ef1ef0b8c85aa01bf38c85335045b2dd2ce5677e3adcab
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # ConversationHistory — Component Spec
@@ -35,7 +35,7 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 ## Best practices
 
 - Title each conversation from its first prompt, short; the full title shows on hover through `title`.
-- Fix the reference time so the groups match on the server and the client: set `now` on the app's `WebkitProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
+- Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
 - Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler.
 
 ## Usage
@@ -62,7 +62,7 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 | Prop        | Type                                                                   | Default     | Required | JSDoc                                                                                                                                                      |
 | ----------- | ---------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `items`     | `{ id: string; title: string; updatedAt: string \| number \| Date }[]` | `[]`        | false    | Conversations, any order; they are sorted newest first inside their group.                                                                                 |
-| `now`       | `string \| number \| Date`                                             | `undefined` | false    | Reference time for the groups. Empty uses the nearest `WebkitProvider`'s `now`, then the current time; set either when the list is rendered on the server. |
+| `now`       | `string \| number \| Date`                                             | `undefined` | false    | Reference time for the groups. Empty uses the nearest `ConfigProvider`'s `now`, then the current time; set either when the list is rendered on the server. |
 | `removable` | `boolean`                                                              | `false`     | false    | Shows a Delete button on each row that emits `remove`.                                                                                                     |
 | `loading`   | `boolean`                                                              | `false`     | false    | Shows placeholder rows while the history loads.                                                                                                            |
 | `ariaLabel` | `string`                                                               | `''`        | false    | Accessible name of the list. Empty uses the locale catalog (`Conversation history`).                                                                       |

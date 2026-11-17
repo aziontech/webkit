@@ -388,16 +388,16 @@ export function planDoctor(projectDir) {
 
   const srcFiles = listSrcFiles(projectDir)
   const provided = srcFiles.some((file) =>
-    /@aziontech\/webkit\/webkit-provider|<WebkitProvider[\s/>]|<webkit-provider[\s/>]/.test(
+    /@aziontech\/webkit\/config-provider|<ConfigProvider[\s/>]|<config-provider[\s/>]/.test(
       read(file) || ''
     )
   )
   add(
-    'webkit provider',
+    'config provider',
     provided ? 'ok' : 'warn',
     provided
-      ? 'WebkitProvider is mounted'
-      : 'no WebkitProvider in src/ — components read English text, left-to-right, and format for the device locale. Wrap the app root in `<WebkitProvider :catalogs="catalogs">` from \'@aziontech/webkit/webkit-provider\' (add `:locale` for a language the user chose).'
+      ? 'ConfigProvider is mounted'
+      : 'no ConfigProvider in src/ — components read English text, left-to-right, and format for the device locale. Wrap the app root in `<ConfigProvider :catalogs="catalogs">` from \'@aziontech/webkit/config-provider\' (add `:locale` for a language the user chose).'
   )
 
   let usesToast = false

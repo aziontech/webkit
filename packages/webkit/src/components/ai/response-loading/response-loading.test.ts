@@ -4,7 +4,7 @@ import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import ResponseLoading from './response-loading.vue'
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -56,7 +56,7 @@ describe('ResponseLoading', () => {
       defineComponent({
         setup: () => () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { locale: 'pt-BR', catalogs: LOCALES },
             { default: () => h(ResponseLoading, { delay: 0 }) }
           )

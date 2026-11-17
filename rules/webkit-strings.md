@@ -3,7 +3,7 @@
 Webkit components carry their own interface text: close buttons, pagination, empty states,
 calendar fields, keycaps, wizard steps, screen-reader labels. Each one is read from a locale
 catalog (`en`, `pt-BR`, `es`) through `useLocale`, so it follows the language set on
-`WebkitProvider`. A string typed by hand next to the component, or passed into a prop to repeat the
+`ConfigProvider`. A string typed by hand next to the component, or passed into a prop to repeat the
 default, is stuck in one language and drifts from the rest of the product.
 
 ## Do
@@ -11,11 +11,11 @@ default, is stuck in one language and drifts from the rest of the product.
 - Leave a component's built-in text alone. `<Pagination>` already says "Previous page" and
   "Página anterior"; `<Dialog>` already names its close button; `<Kbd key-name="escape" />` prints
   `Esc` from the catalog.
-- Set the language once, at the app root: `<WebkitProvider locale="pt-BR" :catalogs="{ 'pt-BR': ptBR }">`,
+- Set the language once, at the app root: `<ConfigProvider locale="pt-BR" :catalogs="{ 'pt-BR': ptBR }">`,
   with `ptBR` from `@aziontech/webkit/locales/pt-BR` (`es` from `/locales/es`; English is built
   in). Every component below it switches, dates and numbers included (`Intl` through the same
   locale).
-- Rename a built-in string for the whole app with `messages` on `WebkitProvider`:
+- Rename a built-in string for the whole app with `messages` on `ConfigProvider`:
   `:messages="{ wizard: { submit: 'Deploy' }, kbd: { ctrl: 'Strg' } }"`. The keys are the
   catalog's (`group.key`): `group` is the component's camelCase name (`sidebarMenu`,
   `feedbackReasonDialog`) and strings several components share are in `common` (`common.copy`,
@@ -43,7 +43,7 @@ default, is stuck in one language and drifts from the rest of the product.
 ```vue
 <script setup lang="ts">
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import Wizard from '@aziontech/webkit/wizard'
   import { ref } from 'vue'
 
@@ -52,7 +52,7 @@ default, is stuck in one language and drifts from the rest of the product.
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     locale="pt-BR"
     :catalogs="{ 'pt-BR': ptBR }"
     :messages="messages"
@@ -64,7 +64,7 @@ default, is stuck in one language and drifts from the rest of the product.
       <Wizard.Step title="Configurar">…</Wizard.Step>
       <Wizard.Step title="Revisar">…</Wizard.Step>
     </Wizard>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 

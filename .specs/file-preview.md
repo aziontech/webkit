@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: bb94472ca8479e436ccfbc21fd9989d43727853945065de76dc17d91b92ad2bd
+checksum: 958e3895906d6cf05340be71d9d0217734e3f0989a6b3a044b260a47633279ec
 created: 2026-11-16
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # FilePreview — Component Spec
@@ -143,7 +143,7 @@ _none_
 | `filePreview.empty`           | `This file is empty.`                                                       | —             |
 | `filePreview.truncated`       | `Showing the first {shown} characters. Download the file to see all of it.` | —             |
 
-- Formatting: `formatFileSize` (`Intl.NumberFormat` units) for `bytes`, `formatNumber` for the truncation count, both with the `WebkitProvider` locale.
+- Formatting: `formatFileSize` (`Intl.NumberFormat` units) for `bytes`, `formatNumber` for the truncation count, both with the `ConfigProvider` locale.
 
 ## Right-to-left
 

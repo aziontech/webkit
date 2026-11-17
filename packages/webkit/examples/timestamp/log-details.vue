@@ -1,14 +1,14 @@
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import StatusCode from '@aziontech/webkit/status-code'
   import Timestamp from '@aziontech/webkit/timestamp'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :now="NOW"
     time-zone="UTC"
   >
@@ -31,5 +31,5 @@
       </KeyValueList.Item>
       <KeyValueList.Item label="Host">app.example.com</KeyValueList.Item>
     </KeyValueList>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

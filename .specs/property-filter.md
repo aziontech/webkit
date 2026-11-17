@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 01263c3395258b86b5e1eed5b51f4f627e870b841e15bd9a7fb2974f9021cbe7
+checksum: 2188c35da939a195771ec95228d1f005c5ef6c7e0124283a31997a89f9eee68d
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # PropertyFilter — Component Spec
@@ -257,7 +257,7 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 - Keyboard: `ArrowDown`/`ArrowUp` are not direction-dependent.
 - User data: suggestion labels sit in `<bdi>` so a value in another script does not reorder the line.
 - Query mode: the query string keeps `dir="auto"` from `input`, so a Latin query stays left-to-right inside a right-to-left page; the message sits at the start and the match count at the end (`ms-auto`).
-- Teleported content: the teleported suggestions listbox binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported suggestions listbox binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Responsive
 

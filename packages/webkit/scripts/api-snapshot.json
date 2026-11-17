@@ -866,7 +866,7 @@
     "utils/cn",
     "utils/csv",
     "vite-plugin",
-    "webkit-provider",
+    "config-provider",
     "wizard",
     "wizard-root",
     "wizard-step"
@@ -3722,7 +3722,7 @@
     "spinner": {
       "ariaLabel": null
     },
-    "webkit-provider": {
+    "config-provider": {
       "catalogs": null,
       "dir": [
         "auto",

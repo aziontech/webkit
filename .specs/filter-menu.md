@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 10
 template: 2
-checksum: d7cd96649ef6d64b470506c5449de929f5e0ddf94b8b3da11e7ae3ba1dc6b702
+checksum: 2238b50bf78c350bab8ff384c217a2dc99f466f1a6407f174d4cad233f6eceab
 created: 2026-11-14
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # FilterMenu — Component Spec
@@ -282,7 +282,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `-end-2` for the badge, `text-start`).
 - Icons: the Back chevron (`az az-chevron-left`) and the row chevrons (`az az-chevron-right`) mirror under rtl (`rtl:-scale-x-100`; IconButton mirrors its own directional icons); the funnel, search, check and filter-slash glyphs do not.
-- Keyboard: `ArrowUp` / `ArrowDown` are vertical and unchanged. The level slide enters from the inline end going forward and from the inline start going back, so it mirrors with the direction from `WebkitProvider`.
+- Keyboard: `ArrowUp` / `ArrowDown` are vertical and unchanged. The level slide enters from the inline end going forward and from the inline start going back, so it mirrors with the direction from `ConfigProvider`.
 - User data: field labels, value labels and summaries render in `<bdi>` so an author name or a domain keeps its own direction.
 
 ## Responsive

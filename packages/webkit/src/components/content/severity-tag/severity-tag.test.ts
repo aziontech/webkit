@@ -4,7 +4,7 @@ import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import SeverityTag from './severity-tag.vue'
 
 const LEVELS = [
@@ -75,7 +75,7 @@ describe('SeverityTag', () => {
     const Host = defineComponent({
       setup: () => () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { locale: 'pt-BR', catalogs: LOCALES },
           { default: () => h(SeverityTag, { severity: 'low' }) }
         )

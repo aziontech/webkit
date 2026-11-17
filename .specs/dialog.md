@@ -7,7 +7,7 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 1151f7106d6bdecd839304d7563b96d7fbc267b22aaa03c69cdb8b7d5ccb8a2f
+checksum: 0bc14ed6285d2cf2c862e12e78237de599f0e6db643544513ac5892d1b8f510d
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -179,7 +179,7 @@ No element sets an inline `transition` (an inline style beats `motion-reduce:tra
 - `motion-reduce:transition-none` on every animated element; nothing sets the transition inline. Tests: `dialog-motion.test.ts`.
 - Touch target ≥40×40 px where the control is interactive.
 - Overlay: every open dialog renders its overlay; there is no way to open a dialog without one, so the page behind is never clickable while it is open. Tests: `dialog.test.ts` › overlay.
-- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/timestamp/default.vue'
 import LogDetails from '../../../../examples/timestamp/log-details.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import Timestamp from './timestamp.vue'
 import { relativeText, toDate } from './timestamp-format'
 
@@ -17,7 +17,7 @@ const ISO = '2026-11-14T12:04:31.000Z'
 const inProvider = (props: Record<string, unknown>, provider: Record<string, unknown> = {}) =>
   defineComponent({
     setup: () => () =>
-      h(WebkitProvider, { now: NOW, timeZone: 'UTC', ...provider }, () => h(Timestamp, props))
+      h(ConfigProvider, { now: NOW, timeZone: 'UTC', ...provider }, () => h(Timestamp, props))
   })
 
 const panel = () => document.body.querySelector<HTMLElement>('[data-testid="timestamp__panel"]')
@@ -47,7 +47,7 @@ describe('Timestamp', () => {
     const now = ref(NOW)
     const Host = defineComponent({
       setup: () => () =>
-        h(WebkitProvider, { now: now.value, timeZone: 'UTC' }, () =>
+        h(ConfigProvider, { now: now.value, timeZone: 'UTC' }, () =>
           h(Timestamp, { value: VALUE, format: 'relative' })
         )
     })

@@ -682,10 +682,10 @@
       "removed": "use DateRangePicker with relative-options for preset ranges"
     },
     "showTimeZone": {
-      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+      "removed": "the time zone selector is DateRangePicker's; set ConfigProvider time-zone for the app's zone"
     },
     "showTimezone": {
-      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+      "removed": "the time zone selector is DateRangePicker's; set ConfigProvider time-zone for the app's zone"
     },
     "timeZones": {
       "removed": "the time zone selector is DateRangePicker's"
@@ -709,10 +709,10 @@
       "removed": "use DateRangePicker with relative-options for preset ranges"
     },
     "showTimeZone": {
-      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+      "removed": "the time zone selector is DateRangePicker's; set ConfigProvider time-zone for the app's zone"
     },
     "showTimezone": {
-      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+      "removed": "the time zone selector is DateRangePicker's; set ConfigProvider time-zone for the app's zone"
     },
     "timeZones": {
       "removed": "the time zone selector is DateRangePicker's"

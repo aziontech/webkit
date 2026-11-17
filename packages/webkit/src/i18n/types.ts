@@ -29,7 +29,7 @@ type Widen<T> = {
 /** The shape every locale catalog implements: the keys of the English catalog. */
 export type Messages = Widen<typeof en>
 
-/** A partial catalog, deep-merged over a built-in locale by `WebkitProvider`. */
+/** A partial catalog, deep-merged over a built-in locale by `ConfigProvider`. */
 export type PartialMessages = {
   [G in keyof Messages]?: Partial<Messages[G]>
 }

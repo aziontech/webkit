@@ -23,7 +23,7 @@
   export interface ConversationHistoryProps {
     /** Conversations, any order; they are sorted newest first inside their group. */
     items?: ConversationHistoryItem[]
-    /** Reference time for the groups. Empty uses the nearest WebkitProvider now, then the current time; set either when the list is rendered on the server. */
+    /** Reference time for the groups. Empty uses the nearest ConfigProvider now, then the current time; set either when the list is rendered on the server. */
     now?: string | number | Date
     /** Shows a Delete button on each row that emits `remove`. */
     removable?: boolean

@@ -92,7 +92,7 @@ test('catalog aliases carry market words only, never retired names', () => {
   assert.equal(aliases.comparison, undefined)
   assert.equal(aliases.cta, 'call-to-action')
   assert.equal(aliases['segmented-control'], 'toggle-group')
-  assert.equal(aliases['config-provider'], 'webkit-provider')
+  assert.equal(aliases['locale-provider'], 'config-provider')
   assert.equal(aliases['alert-dialog'], 'confirm-dialog')
   assert.equal(aliases['input-otp'], 'otp-input')
   assert.equal(aliases['logo-cloud'], 'logo-wall')
@@ -114,6 +114,7 @@ test('retired v6 names map to their new export in catalog.renamed', () => {
   assert.equal(renamed['radio-cards'], 'radio-group')
   assert.equal(renamed['radio-button'], 'radio-group')
   assert.equal(renamed.menu, undefined)
+  assert.equal(renamed['webkit-provider'], 'config-provider')
   for (const to of Object.values(renamed)) assert.ok(subpaths.includes(to), to)
 })
 

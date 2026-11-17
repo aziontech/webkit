@@ -1,7 +1,7 @@
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import Select from '@aziontech/webkit/select'
   import Timestamp from '@aziontech/webkit/timestamp'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
@@ -21,7 +21,7 @@
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :now="NOW"
     :time-zone="zone"
   >
@@ -52,5 +52,5 @@
         </li>
       </ul>
     </div>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

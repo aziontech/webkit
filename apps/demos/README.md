@@ -38,7 +38,7 @@ outside the layout, with their own header and no rail.
 
 The bar at the bottom corner switches the flow, the theme (light / dark), the direction (left to
 right / right to left) and the language (English / Português, through the opt-in
-`@aziontech/webkit/locales/pt-BR` catalog on `WebkitProvider`). The settings can also be given in
+`@aziontech/webkit/locales/pt-BR` catalog on `ConfigProvider`). The settings can also be given in
 the URL: `?theme=light&dir=rtl&lang=pt-BR`.
 
 ## How it was built

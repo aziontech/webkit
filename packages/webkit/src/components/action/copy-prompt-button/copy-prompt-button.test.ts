@@ -9,7 +9,7 @@ import DefaultExample from '../../../../examples/copy-prompt-button/default.vue'
 import DisabledExample from '../../../../examples/copy-prompt-button/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import CopyPromptButton from './copy-prompt-button.vue'
 
 const PROMPT = 'Set up the Azion CLI and link this project.'
@@ -172,7 +172,7 @@ describe('CopyPromptButton', () => {
     const InProvider = defineComponent({
       setup: () => () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { catalogs: LOCALES, locale: 'pt-BR' },
           { default: () => h(CopyPromptButton, { value: PROMPT }) }
         )

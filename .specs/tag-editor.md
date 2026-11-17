@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 8494399492c7bd531c7242a24764c32685255a0efb257a1c317080bfb66c240c
+checksum: e3f8726c99d1caeee62f4f4e5c084c01768b8c51e5e08d0530c2d1155348e2da
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # TagEditor — Component Spec
@@ -153,7 +153,7 @@ _none_
 | `tagEditor.keyInvalid`       | Use letters, numbers, spaces and + - = . _ : / @ only. | —                                |
 | `tagEditor.tooLong`          | Use {max} characters or fewer.                         | `keyMaxLength`, `valueMaxLength` |
 
-- Formatting: the tags left go through the plural rules of the active locale (the nearest `WebkitProvider`'s, else the device locale). Allowed key characters include letters of every script (`\p{L}`).
+- Formatting: the tags left go through the plural rules of the active locale (the nearest `ConfigProvider`'s, else the device locale). Allowed key characters include letters of every script (`\p{L}`).
 - What the person sends stays unambiguous: `v-model:tags` is a list of `{ key, value }` pairs (a server reads each as `key=value`), whatever the language of the labels.
 
 ## Right-to-left

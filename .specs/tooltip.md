@@ -7,9 +7,9 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: a52e86f0e2399989a5573709dfba70c745dd1fc25e44ee0a0be4e3b88dae0962
+checksum: 4b9ff5d6e8f4087469f214e2e337a68243ac211e932cd51b7746bbbb4bd25fb3
 created: 2026-06-02
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Tooltip — Component Spec
@@ -150,7 +150,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.
 - Touch target ≥40×40 px on the trigger (the consumer's responsibility — flag in docs).
-- Teleported content: the teleported `role="tooltip"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported `role="tooltip"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

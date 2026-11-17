@@ -10,11 +10,11 @@
   import { en } from '../../../locales/en'
 
   defineOptions({
-    name: 'WebkitProvider',
+    name: 'ConfigProvider',
     inheritAttrs: false
   })
 
-  export interface WebkitProviderProps {
+  export interface ConfigProviderProps {
     /** BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty follows the device locale, `en-US` on the server and until mount. */
     locale?: string
     /** Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English. */
@@ -29,7 +29,7 @@
     timeZone?: string
   }
 
-  const props = withDefaults(defineProps<WebkitProviderProps>(), {
+  const props = withDefaults(defineProps<ConfigProviderProps>(), {
     locale: '',
     catalogs: undefined,
     messages: undefined,
@@ -54,7 +54,7 @@
     timeZone: () => props.timeZone
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'webkit-provider')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'config-provider')
 </script>
 
 <template>

@@ -7,7 +7,7 @@ import Default from '../../../../examples/console-showcase-section/default.vue'
 import Diagram from '../../../../examples/console-showcase-section/diagram.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import ConsoleShowcaseSection from './console-showcase-section.vue'
 
 const tabs = [
@@ -85,7 +85,7 @@ describe('ConsoleShowcaseSection', () => {
     const { getByRole } = render({
       render: () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { locale: 'pt-BR', catalogs: LOCALES },
           {
             default: () =>

@@ -1,15 +1,15 @@
 ---
-name: webkit-provider
+name: config-provider
 category: provider
 structure: monolithic
 status: implemented
-checksum: 1a7ac07917b2d86d56c4c9338bd780937399b3d3aa04365dd4e9773a435080fa
-spec_version: 5
+checksum: e4fec29cb05d6e2c392056a188f5993085d6c9d2936bc49d20036e724b9e52b3
+spec_version: 6
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
-# WebkitProvider — Component Spec
+# ConfigProvider — Component Spec
 
 ## Purpose
 
@@ -35,7 +35,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 
 ## Best practices
 
-- Mount one `WebkitProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.
+- Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.
 - Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.
 - Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.
@@ -48,16 +48,16 @@ Sets the language and text direction of every WebKit component below it. It wrap
 <script setup>
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import Pagination from '@aziontech/webkit/pagination'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     locale="pt-BR"
     :catalogs="{ 'pt-BR': ptBR }"
   >
     <Pagination :total="120" />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 

@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/date-picker/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import Field from '../field/field.vue'
 import FieldDescription from '../field/field-description/field-description.vue'
 import FieldLabel from '../field/field-label/field-label.vue'
@@ -698,7 +698,7 @@ describe('DatePicker', () => {
       const component = defineComponent({
         setup: () => () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { locale, catalogs: LOCALES },
             {
               default: () =>
@@ -844,11 +844,11 @@ describe('DatePicker', () => {
   })
 
   describe('reference time', () => {
-    it('opens on the WebkitProvider now and marks that day as today', async () => {
+    it('opens on the ConfigProvider now and marks that day as today', async () => {
       const { getByTestId } = render(
         defineComponent({
           setup: () => () =>
-            h(WebkitProvider, { now: '2030-03-15T12:00:00' }, { default: () => h(DatePicker, {}) })
+            h(ConfigProvider, { now: '2030-03-15T12:00:00' }, { default: () => h(DatePicker, {}) })
         })
       )
       const popover = await openDatePicker(getByTestId)

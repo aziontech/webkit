@@ -6,7 +6,7 @@ import { createApp, defineComponent, h, nextTick } from 'vue'
 import Default from '../../../../examples/toast/default.vue'
 import ProgressExample from '../../../../examples/toast/progress.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import Toast, { toast, Toaster, ToastPlugin, useToast, useToastStore } from './index'
 import ToastAction from './toast-action/toast-action.vue'
 import ToastClose from './toast-close/toast-close.vue'
@@ -319,11 +319,11 @@ describe('Toast', () => {
         expect(start!.style.right).toBe('var(--spacing-md)')
       })
 
-      it('mirrors under an rtl WebkitProvider', async () => {
+      it('mirrors under an rtl ConfigProvider', async () => {
         render(
           defineComponent({
             setup: () => () =>
-              h(WebkitProvider, { dir: 'rtl' }, () =>
+              h(ConfigProvider, { dir: 'rtl' }, () =>
                 h(Toaster, { position: 'bottom-end', duration: 0 })
               )
           })

@@ -1,8 +1,8 @@
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import DateRangePicker from '@aziontech/webkit/date-range-picker'
   import { es } from '@aziontech/webkit/locales/es'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
 
   const range = ref({
@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <WebkitProvider :catalogs="{ 'pt-BR': ptBR, es }">
+  <ConfigProvider :catalogs="{ 'pt-BR': ptBR, es }">
     <div class="flex flex-col items-start gap-(--spacing-sm)">
       <DateRangePicker
         v-model="range"
@@ -25,5 +25,5 @@
         Sent to the server: {{ range.start }} to {{ range.end }}
       </p>
     </div>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

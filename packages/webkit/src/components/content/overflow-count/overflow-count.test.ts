@@ -7,7 +7,7 @@ import Default from '../../../../examples/overflow-count/default.vue'
 import LongList from '../../../../examples/overflow-count/long-list.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import OverflowCount from './overflow-count.vue'
 
 const byTestId = (id: string): HTMLElement | null =>
@@ -121,7 +121,7 @@ describe('OverflowCount', () => {
     const Host = defineComponent({
       render: () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { locale: 'pt-BR', catalogs: LOCALES },
           { default: () => h(OverflowCount, { items: ['a', 'b'] }) }
         )

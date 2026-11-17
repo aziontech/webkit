@@ -193,7 +193,7 @@ move with it (`ClientQuotesItem` → `ClientQuotesSectionItem`; the codemod rewr
 `JobPostingSection` → `JobPostingSectionSection` and `PlanComparisonSection` →
 `PlanComparisonSectionSection` by hand, as those old type names are now the component names), its
 test id is the new name, and its locale namespace follows (`siteHeader.*` → `siteHeaderSection.*`,
-`listingIndex.*` → `listingIndexSection.*`, … in a `WebkitProvider` `messages` override). Site page
+`listingIndex.*` → `listingIndexSection.*`, … in a `ConfigProvider` `messages` override). Site page
 JSON that still names an old `_id` keeps rendering: `SitePage` maps every old section id in the
 table to its new one, and translates the renamed props and values of every section in `v6-props.json`
 (`{ _id: 'hero-band', props: { kind: 'centered' } }` renders `hero-section` with `variant: 'center'`);
@@ -1045,6 +1045,11 @@ These shipped only in the 6.0 previews (`feat/webkit-ai-ready`), never in 5.x; t
   `secondary-href` become `:secondary-action="{ label, href }"`. The codemod lists the import as `MANUAL`.
 - `CapabilityGridSection` and `ConsoleShowcaseSection`: `actions` → `primaryAction` and `secondaryAction` (one object
   each, same `{ label, href, trailing?, target?, variant? }` shape). The codemod lists it as `MANUAL`.
+- `WebkitProvider` (`@aziontech/webkit/webkit-provider`) → `ConfigProvider`
+  (`@aziontech/webkit/config-provider`), the name Reka UI, Element Plus, Naive UI and Ant Design
+  use for the same job. Same props (`locale`, `catalogs`, `messages`, `dir`, `now`, `time-zone`);
+  the test id is `config-provider`. The codemod rewrites the import, the tag and
+  `WebkitProviderProps` → `ConfigProviderProps`.
 - `UploadProgress`: `v-model:collapsed` → `v-model:open`, inverted (`open = !collapsed`).
 - `ConsoleLayout`: `v-model:navigation-expanded` → `v-model:navigation-open` (same value);
   `Wizard`: `v-model:activeStep` → `v-model`; the codemod rewrites both.
@@ -1749,22 +1754,22 @@ split view or a card these change:
 
 ### Languages
 
-v6 adds `WebkitProvider` (`@aziontech/webkit/webkit-provider`). Mount it once at the app root with the
+v6 adds `ConfigProvider` (`@aziontech/webkit/config-provider`). Mount it once at the app root with the
 user's locale:
 
 ```vue
 <script setup>
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     locale="pt-BR"
     :catalogs="{ 'pt-BR': ptBR }"
   >
     <App />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 
@@ -1889,7 +1894,7 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   picker becomes `DateRangePicker`, which owns every range: relative or absolute, and whole days
   with `range-selector-mode="absolute-only" :show-time="false"`. Its `v-model` is
   `{ type: 'absolute', start, end }` with ISO instants instead of `{ start, end }` Dates.
-  `DateRangePicker` now formats in `WebkitProvider`'s `time-zone` when its own is unbound. The
+  `DateRangePicker` now formats in `ConfigProvider`'s `time-zone` when its own is unbound. The
   locale catalog group `calendar` is renamed `datePicker`, and its placeholder reads "Select a date".
 - **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
   `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
@@ -2024,7 +2029,7 @@ own scripts that open `node_modules/@aziontech/webkit/catalog.json`. The file is
 
 Component categories are singular and match the source folders: `actions` → `action`, `inputs` →
 `input`, `sections` → `section`, `documentation` → `docs`, and `utils` is gone (`spinner` is
-`feedback`, `webkit-provider` is `provider`). The `category` of every `imports` entry and the
+`feedback`, `config-provider` is `provider`). The `category` of every `imports` entry and the
 `title` of every example (`Components/Action/Button`, was `Components/Primitives/Actions/Button`)
 follow.
 

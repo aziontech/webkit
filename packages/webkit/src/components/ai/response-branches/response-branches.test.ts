@@ -5,7 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/response-branches/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import ResponseBranches from './response-branches.vue'
 
 afterEach(() => cleanup())
@@ -68,7 +68,7 @@ describe('ResponseBranches', () => {
   })
 
   it('reads its strings from the locale catalog', () => {
-    const view = render(WebkitProvider, {
+    const view = render(ConfigProvider, {
       props: { locale: 'pt-BR', catalogs: LOCALES },
       slots: { default: () => h(Harness) }
     })

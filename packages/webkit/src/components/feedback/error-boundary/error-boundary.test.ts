@@ -7,7 +7,7 @@ import CustomFallback from '../../../../examples/error-boundary/custom-fallback.
 import Default from '../../../../examples/error-boundary/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import ErrorBoundary from './error-boundary.vue'
 
 const broken = ref(false)
@@ -171,7 +171,7 @@ describe('ErrorBoundary', () => {
         defineComponent({
           setup: () => () =>
             h(
-              WebkitProvider,
+              ConfigProvider,
               { locale: 'pt-BR', catalogs: LOCALES },
               { default: () => h(ErrorBoundary, null, { default: () => h(Region) }) }
             )
@@ -190,7 +190,7 @@ describe('ErrorBoundary', () => {
         defineComponent({
           setup: () => () =>
             h(
-              WebkitProvider,
+              ConfigProvider,
               { locale: 'en', dir: 'rtl' },
               { default: () => h(ErrorBoundary, null, { default: () => h(Region) }) }
             )

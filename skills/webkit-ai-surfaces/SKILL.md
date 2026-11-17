@@ -118,7 +118,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
   ``Allow `azion deploy --env production`?``; the approve button is the verb (Deploy, Delete).
 - Built-in strings (Thinking, Thought for N seconds, Sources, Helpful, Not helpful, Feedback
   submitted, Approved, Denied, Request expired) come in English, Portuguese and Spanish from the
-  `WebkitProvider` locale.
+  `ConfigProvider` locale.
 - Follow `/webkit-microcopy` for everything else.
 
 ## Enforcement (honest)

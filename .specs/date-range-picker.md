@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 9e34e8637df801d3c422de64fbd51c5c24f62590960731bc0e2ef1ae53ca5a3d
+checksum: 008df40d2c8aa0356b69ded71ad1a862bd787040a188249726cdaa24f25dafa0
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # DateRangePicker — Component Spec
@@ -32,8 +32,8 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 ## Related
 
 - `date-picker` — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.
-- `timestamp` — displays a moment in time; both read the `WebkitProvider` `timeZone`.
-- `webkit-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.
+- `timestamp` — displays a moment in time; both read the `ConfigProvider` `timeZone`.
+- `config-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.
 - `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
 - `property-filter` — the query bar it sits next to in an events toolbar.
 - `chart` — the histogram whose brush usually writes an absolute range back into this picker.
@@ -41,7 +41,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 ## Best practices
 
 - Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them. `useTimeRange(value)` from `@aziontech/webkit/use-time-range` returns `from` and `to` and holds the window until `refresh()`; its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.
-- Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `WebkitProvider` covers every picker below it; the `now` prop overrides it for one picker.
+- Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `ConfigProvider` covers every picker below it; the `now` prop overrides it for one picker.
 - Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.
 - Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.
 - Name the picker after what it filters (`aria-label="Events time range"`).
@@ -79,7 +79,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 | `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'`                   | false    | Which kinds of range the panel offers.                                                                                  |
 | `min`               | `Date`                                            | undefined                     | false    | Earliest instant an absolute range may start at.                                                                        |
 | `max`               | `Date`                                            | undefined                     | false    | Latest instant an absolute range may end at.                                                                            |
-| `now`               | `Date`                                            | undefined                     | false    | Reference clock for relative ranges and stepping. Unset uses the nearest `WebkitProvider`'s `now`, then the real clock. |
+| `now`               | `Date`                                            | undefined                     | false    | Reference clock for relative ranges and stepping. Unset uses the nearest `ConfigProvider`'s `now`, then the real clock. |
 | `placeholder`       | `string`                                          | `''`                          | false    | Trigger text with no range. Empty uses the locale catalog.                                                              |
 | `ariaLabel`         | `string`                                          | `''`                          | false    | Accessible name of the trigger. Empty uses the Field label inside a `Field`, else the locale catalog.                   |
 | `disabled`          | `boolean`                                         | `false`                       | false    | Disables the trigger and the step buttons.                                                                              |
@@ -176,7 +176,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 | `dateRangePicker.outOfBounds`             | Choose a range inside the allowed dates.      | —                      |
 | `dateRangePicker.invalidAmount`           | Enter a whole number greater than 0.          | —                      |
 
-- Active locale: the nearest `WebkitProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
+- Active locale: the nearest `ConfigProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
 - What the person sends stays unambiguous: an absolute `v-model` carries `start` and `end` as ISO 8601 instants (`2026-11-15T00:00:00.000Z`) and a relative one carries `amount` and `unit`, whatever the display format.
 - Formatting: the absolute range goes through `Intl.DateTimeFormat` in the active locale; the relative labels through the plural rules of the active locale; the grid, the date and time fields and the time zone selector use the `datePicker` keys.
 
@@ -186,7 +186,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 - Icons: the Previous and Next chevrons mirror (`rtl:-scale-x-100`); the clock and calendar glyphs do not.
 - Keyboard: the grid's arrow keys follow the reading direction (from `date-picker`).
 - User data: the range text sits in `<bdi>`.
-- Teleported content: the panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`).
+- Teleported content: the panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`).
 
 ## Responsive
 

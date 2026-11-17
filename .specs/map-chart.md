@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 7f244da8a80f2ef3f2a281338f8ffdcbb43658683d59a55f0f87a93dcdd9727b
+checksum: 68b02348ee5be7ad8c2f880ad56a0144884219a51f515986193ccd1d5ff6ecd9
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # MapChart — Component Spec
@@ -157,7 +157,7 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
 | `mapChart.summary`         | `{count} places on the map, {total} in total.` (plural) | `ariaLabel` (caption) |
 | `mapChart.legend`          | `From {min} to {max}`                                   | —                     |
 
-- Formatting: `Intl.NumberFormat` compact values and `Intl.DisplayNames` (type `region`) country names, with the locale from `WebkitProvider`.
+- Formatting: `Intl.NumberFormat` compact values and `Intl.DisplayNames` (type `region`) country names, with the locale from `ConfigProvider`.
 
 ## Right-to-left
 

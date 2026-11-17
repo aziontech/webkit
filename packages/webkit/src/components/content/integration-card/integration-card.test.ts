@@ -8,7 +8,7 @@ import Featured from '../../../../examples/integration-card/featured.vue'
 import Installed from '../../../../examples/integration-card/installed.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import IntegrationCard from './integration-card.vue'
 
 describe('IntegrationCard', () => {
@@ -129,7 +129,7 @@ describe('IntegrationCard', () => {
       defineComponent({
         setup: () => () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { locale: 'pt-BR', catalogs: LOCALES },
             { default: () => h(IntegrationCard, { ...tile, installed: true }) }
           )

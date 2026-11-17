@@ -1,4 +1,5 @@
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
@@ -7,7 +8,6 @@
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const HOUR = 3_600_000
   const NOW = Date.UTC(2026, 10, 10, 12)
@@ -63,7 +63,7 @@
 </script>
 
 <template>
-  <WebkitProvider :now="NOW">
+  <ConfigProvider :now="NOW">
     <DataTable
       :data="rows"
       :columns="columns"
@@ -147,5 +147,5 @@
         </TableCellActions>
       </template>
     </DataTable>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

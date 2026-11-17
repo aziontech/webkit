@@ -8,7 +8,7 @@ import Disabled from '../../../../examples/date-range-picker/disabled.vue'
 import TimeZone from '../../../../examples/date-range-picker/time-zone.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import Field from '../field/field.vue'
 import FieldDescription from '../field/field-description/field-description.vue'
 import FieldLabel from '../field/field-label/field-label.vue'
@@ -391,7 +391,7 @@ describe('DateRangePicker', () => {
     const Host = defineComponent({
       setup: () => () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { locale: 'pt-BR', dir: 'rtl', catalogs: LOCALES },
           {
             default: () =>
@@ -415,14 +415,14 @@ describe('DateRangePicker', () => {
     await expectNoA11yViolations(popover)
   })
 
-  describe('reference clock from WebkitProvider', () => {
+  describe('reference clock from ConfigProvider', () => {
     const host = (pickerProps: Record<string, unknown>) => {
       const values: (DateRangeValue | null)[] = []
       const view = render(
         defineComponent({
           setup: () => () =>
             h(
-              WebkitProvider,
+              ConfigProvider,
               { catalogs: LOCALES, now: NOW },
               {
                 default: () =>
@@ -445,7 +445,7 @@ describe('DateRangePicker', () => {
         defineComponent({
           setup: () => () =>
             h(
-              WebkitProvider,
+              ConfigProvider,
               { timeZone: 'Asia/Tokyo' },
               {
                 default: () =>

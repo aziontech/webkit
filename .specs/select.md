@@ -7,9 +7,9 @@ spec_version: 14
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: adf91f92fa8a7804eea9b800661a0aa9df4fbdb48896e2d2a1fc31b0fdbd7c09
+checksum: 9887bbdf39854b001bdaf410e5c403f9ab7f0dfa53fcb7a46a411918deec6752
 created: 2026-06-15
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Select — Component Spec
@@ -203,7 +203,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
 - Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
-- Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

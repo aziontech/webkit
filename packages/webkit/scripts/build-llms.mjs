@@ -866,7 +866,7 @@ function foundations(catalog) {
       summary:
         'Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.',
       body: [
-        'WebKit ships every built-in string in three catalogs: `en` (built into the provider), `pt-BR` and `es` (opt-in entries `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es`). Wrap the app in `WebkitProvider` with a `locale` and the catalogs it offers (`:catalogs="{ \'pt-BR\': ptBR, es }"`) and every component follows it; `useLocale()` from `@aziontech/webkit/use-locale` gives your own code the same `t`, `dir` and `Intl` formatters.',
+        'WebKit ships every built-in string in three catalogs: `en` (built into the provider), `pt-BR` and `es` (opt-in entries `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es`). Wrap the app in `ConfigProvider` with a `locale` and the catalogs it offers (`:catalogs="{ \'pt-BR\': ptBR, es }"`) and every component follows it; `useLocale()` from `@aziontech/webkit/use-locale` gives your own code the same `t`, `dir` and `Intl` formatters.',
         section(usage, /^## App-level setup/),
         rule('webkit-strings')
       ]

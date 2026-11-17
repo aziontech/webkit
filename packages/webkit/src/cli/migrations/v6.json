@@ -679,6 +679,11 @@
       "to": "template-gallery-section",
       "from": "TemplateGallery",
       "binding": "TemplateGallerySection"
+    },
+    "webkit-provider": {
+      "to": "config-provider",
+      "from": "WebkitProvider",
+      "binding": "ConfigProvider"
     }
   },
   "removed": {
@@ -1175,7 +1180,8 @@
     "PopoverPlacementSide": "PopoverSide",
     "HoverCardPlacement": "HoverCardSide",
     "HoverCardPlacementSide": "HoverCardSide",
-    "HintPlacement": "HintSide"
+    "HintPlacement": "HintSide",
+    "WebkitProviderProps": "ConfigProviderProps"
   },
   "legacy": {
     "major": 3,
@@ -1340,7 +1346,7 @@
       "paginator": "PrimeVue Paginator (first, rows, totalRecords); use Pagination",
       "password": "PrimeVue Password; use PasswordInput (+ PasswordRequirements)",
       "picklist": "PrimeVue PickList; use TransferList",
-      "plugin": "PrimeVue plugin; v6 needs no plugin, mount WebkitProvider at the app root",
+      "plugin": "PrimeVue plugin; v6 needs no plugin, mount ConfigProvider at the app root",
       "pricing-card": "work-in-progress card; use CardPricing",
       "prime-tag": "PrimeVue Tag; use Tag",
       "progressbar": "PrimeVue ProgressBar; use Progress",

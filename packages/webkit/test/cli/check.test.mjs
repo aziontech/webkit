@@ -198,7 +198,7 @@ test('check passes a wired project and enforces --max-warnings', () => {
   const dir = initialised({
     'src/main.ts': "import './webkit.css'\n",
     'src/App.vue':
-      '<script setup>\nimport WebkitProvider from \'@aziontech/webkit/webkit-provider\'\nimport Button from \'@aziontech/webkit/button\'\n</script>\n<template><WebkitProvider><Button label="Go" class="ms-2" /></WebkitProvider></template>\n'
+      '<script setup>\nimport ConfigProvider from \'@aziontech/webkit/config-provider\'\nimport Button from \'@aziontech/webkit/button\'\n</script>\n<template><ConfigProvider><Button label="Go" class="ms-2" /></ConfigProvider></template>\n'
   })
   try {
     const r = cliJson(dir, 'check', '--no-lint')

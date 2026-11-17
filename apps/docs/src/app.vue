@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import { es } from '@aziontech/webkit/locales/es'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { getCurrentInstance, onMounted, useSSRContext } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -38,7 +38,7 @@
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :locale="settings.locale"
     :catalogs="catalogs"
     :dir="settings.dir"
@@ -48,5 +48,5 @@
     <DocsShell v-else>
       <RouterView />
     </DocsShell>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

@@ -24,7 +24,7 @@ import Popover from '../components/overlay/popover/popover.vue'
 import PopoverContent from '../components/overlay/popover/popover-content/popover-content.vue'
 import PopoverTrigger from '../components/overlay/popover/popover-trigger/popover-trigger.vue'
 import Tooltip from '../components/overlay/tooltip/tooltip.vue'
-import WebkitProvider from '../components/provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../components/provider/config-provider/config-provider.vue'
 import { hostable } from './hostable'
 
 const Select = hostable(SelectRoot)
@@ -179,17 +179,17 @@ const panels = () =>
     ])
   )
 
-describe('overlays teleported to body keep the WebkitProvider dir and lang', () => {
+describe('overlays teleported to body keep the ConfigProvider dir and lang', () => {
   afterEach(() => {
     document.body.innerHTML = ''
   })
 
-  it('Dialog, Popover, Tooltip, Select and DropdownMenu resolve to rtl and ar under <WebkitProvider locale="ar">', async () => {
-    render(defineComponent({ setup: () => () => h(WebkitProvider, { locale: 'ar' }, overlays) }))
+  it('Dialog, Popover, Tooltip, Select and DropdownMenu resolve to rtl and ar under <ConfigProvider locale="ar">', async () => {
+    render(defineComponent({ setup: () => () => h(ConfigProvider, { locale: 'ar' }, overlays) }))
     await waitFor(() => expect(Object.values(panels()).every(Boolean)).toBe(true))
     for (const [name, panel] of Object.entries(panels())) {
       const host = panel?.closest('[dir]')
-      expect(host?.closest('[data-testid="webkit-provider"]'), name).toBeNull()
+      expect(host?.closest('[data-testid="config-provider"]'), name).toBeNull()
       expect(host?.getAttribute('dir'), name).toBe('rtl')
       expect(panel?.closest('[lang]')?.getAttribute('lang'), name).toBe('ar')
     }

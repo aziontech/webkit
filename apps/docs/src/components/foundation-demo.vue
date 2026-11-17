@@ -1,9 +1,9 @@
 <script setup lang="ts">
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import { es } from '@aziontech/webkit/locales/es'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import Pagination from '@aziontech/webkit/pagination'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import tokens from 'virtual:docs-tokens'
   import { ref } from 'vue'
 
@@ -43,7 +43,7 @@
       aria-label="Demo direction"
       size="small"
     />
-    <WebkitProvider
+    <ConfigProvider
       :locale="kind === 'locale' ? locale : 'en'"
       :catalogs="catalogs"
       :dir="kind === 'direction' ? dir : 'auto'"
@@ -56,7 +56,7 @@
         :page-size-options="[10, 25, 50]"
         :sibling-count="1"
       />
-    </WebkitProvider>
+    </ConfigProvider>
   </section>
   <section
     v-else

@@ -1,6 +1,6 @@
 {
-  "component": "webkit-provider",
-  "title": "Components/Provider/WebkitProvider",
+  "component": "config-provider",
+  "title": "Components/Provider/ConfigProvider",
   "examples": [
     {
       "name": "Default",

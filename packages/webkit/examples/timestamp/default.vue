@@ -1,13 +1,13 @@
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import Timestamp from '@aziontech/webkit/timestamp'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
   const VALUE = '2026-11-14T12:04:31Z'
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :now="NOW"
     time-zone="America/New_York"
   >
@@ -31,5 +31,5 @@
         />
       </dd>
     </dl>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

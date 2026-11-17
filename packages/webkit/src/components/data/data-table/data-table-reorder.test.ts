@@ -6,7 +6,7 @@ import ReorderableRows from '../../../../examples/data-table/reorderable-rows.vu
 import { expectNoA11yViolations } from '../../../test/axe'
 import { hostable } from '../../../test/hostable'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import DataTableRoot from './data-table.vue'
 
 const DataTable = hostable(DataTableRoot)
@@ -168,7 +168,7 @@ describe('DataTable', () => {
       const Host = defineComponent({
         render: () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { locale: 'pt-BR', catalogs: LOCALES },
             {
               default: () =>

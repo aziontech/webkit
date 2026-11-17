@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 10
-checksum: 46b69b1511a5c1eac1ecd6146eed047c60e033f2b95766afeab7e819abbacf54
+checksum: c6ce066e34d4d532854797286f0280eba6982425a4c2aecfbcefd3e8795259f0
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -180,7 +180,7 @@ No element sets an inline `transition`, so `motion-reduce:transition-none` wins 
 - `motion-reduce:transition-none` on every animated element.
 - Touch target ≥40×40 px where the control is interactive.
 - Overlay: a modal drawer (the default) always renders its overlay, so the page behind is never clickable while it is open. Tests: `drawer.test.ts` › overlay.
-- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

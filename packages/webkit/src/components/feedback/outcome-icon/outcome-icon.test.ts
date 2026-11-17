@@ -7,7 +7,7 @@ import Default from '../../../../examples/outcome-icon/default.vue'
 import Sizes from '../../../../examples/outcome-icon/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import OutcomeIcon from './outcome-icon.vue'
 
 describe('OutcomeIcon', () => {
@@ -52,7 +52,7 @@ describe('OutcomeIcon', () => {
     const Host = defineComponent({
       render: () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { locale: 'pt-BR', catalogs: LOCALES },
           { default: () => h(OutcomeIcon, { severity: 'danger' }) }
         )

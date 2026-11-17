@@ -1084,8 +1084,8 @@
     "limit": "25.2 KB"
   },
   {
-    "name": "webkit-provider",
-    "path": "src/components/provider/webkit-provider/webkit-provider.vue",
+    "name": "config-provider",
+    "path": "src/components/provider/config-provider/config-provider.vue",
     "limit": "10.9 KB"
   },
   {

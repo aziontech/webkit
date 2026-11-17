@@ -7,7 +7,7 @@ import DefaultExample from '../../../../examples/doc-agent-card/default.vue'
 import NarrowExample from '../../../../examples/doc-agent-card/narrow.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import DocAgentCard from './doc-agent-card.vue'
 
 const PROMPT = 'Set up the Azion CLI.'
@@ -84,7 +84,7 @@ describe('DocAgentCard', () => {
     const InProvider = defineComponent({
       setup: () => () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { catalogs: LOCALES, locale: 'pt-BR' },
           { default: () => h(DocAgentCard, { prompt: PROMPT }) }
         )

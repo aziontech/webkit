@@ -7,7 +7,7 @@ import Default from '../../../../examples/conversation-history/default.vue'
 import States from '../../../../examples/conversation-history/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import ConversationHistory from './conversation-history.vue'
 
 afterEach(() => cleanup())
@@ -73,7 +73,7 @@ describe('ConversationHistory', () => {
   })
 
   it('reads its strings from the locale catalog', () => {
-    const view = render(WebkitProvider, {
+    const view = render(ConfigProvider, {
       props: { locale: 'pt-BR', catalogs: LOCALES },
       slots: { default: () => h(ConversationHistory, { items, now, removable: true }) }
     })
@@ -100,7 +100,7 @@ describe('ConversationHistory', () => {
     await expectNoA11yViolations(states.container)
   })
 
-  describe('reference time from WebkitProvider', () => {
+  describe('reference time from ConfigProvider', () => {
     const groupNames = (view: ReturnType<typeof render>) =>
       within(view.getByRole('navigation', { name: 'Conversation history' }))
         .getAllByRole('list')
@@ -109,7 +109,7 @@ describe('ConversationHistory', () => {
         )
 
     it('groups against the provider now when the now prop is unset', () => {
-      const view = render(WebkitProvider, {
+      const view = render(ConfigProvider, {
         props: { catalogs: LOCALES, now },
         slots: { default: () => h(ConversationHistory, { items }) }
       })
@@ -123,7 +123,7 @@ describe('ConversationHistory', () => {
     })
 
     it('lets the now prop override the provider', () => {
-      const view = render(WebkitProvider, {
+      const view = render(ConfigProvider, {
         props: { catalogs: LOCALES, now: '2027-06-01T12:00:00' },
         slots: { default: () => h(ConversationHistory, { items, now }) }
       })

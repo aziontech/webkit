@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 565443707c9b78c534e2b3329b777930adad0f32b4e19d103c78f3ab8a839247
+checksum: 39a74925d6980a877c61226a2771e586ae269e3c193d9a25f618e94ae73b02b1
 created: 2026-08-21
 last_updated: 2026-11-17
 ---
@@ -133,7 +133,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 - The chip copy adds **no tab stops**: it is a pointer shortcut over text that stays selectable the ordinary way, so a page of thirty chips does not become thirty stops. The tooltip is `role="tooltip"` and `pointer-events-none`.
 - `motion-reduce:transition-none` on the descendant link transition.
 - Touch target: not applicable; the container is not interactive.
-- Teleported content: the teleported copy tip binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported copy tip binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

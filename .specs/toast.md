@@ -9,9 +9,9 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 64e63822f0c7a67de43c6901c32373d20249499ce20006061f03cd962e63e037
+checksum: dbc6e88d94f271bc481256475722c6db576e5edb0f2f25b4779329db27174aa4
 created: 2026-06-23
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Toast — Component Spec
@@ -291,7 +291,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 - `motion-reduce:animate-none` on the enter/leave fades and `motion-reduce:transition-none` on the move transition.
 - Touch target ≥40×40 px on the action and close controls (from `Button` / `IconButton` `size="small"`).
 - Progress: the bar is a `progressbar` named by the toast message; only the toast's arrival is announced, not each percentage step (the visible percentage is `aria-hidden`; the bar's value is read when the user reaches it).
-- Teleported content: each teleported toaster region binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: each teleported toaster region binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Internationalization
 
@@ -299,7 +299,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 | ------------- | -------------------- | ------------- |
 | `toast.close` | `Close notification` | —             |
 
-- Formatting: the `toast.progress` percentage uses `Intl.NumberFormat` (`style: 'percent'`, no decimals) with the locale from `WebkitProvider`; messages, descriptions and action labels come from the consumer.
+- Formatting: the `toast.progress` percentage uses `Intl.NumberFormat` (`style: 'percent'`, no decimals) with the locale from `ConfigProvider`; messages, descriptions and action labels come from the consumer.
 
 ## Right-to-left
 

@@ -7,9 +7,9 @@ spec_version: 23
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: f165a3a73b48a3c62d5d33646f2cdd8a3922944bd053074ae01598d72516ea09
+checksum: dca8577f97f6aab112fd7b5147417b8a978c6d1d5275c4e42294772415966c91
 created: 2026-06-16
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Table — Component Spec
@@ -20,7 +20,7 @@ The table's parts and its markup-only root. Compose the anatomy by hand (`Table.
 
 **What the compound carries.** `@aziontech/webkit/table` attaches only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar`), so a hand-composed table costs what its parts cost. The toolbar controls and the cell presets compose `Tooltip`, `DropdownMenu`, `Popover`, `Input` and `CopyButton`; each is imported from its own entry (`@aziontech/webkit/table-search`, `@aziontech/webkit/table-cell-status`, …) and is not attached to the compound, so a screen pays only for the ones it renders.
 
-**Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row).
+**Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row).
 
 **Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `TableAppliedFilter`, `TableFilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in [`data-table`](./data-table.md).
 
@@ -56,7 +56,7 @@ The table's parts and its markup-only root. Compose the anatomy by hand (`Table.
 - Compose `Table` by hand only for small, static tables; for repeated data use `data-table`, which renders through these parts.
 - Mark the row-actions cell `type="action"` with `frozen="end"` so it pins to the trailing edge, and give the principal cell `principal` (or `grow="2"`).
 - Name the table: a `Table.Caption` labels it (`aria-labelledby`), or pass `aria-label` on the root.
-- Give `TableCellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `WebkitProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.
+- Give `TableCellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `ConfigProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.
 - Import the root alone from `table-root`, or each part from its own entry (`table-row`), when only a few parts are used.
 
 ## Usage
@@ -143,7 +143,7 @@ Each sub-component is also a standalone import (`import TableRow from '@aziontec
 - `table-cell-id/table-cell-id.vue` — identifier preset: the value (`dir="ltr"`, tabular numbers, truncating) and a `CopyButton` pinned to the end edge named `Copy <resource> ID`. Props `value?: string | number`, `resource?: string`.
 - `table-cell-status/table-cell-status.vue` — status preset: one `Tag` (`size="medium"`, truncating). Props `label?: string` (empty renders a muted dash), `severity?: TagSeverity` (default `neutral`), `icon?: string`. Use it over a bare `Tag` in a cell: it is the shared empty-dash rule. Use `status-indicator` for a live dot plus text, and `severity-tag` for a log severity.
 - `table-cell-tags/table-cell-tags.vue` — tag list preset: rounded secondary tags, as many as fit the cell (measured with a `ResizeObserver` against a hidden ruler), the rest behind an `OverflowCount`. Props `items?: string[]` (empty renders a muted dash), `icon?: string`, `noun?: OverflowCountNoun` (default `tag` / `tags` from the catalog).
-- `table-cell-time/table-cell-time.vue` — last-modified preset: the author's `Avatar` (name on its tooltip; an email reads as a name) and a `<time datetime>` with the relative time (`just now` under 45 s), the absolute time on its tooltip and in visually hidden text. One shared minute clock re-renders every mounted cell; under a `WebkitProvider` with `now` set, every cell reads that reference time instead, so an example, a test or a server render prints the same text wherever and whenever it renders. Props `value?: string | number | Date` (an epoch with 15 digits or more reads as microseconds, like `Timestamp`, with which it shares parsing and relative phrasing; empty or unparseable renders a muted dash), `author?: string`, `avatarSrc?: string`.
+- `table-cell-time/table-cell-time.vue` — last-modified preset: the author's `Avatar` (name on its tooltip; an email reads as a name) and a `<time datetime>` with the relative time (`just now` under 45 s), the absolute time on its tooltip and in visually hidden text. One shared minute clock re-renders every mounted cell; under a `ConfigProvider` with `now` set, every cell reads that reference time instead, so an example, a test or a server render prints the same text wherever and whenever it renders. Props `value?: string | number | Date` (an epoch with 15 digits or more reads as microseconds, like `Timestamp`, with which it shares parsing and relative phrasing; empty or unparseable renders a muted dash), `author?: string`, `avatarSrc?: string`.
 - `table-cell-actions/table-cell-actions.vue` — row actions preset: a `DropdownMenu` (`side="bottom"` + `align="end"`) triggered by an outlined ellipsis `IconButton` named `Actions for <name>`. Props `name?: string`, `disabled?: boolean`. Emits `select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]`; `DropdownMenuItemValue` (`string | number`) is re-exported by `./table`. Default slot: `DropdownMenu.Group`s of `DropdownMenu.Item`s.
 
 <!-- Resulting layout:
@@ -271,7 +271,7 @@ The root itself is static. `TableFilter` animates through the `FilterMenu` or `P
 This component has no `type`/`size` on its root, so the canonical Types/Sizes examples do not apply. The data-driven scenarios live under [`data-table`](./data-table.md).
 
 - Default — the compound dot-notation form built by hand (`<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Body>` / `<Table.Cell>`); justified as the baseline of the hand-composed API.
-- Cell Presets — every preset in one table (link with destination, domain with `+N` and copy, ID, status, tags, last modified, actions), inside a `WebkitProvider` whose fixed `now` the sample dates count back from, so the relative times read the same on every render; justified because the presets are the shared cell vocabulary every list uses.
+- Cell Presets — every preset in one table (link with destination, domain with `+N` and copy, ID, status, tags, last modified, actions), inside a `ConfigProvider` whose fixed `now` the sample dates count back from, so the relative times read the same on every render; justified because the presets are the shared cell vocabulary every list uses.
 
 ## Constraints — DO NOT
 

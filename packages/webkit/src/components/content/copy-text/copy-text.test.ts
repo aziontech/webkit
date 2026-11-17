@@ -7,7 +7,7 @@ import LongValue from '../../../../examples/copy-text/long-value.vue'
 import Sizes from '../../../../examples/copy-text/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import CopyText from './copy-text.vue'
 
 function stubClipboardResolved() {
@@ -63,7 +63,7 @@ describe('CopyText', () => {
     })
 
     it('reads its default name from the locale catalog', () => {
-      const view = render(WebkitProvider, {
+      const view = render(ConfigProvider, {
         props: { locale: 'pt-BR', catalogs: LOCALES },
         slots: { default: () => h(CopyText, { value: '--spacing-2xl' }) }
       })
@@ -136,7 +136,7 @@ describe('CopyText', () => {
 
   describe('right-to-left', () => {
     it('keeps the value left-to-right inside a right-to-left subtree', () => {
-      const view = render(WebkitProvider, {
+      const view = render(ConfigProvider, {
         props: { dir: 'rtl' },
         slots: { default: () => h(CopyText, { value: 'p-(--spacing-2xl)' }) }
       })

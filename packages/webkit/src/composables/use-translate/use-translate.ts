@@ -18,7 +18,7 @@ import type {
   PluralMessage
 } from '../../i18n/types'
 
-/** What `WebkitProvider` hands down to every component below it. */
+/** What `ConfigProvider` hands down to every component below it. */
 export interface LocaleContext {
   /** BCP 47 locale tag. */
   locale: ComputedRef<string>
@@ -148,7 +148,7 @@ export function createMessageHelpers(
   return { t, fill, selectForm, formatNumber }
 }
 
-/** What `useLocaleContext()` returns; `context` is null when no `WebkitProvider` is above the caller. */
+/** What `useLocaleContext()` returns; `context` is null when no `ConfigProvider` is above the caller. */
 export interface UseLocaleContextReturn {
   /** The provider's context, or null with no provider. */
   context: LocaleContext | null
@@ -178,7 +178,7 @@ export function useTranslate(fallback: PartialMessages = {}): UseTranslateReturn
   return { locale, dir, t }
 }
 
-/** `dir` and `lang` of the nearest `WebkitProvider`, for an element teleported out of it (empty with no provider). */
+/** `dir` and `lang` of the nearest `ConfigProvider`, for an element teleported out of it (empty with no provider). */
 export interface PortalLocaleAttrs {
   dir?: Direction
   lang?: string

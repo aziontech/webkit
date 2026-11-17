@@ -6,7 +6,7 @@ import Default from '../../../../examples/copy-command-section/default.vue'
 import Prompt from '../../../../examples/copy-command-section/prompt.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import CopyCommandSection from './copy-command-section.vue'
 
 describe('CopyCommandSection', () => {
@@ -49,7 +49,7 @@ describe('CopyCommandSection', () => {
   it('translates its built-in labels', () => {
     const { getByRole } = render({
       render: () =>
-        h(WebkitProvider, { locale: 'es', catalogs: LOCALES }, { default: () => h(Default) })
+        h(ConfigProvider, { locale: 'es', catalogs: LOCALES }, { default: () => h(Default) })
     })
     expect(getByRole('button', { name: 'Copiar comando' })).toBeInTheDocument()
   })

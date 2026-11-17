@@ -7,7 +7,7 @@ import RevealHover from '../../../../examples/client-story-columns-section/revea
 import { CLIENT_BRANDS } from '../../../assets/logos/clients/brands'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import ClientStoryColumnsSection from './client-story-columns-section.vue'
 
 const TESTID = 'client-story-columns-section'
@@ -212,7 +212,7 @@ describe('ClientStoryColumnsSection', () => {
       const { getByRole, getAllByRole } = render({
         render: () =>
           h(
-            WebkitProvider,
+            ConfigProvider,
             { locale: 'pt-BR', catalogs: LOCALES },
             { default: () => h(RevealHover) }
           )

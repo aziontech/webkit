@@ -4,7 +4,7 @@
 repository, with the code beside it. It is built with WebKit itself (`AppHeader`, `Sidebar`,
 `Menu`, `Command`, `DocPageHeader`, `DocProse`, `DocOnThisPage`, `CodeBlock`, `Table`,
 `ThemeSwitcher`…), the theme from `@aziontech/theme` and the Rubik font, in light and dark, with a
-right-to-left toggle and a language switch (English, Português, Español) through `WebkitProvider`.
+right-to-left toggle and a language switch (English, Português, Español) through `ConfigProvider`.
 
 ```bash
 pnpm dev:docs       # Vite dev server

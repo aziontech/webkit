@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: b3e55629f0faf392f28075bddf312a2e6c79acfc26f1bd3f1265ff7566149c26
+checksum: cd7b77f357a78036d2f7a6a7ee6207b25260547a530a04bd5717ca71202eb3e7
 created: 2026-11-14
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # HoverCard — Component Spec
@@ -151,7 +151,7 @@ _none_ — the card uses the same surface tokens as `popover`.
 - Visible focus: the focus ring belongs to the consumer's link or button.
 - Contrast ≥4.5:1 for card text on `--bg-surface-raised`.
 - `motion-reduce:animate-none` on `animate-popup-scale-*`.
-- Teleported card: binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`).
+- Teleported card: binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`).
 
 ## Internationalization
 
@@ -161,7 +161,7 @@ No built-in strings: the card shows only consumer content.
 
 ## Right-to-left
 
-- Layout: logical utilities only; the card binds `dir` from `WebkitProvider`.
+- Layout: logical utilities only; the card binds `dir` from `ConfigProvider`.
 - Icons: none.
 - Keyboard: no arrow keys.
 - User data: consumer content; wrap names and domains in `<bdi>` inside the card.

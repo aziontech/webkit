@@ -1,9 +1,9 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import PaginationRoot from '@aziontech/webkit/pagination-root'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
 
   const page = ref(1)
@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     locale="pt-BR"
     :catalogs="{ 'pt-BR': ptBR }"
   >
@@ -36,5 +36,5 @@
         </template>
       </ConfirmDialog>
     </div>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>

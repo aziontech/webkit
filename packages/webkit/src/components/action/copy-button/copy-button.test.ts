@@ -4,7 +4,7 @@ import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import CopyButton from './copy-button.vue'
 
 // The real Clipboard API rejects in headless Chromium ("Document is not
@@ -217,7 +217,7 @@ describe('CopyButton', () => {
     it('reads the fallback strings from the locale catalog', async () => {
       vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new DOMException('denied'))
       vi.spyOn(document, 'execCommand').mockReturnValue(false)
-      const view = render(WebkitProvider, {
+      const view = render(ConfigProvider, {
         props: { locale: 'pt-BR', catalogs: LOCALES },
         slots: { default: () => h(CopyButton, { value: 'x' }) }
       })

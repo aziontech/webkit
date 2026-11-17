@@ -12,7 +12,7 @@ import ChartCard, {
   ChartCardResizeHandle,
   ChartCardTitle
 } from '../../chart/chart-card/index'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import DashboardGrid, { DashboardGridItem, type DashboardGridLayoutItem } from './index'
 
 const titles: Record<string, string> = {
@@ -138,7 +138,7 @@ describe('DashboardGrid', () => {
     const view = render({
       render: () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { dir: 'rtl' },
           {
             default: () =>

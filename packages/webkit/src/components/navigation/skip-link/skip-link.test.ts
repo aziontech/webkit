@@ -6,7 +6,7 @@ import { h } from 'vue'
 import Default from '../../../../examples/skip-link/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import SkipLink from './skip-link.vue'
 
 const mounted: HTMLElement[] = []
@@ -162,9 +162,9 @@ describe('SkipLink', () => {
   it.each([
     ['es', 'Saltar al contenido'],
     ['pt-BR', 'Pular para o conteúdo']
-  ])('reads the %s catalog under WebkitProvider', (locale, label) => {
+  ])('reads the %s catalog under ConfigProvider', (locale, label) => {
     const { getByTestId } = render({
-      render: () => h(WebkitProvider, { locale, catalogs: LOCALES }, { default: () => h(SkipLink) })
+      render: () => h(ConfigProvider, { locale, catalogs: LOCALES }, { default: () => h(SkipLink) })
     })
 
     expect(getByTestId('skip-link').textContent?.trim()).toBe(label)
@@ -173,7 +173,7 @@ describe('SkipLink', () => {
   it('renders under dir="rtl" and still hands focus to the target', async () => {
     const target = addTarget('main', 'main')
     const { getByTestId } = render({
-      render: () => h(WebkitProvider, { dir: 'rtl' }, { default: () => h(SkipLink) })
+      render: () => h(ConfigProvider, { dir: 'rtl' }, { default: () => h(SkipLink) })
     })
     const link = getByTestId('skip-link')
 

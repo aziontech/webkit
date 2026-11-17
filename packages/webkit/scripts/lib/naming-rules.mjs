@@ -105,7 +105,7 @@ export const CATEGORY_RENAMES = {
   sections: 'section',
   charts: 'chart',
   overlays: 'overlay',
-  utils: 'feedback (spinner) or provider (webkit-provider)',
+  utils: 'feedback (spinner) or provider (config-provider)',
   templates: '(no such category)',
   documentation: 'docs'
 }

@@ -8,7 +8,7 @@ import { defineComponent, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import { useWizardContext } from './composables/use-wizard-context'
 import Wizard, { WizardStep } from './index'
 
@@ -493,9 +493,9 @@ describe('Wizard', () => {
   describe('on devices', () => {
     const inBox = (width: number, locale = 'en') =>
       defineComponent({
-        components: { FlowDiagram, WebkitProvider },
+        components: { FlowDiagram, ConfigProvider },
         setup: () => ({ width: `${width}px`, locale, catalogs: LOCALES }),
-        template: `<WebkitProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><FlowDiagram /></div></WebkitProvider>`
+        template: `<ConfigProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><FlowDiagram /></div></ConfigProvider>`
       })
 
     const progressOf = (view: ReturnType<typeof render>) => view.getByTestId('wizard__progress')

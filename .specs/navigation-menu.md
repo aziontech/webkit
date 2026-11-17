@@ -7,9 +7,9 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 2917a20112ccd638b72083ddce132f167608f4b6f4ecc960850aa751764f6d7c
+checksum: 9850dcb600feac0d151d57460e515e389583ed601309ca029a05108d2b0d84d5
 created: 2026-05-22
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Navigation Menu — Component Spec
@@ -220,7 +220,7 @@ animation silently snaps. Only the positioner, whose placement is an inline
 - Motion: the content slides in from the side the pointer came from; the forward/back direction is computed in reading order, so under `rtl` moving to a later trigger slides from the start edge.
 - Placement: the shared `usePlacement` engine resolves `side` and `align` against the direction, so under `rtl` `side="start"` opens on the right and `align="start"` lines the popup up with the trigger's right edge; `alignOffset` moves away from the aligned edge in both directions.
 - User data: none.
-- Teleported content: the `NavigationMenu.Viewport` portal binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the `NavigationMenu.Viewport` portal binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

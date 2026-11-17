@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 8527951bfbe417abd8030e6ff69effab91b3329d9a651a14aecf42caf3e5a815
+checksum: 98125e576c675baa77fd9835040e18a1e3e28ae81e65c23b48fd574e5b6d3c42
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -167,7 +167,7 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 | `gaugeChart.valueWithStatus` | `{value}, {status}`    | `thresholds[].label` |
 | `gaugeChart.range`           | `Range {min} to {max}` | —                    |
 
-- Formatting: `Intl.NumberFormat` compact values with the locale from `WebkitProvider`, unless `formatValue` is passed.
+- Formatting: `Intl.NumberFormat` compact values with the locale from `ConfigProvider`, unless `formatValue` is passed.
 
 ## Right-to-left
 

@@ -8,7 +8,7 @@ import Finished from '../../../../examples/upload-progress/finished.vue'
 import Move from '../../../../examples/upload-progress/move.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import UploadProgress, { type UploadProgressItem } from './upload-progress.vue'
 
 const running = (): UploadProgressItem[] => [
@@ -155,7 +155,7 @@ describe('UploadProgress', () => {
     const Host = defineComponent({
       render: () =>
         h(
-          WebkitProvider,
+          ConfigProvider,
           { locale: 'pt-BR', catalogs: LOCALES },
           { default: () => h(UploadProgress, { items: running(), floating: false }) }
         )

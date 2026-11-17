@@ -80,7 +80,7 @@
     min?: Date
     /** Latest instant an absolute range may end at. */
     max?: Date
-    /** Reference clock for relative ranges and stepping. Unset uses the nearest WebkitProvider now, then the real clock. */
+    /** Reference clock for relative ranges and stepping. Unset uses the nearest ConfigProvider now, then the real clock. */
     now?: Date
     /** Trigger text with no range. Empty uses the locale catalog. */
     placeholder?: string

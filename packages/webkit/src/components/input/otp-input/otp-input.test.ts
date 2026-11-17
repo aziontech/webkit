@@ -8,7 +8,7 @@ import Groups from '../../../../examples/otp-input/groups.vue'
 import States from '../../../../examples/otp-input/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import OtpInput from './otp-input.vue'
 
 afterEach(() => cleanup())
@@ -140,7 +140,7 @@ describe('OtpInput', () => {
     cleanup()
     const Host = defineComponent({
       render: () =>
-        h(WebkitProvider, { locale: 'pt-BR', catalogs: LOCALES }, { default: () => h(OtpInput) })
+        h(ConfigProvider, { locale: 'pt-BR', catalogs: LOCALES }, { default: () => h(OtpInput) })
     })
     render(Host)
     expect(field()).toHaveAttribute('aria-label', 'Código de uso único')

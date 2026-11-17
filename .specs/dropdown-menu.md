@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: acbbd623b00424cb59c52bd7d490fc344e98121b92ba097428e48c8cffa73683
+checksum: 9fd9c3a23b49234dc8f4a521ab30efa23b180ad82f2687636d1f0dee925884fd
 created: 2026-06-26
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # DropdownMenu — Component Spec
@@ -294,7 +294,7 @@ Sub-menus and checkable options:
 - ARIA: the slotted control (or the wrapper, when the slot has none) exposes `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, with a single tab stop; the panel's `aria-labelledby` follows the control's `id`; the `role="menu"` element wraps only the groups and options, and the optional header and footer slots (search fields, footers with buttons) sit beside it inside the floating panel, because a `menu` may own only menu items, groups and separators (`aria-required-children`); each group uses `role="group"` + `aria-labelledby` pointing at its label id (when `label` is set); each option uses `role="menuitem"`, `aria-disabled` mirrors `disabled`; a selected option is `role="menuitemradio"` with `aria-checked="true"` and a visible check mark; `type="checkbox"` / `type="radio"` options are `menuitemcheckbox` / `menuitemradio` with `aria-checked` mirroring `selected`; a sub-trigger is a `menuitem` with `aria-haspopup="menu"`, `aria-expanded` and `aria-controls`, and its sub-panel is a `role="menu"` labelled by it. The check and chevron glyphs are `aria-hidden`. Options are `tabindex="-1"` (roving focus through the arrows), so `Tab` leaves the menu. While closed, a menu attaches no `document` listener; the outside-`mousedown` listener lives only while the panel is open.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled` token).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
-- Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
+- Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
 - Touch target ≥40×40 px on the trigger; option rows are 32 px tall and are activated by full-row click + keyboard, satisfying the 24×24 px target floor for in-menu items per WCAG 2.5.8.
 
 ## Internationalization
@@ -305,7 +305,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 
 ## Right-to-left
 
-- Layout: logical utilities only (`text-start`, `ps-`/`pe-`, `gap`); the panel and every sub-panel bind `dir` / `lang` from `WebkitProvider`, so they lay out in the provider's direction under `body`.
+- Layout: logical utilities only (`text-start`, `ps-`/`pe-`, `gap`); the panel and every sub-panel bind `dir` / `lang` from `ConfigProvider`, so they lay out in the provider's direction under `body`.
 - Icons: the sub-trigger chevron mirrors (`rtl:-scale-x-100`); the check and radio dot do not.
 - Keyboard: under rtl `ArrowLeft` opens a sub-menu and `ArrowRight` closes it; the sub-panel opens on the inline end (the left) and flips to the right when it does not fit. `Up` / `Down` are unchanged.
 - User data: none (labels are consumer text).

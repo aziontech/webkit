@@ -10,7 +10,7 @@ import Text from '../../../../examples/file-preview/text.vue'
 import Unknown from '../../../../examples/file-preview/unknown.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import FilePreview from './file-preview.vue'
 import { filePreviewType } from './lib/file-type'
 
@@ -127,8 +127,8 @@ describe('FilePreview', () => {
     expect(emitted![0]![0]).toBeInstanceOf(MouseEvent)
   })
 
-  it('reads its strings from the WebkitProvider locale', () => {
-    const view = render(WebkitProvider, {
+  it('reads its strings from the ConfigProvider locale', () => {
+    const view = render(ConfigProvider, {
       props: { locale: 'pt-BR', catalogs: LOCALES },
       slots: {
         default: () => h(FilePreview, { fileName: 'a.bin', mimeType: 'application/zip' })

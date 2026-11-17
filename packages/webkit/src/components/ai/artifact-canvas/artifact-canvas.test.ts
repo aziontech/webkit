@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/artifact-canvas/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import ArtifactCanvas from './artifact-canvas.vue'
 
 afterEach(() => cleanup())
@@ -119,7 +119,7 @@ describe('ArtifactCanvas', () => {
   })
 
   it('reads its strings from the locale catalog', () => {
-    const view = render(WebkitProvider, {
+    const view = render(ConfigProvider, {
       props: { locale: 'pt-BR', catalogs: LOCALES },
       slots: {
         default: () => h(ArtifactCanvas, { title: 'a.sql', versions: 2, copyValue: 'x' }, () => 'x')
