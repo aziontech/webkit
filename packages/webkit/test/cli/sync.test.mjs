@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import { applyPlan } from '../../src/cli/apply.js'
-import { FRAGMENT_START, LEGACY_MARKER, stamp, stripMarker } from '../../src/cli/bundle.js'
+import { FRAGMENT_END, FRAGMENT_START, LEGACY_MARKER, stamp, stripMarker } from '../../src/cli/bundle.js'
 import { planDoctor } from '../../src/cli/doctor.js'
 import { planInit } from '../../src/cli/plan.js'
 import { planSync } from '../../src/cli/sync.js'
@@ -266,6 +266,30 @@ test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, 
     plan = planSync(project, { templatesDir, version: VERSION })
     assert.equal(plan.fragment.state, 'stale')
     assert.equal(plan.drift, true)
+  } finally {
+    rmSync(project, { recursive: true, force: true })
+    rmSync(templatesDir, { recursive: true, force: true })
+  }
+})
+
+test('planSync: a CLAUDE.md with a lone start marker is stale and applying leaves one fenced block', () => {
+  const project = makeProject()
+  const templatesDir = makeTemplatesDir()
+  try {
+    writeFileSync(
+      join(project, 'CLAUDE.md'),
+      `# Project\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale fragment.\n\n## Team notes\nkeep\n`
+    )
+    let plan = planSync(project, { templatesDir, version: VERSION })
+    assert.equal(plan.fragment.state, 'stale')
+    applyPlan(project, plan.actions)
+    const after = readFileSync(join(project, 'CLAUDE.md'), 'utf8')
+    assert.ok(!after.includes('Stale fragment.'))
+    assert.equal(after.split(FRAGMENT_START).length - 1, 1)
+    assert.equal(after.split(FRAGMENT_END).length - 1, 1)
+    assert.ok(after.includes('## Team notes\nkeep'))
+    plan = planSync(project, { templatesDir, version: VERSION })
+    assert.equal(plan.fragment.state, 'current')
   } finally {
     rmSync(project, { recursive: true, force: true })
     rmSync(templatesDir, { recursive: true, force: true })

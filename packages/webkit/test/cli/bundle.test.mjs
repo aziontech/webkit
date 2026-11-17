@@ -217,6 +217,36 @@ test('spliceFragment: a stray second fenced block collapses to one', () => {
   assert.ok(idempotent(stray, 'NEWBODY'))
 })
 
+test('spliceFragment: a lone start marker (no end marker) is replaced, not left stale', () => {
+  const source = `# Proj\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale body.\n\n## User Section\nkeep\n`
+  const result = spliceFragment(source, 'NEWBODY')
+  assert.ok(!result.includes('Stale body.'), 'the stale fragment must be gone')
+  assert.equal(result.split(FRAGMENT_START).length - 1, 1)
+  assert.equal(result.split(FRAGMENT_END).length - 1, 1)
+  assert.ok(result.startsWith('# Proj'))
+  assert.ok(result.includes(`${FRAGMENT_START}\nNEWBODY\n${FRAGMENT_END}`))
+  assert.ok(result.includes('## User Section\nkeep'))
+  assert.ok(idempotent(source, 'NEWBODY'))
+})
+
+test('spliceFragment: a lone start marker at the end of the file is replaced', () => {
+  const source = `# Proj\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale.\n`
+  const result = spliceFragment(source, 'NEWBODY')
+  assert.equal(result, `# Proj\n\n${FRAGMENT_START}\nNEWBODY\n${FRAGMENT_END}\n`)
+})
+
+test('spliceFragment: a lone start marker next to a fenced block is removed', () => {
+  const fenced = spliceFragment('', 'OLD')
+  const source = `${FRAGMENT_START}\n## @aziontech/webkit design system\nStale.\n\n## User Section\nkeep\n\n${fenced}`
+  const result = spliceFragment(source, 'NEWBODY')
+  assert.ok(!result.includes('Stale.'))
+  assert.ok(!result.includes('OLD'))
+  assert.equal(result.split(FRAGMENT_START).length - 1, 1)
+  assert.equal(result.split(FRAGMENT_END).length - 1, 1)
+  assert.ok(result.includes('## User Section\nkeep'))
+  assert.ok(idempotent(source, 'NEWBODY'))
+})
+
 test('spliceFragment is idempotent across every case', () => {
   const legacyBody = '## @aziontech/webkit design system\nOld.\n'
   const cases = [
