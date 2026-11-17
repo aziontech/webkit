@@ -1117,7 +1117,7 @@ export const es: Messages = {
     waterfall: 'Cascada',
     timeline: 'Línea de tiempo',
     tree: 'Árbol',
-    span: 'Tramo',
+    span: 'Span',
     onCriticalPath: 'En la ruta crítica',
     selfTime: 'Tiempo propio',
     events: 'Eventos',

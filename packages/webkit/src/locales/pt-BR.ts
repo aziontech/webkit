@@ -1117,7 +1117,7 @@ export const ptBR: Messages = {
     waterfall: 'Cascata',
     timeline: 'Linha do tempo',
     tree: 'Árvore',
-    span: 'Trecho',
+    span: 'Span',
     onCriticalPath: 'No caminho crítico',
     selfTime: 'Tempo próprio',
     events: 'Eventos',

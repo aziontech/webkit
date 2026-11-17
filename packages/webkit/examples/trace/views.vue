@@ -1,8 +1,8 @@
-<script setup>
-  import Trace from '@aziontech/webkit/trace'
+<script setup lang="ts">
+  import Trace, { type TraceSpan, type TraceView } from '@aziontech/webkit/trace'
   import { ref } from 'vue'
 
-  const spans = [
+  const spans: TraceSpan[] = [
     { id: 'root', name: 'GET /checkout', service: 'Function', start: 0, duration: 520 },
     {
       id: 'auth',
@@ -66,7 +66,7 @@
   ]
 
   const selected = ref('prices')
-  const view = ref('timeline')
+  const view = ref<TraceView>('timeline')
 </script>
 
 <template>

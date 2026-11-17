@@ -66,7 +66,7 @@
     path: { key: string; offset: number; width: number }[]
   }
 
-  type Lane = { key: string; items: Placed[] }
+  type Lane = { key: string; depth: number; items: Placed[] }
 
   type Row = {
     span: TraceSpan
@@ -129,6 +129,7 @@
 
   const range = defineModel<TraceRange | null>('range', { default: null })
 
+  /** View the reader picked: waterfall, timeline or tree. Supports v-model:view. */
   const layout = defineModel<TraceView>('view', { default: 'waterfall' })
 
   const attrs = useAttrs()
@@ -349,7 +350,11 @@
           packed[lane]?.push(span)
         })
       packed.forEach((spans, lane) =>
-        out.push({ key: `${depth}-${lane}`, items: spans.map((span) => placeSpan(span, depth)) })
+        out.push({
+          key: `${depth}-${lane}`,
+          depth,
+          items: spans.map((span) => placeSpan(span, depth))
+        })
       )
     })
     return out
@@ -357,7 +362,9 @@
 
   const timelineOrder = computed<string[]>(() =>
     lanes.value
-      .flatMap((lane, index) => lane.items.map((item) => ({ item, index })))
+      .flatMap((lane, index) =>
+        lane.items.filter((item) => !item.outside).map((item) => ({ item, index }))
+      )
       .sort((a, b) => a.item.span.start - b.item.span.start || a.index - b.index)
       .map(({ item }) => item.span.id)
   )
@@ -608,7 +615,11 @@
   const close = (): void => {
     const id = current.value
     setSelected('')
-    if (id && rows.value.some((row) => row.span.id === id)) void focusRow(id)
+    const reachable =
+      layout.value === 'timeline'
+        ? timelineOrder.value.includes(id)
+        : rows.value.some((row) => row.span.id === id)
+    if (id && reachable) void focusRow(id)
   }
 
   const onKeydown = (event: KeyboardEvent, index: number): void => {
@@ -740,7 +751,7 @@
     >
       <div
         v-if="layout !== 'timeline'"
-        class="flex items-center border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+        class="flex items-center border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+1.25rem+var(--spacing-2xs))] pe-(--spacing-sm)"
       >
         <span class="text-label-sm text-(--text-muted)">{{ t('trace.span') }}</span>
       </div>
@@ -893,11 +904,12 @@
         class="relative flex flex-col gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-sm)"
       >
         <div
-          v-for="lane in lanes"
+          v-for="(lane, index) in lanes"
           :key="lane.key"
           role="none"
+          :data-level-start="(index > 0 && lanes[index - 1]?.depth !== lane.depth) || null"
           :data-testid="`${testId}__lane`"
-          class="relative h-(--size-6) pointer-coarse:h-(--size-10)"
+          class="relative box-content h-(--size-6) pointer-coarse:h-(--size-11) data-level-start:border-t data-level-start:border-(--border-muted) data-level-start:pt-(--spacing-xs)"
         >
           <template
             v-for="item in lane.items"
@@ -908,6 +920,9 @@
               :tabindex="item.span.id === tabStop ? 0 : -1"
               :aria-selected="item.span.id === current"
               :aria-label="rowLabel(item)"
+              :title="
+                item.wide ? undefined : `${item.span.name} · ${formatDuration(item.span.duration)}`
+              "
               :data-span-id="item.span.id"
               :data-status="item.status"
               :data-root="item.root || null"
@@ -927,6 +942,7 @@
               @keydown="onBarKeydown($event, item.span.id)"
             >
               <span
+                v-if="item.wide"
                 :data-status="item.status"
                 :data-root="item.root || null"
                 aria-hidden="true"
@@ -1063,7 +1079,7 @@
             <span
               :data-status="row.status"
               :data-root="row.root || null"
-              class="w-20 text-end data-[status=error]:text-(--danger-foreground) data-[status=success]:text-(--text-default) data-[status=running]:text-(--warning-foreground)"
+              class="w-20 text-end data-[status=error]:text-(--text-danger) data-[status=success]:text-(--text-default) data-[status=running]:text-(--warning-foreground)"
               >{{ formatDuration(row.span.duration) }}</span
             >
           </span>

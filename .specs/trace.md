@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 05e43afdb7f63f4a11fa1944151a2b4fbb24a6135025758c68263c8e0fc6b10e
+checksum: c4f3adb60eb05e957e621088601bbb5d8347906fc20bb1b034d487db41c66cff
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -114,7 +114,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 
 ## States
 
-- Views: `data-view` on the root mirrors the model. `waterfall` and `tree` render the tree grid (in `tree` the second column holds the start and duration as text, with no axis, bars, grid lines or minimap); `timeline` renders a listbox of bars in lanes, each bar a named option with its name and duration inside when it fits. While searching, the timeline dims the bars that do not match instead of hiding them.
+- Views: `data-view` on the root mirrors the model. `waterfall` and `tree` render the tree grid (in `tree` the second column holds the start and duration as text, with no axis, bars, grid lines or minimap); `timeline` renders a listbox of bars in lanes, each bar a named option with its name and duration inside when the bar is wide enough (a narrower bar carries them in its `title`); the first lane of each nesting level below the root starts with a divider (`data-level-start`). While searching, the timeline marks the bars that do not match `data-dimmed` and dims them instead of hiding them; a bar outside the zoom window is `data-outside`, hidden, and left out of the keyboard order. The view switch stays enabled while `loading`.
 - Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `loading` (placeholder rows in a `role="status"` region, `aria-busy` on the root, search disabled, no details), `empty` (the package `EmptyState`, small: no spans, or no match with a Clear search action).
 - Bar colour on `data-status` (`success`, `error`, `running`) plus `data-root` on a successful root span: root (info), `success`, `error` (danger), `running` (warning).
 - `data-selected` on the selected row; `aria-expanded` on parent rows; `data-bordered` and `data-loading` on the root mirror their props.
@@ -130,21 +130,22 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 
 ## Tokens
 
-| Region                | Token (DESIGN.md)                                                                                       |
-| --------------------- | ------------------------------------------------------------------------------------------------------- |
-| surface               | `var(--bg-surface)`, `var(--border-default)`                                                            |
-| view switch           | `ToggleGroup` (its own tokens)                                                                          |
-| timeline selected bar | `var(--border-selected)` outline                                                                        |
-| row dividers, grid    | `var(--border-muted)`                                                                                   |
-| hovered row           | `var(--bg-hover)`                                                                                       |
-| selected row          | `var(--bg-selected)`                                                                                    |
-| bars                  | `var(--info)`, `var(--success)`, `var(--danger)`, `var(--warning)` with their `-border` and `-contrast` |
-| details band          | `var(--bg-canvas)`                                                                                      |
-| minimap track, window | `var(--bg-canvas)`; window `var(--bg-selected)` at 40% with a `var(--border-selected)` edge             |
-| event marker          | `var(--text-default)` with a `var(--bg-surface)` ring                                                   |
-| slowest flag          | `var(--text-default)` icon; `info` Tag in the details                                                   |
-| critical path         | `var(--text-default)` line under the bar and `az-route` icon; `neutral` Tag in the details              |
-| shape                 | `var(--shape-card)`, `var(--shape-button)`                                                              |
+| Region                | Token (DESIGN.md)                                                                                         |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| surface               | `var(--bg-surface)`, `var(--border-default)`                                                              |
+| view switch           | `ToggleGroup` (its own tokens)                                                                            |
+| tree times            | `var(--text-muted)` start; duration `var(--text-default)`, `var(--text-danger)` when failed               |
+| timeline selected bar | `var(--border-selected)` outline                                                                          |
+| row dividers, grid    | `var(--border-muted)`                                                                                     |
+| hovered row           | `var(--bg-hover)`                                                                                         |
+| selected row          | `var(--bg-selected)`                                                                                      |
+| bars                  | `var(--info)`, `var(--success)`, `var(--danger)`, `var(--warning)` with their `-border` and `-foreground` |
+| details band          | `var(--bg-canvas)`                                                                                        |
+| minimap track, window | `var(--bg-canvas)`; window `var(--bg-selected)` at 40% with a `var(--border-selected)` edge               |
+| event marker          | `var(--text-default)` with a `var(--bg-surface)` ring                                                     |
+| slowest flag          | `var(--text-default)` icon; `info` Tag in the details                                                     |
+| critical path         | `var(--text-default)` line under the bar and `az-route` icon; `neutral` Tag in the details                |
+| shape                 | `var(--shape-card)`, `var(--shape-button)`                                                                |
 
 ## Theme gaps
 
@@ -157,7 +158,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 - Visible focus: a 2 px inset ring on the focused row.
 - View switch: a `ToggleGroup` named View (a `radiogroup` of Waterfall, Timeline and Tree) with its own arrow-key model; switching keeps the selection and the search.
 - Timeline: a named `listbox` of `option`s in start order, one in the tab order (roving `tabindex`); `ArrowRight`/`ArrowDown` move to the next span, `ArrowLeft`/`ArrowUp` to the previous (the inline arrows swap under `dir="rtl"`), `Home`/`End` to the first and last, `Enter` or `Space` selects (again: deselects). Each option is named like a row and carries `aria-selected`. Lanes are `role="none"`.
-- Keyboard map (waterfall and tree): one row is in the tab order (roving `tabindex`); `ArrowDown`/`ArrowUp` move between visible rows; `Home`/`End` go to the first and last row; `ArrowRight` expands a collapsed parent, or moves into its first child; `ArrowLeft` collapses an expanded parent, or moves to the parent; `Enter` or `Space` selects the row (again: deselects). Close in the details returns focus to the row.
+- Keyboard map (waterfall and tree): one row is in the tab order (roving `tabindex`); `ArrowDown`/`ArrowUp` move between visible rows; `Home`/`End` go to the first and last row; `ArrowRight` expands a collapsed parent, or moves into its first child; `ArrowLeft` collapses an expanded parent, or moves to the parent; `Enter` or `Space` selects the row (again: deselects). Close in the details returns focus to the row (in the timeline, to the bar).
 - ARIA: the waterfall is a named `treegrid` of `row`s with `aria-level`, `aria-posinset`, `aria-setsize`, `aria-expanded` (parents only) and `aria-selected`; each row is named with its span, service, start, duration and outcome; the details band is a named `region` that describes the grid. The axis, the bars' duration labels and the expand glyph are decorative (`aria-hidden`).
 - Minimap: the two window edges are `role="slider"` thumbs named Zoom start and Zoom end, with `aria-valuemin` / `aria-valuemax` / `aria-valuenow` in milliseconds and the formatted time as `aria-valuetext`. `ArrowRight`/`ArrowUp` move an edge by 1% of the run, `ArrowLeft`/`ArrowDown` back, `PageUp`/`PageDown` by 10%, `Home`/`End` to its limits, `Escape` resets the zoom. Reset zoom is a button. The span lines drawn in the minimap are decorative.
 - Event markers are decorative; a row with events is named with their count, and the details list each event with its time. The slowest flag is named in the row (`Slowest`) and shown as a Tag in the details. The critical path lines are decorative; a span on the path is named in its row (`Critical path`), shown as a Tag in the details with its time on the path, so the path never depends on the line alone.
@@ -212,12 +213,12 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 - Container queries: `@container/trace`; the name column grows from 9 rem to 20 rem with the container, the service column and the grid lines appear from `@xl`/`@3xl`.
 - Toolbar: the search and the view switch wrap onto two lines when the trace is narrower than both.
 - Narrow: the timeline view needs no name column and reads best in a narrow panel; names truncate, the duration labels stay on the bars, the details facts take two columns.
-- Touch: rows are 44 px high on `pointer: coarse`; nothing depends on hover. The minimap track sets `touch-action: none` so a drag zooms instead of scrolling, and its thumbs widen to 24 px on `pointer: coarse`.
+- Touch: rows and timeline lanes are 44 px high on `pointer: coarse`; a timeline bar narrower than a touch target is still reached from the keyboard and through the Waterfall and Tree views, which show the same span; nothing depends on hover. The minimap track sets `touch-action: none` so a drag zooms instead of scrolling, and its thumbs widen to 24 px on `pointer: coarse`.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Performance
 
-- Bundle budget: 36.1 KB gzip for the initial chunk of `./trace` (it carries `input`, `button`, `copy-button`, `tag`, `toggle-group`, `empty-state` and `skeleton`) in `.size-limit.json`; the minimap, events, slowest flag and critical path add no dependency; the view switch adds `toggle-group`, whose `cn` (tailwind-merge) most apps already load through other components.
+- Bundle budget: 36.3 KB gzip for the initial chunk of `./trace` (it carries `input`, `button`, `copy-button`, `tag`, `toggle-group`, `empty-state` and `skeleton`) in `.size-limit.json`; the minimap, events, slowest flag and critical path add no dependency; the view switch adds `toggle-group`, whose `cn` (tailwind-merge) most apps already load through other components.
 - Runtime budget: the tree and the visible rows recompute per search keystroke, toggle or zoom step; the minimap draws one line per span with no per-frame work while idle. The `Trace with 1k spans: mount and search` scenario of `performance.test.ts` holds it to its budget in `perf-budgets.json`; the critical path is one walk over the tree per change of `spans` (each span visited once, its children sorted once) and self time one sweep over a span's sorted children; the trace length is a reduce, never a spread, so very long traces do not hit the argument limit.
 - Heavy parts: none; no virtualisation (a trace with thousands of spans should be paged by the product).
 

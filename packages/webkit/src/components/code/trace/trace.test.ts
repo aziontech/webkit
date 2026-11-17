@@ -443,6 +443,48 @@ describe('Trace', () => {
       expect(view.getByTestId('trace__detail').textContent).toContain('encode')
     })
 
+    it('leaves bars outside the zoom window out of the timeline keyboard order', () => {
+      const view = render(Trace, { props: { spans, view: 'timeline', range: [200, 1720] } })
+      const reachable = view
+        .getAllByRole('option')
+        .filter((option) => !option.hasAttribute('data-outside'))
+      expect(reachable.map((option) => option.getAttribute('data-span-id'))).toEqual([
+        'root',
+        'a',
+        'b'
+      ])
+      const outside = view
+        .getAllByRole('option')
+        .find((option) => option.getAttribute('data-span-id') === 'a1')
+      expect(outside?.hasAttribute('data-outside')).toBe(true)
+      expect(outside?.getAttribute('tabindex')).toBe('-1')
+    })
+
+    it('starts each nesting level of the timeline with a divider and labels only wide bars', () => {
+      const view = render(Trace, { props: { spans, view: 'timeline' } })
+      const lanes = view.getAllByTestId('trace__lane')
+      expect(lanes.map((lane) => lane.hasAttribute('data-level-start'))).toEqual([
+        false,
+        true,
+        true
+      ])
+      const dns = view
+        .getAllByRole('option')
+        .find((option) => option.getAttribute('data-span-id') === 'a1') as HTMLElement
+      expect(dns.getAttribute('title')).toBe('dns · 20 ms')
+      expect(dns.textContent?.trim()).toBe('')
+    })
+
+    it('returns focus to the bar when the details close in the timeline', async () => {
+      const view = render(Trace, { props: { spans, view: 'timeline', selectedKey: 'b' } })
+      await fireEvent.click(view.getByTestId('trace__close'))
+      const bar = view
+        .getAllByRole('option')
+        .find((option) => option.getAttribute('data-span-id') === 'b')
+      await nextTick()
+      expect(document.activeElement).toBe(bar)
+    })
+
     it('dims the timeline bars that do not match the search', async () => {
       const view = render(Trace, { props: { spans, view: 'timeline' } })
       await fireEvent.update(view.getByRole('textbox', { name: 'Search spans' }), 'encode')

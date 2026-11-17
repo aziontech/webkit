@@ -1541,15 +1541,16 @@
                     class="flex min-w-0 flex-col gap-(--spacing-xs) pb-(--spacing-lg)"
                   >
                     <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Trace</h3>
-                    <Trace
-                      :key="documentEvent.id"
-                      :spans="documentEvent.spans"
-                      :bordered="false"
-                      v-model:view="traceView"
-                      highlight-critical-path
-                      :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
-                      class="border-y border-(--border-muted)"
-                    />
+                    <div class="border-y border-(--border-muted)">
+                      <Trace
+                        :key="documentEvent.id"
+                        :spans="documentEvent.spans"
+                        :bordered="false"
+                        v-model:view="traceView"
+                        highlight-critical-path
+                        :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
+                      />
+                    </div>
                   </div>
 
                   <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
@@ -1632,15 +1633,16 @@
               class="flex min-w-0 flex-col gap-(--spacing-xs) pb-(--spacing-lg)"
             >
               <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Trace</h3>
-              <Trace
-                :key="documentEvent.id"
-                :spans="documentEvent.spans"
-                :bordered="false"
-                v-model:view="traceView"
-                highlight-critical-path
-                :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
-                class="border-y border-(--border-muted)"
-              />
+              <div class="border-y border-(--border-muted)">
+                <Trace
+                  :key="documentEvent.id"
+                  :spans="documentEvent.spans"
+                  :bordered="false"
+                  v-model:view="traceView"
+                  highlight-critical-path
+                  :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
+                />
+              </div>
             </div>
 
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">

@@ -253,7 +253,7 @@ const requestSpans = (
       spans.push({
         id: `attempt-${attempt + 1}`,
         parentId: 'origin',
-        name: `attempt ${attempt + 1}`,
+        name: `try ${attempt + 1}`,
         service: 'Network',
         start: after + attempt * step + 1,
         duration: step - 2,
