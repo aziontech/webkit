@@ -943,6 +943,18 @@ export function checkIconUsage(rel, text, ctx) {
         v('icon-name', rel, lineOf(text, m.index), `icon "${key}" ${problem} (${RULE_DOC}).`)
       )
   }
+  for (const m of text.matchAll(/(?<![\w:-])class="([^"]*)"/g)) {
+    const base = m[1].split(/\s+/).find((token) => RETIRED_ICON_BASES[token])
+    if (!base || /(?:^|\s)(?:ai|pi|az)-[a-z0-9]/.test(m[1])) continue
+    out.push(
+      v(
+        'icon-name',
+        rel,
+        lineOf(text, m.index),
+        `class "${base}" is a retired icon base class (write "${RETIRED_ICON_BASES[base]}") (${RULE_DOC}).`
+      )
+    )
+  }
   return out
 }
 

@@ -326,6 +326,14 @@ const FIXTURES = {
   ]
 }
 
+test('icon-name flags a retired base class standing alone beside a bound icon name', () => {
+  const rel = `${C}/docs/doc-card/doc-card.vue`
+  const bad = sfc('', '<i :class="open ? \'az-x\' : \'az-menu\'" class="ai text-body-xs" />')
+  const good = sfc('', '<i :class="open ? \'az-x\' : \'az-menu\'" class="az text-body-xs" />')
+  assert.ok(hits(rel, bad, 'icon-name').length > 0)
+  assert.deepEqual(hits(rel, good, 'icon-name'), [])
+})
+
 for (const [rule, fixture] of Object.entries(FIXTURES)) {
   if (!fixture) continue
   const [where, badText, goodText] = fixture
