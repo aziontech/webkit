@@ -149,25 +149,25 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 - **Theme (light or dark)**: with no `data-theme` the theme follows the device (`prefers-color-scheme`). An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark, and an app that is always light sets `data-theme="light"`; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
 
-- **WebkitProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import WebkitProvider from '@aziontech/webkit/webkit-provider'`.
+- **ConfigProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import ConfigProvider from '@aziontech/webkit/config-provider'`.
 
 ```vue
 <!-- App.vue -->
 <script setup>
   import { es } from '@aziontech/webkit/locales/es'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
 
   const catalogs = { 'pt-BR': ptBR, es }
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :locale="user.locale"
     :catalogs="catalogs"
   >
     <RouterView />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 
@@ -177,7 +177,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 
 - ✅ Flat import: `import Button from '@aziontech/webkit/button'`.
 - ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/icon-button` -> `IconButton`.
-- ✅ One `WebkitProvider` at the app root with the user's locale and the catalogs of every language the app offers.
+- ✅ One `ConfigProvider` at the app root with the user's locale and the catalogs of every language the app offers.
 - ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`).
 - ✅ `import './webkit.css'` (the theme, the fonts and `./webkit.sources.css`, as `webkit init` writes it) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ `webkit()` from `@aziontech/webkit/vite-plugin` in `vite.config`: it keeps `src/webkit.sources.css`, the WebKit files Tailwind compiles, in step with your imports. Without Vite, run `npx @aziontech/webkit css` after adding or removing a WebKit import.
@@ -198,7 +198,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ `ai ai-<name>`, `ai-cor ai-<name>` or `ai-color ai-<name>`: the old base classes are gone in WebKit 6. Use `az az-<name>` and, for a colour logo, `az-color az-<name>` (never `az-<name>-color`).
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.
 - ❌ A custom Button, Modal, Table, Tooltip, etc. when webkit ships one.
-- ❌ Passing a translated label to every instance (`aria-label="Fechar"` on each close button) instead of setting the locale on `WebkitProvider`.
+- ❌ Passing a translated label to every instance (`aria-label="Fechar"` on each close button) instead of setting the locale on `ConfigProvider`.
 
 ## Common Patterns
 
@@ -308,7 +308,7 @@ Before you finish UI work in this project:
 - [ ] Root-only usage takes the `-root` path; heavy overlays are lazy-loaded.
 - [ ] No custom component reinvents something webkit already provides (checked via MCP or `catalog.json`).
 - [ ] `./webkit.css` and `@aziontech/icons` are imported once at the app entry, and `npx @aziontech/webkit css --check` passes (the Vite plugin keeps it so).
-- [ ] `WebkitProvider` wraps the app once with the user's locale, and `catalogs` registers every non-English language the app offers.
+- [ ] `ConfigProvider` wraps the app once with the user's locale, and `catalogs` registers every non-English language the app offers.
 
 ## Part B — using a webkit component in your project
 

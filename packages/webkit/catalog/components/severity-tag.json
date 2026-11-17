@@ -15,7 +15,7 @@
   "`chip` — an interactive or removable token, for severity filters."
  ],
  "bestPractices": [
-  "Keep the default label (the level name from the locale catalog, translated under `WebkitProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.",
+  "Keep the default label (the level name from the locale catalog, translated under `ConfigProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.",
   "Use one SeverityTag per row, in its own column, so the glyphs line up and the scale reads down the column.",
   "Do not pair the tag with a toned `tag` for the same level; the glyph and the ramp already carry it."
  ]

@@ -98,7 +98,7 @@
 | `filePreview.empty`           | `This file is empty.`                                                       | —             |
 | `filePreview.truncated`       | `Showing the first {shown} characters. Download the file to see all of it.` | —             |
 
-- Formatting: `formatFileSize` (`Intl.NumberFormat` units) for `bytes`, `formatNumber` for the truncation count, both with the `WebkitProvider` locale.
+- Formatting: `formatFileSize` (`Intl.NumberFormat` units) for `bytes`, `formatNumber` for the truncation count, both with the `ConfigProvider` locale.
 
 ## Responsive
 

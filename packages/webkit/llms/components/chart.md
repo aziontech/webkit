@@ -23,7 +23,8 @@
 - Pass series in a stable order: the slot follows the series position, so color follows the entity. A filter that hides a series keeps the others' colors.
 - Keep one value axis. Index two measures to a common base or split them into two charts.
 - Let the legend carry identity for two or more series; a single series needs no legend, its title names it.
-- Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.
+- Leave `color` unset by default: each series takes the next categorical slot (`--chart-series-1` … `-8`) in order, and the palette follows the theme. Most series name an entity (a host, a country, a metric), not a state.
+- Set a status `color` only when the series itself means a state, and keep it to that series: blocked requests or an error rate take `color: 'danger'`, while the series around it keep their categorical slots. Never reuse a status color as series 4.
 - Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.
 - Keep filters and the time range in one row above the dashboard, never inside a chart.
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
@@ -217,7 +218,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 | `chart.referenceLine`   | `{label} at {value}.`                          | —                     |
 | `chart.referenceBand`   | `{label} from {from} to {to}.`                 | —                     |
 
-- Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `WebkitProvider`.
+- Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `ConfigProvider`.
 
 ## Responsive
 
@@ -252,19 +253,16 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
     {
       id: 'allowed',
       name: 'WAF requests allowed',
-      color: 'success',
       values: [1210, 1340, 1295, 1480, 1530, 1460, 1610, 1580, 1720, 1690, 1810, 1760]
     },
     {
       id: 'blocked',
       name: 'WAF requests blocked',
-      color: 'danger',
       values: [320, 410, 380, 520, 470, 430, 610, 580, 540, 690, 650, 720]
     },
     {
       id: 'threat',
       name: 'WAF requests threat',
-      color: 'warning',
       values: [80, 95, 70, 120, 110, 90, 140, 130, 115, 160, 150, 170]
     }
   ]
@@ -312,19 +310,16 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
     {
       id: 'allowed',
       name: 'WAF requests allowed',
-      color: 'success',
       values: [1210, 1340, 1295, 1480, 1530, 1460, 1610, 1580, 1720, 1690, 1810, 1760]
     },
     {
       id: 'blocked',
       name: 'WAF requests blocked',
-      color: 'danger',
       values: [320, 410, 380, 520, 470, 430, 610, 580, 540, 690, 650, 720]
     },
     {
       id: 'threat',
       name: 'WAF requests threat',
-      color: 'warning',
       values: [80, 95, 70, 120, 110, 90, 140, 130, 115, 160, 150, 170]
     }
   ]
@@ -404,19 +399,16 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
     {
       id: 'allowed',
       name: 'WAF requests allowed',
-      color: 'success',
       values: [1210, 1340, 1295, 1480, 1530, 1460, 1610, 1580, 1720, 1690, 1810, 1760]
     },
     {
       id: 'blocked',
       name: 'WAF requests blocked',
-      color: 'danger',
       values: [320, 410, 380, 520, 470, 430, 610, 580, 540, 690, 650, 720]
     },
     {
       id: 'threat',
       name: 'WAF requests threat',
-      color: 'warning',
       values: [80, 95, 70, 120, 110, 90, 140, 130, 115, 160, 150, 170]
     }
   ]

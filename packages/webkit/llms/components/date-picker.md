@@ -99,7 +99,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - `data-size` mirrors the `size` prop on the root, trigger, and each day cell (`small` | `medium` | `large`)
 - `data-selected` mirrors the selected day cell
 - `data-band` on each day cell is `single` on the selected day and `none` elsewhere (the `start` / `middle` / `end` bands are `date-range-picker`'s)
-- `data-today` marks the current date, taken from the nearest `WebkitProvider` `now` when set (so a server render and the hydrating client agree), else the current time; the grid also opens on that month when there is no value; `data-outside` marks an adjacent-month day cell
+- `data-today` marks the current date, taken from the nearest `ConfigProvider` `now` when set (so a server render and the hydrating client agree), else the current time; the grid also opens on that month when there is no value; `data-outside` marks an adjacent-month day cell
 - `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`'s) on the root and the trigger shell, with `aria-invalid` on the trigger and the danger border
 - Reflow: the root is capped at the width of its container (`max-w-full`), so the trigger never overflows a 320 px box.
@@ -122,12 +122,12 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - Motion: the month strip slide mirrors (`rtl:` swaps `translate-x-full` and `-translate-x-full`), so under `dir="rtl"` the next month enters from the left, the side its chevron points to.
 - Keyboard: in the day grid `ArrowRight`/`ArrowLeft` move one day later/earlier, swapped under `dir="rtl"` (`logicalArrowKey`): `ArrowLeft` moves to the next day. `ArrowUp`/`ArrowDown`, `PageUp`/`PageDown` and `Home`/`End` are unchanged.
 - User data: dates and times are printed by `Intl` in the active locale; the typed field value uses the `Input` `dir="auto"`.
-- Teleported content: the teleported date popover binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported date popover binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Internationalization
 
 - Every built-in string comes from the `datePicker` group of the locale catalog (`useLocale`): trigger placeholder (`Select a date`), Date / Time labels, Apply, Clear, the month navigation labels.
-- The active locale is the nearest `WebkitProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
+- The active locale is the nearest `ConfigProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
 - What the person sends stays unambiguous: `v-model` is a `Date` whatever the display format, so an app sends `toISOString()` (or the ISO date `2026-11-15`) to its server, never the printed label.
 - Printed text uses `Intl` in the active locale: the trigger label, the field value and its placeholder (`Jun 1, 2026` in `en`, `1 de jun. de 2026` in `pt-BR`), the time field, weekday and month names.
 - Typing is parsed in the active locale with English always accepted as well: month names (long and short, accents optional), numeric dates in the locale's day/month order (`1/2/2026` is 2 January in `en`, 1 February in `pt-BR`) and ISO `2026-01-05`. Times accept `14:30`, `14h30` and `2:30 pm`.

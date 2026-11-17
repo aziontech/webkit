@@ -13,15 +13,15 @@
  ],
  "related": [
   "`date-picker` — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.",
-  "`timestamp` — displays a moment in time; both read the `WebkitProvider` `timeZone`.",
-  "`webkit-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.",
+  "`timestamp` — displays a moment in time; both read the `ConfigProvider` `timeZone`.",
+  "`config-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.",
   "`field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
   "`property-filter` — the query bar it sits next to in an events toolbar.",
   "`chart` — the histogram whose brush usually writes an absolute range back into this picker."
  ],
  "bestPractices": [
   "Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them. `useTimeRange(value)` from `@aziontech/webkit/use-time-range` returns `from` and `to` and holds the window until `refresh()`; its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.",
-  "Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `WebkitProvider` covers every picker below it; the `now` prop overrides it for one picker.",
+  "Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `ConfigProvider` covers every picker below it; the `now` prop overrides it for one picker.",
   "Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.",
   "Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.",
   "Name the picker after what it filters (`aria-label=\"Events time range\"`)."

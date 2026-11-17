@@ -1,10 +1,10 @@
-# Webkit Provider
+# Config Provider
 
 > Sets the language and text direction of every WebKit component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/webkit/locales/pt-BR`) and Spanish (`@aziontech/webkit/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. By default everything follows the person's device: an unset `locale` (and every component with no provider mounted) uses the device locale (`navigator.language`) for the `Intl` formats and picks its catalog when one is registered, falling back to English text. The server cannot know the device, so the server render and the hydrating client render `en-US`, and the device locale applies right after mount; an explicit `locale` (the user's saved choice) renders the same on both from the start. Only what people read follows the device: values that components hand back through `v-model` stay unambiguous (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs). It also carries the reference time of relative times (`now`), so a page that must render the same text on the server and the client, or an example, fixes it once instead of on every cell. The element it renders carries `lang` and `dir`.
 
-- Import: `import WebkitProvider from '@aziontech/webkit/webkit-provider'`
+- Import: `import ConfigProvider from '@aziontech/webkit/config-provider'`
 - Category: provider · Surface: app · Structure: monolithic
-- API as JSON: [webkit-provider.json](webkit-provider.json)
+- API as JSON: [config-provider.json](config-provider.json)
 
 ## When to use
 
@@ -14,7 +14,7 @@
 
 ## Do
 
-- Mount one `WebkitProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.
+- Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.
 - Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.
 - Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.
@@ -73,10 +73,10 @@
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import PaginationRoot from '@aziontech/webkit/pagination-root'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
 
   const page = ref(1)
@@ -84,7 +84,7 @@
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     locale="pt-BR"
     :catalogs="{ 'pt-BR': ptBR }"
   >
@@ -109,7 +109,7 @@
         </template>
       </ConfirmDialog>
     </div>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 
@@ -117,9 +117,9 @@
 
 ```vue
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import PaginationRoot from '@aziontech/webkit/pagination-root'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const messages = {
     pagination: { info: '{start}–{end} de {total} domínios' }
@@ -127,13 +127,13 @@
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     locale="pt-BR"
     :catalogs="{ 'pt-BR': ptBR }"
     :messages="messages"
   >
     <PaginationRoot :total="48" />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 
@@ -141,13 +141,13 @@
 
 ```vue
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import PaginationRoot from '@aziontech/webkit/pagination-root'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 </script>
 
 <template>
-  <WebkitProvider locale="ar">
+  <ConfigProvider locale="ar">
     <PaginationRoot :total="48" />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```

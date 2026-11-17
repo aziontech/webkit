@@ -29,7 +29,7 @@
 ## Related
 
 - `SiteHeaderSection` — the bar and its mega-menus; `navigation` is bound onto it.
-- `SiteFooterSection` — the footer; `footer` is bound onto it (`variant="site"` closes a framed page).
+- `SiteFooterSection` — the footer; `footer` is bound onto it. In `variant="site"` it spans the full width like the bar, with no side rules, and opens on a full-width rule whose corner marks close the page's frame.
 - `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
 - `Command` — the search palette the bar's search button opens.
 - `shell/site` — the block that shows this layout with the azion.com navigation and footer.

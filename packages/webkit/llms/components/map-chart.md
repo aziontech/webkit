@@ -106,7 +106,7 @@
 | `mapChart.summary`         | `{count} places on the map, {total} in total.` (plural) | `ariaLabel` (caption) |
 | `mapChart.legend`          | `From {min} to {max}`                                   | —                     |
 
-- Formatting: `Intl.NumberFormat` compact values and `Intl.DisplayNames` (type `region`) country names, with the locale from `WebkitProvider`.
+- Formatting: `Intl.NumberFormat` compact values and `Intl.DisplayNames` (type `region`) country names, with the locale from `ConfigProvider`.
 
 ## Responsive
 

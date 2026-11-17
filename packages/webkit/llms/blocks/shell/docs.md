@@ -1,6 +1,6 @@
 # Docs (`shell/docs`)
 
-> The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant="content"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.
+> The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant="content"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, then one bottom bar with the brand and the social links at the start and the status and language at the end, stacked below `md`, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.
 
 - Surface: docs
 - Source: `blocks/shell/docs/docs.vue` in `@aziontech/webkit`
@@ -58,7 +58,7 @@ One per section, with an `anchor`: an anchored level 2 or 3 heading is an outlin
 
 ### I. Footer — `Footer` (required)
 
-In the `footer` slot, `variant="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. With `signature="compact"` the brand leads the social row from `lg` (`hidden lg:inline-flex`) and the signature band carries it below `lg`, in CSS.
+In the `footer` slot, `variant="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the brand, social, status and language slots. The footer lays the bottom bar out as one row (the brand and the social icons at the start, the status and the language at the end) and stacks it below `md`, in CSS.
 
 ### J. Brand — `Brand` (required)
 
@@ -93,7 +93,7 @@ In the footer's language slot, trigger labelled `Language`.
 - Don't hand-write the outline, the pager or the masthead; the layout's outline rail (fed by the anchored headings), `DocPreviousNext` and `DocPageHeader` own their markup and labels.
 - Don't pass page data up to the layout through route meta or props: the page's headings register on their own.
 - Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`.
-- Don't measure the viewport in script to place the footer brand; the `lg:` utilities and `signature="compact"` decide it in CSS.
+- Don't measure the viewport in script to place the footer brand; put it in the `brand` slot and the footer places it in CSS.
 - Don't reuse the console rail here; docs navigation is pages, not modules.
 
 ## Copy
@@ -403,7 +403,6 @@ Each variant is the same screen in another state: `get_block("shell/docs", { var
       <div class="w-full border-t border-(--border-default)">
         <Footer
           variant="content"
-          signature="compact"
           aria-label="Footer"
         >
           <Footer.Column
@@ -420,13 +419,6 @@ Each variant is the same screen in another state: `get_block("shell/docs", { var
           </Footer.Column>
 
           <template #social>
-            <a
-              href="/"
-              aria-label="Azion home"
-              class="me-(--spacing-xs) hidden w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none lg:inline-flex"
-            >
-              <Brand size="small" />
-            </a>
             <IconButton
               v-for="social in socials"
               :key="social.label"
@@ -477,7 +469,7 @@ Each variant is the same screen in another state: `get_block("shell/docs", { var
             <a
               href="/"
               aria-label="Azion home"
-              class="mx-auto inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+              class="inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
             >
               <Brand size="small" />
             </a>

@@ -83,7 +83,7 @@
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.
 - Touch target ≥40×40 px on the trigger (the consumer's responsibility — flag in docs).
-- Teleported content: the teleported `role="tooltip"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported `role="tooltip"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

@@ -102,7 +102,7 @@ The imperative API is backed by a small reactive store composable, declared here
 - `motion-reduce:animate-none` on the enter/leave fades and `motion-reduce:transition-none` on the move transition.
 - Touch target ≥40×40 px on the action and close controls (from `Button` / `IconButton` `size="small"`).
 - Progress: the bar is a `progressbar` named by the toast message; only the toast's arrival is announced, not each percentage step (the visible percentage is `aria-hidden`; the bar's value is read when the user reaches it).
-- Teleported content: each teleported toaster region binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: each teleported toaster region binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Right-to-left
 
@@ -117,7 +117,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | ------------- | -------------------- | ------------- |
 | `toast.close` | `Close notification` | —             |
 
-- Formatting: the `toast.progress` percentage uses `Intl.NumberFormat` (`style: 'percent'`, no decimals) with the locale from `WebkitProvider`; messages, descriptions and action labels come from the consumer.
+- Formatting: the `toast.progress` percentage uses `Intl.NumberFormat` (`style: 'percent'`, no decimals) with the locale from `ConfigProvider`; messages, descriptions and action labels come from the consumer.
 
 ## Responsive
 

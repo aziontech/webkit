@@ -98,7 +98,7 @@
 | `tagEditor.keyInvalid`       | Use letters, numbers, spaces and + - = . _ : / @ only. | —                                |
 | `tagEditor.tooLong`          | Use {max} characters or fewer.                         | `keyMaxLength`, `valueMaxLength` |
 
-- Formatting: the tags left go through the plural rules of the active locale (the nearest `WebkitProvider`'s, else the device locale). Allowed key characters include letters of every script (`\p{L}`).
+- Formatting: the tags left go through the plural rules of the active locale (the nearest `ConfigProvider`'s, else the device locale). Allowed key characters include letters of every script (`\p{L}`).
 - What the person sends stays unambiguous: `v-model:tags` is a list of `{ key, value }` pairs (a server reads each as `key=value`), whatever the language of the labels.
 
 ## Responsive

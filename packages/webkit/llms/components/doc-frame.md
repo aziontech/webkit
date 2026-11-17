@@ -67,7 +67,7 @@
 - The lightbox Teleports to `body` and locks body scroll while open, so assistive tech and the pointer agree on what is interactive.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on all frame chrome tokens.
 - Touch target: the zoom trigger is the whole picture; the close control is a padded button at the viewport corner.
-- Teleported content: the teleported zoom dialog binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported zoom dialog binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

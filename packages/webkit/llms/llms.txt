@@ -153,7 +153,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Conversation](components/conversation.md): The scrolling message log of a generative AI chat.
 - [ConversationHistory](components/conversation-history.md): The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and…
 - [FeedbackReasonDialog](components/feedback-reason-dialog.md): Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback.
-- [PromptInput](components/prompt-input.md): The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated,…
+- [PromptInput](components/prompt-input.md): The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attac…
 - [Reasoning](components/reasoning.md): Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is…
 - [ResponseBranches](components/response-branches.md): Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it.
 - [ResponseLoading](components/response-loading.md): Use ResponseLoading only while a generative AI answer is being produced; never for loading product data, which uses Skeleton (known shape), Spinner (inline) or Progress (measurable).
@@ -248,7 +248,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocHeading](components/doc-heading.md): A documentation section heading that is also the link to itself.
 - [DocHero](components/doc-hero.md): The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt…
 - [DocItem](components/doc-item.md): One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is.
-- [DocLayout](components/doc-layout.md): The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start,…
+- [DocLayout](components/doc-layout.md): The documentation chrome, composed once in the app: a sticky header (at the inline start the compact menu button, the Azion Docs mark and the section links; an empty `AppHeader.Center` spacer; at the inline end `Searc…
 - [DocMarkdown](components/doc-markdown.md): Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components.
 - [DocOnThisPage](components/doc-on-this-page.md): The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community).
 - [DocPageHeader](components/doc-page-header.md): The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slo…
@@ -299,7 +299,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Switch](components/switch.md): Control-only pill toggle `Switch` (36×20 px).
 - [TagEditor](components/tag-editor.md): Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`.
 - [Textarea](components/textarea.md): Collects multi-line free-form text from the user.
-- [ThemeSwitcher](components/theme-switcher.md): A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments.
+- [ThemeSwitcher](components/theme-switcher.md): A compact segmented control drawn like `toggle-group` (same radius, border, surface and 28 / 32 / 40 heights, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size…
 
 ## Components: Layout
 
@@ -307,7 +307,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [AppLayout](components/app-layout.md): The frame every signed-in product page renders inside.
 - [ConsoleLayout](components/console-layout.md): The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's…
 - [DashboardGrid](components/dashboard-grid.md): A configurable dashboard grid: the reader arranges the cards.
-- [Footer](components/footer.md): Page footer for marketing and product surfaces: the bottom-of-page counterpart to `AppHeader`.
+- [Footer](components/footer.md): Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`.
 - [PageHeader](components/page-header.md): The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right.
 - [RegistrationFrame](components/registration-frame.md): The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content.
 - [Resizable](components/resizable.md): A group of adjacent regions whose shared edges the reader can drag.
@@ -378,7 +378,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Components: Providers
 
-- [WebkitProvider](components/webkit-provider.md): Sets the language and text direction of every WebKit component below it.
+- [ConfigProvider](components/config-provider.md): Sets the language and text direction of every WebKit component below it.
 
 ## Components: Marketing sections
 

@@ -1,6 +1,6 @@
 # Doc Layout
 
-> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
+> The documentation chrome, composed once in the app: a sticky header (at the inline start the compact menu button, the Azion Docs mark and the section links; an empty `AppHeader.Center` spacer; at the inline end `SearchTrigger` and then the app's actions, the way most docs sites end their header with the search), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
 
 - Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -94,7 +94,7 @@
 
 ## Right-to-left
 
-- Layout: logical utilities only; the navigation rail sits at the inline start, the outline at the inline end, and the drawer opens from the inline start.
+- Layout: logical utilities only; the header's mark and section links sit at the inline start and the search and actions at the inline end (right in LTR, left under `dir="rtl"`); the navigation rail sits at the inline start, the outline at the inline end, and the drawer opens from the inline start.
 - Resize: dragging and the arrow keys follow the inline direction (`Sidebar` mirrors them under `dir="rtl"`); the collapse and expand glyphs mirror.
 - Icons: the mark is not mirrored; `SidebarMenu` and `DocOnThisPage` mirror their own glyphs.
 - Keyboard: arrow handling is `SidebarMenu`'s and `Command`'s, both direction-aware.
@@ -122,6 +122,7 @@
 ## Responsive
 
 - Breakpoints (viewport, because the layout is the page): the navigation rail shows from `lg`, resizable and collapsible, and is a drawer below (no resize or collapse there); the outline rail shows from `xl`; the section links show from `lg`. The header is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on a narrow header.
+- Header: the search and the `actions` slot always sit at the inline end, pushed there by an empty `AppHeader.Center`; at every width the mark stays at the start and the search never moves next to it.
 - Narrow: the article takes the full width; the end rail content (`aside`) is not repeated under the article.
 - Touch: menu button and search are 32 px controls, 44 px on coarse pointers through their components.
 - Reflow: no horizontal scroll at 320 px; the document scrolls, never an inner region.

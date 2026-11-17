@@ -97,7 +97,7 @@
 - `motion-reduce:transition-none` on every animated element; nothing sets the transition inline. Tests: `dialog-motion.test.ts`.
 - Touch target ≥40×40 px where the control is interactive.
 - Overlay: every open dialog renders its overlay; there is no way to open a dialog without one, so the page behind is never clickable while it is open. Tests: `dialog.test.ts` › overlay.
-- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

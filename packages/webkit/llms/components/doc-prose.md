@@ -52,7 +52,7 @@
 - The chip copy adds **no tab stops**: it is a pointer shortcut over text that stays selectable the ordinary way, so a page of thirty chips does not become thirty stops. The tooltip is `role="tooltip"` and `pointer-events-none`.
 - `motion-reduce:transition-none` on the descendant link transition.
 - Touch target: not applicable; the container is not interactive.
-- Teleported content: the teleported copy tip binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the teleported copy tip binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

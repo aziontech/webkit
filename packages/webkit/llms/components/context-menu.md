@@ -90,12 +90,12 @@
 - ARIA: the panel is `role="menu"` named by `aria-label` when set; items are `menuitem` / `menuitemcheckbox` / `menuitemradio` (shared parts). The trigger area keeps no role: it is a region of content, and the context menu is a shortcut layer over controls that are reachable on their own.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled items (`--text-disabled`).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`.
-- Teleported panel: binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`).
+- Teleported panel: binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`).
 - Touch target: items are 32 px rows, above the 24 px floor of WCAG 2.5.8.
 
 ## Right-to-left
 
-- Layout: logical utilities only (`text-start`, `ps-`/`pe-`); the panel binds `dir` from `WebkitProvider`.
+- Layout: logical utilities only (`text-start`, `ps-`/`pe-`); the panel binds `dir` from `ConfigProvider`.
 - Icons: the sub-trigger chevron mirrors (shared part); no other icon.
 - Keyboard: a keyboard-opened panel anchors at the inline-start bottom corner of the focused element (its right edge under rtl) and prefers opening toward the inline end; `ArrowLeft` opens a sub-menu under rtl. Pointer opens anchor at the pointer in both directions.
 - User data: none (labels are consumer text).

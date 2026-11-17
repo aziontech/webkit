@@ -2223,7 +2223,6 @@
   "breadcrumbs": "breadcrumb",
   "callout": "alert",
   "command-palette": "command",
-  "config-provider": "webkit-provider",
   "cta": "call-to-action",
   "datatable": "data-table",
   "feature-grid": "capability-grid-section",
@@ -2233,7 +2232,7 @@
   "kebab": "dropdown-menu",
   "keyboard": "kbd",
   "loader": "spinner",
-  "locale-provider": "webkit-provider",
+  "locale-provider": "config-provider",
   "logo-cloud": "logo-wall",
   "modal": "dialog",
   "newsletter": "newsletter-section",
@@ -2398,7 +2397,8 @@
   "ticker": "marquee",
   "topic": "feature-item",
   "use-cases": "customer-use-cases-section",
-  "use-heading-nav": "use-heading-navigation"
+  "use-heading-nav": "use-heading-navigation",
+  "webkit-provider": "config-provider"
  },
  "removed": {
   "article-index-blog": "ArticleIndexSection from @aziontech/webkit/article-index-section (filters defaults to category-search)",
@@ -3200,7 +3200,7 @@
      "type": "string | number | Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference time for the groups. Empty uses the nearest `WebkitProvider`'s `now`, then the current time; set either when the list is rendered on the server."
+     "doc": "Reference time for the groups. Empty uses the nearest `ConfigProvider`'s `now`, then the current time; set either when the list is rendered on the server."
     },
     {
      "name": "removable",
@@ -3244,15 +3244,24 @@
   },
   "prompt-input": {
    "import": "@aziontech/webkit/prompt-input",
-   "target": "./src/components/ai/prompt-input/prompt-input.vue",
+   "target": "./src/components/ai/prompt-input/index.ts",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/prompt-input",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-root",
+   "subcomponents": [
+    "@aziontech/webkit/prompt-input-attach-button",
+    "@aziontech/webkit/prompt-input-dictate-button",
+    "@aziontech/webkit/prompt-input-model-picker",
+    "@aziontech/webkit/prompt-input-context-picker",
+    "@aziontech/webkit/prompt-input-tools"
+   ],
    "models": [
     "modelValue",
-    "references"
+    "references",
+    "files"
    ],
    "category": "ai",
-   "structure": "monolithic",
+   "structure": "composition",
    "props": [
     {
      "name": "placeholder",
@@ -3301,7 +3310,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Disables the text area, the submit control and every control in the slots' row."
+     "doc": "Disables the text area, the submit control and every control in the slots' rows."
     },
     {
      "name": "menus",
@@ -3309,6 +3318,34 @@
      "default": "[]",
      "required": "false",
      "doc": "Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`."
+    },
+    {
+     "name": "accept",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "File filter in the native accept syntax (extensions, MIME types, wildcards) for picked, dropped and pasted files. Empty accepts every file."
+    },
+    {
+     "name": "maxFiles",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Most files attached at once; files past it are rejected. `0` means no limit."
+    },
+    {
+     "name": "maxFileSize",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Largest file in bytes; larger files are rejected. `0` means no limit."
+    },
+    {
+     "name": "voice",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`."
     },
     {
      "name": "modelValue",
@@ -3323,17 +3360,34 @@
      "default": "() => []",
      "required": "false",
      "doc": "Two-way value (`v-model:references`)."
+    },
+    {
+     "name": "files",
+     "type": "PromptInputFile[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:files`)."
     }
    ],
    "events": [
     {
      "name": "submit",
-     "payload": "(event: MouseEvent | KeyboardEvent, payload: { value: string; references: PromptInputReference[] })",
+     "payload": "(event: MouseEvent | KeyboardEvent, payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] })",
      "notes": ""
     },
     {
      "name": "stop",
      "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "voice-start",
+     "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "reject",
+     "payload": "(event: Event, payload: { files: File[]; reason: PromptInputRejectReason })",
      "notes": ""
     }
    ],
@@ -3341,22 +3395,260 @@
     {
      "name": "attachments",
      "scope": "—",
-     "notes": "Attached files or context chips, above the text."
+     "notes": "Attached context the app draws itself, above the text, before the file tokens and the references."
     },
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Secondary controls at the inline start of the toolbar; inside a `fieldset` disabled with the input."
+     "notes": "Controls at the inline start of the toolbar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
+    },
+    {
+     "name": "end",
+     "scope": "—",
+     "notes": "Controls at the inline end of the toolbar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
+    },
+    {
+     "name": "footer",
+     "scope": "—",
+     "notes": "The secondary row under the box (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input."
     },
     {
      "name": "hint",
      "scope": "—",
-     "notes": "Constraint text under the input; referenced by `aria-describedby`."
+     "notes": "Constraint text under everything; referenced by `aria-describedby`."
     }
    ],
    "surface": "app",
    "examplesFile": "catalog/examples/prompt-input.json",
    "docsFile": "catalog/components/prompt-input.json"
+  },
+  "prompt-input-root": {
+   "import": "@aziontech/webkit/prompt-input-root",
+   "target": "./src/components/ai/prompt-input/prompt-input.vue",
+   "kind": "root",
+   "rootOf": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-root",
+   "models": [
+    "modelValue",
+    "references",
+    "files"
+   ],
+   "category": "ai",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`)."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`)."
+    },
+    {
+     "name": "maxLength",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit."
+    },
+    {
+     "name": "minRows",
+     "type": "number",
+     "default": "1",
+     "required": "false",
+     "doc": "Rows shown while empty."
+    },
+    {
+     "name": "maxRows",
+     "type": "number",
+     "default": "6",
+     "required": "false",
+     "doc": "Rows the text area grows to before it scrolls."
+    },
+    {
+     "name": "status",
+     "type": "'ready' | 'pending' | 'streaming'",
+     "default": "'ready'",
+     "required": "false",
+     "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the text area, the submit control and every control in the slots' rows."
+    },
+    {
+     "name": "menus",
+     "type": "PromptInputMenu[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`."
+    },
+    {
+     "name": "accept",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "File filter in the native accept syntax (extensions, MIME types, wildcards) for picked, dropped and pasted files. Empty accepts every file."
+    },
+    {
+     "name": "maxFiles",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Most files attached at once; files past it are rejected. `0` means no limit."
+    },
+    {
+     "name": "maxFileSize",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Largest file in bytes; larger files are rejected. `0` means no limit."
+    },
+    {
+     "name": "voice",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "references",
+     "type": "PromptInputReference[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:references`)."
+    },
+    {
+     "name": "files",
+     "type": "PromptInputFile[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:files`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "submit",
+     "payload": "(event: MouseEvent | KeyboardEvent, payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] })",
+     "notes": ""
+    },
+    {
+     "name": "stop",
+     "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "voice-start",
+     "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "reject",
+     "payload": "(event: Event, payload: { files: File[]; reason: PromptInputRejectReason })",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "attachments",
+     "scope": "—",
+     "notes": "Attached context the app draws itself, above the text, before the file tokens and the references."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Controls at the inline start of the toolbar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
+    },
+    {
+     "name": "end",
+     "scope": "—",
+     "notes": "Controls at the inline end of the toolbar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
+    },
+    {
+     "name": "footer",
+     "scope": "—",
+     "notes": "The secondary row under the box (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input."
+    },
+    {
+     "name": "hint",
+     "scope": "—",
+     "notes": "Constraint text under everything; referenced by `aria-describedby`."
+    }
+   ],
+   "surface": "app",
+   "docsFile": "catalog/components/prompt-input-root.json"
+  },
+  "prompt-input-attach-button": {
+   "import": "@aziontech/webkit/prompt-input-attach-button",
+   "target": "./src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue",
+   "kind": "subcomponent",
+   "parent": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-attach-button",
+   "surface": "app"
+  },
+  "prompt-input-dictate-button": {
+   "import": "@aziontech/webkit/prompt-input-dictate-button",
+   "target": "./src/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue",
+   "kind": "subcomponent",
+   "parent": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-dictate-button",
+   "models": [
+    "listening"
+   ],
+   "surface": "app"
+  },
+  "prompt-input-model-picker": {
+   "import": "@aziontech/webkit/prompt-input-model-picker",
+   "target": "./src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
+   "kind": "subcomponent",
+   "parent": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-model-picker",
+   "attached": false,
+   "models": [
+    "modelValue",
+    "mode"
+   ],
+   "surface": "app"
+  },
+  "prompt-input-context-picker": {
+   "import": "@aziontech/webkit/prompt-input-context-picker",
+   "target": "./src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue",
+   "kind": "subcomponent",
+   "parent": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-context-picker",
+   "attached": false,
+   "models": [
+    "modelValue"
+   ],
+   "surface": "app"
+  },
+  "prompt-input-tools": {
+   "import": "@aziontech/webkit/prompt-input-tools",
+   "target": "./src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
+   "kind": "subcomponent",
+   "parent": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-tools",
+   "attached": false,
+   "models": [
+    "modelValue"
+   ],
+   "surface": "app"
   },
   "reasoning": {
    "import": "@aziontech/webkit/reasoning",
@@ -4071,7 +4363,7 @@
     {
      "name": "copy",
      "payload": "(event: MouseEvent, value: string)",
-     "notes": "Fires with the click and `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead."
+     "notes": "Fires with the click and `value` after the clipboard write succeeds (the async clipboard, or the copy-command fallback of `@aziontech/webkit/utils/clipboard` on an insecure origin). When both are refused, the copy fallback popover opens instead."
     },
     {
      "name": "close",
@@ -6103,7 +6395,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "IANA time zone of the local time (`America/New_York`). Empty reads the nearest `WebkitProvider`'s `time-zone`, then the browser's zone."
+     "doc": "IANA time zone of the local time (`America/New_York`). Empty reads the nearest `ConfigProvider`'s `time-zone`, then the browser's zone."
     }
    ],
    "surface": "app",
@@ -9080,7 +9372,7 @@
     {
      "name": "copy",
      "payload": "(event: ClipboardEvent, text: string)",
-     "notes": "Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), also written to the clipboard."
+     "notes": "Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), written to the clipboard through the `copy` event's `clipboardData`."
     }
    ],
    "slots": [
@@ -12057,7 +12349,7 @@
      "type": "Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference clock for relative ranges and stepping. Unset uses the nearest `WebkitProvider`'s `now`, then the real clock."
+     "doc": "Reference clock for relative ranges and stepping. Unset uses the nearest `ConfigProvider`'s `now`, then the real clock."
     },
     {
      "name": "placeholder",
@@ -14169,6 +14461,13 @@
    "structure": "monolithic",
    "props": [
     {
+     "name": "size",
+     "type": "`ThemeSwitcherSize` (`'small' | 'medium' | 'large'`)",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token, matching the height of a neighbouring IconButton, Select or ToggleGroup of the same size."
+    },
+    {
      "name": "disabled",
      "type": "boolean",
      "default": "false",
@@ -15331,50 +15630,38 @@
      "doc": "Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`)."
     },
     {
-     "name": "signature",
-     "type": "'always' | 'compact'",
-     "default": "'always'",
-     "required": "false",
-     "doc": "Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same."
-    },
-    {
      "name": "variant",
-     "type": "'content' | 'site'",
+     "type": "'content' | 'site' | 'console'",
      "default": "'content'",
      "required": "false",
-     "doc": "Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule."
+     "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a full-width rule with corner marks and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
     }
    ],
    "slots": [
     {
      "name": "default",
      "scope": "—",
-     "notes": "Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`."
-    },
-    {
-     "name": "social",
-     "scope": "—",
-     "notes": "Root: the social icon buttons. Renders its own band; centered stacked, at the row's start from `md`."
-    },
-    {
-     "name": "status",
-     "scope": "—",
-     "notes": "Root: the system status indicator. Shares the status band with `language`."
-    },
-    {
-     "name": "language",
-     "scope": "—",
-     "notes": "Root: the language select. Rendered _before_ `status` when stacked and _after_ it from `md`, per the two Figma variants."
+     "notes": "Root: the `Footer.Column` items; a 2-column grid that becomes 4 columns at `md`, or one inline row in `console`."
     },
     {
      "name": "brand",
      "scope": "—",
-     "notes": "Root: the brand lockup of the signature band."
+     "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px."
     },
     {
-     "name": "tagline",
+     "name": "social",
      "scope": "—",
-     "notes": "Root: the one-line tagline; the footer wraps it in the `.text-heading-xl` measure."
+     "notes": "Root: the social icon buttons, after the brand at the start of the bottom bar."
+    },
+    {
+     "name": "status",
+     "scope": "—",
+     "notes": "Root: the system status indicator, at the end of the bottom bar."
+    },
+    {
+     "name": "language",
+     "scope": "—",
+     "notes": "Root: the language select, after the status."
     },
     {
      "name": "default",
@@ -15408,50 +15695,38 @@
      "doc": "Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`)."
     },
     {
-     "name": "signature",
-     "type": "'always' | 'compact'",
-     "default": "'always'",
-     "required": "false",
-     "doc": "Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same."
-    },
-    {
      "name": "variant",
-     "type": "'content' | 'site'",
+     "type": "'content' | 'site' | 'console'",
      "default": "'content'",
      "required": "false",
-     "doc": "Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule."
+     "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a full-width rule with corner marks and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
     }
    ],
    "slots": [
     {
      "name": "default",
      "scope": "—",
-     "notes": "Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`."
-    },
-    {
-     "name": "social",
-     "scope": "—",
-     "notes": "Root: the social icon buttons. Renders its own band; centered stacked, at the row's start from `md`."
-    },
-    {
-     "name": "status",
-     "scope": "—",
-     "notes": "Root: the system status indicator. Shares the status band with `language`."
-    },
-    {
-     "name": "language",
-     "scope": "—",
-     "notes": "Root: the language select. Rendered _before_ `status` when stacked and _after_ it from `md`, per the two Figma variants."
+     "notes": "Root: the `Footer.Column` items; a 2-column grid that becomes 4 columns at `md`, or one inline row in `console`."
     },
     {
      "name": "brand",
      "scope": "—",
-     "notes": "Root: the brand lockup of the signature band."
+     "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px."
     },
     {
-     "name": "tagline",
+     "name": "social",
      "scope": "—",
-     "notes": "Root: the one-line tagline; the footer wraps it in the `.text-heading-xl` measure."
+     "notes": "Root: the social icon buttons, after the brand at the start of the bottom bar."
+    },
+    {
+     "name": "status",
+     "scope": "—",
+     "notes": "Root: the system status indicator, at the end of the bottom bar."
+    },
+    {
+     "name": "language",
+     "scope": "—",
+     "notes": "Root: the language select, after the status."
     },
     {
      "name": "default",
@@ -20944,11 +21219,11 @@
    "examplesFile": "catalog/examples/spinner.json",
    "docsFile": "catalog/components/spinner.json"
   },
-  "webkit-provider": {
-   "import": "@aziontech/webkit/webkit-provider",
-   "target": "./src/components/provider/webkit-provider/webkit-provider.vue",
+  "config-provider": {
+   "import": "@aziontech/webkit/config-provider",
+   "target": "./src/components/provider/config-provider/config-provider.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/webkit-provider",
+   "treeShakeableImport": "@aziontech/webkit/config-provider",
    "category": "provider",
    "structure": "monolithic",
    "props": [
@@ -21003,8 +21278,8 @@
     }
    ],
    "surface": "app",
-   "examplesFile": "catalog/examples/webkit-provider.json",
-   "docsFile": "catalog/components/webkit-provider.json"
+   "examplesFile": "catalog/examples/config-provider.json",
+   "docsFile": "catalog/components/config-provider.json"
   },
   "svg/error-403": {
    "import": "@aziontech/webkit/svg/error-403",
@@ -26541,7 +26816,7 @@
      "type": "SiteFooterSectionVariant",
      "default": "'site'",
      "required": "false",
-     "doc": "Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed."
+     "doc": "Where the footer sits: `site` spans the page like the site header under its own top rule, `content` runs the bands full bleed under a hairline."
     },
     {
      "name": "ariaLabel",
@@ -34085,7 +34360,7 @@
    "title": "Blocks/Shell/Docs",
    "source": "blocks/shell/docs/docs.vue",
    "surface": "docs",
-   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
+   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, then one bottom bar with the brand and the social links at the start and the status and language at the end, stacked below `md`, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -34254,7 +34529,7 @@
    "title": "Blocks/Shell/Site",
    "source": "blocks/shell/site/site.vue",
    "surface": "site",
-   "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeaderSection data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooterSection data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width=\"site\"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooterSection closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeaderSection.",
+   "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeaderSection data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooterSection data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width=\"site\"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooterSection's full-width top rule, with its corner marks, closes the page frame. The hero and the sections resolve to the site measure, which is the only reason the side rules running down the page are continuous; the footer spans the page like the bar. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeaderSection.",
    "intents": [
     "site shell",
     "marketing site layout",

@@ -2,7 +2,7 @@
 
 > Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.
 
-WebKit ships every built-in string in three catalogs: `en` (built into the provider), `pt-BR` and `es` (opt-in entries `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es`). Wrap the app in `WebkitProvider` with a `locale` and the catalogs it offers (`:catalogs="{ 'pt-BR': ptBR, es }"`) and every component follows it; `useLocale()` from `@aziontech/webkit/use-locale` gives your own code the same `t`, `dir` and `Intl` formatters.
+WebKit ships every built-in string in three catalogs: `en` (built into the provider), `pt-BR` and `es` (opt-in entries `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es`). Wrap the app in `ConfigProvider` with a `locale` and the catalogs it offers (`:catalogs="{ 'pt-BR': ptBR, es }"`) and every component follows it; `useLocale()` from `@aziontech/webkit/use-locale` gives your own code the same `t`, `dir` and `Intl` formatters.
 
 ## App-level setup (`setup` in the catalog)
 
@@ -12,25 +12,25 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 - **Theme (light or dark)**: with no `data-theme` the theme follows the device (`prefers-color-scheme`). An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark, and an app that is always light sets `data-theme="light"`; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
 
-- **WebkitProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import WebkitProvider from '@aziontech/webkit/webkit-provider'`.
+- **ConfigProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import ConfigProvider from '@aziontech/webkit/config-provider'`.
 
 ```vue
 <!-- App.vue -->
 <script setup>
   import { es } from '@aziontech/webkit/locales/es'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
 
   const catalogs = { 'pt-BR': ptBR, es }
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :locale="user.locale"
     :catalogs="catalogs"
   >
     <RouterView />
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 
@@ -39,7 +39,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 Webkit components carry their own interface text: close buttons, pagination, empty states,
 calendar fields, keycaps, wizard steps, screen-reader labels. Each one is read from a locale
 catalog (`en`, `pt-BR`, `es`) through `useLocale`, so it follows the language set on
-`WebkitProvider`. A string typed by hand next to the component, or passed into a prop to repeat the
+`ConfigProvider`. A string typed by hand next to the component, or passed into a prop to repeat the
 default, is stuck in one language and drifts from the rest of the product.
 
 ## Do
@@ -47,11 +47,11 @@ default, is stuck in one language and drifts from the rest of the product.
 - Leave a component's built-in text alone. `<Pagination>` already says "Previous page" and
   "Página anterior"; `<Dialog>` already names its close button; `<Kbd key-name="escape" />` prints
   `Esc` from the catalog.
-- Set the language once, at the app root: `<WebkitProvider locale="pt-BR" :catalogs="{ 'pt-BR': ptBR }">`,
+- Set the language once, at the app root: `<ConfigProvider locale="pt-BR" :catalogs="{ 'pt-BR': ptBR }">`,
   with `ptBR` from `@aziontech/webkit/locales/pt-BR` (`es` from `/locales/es`; English is built
   in). Every component below it switches, dates and numbers included (`Intl` through the same
   locale).
-- Rename a built-in string for the whole app with `messages` on `WebkitProvider`:
+- Rename a built-in string for the whole app with `messages` on `ConfigProvider`:
   `:messages="{ wizard: { submit: 'Deploy' }, kbd: { ctrl: 'Strg' } }"`. The keys are the
   catalog's (`group.key`): `group` is the component's camelCase name (`sidebarMenu`,
   `feedbackReasonDialog`) and strings several components share are in `common` (`common.copy`,
@@ -79,7 +79,7 @@ default, is stuck in one language and drifts from the rest of the product.
 ```vue
 <script setup lang="ts">
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import Wizard from '@aziontech/webkit/wizard'
   import { ref } from 'vue'
 
@@ -88,7 +88,7 @@ default, is stuck in one language and drifts from the rest of the product.
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     locale="pt-BR"
     :catalogs="{ 'pt-BR': ptBR }"
     :messages="messages"
@@ -100,7 +100,7 @@ default, is stuck in one language and drifts from the rest of the product.
       <Wizard.Step title="Configurar">…</Wizard.Step>
       <Wizard.Step title="Revisar">…</Wizard.Step>
     </Wizard>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 

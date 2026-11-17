@@ -1,6 +1,6 @@
 # Timestamp
 
-> Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates every minute. Activating it opens a small panel that lists the moment as UTC (ISO 8601), local time with its time zone, the reader's browser time when the app's time zone differs from it, the relative phrase and the raw value it was given, each with a copy button, so an operator can paste the exact value into a query or a ticket. It accepts a `Date`, an epoch in milliseconds or microseconds, or an ISO string, and reads the app-wide time zone from the nearest `WebkitProvider` (`time-zone`), so an app-level time zone picker changes every timestamp at once. Use it anywhere outside a table: log details, cards, side panels, activity lines. `TableCellTime` keeps its own author-plus-relative-time layout and shares the parsing and the relative phrasing with Timestamp.
+> Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates every minute. Activating it opens a small panel that lists the moment as UTC (ISO 8601), local time with its time zone, the reader's browser time when the app's time zone differs from it, the relative phrase and the raw value it was given, each with a copy button, so an operator can paste the exact value into a query or a ticket. It accepts a `Date`, an epoch in milliseconds or microseconds, or an ISO string, and reads the app-wide time zone from the nearest `ConfigProvider` (`time-zone`), so an app-level time zone picker changes every timestamp at once. Use it anywhere outside a table: log details, cards, side panels, activity lines. `TableCellTime` keeps its own author-plus-relative-time layout and shares the parsing and the relative phrasing with Timestamp.
 
 - Import: `import Timestamp from '@aziontech/webkit/timestamp'`
 - Category: content · Surface: app · Structure: monolithic
@@ -16,7 +16,7 @@
 ## Do
 
 - Pass the value from your data as it comes (`'2026-11-14T12:04:31Z'`, `1794657871000`, or the microseconds a log store returns); do not pre-format it.
-- Set the app's time zone once on `WebkitProvider` (`time-zone`) rather than on each Timestamp; use the `time-zone` prop only for a value that belongs to another zone (a schedule in the customer's zone).
+- Set the app's time zone once on `ConfigProvider` (`time-zone`) rather than on each Timestamp; use the `time-zone` prop only for a value that belongs to another zone (a schedule in the customer's zone).
 - Use `format="relative"` for recent activity, `local` for audit records and logs, `utc` for values people compare across teams.
 - In an example, a test or a server render, fix `now` on the provider and give a time zone, so the text does not depend on when or where it renders.
 
@@ -29,7 +29,7 @@
 
 ## Related
 
-- [webkit-provider](webkit-provider.md) — `time-zone` sets the zone every Timestamp below it reads; `now` fixes the reference time of relative phrases.
+- [config-provider](config-provider.md) — `time-zone` sets the zone every Timestamp below it reads; `now` fixes the reference time of relative phrases.
 - [table](table.md) — `TableCellTime` is the table preset for modification times; it shares Timestamp's parsing and relative phrasing.
 - [copy-button](copy-button.md) — the copy control on every row of the panel.
 - [popover](popover.md) — the panel Timestamp opens.
@@ -40,7 +40,7 @@
 | --- | --- | --- | --- | --- |
 | `value` | `string \| number \| Date` | `undefined` | false | The moment: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash with no panel. |
 | `format` | `'relative' \| 'local' \| 'utc'` | `'local'` | false | What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form. |
-| `timeZone` | `string` | `''` | false | IANA time zone of the local time (`America/New_York`). Empty reads the nearest `WebkitProvider`'s `time-zone`, then the browser's zone. |
+| `timeZone` | `string` | `''` | false | IANA time zone of the local time (`America/New_York`). Empty reads the nearest `ConfigProvider`'s `time-zone`, then the browser's zone. |
 
 ## States
 
@@ -99,15 +99,15 @@
 
 ```vue
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import Timestamp from '@aziontech/webkit/timestamp'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
   const VALUE = '2026-11-14T12:04:31Z'
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :now="NOW"
     time-zone="America/New_York"
   >
@@ -131,7 +131,7 @@
         />
       </dd>
     </dl>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 
@@ -139,9 +139,9 @@
 
 ```vue
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import Select from '@aziontech/webkit/select'
   import Timestamp from '@aziontech/webkit/timestamp'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
@@ -161,7 +161,7 @@
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :now="NOW"
     :time-zone="zone"
   >
@@ -192,7 +192,7 @@
         </li>
       </ul>
     </div>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```
 
@@ -200,16 +200,16 @@
 
 ```vue
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import StatusCode from '@aziontech/webkit/status-code'
   import Timestamp from '@aziontech/webkit/timestamp'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
 </script>
 
 <template>
-  <WebkitProvider
+  <ConfigProvider
     :now="NOW"
     time-zone="UTC"
   >
@@ -232,6 +232,6 @@
       </KeyValueList.Item>
       <KeyValueList.Item label="Host">app.example.com</KeyValueList.Item>
     </KeyValueList>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```

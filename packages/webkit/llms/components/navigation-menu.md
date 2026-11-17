@@ -117,7 +117,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 - Motion: the content slides in from the side the pointer came from; the forward/back direction is computed in reading order, so under `rtl` moving to a later trigger slides from the start edge.
 - Placement: the shared `usePlacement` engine resolves `side` and `align` against the direction, so under `rtl` `side="start"` opens on the right and `align="start"` lines the popup up with the trigger's right edge; `alignOffset` moves away from the aligned edge in both directions.
 - User data: none.
-- Teleported content: the `NavigationMenu.Viewport` portal binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the `NavigationMenu.Viewport` portal binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

@@ -89,11 +89,11 @@
 - Visible focus: the focus ring belongs to the consumer's link or button.
 - Contrast ≥4.5:1 for card text on `--bg-surface-raised`.
 - `motion-reduce:animate-none` on `animate-popup-scale-*`.
-- Teleported card: binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`).
+- Teleported card: binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`).
 
 ## Right-to-left
 
-- Layout: logical utilities only; the card binds `dir` from `WebkitProvider`.
+- Layout: logical utilities only; the card binds `dir` from `ConfigProvider`.
 - Icons: none.
 - Keyboard: no arrow keys.
 - User data: consumer content; wrap names and domains in `<bdi>` inside the card.

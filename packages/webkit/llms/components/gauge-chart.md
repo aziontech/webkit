@@ -15,6 +15,7 @@
 ## Do
 
 - Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.
+- Add bands only when the range has agreed limits (a quota, an SLO, a CPU ceiling); without them the arc draws in `--chart-series-1`, the default chart color, and the reading carries no judgment.
 - Name every band (`label`) so the value is read with its meaning, not only with a color.
 - Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.
 - Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`.
@@ -92,7 +93,7 @@
 | `gaugeChart.valueWithStatus` | `{value}, {status}`    | `thresholds[].label` |
 | `gaugeChart.range`           | `Range {min} to {max}` | —                    |
 
-- Formatting: `Intl.NumberFormat` compact values with the locale from `WebkitProvider`, unless `formatValue` is passed.
+- Formatting: `Intl.NumberFormat` compact values with the locale from `ConfigProvider`, unless `formatValue` is passed.
 
 ## Responsive
 
@@ -109,6 +110,24 @@
 <script setup>
   import GaugeChart from '@aziontech/webkit/gauge-chart'
 
+  const formatValue = (value) => `${value}%`
+</script>
+
+<template>
+  <GaugeChart
+    :value="74"
+    label="Cache hit ratio"
+    :format-value="formatValue"
+  />
+</template>
+```
+
+### Bands
+
+```vue
+<script setup>
+  import GaugeChart from '@aziontech/webkit/gauge-chart'
+
   const thresholds = [
     { value: 0, severity: 'success', label: 'Healthy' },
     { value: 70, severity: 'warning', label: 'Busy' },
@@ -120,7 +139,7 @@
 <template>
   <GaugeChart
     :value="74"
-    label="Cache hit ratio"
+    label="CPU usage"
     :thresholds="thresholds"
     :format-value="formatValue"
   />
@@ -158,32 +177,6 @@
       size="large"
       label="Edge latency, p99"
       :format-value="formatValue"
-    />
-  </div>
-</template>
-```
-
-### States
-
-```vue
-<script setup>
-  import GaugeChart from '@aziontech/webkit/gauge-chart'
-</script>
-
-<template>
-  <div class="grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-3">
-    <GaugeChart
-      loading
-      aria-label="Cache hit ratio"
-    />
-    <GaugeChart
-      :value="null"
-      label="Cache hit ratio"
-      empty-description="No request reached this application in the last hour."
-    />
-    <GaugeChart
-      label="Cache hit ratio"
-      error="Could not load the cache hit ratio. Try again in a few seconds."
     />
   </div>
 </template>

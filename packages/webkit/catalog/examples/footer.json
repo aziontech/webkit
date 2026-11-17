@@ -2,13 +2,18 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The footer composed with four link columns, the status row, the signature band (brand beside its tagline) and the social icon buttons. From md the icons and the status cluster share one row above the signature, each band sized by its content; stacked, the order is links, status, signature, icons. The social buttons are small, so the row holds the brand mark and seven icons beside the status pair in a zone as narrow as the docs reading column.",
+   "summary": "The footer composed with four link columns, then the bottom bar in one row: the Azion mark and the social icons at the start, the status indicator and the language select at the end. Below md the bar stacks, the mark and icons over the status and language, and the columns fold to two.",
    "file": "examples/footer/default.vue"
   },
   {
    "name": "SitePlacement",
-   "summary": "The footer closing a framed marketing page: the bands capped at the site measure and centred, with the side rules, the hatched gutters and the framed column whose bottom rule finishes the page frame. The hero band and the framed sections above resolve to that same measure, which is the only reason the rules running down the page are continuous.",
+   "summary": "The footer under a marketing page: it spans the page like the site header, opens on a full-width rule with a corner mark at each end, and insets its columns and bottom bar to the header measure so they line up under the header's brand.",
    "file": "examples/footer/site-placement.vue"
+  },
+  {
+   "name": "Console",
+   "summary": "The slim console bar: the Azion mark, the column's links on one line (the column title names the navigation for assistive tech), and the status and language at the end. It wraps to a second row on a narrow screen.",
+   "file": "examples/footer/console.vue"
   }
  ]
 }

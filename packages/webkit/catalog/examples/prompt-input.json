@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The composer with its disclaimer under it: Enter submits, Shift+Enter adds a line, and the text area grows up to six rows before it scrolls.",
+   "summary": "The full composer: attach files (pick, drop or paste), a model and effort picker, dictation, a voice-conversation control that becomes Submit once there is something to send, and a row under the box with a project picker, files, plugins and a desktop-app link. Enter submits, Shift+Enter adds a line.",
    "file": "examples/prompt-input/default.vue"
   },
   {

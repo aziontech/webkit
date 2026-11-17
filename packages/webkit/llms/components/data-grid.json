@@ -119,7 +119,7 @@
   {
    "name": "copy",
    "payload": "(event: ClipboardEvent, text: string)",
-   "notes": "Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), also written to the clipboard."
+   "notes": "Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), written to the clipboard through the `copy` event's `clipboardData`."
   }
  ],
  "slots": [

@@ -1,6 +1,6 @@
 # Table
 
-> The table's parts and its markup-only root. Compose the anatomy by hand (`Table.Header` / `Table.Body` / `Table.Row` / `Table.HeadCell` / `Table.Cell`): the component owns markup, tokens, accessibility, column sizing (an emphasized principal column), sortable headers, selectable rows and a **freeze system** for sticky columns (an actions column) and a sticky header. The root is light: it frames the scroll viewport, the toolbar band (`title` / `toolbar` slots) and the `footer`, and loads no table engine. For repeated records pass `data` + `columns` to [`data-table`](data-table.md) instead: DataTable renders through these same parts, and the context-aware toolbar parts (`TableSearch`, `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`) and the cell presets (`TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, `TableCellActions`) go in its slots. Inside a hand-composed `Table` the toolbar parts have no rows to act on. **What the compound carries.** `@aziontech/webkit/table` attaches only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar`), so a hand-composed table costs what its parts cost. The toolbar controls and the cell presets compose `Tooltip`, `DropdownMenu`, `Popover`, `Input` and `CopyButton`; each is imported from its own entry (`@aziontech/webkit/table-search`, `@aziontech/webkit/table-cell-status`, …) and is not attached to the compound, so a screen pays only for the ones it renders. **Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row). **Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `TableAppliedFilter`, `TableFilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in [`data-table`](data-table.md).
+> The table's parts and its markup-only root. Compose the anatomy by hand (`Table.Header` / `Table.Body` / `Table.Row` / `Table.HeadCell` / `Table.Cell`): the component owns markup, tokens, accessibility, column sizing (an emphasized principal column), sortable headers, selectable rows and a **freeze system** for sticky columns (an actions column) and a sticky header. The root is light: it frames the scroll viewport, the toolbar band (`title` / `toolbar` slots) and the `footer`, and loads no table engine. For repeated records pass `data` + `columns` to [`data-table`](data-table.md) instead: DataTable renders through these same parts, and the context-aware toolbar parts (`TableSearch`, `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`) and the cell presets (`TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, `TableCellActions`) go in its slots. Inside a hand-composed `Table` the toolbar parts have no rows to act on. **What the compound carries.** `@aziontech/webkit/table` attaches only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar`), so a hand-composed table costs what its parts cost. The toolbar controls and the cell presets compose `Tooltip`, `DropdownMenu`, `Popover`, `Input` and `CopyButton`; each is imported from its own entry (`@aziontech/webkit/table-search`, `@aziontech/webkit/table-cell-status`, …) and is not attached to the compound, so a screen pays only for the ones it renders. **Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row). **Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `TableAppliedFilter`, `TableFilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in [`data-table`](data-table.md).
 
 - Import: `import TableRoot from '@aziontech/webkit/table-root'`
 - Compound import (dot notation, not tree-shakeable): `import Table from '@aziontech/webkit/table'`
@@ -19,7 +19,7 @@
 - Compose `Table` by hand only for small, static tables; for repeated data use `data-table`, which renders through these parts.
 - Mark the row-actions cell `type="action"` with `frozen="end"` so it pins to the trailing edge, and give the principal cell `principal` (or `grow="2"`).
 - Name the table: a `Table.Caption` labels it (`aria-labelledby`), or pass `aria-label` on the root.
-- Give `TableCellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `WebkitProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.
+- Give `TableCellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `ConfigProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.
 - Import the root alone from `table-root`, or each part from its own entry (`table-row`), when only a few parts are used.
 
 ## Don’t
@@ -104,7 +104,7 @@
 - `table-cell-id/table-cell-id.vue` — identifier preset: the value (`dir="ltr"`, tabular numbers, truncating) and a `CopyButton` pinned to the end edge named `Copy <resource> ID`. Props `value?: string | number`, `resource?: string`.
 - `table-cell-status/table-cell-status.vue` — status preset: one `Tag` (`size="medium"`, truncating). Props `label?: string` (empty renders a muted dash), `severity?: TagSeverity` (default `neutral`), `icon?: string`. Use it over a bare `Tag` in a cell: it is the shared empty-dash rule. Use `status-indicator` for a live dot plus text, and `severity-tag` for a log severity.
 - `table-cell-tags/table-cell-tags.vue` — tag list preset: rounded secondary tags, as many as fit the cell (measured with a `ResizeObserver` against a hidden ruler), the rest behind an `OverflowCount`. Props `items?: string[]` (empty renders a muted dash), `icon?: string`, `noun?: OverflowCountNoun` (default `tag` / `tags` from the catalog).
-- `table-cell-time/table-cell-time.vue` — last-modified preset: the author's `Avatar` (name on its tooltip; an email reads as a name) and a `<time datetime>` with the relative time (`just now` under 45 s), the absolute time on its tooltip and in visually hidden text. One shared minute clock re-renders every mounted cell; under a `WebkitProvider` with `now` set, every cell reads that reference time instead, so an example, a test or a server render prints the same text wherever and whenever it renders. Props `value?: string | number | Date` (an epoch with 15 digits or more reads as microseconds, like `Timestamp`, with which it shares parsing and relative phrasing; empty or unparseable renders a muted dash), `author?: string`, `avatarSrc?: string`.
+- `table-cell-time/table-cell-time.vue` — last-modified preset: the author's `Avatar` (name on its tooltip; an email reads as a name) and a `<time datetime>` with the relative time (`just now` under 45 s), the absolute time on its tooltip and in visually hidden text. One shared minute clock re-renders every mounted cell; under a `ConfigProvider` with `now` set, every cell reads that reference time instead, so an example, a test or a server render prints the same text wherever and whenever it renders. Props `value?: string | number | Date` (an epoch with 15 digits or more reads as microseconds, like `Timestamp`, with which it shares parsing and relative phrasing; empty or unparseable renders a muted dash), `author?: string`, `avatarSrc?: string`.
 - `table-cell-actions/table-cell-actions.vue` — row actions preset: a `DropdownMenu` (`side="bottom"` + `align="end"`) triggered by an outlined ellipsis `IconButton` named `Actions for <name>`. Props `name?: string`, `disabled?: boolean`. Emits `select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]`; `DropdownMenuItemValue` (`string | number`) is re-exported by `./table`. Default slot: `DropdownMenu.Group`s of `DropdownMenu.Item`s.
 
 ## States
@@ -183,6 +183,7 @@
 
 ```vue
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
@@ -191,7 +192,6 @@
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const HOUR = 3_600_000
   const NOW = Date.UTC(2026, 10, 10, 12)
@@ -247,7 +247,7 @@
 </script>
 
 <template>
-  <WebkitProvider :now="NOW">
+  <ConfigProvider :now="NOW">
     <DataTable
       :data="rows"
       :columns="columns"
@@ -331,6 +331,6 @@
         </TableCellActions>
       </template>
     </DataTable>
-  </WebkitProvider>
+  </ConfigProvider>
 </template>
 ```

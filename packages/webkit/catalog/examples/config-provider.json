@@ -3,17 +3,17 @@
   {
    "name": "Default",
    "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers in the pt-BR style.",
-   "file": "examples/webkit-provider/default.vue"
+   "file": "examples/config-provider/default.vue"
   },
   {
    "name": "CustomMessages",
    "summary": "`messages` replaces one built-in string for the whole subtree; the rest of the catalog stays.",
-   "file": "examples/webkit-provider/custom-messages.vue"
+   "file": "examples/config-provider/custom-messages.vue"
   },
   {
    "name": "Rtl",
    "summary": "`locale=\"ar\"` derives `dir=\"rtl\"`: the subtree reads right to left and strings with no Arabic catalog fall back to English.",
-   "file": "examples/webkit-provider/rtl.vue"
+   "file": "examples/config-provider/rtl.vue"
   }
  ]
 }

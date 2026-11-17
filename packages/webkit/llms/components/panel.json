@@ -32,6 +32,7 @@
  "bestPractices": [
   "Inside a dialog or drawer, use only `PanelHeader`, `PanelBody` and `PanelFooter`. The overlay already renders the `Panel` root, so a second `Panel` inside it nests two shells.",
   "Put long content in `PanelBody`. It is the only region that scrolls; the header and footer stay in place.",
+  "`PanelBody` is the dominant block. Its copy defaults to `.text-body-sm` (14px) in `var(--text-default)`, its padding (`var(--spacing-lg)`) is larger than the header and footer block padding (`var(--spacing-md)`), and it is at least `min-h-24` tall, so a one-line body still reads taller than the header and footer bands. The extra height falls after the text. Children with their own text class keep it.",
   "`size` caps the max width (`small`, `medium`, `large` map to the `--container-sm` / `--container-xl` / `--container-2xl` tokens). `sizeAtMd` applies that cap from `md` up only and is meant for the dialog's mobile bottom sheet.",
   "`Panel` has no open state, no dismissal and no focus management. Don't use it alone as a modal."
  ],

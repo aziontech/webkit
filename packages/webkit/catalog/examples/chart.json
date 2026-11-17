@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The Threats vs requests chart: allowed requests as an area, blocked and logged threats as lines. Each series means a state, so it wears a status color. Hover, or focus the plot and use the arrow keys, to read every series at one point.",
+   "summary": "The Threats vs requests chart: allowed requests as an area, blocked and threat requests as lines. No series sets a color, so each takes the next categorical slot in order and the palette follows the theme. Hover, or focus the plot and use the arrow keys, to read every series at one point.",
    "file": "examples/chart/default.vue"
   },
   {

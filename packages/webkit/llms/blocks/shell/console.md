@@ -472,6 +472,7 @@ Each variant is the same screen in another state: `get_block("shell/console", { 
           <span class="flex-1 truncate text-start text-label-sm text-(--text-default)">Theme</span>
           <ThemeSwitcher
             v-model="theme"
+            size="small"
             aria-label="Theme"
           />
         </div>

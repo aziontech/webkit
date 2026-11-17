@@ -53,7 +53,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `copy` | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead. |
+| `copy` | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds (the async clipboard, or the copy-command fallback of `@aziontech/webkit/utils/clipboard` on an insecure origin). When both are refused, the copy fallback popover opens instead. |
 | `close` | `MouseEvent` | Fires with the click on the dismiss button (`closable`), after the chip removes itself; whether it stays away is the page's decision. |
 
 ## v-model
