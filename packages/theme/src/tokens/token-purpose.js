@@ -37,6 +37,7 @@ export const tokenPurpose = {
   '--text-default': 'Body text and headings on any surface.',
   '--text-muted': 'Secondary text: descriptions, captions, metadata.',
   '--text-disabled': 'Text of a disabled control.',
+  '--text-danger': 'Error text on the page, such as the FieldError message.',
   '--text-primary': 'Brand-coloured text, such as the required asterisk on a field label.',
   '--text-brand':
     'The logo orange for brand labels such as the eyebrow; an accepted contrast exception.',
@@ -61,7 +62,7 @@ export const tokenPurpose = {
   '--warning-foreground': 'Text and icons on --warning, and warning icons on a surface.',
   '--warning-mark': 'A warning mark standing on the page: the status dot, the outcome disc.',
   '--danger': 'The box of an error message, tag or badge, and the danger button.',
-  '--danger-border': 'The edge of a danger box.',
+  '--danger-border': 'The edge of a danger box and the outline of an invalid field.',
   '--danger-foreground': 'Text and icons on --danger, and error icons on a surface.',
   '--danger-mark': 'An error mark standing on the page: the status dot, the outcome disc.',
   '--info': 'The box of an informational message, tag or badge.',

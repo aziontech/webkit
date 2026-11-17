@@ -21,7 +21,7 @@
 - Type an options list as `SelectOptionItem<string>[]` and render it with `v-for` into `Select.Item` (`:value`, `:icon`, `:disabled`, the `label` as the slot); bind a typed model so `displayValue` and `update:modelValue` take that type with no cast.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
 - A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `variant="ghost"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
-- Keep `variant="ghost"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outline` inside a `Field`.
+- Keep `variant="ghost"` out of forms: it draws no border, so it cannot show the `invalid` border; a form field is the default `outline` inside a `Field`.
 
 ## Don’t
 
@@ -48,7 +48,7 @@
 | `variant` | `'outline' \| 'ghost'` | `'outline'` | false | Trigger look: `outline` is the bordered field; `ghost` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and prevents opening; applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
-| `required` | `boolean` | `false` | false | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
+| `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required` on the trigger, matching `Input`; it draws no border of its own. The label's Required tag is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
 | `displayValue` | `(value: TValue) => string` | `undefined` | false | Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels. |
 | `name` | `string` | `''` | false | Form field name. Set, the root renders one hidden input per selected value (`String(value)`, objects as JSON) so a native `form` and `FormData` submit the selection; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out, as a native control does. |
@@ -78,12 +78,12 @@
 
 ## v-model
 
-| Model          | Type      | Default     | Emits               | Notes                                                                                                                                                                         |
-| -------------- | --------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`      | `TValue`  | `undefined` | `update:modelValue` | The selection via `defineModel`: the one picked value. Its type flows to `displayValue` and `update:modelValue`. Fires when an option is selected. Uncontrolled when unbound. |
+| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                         |
+| --------- | -------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `TValue` | `undefined` | `update:modelValue` | The selection via `defineModel`: the one picked value. Its type flows to `displayValue` and `update:modelValue`. Fires when an option is selected. Uncontrolled when unbound. |
 
 **Empty value.** `undefined` and `null` mean no selection: the trigger shows the placeholder. `''` is a selection when an option has `value=""` (an `Auto` or `Any` choice): the trigger shows that option's label (or `displayValue('')`), `data-filled` is set and a named field submits `''`. With no such option, `''` means no selection, so a model seeded with `ref('')` still shows the placeholder.
-| `v-model:open` | `boolean` | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                    |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`. |
 
 ## States
 

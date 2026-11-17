@@ -56,7 +56,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone."
+   "doc": "Applies invalid styling and sets `aria-invalid`."
   },
   {
    "name": "required",

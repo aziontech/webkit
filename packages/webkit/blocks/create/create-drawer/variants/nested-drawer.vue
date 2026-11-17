@@ -171,8 +171,8 @@
                               class="w-full"
                               aria-label="Name"
                               placeholder="my-rule"
-                              :required="!!errors.name && !form.name.trim()"
-                              :invalid="!!errors.name && !!form.name.trim()"
+                              required
+                              :invalid="!!errors.name"
                               :aria-describedby="errors.name ? 'rule-name-error' : undefined"
                               @update:model-value="errors.name = ''"
                             />
@@ -207,7 +207,8 @@
                               :disabled="submitting"
                               class="w-full"
                               placeholder="Select an origin"
-                              :required="!!errors.originId"
+                              required
+                              :invalid="!!errors.originId"
                               :display-value="originLabel"
                               @update:model-value="onOriginModel"
                             >
@@ -319,8 +320,8 @@
                               class="w-full"
                               aria-label="Name"
                               placeholder="my-origin"
-                              :required="!!childErrors.name && !childForm.name.trim()"
-                              :invalid="!!childErrors.name && !!childForm.name.trim()"
+                              required
+                              :invalid="!!childErrors.name"
                               :aria-describedby="childErrors.name ? 'origin-name-error' : undefined"
                               @update:model-value="childErrors.name = ''"
                             />
@@ -346,8 +347,8 @@
                               class="w-full"
                               aria-label="Address"
                               placeholder="origin.example.com"
-                              :required="!!childErrors.address && !childForm.address.trim()"
-                              :invalid="!!childErrors.address && !!childForm.address.trim()"
+                              required
+                              :invalid="!!childErrors.address"
                               :aria-describedby="
                                 childErrors.address ? 'origin-address-error' : undefined
                               "

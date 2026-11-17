@@ -206,8 +206,8 @@
                           aria-label="Name"
                           placeholder="My domain"
                           autocomplete="off"
-                          :required="!!errors.name && errors.nameKind === 'required'"
-                          :invalid="!!errors.name && errors.nameKind === 'invalid'"
+                          required
+                          :invalid="!!errors.name"
                           :aria-describedby="errors.name ? 'create-domain-name-message' : undefined"
                           @update:model-value="errors.name = ''"
                         />
@@ -229,8 +229,8 @@
                           aria-label="Domain name"
                           placeholder="example.com"
                           autocomplete="off"
-                          :required="!!errors.domain && errors.domainKind === 'required'"
-                          :invalid="!!errors.domain && errors.domainKind === 'invalid'"
+                          required
+                          :invalid="!!errors.domain"
                           :aria-describedby="
                             errors.domain ? 'create-domain-domain-message' : undefined
                           "

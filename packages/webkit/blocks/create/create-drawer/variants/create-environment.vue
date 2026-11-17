@@ -530,7 +530,10 @@
               hint="How this environment is identified across the console."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <Field :required="!!environmentErrors.name">
+                <Field
+                  required
+                  :invalid="!!environmentErrors.name"
+                >
                   <Field.Label>Name</Field.Label>
                   <Input
                     v-model="environment.name"
@@ -717,7 +720,10 @@
                       >How the branch name is matched.</FieldDescription
                     >
                   </Field>
-                  <Field :required="!!environmentErrors.branchMatch">
+                  <Field
+                    required
+                    :invalid="!!environmentErrors.branchMatch"
+                  >
                     <Field.Label>Branch match</Field.Label>
                     <Input
                       v-model="environment.branchMatch"

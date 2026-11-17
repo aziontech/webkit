@@ -2,7 +2,7 @@
  "variants": [
   {
    "name": "ValidationErrors",
-   "summary": "Create pressed with gaps. The empty Value and Environment take the required state, the malformed key takes the invalid state, each helper text carries its own message, and focus moves to Key.",
+   "summary": "Create pressed with gaps. The empty Value and Environment and the malformed key take the invalid state, each helper text carries its own message, and focus moves to Key.",
    "file": "blocks/state/form-validation/variants/validation-errors.vue"
   },
   {
@@ -42,7 +42,7 @@
   },
   {
    "name": "SectionReloaded",
-   "summary": "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue.",
+   "summary": "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and stays invalid with Select an origin to continue.",
    "file": "blocks/state/form-validation/variants/section-reloaded.vue"
   }
  ],

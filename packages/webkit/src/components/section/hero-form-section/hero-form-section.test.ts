@@ -238,10 +238,10 @@ describe('HeroFormSection', () => {
     expect(getByText(messages.invalidEmail)).toBeInTheDocument()
     const firstName = getByLabelText(/First name/, { selector: 'input' })
     expect(firstName.getAttribute('aria-required')).toBe('true')
-    expect(firstName.getAttribute('aria-invalid')).toBeNull()
+    expect(firstName.getAttribute('aria-invalid')).toBe('true')
     const email = getByLabelText(/Work email/, { selector: 'input' })
     expect(email.getAttribute('aria-invalid')).toBe('true')
-    expect(email.getAttribute('aria-required')).toBeNull()
+    expect(email.getAttribute('aria-required')).toBe('true')
   })
 
   it('moves focus to the first field in error on an invalid submit', async () => {
@@ -265,12 +265,12 @@ describe('HeroFormSection', () => {
     expect(getByLabelText(/Website/, { selector: 'input' }).getAttribute('type')).toBe('text')
   })
 
-  it('tags required labels from the first render but holds the field states until a submit', () => {
+  it('marks required fields from the first render but holds the invalid state until a submit', () => {
     const { getByLabelText, getAllByText } = band()
 
     expect(getAllByText('(Required)')).toHaveLength(2)
     const firstName = getByLabelText(/First name/, { selector: 'input' })
-    expect(firstName.getAttribute('aria-required')).toBeNull()
+    expect(firstName.getAttribute('aria-required')).toBe('true')
     expect(firstName.getAttribute('aria-invalid')).toBeNull()
   })
 

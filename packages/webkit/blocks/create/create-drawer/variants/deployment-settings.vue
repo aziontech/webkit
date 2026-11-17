@@ -127,7 +127,8 @@
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <Field
                   :disabled="submitting"
-                  :required="Boolean(errors.name)"
+                  required
+                  :invalid="Boolean(errors.name)"
                 >
                   <Field.Label for="deployment-settings-name"> Name </Field.Label>
                   <Input

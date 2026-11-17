@@ -16,7 +16,7 @@
 
 - Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.
 - Set the same `size` on the group and on its child controls so heights line up.
-- `disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` styles the group only; set it on the input or on the enclosing `Field`. Inside a `Field`, the Field's state reaches the root and the controls the same way.
+- `disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` only mirrors to `data-required` on the group; set it on the input or on the enclosing `Field`, whose label carries the Required marker. Inside a `Field`, the Field's state reaches the root and the controls the same way.
 - Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string. An `Input` placed in the group loses its own border and radius (the group reads its `data-slot="input"`), so the group's frame and its dividers stay the only lines: the group never doubles a line.
 - The root is `role="group"`; label the inner input itself, or give the group an `aria-label`.
 
@@ -38,7 +38,7 @@
 | --- | --- | --- | --- | --- |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`Input`, `Select`) — set the same `size` on child controls to keep them visually aligned. |
 | `invalid` | `boolean` | `false` | false | Renders the error border and marks the field controls inside invalid (`aria-invalid` on the input, never on the `role="group"` root, where ARIA does not allow it). |
-| `required` | `boolean` | `false` | false | Renders the required (warning) border. `aria-required` is not allowed on `role="group"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field). |
+| `required` | `boolean` | `false` | false | Mirrors to `data-required` on the group and draws no border of its own. `aria-required` is not allowed on `role="group"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field). |
 | `disabled` | `boolean` | `false` | false | Renders the disabled visual, sets `aria-disabled="true"` on the root and disables the field controls inside (`InputGroup.Input`, `Input`, `Select`, …) through the Field context. A `Button` or `IconButton` inside needs its own `disabled`. |
 
 ## Slots
@@ -86,8 +86,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - `data-disabled` mirrors the `disabled` prop; sets `aria-disabled="true"`
 - Border semantics mirror `input` (independent, not compound):
   - `data-invalid` → `var(--danger-border)`
-  - `data-required` → `var(--warning-border)`
-- Hover (only when not focus-within, not invalid, not required, not disabled): `border-(--border-strong)`
+- Hover (only when not focus-within, not invalid, not disabled): `border-(--border-strong)`
 - Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset (suppressed when `data-disabled`)
 - Disabled: `bg-(--bg-disabled)`, `text-(--text-disabled)`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
 - Child seams (applied by the root via Tailwind child selectors):

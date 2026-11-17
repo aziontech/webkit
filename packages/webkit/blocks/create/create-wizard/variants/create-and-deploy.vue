@@ -782,7 +782,10 @@
                       v-if="projectMode === 'new'"
                       class="pb-(--spacing-md)"
                     >
-                      <Field :required="!!projectPicker.message">
+                      <Field
+                        required
+                        :invalid="!!projectPicker.message"
+                      >
                         <Field.Label>Name</Field.Label>
                         <Input
                           v-model="projectName"
@@ -966,7 +969,8 @@
                                   :key="field.name"
                                 >
                                   <Field
-                                    :required="!!errors['cache.' + policy.value + '.' + field.name]"
+                                    required
+                                    :invalid="!!errors['cache.' + policy.value + '.' + field.name]"
                                   >
                                     <Field.Label>{{ field.label }}</Field.Label>
                                     <Input
@@ -1050,7 +1054,8 @@
                               key="field-1"
                               v-if="field.kind === 'select'"
                               :data-field-invalid="!!errors['origin.' + field.name] || null"
-                              :required="!!errors['origin.' + field.name]"
+                              required
+                              :invalid="!!errors['origin.' + field.name]"
                             >
                               <div
                                 class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
@@ -1064,7 +1069,8 @@
                                 size="large"
                                 class="w-full"
                                 :display-value="labelFor(field.options)"
-                                :required="!!errors['origin.' + field.name]"
+                                required
+                                :invalid="!!errors['origin.' + field.name]"
                                 :placeholder="'Select a ' + field.label.toLowerCase()"
                               >
                                 <Select.Trigger
@@ -1089,7 +1095,8 @@
                             <Field
                               key="field-2"
                               v-else
-                              :required="!!errors['origin.' + field.name]"
+                              required
+                              :invalid="!!errors['origin.' + field.name]"
                             >
                               <Field.Label>{{ field.label }}</Field.Label>
                               <Input
@@ -1168,7 +1175,8 @@
 
                     <Field
                       v-if="form.domainType !== 'own'"
-                      :required="!!errors.domainPrefix"
+                      required
+                      :invalid="!!errors.domainPrefix"
                     >
                       <Field.Label>Domain prefix</Field.Label>
                       <Input
@@ -1192,7 +1200,10 @@
                     </Field>
 
                     <template v-else>
-                      <Field :required="!!errors.domainHost">
+                      <Field
+                        required
+                        :invalid="!!errors.domainHost"
+                      >
                         <Field.Label>Domain</Field.Label>
                         <Input
                           v-model="form.domainHost"
@@ -1205,7 +1216,10 @@
                         }}</Field.Description>
                       </Field>
 
-                      <Field :required="!!errors.name">
+                      <Field
+                        required
+                        :invalid="!!errors.name"
+                      >
                         <Field.Label>Name</Field.Label>
                         <Input
                           v-model="form.name"

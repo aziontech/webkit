@@ -19,7 +19,7 @@
     },
     {
       "name": "Required",
-      "summary": "",
+      "summary": "A required Textarea inside a Field: the label carries the Required marker and the border stays neutral until the field is invalid.",
       "file": "required.vue"
     },
     {

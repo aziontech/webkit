@@ -22,7 +22,7 @@
   },
   {
    "name": "RequiredFields",
-   "summary": "Create Service after Save on the empty form: Name and Address carry the required state with This field is required. under them, and typing into either clears its own error.",
+   "summary": "Create Service after Save on the empty form: Name and Address turn invalid with This field is required. under them, and typing into either clears its own error.",
    "file": "blocks/create/create-page/variants/required-fields.vue"
   }
  ],

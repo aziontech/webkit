@@ -2,7 +2,7 @@
 name: webkit-errors
 description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as an Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts and every outcome lands in one card Alert, and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
 status: active
-last_updated: 2026-11-10
+last_updated: 2026-11-17
 scope: general
 enforced_by: [webkit-component-states, webkit-accessibility, ui-verify]
 ---
@@ -60,7 +60,7 @@ _recoverability_ and the user's _presence_ do.
 
 | The failure…                                                     | Goes to                                                                          | Carries                                            |
 | ---------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------- |
-| **1.** Empty or malformed input, caught before any request       | the **field itself** — amber `required` prompt / red `invalid`                   | nothing — the field is the recovery                |
+| **1.** Empty or malformed input, caught before any request       | the **field itself** — its red `invalid` state and a `FieldError`                | nothing — the field is the recovery                |
 | **2.** Server rejection **scoped to one field**                  | a **`Alert`** inside **that field's own section**, + the field's `invalid` state | the fix, in words; on a long form, a scroll anchor |
 | **3.** Request failed, tied to **no** field (5xx, network)       | **`toast.error`**                                                                | **Retry**                                          |
 | **4.** Anything on a **signed-out** screen                       | **one `Alert` in the card** — auth never toasts                                  | Retry only if the user can't fix it                |
@@ -72,11 +72,12 @@ one surface. Row 5 is the inversion: the page that owned the error may not be mo
 ## 1. Client-side validation → the field
 
 An empty or malformed value never reaches the server, so it never reaches a `Alert` or a toast. It
-belongs on the control that holds it. Validate **on submit**, not on every keystroke, and keep the two
-states distinct:
+belongs on the control that holds it. Validate **on submit**, not on every keystroke:
 
-- **amber `required`** — the value is missing. A prompt, not an accusation.
-- **red `invalid`** — the value is present and wrong.
+- **`required`** is static from the first render. It shows the Required marker on the label and draws
+  no colour.
+- **red `invalid`** — a failed submit sets it for any blocking problem, an empty required value or a
+  malformed one, with a `FieldError` that says what to enter.
 
 Mechanics (the `Field` triad, `aria-describedby`, submit-time validation, the locked scope) live in
 **`/webkit-form`**. In a settings row (`SettingsRow`, `@aziontech/webkit/settings-row`) the message is a
@@ -108,8 +109,7 @@ try {
       `Another user deleted it while you were filling in this form, so the ` +
       `Application wasn't created. Nothing else was lost: reload the connector ` +
       `list and select another one.`
-    // …plus the field's own state. The value is PRESENT but no longer valid,
-    // so it is the red `invalid`, never the amber `required` prompt.
+    // …plus the field's own red `invalid` state.
     errors.connectorId = 'This connector no longer exists.'
   } else {
     // Unscoped → row 3.
@@ -276,8 +276,7 @@ application. Check your connection and try again."` — not `"Error 500"`.
   beside that control.
 - **Never a toast on a signed-out screen.** Every auth outcome lands in one `Alert` in the card.
 - **A field-scoped server rejection takes both surfaces** — the `Alert` in its section _and_ the
-  field's red `invalid` state. Never the amber `required` prompt: the value is present, just no longer
-  valid.
+  field's red `invalid` state.
 - **Never auto-dismiss an error that names a required action.** `Alert`s stay until recovery;
   background-job error toasts are `duration: 0` **and** `closable`.
 - **Release the lock in `finally`**, on success and failure alike — otherwise Retry cannot re-run.
@@ -319,8 +318,8 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 - **Surfaces** (resolve each via the MCP / catalog — see "How to find the components"):
   `@aziontech/webkit/alert` (inline notice: `severity`, `size`, `#actions` slot, default slot for
   copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
-  `closable`, `action`), the `@aziontech/webkit/field` compound + `/field-description` (the field's own
-  required / invalid state).
+  `closable`, `action`), the `@aziontech/webkit/field` compound + `/field-error` (the field's own
+  invalid state and its message).
 - **Blocks:** `state/form-validation` (rows 1 and 3 on a short form; row 2, the section `Alert` with
   its recovery action, in SectionRejected), `auth/sign-in` (row 4),
   `state/async-submit` (row 5, Edit and Redeploy).
@@ -333,7 +332,7 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 
 - [ ] Every `catch` on the screen routes to a surface picked from the table — not to whichever one was
       easiest.
-- [ ] Client-side validation renders on the field (amber `required` / red `invalid`), never in a
+- [ ] Client-side validation renders on the field (red `invalid` + `FieldError`), never in a
       `Alert` or a toast.
 - [ ] Field-scoped server rejections render a `Alert` in the owning section **and** set that field's
       red `invalid` state, and say what was not lost.

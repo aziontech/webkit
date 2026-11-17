@@ -267,8 +267,8 @@
                           placeholder="Acme Inc."
                           autocomplete="off"
                           :disabled="submitting"
-                          :required="!!errors.name && errors.nameKind === 'required'"
-                          :invalid="!!errors.name && errors.nameKind === 'invalid'"
+                          required
+                          :invalid="!!errors.name"
                           :aria-describedby="
                             errors.name ? 'create-organization-name-message' : undefined
                           "
@@ -400,7 +400,8 @@
                           :placeholder="DEFAULT_WORKSPACE"
                           autocomplete="off"
                           :disabled="submitting"
-                          :required="!!errors.workspace"
+                          required
+                          :invalid="!!errors.workspace"
                           :aria-describedby="
                             errors.workspace ? 'create-organization-workspace-message' : undefined
                           "

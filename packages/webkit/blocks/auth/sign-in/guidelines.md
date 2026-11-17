@@ -60,15 +60,15 @@ Put the copy in the default slot when it carries links; animate the entrance on 
 
 ### G. Field label — `Field`, `Field.Label` (required)
 
-A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`, `New password`, `Confirm password`. Every field on these screens is required; the `Field`'s `required` turns on with the required prompt after the primary action, and the label shows the indicator then.
+A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`, `New password`, `Confirm password`. Every field on these screens is required; the `Field` is `required` from the first render, so the label shows the Required marker before any submit.
 
 ### H. Email — `Input` (required)
 
-`type="email"`, `size="large"`, full width, with a `name`. Sign in uses `autocomplete="username"` so password managers pair it with the password step; the reset step uses `autocomplete="email"`; sign up uses `autocomplete="email"` too. Empty on submit takes `required`, filled but malformed takes `invalid`, and the error clears as the user types.
+`type="email"`, `size="large"`, full width, with a `name`. Sign in uses `autocomplete="username"` so password managers pair it with the password step; the reset step uses `autocomplete="email"`; sign up uses `autocomplete="email"` too. It is `required` from the start; empty or malformed on submit takes `invalid`, and the error clears as the user types.
 
 ### I. Field message — `FieldError` (conditional)
 
-Shows only after the primary action, under the email input, with `type="required"` when the value is empty and `type="invalid"` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
+Shows only after the primary action, under the email input, with a message that says what to enter: `This field is required.` when the value is empty, `Enter a valid email address.` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
 
 ### J. Step hint — `Tooltip` (password and reset steps)
 

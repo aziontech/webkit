@@ -64,7 +64,7 @@
   }
 
   export interface FormValidationSectionProps {
-    /** The origins the select offers; a chosen origin missing from the list is cleared and flagged required. Left out, the sample renders. */
+    /** The origins the select offers; a chosen origin missing from the list is cleared and the select turns invalid. Left out, the sample renders. */
     origins?: FormValidationOrigin[]
     /** Why the server refused the save; the danger Alert under the Origin heading says it and the select turns invalid. Left out, the sample message renders; pass an empty string for none. */
     originError?: string
@@ -334,7 +334,8 @@
                             class="w-full"
                             aria-label="Name"
                             placeholder="My Service"
-                            :required="!!errors.name"
+                            required
+                            :invalid="!!errors.name"
                             :aria-describedby="errors.name ? 'ev-name-error' : undefined"
                             :disabled="submitting"
                             @update:model-value="errors.name = ''"
@@ -387,7 +388,8 @@
                             size="large"
                             class="w-full"
                             placeholder="Select ports"
-                            :required="!!errors.httpPorts"
+                            required
+                            :invalid="!!errors.httpPorts"
                             :display-value="portsLabel"
                             :disabled="submitting"
                             @update:model-value="errors.httpPorts = ''"
@@ -549,8 +551,8 @@
                               class="w-full"
                               placeholder="Select an origin"
                               :display-value="originLabel"
-                              :required="!!errors.originId && !form.originId"
-                              :invalid="!!errors.originId && !!form.originId"
+                              required
+                              :invalid="!!errors.originId"
                               :disabled="submitting"
                               @update:model-value="onOriginChange"
                             >
@@ -589,7 +591,8 @@
                             size="large"
                             class="w-full"
                             aria-label="Host header"
-                            :required="!!errors.hostHeader"
+                            required
+                            :invalid="!!errors.hostHeader"
                             :aria-describedby="
                               errors.hostHeader ? 'ev-hostHeader-error' : undefined
                             "

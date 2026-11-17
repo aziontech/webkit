@@ -34,7 +34,7 @@ Each band is a `SettingsSection` with a title and a `hint` (the glyph that revea
 
 ### D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 
-A `SettingsRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width; every field row sets `stackable`, so on a phone the control moves under the copy at full width and the description wraps in full. On submit, an empty required field gets `:required` and a `FieldError type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
+A `SettingsRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width; every field row sets `stackable`, so on a phone the control moves under the copy at full width and the description wraps in full. Each required control takes `required` from the first render. On submit, an empty required field or a value the endpoint rejects gets `:invalid` and a `FieldError` that says what to enter. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
 
 ### E. Switch rows — `Switch` (optional)
 
@@ -97,7 +97,7 @@ To go live, render the block from a page that owns the request:
 - Don't show the sidebar on this page, or open it as a modal over the list.
 - Don't stretch the commit bar across the page or build the centred card by hand; it is `SaveBar variant="centered"`.
 - Don't print the band's guidance as a paragraph under its title; use the `hint`.
-- Don't mark fields required or invalid before the first submit, or show both states on one field.
+- Don't mark fields invalid before the first submit; `required` is set from the start and draws no colour.
 - Don't make Save deploy, publish or charge as a side effect; creating is not deploying.
 - Don't add a validation summary at the top; each message sits at its field.
 - Don't squeeze a textarea or radio group into the right-hand cell; stack the row.
@@ -117,7 +117,7 @@ To go live, render the block from a page that owns the request:
 
 - One `main` landmark holding one `form`, labelled by the `PageHeader` title through `aria-labelledby`, with `novalidate` so the page's own messages replace the browser's.
 - A `fieldset` with a visually hidden `legend` groups the sections.
-- Each message is tied to its control with `aria-describedby` and appears only on submit; required and invalid are announced through the control's own state.
+- Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
 - The collapsed Advanced region is `inert` while closed, so keyboard focus never lands in hidden fields.
 - The back `IconButton` and the account trigger have `aria-label`s; decorative icons carry `aria-hidden="true"`.
 - Focus order follows reading order: header, heading, General, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).

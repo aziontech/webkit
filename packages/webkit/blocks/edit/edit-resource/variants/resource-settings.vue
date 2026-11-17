@@ -129,8 +129,8 @@
                       aria-label="Name"
                       placeholder="office-ranges"
                       autocomplete="off"
-                      :required="errors.name?.type === 'required'"
-                      :invalid="errors.name?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.name"
                       :aria-describedby="errors.name ? 'access-lists-name-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('name')"
@@ -192,8 +192,8 @@
                       :rows="5"
                       aria-label="List"
                       placeholder="13335&#10;53331"
-                      :required="errors.items?.type === 'required'"
-                      :invalid="errors.items?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('items')"
@@ -217,8 +217,8 @@
                       :rows="5"
                       aria-label="List"
                       placeholder="192.0.2.10&#10;198.51.100.24&#10;203.0.113.7 #comment"
-                      :required="errors.items?.type === 'required'"
-                      :invalid="errors.items?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('items')"
@@ -242,8 +242,8 @@
                       :rows="5"
                       aria-label="Countries"
                       placeholder="BR&#10;US"
-                      :required="errors.items?.type === 'required'"
-                      :invalid="errors.items?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('items')"

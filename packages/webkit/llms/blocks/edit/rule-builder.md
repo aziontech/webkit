@@ -1,6 +1,6 @@
 # RuleBuilder (`edit/rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
 
 - Surface: app
 - Source: `blocks/edit/rule-builder/rule-builder.vue` in `@aziontech/webkit`
@@ -813,7 +813,8 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <Field
                   :disabled="submitting"
-                  :required="nameError"
+                  required
+                  :invalid="nameError"
                 >
                   <Field.Label for="rule-name">Name</Field.Label>
                   <Input
@@ -1043,7 +1044,8 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                               :aria-label="argument.label"
                               :placeholder="argument.placeholder"
                               :disabled="submitting"
-                              :required="argumentMissing(item, argument.field)"
+                              required
+                              :invalid="argumentMissing(item, argument.field)"
                             />
                             <div
                               v-else-if="argument?.kind === 'select'"
@@ -1055,7 +1057,8 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                                 class="w-full"
                                 :disabled="submitting"
                                 :placeholder="`Select a ${argument.label.toLowerCase()}`"
-                                :required="argumentMissing(item, argument.field)"
+                                required
+                                :invalid="argumentMissing(item, argument.field)"
                                 :display-value="(value) => optionLabelIn(argument.source, value)"
                               >
                                 <Select.Trigger :aria-label="argument.label" />
@@ -1088,7 +1091,8 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                                 :aria-label="part.label"
                                 :placeholder="part.placeholder"
                                 :disabled="submitting"
-                                :required="argumentMissing(item, part.field)"
+                                required
+                                :invalid="argumentMissing(item, part.field)"
                               />
                             </div>
                             <Input

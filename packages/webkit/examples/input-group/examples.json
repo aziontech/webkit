@@ -49,7 +49,7 @@
     },
     {
       "name": "Required",
-      "summary": "Required state — root shows the warning border.",
+      "summary": "A required InputGroup inside a Field: the label carries the Required marker, the group root gets data-required and its input gets required and aria-required; the border stays neutral.",
       "file": "required.vue"
     },
     {

@@ -73,7 +73,7 @@
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
-- `data-required` mirrors the `required` prop; drives the warning-border treatment
+- `data-required` mirrors the `required` prop; it draws no border of its own: the Required marker on the wrapping `Field.Label` says a field is required, and a missing value is shown as `invalid` after a failed submit
 - `data-leading` / `data-trailing` mirror slot presence (driven by `$slots.leading` / `$slots.trailing`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 

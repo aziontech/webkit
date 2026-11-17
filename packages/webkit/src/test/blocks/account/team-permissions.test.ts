@@ -138,7 +138,7 @@ describe('account/team-permissions EditTeam', () => {
   it('starts from the saved team with Save changes disabled', () => {
     const view = render(EditTeam)
     expect(view.getByRole('heading', { name: 'Edit Team' })).toBeTruthy()
-    expect((view.getByLabelText('Name') as HTMLInputElement).value).toBe('Developers')
+    expect((view.getByLabelText(/^Name\b/) as HTMLInputElement).value).toBe('Developers')
     expect(memberNames()).toEqual(['Ava Wilson', 'Brian Hughes', 'Chloe Park'])
     expect(view.getByRole('button', { name: 'Save changes' })).toBeDisabled()
     expect(view.getByRole('checkbox', { name: 'Edit Applications' })).toBeChecked()

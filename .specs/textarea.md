@@ -3,14 +3,14 @@ name: textarea
 category: input
 structure: monolithic
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: bfbf846da65acc8c320f8085771f3591901863bcb2e3ff518cf4ab120e566764
+checksum: 388efaaadc2ff124e67c75123ec04b0b44c98115545bb0bb94ea619f03e46e51
 created: 2026-06-23
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Textarea — Component Spec
@@ -88,7 +88,7 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 | `placeholder` | `string`                                         | `''`         | false    | Placeholder shown when the field is empty.                                                                                                                                                                                                                           |
 | `disabled`    | `boolean`                                        | `false`      | false    | Disables interaction and applies disabled tokens.                                                                                                                                                                                                                    |
 | `readonly`    | `boolean`                                        | `false`      | false    | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
-| `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone.                                                                                                                                                          |
+| `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`.                                                                                                                                                                                                                     |
 | `required`    | `boolean`                                        | `false`      | false    | Marks the field as required and sets `aria-required`.                                                                                                                                                                                                                |
 | `resize`      | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior.                                                                                  |
 | `monospace`   | `boolean`                                        | `false`      | false    | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`.                                                                |
@@ -118,7 +118,7 @@ _No slots._
 
 ## States
 
-- Visual states: `default`, `hover`, `focus`, `filled`, `disabled`, `required` (warning border), `invalid` (danger border), `readonly`
+- Visual states: `default`, `hover`, `focus`, `filled`, `disabled`, `required` (no visual change: the wrapping `Field.Label` carries the Required marker), `invalid` (danger border), `readonly`
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop
@@ -150,7 +150,6 @@ _No slots._
 | border                   | `var(--border-default)`       |
 | border (hover)           | `var(--border-strong)`        |
 | border (focus)           | `var(--ring-color)`           |
-| border (required)        | `var(--warning-border)`       |
 | border (invalid)         | `var(--danger-border)`        |
 | border width             | `var(--border-width-default)` |
 | spacing (padding)        | `var(--spacing-sm)`           |
@@ -204,7 +203,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 - Default
 - Disabled
 - Invalid — justified: `invalid` is a distinct visual state coming from the Figma spec that consumers need to verify in isolation.
-- Required — justified: `required` swaps the border to the warning (yellow) token and must be verifiable in isolation.
+- Required — justified: shows a required textarea inside a `Field`, where the label carries the Required marker and the border stays neutral until the field is invalid.
 - Readonly — justified: the `readonly` look (filled, non-editable, no hover border) is a top-level prop and not visible from the other examples; shown as a generated certificate (`monospace`) inside a `Field` whose description says why it cannot change.
 - Monospace — justification: the code face is a top-level prop not visible in the other examples; shows a zone-file paste box.
 - AutoResize — justified: `autoResize` with `minRows` and `maxRows` is a distinct sizing mode none of the other examples shows; a prompt box that starts at one line and grows to six before it scrolls.

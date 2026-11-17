@@ -370,8 +370,8 @@
                       aria-label="Name"
                       placeholder="my-data-stream"
                       autocomplete="off"
-                      :required="errors.name?.type === 'required'"
-                      :invalid="errors.name?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.name"
                       :aria-describedby="errors.name ? 'data-stream-name-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('name')"
@@ -471,8 +471,8 @@
                       :rows="4"
                       aria-label="Selected workloads"
                       placeholder="storefront&#10;checkout-api"
-                      :required="errors.workloads?.type === 'required'"
-                      :invalid="errors.workloads?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.workloads"
                       :aria-describedby="
                         errors.workloads ? 'data-stream-workloads-message' : undefined
                       "
@@ -609,8 +609,8 @@
                       aria-label="Template name"
                       placeholder="my-custom-template"
                       autocomplete="off"
-                      :required="errors.templateName?.type === 'required'"
-                      :invalid="errors.templateName?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.templateName"
                       :aria-describedby="
                         errors.templateName ? 'data-stream-templateName-message' : undefined
                       "
@@ -754,8 +754,8 @@
                       aria-label="URL"
                       placeholder="https://collector.example.com/ingest"
                       autocomplete="off"
-                      :required="errors.url?.type === 'required'"
-                      :invalid="errors.url?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.url"
                       :aria-describedby="errors.url ? 'data-stream-url-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('url')"
@@ -780,8 +780,8 @@
                       aria-label="Payload format"
                       placeholder="$dataset"
                       autocomplete="off"
-                      :required="errors.payloadFormat?.type === 'required'"
-                      :invalid="errors.payloadFormat?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.payloadFormat"
                       :aria-describedby="
                         errors.payloadFormat ? 'data-stream-payloadFormat-message' : undefined
                       "
@@ -808,8 +808,8 @@
                       aria-label="Log line separator"
                       placeholder="\n"
                       autocomplete="off"
-                      :required="errors.lineSeparator?.type === 'required'"
-                      :invalid="errors.lineSeparator?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.lineSeparator"
                       :aria-describedby="
                         errors.lineSeparator ? 'data-stream-lineSeparator-message' : undefined
                       "
@@ -837,8 +837,8 @@
                         :rows="3"
                         aria-label="Custom headers"
                         placeholder="header-name:value"
-                        :required="errors.headers?.type === 'required'"
-                        :invalid="errors.headers?.type === 'invalid'"
+                        required
+                        :invalid="!!errors.headers"
                         :aria-describedby="
                           errors.headers ? 'data-stream-headers-message' : undefined
                         "
@@ -867,8 +867,8 @@
                         :rows="2"
                         aria-label="Bootstrap servers"
                         placeholder="host1:9092,host2:9092"
-                        :required="errors.bootstrapServers?.type === 'required'"
-                        :invalid="errors.bootstrapServers?.type === 'invalid'"
+                        required
+                        :invalid="!!errors.bootstrapServers"
                         :aria-describedby="
                           errors.bootstrapServers
                             ? 'data-stream-bootstrapServers-message'
@@ -898,8 +898,8 @@
                       aria-label="Topic"
                       placeholder="edge-records"
                       autocomplete="off"
-                      :required="errors.topic?.type === 'required'"
-                      :invalid="errors.topic?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.topic"
                       :aria-describedby="errors.topic ? 'data-stream-topic-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('topic')"
@@ -924,8 +924,8 @@
                       aria-label="Bucket"
                       placeholder="my-records-bucket"
                       autocomplete="off"
-                      :required="errors.bucket?.type === 'required'"
-                      :invalid="errors.bucket?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.bucket"
                       :aria-describedby="errors.bucket ? 'data-stream-bucket-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('bucket')"
@@ -950,8 +950,8 @@
                       aria-label="Region"
                       placeholder="us-east-1"
                       autocomplete="off"
-                      :required="errors.region?.type === 'required'"
-                      :invalid="errors.region?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.region"
                       :aria-describedby="errors.region ? 'data-stream-region-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('region')"
@@ -976,8 +976,8 @@
                       aria-label="Access key"
                       placeholder="AKIAEXAMPLE"
                       autocomplete="off"
-                      :required="errors.accessKey?.type === 'required'"
-                      :invalid="errors.accessKey?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.accessKey"
                       :aria-describedby="
                         errors.accessKey ? 'data-stream-accessKey-message' : undefined
                       "
@@ -1003,8 +1003,8 @@
                       aria-label="Secret key"
                       placeholder="Enter the secret key"
                       autocomplete="off"
-                      :required="errors.secretKey?.type === 'required'"
-                      :invalid="errors.secretKey?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.secretKey"
                       :aria-describedby="
                         errors.secretKey ? 'data-stream-secretKey-message' : undefined
                       "
@@ -1032,8 +1032,8 @@
                       aria-label="Intake URL"
                       placeholder="https://logs.example.com/api/v2/logs"
                       autocomplete="off"
-                      :required="errors.analyticsUrl?.type === 'required'"
-                      :invalid="errors.analyticsUrl?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.analyticsUrl"
                       :aria-describedby="
                         errors.analyticsUrl ? 'data-stream-analyticsUrl-message' : undefined
                       "
@@ -1059,8 +1059,8 @@
                       aria-label="API key"
                       placeholder="Enter the API key"
                       autocomplete="off"
-                      :required="errors.apiKey?.type === 'required'"
-                      :invalid="errors.apiKey?.type === 'invalid'"
+                      required
+                      :invalid="!!errors.apiKey"
                       :aria-describedby="errors.apiKey ? 'data-stream-apiKey-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('apiKey')"

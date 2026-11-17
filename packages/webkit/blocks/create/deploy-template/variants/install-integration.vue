@@ -170,7 +170,8 @@
                 <Field
                   v-for="setting in settings"
                   :key="setting.name"
-                  :required="!!errorOf(setting)"
+                  :required="setting.required"
+                  :invalid="!!errorOf(setting)"
                 >
                   <Field.Label :for="'setting-' + setting.name">{{ setting.label }}</Field.Label>
                   <Input

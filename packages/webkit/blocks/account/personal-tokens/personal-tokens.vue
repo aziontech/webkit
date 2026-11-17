@@ -531,8 +531,8 @@
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
                   <Field
-                    :required="!!errors.name && !form.name.trim()"
-                    :invalid="!!errors.name && !!form.name.trim()"
+                    required
+                    :invalid="!!errors.name"
                   >
                     <Field.Label for="token-name">Name</Field.Label>
                     <Input

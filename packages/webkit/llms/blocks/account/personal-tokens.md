@@ -718,8 +718,8 @@ Each variant is the same screen in another state: `get_block("account/personal-t
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
                   <Field
-                    :required="!!errors.name && !form.name.trim()"
-                    :invalid="!!errors.name && !!form.name.trim()"
+                    required
+                    :invalid="!!errors.name"
                   >
                     <Field.Label for="token-name">Name</Field.Label>
                     <Input

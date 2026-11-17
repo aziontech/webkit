@@ -205,8 +205,8 @@
                         aria-label="Name"
                         placeholder="static-assets"
                         autocomplete="off"
-                        :required="errors.name?.type === 'required'"
-                        :invalid="errors.name?.type === 'invalid'"
+                        required
+                        :invalid="!!errors.name"
                         :aria-describedby="errors.name ? 'cache-name-message' : undefined"
                         :disabled="saving"
                         @update:model-value="clear('name')"
@@ -502,8 +502,8 @@
                         aria-label="Query string fields"
                         placeholder="page, sort, lang"
                         autocomplete="off"
-                        :required="errors.queryStringFields?.type === 'required'"
-                        :invalid="errors.queryStringFields?.type === 'invalid'"
+                        required
+                        :invalid="!!errors.queryStringFields"
                         :aria-describedby="
                           errors.queryStringFields ? 'cache-queryStringFields-message' : undefined
                         "
@@ -554,8 +554,8 @@
                         aria-label="Cookie names"
                         placeholder="session_id, ab_*"
                         autocomplete="off"
-                        :required="errors.cookieNames?.type === 'required'"
-                        :invalid="errors.cookieNames?.type === 'invalid'"
+                        required
+                        :invalid="!!errors.cookieNames"
                         :aria-describedby="
                           errors.cookieNames ? 'cache-cookieNames-message' : undefined
                         "

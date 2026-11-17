@@ -292,8 +292,8 @@
                           :rows="6"
                           :aria-label="selectedType.label + ' list'"
                           :placeholder="selectedType.placeholder"
-                          :required="!!error.message && error.type === 'required'"
-                          :invalid="!!error.message && error.type === 'invalid'"
+                          required
+                          :invalid="!!error.message"
                           aria-describedby="create-purge-arguments-message"
                           :spellcheck="false"
                           autocomplete="off"

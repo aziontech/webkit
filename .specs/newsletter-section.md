@@ -3,10 +3,10 @@ name: newsletter-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: 6fae93e8dc28811afda1b0e5fdb671c111b2229b5e1f16c4f2417040303df2e3
+last_updated: 2026-11-17
+checksum: d3eb74f72efaaf988dd00485fcd454be1a6c40c274fba7c398d3df738fc48f8d
 template: 2
 ---
 
@@ -113,7 +113,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 ## States
 
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `failed`
-- `invalid`: an empty field takes the amber `required` state with `form.requiredMessage`, a malformed address the red `invalid` state with `form.invalidMessage`, under the field (never both at once); focus returns to the field; typing clears it; nothing is emitted
+- `invalid`: the field is `invalid` with `form.requiredMessage` when empty or `form.invalidMessage` when malformed, under the field; the field is `required` from the first render, so only a failed submit turns it red; focus returns to the field; typing clears it; nothing is emitted
 - `loading` (prop): the field is disabled, the button shows its loading state and a submit emits nothing
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
 - `failed` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
@@ -144,7 +144,7 @@ _none_
 
 - Visible focus: owned by `input` and `button`.
 - Keyboard map: `Tab` reaches the field then the button; `Enter` in the field or on the button submits.
-- ARIA: the band is a `<section>` named by its title (`aria-label`); the ask is a `<label for>` bound to the field with `useId`, and without a title a visually hidden label ("Email address") keeps the field named; the field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`; the validation message is the field's helper text, an empty submit sets `aria-required` and a malformed address `aria-invalid`. The success message is a `status` region and the failure message an `alert`. The texture strip is `aria-hidden`.
+- ARIA: the band is a `<section>` named by its title (`aria-label`); the ask is a `<label for>` bound to the field with `useId`, and without a title a visually hidden label ("Email address") keeps the field named; the field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`; the validation message is the field's helper text, the field carries `aria-required` from the first render, and an empty or malformed submit sets `aria-invalid`. The success message is a `status` region and the failure message an `alert`. The texture strip is `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline and ask `var(--text-default)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the texture and the button carry their own fallback.
 - Touch target ≥40×40 px — the field and the button are large.

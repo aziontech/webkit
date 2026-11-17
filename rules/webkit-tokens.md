@@ -72,6 +72,7 @@ use it, so you can check a choice against a real one.
 | Status message                                      | `--success`, `--warning`, `--danger`, `--info` with `-border`, `-foreground` and `-mark` | `Alert`, `Tag`, `Badge`, `Trace` spans, `Button variant="danger"`. The fill is the box, `-border` its edge, `-foreground` its icon or text. A status mark that stands on the page (the `StatusIndicator` dot, the `OutcomeIcon` disc) is `-mark`. |
 | Severity                                            | `--severity-critical`, `-high`, `-medium`, `-low`                                        | the bars of `SeverityTag` only                                                                                                                                                                                                                    |
 | Links                                               | `--text-link`, `--text-link-hover`                                                       | `Button variant="link"`, links in text                                                                                                                                                                                                            |
+| Error text on the page                              | `--text-danger`                                                                          | `FieldError` message, a field error in `FieldDescription`, any error sentence on a surface (red.600 in light, red.200 in dark). Not `--danger-foreground`, which is text on the `--danger` fill                                                   |
 | Form field outline                                  | `--border-input`                                                                         | the resting and disabled outline of `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `OtpInput`, the date fields, `Checkbox`, `RadioGroup`, `Switch`                                                                 |
 | Charts                                              | `--chart-*`                                                                              | the chart components; series, status and severity colors are not interchangeable                                                                                                                                                                  |
 
@@ -83,13 +84,13 @@ Defined but not used by any component yet: `--accent-mask`, `--accent-selected`,
 Every colour pair passes **both** WCAG 2.1 AA (4.5:1 text, 3:1 large text, icons and UI marks) and
 APCA (0.0.98G-4g, the `|Lc|` value):
 
-| What sits on the colour                    | APCA target | Examples                                                          |
-| ------------------------------------------ | ----------- | ----------------------------------------------------------------- |
-| Body text                                  | Lc 75       | `--text-default` on the surfaces                                  |
-| Other text (labels, captions, button text) | Lc 60       | `--text-muted`, links, every `-foreground` on its fill            |
-| Icons                                      | Lc 45       | status icons in `--success-foreground` … on a surface             |
-| Solid marks (dots, bars, chart series)     | Lc 30       | `--chart-series-*`, `--severity-*`, `--border-selected`, the ring |
-| Borders and dividers                       | Lc 15       | `--border-default`, `--border-muted`, `--border-input`            |
+| What sits on the colour                    | APCA target | Examples                                                                                                             |
+| ------------------------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| Body text                                  | Lc 75       | `--text-default` on the surfaces                                                                                     |
+| Other text (labels, captions, button text) | Lc 60       | `--text-muted`, links, `--text-danger`, every `-foreground` on its fill                                              |
+| Icons                                      | Lc 45       | status icons in `--success-foreground` … on a surface                                                                |
+| Solid marks (dots, bars, chart series)     | Lc 30       | `--chart-series-*`, `--severity-*`, `--border-selected`, the ring                                                    |
+| Borders and dividers                       | Lc 15       | `--border-default`, `--border-muted`, `--border-input`, `--danger-border` (also WCAG 3:1, the invalid field outline) |
 
 The theme test `packages/theme/test/apca-contrast.test.mjs` computes Lc for these pairs on
 `--bg-canvas`, `--bg-surface` and `--bg-surface-raised` in light and dark, and fails a pair below

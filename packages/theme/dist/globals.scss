@@ -752,6 +752,7 @@
   --text-brand: #F3652B;
   --text-link: #005FCC;
   --text-link-hover: #004799;
+  --text-danger: #B71515;
   --text-contrast: #FAFAFA;
   --ring-color: #666666;
   --code-syntax-identifier: #141414;
@@ -771,7 +772,7 @@
   --warning-foreground: #312602;
   --warning-mark: #947105;
   --danger: #F3A5A5;
-  --danger-border: #E51A1A66;
+  --danger-border: #E74B4B;
   --danger-foreground: #2E0606;
   --danger-mark: #E51A1A;
   --info: #99C9FF;
@@ -882,6 +883,7 @@
   --text-brand: #F3652B;
   --text-link: #99C9FF;
   --text-link-hover: #99C9FF;
+  --text-danger: #F3A5A5;
   --text-contrast: #000000;
   --ring-color: #808080;
   --code-syntax-identifier: #FAFAFA;
@@ -901,7 +903,7 @@
   --warning-foreground: #F7BD08;
   --warning-mark: #C59707;
   --danger: #5B0B0B;
-  --danger-border: #E51A1A66;
+  --danger-border: #E74B4B;
   --danger-foreground: #F9D2D2;
   --danger-mark: #ED7878;
   --info: #001833;
@@ -1020,6 +1022,7 @@
     --text-brand: #F3652B;
     --text-link: #99C9FF;
     --text-link-hover: #99C9FF;
+    --text-danger: #F3A5A5;
     --text-contrast: #000000;
     --ring-color: #808080;
     --code-syntax-identifier: #FAFAFA;
@@ -1039,7 +1042,7 @@
     --warning-foreground: #F7BD08;
     --warning-mark: #C59707;
     --danger: #5B0B0B;
-    --danger-border: #E51A1A66;
+    --danger-border: #E74B4B;
     --danger-foreground: #F9D2D2;
     --danger-mark: #ED7878;
     --info: #001833;
@@ -1647,6 +1650,7 @@
 @utility text-disabled { color: var(--text-disabled); }
 @utility text-brand { color: var(--text-brand); }
 @utility text-link-hover { color: var(--text-link-hover); }
+@utility text-danger { color: var(--text-danger); }
 @utility text-contrast { color: var(--text-contrast); }
 @utility ring-color { --tw-ring-color: var(--ring-color); }
 @utility bg-success { background-color: var(--success); }
@@ -1674,7 +1678,6 @@
 @utility text-warning-mark { color: var(--warning-mark); }
 @utility border-warning-mark { border-color: var(--warning-mark); }
 @utility bg-danger { background-color: var(--danger); }
-@utility text-danger { color: var(--danger); }
 @utility border-danger { border-color: var(--danger); }
 @utility bg-danger-border { background-color: var(--danger-border); }
 @utility text-danger-border { color: var(--danger-border); }

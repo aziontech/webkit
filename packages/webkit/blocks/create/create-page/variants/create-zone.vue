@@ -305,8 +305,8 @@
                           aria-label="Name"
                           placeholder="My zone"
                           autocomplete="off"
-                          :required="!!errors.name && errors.nameKind === 'required'"
-                          :invalid="!!errors.name && errors.nameKind === 'invalid'"
+                          required
+                          :invalid="!!errors.name"
                           :aria-describedby="errors.name ? 'create-zone-name-message' : undefined"
                           @update:model-value="errors.name = ''"
                         />
@@ -328,8 +328,8 @@
                           aria-label="Domain name"
                           placeholder="example.com"
                           autocomplete="off"
-                          :required="!!errors.domain && errors.domainKind === 'required'"
-                          :invalid="!!errors.domain && errors.domainKind === 'invalid'"
+                          required
+                          :invalid="!!errors.domain"
                           :aria-describedby="
                             errors.domain ? 'create-zone-domain-message' : undefined
                           "

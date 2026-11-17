@@ -651,6 +651,7 @@
    "--text-button-md-letter-spacing",
    "--text-button-md-line-height",
    "--text-contrast",
+   "--text-danger",
    "--text-default",
    "--text-disabled",
    "--text-heading-2xl-font-size",
@@ -1502,6 +1503,7 @@
     "--text-button-md-letter-spacing",
     "--text-button-md-line-height",
     "--text-contrast",
+    "--text-danger",
     "--text-default",
     "--text-disabled",
     "--text-heading-2xl-font-size",
@@ -2048,6 +2050,13 @@
     "dark": "#99C9FF",
     "purpose": "A link under the pointer."
    },
+   "--text-danger": {
+    "group": "text",
+    "type": "color",
+    "light": "#B71515",
+    "dark": "#F3A5A5",
+    "purpose": "Error text on the page, such as the FieldError message."
+   },
    "--text-contrast": {
     "group": "text",
     "type": "color",
@@ -2184,9 +2193,9 @@
    "--danger-border": {
     "group": "danger",
     "type": "color",
-    "light": "#E51A1A66",
-    "dark": "#E51A1A66",
-    "purpose": "The edge of a danger box."
+    "light": "#E74B4B",
+    "dark": "#E74B4B",
+    "purpose": "The edge of a danger box and the outline of an invalid field."
    },
    "--danger-foreground": {
     "group": "danger",
@@ -3066,7 +3075,7 @@
      "font-size": "1.875rem",
      "line-height": "1.25",
      "font-weight": "400",
-     "letter-spacing": "-0.16rem"
+     "letter-spacing": "-0.046em"
     },
     "purpose": "The largest page heading, for a marketing hero.",
     "breakpoints": {
@@ -3086,7 +3095,7 @@
      "font-size": "1.875rem",
      "line-height": "1",
      "font-weight": "400",
-     "letter-spacing": "-0.16rem"
+     "letter-spacing": "-0.053em"
     },
     "purpose": "A marketing section heading.",
     "breakpoints": {
@@ -14639,7 +14648,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Renders the required (warning) border. `aria-required` is not allowed on `role=\"group\"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field)."
+     "doc": "Mirrors to `data-required` on the group and draws no border of its own. `aria-required` is not allowed on `role=\"group\"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field)."
     },
     {
      "name": "disabled",
@@ -14688,7 +14697,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Renders the required (warning) border. `aria-required` is not allowed on `role=\"group\"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field)."
+     "doc": "Mirrors to `data-required` on the group and draws no border of its own. `aria-required` is not allowed on `role=\"group\"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field)."
     },
     {
      "name": "disabled",
@@ -16272,7 +16281,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone."
+     "doc": "Applies invalid styling and sets `aria-invalid`."
     },
     {
      "name": "required",
@@ -17117,7 +17126,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component."
+     "doc": "Marks the field as required and sets `aria-required` on the trigger, matching `Input`; it draws no border of its own. The label's Required tag is owned by the wrapping form-field, not by this component."
     },
     {
      "name": "invalid",
@@ -17226,7 +17235,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component."
+     "doc": "Marks the field as required and sets `aria-required` on the trigger, matching `Input`; it draws no border of its own. The label's Required tag is owned by the wrapping form-field, not by this component."
     },
     {
      "name": "invalid",
@@ -35494,7 +35503,7 @@
    "title": "Blocks/Edit/RuleBuilder",
    "source": "blocks/edit/rule-builder/rule-builder.vue",
    "surface": "app",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -36506,7 +36515,7 @@
    "title": "Blocks/State/FormValidation",
    "source": "blocks/state/form-validation/form-validation.vue",
    "surface": "app",
-   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. The block fetches nothing: Create emits `submit` with the values, and the page passes back `submitting`, `error`, `takenKey` or `saved`. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `SectionHeader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select is flagged required. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/creation-bar), not in ConsoleLayout.",
+   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. A required field carries the Required marker from the start; on submit an empty or filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. The block fetches nothing: Create emits `submit` with the values, and the page passes back `submitting`, `error`, `takenKey` or `saved`. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `SectionHeader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select asks for another origin. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/creation-bar), not in ConsoleLayout.",
    "intents": [
     "form validation",
     "validation errors",

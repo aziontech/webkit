@@ -49,7 +49,7 @@ One `Wizard` (`aria-label="Set up your organization"`, `submit-label="Create Org
 
 ### F. Fields — `Field` (required)
 
-Full name and organization name, each with `Field.Label` and `Field.Description`. On submit, an empty value sets `required` (amber) and the description becomes `This field is required.`
+Full name and organization name, each with `Field.Label` and `Field.Description`. Each `Field` is `required` from the start, so the label shows the Required marker; on submit, an empty value sets `invalid` and the description becomes `This field is required.`
 
 ### G. Text inputs — `Input` (required)
 
@@ -141,7 +141,7 @@ Then delete `sample.ts` and its import.
 
 ## Do
 
-- Validate on Next, not on every keystroke; required fields show the amber prompt, not the red error.
+- Validate on Next, not on every keystroke; required fields show the Required marker from the start and turn `invalid` only after a failed Next.
 - Explain the step under its heading before the fields (what an organization is, that it is created once).
 - Keep every value when the user goes to the previous step; the three steps share one component state.
 - Hide the wireframe below `lg`; it is decoration (`aria-hidden`).
@@ -674,7 +674,10 @@ Each variant is the same screen in another state: `get_block("account/onboarding
 
                       <div class="animate-fade-in motion-reduce:animate-none">
                         <div class="flex flex-col gap-(--spacing-lg)">
-                          <Field :required="organizationSubmitted && !fullName.trim()">
+                          <Field
+                            required
+                            :invalid="organizationSubmitted && !fullName.trim()"
+                          >
                             <Field.Label>Your full name</Field.Label>
                             <Input
                               v-model="fullName"
@@ -690,7 +693,10 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                             }}</Field.Description>
                           </Field>
 
-                          <Field :required="organizationSubmitted && !organizationName.trim()">
+                          <Field
+                            required
+                            :invalid="organizationSubmitted && !organizationName.trim()"
+                          >
                             <Field.Label>Organization name</Field.Label>
                             <Input
                               v-model="organizationName"

@@ -190,7 +190,8 @@
                         :disabled="submitting"
                         class="w-full"
                         aria-label="Full name"
-                        :required="submitted && nameEmpty"
+                        required
+                        :invalid="submitted && nameEmpty"
                         :aria-describedby="submitted && nameEmpty ? 'full-name-error' : undefined"
                       />
                       <FieldError
@@ -215,8 +216,8 @@
                         :disabled="submitting"
                         class="w-full"
                         aria-label="Email"
-                        :required="submitted && emailEmpty"
-                        :invalid="submitted && !emailEmpty && emailInvalid"
+                        required
+                        :invalid="submitted && (emailEmpty || emailInvalid)"
                         :aria-describedby="submitted && emailInvalid ? 'email-error' : undefined"
                       />
                       <FieldError

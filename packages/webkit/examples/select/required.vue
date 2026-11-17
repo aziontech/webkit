@@ -1,36 +1,44 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
   import Select from '@aziontech/webkit/select'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
-  const value = ref('')
+  const region = ref('')
   const submitted = ref(false)
-  const options = [
-    { value: 'opt-1', label: 'Option 1' },
-    { value: 'opt-2', label: 'Option 2' },
-    { value: 'opt-3', label: 'Option 3' },
-    { value: 'opt-4', label: 'Option 4' }
+  const missing = computed(() => submitted.value && !region.value)
+  const regions = [
+    { value: 'us-east', label: 'US East' },
+    { value: 'us-west', label: 'US West' },
+    { value: 'eu-central', label: 'EU Central' },
+    { value: 'ap-southeast', label: 'Asia Pacific Southeast' }
   ]
 </script>
 
 <template>
-  <div class="flex w-[280px] flex-col items-start gap-4">
-    <Select
-      aria-label="Option"
-      v-model="value"
-      :required="submitted && !value"
-      placeholder="Select an option"
+  <div class="flex w-full max-w-(--container-xs) flex-col items-start gap-(--spacing-md)">
+    <Field
+      required
+      :invalid="missing"
+      class="w-full"
     >
-      <Select.Trigger />
-      <Select.Content>
-        <Select.Item
-          v-for="o in options"
-          :key="o.value"
-          :value="o.value"
-          >{{ o.label }}</Select.Item
-        >
-      </Select.Content>
-    </Select>
+      <Field.Label>Region</Field.Label>
+      <Select
+        v-model="region"
+        placeholder="Select a region"
+      >
+        <Select.Trigger />
+        <Select.Content>
+          <Select.Item
+            v-for="option in regions"
+            :key="option.value"
+            :value="option.value"
+            >{{ option.label }}</Select.Item
+          >
+        </Select.Content>
+      </Select>
+      <Field.Error v-if="missing">Choose a region.</Field.Error>
+    </Field>
     <Button
       label="Submit"
       size="medium"

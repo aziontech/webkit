@@ -185,8 +185,8 @@
                           aria-label="Name"
                           placeholder="my-new-database"
                           autocomplete="off"
-                          :required="!!errors.name && errors.nameKind === 'required'"
-                          :invalid="!!errors.name && errors.nameKind === 'invalid'"
+                          required
+                          :invalid="!!errors.name"
                           :aria-describedby="
                             errors.name ? 'create-database-name-message' : undefined
                           "

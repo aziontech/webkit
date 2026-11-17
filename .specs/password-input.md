@@ -3,13 +3,13 @@ name: password-input
 category: input
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 2951c08ff19252de3ee2f49da27f14100a4447f7728f30e49dff8f38c965ba21
+checksum: 35a4737a62a36fda790951dcd2f90c9fd7d88bc32fb77359b3d9503909e4fc51
 created: 2026-06-16
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Input Password — Component Spec
@@ -108,7 +108,7 @@ _none_
 - Single fixed height: 40px (large only)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
-- `data-required` mirrors the `required` prop; drives the warning-border treatment
+- `data-required` mirrors the `required` prop; it draws no border of its own: the Required marker on the wrapping `Field.Label` says a field is required, and a missing value is shown as `invalid` after a failed submit
 - `data-leading` mirrors `$slots.leading` presence
 - `data-trailing` mirrors `$slots.trailing` presence (only relevant when `toggleable=false`)
 - `data-toggleable` mirrors the `toggleable` prop
@@ -137,7 +137,6 @@ _none_
 | border (default)                     | `var(--border-default)`                                                 |
 | border (hover)                       | `var(--border-strong)`                                                  |
 | border (invalid)                     | `var(--danger-border)`                                                  |
-| border (required)                    | `var(--warning-border)`                                                 |
 | ring (focus)                         | `var(--ring-color)`                                                     |
 | spacing (padding-left)               | `var(--spacing-md)`                                                     |
 | spacing (padding-right)              | `var(--spacing-xs)`                                                     |

@@ -31,11 +31,11 @@ A `ToggleGroup` at `size="large"`, `fluid`, with two options, `Existing <noun>` 
 
 ### C. New resource fields — `Field`, `Input` (required in New)
 
-New swaps the list for the fields that create the resource, usually one Name `Field` with a large `Input` and a placeholder in the resource's own format. The `Field.Description` carries the allowed characters and becomes the required message once Next is pressed with it empty (`Field :required`). Nothing is judged while the user types.
+New swaps the list for the fields that create the resource, usually one Name `Field` with a large `Input` and a placeholder in the resource's own format. The `Field.Description` carries the allowed characters and becomes the required message once Next is pressed with it empty (the `Field` is `required` from the start and turns `invalid` then). Nothing is judged while the user types.
 
 ### D. Search and required message — `Input`, `FieldError` (optional)
 
-A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `FieldError type="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
+A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `FieldError` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 
@@ -104,7 +104,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 
 - Don't use radio buttons or a select for a whole resource the user may also create; that is this band.
 - Don't show the search for a list that fits in one batch.
-- Don't validate the Name while it is being typed, or show required and invalid together.
+- Don't validate the Name while it is being typed, or mark it invalid before Next is pressed.
 - Don't render a loading spinner in place of the rows; show skeleton rows in the row shape and keep the visible ones.
 - Don't put the create fields in a dialog or a second page; they belong in the same card.
 - Don't hide a locked module or leave it looking editable; disable it, keep it on and say why in its row description, never only in a tooltip.

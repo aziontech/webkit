@@ -285,7 +285,8 @@
                             size="large"
                             class="w-full"
                             aria-label="Account name"
-                            :required="!!errors.accountName"
+                            required
+                            :invalid="!!errors.accountName"
                             :aria-describedby="
                               errors.accountName ? 'profile-accountName-error' : undefined
                             "
@@ -361,8 +362,8 @@
                             class="w-full"
                             :rows="3"
                             aria-label="Billing emails"
-                            :required="!!errors.billingEmails && !form.billingEmails.trim()"
-                            :invalid="!!errors.billingEmails && !!form.billingEmails.trim()"
+                            required
+                            :invalid="!!errors.billingEmails"
                             :aria-describedby="
                               errors.billingEmails ? 'profile-billingEmails-error' : undefined
                             "

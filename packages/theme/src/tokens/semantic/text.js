@@ -9,6 +9,7 @@ export const text = {
     'text-brand': tokenRef('brand.primary.primary-500'),
     'text-link': tokenRef('primitives.blue.600'),
     'text-link-hover': tokenRef('primitives.blue.700'),
+    'text-danger': tokenRef('primitives.red.600'),
     'text-contrast': tokenRef('primitives.gray.50')
   },
   dark: {
@@ -19,6 +20,7 @@ export const text = {
     'text-brand': tokenRef('brand.primary.primary-500'),
     'text-link': tokenRef('primitives.blue.200'),
     'text-link-hover': tokenRef('primitives.blue.200'),
+    'text-danger': tokenRef('primitives.red.200'),
     'text-contrast': tokenRef('primitives.base.black')
   }
 }

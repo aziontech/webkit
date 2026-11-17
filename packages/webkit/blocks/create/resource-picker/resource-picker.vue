@@ -176,7 +176,10 @@
             v-if="mode === 'new'"
             class="pb-(--spacing-md)"
           >
-            <Field :required="!!projectPicker.message">
+            <Field
+              required
+              :invalid="!!projectPicker.message"
+            >
               <Field.Label>Name</Field.Label>
               <Input
                 v-model="name"

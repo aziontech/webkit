@@ -31,9 +31,14 @@ const STATUS = ['success', 'warning', 'danger', 'info']
 
 const PAIRS = [
   ...SURFACES.map((bg) => ['body', '--text-default', bg]),
-  ...['--text-muted', '--text-primary', '--text-brand', '--text-link', '--text-link-hover'].flatMap(
-    (fg) => SURFACES.map((bg) => ['text', fg, bg])
-  ),
+  ...[
+    '--text-muted',
+    '--text-primary',
+    '--text-brand',
+    '--text-link',
+    '--text-link-hover',
+    '--text-danger'
+  ].flatMap((fg) => SURFACES.map((bg) => ['text', fg, bg])),
   ...FILLS.map((fill) => ['text', `--${fill}-foreground`, `--${fill}`]),
   ['text', '--brand-blue-foreground', '--brand-blue'],
   ['text', '--text-contrast', '--bg-contrast'],
@@ -54,9 +59,13 @@ const PAIRS = [
     '--border-selected',
     '--ring-color'
   ].flatMap((fg) => SURFACES.map((bg) => ['mark', fg, bg])),
-  ...['--border-default', '--border-muted', '--border-input', '--border-strong'].flatMap((fg) =>
-    SURFACES.map((bg) => ['border', fg, bg])
-  )
+  ...[
+    '--border-default',
+    '--border-muted',
+    '--border-input',
+    '--border-strong',
+    '--danger-border'
+  ].flatMap((fg) => SURFACES.map((bg) => ['border', fg, bg]))
 ]
 
 const EXCEPTIONS = [

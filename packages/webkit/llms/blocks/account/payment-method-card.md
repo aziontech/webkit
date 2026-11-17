@@ -104,7 +104,7 @@ Then delete `sample.ts` and its import.
 
 - Show only the last four digits of the card on file.
 - Reset the form to blank on every Change; never prefill card data.
-- Validate on Update: empty fields take the amber required state, malformed numbers the red invalid state with the reason.
+- Validate on Update: required fields carry the Required marker from the start; on a failed Update, empty fields and malformed numbers take the red invalid state with a message that says what to enter.
 
 ## Don't
 

@@ -1420,7 +1420,8 @@
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                   <Field
                     :disabled="submitting"
-                    :required="nameError"
+                    required
+                    :invalid="nameError"
                   >
                     <Field.Label for="rule-name">Name</Field.Label>
                     <Input
@@ -1643,7 +1644,8 @@
                                   :aria-label="textArgument(behavior.type).label"
                                   :placeholder="textArgument(behavior.type).placeholder"
                                   :disabled="submitting"
-                                  :required="
+                                  required
+                                  :invalid="
                                     argumentMissing(behavior, textArgument(behavior.type).field)
                                   "
                                 />
@@ -1659,7 +1661,8 @@
                                     class="w-full"
                                     :disabled="submitting"
                                     :placeholder="`Select a ${selectArgument(behavior.type).label.toLowerCase()}`"
-                                    :required="
+                                    required
+                                    :invalid="
                                       argumentMissing(behavior, selectArgument(behavior.type).field)
                                     "
                                     :display-value="
@@ -1713,7 +1716,8 @@
                                     :aria-label="part.label"
                                     :placeholder="part.placeholder"
                                     :disabled="submitting"
-                                    :required="argumentMissing(behavior, part.field)"
+                                    required
+                                    :invalid="argumentMissing(behavior, part.field)"
                                   />
                                 </div>
                               </template>

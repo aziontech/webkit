@@ -117,7 +117,7 @@ describe('NewsletterSection', () => {
 
     expect(getByText(form.requiredMessage)).toBeInTheDocument()
     expect(field(getByLabelText).getAttribute('aria-required')).toBe('true')
-    expect(field(getByLabelText).getAttribute('aria-invalid')).toBeNull()
+    expect(field(getByLabelText).getAttribute('aria-invalid')).toBe('true')
     expect(emitted('submit')).toBeUndefined()
     await vi.waitFor(() => expect(document.activeElement).toBe(field(getByLabelText)))
   })
@@ -129,7 +129,7 @@ describe('NewsletterSection', () => {
     await userEvent.click(getByRole('button', { name: form.submitLabel }))
     expect(getByText(form.invalidMessage)).toBeInTheDocument()
     expect(field(getByLabelText).getAttribute('aria-invalid')).toBe('true')
-    expect(field(getByLabelText).getAttribute('aria-required')).toBeNull()
+    expect(field(getByLabelText).getAttribute('aria-required')).toBe('true')
     expect(field(getByLabelText).getAttribute('spellcheck')).toBe('false')
     expect(emitted('submit')).toBeUndefined()
 
