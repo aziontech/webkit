@@ -1,7 +1,9 @@
 <script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
+  import Link from '@aziontech/webkit/link'
   import { computed, ref } from 'vue'
 
   import { index } from '../lib/data'
@@ -80,42 +82,46 @@
         <li
           v-for="item in group.items"
           :key="item.to"
-          class="group/cell flex min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) transition-colors duration-fast-02 ease-productive-entrance focus-within:border-(--border-strong) hover:border-(--border-strong) motion-reduce:transition-none"
+          class="flex min-w-0"
         >
-          <div class="h-60 overflow-auto p-(--spacing-md) [contain:layout_paint]">
-            <LivePreview
-              v-if="item.entry?.exampleDir && item.entry.firstExample"
-              :dir="item.entry.exampleDir"
-              :file="item.entry.firstExample"
-            />
-            <div
-              v-else
-              class="flex h-full items-center justify-center"
-            >
-              <p class="max-w-xs text-center text-body-sm text-(--text-muted)">
-                {{ item.entry?.purpose }}
-              </p>
-            </div>
-          </div>
-          <div
-            class="flex items-center justify-between gap-(--spacing-xs) border-t border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
+          <Card
+            :padded="false"
+            class="w-full min-w-0 transition-colors duration-fast-02 ease-productive-entrance focus-within:border-(--border-strong) hover:border-(--border-strong) motion-reduce:transition-none"
           >
-            <a
-              :href="item.to"
-              class="inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) text-label-md text-(--text-default) hover:text-(--text-link) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+            <div
+              class="h-60 overflow-auto bg-(--bg-canvas) p-(--spacing-md) [contain:layout_paint]"
             >
-              <span class="truncate">{{ item.label }}</span>
-              <i
-                class="az az-arrow-right shrink-0 text-(--text-muted) rtl:rotate-180"
-                aria-hidden="true"
+              <LivePreview
+                v-if="item.entry?.exampleDir && item.entry.firstExample"
+                :dir="item.entry.exampleDir"
+                :file="item.entry.firstExample"
               />
-            </a>
-            <span
-              v-if="item.entry?.exampleCount"
-              class="shrink-0 text-body-xs text-(--text-muted)"
-              >{{ item.entry.exampleCount }} {{ t.examples.toLowerCase() }}</span
-            >
-          </div>
+              <div
+                v-else
+                class="flex h-full items-center justify-center"
+              >
+                <p class="max-w-xs text-center text-body-sm text-(--text-muted)">
+                  {{ item.entry?.purpose }}
+                </p>
+              </div>
+            </div>
+            <template #footer>
+              <div class="flex w-full min-w-0 items-center justify-between gap-(--spacing-xs)">
+                <Link
+                  :href="item.to"
+                  :label="item.label"
+                  icon="az az-arrow-right"
+                  size="small"
+                  class="min-w-0"
+                />
+                <span
+                  v-if="item.entry?.exampleCount"
+                  class="shrink-0 text-body-xs text-(--text-muted)"
+                  >{{ item.entry.exampleCount }} {{ t.examples.toLowerCase() }}</span
+                >
+              </div>
+            </template>
+          </Card>
         </li>
       </ul>
     </section>

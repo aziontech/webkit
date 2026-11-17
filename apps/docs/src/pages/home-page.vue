@@ -2,6 +2,8 @@
   import Button from '@aziontech/webkit/button'
   import CardGrid from '@aziontech/webkit/card-grid'
   import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import DocCard from '@aziontech/webkit/doc-card'
+  import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import Hero from '@aziontech/webkit/hero'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionModule from '@aziontech/webkit/section-module'
@@ -92,25 +94,19 @@
         :title="t.exploreTitle"
         :description="t.exploreLead"
       >
-        <CardGrid
+        <DocCardGroup
           :columns="4"
-          variant="divider"
+          :mobile-columns="1"
         >
-          <a
+          <DocCard
             v-for="section in explore"
             :key="section.to"
             :href="section.to"
-            class="relative flex h-full min-h-56 flex-col justify-center gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl) transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-surface) focus-visible:z-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-          >
-            <i
-              :class="section.icon"
-              class="text-heading-sm text-(--text-default)"
-              aria-hidden="true"
-            />
-            <span class="text-heading-xs text-(--text-default)">{{ section.label }}</span>
-            <span class="text-pretty text-body-sm text-(--text-muted)">{{ section.text }}</span>
-          </a>
-        </CardGrid>
+            :title="section.label"
+            :icon="section.icon"
+            :label="section.text"
+          />
+        </DocCardGroup>
       </SectionModule>
 
       <SectionModule
