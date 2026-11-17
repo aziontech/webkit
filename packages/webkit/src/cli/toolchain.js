@@ -1,11 +1,16 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-export const VUE_TSC_KNOWN_GOOD = '3.3.13'
+export const VUE_TSC_KNOWN_GOOD = '3.3.11'
+
+const DOUBLE_SLASH_SCOPE =
+  'a static attribute containing "//" on a component inside a v-for (href="https://…", eyebrow-prefix="//") drops the loop variable from type-checking (TS2304 / TS2552); vuejs/language-tools#6240'
 
 export const VUE_TSC_BROKEN = {
+  '3.3.12': DOUBLE_SLASH_SCOPE,
+  '3.3.13': DOUBLE_SLASH_SCOPE,
   '3.3.14':
-    'a static attribute containing "//" on a component (href="https://…", eyebrow-prefix="//") makes vue-tsc type later template expressions as refs ("Property \'value\' does not exist")'
+    'a static attribute containing "//" on a component drops a surrounding v-for scope and types later template expressions as refs ("Property \'value\' does not exist"); vuejs/language-tools#6240, #6322'
 }
 
 const parse = (version) => {

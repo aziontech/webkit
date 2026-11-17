@@ -1,60 +1,21 @@
-# vue-tsc 3.3.14: the upstream issue (draft, not filed)
+# vue-tsc `//` attribute bug: already reported upstream, not filed
 
-M2.10 row 82. WebKit pins around this regression (`VUE_TSC_KNOWN_GOOD` and `VUE_TSC_BROKEN` in
-`src/cli/toolchain.js`, the `webkit init` advice, the `webkit doctor` warning, the
-`component-attr-double-slash` authoring check, `MIGRATION_V6.md`), but nobody has reported it to
-`vuejs/language-tools`. Filing it is an outward-facing step, so it waits for the owner. Before
-filing, run the repro below once with `vue-tsc@3.3.14` and with the latest release, and drop the
-issue if the latest release already passes.
+M2.10 row 82. Before filing, an audit on 2026-11-17 reproduced the bug in a fresh app and searched
+`vuejs/language-tools`. It is already reported, with our minimal repro, so WebKit files nothing.
 
-## Where we saw it
+## What the audit found
 
-- `b9b694d3b`: vue-tsc / `@vue/language-core` 3.3.14 types every template expression after a static
-  attribute containing `//` on a component as a ref ("Property 'value' does not exist").
-- `00b130d85`: in a builder's app (language-core 3.3.14), `prefix="//"` on a component tag swallowed
-  the `v-for` scope of the template below it (TS2304 on `section` and `sectionIndex`); WebKit's own
-  check passed on 3.3.8. 3.3.13 is the last release we know to be good.
+- A static attribute containing `//` on a component inside a `v-for` drops the loop variable from
+  type-checking (TS2552 / TS2304). Cause: a regex in `@vue/language-core`
+  (`codegen/template/element.js`, `.replace(/\/\/(.*)$/gm, …)`) also rewrites `//` inside string
+  literals, so the generated code no longer parses.
+- Affected: 3.3.12, 3.3.13 and 3.3.14 (3.3.14 also types later expressions as refs). Clean:
+  3.3.8, 3.3.9, 3.3.11. 3.3.14 is the latest stable release.
+- Upstream: issues #6240 (exact repro), #6322, #6352, #6360, all open; fix PR #6357 open
+  (#6241 closed unmerged).
 
-## Draft
+## What WebKit changed
 
-**Title:** `//` inside a static attribute on a component breaks type-checking of the rest of the
-template (3.3.14)
-
-**Versions:** vue-tsc 3.3.14, @vue/language-core 3.3.14, vue 3.5, typescript 5.9. 3.3.13 is not
-affected.
-
-**Repro** (`App.vue` in a fresh `npm create vite@latest -- --template vue-ts` app):
-
-```vue
-<script setup lang="ts">
-  import { ref } from 'vue'
-  import Child from './Child.vue'
-
-  const items = ref([{ id: 'a', label: 'A' }])
-</script>
-
-<template>
-  <Child href="https://example.com/docs" />
-  <ul>
-    <li
-      v-for="item in items"
-      :key="item.id"
-    >
-      {{ item.label }}
-    </li>
-  </ul>
-</template>
-```
-
-`Child.vue` declares `defineProps<{ href?: string }>()` and renders an anchor.
-
-**Expected:** `vue-tsc --noEmit` passes, as it does on 3.3.13.
-
-**Actual:** errors on the expressions after the `Child` tag: `item` is not found (TS2304), or a
-value is typed as a ref ("Property 'value' does not exist"). Replacing the static attribute with a
-binding (`:href="url"` with `const url = 'https://example.com/docs'`) or moving the tag below the
-list makes the errors go away, which suggests the `//` in the attribute value is read as the start
-of a line comment in the generated virtual code.
-
-**Workaround we ship:** pin `vue-tsc` to 3.3.13, and bind any attribute value that contains `//`
-from a script constant.
+`VUE_TSC_KNOWN_GOOD` is 3.3.11 and `VUE_TSC_BROKEN` lists 3.3.12 to 3.3.14
+(`src/cli/toolchain.js`); the workspace ranges skip them; `MIGRATION_V6.md` and
+`docs/toolkit/CLI.md` say the same. Drop the pin once a release with the fix from #6357 ships.

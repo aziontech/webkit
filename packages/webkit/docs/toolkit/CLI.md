@@ -308,7 +308,7 @@ Cite what was read as `@aziontech/webkit@<version> <path>`.
 
 ## Dependency versions
 
-`init` records each missing toolkit dependency as a caret range (`^9.39.3`), keeps one you already declare at a compatible or newer version, and raises only one older than WebKit needs — it never downgrades. `vue-tsc` is never rewritten: when your range can resolve to a release with a known bug (3.3.14), `init` and `doctor` print the pin (`npm i -D vue-tsc@3.3.13`) for you to run. After you install, run `doctor` to see the **resolved** versions and pin the ones you want to freeze — this keeps `init` simple and offline while giving you a reproducible pin when you're ready.
+`init` records each missing toolkit dependency as a caret range (`^9.39.3`), keeps one you already declare at a compatible or newer version, and raises only one older than WebKit needs — it never downgrades. `vue-tsc` is never rewritten: when your range can resolve to a release with a known bug (3.3.12 to 3.3.14), `init` and `doctor` print the pin (`npm i -D vue-tsc@3.3.11`) for you to run. After you install, run `doctor` to see the **resolved** versions and pin the ones you want to freeze — this keeps `init` simple and offline while giving you a reproducible pin when you're ready.
 
 ## Idempotency
 

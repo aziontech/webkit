@@ -966,11 +966,13 @@ the same way. Remove any local `declare module '@aziontech/webkit/…'` or
 `declare module '@aziontech/icons'` shim you added as a workaround. Bundlers still load the `.vue`
 and `.ts` sources (`default`).
 
-Keep `vue-tsc` off 3.3.14: that release types every template expression after a static attribute
-containing `//` on a component (`href="https://…"`) as a ref ("Property 'value' does not exist").
-`webkit init` leaves your `vue-tsc` version as it is and prints the pin
-(`npm i -D vue-tsc@3.3.13`) when your range admits 3.3.14, and `webkit doctor` warns when 3.3.14
-is installed.
+Keep `vue-tsc` off 3.3.12 to 3.3.14: in those releases a static attribute containing `//` on a
+component (`href="https://…"`) inside a `v-for` drops the loop variable from type-checking
+(TS2304), and 3.3.14 also types later template expressions as refs ("Property 'value' does not
+exist"); upstream tracks it in vuejs/language-tools#6240. `webkit init` leaves your `vue-tsc`
+version as it is and prints the pin (`npm i -D vue-tsc@3.3.11`) when your range admits an affected
+release, and `webkit doctor` warns when one is installed. Binding the value from a script constant
+avoids it on every release.
 
 ### `vee-validate` is no longer a dependency; `@aziontech/webkit/vite` is removed
 

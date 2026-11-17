@@ -55,7 +55,7 @@ test('init never rewrites the vue-tsc version and advises the known-good pin ins
 })
 
 test('init leaves a safe vue-tsc pin alone', () => {
-  const dir = makeProject({ devDependencies: { 'vue-tsc': '3.3.12' } })
+  const dir = makeProject({ devDependencies: { 'vue-tsc': '3.3.11' } })
   try {
     const plan = planInit(dir, { wireEntry: false })
     assert.equal(
@@ -64,7 +64,7 @@ test('init leaves a safe vue-tsc pin alone', () => {
     )
     applyPlan(dir, plan)
     const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
-    assert.equal(pkg.devDependencies['vue-tsc'], '3.3.12')
+    assert.equal(pkg.devDependencies['vue-tsc'], '3.3.11')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -114,6 +114,20 @@ test('doctor warns when vue-tsc 3.3.14 is installed', () => {
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+for (const broken of ['3.3.12', '3.3.13']) {
+  test(`doctor warns when vue-tsc ${broken} is installed`, () => {
+    const dir = makeProject(
+      { devDependencies: { 'vue-tsc': broken } },
+      { ...installed('vue-tsc', broken), ...installed('@vue/language-core', broken) }
+    )
+    try {
+      assert.equal(vueTscCheck(dir).status, 'warn')
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+}
 
 test('doctor accepts an installed known-good vue-tsc', () => {
   const dir = makeProject(
