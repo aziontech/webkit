@@ -12,7 +12,7 @@
 </script>
 
 <template>
-  <div class="w-full max-w-(--container-xs)">
+  <div class="w-full max-w-(--container-lg)">
     <Card :padded="false">
       <template #default>
         <Item.List>

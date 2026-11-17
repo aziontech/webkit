@@ -29,7 +29,7 @@
     },
     {
       "name": "Stackable",
-      "summary": "A drawer-width card: the Name row keeps its two columns with the description clamped, while the Address row sets `stackable` so its long URL field drops under the copy at full width.",
+      "summary": "A drawer-width card: the Name row keeps its field beside the copy, while the Address row sets `stackable` so its long URL field drops under the copy at full width. On a phone both rows stack.",
       "file": "stackable.vue"
     }
   ]

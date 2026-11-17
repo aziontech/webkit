@@ -186,8 +186,24 @@ describe('SettingsRow', () => {
       return control.getBoundingClientRect().top < title.getBoundingClientRect().bottom
     }
 
-    it('keeps the control beside the copy by default, as the console does on a phone', () => {
-      expect(beside(mountIn(320))).toBe(true)
+    it('moves a field control under the copy on a phone', () => {
+      expect(beside(mountIn(320))).toBe(false)
+    })
+
+    it('keeps a switch or button at the end side on a phone', () => {
+      expect(beside(mountIn(320, { variant: 'compact' }))).toBe(true)
+    })
+
+    it('wraps a long description in full on a phone, never clamped', () => {
+      const description =
+        'The first sentence says what it does. The second adds detail. The third adds even more detail that a two-line clamp would hide on screen.'
+      const view = mountIn(320, { description })
+      const element = view.getByTestId('settings-row__description')
+
+      expect(element.scrollHeight).toBeLessThanOrEqual(element.clientHeight + 1)
+      expect(element.getBoundingClientRect().height).toBeGreaterThan(
+        parseFloat(getComputedStyle(element).lineHeight) * 2.5
+      )
     })
 
     it('top-aligns the title with a tall control', () => {
@@ -203,8 +219,13 @@ describe('SettingsRow', () => {
       expect(Math.abs(title.top - control.top)).toBeLessThan(row.height / 4)
     })
 
-    it('moves a stackable field control under the copy at full width', () => {
-      expect(beside(mountIn(320, { stackable: true }))).toBe(false)
+    it('keeps a field control beside the copy in a wide box', () => {
+      expect(beside(mountIn(900))).toBe(true)
+    })
+
+    it('stacks a stackable field control in a drawer-width box', () => {
+      expect(beside(mountIn(520))).toBe(true)
+      expect(beside(mountIn(520, { stackable: true }))).toBe(false)
     })
 
     it('keeps a stackable control beside the copy in a wide box', () => {
