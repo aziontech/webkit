@@ -234,6 +234,10 @@ export const copyButton = {
   fallbackHint: 'Press {keys} to copy.'
 } as const
 
+export const copyText = {
+  copy: 'Copy {value}'
+} as const
+
 export const responseBranches = {
   label: 'Response versions',
   previous: 'Previous version',
@@ -1362,6 +1366,7 @@ export const en = {
   confirmDialog,
   conversation,
   copyButton,
+  copyText,
   qrCode,
   conversationHistory,
   feedbackReasonDialog,

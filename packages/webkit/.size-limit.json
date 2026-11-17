@@ -1389,6 +1389,12 @@
     "entryOnly": true
   },
   {
+    "name": "copy-text",
+    "path": "src/components/content/copy-text/copy-text.vue",
+    "limit": "10 KB",
+    "entryOnly": true
+  },
+  {
     "name": "toggle-group",
     "path": "src/components/action/toggle-group/toggle-group.vue",
     "limit": "14.5 KB"

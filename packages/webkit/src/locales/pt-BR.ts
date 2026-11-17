@@ -312,6 +312,9 @@ export const ptBR: Messages = {
     fallbackField: 'Valor para copiar',
     fallbackHint: 'Pressione {keys} para copiar.'
   },
+  copyText: {
+    copy: 'Copiar {value}'
+  },
   responseBranches: {
     label: 'Versões da resposta',
     previous: 'Versão anterior',

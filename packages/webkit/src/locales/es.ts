@@ -312,6 +312,9 @@ export const es: Messages = {
     fallbackField: 'Valor para copiar',
     fallbackHint: 'Pulsa {keys} para copiar.'
   },
+  copyText: {
+    copy: 'Copiar {value}'
+  },
   responseBranches: {
     label: 'Versiones de la respuesta',
     previous: 'Versión anterior',

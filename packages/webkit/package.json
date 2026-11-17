@@ -271,6 +271,10 @@
       "types": "./types/components/action/copy-button/copy-button.vue.d.ts",
       "default": "./src/components/action/copy-button/copy-button.vue"
     },
+    "./copy-text": {
+      "types": "./types/components/content/copy-text/copy-text.vue.d.ts",
+      "default": "./src/components/content/copy-text/copy-text.vue"
+    },
     "./search-trigger": {
       "types": "./types/components/action/search-trigger/search-trigger.vue.d.ts",
       "default": "./src/components/action/search-trigger/search-trigger.vue"
@@ -2646,6 +2650,9 @@
       ],
       "copy-button": [
         "./types/components/action/copy-button/copy-button.vue.d.ts"
+      ],
+      "copy-text": [
+        "./types/components/content/copy-text/copy-text.vue.d.ts"
       ],
       "search-trigger": [
         "./types/components/action/search-trigger/search-trigger.vue.d.ts"
