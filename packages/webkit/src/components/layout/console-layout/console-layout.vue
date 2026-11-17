@@ -588,7 +588,18 @@
                   :compact="compact"
                 />
                 <div
-                  v-if="!compact && pageControl"
+                  v-if="compact && pageControl"
+                  :data-testid="`${testId}__page-control`"
+                  class="flex w-fit min-w-0 shrink"
+                >
+                  <Breadcrumb class="w-full">
+                    <BreadcrumbList>
+                      <PageCrumbControls />
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </div>
+                <div
+                  v-else-if="!compact && pageControl"
                   class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
                 >
                   <Breadcrumb class="w-full">
