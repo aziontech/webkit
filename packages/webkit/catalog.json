@@ -15634,7 +15634,7 @@
      "type": "'content' | 'site' | 'console'",
      "default": "'content'",
      "required": "false",
-     "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a full-width rule with corner marks and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
+     "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
     }
    ],
    "slots": [
@@ -15699,7 +15699,7 @@
      "type": "'content' | 'site' | 'console'",
      "default": "'content'",
      "required": "false",
-     "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a full-width rule with corner marks and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
+     "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
     }
    ],
    "slots": [

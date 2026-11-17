@@ -227,12 +227,11 @@ describe('Footer', () => {
       expect(frame.getAttribute('data-marks')).toBe('none')
     })
 
-    it('opens the site placement on a top rule with a corner mark at each end and no side rules', () => {
+    it('opens the site placement on a plain top rule with no corner marks and no side rules', () => {
       const { getByTestId } = renderComposedSite()
       const frame = getByTestId('footer__frame')
       expect(frame.getAttribute('data-borders')).toBe('top')
-      expect(frame.getAttribute('data-marks')).toBe('top-left top-right')
-      expect(frame.querySelectorAll('[aria-hidden="true"]').length).toBeGreaterThanOrEqual(2)
+      expect(frame.getAttribute('data-marks')).toBe('none')
     })
 
     it('draws a plain top rule in the console placement', () => {

@@ -7,7 +7,7 @@
   },
   {
    "name": "SitePlacement",
-   "summary": "The footer under a marketing page: it spans the page like the site header, opens on a full-width rule with a corner mark at each end, and insets its columns and bottom bar to the header measure so they line up under the header's brand.",
+   "summary": "The footer under a marketing page: it spans the page like the site header, opens on a plain full-width rule like the header's, with no corner marks, and insets its columns and bottom bar to the header measure so they line up under the header's brand.",
    "file": "examples/footer/site-placement.vue"
   },
   {

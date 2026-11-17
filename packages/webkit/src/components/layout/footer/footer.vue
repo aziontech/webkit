@@ -17,7 +17,7 @@
   export interface FooterProps {
     /** Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
-    /** Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a full-width rule with corner marks and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end. */
+    /** Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end. */
     variant?: FooterVariant
   }
 
@@ -65,7 +65,7 @@
   >
     <RegistrationFrame
       :borders="variant === 'content' ? 'none' : 'top'"
-      :marks="variant === 'site' ? 'top' : 'none'"
+      marks="none"
       :data-testid="`${testId}__frame`"
       class="w-full"
     >

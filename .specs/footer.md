@@ -3,11 +3,11 @@ name: footer
 category: layout
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 3ee2491463f4f5f42d64b4c57030062345270417786ab10464ddf317e220b5b0
+checksum: a79772ae429a0b86c7a32adf98d3e129be811e10fa8933b1b6e603e380335131
 created: 2026-08-10
 last_updated: 2026-11-17
 ---
@@ -23,7 +23,7 @@ Page footer for marketing, docs and console surfaces: the bottom-of-page counter
 **Three placements, chosen with `variant`.**
 
 - `content` is the default: the bands run full bleed across whatever zone holds the footer and the footer draws no rule above itself. Every band carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction.
-- `site` closes a marketing page and mirrors the site header: it spans the full width of the page with no side rules, opens on a full-width top rule carrying a corner mark at each end — the way the frame's horizontal rules carry their marks — and insets its content to the header's own measure (`--layout-measure-site-header`), so the first column title and the brand line up under the header's brand at every width. The inset is one custom property (`--footer-inset`, `max(0%, (100% - measure) / 2)`) set on the root and added to each band's own padding, so the band rules stay full width.
+- `site` closes a marketing page and mirrors the site header: it spans the full width of the page with no side rules, opens on a plain full-width top rule with no corner marks, the same clean line as the header's, and insets its content to the header's own measure (`--layout-measure-site-header`), so the first column title and the brand line up under the header's brand at every width. The inset is one custom property (`--footer-inset`, `max(0%, (100% - measure) / 2)`) set on the root and added to each band's own padding, so the band rules stay full width.
 - `console` is the slim bar under a console page: one row with a top rule, the brand (and any social buttons) at the start, the links of each `Footer.Column` inline after it — the column title becomes the visually hidden name of its `nav` — and the status and language at the end. It wraps onto a second row when the zone is narrow.
 
 **Responsive.** The column grid folds from four columns to the 2×2 mobile grid below `md` (768px). The bottom bar stacks below `md`: the brand and the social icons on the first line, the status and the language at the two ends of the second. From `md` it is one row, its two clusters at the two ends, and it wraps instead of clipping when the zone is narrower than both together. All of it is CSS, so the server HTML and the hydrated page are the same tree.
@@ -47,7 +47,7 @@ Content (links, labels, languages, status, brand) always comes from the consumer
 - `app-header` — the top-of-page chrome counterpart; the `site` placement spans the page the way the site header does, and the brand takes the header brand's height.
 - `brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
 - `site-footer-section` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer-section` for a site page fed from section JSON and `Footer` when composing the bands by hand.
-- `registration-frame` — draws the top rule and its corner marks in the `site` placement, and the top rule in `console`.
+- `registration-frame` — draws the plain top rule in the `site` and `console` placements (no corner marks).
 
 ## Best practices
 
@@ -140,10 +140,10 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 ## Props
 
-| Prop        | Type                               | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                           |
-| ----------- | ---------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ariaLabel` | `string`                           | `''`        | false    | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`).                                                                                                                                                                                                                                                                                                         |
-| `variant`   | `'content' \| 'site' \| 'console'` | `'content'` | false    | Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a full-width rule with corner marks and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end. |
+| Prop        | Type                               | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ----------- | ---------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string`                           | `''`        | false    | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`).                                                                                                                                                                                                                                                                                                                 |
+| `variant`   | `'content' \| 'site' \| 'console'` | `'content'` | false    | Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end. |
 
 ## Events
 
@@ -182,7 +182,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 | shell surface                        | `var(--bg-canvas)`                                                                       |
 | content inset (`variant="site"`)     | `--footer-inset`: `max(0%, (100% - var(--layout-measure-site-header)) / 2)`              |
 | band inset                           | `var(--spacing-lg)`, carried inside each band — equal to `var(--layout-boundary-inline)` |
-| top rule (`site`, `console`)         | `RegistrationFrame borders="top"`, marks at both ends in `site`                          |
+| top rule (`site`, `console`)         | `RegistrationFrame borders="top" marks="none"`                                           |
 | columns row gap (mobile 2-row wrap)  | `var(--spacing-lg)`                                                                      |
 | column padding                       | `var(--spacing-lg)` (none in `console`)                                                  |
 | column divider (border-right, `md`+) | `var(--border-width-default)` / `var(--border-default)` (none in `console`)              |
@@ -228,7 +228,6 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 ## Accessibility (WCAG 2.1 AA)
 
 - Root renders as `<footer>` — the implicit `contentinfo` landmark — with `aria-label` from `ariaLabel`.
-- The corner marks are `aria-hidden` (drawn by `RegistrationFrame`).
 - Each `footer-column` renders a `<nav>` labelled via `aria-labelledby` pointing at its title (`useId`), so link groups are unique, navigable landmarks; in `console` the title is visually hidden and still names the `nav`.
 - Keyboard map: none on the shell; `Tab` moves through links and controls in DOM order (columns, brand, social, status, language); `Enter` activates.
 - Visible focus on links: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
@@ -239,7 +238,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 ## Examples
 
 - Default — the `content` placement: four link columns, then the bottom bar with the brand, the social icons, the status and the language.
-- SitePlacement — the `site` placement: the same bands spanning the page like the site header, opening on a full-width rule with corner marks.
+- SitePlacement — the `site` placement: the same bands spanning the page like the site header, opening on a plain full-width rule like the header's.
 - Console — the `console` placement: one slim bar with the brand, inline links, the status and the language.
 
 ## Constraints — DO NOT

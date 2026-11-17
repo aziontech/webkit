@@ -3,9 +3,9 @@ name: site-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: c7ab0da458ec50bee50a3e252161598a2469ef01206c68f04b8c8be8abec9307
+checksum: 2194a15272e923afba9a843edcdfe56b34ce4049e005816b83551bc6ee63c463
 created: 2026-11-12
 last_updated: 2026-11-17
 ---
@@ -30,7 +30,7 @@ The marketing site's chrome, composed once in the app: `SiteHeaderSection` on to
 ## Related
 
 - `SiteHeaderSection` — the bar and its mega-menus; `navigation` is bound onto it.
-- `SiteFooterSection` — the footer; `footer` is bound onto it. In `variant="site"` it spans the full width like the bar, with no side rules, and opens on a full-width rule whose corner marks close the page's frame.
+- `SiteFooterSection` — the footer; `footer` is bound onto it. In `variant="site"` it spans the full width like the bar, with no side rules, and opens on a plain full-width rule, the same clean line as the bar's, with no corner marks.
 - `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
 - `Command` — the search palette the bar's search button opens.
 - `shell/site` — the block that shows this layout with the azion.com navigation and footer.
