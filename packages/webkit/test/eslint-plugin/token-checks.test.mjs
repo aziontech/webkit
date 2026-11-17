@@ -210,6 +210,50 @@ test('container-query-on-container stays silent when the query sits on a child',
   }
 })
 
+test('rtl-double-flip fires when a directional icon also rotates under rtl', () => {
+  for (const content of [
+    'class="ai ai-arrow-right rtl:rotate-180"',
+    'class="ai ai-chevron-left md:rtl:-rotate-180"',
+    "cn('rtl:rotate-180 ai ai-log-out', attrs.class)",
+    'class="ai ai-circle-arrow-left data-[open]:rtl:rotate-180"'
+  ]) {
+    assert.ok(ids(content).includes('rtl-double-flip'), `expected rtl-double-flip for: ${content}`)
+  }
+})
+
+test('rtl-double-flip stays silent on a single flip or a non-directional glyph', () => {
+  for (const content of [
+    'class="ai ai-arrow-right rtl:-scale-x-100"',
+    'class="ai ai-chevron-down rtl:rotate-180"',
+    'class="ai ai-arrow-right"',
+    'class="ai ai-arrow-right-left rtl:rotate-180"',
+    'class="ai ai-arrow-right rtl:rotate-180x"',
+    '<i class="ai ai-arrow-right"></i><i class="ai ai-chevron-down rtl:rotate-180"></i>'
+  ]) {
+    assert.ok(
+      !ids(content).includes('rtl-double-flip'),
+      `expected rtl-double-flip silent for: ${content}`
+    )
+  }
+})
+
+test('rtl-double-flip covers exactly DIRECTIONAL_ICONS', async () => {
+  const { DIRECTIONAL_ICONS } = await import('../../src/utils/directional-icons.ts')
+  for (const icon of DIRECTIONAL_ICONS) {
+    assert.ok(
+      ids(`class="ai ${icon} rtl:rotate-180"`).includes('rtl-double-flip'),
+      `${icon} is directional but rtl-double-flip misses it`
+    )
+  }
+  for (const icon of ['ai-chevron-up', 'ai-arrow-up', 'ai-arrow-down', 'ai-refresh', 'ai-redo']) {
+    assert.ok(!DIRECTIONAL_ICONS.has(icon))
+    assert.ok(
+      !ids(`class="ai ${icon} rtl:rotate-180"`).includes('rtl-double-flip'),
+      `${icon} is not directional but rtl-double-flip fires`
+    )
+  }
+})
+
 test('tokenChecksApply scopes enforcement to component sources', () => {
   assert.ok(tokenChecksApply('packages/webkit/src/components/action/button/button.vue'))
   assert.ok(tokenChecksApply('packages/webkit/src/components/data/table/injection-key.ts'))

@@ -81,6 +81,13 @@ export const TOKEN_CHECKS = [
       'Container-query variant on the element that declares the container. A container query never matches its own container, so `@xl/name:` on the `@container/name` element NEVER applies. Put the variant on a child of the container (.claude/rules/styling.md).'
   },
   {
+    id: 'rtl-double-flip',
+    regex:
+      /(["'`])(?=[^"'`]*(?<![\w-])ai-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|log-in|log-out|reply|undo)(?![\w-]))[^"'`]*?(?<![^\s"'`])(?:[^\s"'`]*:)?rtl:-?rotate-180(?![^\s"'`])/g,
+    message:
+      'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every directional `ai-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with it and the arrow points the WRONG way. Drop the rotation (or use `rtl:-scale-x-100`, which sets the same scale) (.claude/rules/styling.md).'
+  },
+  {
     id: 'class-in-defineprops',
     regex: /defineProps\s*[<(][^>)]*['"]?class['"]?\s*:/s,
     message:
