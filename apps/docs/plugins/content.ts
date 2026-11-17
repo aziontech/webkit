@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { basename, dirname, join, relative } from 'node:path'
+import { basename, dirname, join, relative, resolve } from 'node:path'
 
 import MarkdownIt from 'markdown-it'
 import { createHighlighter, type Highlighter } from 'shiki'
@@ -39,13 +39,46 @@ export function highlight(hl: Highlighter, code: string, lang: string): string {
   })
 }
 
-export async function markdown(): Promise<InstanceType<typeof MarkdownIt>> {
+const SOURCE_URL = 'https://github.com/aziontech/webkit/blob/main/'
+const ABSOLUTE_HREF = /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i
+
+export function sourceHref(href: string, file: string): string {
+  if (!href || ABSOLUTE_HREF.test(href)) return href
+  const [path = '', hash = ''] = href.split('#')
+  const target = relative(REPO, resolve(dirname(file), path))
+    .split('\\')
+    .join('/')
+  if (!target || target.startsWith('..')) return href
+  const spec = /^\.specs\/([a-z0-9-]+)\.md$/.exec(target)
+  if (spec && !spec[1]?.startsWith('_')) return `/components/${spec[1]}${hash ? `#${hash}` : ''}`
+  return `${SOURCE_URL}${target}${hash ? `#${hash}` : ''}`
+}
+
+export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownIt>> {
   const hl = await highlighter()
   const md = new MarkdownIt({
     html: false,
     linkify: true,
     highlight: (code, lang) => highlight(hl, code, lang || 'txt')
   })
+  if (file) {
+    const render = md.renderer.rules.link_open
+    md.renderer.rules.link_open = (tokens, index, options, env, self) => {
+      const token = tokens[index]
+      const href = String(token?.attrGet('href') ?? '')
+      const next = sourceHref(href, file)
+      if (token && next !== href) {
+        token.attrSet('href', next)
+        if (next.startsWith(SOURCE_URL)) {
+          token.attrSet('target', '_blank')
+          token.attrSet('rel', 'noopener noreferrer')
+        }
+      }
+      return render
+        ? render(tokens, index, options, env, self)
+        : self.renderToken(tokens, index, options)
+    }
+  }
   return md
 }
 
@@ -54,7 +87,7 @@ function stripFrontMatter(source: string): string {
 }
 
 export async function renderMarkdownFile(file: string): Promise<{ html: string; title: string }> {
-  const md = await markdown()
+  const md = await markdown(file)
   const source = stripFrontMatter(readFileSync(file, 'utf8'))
   const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(file, '.md')
   const body = source.replace(/^#\s+.+\n/m, '')
@@ -223,7 +256,7 @@ function specSections(name: string): Record<string, string> {
 }
 
 export async function buildComponent(name: string, catalog: Catalog = readCatalog()) {
-  const md = await markdown()
+  const md = await markdown(join(SPECS, `${name.replace(/\//g, '-')}.md`))
   const inline = (text: unknown) => (typeof text === 'string' ? md.renderInline(text) : '')
   const entry = (catalog.imports[name] ?? { import: `@aziontech/webkit/${name}` }) as CatalogEntry
   const rows = (list: unknown) =>
@@ -277,7 +310,7 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
 export async function renderGuidelinesFile(
   file: string
 ): Promise<{ title: string; intro: string; sections: { heading: string; html: string }[] }> {
-  const md = await markdown()
+  const md = await markdown(file)
   const source = stripFrontMatter(readFileSync(file, 'utf8'))
   const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(dirname(file))
   const [head, ...parts] = source.replace(/^#\s+.+\n/m, '').split(/^## /m)

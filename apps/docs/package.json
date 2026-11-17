@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "node --max-old-space-size=8192 node_modules/vite-ssg/bin/vite-ssg.js build",
     "preview": "node scripts/serve.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "test:smoke": "node scripts/test-smoke.mjs",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "vue-tsc --noEmit",
