@@ -218,7 +218,7 @@
   {
     "name": "doc-frame",
     "path": "src/components/docs/doc-frame/doc-frame.vue",
-    "limit": "8.2 KB"
+    "limit": "8.3 KB"
   },
   {
     "name": "doc-changelog-entry",
@@ -1091,12 +1091,12 @@
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "10.4 KB"
+    "limit": "10.45 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "10.5 KB"
+    "limit": "10.55 KB"
   },
   {
     "name": "phone-input",

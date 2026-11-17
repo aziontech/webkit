@@ -371,5 +371,8 @@ Budget-raise: doc-frame 5.75 KB → 8.2 KB (measured 8.16 KB): an autoplaying cl
 Budget-raise: locales-pt-BR 10.35 KB → 10.4 KB (measured 10.37 KB): AvatarGroup (C-07) adds its two plural messages to the catalog, which had 15 bytes of headroom.
 Budget-raise: console-layout-root 73.3 KB → 73.4 KB (measured 73.35 KB): the compact header keeps a page trail's control crumbs (the environment switch) in place of the brand, owner decision AU5 (2026-11-17).
 Budget-raise: console-layout 74.65 KB → 74.75 KB (measured 74.67 KB): the same compact control crumbs, owner decision AU5 (2026-11-17).
+Budget-raise: doc-frame 8.2 KB → 8.3 KB (measured 8.26 KB): the autoplay pause control names its clip ("Pause animation: {alt}") so several frames on a page have distinct names (2026-11-17).
+Budget-raise: locales-pt-BR 10.4 KB → 10.45 KB (measured 10.42 KB): the catalog adds DocFrame's two named pause and play messages (2026-11-17).
+Budget-raise: locales-es 10.5 KB → 10.55 KB (measured 10.54 KB): the same two DocFrame messages (2026-11-17).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.
