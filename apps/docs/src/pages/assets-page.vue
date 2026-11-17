@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import Illustration from '@aziontech/webkit/illustration'
   import LineFigure from '@aziontech/webkit/line-figure'
@@ -114,17 +115,21 @@
         <li
           v-for="name in assets.illustrations"
           :key="name"
-          class="flex flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
+          class="flex"
         >
-          <div
-            class="flex aspect-video items-center justify-center overflow-hidden rounded-(--shape-control) bg-(--bg-canvas)"
-          >
-            <Illustration
-              :name="name"
-              class="max-h-full w-full"
-            />
-          </div>
-          <CopyChip :value="name" />
+          <Card class="w-full">
+            <div class="flex flex-col gap-(--spacing-xs)">
+              <div
+                class="flex aspect-video items-center justify-center overflow-hidden rounded-(--shape-control) bg-(--bg-canvas)"
+              >
+                <Illustration
+                  :name="name"
+                  class="max-h-full w-full"
+                />
+              </div>
+              <CopyChip :value="name" />
+            </div>
+          </Card>
         </li>
       </ul>
     </section>
@@ -159,43 +164,49 @@
         <li
           v-for="figure in figures"
           :key="figure.name"
-          class="flex flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
+          class="flex"
         >
-          <div
-            class="flex aspect-square items-center justify-center overflow-hidden rounded-(--shape-control) bg-(--bg-canvas) p-(--spacing-sm)"
-          >
-            <LineFigure
-              :name="figure.name"
-              class="h-full w-full"
-            />
-          </div>
-          <CopyChip :value="figure.name" />
-          <p class="text-body-xs text-(--text-muted)">{{ figure.label }}</p>
+          <Card class="w-full">
+            <div class="flex flex-col gap-(--spacing-xs)">
+              <div
+                class="flex aspect-square items-center justify-center overflow-hidden rounded-(--shape-control) bg-(--bg-canvas) p-(--spacing-sm)"
+              >
+                <LineFigure
+                  :name="figure.name"
+                  class="h-full w-full"
+                />
+              </div>
+              <CopyChip :value="figure.name" />
+              <p class="text-body-xs text-(--text-muted)">{{ figure.label }}</p>
+            </div>
+          </Card>
         </li>
       </ul>
     </section>
 
-    <section
+    <Card
       id="icons"
-      class="flex scroll-mt-20 flex-col items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)"
+      class="scroll-mt-20"
       aria-labelledby="icons-title"
     >
-      <h2
-        id="icons-title"
-        class="flex items-baseline gap-(--spacing-xs) text-heading-md"
-      >
-        {{ t.icons }}
-        <span class="text-body-sm text-(--text-muted)">{{ assets.icons.length }}</span>
-      </h2>
-      <p class="text-body-sm text-(--text-muted)">{{ t.iconsAssetLead }}</p>
-      <Button
-        :label="t.openIcons"
-        variant="secondary"
-        size="medium"
-        href="/foundations/icon"
-        icon="az az-arrow-right"
-        icon-position="trailing"
-      />
-    </section>
+      <div class="flex flex-col items-start gap-(--spacing-sm)">
+        <h2
+          id="icons-title"
+          class="flex items-baseline gap-(--spacing-xs) text-heading-md"
+        >
+          {{ t.icons }}
+          <span class="text-body-sm text-(--text-muted)">{{ assets.icons.length }}</span>
+        </h2>
+        <p class="text-body-sm text-(--text-muted)">{{ t.iconsAssetLead }}</p>
+        <Button
+          :label="t.openIcons"
+          variant="secondary"
+          size="medium"
+          href="/foundations/icon"
+          icon="az az-arrow-right"
+          icon-position="trailing"
+        />
+      </div>
+    </Card>
   </div>
 </template>
