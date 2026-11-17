@@ -1,12 +1,11 @@
 <script setup>
-  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
   import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
 
   const bands = [
     {
-      image: quickStartWithTemplates,
+      illustration: 'quick-start-with-templates',
       title: 'Modern applications',
       description: 'Build static sites, run serverless applications, or modernize legacy systems.',
       action: {

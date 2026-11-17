@@ -1,5 +1,5 @@
 {
- "purpose": "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.",
+ "purpose": "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.",
  "useWhen": [
   "Use FeatureTilesSection for a static set of picture tiles.",
   "To state three or four reasons to buy, each with a picture, under a product or pricing argument."
@@ -14,7 +14,7 @@
  ],
  "bestPractices": [
   "Match the tile count to the variant: four tiles for `artwork`, three for `illustrated`.",
-  "Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.",
+  "Give a tile its art as `illustration`, a name of the illustration registry; a tile without one renders without a picture. `scale` sizes the illustration in its frame.",
   "Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band."
  ]
 }

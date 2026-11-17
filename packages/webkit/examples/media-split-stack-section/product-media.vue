@@ -1,5 +1,4 @@
 <script setup>
-  import g2Symbol from '@aziontech/webkit/assets/g2-symbol-color.svg'
   import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
 
   const bands = [
@@ -11,12 +10,12 @@
       action: { label: 'Learn more', href: '/en/products/data-stream/' }
     },
     {
-      image: g2Symbol,
-      imageAlt: 'G2',
-      imageFramed: true,
-      title: 'Recognized by the people who use it',
-      description: 'Rated a Leader in Edge Computing by G2 users, season after season.',
-      action: { label: 'Read the reviews', href: '/en/about-us/' }
+      illustration: 'real-time-metrics-error-rate',
+      illustrationLabel: 'A chart of the error rate over time',
+      title: 'Error rates as they happen',
+      description:
+        'Chart the error rate of every application and catch a failing deploy seconds after it ships.',
+      action: { label: 'Learn more', href: '/en/products/real-time-metrics/' }
     }
   ]
 </script>

@@ -3,17 +3,17 @@ name: feature-tiles-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-04
-last_updated: 2026-11-16
-checksum: 84d070c1da7e424014613d1a24a493fef3613f3e31ead2852b03bedaf882dcd5
+last_updated: 2026-11-17
+checksum: f63ab4742e72b8cabe0e8a60c443354093718b93b0f82765f42d9bf3f49127ab
 ---
 
 # FeatureTilesSection — Component Spec
 
 ## Purpose
 
-The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 ## When to use
 
@@ -33,7 +33,7 @@ The reasons band of a marketing page: an optional centered section title over a 
 ## Best practices
 
 - Match the tile count to the variant: four tiles for `artwork`, three for `illustrated`.
-- Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.
+- Give a tile its art as `illustration`, a name of the illustration registry; a tile without one renders without a picture. `scale` sizes the illustration in its frame.
 - Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band.
 
 ## Usage
@@ -51,12 +51,12 @@ The reasons band of a marketing page: an optional centered section title over a 
     description="Build, ship, and run an application on the same platform that serves it."
     :tiles="[
       {
-        image: '/illustrations/branches.svg',
+        illustration: 'branches',
         title: 'Build at AI speed.',
         description: 'Go from commit to a live URL in minutes.'
       },
       {
-        image: '/illustrations/personal-tokens.svg',
+        illustration: 'personal-tokens',
         title: 'Secure by default.',
         description: 'Every workload runs in its own isolated environment.'
       }
@@ -67,14 +67,14 @@ The reasons band of a marketing page: an optional centered section title over a 
 
 ## Props
 
-| Prop          | Type                         | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                        |
-| ------------- | ---------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`     | `FeatureTilesSectionVariant` | `'artwork'` | false    | Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule.                                                                                                                                                         |
-| `anchor`      | `string`                     | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                               |
-| `eyebrow`     | `string`                     | `''`        | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                             |
-| `title`       | `string`                     | `''`        | false    | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty.                                                                                                                                                                             |
-| `description` | `string`                     | `''`        | false    | Supporting sentence under the headline.                                                                                                                                                                                                                                                      |
-| `tiles`       | `FeatureTilesSectionTile[]`  | `[]`        | false    | The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale. |
+| Prop          | Type                         | Default     | Required | JSDoc                                                                                                                                                                                                    |
+| ------------- | ---------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`     | `FeatureTilesSectionVariant` | `'artwork'` | false    | Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule.                                                                     |
+| `anchor`      | `string`                     | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                           |
+| `eyebrow`     | `string`                     | `''`        | false    | Eyebrow above the section title.                                                                                                                                                                         |
+| `title`       | `string`                     | `''`        | false    | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty.                                                                                         |
+| `description` | `string`                     | `''`        | false    | Supporting sentence under the headline.                                                                                                                                                                  |
+| `tiles`       | `FeatureTilesSectionTile[]`  | `[]`        | false    | The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid above the caption, and `scale` its media scale. |
 
 ## Events
 
@@ -90,7 +90,7 @@ The reasons band of a marketing page: an optional centered section title over a 
 - `data-variant` mirrors the `variant` prop and drives the column count and the frame marks
 - Empty: when `tiles` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
-- A tile picture carries its `alt`; without one it is decorative (`alt=""`, `aria-hidden`)
+- A tile without an `illustration` renders without media; in the `artwork` layout an illustration is drawn in a 170:128 frame at the tile's width
 
 ## Motion & Animations
 
@@ -113,7 +113,7 @@ _none_
 
 - Visible focus: nothing in the band is interactive.
 - Keyboard map: none.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading; a tile picture is named by its `alt`, or hidden from assistive technology when `alt` is empty.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title` and `media-tile`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.

@@ -50,8 +50,10 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
   how to use", "Industries"), is `CardCarouselSection` (`card-carousel-section`): each card takes `eyebrow`,
   `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Eyebrow`.
 - A media band (`MediaSplitSection`, a `MediaSplitStackSection` band) always has a picture, and it is
-  a drawn asset: an illustration, an image or a registered scene; a product console widget is one
-  (set `widget`, a `ConsoleMockup` name). Request-flow diagrams and code never go in a media band:
+  a drawn asset: an illustration (a name of the illustration registry) or a registered scene; a
+  product console widget is one (set `widget`, a `ConsoleMockup` name). The sections take no picture
+  URL: art in `FeatureTilesSection`, `MediaSplitSection` and `MediaSplitStackSection` is an
+  `illustration` name. Request-flow diagrams and code never go in a media band:
   a diagram is a `ConsoleShowcaseSection` with `variant="diagram"`, code a `FeatureScrollSection`
   step with `code`. Do not drop to `MediaSplit` and its `media` slot to get around it.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content

@@ -60,22 +60,11 @@
     illustrationLabel?: string
   }
 
-  /** A band's picture drawn from an image URL. */
-  export type MediaSplitStackSectionImageMedia = {
-    /** URL of the picture shown in the media cell. */
-    image: string
-    /** Alternative text of the picture; empty keeps it decorative. */
-    imageAlt?: string
-    /** Sets the picture whole on a rounded, bordered plate inset in the cell, for a badge, a logo or a screenshot. */
-    imageFramed?: boolean
-  }
-
-  /** The required picture of a band: a scene, a console widget, an illustration or an image. */
+  /** The required picture of a band: a scene, a console widget or a registry illustration. */
   export type MediaSplitStackSectionBandMedia =
     | MediaSplitStackSectionSceneMedia
     | MediaSplitStackSectionWidgetMedia
     | MediaSplitStackSectionIllustrationMedia
-    | MediaSplitStackSectionImageMedia
 
   /** One band of the run: a claim beside its required picture. */
   export type MediaSplitStackSectionBand = MediaSplitStackSectionBandCopy &
@@ -85,8 +74,7 @@
     Partial<
       MediaSplitStackSectionSceneMedia &
         MediaSplitStackSectionWidgetMedia &
-        MediaSplitStackSectionIllustrationMedia &
-        MediaSplitStackSectionImageMedia
+        MediaSplitStackSectionIllustrationMedia
     >
 
   export interface MediaSplitStackSectionProps {
@@ -98,7 +86,7 @@
     title?: string
     /** Supporting sentence under the section title. */
     description?: string
-    /** The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget`, `illustration` (with `illustrationLabel?`) or `image` (with `imageAlt?`, `imageFramed?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. */
+    /** The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button. */
     bands?: MediaSplitStackSectionBand[]
   }
 
@@ -140,9 +128,7 @@
 
   const bare = computed(() =>
     views.value
-      .filter(
-        (band, index) => !scenes.value[index] && !band.widget && !band.illustration && !band.image
-      )
+      .filter((band, index) => !scenes.value[index] && !band.widget && !band.illustration)
       .map((band) => band.title)
   )
 
@@ -152,7 +138,7 @@
       (titles) => {
         if (titles.length)
           console.warn(
-            `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. Give every band an illustration, an image or a scene; a request-flow diagram goes in ConsoleShowcaseSection.`
+            `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. Give every band an illustration, a widget or a scene; a request-flow diagram goes in ConsoleShowcaseSection.`
           )
       },
       { immediate: true }
@@ -162,10 +148,6 @@
 
   const isMockup = (band: MediaSplitStackSectionBandFields, index: number) =>
     scenes.value[index] ? band.scene?.component === 'ConsoleMockup' : Boolean(band.widget)
-
-  const mediaPadded = (band: MediaSplitStackSectionBandFields, index: number) =>
-    isMockup(band, index) ||
-    (!scenes.value[index] && Boolean(band.imageFramed && band.image && !band.illustration))
 </script>
 
 <template>
@@ -210,7 +192,7 @@
             :title="band.title"
             :description="band.description"
             :media-href="bandHref(band)"
-            :media-padded="mediaPadded(band, index)"
+            :media-padded="isMockup(band, index)"
             @pointerenter="hovered = index"
             @pointerleave="hovered = null"
           >
@@ -249,36 +231,6 @@
                 :name="band.illustration"
                 :aria-label="band.illustrationLabel ?? ''"
               />
-            </template>
-            <template
-              v-else-if="band.image && band.imageFramed"
-              #media
-            >
-              <div
-                class="flex w-full items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
-              >
-                <img
-                  :src="band.image"
-                  :alt="band.imageAlt ?? ''"
-                  decoding="async"
-                  class="block h-auto max-h-80 w-auto max-w-full object-contain"
-                />
-              </div>
-            </template>
-            <template
-              v-else-if="band.image"
-              #media
-            >
-              <div class="flex aspect-592/300 w-full items-center justify-center">
-                <img
-                  :src="band.image"
-                  :alt="band.imageAlt ?? ''"
-                  width="360"
-                  height="165"
-                  decoding="async"
-                  class="block h-auto max-h-full w-[60.81%] object-contain"
-                />
-              </div>
             </template>
             <template
               v-if="band.action"

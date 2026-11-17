@@ -1,5 +1,4 @@
 <script setup>
-  import g2Symbol from '@aziontech/webkit/assets/g2-symbol-color.svg'
   import MediaSplitSection from '@aziontech/webkit/media-split-section'
 </script>
 
@@ -16,9 +15,10 @@
     }"
   />
   <MediaSplitSection
-    eyebrow="Recognition"
-    title="Recognized by the people who use it"
-    description="Rated a Leader in Edge Computing by G2 users, season after season."
-    :image="{ src: g2Symbol, alt: 'G2', framed: true }"
+    eyebrow="Real-Time Metrics"
+    title="Read every status code as it lands"
+    description="Chart status codes per application and spot a failing deploy seconds after it ships."
+    illustration="real-time-metrics-status-codes"
+    illustration-aria-label="A chart of response status codes over time"
   />
 </template>

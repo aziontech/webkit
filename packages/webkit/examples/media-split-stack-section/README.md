@@ -10,7 +10,7 @@ The band is the `MediaSplitStackSection` component from `@aziontech/webkit/media
 
 ### Solutions
 
-The five solution areas Home stacks inside Why Azion, each a large, centered band with an outlined "Learn more" button. The first band shows an art file as an image; the others use `Illustration` scenes.
+The five solution areas Home stacks inside Why Azion, each a large, centered band with an outlined "Learn more" button. The first band draws the `quick-start-with-templates` illustration; the others use `Illustration` scenes too.
 
 Example: [`site-solutions.vue`](./site-solutions.vue)
 
@@ -18,7 +18,7 @@ Example: [`site-solutions.vue`](./site-solutions.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `bands` are the solutions, each a `title`, a `description`, an `action` (`label` and `href`, the button and the link the whole band follows unless the band sets its own `href`), an optional `eyebrow`, and a `scene`, an `illustration` name or an `image` with `imageAlt`.
+- `bands` are the solutions, each a `title`, a `description`, an `action` (`label` and `href`, the button and the link the whole band follows unless the band sets its own `href`), an optional `eyebrow`, and a `scene`, a `widget` or an `illustration` name from the registry.
 - `anchor` is the run's id for in-page links; `description` sits under the section title. With a title the band headlines are `h3`.
 - A band without `action` has no button and no link. Every band needs a picture; one without renders without its media cell and warns in development.
 

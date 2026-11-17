@@ -7,7 +7,7 @@
   },
   {
    "name": "Product media",
-   "summary": "Bands whose pictures show the product itself: a ConsoleMockup console screen (`widget`), which plays its beat while the pointer is over the band, and an object picture set whole on its own plate (`imageFramed`). The widget loads only when a band uses it.",
+   "summary": "Bands whose pictures show the product itself: a ConsoleMockup console screen (`widget`), which plays its beat while the pointer is over the band, and a registry `illustration` of the product's metrics. The widget loads only when a band uses it.",
    "file": "examples/media-split-stack-section/product-media.vue"
   }
  ]

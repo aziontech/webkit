@@ -7,7 +7,7 @@
   },
   {
    "name": "Product media",
-   "summary": "The band with a ConsoleMockup console screen as its picture (`widget`), then with an object picture set whole on its own plate (`image.framed`). Both sit inset in the media cell, and the widget plays its beat while the pointer is over the band.",
+   "summary": "The band with a ConsoleMockup console screen as its picture (`widget`), inset in the media cell and playing its beat while the pointer is over the band, then with a registry `illustration` of the product's metrics that runs flush to the cell.",
    "file": "examples/media-split-section/product-media.vue"
   },
   {
