@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import CopyText from '@aziontech/webkit/copy-text'
-  import Table from '@aziontech/webkit/table'
+  import DataTable from '@aziontech/webkit/data-table'
   import { computed } from 'vue'
 
   import { messages } from '../../lib/i18n'
@@ -22,111 +22,110 @@
   const withClass = computed(() =>
     props.tokens.some((token) => tailwindClass(token.name, props.kind))
   )
+
+  const columns = computed(() => [
+    {
+      id: 'name',
+      accessorKey: 'name',
+      header: t.value.token,
+      principal: true,
+      sortable: false,
+      minWidth: props.sample === 'none' || paired.value ? 176 : 216
+    },
+    ...(withClass.value
+      ? [{ id: 'tailwind', header: t.value.tailwind, sortable: false, minWidth: 200 }]
+      : []),
+    ...(withUsage.value
+      ? [{ id: 'usage', header: t.value.usage, sortable: false, grow: 3 as const }]
+      : []),
+    ...(paired.value
+      ? [
+          { id: 'light', header: t.value.light, sortable: false, grow: 2 as const },
+          { id: 'dark', header: t.value.dark, sortable: false, grow: 2 as const }
+        ]
+      : [{ id: 'value', header: t.value.value, sortable: false, grow: 2 as const }])
+  ])
+
+  function modeValue(token: Token, mode: 'light' | 'dark'): string {
+    return (mode === 'light' ? token.value : token.dark) ?? token.value
+  }
 </script>
 
 <template>
-  <Table
+  <DataTable
+    :data="tokens"
+    :columns="columns"
+    row-key="name"
     bordered
+    stackable
     wrap-lines
+    :aria-label="caption"
   >
-    <template #caption>
-      <span class="sr-only">{{ caption }}</span>
+    <template #cell-name="{ row }">
+      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+        <TokenSample
+          v-if="!paired"
+          :name="row.name"
+          :sample="sample"
+        />
+        <CopyText
+          :value="row.name"
+          size="small"
+        />
+      </span>
     </template>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeadCell principal>{{ t.token }}</Table.HeadCell>
-        <Table.HeadCell v-if="withClass">{{ t.tailwind }}</Table.HeadCell>
-        <Table.HeadCell
-          key="usage-head"
-          v-if="withUsage"
-          >{{ t.usage }}</Table.HeadCell
-        >
-        <template v-if="paired">
-          <Table.HeadCell>{{ t.light }}</Table.HeadCell>
-          <Table.HeadCell>{{ t.dark }}</Table.HeadCell>
-        </template>
-        <Table.HeadCell
-          key="value-head"
-          v-else
-          >{{ t.value }}</Table.HeadCell
-        >
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      <Table.Row
-        v-for="token in tokens"
-        :key="token.name"
+    <template #cell-tailwind="{ row }">
+      <CopyText
+        v-if="tailwindClass(row.name, kind)"
+        :value="tailwindClass(row.name, kind)"
+        size="small"
+      />
+      <span
+        v-else
+        class="text-body-sm text-(--text-muted)"
+        >—</span
       >
-        <Table.Cell principal>
-          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-            <TokenSample
-              v-if="!paired"
-              :name="token.name"
-              :sample="sample"
-            />
-            <CopyText
-              :value="token.name"
-              size="small"
-            />
-          </span>
-        </Table.Cell>
-        <Table.Cell v-if="withClass">
-          <CopyText
-            v-if="tailwindClass(token.name, kind)"
-            :value="tailwindClass(token.name, kind)"
-            size="small"
-          />
-          <span
-            v-else
-            class="text-body-sm text-(--text-muted)"
-            >—</span
-          >
-        </Table.Cell>
-        <Table.Cell
-          key="usage-cell"
-          v-if="withUsage"
+    </template>
+    <template #cell-usage="{ row }">
+      <span
+        v-if="row.usage"
+        class="flex min-w-0 flex-col gap-(--spacing-2xs)"
+      >
+        <span class="text-body-sm text-(--text-default)">{{ row.usage.job }}</span>
+        <span class="text-body-xs text-(--text-muted)">
+          {{ t.usedBy }}: <InlineCode :text="row.usage.usedBy" />
+        </span>
+      </span>
+      <span
+        v-else
+        class="text-body-sm text-(--text-muted)"
+        >—</span
+      >
+    </template>
+    <template
+      v-for="mode in ['light', 'dark'] as const"
+      :key="mode"
+      #[`cell-${mode}`]="{ row }"
+    >
+      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+        <TokenSample
+          :name="row.name"
+          :sample="sample"
+          :theme="mode"
+        />
+        <code
+          :title="modeValue(row, mode)"
+          class="min-w-0 truncate text-label-code-sm text-(--text-muted)"
+          >{{ modeValue(row, mode) }}</code
         >
-          <span
-            v-if="token.usage"
-            class="flex min-w-0 flex-col gap-(--spacing-2xs)"
-          >
-            <span class="text-body-sm text-(--text-default)">{{ token.usage.job }}</span>
-            <span class="text-body-xs text-(--text-muted)">
-              {{ t.usedBy }}: <InlineCode :text="token.usage.usedBy" />
-            </span>
-          </span>
-          <span
-            v-else
-            class="text-body-sm text-(--text-muted)"
-            >—</span
-          >
-        </Table.Cell>
-        <template v-if="paired">
-          <Table.Cell
-            v-for="mode in ['light', 'dark'] as const"
-            :key="mode"
-          >
-            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-              <TokenSample
-                :name="token.name"
-                :sample="sample"
-                :theme="mode"
-              />
-              <code class="min-w-0 break-all text-label-code-sm text-(--text-muted)">{{
-                (mode === 'light' ? token.value : token.dark) ?? token.value
-              }}</code>
-            </span>
-          </Table.Cell>
-        </template>
-        <Table.Cell
-          key="value-cell"
-          v-else
-        >
-          <code class="min-w-0 break-all text-label-code-sm text-(--text-muted)">{{
-            token.value
-          }}</code>
-        </Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
+      </span>
+    </template>
+    <template #cell-value="{ row }">
+      <code
+        :title="row.value"
+        class="min-w-0 truncate text-label-code-sm text-(--text-muted)"
+        >{{ row.value }}</code
+      >
+    </template>
+  </DataTable>
 </template>
