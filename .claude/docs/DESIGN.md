@@ -76,6 +76,8 @@ Reference: `packages/webkit/src/components/action/button/button.vue`.
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 
+Heading tracking is in `em`, so it shrinks with the font: `text-heading-3xl` is `-0.046em` (`--tracking-tighter`) and `text-heading-2xl` is `-0.053em`, the old `-0.16rem` at their desktop size (3.5rem and 3rem). A fixed `rem` tracking on a heading that steps down on phones runs the words together. Any heading, amount or big-number role with tracking uses `em` or `0`, never `rem` or `px` (`packages/theme/test/heading-tracking.test.mjs`).
+
 ### Do not declare typography primitives in components
 
 Inside `packages/webkit/src/components/`, **never** set:

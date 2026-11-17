@@ -1,5 +1,5 @@
 export const tracking = {
-  tighter: '-0.16rem',
+  tighter: '-0.046em',
   tight: '-0.025rem',
   normal: '0',
   wide: '0.025rem',
