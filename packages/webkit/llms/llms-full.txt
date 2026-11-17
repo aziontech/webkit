@@ -6870,7 +6870,7 @@ What each part takes: [blocks/detail/resource-detail.md](blocks/detail/resource-
 
 ## Topology tab
 
-- Use `TopologyDiagram` for the path a request takes to the resource (Application and ServiceOverview both do). Binds, changes and removals are staged on the node, counted beside Deploy and listed in the deploy `Drawer`; the run ends in the async-submit toast with Edit and Redeploy. A production-checklist step that binds a slot (Bind Policy, Bind Error Page) scrolls to the topology and expands that node instead of opening a separate form.
+- Use `TopologyDiagram` for the path a request takes to the resource (Application and ServiceOverview both do). A pick from a node's bind menu is pending on the node until its Apply control confirms it (Cancel or Escape drops it); only the confirmed `bind`, a change or a removal is staged on the node, counted beside Deploy and listed in the deploy `Drawer`; the run ends in the async-submit toast with Edit and Redeploy. A production-checklist step that binds a slot (Bind Policy, Bind Error Page) scrolls to the topology and expands that node instead of opening a separate form.
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
@@ -20412,7 +20412,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 # Topology Diagram
 
-> The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `FlowDiagram`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
+> The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it); a picked resource stays pending on the node until it is applied. Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `FlowDiagram`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
 
 - Import: `import TopologyDiagram from '@aziontech/webkit/topology-diagram'`
 - Category: data · Surface: app · Structure: monolithic
@@ -20457,7 +20457,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `bind` | `(event: MouseEvent \| KeyboardEvent, binding: { id: string; value: string })` | An existing option was picked in the bind control; `id` is the node's id. |
+| `bind` | `(event: MouseEvent \| KeyboardEvent, binding: { id: string; value: string })` | A pending pick was confirmed with Apply; `id` is the node's id, `value` the picked option. Picking an option no longer emits on its own (v6). |
 | `remove` | `(event: MouseEvent, id: string)` | Remove was activated on a bound, removable node. |
 | `create` | `(event: MouseEvent \| KeyboardEvent, id: string)` | Create was picked in the bind control. |
 
@@ -20475,14 +20475,15 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## States
 
 - Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
-- Node card: `data-state` `open` | `closed`; `data-dashed` for a staged or unbound node.
+- Node card: `data-state` `open` | `closed`; `data-dashed` for a staged, unbound or pending node.
+- Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`ai ai-check`, primary, `Apply {kind}`) and **Cancel** (`ai ai-x`, `Cancel`). Apply emits `bind` and clears it; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
 - Connectors: dashed, flowing; faded never (no disabled nodes).
 
 ## Accessibility
 
 - Visible focus: header buttons `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the scroll area when it scrolls.
-- Keyboard map: `Tab` moves through header buttons, links, copy, bind and remove controls in reading order; `Enter`/`Space` on a header toggles its card; the bind menu follows `dropdown-menu` (arrows, `Enter`, `Esc`). The scroll area is focusable (`tabindex="0"`) only when it overflows, so arrow keys scroll it.
-- ARIA: the root is a `section` named by `ariaLabel`; columns are an `ol` of `li`, each with an optional visually hidden label; each header is a `button` with `aria-expanded` and `aria-controls`; the collapsed body is `inert`; connectors are `aria-hidden`; icon-only controls are named (`Bind Policy`, `Remove Policy`, `Copy Domains Custom domain`) and carry a `Tooltip`; loading announces once through a `role="status"` line.
+- Keyboard map: `Tab` moves through header buttons, links, copy, bind and remove controls in reading order; `Enter`/`Space` on a header toggles its card; the bind menu follows `dropdown-menu` (arrows, `Enter`, `Esc`). Picking an option that differs from the bound one moves focus to Apply, so `Enter` confirms it; `Esc` anywhere in the node's action area cancels the pending pick; after Apply or Cancel focus returns to the bind (pencil) control. The scroll area is focusable (`tabindex="0"`) only when it overflows, so arrow keys scroll it.
+- ARIA: the root is a `section` named by `ariaLabel`; columns are an `ol` of `li`, each with an optional visually hidden label; each header is a `button` with `aria-expanded` and `aria-controls`; the collapsed body is `inert`; connectors are `aria-hidden`; icon-only controls are named (`Bind Policy`, `Remove Policy`, `Apply Policy`, `Cancel`, `Copy Domains Custom domain`) and carry a `Tooltip`; Apply is described by the pending label (`aria-describedby`), so focusing it reads what it applies, and no extra live region is added (the component's only one is the loading line); loading announces once through a `role="status"` line.
 - The unbound dash is `aria-hidden`; the status tag says Not bound in words.
 - Contrast ≥4.5:1 from the semantic text tokens.
 

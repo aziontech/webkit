@@ -9875,7 +9875,7 @@
     {
      "name": "bind",
      "payload": "(event: MouseEvent | KeyboardEvent, binding: { id: string; value: string })",
-     "notes": "An existing option was picked in the bind control; `id` is the node's id."
+     "notes": "A pending pick was confirmed with Apply; `id` is the node's id, `value` the picked option. Picking an option no longer emits on its own (v6)."
     },
     {
      "name": "remove",

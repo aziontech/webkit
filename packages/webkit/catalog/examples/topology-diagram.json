@@ -7,7 +7,7 @@
   },
   {
    "name": "Binding",
-   "summary": "Binding stages a change: the slot turns dashed and Staged with Deploy to apply this policy, removing a bound policy stages Deploy to remove it, and Create opens the create flow (here a status line). Nothing is applied until the next deploy.",
+   "summary": "Binding asks first: a pick from the menu is Pending on the node, with Apply and Cancel in place of Remove, and only Apply emits `bind`. The applied pick stages a change: the slot turns dashed and Staged with Deploy to apply this policy, removing a bound policy stages Deploy to remove it, and Create opens the create flow (here a status line). Nothing is applied until the next deploy.",
    "file": "examples/topology-diagram/binding.vue"
   },
   {
