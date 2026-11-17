@@ -72,15 +72,15 @@ Put the copy in the default slot when it carries links; animate the entrance on 
 
 ### G. Field label — `Field`, `Field.Label` (required)
 
-A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`, `New password`, `Confirm password`. Every field on these screens is required; the `Field`'s `required` turns on with the required prompt after the primary action, and the label shows the indicator then.
+A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`, `New password`, `Confirm password`. Every field on these screens is required; the `Field` is `required` from the first render, so the label shows the Required marker before any submit.
 
 ### H. Email — `Input` (required)
 
-`type="email"`, `size="large"`, full width, with a `name`. Sign in uses `autocomplete="username"` so password managers pair it with the password step; the reset step uses `autocomplete="email"`; sign up uses `autocomplete="email"` too. Empty on submit takes `required`, filled but malformed takes `invalid`, and the error clears as the user types.
+`type="email"`, `size="large"`, full width, with a `name`. Sign in uses `autocomplete="username"` so password managers pair it with the password step; the reset step uses `autocomplete="email"`; sign up uses `autocomplete="email"` too. It is `required` from the start; empty or malformed on submit takes `invalid`, and the error clears as the user types.
 
 ### I. Field message — `FieldError` (conditional)
 
-Shows only after the primary action, under the email input, with `type="required"` when the value is empty and `type="invalid"` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
+Shows only after the primary action, under the email input, with a message that says what to enter: `This field is required.` when the value is empty, `Enter a valid email address.` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
 
 ### J. Step hint — `Tooltip` (password and reset steps)
 
@@ -824,7 +824,10 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                         </div>
 
                         <div v-if="step === 'email'">
-                          <Field :required="!!errors.email && !email.trim()">
+                          <Field
+                            required
+                            :invalid="!!errors.email"
+                          >
                             <Field.Label for="login-email">Email</Field.Label>
                             <Input
                               id="login-email"
@@ -835,8 +838,8 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                               autocomplete="username"
                               class="w-full"
                               placeholder="m@example.com"
-                              :required="!!errors.email && !email.trim()"
-                              :invalid="!!errors.email && !!email.trim()"
+                              required
+                              :invalid="!!errors.email"
                               :aria-describedby="errors.email ? 'login-email-error' : undefined"
                               @update:model-value="errors.email = ''"
                             />
@@ -870,8 +873,8 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                           <div class="flex flex-col items-start gap-(--spacing-xs)">
                             <Field
                               class="w-full"
-                              :required="!!errors.password && !password"
-                              :invalid="!!errors.password && !!password"
+                              required
+                              :invalid="!!errors.password"
                             >
                               <Field.Label for="login-password">Password</Field.Label>
                               <PasswordInput
@@ -915,7 +918,10 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                             >
                           </div>
 
-                          <Field :required="!!errors.resetEmail && !resetEmail.trim()">
+                          <Field
+                            required
+                            :invalid="!!errors.resetEmail"
+                          >
                             <Field.Label for="reset-email">Email</Field.Label>
                             <Input
                               id="reset-email"
@@ -926,8 +932,8 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                               autocomplete="email"
                               class="w-full"
                               placeholder="m@example.com"
-                              :required="!!errors.resetEmail && !resetEmail.trim()"
-                              :invalid="!!errors.resetEmail && !!resetEmail.trim()"
+                              required
+                              :invalid="!!errors.resetEmail"
                               :aria-describedby="
                                 errors.resetEmail ? 'reset-email-error' : undefined
                               "
@@ -946,8 +952,8 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                           class="flex flex-col gap-(--spacing-lg)"
                         >
                           <Field
-                            :required="!!errors.newPassword && !newPassword"
-                            :invalid="!!errors.newPassword && !!newPassword"
+                            required
+                            :invalid="!!errors.newPassword"
                           >
                             <Field.Label for="new-password">New password</Field.Label>
                             <PasswordInput
@@ -965,8 +971,8 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                           </Field>
 
                           <Field
-                            :required="!!errors.confirmPassword && !confirmPassword"
-                            :invalid="!!errors.confirmPassword && !!confirmPassword"
+                            required
+                            :invalid="!!errors.confirmPassword"
                           >
                             <Field.Label for="confirm-password">Confirm password</Field.Label>
                             <PasswordInput
@@ -1275,7 +1281,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                     >
                       <legend class="sr-only">Personal token</legend>
                       <Field
-                        :required="!!tokenError"
+                        required
                         :invalid="!!tokenError"
                       >
                         <Field.Label for="personal-token">Personal token</Field.Label>

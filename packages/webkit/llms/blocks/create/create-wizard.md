@@ -757,7 +757,8 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                           aria-label="Name"
                           placeholder="office-ranges"
                           autocomplete="off"
-                          :required="errors.name?.type === 'required'"
+                          required
+                          :invalid="errors.name?.type === 'required'"
                           :aria-describedby="
                             errors.name ? 'create-access-list-name-message' : undefined
                           "
@@ -817,7 +818,8 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                           :rows="5"
                           :aria-label="listField.label"
                           :placeholder="listField.placeholder"
-                          :required="errors.items?.type === 'required'"
+                          required
+                          :invalid="errors.items?.type === 'required'"
                           :aria-describedby="
                             errors.items ? 'create-access-list-items-message' : undefined
                           "

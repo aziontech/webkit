@@ -1,6 +1,6 @@
 # FormValidation (`state/form-validation`)
 
-> A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. The block fetches nothing: Create emits `submit` with the values, and the page passes back `submitting`, `error`, `takenKey` or `saved`. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `SectionHeader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select is flagged required. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/creation-bar), not in ConsoleLayout.
+> A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. A required field carries the Required marker from the start; on submit an empty or filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. The block fetches nothing: Create emits `submit` with the values, and the page passes back `submitting`, `error`, `takenKey` or `saved`. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `SectionHeader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select asks for another origin. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/creation-bar), not in ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/state/form-validation/form-validation.vue` in `@aziontech/webkit`
@@ -35,7 +35,7 @@ This block is a page body for a create page: render it under the focused creatio
 
 | Error                                                                   | Where it renders                                                                                                                                                                     | Variant          |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
-| A value the user left empty or typed wrong (client-side)                | On the field: `required` or `invalid`, its message in the description, focus on the first field in error                                                                             | ValidationErrors |
+| A value the user left empty or typed wrong (client-side)                | On the field: `invalid`, its message in the description, focus on the first field in error                                                                                           | ValidationErrors |
 | A value the server refused that one field owns (a key already in use)   | On the field (`invalid` with its reason) and in a danger `Alert` above the fields of its section; never a toast                                                                      | Conflict         |
 | A rejection one section of a long form owns (a linked resource deleted) | A danger `Alert` under that section's heading with the recovery action, the field `invalid` with its own reason, the section scrolled into view and the field focused; never a toast | SectionRejected  |
 | A failure no field or section owns (network, timeout, 500)              | `toast.error` with Retry, every entry kept                                                                                                                                           | ServerError      |
@@ -53,7 +53,7 @@ While the form's data loads (the options a select offers, the record an edit for
 
 ### C. Field — `Field` (required)
 
-Each control sits in a `Field` with `Field.Label` (bound by `for`) and `Field.Description`. The description carries the guidance until a submit finds a problem, then swaps to the message, so each field speaks in one place. The field takes `required` when the value is empty and `invalid` when it is filled but wrong (malformed, too long, or already taken on the server). All fields take `disabled` while the request is in flight.
+Each control sits in a `Field` with `Field.Label` (bound by `for`) and `Field.Description`. The description carries the guidance until a submit finds a problem, then swaps to the message, so each field speaks in one place. A required field takes `required` from the first render, so its label shows the Required marker; a submit sets `invalid` when the value is empty or filled but wrong (malformed, too long, or already taken on the server). All fields take `disabled` while the request is in flight.
 
 ### D. Text value — `Input` (required)
 
@@ -61,7 +61,7 @@ Key and Value. A placeholder may show the expected shape (`API_TOKEN`); the rule
 
 ### E. Choice — `Select` (required)
 
-Environment, with `placeholder="Select an environment"`, `Select.Trigger` carrying the id the label points at, and `Select.Item` per value. Empty on submit takes `required`.
+Environment, with `placeholder="Select an environment"`, `Select.Trigger` carrying the id the label points at, and `Select.Item` per value. Empty on submit takes `invalid`.
 
 ### F. Long text — `Textarea` (optional)
 
@@ -77,7 +77,7 @@ A server rejection a field owns lands in two places, never in a toast: a danger 
 
 ### Section rejection (Section variants only)
 
-The Section variants add `AppHeader`, `IconButton`, `Tooltip`, `Brand`, `Breadcrumb`, `DropdownMenu`, `Avatar`, `SectionHeader`, `SettingsRow`, `SaveBar`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `FieldError` to the parts above. The Section variants are a Create Service page under the creation header (`top-bar/creation-bar`): a back `IconButton` with a `Tooltip`, the `Brand`, a `Breadcrumb` (`Services › Create Service`) and the account `DropdownMenu`. Each section is a `SectionHeader` over a flush `Card` whose `Item.List` holds `SettingsRow`s (`Input`, `MultiSelect`, `RadioGroup` with `variant="card"`, `Switch`, `NumberInput`), and a sticky `SaveBar` raised with `z-10` holds Cancel and Save. The Origin heading carries an id so the save can scroll it into view; the danger `Alert` opens under it with an expand transition (`motion-reduce:transition-none`) and the recovery action (`Reload origins`, `variant="secondary"`, `loading` while it runs) in its `action` slot. The Origin `Select` takes `invalid` when the server says the chosen origin no longer exists, and `required` once the list is reloaded without it, each with a one-line `FieldError`. While the list reloads a `Skeleton` named `Loading origins` stands in for the select and Save is disabled.
+The Section variants add `AppHeader`, `IconButton`, `Tooltip`, `Brand`, `Breadcrumb`, `DropdownMenu`, `Avatar`, `SectionHeader`, `SettingsRow`, `SaveBar`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `FieldError` to the parts above. The Section variants are a Create Service page under the creation header (`top-bar/creation-bar`): a back `IconButton` with a `Tooltip`, the `Brand`, a `Breadcrumb` (`Services › Create Service`) and the account `DropdownMenu`. Each section is a `SectionHeader` over a flush `Card` whose `Item.List` holds `SettingsRow`s (`Input`, `MultiSelect`, `RadioGroup` with `variant="card"`, `Switch`, `NumberInput`), and a sticky `SaveBar` raised with `z-10` holds Cancel and Save. The Origin heading carries an id so the save can scroll it into view; the danger `Alert` opens under it with an expand transition (`motion-reduce:transition-none`) and the recovery action (`Reload origins`, `variant="secondary"`, `loading` while it runs) in its `action` slot. The Origin `Select` takes `invalid` when the server says the chosen origin no longer exists, and keeps `invalid` with a new message once the list is reloaded without it, each with a one-line `FieldError`. While the list reloads a `Skeleton` named `Loading origins` stands in for the select and Save is disabled.
 
 ### Result notices — through `toast`
 
@@ -101,7 +101,7 @@ The block fetches nothing and fakes no request: Create validates the draft, then
 | -------- | ----------------- | ------------------------------------------------------------ |
 | `submit` | `(event, values)` | Create, or Retry in the error toast, with every field valid. |
 
-The Section form takes `origins`, `originError`, `reloading` and `submitting`, and emits `submit` `(event, values)`, `cancel` `(event)` and `reload-origins` `(event)`. A chosen origin missing from a new `origins` list is cleared and flagged required.
+The Section form takes `origins`, `originError`, `reloading` and `submitting`, and emits `submit` `(event, values)`, `cancel` `(event)` and `reload-origins` `(event)`. A chosen origin missing from a new `origins` list is cleared and flagged with Select an origin to continue.
 
 To go live, render the block from a page that owns the request:
 
@@ -134,13 +134,13 @@ Then delete `sample.ts` and its imports in the variants.
 - Keep every entry after a failed or rejected save, and say so in the copy.
 - Clear the form after a success, so the next entry starts clean, and name the new object in the toast.
 - On the one-section form, a key already in use raises the danger `Alert` above the fields as well as the `invalid` Key, and focus moves to Key.
-- On a long form, put a section-scoped rejection in one danger `Alert` under that section's heading with the recovery on it, scroll the section into view (instant under `prefers-reduced-motion`) and focus the field with `preventScroll` after the lock is released. After the recovery, close the `Alert`, clear the stale value and flag the field `required`.
+- On a long form, put a section-scoped rejection in one danger `Alert` under that section's heading with the recovery on it, scroll the section into view (instant under `prefers-reduced-motion`) and focus the field with `preventScroll` after the lock is released. After the recovery, close the `Alert`, clear the stale value and keep the field `invalid` with a message that says what to pick.
 
 ## Don't
 
 - Don't show a validation summary at the top; each field carries its own message.
 - Don't toast a rejection a field owns (a key already in use, a deleted origin). The toast dismisses itself and points nowhere.
-- Don't use the amber `required` prompt for a value the server rejected; the value is present, so it is `invalid`.
+- Don't colour a required field before a failed submit; `required` is static and only `invalid` turns the field red.
 - Don't disable Create to signal missing values; let submit run and show the messages.
 - Don't clear the form or send the user back to the start after a rejection, and don't open more than one `Alert` for one rejection.
 - Don't auto-dismiss an `Alert` that names a required action; it stays until the user recovers (see SectionReloaded).
@@ -171,7 +171,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## States
 
 - Default: no prop set; the empty Create Variable form, idle.
-- ValidationErrors: `defaultValues` with a malformed key and `defaultSubmitted`, as after Create pressed with gaps; empty Value and Environment take `required`, the malformed Key takes `invalid`, each with its own message, and focus moves to Key.
+- ValidationErrors: `defaultValues` with a malformed key and `defaultSubmitted`, as after Create pressed with gaps; empty Value and Environment and the malformed Key take `invalid`, each with its own message, and focus moves to Key.
 - Submitting: `submitting`, the request is in flight; Create shows `loading`, the fields and Cancel are disabled.
 - ServerError: `error`, the request failed and no field owns it; an error toast with Retry, the lock released, every entry kept.
 - Conflict: `takenKey`, the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
@@ -179,7 +179,7 @@ Then delete `sample.ts` and its imports in the variants.
 - Loading: `loading`, the form data is still arriving; `Skeleton` rows hold the layout and Create is disabled.
 - SectionRejected: `originError` on the long Create Service form, another user deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
 - SectionReloading: `reloading`, Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
-- SectionReloaded: `origins` without the deleted origin and an empty `originError`; the `Alert` closes, the select is cleared and flagged required with Select an origin to continue.
+- SectionReloaded: `origins` without the deleted origin and an empty `originError`; the `Alert` closes, the select is cleared and stays invalid with Select an origin to continue.
 
 ## Related
 
@@ -193,7 +193,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## Variants
 
 - `Default` — primary (the code below)
-- `ValidationErrors` — Create pressed with gaps. The empty Value and Environment take the required state, the malformed key takes the invalid state, each helper text carries its own message, and focus moves to Key.
+- `ValidationErrors` — Create pressed with gaps. The empty Value and Environment and the malformed key take the invalid state, each helper text carries its own message, and focus moves to Key.
 - `Submitting` — The request is in flight. Create shows its loading state, and the fields and Cancel are disabled so the entries cannot change mid-save.
 - `ServerError` — The request failed and no field owns the failure. An error Toast says what failed and carries Retry, the lock is released, and every entry stays as typed.
 - `Conflict` — The server rejected a value one field owns: the key is already in use. A danger Alert above the fields says so and that the entries are kept, Key takes the invalid state with its reason and the focus, and nothing toasts.
@@ -201,7 +201,7 @@ Then delete `sample.ts` and its imports in the variants.
 - `Loading` — The form while its data loads, such as the environments it offers or the record an edit form opens with. Skeleton rows hold the layout, and Create stays disabled until the fields arrive.
 - `SectionRejected` — A long Create Service form whose linked origin another user deleted, after Save: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
 - `SectionReloading` — Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back.
-- `SectionReloaded` — The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue.
+- `SectionReloaded` — The list is reloaded without the deleted origin: the Alert closes, the select is cleared and stays invalid with Select an origin to continue.
 
 Each variant is the same screen in another state: `get_block("state/form-validation", { variant })`, or the file under `blocks/state/form-validation/variants/`.
 
@@ -431,8 +431,8 @@ Each variant is the same screen in another state: `get_block("state/form-validat
             :label="`A variable named ${form.key} already exists in this account, so it wasn't created. Your entries are kept: change the key and press Create again.`"
           />
           <Field
-            :required="missing('key')"
-            :invalid="invalid('key')"
+            required
+            :invalid="missing('key') || invalid('key')"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.key">Key</Field.Label>
@@ -449,8 +449,8 @@ Each variant is the same screen in another state: `get_block("state/form-validat
             </Field.Description>
           </Field>
           <Field
-            :required="missing('value')"
-            :invalid="invalid('value')"
+            required
+            :invalid="missing('value') || invalid('value')"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.value">Value</Field.Label>
@@ -464,7 +464,8 @@ Each variant is the same screen in another state: `get_block("state/form-validat
             </Field.Description>
           </Field>
           <Field
-            :required="missing('environment')"
+            required
+            :invalid="missing('environment')"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.environment">Environment</Field.Label>

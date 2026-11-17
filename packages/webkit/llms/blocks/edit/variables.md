@@ -1235,8 +1235,8 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                           <Field>
                             <InputGroupRoot
                               size="large"
-                              :required="keyError(entries[index])?.type === 'required'"
-                              :invalid="keyError(entries[index])?.type === 'invalid'"
+                              required
+                              :invalid="!!keyError(entries[index])"
                             >
                               <InputGroupAddon>
                                 <span class="inline-block w-20">
@@ -1278,7 +1278,8 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                           <Field>
                             <InputGroupRoot
                               size="large"
-                              :required="!!valueError(entries[index])"
+                              required
+                              :invalid="!!valueError(entries[index])"
                             >
                               <InputGroupAddon>
                                 <span class="inline-block w-20">
@@ -1401,7 +1402,8 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                   >
                     <InputGroupRoot
                       size="large"
-                      :required="scopeError(scope)"
+                      :required="scope.enabled && scope.type !== 'global'"
+                      :invalid="scopeError(scope)"
                     >
                       <InputGroupAddon>
                         <span class="w-20">{{ scope.label }}</span>
@@ -1422,7 +1424,8 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                           :placeholder="scope.placeholder"
                           :display-value="scopeDisplay(scope)"
                           :disabled="!scope.enabled"
-                          :required="scopeError(scope)"
+                          :required="scope.enabled && scope.type !== 'global'"
+                          :invalid="scopeError(scope)"
                         >
                           <MultiSelect.Trigger
                             :aria-label="scope.placeholder"

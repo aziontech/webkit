@@ -37,7 +37,7 @@
 | `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
-| `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone. |
+| `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. |
 | `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
 | `resize` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior. |
 | `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`. |
@@ -54,7 +54,7 @@
 
 ## States
 
-- Visual states: `default`, `hover`, `focus`, `filled`, `disabled`, `required` (warning border), `invalid` (danger border), `readonly`
+- Visual states: `default`, `hover`, `focus`, `filled`, `disabled`, `required` (no visual change: the wrapping `Field.Label` carries the Required marker), `invalid` (danger border), `readonly`
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop

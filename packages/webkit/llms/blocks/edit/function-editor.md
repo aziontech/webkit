@@ -1251,7 +1251,8 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                           class="w-full"
                           aria-label="Name"
                           autocomplete="off"
-                          :required="!!nameError"
+                          required
+                          :invalid="!!nameError"
                           :aria-describedby="nameError ? nameMessageId : undefined"
                           @update:model-value="nameError = ''"
                         />

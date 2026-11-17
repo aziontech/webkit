@@ -18,6 +18,7 @@
 ## Do
 
 - Put the state on the `Field`, not on the control: `<Field invalid>` sets `aria-invalid` on the control and the invalid tone on `Field.Description`.
+- Set `required` on the `Field` from the first render, never only after a submit: it shows the Required marker on `Field.Label` and sets `required` on the control, and nothing turns a warning colour. A required field submitted empty is `invalid`, with a `Field.Error` that says what to enter; it turns red only then.
 - Let the Field own the ids. Pass an explicit `id` on the control and `for` on `Field.Label` only when another part of the page needs the id (focusing the first invalid field, an error summary link).
 - Render `Field.Description` for guidance and `Field.Error` for a validation message; both are announced through `aria-describedby`. `Field.Error` has `role="alert"`, so render it only when there is an error.
 - Choice cards: `<Field.Label><Field orientation="horizontal">control + Field.Content</Field></Field.Label>`. Never nest a choice card inside another `Field`; group cards with `Field.Set`.
@@ -70,9 +71,9 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
   - Events: _none_.
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
-- `field-description/field-description.vue` — guidance line in the label-sm text style; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (only when no `Field.Error` is mounted) > `required` > `helper`.
+- `field-description/field-description.vue` — guidance line in the label-sm text style; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (`--text-danger`, only when no `Field.Error` is mounted) > `helper` (`--text-muted`). A required field keeps the helper tone: the Required marker on `Field.Label` says it is required, and no control shows a warning colour for it.
   - Props: _none_. Events: _none_. Slots: `default`.
-- `field-error/field-error.vue` — validation message in the danger tone with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
+- `field-error/field-error.vue` — validation message in `--text-danger` led by an `az az-circle-alert` icon (`aria-hidden`, test id `${testId}__icon`), with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-group/field-group.vue` — vertical stack of fields; it is a `@container/field-group`, one of the containers `orientation="responsive"` can follow.
   - Props: _none_. Events: _none_. Slots: `default`.

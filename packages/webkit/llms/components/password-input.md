@@ -67,7 +67,7 @@
 - Single fixed height: 40px (large only)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
-- `data-required` mirrors the `required` prop; drives the warning-border treatment
+- `data-required` mirrors the `required` prop; it draws no border of its own: the Required marker on the wrapping `Field.Label` says a field is required, and a missing value is shown as `invalid` after a failed submit
 - `data-leading` mirrors `$slots.leading` presence
 - `data-trailing` mirrors `$slots.trailing` presence (only relevant when `toggleable=false`)
 - `data-toggleable` mirrors the `toggleable` prop
