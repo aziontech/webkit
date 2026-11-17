@@ -1,16 +1,16 @@
 # EventsExplorer (`view/events-explorer`)
 
-> The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.
+> The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.
 
 - Surface: app
 - Source: `blocks/view/events-explorer/events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/events-explorer")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida; query language; events query; saved searches; saved queries; query history; date range; time range picker; investigation tabs; event document; consulta de eventos; buscas salvas; intervalo de datas
+real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida; query language; events query; saved searches; saved queries; query history; date range; time range picker; investigation tabs; event document; request trace; trace waterfall; critical path; trace de requisição; consulta de eventos; buscas salvas; intervalo de datas
 
 The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
 
@@ -52,11 +52,11 @@ A resizable, collapsible start `Sidebar` named Fields with its own Search fields
 
 Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. While the explorer is too narrow for the document pane, Time, Level and Source fold into the Event cell: Level `Tag`, the clock time and the source on top, the event message wrapped under them, so a phone or tablet reads what happened without scrolling sideways. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window. When `error` is set, a danger `Alert` with the message and Retry takes the place of the summary, the chart and the table; the fields panel stays.
 
-### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
+### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `Trace`, `CodeBlock` (required)
 
-Each row's detail cell is an `IconButton` named Open event <id> with `aria-expanded`, so a keyboard user opens an event with Tab and Enter; a row click does the same for a pointer. When the explorer is wide enough for the fields panel, the log and the document, the event opens in the end pane of a horizontal `Resizable` (`Resizable.Handle` named Resize the event panel, the pane 320 to 512 px, collapsed while no event is open), so the handle sits on the inner edge and dragging it inward widens the document. Its header holds the Event heading and a small Close `IconButton` in a `Tooltip`; the body shows the level and source as small `Tag`s, lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON.
+Each row's detail cell is an `IconButton` named Open event <id> with `aria-expanded`, so a keyboard user opens an event with Tab and Enter; a row click does the same for a pointer. When the explorer is wide enough for the fields panel, the log and the document, the event opens in the end pane of a horizontal `Resizable` (`Resizable.Handle` named Resize the event panel, the pane 320 to 512 px, collapsed while no event is open), so the handle sits on the inner edge and dragging it inward widens the document. Its header holds the Event heading and a small Close `IconButton` in a `Tooltip`; the body shows the level and source as small `Tag`s, lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON. When the event carries the `spans` of its request, a Trace section sits between the fields and the JSON: an unbordered `Trace` with `highlight-critical-path`, named Trace of request <request id>, so the reader goes from "this request was slow or failed" to the step that held it up without leaving the log.
 
-### G. Narrow document — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `Tag`, `CodeBlock` (required)
+### G. Narrow document — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `Tag`, `Trace`, `CodeBlock` (required)
 
 Below that width the same document opens in a large right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and the drawer's own close button. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
 
@@ -92,7 +92,7 @@ The block takes its events through props and emits every action; it fetches noth
 
 | Prop / model              | Type                            | What it does                                                                                                                                                                                                                                                                                  |
 | ------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `events`                  | `EventsExplorerEvent[]`         | The events: `id`, `at`, `source`, `level`, `message` and one key per field. Pass `[]` for a workspace with no traffic.                                                                                                                                                                        |
+| `events`                  | `EventsExplorerEvent[]`         | The events: `id`, `at`, `source`, `level`, `message`, optional `spans` (the `TraceSpan`s of the request, shown as its trace in the document) and one key per field. Pass `[]` for a workspace with no traffic.                                                                                |
 | `fields`                  | `EventsExplorerField[]`         | The fields, in order; the columns, the fields panel and the document follow them. Core fields stay shown, and the first columns are `host`, `status` and `remoteAddress` when the fields have them, else the first three others; `time` and `sourceLabel` are derived from `at` and `source`. |
 | `categories`              | `EventsExplorerFieldCategory[]` | The groups of the fields panel, in order. Left out with `fields` given, one group per `category` the fields name.                                                                                                                                                                             |
 | `buckets`                 | `EventsExplorerBucket[]`        | The volume chart bars, per level. Left out, the block counts them from the events in the period.                                                                                                                                                                                              |
@@ -269,6 +269,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
@@ -289,6 +290,8 @@ Each variant is the same screen in another state: `get_block("view/events-explor
     level: EventsExplorerEventLevel
     /** One-line description, the Event column and the heading of the document. */
     message: string
+    /** Spans of the request the event records; when set, the document shows its trace. */
+    spans?: TraceSpan[]
     /** Every other value, keyed by the id of a field in fields. */
     [field: string]: unknown
   }
@@ -1771,6 +1774,21 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                     </dl>
                   </div>
 
+                  <div
+                    v-if="documentEvent.spans?.length"
+                    class="flex min-w-0 flex-col gap-(--spacing-xs) pb-(--spacing-lg)"
+                  >
+                    <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Trace</h3>
+                    <Trace
+                      :key="documentEvent.id"
+                      :spans="documentEvent.spans"
+                      :bordered="false"
+                      highlight-critical-path
+                      :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
+                      class="border-y border-(--border-muted)"
+                    />
+                  </div>
+
                   <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                     <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
                       Event document
@@ -1846,6 +1864,21 @@ Each variant is the same screen in another state: `get_block("view/events-explor
               </dl>
             </div>
 
+            <div
+              v-if="documentEvent.spans?.length"
+              class="flex min-w-0 flex-col gap-(--spacing-xs) pb-(--spacing-lg)"
+            >
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Trace</h3>
+              <Trace
+                :key="documentEvent.id"
+                :spans="documentEvent.spans"
+                :bordered="false"
+                highlight-critical-path
+                :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
+                class="border-y border-(--border-muted)"
+              />
+            </div>
+
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
               <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
               <div class="min-w-0">
@@ -1869,6 +1902,8 @@ Each variant is the same screen in another state: `get_block("view/events-explor
 ## `sample.ts`
 
 ```ts
+import type { TraceSpan } from '@aziontech/webkit/trace'
+
 import type {
   EventsExplorerEvent,
   EventsExplorerEventLevel,
@@ -2041,6 +2076,119 @@ const eventTemplates: EventTemplate[] = [
   }
 ]
 
+const requestSpans = (
+  method: string,
+  uri: string,
+  total: number,
+  cache: string,
+  status: number
+): TraceSpan[] => {
+  const failed = status >= 500
+  const share = (fraction: number) => Math.max(1, Math.round(total * fraction))
+  const rules = share(0.04)
+  const lookupAt = 1 + rules
+  const lookup = share(0.03)
+  const spans: TraceSpan[] = [
+    {
+      id: 'request',
+      name: `${method} ${uri}`,
+      service: 'Application',
+      start: 0,
+      duration: total,
+      status: failed ? 'error' : undefined,
+      attributes: { 'http.method': method, 'http.status_code': status }
+    },
+    {
+      id: 'firewall',
+      parentId: 'request',
+      name: 'firewall rules',
+      service: 'Firewall',
+      start: 1,
+      duration: rules
+    },
+    {
+      id: 'cache',
+      parentId: 'request',
+      name: 'cache lookup',
+      service: 'Cache',
+      start: lookupAt,
+      duration: lookup,
+      attributes: { 'cache.status': cache }
+    }
+  ]
+  const after = lookupAt + lookup
+  if (cache === 'HIT' && !failed) {
+    spans.push({
+      id: 'deliver',
+      parentId: 'request',
+      name: 'deliver',
+      service: 'Network',
+      start: after,
+      duration: total - after - 1
+    })
+    return spans
+  }
+  const originEnd = failed ? total - share(0.02) : total - share(0.25)
+  const firstByte = failed ? originEnd : after + share(0.3)
+  spans.push({
+    id: 'origin',
+    parentId: 'request',
+    name: 'fetch origin',
+    service: 'Network',
+    start: after,
+    duration: originEnd - after,
+    status: failed ? 'error' : undefined,
+    message:
+      status === 504
+        ? 'The origin did not answer before the timeout.'
+        : failed
+          ? `The origin answered ${status} on every try.`
+          : undefined,
+    events: failed
+      ? [{ at: after + share(0.01), name: 'connection-open' }]
+      : [
+          { at: after + share(0.01), name: 'connection-open' },
+          { at: firstByte, name: 'first-byte' }
+        ]
+  })
+  if (status === 502) {
+    const step = Math.floor((originEnd - after) / 3)
+    ;[0, 1, 2].forEach((attempt) =>
+      spans.push({
+        id: `attempt-${attempt + 1}`,
+        parentId: 'origin',
+        name: `attempt ${attempt + 1}`,
+        service: 'Network',
+        start: after + attempt * step + 1,
+        duration: step - 2,
+        status: 'error',
+        attributes: { 'http.status_code': 502 }
+      })
+    )
+  }
+  if (!failed) {
+    spans.push(
+      {
+        id: 'store',
+        parentId: 'request',
+        name: 'store in cache',
+        service: 'Cache',
+        start: firstByte,
+        duration: share(0.08)
+      },
+      {
+        id: 'deliver',
+        parentId: 'request',
+        name: 'deliver',
+        service: 'Network',
+        start: firstByte,
+        duration: total - firstByte - 1
+      }
+    )
+  }
+  return spans
+}
+
 const sequence = (seed: number) => {
   let state = seed
   return (length: number) => {
@@ -2087,7 +2235,20 @@ const seedEvents = (): EventsExplorerEvent[] => {
       resourceId: resources[pick(resources.length)],
       userAgent: requestScoped ? agents[pick(agents.length)] : undefined
     }
-  })
+  }).map((event) =>
+    event.source === 'http' && typeof event.requestTimeMs === 'number'
+      ? {
+          ...event,
+          spans: requestSpans(
+            String(event.requestMethod),
+            String(event.requestUri),
+            event.requestTimeMs,
+            String(event.cacheStatus),
+            Number(event.status)
+          )
+        }
+      : event
+  )
 }
 
 export const sampleEvents: EventsExplorerEvent[] = seedEvents()

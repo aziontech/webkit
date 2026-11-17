@@ -31,6 +31,34 @@ describe('view/events-explorer block', () => {
     await waitFor(() => expect(open).toHaveAttribute('aria-expanded', 'true'))
   })
 
+  it('shows the trace of a request event with its critical path, and none for an event without spans', async () => {
+    const spans = [
+      { id: 'request', name: 'GET /cart', start: 0, duration: 120 },
+      { id: 'origin', parentId: 'request', name: 'fetch origin', start: 10, duration: 100 }
+    ]
+    const view = render(EventsExplorer, {
+      props: {
+        now,
+        events: [
+          record('ev-trace', 'Origin slow', { requestId: 'req-1', spans }),
+          record('ev-plain', 'Rule matched', { at: new Date(now.getTime() - 6 * 60_000) })
+        ]
+      }
+    })
+    const open = await waitFor(() => view.getByRole('button', { name: 'Open event ev-trace' }))
+    await fireEvent.click(open)
+    const [trace] = await waitFor(() =>
+      view.getAllByRole('treegrid', { name: 'Trace of request req-1' })
+    )
+    const critical = trace?.querySelectorAll('[data-critical]') ?? []
+    expect([...critical].map((row) => row.getAttribute('data-span-id'))).toEqual([
+      'request',
+      'origin'
+    ])
+    await fireEvent.click(view.getByRole('button', { name: 'Open event ev-plain' }))
+    await waitFor(() => expect(view.queryAllByRole('treegrid')).toHaveLength(0))
+  })
+
   it('filters through FilterMenu and shows its chips for applied fields', async () => {
     const view = render(EventsExplorerFiltered)
     expect(view.getByTestId('filter-button')).toBeTruthy()

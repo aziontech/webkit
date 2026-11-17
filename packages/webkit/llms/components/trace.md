@@ -1,6 +1,6 @@
 # Trace
 
-> A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything. With `zoomable`, a minimap under the axis draws the whole run and a window the reader drags or resizes (or moves from the keyboard) to zoom the waterfall into part of it, through `v-model:range`. A span can carry `events` — moments inside it, drawn as markers on its bar and listed in its details — and `highlightSlowest` flags the span that took longest.
+> A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything. With `zoomable`, a minimap under the axis draws the whole run and a window the reader drags or resizes (or moves from the keyboard) to zoom the waterfall into part of it, through `v-model:range`. A span can carry `events` — moments inside it, drawn as markers on its bar and listed in its details — and `highlightSlowest` flags the span that took longest. `highlightCriticalPath` traces the critical path — the chain of work that set the run's end, walked back from the root's end through the child that finished last before each point — and draws a line under each bar along the stretches of that span that lie on it, so the reader sees which work to shorten to make the run faster. The details of a span with children show its self time (its duration less the time its children covered), and of a span on the critical path, its time on that path.
 
 - Import: `import Trace from '@aziontech/webkit/trace'`
 - Category: code · Surface: app · Structure: monolithic
@@ -20,6 +20,7 @@
 - Set `status: 'error'` and a one-line `message` on the span that failed, and on its parents if the failure bubbled up.
 - Turn on `zoomable` for a run with many short spans next to one long one, so the short ones can be read; bind `v-model:range` when the logs or a chart beside the trace should follow the same window.
 - Use `events` for moments that have no duration of their own (a cache miss, a retry, the first byte), with `at` on the run's clock; keep the names short, they are listed in the details.
+- Turn on `highlightCriticalPath` where the question is what to make faster: shortening a span off the path does not shorten the run, shortening one on it does. It reads better than `highlightSlowest` when work runs in parallel, because the longest span is not always the one that held the run up.
 - Turn on `highlightSlowest` where the question is where the time went; the flag goes to the longest span under the root, never to the root itself, which always spans the run.
 - Bind `v-model:selected-key` when another view (a request path, a log line) selects the same span.
 - Name the waterfall after the run (`aria-label="Trace of inv_7f21"`).
@@ -49,6 +50,7 @@
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the spans load; search and selection wait. |
 | `zoomable` | `boolean` | `false` | false | Shows a minimap under the axis to zoom the waterfall into a window of the run. Supports v-model:range. |
 | `highlightSlowest` | `boolean` | `false` | false | Flags the span that took longest, other than the root, in its row and its details. |
+| `highlightCriticalPath` | `boolean` | `false` | false | Draws the critical path of the run under the bars and flags the spans on it in their rows and details. |
 | `selectedKey` | `string` | `''` | false | Two-way value (`v-model:selectedKey`). |
 | `range` | `TraceRange \| null` | `null` | false | Two-way value (`v-model:range`). |
 
@@ -66,6 +68,7 @@
 - `data-selected` on the selected row; `aria-expanded` on parent rows; `data-bordered` and `data-loading` on the root mirror their props.
 - `zoomed` (a window narrower than the run): the axis, the bars and the event markers are placed against the window; a bar outside it is hidden (`data-outside`) while its row stays; the minimap shows the window and Reset zoom.
 - `data-slowest` on the slowest span's row (with `highlightSlowest`).
+- `data-critical` on the rows of spans on the critical path (with `highlightCriticalPath`); each stretch of the path is a line under its bar, placed against the visible window like the bar.
 
 ## Accessibility
 
@@ -73,7 +76,7 @@
 - Keyboard map: one row is in the tab order (roving `tabindex`); `ArrowDown`/`ArrowUp` move between visible rows; `Home`/`End` go to the first and last row; `ArrowRight` expands a collapsed parent, or moves into its first child; `ArrowLeft` collapses an expanded parent, or moves to the parent; `Enter` or `Space` selects the row (again: deselects). Close in the details returns focus to the row.
 - ARIA: the waterfall is a named `treegrid` of `row`s with `aria-level`, `aria-posinset`, `aria-setsize`, `aria-expanded` (parents only) and `aria-selected`; each row is named with its span, service, start, duration and outcome; the details band is a named `region` that describes the grid. The axis, the bars' duration labels and the expand glyph are decorative (`aria-hidden`).
 - Minimap: the two window edges are `role="slider"` thumbs named Zoom start and Zoom end, with `aria-valuemin` / `aria-valuemax` / `aria-valuenow` in milliseconds and the formatted time as `aria-valuetext`. `ArrowRight`/`ArrowUp` move an edge by 1% of the run, `ArrowLeft`/`ArrowDown` back, `PageUp`/`PageDown` by 10%, `Home`/`End` to its limits, `Escape` resets the zoom. Reset zoom is a button. The span lines drawn in the minimap are decorative.
-- Event markers are decorative; a row with events is named with their count, and the details list each event with its time. The slowest flag is named in the row (`Slowest`) and shown as a Tag in the details.
+- Event markers are decorative; a row with events is named with their count, and the details list each event with its time. The slowest flag is named in the row (`Slowest`) and shown as a Tag in the details. The critical path lines are decorative; a span on the path is named in its row (`Critical path`), shown as a Tag in the details with its time on the path, so the path never depends on the line alone.
 - Rows are 36 px high (44 px on `pointer: coarse`).
 - Colour is never the only signal: a failed span also carries an icon in the row and a Failed tag in the details.
 - Contrast ≥4.5:1 from the semantic text tokens; duration labels use the `-foreground` tokens of their status.
@@ -84,6 +87,7 @@
 - Icons: the collapsed chevron is mirrored (`rtl:-scale-x-100`); span icons are not.
 - Keyboard: `ArrowRight` and `ArrowLeft` swap under `dir="rtl"` (expand is the inline-end arrow).
 - User data: span names, services, attribute values and event names sit in `<bdi>`.
+- Critical path lines sit at `inset-inline-start` with an inline size, like the bars, so they mirror with them.
 - Minimap: the run clock starts at the inline start, so the track mirrors; the pointer position is read from the inline start and the slider arrows swap with `logicalArrowKey`.
 
 ## Internationalization
@@ -107,6 +111,9 @@
 | `trace.zoom` / `resetZoom`                           | Zoom / Reset zoom                                | —             |
 | `trace.zoomStart` / `zoomEnd`                        | Zoom start / Zoom end                            | —             |
 | `trace.slowest`                                      | Slowest                                          | —             |
+| `trace.criticalPath`                                 | Critical path                                    | —             |
+| `trace.onCriticalPath`                               | On critical path                                 | —             |
+| `trace.selfTime`                                     | Self time                                        | —             |
 | `trace.events`                                       | Events                                           | —             |
 | `trace.eventCount`                                   | {count} event / {count} events                   | —             |
 

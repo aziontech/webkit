@@ -1,3 +1,5 @@
+import type { TraceSpan } from '@aziontech/webkit/trace'
+
 import type {
   EventsExplorerEvent,
   EventsExplorerEventLevel,
@@ -170,6 +172,119 @@ const eventTemplates: EventTemplate[] = [
   }
 ]
 
+const requestSpans = (
+  method: string,
+  uri: string,
+  total: number,
+  cache: string,
+  status: number
+): TraceSpan[] => {
+  const failed = status >= 500
+  const share = (fraction: number) => Math.max(1, Math.round(total * fraction))
+  const rules = share(0.04)
+  const lookupAt = 1 + rules
+  const lookup = share(0.03)
+  const spans: TraceSpan[] = [
+    {
+      id: 'request',
+      name: `${method} ${uri}`,
+      service: 'Application',
+      start: 0,
+      duration: total,
+      status: failed ? 'error' : undefined,
+      attributes: { 'http.method': method, 'http.status_code': status }
+    },
+    {
+      id: 'firewall',
+      parentId: 'request',
+      name: 'firewall rules',
+      service: 'Firewall',
+      start: 1,
+      duration: rules
+    },
+    {
+      id: 'cache',
+      parentId: 'request',
+      name: 'cache lookup',
+      service: 'Cache',
+      start: lookupAt,
+      duration: lookup,
+      attributes: { 'cache.status': cache }
+    }
+  ]
+  const after = lookupAt + lookup
+  if (cache === 'HIT' && !failed) {
+    spans.push({
+      id: 'deliver',
+      parentId: 'request',
+      name: 'deliver',
+      service: 'Network',
+      start: after,
+      duration: total - after - 1
+    })
+    return spans
+  }
+  const originEnd = failed ? total - share(0.02) : total - share(0.25)
+  const firstByte = failed ? originEnd : after + share(0.3)
+  spans.push({
+    id: 'origin',
+    parentId: 'request',
+    name: 'fetch origin',
+    service: 'Network',
+    start: after,
+    duration: originEnd - after,
+    status: failed ? 'error' : undefined,
+    message:
+      status === 504
+        ? 'The origin did not answer before the timeout.'
+        : failed
+          ? `The origin answered ${status} on every try.`
+          : undefined,
+    events: failed
+      ? [{ at: after + share(0.01), name: 'connection-open' }]
+      : [
+          { at: after + share(0.01), name: 'connection-open' },
+          { at: firstByte, name: 'first-byte' }
+        ]
+  })
+  if (status === 502) {
+    const step = Math.floor((originEnd - after) / 3)
+    ;[0, 1, 2].forEach((attempt) =>
+      spans.push({
+        id: `attempt-${attempt + 1}`,
+        parentId: 'origin',
+        name: `attempt ${attempt + 1}`,
+        service: 'Network',
+        start: after + attempt * step + 1,
+        duration: step - 2,
+        status: 'error',
+        attributes: { 'http.status_code': 502 }
+      })
+    )
+  }
+  if (!failed) {
+    spans.push(
+      {
+        id: 'store',
+        parentId: 'request',
+        name: 'store in cache',
+        service: 'Cache',
+        start: firstByte,
+        duration: share(0.08)
+      },
+      {
+        id: 'deliver',
+        parentId: 'request',
+        name: 'deliver',
+        service: 'Network',
+        start: firstByte,
+        duration: total - firstByte - 1
+      }
+    )
+  }
+  return spans
+}
+
 const sequence = (seed: number) => {
   let state = seed
   return (length: number) => {
@@ -216,7 +331,20 @@ const seedEvents = (): EventsExplorerEvent[] => {
       resourceId: resources[pick(resources.length)],
       userAgent: requestScoped ? agents[pick(agents.length)] : undefined
     }
-  })
+  }).map((event) =>
+    event.source === 'http' && typeof event.requestTimeMs === 'number'
+      ? {
+          ...event,
+          spans: requestSpans(
+            String(event.requestMethod),
+            String(event.requestUri),
+            event.requestTimeMs,
+            String(event.cacheStatus),
+            Number(event.status)
+          )
+        }
+      : event
+  )
 }
 
 export const sampleEvents: EventsExplorerEvent[] = seedEvents()

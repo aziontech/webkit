@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything. With `zoomable`, a minimap under the axis draws the whole run and a window the reader drags or resizes (or moves from the keyboard) to zoom the waterfall into part of it, through `v-model:range`. A span can carry `events` — moments inside it, drawn as markers on its bar and listed in its details — and `highlightSlowest` flags the span that took longest.",
+ "purpose": "A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything. With `zoomable`, a minimap under the axis draws the whole run and a window the reader drags or resizes (or moves from the keyboard) to zoom the waterfall into part of it, through `v-model:range`. A span can carry `events` — moments inside it, drawn as markers on its bar and listed in its details — and `highlightSlowest` flags the span that took longest. `highlightCriticalPath` traces the critical path — the chain of work that set the run's end, walked back from the root's end through the child that finished last before each point — and draws a line under each bar along the stretches of that span that lie on it, so the reader sees which work to shorten to make the run faster. The details of a span with children show its self time (its duration less the time its children covered), and of a span on the critical path, its time on that path.",
  "setup": null,
  "useWhen": [
   "Use Trace for the timed span waterfall of one request or invocation; a nested data hierarchy without timing is a Tree.",
@@ -34,6 +34,7 @@
   "Set `status: 'error'` and a one-line `message` on the span that failed, and on its parents if the failure bubbled up.",
   "Turn on `zoomable` for a run with many short spans next to one long one, so the short ones can be read; bind `v-model:range` when the logs or a chart beside the trace should follow the same window.",
   "Use `events` for moments that have no duration of their own (a cache miss, a retry, the first byte), with `at` on the run's clock; keep the names short, they are listed in the details.",
+  "Turn on `highlightCriticalPath` where the question is what to make faster: shortening a span off the path does not shorten the run, shortening one on it does. It reads better than `highlightSlowest` when work runs in parallel, because the longest span is not always the one that held the run up.",
   "Turn on `highlightSlowest` where the question is where the time went; the flag goes to the longest span under the root, never to the root itself, which always spans the run.",
   "Bind `v-model:selected-key` when another view (a request path, a log line) selects the same span.",
   "Name the waterfall after the run (`aria-label=\"Trace of inv_7f21\"`)."
@@ -80,6 +81,13 @@
    "default": "false",
    "required": "false",
    "doc": "Flags the span that took longest, other than the root, in its row and its details."
+  },
+  {
+   "name": "highlightCriticalPath",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Draws the critical path of the run under the bars and flags the spans on it in their rows and details."
   },
   {
    "name": "selectedKey",

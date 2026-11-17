@@ -10120,6 +10120,13 @@
      "doc": "Flags the span that took longest, other than the root, in its row and its details."
     },
     {
+     "name": "highlightCriticalPath",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Draws the critical path of the run under the bars and flags the spans on it in their rows and details."
+    },
+    {
      "name": "selectedKey",
      "type": "string",
      "default": "''",
@@ -36963,7 +36970,7 @@
    "title": "Blocks/View/EventsExplorer",
    "source": "blocks/view/events-explorer/events-explorer.vue",
    "surface": "app",
-   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
+   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
    "intents": [
     "real-time events",
     "events visualizer",
@@ -36988,6 +36995,10 @@
     "time range picker",
     "investigation tabs",
     "event document",
+    "request trace",
+    "trace waterfall",
+    "critical path",
+    "trace de requisição",
     "consulta de eventos",
     "buscas salvas",
     "intervalo de datas"
@@ -37027,6 +37038,7 @@
     "Tabs",
     "Tag",
     "Tooltip",
+    "Trace",
     "use-collection",
     "use-locale"
    ],
@@ -37060,6 +37072,7 @@
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/trace",
     "@aziontech/webkit/use-collection",
     "@aziontech/webkit/use-locale"
    ],

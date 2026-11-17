@@ -30,6 +30,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
@@ -50,6 +51,8 @@
     level: EventsExplorerEventLevel
     /** One-line description, the Event column and the heading of the document. */
     message: string
+    /** Spans of the request the event records; when set, the document shows its trace. */
+    spans?: TraceSpan[]
     /** Every other value, keyed by the id of a field in fields. */
     [field: string]: unknown
   }
@@ -1532,6 +1535,21 @@
                     </dl>
                   </div>
 
+                  <div
+                    v-if="documentEvent.spans?.length"
+                    class="flex min-w-0 flex-col gap-(--spacing-xs) pb-(--spacing-lg)"
+                  >
+                    <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Trace</h3>
+                    <Trace
+                      :key="documentEvent.id"
+                      :spans="documentEvent.spans"
+                      :bordered="false"
+                      highlight-critical-path
+                      :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
+                      class="border-y border-(--border-muted)"
+                    />
+                  </div>
+
                   <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                     <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
                       Event document
@@ -1605,6 +1623,21 @@
                   </dd>
                 </template>
               </dl>
+            </div>
+
+            <div
+              v-if="documentEvent.spans?.length"
+              class="flex min-w-0 flex-col gap-(--spacing-xs) pb-(--spacing-lg)"
+            >
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Trace</h3>
+              <Trace
+                :key="documentEvent.id"
+                :spans="documentEvent.spans"
+                :bordered="false"
+                highlight-critical-path
+                :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
+                class="border-y border-(--border-muted)"
+              />
             </div>
 
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
