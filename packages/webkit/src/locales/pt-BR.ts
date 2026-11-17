@@ -604,7 +604,8 @@ export const ptBR: Messages = {
     label: 'Rodapé'
   },
   appHeader: {
-    label: 'Cabeçalho global'
+    label: 'Cabeçalho global',
+    home: 'Página inicial da Azion'
   },
   helpPanel: {
     label: 'Ajuda',

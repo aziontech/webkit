@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -260,6 +261,72 @@ describe('AppHeader', () => {
         props: { variant: 'site', ariaLabel: 'Azion' }
       })
       expect(getByRole('banner', { name: 'Azion' })).toBeTruthy()
+    })
+  })
+
+  describe('Brand — href turns the brand into the home link', () => {
+    it('renders a div with no href and no accessible name when href is unset', () => {
+      const { getByTestId } = render(AppHeader.Brand, {
+        slots: { default: '<svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg>' }
+      })
+      const brand = getByTestId('app-header-brand')
+      expect(brand.tagName).toBe('DIV')
+      expect(brand.hasAttribute('href')).toBe(false)
+      expect(brand.hasAttribute('aria-label')).toBe(false)
+      expect(brand.hasAttribute('data-link')).toBe(false)
+    })
+
+    it('renders an anchor to href, named by aria-label', () => {
+      const { getByRole, getByTestId } = render(AppHeader.Brand, {
+        attrs: { 'aria-label': 'Acme home' },
+        props: { href: '/home' },
+        slots: { default: '<svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg>' }
+      })
+      const link = getByRole('link', { name: 'Acme home' })
+      expect(link).toBe(getByTestId('app-header-brand'))
+      expect(link.tagName).toBe('A')
+      expect(link.getAttribute('href')).toBe('/home')
+      expect(link.hasAttribute('data-link')).toBe(true)
+    })
+
+    it('names the link from the locale catalog when aria-label is empty', () => {
+      const { getByRole } = render(AppHeader.Brand, {
+        props: { href: '/' },
+        slots: { default: '<svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg>' }
+      })
+      expect(getByRole('link', { name: 'Azion home' }).getAttribute('href')).toBe('/')
+    })
+
+    it('keeps the slotted logo inside the link', () => {
+      const { getByRole, getByTestId } = render(AppHeader.Brand, {
+        props: { href: '/' },
+        slots: { default: '<span data-testid="logo">Azion</span>' }
+      })
+      expect(getByRole('link', { name: 'Azion home' }).contains(getByTestId('logo'))).toBe(true)
+    })
+
+    it('is reachable with Tab', async () => {
+      const { getByRole } = render(AppHeader.Brand, {
+        props: { href: '/' },
+        slots: { default: '<span>Azion</span>' }
+      })
+      await userEvent.setup().tab()
+      expect(document.activeElement).toBe(getByRole('link', { name: 'Azion home' }))
+    })
+
+    it('a header with a brand link has no violations', async () => {
+      const { container } = render({
+        components: compoundComponents,
+        template: `
+          <AppHeader aria-label="Console header">
+            <AppHeaderContainer>
+              <AppHeaderBrand href="/"><svg viewBox="0 0 10 10" aria-hidden="true"><rect width="10" height="10" /></svg></AppHeaderBrand>
+            </AppHeaderContainer>
+            <AppHeaderEnd><button type="button">Create</button></AppHeaderEnd>
+          </AppHeader>
+        `
+      })
+      await expectNoA11yViolations(container)
     })
   })
 

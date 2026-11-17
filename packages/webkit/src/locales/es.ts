@@ -604,7 +604,8 @@ export const es: Messages = {
     label: 'Pie de página'
   },
   appHeader: {
-    label: 'Encabezado global'
+    label: 'Encabezado global',
+    home: 'Inicio de Azion'
   },
   helpPanel: {
     label: 'Ayuda',
