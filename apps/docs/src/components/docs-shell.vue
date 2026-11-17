@@ -13,7 +13,6 @@
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import SkipLink from '@aziontech/webkit/skip-link'
-  import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -79,15 +78,10 @@
             <AppHeader.Brand
               href="/"
               :aria-label="t.home"
-              class="gap-(--spacing-xs)"
+              label="WebKit"
             >
               <Brand
                 variant="default"
-                size="small"
-              />
-              <Tag
-                label="WebKit"
-                severity="neutral"
                 size="small"
               />
             </AppHeader.Brand>
