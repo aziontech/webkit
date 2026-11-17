@@ -2,7 +2,7 @@
   {
     "name": "css-button",
     "imports": ["button"],
-    "limit": "10.75 KB"
+    "limit": "10.85 KB"
   },
   {
     "name": "css-console",

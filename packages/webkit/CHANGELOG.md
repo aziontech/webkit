@@ -1,5 +1,25 @@
 # Changelog
 
+## [5.13.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.3...@aziontech/webkit@5.13.0) (2026-11-17)
+
+
+### Features
+
+* **webkit:** [ENG-50220] make illustration the only art field of the sections ([#1183](https://github.com/aziontech/webkit/issues/1183)) ([2e99d54](https://github.com/aziontech/webkit/commit/2e99d54249eb8059444c03fdb2bc7111599995ea))
+* **webkit:** draw product widgets in feature-widgets cells ([#1191](https://github.com/aziontech/webkit/issues/1191)) ([a567648](https://github.com/aziontech/webkit/commit/a567648a291b12fd564e466a886717b8dbb96ab0))
+* **webkit:** highlight json, sql and python in code-block ([#1189](https://github.com/aziontech/webkit/issues/1189)) ([3aaef85](https://github.com/aziontech/webkit/commit/3aaef85168ccecb8c06574a34348b9a69ec3226a))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-50456] fit sticky-scroll-code to the screen and balance its open claim ([#1190](https://github.com/aziontech/webkit/issues/1190)) ([bfb4e32](https://github.com/aziontech/webkit/commit/bfb4e3233f81dc3825a1937a759730fae8a9f014))
+* **webkit:** center the code sample in the sticky-scroll-code media panel ([#1185](https://github.com/aziontech/webkit/issues/1185)) ([65faa85](https://github.com/aziontech/webkit/commit/65faa851b99053f297839a012e372f756cceb708))
+* **webkit:** fix the preview scene rules and checks and the cache scene scale ([#1194](https://github.com/aziontech/webkit/issues/1194)) ([c170deb](https://github.com/aziontech/webkit/commit/c170debd439e13e8cc37674a0ccf4b6156de140b))
+* **webkit:** keep long code lines from showing around the code-block copy button ([#1187](https://github.com/aziontech/webkit/issues/1187)) ([b5ad95f](https://github.com/aziontech/webkit/commit/b5ad95f8cf7965e2b4bd3d18bf5b74ee38da104d))
+* **webkit:** open the clicked claim in sticky-stack ([#1186](https://github.com/aziontech/webkit/issues/1186)) ([6723e0a](https://github.com/aziontech/webkit/commit/6723e0a75d9318a2ea656465645bea079b7c989d))
+* **webkit:** render font icons in the code-block filename bar ([#1184](https://github.com/aziontech/webkit/issues/1184)) ([f3e521b](https://github.com/aziontech/webkit/commit/f3e521b8b7ae3b3983430990a4404d46b11fb4ce))
+* **webkit:** show every sticky-stack claim as open below lg ([#1188](https://github.com/aziontech/webkit/issues/1188)) ([5abd53f](https://github.com/aziontech/webkit/commit/5abd53f0e8c444828e29b87caec088c60440e405))
+
 ## [5.12.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.2...@aziontech/webkit@5.12.3) (2026-11-12)
 
 

@@ -23,6 +23,7 @@ Budget-raise: article-highlight-section 11.7 KB → 11.8 KB (measured 11.71 KB):
 Budget-raise: template-gallery-section 28.35 KB → 28.45 KB (measured 28.37 KB): the owner decisions of 2026-11-17 (AU1/AU2 field error icon and tokens, AU4 pause messages, C-07 AvatarGroup messages in the shared catalogs) grew it past a budget with no headroom.
 Budget-raise: architecture-tabs-section 22 KB → 22.1 KB (measured 22.00 KB): the owner decisions of 2026-11-17 (AU1/AU2 field error icon and tokens, AU4 pause messages, C-07 AvatarGroup messages in the shared catalogs) grew it past a budget with no headroom.
 Budget-raise: locales-es 10.5 KB → 10.6 KB (measured 10.52 KB): the owner decisions of 2026-11-17 (AU1/AU2 field error icon and tokens, AU4 pause messages, C-07 AvatarGroup messages in the shared catalogs) grew it past a budget with no headroom.
+Budget-raise: css-button 10.75 KB → 10.85 KB (measured 10.77 KB): the theme stylesheet gained the finite settle variants of the decorative loops (WCAG 2.2.2, owner decision on the round-2 audit).
 Budget-raise: css-button 10.65 KB → 10.75 KB (measured 10.67 KB): the theme stylesheet every app loads gained --text-danger (AU2) and the four diverging chart steps (B05).
 Budget-raise: network-section 26.55 KB → 26.65 KB (measured 26.57 KB): the network map packets and PoP pulse now settle within five seconds (WCAG 2.2.2), a finite run per ray.
 Budget-raise: logo-wall-section 23.6 KB → 23.7 KB (measured 23.60 KB): the brand text wordmarks (A15) in the shared brand-mark registry.

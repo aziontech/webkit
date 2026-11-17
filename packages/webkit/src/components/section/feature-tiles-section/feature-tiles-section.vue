@@ -117,7 +117,19 @@
               fluid
             >
               <template #media>
-                <Illustration :name="tile.illustration" />
+                <div
+                  v-if="variant === 'artwork'"
+                  class="aspect-170/128"
+                >
+                  <Illustration
+                    :name="tile.illustration"
+                    class="h-full!"
+                  />
+                </div>
+                <Illustration
+                  v-else
+                  :name="tile.illustration"
+                />
               </template>
             </MediaTile>
             <MediaTile
