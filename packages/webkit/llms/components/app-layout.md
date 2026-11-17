@@ -104,7 +104,7 @@ Unbound, each one keeps its own local state.
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s`, `border-e`, `ms-auto`); the navigation sits at the inline start and the tools and side split panel at the inline end.
-- Icons: the position toggle icons (`az az-window-maximize` family) are not mirrored; close is not mirrored.
+- Icons: the position toggle icons (`az az-app-window` family) are not mirrored; close is not mirrored.
 - Keyboard: on a side split panel, the arrow that points away from the panel grows it — `ArrowLeft` in LTR, `ArrowRight` in RTL.
 - User data: none.
 

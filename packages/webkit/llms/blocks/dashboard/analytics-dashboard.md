@@ -870,7 +870,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests over time"
@@ -970,7 +970,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Status codes"
@@ -1058,7 +1058,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests by country"
@@ -1144,7 +1144,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top hosts"

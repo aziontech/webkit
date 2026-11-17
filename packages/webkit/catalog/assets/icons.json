@@ -511,32 +511,6 @@
    ]
   },
   {
-   "name": "az-tiered-cache",
-   "class": "az az-tiered-cache",
-   "set": "azionicons",
-   "group": "azion",
-   "category": "feature",
-   "label": "Tiered Cache",
-   "product": "Applications",
-   "keywords": [
-    "applications"
-   ]
-  },
-  {
-   "name": "az-ai-pillar",
-   "class": "az az-ai-pillar",
-   "set": "azionicons",
-   "group": "azion",
-   "category": "platform",
-   "label": "The AI pillar of the platform",
-   "keywords": [
-    "artificial intelligence",
-    "llm",
-    "model",
-    "product family"
-   ]
-  },
-  {
    "name": "az-ask-azion",
    "class": "az az-ask-azion",
    "set": "azionicons",
@@ -1448,7 +1422,7 @@
    "set": "azionicons",
    "group": "interface",
    "category": "arrow",
-   "label": "Unsorted or sorting off",
+   "label": "Sorting off, not sorted",
    "keywords": [
     "order",
     "arrange",
@@ -3570,10 +3544,10 @@
    "set": "azionicons",
    "group": "interface",
    "category": "layout",
-   "label": "Layers",
+   "label": "Layers or stacked levels; also Tiered Cache in Applications",
    "keywords": [
     "stack",
-    "levels"
+    "cache tiers"
    ]
   },
   {
@@ -3669,18 +3643,15 @@
    ]
   },
   {
-   "name": "az-window-maximize",
-   "class": "az az-window-maximize",
+   "name": "az-app-window",
+   "class": "az az-app-window",
    "set": "azionicons",
    "group": "interface",
    "category": "layout",
-   "label": "Maximize the window",
+   "label": "A window or an app; open something in a window",
    "keywords": [
     "browser",
-    "app",
-    "fullscreen",
-    "expand",
-    "enlarge"
+    "window maximize"
    ]
   },
   {
@@ -4273,8 +4244,9 @@
    "set": "azionicons",
    "group": "interface",
    "category": "object",
-   "label": "AI features, magic",
+   "label": "AI features and generated content; also the AI pillar of the platform",
    "keywords": [
+    "magic",
     "new",
     "generate"
    ]
@@ -4318,7 +4290,7 @@
    "set": "azionicons",
    "group": "interface",
    "category": "object",
-   "label": "Half-star rating, filled",
+   "label": "Half a point in a rating",
    "keywords": [
     "favorite"
    ]

@@ -523,7 +523,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Data transferred, this period vs previous"
@@ -602,7 +602,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Data transferred by project"
@@ -676,7 +676,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Usage by project"

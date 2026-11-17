@@ -20,7 +20,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Cache API',
       title: 'Stored response',
-      icon: 'az az-tiered-cache',
+      icon: 'az az-layers',
       status: {
         label: 'No tokens spent',
         severity: 'success'

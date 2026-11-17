@@ -26,7 +26,7 @@
           href: 'https://www.azion.com/en/products/image-processor/'
         },
         {
-          icon: 'az az-tiered-cache',
+          icon: 'az az-layers',
           title: 'Cache',
           description: 'Speed up content delivery and reduce origin load',
           href: 'https://www.azion.com/en/products/cache/'

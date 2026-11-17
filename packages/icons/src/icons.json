@@ -520,29 +520,6 @@
       "legacy": ["ai ai-rules-engine"]
     },
     {
-      "name": "tiered-cache",
-      "set": "mono",
-      "group": "azion",
-      "category": "feature",
-      "product": "Applications",
-      "shows": "Three stacked layers",
-      "means": "Tiered Cache",
-      "status": "stable",
-      "issue": "Same drawing as layers. One of the two needs a new drawing.",
-      "legacy": ["ai ai-tiered-cache"]
-    },
-    {
-      "name": "ai-pillar",
-      "set": "mono",
-      "group": "azion",
-      "category": "platform",
-      "shows": "Three sparkles",
-      "means": "The AI pillar of the platform",
-      "status": "stable",
-      "issue": "Looks the same as sparkles. The pillar needs its own drawing, or sparkles is dropped.",
-      "legacy": ["ai ai-ai-pillar"]
-    },
-    {
       "name": "ask-azion",
       "set": "mono",
       "group": "azion",
@@ -1252,10 +1229,9 @@
       "set": "mono",
       "group": "interface",
       "category": "arrow",
-      "shows": "Two arrows, one pointing down and one pointing up, with no slash",
-      "means": "Unsorted or sorting off",
+      "shows": "Up and down arrows crossed by a diagonal slash",
+      "means": "Sorting off, not sorted",
       "status": "stable",
-      "issue": "The drawing does not match the name: the drawing is the sort arrows mirrored, with no slash or other mark showing sorting is off.",
       "legacy": ["ai ai-sort-alt-slash", "ai ai-sort-off", "pi pi-sort-alt-slash"]
     },
     {
@@ -2980,10 +2956,10 @@
       "group": "interface",
       "category": "layout",
       "shows": "Three stacked layers",
-      "means": "Layers",
+      "means": "Layers or stacked levels; also Tiered Cache in Applications",
       "status": "stable",
-      "issue": "Same drawing as tiered-cache. One of the two needs a new drawing.",
-      "legacy": ["ai ai-layers"]
+      "legacy": ["ai ai-layers", "ai ai-tiered-cache"],
+      "keywords": ["tiered cache", "cache tiers"]
     },
     {
       "name": "layout-grid",
@@ -3070,15 +3046,15 @@
       "legacy": ["ai ai-sliders-v", "ai ai-sliders-vertical", "pi pi-sliders-v"]
     },
     {
-      "name": "window-maximize",
+      "name": "app-window",
       "set": "mono",
       "group": "interface",
       "category": "layout",
-      "shows": "A browser window with two dots in its top bar",
-      "means": "Maximize the window",
+      "shows": "A window with two dots in its title bar",
+      "means": "A window or an app; open something in a window",
       "status": "stable",
-      "issue": "The drawing does not match the name: the drawing is a plain window with two dots, with no expand arrow or mark showing maximize.",
-      "legacy": ["ai ai-window-maximize", "pi pi-window-maximize"]
+      "legacy": ["ai ai-window-maximize", "pi pi-window-maximize"],
+      "renamedBecause": "The drawing is a window with no maximize mark; Lucide calls it app-window."
     },
     {
       "name": "window-minimize",
@@ -3567,9 +3543,10 @@
       "group": "interface",
       "category": "object",
       "shows": "Three sparkles",
-      "means": "AI features, magic",
+      "means": "AI features and generated content; also the AI pillar of the platform",
       "status": "stable",
-      "legacy": ["ai ai-sparkles", "pi pi-sparkles"]
+      "legacy": ["ai ai-ai-pillar", "ai ai-sparkles", "pi pi-sparkles"],
+      "keywords": ["ai pillar"]
     },
     {
       "name": "star",
@@ -3606,10 +3583,9 @@
       "set": "mono",
       "group": "interface",
       "category": "object",
-      "shows": "The outline of the left half of a star, not filled",
-      "means": "Half-star rating, filled",
+      "shows": "A star outline with its left half filled",
+      "means": "Half a point in a rating",
       "status": "stable",
-      "issue": "The drawing does not match the name: the drawing is the same unfilled half-star outline as star-half, not a filled half star.",
       "legacy": ["ai ai-star-half-fill", "pi pi-star-half-fill"]
     },
     {
@@ -3990,7 +3966,6 @@
       "shows": "The Nitro logo",
       "means": "Nitro (framework)",
       "status": "stable",
-      "issue": "Source drawn at 40px, the rest at 14px. Redraw on the 14px grid.",
       "legacy": ["ai ai-nitro"]
     },
     {
@@ -4051,7 +4026,6 @@
       "shows": "The Stencil logo",
       "means": "Stencil (framework)",
       "status": "stable",
-      "issue": "Source drawn at 24px, the rest at 14px. Redraw on the 14px grid.",
       "legacy": ["ai ai-stencil"]
     },
     {

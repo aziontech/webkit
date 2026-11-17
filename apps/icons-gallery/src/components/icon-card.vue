@@ -49,7 +49,7 @@
     return sizeClass
   }
 
-  // Loads the raw SVG of an icon by name (for example "az-ai-pillar" or "az-x")
+  // Loads the raw SVG of an icon by name (for example "az-sparkles" or "az-x")
   async function loadSvg(iconName) {
     const targetFile = `/${iconName}.svg`
     const key = Object.keys(svgModules).find((k) => k.endsWith(targetFile))

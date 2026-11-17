@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Cache',
       title: 'Edge cache in the nearest data center',
-      icon: 'az az-tiered-cache',
+      icon: 'az az-layers',
       status: {
         label: 'Hit',
         severity: 'success'

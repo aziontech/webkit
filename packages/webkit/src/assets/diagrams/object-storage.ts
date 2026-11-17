@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Cache',
       title: 'Object cached at the edge',
-      icon: 'az az-tiered-cache',
+      icon: 'az az-layers',
       active: true
     },
     {

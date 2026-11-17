@@ -41,7 +41,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Cache',
       title: 'Static assets, no origin call',
-      icon: 'az az-tiered-cache'
+      icon: 'az az-layers'
     }
   ],
   layout: {

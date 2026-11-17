@@ -4,7 +4,7 @@
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-453 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+451 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FeatureItem](../components/feature-item.md), [FileDropzone](../components/file-dropzone.md), [HighlightButton](../components/highlight-button.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [SettingsSection](../components/settings-section.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md).
 
@@ -75,13 +75,11 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 | `az az-lora` | AI Inference | LoRA adapters for AI Inference | fine-tuning, model |
 | `az az-origin-shield` | Connectors | Origin Shield (Connectors feature) | backend, server, security, protection, safe |
 | `az az-rules-engine` | Applications | Rules Engine (part of Applications) | logic, conditions, behavior |
-| `az az-tiered-cache` | Applications | Tiered Cache | applications |
 
 #### Azion · Platform
 
 | Class | Stands for | Keywords |
 | --- | --- | --- |
-| `az az-ai-pillar` | The AI pillar of the platform | artificial intelligence, llm, model, product family |
 | `az az-ask-azion` | Ask Azion (the Azion assistant) | question, chat, brand, logo, company |
 | `az az-azion` | Azion | brand, logo, company |
 | `az az-azion-api` | Azion API | brand, logo, company, endpoint, integration, developer |
@@ -168,7 +166,7 @@ Generic glyphs for the interface. They name an action, an object or a state, nev
 | `az az-move-vertical` | Move or resize vertically | drag, reposition, arrows, arrows v |
 | `az az-sort` | Sort | order, arrange, sort alt |
 | `az az-sort-down-fill` | Sort descending | order, arrange |
-| `az az-sort-off` | Unsorted or sorting off | order, arrange, sort alt slash |
+| `az az-sort-off` | Sorting off, not sorted | order, arrange, sort alt slash |
 | `az az-sort-up-fill` | Sort ascending | order, arrange |
 
 #### Interface · Actions
@@ -389,7 +387,7 @@ Generic glyphs for the interface. They name an action, an object or a state, nev
 | `az az-ellipsis` | More options | menu, actions, overflow, ellipsis h |
 | `az az-ellipsis-vertical` | More options menu | actions, overflow, ellipsis v |
 | `az az-expand` | Expand or full screen | fullscreen, maximize |
-| `az az-layers` | Layers | stack, levels |
+| `az az-layers` | Layers or stacked levels; also Tiered Cache in Applications | stack, cache tiers |
 | `az az-layout-grid` | Grid view | tiles, dashboard, objects column, th large |
 | `az az-maximize` | Maximize or enter full screen | fullscreen, expand, enlarge, arrow up right and arrow down left from center |
 | `az az-menu` | Open the menu | hamburger, navigation, bars |
@@ -397,7 +395,7 @@ Generic glyphs for the interface. They name an action, an object or a state, nev
 | `az az-sitemap` | Sitemap or hierarchy | tree, structure |
 | `az az-sliders-horizontal` | Adjust settings or filters | controls, sliders h |
 | `az az-sliders-vertical` | Adjust settings or levels | controls, filters, sliders v |
-| `az az-window-maximize` | Maximize the window | browser, app, fullscreen, expand, enlarge |
+| `az az-app-window` | A window or an app; open something in a window | browser, window maximize |
 | `az az-window-minimize` | Minimize the window | browser, app, exit fullscreen, collapse, shrink |
 
 #### Interface · Objects
@@ -451,11 +449,11 @@ Generic glyphs for the interface. They name an action, an object or a state, nev
 | `az az-route` | A route or path | routing, directions, gateway |
 | `az az-shield` | Security or protection | safe |
 | `az az-signpost` | Directions, routing or navigation | route, directions alt |
-| `az az-sparkles` | AI features, magic | new, generate |
+| `az az-sparkles` | AI features and generated content; also the AI pillar of the platform | magic, new, generate |
 | `az az-star` | Favorite or rating | object |
 | `az az-star-fill` | Favorited or full rating | favorite |
 | `az az-star-half` | Half-star rating | favorite |
-| `az az-star-half-fill` | Half-star rating, filled | favorite |
+| `az az-star-half-fill` | Half a point in a rating | favorite |
 | `az az-stopwatch` | Timer or elapsed time | duration |
 | `az az-sun` | Light mode or daytime | day, theme |
 | `az az-tag` | A tag or label | category |

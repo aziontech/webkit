@@ -546,7 +546,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests over time"
@@ -646,7 +646,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Status codes"
@@ -734,7 +734,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests by country"
@@ -820,7 +820,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top hosts"

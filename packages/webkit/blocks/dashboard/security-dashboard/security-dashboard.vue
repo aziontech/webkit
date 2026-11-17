@@ -544,7 +544,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Matched requests over time"
@@ -715,7 +715,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
@@ -794,7 +794,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by country"
@@ -876,7 +876,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"

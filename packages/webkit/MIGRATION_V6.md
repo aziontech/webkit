@@ -814,7 +814,8 @@ listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
   `az-application-accelerator`; Edge DNS, Edge Pulse and Edge Orchestrator (with `az-edge-nodes`,
   `az-edge-services`, `az-edge-libraries`) keep `edge-`;
 - one drawing, one name: `ai-digital-certificates` → `az-verified`, `ai-instructor` →
-  `az-graduation-cap`; and names that say the drawing: `ai-datasheet` → `az-sheet`, `ai-column` →
+  `az-graduation-cap`, `ai-ai-pillar` → `az-sparkles`, `ai-tiered-cache` → `az-layers`,
+  `ai-window-maximize` → `az-app-window`; and names that say the drawing: `ai-datasheet` → `az-sheet`, `ai-column` →
   `az-columns-3`, `ai-gateway` (the winding path, not AI Gateway) → `az-route`, `ai-eject` →
   `az-arrow-up-from-line`, `ai-fast-backward` / `ai-fast-forward` → `az-skip-back` /
   `az-skip-forward`;

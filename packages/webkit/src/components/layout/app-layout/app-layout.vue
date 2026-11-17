@@ -387,7 +387,7 @@
               </h2>
               <IconButton
                 v-if="!compact"
-                icon="az az-window-maximize"
+                icon="az az-app-window"
                 :ariaLabel="t('appLayout.showAtSide')"
                 variant="ghost"
                 size="small"

@@ -495,7 +495,7 @@
                 </span>
                 <Tooltip content="Expand">
                   <IconButton
-                    icon="az az-window-maximize"
+                    icon="az az-app-window"
                     variant="ghost"
                     size="small"
                     :aria-label="`Expand ${card.title}`"

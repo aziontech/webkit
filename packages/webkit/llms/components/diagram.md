@@ -128,7 +128,7 @@
         type: 'item',
         eyebrow: 'Cache',
         title: 'Served from cache',
-        icon: 'az az-tiered-cache',
+        icon: 'az az-layers',
         active: true
       },
       {
@@ -246,7 +246,7 @@
         key: 'cache',
         type: 'tile',
         title: 'Response cache',
-        icon: 'az az-tiered-cache'
+        icon: 'az az-layers'
       }
     ],
     layout: {

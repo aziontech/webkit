@@ -70,7 +70,7 @@
             <CardGrid.Cell variant="canvas">
               <FeatureItem
                 :heading-level="3"
-                icon="az az-tiered-cache"
+                icon="az az-layers"
                 title="Tiered Cache"
                 description="Answer repeat requests from the nearest location and offload your origin."
               />

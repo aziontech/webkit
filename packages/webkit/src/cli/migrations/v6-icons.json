@@ -117,7 +117,10 @@
     "ai-instructor": "az-graduation-cap",
     "ai-store": "az-store-pillar",
     "ai-waf-rules": "az-waf",
-    "ai-origin-accelerator": "az-application-accelerator"
+    "ai-origin-accelerator": "az-application-accelerator",
+    "ai-ai-pillar": "az-sparkles",
+    "ai-tiered-cache": "az-layers",
+    "ai-window-maximize": "az-app-window"
   },
   "color": {
     "ai-open": "az-openai",
@@ -464,7 +467,7 @@
     "pi-wave-pulse": "az-wave-pulse",
     "pi-whatsapp": "az-whatsapp",
     "pi-wifi": "az-wifi",
-    "pi-window-maximize": "az-window-maximize",
+    "pi-window-maximize": "az-app-window",
     "pi-window-minimize": "az-window-minimize",
     "pi-wrench": "az-wrench",
     "pi-youtube": "az-youtube"

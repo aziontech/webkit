@@ -810,7 +810,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Matched requests over time"
@@ -981,7 +981,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
@@ -1060,7 +1060,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by country"
@@ -1142,7 +1142,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"

@@ -99,7 +99,7 @@
         label="Show artifact"
         variant="ghost"
         size="small"
-        icon="az az-window-maximize"
+        icon="az az-app-window"
         @click="openCanvas"
       />
     </header>

@@ -2,14 +2,14 @@
 
 > Generated from `src/icons.json` by `scripts/build-docs.mjs`. Edit the JSON, then run `npm run build`; do not edit this page by hand.
 
-453 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
+451 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
 
 ## How the icons are organised
 
-- **Azion** (59) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
+- **Azion** (57) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
   - Products (29) — One icon per Azion product, named after the product as WebKit and the console name it.
-  - Product features (8) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
-  - Platform (10) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
+  - Product features (7) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
+  - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
   - Solutions (4) — Solutions Azion sells that combine several products.
   - Services (8) — Support plans and professional services.
 - **Interface** (306) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
@@ -88,7 +88,6 @@ A part that lives inside a product, such as Domains in Workloads or Edge Nodes i
 | `az az-lora` | AI Inference | LoRA adapters for AI Inference | Three sliders |  |
 | `az az-origin-shield` | Connectors | Origin Shield (Connectors feature) | A shield with a map pin |  |
 | `az az-rules-engine` | Applications | Rules Engine (part of Applications) | A box with a path and a lightning bolt |  |
-| `az az-tiered-cache` | Applications | Tiered Cache | Three stacked layers | Open: Same drawing as layers. One of the two needs a new drawing. |
 
 ### Azion · Platform
 
@@ -96,7 +95,6 @@ The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
 
 | Class | Stands for | Shows | Notes |
 | --- | --- | --- | --- |
-| `az az-ai-pillar` | The AI pillar of the platform | Three sparkles | Open: Looks the same as sparkles. The pillar needs its own drawing, or sparkles is dropped. |
 | `az az-ask-azion` | Ask Azion (the Azion assistant) | A speech bubble with the letters AI |  |
 | `az az-azion` | Azion | The Azion logo mark |  |
 | `az az-azion-api` | Azion API | The letters API |  |
@@ -189,7 +187,7 @@ Arrows, chevrons, carets, sorting and moving.
 | `az az-move-vertical` | Move or resize vertically | A double-headed arrow pointing up and down |  |
 | `az az-sort` | Sort | Two arrows, one pointing up and one pointing down |  |
 | `az az-sort-down-fill` | Sort descending | A filled triangle pointing down |  |
-| `az az-sort-off` | Unsorted or sorting off | Two arrows, one pointing down and one pointing up, with no slash | Open: The drawing does not match the name: the drawing is the sort arrows mirrored, with no slash or other mark showing sorting is off. |
+| `az az-sort-off` | Sorting off, not sorted | Up and down arrows crossed by a diagonal slash |  |
 | `az az-sort-up-fill` | Sort ascending | A filled triangle pointing up |  |
 
 ### Interface · Actions
@@ -430,7 +428,7 @@ Alignment, grids, columns, windows, menus and controls.
 | `az az-ellipsis` | More options | Three dots in a row |  |
 | `az az-ellipsis-vertical` | More options menu | Three dots in a column |  |
 | `az az-expand` | Expand or full screen | Four arrows pointing out to the corners |  |
-| `az az-layers` | Layers | Three stacked layers | Open: Same drawing as tiered-cache. One of the two needs a new drawing. |
+| `az az-layers` | Layers or stacked levels; also Tiered Cache in Applications | Three stacked layers |  |
 | `az az-layout-grid` | Grid view | Four squares in a two-by-two grid |  |
 | `az az-maximize` | Maximize or enter full screen | Two diagonal arrows pointing outward |  |
 | `az az-menu` | Open the menu | Three horizontal lines |  |
@@ -438,7 +436,7 @@ Alignment, grids, columns, windows, menus and controls.
 | `az az-sitemap` | Sitemap or hierarchy | One box connected down to two boxes in a tree |  |
 | `az az-sliders-horizontal` | Adjust settings or filters | Three horizontal sliders with knobs |  |
 | `az az-sliders-vertical` | Adjust settings or levels | Three vertical sliders with knobs |  |
-| `az az-window-maximize` | Maximize the window | A browser window with two dots in its top bar | Open: The drawing does not match the name: the drawing is a plain window with two dots, with no expand arrow or mark showing maximize. |
+| `az az-app-window` | A window or an app; open something in a window | A window with two dots in its title bar |  |
 | `az az-window-minimize` | Minimize the window | An arrow pointing into a small square at the lower left of a larger square |  |
 
 ### Interface · Objects
@@ -494,11 +492,11 @@ Everyday objects and symbols: calendar, clock, lock, key, globe, star, flag, too
 | `az az-route` | A route or path | A winding path between two dots |  |
 | `az az-shield` | Security or protection | A shield outline |  |
 | `az az-signpost` | Directions, routing or navigation | A signpost with two direction boards pointing opposite ways |  |
-| `az az-sparkles` | AI features, magic | Three sparkles |  |
+| `az az-sparkles` | AI features and generated content; also the AI pillar of the platform | Three sparkles |  |
 | `az az-star` | Favorite or rating | A star outline |  |
 | `az az-star-fill` | Favorited or full rating | A filled star |  |
 | `az az-star-half` | Half-star rating | The outline of the left half of a star |  |
-| `az az-star-half-fill` | Half-star rating, filled | The outline of the left half of a star, not filled | Open: The drawing does not match the name: the drawing is the same unfilled half-star outline as star-half, not a filled half star. |
+| `az az-star-half-fill` | Half a point in a rating | A star outline with its left half filled |  |
 | `az az-stopwatch` | Timer or elapsed time | A stopwatch |  |
 | `az az-sun` | Light mode or daytime | A sun with rays |  |
 | `az az-tag` | A tag or label | A price tag with a hole |  |
@@ -554,13 +552,13 @@ Web frameworks and site generators an app can be built with.
 | `az az-hugo` | Hugo (framework) | The Hugo logo |  |
 | `az az-jekyll` | Jekyll (framework) | The Jekyll logo |  |
 | `az az-nextjs` | Next.js (framework) | The Next.js logo |  |
-| `az az-nitro` | Nitro (framework) | The Nitro logo | Open: Source drawn at 40px, the rest at 14px. Redraw on the 14px grid. |
+| `az az-nitro` | Nitro (framework) | The Nitro logo |  |
 | `az az-nuxt` | Nuxt (framework) | The Nuxt logo |  |
 | `az az-preact` | Preact (framework) | The Preact logo |  |
 | `az az-qwik` | Qwik (framework) | The Qwik logo |  |
 | `az az-react` | React (framework) | The React logo |  |
 | `az az-remix` | Remix (framework) | The Remix logo |  |
-| `az az-stencil` | Stencil (framework) | The Stencil logo | Open: Source drawn at 24px, the rest at 14px. Redraw on the 14px grid. |
+| `az az-stencil` | Stencil (framework) | The Stencil logo |  |
 | `az az-svelte` | Svelte (framework) | The Svelte logo |  |
 | `az az-vitepress` | VitePress (framework) | The VitePress logo |  |
 | `az az-vue` | Vue (framework) | The Vue logo |  |
@@ -755,6 +753,7 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai ai-column` | `az az-columns-3` | Lucide name for a box split into three columns. |
 | `ai ai-ellipsis-h` | `az az-ellipsis` |  |
 | `ai ai-ellipsis-v` | `az az-ellipsis-vertical` |  |
+| `ai ai-tiered-cache` | `az az-layers` |  |
 | `ai ai-objects-column` | `az az-layout-grid` |  |
 | `ai ai-th-large` | `az az-layout-grid` |  |
 | `ai ai-arrow-up-right-and-arrow-down-left-from-center` | `az az-maximize` |  |
@@ -762,6 +761,7 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai ai-arrow-down-left-and-arrow-up-right-to-center` | `az az-minimize` |  |
 | `ai ai-sliders-h` | `az az-sliders-horizontal` |  |
 | `ai ai-sliders-v` | `az az-sliders-vertical` |  |
+| `ai ai-window-maximize` | `az az-app-window` | The drawing is a window with no maximize mark; Lucide calls it app-window. |
 | `ai ai-calendar-times` | `az az-calendar-x` |  |
 | `ai ai-instructor` | `az az-graduation-cap` |  |
 | `ai ai-hashtag` | `az az-hash` |  |
@@ -770,6 +770,7 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai ai-thumbtack` | `az az-pin` |  |
 | `ai ai-gateway` | `az az-route` | Too close to ai-gateway (AI Gateway); Lucide name for a winding path between two dots. |
 | `ai ai-directions-alt` | `az az-signpost` |  |
+| `ai ai-ai-pillar` | `az az-sparkles` |  |
 | `ai ai-branch` | `az az-git-branch` |  |
 | `ai ai-next` | `az az-nextjs` |  |
 | `ai ai-open` | `az az-openai` | "open" does not say whose logo it is. |
@@ -781,4 +782,4 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai-cor ai-ts` | `az-color az-typescript` | Spelled out, so search finds it. |
 | `ai-cor ai-x` | `az-color az-x-brand` |  |
 
-PrimeIcons: 86 `pi pi-<name>` classes map to an `az` icon; each entry lists its old class under `legacy` in `src/icons.json`.
+PrimeIcons: 87 `pi pi-<name>` classes map to an `az` icon; each entry lists its old class under `legacy` in `src/icons.json`.

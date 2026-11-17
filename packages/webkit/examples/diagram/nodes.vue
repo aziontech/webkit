@@ -44,7 +44,7 @@
         key: 'cache',
         type: 'tile',
         title: 'Response cache',
-        icon: 'az az-tiered-cache'
+        icon: 'az az-layers'
       }
     ],
     layout: {

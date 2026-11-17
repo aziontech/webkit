@@ -912,7 +912,7 @@
                 </div>
 
                 <IconButton
-                  icon="az az-window-maximize"
+                  icon="az az-app-window"
                   aria-label="Expand the production checklist"
                   variant="outline"
                   size="small"

@@ -36,7 +36,7 @@
         "description": "Firewall applies WAF, rate limits, and DDoS Protection before requests reach the gateway, so blocked traffic never reaches a model."
       },
       {
-        "icon": "az az-tiered-cache",
+        "icon": "az az-layers",
         "title": "Repeated prompts served from cache",
         "description": "Callers opt in per request. A matching prompt gets a stored response, with no model call and no tokens spent."
       },

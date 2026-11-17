@@ -35,7 +35,7 @@
     {
       to: '/blocks',
       label: t.value.blocks,
-      icon: 'az az-window-maximize',
+      icon: 'az az-app-window',
       text: t.value.exploreBlocks
     },
     { to: '/assets', label: t.value.assets, icon: 'az az-images', text: t.value.exploreAssets }

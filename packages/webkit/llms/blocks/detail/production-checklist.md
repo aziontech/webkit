@@ -237,7 +237,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
         class="shrink-0"
       >
         <IconButton
-          icon="az az-window-maximize"
+          icon="az az-app-window"
           aria-label="Expand the production checklist"
           variant="outline"
           size="small"
