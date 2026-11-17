@@ -77,6 +77,24 @@ describe('DocLayout', () => {
     ).toBeTruthy()
   })
 
+  it('tabs from the mark through the section links to the search, then the actions', async () => {
+    const { getByRole, getByTestId } = mount(
+      {},
+      { actions: () => h('a', { href: 'https://console.azion.com' }, 'Console') }
+    )
+    const order = [
+      getByRole('link', { name: 'Azion Docs home' }),
+      getByRole('link', { name: 'Guides' }),
+      getByTestId('doc-layout__search'),
+      getByRole('link', { name: 'Console' })
+    ]
+    for (let i = 1; i < order.length; i += 1) {
+      expect(
+        order[i - 1]!.compareDocumentPosition(order[i]!) & Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy()
+    }
+  })
+
   it('lets a consumer override data-testid', () => {
     const { getByTestId } = mount({ 'data-testid': 'docs' })
     expect(getByTestId('docs')).toBeTruthy()

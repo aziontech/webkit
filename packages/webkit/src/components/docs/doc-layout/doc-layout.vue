@@ -25,6 +25,7 @@
   import Brand from '../../content/brand/brand.vue'
   import AppHeader from '../../layout/app-header/app-header.vue'
   import AppHeaderBrand from '../../layout/app-header/app-header-brand.vue'
+  import AppHeaderCenter from '../../layout/app-header/app-header-center.vue'
   import AppHeaderEnd from '../../layout/app-header/app-header-end.vue'
   import AppHeaderStart from '../../layout/app-header/app-header-start.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
@@ -370,6 +371,7 @@
             </NavigationMenu>
           </div>
         </AppHeaderStart>
+        <AppHeaderCenter />
         <AppHeaderEnd>
           <SearchTrigger
             collapsible
