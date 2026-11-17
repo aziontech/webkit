@@ -12,5 +12,5 @@ export const sampleResource: ResourceDetailResource = {
   createdAt: new Date(referenceTime - 14 * 86_400_000),
   createdBy: 'John Smith',
   framework: 'Next.js',
-  frameworkIcon: 'ai-color ai-nextjs'
+  frameworkIcon: 'az-color az-nextjs'
 }

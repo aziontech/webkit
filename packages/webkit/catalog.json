@@ -2801,7 +2801,7 @@
     {
      "name": "icon",
      "type": "string",
-     "default": "'ai ai-file'",
+     "default": "'az az-file'",
      "required": "false",
      "doc": "Icon class for the file type."
     },
@@ -6101,7 +6101,7 @@
     {
      "name": "icon",
      "type": "string",
-     "default": "'ai ai-user'",
+     "default": "'az az-user'",
      "required": "false",
      "doc": "Icon class for the fallback when no image or label (Azion icon class)."
     },
@@ -10859,7 +10859,7 @@
     {
      "name": "icon",
      "type": "string",
-     "default": "'ai ai-sparkles'",
+     "default": "'az az-sparkles'",
      "required": "false",
      "doc": "Azion icon class for the glyph beside the title."
     },
@@ -11431,7 +11431,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Azion icon class for the standardized adornment (e.g. `ai ai-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders."
+     "doc": "Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders."
     },
     {
      "name": "size",
@@ -13332,7 +13332,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`ai ai-cloud-upload`)."
+     "doc": "Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`az az-cloud-upload`)."
     }
    ],
    "events": [
@@ -16565,7 +16565,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Glyph shown before the title of a collapsible band (e.g. `ai ai-settings`)."
+     "doc": "Glyph shown before the title of a collapsible band (e.g. `az az-settings`)."
     },
     {
      "name": "open",
@@ -17288,7 +17288,7 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant=\"secondary\"` for the action, `variant=\"outline\"` for a second beside it, `icon=\"ai ai-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
+     "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant=\"secondary\"` for the action, `variant=\"outline\"` for a second beside it, `icon=\"az az-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
     }
    ],
    "surface": "site",
@@ -18632,7 +18632,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Azion icon class for the leading icon when `showIcon` is true; empty shows `ai ai-box`."
+     "doc": "Azion icon class for the leading icon when `showIcon` is true; empty shows `az az-box`."
     },
     {
      "name": "disabled",
@@ -18687,7 +18687,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Azion icon class for the trailing icon; set shows it. Empty shows `ai ai-external-link` only when `target` is `_blank`."
+     "doc": "Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`."
     },
     {
      "name": "href",
@@ -28533,7 +28533,7 @@
   },
   "icons": {
    "title": "Icons",
-   "summary": "Every icon class of `@aziontech/icons` with search keywords. A monochrome icon is `ai ai-<name>`, coloured by the text colour; a colour brand icon is `ai-color ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.",
+   "summary": "Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, layout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.",
    "unknown": "An unknown class renders nothing.",
    "usedBy": [
     "alert",
@@ -28553,7 +28553,7 @@
     "split-button",
     "tag"
    ],
-   "count": 456,
+   "count": 453,
    "file": "catalog/assets/icons.json"
   }
  },

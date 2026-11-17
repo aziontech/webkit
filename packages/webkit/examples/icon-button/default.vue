@@ -6,7 +6,7 @@
   <IconButton
     variant="primary"
     size="large"
-    icon="ai ai-plus"
+    icon="az az-plus"
     aria-label="Add"
   />
 </template>

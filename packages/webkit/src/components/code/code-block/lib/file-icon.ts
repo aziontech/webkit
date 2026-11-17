@@ -1,12 +1,12 @@
 const LANGUAGE_ICON: Record<string, string> = {
-  javascript: 'ai ai-code',
-  js: 'ai ai-code',
-  typescript: 'ai ai-code',
-  ts: 'ai ai-code',
-  python: 'ai ai-code',
-  json: 'ai ai-file',
-  shell: 'ai ai-code',
-  bash: 'ai ai-code'
+  javascript: 'az az-code',
+  js: 'az az-code',
+  typescript: 'az az-code',
+  ts: 'az az-code',
+  python: 'az az-code',
+  json: 'az az-file',
+  shell: 'az az-code',
+  bash: 'az az-code'
 }
 
 export const resolveFileIcon = (language?: string, fileIcon?: string): string => {
@@ -20,5 +20,5 @@ export const resolveFileIcon = (language?: string, fileIcon?: string): string =>
     return LANGUAGE_ICON[normalized]
   }
 
-  return 'ai ai-file'
+  return 'az az-file'
 }

@@ -185,7 +185,7 @@
                             />
                           </span>
                           <IconButton
-                            icon="ai ai-menu"
+                            icon="az az-menu"
                             variant="outline"
                             size="small"
                             :disabled="index === 0"

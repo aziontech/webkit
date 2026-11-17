@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'AI Inference',
       title: 'Mistral 3 Small',
-      icon: 'ai ai-edge-ai',
+      icon: 'az az-ai-inference',
       status: {
         label: 'Under 30 ms',
         severity: 'success'

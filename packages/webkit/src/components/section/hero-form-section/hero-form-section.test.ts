@@ -17,8 +17,8 @@ const messages = {
 }
 
 const items = [
-  { icon: 'ai ai-edge-ai', title: 'Build AI applications', description: 'Run AI agents.' },
-  { icon: 'ai ai-build-pillar', title: 'Modernize applications', description: 'Ship in minutes.' }
+  { icon: 'az az-ai-inference', title: 'Build AI applications', description: 'Run AI agents.' },
+  { icon: 'az az-build-pillar', title: 'Modernize applications', description: 'Ship in minutes.' }
 ]
 
 const fields: HeroFormSectionField[] = [

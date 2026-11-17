@@ -153,7 +153,7 @@
                       class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted)"
                     >
                       <i
-                        class="ai ai-menu"
+                        class="az az-menu"
                         aria-hidden="true"
                       />
                     </span>
@@ -195,7 +195,7 @@
                       />
                     </span>
                     <IconButton
-                      icon="ai ai-x"
+                      icon="az az-x"
                       variant="outline"
                       size="large"
                       ariaLabel="Remove column"
@@ -220,7 +220,7 @@
                         class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted)"
                       >
                         <i
-                          class="ai ai-menu"
+                          class="az az-menu"
                           aria-hidden="true"
                         />
                       </span>
@@ -267,7 +267,7 @@
                         />
                       </span>
                       <IconButton
-                        icon="ai ai-x"
+                        icon="az az-x"
                         variant="outline"
                         size="large"
                         ariaLabel="Remove column"
@@ -285,7 +285,7 @@
                   label="Add column"
                   variant="outline"
                   size="medium"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   class="w-full"
                 />
               </span>

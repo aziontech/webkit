@@ -65,7 +65,7 @@ describe('DocAgentCard', () => {
 
   it('passes a custom agent list to the copy button and accepts an actions slot', () => {
     const custom = render(DocAgentCard, {
-      props: { prompt: PROMPT, agents: [{ name: 'Claude', icon: 'ai ai-claude' }] }
+      props: { prompt: PROMPT, agents: [{ name: 'Claude', icon: 'az az-claude' }] }
     })
     expect(custom.getByRole('button', { name: 'Copy prompt' })).toHaveAccessibleDescription(
       'Works with Claude'

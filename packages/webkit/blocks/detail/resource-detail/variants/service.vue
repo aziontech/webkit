@@ -35,7 +35,7 @@
       >
         <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
           <i
-            class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
+            class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
             aria-hidden="true"
           />
           <div class="flex min-w-0">
@@ -55,7 +55,7 @@
                 >
                 <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                 <i
-                  class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                  class="az az-external-link shrink-0 text-body-xs leading-none"
                   aria-hidden="true"
                 />
               </a>
@@ -96,7 +96,7 @@
                 >
                   <span class="truncate">{{ domain }}</span>
                   <i
-                    class="ai ai-external-link ms-auto shrink-0 text-body-xs leading-none"
+                    class="az az-external-link ms-auto shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -118,7 +118,7 @@
             target="_blank"
             variant="secondary"
             size="medium"
-            icon="ai ai-external-link"
+            icon="az az-external-link"
           />
 
           <div class="contents md:hidden">
@@ -139,12 +139,12 @@
                     class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
                   >
                     <i
-                      class="ai ai-layers shrink-0 text-(--text-muted)"
+                      class="az az-layers shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate">{{ environment }}</span>
                     <i
-                      class="ai ai-chevron-down shrink-0 text-(--text-muted)"
+                      class="az az-chevron-down shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                   </span>
@@ -167,7 +167,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-plus"
+                        class="az az-plus"
                         aria-hidden="true"
                       />
                     </template>
@@ -184,7 +184,7 @@
             <DropdownMenu.Trigger>
               <Tooltip content="Service actions">
                 <IconButton
-                  icon="ai ai-ellipsis"
+                  icon="az az-ellipsis"
                   variant="outline"
                   size="medium"
                   aria-label="Service actions"
@@ -199,7 +199,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-copy"
+                    class="az az-copy"
                     aria-hidden="true"
                   />
                 </template>
@@ -213,7 +213,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-globe"
+                    class="az az-globe"
                     aria-hidden="true"
                   />
                 </template>
@@ -224,7 +224,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-settings"
+                    class="az az-settings"
                     aria-hidden="true"
                   />
                 </template>
@@ -242,7 +242,7 @@
             <span class="text-label-sm text-(--text-muted)">Custom domains</span>
             <Tooltip content="Add a custom domain">
               <IconButton
-                icon="ai ai-circle-plus"
+                icon="az az-circle-plus"
                 variant="ghost"
                 size="small"
                 aria-label="Add a custom domain"
@@ -330,7 +330,7 @@
                         acme-production
                       </span>
                       <i
-                        class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                        class="az az-external-link shrink-0 text-body-xs leading-none"
                         aria-hidden="true"
                       />
                     </a>

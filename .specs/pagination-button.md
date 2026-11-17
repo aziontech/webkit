@@ -4,7 +4,7 @@ category: data
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: c6ab1229c720ff3b6c0a4d7bd973d3257234f432ba70962c7ffc0d34a63d13c4
+checksum: 7edced585ffa915ac9b8d55481428c43612bf79d88ed12ab559cdbaf9c36607a
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -97,7 +97,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 
 - Visual states: `default`, `hover`, `active`, `focus-visible`, current page (`active` prop), `disabled`.
 - Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `type` is `more` (inert: not focusable, no hover / active layer, no `active` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
-- `data-type` mirrors `type` (`previous` | `next` | `number` | `more`). `previous` renders `ai ai-chevron-left`, `next` renders `ai ai-chevron-right`, `more` renders `ai ai-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `data-type` mirrors `type` (`previous` | `next` | `number` | `more`). `previous` renders `az az-chevron-left`, `next` renders `az az-chevron-right`, `more` renders `az az-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
 - `data-active` is present when `active` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the type's own surface.

@@ -237,7 +237,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
         class="shrink-0"
       >
         <IconButton
-          icon="ai ai-window-maximize"
+          icon="az az-window-maximize"
           aria-label="Expand the production checklist"
           variant="outline"
           size="small"
@@ -279,7 +279,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
             <Item.Actions>
               <i
                 v-if="step.done"
-                class="ai ai-check text-body-sm leading-none text-(--primary)"
+                class="az az-check text-body-sm leading-none text-(--primary)"
                 aria-hidden="true"
               />
               <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
@@ -327,7 +327,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
                 aria-hidden="true"
               >
                 <i
-                  :class="step.done ? 'ai ai-check' : step.icon"
+                  :class="step.done ? 'az az-check' : step.icon"
                   class="text-body-sm leading-none"
                 />
               </span>
@@ -348,7 +348,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
                 class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
               >
                 <Tag
-                  icon="ai ai-check"
+                  icon="az az-check"
                   label="Done"
                   severity="neutral"
                   size="medium"
@@ -394,7 +394,7 @@ import type { ProductionChecklistStep } from './production-checklist.vue'
 export const sampleSteps: ProductionChecklistStep[] = [
   {
     id: 'domain',
-    icon: 'ai ai-globe',
+    icon: 'az az-globe',
     title: 'Add a custom domain',
     description:
       'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
@@ -404,7 +404,7 @@ export const sampleSteps: ProductionChecklistStep[] = [
   },
   {
     id: 'policy',
-    icon: 'ai ai-shield',
+    icon: 'az az-shield',
     title: 'Enable a security policy',
     description:
       'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',
@@ -414,7 +414,7 @@ export const sampleSteps: ProductionChecklistStep[] = [
   },
   {
     id: 'customPage',
-    icon: 'ai ai-file',
+    icon: 'az az-file',
     title: 'Set custom error pages',
     description: 'Answer 4xx and 5xx with your own page instead of the default response.',
     actionLabel: 'Add Error Page',

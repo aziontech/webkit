@@ -20,7 +20,7 @@ const TESTID = 'diagram'
 
 const spec: DiagramSpec = {
   nodes: [
-    { key: 'user', type: 'pill', title: 'User', icon: 'ai ai-user', active: true },
+    { key: 'user', type: 'pill', title: 'User', icon: 'az az-user', active: true },
     { key: 'workload', type: 'card', eyebrow: 'Workload', title: 'shop.example.com', lit: true },
     { key: 'cache', type: 'item', eyebrow: 'Cache', title: 'Served from cache' },
     { key: 'origin', type: 'item', eyebrow: 'Origin', title: 'origin.example.com' }

@@ -79,7 +79,7 @@
       label="Regenerate"
       variant="outline"
       size="small"
-      icon="ai ai-refresh"
+      icon="az az-refresh"
       :loading="streaming"
       @click="regenerate"
     />

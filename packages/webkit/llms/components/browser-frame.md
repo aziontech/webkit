@@ -174,7 +174,7 @@ The frame is static apart from its resize handles.
             <CardGrid.Cell variant="canvas">
               <FeatureItem
                 :heading-level="3"
-                icon="ai ai-edge-application"
+                icon="az az-applications"
                 title="Applications"
                 description="Deploy web apps and APIs close to every user, with no servers to provision."
               />
@@ -182,7 +182,7 @@ The frame is static apart from its resize handles.
             <CardGrid.Cell variant="canvas">
               <FeatureItem
                 :heading-level="3"
-                icon="ai ai-edge-firewall"
+                icon="az az-firewall"
                 title="Firewall"
                 description="Stop DDoS, bots and injection attacks before a request reaches your origin."
               />
@@ -190,7 +190,7 @@ The frame is static apart from its resize handles.
             <CardGrid.Cell variant="canvas">
               <FeatureItem
                 :heading-level="3"
-                icon="ai ai-tiered-cache"
+                icon="az az-tiered-cache"
                 title="Tiered Cache"
                 description="Answer repeat requests from the nearest location and offload your origin."
               />
@@ -297,7 +297,7 @@ The frame is static apart from its resize handles.
               <CardGrid.Cell variant="canvas">
                 <FeatureItem
                   :heading-level="3"
-                  icon="ai ai-edge-application"
+                  icon="az az-applications"
                   title="Applications"
                   description="Deploy web apps and APIs close to every user, with no servers to provision."
                 />
@@ -305,7 +305,7 @@ The frame is static apart from its resize handles.
               <CardGrid.Cell variant="canvas">
                 <FeatureItem
                   :heading-level="3"
-                  icon="ai ai-edge-firewall"
+                  icon="az az-firewall"
                   title="Firewall"
                   description="Stop DDoS, bots and injection attacks before a request reaches your origin."
                 />
@@ -313,7 +313,7 @@ The frame is static apart from its resize handles.
               <CardGrid.Cell variant="canvas">
                 <FeatureItem
                   :heading-level="3"
-                  icon="ai ai-tiered-cache"
+                  icon="az az-tiered-cache"
                   title="Tiered Cache"
                   description="Answer repeat requests from the nearest location and offload your origin."
                 />

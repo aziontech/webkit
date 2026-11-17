@@ -219,7 +219,7 @@
                       label="Reload"
                       variant="secondary"
                       size="medium"
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       :disabled="saving"
                       @click="reload"
                     />

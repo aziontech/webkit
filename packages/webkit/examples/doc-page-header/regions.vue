@@ -21,13 +21,13 @@
         {
           value: 'copy',
           label: 'Copy as Markdown',
-          icon: 'ai ai-copy',
+          icon: 'az az-copy',
           tip: 'Copy this page as Markdown, ready to paste into an assistant.'
         },
         {
           value: 'markdown',
           label: 'View as Markdown',
-          icon: 'ai ai-eye',
+          icon: 'az az-eye',
           tip: 'Open this page as plain Markdown in a new tab.'
         }
       ]"

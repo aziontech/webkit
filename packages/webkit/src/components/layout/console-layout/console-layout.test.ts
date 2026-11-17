@@ -23,8 +23,8 @@ import ConsoleLayoutCompound from './index'
 const navigation: ConsoleLayoutNavGroup[] = [
   {
     items: [
-      { id: 'home', label: 'Home', icon: 'ai ai-home', href: '/' },
-      { id: 'workloads', label: 'Workloads', icon: 'ai ai-box', href: '/workloads' }
+      { id: 'home', label: 'Home', icon: 'az az-home', href: '/' },
+      { id: 'workloads', label: 'Workloads', icon: 'az az-box', href: '/workloads' }
     ]
   },
   {

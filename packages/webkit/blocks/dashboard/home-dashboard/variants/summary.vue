@@ -171,7 +171,7 @@
     {
       id: 'jwt',
       name: 'JWT',
-      icon: 'ai ai-key',
+      icon: 'az az-key',
       description:
         'Streamline authentication by processing and validating JSON Web Tokens (JWTs) before a request reaches your origin.',
       vendor: 'Acme',
@@ -180,7 +180,7 @@
     {
       id: 'image-optimizer',
       name: 'Image optimizer',
-      icon: 'ai ai-image',
+      icon: 'az az-image',
       description: 'Resize, crop and convert images on request, and cache every variant.',
       vendor: 'Acme',
       version: '2.4.0'
@@ -188,7 +188,7 @@
     {
       id: 'bot-detection',
       name: 'Bot detection',
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       description: 'Score each request and block automated traffic before it costs you capacity.',
       vendor: 'Acme',
       version: '0.9.2'
@@ -458,7 +458,7 @@
             <div class="flex items-center gap-(--spacing-sm)">
               <Tooltip content="Previous template">
                 <IconButton
-                  icon="ai ai-chevron-left"
+                  icon="az az-chevron-left"
                   variant="ghost"
                   size="small"
                   aria-label="Previous template"
@@ -478,7 +478,7 @@
               </div>
               <Tooltip content="Next template">
                 <IconButton
-                  icon="ai ai-chevron-right"
+                  icon="az az-chevron-right"
                   variant="ghost"
                   size="small"
                   aria-label="Next template"

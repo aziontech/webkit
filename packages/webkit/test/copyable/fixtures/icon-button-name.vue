@@ -7,22 +7,22 @@
 
 <template>
   <IconButton
-    icon="ai ai-trash"
+    icon="az az-trash"
     aria-label="Delete domain"
   />
   <IconButton
-    :icon="revealed ? 'ai ai-eye-off' : 'ai ai-eye'"
+    :icon="revealed ? 'az az-eye-off' : 'az az-eye'"
     :aria-label="revealed ? 'Hide password' : 'Show password'"
     @click="revealed = !revealed"
   />
   <span id="close-name">Close panel</span>
   <IconButton
-    icon="ai ai-x"
+    icon="az az-x"
     aria-labelledby="close-name"
   />
   <!-- @vue-expect-error the accessible name is a string -->
   <IconButton
-    icon="ai ai-x"
+    icon="az az-x"
     :ariaLabel="3"
   />
 </template>

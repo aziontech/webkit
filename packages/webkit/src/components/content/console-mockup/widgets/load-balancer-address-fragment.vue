@@ -138,7 +138,7 @@
           class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
         >
           <i
-            class="ai ai-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted)"
+            class="az az-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted)"
             aria-hidden="true"
           />
           <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
@@ -155,7 +155,7 @@
             </span>
           </span>
           <IconButton
-            icon="ai ai-trash"
+            icon="az az-trash"
             variant="outline"
             size="small"
             ariaLabel="Remove address"

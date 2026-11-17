@@ -81,7 +81,7 @@
         @click="toggle"
       >
         <i
-          class="ai ai-wrench shrink-0 text-(--text-muted)"
+          class="az az-wrench shrink-0 text-(--text-muted)"
           aria-hidden="true"
         />
         <span
@@ -97,7 +97,7 @@
         >
         <i
           :data-state="isOpen ? 'open' : 'closed'"
-          class="ai ai-chevron-down ms-auto shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+          class="az az-chevron-down ms-auto shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
           aria-hidden="true"
         />
       </button>
@@ -106,7 +106,7 @@
         class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
       >
         <i
-          class="ai ai-wrench shrink-0 text-(--text-muted)"
+          class="az az-wrench shrink-0 text-(--text-muted)"
           aria-hidden="true"
         />
         <span

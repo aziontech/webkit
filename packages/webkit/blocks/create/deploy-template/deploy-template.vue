@@ -72,7 +72,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Creation Center"
           variant="outline"
           size="small"
@@ -159,7 +159,7 @@
                       class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
                     >
                       <i
-                        class="ai ai-folder text-[length:inherit] leading-none"
+                        class="az az-folder text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
                       {{ currentTemplate.path }}
@@ -196,7 +196,7 @@
                   class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
                 >
                   <i
-                    class="ai ai-github text-body-md leading-none text-(--text-default)"
+                    class="az az-github text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
@@ -205,7 +205,7 @@
             <template #actions>
               <Button
                 label="Continue with GitHub"
-                icon="ai ai-github"
+                icon="az az-github"
                 variant="secondary"
                 size="large"
                 @click="(event: MouseEvent) => emit('connect', event)"

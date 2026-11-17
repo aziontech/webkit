@@ -42,17 +42,17 @@
       {
         label: 'Join us on Discord',
         href: 'https://discord.com/invite/Yp9N7RMVZy',
-        icon: 'ai ai-discord'
+        icon: 'az az-discord'
       },
       {
         label: 'Read our blog posts',
         href: '/blog',
-        icon: 'ai ai-comment'
+        icon: 'az az-comment'
       },
       {
         label: 'Follow us on X',
         href: 'https://twitter.com/aziontech',
-        icon: 'ai ai-x-brand'
+        icon: 'az az-x-brand'
       }
     ]
   }
@@ -63,37 +63,37 @@
       {
         value: 'link',
         label: 'Get page link',
-        icon: 'ai ai-link'
+        icon: 'az az-link'
       },
       {
         value: 'markdown',
         label: 'View page as markdown',
-        icon: 'ai ai-eye'
+        icon: 'az az-eye'
       },
       {
         value: 'google',
         label: 'Open in Google AI',
-        icon: 'ai ai-external-link'
+        icon: 'az az-external-link'
       },
       {
         value: 'perplexity',
         label: 'Open in Perplexity',
-        icon: 'ai ai-external-link'
+        icon: 'az az-external-link'
       },
       {
         value: 'claude',
         label: 'Open in Claude',
-        icon: 'ai ai-external-link'
+        icon: 'az az-external-link'
       },
       {
         value: 'chatgpt',
         label: 'Open in ChatGPT',
-        icon: 'ai ai-external-link'
+        icon: 'az az-external-link'
       },
       {
         value: 'grok',
         label: 'Open in Grok',
-        icon: 'ai ai-external-link'
+        icon: 'az az-external-link'
       }
     ]
   }

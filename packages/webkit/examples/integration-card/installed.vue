@@ -8,7 +8,7 @@
     class="w-full max-w-[400px]"
     title="Waiting Room"
     vendor="Tidewater"
-    logo="ai ai-hourglass"
+    logo="az az-hourglass"
     description="Queue visitors during a traffic surge and let them in as capacity frees up."
     :badges="[{ label: 'Application' }]"
     installed
@@ -19,7 +19,7 @@
         label="Configure"
         variant="outline"
         size="small"
-        icon="ai ai-settings"
+        icon="az az-settings"
       />
     </template>
   </IntegrationCard>

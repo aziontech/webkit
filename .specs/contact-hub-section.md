@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 6b68533e6ea0d615a1232ad9de79c81e4c16241fe92df3420da30341affcc46a
+checksum: 74929be69bda8a0991249ce2936255d9f84ca33f554e41f7f8ba30eb705a218e
 ---
 
 # ContactHubSection — Component Spec
@@ -50,7 +50,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
     anchor="contact"
     :lanes="[
       {
-        icon: 'ai ai-briefcase',
+        icon: 'az az-briefcase',
         title: 'Sales',
         description: 'Discuss your requirements or get custom pricing.',
         action: { label: 'Talk to sales', href: '/contact/sales' },
@@ -59,7 +59,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
     ]"
     :channels="[
       {
-        icon: 'ai ai-book',
+        icon: 'az az-book',
         title: 'Read the docs',
         description: 'Guides and API reference for every Azion product.',
         href: 'https://www.azion.com/en/documentation/',

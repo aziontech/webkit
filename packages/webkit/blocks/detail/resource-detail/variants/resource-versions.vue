@@ -216,7 +216,7 @@
               <template #actions>
                 <Button
                   label="Add Version"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   variant="outline"
                   size="medium"
                 />
@@ -231,7 +231,7 @@
                       label="Filter"
                       variant="outline"
                       size="medium"
-                      icon="ai ai-filter"
+                      icon="az az-filter"
                     />
                   </div>
                   <div class="flex min-w-36 grow basis-(--container-2xs)">
@@ -244,7 +244,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-search"
+                          class="az az-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -257,7 +257,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       variant="outline"
                       size="medium"
                       :loading="loading"
@@ -270,7 +270,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-download"
+                      icon="az az-download"
                       variant="outline"
                       size="medium"
                       :disabled="!tableEl"
@@ -283,7 +283,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-column"
+                      icon="az az-columns-3"
                       variant="outline"
                       size="medium"
                       aria-label="Columns"
@@ -361,7 +361,7 @@
                         <DropdownMenu.Trigger>
                           <Tooltip content="Version actions">
                             <IconButton
-                              icon="ai ai-ellipsis"
+                              icon="az az-ellipsis"
                               variant="outline"
                               size="small"
                               aria-label="Version actions"
@@ -375,7 +375,7 @@
                           >
                             <template #leading>
                               <i
-                                class="ai ai-eye"
+                                class="az az-eye"
                                 aria-hidden="true"
                               />
                             </template>
@@ -387,7 +387,7 @@
                           >
                             <template #leading>
                               <i
-                                class="ai ai-cloud-upload"
+                                class="az az-cloud-upload"
                                 aria-hidden="true"
                               />
                             </template>
@@ -411,7 +411,7 @@
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="ai ai-external-link"
+            icon="az az-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >

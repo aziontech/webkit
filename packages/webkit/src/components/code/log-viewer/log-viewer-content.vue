@@ -375,7 +375,7 @@
         <slot name="empty">
           <EmptyState
             size="small"
-            :icon="searchQuery ? 'ai ai-search' : 'ai ai-align-left'"
+            :icon="searchQuery ? 'az az-search' : 'az az-align-left'"
             :title="emptyTitle"
           >
             <template

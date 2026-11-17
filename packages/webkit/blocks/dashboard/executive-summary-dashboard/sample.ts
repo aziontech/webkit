@@ -92,7 +92,7 @@ export const sampleTrends: ExecutiveSummaryDashboardTrends = {
     change: {
       label: '+25.2%',
       severity: 'success',
-      icon: 'ai ai-arrow-up-right'
+      icon: 'az az-arrow-up-right'
     },
     values: [
       1310000, 1340000, 1420000, 1380000, 1410000, 1470000, 1490000, 1520000, 1550000, 1570000,
@@ -103,7 +103,7 @@ export const sampleTrends: ExecutiveSummaryDashboardTrends = {
     change: {
       label: '+30.8%',
       severity: 'success',
-      icon: 'ai ai-arrow-up-right'
+      icon: 'az az-arrow-up-right'
     },
     values: [
       98200, 101400, 104000, 103100, 107900, 111500, 114600, 117300, 122200, 124000, 126100, 128400
@@ -113,7 +113,7 @@ export const sampleTrends: ExecutiveSummaryDashboardTrends = {
     change: {
       label: '+5.7%',
       severity: 'success',
-      icon: 'ai ai-arrow-up-right'
+      icon: 'az az-arrow-up-right'
     },
     values: [106, 106, 107, 107, 108, 109, 109, 110, 110, 111, 111, 112]
   },
@@ -121,7 +121,7 @@ export const sampleTrends: ExecutiveSummaryDashboardTrends = {
     change: {
       label: '+23.7%',
       severity: 'success',
-      icon: 'ai ai-arrow-up-right'
+      icon: 'az az-arrow-up-right'
     },
     values: [38, 39, 41, 40, 42, 43, 42, 44, 44, 45, 46, 47]
   },
@@ -129,7 +129,7 @@ export const sampleTrends: ExecutiveSummaryDashboardTrends = {
     change: {
       label: '+0.05%',
       severity: 'success',
-      icon: 'ai ai-arrow-up-right'
+      icon: 'az az-arrow-up-right'
     },
     values: [99.94, 99.96, 99.91, 99.97, 99.98, 99.95, 99.99, 99.95, 99.91, 99.98, 99.94, 99.99]
   },
@@ -137,7 +137,7 @@ export const sampleTrends: ExecutiveSummaryDashboardTrends = {
     change: {
       label: '−25.0%',
       severity: 'success',
-      icon: 'ai ai-arrow-down-right'
+      icon: 'az az-arrow-down-right'
     },
     values: [
       0.0028, 0.0028, 0.0027, 0.0027, 0.0026, 0.0025, 0.0024, 0.0023, 0.0023, 0.0022, 0.0022, 0.0021

@@ -9,17 +9,17 @@
         {
           id: 'applications',
           label: 'Applications',
-          icon: 'ai ai-layout-grid',
+          icon: 'az az-layout-grid',
           href: '/applications'
         },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-code', href: '/functions' }
+        { id: 'functions', label: 'Functions', icon: 'az az-code', href: '/functions' }
       ]
     },
     {
       label: 'Secure',
       items: [
-        { id: 'firewall', label: 'Firewall', icon: 'ai ai-shield', href: '/firewall' },
-        { id: 'certificates', label: 'Certificates', icon: 'ai ai-lock', href: '/certificates' }
+        { id: 'firewall', label: 'Firewall', icon: 'az az-shield', href: '/firewall' },
+        { id: 'certificates', label: 'Certificates', icon: 'az az-lock', href: '/certificates' }
       ]
     }
   ]

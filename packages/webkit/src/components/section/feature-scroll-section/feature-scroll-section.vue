@@ -249,7 +249,7 @@
               :target="items[index].action.target"
               :variant="items[index].action.variant ?? 'secondary'"
               size="small"
-              :icon="items[index].action.trailing ? 'ai ai-chevron-right' : ''"
+              :icon="items[index].action.trailing ? 'az az-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(items[index].action.trailing)"
             />

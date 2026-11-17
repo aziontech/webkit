@@ -40,17 +40,17 @@ const outcomes = [
 
 const benefits = [
   {
-    icon: 'ai ai-globe',
+    icon: 'az az-globe',
     title: 'Global resilience beyond anycast',
     description: 'Traffic is steered around failures faster than BGP can reconverge.'
   },
   {
-    icon: 'ai ai-stopwatch',
+    icon: 'az az-stopwatch',
     title: 'Low latency everywhere',
     description: 'Compute, AI, databases and security run close to your users.'
   },
   {
-    icon: 'ai ai-move-vertical',
+    icon: 'az az-move-vertical',
     title: 'Zero-ops autoscaling and failover',
     description: 'Absorbs any traffic spike with no cold starts and no capacity planning.'
   }

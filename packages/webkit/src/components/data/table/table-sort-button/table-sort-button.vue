@@ -33,9 +33,9 @@
   )
 
   const icon = computed<string>(() => {
-    if (props.sortDirection === 'ascending') return 'ai ai-arrow-up-wide-narrow'
-    if (props.sortDirection === 'descending') return 'ai ai-arrow-down-wide-narrow'
-    return 'ai ai-sort'
+    if (props.sortDirection === 'ascending') return 'az az-arrow-up-wide-narrow'
+    if (props.sortDirection === 'descending') return 'az az-arrow-down-wide-narrow'
+    return 'az az-sort'
   })
 
   const ariaLabel = computed<string>(() => {

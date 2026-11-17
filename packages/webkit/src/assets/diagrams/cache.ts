@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'User',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'Cache policy: hold for 60 s',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Cache',
       title: 'Edge cache in the nearest data center',
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-tiered-cache',
       status: {
         label: 'Hit',
         severity: 'success'
@@ -37,14 +37,14 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Tiered Cache',
       title: 'Second layer before the origin',
-      icon: 'ai ai-origin-shield'
+      icon: 'az az-origin-shield'
     },
     {
       key: 'origin',
       type: 'item',
       eyebrow: 'Origin',
       title: 'origin.example.com',
-      icon: 'ai ai-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

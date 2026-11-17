@@ -266,7 +266,7 @@
       :label="title"
       variant="outline"
       size="medium"
-      icon="ai ai-plus"
+      icon="az az-plus"
       @click="openDrawer"
     />
   </slot>

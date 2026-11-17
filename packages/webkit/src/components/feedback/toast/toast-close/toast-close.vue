@@ -24,7 +24,7 @@
 <template>
   <IconButton
     v-bind="$attrs"
-    icon="ai ai-x"
+    icon="az az-x"
     variant="ghost"
     size="small"
     :ariaLabel="t('toast.close')"

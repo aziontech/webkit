@@ -46,7 +46,7 @@
       key: 'service',
       label: 'Service',
       name: 'project-01-web',
-      icon: 'ai ai-server',
+      icon: 'az az-server',
       note: '',
       total: 12,
       versions: [
@@ -88,7 +88,7 @@
           key: 'service@AWPT11GA:module-image-optimizer',
           label: 'Module',
           name: 'image-optimizer',
-          icon: 'ai ai-code',
+          icon: 'az az-code',
           note: '',
           total: 6,
           versions: [
@@ -128,7 +128,7 @@
           key: 'service@AWPT11GA:integration-search-index',
           label: 'Integration',
           name: 'search-index',
-          icon: 'ai ai-link',
+          icon: 'az az-link',
           note: '',
           total: 3,
           versions: [
@@ -158,7 +158,7 @@
       key: 'storage',
       label: 'Storage',
       name: 'project-01-storage',
-      icon: 'ai ai-database',
+      icon: 'az az-database',
       note: 'Not versioned',
       total: 0,
       versions: [],
@@ -230,7 +230,7 @@
         label="Deploy"
         variant="outline"
         size="medium"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -310,7 +310,7 @@
                               :aria-label="`Change version of ${row.name}`"
                               variant="outline"
                               size="small"
-                              icon="ai ai-chevron-down"
+                              icon="az az-chevron-down"
                               icon-position="trailing"
                               :disabled="!row.versions.length"
                             />
@@ -330,7 +330,7 @@
                               >
                                 <template #leading>
                                   <i
-                                    class="ai ai-search"
+                                    class="az az-search"
                                     aria-hidden="true"
                                   />
                                 </template>
@@ -459,7 +459,7 @@
                                           :aria-label="`Change version of ${dependency.name}`"
                                           variant="outline"
                                           size="small"
-                                          icon="ai ai-chevron-down"
+                                          icon="az az-chevron-down"
                                           icon-position="trailing"
                                           :disabled="!dependency.versions.length"
                                         />
@@ -479,7 +479,7 @@
                                           >
                                             <template #leading>
                                               <i
-                                                class="ai ai-search"
+                                                class="az az-search"
                                                 aria-hidden="true"
                                               />
                                             </template>

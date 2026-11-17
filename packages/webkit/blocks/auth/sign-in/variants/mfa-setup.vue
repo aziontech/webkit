@@ -77,7 +77,7 @@
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           href="/docs"
         />
       </AppHeader.End>

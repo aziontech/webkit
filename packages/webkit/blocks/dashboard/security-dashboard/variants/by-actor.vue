@@ -640,7 +640,7 @@
             </Select>
           </div>
           <IconButton
-            icon="ai ai-refresh"
+            icon="az az-refresh"
             variant="outline"
             size="medium"
             aria-label="Refresh"
@@ -847,7 +847,7 @@
               key="empty-state-1"
               v-else-if="filtering"
               size="small"
-              icon="ai ai-filter-off"
+              icon="az az-filter-off"
               title="No requests match these filters"
               description="Clear the filters or pick other values."
             >
@@ -864,7 +864,7 @@
               key="empty-state-2"
               v-else
               size="small"
-              icon="ai ai-list"
+              icon="az az-list"
               title="No requests in this time range"
               description="Requests the rules evaluate appear here. Widen the time range to see older ones."
             />

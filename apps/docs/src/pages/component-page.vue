@@ -74,7 +74,7 @@
     {
       value: 'copy',
       label: t.value.copyForAi,
-      icon: 'ai ai-copy',
+      icon: 'az az-copy',
       tip: 'Copy this page as Markdown, ready to paste into an assistant.'
     },
     ...(item.value?.llms
@@ -82,7 +82,7 @@
           {
             value: 'markdown',
             label: t.value.viewMarkdown,
-            icon: 'ai ai-file',
+            icon: 'az az-file',
             href: item.value.llms,
             target: '_blank' as const
           }
@@ -275,7 +275,7 @@
         >
           <h2 class="mb-(--spacing-sm) flex items-center gap-(--spacing-xs) text-heading-xs">
             <i
-              class="ai ai-circle-check text-(--success)"
+              class="az az-circle-check text-(--success)"
               aria-hidden="true"
             />{{ t.bestPractices }}
           </h2>
@@ -294,7 +294,7 @@
         >
           <h2 class="mb-(--spacing-sm) flex items-center gap-(--spacing-xs) text-heading-xs">
             <i
-              class="ai ai-circle-x text-(--danger)"
+              class="az az-circle-x text-(--danger)"
               aria-hidden="true"
             />{{ t.constraints }}
           </h2>

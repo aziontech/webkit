@@ -29,7 +29,7 @@
           label="Read the guide"
           variant="outline"
           size="small"
-          icon="ai ai-chevron-right"
+          icon="az az-chevron-right"
           icon-position="trailing"
           animated
           href="/site/docs"

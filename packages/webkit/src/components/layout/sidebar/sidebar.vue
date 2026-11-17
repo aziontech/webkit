@@ -364,7 +364,7 @@
             :side="rail ? 'end' : 'top'"
           >
             <IconButton
-              :icon="rail ? 'ai ai-chevrons-right' : 'ai ai-chevrons-left'"
+              :icon="rail ? 'az az-chevrons-right' : 'az az-chevrons-left'"
               :ariaLabel="rail ? labels.expand : labels.collapse"
               :aria-keyshortcuts="keyShortcuts"
               variant="outline"
@@ -440,7 +440,7 @@
           side="end"
         >
           <IconButton
-            icon="ai ai-chevrons-right"
+            icon="az az-chevrons-right"
             :ariaLabel="labels.expand"
             variant="outline"
             size="medium"

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 0b54099c5ee4d7033e20bfdee9cef024f494a98fd21405763b5b8511077da740
+checksum: 97351cafeccd628918c03454281d51a5f38ac2946289a2255a047b4332746fd6
 created: 2026-10-21
 last_updated: 2026-11-15
 ---
@@ -55,13 +55,13 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 
   const spec = {
     nodes: [
-      { key: 'client', type: 'pill', title: 'Client', icon: 'ai ai-user', active: true },
+      { key: 'client', type: 'pill', title: 'Client', icon: 'az az-user', active: true },
       {
         key: 'app',
         type: 'card',
         title: 'Application',
         eyebrow: 'Workload',
-        icon: 'ai ai-globe',
+        icon: 'az az-globe',
         active: true
       },
       {
@@ -69,11 +69,11 @@ A node-and-connector diagram for marketing pages: the request path of an archite
         type: 'card',
         title: 'Firewall',
         eyebrow: 'Product',
-        icon: 'ai ai-shield',
+        icon: 'az az-shield',
         lit: true,
         active: true
       },
-      { key: 'origin', type: 'card', title: 'Origin', eyebrow: 'Backend', icon: 'ai ai-server' }
+      { key: 'origin', type: 'card', title: 'Origin', eyebrow: 'Backend', icon: 'az az-server' }
     ],
     layout: {
       row: [{ node: 'client' }, { node: 'app' }, { node: 'firewall' }, { node: 'origin' }],

@@ -7,6 +7,6 @@
     label="Page Name"
     href="#"
     show-icon
-    icon="ai ai-box"
+    icon="az az-box"
   />
 </template>

@@ -198,7 +198,7 @@
     return {
       label: `${rising ? '+' : ''}${change.toFixed(2)}%`,
       severity: (rising ? 'danger' : 'success') as TagSeverity,
-      icon: rising ? 'ai ai-arrow-up-right' : 'ai ai-arrow-down-left'
+      icon: rising ? 'az az-arrow-up-right' : 'az az-arrow-down-left'
     }
   }
 
@@ -493,7 +493,7 @@
         v-if="empty"
         title="No security rules protect your services"
         description="Security metrics and the Needs attention list appear once a rule set protects a service."
-        icon="ai ai-shield"
+        icon="az az-shield"
         bordered
       >
         <template #actions>
@@ -501,7 +501,7 @@
             label="Add rule set"
             variant="primary"
             size="medium"
-            icon="ai ai-plus"
+            icon="az az-plus"
             href="/security/rules"
           />
         </template>
@@ -526,7 +526,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="changeTag('matched')"
@@ -544,7 +544,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Matched requests over time"
@@ -559,7 +559,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Matched requests over time"
@@ -703,7 +703,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="changeTag('categories')"
@@ -715,7 +715,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
@@ -730,7 +730,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
@@ -782,7 +782,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="changeTag('countries')"
@@ -794,7 +794,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by country"
@@ -809,7 +809,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by country"
@@ -864,7 +864,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="changeTag('ips')"
@@ -876,7 +876,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
@@ -891,7 +891,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"
@@ -933,7 +933,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -956,7 +956,7 @@
                 <template #empty>
                   <EmptyState
                     size="small"
-                    icon="ai ai-search"
+                    icon="az az-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -1035,7 +1035,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-shield"
+                  icon="az az-shield"
                   title="No blocked requests in this period"
                   description="Nothing was recorded in this period."
                 />

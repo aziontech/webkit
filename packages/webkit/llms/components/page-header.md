@@ -113,7 +113,7 @@ No built-in strings: the title, description and every region come from the consu
     <template #actions>
       <Button
         label="Documentation"
-        icon="ai ai-book"
+        icon="az az-book"
         variant="outline"
         size="medium"
         href="https://example.com/docs/resources"
@@ -121,7 +121,7 @@ No built-in strings: the title, description and every region come from the consu
       />
       <Button
         label="Create Resource"
-        icon="ai ai-plus"
+        icon="az az-plus"
         variant="outline"
         size="medium"
       />

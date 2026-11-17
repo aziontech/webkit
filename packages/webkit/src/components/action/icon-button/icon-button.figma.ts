@@ -22,7 +22,7 @@ const loading = instance.getEnum('loading', { true: true, false: false })
 
 export default {
   example: figma.code`<IconButton
-  icon="ai ai-check"
+  icon="az az-check"
   aria-label="Action"${
     variant === 'primary'
       ? ''

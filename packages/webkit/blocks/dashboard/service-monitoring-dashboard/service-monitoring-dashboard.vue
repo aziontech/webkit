@@ -315,7 +315,7 @@
         <EmptyState
           v-else
           size="small"
-          icon="ai ai-circle-check"
+          icon="az az-circle-check"
           title="No open alerts"
           description="Alerts appear here when a service crosses a threshold."
         />

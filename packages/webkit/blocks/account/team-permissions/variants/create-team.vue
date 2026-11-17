@@ -164,7 +164,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Teams and permissions"
           variant="outline"
           size="small"
@@ -264,7 +264,7 @@
                           >
                             <template #leading>
                               <i
-                                class="ai ai-search"
+                                class="az az-search"
                                 aria-hidden="true"
                               />
                             </template>
@@ -296,7 +296,7 @@
                       <EmptyState
                         v-if="!visibleGroups.length"
                         size="small"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No matching permissions"
                         :description="`No permission matches “${query}”.`"
                       >

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: a30255b51066a31b6b5781d9934dac9b90bbd57bae5f0ac715e025523c50ad7f
+checksum: 6d70d05c844b812fabc98a8af8304a9ddfe2d28178f83a982979e8b3fec22db7
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -111,7 +111,7 @@ Two details are what make the pair correct, and neither costs more than one attr
       <SidebarMenu.Group>
         <SidebarMenu.Item
           label="Home"
-          icon="ai ai-home"
+          icon="az az-home"
           href="/"
           selected
         />
@@ -120,7 +120,7 @@ Two details are what make the pair correct, and neither costs more than one attr
       <SidebarMenu.Group label="Build">
         <SidebarMenu.Item
           label="Applications"
-          icon="ai ai-edge-application"
+          icon="az az-applications"
           href="/applications"
         />
 
@@ -142,7 +142,7 @@ Two details are what make the pair correct, and neither costs more than one attr
         <SidebarMenu.Sub>
           <SidebarMenu.SubTrigger
             label="Settings"
-            icon="ai ai-settings"
+            icon="az az-settings"
             type="drill"
           />
           <SidebarMenu.SubContent>
@@ -179,7 +179,7 @@ Two details are what make the pair correct, and neither costs more than one attr
         >
           <DropdownMenu.Trigger>
             <IconButton
-              icon="ai ai-ellipsis-vertical"
+              icon="az az-ellipsis-vertical"
               aria-label="Account menu"
               variant="outline"
               size="small"
@@ -315,7 +315,7 @@ this the only trace of a fully collapsed rail would be a 1 px line down the page
         <SidebarMenu.Group label="Build">
           <SidebarMenu.Item
             label="Applications"
-            icon="ai ai-edge-application"
+            icon="az az-applications"
             href="/applications"
             selected
           />
@@ -637,7 +637,7 @@ Every story composes `SidebarMenu` for its rows and groups.
   it under `dir="rtl"`.
 - The drag and the arrow keys mirror (`logicalArrowKey`); the expand affordance slides in from the
   right, and every tooltip (the expand button, the icon-rail rows) opens on the left.
-- The collapse / expand glyphs (`ai-chevrons-left` / `-right`) keep their meaning through the
+- The collapse / expand glyphs (`az-chevrons-left` / `-right`) keep their meaning through the
   direction-aware placement of the trigger.
 
 ## Responsive

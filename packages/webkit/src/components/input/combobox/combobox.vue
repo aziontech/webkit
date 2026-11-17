@@ -472,7 +472,7 @@
       >
         <template #leading>
           <i
-            class="ai ai-search text-(--text-muted)"
+            class="az az-search text-(--text-muted)"
             aria-hidden="true"
           />
         </template>
@@ -488,7 +488,7 @@
       </Input>
       <IconButton
         v-if="showClear"
-        icon="ai ai-x"
+        icon="az az-x"
         :ariaLabel="t('combobox.clear')"
         variant="ghost"
         size="small"
@@ -582,13 +582,13 @@
                     </slot>
                     <i
                       v-if="row.option.value === model"
-                      class="ai ai-check shrink-0 text-body-xs text-(--text-default)"
+                      class="az az-check shrink-0 text-body-xs text-(--text-default)"
                       aria-hidden="true"
                     />
                   </template>
                   <template v-else>
                     <i
-                      class="ai ai-plus shrink-0 text-body-xs text-(--text-muted)"
+                      class="az az-plus shrink-0 text-body-xs text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 flex-1 truncate">{{

@@ -158,7 +158,7 @@
       placeholder="Enter your password"
     >
       <template #leading>
-        <i class="ai ai-lock" />
+        <i class="az az-lock" />
       </template>
     </PasswordInput>
   </div>

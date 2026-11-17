@@ -7,7 +7,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 530bccaf4acb01208cfe1082ea13f41ec936d13db22b805efaaa1034aa8949c5
+checksum: 91be354307c22cdebf3fa149b8bebbf6b3769d698cbef934a159769685f95e47
 ---
 
 # CustomerUseCasesSection — Component Spec
@@ -55,12 +55,12 @@ The "what teams use it for" band of a product page: a three-column frame whose f
     :primary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     :items="[
       {
-        icon: 'ai ai-comments',
+        icon: 'az az-comments',
         title: 'RAG Applications',
         description: 'Build topic-specific chatbots with the data stored in SQL Database.'
       },
       {
-        icon: 'ai ai-search',
+        icon: 'az az-search',
         title: 'Search Applications',
         description: 'Power search with vector similarity queries on stored embeddings.'
       }

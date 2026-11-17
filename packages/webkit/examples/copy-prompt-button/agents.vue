@@ -3,9 +3,9 @@
 
   const prompt = 'Deploy this repository to Azion with the Azion CLI.'
   const agents = [
-    { name: 'Claude', icon: 'ai ai-claude' },
-    { name: 'GitHub Copilot', icon: 'ai ai-microsoft-copilot' },
-    { name: 'Windsurf', icon: 'ai ai-windsurf' }
+    { name: 'Claude', icon: 'az az-claude' },
+    { name: 'GitHub Copilot', icon: 'az az-microsoft-copilot' },
+    { name: 'Windsurf', icon: 'az az-windsurf' }
   ]
 </script>
 

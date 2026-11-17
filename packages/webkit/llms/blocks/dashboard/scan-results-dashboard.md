@@ -570,7 +570,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       >
         <template #actions>
           <IconButton
-            icon="ai ai-refresh"
+            icon="az az-refresh"
             variant="outline"
             size="medium"
             aria-label="Refresh"
@@ -757,7 +757,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -846,7 +846,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                 <template #empty>
                   <EmptyState
                     size="small"
-                    icon="ai ai-search"
+                    icon="az az-search"
                     title="No matching items"
                     description="Change the search or the filters."
                   />
@@ -854,7 +854,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                 <template #cell-name="{ row }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-file shrink-0 text-body-lg text-(--text-muted)"
+                      class="az az-file shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate">{{ row.name }}</span>
@@ -887,7 +887,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
             <EmptyState
               v-else
               size="small"
-              icon="ai ai-file"
+              icon="az az-file"
               title="No items yet"
               description="Items sent for analysis inline or through the API appear here."
             />

@@ -295,7 +295,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -330,7 +330,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-circle-plus"
+                  class="az az-circle-plus"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -353,7 +353,7 @@
             label="Deploy"
             variant="outline"
             size="medium"
-            icon="ai ai-cloud-upload"
+            icon="az az-cloud-upload"
           />
         </template>
       </PageTabs>
@@ -448,7 +448,7 @@
                             severity="neutral"
                             size="medium"
                             rounded
-                            icon="ai ai-layers"
+                            icon="az az-layers"
                             :label="value"
                           />
                         </template>
@@ -458,7 +458,7 @@
                         <template #cell-certificate="{ value }">
                           <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                             <i
-                              class="ai ai-verified shrink-0 text-(--text-muted)"
+                              class="az az-verified shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="min-w-0 truncate">{{ value }}</span>
@@ -473,7 +473,7 @@
                             <DropdownMenu.Trigger>
                               <Tooltip content="Row actions">
                                 <IconButton
-                                  icon="ai ai-ellipsis"
+                                  icon="az az-ellipsis"
                                   variant="outline"
                                   size="small"
                                   :disabled="saving"
@@ -488,7 +488,7 @@
                               >
                                 <template #leading
                                   ><i
-                                    class="ai ai-pencil"
+                                    class="az az-pencil"
                                     aria-hidden="true"
                                 /></template>
                               </DropdownMenu.Item>
@@ -500,7 +500,7 @@
                               >
                                 <template #leading
                                   ><i
-                                    class="ai ai-trash"
+                                    class="az az-trash"
                                     aria-hidden="true"
                                 /></template>
                               </DropdownMenu.Item>
@@ -521,7 +521,7 @@
                           label="Add Domain"
                           variant="outline"
                           size="medium"
-                          icon="ai ai-plus"
+                          icon="az az-plus"
                           :disabled="saving"
                         />
                       </div>
@@ -937,7 +937,7 @@
                               label="Delete resource"
                               variant="danger"
                               size="medium"
-                              icon="ai ai-trash"
+                              icon="az az-trash"
                             />
                           </template>
                           <div class="flex flex-col gap-(--spacing-md)">

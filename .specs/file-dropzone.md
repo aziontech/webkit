@@ -3,7 +3,7 @@ name: file-dropzone
 category: input
 structure: monolithic
 status: implemented
-checksum: b67ea0cf13e6d2553e34267fc7d4ea37741aa7e188f486e9e82986962310254b
+checksum: 19777114b3cd3b41f33ed327f1cb31c766df6eb6dd9e227509ae22a45eba4790
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -130,7 +130,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 | `directories` | `boolean`               | `false`    | false    | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk.                     |
 | `disabled`    | `boolean`               | `false`    | false    | Ignores drags and drops: no active state, no events.                                                                                                                                            |
 | `invalid`     | `boolean`               | `false`    | false    | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work.                                                                              |
-| `icon`        | `string`                | `''`       | false    | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`ai ai-cloud-upload`).                                                                                      |
+| `icon`        | `string`                | `''`       | false    | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`az az-cloud-upload`).                                                                                      |
 
 `multiple` defaults to `true` on purpose, against the "booleans default to `false`" habit. Most drops carry several files (a folder's contents, a batch of assets), and the positive name `multiple` matches the native `<input multiple>` attribute the consumer pairs it with. The inverse (`single`) would be a new term with no native counterpart.
 

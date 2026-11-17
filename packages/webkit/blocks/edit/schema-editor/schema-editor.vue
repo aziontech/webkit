@@ -794,7 +794,7 @@
             <div class="flex w-full flex-wrap items-center gap-(--spacing-xs)">
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-table shrink-0 text-(--text-muted)"
+                  class="az az-table shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-heading-2xs text-(--text-default)">{{
@@ -811,14 +811,14 @@
                   label="Add column"
                   variant="outline"
                   size="medium"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   @click="openColumn"
                 />
                 <Button
                   label="Insert row"
                   variant="primary"
                   size="medium"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   @click="openRow"
                 />
                 <DropdownMenu
@@ -829,7 +829,7 @@
                   <DropdownMenu.Trigger>
                     <Tooltip content="Table actions">
                       <IconButton
-                        icon="ai ai-ellipsis"
+                        icon="az az-ellipsis"
                         variant="outline"
                         size="medium"
                         aria-label="Table actions"
@@ -843,7 +843,7 @@
                     >
                       <template #leading
                         ><i
-                          class="ai ai-plus"
+                          class="az az-plus"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -855,7 +855,7 @@
                     >
                       <template #leading
                         ><i
-                          class="ai ai-eraser"
+                          class="az az-eraser"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -889,7 +889,7 @@
                 >
                   <template #leading
                     ><i
-                      class="ai ai-pencil"
+                      class="az az-pencil"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenu.Item>
@@ -1018,7 +1018,7 @@
                       label="About data types"
                       variant="outline"
                       size="small"
-                      icon="ai ai-external-link"
+                      icon="az az-external-link"
                       href="https://www.azion.com/en/documentation/"
                       target="_blank"
                     />

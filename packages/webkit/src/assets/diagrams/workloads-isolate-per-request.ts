@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'requests',
       type: 'pill',
       title: 'Requests',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Azion Runtime',
       title: 'Isolate per request',
-      icon: 'ai ai-edge-functions',
+      icon: 'az az-functions',
       status: {
         label: 'No cold start',
         severity: 'success'

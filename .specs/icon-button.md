@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: b6081551808b5c783c7e6887776cbaeed06fdc8e2202b7bc3f535008fe7fe91b
+checksum: 3b6590d0c99e0c11c3668226e9f91c0a95ddca4fcf348d5a9854716445acbd3c
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -53,17 +53,17 @@ A square control that triggers an action with a glyph and no visible text: close
 
 <template>
   <IconButton
-    icon="ai ai-plus"
+    icon="az az-plus"
     aria-label="Add domain"
   />
   <IconButton
-    icon="ai ai-refresh"
+    icon="az az-refresh"
     aria-label="Refresh"
     variant="ghost"
     size="medium"
   />
   <IconButton
-    icon="ai ai-trash"
+    icon="az az-trash"
     aria-label="Delete domain"
     variant="danger"
     size="small"

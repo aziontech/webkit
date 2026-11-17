@@ -62,14 +62,14 @@ export default {
           iconLeft
             ? figma.code`
   <template #leading>
-    <i class="ai ai-globe" />
+    <i class="az az-globe" />
   </template>`
             : ''
         }${
           iconRight
             ? figma.code`
   <template #trailing>
-    <i class="ai ai-search" />
+    <i class="az az-search" />
   </template>`
             : ''
         }

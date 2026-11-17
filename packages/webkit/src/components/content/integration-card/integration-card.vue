@@ -123,7 +123,7 @@
         >
           <slot name="logo">
             <i
-              :class="logo || 'ai ai-box'"
+              :class="logo || 'az az-box'"
               class="text-body-lg leading-none text-(--text-default)"
               aria-hidden="true"
             />
@@ -179,7 +179,7 @@
           :label="t('integrationCard.installed')"
           severity="success"
           size="small"
-          icon="ai ai-check"
+          icon="az az-check"
           :data-testid="`${testId}__installed`"
         />
         <template v-if="!featured">

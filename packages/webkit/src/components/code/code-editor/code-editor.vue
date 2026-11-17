@@ -781,10 +781,10 @@
               :data-severity="marker.severity"
               :class="
                 marker.severity === 'danger'
-                  ? 'ai ai-circle-x'
+                  ? 'az az-circle-x'
                   : marker.severity === 'warning'
-                    ? 'ai ai-triangle-alert'
-                    : 'ai ai-circle-info'
+                    ? 'az az-triangle-alert'
+                    : 'az az-circle-info'
               "
               class="shrink-0 text-body-xs data-[severity=danger]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground)"
               aria-hidden="true"

@@ -49,7 +49,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ link: en.link })
 
-  const EXTERNAL_ICON = 'ai ai-external-link'
+  const EXTERNAL_ICON = 'az az-external-link'
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'link')
 

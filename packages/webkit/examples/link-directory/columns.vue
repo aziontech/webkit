@@ -12,13 +12,13 @@
     >
       <LinkDirectoryColumn title="Compute">
         <LinkDirectoryItem
-          icon="ai ai-edge-functions"
+          icon="az az-functions"
           title="Functions"
           description="Run serverless code closer to users"
           href="/functions"
         />
         <LinkDirectoryItem
-          icon="ai ai-load-balancer"
+          icon="az az-load-balancer"
           title="Load Balancer"
           description="Distribute traffic for performance and availability"
           href="/load-balancer"
@@ -26,13 +26,13 @@
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Data">
         <LinkDirectoryItem
-          icon="ai ai-edge-sql"
+          icon="az az-sql-database"
           title="SQL Database"
           description="Relational database built for distributed applications"
           href="/sql-database"
         />
         <LinkDirectoryItem
-          icon="ai ai-tiered-cache"
+          icon="az az-tiered-cache"
           title="Cache"
           description="Accelerate content delivery and reduce origin load"
           href="/cache"
@@ -46,7 +46,7 @@
     >
       <LinkDirectoryColumn title="Compute">
         <LinkDirectoryItem
-          icon="ai ai-edge-functions"
+          icon="az az-functions"
           title="Functions"
           description="Run serverless code closer to users"
           href="/functions"
@@ -54,7 +54,7 @@
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Data">
         <LinkDirectoryItem
-          icon="ai ai-edge-sql"
+          icon="az az-sql-database"
           title="SQL Database"
           description="Relational database built for distributed applications"
           href="/sql-database"
@@ -62,7 +62,7 @@
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Security">
         <LinkDirectoryItem
-          icon="ai ai-waf-rules"
+          icon="az az-waf"
           title="WAF"
           description="Block application attacks at the edge"
           href="/waf"
@@ -76,7 +76,7 @@
     >
       <LinkDirectoryColumn title="Compute">
         <LinkDirectoryItem
-          icon="ai ai-edge-functions"
+          icon="az az-functions"
           title="Functions"
           description="Run serverless code closer to users"
           href="/functions"
@@ -84,7 +84,7 @@
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Data">
         <LinkDirectoryItem
-          icon="ai ai-edge-sql"
+          icon="az az-sql-database"
           title="SQL Database"
           description="Relational database built for distributed applications"
           href="/sql-database"
@@ -92,7 +92,7 @@
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Security">
         <LinkDirectoryItem
-          icon="ai ai-waf-rules"
+          icon="az az-waf"
           title="WAF"
           description="Block application attacks at the edge"
           href="/waf"
@@ -100,7 +100,7 @@
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Observe">
         <LinkDirectoryItem
-          icon="ai ai-real-time-metrics"
+          icon="az az-real-time-metrics"
           title="Real-Time Metrics"
           description="Watch traffic and errors as they happen"
           href="/real-time-metrics"

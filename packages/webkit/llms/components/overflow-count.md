@@ -62,7 +62,7 @@
 ## Right-to-left
 
 - Layout: logical utilities only; the external-link glyph sits at the inline end.
-- Icons: `ai-external-link` and `ai-search` are not mirrored.
+- Icons: `az-external-link` and `az-search` are not mirrored.
 - Keyboard: unchanged.
 - User data: each entry is wrapped in `dir="auto"` so a domain keeps its order inside right-to-left text.
 

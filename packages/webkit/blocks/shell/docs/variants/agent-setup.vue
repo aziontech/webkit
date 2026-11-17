@@ -40,7 +40,7 @@
       slug: 'claude-code',
       name: 'Claude Code',
       vendor: 'Anthropic',
-      icon: 'ai ai-claude',
+      icon: 'az az-claude',
       logo: claudeMark,
       mono: false,
       workflows: ['Terminal'],
@@ -55,7 +55,7 @@
       slug: 'cursor',
       name: 'Cursor',
       vendor: 'Cursor',
-      icon: 'ai ai-cursor',
+      icon: 'az az-cursor',
       logo: cursorMark,
       mono: true,
       workflows: ['IDE'],
@@ -70,7 +70,7 @@
       slug: 'github-copilot',
       name: 'GitHub Copilot',
       vendor: 'GitHub',
-      icon: 'ai ai-github',
+      icon: 'az az-github',
       logo: copilotMark,
       mono: false,
       workflows: ['Extension', 'IDE'],
@@ -85,7 +85,7 @@
       slug: 'windsurf',
       name: 'Windsurf',
       vendor: 'Cognition',
-      icon: 'ai ai-windsurf',
+      icon: 'az az-windsurf',
       logo: '',
       mono: true,
       workflows: ['IDE'],
@@ -100,7 +100,7 @@
       slug: 'codex',
       name: 'Codex',
       vendor: 'OpenAI',
-      icon: 'ai ai-code',
+      icon: 'az az-code',
       logo: codexMark,
       mono: true,
       workflows: ['Terminal'],
@@ -115,7 +115,7 @@
       slug: 'gemini-cli',
       name: 'Gemini CLI',
       vendor: 'Google',
-      icon: 'ai ai-gemini',
+      icon: 'az az-gemini',
       logo: geminiMark,
       mono: false,
       workflows: ['Terminal'],
@@ -130,7 +130,7 @@
       slug: 'opencode',
       name: 'OpenCode',
       vendor: 'SST',
-      icon: 'ai ai-desktop',
+      icon: 'az az-desktop',
       logo: opencodeMark,
       mono: true,
       workflows: ['Terminal'],
@@ -148,8 +148,8 @@
   const crumbs = [{ label: 'Dev tools', href: '/docs/dev-tools' }, { label: 'Agent setup' }]
 
   const metaActions = [
-    { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
-    { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' }
+    { value: 'copy', label: 'Copy as Markdown', icon: 'az az-copy' },
+    { value: 'markdown', label: 'View as Markdown', icon: 'az az-eye' }
   ]
 
   const filters: Array<'All' | Workflow> = ['All', 'Terminal', 'IDE', 'Extension']
@@ -211,22 +211,22 @@
   const workflowTypes = [
     {
       title: 'Terminal',
-      icon: 'ai ai-desktop',
+      icon: 'az az-desktop',
       description: 'Runs in a shell. Best for automation, scripting and CI pipelines.'
     },
     {
       title: 'IDE',
-      icon: 'ai ai-code',
+      icon: 'az az-code',
       description: 'A full editor with the agent first-class: visual diffs and multi-file edits.'
     },
     {
       title: 'Extension',
-      icon: 'ai ai-layout-grid',
+      icon: 'az az-layout-grid',
       description: 'Plugs into the editor you already use. Lightest install, keeps your setup.'
     },
     {
       title: 'Cloud',
-      icon: 'ai ai-cloud',
+      icon: 'az az-cloud',
       description: 'Hosted, with no local install. Suited to asynchronous, long-running work.'
     }
   ]
@@ -234,25 +234,25 @@
   const keyConcepts = [
     {
       title: 'MCP',
-      icon: 'ai ai-server',
+      icon: 'az az-server',
       description:
         'The Model Context Protocol, the standard that lets an agent call external tools. Azion ships one MCP server, and every agent on this page speaks it.'
     },
     {
       title: 'Agent context',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description:
         'The files an agent reads before it answers: llms.txt for the documentation index, AGENTS.md for your project conventions.'
     },
     {
       title: 'Model flexibility',
-      icon: 'ai ai-sliders-horizontal',
+      icon: 'az az-sliders-horizontal',
       description:
         'Locked ties you to the maker’s own models. BYOK takes your provider key. Multi-provider switches between several.'
     },
     {
       title: 'Context',
-      icon: 'ai ai-database',
+      icon: 'az az-database',
       description:
         'Session forgets at the end of a conversation. Project memory persists in a file you commit. Indexed codebase keeps a searchable index of the repository.'
     }
@@ -261,25 +261,25 @@
   const tradeoffs = [
     {
       title: 'Cloud vs. local',
-      icon: 'ai ai-cloud-upload',
+      icon: 'az az-cloud-upload',
       description:
         'Cloud runs long tasks without holding your machine, and sends your code somewhere. Local keeps everything on disk, and stops when your laptop does.'
     },
     {
       title: 'Proprietary vs. open source',
-      icon: 'ai ai-github',
+      icon: 'az az-github',
       description:
         'Open source can be audited, forked and self-hosted. Proprietary tends to ship the newest capability first.'
     },
     {
       title: 'Locked model vs. BYOK',
-      icon: 'ai ai-key',
+      icon: 'az az-key',
       description:
         'A locked model is tuned for its own agent and priced as one subscription. BYOK lets you choose the model per task and pay per token.'
     },
     {
       title: 'Session vs. indexed codebase',
-      icon: 'ai ai-search',
+      icon: 'az az-search',
       description:
         'An index answers questions about code nobody opened, at the cost of a copy of the repository. A session only knows what it was shown.'
     }
@@ -385,7 +385,7 @@
             #[`cell-${column}`]="{ value }"
           >
             <i
-              :class="value ? 'ai-check text-(--primary)' : 'ai-minus text-(--text-muted)'"
+              :class="value ? 'az-check text-(--primary)' : 'az-minus text-(--text-muted)'"
               class="ai text-label-md"
               aria-hidden="true"
             />

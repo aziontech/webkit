@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 12cd40d6a9e0f210a98b9fac8a04a87de28c3e3cbe4561163abe3a571a726879
+checksum: 06f091278f0cd4ffae05653831e45cb5aba43cfb176aa6a587ec65b483ec8537
 created: 2026-06-01
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 ## Best practices
 
 - Use at most one per view; the glow loses its meaning when it repeats.
-- Keep the label short and verb-led, and pair it with a leading `icon` (for example `ai ai-sparkles`).
+- Keep the label short and verb-led, and pair it with a leading `icon` (for example `az az-sparkles`).
 - It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
 - `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
 - The glow stops under reduced motion, so never use it to convey state.
@@ -54,7 +54,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 <template>
   <HighlightButton
     label="Ask Azion"
-    icon="ai ai-sparkles"
+    icon="az az-sparkles"
   />
 </template>
 ```

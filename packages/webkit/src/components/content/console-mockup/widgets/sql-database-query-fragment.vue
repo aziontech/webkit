@@ -130,7 +130,7 @@
                 label="Run Query"
                 variant="primary"
                 size="medium"
-                icon="ai ai-play"
+                icon="az az-play"
                 :loading="running"
               />
             </span>
@@ -139,14 +139,14 @@
                 label="Prettify"
                 variant="outline"
                 size="medium"
-                icon="ai ai-align-left"
+                icon="az az-align-left"
                 :disabled="running"
               />
               <Button
                 label="Templates"
                 variant="outline"
                 size="medium"
-                icon="ai ai-bolt"
+                icon="az az-bolt"
                 :disabled="running"
               />
             </span>
@@ -180,7 +180,7 @@
                 >
                   <template #leading>
                     <i
-                      class="ai ai-search"
+                      class="az az-search"
                       aria-hidden="true"
                     />
                   </template>
@@ -193,7 +193,7 @@
                   aria-label="Result view"
                 />
                 <IconButton
-                  icon="ai ai-refresh"
+                  icon="az az-refresh"
                   variant="outline"
                   size="medium"
                   ariaLabel="Refresh results"

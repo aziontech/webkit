@@ -54,7 +54,7 @@
         >
           <Tag
             severity="warning"
-            icon="ai ai-triangle-alert"
+            icon="az az-triangle-alert"
             :label="ctx.warningTagLabel.value"
           />
         </button>
@@ -112,7 +112,7 @@
           >
             <template #leading>
               <i
-                class="ai ai-search"
+                class="az az-search"
                 aria-hidden="true"
               />
             </template>

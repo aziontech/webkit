@@ -157,7 +157,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Cache"
           variant="outline"
           size="small"

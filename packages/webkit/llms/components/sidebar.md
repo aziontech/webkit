@@ -178,7 +178,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   it under `dir="rtl"`.
 - The drag and the arrow keys mirror (`logicalArrowKey`); the expand affordance slides in from the
   right, and every tooltip (the expand button, the icon-rail rows) opens on the left.
-- The collapse / expand glyphs (`ai-chevrons-left` / `-right`) keep their meaning through the
+- The collapse / expand glyphs (`az-chevrons-left` / `-right`) keep their meaning through the
   direction-aware placement of the trigger.
 
 ## Internationalization
@@ -250,7 +250,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <CommandItem value="nav:applications">
                   <template #leading
                     ><i
-                      class="ai ai-edge-application"
+                      class="az az-applications"
                       aria-hidden="true"
                   /></template>
                   Applications
@@ -258,7 +258,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <CommandItem value="nav:variables">
                   <template #leading
                     ><i
-                      class="ai ai-variables"
+                      class="az az-variables"
                       aria-hidden="true"
                   /></template>
                   Variables
@@ -271,7 +271,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <CommandItem value="cmd:settings">
                   <template #leading
                     ><i
-                      class="ai ai-settings"
+                      class="az az-settings"
                       aria-hidden="true"
                   /></template>
                   Account Settings
@@ -288,20 +288,20 @@ with `defineModel`, so their `update:*` events are not hand-declared.
         <SidebarMenuGroup>
           <SidebarMenuItem
             label="Home"
-            icon="ai ai-home"
+            icon="az az-home"
             href="/"
             active
           />
           <SidebarMenuItem
             label="Marketplace"
-            icon="ai ai-marketplace"
+            icon="az az-marketplace"
             href="/marketplace"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Build">
           <SidebarMenuItem
             label="Applications"
-            icon="ai ai-edge-application"
+            icon="az az-applications"
             href="/applications"
           />
           <SidebarMenuSub default-open>
@@ -322,19 +322,19 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           </SidebarMenuSub>
           <SidebarMenuItem
             label="Variables"
-            icon="ai ai-variables"
+            icon="az az-variables"
             href="/variables"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Store">
           <SidebarMenuItem
             label="Object Storage"
-            icon="ai ai-edge-storage"
+            icon="az az-object-storage"
             href="/object-storage"
           />
           <SidebarMenuItem
             label="SQL Database"
-            icon="ai ai-edge-sql"
+            icon="az az-sql-database"
             href="/sql-database"
             tag-value="Preview"
             tag-variant="primary"
@@ -344,7 +344,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Settings"
-              icon="ai ai-settings"
+              icon="az az-settings"
               type="drill"
             />
             <SidebarMenuSubContent>
@@ -385,7 +385,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             >
               <DropdownMenuTrigger>
                 <IconButton
-                  icon="ai ai-ellipsis-vertical"
+                  icon="az az-ellipsis-vertical"
                   aria-label="Account menu"
                   variant="outline"
                   size="small"
@@ -416,7 +416,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 >
                   <template #trailing
                     ><i
-                      class="ai ai-log-out"
+                      class="az az-log-out"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuItem>
@@ -463,37 +463,37 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           <SidebarMenuGroup>
             <SidebarMenuItem
               label="Home"
-              icon="ai ai-home"
+              icon="az az-home"
               href="/"
               active
             />
             <SidebarMenuItem
               label="Marketplace"
-              icon="ai ai-marketplace"
+              icon="az az-marketplace"
               href="/marketplace"
             />
           </SidebarMenuGroup>
           <SidebarMenuGroup label="Build">
             <SidebarMenuItem
               label="Applications"
-              icon="ai ai-edge-application"
+              icon="az az-applications"
               href="/applications"
             />
             <SidebarMenuItem
               label="Variables"
-              icon="ai ai-variables"
+              icon="az az-variables"
               href="/variables"
             />
           </SidebarMenuGroup>
           <SidebarMenuGroup label="Store">
             <SidebarMenuItem
               label="Object Storage"
-              icon="ai ai-edge-storage"
+              icon="az az-object-storage"
               href="/object-storage"
             />
             <SidebarMenuItem
               label="SQL Database"
-              icon="ai ai-edge-sql"
+              icon="az az-sql-database"
               href="/sql-database"
               tag-value="Preview"
               tag-variant="primary"
@@ -503,7 +503,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             <SidebarMenuSub>
               <SidebarMenuSubTrigger
                 label="Settings"
-                icon="ai ai-settings"
+                icon="az az-settings"
                 type="drill"
               />
               <SidebarMenuSubContent>

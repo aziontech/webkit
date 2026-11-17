@@ -384,7 +384,7 @@
           <IconButton
             v-if="busy"
             key="stop"
-            icon="ai ai-stop"
+            icon="az az-stop"
             variant="secondary"
             size="medium"
             :ariaLabel="t('promptInput.stop')"
@@ -395,7 +395,7 @@
           <IconButton
             v-else
             key="submit"
-            icon="ai ai-arrow-up"
+            icon="az az-arrow-up"
             variant="primary"
             size="medium"
             :ariaLabel="t('promptInput.submit')"

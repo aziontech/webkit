@@ -24,7 +24,7 @@
   }
 
   const benefits: NetworkSectionBenefit[] = [
-    { title: 'Global', description: 'Everywhere.', icon: 'ai ai-globe' }
+    { title: 'Global', description: 'Everywhere.', icon: 'az az-globe' }
   ]
 
   // @ts-expect-error a network benefit carries its icon

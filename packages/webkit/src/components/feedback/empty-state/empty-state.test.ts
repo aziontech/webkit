@@ -29,7 +29,7 @@ describe('EmptyState', () => {
   it('honours a consumer-supplied data-testid across the whole subtree', () => {
     const { getByTestId } = within(
       render(EmptyState, {
-        props: { title: 'Empty', icon: 'ai ai-inbox' },
+        props: { title: 'Empty', icon: 'az az-inbox' },
         attrs: { 'data-testid': 'custom-empty' }
       }).container as HTMLElement
     )
@@ -64,20 +64,20 @@ describe('EmptyState', () => {
 
   it('renders the standardized featured-icon tile when the icon prop is set', () => {
     const { getByTestId } = within(
-      render(EmptyState, { props: { title: 'Empty', icon: 'ai ai-inbox' } })
+      render(EmptyState, { props: { title: 'Empty', icon: 'az az-inbox' } })
         .container as HTMLElement
     )
 
     const icon = getByTestId('empty-state__icon')
     expect(icon.getAttribute('aria-hidden')).toBe('true')
     // The tile carries the consumer-supplied icon glyph.
-    expect(icon.querySelector('i.ai.ai-inbox')).toBeTruthy()
+    expect(icon.querySelector('i.az.az-inbox')).toBeTruthy()
   })
 
   it('renders custom icon slot content, overriding the icon prop tile', () => {
     const { getByTestId } = within(
       render(EmptyState, {
-        props: { title: 'Empty', icon: 'ai ai-inbox' },
+        props: { title: 'Empty', icon: 'az az-inbox' },
         slots: { icon: '<span data-testid="my-icon">glyph</span>' }
       }).container as HTMLElement
     )
@@ -86,7 +86,7 @@ describe('EmptyState', () => {
     expect(icon.getAttribute('aria-hidden')).toBe('true')
     expect(getByTestId('my-icon').textContent).toBe('glyph')
     // Slot wins: the prop's default tile glyph is not rendered.
-    expect(icon.querySelector('i.ai.ai-inbox')).toBeNull()
+    expect(icon.querySelector('i.az.az-inbox')).toBeNull()
   })
 
   it('renders the actions region only when the actions slot is supplied', () => {
@@ -129,7 +129,7 @@ describe('EmptyState', () => {
     'mirrors size=%s onto data-size of the root and the icon tile',
     (size) => {
       const { getByTestId } = within(
-        render(EmptyState, { props: { title: 'Empty', size, icon: 'ai ai-inbox' } })
+        render(EmptyState, { props: { title: 'Empty', size, icon: 'az az-inbox' } })
           .container as HTMLElement
       )
       expect(getByTestId('empty-state').getAttribute('data-size')).toBe(size)

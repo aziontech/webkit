@@ -54,7 +54,7 @@
   {
    "name": "icon",
    "type": "string",
-   "default": "'ai ai-file'",
+   "default": "'az az-file'",
    "required": "false",
    "doc": "Icon class for the file type."
   },

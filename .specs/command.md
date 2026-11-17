@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 12
 template: 2
-checksum: 0de13708f630c19aef7a772807e74adaa58bb99384ccc19a0edbc598a837796b
+checksum: ddf5c0b16722f44611a32eddd22fe16d6a92e0ed328d6fb8a23ece2dcfbf7f73
 created: 2026-07-23
 last_updated: 2026-11-16
 ---
@@ -238,9 +238,9 @@ The palette panel's open/close scale animation is owned by the wrapped `Dialog` 
 | item hover surface                                        | `var(--bg-hover)`                                                                                                                                       |
 | item disabled text                                        | `var(--text-disabled)`                                                                                                                                  |
 | item match highlight                                      | `font-semibold` on a transparent `<mark>`, `text-inherit` (inherits the row's color)                                                                    |
-| item page chevron                                         | `ai ai-chevron-right` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                      |
+| item page chevron                                         | `az az-chevron-right` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                      |
 | back control                                              | `.text-label-sm` + `text-(--text-default)`, `var(--shape-control)`, `h-8`, `px-(--spacing-xs)`, hover `var(--bg-hover)`, focus ring `var(--ring-color)` |
-| back control glyph                                        | `ai ai-chevron-left` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                       |
+| back control glyph                                        | `az az-chevron-left` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                       |
 | separator                                                 | `border-t border-(--border-default)`                                                                                                                    |
 | separator spacing.above                                   | `var(--spacing-sm)`                                                                                                                                     |
 | separator spacing.below                                   | `var(--spacing-xs)`                                                                                                                                     |

@@ -186,7 +186,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Home"
           variant="outline"
           size="small"
@@ -301,7 +301,7 @@
                           class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
                         >
                           <i
-                            class="ai ai-github text-body-md leading-none text-(--text-default)"
+                            class="az az-github text-body-md leading-none text-(--text-default)"
                             aria-hidden="true"
                           />
                         </span>
@@ -310,7 +310,7 @@
                     <template #actions>
                       <Button
                         label="Continue with GitHub"
-                        icon="ai ai-github"
+                        icon="az az-github"
                         variant="secondary"
                         size="large"
                         class="self-center"
@@ -355,7 +355,7 @@
                         <Select.Trigger>
                           <template #leading>
                             <i
-                              class="ai ai-github text-body-md leading-none shrink-0 text-(--text-default)"
+                              class="az az-github text-body-md leading-none shrink-0 text-(--text-default)"
                               aria-hidden="true"
                             />
                           </template>
@@ -370,7 +370,7 @@
                           </Select.Item>
                           <Select.Item
                             value="__add-account__"
-                            icon="ai ai-circle-plus"
+                            icon="az az-circle-plus"
                           >
                             Add GitHub account
                           </Select.Item>
@@ -387,7 +387,7 @@
                         class="w-full"
                       >
                         <template #leading>
-                          <i class="ai ai-search" />
+                          <i class="az az-search" />
                         </template>
                       </Input>
                     </div>
@@ -485,7 +485,7 @@
                                       class="flex items-center gap-(--spacing-2xs) text-body-xs"
                                     >
                                       <i
-                                        class="ai ai-history"
+                                        class="az az-history"
                                         aria-hidden="true"
                                       />
                                       {{ repo.age }}
@@ -518,7 +518,7 @@
                           <EmptyState
                             v-else
                             size="small"
-                            icon="ai ai-search"
+                            icon="az az-search"
                             title="No repositories match"
                             :description="`Nothing in ${activeScope} is named like “${search}”.`"
                           >
@@ -559,7 +559,7 @@
                       class="w-full"
                     >
                       <template #leading>
-                        <i class="ai ai-search" />
+                        <i class="az az-search" />
                       </template>
                     </Input>
                   </div>
@@ -577,7 +577,7 @@
                       <EmptyState
                         v-if="!filteredSections.length"
                         size="small"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No templates match"
                         :description="`Nothing is named like “${templateSearch}”.`"
                       >

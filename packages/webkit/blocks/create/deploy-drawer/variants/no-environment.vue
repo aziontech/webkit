@@ -26,7 +26,7 @@
         label="Deploy"
         variant="outline"
         size="medium"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -62,7 +62,7 @@
             <EmptyState
               bordered
               size="small"
-              icon="ai ai-link"
+              icon="az az-link"
               title="No environment on this project"
               description="project-01 has no environment yet, so there is nowhere to deploy it. Add a domain and the environment it answers in, then deploy."
             >
@@ -71,7 +71,7 @@
                   label="Add environment"
                   variant="outline"
                   size="small"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                 />
               </template>
             </EmptyState>

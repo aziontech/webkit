@@ -177,7 +177,7 @@
     )
 
   const actionIcon = (action: MediaSplitSectionAction): string =>
-    action.trailing ? 'ai ai-chevron-right' : (action.icon ?? '')
+    action.trailing ? 'az az-chevron-right' : (action.icon ?? '')
 </script>
 
 <template>
@@ -268,7 +268,7 @@
             :target="lone.target"
             :variant="lone.variant ?? 'outline'"
             size="medium"
-            :icon="lone.icon && !lone.trailing ? lone.icon : 'ai ai-chevron-right'"
+            :icon="lone.icon && !lone.trailing ? lone.icon : 'az az-chevron-right'"
             :icon-position="lone.icon && !lone.trailing ? 'leading' : 'trailing'"
             :animated="!(lone.icon && !lone.trailing)"
           />

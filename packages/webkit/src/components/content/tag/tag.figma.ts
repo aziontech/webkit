@@ -49,7 +49,7 @@ export default {
   }${
     showIcon
       ? figma.code`
-  icon="ai ai-box"`
+  icon="az az-box"`
       : ''
   }
 />`,

@@ -29,7 +29,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Next.js Starter',
     'frameworks',
     'next',
-    'ai-color ai-nextjs',
+    'az-color az-nextjs',
     'A Next.js app with server rendering and static pages, ready to deploy.',
     'Oct 28, 2026'
   ),
@@ -38,7 +38,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Astro Blog',
     'frameworks',
     'astro',
-    'ai-color ai-astro',
+    'az-color az-astro',
     'A content-first blog with Markdown posts, an RSS feed and a sitemap.',
     'Oct 21, 2026'
   ),
@@ -47,7 +47,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Nuxt Storefront',
     'frameworks',
     'nuxt',
-    'ai-color ai-nuxt',
+    'az-color az-nuxt',
     'A product catalog with a cart, rendered on the server and cached close to buyers.',
     'Oct 14, 2026'
   ),
@@ -56,7 +56,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Angular Dashboard',
     'frameworks',
     'angular',
-    'ai-color ai-angular',
+    'az-color az-angular',
     'A single-page admin dashboard with routing and lazy-loaded modules.',
     'Sep 30, 2026'
   ),
@@ -65,7 +65,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Hugo Docs',
     'frameworks',
     'hugo',
-    'ai ai-hugo',
+    'az az-hugo',
     'A documentation site with search, versioned sections and dark mode.',
     'Sep 22, 2026'
   ),
@@ -74,7 +74,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Static Site',
     'starters',
     'vite',
-    'ai ai-edge-storage',
+    'az az-object-storage',
     'Publish a folder of built files and serve it from the closest location.',
     'Nov 2, 2026'
   ),
@@ -83,7 +83,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Reverse Proxy',
     'starters',
     'javascript',
-    'ai ai-edge-connectors',
+    'az az-connectors',
     'Front an origin you already run and pass every request on to it.',
     'Oct 30, 2026'
   ),
@@ -92,7 +92,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'REST API',
     'starters',
     'hono',
-    'ai ai-hono',
+    'az az-hono',
     'A small JSON API with routing, validation and a key-value store.',
     'Oct 18, 2026'
   ),
@@ -101,7 +101,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Hello Function',
     'functions',
     'javascript',
-    'ai ai-edge-functions',
+    'az az-functions',
     'The smallest function that answers a request, to see how a deploy works.',
     'Nov 4, 2026'
   ),
@@ -110,7 +110,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'A/B Test',
     'functions',
     'javascript',
-    'ai ai-edge-functions',
+    'az az-functions',
     'Split traffic between two versions of a page with a sticky cookie.',
     'Oct 9, 2026'
   ),
@@ -119,7 +119,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Geo Redirect',
     'functions',
     'javascript',
-    'ai ai-edge-functions',
+    'az az-functions',
     'Send visitors to the regional version of a site from their location.',
     'Sep 27, 2026'
   )

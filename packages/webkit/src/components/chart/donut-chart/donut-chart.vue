@@ -291,7 +291,7 @@
         <EmptyState
           :title="emptyTitle || t('donutChart.emptyTitle')"
           :description="emptyDescription"
-          icon="ai ai-chart-pie"
+          icon="az az-chart-pie"
           size="small"
           bordered
           :data-testid="`${testId}__empty`"

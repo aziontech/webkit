@@ -218,7 +218,7 @@
                 <span class="text-body-sm text-(--text-default) capitalize">and</span>
                 <span class="h-0 flex-1 border-t border-dashed border-(--border-default)" />
                 <IconButton
-                  icon="ai ai-trash"
+                  icon="az az-trash"
                   variant="outline"
                   size="small"
                   ariaLabel="Remove condition"
@@ -263,14 +263,14 @@
               label="And"
               variant="outline"
               size="small"
-              icon="ai ai-circle-plus"
+              icon="az az-circle-plus"
             />
           </span>
           <Button
             label="Or"
             variant="outline"
             size="small"
-            icon="ai ai-circle-plus"
+            icon="az az-circle-plus"
           />
         </span>
       </ConsoleMockupShellItem>

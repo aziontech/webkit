@@ -93,7 +93,7 @@
     return name ? t('sidebarMenu.expandNamed', { label: name }) : t('sidebarMenu.expand')
   })
 
-  const arrowIcon = computed(() => (isInline.value ? 'ai ai-chevron-down' : 'ai ai-chevron-right'))
+  const arrowIcon = computed(() => (isInline.value ? 'az az-chevron-down' : 'az az-chevron-right'))
 
   const ROW_CLASS = 'group/row relative flex h-8 w-full shrink-0 items-center'
 

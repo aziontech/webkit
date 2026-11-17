@@ -132,8 +132,8 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   {
     id: 'errors',
     label: 'Why is storefront answering with 502 errors?',
-    icon: 'ai ai-triangle-alert'
+    icon: 'az az-triangle-alert'
   },
-  { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
-  { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'ai ai-globe' }
+  { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
+  { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
 ]

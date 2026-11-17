@@ -13,12 +13,12 @@
       <SidebarMenuGroup label="Azion platform">
         <SidebarMenuItem
           label="Applications"
-          icon="ai ai-layout-grid"
+          icon="az az-layout-grid"
           href="/applications"
         />
         <SidebarMenuItem
           label="Real-Time Purge"
-          icon="ai ai-refresh"
+          icon="az az-refresh"
           disabled
         />
         <SidebarMenuSub>

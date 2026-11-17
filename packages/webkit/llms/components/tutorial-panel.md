@@ -125,7 +125,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 ## Right-to-left
 
 - Layout: logical utilities only; every row is a flex row that follows `dir`.
-- Icons: `ai ai-circle-check` (not mirrored), `ai ai-log-out` on Exit (not mirrored; it names the action, not a direction).
+- Icons: `az az-circle-check` (not mirrored), `az az-log-out` on Exit (not mirrored; it names the action, not a direction).
 - Keyboard: no arrow keys.
 - User data: none.
 
@@ -256,7 +256,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
           <Hotspot hotspot-id="new-service">
             <Button
               label="New service"
-              icon="ai ai-plus"
+              icon="az az-plus"
               size="medium"
             />
           </Hotspot>

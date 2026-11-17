@@ -131,7 +131,7 @@
           {{ link.label }}
           <template v-if="link.target === '_blank'">
             <i
-              class="ai ai-external-link shrink-0 text-body-xs leading-none"
+              class="az az-external-link shrink-0 text-body-xs leading-none"
               aria-hidden="true"
             />
             <span class="sr-only">{{ ` ${t('common.newTab')}` }}</span>
@@ -182,7 +182,7 @@
             <SelectTrigger :aria-label="languageAriaLabel || t('siteFooterSection.language')">
               <template #leading>
                 <i
-                  class="ai ai-globe text-(--text-muted)"
+                  class="az az-globe text-(--text-muted)"
                   aria-hidden="true"
                 />
               </template>

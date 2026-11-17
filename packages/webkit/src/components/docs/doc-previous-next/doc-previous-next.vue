@@ -68,7 +68,7 @@
       }}</span>
       <span class="flex items-center gap-(--spacing-2xs)">
         <i
-          class="ai ai-chevron-left size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
+          class="az az-chevron-left size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
           aria-hidden="true"
         />
         <span class="text-label-md text-(--text-default)">{{ previous.label }}</span>
@@ -88,7 +88,7 @@
       <span class="flex items-center gap-(--spacing-2xs)">
         <span class="text-label-md text-(--text-default)">{{ next.label }}</span>
         <i
-          class="ai ai-chevron-right size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
+          class="az az-chevron-right size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
           aria-hidden="true"
         />
       </span>

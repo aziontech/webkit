@@ -43,7 +43,7 @@
   >
     <i
       v-if="type === 'disabled'"
-      class="ai ai-lock flex shrink-0 items-center"
+      class="az az-lock flex shrink-0 items-center"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"
     />

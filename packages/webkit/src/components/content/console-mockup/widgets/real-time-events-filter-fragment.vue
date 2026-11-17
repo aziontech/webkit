@@ -143,7 +143,7 @@
               label="Filter"
               variant="outline"
               size="medium"
-              icon="ai ai-filter"
+              icon="az az-filter"
             />
             <Badge
               :label="String(appliedCount)"
@@ -162,7 +162,7 @@
           >
             <template #leading>
               <i
-                class="ai ai-search"
+                class="az az-search"
                 aria-hidden="true"
               />
             </template>
@@ -189,7 +189,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -211,7 +211,7 @@
                   {{ summary(field.id) }}
                 </span>
                 <i
-                  class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                  class="az az-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
               </span>
@@ -227,7 +227,7 @@
               class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
             >
               <IconButton
-                icon="ai ai-chevron-left"
+                icon="az az-chevron-left"
                 variant="outline"
                 size="small"
                 ariaLabel="Back to all filters"
@@ -244,7 +244,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -261,7 +261,7 @@
                 <span class="grow truncate">{{ source.label }}</span>
                 <i
                   :data-selected="picked(source.id) || null"
-                  class="ai ai-check shrink-0 text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-selected:opacity-100 motion-reduce:transition-none"
+                  class="az az-check shrink-0 text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-selected:opacity-100 motion-reduce:transition-none"
                   aria-hidden="true"
                 />
               </span>
@@ -274,7 +274,7 @@
                 class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
               >
                 <i
-                  class="ai ai-filter-off text-(--text-muted)"
+                  class="az az-filter-off text-(--text-muted)"
                   aria-hidden="true"
                 />
                 Clear Source

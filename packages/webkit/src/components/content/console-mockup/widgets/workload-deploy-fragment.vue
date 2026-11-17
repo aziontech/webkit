@@ -19,14 +19,14 @@
   const canHover = useMediaQuery('(hover: hover)', true)
 
   const EVENTS = [
-    { icon: 'ai ai-settings', label: 'Build started', note: 'vue preset' },
-    { icon: 'ai ai-box', label: 'Bundle produced', note: '1.4 MB' },
-    { icon: 'ai ai-cloud-upload', label: 'Assets uploaded', note: '214 objects' },
-    { icon: 'ai ai-edge-functions', label: 'Functions bundled', note: '2 functions' },
-    { icon: 'ai ai-globe', label: 'Propagating', note: '100+ locations' },
-    { icon: 'ai ai-lock', label: 'Certificates verified', note: 'TLS 1.3' },
-    { icon: 'ai ai-bolt', label: 'Cache warmed', note: 'storefront-prod' },
-    { icon: 'ai ai-circle-check', label: 'Live everywhere', note: '18s total' }
+    { icon: 'az az-settings', label: 'Build started', note: 'vue preset' },
+    { icon: 'az az-box', label: 'Bundle produced', note: '1.4 MB' },
+    { icon: 'az az-cloud-upload', label: 'Assets uploaded', note: '214 objects' },
+    { icon: 'az az-functions', label: 'Functions bundled', note: '2 functions' },
+    { icon: 'az az-globe', label: 'Propagating', note: '100+ locations' },
+    { icon: 'az az-lock', label: 'Certificates verified', note: 'TLS 1.3' },
+    { icon: 'az az-bolt', label: 'Cache warmed', note: 'storefront-prod' },
+    { icon: 'az az-circle-check', label: 'Live everywhere', note: '18s total' }
   ]
 </script>
 
@@ -44,7 +44,7 @@
           class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
         >
           <i
-            class="ai ai-cloud-upload shrink-0 text-body-md leading-none text-(--text-muted)"
+            class="az az-cloud-upload shrink-0 text-body-md leading-none text-(--text-muted)"
             aria-hidden="true"
           />
           <span class="flex min-w-0 flex-col">

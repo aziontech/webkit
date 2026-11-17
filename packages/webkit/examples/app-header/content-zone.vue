@@ -18,7 +18,7 @@
           label="Create"
           variant="secondary"
           size="medium"
-          icon="ai ai-circle-plus"
+          icon="az az-circle-plus"
         />
       </AppHeader.End>
     </AppHeader>

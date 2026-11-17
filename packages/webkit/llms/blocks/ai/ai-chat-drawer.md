@@ -322,7 +322,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
               label="Agent"
               variant="outline"
               size="medium"
-              icon="ai ai-ask-azion"
+              icon="az az-ask-azion"
               :aria-expanded="open ? 'true' : 'false'"
               @click="open = true"
             />
@@ -374,7 +374,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
             </div>
             <div class="flex items-center gap-(--spacing-2xs)">
               <IconButton
-                icon="ai ai-plus"
+                icon="az az-plus"
                 aria-label="New chat"
                 variant="ghost"
                 size="small"
@@ -391,7 +391,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
               <EmptyState
                 title="Ask about storefront"
                 description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
-                icon="ai ai-ask-azion"
+                icon="az az-ask-azion"
                 size="small"
               />
               <SuggestionGroup
@@ -451,7 +451,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                       :value="turn.content"
                     />
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       aria-label="Regenerate response"
                       variant="ghost"
                       size="small"
@@ -636,9 +636,9 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   {
     id: 'errors',
     label: 'Why is storefront answering with 502 errors?',
-    icon: 'ai ai-triangle-alert'
+    icon: 'az az-triangle-alert'
   },
-  { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
-  { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'ai ai-globe' }
+  { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
+  { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
 ]
 ````

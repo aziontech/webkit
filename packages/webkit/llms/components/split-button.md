@@ -113,9 +113,9 @@
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
-    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },
-    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'az az-refresh' },
+    { label: 'Duplicate', value: 'duplicate', icon: 'az az-copy' },
+    { label: 'Delete', value: 'delete', icon: 'az az-trash', disabled: true }
   ]
 </script>
 
@@ -124,7 +124,7 @@
     variant="primary"
     size="large"
     label="Save"
-    icon="ai ai-check"
+    icon="az az-check"
     :items="items"
   />
 </template>
@@ -137,9 +137,9 @@
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
-    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },
-    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'az az-refresh' },
+    { label: 'Duplicate', value: 'duplicate', icon: 'az az-copy' },
+    { label: 'Delete', value: 'delete', icon: 'az az-trash', disabled: true }
   ]
 </script>
 
@@ -171,9 +171,9 @@
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
-    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },
-    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'az az-refresh' },
+    { label: 'Duplicate', value: 'duplicate', icon: 'az az-copy' },
+    { label: 'Delete', value: 'delete', icon: 'az az-trash', disabled: true }
   ]
 </script>
 

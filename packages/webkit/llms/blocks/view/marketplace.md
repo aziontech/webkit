@@ -528,7 +528,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/marketplace"
@@ -649,7 +649,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
             <EmptyState
               v-if="status === 'no-match'"
               size="medium"
-              icon="ai ai-filter-off"
+              icon="az az-filter-off"
               title="No matching integrations"
               description="No integration matches this search. Remove a filter to widen the results."
             >
@@ -809,7 +809,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                     class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
                   >
                     <i
-                      class="ai ai-check shrink-0 text-(--success-foreground)"
+                      class="az az-check shrink-0 text-(--success-foreground)"
                       aria-hidden="true"
                     />
                     {{ permission }}
@@ -871,7 +871,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
               <Button
                 v-if="selected.installedOn.length"
                 label="Configure"
-                icon="ai ai-settings"
+                icon="az az-settings"
                 variant="outline"
                 size="medium"
                 :href="`/marketplace/${selected.id}/configure`"
@@ -930,7 +930,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'request-signer',
     'Request Signer',
     'Acme',
-    'ai ai-key',
+    'az az-key',
     'Access control',
     'firewall',
     'Sign every request with a rotating key, so the origin only answers traffic that passed through.',
@@ -940,7 +940,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'waiting-room',
     'Waiting Room',
     'Acme',
-    'ai ai-hourglass',
+    'az az-hourglass',
     'Traffic management',
     'application',
     'Queue visitors during a traffic surge and let them in as capacity frees up.',
@@ -950,7 +950,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'bot-score',
     'Bot Score',
     'Acme',
-    'ai ai-shield',
+    'az az-shield',
     'Bot management',
     'firewall',
     'Score each request on known bot behaviour and block the ones above your threshold.',
@@ -960,7 +960,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'split-traffic',
     'Split Traffic',
     'Azion',
-    'ai ai-sitemap',
+    'az az-sitemap',
     'Testing',
     'application',
     'Send a share of visitors to a second version of a page and keep each one on theirs.'
@@ -969,7 +969,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'geo-content',
     'Geo Content',
     'Azion',
-    'ai ai-globe',
+    'az az-globe',
     'Personalization',
     'application',
     'Serve a regional version of a page from the visitor’s country, with a fallback.'
@@ -978,7 +978,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'signed-urls',
     'Signed URLs',
     'Azion',
-    'ai ai-link',
+    'az az-link',
     'Access control',
     'firewall',
     'Issue links that expire, so protected files can only be fetched for a limited time.',
@@ -988,7 +988,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'rate-guard',
     'Rate Guard',
     'Acme',
-    'ai ai-sliders-horizontal',
+    'az az-sliders-horizontal',
     'Access control',
     'firewall',
     'Limit how many requests one client can make in a window, per path or per key.'
@@ -997,7 +997,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'payload-limit',
     'Payload Limit',
     'Azion',
-    'ai ai-box',
+    'az az-box',
     'Traffic management',
     'firewall',
     'Refuse request bodies above a size you set, before they reach the origin.'
@@ -1006,7 +1006,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'request-id',
     'Request ID',
     'Azion',
-    'ai ai-hash',
+    'az az-hash',
     'Observability',
     'application',
     'Add a unique identifier header to every request, to trace it across services.'
@@ -1015,7 +1015,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'phone-check',
     'Phone Check',
     'Acme',
-    'ai ai-phone',
+    'az az-phone',
     'Fraud prevention',
     'firewall',
     'Validate phone numbers on sign-up forms and flag numbers linked to fraud.'
@@ -1024,7 +1024,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'queue-writer',
     'Queue Writer',
     'Azion',
-    'ai ai-inbox',
+    'az az-inbox',
     'Messaging',
     'application',
     'Write each request to a queue for processing later, and answer the client right away.'
@@ -1033,7 +1033,7 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'schedule-block',
     'Scheduled Block',
     'Azion',
-    'ai ai-calendar-x',
+    'az az-calendar-x',
     'Access control',
     'firewall',
     'Close an application to traffic on a schedule, such as outside business hours.'

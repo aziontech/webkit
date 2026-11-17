@@ -34,7 +34,7 @@
   const props = withDefaults(defineProps<DocPromptProps>(), {
     variant: 'block',
     title: '',
-    icon: 'ai ai-sparkles',
+    icon: 'az az-sparkles',
     label: ''
   })
 
@@ -239,7 +239,7 @@
         >
           <Button
             :label="expanded ? t('docPrompt.showLess') : t('docPrompt.showMore')"
-            :icon="expanded ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
+            :icon="expanded ? 'az az-chevron-up' : 'az az-chevron-down'"
             variant="outline"
             size="small"
             @click="toggle"

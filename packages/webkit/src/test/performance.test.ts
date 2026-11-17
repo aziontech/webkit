@@ -209,11 +209,11 @@ function treeCase(expandAll = false): Case {
   const items = Array.from({ length: 50 }, (_, f) => ({
     id: `f${f}`,
     label: `folder-${f}`,
-    icon: 'ai ai-folder',
+    icon: 'az az-folder',
     children: Array.from({ length: 99 }, (_, c) => ({
       id: `f${f}/c${c}`,
       label: `file-${c}.txt`,
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: `${c} KB`
     }))
   }))
@@ -238,11 +238,11 @@ function treeExpandedCase(): Case {
   const items = Array.from({ length: 20 }, (_, f) => ({
     id: `f${f}`,
     label: `folder-${f}`,
-    icon: 'ai ai-folder',
+    icon: 'az az-folder',
     children: Array.from({ length: 49 }, (_, c) => ({
       id: `f${f}/c${c}`,
       label: `file-${c}.txt`,
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: `${c} KB`
     }))
   }))
@@ -267,11 +267,11 @@ function treeMultiSelectCase(): Case {
   const items = Array.from({ length: 50 }, (_, f) => ({
     id: `f${f}`,
     label: `folder-${f}`,
-    icon: 'ai ai-folder',
+    icon: 'az az-folder',
     children: Array.from({ length: 99 }, (_, c) => ({
       id: `f${f}/c${c}`,
       label: `file-${c}.txt`,
-      icon: 'ai ai-file'
+      icon: 'az az-file'
     }))
   }))
   const ids = items.flatMap((folder) => [folder.id, ...folder.children.map((child) => child.id)])

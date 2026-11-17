@@ -314,7 +314,7 @@ legacy  IN HINFO "PC" "Linux"`
               description="One .zone or .txt file in BIND format."
               accept=".zone,.txt,.db,text/plain"
               :multiple="false"
-              icon="ai ai-file-import"
+              icon="az az-file-import"
               :invalid="Boolean(dropError)"
               @drop="onDrop"
               @reject="onReject"

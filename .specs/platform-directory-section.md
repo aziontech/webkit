@@ -7,7 +7,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 734967ab9f36e93e78311e140b8ec5ee1dbf7ff6de6493a3b784f00f947f6ee8
+checksum: cc039ed5a3e75ab0ce77d521819dbb944b29c1cfc74219f44badc1762b03f326
 ---
 
 # PlatformDirectorySection — Component Spec
@@ -60,7 +60,7 @@ A directory of Azion's products under a section title: one column per product gr
         title: 'Build',
         items: [
           {
-            icon: 'ai ai-edge-functions',
+            icon: 'az az-functions',
             title: 'Functions',
             description: 'Run code globally with no cold starts',
             href: '/products/functions'
@@ -71,7 +71,7 @@ A directory of Azion's products under a section title: one column per product gr
         title: 'Store',
         items: [
           {
-            icon: 'ai ai-edge-kv',
+            icon: 'az az-kv-store',
             title: 'KV Store',
             description: 'Store key-value data with low latency',
             href: '/products/kv-store'

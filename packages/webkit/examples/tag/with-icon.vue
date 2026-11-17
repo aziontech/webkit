@@ -7,42 +7,42 @@
     <Tag
       label="Label"
       variant="primary"
-      icon="ai ai-box"
+      icon="az az-box"
     />
     <Tag
       label="Label"
       severity="neutral"
-      icon="ai ai-box"
+      icon="az az-box"
     />
     <Tag
       label="Label"
       variant="accent"
-      icon="ai ai-box"
+      icon="az az-box"
     />
     <Tag
       label="Label"
       severity="success"
-      icon="ai ai-box"
+      icon="az az-box"
     />
     <Tag
       label="Label"
       severity="warning"
-      icon="ai ai-box"
+      icon="az az-box"
     />
     <Tag
       label="Label"
       severity="danger"
-      icon="ai ai-box"
+      icon="az az-box"
     />
     <Tag
       label="Label"
       severity="info"
-      icon="ai ai-box"
+      icon="az az-box"
     />
     <Tag
       label="Label"
       variant="contrast"
-      icon="ai ai-box"
+      icon="az az-box"
     />
   </div>
 </template>

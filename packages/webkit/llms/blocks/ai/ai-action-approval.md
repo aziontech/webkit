@@ -339,7 +339,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
               label="Retry"
               variant="outline"
               size="small"
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               @click="emit('retry', $event, current)"
             />
           </ChatMessage.Actions>

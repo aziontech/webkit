@@ -26,12 +26,12 @@
   }>()
 
   const VARIANTS = {
-    note: { severity: 'info', icon: 'ai ai-circle-info', neutral: false },
-    info: { severity: 'info', icon: 'ai ai-circle-info', neutral: false },
-    tip: { severity: 'info', icon: 'ai ai-lightbulb', neutral: true },
-    check: { severity: 'success', icon: 'ai ai-circle-check', neutral: false },
-    warning: { severity: 'warning', icon: 'ai ai-triangle-alert', neutral: false },
-    danger: { severity: 'danger', icon: 'ai ai-circle-x', neutral: false }
+    note: { severity: 'info', icon: 'az az-circle-info', neutral: false },
+    info: { severity: 'info', icon: 'az az-circle-info', neutral: false },
+    tip: { severity: 'info', icon: 'az az-lightbulb', neutral: true },
+    check: { severity: 'success', icon: 'az az-circle-check', neutral: false },
+    warning: { severity: 'warning', icon: 'az az-triangle-alert', neutral: false },
+    danger: { severity: 'danger', icon: 'az az-circle-x', neutral: false }
   } as const
 
   const attrs = useAttrs()

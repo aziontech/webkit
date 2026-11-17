@@ -25,7 +25,7 @@
           label="Try again"
           variant="secondary"
           size="small"
-          icon="ai ai-refresh"
+          icon="az az-refresh"
         />
       </div>
     </template>

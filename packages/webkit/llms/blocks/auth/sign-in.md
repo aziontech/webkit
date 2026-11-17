@@ -88,7 +88,7 @@ Names the icon-only back control: `Change email` on the password step, `Back to 
 
 ### K. Back control — `IconButton` (password and reset steps)
 
-`ai ai-chevron-left`, `variant="outline"`, `size="small"`, with an `aria-label` equal to its tooltip. On the password step it sits beside the email being used, so the user can see and change which account they are signing in to; going back clears the password.
+`az az-chevron-left`, `variant="outline"`, `size="small"`, with an `aria-label` equal to its tooltip. On the password step it sits beside the email being used, so the user can see and change which account they are signing in to; going back clears the password.
 
 ### L. Password field — `Field` (password and new-password steps)
 
@@ -718,7 +718,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           :href="docsHref"
         />
       </AppHeader.End>
@@ -804,7 +804,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                               label="Continue with Google"
                               variant="outline"
                               size="large"
-                              icon="ai-color ai-google"
+                              icon="az-color az-google"
                               class="w-full"
                               @click="
                                 (event: MouseEvent) => emit('provider-click', event, 'google')
@@ -815,7 +815,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                               label="Continue with GitHub"
                               variant="outline"
                               size="large"
-                              icon="ai ai-github"
+                              icon="az az-github"
                               class="w-full"
                               @click="
                                 (event: MouseEvent) => emit('provider-click', event, 'github')
@@ -858,7 +858,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                           <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip content="Change email">
                               <IconButton
-                                icon="ai ai-chevron-left"
+                                icon="az az-chevron-left"
                                 aria-label="Change email"
                                 variant="outline"
                                 size="small"
@@ -906,7 +906,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                           <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip content="Back to sign in">
                               <IconButton
-                                icon="ai ai-chevron-left"
+                                icon="az az-chevron-left"
                                 aria-label="Back to sign in"
                                 variant="outline"
                                 size="small"
@@ -1224,7 +1224,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           :href="docsHref"
         />
       </AppHeader.End>

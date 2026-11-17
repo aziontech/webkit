@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 10
 template: 2
-checksum: bd0b0b7a3bda0080e304419696f79c5215f54eaaeadeb28bc9ca3633cf72c790
+checksum: 90898ebd4ddd837cee283569ecc81b599dc44b93389b171e0f2b5395eac6bb04
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -64,13 +64,13 @@ The labelled control that triggers an action. `variant` ranks the action in its 
   <Button
     label="Deploy"
     variant="secondary"
-    icon="ai ai-upload"
+    icon="az az-upload"
   />
   <Button
     label="Read the docs"
     variant="outline"
     href="https://www.azion.com/en/documentation/"
-    icon="ai ai-chevron-right"
+    icon="az az-chevron-right"
     icon-position="trailing"
     animated
   />

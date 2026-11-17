@@ -1,47 +1,14 @@
 {
  "items": [
   {
-   "name": "ai-abuse-prevention",
-   "class": "ai ai-abuse-prevention",
+   "name": "az-ai-gateway",
+   "class": "az az-ai-gateway",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "AI Gateway",
+   "product": "AI Gateway",
    "keywords": [
-    "abuse",
-    "prevention",
-    "fraud",
-    "security"
-   ]
-  },
-  {
-   "name": "ai-adaptive-security",
-   "class": "ai ai-adaptive-security",
-   "set": "azionicons",
-   "keywords": [
-    "adaptive",
-    "security",
-    "protection",
-    "shield"
-   ]
-  },
-  {
-   "name": "ai-address-book",
-   "class": "ai ai-address-book",
-   "set": "azionicons",
-   "keywords": [
-    "address",
-    "book",
-    "contacts",
-    "people",
-    "docs",
-    "documentation",
-    "read"
-   ]
-  },
-  {
-   "name": "ai-ai-gateway",
-   "class": "ai ai-ai-gateway",
-   "set": "azionicons",
-   "keywords": [
-    "gateway",
     "artificial intelligence",
     "llm",
     "model",
@@ -51,795 +18,75 @@
    ]
   },
   {
-   "name": "ai-ai-pillar",
-   "class": "ai ai-ai-pillar",
+   "name": "az-ai-inference",
+   "class": "az az-ai-inference",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "AI Inference",
+   "product": "AI Inference",
    "keywords": [
-    "pillar",
     "artificial intelligence",
     "llm",
     "model",
-    "product family"
+    "serverless ai",
+    "edge ai"
    ]
   },
   {
-   "name": "ai-align-center",
-   "class": "ai ai-align-center",
+   "name": "az-application-accelerator",
+   "class": "az az-application-accelerator",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Application Accelerator",
+   "product": "Application Accelerator",
    "keywords": [
-    "align",
-    "center",
-    "text",
-    "alignment",
-    "format"
-   ]
-  },
-  {
-   "name": "ai-align-justify",
-   "class": "ai ai-align-justify",
-   "set": "azionicons",
-   "keywords": [
-    "align",
-    "justify",
-    "text",
-    "alignment",
-    "format"
-   ]
-  },
-  {
-   "name": "ai-align-left",
-   "class": "ai ai-align-left",
-   "set": "azionicons",
-   "keywords": [
-    "align",
-    "left",
-    "text",
-    "alignment",
-    "format"
-   ]
-  },
-  {
-   "name": "ai-align-right",
-   "class": "ai ai-align-right",
-   "set": "azionicons",
-   "keywords": [
-    "align",
-    "right",
-    "text",
-    "alignment",
-    "format"
-   ]
-  },
-  {
-   "name": "ai-angular",
-   "class": "ai ai-angular",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-app-accelerator",
-   "class": "ai ai-app-accelerator",
-   "set": "azionicons",
-   "keywords": [
-    "app",
-    "accelerator",
     "performance",
     "speed",
-    "product"
+    "product",
+    "app accelerator"
    ]
   },
   {
-   "name": "ai-arrow-down-0-1",
-   "class": "ai ai-arrow-down-0-1",
+   "name": "az-applications",
+   "class": "az az-applications",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Applications",
+   "product": "Applications",
    "keywords": [
-    "arrow",
-    "down",
-    "direction",
-    "navigate",
-    "move"
+    "app",
+    "delivery",
+    "cache",
+    "rules",
+    "edge application"
    ]
   },
   {
-   "name": "ai-arrow-down-1-0",
-   "class": "ai ai-arrow-down-1-0",
+   "name": "az-bot-manager",
+   "class": "az az-bot-manager",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Bot Manager",
+   "product": "Bot Manager",
    "keywords": [
-    "arrow",
-    "down",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-down-a-z",
-   "class": "ai ai-arrow-down-a-z",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "down",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-down-left",
-   "class": "ai ai-arrow-down-left",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "down",
-    "left",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-down-narrow-wide",
-   "class": "ai ai-arrow-down-narrow-wide",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "down",
-    "narrow",
-    "wide",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-down-right",
-   "class": "ai ai-arrow-down-right",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "down",
-    "right",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-down-wide-narrow",
-   "class": "ai ai-arrow-down-wide-narrow",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "down",
-    "wide",
-    "narrow",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-down-z-a",
-   "class": "ai ai-arrow-down-z-a",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "down",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-down",
-   "class": "ai ai-arrow-down",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "down",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-left",
-   "class": "ai ai-arrow-left",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "left",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-right-left",
-   "class": "ai ai-arrow-right-left",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "right",
-    "left",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-right",
-   "class": "ai ai-arrow-right",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "right",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up-0-1",
-   "class": "ai ai-arrow-up-0-1",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up-1-0",
-   "class": "ai ai-arrow-up-1-0",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up-a-z",
-   "class": "ai ai-arrow-up-a-z",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up-left",
-   "class": "ai ai-arrow-up-left",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "left",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up-narrow-wide",
-   "class": "ai ai-arrow-up-narrow-wide",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "narrow",
-    "wide",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up-right",
-   "class": "ai ai-arrow-up-right",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "right",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up-wide-narrow",
-   "class": "ai ai-arrow-up-wide-narrow",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "wide",
-    "narrow",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up-z-a",
-   "class": "ai ai-arrow-up-z-a",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-arrow-up",
-   "class": "ai ai-arrow-up",
-   "set": "azionicons",
-   "keywords": [
-    "arrow",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-ask-azion",
-   "class": "ai ai-ask-azion",
-   "set": "azionicons",
-   "keywords": [
-    "ask",
-    "azion",
-    "question",
-    "assistant",
-    "chat",
-    "brand",
-    "logo",
-    "company"
-   ]
-  },
-  {
-   "name": "ai-asterisk",
-   "class": "ai ai-asterisk",
-   "set": "azionicons",
-   "keywords": [
-    "required",
-    "star"
-   ]
-  },
-  {
-   "name": "ai-astro",
-   "class": "ai ai-astro",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-at",
-   "class": "ai ai-at",
-   "set": "azionicons",
-   "keywords": [
-    "email",
-    "mention"
-   ]
-  },
-  {
-   "name": "ai-attack",
-   "class": "ai ai-attack",
-   "set": "azionicons",
-   "keywords": [
-    "threat",
-    "security",
-    "ddos"
-   ]
-  },
-  {
-   "name": "ai-azion-api",
-   "class": "ai ai-azion-api",
-   "set": "azionicons",
-   "keywords": [
-    "azion",
-    "api",
-    "brand",
-    "logo",
-    "company",
-    "endpoint",
-    "integration",
-    "developer"
-   ]
-  },
-  {
-   "name": "ai-azion-cli",
-   "class": "ai ai-azion-cli",
-   "set": "azionicons",
-   "keywords": [
-    "azion",
-    "cli",
-    "brand",
-    "logo",
-    "company",
-    "terminal",
-    "command line",
-    "console"
-   ]
-  },
-  {
-   "name": "ai-azion",
-   "class": "ai ai-azion",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo",
-    "company"
-   ]
-  },
-  {
-   "name": "ai-backward",
-   "class": "ai ai-backward",
-   "set": "azionicons",
-   "keywords": [
-    "previous",
-    "rewind"
-   ]
-  },
-  {
-   "name": "ai-ban",
-   "class": "ai ai-ban",
-   "set": "azionicons",
-   "keywords": [
-    "block",
-    "forbidden",
-    "deny"
-   ]
-  },
-  {
-   "name": "ai-barcode",
-   "class": "ai ai-barcode",
-   "set": "azionicons",
-   "keywords": [
-    "scan",
-    "product code"
-   ]
-  },
-  {
-   "name": "ai-bell-off",
-   "class": "ai ai-bell-off",
-   "set": "azionicons",
-   "keywords": [
-    "bell",
-    "off",
-    "notification",
-    "alert"
-   ]
-  },
-  {
-   "name": "ai-bell",
-   "class": "ai ai-bell",
-   "set": "azionicons",
-   "keywords": [
-    "notification",
-    "alert"
-   ]
-  },
-  {
-   "name": "ai-bolt",
-   "class": "ai ai-bolt",
-   "set": "azionicons",
-   "keywords": [
-    "fast",
-    "lightning",
-    "power"
-   ]
-  },
-  {
-   "name": "ai-book",
-   "class": "ai ai-book",
-   "set": "azionicons",
-   "keywords": [
-    "docs",
-    "documentation",
-    "read"
-   ]
-  },
-  {
-   "name": "ai-bookmark-fill",
-   "class": "ai ai-bookmark-fill",
-   "set": "azionicons",
-   "keywords": [
-    "bookmark",
-    "fill",
-    "save",
-    "favorite"
-   ]
-  },
-  {
-   "name": "ai-bookmark",
-   "class": "ai ai-bookmark",
-   "set": "azionicons",
-   "keywords": [
-    "save",
-    "favorite"
-   ]
-  },
-  {
-   "name": "ai-bot-manager",
-   "class": "ai ai-bot-manager",
-   "set": "azionicons",
-   "keywords": [
-    "bot",
-    "manager",
     "robot",
     "automation",
     "security"
    ]
   },
   {
-   "name": "ai-box",
-   "class": "ai ai-box",
+   "name": "az-certificate-manager",
+   "class": "az az-certificate-manager",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Certificate Manager",
+   "product": "Certificate Manager",
    "keywords": [
-    "package",
-    "product"
-   ]
-  },
-  {
-   "name": "ai-briefcase",
-   "class": "ai ai-briefcase",
-   "set": "azionicons",
-   "keywords": [
-    "work",
-    "business"
-   ]
-  },
-  {
-   "name": "ai-build-pillar",
-   "class": "ai ai-build-pillar",
-   "set": "azionicons",
-   "keywords": [
-    "build",
-    "pillar",
-    "product family"
-   ]
-  },
-  {
-   "name": "ai-building-columns",
-   "class": "ai ai-building-columns",
-   "set": "azionicons",
-   "keywords": [
-    "building",
-    "columns",
-    "company",
-    "organization",
-    "office"
-   ]
-  },
-  {
-   "name": "ai-building",
-   "class": "ai ai-building",
-   "set": "azionicons",
-   "keywords": [
-    "company",
-    "organization",
-    "office"
-   ]
-  },
-  {
-   "name": "ai-bullseye",
-   "class": "ai ai-bullseye",
-   "set": "azionicons",
-   "keywords": [
-    "target",
-    "goal"
-   ]
-  },
-  {
-   "name": "ai-business-support",
-   "class": "ai ai-business-support",
-   "set": "azionicons",
-   "keywords": [
-    "business",
-    "support",
-    "help",
-    "service"
-   ]
-  },
-  {
-   "name": "ai-calculator",
-   "class": "ai ai-calculator",
-   "set": "azionicons",
-   "keywords": [
-    "math",
-    "pricing"
-   ]
-  },
-  {
-   "name": "ai-calendar-clock",
-   "class": "ai ai-calendar-clock",
-   "set": "azionicons",
-   "keywords": [
-    "calendar",
-    "clock",
-    "date",
-    "schedule",
-    "time",
-    "history"
-   ]
-  },
-  {
-   "name": "ai-calendar-minus",
-   "class": "ai ai-calendar-minus",
-   "set": "azionicons",
-   "keywords": [
-    "calendar",
-    "minus",
-    "date",
-    "schedule",
-    "time",
-    "remove",
-    "subtract",
-    "collapse"
-   ]
-  },
-  {
-   "name": "ai-calendar-plus",
-   "class": "ai ai-calendar-plus",
-   "set": "azionicons",
-   "keywords": [
-    "calendar",
-    "plus",
-    "date",
-    "schedule",
-    "time",
-    "add",
-    "create",
-    "new"
-   ]
-  },
-  {
-   "name": "ai-calendar-x",
-   "class": "ai ai-calendar-x",
-   "set": "azionicons",
-   "keywords": [
-    "calendar",
-    "date",
-    "schedule",
-    "time"
-   ]
-  },
-  {
-   "name": "ai-calendar",
-   "class": "ai ai-calendar",
-   "set": "azionicons",
-   "keywords": [
-    "date",
-    "schedule",
-    "time"
-   ]
-  },
-  {
-   "name": "ai-camera",
-   "class": "ai ai-camera",
-   "set": "azionicons",
-   "keywords": [
-    "photo",
-    "picture"
-   ]
-  },
-  {
-   "name": "ai-car",
-   "class": "ai ai-car",
-   "set": "azionicons",
-   "keywords": [
-    "vehicle",
-    "automotive"
-   ]
-  },
-  {
-   "name": "ai-caret-down",
-   "class": "ai ai-caret-down",
-   "set": "azionicons",
-   "keywords": [
-    "caret",
-    "down",
-    "arrow",
-    "dropdown",
-    "triangle"
-   ]
-  },
-  {
-   "name": "ai-caret-left",
-   "class": "ai ai-caret-left",
-   "set": "azionicons",
-   "keywords": [
-    "caret",
-    "left",
-    "arrow",
-    "dropdown",
-    "triangle"
-   ]
-  },
-  {
-   "name": "ai-caret-right",
-   "class": "ai ai-caret-right",
-   "set": "azionicons",
-   "keywords": [
-    "caret",
-    "right",
-    "arrow",
-    "dropdown",
-    "triangle"
-   ]
-  },
-  {
-   "name": "ai-caret-up",
-   "class": "ai ai-caret-up",
-   "set": "azionicons",
-   "keywords": [
-    "caret",
-    "arrow",
-    "dropdown",
-    "triangle"
-   ]
-  },
-  {
-   "name": "ai-cart-arrow-down",
-   "class": "ai ai-cart-arrow-down",
-   "set": "azionicons",
-   "keywords": [
-    "cart",
-    "arrow",
-    "down",
-    "shopping",
-    "commerce",
-    "buy",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-cart-minus",
-   "class": "ai ai-cart-minus",
-   "set": "azionicons",
-   "keywords": [
-    "cart",
-    "minus",
-    "shopping",
-    "commerce",
-    "buy",
-    "remove",
-    "subtract",
-    "collapse"
-   ]
-  },
-  {
-   "name": "ai-cart-plus",
-   "class": "ai ai-cart-plus",
-   "set": "azionicons",
-   "keywords": [
-    "cart",
-    "plus",
-    "shopping",
-    "commerce",
-    "buy",
-    "add",
-    "create",
-    "new"
-   ]
-  },
-  {
-   "name": "ai-certificate-manager",
-   "class": "ai ai-certificate-manager",
-   "set": "azionicons",
-   "keywords": [
-    "certificate",
-    "manager",
     "tls",
     "ssl",
     "security",
@@ -847,878 +94,65 @@
    ]
   },
   {
-   "name": "ai-chart-bar",
-   "class": "ai ai-chart-bar",
+   "name": "az-connectors",
+   "class": "az az-connectors",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Connectors",
+   "product": "Connectors",
    "keywords": [
-    "chart",
-    "bar",
-    "graph",
-    "analytics",
-    "metrics"
+    "integration",
+    "origin",
+    "edge connectors"
    ]
   },
   {
-   "name": "ai-chart-line",
-   "class": "ai ai-chart-line",
+   "name": "az-custom-pages",
+   "class": "az az-custom-pages",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Custom Pages",
+   "product": "Custom Pages",
    "keywords": [
-    "chart",
-    "line",
-    "graph",
-    "analytics",
-    "metrics"
+    "product"
    ]
   },
   {
-   "name": "ai-chart-pie",
-   "class": "ai ai-chart-pie",
+   "name": "az-data-stream",
+   "class": "az az-data-stream",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Data Stream",
+   "product": "Data Stream",
    "keywords": [
-    "chart",
-    "pie",
-    "graph",
-    "analytics",
-    "metrics"
-   ]
-  },
-  {
-   "name": "ai-chart-scatter",
-   "class": "ai ai-chart-scatter",
-   "set": "azionicons",
-   "keywords": [
-    "chart",
-    "scatter",
-    "graph",
-    "analytics",
-    "metrics"
-   ]
-  },
-  {
-   "name": "ai-check",
-   "class": "ai ai-check",
-   "set": "azionicons",
-   "keywords": [
-    "done",
-    "success",
-    "confirm",
-    "ok"
-   ]
-  },
-  {
-   "name": "ai-chevron-down",
-   "class": "ai ai-chevron-down",
-   "set": "azionicons",
-   "keywords": [
-    "chevron",
-    "down",
-    "arrow",
-    "expand",
-    "collapse",
-    "direction",
-    "angle"
-   ]
-  },
-  {
-   "name": "ai-chevron-left",
-   "class": "ai ai-chevron-left",
-   "set": "azionicons",
-   "keywords": [
-    "chevron",
-    "left",
-    "arrow",
-    "expand",
-    "collapse",
-    "direction",
-    "angle"
-   ]
-  },
-  {
-   "name": "ai-chevron-right",
-   "class": "ai ai-chevron-right",
-   "set": "azionicons",
-   "keywords": [
-    "chevron",
-    "right",
-    "arrow",
-    "expand",
-    "collapse",
-    "direction",
-    "angle"
-   ]
-  },
-  {
-   "name": "ai-chevron-up",
-   "class": "ai ai-chevron-up",
-   "set": "azionicons",
-   "keywords": [
-    "chevron",
-    "arrow",
-    "expand",
-    "collapse",
-    "direction",
-    "angle"
-   ]
-  },
-  {
-   "name": "ai-chevrons-down",
-   "class": "ai ai-chevrons-down",
-   "set": "azionicons",
-   "keywords": [
-    "chevrons",
-    "down",
-    "double",
-    "arrow",
-    "first",
-    "last",
-    "direction"
-   ]
-  },
-  {
-   "name": "ai-chevrons-left",
-   "class": "ai ai-chevrons-left",
-   "set": "azionicons",
-   "keywords": [
-    "chevrons",
-    "left",
-    "double",
-    "arrow",
-    "first",
-    "last",
-    "direction"
-   ]
-  },
-  {
-   "name": "ai-chevrons-right",
-   "class": "ai ai-chevrons-right",
-   "set": "azionicons",
-   "keywords": [
-    "chevrons",
-    "right",
-    "double",
-    "arrow",
-    "first",
-    "last",
-    "direction"
-   ]
-  },
-  {
-   "name": "ai-chevrons-up",
-   "class": "ai ai-chevrons-up",
-   "set": "azionicons",
-   "keywords": [
-    "chevrons",
-    "double",
-    "arrow",
-    "first",
-    "last",
-    "direction"
-   ]
-  },
-  {
-   "name": "ai-circle-alert",
-   "class": "ai ai-circle-alert",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "alert",
-    "error",
-    "exclamation",
-    "warning",
-    "status",
-    "shape",
-    "notification"
-   ]
-  },
-  {
-   "name": "ai-circle-arrow-down",
-   "class": "ai ai-circle-arrow-down",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "arrow",
-    "down",
-    "status",
-    "shape",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-circle-arrow-left",
-   "class": "ai ai-circle-arrow-left",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "arrow",
-    "left",
-    "status",
-    "shape",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-circle-arrow-right",
-   "class": "ai ai-circle-arrow-right",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "arrow",
-    "right",
-    "status",
-    "shape",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-circle-arrow-up",
-   "class": "ai ai-circle-arrow-up",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "arrow",
-    "status",
-    "shape",
-    "direction",
-    "navigate",
-    "move"
-   ]
-  },
-  {
-   "name": "ai-circle-check",
-   "class": "ai ai-circle-check",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "check",
-    "status",
-    "shape",
-    "done",
-    "success",
-    "confirm",
-    "ok"
-   ]
-  },
-  {
-   "name": "ai-circle-chevron-down",
-   "class": "ai ai-circle-chevron-down",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "chevron",
-    "down",
-    "status",
-    "shape",
-    "arrow",
-    "expand",
-    "collapse",
-    "direction",
-    "angle"
-   ]
-  },
-  {
-   "name": "ai-circle-chevron-left",
-   "class": "ai ai-circle-chevron-left",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "chevron",
-    "left",
-    "status",
-    "shape",
-    "arrow",
-    "expand",
-    "collapse",
-    "direction",
-    "angle"
-   ]
-  },
-  {
-   "name": "ai-circle-chevron-right",
-   "class": "ai ai-circle-chevron-right",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "chevron",
-    "right",
-    "status",
-    "shape",
-    "arrow",
-    "expand",
-    "collapse",
-    "direction",
-    "angle"
-   ]
-  },
-  {
-   "name": "ai-circle-chevron-up",
-   "class": "ai ai-circle-chevron-up",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "chevron",
-    "status",
-    "shape",
-    "arrow",
-    "expand",
-    "collapse",
-    "direction",
-    "angle"
-   ]
-  },
-  {
-   "name": "ai-circle-fill",
-   "class": "ai ai-circle-fill",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "fill",
-    "status",
-    "shape"
-   ]
-  },
-  {
-   "name": "ai-circle-half",
-   "class": "ai ai-circle-half",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "half",
-    "status",
-    "shape"
-   ]
-  },
-  {
-   "name": "ai-circle-help",
-   "class": "ai ai-circle-help",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "help",
-    "question",
-    "faq",
-    "status",
-    "shape"
-   ]
-  },
-  {
-   "name": "ai-circle-info",
-   "class": "ai ai-circle-info",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "info",
-    "status",
-    "shape",
-    "information",
-    "help",
-    "about"
-   ]
-  },
-  {
-   "name": "ai-circle-minus",
-   "class": "ai ai-circle-minus",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "minus",
-    "status",
-    "shape",
-    "remove",
-    "subtract",
-    "collapse"
-   ]
-  },
-  {
-   "name": "ai-circle-off",
-   "class": "ai ai-circle-off",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "off",
-    "status",
-    "shape"
-   ]
-  },
-  {
-   "name": "ai-circle-on",
-   "class": "ai ai-circle-on",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "status",
-    "shape"
-   ]
-  },
-  {
-   "name": "ai-circle-pause",
-   "class": "ai ai-circle-pause",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "pause",
-    "status",
-    "shape",
-    "stop",
-    "hold"
-   ]
-  },
-  {
-   "name": "ai-circle-play",
-   "class": "ai ai-circle-play",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "play",
-    "status",
-    "shape",
-    "start",
-    "run",
-    "video"
-   ]
-  },
-  {
-   "name": "ai-circle-plus",
-   "class": "ai ai-circle-plus",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "plus",
-    "status",
-    "shape",
-    "add",
-    "create",
-    "new"
-   ]
-  },
-  {
-   "name": "ai-circle-stop",
-   "class": "ai ai-circle-stop",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "stop",
-    "status",
-    "shape",
-    "halt",
-    "end"
-   ]
-  },
-  {
-   "name": "ai-circle-x",
-   "class": "ai ai-circle-x",
-   "set": "azionicons",
-   "keywords": [
-    "circle",
-    "close",
-    "error",
-    "clear",
-    "times",
-    "status",
-    "shape"
-   ]
-  },
-  {
-   "name": "ai-circle",
-   "class": "ai ai-circle",
-   "set": "azionicons",
-   "keywords": [
-    "status",
-    "shape"
-   ]
-  },
-  {
-   "name": "ai-claude",
-   "class": "ai ai-claude",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-clipboard",
-   "class": "ai ai-clipboard",
-   "set": "azionicons",
-   "keywords": [
-    "copy",
-    "paste"
-   ]
-  },
-  {
-   "name": "ai-clock",
-   "class": "ai ai-clock",
-   "set": "azionicons",
-   "keywords": [
-    "time",
-    "schedule",
-    "history"
-   ]
-  },
-  {
-   "name": "ai-cloud-download",
-   "class": "ai ai-cloud-download",
-   "set": "azionicons",
-   "keywords": [
-    "cloud",
-    "download",
-    "hosting",
-    "storage",
-    "save",
-    "export"
-   ]
-  },
-  {
-   "name": "ai-cloud-upload",
-   "class": "ai ai-cloud-upload",
-   "set": "azionicons",
-   "keywords": [
-    "cloud",
-    "upload",
-    "hosting",
-    "storage",
-    "import",
-    "send"
-   ]
-  },
-  {
-   "name": "ai-cloud",
-   "class": "ai ai-cloud",
-   "set": "azionicons",
-   "keywords": [
-    "hosting",
-    "storage"
-   ]
-  },
-  {
-   "name": "ai-code",
-   "class": "ai ai-code",
-   "set": "azionicons",
-   "keywords": [
-    "developer",
-    "source",
-    "snippet"
-   ]
-  },
-  {
-   "name": "ai-column",
-   "class": "ai ai-column",
-   "set": "azionicons",
-   "keywords": [
-    "layout",
-    "grid"
-   ]
-  },
-  {
-   "name": "ai-comment",
-   "class": "ai ai-comment",
-   "set": "azionicons",
-   "keywords": [
-    "chat",
-    "message",
-    "feedback"
-   ]
-  },
-  {
-   "name": "ai-comments",
-   "class": "ai ai-comments",
-   "set": "azionicons",
-   "keywords": [
-    "chat",
-    "messages",
-    "discussion"
-   ]
-  },
-  {
-   "name": "ai-compass",
-   "class": "ai ai-compass",
-   "set": "azionicons",
-   "keywords": [
-    "explore",
-    "navigation"
-   ]
-  },
-  {
-   "name": "ai-configuration-service",
-   "class": "ai ai-configuration-service",
-   "set": "azionicons",
-   "keywords": [
-    "configuration",
-    "service",
-    "settings",
-    "preferences"
-   ]
-  },
-  {
-   "name": "ai-content-delivery",
-   "class": "ai ai-content-delivery",
-   "set": "azionicons",
-   "keywords": [
-    "content",
-    "delivery"
-   ]
-  },
-  {
-   "name": "ai-copy",
-   "class": "ai ai-copy",
-   "set": "azionicons",
-   "keywords": [
-    "duplicate",
-    "clipboard"
-   ]
-  },
-  {
-   "name": "ai-credit-card",
-   "class": "ai ai-credit-card",
-   "set": "azionicons",
-   "keywords": [
-    "credit",
-    "card",
-    "payment",
-    "billing"
-   ]
-  },
-  {
-   "name": "ai-crown",
-   "class": "ai ai-crown",
-   "set": "azionicons",
-   "keywords": [
-    "premium",
-    "plan",
-    "pro"
-   ]
-  },
-  {
-   "name": "ai-cursor",
-   "class": "ai ai-cursor",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-custom-pages",
-   "class": "ai ai-custom-pages",
-   "set": "azionicons",
-   "keywords": [
-    "custom",
-    "pages"
-   ]
-  },
-  {
-   "name": "ai-data-stream",
-   "class": "ai ai-data-stream",
-   "set": "azionicons",
-   "keywords": [
-    "data",
-    "stream",
     "logs",
     "events"
    ]
   },
   {
-   "name": "ai-database",
-   "class": "ai ai-database",
+   "name": "az-durable-objects",
+   "class": "az az-durable-objects",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Durable Objects",
+   "product": "Durable Objects",
    "keywords": [
-    "data",
-    "storage",
-    "sql"
+    "product"
    ]
   },
   {
-   "name": "ai-datasheet",
-   "class": "ai ai-datasheet",
+   "name": "az-edge-dns",
+   "class": "az az-edge-dns",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Edge DNS",
+   "product": "Edge DNS",
    "keywords": [
-    "document",
-    "specification"
-   ]
-  },
-  {
-   "name": "ai-deepseek",
-   "class": "ai ai-deepseek",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-delete-left",
-   "class": "ai ai-delete-left",
-   "set": "azionicons",
-   "keywords": [
-    "delete",
-    "left",
-    "remove",
-    "erase"
-   ]
-  },
-  {
-   "name": "ai-deploy-pillar",
-   "class": "ai ai-deploy-pillar",
-   "set": "azionicons",
-   "keywords": [
-    "deploy",
-    "pillar",
-    "release",
-    "publish",
-    "ship",
-    "product family"
-   ]
-  },
-  {
-   "name": "ai-desktop",
-   "class": "ai ai-desktop",
-   "set": "azionicons",
-   "keywords": [
-    "computer",
-    "screen",
-    "device"
-   ]
-  },
-  {
-   "name": "ai-digital-certificates",
-   "class": "ai ai-digital-certificates",
-   "set": "azionicons",
-   "keywords": [
-    "digital",
-    "certificates",
-    "certificate",
-    "security",
-    "tls",
-    "ssl",
-    "https"
-   ]
-  },
-  {
-   "name": "ai-directions",
-   "class": "ai ai-directions",
-   "set": "azionicons",
-   "keywords": [
-    "route",
-    "navigation",
-    "map"
-   ]
-  },
-  {
-   "name": "ai-disabled",
-   "class": "ai ai-disabled",
-   "set": "azionicons",
-   "keywords": [
-    "off",
-    "inactive",
-    "status"
-   ]
-  },
-  {
-   "name": "ai-discord",
-   "class": "ai ai-discord",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-docusaurus",
-   "class": "ai ai-docusaurus",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-dollar",
-   "class": "ai ai-dollar",
-   "set": "azionicons",
-   "keywords": [
-    "money",
-    "price",
-    "billing",
-    "currency"
-   ]
-  },
-  {
-   "name": "ai-domains",
-   "class": "ai ai-domains",
-   "set": "azionicons",
-   "keywords": [
-    "dns",
-    "url",
-    "workload"
-   ]
-  },
-  {
-   "name": "ai-download",
-   "class": "ai ai-download",
-   "set": "azionicons",
-   "keywords": [
-    "save",
-    "export"
-   ]
-  },
-  {
-   "name": "ai-durable-objects",
-   "class": "ai ai-durable-objects",
-   "set": "azionicons",
-   "keywords": [
-    "durable",
-    "objects"
-   ]
-  },
-  {
-   "name": "ai-edge-ai",
-   "class": "ai ai-edge-ai",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "network",
-    "distributed",
-    "artificial intelligence",
-    "llm",
-    "model"
-   ]
-  },
-  {
-   "name": "ai-edge-application",
-   "class": "ai ai-edge-application",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "application",
-    "network",
-    "distributed"
-   ]
-  },
-  {
-   "name": "ai-edge-connectors",
-   "class": "ai ai-edge-connectors",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "connectors",
-    "network",
-    "distributed",
-    "integration",
-    "origin"
-   ]
-  },
-  {
-   "name": "ai-edge-dns",
-   "class": "ai ai-edge-dns",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "dns",
     "network",
     "distributed",
     "domain",
@@ -1728,77 +162,14 @@
    ]
   },
   {
-   "name": "ai-edge-firewall",
-   "class": "ai ai-edge-firewall",
+   "name": "az-edge-orchestrator",
+   "class": "az az-edge-orchestrator",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Edge Orchestrator",
+   "product": "Edge Orchestrator",
    "keywords": [
-    "edge",
-    "firewall",
-    "network",
-    "distributed",
-    "security",
-    "waf",
-    "protection"
-   ]
-  },
-  {
-   "name": "ai-edge-functions",
-   "class": "ai ai-edge-functions",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "functions",
-    "network",
-    "distributed",
-    "serverless",
-    "compute",
-    "code"
-   ]
-  },
-  {
-   "name": "ai-edge-kv",
-   "class": "ai ai-edge-kv",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "network",
-    "distributed",
-    "key value",
-    "store",
-    "storage"
-   ]
-  },
-  {
-   "name": "ai-edge-libraries",
-   "class": "ai ai-edge-libraries",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "libraries",
-    "network",
-    "distributed"
-   ]
-  },
-  {
-   "name": "ai-edge-nodes",
-   "class": "ai ai-edge-nodes",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "nodes",
-    "network",
-    "distributed",
-    "servers",
-    "infrastructure"
-   ]
-  },
-  {
-   "name": "ai-edge-orchestrator",
-   "class": "ai ai-edge-orchestrator",
-   "set": "azionicons",
-   "keywords": [
-    "edge",
-    "orchestrator",
     "network",
     "distributed",
     "infrastructure",
@@ -1806,151 +177,1406 @@
    ]
   },
   {
-   "name": "ai-edge-pulse",
-   "class": "ai ai-edge-pulse",
+   "name": "az-edge-pulse",
+   "class": "az az-edge-pulse",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Edge Pulse",
+   "product": "Edge Pulse",
    "keywords": [
-    "edge",
-    "pulse",
     "network",
     "distributed"
    ]
   },
   {
-   "name": "ai-edge-services",
-   "class": "ai ai-edge-services",
+   "name": "az-firewall",
+   "class": "az az-firewall",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Firewall",
+   "product": "Firewall",
    "keywords": [
-    "edge",
-    "services",
-    "network",
-    "distributed"
+    "security",
+    "waf",
+    "protection",
+    "edge firewall"
    ]
   },
   {
-   "name": "ai-edge-sql",
-   "class": "ai ai-edge-sql",
+   "name": "az-functions",
+   "class": "az az-functions",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Functions",
+   "product": "Functions",
    "keywords": [
-    "edge",
-    "sql",
-    "network",
-    "distributed",
-    "database",
-    "query"
+    "serverless",
+    "compute",
+    "code",
+    "edge functions"
    ]
   },
   {
-   "name": "ai-edge-storage",
-   "class": "ai ai-edge-storage",
+   "name": "az-image-processor",
+   "class": "az az-image-processor",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Image Processor",
+   "product": "Image Processor",
    "keywords": [
-    "edge",
+    "picture",
+    "photo",
+    "media"
+   ]
+  },
+  {
+   "name": "az-kv-store",
+   "class": "az az-kv-store",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "KV Store",
+   "product": "KV Store",
+   "keywords": [
+    "key value",
     "storage",
-    "network",
-    "distributed",
+    "shop",
+    "marketplace",
+    "edge kv"
+   ]
+  },
+  {
+   "name": "az-live-ingest",
+   "class": "az az-live-ingest",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Live Ingest",
+   "product": "Live Ingest",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-load-balancer",
+   "class": "az az-load-balancer",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Load Balancer",
+   "product": "Load Balancer",
+   "keywords": [
+    "traffic",
+    "distribution",
+    "origin"
+   ]
+  },
+  {
+   "name": "az-marketplace",
+   "class": "az az-marketplace",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Marketplace",
+   "product": "Marketplace",
+   "keywords": [
+    "templates",
+    "store",
+    "integrations"
+   ]
+  },
+  {
+   "name": "az-network-lists",
+   "class": "az az-network-lists",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Network Lists",
+   "product": "Network Lists",
+   "keywords": [
+    "connectivity"
+   ]
+  },
+  {
+   "name": "az-object-storage",
+   "class": "az az-object-storage",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Object Storage",
+   "product": "Object Storage",
+   "keywords": [
     "bucket",
     "files",
-    "object storage"
+    "edge storage"
    ]
   },
   {
-   "name": "ai-eject",
-   "class": "ai ai-eject",
+   "name": "az-real-time-events",
+   "class": "az az-real-time-events",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Real-Time Events",
+   "product": "Real-Time Events",
    "keywords": [
-    "remove",
-    "unmount"
+    "product"
    ]
   },
   {
-   "name": "ai-eleventy",
-   "class": "ai ai-eleventy",
+   "name": "az-real-time-metrics",
+   "class": "az az-real-time-metrics",
    "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Real-Time Metrics",
+   "product": "Real-Time Metrics",
+   "keywords": [
+    "analytics",
+    "observability",
+    "charts"
+   ]
+  },
+  {
+   "name": "az-real-time-purge",
+   "class": "az az-real-time-purge",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Real-Time Purge",
+   "product": "Real-Time Purge",
+   "keywords": [
+    "cache",
+    "clear",
+    "invalidate"
+   ]
+  },
+  {
+   "name": "az-sql-database",
+   "class": "az az-sql-database",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "SQL Database",
+   "product": "SQL Database",
+   "keywords": [
+    "query",
+    "data",
+    "storage",
+    "edge sql"
+   ]
+  },
+  {
+   "name": "az-variables",
+   "class": "az az-variables",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Variables",
+   "product": "Variables",
+   "keywords": [
+    "environment",
+    "env",
+    "config"
+   ]
+  },
+  {
+   "name": "az-waf",
+   "class": "az az-waf",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "WAF",
+   "product": "WAF",
+   "keywords": [
+    "web application firewall",
+    "security",
+    "rules",
+    "waf rules"
+   ]
+  },
+  {
+   "name": "az-workloads",
+   "class": "az az-workloads",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Workloads",
+   "product": "Workloads",
+   "keywords": [
+    "domains",
+    "deploy",
+    "traffic"
+   ]
+  },
+  {
+   "name": "az-domains",
+   "class": "az az-domains",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Domains (inside Workloads)",
+   "product": "Workloads",
+   "keywords": [
+    "dns",
+    "url",
+    "workload"
+   ]
+  },
+  {
+   "name": "az-edge-libraries",
+   "class": "az az-edge-libraries",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Edge Libraries, where Edge Orchestrator keeps the services it can install",
+   "product": "Edge Orchestrator",
+   "keywords": [
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "az-edge-nodes",
+   "class": "az az-edge-nodes",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Edge Nodes, the servers Edge Orchestrator manages",
+   "product": "Edge Orchestrator",
+   "keywords": [
+    "network",
+    "distributed",
+    "infrastructure"
+   ]
+  },
+  {
+   "name": "az-edge-services",
+   "class": "az az-edge-services",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Edge Services, the services Edge Orchestrator installs on an edge node",
+   "product": "Edge Orchestrator",
+   "keywords": [
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "az-lora",
+   "class": "az az-lora",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "LoRA adapters for AI Inference",
+   "product": "AI Inference",
+   "keywords": [
+    "fine-tuning",
+    "model"
+   ]
+  },
+  {
+   "name": "az-origin-shield",
+   "class": "az az-origin-shield",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Origin Shield (Connectors feature)",
+   "product": "Connectors",
+   "keywords": [
+    "backend",
+    "server",
+    "security",
+    "protection",
+    "safe"
+   ]
+  },
+  {
+   "name": "az-rules-engine",
+   "class": "az az-rules-engine",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Rules Engine (part of Applications)",
+   "product": "Applications",
+   "keywords": [
+    "logic",
+    "conditions",
+    "behavior"
+   ]
+  },
+  {
+   "name": "az-tiered-cache",
+   "class": "az az-tiered-cache",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Tiered Cache",
+   "product": "Applications",
+   "keywords": [
+    "applications"
+   ]
+  },
+  {
+   "name": "az-ai-pillar",
+   "class": "az az-ai-pillar",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The AI pillar of the platform",
+   "keywords": [
+    "artificial intelligence",
+    "llm",
+    "model",
+    "product family"
+   ]
+  },
+  {
+   "name": "az-ask-azion",
+   "class": "az az-ask-azion",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "Ask Azion (the Azion assistant)",
+   "keywords": [
+    "question",
+    "chat",
+    "brand",
+    "logo",
+    "company"
+   ]
+  },
+  {
+   "name": "az-azion",
+   "class": "az az-azion",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "Azion",
    "keywords": [
     "brand",
-    "logo"
+    "logo",
+    "company"
    ]
   },
   {
-   "name": "ai-ellipsis-vertical",
-   "class": "ai ai-ellipsis-vertical",
+   "name": "az-azion-api",
+   "class": "az az-azion-api",
    "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "Azion API",
    "keywords": [
-    "ellipsis",
-    "vertical",
-    "more",
-    "menu",
-    "actions",
-    "overflow"
+    "brand",
+    "logo",
+    "company",
+    "endpoint",
+    "integration",
+    "developer"
    ]
   },
   {
-   "name": "ai-ellipsis",
-   "class": "ai ai-ellipsis",
+   "name": "az-azion-cli",
+   "class": "az az-azion-cli",
    "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "Azion CLI",
    "keywords": [
-    "more",
-    "menu",
-    "actions",
-    "overflow"
+    "brand",
+    "logo",
+    "company",
+    "terminal",
+    "command line",
+    "console"
    ]
   },
   {
-   "name": "ai-enabled",
-   "class": "ai ai-enabled",
+   "name": "az-build-pillar",
+   "class": "az az-build-pillar",
    "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Build pillar of the platform",
    "keywords": [
-    "on",
-    "active",
-    "status"
+    "product family"
    ]
   },
   {
-   "name": "ai-equals",
-   "class": "ai ai-equals",
+   "name": "az-deploy-pillar",
+   "class": "az az-deploy-pillar",
    "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Deploy pillar of the platform",
    "keywords": [
-    "equal",
-    "math"
+    "release",
+    "publish",
+    "ship",
+    "product family"
    ]
   },
   {
-   "name": "ai-eraser",
-   "class": "ai ai-eraser",
+   "name": "az-observe-pillar",
+   "class": "az az-observe-pillar",
    "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Observe pillar of the platform",
    "keywords": [
-    "clear",
+    "observability",
+    "monitoring",
+    "product family"
+   ]
+  },
+  {
+   "name": "az-secure-pillar",
+   "class": "az az-secure-pillar",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Secure pillar of the platform",
+   "keywords": [
+    "security",
+    "protection",
+    "product family"
+   ]
+  },
+  {
+   "name": "az-store-pillar",
+   "class": "az az-store-pillar",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Store pillar of the platform",
+   "keywords": [
+    "shop",
+    "marketplace",
+    "product family"
+   ]
+  },
+  {
+   "name": "az-abuse-prevention",
+   "class": "az az-abuse-prevention",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Abuse prevention (security solution)",
+   "keywords": [
+    "fraud"
+   ]
+  },
+  {
+   "name": "az-adaptive-security",
+   "class": "az az-adaptive-security",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Adaptive security (security solution)",
+   "keywords": [
+    "protection",
+    "shield"
+   ]
+  },
+  {
+   "name": "az-content-delivery",
+   "class": "az az-content-delivery",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Content delivery (solution)",
+   "keywords": [
+    "solution"
+   ]
+  },
+  {
+   "name": "az-sase",
+   "class": "az az-sase",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "SASE (secure access solution)",
+   "keywords": [
+    "network security",
+    "zero trust"
+   ]
+  },
+  {
+   "name": "az-business-support",
+   "class": "az az-business-support",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Business support plan",
+   "keywords": [
+    "help",
+    "service"
+   ]
+  },
+  {
+   "name": "az-configuration-service",
+   "class": "az az-configuration-service",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Configuration service (professional service)",
+   "keywords": [
+    "settings",
+    "preferences"
+   ]
+  },
+  {
+   "name": "az-integration-services",
+   "class": "az az-integration-services",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Integration services (professional service)",
+   "keywords": [
+    "service"
+   ]
+  },
+  {
+   "name": "az-practices-review",
+   "class": "az az-practices-review",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Best practices review (professional service)",
+   "keywords": [
+    "audit",
+    "pratices review"
+   ]
+  },
+  {
+   "name": "az-professional-services",
+   "class": "az az-professional-services",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Professional services",
+   "keywords": [
+    "service"
+   ]
+  },
+  {
+   "name": "az-security-team",
+   "class": "az az-security-team",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Security team (managed service)",
+   "keywords": [
+    "protection",
+    "shield"
+   ]
+  },
+  {
+   "name": "az-technical-account",
+   "class": "az az-technical-account",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Technical account manager",
+   "keywords": [
+    "service"
+   ]
+  },
+  {
+   "name": "az-technical-support",
+   "class": "az az-technical-support",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Technical support",
+   "keywords": [
+    "help",
+    "service"
+   ]
+  },
+  {
+   "name": "az-arrow-down",
+   "class": "az az-arrow-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move down or go down",
+   "keywords": [
+    "direction",
+    "navigate",
+    "sort down"
+   ]
+  },
+  {
+   "name": "az-arrow-down-0-1",
+   "class": "az az-arrow-down-0-1",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, 0 to 9",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort numeric down"
+   ]
+  },
+  {
+   "name": "az-arrow-down-1-0",
+   "class": "az az-arrow-down-1-0",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, 9 to 0",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort numeric down alt"
+   ]
+  },
+  {
+   "name": "az-arrow-down-a-z",
+   "class": "az az-arrow-down-a-z",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, A to Z",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort alpha down"
+   ]
+  },
+  {
+   "name": "az-arrow-down-left",
+   "class": "az az-arrow-down-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move toward the lower left",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-down-narrow-wide",
+   "class": "az az-arrow-down-narrow-wide",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, smallest first",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort amount down alt"
+   ]
+  },
+  {
+   "name": "az-arrow-down-right",
+   "class": "az az-arrow-down-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move toward the lower right",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-down-wide-narrow",
+   "class": "az az-arrow-down-wide-narrow",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, largest first",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort amount down"
+   ]
+  },
+  {
+   "name": "az-arrow-down-z-a",
+   "class": "az az-arrow-down-z-a",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, Z to A",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort alpha down alt"
+   ]
+  },
+  {
+   "name": "az-arrow-left",
+   "class": "az az-arrow-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go back or move left",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-right",
+   "class": "az az-arrow-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go forward or move right",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-right-left",
+   "class": "az az-arrow-right-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Swap or exchange",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-arrow-up",
+   "class": "az az-arrow-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move up or go up",
+   "keywords": [
+    "direction",
+    "navigate",
+    "sort up"
+   ]
+  },
+  {
+   "name": "az-arrow-up-0-1",
+   "class": "az az-arrow-up-0-1",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, 0 to 9",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort numeric up"
+   ]
+  },
+  {
+   "name": "az-arrow-up-1-0",
+   "class": "az az-arrow-up-1-0",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, 9 to 0",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort numeric up alt"
+   ]
+  },
+  {
+   "name": "az-arrow-up-a-z",
+   "class": "az az-arrow-up-a-z",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, A to Z",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort alpha up"
+   ]
+  },
+  {
+   "name": "az-arrow-up-left",
+   "class": "az az-arrow-up-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move toward the upper left",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-up-narrow-wide",
+   "class": "az az-arrow-up-narrow-wide",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, smallest first",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort amount up alt"
+   ]
+  },
+  {
+   "name": "az-arrow-up-right",
+   "class": "az az-arrow-up-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Open externally or move toward the upper right",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-up-wide-narrow",
+   "class": "az az-arrow-up-wide-narrow",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, largest first",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort amount up"
+   ]
+  },
+  {
+   "name": "az-arrow-up-z-a",
+   "class": "az az-arrow-up-z-a",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort Z to A, upwards",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort alpha up alt"
+   ]
+  },
+  {
+   "name": "az-caret-down",
+   "class": "az az-caret-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Expand or open a dropdown",
+   "keywords": [
+    "arrow",
+    "triangle"
+   ]
+  },
+  {
+   "name": "az-caret-left",
+   "class": "az az-caret-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Previous or collapse left",
+   "keywords": [
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "az-caret-right",
+   "class": "az az-caret-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Next or expand right",
+   "keywords": [
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "az-caret-up",
+   "class": "az az-caret-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Collapse or move up",
+   "keywords": [
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "az-chevron-down",
+   "class": "az az-chevron-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Expand or open a menu downward",
+   "keywords": [
+    "arrow",
+    "collapse",
+    "direction",
+    "angle",
+    "angle down"
+   ]
+  },
+  {
+   "name": "az-chevron-left",
+   "class": "az az-chevron-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go back or previous",
+   "keywords": [
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "angle",
+    "angle left"
+   ]
+  },
+  {
+   "name": "az-chevron-right",
+   "class": "az az-chevron-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go forward or next",
+   "keywords": [
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "angle",
+    "angle right"
+   ]
+  },
+  {
+   "name": "az-chevron-up",
+   "class": "az az-chevron-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Collapse or move up",
+   "keywords": [
+    "arrow",
+    "expand",
+    "direction",
+    "angle",
+    "angle up"
+   ]
+  },
+  {
+   "name": "az-chevrons-down",
+   "class": "az az-chevrons-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Expand all or jump down",
+   "keywords": [
+    "double",
+    "arrow",
+    "first",
+    "last",
+    "direction",
+    "angle double down"
+   ]
+  },
+  {
+   "name": "az-chevrons-left",
+   "class": "az az-chevrons-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go to the first item or page",
+   "keywords": [
+    "double",
+    "arrow",
+    "last",
+    "direction",
+    "angle double left"
+   ]
+  },
+  {
+   "name": "az-chevrons-right",
+   "class": "az az-chevrons-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go to the last item or page",
+   "keywords": [
+    "double",
+    "arrow",
+    "first",
+    "direction",
+    "angle double right"
+   ]
+  },
+  {
+   "name": "az-chevrons-up",
+   "class": "az az-chevrons-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Collapse all or jump to the top",
+   "keywords": [
+    "double",
+    "arrow",
+    "first",
+    "last",
+    "direction",
+    "angle double up"
+   ]
+  },
+  {
+   "name": "az-circle-arrow-down",
+   "class": "az az-circle-arrow-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move down or download",
+   "keywords": [
+    "status",
+    "shape",
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-circle-arrow-left",
+   "class": "az az-circle-arrow-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go back or move left",
+   "keywords": [
+    "status",
+    "shape",
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-circle-arrow-right",
+   "class": "az az-circle-arrow-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go forward or proceed",
+   "keywords": [
+    "status",
+    "shape",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-circle-arrow-up",
+   "class": "az az-circle-arrow-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move up or upload",
+   "keywords": [
+    "status",
+    "shape",
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-circle-chevron-down",
+   "class": "az az-circle-chevron-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Expand or show more below",
+   "keywords": [
+    "status",
+    "shape",
+    "arrow",
+    "collapse",
+    "direction",
+    "angle"
+   ]
+  },
+  {
+   "name": "az-circle-chevron-left",
+   "class": "az az-circle-chevron-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Previous",
+   "keywords": [
+    "status",
+    "shape",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "angle"
+   ]
+  },
+  {
+   "name": "az-circle-chevron-right",
+   "class": "az az-circle-chevron-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Next",
+   "keywords": [
+    "status",
+    "shape",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "angle"
+   ]
+  },
+  {
+   "name": "az-circle-chevron-up",
+   "class": "az az-circle-chevron-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Collapse or show less",
+   "keywords": [
+    "status",
+    "shape",
+    "arrow",
+    "expand",
+    "direction",
+    "angle"
+   ]
+  },
+  {
+   "name": "az-move",
+   "class": "az az-move",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move or drag in any direction",
+   "keywords": [
+    "reposition",
+    "arrows",
+    "arrows alt"
+   ]
+  },
+  {
+   "name": "az-move-horizontal",
+   "class": "az az-move-horizontal",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move or resize horizontally",
+   "keywords": [
+    "drag",
+    "reposition",
+    "arrows",
+    "arrows h"
+   ]
+  },
+  {
+   "name": "az-move-vertical",
+   "class": "az az-move-vertical",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move or resize vertically",
+   "keywords": [
+    "drag",
+    "reposition",
+    "arrows",
+    "arrows v"
+   ]
+  },
+  {
+   "name": "az-sort",
+   "class": "az az-sort",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort",
+   "keywords": [
+    "order",
+    "arrange",
+    "sort alt"
+   ]
+  },
+  {
+   "name": "az-sort-down-fill",
+   "class": "az az-sort-down-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending",
+   "keywords": [
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "az-sort-off",
+   "class": "az az-sort-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Unsorted or sorting off",
+   "keywords": [
+    "order",
+    "arrange",
+    "sort alt slash"
+   ]
+  },
+  {
+   "name": "az-sort-up-fill",
+   "class": "az az-sort-up-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending",
+   "keywords": [
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "az-arrow-up-from-line",
+   "class": "az az-arrow-up-from-line",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Eject",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-circle-plus",
+   "class": "az az-circle-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Add or create",
+   "keywords": [
+    "status",
+    "shape",
+    "new"
+   ]
+  },
+  {
+   "name": "az-cloud-download",
+   "class": "az az-cloud-download",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Download from the cloud",
+   "keywords": [
+    "hosting",
+    "storage",
+    "save",
+    "export"
+   ]
+  },
+  {
+   "name": "az-cloud-upload",
+   "class": "az az-cloud-upload",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Upload to the cloud",
+   "keywords": [
+    "hosting",
+    "storage",
+    "import",
+    "send"
+   ]
+  },
+  {
+   "name": "az-copy",
+   "class": "az az-copy",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Copy",
+   "keywords": [
+    "duplicate",
+    "clipboard",
+    "clone"
+   ]
+  },
+  {
+   "name": "az-delete-left",
+   "class": "az az-delete-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Backspace, delete the previous character",
+   "keywords": [
+    "remove",
     "erase"
    ]
   },
   {
-   "name": "ai-euro",
-   "class": "ai ai-euro",
+   "name": "az-download",
+   "class": "az az-download",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Download",
    "keywords": [
-    "money",
-    "currency"
+    "save",
+    "export"
    ]
   },
   {
-   "name": "ai-expand",
-   "class": "ai ai-expand",
+   "name": "az-eraser",
+   "class": "az az-eraser",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Erase or clear",
    "keywords": [
-    "fullscreen",
-    "maximize"
+    "action"
    ]
   },
   {
-   "name": "ai-external-link",
-   "class": "ai ai-external-link",
+   "name": "az-external-link",
+   "class": "az az-external-link",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Open in a new tab or external site",
    "keywords": [
-    "external",
-    "link",
-    "open",
-    "new tab",
     "link out",
     "url",
     "chain",
@@ -1958,79 +1584,691 @@
    ]
   },
   {
-   "name": "ai-eye-off",
-   "class": "ai ai-eye-off",
+   "name": "az-eye",
+   "class": "az az-eye",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Show or view",
    "keywords": [
-    "eye",
-    "off",
-    "hide",
+    "visible",
+    "preview"
+   ]
+  },
+  {
+   "name": "az-eye-off",
+   "class": "az az-eye-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Hide",
+   "keywords": [
     "hidden",
     "invisible",
     "view",
     "show",
     "visible",
-    "preview"
+    "preview",
+    "eye slash"
    ]
   },
   {
-   "name": "ai-eye",
-   "class": "ai ai-eye",
+   "name": "az-filter",
+   "class": "az az-filter",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Filter a list",
    "keywords": [
-    "view",
-    "show",
-    "visible",
-    "preview"
+    "funnel",
+    "refine",
+    "narrow",
+    "filter alt"
    ]
   },
   {
-   "name": "ai-face-smile",
-   "class": "ai ai-face-smile",
+   "name": "az-filter-fill",
+   "class": "az az-filter-fill",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Filter (active filter applied)",
    "keywords": [
-    "face",
-    "smile"
+    "funnel",
+    "refine",
+    "narrow"
    ]
   },
   {
-   "name": "ai-facebook",
-   "class": "ai ai-facebook",
+   "name": "az-filter-off",
+   "class": "az az-filter-off",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Remove the filter",
    "keywords": [
-    "brand",
-    "logo"
+    "funnel",
+    "refine",
+    "narrow",
+    "filter slash"
    ]
   },
   {
-   "name": "ai-fast-backward",
-   "class": "ai ai-fast-backward",
+   "name": "az-history",
+   "class": "az az-history",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "History or recent activity",
    "keywords": [
-    "fast",
-    "backward",
-    "previous",
-    "rewind"
+    "audit",
+    "log"
    ]
   },
   {
-   "name": "ai-fast-forward",
-   "class": "ai ai-fast-forward",
+   "name": "az-link",
+   "class": "az az-link",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Link or URL",
    "keywords": [
-    "fast",
-    "forward",
-    "next",
-    "skip"
+    "chain",
+    "hyperlink"
    ]
   },
   {
-   "name": "ai-file-arrow-up",
-   "class": "ai ai-file-arrow-up",
+   "name": "az-log-in",
+   "class": "az az-log-in",
    "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Sign in",
    "keywords": [
-    "file",
-    "arrow",
+    "login",
+    "enter"
+   ]
+  },
+  {
+   "name": "az-log-out",
+   "class": "az az-log-out",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Sign out",
+   "keywords": [
+    "logout",
+    "exit"
+   ]
+  },
+  {
+   "name": "az-minus",
+   "class": "az az-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Remove, subtract or collapse",
+   "keywords": [
+    "action"
+   ]
+  },
+  {
+   "name": "az-pencil",
+   "class": "az az-pencil",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Edit",
+   "keywords": [
+    "write",
+    "rename"
+   ]
+  },
+  {
+   "name": "az-plus",
+   "class": "az az-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Add or create",
+   "keywords": [
+    "new"
+   ]
+  },
+  {
+   "name": "az-power-off",
+   "class": "az az-power-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Power off or shut down",
+   "keywords": [
+    "logout"
+   ]
+  },
+  {
+   "name": "az-refresh",
+   "class": "az az-refresh",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Refresh or reload",
+   "keywords": [
+    "sync",
+    "update"
+   ]
+  },
+  {
+   "name": "az-replay",
+   "class": "az az-replay",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Replay or restart from the beginning",
+   "keywords": [
+    "repeat",
+    "retry"
+   ]
+  },
+  {
+   "name": "az-save",
+   "class": "az az-save",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Save changes",
+   "keywords": [
+    "disk",
+    "store"
+   ]
+  },
+  {
+   "name": "az-scissors",
+   "class": "az az-scissors",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Cut",
+   "keywords": [
+    "scizors"
+   ]
+  },
+  {
+   "name": "az-search",
+   "class": "az az-search",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Search",
+   "keywords": [
+    "find",
+    "magnifier",
+    "lookup"
+   ]
+  },
+  {
+   "name": "az-settings",
+   "class": "az az-settings",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Open settings",
+   "keywords": [
+    "gear",
+    "cog",
+    "preferences",
+    "configuration"
+   ]
+  },
+  {
+   "name": "az-share",
+   "class": "az az-share",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Share",
+   "keywords": [
+    "send",
+    "social",
+    "share alt"
+   ]
+  },
+  {
+   "name": "az-square-pen",
+   "class": "az az-square-pen",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Edit",
+   "keywords": [
+    "write",
+    "pen to square"
+   ]
+  },
+  {
+   "name": "az-sync",
+   "class": "az az-sync",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Synchronize",
+   "keywords": [
+    "refresh"
+   ]
+  },
+  {
+   "name": "az-trash",
+   "class": "az az-trash",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Delete",
+   "keywords": [
+    "remove",
+    "bin"
+   ]
+  },
+  {
+   "name": "az-undo",
+   "class": "az az-undo",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Undo",
+   "keywords": [
+    "revert",
+    "back"
+   ]
+  },
+  {
+   "name": "az-upload",
+   "class": "az az-upload",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Upload",
+   "keywords": [
+    "import",
+    "send"
+   ]
+  },
+  {
+   "name": "az-x",
+   "class": "az az-x",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Close or dismiss",
+   "keywords": [
+    "cancel",
+    "times"
+   ]
+  },
+  {
+   "name": "az-zoom-in",
+   "class": "az az-zoom-in",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Zoom in",
+   "keywords": [
+    "magnify",
+    "scale",
+    "search plus"
+   ]
+  },
+  {
+   "name": "az-zoom-out",
+   "class": "az az-zoom-out",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Zoom out",
+   "keywords": [
+    "magnify",
+    "scale",
+    "search minus"
+   ]
+  },
+  {
+   "name": "az-attack",
+   "class": "az az-attack",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "An attack or threat",
+   "keywords": [
+    "security",
+    "ddos"
+   ]
+  },
+  {
+   "name": "az-ban",
+   "class": "az az-ban",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Not allowed or blocked",
+   "keywords": [
+    "block",
+    "forbidden",
+    "deny"
+   ]
+  },
+  {
+   "name": "az-check",
+   "class": "az az-check",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Done, confirmed or selected",
+   "keywords": [
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "az-circle",
+   "class": "az az-circle",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Unselected or inactive state",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-alert",
+   "class": "az az-circle-alert",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Warning or error alert",
+   "keywords": [
+    "exclamation",
+    "status",
+    "shape",
+    "notification",
+    "exclamation circle"
+   ]
+  },
+  {
+   "name": "az-circle-check",
+   "class": "az az-circle-check",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Success or completed",
+   "keywords": [
+    "status",
+    "shape",
+    "done",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "az-circle-fill",
+   "class": "az az-circle-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Active or status dot",
+   "keywords": [
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-half",
+   "class": "az az-circle-half",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Partial, half done; also light and dark contrast",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-help",
+   "class": "az az-circle-help",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Help or more information",
+   "keywords": [
+    "question",
+    "faq",
+    "status",
+    "shape",
+    "question circle"
+   ]
+  },
+  {
+   "name": "az-circle-info",
+   "class": "az az-circle-info",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Information",
+   "keywords": [
+    "status",
+    "shape",
+    "help",
+    "about"
+   ]
+  },
+  {
+   "name": "az-circle-minus",
+   "class": "az az-circle-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Remove, collapse",
+   "keywords": [
+    "status",
+    "shape",
+    "subtract"
+   ]
+  },
+  {
+   "name": "az-circle-off",
+   "class": "az az-circle-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Off, disabled or not available",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-on",
+   "class": "az az-circle-on",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "On or selected (radio state)",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-x",
+   "class": "az az-circle-x",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Error, cancel or clear",
+   "keywords": [
+    "close",
+    "times",
+    "status",
+    "shape",
+    "times circle"
+   ]
+  },
+  {
+   "name": "az-disabled",
+   "class": "az az-disabled",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Disabled status",
+   "keywords": [
+    "off",
+    "inactive"
+   ]
+  },
+  {
+   "name": "az-enabled",
+   "class": "az az-enabled",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Enabled status",
+   "keywords": [
+    "on",
+    "active"
+   ]
+  },
+  {
+   "name": "az-hourglass",
+   "class": "az az-hourglass",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Waiting, pending or time running",
+   "keywords": [
+    "wait"
+   ]
+  },
+  {
+   "name": "az-info",
+   "class": "az az-info",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Information",
+   "keywords": [
+    "help",
+    "about"
+   ]
+  },
+  {
+   "name": "az-question",
+   "class": "az az-question",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Help or question",
+   "keywords": [
+    "faq",
+    "support"
+   ]
+  },
+  {
+   "name": "az-spinner",
+   "class": "az az-spinner",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Loading in progress",
+   "keywords": [
+    "busy"
+   ]
+  },
+  {
+   "name": "az-spinner-dotted",
+   "class": "az az-spinner-dotted",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Loading in progress",
+   "keywords": [
+    "busy"
+   ]
+  },
+  {
+   "name": "az-square-check",
+   "class": "az az-square-check",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Checked or selected",
+   "keywords": [
+    "checkbox",
+    "done",
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "az-triangle-alert",
+   "class": "az az-triangle-alert",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Warning",
+   "keywords": [
+    "exclamation",
+    "caution",
+    "notification",
+    "exclamation triangle"
+   ]
+  },
+  {
+   "name": "az-verified",
+   "class": "az az-verified",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Verified",
+   "keywords": [
+    "check",
+    "approved",
+    "badge",
+    "digital certificates"
+   ]
+  },
+  {
+   "name": "az-clipboard",
+   "class": "az az-clipboard",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Clipboard or paste",
+   "keywords": [
+    "copy"
+   ]
+  },
+  {
+   "name": "az-file",
+   "class": "az az-file",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "File or document",
+   "keywords": [
+    "page",
+    "file o"
+   ]
+  },
+  {
+   "name": "az-file-arrow-up",
+   "class": "az az-file-arrow-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Upload a file",
+   "keywords": [
     "document",
     "page",
     "direction",
@@ -2039,12 +2277,13 @@
    ]
   },
   {
-   "name": "ai-file-check",
-   "class": "ai ai-file-check",
+   "name": "az-file-check",
+   "class": "az az-file-check",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "File approved or verified",
    "keywords": [
-    "file",
-    "check",
     "document",
     "page",
     "done",
@@ -2054,663 +2293,475 @@
    ]
   },
   {
-   "name": "ai-file-excel",
-   "class": "ai ai-file-excel",
+   "name": "az-file-excel",
+   "class": "az az-file-excel",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Spreadsheet or Excel file",
    "keywords": [
-    "file",
-    "excel",
     "document",
     "page"
    ]
   },
   {
-   "name": "ai-file-export",
-   "class": "ai ai-file-export",
+   "name": "az-file-export",
+   "class": "az az-file-export",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Export to a file",
    "keywords": [
-    "file",
-    "export",
     "document",
     "page"
    ]
   },
   {
-   "name": "ai-file-import",
-   "class": "ai ai-file-import",
+   "name": "az-file-import",
+   "class": "az az-file-import",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Import from a file",
    "keywords": [
-    "file",
-    "import",
     "document",
     "page"
    ]
   },
   {
-   "name": "ai-file-pdf",
-   "class": "ai ai-file-pdf",
+   "name": "az-file-pdf",
+   "class": "az az-file-pdf",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "PDF file",
    "keywords": [
-    "file",
-    "pdf",
     "document",
     "page"
    ]
   },
   {
-   "name": "ai-file-pen",
-   "class": "ai ai-file-pen",
+   "name": "az-file-pen",
+   "class": "az az-file-pen",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Edit a file",
    "keywords": [
-    "file",
-    "pen",
     "document",
     "page",
-    "edit",
     "write"
    ]
   },
   {
-   "name": "ai-file-plus",
-   "class": "ai ai-file-plus",
+   "name": "az-file-plus",
+   "class": "az az-file-plus",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Create a new file",
    "keywords": [
-    "file",
-    "plus",
     "document",
     "page",
-    "add",
-    "create",
-    "new"
+    "add"
    ]
   },
   {
-   "name": "ai-file-word",
-   "class": "ai ai-file-word",
+   "name": "az-file-word",
+   "class": "az az-file-word",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Word document file",
    "keywords": [
-    "file",
-    "word",
-    "document",
     "page"
    ]
   },
   {
-   "name": "ai-file",
-   "class": "ai ai-file",
+   "name": "az-folder",
+   "class": "az az-folder",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Folder",
    "keywords": [
-    "document",
-    "page"
-   ]
-  },
-  {
-   "name": "ai-filter-fill",
-   "class": "ai ai-filter-fill",
-   "set": "azionicons",
-   "keywords": [
-    "filter",
-    "fill",
-    "funnel",
-    "refine",
-    "narrow"
-   ]
-  },
-  {
-   "name": "ai-filter-off",
-   "class": "ai ai-filter-off",
-   "set": "azionicons",
-   "keywords": [
-    "filter",
-    "off",
-    "funnel",
-    "refine",
-    "narrow"
-   ]
-  },
-  {
-   "name": "ai-filter",
-   "class": "ai ai-filter",
-   "set": "azionicons",
-   "keywords": [
-    "funnel",
-    "refine",
-    "narrow"
-   ]
-  },
-  {
-   "name": "ai-flag-fill",
-   "class": "ai ai-flag-fill",
-   "set": "azionicons",
-   "keywords": [
-    "flag",
-    "fill",
-    "report",
-    "mark"
-   ]
-  },
-  {
-   "name": "ai-flag",
-   "class": "ai ai-flag",
-   "set": "azionicons",
-   "keywords": [
-    "report",
-    "mark"
-   ]
-  },
-  {
-   "name": "ai-folder-open",
-   "class": "ai ai-folder-open",
-   "set": "azionicons",
-   "keywords": [
-    "folder",
-    "open",
     "directory",
     "files"
    ]
   },
   {
-   "name": "ai-folder-plus",
-   "class": "ai ai-folder-plus",
+   "name": "az-folder-open",
+   "class": "az az-folder-open",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Open folder",
    "keywords": [
-    "folder",
-    "plus",
+    "directory",
+    "files"
+   ]
+  },
+  {
+   "name": "az-folder-plus",
+   "class": "az az-folder-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Create a new folder",
+   "keywords": [
     "directory",
     "files",
-    "add",
-    "create",
-    "new"
+    "add"
    ]
   },
   {
-   "name": "ai-folder",
-   "class": "ai ai-folder",
+   "name": "az-json",
+   "class": "az az-json",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "JSON or code object",
    "keywords": [
-    "directory",
-    "files"
+    "data",
+    "format"
    ]
   },
   {
-   "name": "ai-forward",
-   "class": "ai ai-forward",
+   "name": "az-json-text",
+   "class": "az az-json-text",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "JSON as a file type",
    "keywords": [
-    "next",
-    "skip"
-   ]
-  },
-  {
-   "name": "ai-gateway",
-   "class": "ai ai-gateway",
-   "set": "azionicons",
-   "keywords": [
-    "proxy",
-    "api",
-    "routing"
-   ]
-  },
-  {
-   "name": "ai-gatsby",
-   "class": "ai ai-gatsby",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-gauge",
-   "class": "ai ai-gauge",
-   "set": "azionicons",
-   "keywords": [
-    "performance",
-    "speed",
-    "meter"
-   ]
-  },
-  {
-   "name": "ai-gemini",
-   "class": "ai ai-gemini",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-gift",
-   "class": "ai ai-gift",
-   "set": "azionicons",
-   "keywords": [
-    "present",
-    "reward"
-   ]
-  },
-  {
-   "name": "ai-git-branch-delete",
-   "class": "ai ai-git-branch-delete",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "branch",
-    "delete",
-    "version control",
-    "source",
-    "repository",
-    "version",
-    "remove",
-    "erase"
-   ]
-  },
-  {
-   "name": "ai-git-branch-plus",
-   "class": "ai ai-git-branch-plus",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "branch",
-    "plus",
-    "version control",
-    "source",
-    "repository",
-    "version",
-    "add",
-    "create",
-    "new"
-   ]
-  },
-  {
-   "name": "ai-git-branch",
-   "class": "ai ai-git-branch",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "branch",
-    "version control",
-    "source",
-    "repository",
-    "version"
-   ]
-  },
-  {
-   "name": "ai-git-cherry-pick",
-   "class": "ai ai-git-cherry-pick",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "cherry",
-    "pick",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-commit",
-   "class": "ai ai-git-commit",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "commit",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-compare",
-   "class": "ai ai-git-compare",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "compare",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-diff",
-   "class": "ai ai-git-diff",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "diff",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-fork",
-   "class": "ai ai-git-fork",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "fork",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-graph",
-   "class": "ai ai-git-graph",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "graph",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-merge-conflict",
-   "class": "ai ai-git-merge-conflict",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "merge",
-    "conflict",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-merge",
-   "class": "ai ai-git-merge",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "merge",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-pull-request-closed",
-   "class": "ai ai-git-pull-request-closed",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "pull",
-    "request",
-    "closed",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-pull-request-draft",
-   "class": "ai ai-git-pull-request-draft",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "pull",
-    "request",
-    "draft",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-pull-request",
-   "class": "ai ai-git-pull-request",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "pull",
-    "request",
-    "version control",
-    "source",
-    "repository"
-   ]
-  },
-  {
-   "name": "ai-git-repository",
-   "class": "ai ai-git-repository",
-   "set": "azionicons",
-   "keywords": [
-    "git",
-    "repository",
-    "version control",
-    "source",
+    "data",
+    "format",
     "code"
    ]
   },
   {
-   "name": "ai-github",
-   "class": "ai ai-github",
+   "name": "az-paperclip",
+   "class": "az az-paperclip",
    "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Attachment",
    "keywords": [
-    "brand",
-    "logo"
+    "attach"
    ]
   },
   {
-   "name": "ai-globe",
-   "class": "ai ai-globe",
+   "name": "az-backward",
+   "class": "az az-backward",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Rewind or skip back",
    "keywords": [
-    "world",
-    "global",
-    "language",
-    "web"
+    "previous"
    ]
   },
   {
-   "name": "ai-google",
-   "class": "ai ai-google",
+   "name": "az-camera",
+   "class": "az az-camera",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Take a photo",
    "keywords": [
-    "brand",
-    "logo"
+    "picture"
    ]
   },
   {
-   "name": "ai-graduation-cap",
-   "class": "ai ai-graduation-cap",
+   "name": "az-circle-pause",
+   "class": "az az-circle-pause",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Pause",
    "keywords": [
-    "graduation",
-    "cap",
-    "learn",
-    "education",
-    "course"
+    "status",
+    "shape",
+    "stop",
+    "hold"
    ]
   },
   {
-   "name": "ai-graphql",
-   "class": "ai ai-graphql",
+   "name": "az-circle-play",
+   "class": "az az-circle-play",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Play or start",
    "keywords": [
-    "brand",
-    "logo"
+    "status",
+    "shape",
+    "run",
+    "video"
    ]
   },
   {
-   "name": "ai-grok",
-   "class": "ai ai-grok",
+   "name": "az-circle-stop",
+   "class": "az az-circle-stop",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Stop",
    "keywords": [
-    "brand",
-    "logo"
+    "status",
+    "shape",
+    "halt",
+    "end"
    ]
   },
   {
-   "name": "ai-hammer",
-   "class": "ai ai-hammer",
+   "name": "az-forward",
+   "class": "az az-forward",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Fast forward or skip ahead",
    "keywords": [
-    "build",
-    "tools"
+    "next"
    ]
   },
   {
-   "name": "ai-hash",
-   "class": "ai ai-hash",
+   "name": "az-image",
+   "class": "az az-image",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Image or photo",
    "keywords": [
-    "hashtag",
-    "tag",
-    "number",
-    "channel"
+    "picture",
+    "media"
    ]
   },
   {
-   "name": "ai-headphones",
-   "class": "ai ai-headphones",
+   "name": "az-images",
+   "class": "az az-images",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Image gallery or multiple images",
    "keywords": [
-    "support",
+    "pictures",
+    "photos",
+    "media"
+   ]
+  },
+  {
+   "name": "az-microphone",
+   "class": "az az-microphone",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Microphone, voice input or recording",
+   "keywords": [
+    "audio",
+    "record"
+   ]
+  },
+  {
+   "name": "az-pause",
+   "class": "az az-pause",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Pause",
+   "keywords": [
+    "stop",
+    "hold"
+   ]
+  },
+  {
+   "name": "az-play",
+   "class": "az az-play",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Play",
+   "keywords": [
+    "start",
+    "run",
+    "video"
+   ]
+  },
+  {
+   "name": "az-skip-back",
+   "class": "az az-skip-back",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Skip to the start or previous track",
+   "keywords": [
+    "next",
+    "fast backward",
+    "step backward alt"
+   ]
+  },
+  {
+   "name": "az-skip-forward",
+   "class": "az az-skip-forward",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Skip to the end or next track",
+   "keywords": [
+    "previous",
+    "fast forward",
+    "step forward alt"
+   ]
+  },
+  {
+   "name": "az-step-back",
+   "class": "az az-step-back",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Skip back or previous",
+   "keywords": [
+    "step backward"
+   ]
+  },
+  {
+   "name": "az-step-forward",
+   "class": "az az-step-forward",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Skip forward or next",
+   "keywords": [
+    "media"
+   ]
+  },
+  {
+   "name": "az-stop",
+   "class": "az az-stop",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Stop playback",
+   "keywords": [
+    "halt",
+    "end"
+   ]
+  },
+  {
+   "name": "az-video",
+   "class": "az az-video",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Video",
+   "keywords": [
+    "movie",
+    "media"
+   ]
+  },
+  {
+   "name": "az-volume-down",
+   "class": "az az-volume-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Lower the volume",
+   "keywords": [
+    "sound",
     "audio"
    ]
   },
   {
-   "name": "ai-heart-fill",
-   "class": "ai ai-heart-fill",
+   "name": "az-volume-off",
+   "class": "az az-volume-off",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Mute",
    "keywords": [
-    "heart",
-    "fill",
-    "like",
-    "favorite",
-    "love"
+    "sound",
+    "audio"
    ]
   },
   {
-   "name": "ai-heart",
-   "class": "ai ai-heart",
+   "name": "az-volume-up",
+   "class": "az az-volume-up",
    "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Raise the volume",
    "keywords": [
-    "like",
-    "favorite",
-    "love"
+    "sound",
+    "audio"
    ]
   },
   {
-   "name": "ai-hexo",
-   "class": "ai ai-hexo",
+   "name": "az-at",
+   "class": "az az-at",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Email address or mention",
    "keywords": [
-    "brand",
-    "logo"
+    "communication"
    ]
   },
   {
-   "name": "ai-history",
-   "class": "ai ai-history",
+   "name": "az-bell",
+   "class": "az az-bell",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Notifications",
    "keywords": [
-    "recent",
-    "activity",
-    "audit",
-    "log"
+    "notification",
+    "alert"
    ]
   },
   {
-   "name": "ai-home",
-   "class": "ai ai-home",
+   "name": "az-bell-off",
+   "class": "az az-bell-off",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Notifications turned off",
    "keywords": [
-    "house",
-    "start",
-    "dashboard"
+    "notification",
+    "alert",
+    "bell slash"
    ]
   },
   {
-   "name": "ai-hono",
-   "class": "ai ai-hono",
+   "name": "az-comment",
+   "class": "az az-comment",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Comment or message",
    "keywords": [
-    "brand",
-    "logo"
+    "chat",
+    "feedback"
    ]
   },
   {
-   "name": "ai-hourglass",
-   "class": "ai ai-hourglass",
+   "name": "az-comments",
+   "class": "az az-comments",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Conversation or discussion",
    "keywords": [
-    "wait",
-    "pending",
-    "time"
+    "chat",
+    "messages"
    ]
   },
   {
-   "name": "ai-html",
-   "class": "ai ai-html",
+   "name": "az-inbox",
+   "class": "az az-inbox",
    "set": "azionicons",
-   "keywords": [
-    "markup",
-    "web",
-    "brand"
-   ]
-  },
-  {
-   "name": "ai-hugo",
-   "class": "ai ai-hugo",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-id-card",
-   "class": "ai ai-id-card",
-   "set": "azionicons",
-   "keywords": [
-    "card",
-    "identity",
-    "profile",
-    "account"
-   ]
-  },
-  {
-   "name": "ai-image-processor",
-   "class": "ai ai-image-processor",
-   "set": "azionicons",
-   "keywords": [
-    "image",
-    "processor",
-    "picture",
-    "photo",
-    "media"
-   ]
-  },
-  {
-   "name": "ai-image",
-   "class": "ai ai-image",
-   "set": "azionicons",
-   "keywords": [
-    "picture",
-    "photo",
-    "media"
-   ]
-  },
-  {
-   "name": "ai-images",
-   "class": "ai ai-images",
-   "set": "azionicons",
-   "keywords": [
-    "pictures",
-    "photos",
-    "gallery",
-    "media"
-   ]
-  },
-  {
-   "name": "ai-inbox",
-   "class": "ai ai-inbox",
-   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Inbox or received items",
    "keywords": [
     "messages",
     "mail",
@@ -2718,163 +2769,646 @@
    ]
   },
   {
-   "name": "ai-indian-rupee",
-   "class": "ai ai-indian-rupee",
+   "name": "az-mail",
+   "class": "az az-mail",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Email",
    "keywords": [
-    "indian",
-    "rupee"
+    "envelope",
+    "message"
    ]
   },
   {
-   "name": "ai-info",
-   "class": "ai ai-info",
+   "name": "az-megaphone",
+   "class": "az az-megaphone",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Announcement or marketing",
    "keywords": [
-    "information",
-    "help",
-    "about"
+    "news"
    ]
   },
   {
-   "name": "ai-instagram",
-   "class": "ai ai-instagram",
+   "name": "az-phone",
+   "class": "az az-phone",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Phone call",
    "keywords": [
-    "brand",
-    "logo"
+    "contact"
    ]
   },
   {
-   "name": "ai-instructor",
-   "class": "ai ai-instructor",
+   "name": "az-reply",
+   "class": "az az-reply",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Reply to a message",
    "keywords": [
-    "teacher",
-    "training",
-    "course"
+    "answer",
+    "respond"
    ]
   },
   {
-   "name": "ai-integration-services",
-   "class": "ai ai-integration-services",
+   "name": "az-rss",
+   "class": "az az-rss",
    "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "RSS feed",
+   "keywords": [
+    "subscribe",
+    "news"
+   ]
+  },
+  {
+   "name": "az-send",
+   "class": "az az-send",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Send a message",
+   "keywords": [
+    "submit",
+    "paper plane"
+   ]
+  },
+  {
+   "name": "az-webhook",
+   "class": "az az-webhook",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Webhook",
    "keywords": [
     "integration",
-    "services"
+    "callback",
+    "events"
    ]
   },
   {
-   "name": "ai-jekyll",
-   "class": "ai ai-jekyll",
+   "name": "az-barcode",
+   "class": "az az-barcode",
    "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Barcode or product code",
    "keywords": [
-    "brand",
-    "logo"
+    "scan"
    ]
   },
   {
-   "name": "ai-json-text",
-   "class": "ai ai-json-text",
+   "name": "az-cart-arrow-down",
+   "class": "az az-cart-arrow-down",
    "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Add to cart",
    "keywords": [
-    "json",
-    "text",
+    "shopping",
+    "commerce",
+    "buy",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-cart-minus",
+   "class": "az az-cart-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Remove from cart",
+   "keywords": [
+    "shopping",
+    "commerce",
+    "buy",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "az-cart-plus",
+   "class": "az az-cart-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Add to cart",
+   "keywords": [
+    "shopping",
+    "commerce",
+    "buy",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "az-credit-card",
+   "class": "az az-credit-card",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Payment or billing",
+   "keywords": [
+    "commerce"
+   ]
+  },
+  {
+   "name": "az-dollar",
+   "class": "az az-dollar",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Money, price or USD",
+   "keywords": [
+    "billing",
+    "currency"
+   ]
+  },
+  {
+   "name": "az-euro",
+   "class": "az az-euro",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Money, price or EUR",
+   "keywords": [
+    "currency"
+   ]
+  },
+  {
+   "name": "az-gift",
+   "class": "az az-gift",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Gift, reward or promotion",
+   "keywords": [
+    "present"
+   ]
+  },
+  {
+   "name": "az-indian-rupee",
+   "class": "az az-indian-rupee",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Indian rupee currency",
+   "keywords": [
+    "commerce"
+   ]
+  },
+  {
+   "name": "az-money-bill",
+   "class": "az az-money-bill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Money, payment or cash",
+   "keywords": [
+    "billing"
+   ]
+  },
+  {
+   "name": "az-pound",
+   "class": "az az-pound",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "British pound currency",
+   "keywords": [
+    "money",
+    "gbp"
+   ]
+  },
+  {
+   "name": "az-receipt",
+   "class": "az az-receipt",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Receipt, invoice or billing",
+   "keywords": [
+    "payment"
+   ]
+  },
+  {
+   "name": "az-shop",
+   "class": "az az-shop",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "A shop or store",
+   "keywords": [
+    "commerce"
+   ]
+  },
+  {
+   "name": "az-shopping-bag",
+   "class": "az az-shopping-bag",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Shopping bag or purchases",
+   "keywords": [
+    "commerce",
+    "buy"
+   ]
+  },
+  {
+   "name": "az-shopping-cart",
+   "class": "az az-shopping-cart",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Shopping cart",
+   "keywords": [
+    "commerce",
+    "buy"
+   ]
+  },
+  {
+   "name": "az-ticket",
+   "class": "az az-ticket",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "A ticket or pass",
+   "keywords": [
+    "support",
+    "issue"
+   ]
+  },
+  {
+   "name": "az-turkish-lira",
+   "class": "az az-turkish-lira",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Turkish lira currency",
+   "keywords": [
+    "commerce"
+   ]
+  },
+  {
+   "name": "az-wallet",
+   "class": "az az-wallet",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Wallet or payment method",
+   "keywords": [
+    "money"
+   ]
+  },
+  {
+   "name": "az-address-book",
+   "class": "az az-address-book",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Contacts or address book",
+   "keywords": [
+    "people",
+    "docs",
+    "documentation",
+    "read"
+   ]
+  },
+  {
+   "name": "az-face-smile",
+   "class": "az az-face-smile",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Happy, emoji or positive feedback",
+   "keywords": [
+    "person"
+   ]
+  },
+  {
+   "name": "az-id-card",
+   "class": "az az-id-card",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Identity, profile or account details",
+   "keywords": [
+    "person"
+   ]
+  },
+  {
+   "name": "az-mars",
+   "class": "az az-mars",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Male gender",
+   "keywords": [
+    "person"
+   ]
+  },
+  {
+   "name": "az-user",
+   "class": "az az-user",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "A user or account",
+   "keywords": [
+    "person",
+    "profile"
+   ]
+  },
+  {
+   "name": "az-user-minus",
+   "class": "az az-user-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Remove a user",
+   "keywords": [
+    "person",
+    "account",
+    "profile",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "az-user-pen",
+   "class": "az az-user-pen",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Edit a user",
+   "keywords": [
+    "person",
+    "account",
+    "profile",
+    "write"
+   ]
+  },
+  {
+   "name": "az-user-plus",
+   "class": "az az-user-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Add a user",
+   "keywords": [
+    "person",
+    "account",
+    "profile",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "az-users",
+   "class": "az az-users",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Users or a group",
+   "keywords": [
+    "people",
+    "team",
+    "members"
+   ]
+  },
+  {
+   "name": "az-venus",
+   "class": "az az-venus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Female",
+   "keywords": [
+    "gender"
+   ]
+  },
+  {
+   "name": "az-desktop",
+   "class": "az az-desktop",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Desktop computer or desktop view",
+   "keywords": [
+    "screen",
+    "device"
+   ]
+  },
+  {
+   "name": "az-headphones",
+   "class": "az az-headphones",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Audio, listening or support",
+   "keywords": [
+    "device"
+   ]
+  },
+  {
+   "name": "az-microchip",
+   "class": "az az-microchip",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Processor or hardware",
+   "keywords": [
+    "compute"
+   ]
+  },
+  {
+   "name": "az-microchip-ai",
+   "class": "az az-microchip-ai",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "AI processing or AI model",
+   "keywords": [
+    "hardware",
+    "processor",
+    "compute",
+    "artificial intelligence",
+    "llm"
+   ]
+  },
+  {
+   "name": "az-mobile",
+   "class": "az az-mobile",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Mobile device",
+   "keywords": [
+    "phone",
+    "smartphone"
+   ]
+  },
+  {
+   "name": "az-print",
+   "class": "az az-print",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Print",
+   "keywords": [
+    "printer"
+   ]
+  },
+  {
+   "name": "az-server",
+   "class": "az az-server",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "A server or host",
+   "keywords": [
+    "infrastructure",
+    "compute"
+   ]
+  },
+  {
+   "name": "az-tablet",
+   "class": "az az-tablet",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "A tablet device",
+   "keywords": [
+    "ipad"
+   ]
+  },
+  {
+   "name": "az-wifi",
+   "class": "az az-wifi",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Wi-Fi or wireless connection",
+   "keywords": [
+    "network"
+   ]
+  },
+  {
+   "name": "az-calculator",
+   "class": "az az-calculator",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Calculate or estimate",
+   "keywords": [
+    "math",
+    "pricing"
+   ]
+  },
+  {
+   "name": "az-chart-bar",
+   "class": "az az-chart-bar",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Bar chart",
+   "keywords": [
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "az-chart-line",
+   "class": "az az-chart-line",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Line chart or trend",
+   "keywords": [
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "az-chart-pie",
+   "class": "az az-chart-pie",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Pie chart or share",
+   "keywords": [
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "az-chart-scatter",
+   "class": "az az-chart-scatter",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Scatter plot",
+   "keywords": [
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "az-database",
+   "class": "az az-database",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "A database in general (not a product)",
+   "keywords": [
     "data",
-    "format",
-    "code"
+    "storage",
+    "sql"
    ]
   },
   {
-   "name": "ai-json",
-   "class": "ai ai-json",
+   "name": "az-gauge",
+   "class": "az az-gauge",
    "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Gauge, performance or speed metric",
    "keywords": [
-    "data",
-    "format",
-    "code"
+    "meter"
    ]
   },
   {
-   "name": "ai-key",
-   "class": "ai ai-key",
+   "name": "az-list",
+   "class": "az az-list",
    "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "List or list view",
    "keywords": [
-    "password",
-    "token",
-    "secret",
-    "credential"
+    "items",
+    "bullets"
    ]
   },
   {
-   "name": "ai-language",
-   "class": "ai ai-language",
+   "name": "az-list-check",
+   "class": "az az-list-check",
    "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Checklist or completed tasks",
    "keywords": [
-    "translate",
-    "locale",
-    "i18n"
-   ]
-  },
-  {
-   "name": "ai-layers",
-   "class": "ai ai-layers",
-   "set": "azionicons",
-   "keywords": [
-    "stack",
-    "levels"
-   ]
-  },
-  {
-   "name": "ai-layout-grid",
-   "class": "ai ai-layout-grid",
-   "set": "azionicons",
-   "keywords": [
-    "layout",
-    "grid",
-    "tiles",
-    "dashboard"
-   ]
-  },
-  {
-   "name": "ai-lightbulb",
-   "class": "ai ai-lightbulb",
-   "set": "azionicons",
-   "keywords": [
-    "idea",
-    "tip",
-    "hint"
-   ]
-  },
-  {
-   "name": "ai-link",
-   "class": "ai ai-link",
-   "set": "azionicons",
-   "keywords": [
-    "url",
-    "chain",
-    "hyperlink"
-   ]
-  },
-  {
-   "name": "ai-linkedin",
-   "class": "ai ai-linkedin",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-list-check",
-   "class": "ai ai-list-check",
-   "set": "azionicons",
-   "keywords": [
-    "list",
-    "check",
-    "tasks",
     "todo",
-    "checklist",
     "items",
     "bullets",
     "done",
@@ -2884,1202 +3418,37 @@
    ]
   },
   {
-   "name": "ai-list",
-   "class": "ai ai-list",
+   "name": "az-sheet",
+   "class": "az az-sheet",
    "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "A table or spreadsheet",
    "keywords": [
-    "items",
-    "bullets"
+    "grid",
+    "cells",
+    "datasheet"
    ]
   },
   {
-   "name": "ai-live-ingest",
-   "class": "ai ai-live-ingest",
+   "name": "az-sql",
+   "class": "az az-sql",
    "set": "azionicons",
-   "keywords": [
-    "live",
-    "ingest"
-   ]
-  },
-  {
-   "name": "ai-load-balancer",
-   "class": "ai ai-load-balancer",
-   "set": "azionicons",
-   "keywords": [
-    "load",
-    "balancer",
-    "traffic",
-    "distribution",
-    "origin"
-   ]
-  },
-  {
-   "name": "ai-lock-open",
-   "class": "ai ai-lock-open",
-   "set": "azionicons",
-   "keywords": [
-    "lock",
-    "open",
-    "unlock",
-    "public",
-    "unlocked",
-    "secure",
-    "private",
-    "password",
-    "locked"
-   ]
-  },
-  {
-   "name": "ai-lock",
-   "class": "ai ai-lock",
-   "set": "azionicons",
-   "keywords": [
-    "secure",
-    "private",
-    "password",
-    "locked"
-   ]
-  },
-  {
-   "name": "ai-log-in",
-   "class": "ai ai-log-in",
-   "set": "azionicons",
-   "keywords": [
-    "log",
-    "login",
-    "sign in",
-    "enter"
-   ]
-  },
-  {
-   "name": "ai-log-out",
-   "class": "ai ai-log-out",
-   "set": "azionicons",
-   "keywords": [
-    "log",
-    "out",
-    "logout",
-    "sign out",
-    "exit"
-   ]
-  },
-  {
-   "name": "ai-lora",
-   "class": "ai ai-lora",
-   "set": "azionicons",
-   "keywords": [
-    "fine-tuning",
-    "ai",
-    "model"
-   ]
-  },
-  {
-   "name": "ai-mail",
-   "class": "ai ai-mail",
-   "set": "azionicons",
-   "keywords": [
-    "email",
-    "envelope",
-    "message"
-   ]
-  },
-  {
-   "name": "ai-map-pin",
-   "class": "ai ai-map-pin",
-   "set": "azionicons",
-   "keywords": [
-    "map",
-    "pin",
-    "location",
-    "marker",
-    "place",
-    "geo",
-    "thumbtack",
-    "pushpin",
-    "fixed"
-   ]
-  },
-  {
-   "name": "ai-map",
-   "class": "ai ai-map",
-   "set": "azionicons",
-   "keywords": [
-    "location",
-    "geo"
-   ]
-  },
-  {
-   "name": "ai-marketplace",
-   "class": "ai ai-marketplace",
-   "set": "azionicons",
-   "keywords": [
-    "templates",
-    "store",
-    "integrations"
-   ]
-  },
-  {
-   "name": "ai-mars",
-   "class": "ai ai-mars",
-   "set": "azionicons",
-   "keywords": [
-    "male",
-    "gender"
-   ]
-  },
-  {
-   "name": "ai-maximize",
-   "class": "ai ai-maximize",
-   "set": "azionicons",
-   "keywords": [
-    "fullscreen",
-    "expand",
-    "enlarge"
-   ]
-  },
-  {
-   "name": "ai-mcp",
-   "class": "ai ai-mcp",
-   "set": "azionicons",
-   "keywords": [
-    "model context protocol",
-    "agent",
-    "integration",
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-medium",
-   "class": "ai ai-medium",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-megaphone",
-   "class": "ai ai-megaphone",
-   "set": "azionicons",
-   "keywords": [
-    "announcement",
-    "marketing",
-    "news"
-   ]
-  },
-  {
-   "name": "ai-menu",
-   "class": "ai ai-menu",
-   "set": "azionicons",
-   "keywords": [
-    "hamburger",
-    "navigation",
-    "bars"
-   ]
-  },
-  {
-   "name": "ai-meta",
-   "class": "ai ai-meta",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-microchip-ai",
-   "class": "ai ai-microchip-ai",
-   "set": "azionicons",
-   "keywords": [
-    "microchip",
-    "hardware",
-    "processor",
-    "compute",
-    "artificial intelligence",
-    "llm",
-    "model"
-   ]
-  },
-  {
-   "name": "ai-microchip",
-   "class": "ai ai-microchip",
-   "set": "azionicons",
-   "keywords": [
-    "hardware",
-    "processor",
-    "compute"
-   ]
-  },
-  {
-   "name": "ai-microphone",
-   "class": "ai ai-microphone",
-   "set": "azionicons",
-   "keywords": [
-    "audio",
-    "voice",
-    "record"
-   ]
-  },
-  {
-   "name": "ai-microsoft-copilot",
-   "class": "ai ai-microsoft-copilot",
-   "set": "azionicons",
-   "keywords": [
-    "microsoft",
-    "copilot",
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-minimize",
-   "class": "ai ai-minimize",
-   "set": "azionicons",
-   "keywords": [
-    "exit fullscreen",
-    "collapse",
-    "shrink"
-   ]
-  },
-  {
-   "name": "ai-minus",
-   "class": "ai ai-minus",
-   "set": "azionicons",
-   "keywords": [
-    "remove",
-    "subtract",
-    "collapse"
-   ]
-  },
-  {
-   "name": "ai-mistral",
-   "class": "ai ai-mistral",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-mobile",
-   "class": "ai ai-mobile",
-   "set": "azionicons",
-   "keywords": [
-    "phone",
-    "device",
-    "smartphone"
-   ]
-  },
-  {
-   "name": "ai-money-bill",
-   "class": "ai ai-money-bill",
-   "set": "azionicons",
-   "keywords": [
-    "money",
-    "bill",
-    "payment",
-    "billing",
-    "cash"
-   ]
-  },
-  {
-   "name": "ai-moon",
-   "class": "ai ai-moon",
-   "set": "azionicons",
-   "keywords": [
-    "dark mode",
-    "night",
-    "theme"
-   ]
-  },
-  {
-   "name": "ai-move-horizontal",
-   "class": "ai ai-move-horizontal",
-   "set": "azionicons",
-   "keywords": [
-    "move",
-    "horizontal",
-    "drag",
-    "reposition",
-    "arrows"
-   ]
-  },
-  {
-   "name": "ai-move-vertical",
-   "class": "ai ai-move-vertical",
-   "set": "azionicons",
-   "keywords": [
-    "move",
-    "vertical",
-    "drag",
-    "reposition",
-    "arrows"
-   ]
-  },
-  {
-   "name": "ai-move",
-   "class": "ai ai-move",
-   "set": "azionicons",
-   "keywords": [
-    "drag",
-    "reposition",
-    "arrows"
-   ]
-  },
-  {
-   "name": "ai-network-lists",
-   "class": "ai ai-network-lists",
-   "set": "azionicons",
-   "keywords": [
-    "network",
-    "lists",
-    "connectivity"
-   ]
-  },
-  {
-   "name": "ai-nextjs",
-   "class": "ai ai-nextjs",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-nitro",
-   "class": "ai ai-nitro",
-   "set": "azionicons",
-   "keywords": [
-    "server",
-    "framework",
-    "unjs",
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-nuxt",
-   "class": "ai ai-nuxt",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-observe-pillar",
-   "class": "ai ai-observe-pillar",
-   "set": "azionicons",
-   "keywords": [
-    "observe",
-    "pillar",
-    "observability",
-    "monitoring",
-    "product family"
-   ]
-  },
-  {
-   "name": "ai-openai",
-   "class": "ai ai-openai",
-   "set": "azionicons",
-   "keywords": [
-    "chatgpt",
-    "gpt",
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-origin-accelerator",
-   "class": "ai ai-origin-accelerator",
-   "set": "azionicons",
-   "keywords": [
-    "origin",
-    "accelerator",
-    "backend",
-    "server",
-    "performance",
-    "speed",
-    "product"
-   ]
-  },
-  {
-   "name": "ai-origin-shield",
-   "class": "ai ai-origin-shield",
-   "set": "azionicons",
-   "keywords": [
-    "origin",
-    "shield",
-    "backend",
-    "server",
-    "security",
-    "protection",
-    "safe"
-   ]
-  },
-  {
-   "name": "ai-palette",
-   "class": "ai ai-palette",
-   "set": "azionicons",
-   "keywords": [
-    "color",
-    "theme",
-    "design"
-   ]
-  },
-  {
-   "name": "ai-paperclip",
-   "class": "ai ai-paperclip",
-   "set": "azionicons",
-   "keywords": [
-    "attachment",
-    "attach"
-   ]
-  },
-  {
-   "name": "ai-pause",
-   "class": "ai ai-pause",
-   "set": "azionicons",
-   "keywords": [
-    "stop",
-    "hold"
-   ]
-  },
-  {
-   "name": "ai-pencil",
-   "class": "ai ai-pencil",
-   "set": "azionicons",
-   "keywords": [
-    "edit",
-    "write",
-    "rename"
-   ]
-  },
-  {
-   "name": "ai-percentage",
-   "class": "ai ai-percentage",
-   "set": "azionicons",
-   "keywords": [
-    "percent",
-    "discount",
-    "rate"
-   ]
-  },
-  {
-   "name": "ai-perplexity",
-   "class": "ai ai-perplexity",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-phone",
-   "class": "ai ai-phone",
-   "set": "azionicons",
-   "keywords": [
-    "call",
-    "contact"
-   ]
-  },
-  {
-   "name": "ai-pin",
-   "class": "ai ai-pin",
-   "set": "azionicons",
-   "keywords": [
-    "thumbtack",
-    "pushpin",
-    "fixed"
-   ]
-  },
-  {
-   "name": "ai-play",
-   "class": "ai ai-play",
-   "set": "azionicons",
-   "keywords": [
-    "start",
-    "run",
-    "video"
-   ]
-  },
-  {
-   "name": "ai-plus",
-   "class": "ai ai-plus",
-   "set": "azionicons",
-   "keywords": [
-    "add",
-    "create",
-    "new"
-   ]
-  },
-  {
-   "name": "ai-pound",
-   "class": "ai ai-pound",
-   "set": "azionicons",
-   "keywords": [
-    "currency",
-    "money",
-    "gbp"
-   ]
-  },
-  {
-   "name": "ai-power-off",
-   "class": "ai ai-power-off",
-   "set": "azionicons",
-   "keywords": [
-    "power",
-    "off",
-    "shut down",
-    "logout"
-   ]
-  },
-  {
-   "name": "ai-practices-review",
-   "class": "ai ai-practices-review",
-   "set": "azionicons",
-   "keywords": [
-    "practices",
-    "review"
-   ]
-  },
-  {
-   "name": "ai-preact",
-   "class": "ai ai-preact",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-print",
-   "class": "ai ai-print",
-   "set": "azionicons",
-   "keywords": [
-    "printer"
-   ]
-  },
-  {
-   "name": "ai-professional-services",
-   "class": "ai ai-professional-services",
-   "set": "azionicons",
-   "keywords": [
-    "professional",
-    "services"
-   ]
-  },
-  {
-   "name": "ai-qrcode",
-   "class": "ai ai-qrcode",
-   "set": "azionicons",
-   "keywords": [
-    "qr code",
-    "scan"
-   ]
-  },
-  {
-   "name": "ai-question",
-   "class": "ai ai-question",
-   "set": "azionicons",
-   "keywords": [
-    "help",
-    "faq",
-    "support"
-   ]
-  },
-  {
-   "name": "ai-qwen",
-   "class": "ai ai-qwen",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-qwik",
-   "class": "ai ai-qwik",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-react",
-   "class": "ai ai-react",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-real-time-events",
-   "class": "ai ai-real-time-events",
-   "set": "azionicons",
-   "keywords": [
-    "real",
-    "time",
-    "events"
-   ]
-  },
-  {
-   "name": "ai-real-time-metrics",
-   "class": "ai ai-real-time-metrics",
-   "set": "azionicons",
-   "keywords": [
-    "real",
-    "time",
-    "metrics",
-    "analytics",
-    "observability",
-    "charts"
-   ]
-  },
-  {
-   "name": "ai-real-time-purge",
-   "class": "ai ai-real-time-purge",
-   "set": "azionicons",
-   "keywords": [
-    "real",
-    "time",
-    "purge",
-    "cache",
-    "clear",
-    "invalidate"
-   ]
-  },
-  {
-   "name": "ai-receipt",
-   "class": "ai ai-receipt",
-   "set": "azionicons",
-   "keywords": [
-    "invoice",
-    "billing",
-    "payment"
-   ]
-  },
-  {
-   "name": "ai-reddit",
-   "class": "ai ai-reddit",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-redis",
-   "class": "ai ai-redis",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-refresh",
-   "class": "ai ai-refresh",
-   "set": "azionicons",
-   "keywords": [
-    "reload",
-    "sync",
-    "update"
-   ]
-  },
-  {
-   "name": "ai-remix",
-   "class": "ai ai-remix",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-replay",
-   "class": "ai ai-replay",
-   "set": "azionicons",
-   "keywords": [
-    "repeat",
-    "retry"
-   ]
-  },
-  {
-   "name": "ai-reply",
-   "class": "ai ai-reply",
-   "set": "azionicons",
-   "keywords": [
-    "answer",
-    "respond"
-   ]
-  },
-  {
-   "name": "ai-rss",
-   "class": "ai ai-rss",
-   "set": "azionicons",
-   "keywords": [
-    "feed",
-    "subscribe",
-    "news"
-   ]
-  },
-  {
-   "name": "ai-rules-engine",
-   "class": "ai ai-rules-engine",
-   "set": "azionicons",
-   "keywords": [
-    "rules",
-    "engine",
-    "logic",
-    "conditions",
-    "behavior"
-   ]
-  },
-  {
-   "name": "ai-sase",
-   "class": "ai ai-sase",
-   "set": "azionicons",
-   "keywords": [
-    "secure access",
-    "network security",
-    "zero trust"
-   ]
-  },
-  {
-   "name": "ai-save",
-   "class": "ai ai-save",
-   "set": "azionicons",
-   "keywords": [
-    "disk",
-    "store"
-   ]
-  },
-  {
-   "name": "ai-scissors",
-   "class": "ai ai-scissors",
-   "set": "azionicons",
-   "keywords": [
-    "cut"
-   ]
-  },
-  {
-   "name": "ai-search",
-   "class": "ai ai-search",
-   "set": "azionicons",
-   "keywords": [
-    "find",
-    "magnifier",
-    "lookup"
-   ]
-  },
-  {
-   "name": "ai-secure-pillar",
-   "class": "ai ai-secure-pillar",
-   "set": "azionicons",
-   "keywords": [
-    "secure",
-    "pillar",
-    "security",
-    "protection",
-    "product family"
-   ]
-  },
-  {
-   "name": "ai-security-team",
-   "class": "ai ai-security-team",
-   "set": "azionicons",
-   "keywords": [
-    "security",
-    "team",
-    "protection",
-    "shield"
-   ]
-  },
-  {
-   "name": "ai-send",
-   "class": "ai ai-send",
-   "set": "azionicons",
-   "keywords": [
-    "submit",
-    "paper plane",
-    "message"
-   ]
-  },
-  {
-   "name": "ai-server",
-   "class": "ai ai-server",
-   "set": "azionicons",
-   "keywords": [
-    "host",
-    "infrastructure",
-    "compute"
-   ]
-  },
-  {
-   "name": "ai-settings",
-   "class": "ai ai-settings",
-   "set": "azionicons",
-   "keywords": [
-    "gear",
-    "cog",
-    "preferences",
-    "configuration"
-   ]
-  },
-  {
-   "name": "ai-share",
-   "class": "ai ai-share",
-   "set": "azionicons",
-   "keywords": [
-    "send",
-    "social"
-   ]
-  },
-  {
-   "name": "ai-shield",
-   "class": "ai ai-shield",
-   "set": "azionicons",
-   "keywords": [
-    "security",
-    "protection",
-    "safe"
-   ]
-  },
-  {
-   "name": "ai-shop",
-   "class": "ai ai-shop",
-   "set": "azionicons",
-   "keywords": [
-    "store",
-    "commerce"
-   ]
-  },
-  {
-   "name": "ai-shopping-bag",
-   "class": "ai ai-shopping-bag",
-   "set": "azionicons",
-   "keywords": [
-    "shopping",
-    "bag",
-    "commerce",
-    "buy"
-   ]
-  },
-  {
-   "name": "ai-shopping-cart",
-   "class": "ai ai-shopping-cart",
-   "set": "azionicons",
-   "keywords": [
-    "shopping",
-    "cart",
-    "commerce",
-    "buy"
-   ]
-  },
-  {
-   "name": "ai-signpost",
-   "class": "ai ai-signpost",
-   "set": "azionicons",
-   "keywords": [
-    "directions",
-    "route",
-    "navigation"
-   ]
-  },
-  {
-   "name": "ai-sitemap",
-   "class": "ai ai-sitemap",
-   "set": "azionicons",
-   "keywords": [
-    "hierarchy",
-    "tree",
-    "structure"
-   ]
-  },
-  {
-   "name": "ai-slack",
-   "class": "ai ai-slack",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-sliders-horizontal",
-   "class": "ai ai-sliders-horizontal",
-   "set": "azionicons",
-   "keywords": [
-    "sliders",
-    "horizontal",
-    "settings",
-    "controls",
-    "adjust",
-    "filters"
-   ]
-  },
-  {
-   "name": "ai-sliders-vertical",
-   "class": "ai ai-sliders-vertical",
-   "set": "azionicons",
-   "keywords": [
-    "sliders",
-    "vertical",
-    "settings",
-    "controls",
-    "adjust",
-    "filters"
-   ]
-  },
-  {
-   "name": "ai-sort-down-fill",
-   "class": "ai ai-sort-down-fill",
-   "set": "azionicons",
-   "keywords": [
-    "sort",
-    "down",
-    "fill",
-    "order",
-    "arrange"
-   ]
-  },
-  {
-   "name": "ai-sort-off",
-   "class": "ai ai-sort-off",
-   "set": "azionicons",
-   "keywords": [
-    "sort",
-    "off",
-    "order",
-    "arrange"
-   ]
-  },
-  {
-   "name": "ai-sort-up-fill",
-   "class": "ai ai-sort-up-fill",
-   "set": "azionicons",
-   "keywords": [
-    "sort",
-    "fill",
-    "order",
-    "arrange"
-   ]
-  },
-  {
-   "name": "ai-sort",
-   "class": "ai ai-sort",
-   "set": "azionicons",
-   "keywords": [
-    "order",
-    "arrange"
-   ]
-  },
-  {
-   "name": "ai-sparkles",
-   "class": "ai ai-sparkles",
-   "set": "azionicons",
-   "keywords": [
-    "ai",
-    "magic",
-    "new",
-    "generate"
-   ]
-  },
-  {
-   "name": "ai-spinner-dotted",
-   "class": "ai ai-spinner-dotted",
-   "set": "azionicons",
-   "keywords": [
-    "spinner",
-    "dotted",
-    "loading",
-    "progress",
-    "busy"
-   ]
-  },
-  {
-   "name": "ai-spinner",
-   "class": "ai ai-spinner",
-   "set": "azionicons",
-   "keywords": [
-    "loading",
-    "progress",
-    "busy"
-   ]
-  },
-  {
-   "name": "ai-sql",
-   "class": "ai ai-sql",
-   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "SQL as a language (not the product)",
    "keywords": [
     "database",
     "query"
    ]
   },
   {
-   "name": "ai-square-check",
-   "class": "ai ai-square-check",
+   "name": "az-table",
+   "class": "az az-table",
    "set": "azionicons",
-   "keywords": [
-    "square",
-    "check",
-    "checkbox",
-    "done",
-    "success",
-    "confirm",
-    "ok"
-   ]
-  },
-  {
-   "name": "ai-square-pen",
-   "class": "ai ai-square-pen",
-   "set": "azionicons",
-   "keywords": [
-    "square",
-    "pen",
-    "edit",
-    "write"
-   ]
-  },
-  {
-   "name": "ai-star-fill",
-   "class": "ai ai-star-fill",
-   "set": "azionicons",
-   "keywords": [
-    "star",
-    "fill",
-    "favorite",
-    "rating"
-   ]
-  },
-  {
-   "name": "ai-star-half-fill",
-   "class": "ai ai-star-half-fill",
-   "set": "azionicons",
-   "keywords": [
-    "star",
-    "half",
-    "fill",
-    "favorite",
-    "rating"
-   ]
-  },
-  {
-   "name": "ai-star-half",
-   "class": "ai ai-star-half",
-   "set": "azionicons",
-   "keywords": [
-    "star",
-    "half",
-    "favorite",
-    "rating"
-   ]
-  },
-  {
-   "name": "ai-star",
-   "class": "ai ai-star",
-   "set": "azionicons",
-   "keywords": [
-    "favorite",
-    "rating"
-   ]
-  },
-  {
-   "name": "ai-stencil",
-   "class": "ai ai-stencil",
-   "set": "azionicons",
-   "keywords": [
-    "web components",
-    "compiler",
-    "framework",
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-step-back",
-   "class": "ai ai-step-back",
-   "set": "azionicons",
-   "keywords": [
-    "step",
-    "back"
-   ]
-  },
-  {
-   "name": "ai-step-forward",
-   "class": "ai ai-step-forward",
-   "set": "azionicons",
-   "keywords": [
-    "step",
-    "forward",
-    "next",
-    "skip"
-   ]
-  },
-  {
-   "name": "ai-stop",
-   "class": "ai ai-stop",
-   "set": "azionicons",
-   "keywords": [
-    "halt",
-    "end"
-   ]
-  },
-  {
-   "name": "ai-stopwatch",
-   "class": "ai ai-stopwatch",
-   "set": "azionicons",
-   "keywords": [
-    "timer",
-    "time",
-    "duration"
-   ]
-  },
-  {
-   "name": "ai-store",
-   "class": "ai ai-store",
-   "set": "azionicons",
-   "keywords": [
-    "shop",
-    "marketplace"
-   ]
-  },
-  {
-   "name": "ai-sun",
-   "class": "ai ai-sun",
-   "set": "azionicons",
-   "keywords": [
-    "light mode",
-    "day",
-    "theme"
-   ]
-  },
-  {
-   "name": "ai-svelte",
-   "class": "ai ai-svelte",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-sync",
-   "class": "ai ai-sync",
-   "set": "azionicons",
-   "keywords": [
-    "refresh",
-    "synchronize"
-   ]
-  },
-  {
-   "name": "ai-table",
-   "class": "ai ai-table",
-   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "A table",
    "keywords": [
     "grid",
     "data",
@@ -4087,465 +3456,226 @@
    ]
   },
   {
-   "name": "ai-tablet",
-   "class": "ai ai-tablet",
+   "name": "az-wave-pulse",
+   "class": "az az-wave-pulse",
    "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Activity or monitoring",
    "keywords": [
-    "device",
-    "ipad"
+    "health"
    ]
   },
   {
-   "name": "ai-tag",
-   "class": "ai ai-tag",
+   "name": "az-align-center",
+   "class": "az az-align-center",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Center-align text",
    "keywords": [
-    "label",
-    "category"
+    "alignment",
+    "format"
    ]
   },
   {
-   "name": "ai-tags",
-   "class": "ai ai-tags",
+   "name": "az-align-justify",
+   "class": "az az-align-justify",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Justify text",
    "keywords": [
-    "labels",
-    "categories"
+    "alignment",
+    "format"
    ]
   },
   {
-   "name": "ai-technical-account",
-   "class": "ai ai-technical-account",
+   "name": "az-align-left",
+   "class": "az az-align-left",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Left-align text",
    "keywords": [
-    "technical",
-    "account"
+    "alignment",
+    "format"
    ]
   },
   {
-   "name": "ai-technical-support",
-   "class": "ai ai-technical-support",
+   "name": "az-align-right",
+   "class": "az az-align-right",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Right-align text",
    "keywords": [
-    "technical",
-    "support",
-    "help",
-    "service"
+    "alignment",
+    "format"
    ]
   },
   {
-   "name": "ai-terraform",
-   "class": "ai ai-terraform",
+   "name": "az-columns-3",
+   "class": "az az-columns-3",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "A column layout, show or hide columns",
    "keywords": [
-    "infrastructure as code",
-    "iac",
-    "brand",
-    "logo"
+    "layout"
    ]
   },
   {
-   "name": "ai-thumbs-down-fill",
-   "class": "ai ai-thumbs-down-fill",
+   "name": "az-ellipsis",
+   "class": "az az-ellipsis",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "More options",
    "keywords": [
-    "thumbs",
-    "down",
-    "fill",
-    "dislike",
-    "bad",
-    "feedback"
+    "menu",
+    "actions",
+    "overflow",
+    "ellipsis h"
    ]
   },
   {
-   "name": "ai-thumbs-down",
-   "class": "ai ai-thumbs-down",
+   "name": "az-ellipsis-vertical",
+   "class": "az az-ellipsis-vertical",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "More options menu",
    "keywords": [
-    "thumbs",
-    "down",
-    "dislike",
-    "bad",
-    "feedback"
+    "actions",
+    "overflow",
+    "ellipsis v"
    ]
   },
   {
-   "name": "ai-thumbs-up-fill",
-   "class": "ai ai-thumbs-up-fill",
+   "name": "az-expand",
+   "class": "az az-expand",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Expand or full screen",
    "keywords": [
-    "thumbs",
-    "fill",
-    "like",
-    "good",
-    "feedback"
+    "fullscreen",
+    "maximize"
    ]
   },
   {
-   "name": "ai-thumbs-up",
-   "class": "ai ai-thumbs-up",
+   "name": "az-layers",
+   "class": "az az-layers",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Layers",
    "keywords": [
-    "thumbs",
-    "like",
-    "good",
-    "feedback"
+    "stack",
+    "levels"
    ]
   },
   {
-   "name": "ai-ticket",
-   "class": "ai ai-ticket",
+   "name": "az-layout-grid",
+   "class": "az az-layout-grid",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Grid view",
    "keywords": [
-    "support",
-    "issue"
+    "tiles",
+    "dashboard",
+    "objects column",
+    "th large"
    ]
   },
   {
-   "name": "ai-tiered-cache",
-   "class": "ai ai-tiered-cache",
+   "name": "az-maximize",
+   "class": "az az-maximize",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Maximize or enter full screen",
    "keywords": [
-    "tiered",
-    "cache"
+    "fullscreen",
+    "expand",
+    "enlarge",
+    "arrow up right and arrow down left from center"
    ]
   },
   {
-   "name": "ai-trash",
-   "class": "ai ai-trash",
+   "name": "az-menu",
+   "class": "az az-menu",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Open the menu",
    "keywords": [
-    "delete",
-    "remove",
-    "bin"
+    "hamburger",
+    "navigation",
+    "bars"
    ]
   },
   {
-   "name": "ai-triangle-alert",
-   "class": "ai ai-triangle-alert",
+   "name": "az-minimize",
+   "class": "az az-minimize",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Minimize or exit full screen",
    "keywords": [
-    "triangle",
-    "alert",
-    "warning",
-    "exclamation",
-    "caution",
-    "notification"
+    "exit fullscreen",
+    "collapse",
+    "shrink",
+    "arrow down left and arrow up right to center"
    ]
   },
   {
-   "name": "ai-trophy",
-   "class": "ai ai-trophy",
+   "name": "az-sitemap",
+   "class": "az az-sitemap",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Sitemap or hierarchy",
    "keywords": [
-    "award",
-    "winner"
+    "tree",
+    "structure"
    ]
   },
   {
-   "name": "ai-truck",
-   "class": "ai ai-truck",
+   "name": "az-sliders-horizontal",
+   "class": "az az-sliders-horizontal",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Adjust settings or filters",
    "keywords": [
-    "delivery",
-    "shipping"
+    "controls",
+    "sliders h"
    ]
   },
   {
-   "name": "ai-turkish-lira",
-   "class": "ai ai-turkish-lira",
+   "name": "az-sliders-vertical",
+   "class": "az az-sliders-vertical",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Adjust settings or levels",
    "keywords": [
-    "turkish",
-    "lira"
+    "controls",
+    "filters",
+    "sliders v"
    ]
   },
   {
-   "name": "ai-turso",
-   "class": "ai ai-turso",
+   "name": "az-window-maximize",
+   "class": "az az-window-maximize",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Maximize the window",
    "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-twitch",
-   "class": "ai ai-twitch",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-undo",
-   "class": "ai ai-undo",
-   "set": "azionicons",
-   "keywords": [
-    "revert",
-    "back"
-   ]
-  },
-  {
-   "name": "ai-upload",
-   "class": "ai ai-upload",
-   "set": "azionicons",
-   "keywords": [
-    "import",
-    "send"
-   ]
-  },
-  {
-   "name": "ai-user-minus",
-   "class": "ai ai-user-minus",
-   "set": "azionicons",
-   "keywords": [
-    "user",
-    "minus",
-    "person",
-    "account",
-    "profile",
-    "remove",
-    "subtract",
-    "collapse"
-   ]
-  },
-  {
-   "name": "ai-user-pen",
-   "class": "ai ai-user-pen",
-   "set": "azionicons",
-   "keywords": [
-    "user",
-    "pen",
-    "person",
-    "account",
-    "profile",
-    "edit",
-    "write"
-   ]
-  },
-  {
-   "name": "ai-user-plus",
-   "class": "ai ai-user-plus",
-   "set": "azionicons",
-   "keywords": [
-    "user",
-    "plus",
-    "person",
-    "account",
-    "profile",
-    "add",
-    "create",
-    "new"
-   ]
-  },
-  {
-   "name": "ai-user",
-   "class": "ai ai-user",
-   "set": "azionicons",
-   "keywords": [
-    "person",
-    "account",
-    "profile"
-   ]
-  },
-  {
-   "name": "ai-users",
-   "class": "ai ai-users",
-   "set": "azionicons",
-   "keywords": [
-    "people",
-    "team",
-    "members"
-   ]
-  },
-  {
-   "name": "ai-variables",
-   "class": "ai ai-variables",
-   "set": "azionicons",
-   "keywords": [
-    "environment",
-    "env",
-    "config"
-   ]
-  },
-  {
-   "name": "ai-venus",
-   "class": "ai ai-venus",
-   "set": "azionicons",
-   "keywords": [
-    "female",
-    "gender"
-   ]
-  },
-  {
-   "name": "ai-verified",
-   "class": "ai ai-verified",
-   "set": "azionicons",
-   "keywords": [
-    "check",
-    "approved",
-    "badge"
-   ]
-  },
-  {
-   "name": "ai-video",
-   "class": "ai ai-video",
-   "set": "azionicons",
-   "keywords": [
-    "movie",
-    "media"
-   ]
-  },
-  {
-   "name": "ai-vite",
-   "class": "ai ai-vite",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-vitepress",
-   "class": "ai ai-vitepress",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-volume-down",
-   "class": "ai ai-volume-down",
-   "set": "azionicons",
-   "keywords": [
-    "volume",
-    "down",
-    "sound",
-    "audio"
-   ]
-  },
-  {
-   "name": "ai-volume-off",
-   "class": "ai ai-volume-off",
-   "set": "azionicons",
-   "keywords": [
-    "volume",
-    "off",
-    "sound",
-    "audio"
-   ]
-  },
-  {
-   "name": "ai-volume-up",
-   "class": "ai ai-volume-up",
-   "set": "azionicons",
-   "keywords": [
-    "volume",
-    "sound",
-    "audio"
-   ]
-  },
-  {
-   "name": "ai-vue",
-   "class": "ai ai-vue",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-vuepress",
-   "class": "ai ai-vuepress",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-waf-rules",
-   "class": "ai ai-waf-rules",
-   "set": "azionicons",
-   "keywords": [
-    "waf",
-    "rules",
-    "web application firewall",
-    "security",
-    "logic",
-    "conditions",
-    "behavior"
-   ]
-  },
-  {
-   "name": "ai-wallet",
-   "class": "ai ai-wallet",
-   "set": "azionicons",
-   "keywords": [
-    "payment",
-    "money"
-   ]
-  },
-  {
-   "name": "ai-warehouse",
-   "class": "ai ai-warehouse",
-   "set": "azionicons",
-   "keywords": [
-    "storage",
-    "inventory"
-   ]
-  },
-  {
-   "name": "ai-wave-pulse",
-   "class": "ai ai-wave-pulse",
-   "set": "azionicons",
-   "keywords": [
-    "wave",
-    "pulse",
-    "activity",
-    "health",
-    "monitoring"
-   ]
-  },
-  {
-   "name": "ai-webhook",
-   "class": "ai ai-webhook",
-   "set": "azionicons",
-   "keywords": [
-    "integration",
-    "callback",
-    "events"
-   ]
-  },
-  {
-   "name": "ai-whatsapp",
-   "class": "ai ai-whatsapp",
-   "set": "azionicons",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-wifi",
-   "class": "ai ai-wifi",
-   "set": "azionicons",
-   "keywords": [
-    "network",
-    "wireless",
-    "connection"
-   ]
-  },
-  {
-   "name": "ai-window-maximize",
-   "class": "ai ai-window-maximize",
-   "set": "azionicons",
-   "keywords": [
-    "window",
-    "maximize",
     "browser",
     "app",
     "fullscreen",
@@ -4554,12 +3684,13 @@
    ]
   },
   {
-   "name": "ai-window-minimize",
-   "class": "ai ai-window-minimize",
+   "name": "az-window-minimize",
+   "class": "az az-window-minimize",
    "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Minimize the window",
    "keywords": [
-    "window",
-    "minimize",
     "browser",
     "app",
     "exit fullscreen",
@@ -4568,359 +3699,1408 @@
    ]
   },
   {
-   "name": "ai-windsurf",
-   "class": "ai ai-windsurf",
+   "name": "az-asterisk",
+   "class": "az az-asterisk",
    "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Required field or wildcard",
    "keywords": [
-    "brand",
-    "logo"
+    "star"
    ]
   },
   {
-   "name": "ai-workloads",
-   "class": "ai ai-workloads",
+   "name": "az-bolt",
+   "class": "az az-bolt",
    "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Power, energy or speed",
    "keywords": [
-    "domains",
-    "deploy",
-    "traffic"
+    "fast",
+    "lightning"
    ]
   },
   {
-   "name": "ai-wrench",
-   "class": "ai ai-wrench",
+   "name": "az-book",
+   "class": "az az-book",
    "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Documentation or reading",
+   "keywords": [
+    "docs",
+    "read"
+   ]
+  },
+  {
+   "name": "az-bookmark",
+   "class": "az az-bookmark",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Save for later",
+   "keywords": [
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-bookmark-fill",
+   "class": "az az-bookmark-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Saved item",
+   "keywords": [
+    "save",
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-box",
+   "class": "az az-box",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Package, product or bundle",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-briefcase",
+   "class": "az az-briefcase",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Work or business",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-building",
+   "class": "az az-building",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Company or organization",
+   "keywords": [
+    "office"
+   ]
+  },
+  {
+   "name": "az-building-columns",
+   "class": "az az-building-columns",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Bank or institution",
+   "keywords": [
+    "company",
+    "organization",
+    "office"
+   ]
+  },
+  {
+   "name": "az-bullseye",
+   "class": "az az-bullseye",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Goal or target",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-calendar",
+   "class": "az az-calendar",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Date or schedule",
+   "keywords": [
+    "time"
+   ]
+  },
+  {
+   "name": "az-calendar-clock",
+   "class": "az az-calendar-clock",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Scheduled date and time",
+   "keywords": [
+    "schedule",
+    "history"
+   ]
+  },
+  {
+   "name": "az-calendar-minus",
+   "class": "az az-calendar-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Remove an event or date",
+   "keywords": [
+    "schedule",
+    "time",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "az-calendar-plus",
+   "class": "az az-calendar-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Add an event or date",
+   "keywords": [
+    "schedule",
+    "time",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "az-calendar-x",
+   "class": "az az-calendar-x",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Cancel an event or clear a date",
+   "keywords": [
+    "schedule",
+    "time",
+    "calendar times"
+   ]
+  },
+  {
+   "name": "az-car",
+   "class": "az az-car",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Vehicle or transport",
+   "keywords": [
+    "automotive"
+   ]
+  },
+  {
+   "name": "az-clock",
+   "class": "az az-clock",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Time, schedule or history",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-cloud",
+   "class": "az az-cloud",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Cloud or hosted service",
+   "keywords": [
+    "hosting",
+    "storage"
+   ]
+  },
+  {
+   "name": "az-code",
+   "class": "az az-code",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Code or source view",
+   "keywords": [
+    "developer",
+    "snippet"
+   ]
+  },
+  {
+   "name": "az-compass",
+   "class": "az az-compass",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Explore or navigate",
+   "keywords": [
+    "navigation"
+   ]
+  },
+  {
+   "name": "az-crown",
+   "class": "az az-crown",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Premium, owner or top rank",
+   "keywords": [
+    "plan",
+    "pro"
+   ]
+  },
+  {
+   "name": "az-directions",
+   "class": "az az-directions",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Directions or route",
+   "keywords": [
+    "navigation",
+    "map"
+   ]
+  },
+  {
+   "name": "az-equals",
+   "class": "az az-equals",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Equals or equal to",
+   "keywords": [
+    "math"
+   ]
+  },
+  {
+   "name": "az-flag",
+   "class": "az az-flag",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Flag, mark or report an item",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-flag-fill",
+   "class": "az az-flag-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Flagged item",
+   "keywords": [
+    "report",
+    "mark"
+   ]
+  },
+  {
+   "name": "az-globe",
+   "class": "az az-globe",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "World, internet or language/region",
+   "keywords": [
+    "global",
+    "web"
+   ]
+  },
+  {
+   "name": "az-graduation-cap",
+   "class": "az az-graduation-cap",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Education, learning or courses",
+   "keywords": [
+    "learn",
+    "course",
+    "instructor"
+   ]
+  },
+  {
+   "name": "az-hammer",
+   "class": "az az-hammer",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Build, tools or settings",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-hash",
+   "class": "az az-hash",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Number, ID or hashtag",
+   "keywords": [
+    "tag",
+    "channel"
+   ]
+  },
+  {
+   "name": "az-heart",
+   "class": "az az-heart",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Favorite or like",
+   "keywords": [
+    "love"
+   ]
+  },
+  {
+   "name": "az-heart-fill",
+   "class": "az az-heart-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Favorited or liked",
+   "keywords": [
+    "like",
+    "favorite",
+    "love"
+   ]
+  },
+  {
+   "name": "az-home",
+   "class": "az az-home",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Home, overview",
+   "keywords": [
+    "house",
+    "start",
+    "dashboard"
+   ]
+  },
+  {
+   "name": "az-key",
+   "class": "az az-key",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Key, credentials or access",
+   "keywords": [
+    "password",
+    "token",
+    "secret",
+    "credential"
+   ]
+  },
+  {
+   "name": "az-language",
+   "class": "az az-language",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Language or translation",
+   "keywords": [
+    "translate",
+    "locale",
+    "i18n"
+   ]
+  },
+  {
+   "name": "az-lightbulb",
+   "class": "az az-lightbulb",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Idea, tip or hint",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-lock",
+   "class": "az az-lock",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Locked or secure",
+   "keywords": [
+    "private",
+    "password"
+   ]
+  },
+  {
+   "name": "az-lock-open",
+   "class": "az az-lock-open",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Unlocked",
+   "keywords": [
+    "unlock",
+    "public",
+    "secure",
+    "private",
+    "password",
+    "locked"
+   ]
+  },
+  {
+   "name": "az-map",
+   "class": "az az-map",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Map",
+   "keywords": [
+    "location",
+    "geo"
+   ]
+  },
+  {
+   "name": "az-map-pin",
+   "class": "az az-map-pin",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Location",
+   "keywords": [
+    "marker",
+    "place",
+    "geo",
+    "thumbtack",
+    "pushpin",
+    "fixed",
+    "map marker"
+   ]
+  },
+  {
+   "name": "az-moon",
+   "class": "az az-moon",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Dark mode or night",
+   "keywords": [
+    "theme"
+   ]
+  },
+  {
+   "name": "az-palette",
+   "class": "az az-palette",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Colors, theme or appearance",
+   "keywords": [
+    "color",
+    "design"
+   ]
+  },
+  {
+   "name": "az-percentage",
+   "class": "az az-percentage",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Percentage or discount",
+   "keywords": [
+    "percent",
+    "rate"
+   ]
+  },
+  {
+   "name": "az-pin",
+   "class": "az az-pin",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Pin an item",
+   "keywords": [
+    "thumbtack",
+    "pushpin",
+    "fixed"
+   ]
+  },
+  {
+   "name": "az-qrcode",
+   "class": "az az-qrcode",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "QR code",
+   "keywords": [
+    "scan"
+   ]
+  },
+  {
+   "name": "az-route",
+   "class": "az az-route",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "A route or path",
+   "keywords": [
+    "routing",
+    "directions",
+    "gateway"
+   ]
+  },
+  {
+   "name": "az-shield",
+   "class": "az az-shield",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Security or protection",
+   "keywords": [
+    "safe"
+   ]
+  },
+  {
+   "name": "az-signpost",
+   "class": "az az-signpost",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Directions, routing or navigation",
+   "keywords": [
+    "route",
+    "directions alt"
+   ]
+  },
+  {
+   "name": "az-sparkles",
+   "class": "az az-sparkles",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "AI features, magic",
+   "keywords": [
+    "new",
+    "generate"
+   ]
+  },
+  {
+   "name": "az-star",
+   "class": "az az-star",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Favorite or rating",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-star-fill",
+   "class": "az az-star-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Favorited or full rating",
+   "keywords": [
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-star-half",
+   "class": "az az-star-half",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Half-star rating",
+   "keywords": [
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-star-half-fill",
+   "class": "az az-star-half-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Half-star rating, filled",
+   "keywords": [
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-stopwatch",
+   "class": "az az-stopwatch",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Timer or elapsed time",
+   "keywords": [
+    "duration"
+   ]
+  },
+  {
+   "name": "az-sun",
+   "class": "az az-sun",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Light mode or daytime",
+   "keywords": [
+    "day",
+    "theme"
+   ]
+  },
+  {
+   "name": "az-tag",
+   "class": "az az-tag",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "A tag or label",
+   "keywords": [
+    "category"
+   ]
+  },
+  {
+   "name": "az-tags",
+   "class": "az az-tags",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Tags or labels",
+   "keywords": [
+    "categories"
+   ]
+  },
+  {
+   "name": "az-thumbs-down",
+   "class": "az az-thumbs-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Dislike or negative feedback",
+   "keywords": [
+    "bad"
+   ]
+  },
+  {
+   "name": "az-thumbs-down-fill",
+   "class": "az az-thumbs-down-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Disliked",
+   "keywords": [
+    "dislike",
+    "bad",
+    "feedback"
+   ]
+  },
+  {
+   "name": "az-thumbs-up",
+   "class": "az az-thumbs-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Like or positive feedback",
+   "keywords": [
+    "good"
+   ]
+  },
+  {
+   "name": "az-thumbs-up-fill",
+   "class": "az az-thumbs-up-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Liked",
+   "keywords": [
+    "like",
+    "good",
+    "feedback"
+   ]
+  },
+  {
+   "name": "az-trophy",
+   "class": "az az-trophy",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Achievement or winner",
+   "keywords": [
+    "award"
+   ]
+  },
+  {
+   "name": "az-truck",
+   "class": "az az-truck",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Shipping or delivery",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-warehouse",
+   "class": "az az-warehouse",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "A warehouse or storage",
+   "keywords": [
+    "inventory"
+   ]
+  },
+  {
+   "name": "az-wrench",
+   "class": "az az-wrench",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Tools or configuration",
    "keywords": [
     "settings",
-    "tools",
     "fix",
     "maintenance"
    ]
   },
   {
-   "name": "ai-x-brand",
-   "class": "ai ai-x-brand",
+   "name": "az-git-branch",
+   "class": "az az-git-branch",
    "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A git branch",
    "keywords": [
-    "brand",
-    "twitter",
-    "social",
-    "logo"
+    "version control",
+    "source",
+    "repository",
+    "version"
    ]
   },
   {
-   "name": "ai-x",
-   "class": "ai ai-x",
+   "name": "az-git-branch-delete",
+   "class": "az az-git-branch-delete",
    "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "Delete a branch",
    "keywords": [
-    "close",
-    "cancel",
-    "dismiss",
-    "times"
+    "version control",
+    "source",
+    "repository",
+    "version",
+    "remove",
+    "erase"
    ]
   },
   {
-   "name": "ai-youtube",
-   "class": "ai ai-youtube",
+   "name": "az-git-branch-plus",
+   "class": "az az-git-branch-plus",
    "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "Create a branch",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository",
+    "version",
+    "add",
+    "new"
    ]
   },
   {
-   "name": "ai-zoom-in",
-   "class": "ai ai-zoom-in",
+   "name": "az-git-cherry-pick",
+   "class": "az az-git-cherry-pick",
    "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "Cherry-pick a commit",
    "keywords": [
-    "zoom",
-    "magnify",
-    "scale"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-zoom-out",
-   "class": "ai ai-zoom-out",
+   "name": "az-git-commit",
+   "class": "az az-git-commit",
    "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A commit",
    "keywords": [
-    "zoom",
-    "out",
-    "magnify",
-    "scale"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-angular",
-   "class": "ai-color ai-angular",
-   "set": "color",
+   "name": "az-git-compare",
+   "class": "az az-git-compare",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "Compare two versions",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-astro",
-   "class": "ai-color ai-astro",
-   "set": "color",
+   "name": "az-git-diff",
+   "class": "az az-git-diff",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A diff",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-azure-devops",
-   "class": "ai-color ai-azure-devops",
-   "set": "color",
+   "name": "az-git-fork",
+   "class": "az az-git-fork",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A fork",
    "keywords": [
-    "azure",
-    "devops",
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-bitbucket",
-   "class": "ai-color ai-bitbucket",
-   "set": "color",
+   "name": "az-git-graph",
+   "class": "az az-git-graph",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A commit graph",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-claude",
-   "class": "ai-color ai-claude",
-   "set": "color",
+   "name": "az-git-merge",
+   "class": "az az-git-merge",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A merge",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-cursor",
-   "class": "ai-color ai-cursor",
-   "set": "color",
+   "name": "az-git-merge-conflict",
+   "class": "az az-git-merge-conflict",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A merge conflict",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-deepseek",
-   "class": "ai-color ai-deepseek",
-   "set": "color",
+   "name": "az-git-pull-request",
+   "class": "az az-git-pull-request",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A pull request",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-discord",
-   "class": "ai-color ai-discord",
-   "set": "color",
+   "name": "az-git-pull-request-closed",
+   "class": "az az-git-pull-request-closed",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A closed pull request",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-flutter",
-   "class": "ai-color ai-flutter",
-   "set": "color",
+   "name": "az-git-pull-request-draft",
+   "class": "az az-git-pull-request-draft",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A draft pull request",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "repository"
    ]
   },
   {
-   "name": "ai-gemini",
-   "class": "ai-color ai-gemini",
-   "set": "color",
+   "name": "az-git-repository",
+   "class": "az az-git-repository",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A repository",
    "keywords": [
-    "brand",
-    "logo"
+    "version control",
+    "source",
+    "code"
    ]
   },
   {
-   "name": "ai-gitlab",
-   "class": "ai-color ai-gitlab",
-   "set": "color",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-google",
-   "class": "ai-color ai-google",
-   "set": "color",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-graphql",
-   "class": "ai-color ai-graphql",
-   "set": "color",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-grok",
-   "class": "ai-color ai-grok",
-   "set": "color",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-html",
-   "class": "ai-color ai-html",
-   "set": "color",
-   "keywords": [
-    "markup",
-    "web",
-    "brand"
-   ]
-  },
-  {
-   "name": "ai-javascript",
-   "class": "ai-color ai-javascript",
-   "set": "color",
+   "name": "az-angular",
+   "class": "az az-angular",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Angular (framework)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-kotlin",
-   "class": "ai-color ai-kotlin",
-   "set": "color",
+   "name": "az-astro",
+   "class": "az az-astro",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Astro (framework)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-meta",
-   "class": "ai-color ai-meta",
-   "set": "color",
+   "name": "az-docusaurus",
+   "class": "az az-docusaurus",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Docusaurus (framework)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-microsoft-copilot",
-   "class": "ai-color ai-microsoft-copilot",
-   "set": "color",
-   "keywords": [
-    "microsoft",
-    "copilot",
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-mistral",
-   "class": "ai-color ai-mistral",
-   "set": "color",
+   "name": "az-eleventy",
+   "class": "az az-eleventy",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Eleventy (framework)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-nextjs",
-   "class": "ai-color ai-nextjs",
-   "set": "color",
+   "name": "az-gatsby",
+   "class": "az az-gatsby",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Gatsby (framework)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-nuxt",
-   "class": "ai-color ai-nuxt",
-   "set": "color",
+   "name": "az-hexo",
+   "class": "az az-hexo",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Hexo (framework)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-openai",
-   "class": "ai-color ai-openai",
-   "set": "color",
+   "name": "az-hono",
+   "class": "az az-hono",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Hono (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hugo",
+   "class": "az az-hugo",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Hugo (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-jekyll",
+   "class": "az az-jekyll",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Jekyll (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nextjs",
+   "class": "az az-nextjs",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Next.js (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nitro",
+   "class": "az az-nitro",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Nitro (framework)",
+   "keywords": [
+    "server",
+    "unjs",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nuxt",
+   "class": "az az-nuxt",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Nuxt (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-preact",
+   "class": "az az-preact",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Preact (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-qwik",
+   "class": "az az-qwik",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Qwik (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-react",
+   "class": "az az-react",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "React (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-remix",
+   "class": "az az-remix",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Remix (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-stencil",
+   "class": "az az-stencil",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Stencil (framework)",
+   "keywords": [
+    "web components",
+    "compiler",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-svelte",
+   "class": "az az-svelte",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Svelte (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vitepress",
+   "class": "az az-vitepress",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "VitePress (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vue",
+   "class": "az az-vue",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Vue (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vuepress",
+   "class": "az az-vuepress",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "VuePress (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-claude",
+   "class": "az az-claude",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Claude (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-deepseek",
+   "class": "az az-deepseek",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "DeepSeek (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gemini",
+   "class": "az az-gemini",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Gemini (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-grok",
+   "class": "az az-grok",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Grok (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-meta",
+   "class": "az az-meta",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Meta (AI models)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-microsoft-copilot",
+   "class": "az az-microsoft-copilot",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Microsoft Copilot",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-mistral",
+   "class": "az az-mistral",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Mistral (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-openai",
+   "class": "az az-openai",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "OpenAI",
    "keywords": [
     "chatgpt",
     "gpt",
     "brand",
-    "logo"
+    "logo",
+    "open"
    ]
   },
   {
-   "name": "ai-perplexity",
-   "class": "ai-color ai-perplexity",
-   "set": "color",
+   "name": "az-perplexity",
+   "class": "az az-perplexity",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Perplexity (AI model)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-qwen",
-   "class": "ai-color ai-qwen",
-   "set": "color",
+   "name": "az-qwen",
+   "class": "az az-qwen",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Qwen (AI model)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-react",
-   "class": "ai-color ai-react",
-   "set": "color",
+   "name": "az-cursor",
+   "class": "az az-cursor",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Cursor (code editor)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-redwood",
-   "class": "ai-color ai-redwood",
-   "set": "color",
+   "name": "az-github",
+   "class": "az az-github",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "GitHub",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-solidjs",
-   "class": "ai-color ai-solidjs",
-   "set": "color",
+   "name": "az-mcp",
+   "class": "az az-mcp",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Model Context Protocol",
+   "keywords": [
+    "agent",
+    "integration",
+    "brand",
+    "logo",
+    "mcp logo"
+   ]
+  },
+  {
+   "name": "az-redis",
+   "class": "az az-redis",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Redis",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-svelte",
-   "class": "ai-color ai-svelte",
-   "set": "color",
-   "keywords": [
-    "brand",
-    "logo"
-   ]
-  },
-  {
-   "name": "ai-terraform",
-   "class": "ai-color ai-terraform",
-   "set": "color",
+   "name": "az-terraform",
+   "class": "az az-terraform",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Terraform",
    "keywords": [
     "infrastructure as code",
     "iac",
@@ -4929,47 +5109,634 @@
    ]
   },
   {
-   "name": "ai-typescript",
-   "class": "ai-color ai-typescript",
-   "set": "color",
+   "name": "az-turso",
+   "class": "az az-turso",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Turso (database)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-vue",
-   "class": "ai-color ai-vue",
-   "set": "color",
+   "name": "az-vite",
+   "class": "az az-vite",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Vite (build tool)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-windsurf",
-   "class": "ai-color ai-windsurf",
-   "set": "color",
+   "name": "az-windsurf",
+   "class": "az az-windsurf",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Windsurf (code editor)",
    "keywords": [
     "brand",
     "logo"
    ]
   },
   {
-   "name": "ai-x-brand",
-   "class": "ai-color ai-x-brand",
-   "set": "color",
+   "name": "az-graphql",
+   "class": "az az-graphql",
+   "set": "azionicons",
+   "group": "external",
+   "category": "language",
+   "label": "GraphQL",
    "keywords": [
     "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-html",
+   "class": "az az-html",
+   "set": "azionicons",
+   "group": "external",
+   "category": "language",
+   "label": "HTML",
+   "keywords": [
+    "markup",
+    "web",
+    "brand"
+   ]
+  },
+  {
+   "name": "az-discord",
+   "class": "az az-discord",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Discord (community)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-facebook",
+   "class": "az az-facebook",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Facebook (social network)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-google",
+   "class": "az az-google",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Google (search and cloud services)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-instagram",
+   "class": "az az-instagram",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Instagram (photo social network)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-linkedin",
+   "class": "az az-linkedin",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "LinkedIn (professional social network)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-medium",
+   "class": "az az-medium",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Medium (blog)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-reddit",
+   "class": "az az-reddit",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Reddit (online discussion community)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-slack",
+   "class": "az az-slack",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Slack (team messaging app)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-twitch",
+   "class": "az az-twitch",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Twitch",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-whatsapp",
+   "class": "az az-whatsapp",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "WhatsApp (messaging app)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-x-brand",
+   "class": "az az-x-brand",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "X (social network)",
+   "keywords": [
     "twitter",
-    "social",
     "logo"
    ]
   },
   {
-   "name": "ai-youtube",
-   "class": "ai-color ai-youtube",
+   "name": "az-youtube",
+   "class": "az az-youtube",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "YouTube",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-angular",
+   "class": "az-color az-angular",
    "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Angular (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-astro",
+   "class": "az-color az-astro",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Astro (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-flutter",
+   "class": "az-color az-flutter",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Flutter (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nextjs",
+   "class": "az-color az-nextjs",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Next.js (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nuxt",
+   "class": "az-color az-nuxt",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Nuxt (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-react",
+   "class": "az-color az-react",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "React (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-redwood",
+   "class": "az-color az-redwood",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "RedwoodJS (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-solidjs",
+   "class": "az-color az-solidjs",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "SolidJS (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-svelte",
+   "class": "az-color az-svelte",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Svelte (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vue",
+   "class": "az-color az-vue",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Vue (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-claude",
+   "class": "az-color az-claude",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Claude (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-deepseek",
+   "class": "az-color az-deepseek",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "DeepSeek (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gemini",
+   "class": "az-color az-gemini",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Gemini (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-grok",
+   "class": "az-color az-grok",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Grok (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-meta",
+   "class": "az-color az-meta",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Meta (AI models)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-microsoft-copilot",
+   "class": "az-color az-microsoft-copilot",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Microsoft Copilot",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-mistral",
+   "class": "az-color az-mistral",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Mistral (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-openai",
+   "class": "az-color az-openai",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "OpenAI",
+   "keywords": [
+    "chatgpt",
+    "gpt",
+    "brand",
+    "logo",
+    "open"
+   ]
+  },
+  {
+   "name": "az-perplexity",
+   "class": "az-color az-perplexity",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Perplexity (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-qwen",
+   "class": "az-color az-qwen",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Qwen (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-azure-devops",
+   "class": "az-color az-azure-devops",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Azure DevOps",
+   "keywords": [
+    "brand",
+    "logo",
+    "azuredevops"
+   ]
+  },
+  {
+   "name": "az-bitbucket",
+   "class": "az-color az-bitbucket",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Bitbucket",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-cursor",
+   "class": "az-color az-cursor",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Cursor (code editor)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gitlab",
+   "class": "az-color az-gitlab",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "GitLab",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-terraform",
+   "class": "az-color az-terraform",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Terraform",
+   "keywords": [
+    "infrastructure as code",
+    "iac",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-windsurf",
+   "class": "az-color az-windsurf",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Windsurf (code editor)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-graphql",
+   "class": "az-color az-graphql",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "GraphQL",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-html",
+   "class": "az-color az-html",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "HTML",
+   "keywords": [
+    "markup",
+    "web",
+    "brand"
+   ]
+  },
+  {
+   "name": "az-javascript",
+   "class": "az-color az-javascript",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "JavaScript",
+   "keywords": [
+    "brand",
+    "logo",
+    "js"
+   ]
+  },
+  {
+   "name": "az-kotlin",
+   "class": "az-color az-kotlin",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "Kotlin",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-typescript",
+   "class": "az-color az-typescript",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "TypeScript",
+   "keywords": [
+    "brand",
+    "logo",
+    "ts"
+   ]
+  },
+  {
+   "name": "az-discord",
+   "class": "az-color az-discord",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Discord (community)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-google",
+   "class": "az-color az-google",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Google",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-x-brand",
+   "class": "az-color az-x-brand",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "X (social network)",
+   "keywords": [
+    "twitter",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-youtube",
+   "class": "az-color az-youtube",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "YouTube",
    "keywords": [
     "brand",
     "logo"

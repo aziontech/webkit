@@ -160,7 +160,7 @@
               :label="secondaryAction.label"
               :href="secondaryAction.href"
               variant="outline"
-              :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
+              :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
               icon-position="trailing"
             />
           </template>
@@ -215,7 +215,7 @@
                     :href="item.action.href"
                     variant="outline"
                     size="medium"
-                    icon="ai ai-chevron-right"
+                    icon="az az-chevron-right"
                     icon-position="trailing"
                     animated
                   />
@@ -223,7 +223,7 @@
                     v-if="item.copy"
                     :label="copied === index ? doneLabel : item.copy.label"
                     size="medium"
-                    :icon="copied === index ? 'ai ai-check' : 'ai ai-copy'"
+                    :icon="copied === index ? 'az az-check' : 'az az-copy'"
                     @click="copyPrompt(index, item.copy.text)"
                   />
                 </span>

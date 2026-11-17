@@ -12,7 +12,7 @@
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"
-        icon="ai ai-plus"
+        icon="az az-plus"
         aria-label="Open menu"
       />
     </DropdownMenuTrigger>
@@ -29,7 +29,7 @@
       <DropdownMenuItem value="leading">
         <template #leading>
           <i
-            class="ai ai-user"
+            class="az az-user"
             aria-hidden="true"
           />
         </template>

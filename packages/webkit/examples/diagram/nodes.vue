@@ -12,7 +12,7 @@
         key: 'user',
         type: 'pill',
         title: 'User',
-        icon: 'ai ai-user',
+        icon: 'az az-user',
         active: true
       },
       {
@@ -20,7 +20,7 @@
         type: 'card',
         eyebrow: 'AI Gateway',
         title: 'Route by cost',
-        icon: 'ai ai-gateway',
+        icon: 'az az-ai-gateway',
         status: {
           label: 'On',
           severity: 'success'
@@ -33,7 +33,7 @@
         type: 'item',
         eyebrow: 'provider · general',
         title: 'General model',
-        icon: 'ai ai-sparkles',
+        icon: 'az az-sparkles',
         status: {
           label: 'Primary',
           severity: 'info'
@@ -44,7 +44,7 @@
         key: 'cache',
         type: 'tile',
         title: 'Response cache',
-        icon: 'ai ai-tiered-cache'
+        icon: 'az az-tiered-cache'
       }
     ],
     layout: {

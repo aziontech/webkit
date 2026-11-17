@@ -151,7 +151,7 @@
               label="Agent"
               variant="outline"
               size="medium"
-              icon="ai ai-ask-azion"
+              icon="az az-ask-azion"
               :aria-expanded="open ? 'true' : 'false'"
               @click="open = true"
             />
@@ -203,7 +203,7 @@
             </div>
             <div class="flex items-center gap-(--spacing-2xs)">
               <IconButton
-                icon="ai ai-plus"
+                icon="az az-plus"
                 aria-label="New chat"
                 variant="ghost"
                 size="small"
@@ -220,7 +220,7 @@
               <EmptyState
                 title="Ask about storefront"
                 description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
-                icon="ai ai-ask-azion"
+                icon="az az-ask-azion"
                 size="small"
               />
               <SuggestionGroup
@@ -280,7 +280,7 @@
                       :value="turn.content"
                     />
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       aria-label="Regenerate response"
                       variant="ghost"
                       size="small"

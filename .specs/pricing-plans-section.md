@@ -7,7 +7,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 07e2e466b2557f7826b19516a294be2d15cec7ac350bcd5983810c49e4553293
+checksum: e1faff65bf16887a5ef1691e124bd5afa8ee5db8f389e415692f59b5ffa1ae1f
 ---
 
 # PricingPlansSection — Component Spec
@@ -68,7 +68,7 @@ The plan cards at the top of Pricing: a billing-period toggle over a framed row 
           { period: 'annual', value: '20', prefix: '$', suffix: '/mo', details: 'Billed annually.' }
         ],
         featuresTitle: 'All Hobby features, plus:',
-        features: [{ icon: 'ai ai-workloads', label: 'Additional workloads' }],
+        features: [{ icon: 'az az-workloads', label: 'Additional workloads' }],
         action: { label: 'Start with Pro', href: '/signup' }
       }
     ]"

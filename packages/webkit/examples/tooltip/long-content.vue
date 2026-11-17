@@ -9,7 +9,7 @@
     side="top"
   >
     <IconButton
-      icon="ai ai-circle-info"
+      icon="az az-circle-info"
       aria-label="More information"
       variant="ghost"
       size="small"

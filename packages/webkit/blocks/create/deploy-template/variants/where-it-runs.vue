@@ -105,7 +105,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Creation Center"
           variant="outline"
           size="small"
@@ -153,7 +153,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-color ai-nuxt text-body-lg leading-none text-(--text-default)"
+                  class="az-color az-nuxt text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -179,7 +179,7 @@
                       class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)"
                     >
                       <i
-                        class="ai ai-github text-[length:inherit] leading-none"
+                        class="az az-github text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
                       acme
@@ -188,7 +188,7 @@
                       class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
                     >
                       <i
-                        class="ai ai-folder text-[length:inherit] leading-none"
+                        class="az az-folder text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
                       templates/nuxt-ecommerce
@@ -279,7 +279,7 @@
                     >
                       <Item.Media>
                         <i
-                          class="ai ai-server text-body-md leading-none text-(--text-muted)"
+                          class="az az-server text-body-md leading-none text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </Item.Media>
@@ -290,7 +290,7 @@
                       <Item.Actions>
                         <i
                           v-if="service === option.value"
-                          class="ai ai-check text-body-sm leading-none text-(--text-default)"
+                          class="az az-check text-body-sm leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </Item.Actions>
@@ -316,7 +316,7 @@
                     >
                       <Item.Media>
                         <i
-                          class="ai ai-plus text-body-sm leading-none text-(--text-muted)"
+                          class="az az-plus text-body-sm leading-none text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </Item.Media>
@@ -367,7 +367,7 @@
                   class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
                 >
                   <i
-                    class="ai ai-github text-body-md leading-none text-(--text-default)"
+                    class="az az-github text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
@@ -376,7 +376,7 @@
             <template #actions>
               <Button
                 label="Continue with GitHub"
-                icon="ai ai-github"
+                icon="az az-github"
                 variant="secondary"
                 size="large"
               />

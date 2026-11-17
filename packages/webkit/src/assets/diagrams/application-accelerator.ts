@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'User',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'Rule: dynamic routes',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application Accelerator',
       title: 'Tuned route, fewer round trips',
-      icon: 'ai ai-app-accelerator',
+      icon: 'az az-application-accelerator',
       active: true,
       lit: true
     },
@@ -33,7 +33,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Origin',
       title: 'api.example.com',
-      icon: 'ai ai-database',
+      icon: 'az az-database',
       active: true
     },
     {
@@ -41,7 +41,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Cache',
       title: 'Static assets, no origin call',
-      icon: 'ai ai-tiered-cache'
+      icon: 'az az-tiered-cache'
     }
   ],
   layout: {

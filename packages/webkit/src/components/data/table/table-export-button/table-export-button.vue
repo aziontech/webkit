@@ -50,7 +50,7 @@
       <IconButton
         v-bind="$attrs"
         :data-testid="testId"
-        icon="ai ai-download"
+        icon="az az-download"
         :ariaLabel="t('tableExportButton.label')"
         variant="outline"
         size="medium"

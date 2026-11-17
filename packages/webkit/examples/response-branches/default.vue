@@ -47,7 +47,7 @@
             :value="versions[active]"
           />
           <IconButton
-            icon="ai ai-refresh"
+            icon="az az-refresh"
             aria-label="Regenerate response"
             variant="ghost"
             size="small"

@@ -324,7 +324,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
     >
       <template #default>
         <EmptyState
-          icon="ai ai-box"
+          icon="az az-box"
           :title="title"
           :description="description"
         >
@@ -342,7 +342,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
             <Item>
               <Item.Media type="icon">
                 <i
-                  class="ai ai-github text-body-lg leading-none text-(--text-default)"
+                  class="az az-github text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </Item.Media>
@@ -364,7 +364,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
             <Item>
               <Item.Media type="icon">
                 <i
-                  class="ai ai-code text-body-lg leading-none text-(--text-default)"
+                  class="az az-code text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </Item.Media>
@@ -403,7 +403,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
             <Item>
               <Item.Media type="icon">
                 <i
-                  class="ai ai-globe text-body-lg leading-none text-(--text-default)"
+                  class="az az-globe text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </Item.Media>
@@ -445,7 +445,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-color ai-nextjs text-body-lg leading-none text-(--text-default)"
+                  class="az-color az-nextjs text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -453,7 +453,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-color ai-react text-body-lg leading-none text-(--text-default)"
+                  class="az-color az-react text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -461,7 +461,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-color ai-vue text-body-lg leading-none text-(--text-default)"
+                  class="az-color az-vue text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -469,7 +469,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-color ai-svelte text-body-lg leading-none text-(--text-default)"
+                  class="az-color az-svelte text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -485,7 +485,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
             </span>
 
             <i
-              class="ai ai-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
+              class="az az-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
               aria-hidden="true"
             />
             <span class="sr-only">(opens in a new tab)</span>

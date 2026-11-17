@@ -11,18 +11,18 @@ export const sampleAccounts: CreateHubAccount[] = [
 ]
 
 export const sampleRepositories: CreateHubRepository[] = [
-  { name: 'next-js-boilerplate', age: '2 hours ago', icon: 'ai-color ai-nextjs' },
-  { name: 'docs-site', age: '5 hours ago', icon: 'ai-color ai-astro' },
-  { name: 'api-playground', age: 'yesterday', icon: 'ai-color ai-vue' },
-  { name: 'storefront-checkout', age: '3 days ago', icon: 'ai-color ai-react' },
-  { name: 'observability-dashboard', age: '6 days ago', icon: 'ai-color ai-svelte' },
-  { name: 'marketing-landing', age: '2 weeks ago', icon: 'ai-color ai-nuxt' },
-  { name: 'internal-admin', age: 'last month', icon: 'ai-color ai-angular' },
-  { name: 'image-resizer', age: 'last month', icon: 'ai ai-image' },
-  { name: 'status-page', age: '2 months ago', icon: 'ai-color ai-astro' },
-  { name: 'auth-gateway', age: '2 months ago', icon: 'ai ai-lock' },
-  { name: 'blog', age: '3 months ago', icon: 'ai-color ai-nuxt' },
-  { name: 'design-tokens', age: '5 months ago', icon: 'ai ai-palette' }
+  { name: 'next-js-boilerplate', age: '2 hours ago', icon: 'az-color az-nextjs' },
+  { name: 'docs-site', age: '5 hours ago', icon: 'az-color az-astro' },
+  { name: 'api-playground', age: 'yesterday', icon: 'az-color az-vue' },
+  { name: 'storefront-checkout', age: '3 days ago', icon: 'az-color az-react' },
+  { name: 'observability-dashboard', age: '6 days ago', icon: 'az-color az-svelte' },
+  { name: 'marketing-landing', age: '2 weeks ago', icon: 'az-color az-nuxt' },
+  { name: 'internal-admin', age: 'last month', icon: 'az-color az-angular' },
+  { name: 'image-resizer', age: 'last month', icon: 'az az-image' },
+  { name: 'status-page', age: '2 months ago', icon: 'az-color az-astro' },
+  { name: 'auth-gateway', age: '2 months ago', icon: 'az az-lock' },
+  { name: 'blog', age: '3 months ago', icon: 'az-color az-nuxt' },
+  { name: 'design-tokens', age: '5 months ago', icon: 'az az-palette' }
 ]
 
 export const sampleTemplates: CreateHubTemplateSection[] = [
@@ -35,63 +35,63 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         slug: 'next-boilerplate',
         title: 'Next.js Boilerplate',
         description: 'Deploy a full-stack Next.js application in a few steps.',
-        icon: 'ai-color ai-nextjs',
+        icon: 'az-color az-nextjs',
         markClass: '[[data-theme=dark]_&]:invert'
       },
       {
         slug: 'react-boilerplate',
         title: 'React Boilerplate',
         description: 'Automate your React.js deployment process.',
-        icon: 'ai-color ai-react',
+        icon: 'az-color az-react',
         markClass: ''
       },
       {
         slug: 'vue-boilerplate',
         title: 'Vue.js starter',
         description: 'A lightweight template to rapidly build Vue.js applications.',
-        icon: 'ai-color ai-vue',
+        icon: 'az-color az-vue',
         markClass: ''
       },
       {
         slug: 'angular-boilerplate',
         title: 'Angular Boilerplate',
         description: 'Automate your Angular deployment process with this template.',
-        icon: 'ai-color ai-angular',
+        icon: 'az-color az-angular',
         markClass: ''
       },
       {
         slug: 'nuxt-ecommerce',
         title: 'Nuxt E-commerce',
         description: 'Launch a Nuxt e-commerce or content app.',
-        icon: 'ai-color ai-nuxt',
+        icon: 'az-color az-nuxt',
         markClass: ''
       },
       {
         slug: 'astro-starter',
         title: 'Astro Starter',
         description: 'Ship a content-driven Astro site that renders.',
-        icon: 'ai-color ai-astro',
+        icon: 'az-color az-astro',
         markClass: ''
       },
       {
         slug: 'svelte-boilerplate',
         title: 'Svelte Boilerplate',
         description: 'Accelerate the deployment of Svelte applications.',
-        icon: 'ai-color ai-svelte',
+        icon: 'az-color az-svelte',
         markClass: ''
       },
       {
         slug: 'preact-starter',
         title: 'Preact Starter',
         description: 'Deploy a Preact app: the React API in a fraction of the bundle.',
-        icon: 'ai ai-preact',
+        icon: 'az az-preact',
         markClass: ''
       },
       {
         slug: 'qwik-starter',
         title: 'Qwik Starter',
         description: 'Ship a resumable Qwik app that hydrates only what the reader touches.',
-        icon: 'ai ai-qwik',
+        icon: 'az az-qwik',
         markClass: ''
       }
     ]
@@ -106,7 +106,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Static Site',
         description: 'Publish a folder of built files and serve it as-is.',
         vendor: 'Acme',
-        icon: 'ai ai-file',
+        icon: 'az az-file',
         markClass: ''
       },
       {
@@ -114,7 +114,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Reverse Proxy',
         description: 'Front an origin you already run and pass its traffic on.',
         vendor: 'Acme',
-        icon: 'ai ai-server',
+        icon: 'az az-server',
         markClass: ''
       },
       {
@@ -122,7 +122,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'API Service',
         description: 'Run a small HTTP API with routing and JSON responses.',
         vendor: 'Acme',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         markClass: ''
       },
       {
@@ -130,7 +130,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Scheduled Job',
         description: 'Run a task on a schedule, with its runs and logs kept.',
         vendor: 'Acme',
-        icon: 'ai ai-clock',
+        icon: 'az az-clock',
         markClass: ''
       },
       {
@@ -138,7 +138,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'AI Inference',
         description: 'Serve a model behind an endpoint that streams its answers.',
         vendor: 'Acme',
-        icon: 'ai ai-bolt',
+        icon: 'az az-bolt',
         markClass: ''
       },
       {
@@ -146,7 +146,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Image Optimization',
         description: 'Resize and compress images on request, cached after the first.',
         vendor: 'Acme',
-        icon: 'ai ai-image',
+        icon: 'az az-image',
         markClass: ''
       },
       {
@@ -154,7 +154,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Storefront',
         description: 'A server-rendered commerce storefront with cart and checkout.',
         vendor: 'Acme',
-        icon: 'ai ai-shopping-cart',
+        icon: 'az az-shopping-cart',
         markClass: ''
       },
       {
@@ -162,7 +162,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Multi-tenant App',
         description: 'One codebase that serves each tenant on its own domain.',
         vendor: 'Acme',
-        icon: 'ai ai-users',
+        icon: 'az az-users',
         markClass: ''
       },
       {
@@ -170,7 +170,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Auth Gateway',
         description: 'Check a token before a request reaches the service behind it.',
         vendor: 'Acme',
-        icon: 'ai ai-lock',
+        icon: 'az az-lock',
         markClass: ''
       },
       {
@@ -178,7 +178,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Database App',
         description: 'A starter wired to a database, with a table and its queries.',
         vendor: 'Acme',
-        icon: 'ai ai-database',
+        icon: 'az az-database',
         markClass: ''
       },
       {
@@ -186,7 +186,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Blog',
         description: 'A content site with posts, tags and a feed.',
         vendor: 'Community',
-        icon: 'ai ai-pencil',
+        icon: 'az az-pencil',
         markClass: ''
       },
       {
@@ -194,7 +194,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Landing Page',
         description: 'A single page with a hero, features and a sign-up form.',
         vendor: 'Community',
-        icon: 'ai ai-desktop',
+        icon: 'az az-desktop',
         markClass: ''
       },
       {
@@ -202,7 +202,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Documentation Site',
         description: 'Searchable docs with versioned sections.',
         vendor: 'Community',
-        icon: 'ai ai-book',
+        icon: 'az az-book',
         markClass: ''
       },
       {
@@ -210,7 +210,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Status Page',
         description: 'Publish uptime and incidents for the services you run.',
         vendor: 'Community',
-        icon: 'ai ai-chart-line',
+        icon: 'az az-chart-line',
         markClass: ''
       }
     ]
@@ -225,7 +225,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'OpenNext Starter',
         description: 'Deploy Next.js through the OpenNext adapter, server routes included.',
         vendor: '',
-        icon: 'ai-color ai-nextjs',
+        icon: 'az-color az-nextjs',
         markClass: '[[data-theme=dark]_&]:invert'
       },
       {
@@ -233,7 +233,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Nitro Starter',
         description: 'Deploy a Nitro server build, the engine behind Nuxt, on its own.',
         vendor: '',
-        icon: 'ai ai-server',
+        icon: 'az az-server',
         markClass: ''
       },
       {
@@ -241,7 +241,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Gatsby Starter',
         description: 'Publish a Gatsby site built at deploy time and served worldwide.',
         vendor: '',
-        icon: 'ai ai-gatsby',
+        icon: 'az az-gatsby',
         markClass: ''
       },
       {
@@ -249,7 +249,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Docusaurus Starter',
         description: 'Publish a Docusaurus documentation site.',
         vendor: '',
-        icon: 'ai ai-docusaurus',
+        icon: 'az az-docusaurus',
         markClass: ''
       },
       {
@@ -257,7 +257,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'VitePress Starter',
         description: 'Publish a VitePress documentation site.',
         vendor: '',
-        icon: 'ai ai-vitepress',
+        icon: 'az az-vitepress',
         markClass: ''
       },
       {
@@ -265,7 +265,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'VuePress Starter',
         description: 'Publish a VuePress documentation site.',
         vendor: '',
-        icon: 'ai ai-vuepress',
+        icon: 'az az-vuepress',
         markClass: ''
       },
       {
@@ -273,7 +273,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Hugo Starter',
         description: 'Deploy a Hugo site with thousands of pages built in seconds.',
         vendor: '',
-        icon: 'ai ai-hugo',
+        icon: 'az az-hugo',
         markClass: ''
       },
       {
@@ -281,7 +281,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Jekyll Starter',
         description: 'Publish a Jekyll site straight from its source.',
         vendor: '',
-        icon: 'ai ai-jekyll',
+        icon: 'az az-jekyll',
         markClass: ''
       },
       {
@@ -289,7 +289,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Hexo Starter',
         description: 'Publish a Hexo blog.',
         vendor: '',
-        icon: 'ai ai-hexo',
+        icon: 'az az-hexo',
         markClass: ''
       },
       {
@@ -297,7 +297,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Eleventy Starter',
         description: 'Publish an Eleventy site with no framework runtime shipped to the reader.',
         vendor: '',
-        icon: 'ai ai-eleventy',
+        icon: 'az az-eleventy',
         markClass: ''
       },
       {
@@ -305,7 +305,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Stencil Starter',
         description: 'Build framework-agnostic web components with Stencil.',
         vendor: '',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         markClass: ''
       },
       {
@@ -313,7 +313,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Static HTML Starter',
         description: 'Serve a folder of HTML, CSS and JavaScript with no build step.',
         vendor: '',
-        icon: 'ai-color ai-html',
+        icon: 'az-color az-html',
         markClass: ''
       },
       {
@@ -321,7 +321,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'JavaScript Starter',
         description: 'Run plain JavaScript with no framework, only a handler.',
         vendor: '',
-        icon: 'ai-color ai-javascript',
+        icon: 'az-color az-javascript',
         markClass: ''
       },
       {
@@ -329,7 +329,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'TypeScript Starter',
         description: 'Run a TypeScript handler, compiled on build.',
         vendor: '',
-        icon: 'ai-color ai-typescript',
+        icon: 'az-color az-typescript',
         markClass: ''
       },
       {
@@ -337,7 +337,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Rust WASM Starter',
         description: 'Compile Rust to WebAssembly and run it.',
         vendor: '',
-        icon: 'ai ai-microchip',
+        icon: 'az az-microchip',
         markClass: ''
       },
       {
@@ -345,7 +345,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
         title: 'Emscripten Starter',
         description: 'Bring C or C++, compiled to WebAssembly with Emscripten.',
         vendor: '',
-        icon: 'ai ai-microchip',
+        icon: 'az az-microchip',
         markClass: ''
       }
     ]

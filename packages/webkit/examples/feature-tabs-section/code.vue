@@ -7,7 +7,7 @@
     language: 'javascript',
     code,
     fileName,
-    fileIcon: 'ai-color ai-javascript'
+    fileIcon: 'az-color az-javascript'
   })
 
   const tabs = [

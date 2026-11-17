@@ -164,15 +164,15 @@ describe('SidebarMenuItem', () => {
 
   it('renders the leading icon element hidden from a11y with the provided class', () => {
     const { getByTestId } = render(SidebarMenuItem, {
-      props: { label: 'Home', icon: 'ai ai-settings' }
+      props: { label: 'Home', icon: 'az az-settings' }
     })
 
     const iconBox = getByTestId('sidebar-menu-item__icon')
     expect(iconBox.getAttribute('aria-hidden')).toBe('true')
     const glyph = iconBox.querySelector('i')
     expect(glyph).toBeTruthy()
-    expect(glyph?.classList.contains('ai')).toBe(true)
-    expect(glyph?.classList.contains('ai-settings')).toBe(true)
+    expect(glyph?.classList.contains('az')).toBe(true)
+    expect(glyph?.classList.contains('az-settings')).toBe(true)
   })
 
   it('renders no icon box at all when icon is empty', () => {
@@ -255,7 +255,7 @@ describe('SidebarMenuItem', () => {
   // rendering is covered directly above, so nothing is lost with the fixture.
   it('renders cleanly in the shape the SidebarMenu compound puts it in', async () => {
     const { getByTestId, container } = render(
-      InList({ label: 'Home', icon: 'ai ai-home', href: '/', active: true })
+      InList({ label: 'Home', icon: 'az az-home', href: '/', active: true })
     )
 
     expect(getByTestId('sidebar-menu-item')).toBeTruthy()

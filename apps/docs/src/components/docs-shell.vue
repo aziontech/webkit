@@ -69,7 +69,7 @@
           <div class="flex min-w-0 items-center gap-(--spacing-xs)">
             <div class="shrink-0 lg:hidden">
               <IconButton
-                icon="ai ai-menu"
+                icon="az az-menu"
                 variant="outline"
                 size="medium"
                 :aria-label="t.openNavigation"
@@ -127,7 +127,7 @@
               <Select.Trigger :aria-label="t.language">
                 <template #leading>
                   <i
-                    class="ai ai-globe text-(--text-muted)"
+                    class="az az-globe text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </template>
@@ -145,7 +145,7 @@
           </div>
           <Tooltip :content="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
             <IconButton
-              :icon="settings.dir === 'rtl' ? 'ai ai-align-left' : 'ai ai-align-right'"
+              :icon="settings.dir === 'rtl' ? 'az az-align-left' : 'az az-align-right'"
               variant="outline"
               size="medium"
               :aria-label="t.rightToLeft"
@@ -161,7 +161,7 @@
             />
           </div>
           <IconButton
-            icon="ai ai-github"
+            icon="az az-github"
             variant="outline"
             size="medium"
             :aria-label="t.github"

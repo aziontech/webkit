@@ -77,7 +77,7 @@
                 <template #actions>
                   <Button
                     label="Deploy"
-                    icon="ai ai-cloud-upload"
+                    icon="az az-cloud-upload"
                     variant="outline"
                     size="medium"
                   />
@@ -115,7 +115,7 @@
                                 class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
                               >
                                 <i
-                                  class="ai ai-github text-body-md leading-none text-(--text-default)"
+                                  class="az az-github text-body-md leading-none text-(--text-default)"
                                   aria-hidden="true"
                                 />
                               </span>
@@ -124,7 +124,7 @@
                           <template #actions>
                             <Button
                               label="Continue with GitHub"
-                              icon="ai ai-github"
+                              icon="az az-github"
                               variant="secondary"
                               size="large"
                             />
@@ -306,7 +306,7 @@
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="ai ai-external-link"
+            icon="az az-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >

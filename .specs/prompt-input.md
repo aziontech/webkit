@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: cbac7ca0acf259418b942a5637a3d8431381027d1835c9e456e017a6b73dd467
+checksum: d72ffa0fbb7ee077f914cfbebd223d4af4ddb645a62dac0ef81572e058a2b66b
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -124,8 +124,8 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 ## States
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`.
-- `ready`: Submit (primary `IconButton`, `ai ai-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
-- `pending` / `streaming`: Stop (secondary `IconButton`, `ai ai-stop`) replaces Submit; Enter does nothing.
+- `ready`: Submit (primary `IconButton`, `az az-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
+- `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 
 ## Motion & Animations

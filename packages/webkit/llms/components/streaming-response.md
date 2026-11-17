@@ -173,7 +173,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
       label="Replay"
       variant="outline"
       size="small"
-      icon="ai ai-refresh"
+      icon="az az-refresh"
       :disabled="streaming"
       @click="play"
     />

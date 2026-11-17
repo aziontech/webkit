@@ -46,7 +46,7 @@
                 <CommandItem value="nav:applications">
                   <template #leading
                     ><i
-                      class="ai ai-edge-application"
+                      class="az az-applications"
                       aria-hidden="true"
                   /></template>
                   Applications
@@ -54,7 +54,7 @@
                 <CommandItem value="nav:variables">
                   <template #leading
                     ><i
-                      class="ai ai-variables"
+                      class="az az-variables"
                       aria-hidden="true"
                   /></template>
                   Variables
@@ -67,7 +67,7 @@
                 <CommandItem value="cmd:settings">
                   <template #leading
                     ><i
-                      class="ai ai-settings"
+                      class="az az-settings"
                       aria-hidden="true"
                   /></template>
                   Account Settings
@@ -84,20 +84,20 @@
         <SidebarMenuGroup>
           <SidebarMenuItem
             label="Home"
-            icon="ai ai-home"
+            icon="az az-home"
             href="/"
             active
           />
           <SidebarMenuItem
             label="Marketplace"
-            icon="ai ai-marketplace"
+            icon="az az-marketplace"
             href="/marketplace"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Build">
           <SidebarMenuItem
             label="Applications"
-            icon="ai ai-edge-application"
+            icon="az az-applications"
             href="/applications"
           />
           <SidebarMenuSub default-open>
@@ -118,19 +118,19 @@
           </SidebarMenuSub>
           <SidebarMenuItem
             label="Variables"
-            icon="ai ai-variables"
+            icon="az az-variables"
             href="/variables"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Store">
           <SidebarMenuItem
             label="Object Storage"
-            icon="ai ai-edge-storage"
+            icon="az az-object-storage"
             href="/object-storage"
           />
           <SidebarMenuItem
             label="SQL Database"
-            icon="ai ai-edge-sql"
+            icon="az az-sql-database"
             href="/sql-database"
             tag-value="Preview"
             tag-variant="primary"
@@ -140,7 +140,7 @@
           <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Settings"
-              icon="ai ai-settings"
+              icon="az az-settings"
               type="drill"
             />
             <SidebarMenuSubContent>
@@ -181,7 +181,7 @@
             >
               <DropdownMenuTrigger>
                 <IconButton
-                  icon="ai ai-ellipsis-vertical"
+                  icon="az az-ellipsis-vertical"
                   aria-label="Account menu"
                   variant="outline"
                   size="small"
@@ -212,7 +212,7 @@
                 >
                   <template #trailing
                     ><i
-                      class="ai ai-log-out"
+                      class="az az-log-out"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuItem>

@@ -597,7 +597,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/rules"
@@ -605,7 +605,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
           />
           <Button
             label="Add Rule"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="outline"
             size="medium"
             :disabled="loading || loadFailed"
@@ -632,7 +632,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -739,7 +739,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                           </Tooltip>
                           <Tooltip :content="lockReason(group.value, row) || 'Move up'">
                             <IconButton
-                              icon="ai ai-chevron-up"
+                              icon="az az-chevron-up"
                               variant="outline"
                               size="small"
                               data-control="up"
@@ -754,7 +754,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                           </Tooltip>
                           <Tooltip :content="lockReason(group.value, row) || 'Move down'">
                             <IconButton
-                              icon="ai ai-chevron-down"
+                              icon="az az-chevron-down"
                               variant="outline"
                               size="small"
                               data-control="down"
@@ -819,7 +819,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                       <template #empty>
                         <EmptyState
                           size="small"
-                          icon="ai ai-search"
+                          icon="az az-search"
                           :title="`No ${group.label.toLowerCase()} rule matches “${search.trim()}”`"
                         >
                           <template #actions>
@@ -842,7 +842,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                       <template #actions>
                         <Button
                           label="Add Rule"
-                          icon="ai ai-plus"
+                          icon="az az-plus"
                           variant="outline"
                           size="medium"
                           @click="(event: MouseEvent) => emit('create', event, group.value)"

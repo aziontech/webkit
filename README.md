@@ -100,27 +100,27 @@ Once the project is wired, import components by path:
   <Button
     variant="primary"
     label="Button"
-    icon="ai ai-arrow-right"
+    icon="az az-arrow-right"
   />
   <Button
     variant="secondary"
     label="Button"
-    icon="ai ai-arrow-right"
+    icon="az az-arrow-right"
   />
   <Button
     variant="outline"
     label="Button"
-    icon="ai ai-arrow-right"
+    icon="az az-arrow-right"
   />
   <Button
     variant="ghost"
     label="Button"
-    icon="ai ai-arrow-right"
+    icon="az az-arrow-right"
   />
   <Button
     variant="danger"
     label="Button"
-    icon="ai ai-trash"
+    icon="az az-trash"
   />
 
   <!-- statment buttons -->

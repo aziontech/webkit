@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'User',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Routing',
       title: 'Nearest data center',
-      icon: 'ai ai-directions',
+      icon: 'az az-directions',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       status: {
         label: 'Live',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Cache',
       title: 'Served from cache',
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-tiered-cache',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Origin',
       title: 'origin.example.com',
-      icon: 'ai ai-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

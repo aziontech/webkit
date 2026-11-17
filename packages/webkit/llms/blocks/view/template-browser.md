@@ -44,7 +44,7 @@ One `PropertyFilter` bound with `v-bind="propertyFilterProps"` from `useCollecti
 
 ### C. Category sections — `IntegrationCard` (required)
 
-One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by the width of the content (container queries on the `@container/templates` section, so an open rail does not overstate the room). A tile is an `IntegrationCard`: the framework mark as its `logo` (colour marks use `ai-color`, and the black Next.js mark inverts in dark), the name as an `h3` holding a button that emits `select` and opens the preview, two lines of description and the framework as a secondary badge. The title's stretched target makes the whole tile one target with the hover wash and the focus ring inside the tile; the markup lives in `IntegrationCard`, not in the block. Tiles in a row share a height.
+One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by the width of the content (container queries on the `@container/templates` section, so an open rail does not overstate the room). A tile is an `IntegrationCard`: the framework mark as its `logo` (colour marks use `az-color`, and the black Next.js mark inverts in dark), the name as an `h3` holding a button that emits `select` and opens the preview, two lines of description and the framework as a secondary badge. The title's stretched target makes the whole tile one target with the hover wash and the focus ring inside the tile; the markup lives in `IntegrationCard`, not in the block. Tiles in a row share a height.
 
 ### D. No matching templates — `EmptyState`, `Button` (required)
 
@@ -334,7 +334,7 @@ Each variant is the same screen in another state: `get_block("view/template-brow
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/templates"
@@ -412,14 +412,14 @@ Each variant is the same screen in another state: `get_block("view/template-brow
           />
           <EmptyState
             size="medium"
-            icon="ai ai-layout-grid"
+            icon="az az-layout-grid"
             title="Templates are unavailable"
             description="The catalog shows here once it loads. You can still deploy from your own repository."
           >
             <template #actions>
               <Button
                 label="Import from Git"
-                icon="ai ai-github"
+                icon="az az-github"
                 variant="secondary"
                 size="small"
                 href="/create/import"
@@ -431,7 +431,7 @@ Each variant is the same screen in another state: `get_block("view/template-brow
         <EmptyState
           v-else-if="status === 'no-match'"
           size="medium"
-          icon="ai ai-filter-off"
+          icon="az az-filter-off"
           title="No matching templates"
           description="No template matches this search. Remove a filter to widen the results."
         >
@@ -561,7 +561,7 @@ npm run dev</code></pre>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="View repository"
-              icon="ai ai-external-link"
+              icon="az az-external-link"
               icon-position="trailing"
               variant="outline"
               size="medium"
@@ -570,7 +570,7 @@ npm run dev</code></pre>
             />
             <Button
               label="Deploy"
-              icon="ai ai-cloud-upload"
+              icon="az az-cloud-upload"
               variant="primary"
               size="medium"
               :href="`/create/deploy?template=${selected.id}`"
@@ -617,7 +617,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Next.js Starter',
     'frameworks',
     'next',
-    'ai-color ai-nextjs',
+    'az-color az-nextjs',
     'A Next.js app with server rendering and static pages, ready to deploy.',
     'Oct 28, 2026'
   ),
@@ -626,7 +626,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Astro Blog',
     'frameworks',
     'astro',
-    'ai-color ai-astro',
+    'az-color az-astro',
     'A content-first blog with Markdown posts, an RSS feed and a sitemap.',
     'Oct 21, 2026'
   ),
@@ -635,7 +635,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Nuxt Storefront',
     'frameworks',
     'nuxt',
-    'ai-color ai-nuxt',
+    'az-color az-nuxt',
     'A product catalog with a cart, rendered on the server and cached close to buyers.',
     'Oct 14, 2026'
   ),
@@ -644,7 +644,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Angular Dashboard',
     'frameworks',
     'angular',
-    'ai-color ai-angular',
+    'az-color az-angular',
     'A single-page admin dashboard with routing and lazy-loaded modules.',
     'Sep 30, 2026'
   ),
@@ -653,7 +653,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Hugo Docs',
     'frameworks',
     'hugo',
-    'ai ai-hugo',
+    'az az-hugo',
     'A documentation site with search, versioned sections and dark mode.',
     'Sep 22, 2026'
   ),
@@ -662,7 +662,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Static Site',
     'starters',
     'vite',
-    'ai ai-edge-storage',
+    'az az-object-storage',
     'Publish a folder of built files and serve it from the closest location.',
     'Nov 2, 2026'
   ),
@@ -671,7 +671,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Reverse Proxy',
     'starters',
     'javascript',
-    'ai ai-edge-connectors',
+    'az az-connectors',
     'Front an origin you already run and pass every request on to it.',
     'Oct 30, 2026'
   ),
@@ -680,7 +680,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'REST API',
     'starters',
     'hono',
-    'ai ai-hono',
+    'az az-hono',
     'A small JSON API with routing, validation and a key-value store.',
     'Oct 18, 2026'
   ),
@@ -689,7 +689,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Hello Function',
     'functions',
     'javascript',
-    'ai ai-edge-functions',
+    'az az-functions',
     'The smallest function that answers a request, to see how a deploy works.',
     'Nov 4, 2026'
   ),
@@ -698,7 +698,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'A/B Test',
     'functions',
     'javascript',
-    'ai ai-edge-functions',
+    'az az-functions',
     'Split traffic between two versions of a page with a sticky cookie.',
     'Oct 9, 2026'
   ),
@@ -707,7 +707,7 @@ export const sampleTemplates: TemplateBrowserTemplate[] = [
     'Geo Redirect',
     'functions',
     'javascript',
-    'ai ai-edge-functions',
+    'az az-functions',
     'Send visitors to the regional version of a site from their location.',
     'Sep 27, 2026'
   )

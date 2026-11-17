@@ -12,16 +12,16 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import Tree, { type TreeItem } from './tree.vue'
 
 const LOGO: TreeItem = { id: 'assets/img/logo.svg', label: 'logo.svg', description: '4.2 KB' }
-const IMG: TreeItem = { id: 'assets/img', label: 'img', icon: 'ai ai-folder', children: [LOGO] }
+const IMG: TreeItem = { id: 'assets/img', label: 'img', icon: 'az az-folder', children: [LOGO] }
 const HERO: TreeItem = { id: 'assets/hero.webp', label: 'hero.webp', description: '182 KB' }
 const ASSETS: TreeItem = {
   id: 'assets',
   label: 'assets',
-  icon: 'ai ai-folder',
+  icon: 'az az-folder',
   children: [IMG, HERO]
 }
 const INDEX: TreeItem = { id: 'src/index.js', label: 'index.js' }
-const SRC: TreeItem = { id: 'src', label: 'src', icon: 'ai ai-folder', children: [INDEX] }
+const SRC: TreeItem = { id: 'src', label: 'src', icon: 'az az-folder', children: [INDEX] }
 const LOCKED: TreeItem = { id: 'locked.txt', label: 'locked.txt', disabled: true }
 const CONFIG: TreeItem = { id: 'azion.config.js', label: 'azion.config.js', description: '612 B' }
 const ITEMS: TreeItem[] = [ASSETS, SRC, LOCKED, CONFIG]
@@ -445,7 +445,7 @@ describe('Tree', () => {
     const row = rowOf(view.container, CONFIG.id)
     expect(row.textContent).toContain('azion.config.js')
     expect(row.textContent).toContain('612 B')
-    expect(rowOf(view.container, 'assets').querySelector('i.ai-folder')).toBeTruthy()
+    expect(rowOf(view.container, 'assets').querySelector('i.az-folder')).toBeTruthy()
     expect(view.container.querySelector('[data-slot="tree-actions"]')).toBeNull()
   })
 
@@ -649,7 +649,7 @@ describe('Tree', () => {
     const FOLDERS: TreeItem[] = Array.from({ length: 20 }, (_, f) => ({
       id: `f${f}`,
       label: `folder-${f}`,
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: Array.from({ length: 49 }, (_, c) => ({
         id: `f${f}/c${c}`,
         label: `file-${c}.txt`,

@@ -123,7 +123,7 @@
         >
           <span class="flex items-center gap-(--spacing-xs)">
             <Tag
-              icon="ai ai-azion"
+              icon="az az-azion"
               severity="neutral"
               size="small"
             />
@@ -140,7 +140,7 @@
             <span class="flex">
               <Tag
                 label="Sum"
-                icon="ai ai-calculator"
+                icon="az az-calculator"
                 severity="info"
                 size="small"
               />

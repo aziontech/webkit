@@ -82,7 +82,7 @@
                 <template #actions>
                   <Button
                     label="Deploy"
-                    icon="ai ai-cloud-upload"
+                    icon="az az-cloud-upload"
                     variant="outline"
                     size="medium"
                   />
@@ -110,7 +110,7 @@
                             <template #description>
                               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                                 <i
-                                  class="ai ai-github shrink-0"
+                                  class="az az-github shrink-0"
                                   aria-hidden="true"
                                 />
                                 <Tooltip :content="`Open ${repository} on GitHub`">
@@ -126,7 +126,7 @@
                                       {{ repository }}
                                     </span>
                                     <i
-                                      class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                                      class="az az-external-link shrink-0 text-body-xs leading-none"
                                       aria-hidden="true"
                                     />
                                   </a>
@@ -348,7 +348,7 @@
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="ai ai-external-link"
+            icon="az az-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >

@@ -15,7 +15,7 @@
 ## Do
 
 - Use at most one per view; the glow loses its meaning when it repeats.
-- Keep the label short and verb-led, and pair it with a leading `icon` (for example `ai ai-sparkles`).
+- Keep the label short and verb-led, and pair it with a leading `icon` (for example `az az-sparkles`).
 - It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
 - `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
 - The glow stops under reduced motion, so never use it to convey state.
@@ -99,7 +99,7 @@
   <HighlightButton
     size="large"
     label="Ask Azion"
-    icon="ai ai-sparkles"
+    icon="az az-sparkles"
   />
 </template>
 ```
@@ -116,17 +116,17 @@
     <HighlightButton
       size="small"
       label="Ask Azion"
-      icon="ai ai-sparkles"
+      icon="az az-sparkles"
     />
     <HighlightButton
       size="medium"
       label="Ask Azion"
-      icon="ai ai-sparkles"
+      icon="az az-sparkles"
     />
     <HighlightButton
       size="large"
       label="Ask Azion"
-      icon="ai ai-sparkles"
+      icon="az az-sparkles"
     />
   </div>
 </template>
@@ -142,7 +142,7 @@
 <template>
   <HighlightButton
     label="Ask Azion"
-    icon="ai ai-sparkles"
+    icon="az az-sparkles"
     loading
   />
 </template>

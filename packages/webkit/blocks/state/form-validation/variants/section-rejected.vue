@@ -220,7 +220,7 @@
           side="bottom"
         >
           <IconButton
-            icon="ai ai-chevron-left"
+            icon="az az-chevron-left"
             aria-label="Back to Services"
             variant="outline"
             size="small"
@@ -273,7 +273,7 @@
             >
               <template #trailing>
                 <i
-                  class="ai ai-settings"
+                  class="az az-settings"
                   aria-hidden="true"
                 />
               </template>
@@ -286,7 +286,7 @@
             >
               <template #trailing>
                 <i
-                  class="ai ai-book"
+                  class="az az-book"
                   aria-hidden="true"
                 />
               </template>
@@ -297,7 +297,7 @@
             >
               <template #trailing>
                 <i
-                  class="ai ai-log-out"
+                  class="az az-log-out"
                   aria-hidden="true"
                 />
               </template>

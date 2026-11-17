@@ -61,7 +61,7 @@
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `ai ai-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
+- A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `az az-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
 - Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Accessibility
@@ -232,37 +232,37 @@
 
   const socials = [
     {
-      icon: 'ai ai-github',
+      icon: 'az az-github',
       label: 'Azion on GitHub',
       href: 'https://github.com/aziontech'
     },
     {
-      icon: 'ai ai-linkedin',
+      icon: 'az az-linkedin',
       label: 'Azion on LinkedIn',
       href: 'https://www.linkedin.com/company/aziontech'
     },
     {
-      icon: 'ai ai-youtube',
+      icon: 'az az-youtube',
       label: 'Azion on YouTube',
       href: 'https://www.youtube.com/aziontech'
     },
     {
-      icon: 'ai ai-x-brand',
+      icon: 'az az-x-brand',
       label: 'Azion on X',
       href: 'https://x.com/aziontech'
     },
     {
-      icon: 'ai ai-instagram',
+      icon: 'az az-instagram',
       label: 'Azion on Instagram',
       href: 'https://www.instagram.com/aziontech'
     },
     {
-      icon: 'ai ai-discord',
+      icon: 'az az-discord',
       label: 'Azion on Discord',
       href: 'https://discord.gg/azion'
     },
     {
-      icon: 'ai ai-reddit',
+      icon: 'az az-reddit',
       label: 'Azion on Reddit',
       href: 'https://www.reddit.com/r/aziontech'
     }

@@ -78,12 +78,12 @@ test('every media band has a drawn picture and no code or diagram', () => {
 })
 
 test('the checks fire on a gap and stay silent on a whole grid', () => {
-  assert.equal(capabilityGridIconGaps({ items: [{ icon: 'ai ai-bolt' }, {}] }).length, 1)
+  assert.equal(capabilityGridIconGaps({ items: [{ icon: 'az az-bolt' }, {}] }).length, 1)
   assert.equal(capabilityGridIconGaps({ items: [{}, {}] }).length, 0)
   assert.equal(capabilityGridIconGaps({ items: [{ icon: 'a' }, { icon: 'b' }] }).length, 0)
   assert.equal(networkBenefitIconGaps({ benefits: [{ title: 'A' }] }).length, 1)
   assert.equal(
-    networkBenefitIconGaps({ benefits: [{ title: 'A', icon: 'ai ai-globe' }] }).length,
+    networkBenefitIconGaps({ benefits: [{ title: 'A', icon: 'az az-globe' }] }).length,
     0
   )
 })

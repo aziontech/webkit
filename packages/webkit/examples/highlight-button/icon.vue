@@ -6,15 +6,15 @@
   <div class="flex flex-wrap items-center gap-4">
     <HighlightButton
       label="Ask Azion"
-      icon="ai ai-sparkles"
+      icon="az az-sparkles"
     />
     <HighlightButton
       label="Generate"
-      icon="ai ai-bolt"
+      icon="az az-bolt"
     />
     <HighlightButton
       label="Highlight"
-      icon="ai ai-star"
+      icon="az az-star"
     />
   </div>
 </template>

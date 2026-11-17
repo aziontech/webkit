@@ -93,7 +93,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text description.
-- `popover-close/popover-close.vue` — close control. Renders an `IconButton` (`ai ai-x`, `aria-label="Close"`) that calls the injected `setOpen(false)` on activation; focus returns to the trigger. Optional — omit when the popover is dismissed only by outside-click / `Esc` / a footer action.
+- `popover-close/popover-close.vue` — close control. Renders an `IconButton` (`az az-x`, `aria-label="Close"`) that calls the injected `setOpen(false)` on activation; focus returns to the trigger. Optional — omit when the popover is dismissed only by outside-click / `Esc` / a footer action.
   - Props: _none_.
   - Events: _none_ (root handles `update:open`).
   - Slots: _none_.

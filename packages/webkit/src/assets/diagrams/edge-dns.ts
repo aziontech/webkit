@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Resolver',
-      icon: 'ai ai-globe',
+      icon: 'az az-globe',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'DNS',
       title: 'shop.example.com zone',
-      icon: 'ai ai-edge-dns',
+      icon: 'az az-edge-dns',
       status: {
         label: 'DNSSEC',
         severity: 'success'
@@ -29,7 +29,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'A record',
       title: 'Points at the workload',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       active: true
     },
     {
@@ -37,14 +37,14 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'MX record',
       title: 'Mail provider',
-      icon: 'ai ai-mail'
+      icon: 'az az-mail'
     },
     {
       key: 'txt',
       type: 'item',
       eyebrow: 'TXT record',
       title: 'Domain verification',
-      icon: 'ai ai-key'
+      icon: 'az az-key'
     }
   ],
   layout: {

@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Request',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Firewall',
       title: 'Rule: run the WAF',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'WAF',
       title: 'SQLi, XSS, RCE scored',
-      icon: 'ai ai-waf-rules',
+      icon: 'az az-waf',
       status: {
         label: 'Blocking',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Application',
       title: 'Clean traffic goes on',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Block',
       title: '403 to the attacker',
-      icon: 'ai ai-ban'
+      icon: 'az az-ban'
     }
   ],
   layout: {

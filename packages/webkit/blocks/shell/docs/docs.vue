@@ -89,19 +89,19 @@
     {
       label: 'GitHub',
       links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
+        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'az az-github' },
         {
           label: 'Contribute to this page',
           href: 'https://github.com/aziontech/azion',
-          icon: 'ai ai-pencil'
+          icon: 'az az-pencil'
         }
       ]
     },
     {
       label: 'Community',
       links: [
-        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'ai ai-discord' },
-        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x-brand' }
+        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'az az-discord' },
+        { label: 'X', href: 'https://x.com/aziontech', icon: 'az az-x-brand' }
       ]
     }
   ]
@@ -140,25 +140,25 @@
   ]
 
   const socials = [
-    { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+    { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
     {
-      icon: 'ai ai-linkedin',
+      icon: 'az az-linkedin',
       label: 'Azion on LinkedIn',
       href: 'https://www.linkedin.com/company/aziontech'
     },
     {
-      icon: 'ai ai-youtube',
+      icon: 'az az-youtube',
       label: 'Azion on YouTube',
       href: 'https://www.youtube.com/aziontech'
     },
-    { icon: 'ai ai-x-brand', label: 'Azion on X', href: 'https://x.com/aziontech' },
+    { icon: 'az az-x-brand', label: 'Azion on X', href: 'https://x.com/aziontech' },
     {
-      icon: 'ai ai-instagram',
+      icon: 'az az-instagram',
       label: 'Azion on Instagram',
       href: 'https://www.instagram.com/aziontech'
     },
-    { icon: 'ai ai-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
-    { icon: 'ai ai-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
+    { icon: 'az az-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
+    { icon: 'az az-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
   ]
 
   const languages = ['EN', 'PT-BR', 'ES']
@@ -224,7 +224,7 @@
 
     <template #actions>
       <IconButton
-        icon="ai ai-github"
+        icon="az az-github"
         variant="outline"
         size="medium"
         aria-label="Azion on GitHub"
@@ -314,7 +314,7 @@
                 <Select.Trigger aria-label="Language">
                   <template #leading>
                     <i
-                      class="ai ai-globe text-(--text-muted)"
+                      class="az az-globe text-(--text-muted)"
                       aria-hidden="true"
                     />
                   </template>

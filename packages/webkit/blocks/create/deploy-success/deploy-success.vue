@@ -272,7 +272,7 @@ jobs:
                       class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface)"
                     >
                       <i
-                        class="ai ai-globe text-body-md leading-none text-(--text-default)"
+                        class="az az-globe text-body-md leading-none text-(--text-default)"
                         aria-hidden="true"
                       />
                     </span>
@@ -300,7 +300,7 @@ jobs:
                         label="Visit site"
                         variant="outline"
                         size="medium"
-                        icon="ai ai-external-link"
+                        icon="az az-external-link"
                         icon-position="trailing"
                         :href="currentDeployment.url"
                         target="_blank"
@@ -311,7 +311,7 @@ jobs:
                       <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
                         <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                           <i
-                            class="ai ai-globe shrink-0 text-(--text-muted)"
+                            class="az az-globe shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                           <div class="min-w-0">
@@ -332,7 +332,7 @@ jobs:
                           label="Add custom domain"
                           variant="link"
                           size="small"
-                          icon="ai ai-circle-plus"
+                          icon="az az-circle-plus"
                           :href="currentDeployment.addDomainHref"
                         />
                       </li>
@@ -362,7 +362,7 @@ jobs:
                         </span>
                         <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                           <i
-                            class="ai ai-git-branch shrink-0 text-(--text-muted)"
+                            class="az az-git-branch shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                           <span class="truncate text-body-sm text-(--text-default)">{{

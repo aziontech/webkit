@@ -546,7 +546,7 @@
                             >
                               <template #leading>
                                 <i
-                                  class="ai ai-search"
+                                  class="az az-search"
                                   aria-hidden="true"
                                 />
                               </template>
@@ -579,7 +579,7 @@
                             >
                               <span class="flex items-center gap-(--spacing-xs)">
                                 <i
-                                  class="ai ai-upload"
+                                  class="az az-upload"
                                   aria-hidden="true"
                                 />
                                 Upload certificate

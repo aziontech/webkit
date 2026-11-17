@@ -8,7 +8,7 @@
   <EmptyState
     title="No resource yet"
     description="Get started by creating your first resource."
-    icon="ai ai-inbox"
+    icon="az az-inbox"
   >
     <template #actions>
       <div class="flex gap-(--spacing-3)">
@@ -23,7 +23,7 @@
       </div>
       <Link
         label="Docs"
-        icon="ai ai-arrow-right"
+        icon="az az-arrow-right"
         size="medium"
         href="#"
       />

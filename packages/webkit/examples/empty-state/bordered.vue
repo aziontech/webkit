@@ -8,7 +8,7 @@
   <EmptyState
     title="No resource yet"
     description="Get started by creating your first resource."
-    icon="ai ai-inbox"
+    icon="az az-inbox"
     bordered
   >
     <template #actions>
@@ -24,7 +24,7 @@
       </div>
       <Link
         label="Docs"
-        icon="ai ai-arrow-right"
+        icon="az az-arrow-right"
         size="medium"
         href="#"
       />

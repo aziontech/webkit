@@ -287,7 +287,7 @@
                 {
                   label: 'Join our community',
                   description: 'Developers and the Azion team on Discord',
-                  icon: 'ai-color ai-discord',
+                  icon: 'az-color az-discord',
                   href: 'https://discord.gg/azion'
                 }
               ]
@@ -414,25 +414,25 @@
       }
     ],
     socials: [
-      { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+      { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
       {
-        icon: 'ai ai-linkedin',
+        icon: 'az az-linkedin',
         label: 'Azion on LinkedIn',
         href: 'https://www.linkedin.com/company/aziontech'
       },
       {
-        icon: 'ai ai-youtube',
+        icon: 'az az-youtube',
         label: 'Azion on YouTube',
         href: 'https://www.youtube.com/aziontech'
       },
-      { icon: 'ai ai-x-brand', label: 'Azion on X', href: 'https://x.com/aziontech' },
+      { icon: 'az az-x-brand', label: 'Azion on X', href: 'https://x.com/aziontech' },
       {
-        icon: 'ai ai-instagram',
+        icon: 'az az-instagram',
         label: 'Azion on Instagram',
         href: 'https://www.instagram.com/aziontech'
       },
-      { icon: 'ai ai-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
-      { icon: 'ai ai-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
+      { icon: 'az az-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
+      { icon: 'az az-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
     ],
     statusLabel: 'All systems operational',
     languages: ['EN', 'PT-BR', 'ES'],

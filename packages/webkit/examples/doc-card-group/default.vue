@@ -7,14 +7,14 @@
   <DocCardGroup :columns="2">
     <DocCard
       title="Start from a template"
-      icon="ai ai-layout-grid"
+      icon="az az-layout-grid"
       href="#templates"
     >
       Ready-made projects that go live in a few clicks. No local tooling.
     </DocCard>
     <DocCard
       title="Import from GitHub"
-      icon="ai ai-github"
+      icon="az az-github"
       href="#github"
     >
       Connect a repository and let Azion build it on every push.

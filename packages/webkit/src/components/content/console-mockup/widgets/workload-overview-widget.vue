@@ -90,7 +90,7 @@
     {
       key: 'domains',
       kind: 'Domains',
-      icon: 'ai ai-domains',
+      icon: 'az az-domains',
       name: FACTS.domain,
       status: '1 domain',
       severity: 'neutral',
@@ -100,7 +100,7 @@
     {
       key: 'workload',
       kind: 'Workload',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       name: 'storefront-prod',
       status: 'Live',
       severity: 'success',
@@ -111,7 +111,7 @@
     {
       key: 'firewall',
       kind: 'Firewall',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       name: '',
       status: 'Not bound',
       severity: 'neutral',
@@ -122,7 +122,7 @@
     {
       key: 'application',
       kind: 'Application',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       name: 'storefront-prod',
       status: 'Active',
       severity: 'success',
@@ -133,7 +133,7 @@
     {
       key: 'custom-page',
       kind: 'Custom Page',
-      icon: 'ai ai-custom-pages',
+      icon: 'az az-custom-pages',
       name: '',
       status: 'Not bound',
       severity: 'neutral',
@@ -195,7 +195,7 @@
             label="Deploy"
             variant="outline"
             size="medium"
-            icon="ai ai-cloud-upload"
+            icon="az az-cloud-upload"
           />
         </div>
       </ConsoleMockupShellItem>
@@ -213,7 +213,7 @@
                 >
                   <div class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)"
+                      class="az az-domains shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span
@@ -221,7 +221,7 @@
                     >
                       {{ FACTS.domain }}
                       <i
-                        class="ai ai-external-link text-body-xs leading-none"
+                        class="az az-external-link text-body-xs leading-none"
                         aria-hidden="true"
                       />
                     </span>
@@ -231,23 +231,23 @@
                       label="Visit"
                       variant="secondary"
                       size="medium"
-                      icon="ai ai-external-link"
+                      icon="az az-external-link"
                     />
                     <span
                       class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default)"
                     >
                       <i
-                        class="ai ai-layers shrink-0 text-(--text-muted)"
+                        class="az az-layers shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                       Production
                       <i
-                        class="ai ai-chevron-down shrink-0 text-(--text-muted)"
+                        class="az az-chevron-down shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </span>
                     <IconButton
-                      icon="ai ai-ellipsis"
+                      icon="az az-ellipsis"
                       variant="outline"
                       size="medium"
                       ariaLabel="Workload actions"
@@ -264,7 +264,7 @@
                     >
                       Custom domains
                       <i
-                        class="ai ai-circle-plus text-body-sm leading-none"
+                        class="az az-circle-plus text-body-sm leading-none"
                         aria-hidden="true"
                       />
                     </span>
@@ -314,7 +314,7 @@
                   class="flex min-h-12 items-center gap-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md)"
                 >
                   <i
-                    class="ai ai-chevron-down text-(--text-muted)"
+                    class="az az-chevron-down text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span class="text-label-md text-(--text-default)">Deployment Settings</span>
@@ -323,7 +323,7 @@
                   >
                     Azion Default
                     <i
-                      class="ai ai-external-link text-body-xs leading-none"
+                      class="az az-external-link text-body-xs leading-none"
                       aria-hidden="true"
                     />
                   </span>
@@ -423,7 +423,7 @@
                             size="small"
                           />
                           <i
-                            class="ai ai-chevron-down shrink-0 text-(--text-muted)"
+                            class="az az-chevron-down shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                         </div>
@@ -436,14 +436,14 @@
                             <span class="truncate">{{ node.name || '—' }}</span>
                             <i
                               v-if="node.link"
-                              class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                              class="az az-external-link shrink-0 text-body-xs leading-none"
                               aria-hidden="true"
                             />
                           </span>
                           <IconButton
                             v-if="node.status !== 'Live' && node.status !== 'Active'"
                             class="ms-auto shrink-0"
-                            icon="ai ai-plus"
+                            icon="az az-plus"
                             variant="outline"
                             size="small"
                             ariaLabel="Bind"
@@ -480,7 +480,7 @@
           </div>
           <IconButton
             class="ms-auto shrink-0"
-            icon="ai ai-x"
+            icon="az az-x"
             variant="outline"
             size="small"
             ariaLabel="Close"
@@ -496,7 +496,7 @@
             >
               Resources
               <i
-                class="ai ai-circle-info text-body-xs text-(--text-muted)"
+                class="az az-circle-info text-body-xs text-(--text-muted)"
                 aria-hidden="true"
               />
             </h3>
@@ -508,7 +508,7 @@
                   class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default)"
                 >
                   <i
-                    class="ai ai-edge-application text-body-md leading-none text-(--text-default)"
+                    class="az az-applications text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
@@ -529,7 +529,7 @@
                 >
                   Change Version
                   <i
-                    class="ai ai-chevron-down text-(--text-muted)"
+                    class="az az-chevron-down text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </span>
@@ -539,7 +539,7 @@
               >
                 Dependencies
                 <i
-                  class="ai ai-chevron-down ms-auto text-(--text-muted)"
+                  class="az az-chevron-down ms-auto text-(--text-muted)"
                   aria-hidden="true"
                 />
               </div>
@@ -548,7 +548,7 @@
                   class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default)"
                 >
                   <i
-                    class="ai ai-edge-storage text-body-md leading-none text-(--text-default)"
+                    class="az az-object-storage text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
@@ -570,7 +570,7 @@
             >
               Environment
               <i
-                class="ai ai-circle-info text-body-xs text-(--text-muted)"
+                class="az az-circle-info text-body-xs text-(--text-muted)"
                 aria-hidden="true"
               />
             </h3>

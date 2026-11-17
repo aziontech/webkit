@@ -1085,7 +1085,7 @@
                     :label="panel.aggregation"
                     severity="neutral"
                     size="small"
-                    icon="ai ai-calculator"
+                    icon="az az-calculator"
                   />
                 </span>
                 <DropdownMenu
@@ -1095,7 +1095,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="ai ai-ellipsis"
+                      icon="az az-ellipsis"
                       variant="ghost"
                       size="small"
                       :aria-label="`More options for ${panel.title}`"
@@ -1155,7 +1155,7 @@
                     label="Sum"
                     severity="neutral"
                     size="small"
-                    icon="ai ai-calculator"
+                    icon="az az-calculator"
                   />
                 </span>
                 <DropdownMenu
@@ -1165,7 +1165,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="ai ai-ellipsis"
+                      icon="az az-ellipsis"
                       variant="ghost"
                       size="small"
                       :aria-label="`More options for ${breakdown.title}`"
@@ -1196,7 +1196,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-search"
+                          class="az az-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -1227,7 +1227,7 @@
                   <template #empty>
                     <EmptyState
                       size="small"
-                      icon="ai ai-search"
+                      icon="az az-search"
                       title="No matching rows"
                       :description="
                         breakdown.classes

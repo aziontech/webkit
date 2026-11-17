@@ -4,7 +4,7 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 7
-checksum: 3132d18b0044dc2cd0f02db0824c4aeb2aca794148f9f636747107c90fcf368b
+checksum: 63c3f79414a64c9ed4fe9e02877b6af63a613840397db1bca260e546634b0f82
 created: 2026-09-22
 last_updated: 2026-11-16
 ---
@@ -155,8 +155,8 @@ The five dot looks, and what each one renders:
 | ----------------------- | ----------------------------------- | ----------------------------------------------------------- | -------------------- |
 | `data-status="pending"` | not reached, nothing known          | outlined, muted, shows its number                           | muted track          |
 | `data-active`           | `value` equals the root's `v-model` | outlined in `--secondary` with a filled inner disc          | muted track          |
-| `data-completed`        | the owner set `status="success"`    | filled `--secondary`, `ai ai-check` glyph                   | filled `--secondary` |
-| `data-status="error"`   | the owner set `status="error"`      | filled `--danger`, `ai ai-triangle-alert` glyph             | muted track          |
+| `data-completed`        | the owner set `status="success"`    | filled `--secondary`, `az az-check` glyph                   | filled `--secondary` |
+| `data-status="error"`   | the owner set `status="error"`      | filled `--danger`, `az az-triangle-alert` glyph             | muted track          |
 | `data-status="running"` | the owner set `status="running"`    | outlined in `--secondary`, `Spinner` in place of the number | muted track          |
 
 `error` and `running` outrank active: a step that is both on screen and wrong must say it is wrong.

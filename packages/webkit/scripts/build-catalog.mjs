@@ -25,7 +25,8 @@ import {
 import { buildAliases, buildRenamed, removedNames, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import { sameVariant } from '../src/catalog/queries.js'
-import { iconKeywords } from '../../icons/scripts/lib/icon-keywords.mjs'
+import { entryKeywords } from '../../icons/scripts/lib/icon-keywords.mjs'
+import { classOf, loadManifest } from '../../icons/scripts/lib/icons-manifest.mjs'
 import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
@@ -48,7 +49,6 @@ const THEME_GLOBALS_CANDIDATES = [
   resolve(REPO_ROOT, 'packages/theme/dist/globals.css')
 ]
 const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/typography.js')
-const ICONS_SVG = resolve(REPO_ROOT, 'packages/icons/src/svg-raw')
 const SRC = resolve(PKG_ROOT, 'src')
 const ASSET_PART_DIR = 'catalog/assets'
 
@@ -548,7 +548,7 @@ const ASSET_KINDS = {
   icons: {
     title: 'Icons',
     summary:
-      'Every icon class of `@aziontech/icons` with search keywords. A monochrome icon is `ai ai-<name>`, coloured by the text colour; a colour brand icon is `ai-color ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.',
+      'Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, layout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.',
     unknown: 'An unknown class renders nothing.'
   }
 }
@@ -616,22 +616,16 @@ function reaches(graph, from, markers) {
 }
 
 function iconItems() {
-  const sets = [
-    ['ai', 'azionicons', (n) => `ai ${n}`],
-    ['ai-color', 'color', (n) => `ai-color ${n}`]
-  ]
-  const items = []
-  for (const [folder, set, cls] of sets) {
-    const dir = join(ICONS_SVG, folder)
-    if (!existsSync(dir)) continue
-    for (const file of readdirSync(dir)
-      .filter((f) => f.endsWith('.svg'))
-      .sort()) {
-      const name = file.slice(0, -4)
-      items.push({ name, class: cls(name), set, keywords: iconKeywords(name) })
-    }
-  }
-  return items
+  return loadManifest().icons.map((entry) => ({
+    name: `az-${entry.name}`,
+    class: classOf(entry),
+    set: entry.set === 'color' ? 'color' : 'azionicons',
+    group: entry.group,
+    category: entry.category,
+    label: entry.means,
+    ...(entry.product ? { product: entry.product } : {}),
+    keywords: entryKeywords(entry)
+  }))
 }
 
 export function buildAssets(imports) {

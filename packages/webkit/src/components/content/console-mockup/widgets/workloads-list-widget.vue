@@ -145,7 +145,7 @@
           >
             <template #leading>
               <i
-                class="ai ai-search"
+                class="az az-search"
                 aria-hidden="true"
               />
             </template>
@@ -155,7 +155,7 @@
               label="Create Workload"
               variant="outline"
               size="medium"
-              icon="ai ai-plus"
+              icon="az az-plus"
             />
           </span>
         </div>
@@ -193,14 +193,14 @@
               >
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-workloads shrink-0 text-body-md leading-none text-(--text-muted)"
+                    class="az az-workloads shrink-0 text-body-md leading-none text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span class="truncate text-body-sm text-(--text-default)">{{ row.name }}</span>
                 </span>
                 <span class="hidden min-w-0 items-center gap-(--spacing-xs) md:flex">
                   <i
-                    class="ai ai-domains shrink-0 text-body-md leading-none text-(--text-muted)"
+                    class="az az-domains shrink-0 text-body-md leading-none text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span class="truncate text-body-sm text-(--text-muted)">{{ row.domain }}</span>

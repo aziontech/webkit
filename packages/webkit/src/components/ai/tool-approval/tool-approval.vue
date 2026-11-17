@@ -124,7 +124,7 @@
     <div class="flex items-start gap-(--spacing-sm)">
       <i
         :data-variant="variant"
-        class="ai ai-shield mt-0.5 shrink-0 text-(--text-muted) data-[variant=danger]:text-(--danger-foreground)"
+        class="az az-shield mt-0.5 shrink-0 text-(--text-muted) data-[variant=danger]:text-(--danger-foreground)"
         aria-hidden="true"
       />
       <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">

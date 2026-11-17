@@ -37,7 +37,7 @@
     @click="context.scrollNext()"
   >
     <i
-      class="ai ai-chevron-right rtl:-scale-x-100"
+      class="az az-chevron-right rtl:-scale-x-100"
       aria-hidden="true"
     />
   </button>

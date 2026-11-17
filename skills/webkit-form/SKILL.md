@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -522,7 +522,7 @@ Canonical pattern:
       <template #footer>
         <Select.Item
           :value="CREATE_ORIGIN"
-          icon="ai ai-circle-plus"
+          icon="az az-circle-plus"
           >Create Origin</Select.Item
         >
       </template>
@@ -696,7 +696,7 @@ When a settings surface is split into topic bands (the Account Settings pattern)
 `SettingsSection`**: an h2 titled in one or two words, its one-sentence guidance in `hint` (rendered as
 a `Hint` glyph beside the title), and `anchor` when people link to it (the h2 takes the id and a
 copy-link appears in the gutter on hover or focus). An Advanced band whose defaults suit most people is
-`collapsible` with `icon="ai ai-settings"`; it starts closed, and its body is `inert` while folded.
+`collapsible` with `icon="az az-settings"`; it starts closed, and its body is `inert` while folded.
 
 Rules:
 

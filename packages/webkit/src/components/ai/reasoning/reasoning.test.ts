@@ -78,7 +78,7 @@ describe('Reasoning', () => {
 
   it('pairs the pulsing glyph with a reduced-motion escape', () => {
     const { container } = render(Reasoning, { props: { streaming: true }, slots })
-    const glyph = container.querySelector('.ai-sparkles') as HTMLElement
+    const glyph = container.querySelector('.az-sparkles') as HTMLElement
     expect(glyph.className).toContain('motion-reduce:animate-none')
   })
 

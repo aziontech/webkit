@@ -22,7 +22,7 @@ monochrome glyph in `@aziontech/icons`, `fill="currentColor"`.
   **not** in the `Marquee` brand-mark registry (`src/assets/brands/registry.ts`): those marks are
   drawn in `currentColor`, which recolours them.
 
-### Nitro — `@aziontech/icons`, `packages/icons/src/svg-raw/ai/ai-nitro.svg` (`ai ai-nitro`)
+### Nitro — `@aziontech/icons`, `packages/icons/src/svg-raw/ai/az-nitro.svg` (`az az-nitro`)
 
 - **Source:** the Nitro repository's own icon,
   https://raw.githubusercontent.com/nitrojs/nitro/main/docs/.docs/public/icon.svg (last changed in
@@ -42,7 +42,7 @@ monochrome glyph in `@aziontech/icons`, `fill="currentColor"`.
 - **Not used:** the copy on unjs.io — that site is "licensed under CC BY-NC-SA 4.0", which bars
   commercial use.
 
-### Stencil — `@aziontech/icons`, `packages/icons/src/svg-raw/ai/ai-stencil.svg` (`ai ai-stencil`)
+### Stencil — `@aziontech/icons`, `packages/icons/src/svg-raw/ai/az-stencil.svg` (`az az-stencil`)
 
 - **Source:** Simple Icons `stencil`,
   https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/stencil.svg (24×24),

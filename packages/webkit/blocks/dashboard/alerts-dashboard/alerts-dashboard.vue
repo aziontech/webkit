@@ -424,7 +424,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="ai ai-circle-check"
+                icon="az az-circle-check"
                 title="No open alerts"
                 description="Every alert raised in the period has been closed."
               />
@@ -510,7 +510,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="ai ai-users"
+              icon="az az-users"
               title="No entities at risk yet"
               description="Entities appear here once an alert names them."
             />
@@ -561,7 +561,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="ai ai-bell"
+              icon="az az-bell"
               title="No open alerts"
               description="Alerts appear here when a detection rule matches. Select a longer period to see closed ones."
             />

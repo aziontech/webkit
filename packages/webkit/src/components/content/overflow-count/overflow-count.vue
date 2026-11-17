@@ -155,7 +155,7 @@
           >
             <template #leading>
               <i
-                class="ai ai-search"
+                class="az az-search"
                 aria-hidden="true"
               />
             </template>
@@ -191,7 +191,7 @@
                 >
                 <span class="sr-only">{{ ` ${t('common.newTab')}` }}</span>
                 <i
-                  class="ai ai-external-link ms-auto shrink-0 text-body-xs leading-none"
+                  class="az az-external-link ms-auto shrink-0 text-body-xs leading-none"
                   aria-hidden="true"
                 />
               </a>

@@ -15,8 +15,8 @@
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' }
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' }
       ]
     },
     {
@@ -25,10 +25,10 @@
         {
           id: 'applications',
           label: 'Applications',
-          icon: 'ai ai-edge-application',
+          icon: 'az az-applications',
           href: '/applications'
         },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
       ]
     },
     {
@@ -37,7 +37,7 @@
         {
           id: 'sql-database',
           label: 'SQL Database',
-          icon: 'ai ai-edge-sql',
+          icon: 'az az-sql-database',
           href: '/sql-database',
           tagValue: 'Preview'
         }
@@ -49,7 +49,7 @@
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'ai ai-settings',
+          icon: 'az az-settings',
           type: 'drill',
           groups: [
             {
@@ -88,7 +88,7 @@
         side="bottom"
       >
         <IconButton
-          icon="ai ai-circle-plus"
+          icon="az az-circle-plus"
           variant="primary"
           size="medium"
           aria-label="Create"
@@ -99,12 +99,12 @@
           label="Create"
           variant="primary"
           size="medium"
-          icon="ai ai-circle-plus"
+          icon="az az-circle-plus"
         />
         <HighlightButton
           label="Agent"
           size="medium"
-          icon="ai ai-ask-azion"
+          icon="az az-ask-azion"
         />
       </template>
     </template>

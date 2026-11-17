@@ -327,7 +327,7 @@
     </div>
     <IconButton
       v-if="hasItems && autoplayEnabled"
-      :icon="paused ? 'ai ai-play' : 'ai ai-pause'"
+      :icon="paused ? 'az az-play' : 'az az-pause'"
       :aria-label="pauseLabel"
       variant="outline"
       size="small"

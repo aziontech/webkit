@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 8f27f45840ef7a9b820951f7a742877e572c1f6611ae685339547dd6ee9c07da
+checksum: 3a51d3eb569315db390af7bf8aa5d759057b861bae197c4cded2b65a5ec9a4bf
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -58,7 +58,7 @@ preview (Cloudscape's inline preview): the first lines of code, the first rows o
   <ArtifactPreview
     title="cache-rules.json"
     meta="1 KB · JSON"
-    icon="ai ai-code"
+    icon="az az-code"
     :copy-value="rules"
     openable
     @open="showInDrawer"
@@ -84,7 +84,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 | `title`        | `string`  | —              | true     | File name or title of what was generated (`cache-rules.json`).                                                  |
 | `description`  | `string`  | `''`           | false    | One line on what it is or does.                                                                                 |
 | `meta`         | `string`  | `''`           | false    | Facts that help recognize it: size, rows, language (`2.4 KB · JSON`).                                           |
-| `icon`         | `string`  | `'ai ai-file'` | false    | Icon class for the file type.                                                                                   |
+| `icon`         | `string`  | `'az az-file'` | false    | Icon class for the file type.                                                                                   |
 | `copyValue`    | `string`  | `''`           | false    | Text the Copy control puts on the clipboard. Empty hides Copy.                                                  |
 | `downloadHref` | `string`  | `''`           | false    | URL of the file for the Download control. Empty hides Download.                                                 |
 | `openable`     | `boolean` | `false`        | false    | Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview). |

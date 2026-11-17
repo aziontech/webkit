@@ -28,7 +28,7 @@
         label="Docs"
         variant="outline"
         size="large"
-        icon="ai ai-chevron-right"
+        icon="az az-chevron-right"
         icon-position="trailing"
         animated
       />
@@ -37,19 +37,19 @@
       <Marquee
         aria-label="Why teams choose Azion"
         :items="[
-          { icon: 'ai ai-edge-nodes', label: 'Distributed to 100+ locations automatically' },
-          { icon: 'ai ai-edge-functions', label: 'No regions to pick, no servers to manage' },
-          { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
-          { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
-          { icon: 'ai ai-dollar', label: 'Usage-based pricing with no hidden fees' },
-          { icon: 'ai ai-gift', label: 'Start with $300 in free credits' },
-          { icon: 'ai ai-azion-cli', label: 'Deploy from the CLI, the Console or an agent' },
+          { icon: 'az az-edge-nodes', label: 'Distributed to 100+ locations automatically' },
+          { icon: 'az az-functions', label: 'No regions to pick, no servers to manage' },
+          { icon: 'az az-origin-shield', label: 'Stop attacks before they reach your origin' },
+          { icon: 'az az-firewall', label: 'DDoS mitigation with no surprise charges' },
+          { icon: 'az az-dollar', label: 'Usage-based pricing with no hidden fees' },
+          { icon: 'az az-gift', label: 'Start with $300 in free credits' },
+          { icon: 'az az-azion-cli', label: 'Deploy from the CLI, the Console or an agent' },
           {
-            icon: 'ai ai-real-time-metrics',
+            icon: 'az az-real-time-metrics',
             label: 'Real-time events and metrics for every request'
           },
-          { icon: 'ai ai-real-time-purge', label: 'Purge the cache everywhere in real time' },
-          { icon: 'ai ai-code', label: 'Works with Vue, React, Next.js, Astro and more' }
+          { icon: 'az az-real-time-purge', label: 'Purge the cache everywhere in real time' },
+          { icon: 'az az-code', label: 'Works with Vue, React, Next.js, Astro and more' }
         ]"
       />
     </template>

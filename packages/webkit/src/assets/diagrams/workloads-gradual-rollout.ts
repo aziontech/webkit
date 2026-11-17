@@ -9,7 +9,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Workload',
       title: 'shop-prod',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       status: {
         label: 'Live',
         severity: 'success'
@@ -27,7 +27,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'New deployment',
       title: 'storefront v2',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       status: {
         label: 'Watching',
         severity: 'info'
@@ -40,7 +40,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Serving deployment',
       title: 'storefront v1',
-      icon: 'ai ai-edge-application'
+      icon: 'az az-applications'
     }
   ],
   layout: {

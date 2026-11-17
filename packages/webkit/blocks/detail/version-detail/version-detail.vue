@@ -183,7 +183,7 @@
     VersionDetailState,
     { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
   > = {
-    draft: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-pen' },
+    draft: { label: 'Draft', severity: 'warning', icon: 'az az-file-pen' },
     deployed: { label: 'Deployed', variant: 'primary', icon: '' },
     ready: { label: 'Ready', severity: 'success', icon: '' }
   }
@@ -382,7 +382,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -419,7 +419,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-circle-plus"
+                  class="az az-circle-plus"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -452,7 +452,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -496,7 +496,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-circle-plus"
+                  class="az az-circle-plus"
                   aria-hidden="true"
                 />
                 Add Version
@@ -512,7 +512,7 @@
     >
       <Tooltip :content="`Back to ${resource.name} versions`">
         <IconButton
-          icon="ai ai-arrow-left"
+          icon="az az-arrow-left"
           variant="ghost"
           size="medium"
           :href="`${resource.href}?tab=versions`"
@@ -546,7 +546,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -583,7 +583,7 @@
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-circle-plus"
+                    class="az az-circle-plus"
                     aria-hidden="true"
                   />
                   Add Environment
@@ -619,7 +619,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -663,7 +663,7 @@
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-circle-plus"
+                    class="az az-circle-plus"
                     aria-hidden="true"
                   />
                   Add Version
@@ -709,7 +709,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="ai ai-ellipsis"
+                      icon="az az-ellipsis"
                       variant="ghost"
                       size="small"
                       aria-label="Version actions"
@@ -723,7 +723,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-pencil"
+                          class="az az-pencil"
                           aria-hidden="true"
                         />
                       </template>
@@ -734,7 +734,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-history"
+                          class="az az-history"
                           aria-hidden="true"
                         />
                       </template>
@@ -862,7 +862,7 @@
                                       >
                                         Contact sales
                                         <i
-                                          class="ai ai-external-link shrink-0 text-body-sm leading-none"
+                                          class="az az-external-link shrink-0 text-body-sm leading-none"
                                           aria-hidden="true"
                                         />
                                       </a>
@@ -977,7 +977,7 @@
                 <div class="layout-section-start">
                   <EmptyState
                     size="medium"
-                    icon="ai ai-external-link"
+                    icon="az az-external-link"
                     :title="tabLabel"
                     :description="`${tabLabel} opens on its own page.`"
                   >
@@ -1014,7 +1014,7 @@
                     <Spinner v-if="creating" />
                     <i
                       v-else
-                      class="ai ai-file-pen text-body-sm text-(--text-default)"
+                      class="az az-file-pen text-body-sm text-(--text-default)"
                     />
                   </span>
                   <div
@@ -1032,7 +1032,7 @@
                         <Tag
                           :label="isDraft ? 'Editable' : 'Read-only'"
                           :severity="isDraft ? 'info' : 'neutral'"
-                          :icon="isDraft ? '' : 'ai ai-lock'"
+                          :icon="isDraft ? '' : 'az az-lock'"
                           size="small"
                         />
                       </span>
@@ -1049,7 +1049,7 @@
                     <SplitButton
                       v-if="isDraft && !creating"
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
-                      :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
+                      :icon="saveAction === 'deploy' ? 'az az-cloud-upload' : ''"
                       variant="primary"
                       size="medium"
                       :items="saveOptions"
@@ -1061,7 +1061,7 @@
                         label="Add Version"
                         variant="outline"
                         size="medium"
-                        icon="ai ai-plus"
+                        icon="az az-plus"
                         :loading="creating"
                         @click="(event: MouseEvent) => emit('add-version', event)"
                       />
@@ -1070,7 +1070,7 @@
                         label="Redeploy"
                         variant="outline"
                         size="medium"
-                        icon="ai ai-refresh"
+                        icon="az az-refresh"
                         :disabled="creating"
                         @click="(event: MouseEvent) => emit('redeploy', event)"
                       />
@@ -1089,7 +1089,7 @@
                             :label="`Revert to ${viewed.name}`"
                             variant="primary"
                             size="medium"
-                            icon="ai ai-undo"
+                            icon="az az-undo"
                             :loading="reverting"
                           />
                         </template>
@@ -1125,7 +1125,7 @@
                                   <span class="text-(--text-muted) line-through">{{
                                     change.from
                                   }}</span>
-                                  <i class="ai ai-arrow-right text-body-xs text-(--text-muted)" />
+                                  <i class="az az-arrow-right text-body-xs text-(--text-muted)" />
                                   <span class="text-(--text-default)">{{ change.to }}</span>
                                 </span>
                               </li>
@@ -1173,7 +1173,7 @@
                 Version history
               </h2>
               <IconButton
-                icon="ai ai-x"
+                icon="az az-x"
                 variant="ghost"
                 size="small"
                 aria-label="Close version history"
@@ -1192,7 +1192,7 @@
                     aria-hidden="true"
                   >
                     <i
-                      :class="version.state === 'draft' ? 'ai ai-file-pen' : 'ai ai-code'"
+                      :class="version.state === 'draft' ? 'az az-file-pen' : 'az az-code'"
                       class="text-body-xs"
                     />
                   </span>
@@ -1214,7 +1214,7 @@
                         class="ms-auto shrink-0"
                       >
                         <IconButton
-                          icon="ai ai-pencil"
+                          icon="az az-pencil"
                           variant="ghost"
                           size="small"
                           aria-label="Edit version info"
@@ -1326,7 +1326,7 @@
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
                       aria-hidden="true"
                     >
-                      <i class="ai ai-code text-body-xs" />
+                      <i class="az az-code text-body-xs" />
                     </span>
                     <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">

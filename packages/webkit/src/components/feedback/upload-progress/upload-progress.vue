@@ -104,9 +104,9 @@
   const RUNNING_KEY = { upload: 'uploading', move: 'moving', delete: 'deleting' } as const
   const DONE_KEY = { upload: 'uploaded', move: 'moved', delete: 'deleted' } as const
   const GLYPH = {
-    upload: 'ai ai-upload',
-    move: 'ai ai-arrow-right-left',
-    delete: 'ai ai-trash'
+    upload: 'az az-upload',
+    move: 'az az-arrow-right-left',
+    delete: 'az az-trash'
   } as const
 
   const heading = computed<string>(() => {
@@ -190,7 +190,7 @@
         >{{ percentText }}</span
       >
       <IconButton
-        :icon="isCollapsed ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
+        :icon="isCollapsed ? 'az az-chevron-up' : 'az az-chevron-down'"
         variant="ghost"
         size="small"
         :ariaLabel="isCollapsed ? t('uploadProgress.expand') : t('uploadProgress.collapse')"
@@ -201,7 +201,7 @@
       />
       <IconButton
         v-if="status !== 'running'"
-        icon="ai ai-x"
+        icon="az az-x"
         variant="ghost"
         size="small"
         :ariaLabel="t('uploadProgress.close')"
@@ -257,7 +257,7 @@
                   class="flex items-center gap-(--spacing-2xs) text-label-sm text-(--danger-foreground)"
                 >
                   <i
-                    class="ai ai-circle-x shrink-0"
+                    class="az az-circle-x shrink-0"
                     aria-hidden="true"
                   />
                   <span class="min-w-0">{{ item.error }}</span>
@@ -278,7 +278,7 @@
               <IconButton
                 key="icon-button-2"
                 v-if="cancelable && (item.status === 'pending' || item.status === 'running')"
-                icon="ai ai-x"
+                icon="az az-x"
                 variant="ghost"
                 size="small"
                 :ariaLabel="t('uploadProgress.cancelItem', { name: item.name })"
@@ -288,7 +288,7 @@
               <IconButton
                 key="icon-button-3"
                 v-else-if="item.status === 'error'"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="ghost"
                 size="small"
                 :ariaLabel="t('uploadProgress.retryItem', { name: item.name })"
@@ -297,7 +297,7 @@
               />
               <i
                 v-else-if="item.status === 'success'"
-                class="ai ai-check shrink-0 px-(--spacing-xs) text-(--text-muted)"
+                class="az az-check shrink-0 px-(--spacing-xs) text-(--text-muted)"
                 aria-hidden="true"
               />
             </div>
@@ -330,7 +330,7 @@
         key="button-2"
         v-if="status === 'error'"
         :label="t('uploadProgress.retryFailed')"
-        icon="ai ai-refresh"
+        icon="az az-refresh"
         variant="outline"
         size="small"
         :data-testid="`${testId}__retry-failed`"

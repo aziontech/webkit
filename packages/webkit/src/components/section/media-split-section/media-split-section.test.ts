@@ -288,12 +288,12 @@ describe('MediaSplitSection', () => {
   it('lets an action variant win over the drawn variant and draws its leading icon', () => {
     const { getByRole } = band({
       primaryAction: { ...primaryAction, variant: 'ghost' },
-      secondaryAction: { ...secondaryAction, icon: 'ai ai-github', trailing: false }
+      secondaryAction: { ...secondaryAction, icon: 'az az-github', trailing: false }
     })
 
     expect(getByRole('link', { name: 'Join us' })).toHaveAttribute('data-variant', 'ghost')
     const second = getByRole('link', { name: secondaryAction.label })
     expect(second).toHaveAttribute('data-variant', 'outline')
-    expect(second.querySelector('.ai-github')).not.toBeNull()
+    expect(second.querySelector('.az-github')).not.toBeNull()
   })
 })

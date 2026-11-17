@@ -55,7 +55,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Moonshot AI',
       title: 'Kimi K2.6',
-      icon: 'ai ai-moon'
+      icon: 'az az-moon'
     },
     {
       key: 'gemma',

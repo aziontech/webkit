@@ -23,7 +23,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Diagrams](foundations/diagrams.md): The registered product architecture diagrams.
 - [Line figures](foundations/line-figures.md): The isometric line-art figures that answer the pointer, one per product.
 - [Brand marks](foundations/brand-marks.md): Client, analyst and framework marks drawn as theme-aware SVG.
-- [Icons](foundations/icons.md): Every icon class of `@aziontech/icons` with search keywords.
+- [Icons](foundations/icons.md): Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, l…
 
 ## Blocks: Account
 
@@ -283,7 +283,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`,…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
 - [FileTokenGroup](components/file-token-group.md): Use FileTokenGroup for the files picked in a form field, before and during upload; a transfer that runs in the background while the person keeps working is an UploadProgress.
-- [Hint](components/hint.md): Small info affordance — a muted `ai ai-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
+- [Hint](components/hint.md): Small info affordance — a muted `az az-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
 - [Input](components/input.md): Single-line text input for forms and inline editing.
 - [InputGroup](components/input-group.md): Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field (an input group, as other UI kits call it).
 - [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.

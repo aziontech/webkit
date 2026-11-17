@@ -49,8 +49,8 @@ const sections = [
 ]
 
 const facets = [
-  { label: 'Engineering', icon: 'ai ai-sitemap' },
-  { label: 'San Francisco, California', icon: 'ai ai-map-pin' }
+  { label: 'Engineering', icon: 'az az-sitemap' },
+  { label: 'San Francisco, California', icon: 'az az-map-pin' }
 ]
 
 const band = (props: Record<string, unknown> = {}) =>

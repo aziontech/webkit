@@ -14,12 +14,12 @@
   const crumbs = [{ label: 'Applications', href: '/docs/applications' }, { label: 'Overview' }]
 
   const metaActions = [
-    { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
-    { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' },
+    { value: 'copy', label: 'Copy as Markdown', icon: 'az az-copy' },
+    { value: 'markdown', label: 'View as Markdown', icon: 'az az-eye' },
     {
       value: 'agent-setup',
       label: 'Agent setup',
-      icon: 'ai ai-microchip-ai',
+      icon: 'az az-microchip-ai',
       href: '/docs/agent-setup'
     }
   ]
@@ -124,13 +124,13 @@
       <DocCardGroup :columns="2">
         <DocCard
           title="Quickstart"
-          icon="ai ai-bolt"
+          icon="az az-bolt"
           href="/docs/applications/quickstart"
           >Create an application and bind it to a workload.</DocCard
         >
         <DocCard
           title="Rules Engine"
-          icon="ai ai-sliders-horizontal"
+          icon="az az-sliders-horizontal"
           href="/docs/applications/rules-engine"
           >Criteria and behaviors, phase by phase.</DocCard
         >

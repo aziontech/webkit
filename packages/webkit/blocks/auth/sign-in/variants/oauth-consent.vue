@@ -22,19 +22,19 @@
   const scopes = [
     {
       id: 'profile',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       title: 'Read your profile',
       description: 'Your name, email address and avatar.'
     },
     {
       id: 'workloads:read',
-      icon: 'ai ai-globe',
+      icon: 'az az-globe',
       title: 'Read your workloads',
       description: 'Names, domains and status. Not their settings or secrets.'
     },
     {
       id: 'applications:deploy',
-      icon: 'ai ai-upload',
+      icon: 'az az-upload',
       title: 'Deploy your applications',
       description: 'Create and publish new versions of the applications in this account.'
     }
@@ -78,7 +78,7 @@
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           href="/docs"
         />
       </AppHeader.End>

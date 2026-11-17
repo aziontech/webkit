@@ -716,7 +716,7 @@
       id: 'create-table',
       title: 'Create table',
       description: 'Create a basic customers table with auto-increment ID and timestamp',
-      icon: 'ai ai-table',
+      icon: 'az az-table',
       sql: `CREATE TABLE IF NOT EXISTS customers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
@@ -728,7 +728,7 @@
       id: 'insert-data',
       title: 'Insert data',
       description: 'Insert sample customer records into the customers table',
-      icon: 'ai ai-circle-plus',
+      icon: 'az az-circle-plus',
       sql: `INSERT INTO customers (name, email) VALUES
   ('Jane Doe', 'jane.doe@example.com'),
   ('John Smith', 'john.smith@example.com'),
@@ -738,7 +738,7 @@
       id: 'select-all',
       title: 'Select all',
       description: 'Retrieve all records from customers table with limit',
-      icon: 'ai ai-list',
+      icon: 'az az-list',
       sql: `SELECT id, name, email, created_at
 FROM customers
 ORDER BY created_at DESC
@@ -748,14 +748,14 @@ LIMIT 100;`
       id: 'count-records',
       title: 'Count records',
       description: 'Count total number of records in customers table',
-      icon: 'ai ai-hash',
+      icon: 'az az-hash',
       sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
     },
     {
       id: 'related-table',
       title: 'Related table',
       description: 'Create an orders table that references the customers table',
-      icon: 'ai ai-box',
+      icon: 'az az-box',
       sql: `CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   customer_id INTEGER NOT NULL REFERENCES customers (id),
@@ -766,7 +766,7 @@ LIMIT 100;`
       id: 'insert-related',
       title: 'Insert related rows',
       description: 'Insert sample orders for existing customers',
-      icon: 'ai ai-arrow-right-left',
+      icon: 'az az-arrow-right-left',
       sql: `INSERT INTO orders (customer_id, total) VALUES
   (1, 42.50),
   (3, 18.00);`
@@ -775,7 +775,7 @@ LIMIT 100;`
       id: 'join-tables',
       title: 'Join tables',
       description: 'List every order with the name of the customer who placed it',
-      icon: 'ai ai-search',
+      icon: 'az az-search',
       sql: `SELECT orders.id, customers.name, orders.total
 FROM orders
 JOIN customers ON customers.id = orders.customer_id
@@ -785,7 +785,7 @@ ORDER BY orders.id DESC;`
       id: 'create-index',
       title: 'Create index',
       description: 'Create an index to speed up lookups of orders by customer',
-      icon: 'ai ai-sitemap',
+      icon: 'az az-sitemap',
       sql: `CREATE INDEX IF NOT EXISTS orders_customer_id_idx
 ON orders (customer_id);`
     },
@@ -793,7 +793,7 @@ ON orders (customer_id);`
       id: 'top-customers',
       title: 'Top customers',
       description: 'Find the 3 customers with the highest order totals',
-      icon: 'ai ai-arrow-down-wide-narrow',
+      icon: 'az az-arrow-down-wide-narrow',
       sql: `SELECT customers.name, SUM(orders.total) AS total_spent
 FROM customers
 JOIN orders ON orders.customer_id = customers.id
@@ -857,7 +857,7 @@ LIMIT 3;`
                 <div class="flex items-center gap-(--spacing-2xs)">
                   <Tooltip content="Refresh tables">
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       variant="outline"
                       size="small"
                       aria-label="Refresh tables"
@@ -865,7 +865,7 @@ LIMIT 3;`
                   </Tooltip>
                   <Tooltip content="Create Table">
                     <IconButton
-                      icon="ai ai-plus"
+                      icon="az az-plus"
                       variant="outline"
                       size="small"
                       aria-label="Create Table"
@@ -882,7 +882,7 @@ LIMIT 3;`
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -899,7 +899,7 @@ LIMIT 3;`
             <EmptyState
               v-else-if="!filteredTables.length"
               size="small"
-              icon="ai ai-search"
+              icon="az az-search"
               :title="`No tables match “${tableSearch}”`"
             >
               <template #actions>
@@ -929,7 +929,7 @@ LIMIT 3;`
                 >
                   <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-table shrink-0 text-(--text-muted)"
+                      class="az az-table shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
@@ -942,7 +942,7 @@ LIMIT 3;`
                   <DropdownMenu.Trigger>
                     <Tooltip :content="`Actions for ${table.name}`">
                       <IconButton
-                        icon="ai ai-ellipsis"
+                        icon="az az-ellipsis"
                         variant="ghost"
                         size="small"
                         :aria-label="`Actions for ${table.name}`"
@@ -956,7 +956,7 @@ LIMIT 3;`
                     >
                       <template #leading
                         ><i
-                          class="ai ai-trash"
+                          class="az az-trash"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -976,7 +976,7 @@ LIMIT 3;`
           <EmptyState
             bordered
             size="medium"
-            icon="ai ai-table"
+            icon="az az-table"
             title="No tables yet"
             description="Create your first table to store your data."
             class="w-full max-w-(--container-2xl)"
@@ -985,7 +985,7 @@ LIMIT 3;`
               <div class="w-full md:w-fit">
                 <Button
                   label="Create Table"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   variant="secondary"
                   size="medium"
                   class="w-full"
@@ -1004,7 +1004,7 @@ LIMIT 3;`
           >
             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
               <i
-                class="ai ai-table shrink-0 text-(--text-muted)"
+                class="az az-table shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="truncate text-heading-2xs text-(--text-default)">{{
@@ -1035,7 +1035,7 @@ LIMIT 3;`
                 >
                   <template #leading>
                     <i
-                      class="ai ai-search"
+                      class="az az-search"
                       aria-hidden="true"
                     />
                   </template>
@@ -1047,13 +1047,13 @@ LIMIT 3;`
                   :label="`Delete ${selectedKeys.length} ${selectedKeys.length === 1 ? 'row' : 'rows'}`"
                   variant="danger"
                   size="medium"
-                  icon="ai ai-trash"
+                  icon="az az-trash"
                   :loading="deleting"
                   @click="deleteSelected"
                 />
                 <Tooltip content="Refresh">
                   <IconButton
-                    icon="ai ai-refresh"
+                    icon="az az-refresh"
                     variant="outline"
                     size="medium"
                     aria-label="Refresh"
@@ -1063,7 +1063,7 @@ LIMIT 3;`
                   label="Insert"
                   variant="primary"
                   size="medium"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                 />
               </div>
             </div>
@@ -1093,7 +1093,7 @@ LIMIT 3;`
                     <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
                     <i
                       v-if="column.primaryKey"
-                      class="ai ai-key shrink-0 text-(--primary)"
+                      class="az az-key shrink-0 text-(--primary)"
                       role="img"
                       aria-label="Primary key"
                     />
@@ -1113,7 +1113,7 @@ LIMIT 3;`
                 <template #cell-__actions="{ row }">
                   <Tooltip :content="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
-                      icon="ai ai-trash"
+                      icon="az az-trash"
                       variant="ghost"
                       size="small"
                       :aria-label="`Delete row ${row['id'] ?? row.__k}`"
@@ -1129,7 +1129,7 @@ LIMIT 3;`
                   >
                     <EmptyState
                       size="small"
-                      icon="ai ai-table"
+                      icon="az az-table"
                       title="This table is empty"
                       description="Insert a row, import a CSV file or drop one here."
                     >
@@ -1139,13 +1139,13 @@ LIMIT 3;`
                             label="Insert row"
                             variant="secondary"
                             size="medium"
-                            icon="ai ai-plus"
+                            icon="az az-plus"
                           />
                           <Button
                             label="Import data from CSV"
                             variant="outline"
                             size="medium"
-                            icon="ai ai-upload"
+                            icon="az az-upload"
                             @click="openImport()"
                           />
                         </div>
@@ -1155,7 +1155,7 @@ LIMIT 3;`
                   <EmptyState
                     v-else
                     size="small"
-                    icon="ai ai-search"
+                    icon="az az-search"
                     :title="`No rows match “${rowFilter}”`"
                     description="Change the filter to see the rows."
                   >
@@ -1183,7 +1183,7 @@ LIMIT 3;`
                 label="Add column"
                 variant="outline"
                 size="medium"
-                icon="ai ai-plus"
+                icon="az az-plus"
               />
             </div>
             <Card :padded="false">
@@ -1242,7 +1242,7 @@ LIMIT 3;`
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -1291,7 +1291,7 @@ LIMIT 3;`
                   <DropdownMenu.Trigger>
                     <Tooltip :content="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
-                        icon="ai ai-ellipsis"
+                        icon="az az-ellipsis"
                         variant="ghost"
                         size="small"
                         :aria-label="`Actions for ${oneLine(item.sql)}`"
@@ -1305,7 +1305,7 @@ LIMIT 3;`
                     >
                       <template #leading
                         ><i
-                          class="ai ai-play"
+                          class="az az-play"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -1315,7 +1315,7 @@ LIMIT 3;`
                     >
                       <template #leading
                         ><i
-                          class="ai ai-trash"
+                          class="az az-trash"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -1335,7 +1335,7 @@ LIMIT 3;`
             label="Run query"
             variant="primary"
             size="medium"
-            icon="ai ai-play"
+            icon="az az-play"
             :loading="running"
             @click="runQuery"
           />
@@ -1344,14 +1344,14 @@ LIMIT 3;`
               label="Prettify"
               variant="outline"
               size="medium"
-              icon="ai ai-align-left"
+              icon="az az-align-left"
               :disabled="running"
             />
             <Button
               label="Templates"
               variant="outline"
               size="medium"
-              icon="ai ai-bolt"
+              icon="az az-bolt"
               :disabled="running"
               @click="templatesOpen = true"
             />
@@ -1386,7 +1386,7 @@ LIMIT 3;`
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -1400,7 +1400,7 @@ LIMIT 3;`
               />
               <Tooltip content="Refresh results">
                 <IconButton
-                  icon="ai ai-refresh"
+                  icon="az az-refresh"
                   variant="outline"
                   size="medium"
                   aria-label="Refresh results"
@@ -1410,7 +1410,7 @@ LIMIT 3;`
               </Tooltip>
               <Tooltip content="Download results">
                 <IconButton
-                  icon="ai ai-download"
+                  icon="az az-download"
                   variant="outline"
                   size="medium"
                   aria-label="Download results"
@@ -1419,7 +1419,7 @@ LIMIT 3;`
               </Tooltip>
               <Tooltip content="Toggle columns">
                 <IconButton
-                  icon="ai ai-table"
+                  icon="az az-table"
                   variant="outline"
                   size="medium"
                   aria-label="Toggle columns"
@@ -1513,7 +1513,7 @@ LIMIT 3;`
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -1547,7 +1547,7 @@ LIMIT 3;`
             <EmptyState
               v-else
               size="small"
-              icon="ai ai-search"
+              icon="az az-search"
               :title="`No templates match “${templateQuery}”`"
               description="Try another name or statement."
             >
@@ -1666,7 +1666,7 @@ LIMIT 3;`
                           >
                         </span>
                         <i
-                          class="ai ai-arrow-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                          class="az az-arrow-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                           aria-hidden="true"
                         />
                         <div class="min-w-0 flex-[1_1_12rem]">
@@ -1740,7 +1740,7 @@ LIMIT 3;`
                         class="flex gap-(--spacing-xs) text-body-sm text-(--text-default)"
                       >
                         <i
-                          class="ai ai-circle-x mt-(--spacing-2xs) shrink-0 text-(--danger-foreground)"
+                          class="az az-circle-x mt-(--spacing-2xs) shrink-0 text-(--danger-foreground)"
                           aria-hidden="true"
                         />
                         <span

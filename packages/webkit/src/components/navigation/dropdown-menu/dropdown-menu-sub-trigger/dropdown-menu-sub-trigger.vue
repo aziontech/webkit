@@ -101,7 +101,7 @@
 
     <i
       aria-hidden="true"
-      class="ai ai-chevron-right shrink-0 text-[length:inherit] leading-none text-(--text-muted) rtl:-scale-x-100"
+      class="az az-chevron-right shrink-0 text-[length:inherit] leading-none text-(--text-muted) rtl:-scale-x-100"
     />
   </div>
 </template>

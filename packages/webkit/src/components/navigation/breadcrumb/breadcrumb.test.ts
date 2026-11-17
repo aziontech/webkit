@@ -142,7 +142,7 @@ describe('Breadcrumb', () => {
           props: {
             items: [
               { label: 'Home', href: '/home' },
-              { label: 'Projects', href: '/projects', showIcon: true, icon: 'ai ai-folder' },
+              { label: 'Projects', href: '/projects', showIcon: true, icon: 'az az-folder' },
               { label: 'Settings' }
             ]
           }
@@ -153,7 +153,7 @@ describe('Breadcrumb', () => {
         const option = document.body.querySelector(
           `[data-testid="${TESTID}__overflow-item-0"]`
         ) as HTMLElement | null
-        expect(option?.querySelector('i.ai-folder')).toBeTruthy()
+        expect(option?.querySelector('i.az-folder')).toBeTruthy()
       })
 
       // This was skipped as a harness limitation ("@select does not fire under test
@@ -469,7 +469,7 @@ describe('Breadcrumb', () => {
         const { container } = await renderMounted(Breadcrumb, {
           props: {
             items: [
-              { label: 'Home', href: '/home', showIcon: true, icon: 'ai ai-home' },
+              { label: 'Home', href: '/home', showIcon: true, icon: 'az az-home' },
               { label: 'Current' }
             ]
           }

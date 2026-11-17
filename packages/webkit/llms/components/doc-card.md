@@ -87,7 +87,7 @@
 <template>
   <DocCard
     title="Edge Application"
-    icon="ai ai-server"
+    icon="az az-server"
     href="/docs/edge-application"
     link-label="Read the guide"
   >
@@ -107,7 +107,7 @@
   <div class="grid gap-(--spacing-md) sm:grid-cols-2">
     <DocCard
       title="Edge Application"
-      icon="ai ai-server"
+      icon="az az-server"
       href="/docs/edge-application"
       link-label="Read the guide"
     >
@@ -116,7 +116,7 @@
     <DocCard
       eyebrow="Azion CLI"
       title="Deploy from your terminal"
-      icon="ai ai-desktop"
+      icon="az az-desktop"
       href="/docs/cli"
     >
       An overline says who or when, for a title that does not carry it.

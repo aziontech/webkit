@@ -116,7 +116,7 @@
           >
             {{ item.linkLabel }}
             <i
-              class="ai ai-arrow-right text-[length:inherit] leading-none text-(--text-primary) transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
+              class="az az-arrow-right text-[length:inherit] leading-none text-(--text-primary) transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
             />
           </span>
         </div>

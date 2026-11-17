@@ -94,7 +94,7 @@
               severity="neutral"
               size="medium"
               rounded
-              icon="ai ai-layers"
+              icon="az az-layers"
               :label="value"
             />
           </template>
@@ -104,7 +104,7 @@
           <template #cell-certificate="{ value }">
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <i
-                class="ai ai-verified shrink-0 text-(--text-muted)"
+                class="az az-verified shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="min-w-0 truncate">{{ value }}</span>
@@ -123,7 +123,7 @@
                 >
                   <template #leading
                     ><i
-                      class="ai ai-pencil"
+                      class="az az-pencil"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuItem>
@@ -135,7 +135,7 @@
                 >
                   <template #leading
                     ><i
-                      class="ai ai-trash"
+                      class="az az-trash"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuItem>
@@ -153,7 +153,7 @@
             label="Add Domain"
             variant="outline"
             size="medium"
-            icon="ai ai-plus"
+            icon="az az-plus"
             @click="(event: MouseEvent) => emit('create', event)"
           />
         </div>

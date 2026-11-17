@@ -101,7 +101,7 @@
       key: 'service',
       label: 'Service',
       name: 'web-app',
-      icon: 'ai ai-server',
+      icon: 'az az-server',
       note: '',
       total: 6,
       versions: [
@@ -138,7 +138,7 @@
           key: 'service@AG1VVDJP:module-auth-gateway',
           label: 'Module',
           name: 'auth-gateway',
-          icon: 'ai ai-code',
+          icon: 'az az-code',
           note: '',
           total: 8,
           versions: [
@@ -178,7 +178,7 @@
           key: 'service@AG1VVDJP:module-geo-redirect',
           label: 'Module',
           name: 'geo-redirect',
-          icon: 'ai ai-code',
+          icon: 'az az-code',
           note: '',
           total: 11,
           versions: [
@@ -218,7 +218,7 @@
           key: 'service@AG1VVDJP:integration-payments-api',
           label: 'Integration',
           name: 'payments-api',
-          icon: 'ai ai-link',
+          icon: 'az az-link',
           note: '',
           total: 11,
           versions: [
@@ -665,7 +665,7 @@
           label="Deploy"
           variant="outline"
           size="medium"
-          icon="ai ai-cloud-upload"
+          icon="az az-cloud-upload"
         />
       </DrawerTrigger>
 
@@ -742,7 +742,7 @@
                                 :aria-label="`Change version of ${row.name}`"
                                 variant="outline"
                                 size="small"
-                                icon="ai ai-chevron-down"
+                                icon="az az-chevron-down"
                                 icon-position="trailing"
                                 :disabled="!row.versions.length"
                               />
@@ -762,7 +762,7 @@
                                 >
                                   <template #leading>
                                     <i
-                                      class="ai ai-search"
+                                      class="az az-search"
                                       aria-hidden="true"
                                     />
                                   </template>
@@ -895,7 +895,7 @@
                                             :aria-label="`Change version of ${dependency.name}`"
                                             variant="outline"
                                             size="small"
-                                            icon="ai ai-chevron-down"
+                                            icon="az az-chevron-down"
                                             icon-position="trailing"
                                             :disabled="!dependency.versions.length"
                                           />
@@ -915,7 +915,7 @@
                                             >
                                               <template #leading>
                                                 <i
-                                                  class="ai ai-search"
+                                                  class="az az-search"
                                                   aria-hidden="true"
                                                 />
                                               </template>
@@ -1017,7 +1017,7 @@
                             class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              class="ai ai-box text-body-xs text-(--text-default)"
+                              class="az az-box text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
                           </span>
@@ -1096,7 +1096,7 @@
                                     >
                                       <template #leading>
                                         <i
-                                          class="ai ai-search"
+                                          class="az az-search"
                                           aria-hidden="true"
                                         />
                                       </template>
@@ -1154,7 +1154,7 @@
                                 label="Change"
                                 variant="outline"
                                 size="small"
-                                icon="ai ai-chevron-down"
+                                icon="az az-chevron-down"
                                 icon-position="trailing"
                               />
                             </DropdownMenu.Trigger>
@@ -1278,7 +1278,7 @@
                       class="flex items-center gap-(--spacing-xs) text-label-sm text-(--text-muted)"
                     >
                       <i
-                        class="ai ai-sitemap text-body-xs"
+                        class="az az-sitemap text-body-xs"
                         aria-hidden="true"
                       />
                       <span
@@ -1303,7 +1303,7 @@
                               class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
-                                class="ai ai-box text-body-xs text-(--text-default)"
+                                class="az az-box text-body-xs text-(--text-default)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1376,7 +1376,7 @@
                                       >
                                         <template #leading>
                                           <i
-                                            class="ai ai-search"
+                                            class="az az-search"
                                             aria-hidden="true"
                                           />
                                         </template>

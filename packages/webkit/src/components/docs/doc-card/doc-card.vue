@@ -96,8 +96,8 @@
       <i
         :class="
           isExternal
-            ? 'ai-arrow-up-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
-            : 'ai-chevron-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
+            ? 'az-arrow-up-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
+            : 'az-chevron-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
         "
         class="ai text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
         aria-hidden="true"

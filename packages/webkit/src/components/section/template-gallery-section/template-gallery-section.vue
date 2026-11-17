@@ -25,7 +25,7 @@
     title: string
     /** One line on what the template builds. */
     description?: string
-    /** Icon-font class of the template's mark, such as `ai-color ai-astro`. */
+    /** Icon-font class of the template's mark, such as `az-color az-astro`. */
     icon?: string
     /** Inverts the mark under the dark theme, for a mark whose artwork ships in dark ink only. */
     invertInDark?: boolean
@@ -168,7 +168,7 @@
                       :label="deployLabel"
                       variant="outline"
                       size="medium"
-                      icon="ai ai-chevron-right"
+                      icon="az az-chevron-right"
                       icon-position="trailing"
                       animated
                       :href="template.href"
@@ -176,7 +176,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-azion text-(--primary)"
+                          class="az az-azion text-(--primary)"
                           aria-hidden="true"
                         />
                       </template>
@@ -203,7 +203,7 @@
             :target="primaryAction.target"
             variant="secondary"
             size="large"
-            :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
+            :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
             icon-position="trailing"
             :animated="Boolean(primaryAction.trailing)"
           />
@@ -215,7 +215,7 @@
             :target="secondaryAction.target"
             variant="outline"
             size="large"
-            :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
+            :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
             icon-position="trailing"
             :animated="Boolean(secondaryAction.trailing)"
           />

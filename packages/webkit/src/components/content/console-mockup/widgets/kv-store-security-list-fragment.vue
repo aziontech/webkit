@@ -53,7 +53,7 @@
               class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
             >
               <i
-                class="ai ai-key shrink-0 text-body-md leading-none text-(--text-muted)"
+                class="az az-key shrink-0 text-body-md leading-none text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="truncate text-body-sm text-(--text-default)">

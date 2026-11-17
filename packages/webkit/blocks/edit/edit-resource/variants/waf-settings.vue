@@ -177,7 +177,7 @@
               <template #actions>
                 <Button
                   label="Documentation"
-                  icon="ai ai-book"
+                  icon="az az-book"
                   variant="outline"
                   href="https://example.com/docs/waf-rule-sets"
                   target="_blank"

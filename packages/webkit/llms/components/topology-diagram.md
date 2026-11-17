@@ -17,8 +17,8 @@
 - Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.
 - Mark the last node of each branch `terminal` so no connector leaves it.
 - Give every unbound slot a message that says what happens without it.
-- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`ai ai-external-link`), as every resource name in the console does.
-- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`ai ai-plus`, `variant="outline"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
+- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`az az-external-link`), as every resource name in the console does.
+- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`az az-plus`, `variant="outline"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
 
 ## Don’t
 
@@ -130,7 +130,7 @@
         {
           id: 'domains',
           type: 'Domains',
-          icon: 'ai ai-globe',
+          icon: 'az az-globe',
           name: 'shop.example.com',
           status: '2 domains',
           severity: 'info',
@@ -158,7 +158,7 @@
         {
           id: 'project',
           type: 'Project',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           name: 'web-app',
           status: 'Live',
           severity: 'success',
@@ -177,7 +177,7 @@
         {
           id: 'policy',
           type: 'Policy',
-          icon: 'ai ai-shield',
+          icon: 'az az-shield',
           name: 'edge-guard',
           status: 'Active',
           severity: 'success',
@@ -197,7 +197,7 @@
         {
           id: 'service',
           type: 'Service',
-          icon: 'ai ai-server',
+          icon: 'az az-server',
           name: 'web-app',
           status: 'Active',
           severity: 'success',
@@ -207,7 +207,7 @@
         {
           id: 'error-page',
           type: 'Error page',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           terminal: true,
           bindable: true,
           bindOptions: errorPages,
@@ -222,7 +222,7 @@
         {
           id: 'cache-static',
           type: 'Cache rule',
-          icon: 'ai ai-bolt',
+          icon: 'az az-bolt',
           name: 'static-assets',
           status: 'Active',
           severity: 'success',
@@ -231,7 +231,7 @@
         {
           id: 'cache-api',
           type: 'Cache rule',
-          icon: 'ai ai-bolt',
+          icon: 'az az-bolt',
           name: 'api-bypass',
           status: 'Active',
           severity: 'success',
@@ -246,7 +246,7 @@
         {
           id: 'integration',
           type: 'Integration',
-          icon: 'ai ai-link',
+          icon: 'az az-link',
           name: 'web-app-origin',
           status: 'Active',
           severity: 'success',
@@ -263,7 +263,7 @@
         {
           id: 'storage',
           type: 'Storage',
-          icon: 'ai ai-inbox',
+          icon: 'az az-inbox',
           name: 'web-app-assets',
           status: 'Private',
           severity: 'neutral',
@@ -294,7 +294,7 @@
             content="Add domain"
           >
             <IconButton
-              icon="ai ai-plus"
+              icon="az az-plus"
               variant="outline"
               size="small"
               aria-label="Add domain"
@@ -324,7 +324,7 @@
   const targets = {
     policy: {
       type: 'Policy',
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       options: [
         { value: 'edge-guard', label: 'edge-guard' },
         { value: 'strict-waf', label: 'strict-waf' }
@@ -333,7 +333,7 @@
     },
     'error-page': {
       type: 'Error page',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       options: [{ value: 'maintenance', label: 'maintenance' }],
       unbound: 'Errors answer with the default page.'
     }
@@ -384,7 +384,7 @@
         {
           id: 'project',
           type: 'Project',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           name: 'web-app',
           status: 'Live',
           severity: 'success'
@@ -398,7 +398,7 @@
         {
           id: 'service',
           type: 'Service',
-          icon: 'ai ai-server',
+          icon: 'az az-server',
           name: 'web-app',
           status: 'Active',
           severity: 'success'

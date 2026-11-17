@@ -285,7 +285,7 @@
         label="Deploy a folder"
         variant="outline"
         size="medium"
-        icon="ai ai-upload"
+        icon="az az-upload"
         @click="dropOpen = true"
       />
     </div>
@@ -322,7 +322,7 @@
             >
               <div class="flex min-w-0 items-center gap-(--spacing-sm)">
                 <i
-                  class="ai ai-folder shrink-0 text-(--text-muted)"
+                  class="az az-folder shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <div class="flex min-w-0 flex-col">
@@ -341,7 +341,7 @@
                   class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <i
-                    class="ai ai-file shrink-0 text-(--text-muted)"
+                    class="az az-file shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span
@@ -383,7 +383,7 @@
                 label="Deploy to Production"
                 variant="primary"
                 size="medium"
-                icon="ai ai-cloud-upload"
+                icon="az az-cloud-upload"
                 @click="deployDropped"
               />
             </div>
@@ -460,7 +460,7 @@
                   />
                   <i
                     v-else
-                    class="ai ai-sliders-horizontal text-(--text-muted)"
+                    class="az az-sliders-horizontal text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Media>
@@ -492,7 +492,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="ai ai-filter"
+              icon="az az-filter"
               :title="emptyLabel"
             />
             <span
@@ -515,7 +515,7 @@
                 label="Retry failed"
                 variant="outline"
                 size="medium"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="retryFailed"
               />
             </div>

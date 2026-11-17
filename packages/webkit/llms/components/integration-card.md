@@ -119,7 +119,7 @@
     <IntegrationCard
       title="Request Signer"
       vendor="Acme Inc."
-      logo="ai ai-key"
+      logo="az az-key"
       description="Sign every request at the edge with a rotating key, so the origin only answers traffic that passed through."
       :badges="[{ label: 'Firewall' }]"
       @select="opened = 'Request Signer'"
@@ -155,7 +155,7 @@
     class="w-full max-w-[400px]"
     title="Waiting Room"
     vendor="Tidewater"
-    logo="ai ai-hourglass"
+    logo="az az-hourglass"
     description="Queue visitors during a traffic surge and let them in as capacity frees up."
     :badges="[{ label: 'Application' }]"
     installed
@@ -166,7 +166,7 @@
         label="Configure"
         variant="outline"
         size="small"
-        icon="ai ai-settings"
+        icon="az az-settings"
       />
     </template>
   </IntegrationCard>
@@ -187,7 +187,7 @@
       id: 'split-testing',
       name: 'Split Testing',
       vendor: 'Acme Inc.',
-      logo: 'ai ai-percentage',
+      logo: 'az az-percentage',
       context: 'Application',
       description: 'Send a share of the traffic to a second version and compare the results.'
     },
@@ -195,7 +195,7 @@
       id: 'bot-shield',
       name: 'Bot Shield',
       vendor: 'Acme Inc.',
-      logo: 'ai ai-shield',
+      logo: 'az az-shield',
       context: 'Firewall',
       description:
         'Score every request and block the automated traffic before it reaches the origin.'
@@ -204,7 +204,7 @@
       id: 'request-signer',
       name: 'Request Signer',
       vendor: 'Acme Inc.',
-      logo: 'ai ai-key',
+      logo: 'az az-key',
       context: 'Firewall',
       description:
         'Sign every request with a rotating key, so the origin only answers signed traffic.'

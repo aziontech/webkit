@@ -11,19 +11,19 @@
   >
     <LinkDirectoryColumn title="Compute">
       <LinkDirectoryItem
-        icon="ai ai-edge-functions"
+        icon="az az-functions"
         title="Functions"
         description="Run serverless code closer to users"
         href="/functions"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-orchestrator"
+        icon="az az-edge-orchestrator"
         title="Rules Engine"
         description="Automate request handling with programmable rules"
         href="/rules-engine"
       />
       <LinkDirectoryItem
-        icon="ai ai-load-balancer"
+        icon="az az-load-balancer"
         title="Load Balancer"
         description="Distribute traffic for performance and availability"
         href="/load-balancer"
@@ -31,19 +31,19 @@
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Data">
       <LinkDirectoryItem
-        icon="ai ai-edge-storage"
+        icon="az az-object-storage"
         title="Object Storage"
         description="Scalable, durable storage for unstructured data"
         href="/object-storage"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-sql"
+        icon="az az-sql-database"
         title="SQL Database"
         description="Relational database built for distributed applications"
         href="/sql-database"
       />
       <LinkDirectoryItem
-        icon="ai ai-tiered-cache"
+        icon="az az-tiered-cache"
         title="Cache"
         description="Accelerate content delivery and reduce origin load"
         href="/cache"
@@ -51,19 +51,19 @@
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Security">
       <LinkDirectoryItem
-        icon="ai ai-waf-rules"
+        icon="az az-waf"
         title="WAF"
         description="Block application attacks at the edge"
         href="/waf"
       />
       <LinkDirectoryItem
-        icon="ai ai-network-lists"
+        icon="az az-network-lists"
         title="Network Shield"
         description="Absorb volumetric and protocol attacks"
         href="/network-shield"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-dns"
+        icon="az az-edge-dns"
         title="Edge DNS"
         description="Authoritative DNS answered from every location"
         href="/edge-dns"
@@ -71,19 +71,19 @@
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Observe">
       <LinkDirectoryItem
-        icon="ai ai-real-time-metrics"
+        icon="az az-real-time-metrics"
         title="Real-Time Metrics"
         description="Watch traffic and errors as they happen"
         href="/real-time-metrics"
       />
       <LinkDirectoryItem
-        icon="ai ai-data-stream"
+        icon="az az-data-stream"
         title="Data Stream"
         description="Ship events to the tools you already run"
         href="/data-stream"
       />
       <LinkDirectoryItem
-        icon="ai ai-real-time-events"
+        icon="az az-real-time-events"
         title="Real-Time Events"
         description="Query every request without sampling"
         href="/real-time-events"

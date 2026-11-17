@@ -524,7 +524,7 @@
           <template #actions>
             <Button
               label="Documentation"
-              icon="ai ai-book"
+              icon="az az-book"
               variant="outline"
               size="medium"
               href="https://example.com/docs/records"
@@ -533,14 +533,14 @@
             <Button
               v-if="importable"
               label="Import zone file"
-              icon="ai ai-file-import"
+              icon="az az-file-import"
               variant="outline"
               size="medium"
               @click="(event: MouseEvent) => emit('import', event)"
             />
             <Button
               label="Add Record"
-              icon="ai ai-plus"
+              icon="az az-plus"
               variant="outline"
               size="medium"
               @click="(event: MouseEvent) => emit('create', event)"
@@ -564,7 +564,7 @@
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="ai ai-refresh"
+                    icon="az az-refresh"
                     variant="outline"
                     size="medium"
                     :loading="loading"
@@ -577,7 +577,7 @@
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="ai ai-download"
+                    icon="az az-download"
                     variant="outline"
                     size="medium"
                     :disabled="blocked || !matchingItems.length"
@@ -655,7 +655,7 @@
                         >
                           <template #leading
                             ><i
-                              class="ai ai-pencil"
+                              class="az az-pencil"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -667,7 +667,7 @@
                         >
                           <template #leading
                             ><i
-                              class="ai ai-trash"
+                              class="az az-trash"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -679,7 +679,7 @@
                       key="empty-state-1"
                       v-if="status === 'no-match'"
                       size="medium"
-                      icon="ai ai-filter-off"
+                      icon="az az-filter-off"
                       title="No matching records"
                       description="No record matches these filters."
                     >
@@ -696,7 +696,7 @@
                       key="empty-state-2"
                       v-else
                       size="medium"
-                      icon="ai ai-list"
+                      icon="az az-list"
                       title="No records yet"
                       :description="`Add a record, or import a zone file, so this zone starts answering for ${zone.domain}.`"
                     >
@@ -704,14 +704,14 @@
                         <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                           <Button
                             label="Add Record"
-                            icon="ai ai-plus"
+                            icon="az az-plus"
                             variant="secondary"
                             size="small"
                             @click="(event: MouseEvent) => emit('create', event)"
                           />
                           <Button
                             label="Import zone file"
-                            icon="ai ai-upload"
+                            icon="az az-upload"
                             variant="outline"
                             size="small"
                             @click="(event: MouseEvent) => emit('import', event)"

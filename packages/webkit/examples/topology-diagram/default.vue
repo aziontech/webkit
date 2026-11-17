@@ -18,7 +18,7 @@
         {
           id: 'domains',
           type: 'Domains',
-          icon: 'ai ai-globe',
+          icon: 'az az-globe',
           name: 'shop.example.com',
           status: '2 domains',
           severity: 'info',
@@ -46,7 +46,7 @@
         {
           id: 'project',
           type: 'Project',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           name: 'web-app',
           status: 'Live',
           severity: 'success',
@@ -65,7 +65,7 @@
         {
           id: 'policy',
           type: 'Policy',
-          icon: 'ai ai-shield',
+          icon: 'az az-shield',
           name: 'edge-guard',
           status: 'Active',
           severity: 'success',
@@ -85,7 +85,7 @@
         {
           id: 'service',
           type: 'Service',
-          icon: 'ai ai-server',
+          icon: 'az az-server',
           name: 'web-app',
           status: 'Active',
           severity: 'success',
@@ -95,7 +95,7 @@
         {
           id: 'error-page',
           type: 'Error page',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           terminal: true,
           bindable: true,
           bindOptions: errorPages,
@@ -110,7 +110,7 @@
         {
           id: 'cache-static',
           type: 'Cache rule',
-          icon: 'ai ai-bolt',
+          icon: 'az az-bolt',
           name: 'static-assets',
           status: 'Active',
           severity: 'success',
@@ -119,7 +119,7 @@
         {
           id: 'cache-api',
           type: 'Cache rule',
-          icon: 'ai ai-bolt',
+          icon: 'az az-bolt',
           name: 'api-bypass',
           status: 'Active',
           severity: 'success',
@@ -134,7 +134,7 @@
         {
           id: 'integration',
           type: 'Integration',
-          icon: 'ai ai-link',
+          icon: 'az az-link',
           name: 'web-app-origin',
           status: 'Active',
           severity: 'success',
@@ -151,7 +151,7 @@
         {
           id: 'storage',
           type: 'Storage',
-          icon: 'ai ai-inbox',
+          icon: 'az az-inbox',
           name: 'web-app-assets',
           status: 'Private',
           severity: 'neutral',
@@ -182,7 +182,7 @@
             content="Add domain"
           >
             <IconButton
-              icon="ai ai-plus"
+              icon="az az-plus"
               variant="outline"
               size="small"
               aria-label="Add domain"

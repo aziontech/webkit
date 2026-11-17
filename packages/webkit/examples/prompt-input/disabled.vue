@@ -11,7 +11,7 @@
     >
       <template #actions>
         <IconButton
-          icon="ai ai-paperclip"
+          icon="az az-paperclip"
           aria-label="Attach a file"
           variant="ghost"
           size="medium"

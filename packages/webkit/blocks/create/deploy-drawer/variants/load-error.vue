@@ -31,7 +31,7 @@
         label="Deploy"
         variant="outline"
         size="medium"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -101,7 +101,7 @@
                 label="Retry"
                 variant="outline"
                 size="small"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="retrying = true"
               />
             </div>

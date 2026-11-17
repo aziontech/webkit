@@ -282,14 +282,14 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
         label="Reset layout"
         variant="ghost"
         size="medium"
-        icon="ai ai-replay"
+        icon="az az-replay"
         @click="reset"
       />
       <Button
         :label="editing ? 'Done' : 'Edit layout'"
         :variant="editing ? 'primary' : 'outline'"
         size="medium"
-        :icon="editing ? 'ai ai-check' : 'ai ai-layout-grid'"
+        :icon="editing ? 'az az-check' : 'az az-layout-grid'"
         :aria-pressed="editing"
         @click="editing = !editing"
       />
@@ -316,7 +316,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
                 :label="item.span + '/12'"
                 severity="neutral"
                 size="small"
-                icon="ai ai-move-horizontal"
+                icon="az az-move-horizontal"
               />
             </ChartCard.Action>
           </ChartCard.Header>

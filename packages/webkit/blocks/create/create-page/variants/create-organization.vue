@@ -190,7 +190,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to console"
           variant="outline"
           size="small"
@@ -368,7 +368,7 @@
                             label="Owner"
                             variant="primary"
                             size="medium"
-                            icon="ai ai-key"
+                            icon="az az-key"
                           />
                           <Tag
                             label="Active"
@@ -422,7 +422,7 @@
                 v-model:open="advancedOpen"
                 title="Advanced"
                 hint="Stored with the organization and used to shape what we recommend inside it."
-                icon="ai ai-settings"
+                icon="az az-settings"
                 collapsible
               >
                 <Card :padded="false">

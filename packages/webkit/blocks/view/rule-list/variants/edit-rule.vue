@@ -1030,7 +1030,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/rules"
@@ -1038,7 +1038,7 @@
           />
           <Button
             label="Add Rule"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="outline"
             size="medium"
             :disabled="loading"
@@ -1065,7 +1065,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -1160,7 +1160,7 @@
                           </Tooltip>
                           <Tooltip :content="lockReason(group.value, row) || 'Move up'">
                             <IconButton
-                              icon="ai ai-chevron-up"
+                              icon="az az-chevron-up"
                               variant="outline"
                               size="small"
                               data-control="up"
@@ -1175,7 +1175,7 @@
                           </Tooltip>
                           <Tooltip :content="lockReason(group.value, row) || 'Move down'">
                             <IconButton
-                              icon="ai ai-chevron-down"
+                              icon="az az-chevron-down"
                               variant="outline"
                               size="small"
                               data-control="down"
@@ -1240,7 +1240,7 @@
                       <template #empty>
                         <EmptyState
                           size="small"
-                          icon="ai ai-search"
+                          icon="az az-search"
                           :title="`No ${group.label.toLowerCase()} rule matches “${search.trim()}”`"
                         >
                           <template #actions>
@@ -1263,7 +1263,7 @@
                       <template #actions>
                         <Button
                           label="Add Rule"
-                          icon="ai ai-plus"
+                          icon="az az-plus"
                           variant="outline"
                           size="medium"
                           @click="addRule(group.value)"
@@ -1611,7 +1611,7 @@
                                     >
                                       <template #leading>
                                         <i
-                                          class="ai ai-search"
+                                          class="az az-search"
                                           aria-hidden="true"
                                         />
                                       </template>
@@ -1733,13 +1733,13 @@
                                 @keydown.down.prevent="moveBehavior(bIdx, 1)"
                               >
                                 <i
-                                  class="ai ai-menu"
+                                  class="az az-menu"
                                   aria-hidden="true"
                                 />
                               </span>
                               <Tooltip content="Move behavior up">
                                 <IconButton
-                                  icon="ai ai-chevron-up"
+                                  icon="az az-chevron-up"
                                   variant="outline"
                                   size="large"
                                   aria-label="Move behavior up"
@@ -1749,7 +1749,7 @@
                               </Tooltip>
                               <Tooltip content="Move behavior down">
                                 <IconButton
-                                  icon="ai ai-chevron-down"
+                                  icon="az az-chevron-down"
                                   variant="outline"
                                   size="large"
                                   aria-label="Move behavior down"
@@ -1759,7 +1759,7 @@
                               </Tooltip>
                               <Tooltip content="Remove behavior">
                                 <IconButton
-                                  icon="ai ai-trash"
+                                  icon="az az-trash"
                                   variant="outline"
                                   size="large"
                                   aria-label="Remove behavior"
@@ -1777,7 +1777,7 @@
                             label="Add behavior"
                             variant="outline"
                             size="medium"
-                            icon="ai ai-circle-plus"
+                            icon="az az-circle-plus"
                             :disabled="submitting || !canAddBehavior"
                             @click="addBehavior"
                           />

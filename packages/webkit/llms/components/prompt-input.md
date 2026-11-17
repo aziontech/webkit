@@ -79,8 +79,8 @@ Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed
 ## States
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`.
-- `ready`: Submit (primary `IconButton`, `ai ai-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
-- `pending` / `streaming`: Stop (secondary `IconButton`, `ai ai-stop`) replaces Submit; Enter does nothing.
+- `ready`: Submit (primary `IconButton`, `az az-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
+- `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 
 ## Accessibility

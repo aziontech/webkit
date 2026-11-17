@@ -14,37 +14,37 @@
 
   const items = [
     {
-      icon: 'ai ai-azion-api',
+      icon: 'az az-azion-api',
       title: 'One endpoint for every model',
       description:
         'Apps send OpenAI-format requests with a model alias. Change the model behind an alias once, and every app follows.'
     },
     {
-      icon: 'ai ai-replay',
+      icon: 'az az-replay',
       title: 'Fallback when a provider fails',
       description:
         'Each alias lists its models in order. When a call errors or times out, the gateway moves to the next one.'
     },
     {
-      icon: 'ai ai-key',
+      icon: 'az az-key',
       title: 'Provider keys stay server-side',
       description:
         'Provider keys live in secret environment variables. Each team gets its own gateway key, stored only as a SHA-256 hash.'
     },
     {
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       title: 'Abuse blocked before it costs tokens',
       description:
         'Firewall applies WAF, rate limits, and DDoS Protection before requests reach the gateway, so blocked traffic never reaches a model.'
     },
     {
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-tiered-cache',
       title: 'Repeated prompts served from cache',
       description:
         'Callers opt in per request. A matching prompt gets a stored response, with no model call and no tokens spent.'
     },
     {
-      icon: 'ai ai-list',
+      icon: 'az az-list',
       title: 'Every call on the record',
       description:
         'Each call logs the team, model, fallback, cache result, and tokens used. Stream the logs to your SIEM or data warehouse.'

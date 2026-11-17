@@ -38,8 +38,8 @@
   ]
 
   const ADD_TO_FILES = [
-    { label: 'Upload file', value: 'upload', icon: 'ai ai-upload' },
-    { label: 'Add folder', value: 'folder', icon: 'ai ai-folder-plus' }
+    { label: 'Upload file', value: 'upload', icon: 'az az-upload' },
+    { label: 'Add folder', value: 'folder', icon: 'az az-folder-plus' }
   ]
 
   type Kind = 'parent' | 'folder' | 'file'
@@ -55,7 +55,7 @@
     name,
     kind: 'folder',
     size: '-',
-    icon: 'ai ai-folder'
+    icon: 'az az-folder'
   })
   const file = (name: string, size: string, icon: string): Entry => ({
     name,
@@ -67,18 +67,18 @@
   const ROOT: Entry[] = [
     folder('assets/'),
     folder('images/'),
-    file('favicon.ico', '15 KB', 'ai ai-image'),
-    file('index.html', '2.1 KB', 'ai ai-code'),
-    file('manifest.json', '412 B', 'ai ai-database'),
-    file('robots.txt', '64 B', 'ai ai-file')
+    file('favicon.ico', '15 KB', 'az az-image'),
+    file('index.html', '2.1 KB', 'az az-code'),
+    file('manifest.json', '412 B', 'az az-database'),
+    file('robots.txt', '64 B', 'az az-file')
   ]
 
   const ASSETS: Entry[] = [
-    { name: '..', kind: 'parent', size: '-', icon: 'ai ai-folder-open' },
-    file('index-B7xq2k1d.js', '148.2 KB', 'ai ai-code'),
-    file('index-Cm4r9zLp.css', '21.6 KB', 'ai ai-code'),
-    file('logo-9aW3eT0c.svg', '3.2 KB', 'ai ai-image'),
-    file('vendor-D1f8sKqa.js', '412.9 KB', 'ai ai-code')
+    { name: '..', kind: 'parent', size: '-', icon: 'az az-folder-open' },
+    file('index-B7xq2k1d.js', '148.2 KB', 'az az-code'),
+    file('index-Cm4r9zLp.css', '21.6 KB', 'az az-code'),
+    file('logo-9aW3eT0c.svg', '3.2 KB', 'az az-image'),
+    file('vendor-D1f8sKqa.js', '412.9 KB', 'az az-code')
   ]
 
   const tableRows = (entries: Entry[]) => {
@@ -202,7 +202,7 @@
                 <div class="flex w-full flex-col gap-(--spacing-sm)">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-edge-storage shrink-0 text-body-lg text-(--text-muted)"
+                      class="az az-object-storage shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 truncate text-heading-2xs text-(--text-default)">
@@ -219,7 +219,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -233,7 +233,7 @@
                     <span class="flex shrink-0">
                       <SplitButton
                         label="Add to files"
-                        icon="ai ai-plus"
+                        icon="az az-plus"
                         variant="primary"
                         size="medium"
                         :items="ADD_TO_FILES"

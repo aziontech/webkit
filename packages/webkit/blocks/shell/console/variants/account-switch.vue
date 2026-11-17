@@ -36,12 +36,12 @@
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' },
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' },
         {
           id: 'deployments',
           label: 'Deployments',
-          icon: 'ai ai-deploy-pillar',
+          icon: 'az az-deploy-pillar',
           href: '/deployments'
         }
       ]
@@ -52,21 +52,21 @@
         {
           id: 'applications',
           label: 'Applications',
-          icon: 'ai ai-edge-application',
+          icon: 'az az-applications',
           href: '/applications'
         },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' },
-        { id: 'variables', label: 'Variables', icon: 'ai ai-variables', href: '/variables' },
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' },
+        { id: 'variables', label: 'Variables', icon: 'az az-variables', href: '/variables' },
         {
           id: 'connectors',
           label: 'Connectors',
-          icon: 'ai ai-edge-connectors',
+          icon: 'az az-connectors',
           href: '/connectors'
         },
         {
           id: 'custom-pages',
           label: 'Custom Pages',
-          icon: 'ai ai-custom-pages',
+          icon: 'az az-custom-pages',
           href: '/custom-pages'
         }
       ]
@@ -74,19 +74,19 @@
     {
       label: 'Secure',
       items: [
-        { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall', href: '/firewall' },
-        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', href: '/edge-dns' },
-        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules', href: '/waf-rules' },
+        { id: 'firewall', label: 'Firewall', icon: 'az az-firewall', href: '/firewall' },
+        { id: 'edge-dns', label: 'Edge DNS', icon: 'az az-edge-dns', href: '/edge-dns' },
+        { id: 'waf-rules', label: 'WAF Rules', icon: 'az az-waf', href: '/waf-rules' },
         {
           id: 'certificate-manager',
           label: 'Certificate Manager',
-          icon: 'ai ai-certificate-manager',
+          icon: 'az az-certificate-manager',
           href: '/certificate-manager'
         },
         {
           id: 'network-lists',
           label: 'Network Lists',
-          icon: 'ai ai-network-lists',
+          icon: 'az az-network-lists',
           href: '/network-lists'
         }
       ]
@@ -97,13 +97,13 @@
         {
           id: 'object-storage',
           label: 'Object Storage',
-          icon: 'ai ai-edge-storage',
+          icon: 'az az-object-storage',
           href: '/object-storage'
         },
         {
           id: 'sql-database',
           label: 'SQL Database',
-          icon: 'ai ai-edge-sql',
+          icon: 'az az-sql-database',
           href: '/sql-database',
           tagValue: 'Preview'
         }
@@ -115,26 +115,26 @@
         {
           id: 'data-stream',
           label: 'Data Stream',
-          icon: 'ai ai-data-stream',
+          icon: 'az az-data-stream',
           href: '/data-stream'
         },
-        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', href: '/edge-pulse' },
+        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'az az-edge-pulse', href: '/edge-pulse' },
         {
           id: 'real-time-metrics',
           label: 'Real-Time Metrics',
-          icon: 'ai ai-real-time-metrics',
+          icon: 'az az-real-time-metrics',
           href: '/real-time-metrics'
         },
         {
           id: 'real-time-events',
           label: 'Real-Time Events',
-          icon: 'ai ai-real-time-events',
+          icon: 'az az-real-time-events',
           href: '/real-time-events'
         },
         {
           id: 'real-time-purge',
           label: 'Real-Time Purge',
-          icon: 'ai ai-real-time-purge',
+          icon: 'az az-real-time-purge',
           href: '/real-time-purge'
         }
       ]
@@ -145,13 +145,13 @@
         {
           id: 'marketplace',
           label: 'Marketplace',
-          icon: 'ai ai-marketplace',
+          icon: 'az az-marketplace',
           href: '/marketplace'
         },
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'ai ai-settings',
+          icon: 'az az-settings',
           type: 'drill',
           groups: [
             {
@@ -198,9 +198,9 @@
   const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 
   const recents = [
-    { id: 'azion-site', label: 'azion-site', icon: 'ai ai-edge-application', type: 'Application' },
-    { id: 'edge-auth', label: 'edge-auth', icon: 'ai ai-edge-functions', type: 'Function' },
-    { id: 'shop-assets', label: 'shop-assets', icon: 'ai ai-edge-storage', type: 'Bucket' }
+    { id: 'azion-site', label: 'azion-site', icon: 'az az-applications', type: 'Application' },
+    { id: 'edge-auth', label: 'edge-auth', icon: 'az az-functions', type: 'Function' },
+    { id: 'shop-assets', label: 'shop-assets', icon: 'az az-object-storage', type: 'Bucket' }
   ]
 
   const { mode: theme } = useColorMode()
@@ -237,9 +237,9 @@
   }
 
   const accountTypes: Record<AccountType, AccountTypeMeta> = {
-    organization: { label: 'Organization', icon: 'ai ai-building', variant: 'primary' },
-    group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
+    organization: { label: 'Organization', icon: 'az az-building', variant: 'primary' },
+    group: { label: 'Group', icon: 'az az-users', severity: 'info' },
+    workspace: { label: 'Workspace', icon: 'az az-layout-grid', severity: 'neutral' }
   }
 
   const accounts: Account[] = [
@@ -406,7 +406,7 @@
               currentAccount.name
             }}</span>
             <i
-              class="ai ai-sort shrink-0 text-body-xs text-(--text-muted)"
+              class="az az-sort shrink-0 text-body-xs text-(--text-muted)"
               aria-hidden="true"
             />
           </button>
@@ -433,7 +433,7 @@
               variant="square"
             />
             <i
-              class="ai ai-chevron-down shrink-0 text-body-xs text-(--text-muted)"
+              class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted)"
               aria-hidden="true"
             />
           </button>
@@ -447,7 +447,7 @@
             side="bottom"
           >
             <IconButton
-              icon="ai ai-circle-plus"
+              icon="az az-circle-plus"
               variant="primary"
               size="medium"
               aria-label="Create"
@@ -458,7 +458,7 @@
             side="bottom"
           >
             <IconButton
-              icon="ai ai-ask-azion"
+              icon="az az-ask-azion"
               variant="outline"
               size="medium"
               aria-label="Agent"
@@ -470,12 +470,12 @@
             label="Create"
             variant="primary"
             size="medium"
-            icon="ai ai-circle-plus"
+            icon="az az-circle-plus"
           />
           <HighlightButton
             label="Agent"
             size="medium"
-            icon="ai ai-ask-azion"
+            icon="az az-ask-azion"
           />
         </template>
       </template>
@@ -506,7 +506,7 @@
           <Command.Item value="action:create">
             <template #leading>
               <i
-                class="ai ai-circle-plus"
+                class="az az-circle-plus"
                 aria-hidden="true"
               />
             </template>
@@ -515,7 +515,7 @@
           <Command.Item value="action:theme">
             <template #leading>
               <i
-                class="ai ai-moon"
+                class="az az-moon"
                 aria-hidden="true"
               />
             </template>
@@ -538,7 +538,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-settings"
+                class="az az-settings"
                 aria-hidden="true"
               />
             </template>
@@ -549,7 +549,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-key"
+                class="az az-key"
                 aria-hidden="true"
               />
             </template>
@@ -575,7 +575,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-book"
+                class="az az-book"
                 aria-hidden="true"
               />
             </template>
@@ -586,7 +586,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-log-out"
+                class="az az-log-out"
                 aria-hidden="true"
               />
             </template>
@@ -619,7 +619,7 @@
             <template #actions>
               <Button
                 label="Documentation"
-                icon="ai ai-book"
+                icon="az az-book"
                 variant="outline"
                 size="medium"
                 href="https://www.azion.com/en/documentation/"
@@ -627,7 +627,7 @@
               />
               <Button
                 label="Create Application"
-                icon="ai ai-plus"
+                icon="az az-plus"
                 variant="outline"
                 size="medium"
               />
@@ -668,7 +668,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -692,7 +692,7 @@
                     >
                       <IconButton
                         v-if="row.hasChildren"
-                        :icon="row.expanded ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
+                        :icon="row.expanded ? 'az az-chevron-down' : 'az az-chevron-right'"
                         variant="ghost"
                         size="small"
                         :aria-label="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
@@ -749,7 +749,7 @@
                   <template #empty>
                     <EmptyState
                       size="small"
-                      icon="ai ai-search"
+                      icon="az az-search"
                       title="No accounts match your search"
                       :description="`Nothing in this tree matches “${accountQuery}”.`"
                     >

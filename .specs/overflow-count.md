@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: f60db82f49ac8c87add6c837c4c75dbc94758f8a3445f468ad0c3e13fe1f94c7
+checksum: 2f63f7dfb82e16e875ac5f21f008a1ed991f619a3e85e96fb78844733ec47c9b
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -133,7 +133,7 @@ _none_
 ## Right-to-left
 
 - Layout: logical utilities only; the external-link glyph sits at the inline end.
-- Icons: `ai-external-link` and `ai-search` are not mirrored.
+- Icons: `az-external-link` and `az-search` are not mirrored.
 - Keyboard: unchanged.
 - User data: each entry is wrapped in `dir="auto"` so a domain keeps its order inside right-to-left text.
 

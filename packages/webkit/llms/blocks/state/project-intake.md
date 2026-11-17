@@ -279,7 +279,7 @@ Each variant is the same screen in another state: `get_block("state/project-inta
         label="Choose a folder"
         variant="outline"
         size="medium"
-        icon="ai ai-folder-open"
+        icon="az az-folder-open"
         @click="chooseFolder"
       />
       <input

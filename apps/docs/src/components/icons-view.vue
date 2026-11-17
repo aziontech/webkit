@@ -21,16 +21,39 @@
     return assets.icons.filter((icon) => matches(icon, q))
   })
 
-  const sets = computed(() =>
-    [
-      { id: 'azionicons', title: t.value.iconsAzion, lead: t.value.iconsAzionLead, prefix: 'ai-' },
-      { id: 'color', title: t.value.iconsColor, lead: t.value.iconsColorLead, prefix: 'ai-' }
-    ].map((set) => ({
-      ...set,
-      total: assets.icons.filter((icon) => icon.set === set.id).length,
-      icons: filtered.value.filter((icon) => icon.set === set.id)
-    }))
+  const GROUPS = ['azion', 'interface', 'external'] as const
+
+  const groups = computed(() =>
+    GROUPS.map((id) => {
+      const all = assets.icons.filter((icon) => icon.group === id)
+      const shown = filtered.value.filter((icon) => icon.group === id)
+      const categories = [...new Set(all.map((icon) => icon.category))]
+        .map((category) => ({
+          id: category,
+          title: t.value.iconCategories[category] ?? category,
+          icons: shown.filter((icon) => icon.category === category)
+        }))
+        .filter((category) => category.icons.length)
+      return {
+        id,
+        title: {
+          azion: t.value.iconsAzion,
+          interface: t.value.iconsInterface,
+          external: t.value.iconsExternal
+        }[id],
+        lead: {
+          azion: t.value.iconsAzionLead,
+          interface: t.value.iconsInterfaceLead,
+          external: t.value.iconsExternalLead
+        }[id],
+        total: all.length,
+        count: shown.length,
+        categories
+      }
+    })
   )
+
+  const shortName = (icon: IconAsset) => icon.name.replace(/^az-/, '')
 </script>
 
 <template>
@@ -45,7 +68,7 @@
         >
           <template #leading>
             <i
-              class="ai ai-search text-(--text-muted)"
+              class="az az-search text-(--text-muted)"
               aria-hidden="true"
             />
           </template>
@@ -75,57 +98,65 @@
     </div>
 
     <template
-      v-for="set in sets"
-      :key="set.id"
+      v-for="group in groups"
+      :key="group.id"
     >
       <section
-        v-if="set.icons.length"
-        class="flex flex-col gap-(--spacing-sm)"
-        :aria-labelledby="`icons-${set.id}`"
+        v-if="group.count"
+        class="flex flex-col gap-(--spacing-md)"
+        :aria-labelledby="`icons-${group.id}`"
       >
         <div class="flex flex-col gap-(--spacing-2xs)">
           <h2
-            :id="`icons-${set.id}`"
+            :id="`icons-${group.id}`"
             class="flex items-baseline gap-(--spacing-xs) text-heading-sm"
           >
-            {{ set.title }}
+            {{ group.title }}
             <span class="text-body-sm text-(--text-muted)"
-              >{{ set.icons.length }} / {{ set.total }}</span
+              >{{ group.count }} / {{ group.total }}</span
             >
           </h2>
-          <p class="text-body-sm text-(--text-muted)">{{ set.lead }}</p>
+          <p class="text-body-sm text-(--text-muted)">{{ group.lead }}</p>
         </div>
-        <ul
-          class="grid grid-cols-3 gap-px overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--border-default) sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8"
+        <div
+          v-for="category in group.categories"
+          :key="category.id"
+          class="flex flex-col gap-(--spacing-xs)"
         >
-          <li
-            v-for="icon in set.icons"
-            :key="icon.name"
-            class="flex"
+          <h3 class="text-label-md text-(--text-muted)">{{ category.title }}</h3>
+          <ul
+            class="grid grid-cols-3 gap-px overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--border-default) sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8"
           >
-            <button
-              type="button"
-              :title="format('{label}: {value}', { label: t.iconsCopy, value: icon.class })"
-              class="group relative flex min-h-24 w-full flex-col items-center justify-center gap-(--spacing-xs) bg-(--bg-canvas) p-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface) focus-visible:z-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-              @click="copyValue(icon.class)"
+            <li
+              v-for="icon in category.icons"
+              :key="icon.class"
+              class="flex"
             >
-              <i
-                :class="icon.class"
-                class="text-(--text-default)"
-                :style="{ fontSize: `${size}px` }"
-                aria-hidden="true"
-              />
-              <span class="w-full truncate text-center text-label-code-sm text-(--text-muted)">{{
-                icon.name.replace(set.prefix, '')
-              }}</span>
-              <span class="sr-only">{{ icon.class }}</span>
-              <i
-                class="ai ai-copy absolute end-(--spacing-xs) top-(--spacing-xs) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
-                aria-hidden="true"
-              />
-            </button>
-          </li>
-        </ul>
+              <button
+                type="button"
+                :title="`${icon.label} · ${format('{label}: {value}', { label: t.iconsCopy, value: icon.class })}`"
+                class="group relative flex min-h-24 w-full flex-col items-center justify-center gap-(--spacing-xs) bg-(--bg-canvas) p-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface) focus-visible:z-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                @click="copyValue(icon.class)"
+              >
+                <i
+                  :class="icon.class"
+                  class="text-(--text-default)"
+                  :style="{ fontSize: `${size}px` }"
+                  aria-hidden="true"
+                />
+                <span class="w-full truncate text-center text-label-code-sm text-(--text-muted)"
+                  >{{ shortName(icon)
+                  }}<template v-if="icon.set === 'color'"> · {{ t.iconsColor }}</template></span
+                >
+                <span class="sr-only">{{ icon.class }}, {{ icon.label }}</span>
+                <i
+                  class="az az-copy absolute end-(--spacing-xs) top-(--spacing-xs) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
+              </button>
+            </li>
+          </ul>
+        </div>
       </section>
     </template>
 
@@ -133,7 +164,7 @@
       v-if="!filtered.length"
       :title="t.iconsEmpty"
       :description="t.iconsEmptyLead"
-      icon="ai ai-search"
+      icon="az az-search"
       bordered
     />
   </div>

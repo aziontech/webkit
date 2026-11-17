@@ -53,7 +53,7 @@
               class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
             >
               <i
-                class="ai ai-network-lists shrink-0 text-body-md leading-none text-(--text-muted)"
+                class="az az-network-lists shrink-0 text-body-md leading-none text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="flex min-w-0 flex-col">

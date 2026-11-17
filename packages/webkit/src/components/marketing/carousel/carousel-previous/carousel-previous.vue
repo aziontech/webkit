@@ -37,7 +37,7 @@
     @click="context.scrollPrev()"
   >
     <i
-      class="ai ai-chevron-left rtl:-scale-x-100"
+      class="az az-chevron-left rtl:-scale-x-100"
       aria-hidden="true"
     />
   </button>

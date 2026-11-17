@@ -141,7 +141,7 @@
                   label="Add Device Group"
                   variant="outline"
                   size="medium"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   @click="openGroup()"
                 />
               </template>
@@ -159,7 +159,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -171,7 +171,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       variant="outline"
                       size="medium"
                       aria-label="Refresh"
@@ -182,7 +182,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-download"
+                      icon="az az-download"
                       variant="outline"
                       size="medium"
                       :disabled="!tableEl"
@@ -195,7 +195,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-column"
+                      icon="az az-columns-3"
                       variant="outline"
                       size="medium"
                       aria-label="Columns"
@@ -252,7 +252,7 @@
                         key="empty-state-1"
                         v-if="search.trim()"
                         size="medium"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No matching device groups"
                         :description="`Nothing matches ${search.trim()}.`"
                       >
@@ -269,14 +269,14 @@
                         key="empty-state-2"
                         v-else
                         size="medium"
-                        icon="ai ai-mobile"
+                        icon="az az-mobile"
                         title="No device groups yet"
                         description="Add the first one to this version."
                       >
                         <template #actions>
                           <Button
                             label="Add Device Group"
-                            icon="ai ai-plus"
+                            icon="az az-plus"
                             variant="secondary"
                             size="small"
                             @click="openGroup()"

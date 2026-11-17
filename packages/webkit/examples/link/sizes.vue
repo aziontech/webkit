@@ -7,17 +7,17 @@
     <Link
       size="large"
       label="Learn more"
-      icon="ai ai-external-link"
+      icon="az az-external-link"
     />
     <Link
       size="medium"
       label="Learn more"
-      icon="ai ai-external-link"
+      icon="az az-external-link"
     />
     <Link
       size="small"
       label="Learn more"
-      icon="ai ai-external-link"
+      icon="az az-external-link"
     />
   </div>
 </template>

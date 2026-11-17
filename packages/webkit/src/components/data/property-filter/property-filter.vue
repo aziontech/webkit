@@ -735,7 +735,7 @@
       >
         <template #leading>
           <i
-            class="ai ai-filter text-(--text-muted)"
+            class="az az-filter text-(--text-muted)"
             aria-hidden="true"
           />
         </template>
@@ -831,7 +831,7 @@
             class="flex min-h-8 items-center gap-(--spacing-sm) px-(--spacing-sm) text-body-sm text-(--text-default)"
           >
             <i
-              class="ai ai-circle-alert shrink-0 text-(--danger)"
+              class="az az-circle-alert shrink-0 text-(--danger)"
               aria-hidden="true"
             />
             {{ t('propertyFilter.valuesError') }}
@@ -970,7 +970,7 @@
         :label="t('propertyFilter.addGroup')"
         :disabled="disabled"
         :data-testid="`${testId}__add-group`"
-        icon="ai ai-plus"
+        icon="az az-plus"
         variant="ghost"
         size="small"
         @click="startGroup"

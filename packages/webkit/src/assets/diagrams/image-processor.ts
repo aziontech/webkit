@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Browser',
-      icon: 'ai ai-globe',
+      icon: 'az az-globe',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'Rule: optimize images',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Image Processor',
       title: 'fit-in/400x400, WebP',
-      icon: 'ai ai-image-processor',
+      icon: 'az az-image-processor',
       status: {
         label: 'Variant cached',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Cache',
       title: 'Same variant, no work',
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-tiered-cache',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Origin',
       title: 'One source image',
-      icon: 'ai ai-image'
+      icon: 'az az-image'
     }
   ],
   layout: {

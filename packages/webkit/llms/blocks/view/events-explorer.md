@@ -1122,7 +1122,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -1135,7 +1135,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
             class="shrink-0"
           >
             <IconButton
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               variant="outline"
               size="medium"
               :loading="loading"
@@ -1149,7 +1149,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
             class="shrink-0"
           >
             <IconButton
-              icon="ai ai-download"
+              icon="az az-download"
               variant="outline"
               size="medium"
               :disabled="!tableEl"
@@ -1205,7 +1205,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                     >
                       <template #leading>
                         <i
-                          class="ai ai-search"
+                          class="az az-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -1288,7 +1288,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                               </span>
                               <i
                                 v-if="isValueApplied(field.id, entry.value)"
-                                class="ai ai-check shrink-0 text-(--primary)"
+                                class="az az-check shrink-0 text-(--primary)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1410,7 +1410,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                                       </span>
                                       <i
                                         v-if="isValueApplied(field.id, entry.value)"
-                                        class="ai ai-check shrink-0 text-(--primary)"
+                                        class="az az-check shrink-0 text-(--primary)"
                                         aria-hidden="true"
                                       />
                                     </span>
@@ -1573,7 +1573,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
 
                     <template #cell-detail="{ row }">
                       <IconButton
-                        :icon="row.id === selectedId ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
+                        :icon="row.id === selectedId ? 'az az-chevron-down' : 'az az-chevron-right'"
                         variant="ghost"
                         size="small"
                         :aria-label="`Open event ${row.id}`"
@@ -1630,7 +1630,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                         v-if="noTraffic"
                         key="no-traffic"
                         size="small"
-                        icon="ai ai-inbox"
+                        icon="az az-inbox"
                         title="No events yet"
                         description="Events appear here as soon as traffic reaches this workspace's resources."
                       />
@@ -1638,7 +1638,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                         v-else-if="search.trim()"
                         key="no-match"
                         size="small"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No events match this search"
                         description="Clear the search, or widen the period to cover more of the log."
                       />
@@ -1646,7 +1646,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
                         v-else
                         key="no-events"
                         size="small"
-                        icon="ai ai-filter-off"
+                        icon="az az-filter-off"
                         title="No events in this window"
                         description="Widen the period or clear a filter to see more of the log."
                       />
@@ -1685,7 +1685,7 @@ Each variant is the same screen in another state: `get_block("view/events-explor
               </h2>
               <Tooltip content="Close">
                 <IconButton
-                  icon="ai ai-x"
+                  icon="az az-x"
                   variant="ghost"
                   size="small"
                   aria-label="Close the event document"

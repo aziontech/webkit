@@ -121,7 +121,7 @@
               label: linkLabel,
               href,
               size: 'small',
-              icon: 'ai ai-chevron-right',
+              icon: 'az az-chevron-right',
               class: 'self-start'
             })
           : null

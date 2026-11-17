@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: a3043621f43e9274f098c7e7b91795a13eb5f34b0cc686414e1d5327fd9ec961
+checksum: 3761c2e2f3cfe19e40df21b888ae1c673579d788f8faf21997b9e9e968880476
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -57,13 +57,13 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
       {
         value: 'copy',
         label: 'Copy as Markdown',
-        icon: 'ai ai-copy',
+        icon: 'az az-copy',
         tip: 'Copy this page as Markdown, ready to paste into an assistant.'
       },
       {
         value: 'agent',
         label: 'Agent setup',
-        icon: 'ai ai-microchip-ai',
+        icon: 'az az-microchip-ai',
         href: '/docs/agent-setup',
         tip: 'Set up your coding agent to build on Azion.'
       }

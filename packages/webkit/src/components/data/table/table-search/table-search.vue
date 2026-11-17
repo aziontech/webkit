@@ -55,7 +55,7 @@
   >
     <template #leading>
       <i
-        class="ai ai-search text-button-md"
+        class="az az-search text-button-md"
         aria-hidden="true"
       />
     </template>

@@ -167,7 +167,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/mfa"
@@ -222,7 +222,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="ai ai-refresh"
+                  icon="az az-refresh"
                   variant="outline"
                   size="medium"
                   :loading="refreshing"
@@ -235,7 +235,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="ai ai-download"
+                  icon="az az-download"
                   variant="outline"
                   size="medium"
                   :disabled="!matchingItems.length"
@@ -340,7 +340,7 @@
                 <template #empty>
                   <EmptyState
                     size="small"
-                    icon="ai ai-search"
+                    icon="az az-search"
                     title="No matching people"
                     description="No person matches these filters."
                   >

@@ -30,7 +30,7 @@
           {
             value: 'markdown',
             label: t.value.viewMarkdown,
-            icon: 'ai ai-file',
+            icon: 'az az-file',
             href: llms.value,
             target: '_blank' as const
           }

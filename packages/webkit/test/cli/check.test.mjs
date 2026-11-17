@@ -149,7 +149,7 @@ test('check reports PrimeIcons classes: a mapped pair is an error, a mark with n
       migration.some(
         (f) =>
           f.severity === 'error' &&
-          /pi pi-cog → ai ai-settings/.test(f.message) &&
+          /pi pi-cog → az az-settings/.test(f.message) &&
           /migrate v6/.test(f.message)
       )
     )

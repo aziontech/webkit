@@ -11,7 +11,7 @@
     <IntegrationCard
       title="Request Signer"
       vendor="Acme Inc."
-      logo="ai ai-key"
+      logo="az az-key"
       description="Sign every request at the edge with a rotating key, so the origin only answers traffic that passed through."
       :badges="[{ label: 'Firewall' }]"
       @select="opened = 'Request Signer'"

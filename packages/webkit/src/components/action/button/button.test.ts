@@ -257,14 +257,14 @@ describe('Button', () => {
 
     it('defaults an icon to the leading side', () => {
       const { getByRole } = render(Button, {
-        props: { label: 'Save', icon: 'ai ai-check' }
+        props: { label: 'Save', icon: 'az az-check' }
       })
       expect(getByRole('button').getAttribute('data-icon-position')).toBe('leading')
     })
 
     it('puts the glyph after the label when iconPosition is trailing', () => {
       const { getByRole } = render(Button, {
-        props: { label: 'Read the guide', icon: 'ai ai-chevron-right', iconPosition: 'trailing' }
+        props: { label: 'Read the guide', icon: 'az az-chevron-right', iconPosition: 'trailing' }
       })
       const node = getByRole('button', { name: 'Read the guide' })
       expect(node.getAttribute('data-icon-position')).toBe('trailing')
@@ -275,7 +275,7 @@ describe('Button', () => {
 
     it('keeps a trailing glyph still unless animated is set', () => {
       const { getByRole } = render(Button, {
-        props: { label: 'Read the guide', icon: 'ai ai-chevron-right', iconPosition: 'trailing' }
+        props: { label: 'Read the guide', icon: 'az az-chevron-right', iconPosition: 'trailing' }
       })
       expect(getByRole('button').querySelector('[data-animated]')).toBeNull()
     })
@@ -284,7 +284,7 @@ describe('Button', () => {
       const { getByRole } = render(Button, {
         props: {
           label: 'Read the guide',
-          icon: 'ai ai-chevron-right',
+          icon: 'az az-chevron-right',
           iconPosition: 'trailing',
           animated: true
         }
@@ -294,7 +294,7 @@ describe('Button', () => {
 
     it('never animates a leading glyph', () => {
       const { getByRole } = render(Button, {
-        props: { label: 'Save', icon: 'ai ai-check', animated: true }
+        props: { label: 'Save', icon: 'az az-check', animated: true }
       })
       expect(getByRole('button').querySelector('[data-animated]')).toBeNull()
     })
@@ -303,12 +303,12 @@ describe('Button', () => {
       const { getByRole } = render(Button, {
         props: {
           label: 'Deploy now',
-          icon: 'ai ai-chevron-right',
+          icon: 'az az-chevron-right',
           iconPosition: 'trailing',
           animated: true,
           href: '/deploy'
         },
-        slots: { leading: '<i data-mark class="ai ai-azion" aria-hidden="true"></i>' }
+        slots: { leading: '<i data-mark class="az az-azion" aria-hidden="true"></i>' }
       })
       const node = getByRole('link', { name: 'Deploy now' })
       const mark = node.querySelector('[data-mark]')
@@ -325,7 +325,7 @@ describe('Button', () => {
       const { getByRole, getByTestId } = render(Button, {
         props: {
           label: 'Save',
-          icon: 'ai ai-chevron-right',
+          icon: 'az az-chevron-right',
           iconPosition: 'trailing',
           loading: true
         }
@@ -343,8 +343,8 @@ describe('Button', () => {
 
     it('Prefix + trailing glyph has no violations', async () => {
       const { container } = render(Button, {
-        props: { label: 'Deploy now', icon: 'ai ai-chevron-right', iconPosition: 'trailing' },
-        slots: { leading: '<i class="ai ai-azion" aria-hidden="true"></i>' }
+        props: { label: 'Deploy now', icon: 'az az-chevron-right', iconPosition: 'trailing' },
+        slots: { leading: '<i class="az az-azion" aria-hidden="true"></i>' }
       })
       await expectNoA11yViolations(container)
     })

@@ -14,7 +14,7 @@
         <Item>
           <Item.Media type="icon">
             <i
-              class="ai ai-edge-application text-[length:inherit] leading-none"
+              class="az az-applications text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </Item.Media>
@@ -33,7 +33,7 @@
         <Item>
           <Item.Media type="icon">
             <i
-              class="ai ai-edge-application text-[length:inherit] leading-none"
+              class="az az-applications text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </Item.Media>
@@ -52,7 +52,7 @@
         <Item>
           <Item.Media type="icon">
             <i
-              class="ai ai-edge-application text-[length:inherit] leading-none"
+              class="az az-applications text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </Item.Media>

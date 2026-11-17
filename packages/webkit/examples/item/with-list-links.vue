@@ -13,7 +13,7 @@
         <Item href="#">
           <Item.Media type="icon">
             <i
-              class="ai ai-edge-application text-[length:inherit] leading-none"
+              class="az az-applications text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </Item.Media>
@@ -22,14 +22,14 @@
             <Item.Description>A simple item with title and description.</Item.Description>
           </Item.Content>
           <i
-            class="ai ai-arrow-right text-(--text-muted)"
+            class="az az-arrow-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>
         <Item href="#">
           <Item.Media type="icon">
             <i
-              class="ai ai-edge-application text-[length:inherit] leading-none"
+              class="az az-applications text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </Item.Media>
@@ -38,14 +38,14 @@
             <Item.Description>A simple item with title and description.</Item.Description>
           </Item.Content>
           <i
-            class="ai ai-arrow-right text-(--text-muted)"
+            class="az az-arrow-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>
         <Item href="#">
           <Item.Media type="icon">
             <i
-              class="ai ai-edge-application text-[length:inherit] leading-none"
+              class="az az-applications text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </Item.Media>
@@ -54,7 +54,7 @@
             <Item.Description>A simple item with title and description.</Item.Description>
           </Item.Content>
           <i
-            class="ai ai-arrow-right text-(--text-muted)"
+            class="az az-arrow-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>

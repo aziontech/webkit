@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: 305fc281e1866972da3db49768a1f4e486563dc3ece1b913bb26285dbf9c43f8
+checksum: 53b6b31d83ceddd9594cf62d3f36c90c1430036730f7f8eee98679bcd2790824
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-16
@@ -67,14 +67,14 @@ The responsive cell grid of the page language, in three registers: spaced cards 
   >
     <CardGrid.Cell variant="canvas">
       <FeatureItem
-        icon="ai ai-edge-nodes"
+        icon="az az-edge-nodes"
         title="Consistent global speed"
         description="Serve content across hundreds of locations."
       />
     </CardGrid.Cell>
     <CardGrid.Cell variant="canvas">
       <FeatureItem
-        icon="ai ai-load-balancer"
+        icon="az az-load-balancer"
         title="Safer high-traffic launches"
         description="Scale from routine traffic to campaign spikes."
       />

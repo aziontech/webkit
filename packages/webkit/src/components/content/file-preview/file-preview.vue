@@ -84,10 +84,10 @@
 
   const icon = computed(() =>
     shownType.value === 'image'
-      ? 'ai ai-image'
+      ? 'az az-image'
       : shownType.value === 'json'
-        ? 'ai ai-json'
-        : 'ai ai-file'
+        ? 'az az-json'
+        : 'az az-file'
   )
 
   const meta = computed(() =>
@@ -153,7 +153,7 @@
           :label="t('filePreview.download')"
           variant="outline"
           size="small"
-          icon="ai ai-download"
+          icon="az az-download"
           @click="emit('download', $event)"
         />
       </div>
@@ -188,7 +188,7 @@
         :data-testid="`${testId}__error`"
         :title="t('filePreview.error')"
         :description="error"
-        icon="ai ai-triangle-alert"
+        icon="az az-triangle-alert"
         size="small"
       />
       <div
@@ -209,7 +209,7 @@
         :data-testid="`${testId}__unsupported`"
         :title="t('filePreview.noPreview')"
         :description="t('filePreview.noPreviewDetail')"
-        icon="ai ai-file"
+        icon="az az-file"
         size="small"
       />
       <p

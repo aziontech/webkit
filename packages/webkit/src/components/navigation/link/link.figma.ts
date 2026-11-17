@@ -22,7 +22,7 @@ export default {
   }${
     showIcon
       ? figma.code`
-  icon="ai ai-external-link"`
+  icon="az az-external-link"`
       : ''
   }
   href="#"

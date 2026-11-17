@@ -541,7 +541,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
           </div>
           <Button
             label="Export CSV"
-            icon="ai ai-download"
+            icon="az az-download"
             variant="outline"
             size="medium"
             :disabled="!exportable"
@@ -598,7 +598,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Spend by category"
@@ -663,7 +663,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Current split"
@@ -716,7 +716,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Top contributors"
@@ -753,7 +753,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-chart-bar"
+                  icon="az az-chart-bar"
                   title="No spend in this range"
                   description="Nothing was billed to the organization in the selected period."
                 />
@@ -805,10 +805,10 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
                   :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
                   :icon="
                     row.change > 0
-                      ? 'ai ai-arrow-up-right'
+                      ? 'az az-arrow-up-right'
                       : row.change < 0
-                        ? 'ai ai-arrow-down-right'
-                        : 'ai ai-minus'
+                        ? 'az az-arrow-down-right'
+                        : 'az az-minus'
                   "
                   size="small"
                 />
@@ -931,7 +931,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'web-app',
     rank: 1,
     name: 'web-app',
-    icon: 'ai ai-server',
+    icon: 'az az-server',
     category: 'Compute',
     amount: 6200,
     share: 16.1,
@@ -941,7 +941,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'worker-pool',
     rank: 2,
     name: 'worker-pool',
-    icon: 'ai ai-server',
+    icon: 'az az-server',
     category: 'Compute',
     amount: 5900,
     share: 15.3,
@@ -951,7 +951,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'orders-db',
     rank: 3,
     name: 'orders-db',
-    icon: 'ai ai-database',
+    icon: 'az az-database',
     category: 'Database',
     amount: 5400,
     share: 14,
@@ -961,7 +961,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'api-service',
     rank: 4,
     name: 'api-service',
-    icon: 'ai ai-server',
+    icon: 'az az-server',
     category: 'Compute',
     amount: 4800,
     share: 12.5,
@@ -971,7 +971,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'analytics-warehouse',
     rank: 5,
     name: 'analytics-warehouse',
-    icon: 'ai ai-database',
+    icon: 'az az-database',
     category: 'Database',
     amount: 4000,
     share: 10.4,
@@ -981,7 +981,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'media-files',
     rank: 6,
     name: 'media-files',
-    icon: 'ai ai-folder',
+    icon: 'az az-folder',
     category: 'Storage',
     amount: 3700,
     share: 9.6,
@@ -991,7 +991,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'public-egress',
     rank: 7,
     name: 'public-egress',
-    icon: 'ai ai-globe',
+    icon: 'az az-globe',
     category: 'Networking',
     amount: 2600,
     share: 6.8,
@@ -1001,7 +1001,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'backups',
     rank: 8,
     name: 'backups',
-    icon: 'ai ai-folder',
+    icon: 'az az-folder',
     category: 'Storage',
     amount: 2300,
     share: 6,
@@ -1011,7 +1011,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'logs-pipeline',
     rank: 9,
     name: 'logs-pipeline',
-    icon: 'ai ai-chart-line',
+    icon: 'az az-chart-line',
     category: 'Monitoring',
     amount: 2100,
     share: 5.5,
@@ -1021,7 +1021,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     id: 'load-balancer',
     rank: 10,
     name: 'load-balancer',
-    icon: 'ai ai-globe',
+    icon: 'az az-globe',
     category: 'Networking',
     amount: 1500,
     share: 3.9,

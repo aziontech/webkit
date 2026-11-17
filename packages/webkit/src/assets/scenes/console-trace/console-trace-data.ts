@@ -35,17 +35,17 @@ export const CONSOLE_TRACE_STEPS: ConsoleTraceStep[] = [
 
 export const CONSOLE_TRACE_FUNCTION = {
   name: 'image-optimizer',
-  icon: 'ai ai-edge-functions',
+  icon: 'az az-functions',
   duration: 412
 }
 
 export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
-  { id: 'root', name: 'image-optimizer', icon: 'ai ai-edge-functions', start: 0, duration: 412 },
+  { id: 'root', name: 'image-optimizer', icon: 'az az-functions', start: 0, duration: 412 },
   {
     id: 'parse',
     parentId: 'root',
     name: 'parse-request',
-    icon: 'ai ai-code',
+    icon: 'az az-code',
     start: 4,
     duration: 12
   },
@@ -53,7 +53,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'origin',
     parentId: 'root',
     name: 'fetch-origin',
-    icon: 'ai ai-send',
+    icon: 'az az-send',
     start: 16,
     duration: 186
   },
@@ -61,7 +61,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'dns',
     parentId: 'origin',
     name: 'dns-lookup',
-    icon: 'ai ai-send',
+    icon: 'az az-send',
     start: 16,
     duration: 14
   },
@@ -69,7 +69,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'tls',
     parentId: 'origin',
     name: 'tls-handshake',
-    icon: 'ai ai-lock',
+    icon: 'az az-lock',
     start: 30,
     duration: 31
   },
@@ -77,16 +77,16 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'response',
     parentId: 'origin',
     name: 'origin-response',
-    icon: 'ai ai-send',
+    icon: 'az az-send',
     start: 61,
     duration: 141
   },
-  { id: 'decode', parentId: 'root', name: 'decode', icon: 'ai ai-code', start: 202, duration: 54 },
+  { id: 'decode', parentId: 'root', name: 'decode', icon: 'az az-code', start: 202, duration: 54 },
   {
     id: 'transform',
     parentId: 'root',
     name: 'transform',
-    icon: 'ai ai-code',
+    icon: 'az az-code',
     start: 256,
     duration: 92
   },
@@ -94,7 +94,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'cache',
     parentId: 'root',
     name: 'put-cache',
-    icon: 'ai ai-edge-storage',
+    icon: 'az az-object-storage',
     start: 348,
     duration: 38
   }
@@ -116,7 +116,7 @@ export const CONSOLE_TRACE_PATH: ConsoleTracePathNode[] = [
   {
     key: 'workload',
     eyebrow: 'Workload',
-    icon: 'ai ai-domains',
+    icon: 'az az-domains',
     title: 'storefront-prod',
     label: 'Live',
     severity: 'success',
@@ -128,7 +128,7 @@ export const CONSOLE_TRACE_PATH: ConsoleTracePathNode[] = [
   {
     key: 'application',
     eyebrow: 'Application',
-    icon: 'ai ai-edge-application',
+    icon: 'az az-applications',
     title: 'storefront',
     label: 'Active',
     severity: 'success',
@@ -140,7 +140,7 @@ export const CONSOLE_TRACE_PATH: ConsoleTracePathNode[] = [
   {
     key: 'function',
     eyebrow: 'Function',
-    icon: 'ai ai-edge-functions',
+    icon: 'az az-functions',
     title: 'image-optimizer',
     label: 'Active',
     severity: 'success',
@@ -152,7 +152,7 @@ export const CONSOLE_TRACE_PATH: ConsoleTracePathNode[] = [
   {
     key: 'connector',
     eyebrow: 'Connector',
-    icon: 'ai ai-edge-connectors',
+    icon: 'az az-connectors',
     title: 'origin-assets',
     label: 'Answered',
     severity: 'success',

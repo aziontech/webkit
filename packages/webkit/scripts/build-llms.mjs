@@ -3,6 +3,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join, posix, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { loadManifest as loadIconManifest } from '../../icons/scripts/lib/icons-manifest.mjs'
 
 import { getSection, parseSpecFile } from '../../../.claude/hooks/lib/spec.mjs'
 import { hydratePart } from '../src/catalog/catalog.js'
@@ -377,9 +378,35 @@ function assetUsage(kind) {
     )
   if (kind === 'icons')
     return code(
-      '<script setup>\n  import \'@aziontech/icons\'\n  import Button from \'@aziontech/webkit/button\'\n</script>\n\n<template>\n  <i class="ai ai-edge-firewall" aria-hidden="true"></i>\n  <i class="ai ai-trash" aria-hidden="true"></i>\n  <i class="ai-color ai-react" aria-hidden="true"></i>\n  <Button icon="ai ai-plus">Create</Button>\n</template>'
+      '<script setup>\n  import \'@aziontech/icons\'\n  import Button from \'@aziontech/webkit/button\'\n</script>\n\n<template>\n  <i class="az az-firewall" aria-hidden="true"></i>\n  <i class="az az-trash" aria-hidden="true"></i>\n  <i class="az-color az-react" aria-hidden="true"></i>\n  <Button icon="az az-plus">Create</Button>\n</template>'
     )
   return ''
+}
+
+function iconTables(items) {
+  const { groups } = loadIconManifest()
+  const out = []
+  for (const [group, { title, summary, categories }] of Object.entries(groups)) {
+    out.push(`### ${title}\n\n${summary}`)
+    for (const [category, { title: heading }] of Object.entries(categories)) {
+      const rows = items.filter((i) => i.group === group && i.category === category)
+      if (!rows.length) continue
+      const product = group === 'azion' && ['product', 'feature'].includes(category)
+      out.push(
+        `#### ${title} · ${heading}`,
+        table(
+          ['Class', ...(product ? ['Product'] : []), 'Stands for', 'Keywords'],
+          rows.map((i) => [
+            `\`${i.class}\``,
+            ...(product ? [i.product ?? ''] : []),
+            i.label ?? '',
+            (i.keywords || []).join(', ')
+          ])
+        )
+      )
+    }
+  }
+  return out.join('\n\n')
 }
 
 function assetRows(kind, items) {
@@ -392,11 +419,7 @@ function assetRows(kind, items) {
         i.deprecated ? `Old name, kept so existing page data renders: use \`${i.replacedBy}\`.` : ''
       ])
     )
-  if (kind === 'icons')
-    return table(
-      ['Class', 'Set', 'Keywords'],
-      items.map((i) => [`\`${i.class}\``, i.set, (i.keywords || []).join(', ')])
-    )
+  if (kind === 'icons') return iconTables(items)
   return table(
     ['Name', 'Description'],
     items.map((i) => [`\`${i.name}\``, i.label ?? ''])
@@ -422,7 +445,7 @@ function assetPages(catalog) {
       summary: firstSentence(meta.summary),
       compact: [
         ...intro,
-        `## Names\n\n${items.map((i) => `\`${i.class ?? i.name}\`${i.deprecated ? ` (deprecated, use \`${i.replacedBy}\`)` : ''}`).join(' · ')}\n\nDescriptions${kind === 'icons' ? ' and keywords' : ''}: [${path}](${path.split('/').pop()}).`
+        `## Names\n\n${items.map((i) => `\`${i.class ?? i.name}\`${i.deprecated ? ` (deprecated, use \`${i.replacedBy}\`)` : ''}`).join(' · ')}\n\nDescriptions${kind === 'icons' ? ', groups and keywords' : ''}: [${path}](${path.split('/').pop()}).`
       ],
       body: [...intro, '## Usage', assetUsage(kind), '## Names', assetRows(kind, items)]
     }

@@ -73,7 +73,7 @@
         <slot>{{ label }}</slot>
       </span>
       <i
-        class="ai ai-link ms-(--spacing-xs) align-middle text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
+        class="az az-link ms-(--spacing-xs) align-middle text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
         aria-hidden="true"
       />
     </a>

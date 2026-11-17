@@ -81,7 +81,7 @@
     language: 'bash',
     code: visibleText.value,
     fileName: 'Azion CLI',
-    fileIcon: 'ai ai-azion text-(--primary)'
+    fileIcon: 'az az-azion text-(--primary)'
   }))
 
   const measure = () => {

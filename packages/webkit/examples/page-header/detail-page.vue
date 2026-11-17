@@ -19,7 +19,7 @@
       <Breadcrumb :items="trail" />
     </template>
     <template #icon>
-      <i class="ai ai-box" />
+      <i class="az az-box" />
     </template>
     <template #meta>
       <Tag
@@ -36,7 +36,7 @@
     <template #actions>
       <Button
         label="Documentation"
-        icon="ai ai-book"
+        icon="az az-book"
         variant="outline"
         size="medium"
         href="https://example.com/docs/resources"
@@ -44,7 +44,7 @@
       />
       <Button
         label="Deploy"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
         variant="outline"
         size="medium"
       />

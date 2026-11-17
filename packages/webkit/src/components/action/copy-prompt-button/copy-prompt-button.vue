@@ -12,7 +12,7 @@
   export type CopyPromptButtonAgent = {
     /** Brand name, read by screen readers in the "Works with" description. */
     name: string
-    /** Icon-font class of the single-colour mark, such as `ai ai-claude`; used when `logo` is not set. */
+    /** Icon-font class of the single-colour mark, such as `az az-claude`; used when `logo` is not set. */
     icon?: string
     /** URL of the agent's mark file, such as the `@aziontech/webkit/assets/claude-symbol-color.svg` asset, drawn through `Logo` in the chip's own ink. */
     logo?: string
@@ -37,10 +37,10 @@
     label: '',
     copiedLabel: '',
     agents: () => [
-      { name: 'Claude', icon: 'ai ai-claude' },
-      { name: 'ChatGPT', icon: 'ai ai-openai' },
-      { name: 'Gemini', icon: 'ai ai-gemini' },
-      { name: 'Cursor', icon: 'ai ai-cursor' }
+      { name: 'Claude', icon: 'az az-claude' },
+      { name: 'ChatGPT', icon: 'az az-openai' },
+      { name: 'Gemini', icon: 'az az-gemini' },
+      { name: 'Cursor', icon: 'az az-cursor' }
     ],
     disabled: false,
     closable: false
@@ -170,7 +170,7 @@
               class="invisible inline-flex items-center gap-(--spacing-2xs) [grid-area:1/1] group-data-[state=copied]/copy-prompt:visible"
             >
               <i
-                class="ai ai-check text-body-sm"
+                class="az az-check text-body-sm"
                 aria-hidden="true"
               />{{ doneLabel }}</span
             >
@@ -211,7 +211,7 @@
       side="top"
     >
       <IconButton
-        icon="ai ai-x"
+        icon="az az-x"
         variant="ghost"
         size="small"
         :aria-label="t('copyPromptButton.dismiss')"

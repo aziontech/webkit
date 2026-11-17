@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 68c1d3c89f910004dc80d9d65acfdb48e81477deeafc5be63b67793fa56abec9
+checksum: 497039ce701c6099b96c127d541169a7ef2df4ce3b826d3736de9ec86ee6cc1b
 spec_version: 13
 template: 2
 created: 2026-11-10
@@ -63,21 +63,21 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
     {
       id: 'assets',
       label: 'assets',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
-        { id: 'assets/logo.svg', label: 'logo.svg', icon: 'ai ai-image', description: '4.2 KB' },
-        { id: 'assets/hero.webp', label: 'hero.webp', icon: 'ai ai-image', description: '182 KB' }
+        { id: 'assets/logo.svg', label: 'logo.svg', icon: 'az az-image', description: '4.2 KB' },
+        { id: 'assets/hero.webp', label: 'hero.webp', icon: 'az az-image', description: '182 KB' }
       ]
     },
     {
       id: 'src',
       label: 'src',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
-        { id: 'src/index.js', label: 'index.js', icon: 'ai ai-file', description: '1.1 KB' }
+        { id: 'src/index.js', label: 'index.js', icon: 'az az-file', description: '1.1 KB' }
       ]
     },
-    { id: 'azion.config.js', label: 'azion.config.js', icon: 'ai ai-file', description: '612 B' }
+    { id: 'azion.config.js', label: 'azion.config.js', icon: 'az az-file', description: '612 B' }
   ]
 </script>
 
@@ -102,7 +102,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 | `emptyDescription` | `string`                    | `''`    | false    | Supporting line under the empty title.                                                                                                                                                          |
 | `ariaLabel`        | `string`                    | `''`    | false    | Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name.                                                                        |
 
-Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[]; lazy?: boolean; loading?: boolean }` — `lazy` makes a node a parent before its `children` exist, `loading` renders a loading row in place of the children while the node is expanded; `TreeSelectable` = `'single' | 'multiple'`; `TreeRenamePayload` = `{ item: TreeItem; label: string }`. `icon` is an icon class string (`ai ai-folder`, `ai ai-…`), the same convention `empty-state` uses.
+Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[]; lazy?: boolean; loading?: boolean }` — `lazy` makes a node a parent before its `children` exist, `loading` renders a loading row in place of the children while the node is expanded; `TreeSelectable` = `'single' | 'multiple'`; `TreeRenamePayload` = `{ item: TreeItem; label: string }`. `icon` is an icon class string (`az az-folder`, `az az-…`), the same convention `empty-state` uses.
 
 ## v-model
 

@@ -55,7 +55,7 @@
       label="Start upload"
       variant="secondary"
       size="medium"
-      icon="ai ai-upload"
+      icon="az az-upload"
       @click="start"
     />
     <UploadProgress

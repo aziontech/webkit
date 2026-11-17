@@ -569,7 +569,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
       : {
           label: `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`,
           severity: change >= 0 ? 'success' : 'danger',
-          icon: change >= 0 ? 'ai ai-arrow-up-right' : 'ai ai-arrow-down-right'
+          icon: change >= 0 ? 'az az-arrow-up-right' : 'az az-arrow-down-right'
         }
   const variations = computed(() => {
     const changes = fallback(props.changes, sampleChanges, { requests: null, statusCodes: null })
@@ -852,7 +852,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="variations.requests"
@@ -870,7 +870,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests over time"
@@ -885,7 +885,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Requests over time"
@@ -952,7 +952,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="variations.statusCodes"
@@ -970,7 +970,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Status codes"
@@ -985,7 +985,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Status codes"
@@ -1053,12 +1053,12 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests by country"
@@ -1073,7 +1073,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Requests by country"
@@ -1139,12 +1139,12 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top hosts"
@@ -1159,7 +1159,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Top hosts"
@@ -1201,7 +1201,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -1227,7 +1227,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                     key="empty-state-1"
                     v-if="!hosts.length"
                     size="small"
-                    icon="ai ai-chart-line"
+                    icon="az az-chart-line"
                     title="No traffic yet"
                     description="Metrics appear here once a service serves requests."
                   />
@@ -1235,7 +1235,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                     key="empty-state-2"
                     v-else
                     size="small"
-                    icon="ai ai-search"
+                    icon="az az-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -1349,7 +1349,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-chart-line"
+                  icon="az az-chart-line"
                   title="No traffic yet"
                   description="Metrics appear here once a service serves requests."
                 />

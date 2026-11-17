@@ -43,7 +43,7 @@
         <Tag
           label="Sum"
           severity="neutral"
-          icon="ai ai-calculator"
+          icon="az az-calculator"
         />
         <Tag
           label="+12.40%"
@@ -54,7 +54,7 @@
             <IconButton
               variant="ghost"
               size="small"
-              icon="ai ai-ellipsis"
+              icon="az az-ellipsis"
               aria-label="More options"
             />
           </DropdownMenuTrigger>

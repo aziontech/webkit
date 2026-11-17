@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: c879b6625c7ac62a000e121a1f89c5f627b678f6a8e3e88d1368af6271d8f06a
+checksum: 921e5cdd4dd60f0febc12dc4cb20f69d3a213577fb952a47795f395451cb9457
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -55,14 +55,14 @@ Use CapabilityGridSection for any grid of claims or links on a marketing page. I
   <CapabilityGridSection
     title="Everything an application needs"
     :items="[
-      { icon: 'ai ai-bolt', title: 'Functions', description: 'Run code close to users.' },
+      { icon: 'az az-bolt', title: 'Functions', description: 'Run code close to users.' },
       {
-        icon: 'ai ai-database',
+        icon: 'az az-database',
         title: 'Storage',
         description: 'Keep objects where they are read.'
       },
       {
-        icon: 'ai ai-shield',
+        icon: 'az az-shield',
         title: 'Firewall',
         description: 'Stop attacks before they reach you.'
       }

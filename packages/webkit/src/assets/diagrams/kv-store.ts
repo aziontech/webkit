@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Request',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Functions',
       title: 'session-check',
-      icon: 'ai ai-edge-functions',
+      icon: 'az az-functions',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'KV Store',
       title: 'sessions namespace',
-      icon: 'ai ai-edge-kv',
+      icon: 'az az-kv-store',
       status: {
         label: 'Low latency',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'get',
       title: 'Value from the edge',
-      icon: 'ai ai-bolt',
+      icon: 'az az-bolt',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'put',
       title: 'Replicated everywhere',
-      icon: 'ai ai-globe'
+      icon: 'az az-globe'
     }
   ],
   layout: {

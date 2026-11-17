@@ -102,7 +102,7 @@
         />
         <i
           :data-pushed="!status || null"
-          class="ai ai-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-moderate-01 ease-productive-entrance group-data-[state=open]:rotate-180 data-[pushed]:ms-auto motion-reduce:transition-none"
+          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-moderate-01 ease-productive-entrance group-data-[state=open]:rotate-180 data-[pushed]:ms-auto motion-reduce:transition-none"
           aria-hidden="true"
         />
       </button>
@@ -129,7 +129,7 @@
           >{{ node.name }}</span
         >
         <i
-          class="ai ai-external-link shrink-0 text-body-xs leading-none"
+          class="az az-external-link shrink-0 text-body-xs leading-none"
           aria-hidden="true"
           :data-testid="`${testId}__node-link-icon`"
         />
@@ -154,7 +154,7 @@
             <DropdownMenuTrigger>
               <Tooltip :content="bindLabel">
                 <IconButton
-                  :icon="bound ? 'ai ai-pencil' : 'ai ai-plus'"
+                  :icon="bound ? 'az az-pencil' : 'az az-plus'"
                   variant="outline"
                   size="small"
                   :ariaLabel="bindLabel"
@@ -190,7 +190,7 @@
             :content="removeLabel"
           >
             <IconButton
-              icon="ai ai-x"
+              icon="az az-x"
               variant="outline"
               size="small"
               :ariaLabel="removeLabel"

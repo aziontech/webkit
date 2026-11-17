@@ -91,7 +91,7 @@
   const toggleLabel = computed(() =>
     visible.value ? t('passwordInput.hide') : t('passwordInput.show')
   )
-  const toggleIcon = computed(() => (visible.value ? 'ai ai-eye-off' : 'ai ai-eye'))
+  const toggleIcon = computed(() => (visible.value ? 'az az-eye-off' : 'az az-eye'))
 
   const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement

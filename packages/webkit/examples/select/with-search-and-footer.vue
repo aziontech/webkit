@@ -44,7 +44,7 @@
           >
             <template #leading>
               <i
-                class="ai ai-search"
+                class="az az-search"
                 aria-hidden="true"
               />
             </template>
@@ -59,7 +59,7 @@
         <template #footer>
           <Button
             label="Create new item"
-            icon="ai ai-circle-plus"
+            icon="az az-circle-plus"
             variant="ghost"
             size="small"
             class="w-full"

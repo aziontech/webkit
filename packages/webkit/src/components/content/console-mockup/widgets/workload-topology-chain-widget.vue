@@ -71,21 +71,21 @@
     {
       key: 'domain-shop',
       eyebrow: 'Domain',
-      icon: 'ai ai-domains',
+      icon: 'az az-domains',
       title: 'shop.example.com',
       label: 'Public'
     },
     {
       key: 'domain-www',
       eyebrow: 'Domain',
-      icon: 'ai ai-domains',
+      icon: 'az az-domains',
       title: 'www.example.com',
       label: 'Public'
     },
     {
       key: 'domain-generated',
       eyebrow: 'Domain',
-      icon: 'ai ai-domains',
+      icon: 'az az-domains',
       title: 'storefront.azion.app',
       label: 'Public'
     }
@@ -94,7 +94,7 @@
   const WORKLOAD: TopologyNode = {
     key: 'workload',
     eyebrow: 'Workload',
-    icon: 'ai ai-workloads',
+    icon: 'az az-workloads',
     title: 'storefront-prod',
     label: 'Live',
     indicator: true
@@ -103,7 +103,7 @@
   const APPLICATION: TopologyNode = {
     key: 'application',
     eyebrow: 'Application',
-    icon: 'ai ai-edge-application',
+    icon: 'az az-applications',
     title: 'storefront',
     label: 'Active'
   }
@@ -111,7 +111,7 @@
   const FIREWALL: TopologyNode = {
     key: 'firewall',
     eyebrow: 'Firewall',
-    icon: 'ai ai-edge-firewall',
+    icon: 'az az-firewall',
     title: 'edge-rules',
     label: 'Active'
   }
@@ -119,7 +119,7 @@
   const DOMAIN_GROUP: TopologyNode = {
     key: 'domains',
     eyebrow: 'Domains',
-    icon: 'ai ai-domains',
+    icon: 'az az-domains',
     title: '',
     label: ''
   }

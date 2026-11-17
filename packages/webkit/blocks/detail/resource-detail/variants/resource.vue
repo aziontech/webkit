@@ -18,7 +18,7 @@
       >
         <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
           <i
-            class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
+            class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
             aria-hidden="true"
           />
           <div class="flex min-w-0">
@@ -38,7 +38,7 @@
                 >
                 <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                 <i
-                  class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                  class="az az-external-link shrink-0 text-body-xs leading-none"
                   aria-hidden="true"
                 />
               </a>
@@ -53,7 +53,7 @@
             target="_blank"
             variant="secondary"
             size="medium"
-            icon="ai ai-external-link"
+            icon="az az-external-link"
           />
 
           <DropdownMenu
@@ -63,7 +63,7 @@
             <DropdownMenu.Trigger>
               <Tooltip content="Resource actions">
                 <IconButton
-                  icon="ai ai-ellipsis"
+                  icon="az az-ellipsis"
                   variant="outline"
                   size="medium"
                   aria-label="Resource actions"
@@ -78,7 +78,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-copy"
+                    class="az az-copy"
                     aria-hidden="true"
                   />
                 </template>
@@ -92,7 +92,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-settings"
+                    class="az az-settings"
                     aria-hidden="true"
                   />
                 </template>
@@ -149,7 +149,7 @@
                   >
                   <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                   <i
-                    class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                    class="az az-external-link shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -189,7 +189,7 @@
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
               <i
-                class="ai ai-github shrink-0 text-(--text-muted)"
+                class="az az-github shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <div class="flex min-w-0">
@@ -209,7 +209,7 @@
                     >
                     <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                     <i
-                      class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                      class="az az-external-link shrink-0 text-body-xs leading-none"
                       aria-hidden="true"
                     />
                   </a>
@@ -218,7 +218,7 @@
             </div>
             <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
               <i
-                class="ai ai-git-branch shrink-0 text-(--text-muted)"
+                class="az az-git-branch shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="truncate text-body-sm text-(--text-default)">develop</span>
@@ -230,7 +230,7 @@
           <span class="text-label-sm text-(--text-muted)">Framework</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <i
-              class="ai-color ai-nuxt shrink-0 text-body-lg"
+              class="az-color az-nuxt shrink-0 text-body-lg"
               aria-hidden="true"
             />
             <span class="truncate text-body-sm text-(--text-default)"> Nuxt </span>
@@ -262,7 +262,7 @@
             label="Documentation"
             variant="outline"
             size="medium"
-            icon="ai ai-book"
+            icon="az az-book"
             href="https://example.com/docs/cli"
             target="_blank"
           />

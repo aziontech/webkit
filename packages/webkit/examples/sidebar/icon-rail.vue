@@ -28,37 +28,37 @@
           <SidebarMenuGroup>
             <SidebarMenuItem
               label="Home"
-              icon="ai ai-home"
+              icon="az az-home"
               href="/"
               active
             />
             <SidebarMenuItem
               label="Marketplace"
-              icon="ai ai-marketplace"
+              icon="az az-marketplace"
               href="/marketplace"
             />
           </SidebarMenuGroup>
           <SidebarMenuGroup label="Build">
             <SidebarMenuItem
               label="Applications"
-              icon="ai ai-edge-application"
+              icon="az az-applications"
               href="/applications"
             />
             <SidebarMenuItem
               label="Variables"
-              icon="ai ai-variables"
+              icon="az az-variables"
               href="/variables"
             />
           </SidebarMenuGroup>
           <SidebarMenuGroup label="Store">
             <SidebarMenuItem
               label="Object Storage"
-              icon="ai ai-edge-storage"
+              icon="az az-object-storage"
               href="/object-storage"
             />
             <SidebarMenuItem
               label="SQL Database"
-              icon="ai ai-edge-sql"
+              icon="az az-sql-database"
               href="/sql-database"
               tag-value="Preview"
               tag-variant="primary"
@@ -68,7 +68,7 @@
             <SidebarMenuSub>
               <SidebarMenuSubTrigger
                 label="Settings"
-                icon="ai ai-settings"
+                icon="az az-settings"
                 type="drill"
               />
               <SidebarMenuSubContent>

@@ -10,7 +10,7 @@ import SplitButton from './split-button.vue'
 /** Realistic deploy actions; the second row omits `value` (falls back to label),
  *  the third is disabled. */
 const model: SplitButtonItem[] = [
-  { label: 'Deploy to staging', value: 'staging', icon: 'ai ai-cloud-upload' },
+  { label: 'Deploy to staging', value: 'staging', icon: 'az az-cloud-upload' },
   { label: 'Deploy preview' },
   { label: 'Rollback release', value: 'rollback', disabled: true }
 ]

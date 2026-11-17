@@ -26,23 +26,23 @@
         "featuresTitle": "All features included.",
         "features": [
           {
-            "icon": "ai ai-globe",
+            "icon": "az az-globe",
             "label": "Global infrastructure"
           },
           {
-            "icon": "ai ai-edge-functions",
+            "icon": "az az-functions",
             "label": "Serverless functions"
           },
           {
-            "icon": "ai ai-edge-storage",
+            "icon": "az az-object-storage",
             "label": "Storage and database"
           },
           {
-            "icon": "ai ai-image",
+            "icon": "az az-image",
             "label": "Image Processor"
           },
           {
-            "icon": "ai ai-edge-firewall",
+            "icon": "az az-firewall",
             "label": "DDoS mitigation and firewall"
           }
         ],
@@ -74,23 +74,23 @@
         "featuresTitle": "All Hobby features, plus:",
         "features": [
           {
-            "icon": "ai ai-workloads",
+            "icon": "az az-workloads",
             "label": "Additional workloads"
           },
           {
-            "icon": "ai ai-edge-application",
+            "icon": "az az-applications",
             "label": "Higher application limits"
           },
           {
-            "icon": "ai ai-store",
+            "icon": "az az-store-pillar",
             "label": "More storage capacity"
           },
           {
-            "icon": "ai ai-waf-rules",
+            "icon": "az az-waf",
             "label": "Broader security coverage"
           },
           {
-            "icon": "ai ai-wallet",
+            "icon": "az az-wallet",
             "label": "Configurable spend limit"
           }
         ],
@@ -111,23 +111,23 @@
         "featuresTitle": "All Pro features, plus:",
         "features": [
           {
-            "icon": "ai ai-chart-line",
+            "icon": "az az-chart-line",
             "label": "On-demand pricing"
           },
           {
-            "icon": "ai ai-arrow-down",
+            "icon": "az az-arrow-down",
             "label": "Cut costs with commitments"
           },
           {
-            "icon": "ai ai-layers",
+            "icon": "az az-layers",
             "label": "Capacity Reservation available"
           },
           {
-            "icon": "ai ai-calendar",
+            "icon": "az az-calendar",
             "label": "Savings Plan available"
           },
           {
-            "icon": "ai ai-business-support",
+            "icon": "az az-business-support",
             "label": "Advanced support available"
           }
         ],

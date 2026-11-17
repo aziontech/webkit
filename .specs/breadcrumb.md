@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 2a452446a1180d7c18ea5e2a623ac5c9ad21041b40a496058cd03b0cfa40b846
+checksum: 720bcc9f158da339c6d5062eb4d3417c6f78c44009f531abc13c2175c9044e03
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -60,7 +60,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
           label="Home"
           href="/"
           show-icon
-          icon="ai ai-home"
+          icon="az az-home"
         />
       </li>
       <Breadcrumb.Separator />

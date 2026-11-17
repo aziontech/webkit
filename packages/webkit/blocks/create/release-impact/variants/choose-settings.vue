@@ -177,7 +177,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -209,7 +209,7 @@
           <EmptyState
             v-if="!visibleGroups.length"
             size="small"
-            icon="ai ai-search"
+            icon="az az-search"
             title="No Deployment Settings match"
             :description="`Nothing is named like “${search}”.`"
           >
@@ -258,7 +258,7 @@
                         <Field.Title>
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="ai ai-sitemap shrink-0 text-(--text-muted)"
+                              class="az az-sitemap shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate">{{ entry.name }}</span>
@@ -321,7 +321,7 @@
                 >
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-circle-alert shrink-0 text-(--warning-foreground)"
+                      class="az az-circle-alert shrink-0 text-(--warning-foreground)"
                       aria-hidden="true"
                     />
                     <span class="truncate text-label-md text-(--text-default)">
@@ -340,7 +340,7 @@
                     :href="group.href ?? ''"
                     variant="ghost"
                     size="small"
-                    icon="ai ai-external-link"
+                    icon="az az-external-link"
                   />
                 </div>
               </template>
@@ -373,7 +373,7 @@
             label="Continue"
             variant="primary"
             size="medium"
-            icon="ai ai-arrow-right"
+            icon="az az-arrow-right"
             icon-position="trailing"
             :disabled="!selected.length"
             aria-describedby="release-impact-settings-hint"

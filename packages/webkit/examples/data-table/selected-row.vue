@@ -58,11 +58,11 @@
 
   const rowActionGroups = [
     [
-      { value: 'view', label: 'View details', icon: 'ai ai-eye' },
-      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },
-      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }
+      { value: 'view', label: 'View details', icon: 'az az-eye' },
+      { value: 'edit', label: 'Edit', icon: 'az az-pencil' },
+      { value: 'duplicate', label: 'Duplicate', icon: 'az az-copy' }
     ],
-    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]
+    [{ value: 'delete', label: 'Delete', icon: 'az az-trash' }]
   ]
 
   const statusSeverity = (status) =>
@@ -103,7 +103,7 @@
       <DropdownMenuRoot @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
         <DropdownMenuTrigger>
           <IconButton
-            icon="ai ai-ellipsis-vertical"
+            icon="az az-ellipsis-vertical"
             aria-label="Row actions"
             variant="ghost"
             size="small"

@@ -29,7 +29,7 @@
     resources.value.slice(0, 3).map((resource) => ({
       id: resource.id,
       label: resource.name,
-      icon: 'ai ai-box',
+      icon: 'az az-box',
       type: 'Resource'
     }))
   )
@@ -76,7 +76,7 @@
             side="bottom"
           >
             <IconButton
-              icon="ai ai-circle-plus"
+              icon="az az-circle-plus"
               variant="primary"
               size="medium"
               aria-label="Create"
@@ -88,7 +88,7 @@
             side="bottom"
           >
             <IconButton
-              icon="ai ai-ask-azion"
+              icon="az az-ask-azion"
               variant="outline"
               size="medium"
               aria-label="Agent"
@@ -101,13 +101,13 @@
             label="Create"
             variant="primary"
             size="medium"
-            icon="ai ai-circle-plus"
+            icon="az az-circle-plus"
             @click="router.push('/resources/new')"
           />
           <HighlightButton
             label="Agent"
             size="medium"
-            icon="ai ai-ask-azion"
+            icon="az az-ask-azion"
             @click="router.push('/assistant')"
           />
         </template>
@@ -139,7 +139,7 @@
           <Command.Item value="action:create">
             <template #leading>
               <i
-                class="ai ai-circle-plus"
+                class="az az-circle-plus"
                 aria-hidden="true"
               />
             </template>
@@ -148,7 +148,7 @@
           <Command.Item value="action:theme">
             <template #leading>
               <i
-                class="ai ai-moon"
+                class="az az-moon"
                 aria-hidden="true"
               />
             </template>
@@ -171,7 +171,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-settings"
+                class="az az-settings"
                 aria-hidden="true"
               />
             </template>
@@ -182,7 +182,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-key"
+                class="az az-key"
                 aria-hidden="true"
               />
             </template>
@@ -208,7 +208,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-book"
+                class="az az-book"
                 aria-hidden="true"
               />
             </template>
@@ -219,7 +219,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-log-out"
+                class="az az-log-out"
                 aria-hidden="true"
               />
             </template>

@@ -48,7 +48,7 @@ describe('dashboard/health-score-dashboard', () => {
       id: 'incident-acme',
       name: 'Acme portal',
       scope: 'Application',
-      icon: 'ai ai-layout-grid',
+      icon: 'az az-layout-grid',
       devices: 4,
       share: 2,
       cause: 'Slow DNS lookups',

@@ -33,7 +33,7 @@
           <EmptyState
             title="No domain yet"
             description="Add a domain to route its traffic to this workload."
-            icon="ai ai-globe"
+            icon="az az-globe"
           >
             <template #actions>
               <Button

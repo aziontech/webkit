@@ -52,7 +52,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Azion icon class for the standardized adornment (e.g. `ai ai-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders."
+   "doc": "Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders."
   },
   {
    "name": "size",

@@ -145,7 +145,7 @@
 
         <DropdownMenu.Trigger :data-testid="`${testId}__toggle`">
           <IconButton
-            icon="ai ai-chevron-down"
+            icon="az az-chevron-down"
             :ariaLabel="toggleAriaLabel"
             :variant="variant"
             :size="size"

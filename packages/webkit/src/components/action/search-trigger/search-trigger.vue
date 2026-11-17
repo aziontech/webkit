@@ -101,7 +101,7 @@
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       >
-        <i class="ai ai-search" />
+        <i class="az az-search" />
       </span>
       <span
         class="sr-only"

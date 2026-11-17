@@ -175,7 +175,7 @@
               label="Retry"
               variant="outline"
               size="small"
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               @click="emit('retry', $event, current)"
             />
           </ChatMessage.Actions>

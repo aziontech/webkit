@@ -127,9 +127,9 @@
   const platforms = ['azion', 'competitor'] as const
 
   const supportIcon: Record<CompetitorComparisonSectionSupport, string> = {
-    full: 'ai ai-circle-check',
-    partial: 'ai ai-circle-half',
-    none: 'ai ai-circle-minus'
+    full: 'az az-circle-check',
+    partial: 'az az-circle-half',
+    none: 'az az-circle-minus'
   }
 
   const labelOf = (level: CompetitorComparisonSectionSupport | undefined) =>
@@ -257,7 +257,7 @@
                         <IconButton
                           variant="ghost"
                           size="small"
-                          icon="ai ai-circle-info"
+                          icon="az az-circle-info"
                           :ariaLabel="
                             t('competitorComparisonSection.about', { capability: item.capability })
                           "

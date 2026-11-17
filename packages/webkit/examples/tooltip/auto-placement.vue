@@ -19,7 +19,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="ai ai-arrow-up"
+          icon="az az-arrow-up"
           aria-label="top-edge trigger"
           variant="outline"
           size="medium"
@@ -34,7 +34,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="ai ai-arrow-down"
+          icon="az az-arrow-down"
           aria-label="bottom-edge trigger"
           variant="outline"
           size="medium"
@@ -49,7 +49,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="ai ai-arrow-left"
+          icon="az az-arrow-left"
           aria-label="left-edge trigger"
           variant="outline"
           size="medium"
@@ -64,7 +64,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="ai ai-arrow-right"
+          icon="az az-arrow-right"
           aria-label="right-edge trigger"
           variant="outline"
           size="medium"

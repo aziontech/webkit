@@ -36,9 +36,9 @@ describe('deploy-template#ConnectGit', () => {
         template: {
           name: 'Acme Docs',
           description: 'Launch a docs site.',
-          icon: 'ai ai-book',
+          icon: 'az az-book',
           provider: 'GitHub',
-          providerIcon: 'ai ai-github',
+          providerIcon: 'az az-github',
           scope: 'acme',
           path: 'templates/docs-site'
         }

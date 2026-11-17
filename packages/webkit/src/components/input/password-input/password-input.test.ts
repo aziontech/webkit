@@ -254,7 +254,7 @@ describe('PasswordInput', () => {
 
   it('renders the leading slot and marks its wrapper aria-hidden', () => {
     const { getByTestId } = render(PasswordInput, {
-      slots: { leading: '<i data-testid="left-icon" class="ai ai-lock" />' }
+      slots: { leading: '<i data-testid="left-icon" class="az az-lock" />' }
     })
 
     const icon = getByTestId('left-icon')
@@ -266,7 +266,7 @@ describe('PasswordInput', () => {
   it('renders the trailing slot only when toggleable is false', () => {
     const withToggle = render(PasswordInput, {
       props: { toggleable: true },
-      slots: { trailing: '<i data-testid="right-icon" class="ai ai-key" />' }
+      slots: { trailing: '<i data-testid="right-icon" class="az az-key" />' }
     })
     // hasTrailing is `!toggleable && hasSlot` → not rendered while toggleable.
     expect(withToggle.queryByTestId('right-icon')).toBeNull()
@@ -274,7 +274,7 @@ describe('PasswordInput', () => {
 
     const noToggle = render(PasswordInput, {
       props: { toggleable: false },
-      slots: { trailing: '<i data-testid="right-icon" class="ai ai-key" />' }
+      slots: { trailing: '<i data-testid="right-icon" class="az az-key" />' }
     })
     expect(noToggle.queryByTestId('right-icon')).toBeTruthy()
     expect(
@@ -309,7 +309,7 @@ describe('PasswordInput', () => {
     const { container } = render(PasswordInput, {
       props: { toggleable: false, placeholder: 'Password' },
       attrs: { 'aria-label': 'Password' },
-      slots: { trailing: '<i class="ai ai-key" aria-hidden="true" />' }
+      slots: { trailing: '<i class="az az-key" aria-hidden="true" />' }
     })
 
     await expectNoA11yViolations(container)

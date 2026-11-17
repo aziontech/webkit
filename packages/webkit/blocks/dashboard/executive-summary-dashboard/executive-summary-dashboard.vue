@@ -363,7 +363,7 @@
             label="Export"
             variant="outline"
             size="medium"
-            icon="ai ai-download"
+            icon="az az-download"
             :disabled="!exportable"
             @click="exportCsv"
           />
@@ -533,7 +533,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="ai ai-flag"
+                icon="az az-flag"
                 :title="'No goal results for ' + quarter"
                 description="Progress appears once the quarter reports its first month."
               />
@@ -611,7 +611,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="ai ai-comment"
+                icon="az az-comment"
                 :title="'No notes for ' + quarter"
                 description="Leads add notes here when they review the quarter."
               />

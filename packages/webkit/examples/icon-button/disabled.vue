@@ -4,7 +4,7 @@
 
 <template>
   <IconButton
-    icon="ai ai-plus"
+    icon="az az-plus"
     aria-label="Add"
     disabled
   />

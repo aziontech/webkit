@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: a537c1e7e43fe42b5b50ee7344b2545eef1fd06cd8ea0dac34f2dbe7d10b5102
+checksum: df4fd877ca59a1e5192a653bd91aaf6e4ec1386c1635f2c86f3f4a59e90bb655
 created: 2026-11-12
 last_updated: 2026-11-16
 ---
@@ -153,7 +153,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel-sectio
 ## Right-to-left
 
 - Layout: logical utilities only; the title row keeps the title at the start edge and the controls at the end edge.
-- Icons: the link arrow (`ai ai-arrow-right`) mirrors under `rtl:-scale-x-100` and its hover nudge runs toward the end edge (`rtl:group-hover/card:-translate-x-0.5`); the carousel's chevrons mirror in `carousel`.
+- Icons: the link arrow (`az az-arrow-right`) mirrors under `rtl:-scale-x-100` and its hover nudge runs toward the end edge (`rtl:group-hover/card:-translate-x-0.5`); the carousel's chevrons mirror in `carousel`.
 - Keyboard: the next control steps toward the end edge in both directions (`carousel`).
 - User data: none.
 

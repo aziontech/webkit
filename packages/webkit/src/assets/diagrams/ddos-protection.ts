@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Users and attackers',
-      icon: 'ai ai-triangle-alert',
+      icon: 'az az-triangle-alert',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'DDoS Protection',
       title: 'Always-on mitigation',
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       status: {
         label: 'Mitigated',
         severity: 'success'
@@ -29,7 +29,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       active: true
     },
     {
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Flood',
       title: 'Absorbed at the edge',
-      icon: 'ai ai-ban'
+      icon: 'az az-ban'
     }
   ],
   layout: {

@@ -93,19 +93,19 @@
       {
         value: 'copy',
         label: 'Copy as Markdown',
-        icon: 'ai ai-copy',
+        icon: 'az az-copy',
         tip: 'Copy this page as Markdown, ready to paste into an assistant.'
       },
       {
         value: 'markdown',
         label: 'View as Markdown',
-        icon: 'ai ai-eye',
+        icon: 'az az-eye',
         tip: 'Open this page as plain Markdown in a new tab.'
       },
       {
         value: 'agent-setup',
         label: 'Agent setup',
-        icon: 'ai ai-microchip-ai',
+        icon: 'az az-microchip-ai',
         href: '/docs/agent-setup',
         tip: 'Set up your coding agent to build on Azion.'
       }
@@ -132,20 +132,20 @@
       {
         value: 'copy',
         label: 'Copy as Markdown',
-        icon: 'ai ai-copy',
+        icon: 'az az-copy',
         tip: 'Copy this page as Markdown, ready to paste into an assistant.'
       },
       {
         value: 'agent-setup',
         label: 'Agent setup',
-        icon: 'ai ai-microchip-ai',
+        icon: 'az az-microchip-ai',
         href: '/docs/agent-setup',
         tip: 'Set up your coding agent to build on Azion.'
       },
       {
         value: 'source',
         label: 'Edit this page',
-        icon: 'ai ai-pencil',
+        icon: 'az az-pencil',
         href: 'https://github.com/aziontech/azion-docs',
         target: '_blank',
         tip: 'Open this page in the repository and propose a change.'
@@ -182,13 +182,13 @@
         {
           value: 'copy',
           label: 'Copy as Markdown',
-          icon: 'ai ai-copy',
+          icon: 'az az-copy',
           tip: 'Copy this page as Markdown, ready to paste into an assistant.'
         },
         {
           value: 'markdown',
           label: 'View as Markdown',
-          icon: 'ai ai-eye',
+          icon: 'az az-eye',
           tip: 'Open this page as plain Markdown in a new tab.'
         }
       ]"

@@ -558,7 +558,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Access Lists"
           variant="outline"
           size="small"
@@ -639,7 +639,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                   >
                     <Item.Media>
                       <i
-                        class="ai ai-shield text-body-md leading-none text-(--text-muted)"
+                        class="az az-shield text-body-md leading-none text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </Item.Media>
@@ -655,7 +655,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                       />
                       <i
                         v-if="choice === option.value"
-                        class="ai ai-check text-body-sm leading-none text-(--text-default)"
+                        class="az az-check text-body-sm leading-none text-(--text-default)"
                         aria-hidden="true"
                       />
                     </Item.Actions>

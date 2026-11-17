@@ -214,7 +214,7 @@
           >
             <span
               aria-hidden="true"
-              class="ai ai-circle-check text-(--text-success)"
+              class="az az-circle-check text-(--text-success)"
             />
             {{ t('tutorialPanel.completedTitle') }}
           </h3>
@@ -282,7 +282,7 @@
               :label="t('tutorialPanel.exit')"
               variant="outline"
               size="small"
-              icon="ai ai-log-out"
+              icon="az az-log-out"
               :data-testid="`${testId}__exit`"
               @click="exit"
             />

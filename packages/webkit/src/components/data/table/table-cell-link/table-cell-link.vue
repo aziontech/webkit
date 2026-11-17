@@ -24,7 +24,7 @@
     to?: string | Record<string, unknown>
     /** Where an in-app link leads (`Workloads`), for the tooltip `Open <label> in <destination>`. */
     destination?: string
-    /** Glyph class drawn before the name, muted (the provider or resource type: `ai ai-github`, `ai ai-workloads`). */
+    /** Glyph class drawn before the name, muted (the provider or resource type: `az az-github`, `az az-workloads`). */
     icon?: string
     /** Adds a copy button pinned to the cell's end edge. */
     copyable?: boolean
@@ -120,7 +120,7 @@
         >
         <i
           v-if="external"
-          class="ai ai-external-link shrink-0 text-body-xs leading-none"
+          class="az az-external-link shrink-0 text-body-xs leading-none"
           aria-hidden="true"
         />
       </component>

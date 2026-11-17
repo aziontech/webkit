@@ -7,7 +7,7 @@
   },
   {
    "name": "CellPresets",
-   "summary": "The cell presets every list shares: `TableCellLink` for a name that opens another screen (tooltip names the destination), for a repository with its provider glyph before the name (`icon=\"ai ai-github\"`, muted and outside the link) and for a domain with its `+N` overflow and a copy button pinned to the end edge, `TableCellId` with a copy button, `TableCellStatus` (one semantic chip per row), `TableCellTags` showing as many tags as fit, `TableCellTime` (avatar plus relative time counted from the `WebkitProvider`'s fixed `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row).",
+   "summary": "The cell presets every list shares: `TableCellLink` for a name that opens another screen (tooltip names the destination), for a repository with its provider glyph before the name (`icon=\"az az-github\"`, muted and outside the link) and for a domain with its `+N` overflow and a copy button pinned to the end edge, `TableCellId` with a copy button, `TableCellStatus` (one semantic chip per row), `TableCellTags` showing as many tags as fit, `TableCellTime` (avatar plus relative time counted from the `WebkitProvider`'s fixed `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row).",
    "file": "examples/table/cell-presets.vue"
   }
  ]

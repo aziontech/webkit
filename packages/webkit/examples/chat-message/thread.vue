@@ -16,7 +16,7 @@
       <ArtifactPreview
         title="cache-rules.json"
         meta="1 KB · JSON"
-        icon="ai ai-code"
+        icon="az az-code"
         copy-value='{ "edge_cache_ttl": 86400 }'
       />
     </ChatMessageRoot>

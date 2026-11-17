@@ -72,7 +72,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Creation Center"
           variant="outline"
           size="small"
@@ -120,7 +120,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai ai-arrow-right-left text-body-lg leading-none text-(--text-default)"
+                  class="az az-arrow-right-left text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -144,7 +144,7 @@
                     class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)"
                   >
                     <i
-                      class="ai ai-server text-[length:inherit] leading-none"
+                      class="az az-server text-[length:inherit] leading-none"
                       aria-hidden="true"
                     />
                     {{ service }}
@@ -221,7 +221,7 @@
                       class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                     >
                       <i
-                        class="ai ai-sliders-horizontal text-body-md leading-none text-(--text-default)"
+                        class="az az-sliders-horizontal text-body-md leading-none text-(--text-default)"
                         aria-hidden="true"
                       />
                     </span>

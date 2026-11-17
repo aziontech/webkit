@@ -9,13 +9,13 @@ const TOPIC_TESTID = 'feature-item'
 
 const lanes = [
   {
-    icon: 'ai ai-briefcase',
+    icon: 'az az-briefcase',
     title: 'Sales',
     description: 'Discuss your requirements, get custom pricing, or see the platform running.',
     action: { label: 'Talk to sales', href: '/contact/sales' }
   },
   {
-    icon: 'ai ai-headphones',
+    icon: 'az az-headphones',
     title: 'Support',
     description: 'Log in with your Azion account to open a ticket.',
     action: {
@@ -29,21 +29,21 @@ const lanes = [
 
 const channels = [
   {
-    icon: 'ai ai-shield',
+    icon: 'az az-shield',
     title: 'Under a cyberattack?',
     description: 'Get emergency mitigation for an attack in progress.',
     href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
     target: '_blank'
   },
   {
-    icon: 'ai ai-discord',
+    icon: 'az az-discord',
     title: 'Join the community',
     description: 'Ask developers and the Azion team on Discord.',
     href: 'https://discord.com/invite/pM8ANzztuB',
     target: '_blank'
   },
   {
-    icon: 'ai ai-book',
+    icon: 'az az-book',
     title: 'Read the docs',
     description: 'Guides, API reference, and troubleshooting.',
     href: '/en/documentation/'
@@ -141,7 +141,7 @@ describe('ContactHubSection', () => {
 
   it('renders no status link or action when a lane carries none', () => {
     const { queryByRole } = band({
-      lanes: [{ icon: 'ai ai-briefcase', title: 'Sales', description: 'Talk to us.' }],
+      lanes: [{ icon: 'az az-briefcase', title: 'Sales', description: 'Talk to us.' }],
       channels: []
     })
 

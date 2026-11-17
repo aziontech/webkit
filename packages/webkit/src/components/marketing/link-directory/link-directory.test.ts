@@ -20,13 +20,13 @@ const groups = [
     label: 'Build',
     items: [
       {
-        icon: 'ai ai-workloads',
+        icon: 'az az-workloads',
         title: 'Workloads',
         description: 'Put an application on a hostname, everywhere',
         href: '/workloads'
       },
       {
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         title: 'Functions',
         description: 'Run serverless code at the edge',
         href: '/functions'
@@ -37,7 +37,7 @@ const groups = [
     label: 'Store',
     items: [
       {
-        icon: 'ai ai-edge-sql',
+        icon: 'az az-sql-database',
         title: 'SQL Database',
         description: 'A distributed SQL database',
         href: '/sql-database'

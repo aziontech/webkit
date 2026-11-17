@@ -7,7 +7,7 @@
         key: 'user',
         type: 'pill',
         title: 'User',
-        icon: 'ai ai-user',
+        icon: 'az az-user',
         active: true
       },
       {
@@ -15,7 +15,7 @@
         type: 'card',
         eyebrow: 'Routing',
         title: 'Nearest data center',
-        icon: 'ai ai-directions',
+        icon: 'az az-directions',
         active: true
       },
       {
@@ -23,7 +23,7 @@
         type: 'card',
         eyebrow: 'Workload',
         title: 'shop.example.com',
-        icon: 'ai ai-workloads',
+        icon: 'az az-workloads',
         status: {
           label: 'Live',
           severity: 'success'
@@ -36,7 +36,7 @@
         type: 'item',
         eyebrow: 'Cache',
         title: 'Served from cache',
-        icon: 'ai ai-tiered-cache',
+        icon: 'az az-tiered-cache',
         active: true
       },
       {
@@ -44,7 +44,7 @@
         type: 'item',
         eyebrow: 'Origin',
         title: 'origin.example.com',
-        icon: 'ai ai-database'
+        icon: 'az az-database'
       }
     ],
     layout: {

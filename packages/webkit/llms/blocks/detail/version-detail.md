@@ -397,7 +397,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     VersionDetailState,
     { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
   > = {
-    draft: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-pen' },
+    draft: { label: 'Draft', severity: 'warning', icon: 'az az-file-pen' },
     deployed: { label: 'Deployed', variant: 'primary', icon: '' },
     ready: { label: 'Ready', severity: 'success', icon: '' }
   }
@@ -596,7 +596,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -633,7 +633,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-circle-plus"
+                  class="az az-circle-plus"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -666,7 +666,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -710,7 +710,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-circle-plus"
+                  class="az az-circle-plus"
                   aria-hidden="true"
                 />
                 Add Version
@@ -726,7 +726,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     >
       <Tooltip :content="`Back to ${resource.name} versions`">
         <IconButton
-          icon="ai ai-arrow-left"
+          icon="az az-arrow-left"
           variant="ghost"
           size="medium"
           :href="`${resource.href}?tab=versions`"
@@ -760,7 +760,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -797,7 +797,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-circle-plus"
+                    class="az az-circle-plus"
                     aria-hidden="true"
                   />
                   Add Environment
@@ -833,7 +833,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -877,7 +877,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-circle-plus"
+                    class="az az-circle-plus"
                     aria-hidden="true"
                   />
                   Add Version
@@ -923,7 +923,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="ai ai-ellipsis"
+                      icon="az az-ellipsis"
                       variant="ghost"
                       size="small"
                       aria-label="Version actions"
@@ -937,7 +937,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     >
                       <template #leading>
                         <i
-                          class="ai ai-pencil"
+                          class="az az-pencil"
                           aria-hidden="true"
                         />
                       </template>
@@ -948,7 +948,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     >
                       <template #leading>
                         <i
-                          class="ai ai-history"
+                          class="az az-history"
                           aria-hidden="true"
                         />
                       </template>
@@ -1076,7 +1076,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                       >
                                         Contact sales
                                         <i
-                                          class="ai ai-external-link shrink-0 text-body-sm leading-none"
+                                          class="az az-external-link shrink-0 text-body-sm leading-none"
                                           aria-hidden="true"
                                         />
                                       </a>
@@ -1191,7 +1191,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 <div class="layout-section-start">
                   <EmptyState
                     size="medium"
-                    icon="ai ai-external-link"
+                    icon="az az-external-link"
                     :title="tabLabel"
                     :description="`${tabLabel} opens on its own page.`"
                   >
@@ -1228,7 +1228,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     <Spinner v-if="creating" />
                     <i
                       v-else
-                      class="ai ai-file-pen text-body-sm text-(--text-default)"
+                      class="az az-file-pen text-body-sm text-(--text-default)"
                     />
                   </span>
                   <div
@@ -1246,7 +1246,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                         <Tag
                           :label="isDraft ? 'Editable' : 'Read-only'"
                           :severity="isDraft ? 'info' : 'neutral'"
-                          :icon="isDraft ? '' : 'ai ai-lock'"
+                          :icon="isDraft ? '' : 'az az-lock'"
                           size="small"
                         />
                       </span>
@@ -1263,7 +1263,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     <SplitButton
                       v-if="isDraft && !creating"
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
-                      :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
+                      :icon="saveAction === 'deploy' ? 'az az-cloud-upload' : ''"
                       variant="primary"
                       size="medium"
                       :items="saveOptions"
@@ -1275,7 +1275,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                         label="Add Version"
                         variant="outline"
                         size="medium"
-                        icon="ai ai-plus"
+                        icon="az az-plus"
                         :loading="creating"
                         @click="(event: MouseEvent) => emit('add-version', event)"
                       />
@@ -1284,7 +1284,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                         label="Redeploy"
                         variant="outline"
                         size="medium"
-                        icon="ai ai-refresh"
+                        icon="az az-refresh"
                         :disabled="creating"
                         @click="(event: MouseEvent) => emit('redeploy', event)"
                       />
@@ -1303,7 +1303,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             :label="`Revert to ${viewed.name}`"
                             variant="primary"
                             size="medium"
-                            icon="ai ai-undo"
+                            icon="az az-undo"
                             :loading="reverting"
                           />
                         </template>
@@ -1339,7 +1339,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                   <span class="text-(--text-muted) line-through">{{
                                     change.from
                                   }}</span>
-                                  <i class="ai ai-arrow-right text-body-xs text-(--text-muted)" />
+                                  <i class="az az-arrow-right text-body-xs text-(--text-muted)" />
                                   <span class="text-(--text-default)">{{ change.to }}</span>
                                 </span>
                               </li>
@@ -1387,7 +1387,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 Version history
               </h2>
               <IconButton
-                icon="ai ai-x"
+                icon="az az-x"
                 variant="ghost"
                 size="small"
                 aria-label="Close version history"
@@ -1406,7 +1406,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     aria-hidden="true"
                   >
                     <i
-                      :class="version.state === 'draft' ? 'ai ai-file-pen' : 'ai ai-code'"
+                      :class="version.state === 'draft' ? 'az az-file-pen' : 'az az-code'"
                       class="text-body-xs"
                     />
                   </span>
@@ -1428,7 +1428,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                         class="ms-auto shrink-0"
                       >
                         <IconButton
-                          icon="ai ai-pencil"
+                          icon="az az-pencil"
                           variant="ghost"
                           size="small"
                           aria-label="Edit version info"
@@ -1540,7 +1540,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
                       aria-hidden="true"
                     >
-                      <i class="ai ai-code text-body-xs" />
+                      <i class="az az-code text-body-xs" />
                     </span>
                     <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">

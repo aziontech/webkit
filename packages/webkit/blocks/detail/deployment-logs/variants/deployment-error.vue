@@ -302,7 +302,7 @@
               label="Redeploy"
               variant="secondary"
               size="medium"
-              icon="ai ai-refresh"
+              icon="az az-refresh"
             />
           </template>
         </Alert>
@@ -318,7 +318,7 @@
                 label="Visit"
                 variant="secondary"
                 size="medium"
-                icon="ai ai-external-link"
+                icon="az az-external-link"
                 disabled
                 target="_blank"
               />
@@ -331,7 +331,7 @@
               <DropdownMenu.Trigger>
                 <Tooltip content="Deployment actions">
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="outline"
                     size="medium"
                     aria-label="Deployment actions"
@@ -345,7 +345,7 @@
                 >
                   <template #leading>
                     <i
-                      class="ai ai-align-left"
+                      class="az az-align-left"
                       aria-hidden="true"
                     />
                   </template>
@@ -356,7 +356,7 @@
                 >
                   <template #leading>
                     <i
-                      class="ai ai-arrow-right-left"
+                      class="az az-arrow-right-left"
                       aria-hidden="true"
                     />
                   </template>
@@ -369,7 +369,7 @@
                 >
                   <template #leading>
                     <i
-                      class="ai ai-refresh"
+                      class="az az-refresh"
                       aria-hidden="true"
                     />
                   </template>
@@ -411,7 +411,7 @@
               <span class="text-label-sm text-(--text-muted)">Duration</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-clock shrink-0 text-(--text-muted)"
+                  class="az az-clock shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-body-sm text-(--text-default)"> 48s </span>
@@ -438,7 +438,7 @@
                     web-app
                   </span>
                   <i
-                    class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                    class="az az-external-link shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -455,7 +455,7 @@
                     web-app
                   </span>
                   <i
-                    class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                    class="az az-external-link shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -468,7 +468,7 @@
                   <Tag
                     severity="neutral"
                     size="medium"
-                    icon="ai ai-desktop"
+                    icon="az az-desktop"
                     label="Console"
                   />
                 </Tooltip>
@@ -481,7 +481,7 @@
                   <Tag
                     severity="neutral"
                     size="medium"
-                    icon="ai ai-wrench"
+                    icon="az az-wrench"
                     label="vue"
                   />
                 </Tooltip>
@@ -493,7 +493,7 @@
                 class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
               >
                 <i
-                  class="ai ai-inbox shrink-0 text-(--text-muted)"
+                  class="az az-inbox shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate">web-app-assets</span>
@@ -509,7 +509,7 @@
               <span class="text-label-sm text-(--text-muted)">Domains</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
+                  class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <Tooltip content="Open web-app-mh2saq.example.com in a new tab">
@@ -523,7 +523,7 @@
                       web-app-mh2saq.example.com
                     </span>
                     <i
-                      class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                      class="az az-external-link shrink-0 text-body-xs leading-none"
                       aria-hidden="true"
                     />
                   </a>
@@ -568,7 +568,7 @@
                             Default
                           </span>
                           <i
-                            class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                            class="az az-external-link shrink-0 text-body-xs leading-none"
                             aria-hidden="true"
                           />
                         </a>

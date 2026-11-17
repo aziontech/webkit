@@ -2,7 +2,7 @@
 
 A table that compares Azion with one competitor, capability by capability, grouped by category. It is used on the migration guide landing pages.
 
-Each category opens with a heading row. Each cell is a circle icon with a `Tooltip` naming the level: `ai-circle-check` for full support, `ai-circle-half` for partial and `ai-circle-minus` for none. A capability with a definition carries an info button that opens it in a `Popover`. Screen readers hear each value with its row and its column. The header row stays on screen while you scroll.
+Each category opens with a heading row. Each cell is a circle icon with a `Tooltip` naming the level: `az-circle-check` for full support, `az-circle-half` for partial and `az-circle-minus` for none. A capability with a definition carries an info button that opens it in a `Popover`. Screen readers hear each value with its row and its column. The header row stays on screen while you scroll.
 
 The capability column takes 56% of the width on phones, 36% from `sm` and 40% from `lg`, and the two platform columns share the rest. Logos are 12px tall on phones and 24px from `sm`. The band is the `CompetitorComparisonSection` component from `@aziontech/webkit/competitor-comparison-section`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame`, `Brand` for the Azion column, `Popover` with `IconButton` for the definitions, and `Tooltip` on the support icons. Both comparisons below are the same component with different props, so both use `_id: 'competitor-comparison-section'`.
 

@@ -174,7 +174,7 @@
           >
             <div class="flex items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)">
               <i
-                class="ai ai-azion text-label-sm leading-none text-(--primary)"
+                class="az az-azion text-label-sm leading-none text-(--primary)"
                 aria-hidden="true"
               />
               <span class="min-w-0 truncate text-label-sm text-(--text-default)">
@@ -222,7 +222,7 @@
         >
       </p>
       <IconButton
-        icon="ai ai-arrow-up"
+        icon="az az-arrow-up"
         variant="primary"
         size="small"
         ariaLabel="Send"

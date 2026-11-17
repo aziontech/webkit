@@ -225,7 +225,7 @@
           aria-hidden="true"
         >
           <i
-            :class="icon || 'ai ai-cloud-upload'"
+            :class="icon || 'az az-cloud-upload'"
             class="text-body-lg text-(--text-default) group-data-[disabled]:text-(--text-disabled)"
             aria-hidden="true"
           />

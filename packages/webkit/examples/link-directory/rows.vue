@@ -11,25 +11,25 @@
   >
     <LinkDirectoryColumn title="Available now">
       <LinkDirectoryItem
-        icon="ai ai-edge-functions"
+        icon="az az-functions"
         title="Functions"
         description="Run serverless code closer to users"
         href="/functions"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-sql"
+        icon="az az-sql-database"
         title="SQL Database"
         href="/sql-database"
       />
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="On the way">
       <LinkDirectoryItem
-        icon="ai ai-edge-ai"
+        icon="az az-ai-inference"
         title="AI Inference"
         description="Run AI models closer to users"
       />
       <LinkDirectoryItem
-        icon="ai ai-gateway"
+        icon="az az-ai-gateway"
         title="AI Gateway"
         description="Secure, manage, and optimize AI traffic"
       />

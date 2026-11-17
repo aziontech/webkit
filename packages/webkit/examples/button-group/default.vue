@@ -6,14 +6,14 @@
   const last = ref('')
 
   const items = [
-    { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
-    { id: 'format', label: 'Format document', icon: 'ai ai-align-left' },
-    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-move-horizontal' },
+    { id: 'copy', label: 'Copy code', icon: 'az az-copy' },
+    { id: 'format', label: 'Format document', icon: 'az az-align-left' },
+    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'az az-move-horizontal' },
     {
       id: 'download',
       type: 'menu',
       label: 'Download',
-      icon: 'ai ai-download',
+      icon: 'az az-download',
       options: [
         { id: 'download-js', label: 'Download as .js' },
         { id: 'download-zip', label: 'Download as .zip' }

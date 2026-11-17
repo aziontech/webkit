@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Request',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Functions',
       title: 'orders-api',
-      icon: 'ai ai-edge-functions',
+      icon: 'az az-functions',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'SQL Database',
       title: 'orders, replicated',
-      icon: 'ai ai-edge-sql',
+      icon: 'az az-sql-database',
       status: {
         label: 'SQLite dialect',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Read replica',
       title: 'Nearest data center',
-      icon: 'ai ai-edge-nodes',
+      icon: 'az az-edge-nodes',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Primary',
       title: 'Writes applied once',
-      icon: 'ai ai-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

@@ -134,10 +134,10 @@ describe('TopologyDiagram', () => {
       .getAllByRole('link', { name: 'web-app' })
       .find((node) => node.getAttribute('href') === '#project')!
     expect(link).toHaveAttribute('data-testid', 'topology-diagram__node-link')
-    expect(link.querySelector('.ai-external-link')).toHaveAttribute('aria-hidden', 'true')
+    expect(link.querySelector('.az-external-link')).toHaveAttribute('aria-hidden', 'true')
     const plain = render(TopologyDiagram, { props: { levels } })
     expect(within(plain.container as HTMLElement).queryByRole('link')).toBeNull()
-    expect(plain.container.querySelector('.ai-external-link')).toBeNull()
+    expect(plain.container.querySelector('.az-external-link')).toBeNull()
   })
 
   it('puts the Domains add control from the actions slot in the identity row', async () => {

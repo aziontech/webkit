@@ -1962,7 +1962,7 @@
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
                     <IconButton
-                      icon="ai ai-menu"
+                      icon="az az-menu"
                       variant="outline"
                       size="small"
                       :ariaLabel="reorderHandleLabelOf(row.id, windowStart + index)"
@@ -2031,8 +2031,8 @@
                           class="text-body-xs"
                           :class="
                             row.getIsExpanded()
-                              ? 'ai ai-chevron-down'
-                              : 'ai ai-chevron-right rtl:-scale-x-100'
+                              ? 'az az-chevron-down'
+                              : 'az az-chevron-right rtl:-scale-x-100'
                           "
                         />
                       </span>
@@ -2118,7 +2118,7 @@
           >
             <EmptyState
               size="small"
-              icon="ai ai-triangle-alert"
+              icon="az az-triangle-alert"
               :title="t('table.errorTitle')"
               :description="error"
             />
@@ -2132,7 +2132,7 @@
           <slot name="empty">
             <EmptyState
               size="small"
-              icon="ai ai-table"
+              icon="az az-table"
               :title="t('table.emptyTitle')"
               :description="t('table.emptyDescription')"
             />

@@ -366,7 +366,7 @@
             :target="primary.target"
             variant="secondary"
             size="large"
-            :icon="primary.trailing ? 'ai ai-chevron-right' : ''"
+            :icon="primary.trailing ? 'az az-chevron-right' : ''"
             :icon-position="primary.trailing ? 'trailing' : 'leading'"
             :animated="Boolean(primary.trailing)"
           />
@@ -378,7 +378,7 @@
             :target="secondary.target"
             variant="outline"
             size="large"
-            :icon="secondary.trailing ? 'ai ai-chevron-right' : ''"
+            :icon="secondary.trailing ? 'az az-chevron-right' : ''"
             :icon-position="secondary.trailing ? 'trailing' : 'leading'"
             :animated="Boolean(secondary.trailing)"
           />

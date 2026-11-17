@@ -6,7 +6,7 @@ status: implemented
 spec_version: 10
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: b7b4009e1e81828becb5e9658e39b4b6b0fd68c16c3259f055885966f01a9072
+checksum: 9d06fe6b5e68236bff33776b0078758cb2f64435df48a18d447388db46ab5863
 ---
 
 # PlanComparisonSection — Component Spec
@@ -109,7 +109,7 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 - The highlighted plan carries the accent bar and the secondary button; the others carry an outlined button
 - Below the large breakpoint only the picked plan's column shows (`data-folded` on the others); the picker opens on the highlighted plan, or the first
 - Picker search: the picker's list carries a search field that narrows the plans by name; with no match it shows a `role="status"` line from the locale catalog (`No results found.`); the query clears each time the list opens or closes
-- Cells: an included cell is a `ai ai-circle-check` mark and a not-included cell an `ai ai-circle-minus` mark, each with a tooltip of its label on hover and the same label as `sr-only` text
+- Cells: an included cell is a `az az-circle-check` mark and a not-included cell an `az az-circle-minus` mark, each with a tooltip of its label on hover and the same label as `sr-only` text
 - Hint: a row with `hint` ends its label with an info icon button that opens a popover titled with the label and described by the hint
 - Closing rule: when neither the last band nor the table carries a closing link, the last row draws a bottom rule (`data-closing`) so the table never ends open
 - Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.

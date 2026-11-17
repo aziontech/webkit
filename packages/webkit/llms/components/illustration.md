@@ -24,7 +24,7 @@
 
 ## Don’t
 
-- A single glyph is enough → use an icon from `@aziontech/icons` (`<i class="ai ai-…">`).
+- A single glyph is enough → use an icon from `@aziontech/icons` (`<i class="az az-…">`).
 - The artwork is a brand mark (a client logo, a framework mark) → those are brand assets, not illustrations.
 - The whole component is "no data here, with a title and an action" → use `empty-state`, which already owns that layout and may embed an `Illustration`.
 - The graphic is a live data visualization → that is a chart, not an illustration.

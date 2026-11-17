@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Traffic',
-      icon: 'ai ai-globe',
+      icon: 'az az-globe',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Network Shield',
       title: 'Network lists at the border',
-      icon: 'ai ai-network-lists',
+      icon: 'az az-network-lists',
       status: {
         label: 'L3 and L4',
         severity: 'success'
@@ -29,7 +29,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Allowed',
       title: 'Reaches the Firewall',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true
     },
     {
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Dropped',
       title: 'Listed ASN, country or IP',
-      icon: 'ai ai-ban'
+      icon: 'az az-ban'
     }
   ],
   layout: {

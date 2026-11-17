@@ -23,7 +23,7 @@
           label="Add"
           variant="ghost"
           size="small"
-          icon="ai ai-plus"
+          icon="az az-plus"
         />
       </Item.Actions>
     </Item>
@@ -44,7 +44,7 @@
           label="Add"
           variant="ghost"
           size="small"
-          icon="ai ai-plus"
+          icon="az az-plus"
         />
       </Item.Actions>
     </Item>
@@ -65,7 +65,7 @@
           label="Add"
           variant="ghost"
           size="small"
-          icon="ai ai-plus"
+          icon="az az-plus"
         />
       </Item.Actions>
     </Item>

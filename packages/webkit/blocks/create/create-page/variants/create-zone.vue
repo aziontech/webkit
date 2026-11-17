@@ -230,7 +230,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Edge DNS"
           variant="outline"
           size="small"
@@ -377,7 +377,7 @@
                         </Item.Content>
                         <Item.Actions>
                           <IconButton
-                            icon="ai ai-x"
+                            icon="az az-x"
                             variant="ghost"
                             size="medium"
                             :aria-label="`Remove ${record.type} record ${record.name}`"
@@ -416,7 +416,7 @@
               <SettingsSection
                 title="Advanced"
                 v-model:open="advancedOpen"
-                icon="ai ai-settings"
+                icon="az az-settings"
                 collapsible
               >
                 <Card :padded="false">
@@ -456,7 +456,7 @@
                   label="Import"
                   variant="outline"
                   size="medium"
-                  icon="ai ai-upload"
+                  icon="az az-upload"
                   @click="openImport"
                 />
                 <p class="min-w-0 text-body-sm text-(--text-muted)">

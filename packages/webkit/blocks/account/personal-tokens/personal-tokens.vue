@@ -293,7 +293,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/personal-tokens"
@@ -301,7 +301,7 @@
           />
           <Button
             label="Create Personal Token"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="primary"
             size="large"
             @click="openCreate"
@@ -327,7 +327,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="outline"
                 size="medium"
                 :loading="refreshing"
@@ -340,7 +340,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-download"
+                icon="az az-download"
                 variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -378,14 +378,14 @@
           <template #default>
             <EmptyState
               size="medium"
-              icon="ai ai-key"
+              icon="az az-key"
               title="No personal tokens yet"
               description="Create a token to call the API from a script, a CI job or the CLI."
             >
               <template #actions>
                 <Button
                   label="Create Personal Token"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   variant="secondary"
                   size="small"
                   @click="openCreate"
@@ -478,7 +478,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-search"
+                  icon="az az-search"
                   title="No matching tokens"
                   description="No token matches these filters."
                 >

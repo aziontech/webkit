@@ -547,7 +547,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
         label="Deploy"
         variant="outline"
         size="medium"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -616,7 +616,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                 label="Retry"
                 variant="outline"
                 size="small"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="(event: MouseEvent) => emit('retry', event)"
               />
             </div>
@@ -642,7 +642,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                     class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                   >
                     <i
-                      class="ai ai-server text-body-xs text-(--text-default)"
+                      class="az az-server text-body-xs text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
@@ -726,7 +726,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                               :aria-label="`Change version of ${row.name}`"
                               variant="outline"
                               size="small"
-                              icon="ai ai-chevron-down"
+                              icon="az az-chevron-down"
                               icon-position="trailing"
                               :disabled="!row.versions.length"
                             />
@@ -746,7 +746,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                               >
                                 <template #leading>
                                   <i
-                                    class="ai ai-search"
+                                    class="az az-search"
                                     aria-hidden="true"
                                   />
                                 </template>
@@ -875,7 +875,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                           :aria-label="`Change version of ${dependency.name}`"
                                           variant="outline"
                                           size="small"
-                                          icon="ai ai-chevron-down"
+                                          icon="az az-chevron-down"
                                           icon-position="trailing"
                                           :disabled="!dependency.versions.length"
                                         />
@@ -895,7 +895,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                           >
                                             <template #leading>
                                               <i
-                                                class="ai ai-search"
+                                                class="az az-search"
                                                 aria-hidden="true"
                                               />
                                             </template>
@@ -999,7 +999,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                           class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
-                            class="ai ai-box text-body-xs text-(--text-default)"
+                            class="az az-box text-body-xs text-(--text-default)"
                             aria-hidden="true"
                           />
                         </span>
@@ -1078,7 +1078,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                   >
                                     <template #leading>
                                       <i
-                                        class="ai ai-search"
+                                        class="az az-search"
                                         aria-hidden="true"
                                       />
                                     </template>
@@ -1136,7 +1136,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                               label="Change"
                               variant="outline"
                               size="small"
-                              icon="ai ai-chevron-down"
+                              icon="az az-chevron-down"
                               icon-position="trailing"
                             />
                           </DropdownMenu.Trigger>
@@ -1230,7 +1230,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                             class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              class="ai ai-box text-body-xs text-(--text-default)"
+                              class="az az-box text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
                           </span>
@@ -1303,7 +1303,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                     >
                                       <template #leading>
                                         <i
-                                          class="ai ai-search"
+                                          class="az az-search"
                                           aria-hidden="true"
                                         />
                                       </template>
@@ -1371,7 +1371,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
               class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
             >
               <i
-                class="ai ai-circle-info shrink-0"
+                class="az az-circle-info shrink-0"
                 aria-hidden="true"
               />
               <span class="truncate">{{ changeSummary }}</span>
@@ -1409,7 +1409,7 @@ export const sampleResources: DeployDrawerResource[] = [
     key: 'service',
     label: 'Service',
     name: 'web-app',
-    icon: 'ai ai-server',
+    icon: 'az az-server',
     note: '',
     total: 6,
     versions: [
@@ -1446,7 +1446,7 @@ export const sampleResources: DeployDrawerResource[] = [
         key: 'service@AG1VVDJP:module-auth-gateway',
         label: 'Module',
         name: 'auth-gateway',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         note: '',
         total: 8,
         versions: [
@@ -1486,7 +1486,7 @@ export const sampleResources: DeployDrawerResource[] = [
         key: 'service@AG1VVDJP:module-geo-redirect',
         label: 'Module',
         name: 'geo-redirect',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         note: '',
         total: 11,
         versions: [
@@ -1526,7 +1526,7 @@ export const sampleResources: DeployDrawerResource[] = [
         key: 'service@AG1VVDJP:integration-payments-api',
         label: 'Integration',
         name: 'payments-api',
-        icon: 'ai ai-link',
+        icon: 'az az-link',
         note: '',
         total: 11,
         versions: [

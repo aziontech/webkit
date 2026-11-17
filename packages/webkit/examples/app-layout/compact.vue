@@ -29,13 +29,13 @@
             <SidebarMenuGroup>
               <SidebarMenuItem
                 label="Home"
-                icon="ai ai-home"
+                icon="az az-home"
                 href="#"
                 active
               />
               <SidebarMenuItem
                 label="Services"
-                icon="ai ai-edge-application"
+                icon="az az-applications"
                 href="#"
               />
             </SidebarMenuGroup>
@@ -50,7 +50,7 @@
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
-                  icon="ai ai-menu"
+                  icon="az az-menu"
                   aria-label="Open navigation"
                   variant="outline"
                   size="medium"
@@ -65,7 +65,7 @@
                 @open="searchOpen = true"
               />
               <IconButton
-                icon="ai ai-circle-help"
+                icon="az az-circle-help"
                 aria-label="Help"
                 variant="outline"
                 size="medium"

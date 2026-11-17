@@ -444,7 +444,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
               <template #actions>
                 <Button
                   label="Documentation"
-                  icon="ai ai-book"
+                  icon="az az-book"
                   variant="outline"
                   size="medium"
                   href="https://example.com/docs/private-access"
@@ -452,7 +452,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                 />
                 <Button
                   :label="`Add ${current.noun}`"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   variant="outline"
                   size="medium"
                   @click="emit('add', $event, current)"
@@ -473,7 +473,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="ai ai-refresh"
+                    icon="az az-refresh"
                     variant="outline"
                     size="medium"
                     :loading="loading"
@@ -520,14 +520,14 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                         key="empty-state-1"
                         v-if="status !== 'no-match'"
                         size="medium"
-                        icon="ai ai-inbox"
+                        icon="az az-inbox"
                         :title="`No ${current.label.toLowerCase()} yet`"
                         :description="`Add the first ${current.noun.toLowerCase()} to this policy.`"
                       >
                         <template #actions>
                           <Button
                             :label="`Add ${current.noun}`"
-                            icon="ai ai-plus"
+                            icon="az az-plus"
                             variant="secondary"
                             size="small"
                             @click="emit('add', $event, current)"
@@ -538,7 +538,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                         key="empty-state-2"
                         v-else
                         size="medium"
-                        icon="ai ai-filter-off"
+                        icon="az az-filter-off"
                         :title="`No matching ${current.label.toLowerCase()}`"
                         description="Nothing matches these filters."
                       >
@@ -568,7 +568,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="ai ai-external-link"
+            icon="az az-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page of ${resourceLabel}.`"
           >

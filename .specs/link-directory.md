@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: 7ae1509548f99a37f0baffe4910f942d3dfcb85dcc662280d1ce8d9e904eb1e3
+checksum: b4346fd122083538557844e751edfe16c6014e74257f19a420dc7c4a1c8373b2
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -63,13 +63,13 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
   >
     <LinkDirectory.Column title="Build">
       <LinkDirectory.Item
-        icon="ai ai-workloads"
+        icon="az az-workloads"
         title="Workloads"
         description="Put an application on a hostname, everywhere"
         href="/workloads"
       />
       <LinkDirectory.Item
-        icon="ai ai-edge-functions"
+        icon="az az-functions"
         title="Functions"
         description="Run serverless code at the edge"
         href="/functions"
@@ -77,7 +77,7 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
     </LinkDirectory.Column>
     <LinkDirectory.Column title="Store">
       <LinkDirectory.Item
-        icon="ai ai-edge-sql"
+        icon="az az-sql-database"
         title="SQL Database"
         description="A distributed SQL database"
         href="/sql-database"
@@ -94,7 +94,7 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
 
 Column props: `title` (`string`, default `''`) — the column's overline heading, which also names its list for a screen reader. Column slot: `default` — the column's rows, composed as `LinkDirectory.Item` elements.
 
-Item props: `icon` (`string`, default `''`) — icon-font class for the glyph, e.g. `ai ai-workloads`; `title` (`string`, default `''`) — the destination's name, the row's first line; `description` (`string`, default `''`) — one line of what the destination is, omitted when empty; `href` (`string`, default `''`) — the destination, where empty renders a row that is not a link and not focusable. Item event: `click` — `(event: MouseEvent, item: LinkDirectoryItemTarget)`, fired only by a row that has an `href`, with `item` carrying `{ title, href }` so a consuming app can `preventDefault()` and route the destination itself instead of reloading.
+Item props: `icon` (`string`, default `''`) — icon-font class for the glyph, e.g. `az az-workloads`; `title` (`string`, default `''`) — the destination's name, the row's first line; `description` (`string`, default `''`) — one line of what the destination is, omitted when empty; `href` (`string`, default `''`) — the destination, where empty renders a row that is not a link and not focusable. Item event: `click` — `(event: MouseEvent, item: LinkDirectoryItemTarget)`, fired only by a row that has an `href`, with `item` carrying `{ title, href }` so a consuming app can `preventDefault()` and route the destination itself instead of reloading.
 
 The compound `index.ts` annotates the `Object.assign` result with an explicit `typeof LinkDirectory & { Column: typeof LinkDirectoryColumn; Item: typeof LinkDirectoryItem }` type. Without it, declaration emit expands the root's private `Props` interface and `vue-tsc` fails with TS4082 ("default export of the module has or is using private name"). Do not simplify it back to a bare `Object.assign`.
 

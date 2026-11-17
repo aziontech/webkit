@@ -56,12 +56,12 @@ describe('Table', () => {
         props: {
           label: 'example/storefront',
           href: 'https://github.com/example/storefront',
-          icon: 'ai ai-github'
+          icon: 'az az-github'
         }
       })
       const icon = view.getByTestId('table-cell-link__icon')
       expect(icon.getAttribute('aria-hidden')).toBe('true')
-      expect(icon.classList.contains('ai-github')).toBe(true)
+      expect(icon.classList.contains('az-github')).toBe(true)
       expect(view.getByRole('link').contains(icon)).toBe(false)
       expect(view.getByRole('link').textContent).toContain('example/storefront')
 
@@ -72,7 +72,7 @@ describe('Table', () => {
     it('CellLink: no destination renders plain text with no mark', () => {
       const view = render(TableCellLink, { props: { label: 'draft' } })
       expect(view.queryByRole('link')).toBeNull()
-      expect(view.container.querySelector('.ai-external-link')).toBeNull()
+      expect(view.container.querySelector('.az-external-link')).toBeNull()
     })
 
     it('CellLink: the external mark appears only on an address outside the app', () => {
@@ -80,7 +80,7 @@ describe('Table', () => {
         const view = render(TableCellLink, { props: { label: 'site-assets', ...props } })
         const link = view.getByTestId('table-cell-link__link')
         const result = {
-          mark: link.querySelector('.ai-external-link') !== null,
+          mark: link.querySelector('.az-external-link') !== null,
           target: link.getAttribute('target'),
           newTab: (link.textContent ?? '').includes('(opens in a new tab)')
         }

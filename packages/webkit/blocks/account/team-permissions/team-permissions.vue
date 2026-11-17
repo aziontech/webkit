@@ -179,7 +179,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/teams"
@@ -187,7 +187,7 @@
           />
           <Button
             label="Create Team"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="primary"
             size="large"
             href="/account/teams/new"
@@ -213,7 +213,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="outline"
                 size="medium"
                 :loading="refreshing"
@@ -226,7 +226,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-download"
+                icon="az az-download"
                 variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -264,14 +264,14 @@
           <template #default>
             <EmptyState
               size="medium"
-              icon="ai ai-users"
+              icon="az az-users"
               title="No teams yet"
               description="Create a team for each role in your organisation, then add people to it."
             >
               <template #actions>
                 <Button
                   label="Create Team"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   variant="secondary"
                   size="small"
                   href="/account/teams/new"
@@ -363,7 +363,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-search"
+                  icon="az az-search"
                   title="No matching teams"
                   description="No team matches these filters."
                 >

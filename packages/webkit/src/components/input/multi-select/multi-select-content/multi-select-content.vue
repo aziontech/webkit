@@ -197,7 +197,7 @@
             @keydown="onCreateKeydown"
           >
             <i
-              class="ai ai-plus shrink-0 text-body-xs text-(--text-muted)"
+              class="az az-plus shrink-0 text-body-xs text-(--text-muted)"
               aria-hidden="true"
             />
             <span class="min-w-0 flex-1 truncate text-start"
@@ -220,7 +220,7 @@
             class="flex min-h-8 items-center gap-(--spacing-xs) px-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             <i
-              class="ai ai-circle-alert shrink-0 text-(--danger)"
+              class="az az-circle-alert shrink-0 text-(--danger)"
               aria-hidden="true"
             />
             <span class="min-w-0 flex-1">{{ ctx.error.value }}</span>

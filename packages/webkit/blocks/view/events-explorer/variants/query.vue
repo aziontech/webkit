@@ -946,7 +946,7 @@
             <Popover.Trigger>
               <Tooltip content="Saved queries">
                 <IconButton
-                  icon="ai ai-bookmark"
+                  icon="az az-bookmark"
                   variant="outline"
                   size="medium"
                   aria-label="Saved queries"
@@ -990,7 +990,7 @@
                     </Item>
                     <Tooltip content="Delete">
                       <IconButton
-                        icon="ai ai-trash"
+                        icon="az az-trash"
                         variant="ghost"
                         size="small"
                         :aria-label="`Delete ${entry.name}`"
@@ -1047,7 +1047,7 @@
             <Popover.Trigger>
               <Tooltip content="Recent queries">
                 <IconButton
-                  icon="ai ai-history"
+                  icon="az az-history"
                   variant="outline"
                   size="medium"
                   aria-label="Recent queries"
@@ -1080,7 +1080,7 @@
                     >
                       <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
                         <i
-                          class="ai ai-history shrink-0 text-(--text-muted)"
+                          class="az az-history shrink-0 text-(--text-muted)"
                           aria-hidden="true"
                         />
                         <span
@@ -1118,7 +1118,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               variant="outline"
               size="medium"
               :loading="loading"
@@ -1132,7 +1132,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="ai ai-download"
+              icon="az az-download"
               variant="outline"
               size="medium"
               :disabled="!tableEl"
@@ -1190,7 +1190,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-search"
+                          class="az az-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -1273,7 +1273,7 @@
                               </span>
                               <i
                                 v-if="isValueApplied(field.id, entry.value)"
-                                class="ai ai-check shrink-0 text-(--primary)"
+                                class="az az-check shrink-0 text-(--primary)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1395,7 +1395,7 @@
                                       </span>
                                       <i
                                         v-if="isValueApplied(field.id, entry.value)"
-                                        class="ai ai-check shrink-0 text-(--primary)"
+                                        class="az az-check shrink-0 text-(--primary)"
                                         aria-hidden="true"
                                       />
                                     </span>
@@ -1519,7 +1519,7 @@
 
                     <template #cell-detail="{ row }">
                       <IconButton
-                        :icon="row.id === selectedId ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
+                        :icon="row.id === selectedId ? 'az az-chevron-down' : 'az az-chevron-right'"
                         variant="ghost"
                         size="small"
                         :aria-label="`Open event ${row.id}`"
@@ -1576,7 +1576,7 @@
                         v-if="!events.length"
                         key="no-traffic"
                         size="small"
-                        icon="ai ai-inbox"
+                        icon="az az-inbox"
                         title="No events yet"
                         description="Events appear here as soon as traffic reaches this workspace's resources."
                       />
@@ -1584,7 +1584,7 @@
                         v-else-if="appliedQuery.tokens.length"
                         key="no-match"
                         size="small"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No events match this query"
                         description="Change the query, or widen the time range to cover more of the log."
                       />
@@ -1592,7 +1592,7 @@
                         v-else
                         key="no-events"
                         size="small"
-                        icon="ai ai-filter-off"
+                        icon="az az-filter-off"
                         title="No events in this window"
                         description="Widen the time range to see more of the log."
                       />
@@ -1631,7 +1631,7 @@
               </h2>
               <Tooltip content="Close">
                 <IconButton
-                  icon="ai ai-x"
+                  icon="az az-x"
                   variant="ghost"
                   size="small"
                   aria-label="Close the event document"

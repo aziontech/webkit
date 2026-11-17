@@ -104,7 +104,7 @@ Unbound, each one keeps its own local state.
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s`, `border-e`, `ms-auto`); the navigation sits at the inline start and the tools and side split panel at the inline end.
-- Icons: the position toggle icons (`ai ai-window-maximize` family) are not mirrored; close is not mirrored.
+- Icons: the position toggle icons (`az az-window-maximize` family) are not mirrored; close is not mirrored.
 - Keyboard: on a side split panel, the arrow that points away from the panel grows it — `ArrowLeft` in LTR, `ArrowRight` in RTL.
 - User data: none.
 
@@ -182,18 +182,18 @@ Unbound, each one keeps its own local state.
             <SidebarMenuGroup>
               <SidebarMenuItem
                 label="Home"
-                icon="ai ai-home"
+                icon="az az-home"
                 href="#"
               />
               <SidebarMenuItem
                 label="Services"
-                icon="ai ai-edge-application"
+                icon="az az-applications"
                 href="#"
                 active
               />
               <SidebarMenuItem
                 label="Variables"
-                icon="ai ai-variables"
+                icon="az az-variables"
                 href="#"
               />
             </SidebarMenuGroup>
@@ -208,7 +208,7 @@ Unbound, each one keeps its own local state.
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
-                  icon="ai ai-menu"
+                  icon="az az-menu"
                   aria-label="Open navigation"
                   variant="outline"
                   size="medium"
@@ -223,7 +223,7 @@ Unbound, each one keeps its own local state.
                 @open="searchOpen = true"
               />
               <IconButton
-                icon="ai ai-circle-help"
+                icon="az az-circle-help"
                 aria-label="Help"
                 variant="outline"
                 size="medium"
@@ -353,7 +353,7 @@ Unbound, each one keeps its own local state.
           <EmptyState
             title="No domain yet"
             description="Add a domain to route its traffic to this workload."
-            icon="ai ai-globe"
+            icon="az az-globe"
           >
             <template #actions>
               <Button

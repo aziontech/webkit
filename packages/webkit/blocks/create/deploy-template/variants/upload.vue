@@ -29,13 +29,13 @@
   ]
 
   const files: ProjectFile[] = [
-    { path: 'about.html', bytes: 4301, glyph: 'ai ai-code' },
-    { path: 'pricing.html', bytes: 6963, glyph: 'ai ai-code' },
-    { path: 'robots.txt', bytes: 68, glyph: 'ai ai-file' },
-    { path: 'assets/app.js', bytes: 31744, glyph: 'ai ai-code' },
-    { path: 'assets/logo.svg', bytes: 2150, glyph: 'ai ai-image' },
-    { path: 'assets/styles.css', bytes: 12698, glyph: 'ai ai-palette' },
-    { path: 'images/hero.webp', bytes: 188928, glyph: 'ai ai-image' }
+    { path: 'about.html', bytes: 4301, glyph: 'az az-code' },
+    { path: 'pricing.html', bytes: 6963, glyph: 'az az-code' },
+    { path: 'robots.txt', bytes: 68, glyph: 'az az-file' },
+    { path: 'assets/app.js', bytes: 31744, glyph: 'az az-code' },
+    { path: 'assets/logo.svg', bytes: 2150, glyph: 'az az-image' },
+    { path: 'assets/styles.css', bytes: 12698, glyph: 'az az-palette' },
+    { path: 'images/hero.webp', bytes: 188928, glyph: 'az az-image' }
   ]
 
   const FILE_LIMIT = 100
@@ -105,7 +105,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Creation Center"
           variant="outline"
           size="small"
@@ -153,7 +153,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai ai-folder text-body-lg leading-none text-(--text-default)"
+                  class="az az-folder text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -230,7 +230,7 @@
                         class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface)"
                       >
                         <i
-                          class="ai ai-folder-open text-body-md leading-none text-(--text-default)"
+                          class="az az-folder-open text-body-md leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </span>

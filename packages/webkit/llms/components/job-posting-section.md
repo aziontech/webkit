@@ -79,7 +79,7 @@
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s` on the rail, `ps-` on the bullet lists, `text-start`); the rail sits at the inline end.
-- Icons: the apply button's `ai ai-chevron-right` is mirrored by `button`; facet glyphs are not mirrored.
+- Icons: the apply button's `az az-chevron-right` is mirrored by `button`; facet glyphs are not mirrored.
 - Keyboard: no arrow-key interaction of its own.
 - User data: the posting copy is passed as props and inherits the page direction; field values are typed by the reader.
 
@@ -112,19 +112,19 @@ No built-in strings: every visible string and accessible name comes from the pro
   const facets = [
     {
       label: 'Engineering',
-      icon: 'ai ai-sitemap'
+      icon: 'az az-sitemap'
     },
     {
       label: 'San Francisco, California',
-      icon: 'ai ai-map-pin'
+      icon: 'az az-map-pin'
     },
     {
       label: 'Hybrid',
-      icon: 'ai ai-building'
+      icon: 'az az-building'
     },
     {
       label: 'Full-time',
-      icon: 'ai ai-clock'
+      icon: 'az az-clock'
     }
   ]
 
@@ -327,7 +327,7 @@ No built-in strings: every visible string and accessible name comes from the pro
       area="Engineering"
       title="Senior Platform Engineer"
       apply-label="Apply for this position"
-      :facets="[{ label: 'Engineering', icon: 'ai ai-sitemap' }]"
+      :facets="[{ label: 'Engineering', icon: 'az az-sitemap' }]"
       :sections="[
         {
           title: 'About the role',

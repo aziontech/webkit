@@ -907,7 +907,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
       <template #actions>
         <Button
           label="Documentation"
-          icon="ai ai-book"
+          icon="az az-book"
           variant="outline"
           href="https://example.com/docs/variables"
           target="_blank"
@@ -915,7 +915,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
         />
         <Button
           label="Create Variable"
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="primary"
           size="large"
           @click="openCreate"
@@ -939,7 +939,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="outline"
                 size="medium"
                 :loading="loading"
@@ -952,7 +952,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-download"
+                icon="az az-download"
                 variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -976,7 +976,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
             <template #default>
               <EmptyState
                 size="medium"
-                icon="ai ai-key"
+                icon="az az-key"
                 title="No variables yet"
                 description="Create a variable to store a value your services read at runtime."
               >
@@ -984,14 +984,14 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                   <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                     <Button
                       label="Create Variable"
-                      icon="ai ai-plus"
+                      icon="az az-plus"
                       variant="secondary"
                       size="small"
                       @click="openCreate"
                     />
                     <Button
                       label="Documentation"
-                      icon="ai ai-book"
+                      icon="az az-book"
                       variant="outline"
                       size="small"
                       href="https://example.com/docs/variables"
@@ -1018,7 +1018,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                 <template #cell-key="{ value }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-key shrink-0 text-body-lg text-(--text-muted)"
+                      class="az az-key shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 truncate">{{ value }}</span>
@@ -1090,7 +1090,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                       >
                         <template #leading>
                           <i
-                            class="ai ai-pencil"
+                            class="az az-pencil"
                             aria-hidden="true"
                           />
                         </template>
@@ -1101,7 +1101,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                       >
                         <template #leading>
                           <i
-                            class="ai ai-copy"
+                            class="az az-copy"
                             aria-hidden="true"
                           />
                         </template>
@@ -1115,7 +1115,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                       >
                         <template #leading>
                           <i
-                            class="ai ai-trash"
+                            class="az az-trash"
                             aria-hidden="true"
                           />
                         </template>
@@ -1127,7 +1127,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="ai ai-filter-off"
+                    icon="az az-filter-off"
                     title="No matching variables"
                     description="No variable matches these filters."
                   >
@@ -1197,7 +1197,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                   >
                     <Button
                       label="Upload"
-                      icon="ai ai-upload"
+                      icon="az az-upload"
                       variant="outline"
                       size="medium"
                       @click="fileInputEl?.click()"
@@ -1265,7 +1265,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                                 content="Remove variable"
                               >
                                 <IconButton
-                                  icon="ai ai-trash"
+                                  icon="az az-trash"
                                   variant="outline"
                                   size="large"
                                   :aria-label="removeLabel"
@@ -1312,7 +1312,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                                 :content="entries[index].visible ? 'Hide value' : 'Show value'"
                               >
                                 <IconButton
-                                  :icon="entries[index].visible ? 'ai ai-eye-off' : 'ai ai-eye'"
+                                  :icon="entries[index].visible ? 'az az-eye-off' : 'az az-eye'"
                                   variant="outline"
                                   size="large"
                                   :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"
@@ -1441,7 +1441,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                               >
                                 <template #leading>
                                   <i
-                                    class="ai ai-search"
+                                    class="az az-search"
                                     aria-hidden="true"
                                   />
                                 </template>

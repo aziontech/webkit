@@ -513,14 +513,14 @@
               @keydown="onGroupGripKeydown($event, groupIndex)"
             >
               <i
-                class="ai ai-menu"
+                class="az az-menu"
                 aria-hidden="true"
               />
             </button>
             <span class="flex-1" />
             <Tooltip :content="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })">
               <IconButton
-                icon="ai ai-chevron-up"
+                icon="az az-chevron-up"
                 variant="outline"
                 size="small"
                 data-reorder="group-up"
@@ -532,7 +532,7 @@
             </Tooltip>
             <Tooltip :content="t('attributeEditor.moveGroupDown', { index: groupIndex + 1 })">
               <IconButton
-                icon="ai ai-chevron-down"
+                icon="az az-chevron-down"
                 variant="outline"
                 size="small"
                 data-reorder="group-down"
@@ -691,7 +691,7 @@
                           @keydown="onGripKeydown($event, index, grouped ? groupIndex : undefined)"
                         >
                           <i
-                            class="ai ai-menu"
+                            class="az az-menu"
                             aria-hidden="true"
                           />
                         </button>
@@ -703,7 +703,7 @@
                           "
                         >
                           <IconButton
-                            icon="ai ai-chevron-up"
+                            icon="az az-chevron-up"
                             variant="outline"
                             :size="size"
                             data-reorder="up"
@@ -725,7 +725,7 @@
                           "
                         >
                           <IconButton
-                            icon="ai ai-chevron-down"
+                            icon="az az-chevron-down"
                             variant="outline"
                             :size="size"
                             data-reorder="down"
@@ -759,7 +759,7 @@
                           :content="removeLabel(position(index, grouped ? groupIndex : undefined))"
                         >
                           <IconButton
-                            icon="ai ai-trash"
+                            icon="az az-trash"
                             variant="outline"
                             :size="size"
                             :ariaLabel="
@@ -788,7 +788,7 @@
           >
             <Button
               :label="addLabel"
-              icon="ai ai-plus"
+              icon="az az-plus"
               variant="outline"
               size="small"
               :disabled="disabled || addDisabled || atLimit(group)"
@@ -812,7 +812,7 @@
           key="add"
           ref="addEl"
           :label="addLabel"
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="outline"
           size="medium"
           :disabled="disabled || addDisabled || atLimit(items)"
@@ -824,7 +824,7 @@
           key="add-group"
           ref="addEl"
           :label="groupAddLabel"
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="outline"
           size="medium"
           :disabled="!canAddGroup"

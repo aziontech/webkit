@@ -697,7 +697,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Services"
           variant="outline"
           size="small"
@@ -818,7 +818,7 @@
                       >
                         <template #leading>
                           <i
-                            class="ai ai-search"
+                            class="az az-search"
                             aria-hidden="true"
                           />
                         </template>
@@ -844,7 +844,7 @@
                               class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
-                                class="ai ai-box text-body-md leading-none text-(--text-default)"
+                                class="az az-box text-body-md leading-none text-(--text-default)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -856,7 +856,7 @@
                           <Item.Actions>
                             <i
                               v-if="option.value === projectPicker.chosen"
-                              class="ai ai-check shrink-0 text-(--text-default)"
+                              class="az az-check shrink-0 text-(--text-default)"
                               aria-hidden="true"
                             />
                           </Item.Actions>
@@ -1130,7 +1130,7 @@
                           class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
-                            class="ai ai-box text-body-md leading-none text-(--text-default)"
+                            class="az az-box text-body-md leading-none text-(--text-default)"
                             aria-hidden="true"
                           />
                         </span>
@@ -1232,7 +1232,7 @@
                       class="flex min-h-10 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) data-[empty]:border-dashed"
                     >
                       <i
-                        class="ai ai-globe shrink-0 text-(--text-muted)"
+                        class="az az-globe shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span
@@ -1358,7 +1358,7 @@
                               class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
-                                class="ai ai-cloud-upload text-body-md leading-none text-(--text-default)"
+                                class="az az-cloud-upload text-body-md leading-none text-(--text-default)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1395,7 +1395,7 @@
                         >
                           <template #leading>
                             <i
-                              class="ai ai-search"
+                              class="az az-search"
                               aria-hidden="true"
                             />
                           </template>
@@ -1421,7 +1421,7 @@
                                 class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                               >
                                 <i
-                                  class="ai ai-cloud-upload text-body-md leading-none text-(--text-default)"
+                                  class="az az-cloud-upload text-body-md leading-none text-(--text-default)"
                                   aria-hidden="true"
                                 />
                               </span>
@@ -1433,7 +1433,7 @@
                             <Item.Actions>
                               <i
                                 v-if="option.value === deploymentPicker.chosen"
-                                class="ai ai-check shrink-0 text-(--text-default)"
+                                class="az az-check shrink-0 text-(--text-default)"
                                 aria-hidden="true"
                               />
                             </Item.Actions>
@@ -1507,7 +1507,7 @@
                 title="Advanced"
                 hint="Every field here already carries the endpoint's own default, and all of them can be changed once the service exists."
                 v-model:open="advancedOpen"
-                icon="ai ai-settings"
+                icon="az az-settings"
                 collapsible
               >
                 <Card :padded="false">

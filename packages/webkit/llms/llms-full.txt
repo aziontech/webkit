@@ -1076,7 +1076,7 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
   same in both directions.
 - Mirror what points along the reading direction: arrows, chevrons, carets, "back"/"next", sign-in /
   sign-out. Webkit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
-  and `@aziontech/webkit/styles` for any `ai ai-chevron-right`-style glyph); on your own glyph add
+  and `@aziontech/webkit/styles` for any `az az-chevron-right`-style glyph); on your own glyph add
   `rtl:-scale-x-100`.
 - Place overlays with `side` and `align` (`Tooltip`, `Popover`, `HoverCard`, `DropdownMenu`,
   `Hint`, `NavigationMenu.Viewport`): `side="end"` opens on the right in `ltr` and on the left in
@@ -1099,8 +1099,8 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
 - `ml-*`, `mr-*`, `pl-*`, `pr-*`, `left-*`, `right-*`, `text-left`, `text-right`, `border-l`,
   `border-r`, `rounded-l`, `rounded-tr`… in a class string. They stay put under `dir="rtl"` and the
   layout breaks: an icon gap on the wrong side, a drawer that opens from the wrong edge.
-- Mirroring what does not point along the text: external-link arrows (`ai-arrow-up-right`,
-  `ai-external-link`), play/pause and other media controls, logos, clocks, checkmarks, charts'
+- Mirroring what does not point along the text: external-link arrows (`az-arrow-up-right`,
+  `az-external-link`), play/pause and other media controls, logos, clocks, checkmarks, charts'
   value axes, code.
 - Comparing `event.key === 'ArrowRight'` to mean "next" without the direction.
 - Reading `scrollLeft` as a distance from the start: it is `0` or negative under `rtl`; use
@@ -1136,7 +1136,7 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
       >{{ domain }}</span
     >
     <i
-      class="ai ai-chevron-right rtl:-scale-x-100"
+      class="az az-chevron-right rtl:-scale-x-100"
       aria-hidden="true"
     />
   </div>
@@ -1502,8 +1502,8 @@ props, so it imports the primary instead of copying it. A marketing band is a pa
   chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section
   opens on `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the
   guided route?" with the orange Agent setup over a halftone) above the Console, CLI and API
-  `DocCard`s (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`). Framework templates use the
-  brand-colour icons (`ai-color ai-react`). Do not substitute `DocPageHeader`, a `DocPrompt` or a
+  `DocCard`s (`az az-azion`, `az az-azion-cli`, `az az-azion-api`). Framework templates use the
+  brand-colour icons (`az-color az-react`). Do not substitute `DocPageHeader`, a `DocPrompt` or a
   `DocCard` with an overline for these.
 
 ## Which skill for which task
@@ -1585,7 +1585,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ `webkit()` from `@aziontech/webkit/vite-plugin` in `vite.config`: it keeps `src/webkit.sources.css`, the WebKit files Tailwind compiles, in step with your imports. Without Vite, run `npx @aziontech/webkit css` after adding or removing a WebKit import.
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
-- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, and `ai-color ai-<name>` for a colour brand icon. WebKit 6 uses only the Azion set: write `ai ai-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
+- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `az az-<name>`, and `az-color az-<name>` for a colour logo; pick one by what it stands for (`list_assets` gives each icon's group, category and meaning, and a product icon names only that product). WebKit 6 uses only the Azion set: write `az az-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
 
 ## Must Not Have
@@ -1597,7 +1597,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ Hardcoded color: `#fff`, `rgb(...)`, `hsl(...)`, `text-[#1e40af]`, or raw Tailwind palette (`bg-blue-600`).
 - ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only layout utilities (size, flex and grid placement, order, logical margins) may sit on the tag, each optionally behind a breakpoint prefix (`sm:` to `2xl:`): `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `shrink-0`, `self-*`, `justify-self-*`, `place-self-*`, `order-*`, `col-span-*`, `col-start-*`, `col-end-*`, `row-span-*`, `row-start-*`, `row-end-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mb-*`, `ms-*`, `me-*`.
 - ❌ An illustration, diagram, figure or mark name guessed from a file in `src/` or from the page title: an unknown illustration renders a "PLACE DESIGN ASSET" placeholder, an unknown diagram or figure draws nothing.
-- ❌ `ai-cor ai-<name>`, `ai-<name>-cor` or `ai ai-<name>-cor` for a colour icon: none is a class in WebKit 6. Use `ai-color ai-<name>`.
+- ❌ `ai ai-<name>`, `ai-cor ai-<name>` or `ai-color ai-<name>`: the old base classes are gone in WebKit 6. Use `az az-<name>` and, for a colour logo, `az-color az-<name>` (never `az-<name>-color`).
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.
 - ❌ A custom Button, Modal, Table, Tooltip, etc. when webkit ships one.
 - ❌ Passing a translated label to every instance (`aria-label="Fechar"` on each close button) instead of setting the locale on `WebkitProvider`.
@@ -1827,19 +1827,19 @@ Descriptions: foundations/brand-marks.md.
 
 # Icons
 
-> Every icon class of `@aziontech/icons` with search keywords.
+> Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, l…
 
-A monochrome icon is `ai ai-<name>`, coloured by the text colour; a colour brand icon is `ai-color ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
+yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-456 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+453 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: Alert, ArtifactPreview, Avatar, Button, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsSection, SplitButton, Tag.
 
 ## Names
 
-`ai ai-abuse-prevention` · `ai ai-adaptive-security` · `ai ai-address-book` · `ai ai-ai-gateway` · `ai ai-ai-pillar` · `ai ai-align-center` · `ai ai-align-justify` · `ai ai-align-left` · `ai ai-align-right` · `ai ai-angular` · `ai ai-app-accelerator` · `ai ai-arrow-down-0-1` · `ai ai-arrow-down-1-0` · `ai ai-arrow-down-a-z` · `ai ai-arrow-down-left` · `ai ai-arrow-down-narrow-wide` · `ai ai-arrow-down-right` · `ai ai-arrow-down-wide-narrow` · `ai ai-arrow-down-z-a` · `ai ai-arrow-down` · `ai ai-arrow-left` · `ai ai-arrow-right-left` · `ai ai-arrow-right` · `ai ai-arrow-up-0-1` · `ai ai-arrow-up-1-0` · `ai ai-arrow-up-a-z` · `ai ai-arrow-up-left` · `ai ai-arrow-up-narrow-wide` · `ai ai-arrow-up-right` · `ai ai-arrow-up-wide-narrow` · `ai ai-arrow-up-z-a` · `ai ai-arrow-up` · `ai ai-ask-azion` · `ai ai-asterisk` · `ai ai-astro` · `ai ai-at` · `ai ai-attack` · `ai ai-azion-api` · `ai ai-azion-cli` · `ai ai-azion` · `ai ai-backward` · `ai ai-ban` · `ai ai-barcode` · `ai ai-bell-off` · `ai ai-bell` · `ai ai-bolt` · `ai ai-book` · `ai ai-bookmark-fill` · `ai ai-bookmark` · `ai ai-bot-manager` · `ai ai-box` · `ai ai-briefcase` · `ai ai-build-pillar` · `ai ai-building-columns` · `ai ai-building` · `ai ai-bullseye` · `ai ai-business-support` · `ai ai-calculator` · `ai ai-calendar-clock` · `ai ai-calendar-minus` · `ai ai-calendar-plus` · `ai ai-calendar-x` · `ai ai-calendar` · `ai ai-camera` · `ai ai-car` · `ai ai-caret-down` · `ai ai-caret-left` · `ai ai-caret-right` · `ai ai-caret-up` · `ai ai-cart-arrow-down` · `ai ai-cart-minus` · `ai ai-cart-plus` · `ai ai-certificate-manager` · `ai ai-chart-bar` · `ai ai-chart-line` · `ai ai-chart-pie` · `ai ai-chart-scatter` · `ai ai-check` · `ai ai-chevron-down` · `ai ai-chevron-left` · `ai ai-chevron-right` · `ai ai-chevron-up` · `ai ai-chevrons-down` · `ai ai-chevrons-left` · `ai ai-chevrons-right` · `ai ai-chevrons-up` · `ai ai-circle-alert` · `ai ai-circle-arrow-down` · `ai ai-circle-arrow-left` · `ai ai-circle-arrow-right` · `ai ai-circle-arrow-up` · `ai ai-circle-check` · `ai ai-circle-chevron-down` · `ai ai-circle-chevron-left` · `ai ai-circle-chevron-right` · `ai ai-circle-chevron-up` · `ai ai-circle-fill` · `ai ai-circle-half` · `ai ai-circle-help` · `ai ai-circle-info` · `ai ai-circle-minus` · `ai ai-circle-off` · `ai ai-circle-on` · `ai ai-circle-pause` · `ai ai-circle-play` · `ai ai-circle-plus` · `ai ai-circle-stop` · `ai ai-circle-x` · `ai ai-circle` · `ai ai-claude` · `ai ai-clipboard` · `ai ai-clock` · `ai ai-cloud-download` · `ai ai-cloud-upload` · `ai ai-cloud` · `ai ai-code` · `ai ai-column` · `ai ai-comment` · `ai ai-comments` · `ai ai-compass` · `ai ai-configuration-service` · `ai ai-content-delivery` · `ai ai-copy` · `ai ai-credit-card` · `ai ai-crown` · `ai ai-cursor` · `ai ai-custom-pages` · `ai ai-data-stream` · `ai ai-database` · `ai ai-datasheet` · `ai ai-deepseek` · `ai ai-delete-left` · `ai ai-deploy-pillar` · `ai ai-desktop` · `ai ai-digital-certificates` · `ai ai-directions` · `ai ai-disabled` · `ai ai-discord` · `ai ai-docusaurus` · `ai ai-dollar` · `ai ai-domains` · `ai ai-download` · `ai ai-durable-objects` · `ai ai-edge-ai` · `ai ai-edge-application` · `ai ai-edge-connectors` · `ai ai-edge-dns` · `ai ai-edge-firewall` · `ai ai-edge-functions` · `ai ai-edge-kv` · `ai ai-edge-libraries` · `ai ai-edge-nodes` · `ai ai-edge-orchestrator` · `ai ai-edge-pulse` · `ai ai-edge-services` · `ai ai-edge-sql` · `ai ai-edge-storage` · `ai ai-eject` · `ai ai-eleventy` · `ai ai-ellipsis-vertical` · `ai ai-ellipsis` · `ai ai-enabled` · `ai ai-equals` · `ai ai-eraser` · `ai ai-euro` · `ai ai-expand` · `ai ai-external-link` · `ai ai-eye-off` · `ai ai-eye` · `ai ai-face-smile` · `ai ai-facebook` · `ai ai-fast-backward` · `ai ai-fast-forward` · `ai ai-file-arrow-up` · `ai ai-file-check` · `ai ai-file-excel` · `ai ai-file-export` · `ai ai-file-import` · `ai ai-file-pdf` · `ai ai-file-pen` · `ai ai-file-plus` · `ai ai-file-word` · `ai ai-file` · `ai ai-filter-fill` · `ai ai-filter-off` · `ai ai-filter` · `ai ai-flag-fill` · `ai ai-flag` · `ai ai-folder-open` · `ai ai-folder-plus` · `ai ai-folder` · `ai ai-forward` · `ai ai-gateway` · `ai ai-gatsby` · `ai ai-gauge` · `ai ai-gemini` · `ai ai-gift` · `ai ai-git-branch-delete` · `ai ai-git-branch-plus` · `ai ai-git-branch` · `ai ai-git-cherry-pick` · `ai ai-git-commit` · `ai ai-git-compare` · `ai ai-git-diff` · `ai ai-git-fork` · `ai ai-git-graph` · `ai ai-git-merge-conflict` · `ai ai-git-merge` · `ai ai-git-pull-request-closed` · `ai ai-git-pull-request-draft` · `ai ai-git-pull-request` · `ai ai-git-repository` · `ai ai-github` · `ai ai-globe` · `ai ai-google` · `ai ai-graduation-cap` · `ai ai-graphql` · `ai ai-grok` · `ai ai-hammer` · `ai ai-hash` · `ai ai-headphones` · `ai ai-heart-fill` · `ai ai-heart` · `ai ai-hexo` · `ai ai-history` · `ai ai-home` · `ai ai-hono` · `ai ai-hourglass` · `ai ai-html` · `ai ai-hugo` · `ai ai-id-card` · `ai ai-image-processor` · `ai ai-image` · `ai ai-images` · `ai ai-inbox` · `ai ai-indian-rupee` · `ai ai-info` · `ai ai-instagram` · `ai ai-instructor` · `ai ai-integration-services` · `ai ai-jekyll` · `ai ai-json-text` · `ai ai-json` · `ai ai-key` · `ai ai-language` · `ai ai-layers` · `ai ai-layout-grid` · `ai ai-lightbulb` · `ai ai-link` · `ai ai-linkedin` · `ai ai-list-check` · `ai ai-list` · `ai ai-live-ingest` · `ai ai-load-balancer` · `ai ai-lock-open` · `ai ai-lock` · `ai ai-log-in` · `ai ai-log-out` · `ai ai-lora` · `ai ai-mail` · `ai ai-map-pin` · `ai ai-map` · `ai ai-marketplace` · `ai ai-mars` · `ai ai-maximize` · `ai ai-mcp` · `ai ai-medium` · `ai ai-megaphone` · `ai ai-menu` · `ai ai-meta` · `ai ai-microchip-ai` · `ai ai-microchip` · `ai ai-microphone` · `ai ai-microsoft-copilot` · `ai ai-minimize` · `ai ai-minus` · `ai ai-mistral` · `ai ai-mobile` · `ai ai-money-bill` · `ai ai-moon` · `ai ai-move-horizontal` · `ai ai-move-vertical` · `ai ai-move` · `ai ai-network-lists` · `ai ai-nextjs` · `ai ai-nitro` · `ai ai-nuxt` · `ai ai-observe-pillar` · `ai ai-openai` · `ai ai-origin-accelerator` · `ai ai-origin-shield` · `ai ai-palette` · `ai ai-paperclip` · `ai ai-pause` · `ai ai-pencil` · `ai ai-percentage` · `ai ai-perplexity` · `ai ai-phone` · `ai ai-pin` · `ai ai-play` · `ai ai-plus` · `ai ai-pound` · `ai ai-power-off` · `ai ai-practices-review` · `ai ai-preact` · `ai ai-print` · `ai ai-professional-services` · `ai ai-qrcode` · `ai ai-question` · `ai ai-qwen` · `ai ai-qwik` · `ai ai-react` · `ai ai-real-time-events` · `ai ai-real-time-metrics` · `ai ai-real-time-purge` · `ai ai-receipt` · `ai ai-reddit` · `ai ai-redis` · `ai ai-refresh` · `ai ai-remix` · `ai ai-replay` · `ai ai-reply` · `ai ai-rss` · `ai ai-rules-engine` · `ai ai-sase` · `ai ai-save` · `ai ai-scissors` · `ai ai-search` · `ai ai-secure-pillar` · `ai ai-security-team` · `ai ai-send` · `ai ai-server` · `ai ai-settings` · `ai ai-share` · `ai ai-shield` · `ai ai-shop` · `ai ai-shopping-bag` · `ai ai-shopping-cart` · `ai ai-signpost` · `ai ai-sitemap` · `ai ai-slack` · `ai ai-sliders-horizontal` · `ai ai-sliders-vertical` · `ai ai-sort-down-fill` · `ai ai-sort-off` · `ai ai-sort-up-fill` · `ai ai-sort` · `ai ai-sparkles` · `ai ai-spinner-dotted` · `ai ai-spinner` · `ai ai-sql` · `ai ai-square-check` · `ai ai-square-pen` · `ai ai-star-fill` · `ai ai-star-half-fill` · `ai ai-star-half` · `ai ai-star` · `ai ai-stencil` · `ai ai-step-back` · `ai ai-step-forward` · `ai ai-stop` · `ai ai-stopwatch` · `ai ai-store` · `ai ai-sun` · `ai ai-svelte` · `ai ai-sync` · `ai ai-table` · `ai ai-tablet` · `ai ai-tag` · `ai ai-tags` · `ai ai-technical-account` · `ai ai-technical-support` · `ai ai-terraform` · `ai ai-thumbs-down-fill` · `ai ai-thumbs-down` · `ai ai-thumbs-up-fill` · `ai ai-thumbs-up` · `ai ai-ticket` · `ai ai-tiered-cache` · `ai ai-trash` · `ai ai-triangle-alert` · `ai ai-trophy` · `ai ai-truck` · `ai ai-turkish-lira` · `ai ai-turso` · `ai ai-twitch` · `ai ai-undo` · `ai ai-upload` · `ai ai-user-minus` · `ai ai-user-pen` · `ai ai-user-plus` · `ai ai-user` · `ai ai-users` · `ai ai-variables` · `ai ai-venus` · `ai ai-verified` · `ai ai-video` · `ai ai-vite` · `ai ai-vitepress` · `ai ai-volume-down` · `ai ai-volume-off` · `ai ai-volume-up` · `ai ai-vue` · `ai ai-vuepress` · `ai ai-waf-rules` · `ai ai-wallet` · `ai ai-warehouse` · `ai ai-wave-pulse` · `ai ai-webhook` · `ai ai-whatsapp` · `ai ai-wifi` · `ai ai-window-maximize` · `ai ai-window-minimize` · `ai ai-windsurf` · `ai ai-workloads` · `ai ai-wrench` · `ai ai-x-brand` · `ai ai-x` · `ai ai-youtube` · `ai ai-zoom-in` · `ai ai-zoom-out` · `ai-color ai-angular` · `ai-color ai-astro` · `ai-color ai-azure-devops` · `ai-color ai-bitbucket` · `ai-color ai-claude` · `ai-color ai-cursor` · `ai-color ai-deepseek` · `ai-color ai-discord` · `ai-color ai-flutter` · `ai-color ai-gemini` · `ai-color ai-gitlab` · `ai-color ai-google` · `ai-color ai-graphql` · `ai-color ai-grok` · `ai-color ai-html` · `ai-color ai-javascript` · `ai-color ai-kotlin` · `ai-color ai-meta` · `ai-color ai-microsoft-copilot` · `ai-color ai-mistral` · `ai-color ai-nextjs` · `ai-color ai-nuxt` · `ai-color ai-openai` · `ai-color ai-perplexity` · `ai-color ai-qwen` · `ai-color ai-react` · `ai-color ai-redwood` · `ai-color ai-solidjs` · `ai-color ai-svelte` · `ai-color ai-terraform` · `ai-color ai-typescript` · `ai-color ai-vue` · `ai-color ai-windsurf` · `ai-color ai-x-brand` · `ai-color ai-youtube`
+`az az-ai-gateway` · `az az-ai-inference` · `az az-application-accelerator` · `az az-applications` · `az az-bot-manager` · `az az-certificate-manager` · `az az-connectors` · `az az-custom-pages` · `az az-data-stream` · `az az-durable-objects` · `az az-edge-dns` · `az az-edge-orchestrator` · `az az-edge-pulse` · `az az-firewall` · `az az-functions` · `az az-image-processor` · `az az-kv-store` · `az az-live-ingest` · `az az-load-balancer` · `az az-marketplace` · `az az-network-lists` · `az az-object-storage` · `az az-real-time-events` · `az az-real-time-metrics` · `az az-real-time-purge` · `az az-sql-database` · `az az-variables` · `az az-waf` · `az az-workloads` · `az az-domains` · `az az-edge-libraries` · `az az-edge-nodes` · `az az-edge-services` · `az az-lora` · `az az-origin-shield` · `az az-rules-engine` · `az az-tiered-cache` · `az az-ai-pillar` · `az az-ask-azion` · `az az-azion` · `az az-azion-api` · `az az-azion-cli` · `az az-build-pillar` · `az az-deploy-pillar` · `az az-observe-pillar` · `az az-secure-pillar` · `az az-store-pillar` · `az az-abuse-prevention` · `az az-adaptive-security` · `az az-content-delivery` · `az az-sase` · `az az-business-support` · `az az-configuration-service` · `az az-integration-services` · `az az-practices-review` · `az az-professional-services` · `az az-security-team` · `az az-technical-account` · `az az-technical-support` · `az az-arrow-down` · `az az-arrow-down-0-1` · `az az-arrow-down-1-0` · `az az-arrow-down-a-z` · `az az-arrow-down-left` · `az az-arrow-down-narrow-wide` · `az az-arrow-down-right` · `az az-arrow-down-wide-narrow` · `az az-arrow-down-z-a` · `az az-arrow-left` · `az az-arrow-right` · `az az-arrow-right-left` · `az az-arrow-up` · `az az-arrow-up-0-1` · `az az-arrow-up-1-0` · `az az-arrow-up-a-z` · `az az-arrow-up-left` · `az az-arrow-up-narrow-wide` · `az az-arrow-up-right` · `az az-arrow-up-wide-narrow` · `az az-arrow-up-z-a` · `az az-caret-down` · `az az-caret-left` · `az az-caret-right` · `az az-caret-up` · `az az-chevron-down` · `az az-chevron-left` · `az az-chevron-right` · `az az-chevron-up` · `az az-chevrons-down` · `az az-chevrons-left` · `az az-chevrons-right` · `az az-chevrons-up` · `az az-circle-arrow-down` · `az az-circle-arrow-left` · `az az-circle-arrow-right` · `az az-circle-arrow-up` · `az az-circle-chevron-down` · `az az-circle-chevron-left` · `az az-circle-chevron-right` · `az az-circle-chevron-up` · `az az-move` · `az az-move-horizontal` · `az az-move-vertical` · `az az-sort` · `az az-sort-down-fill` · `az az-sort-off` · `az az-sort-up-fill` · `az az-arrow-up-from-line` · `az az-circle-plus` · `az az-cloud-download` · `az az-cloud-upload` · `az az-copy` · `az az-delete-left` · `az az-download` · `az az-eraser` · `az az-external-link` · `az az-eye` · `az az-eye-off` · `az az-filter` · `az az-filter-fill` · `az az-filter-off` · `az az-history` · `az az-link` · `az az-log-in` · `az az-log-out` · `az az-minus` · `az az-pencil` · `az az-plus` · `az az-power-off` · `az az-refresh` · `az az-replay` · `az az-save` · `az az-scissors` · `az az-search` · `az az-settings` · `az az-share` · `az az-square-pen` · `az az-sync` · `az az-trash` · `az az-undo` · `az az-upload` · `az az-x` · `az az-zoom-in` · `az az-zoom-out` · `az az-attack` · `az az-ban` · `az az-check` · `az az-circle` · `az az-circle-alert` · `az az-circle-check` · `az az-circle-fill` · `az az-circle-half` · `az az-circle-help` · `az az-circle-info` · `az az-circle-minus` · `az az-circle-off` · `az az-circle-on` · `az az-circle-x` · `az az-disabled` · `az az-enabled` · `az az-hourglass` · `az az-info` · `az az-question` · `az az-spinner` · `az az-spinner-dotted` · `az az-square-check` · `az az-triangle-alert` · `az az-verified` · `az az-clipboard` · `az az-file` · `az az-file-arrow-up` · `az az-file-check` · `az az-file-excel` · `az az-file-export` · `az az-file-import` · `az az-file-pdf` · `az az-file-pen` · `az az-file-plus` · `az az-file-word` · `az az-folder` · `az az-folder-open` · `az az-folder-plus` · `az az-json` · `az az-json-text` · `az az-paperclip` · `az az-backward` · `az az-camera` · `az az-circle-pause` · `az az-circle-play` · `az az-circle-stop` · `az az-forward` · `az az-image` · `az az-images` · `az az-microphone` · `az az-pause` · `az az-play` · `az az-skip-back` · `az az-skip-forward` · `az az-step-back` · `az az-step-forward` · `az az-stop` · `az az-video` · `az az-volume-down` · `az az-volume-off` · `az az-volume-up` · `az az-at` · `az az-bell` · `az az-bell-off` · `az az-comment` · `az az-comments` · `az az-inbox` · `az az-mail` · `az az-megaphone` · `az az-phone` · `az az-reply` · `az az-rss` · `az az-send` · `az az-webhook` · `az az-barcode` · `az az-cart-arrow-down` · `az az-cart-minus` · `az az-cart-plus` · `az az-credit-card` · `az az-dollar` · `az az-euro` · `az az-gift` · `az az-indian-rupee` · `az az-money-bill` · `az az-pound` · `az az-receipt` · `az az-shop` · `az az-shopping-bag` · `az az-shopping-cart` · `az az-ticket` · `az az-turkish-lira` · `az az-wallet` · `az az-address-book` · `az az-face-smile` · `az az-id-card` · `az az-mars` · `az az-user` · `az az-user-minus` · `az az-user-pen` · `az az-user-plus` · `az az-users` · `az az-venus` · `az az-desktop` · `az az-headphones` · `az az-microchip` · `az az-microchip-ai` · `az az-mobile` · `az az-print` · `az az-server` · `az az-tablet` · `az az-wifi` · `az az-calculator` · `az az-chart-bar` · `az az-chart-line` · `az az-chart-pie` · `az az-chart-scatter` · `az az-database` · `az az-gauge` · `az az-list` · `az az-list-check` · `az az-sheet` · `az az-sql` · `az az-table` · `az az-wave-pulse` · `az az-align-center` · `az az-align-justify` · `az az-align-left` · `az az-align-right` · `az az-columns-3` · `az az-ellipsis` · `az az-ellipsis-vertical` · `az az-expand` · `az az-layers` · `az az-layout-grid` · `az az-maximize` · `az az-menu` · `az az-minimize` · `az az-sitemap` · `az az-sliders-horizontal` · `az az-sliders-vertical` · `az az-window-maximize` · `az az-window-minimize` · `az az-asterisk` · `az az-bolt` · `az az-book` · `az az-bookmark` · `az az-bookmark-fill` · `az az-box` · `az az-briefcase` · `az az-building` · `az az-building-columns` · `az az-bullseye` · `az az-calendar` · `az az-calendar-clock` · `az az-calendar-minus` · `az az-calendar-plus` · `az az-calendar-x` · `az az-car` · `az az-clock` · `az az-cloud` · `az az-code` · `az az-compass` · `az az-crown` · `az az-directions` · `az az-equals` · `az az-flag` · `az az-flag-fill` · `az az-globe` · `az az-graduation-cap` · `az az-hammer` · `az az-hash` · `az az-heart` · `az az-heart-fill` · `az az-home` · `az az-key` · `az az-language` · `az az-lightbulb` · `az az-lock` · `az az-lock-open` · `az az-map` · `az az-map-pin` · `az az-moon` · `az az-palette` · `az az-percentage` · `az az-pin` · `az az-qrcode` · `az az-route` · `az az-shield` · `az az-signpost` · `az az-sparkles` · `az az-star` · `az az-star-fill` · `az az-star-half` · `az az-star-half-fill` · `az az-stopwatch` · `az az-sun` · `az az-tag` · `az az-tags` · `az az-thumbs-down` · `az az-thumbs-down-fill` · `az az-thumbs-up` · `az az-thumbs-up-fill` · `az az-trophy` · `az az-truck` · `az az-warehouse` · `az az-wrench` · `az az-git-branch` · `az az-git-branch-delete` · `az az-git-branch-plus` · `az az-git-cherry-pick` · `az az-git-commit` · `az az-git-compare` · `az az-git-diff` · `az az-git-fork` · `az az-git-graph` · `az az-git-merge` · `az az-git-merge-conflict` · `az az-git-pull-request` · `az az-git-pull-request-closed` · `az az-git-pull-request-draft` · `az az-git-repository` · `az az-angular` · `az az-astro` · `az az-docusaurus` · `az az-eleventy` · `az az-gatsby` · `az az-hexo` · `az az-hono` · `az az-hugo` · `az az-jekyll` · `az az-nextjs` · `az az-nitro` · `az az-nuxt` · `az az-preact` · `az az-qwik` · `az az-react` · `az az-remix` · `az az-stencil` · `az az-svelte` · `az az-vitepress` · `az az-vue` · `az az-vuepress` · `az az-claude` · `az az-deepseek` · `az az-gemini` · `az az-grok` · `az az-meta` · `az az-microsoft-copilot` · `az az-mistral` · `az az-openai` · `az az-perplexity` · `az az-qwen` · `az az-cursor` · `az az-github` · `az az-mcp` · `az az-redis` · `az az-terraform` · `az az-turso` · `az az-vite` · `az az-windsurf` · `az az-graphql` · `az az-html` · `az az-discord` · `az az-facebook` · `az az-google` · `az az-instagram` · `az az-linkedin` · `az az-medium` · `az az-reddit` · `az az-slack` · `az az-twitch` · `az az-whatsapp` · `az az-x-brand` · `az az-youtube` · `az-color az-angular` · `az-color az-astro` · `az-color az-flutter` · `az-color az-nextjs` · `az-color az-nuxt` · `az-color az-react` · `az-color az-redwood` · `az-color az-solidjs` · `az-color az-svelte` · `az-color az-vue` · `az-color az-claude` · `az-color az-deepseek` · `az-color az-gemini` · `az-color az-grok` · `az-color az-meta` · `az-color az-microsoft-copilot` · `az-color az-mistral` · `az-color az-openai` · `az-color az-perplexity` · `az-color az-qwen` · `az-color az-azure-devops` · `az-color az-bitbucket` · `az-color az-cursor` · `az-color az-gitlab` · `az-color az-terraform` · `az-color az-windsurf` · `az-color az-graphql` · `az-color az-html` · `az-color az-javascript` · `az-color az-kotlin` · `az-color az-typescript` · `az-color az-discord` · `az-color az-google` · `az-color az-x-brand` · `az-color az-youtube`
 
-Descriptions and keywords: foundations/icons.md.
+Descriptions, groups and keywords: foundations/icons.md.
 
 ---
 
@@ -6874,7 +6874,7 @@ What each part takes: [blocks/detail/resource-detail.md](blocks/detail/resource-
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
-- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
+- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`az az-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
 
 ## Data
 
@@ -10671,14 +10671,14 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
   const last = ref('')
 
   const items = [
-    { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
-    { id: 'format', label: 'Format document', icon: 'ai ai-align-left' },
-    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-move-horizontal' },
+    { id: 'copy', label: 'Copy code', icon: 'az az-copy' },
+    { id: 'format', label: 'Format document', icon: 'az az-align-left' },
+    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'az az-move-horizontal' },
     {
       id: 'download',
       type: 'menu',
       label: 'Download',
-      icon: 'ai ai-download',
+      icon: 'az az-download',
       options: [
         { id: 'download-js', label: 'Download as .js' },
         { id: 'download-zip', label: 'Download as .zip' }
@@ -10940,7 +10940,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 ## Do
 
 - Use at most one per view; the glow loses its meaning when it repeats.
-- Keep the label short and verb-led, and pair it with a leading `icon` (for example `ai ai-sparkles`).
+- Keep the label short and verb-led, and pair it with a leading `icon` (for example `az az-sparkles`).
 - It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
 - `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
 - The glow stops under reduced motion, so never use it to convey state.
@@ -11007,7 +11007,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
   <HighlightButton
     size="large"
     label="Ask Azion"
-    icon="ai ai-sparkles"
+    icon="az az-sparkles"
   />
 </template>
 ```
@@ -11110,7 +11110,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
   <IconButton
     variant="primary"
     size="large"
-    icon="ai ai-plus"
+    icon="az az-plus"
     aria-label="Add"
   />
 </template>
@@ -11327,9 +11327,9 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
-    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },
-    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'az az-refresh' },
+    { label: 'Duplicate', value: 'duplicate', icon: 'az az-copy' },
+    { label: 'Delete', value: 'delete', icon: 'az az-trash', disabled: true }
   ]
 </script>
 
@@ -11338,7 +11338,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
     variant="primary"
     size="large"
     label="Save"
-    icon="ai ai-check"
+    icon="az az-check"
     :items="items"
   />
 </template>
@@ -11414,7 +11414,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 - Visual states per segment: `default`, `focus-visible`, `selected`, `disabled`.
 - Root: `role="radiogroup"`; consumer attributes (`id`, `aria-labelledby`, `aria-describedby`, …) land on it; `data-disabled` when `disabled`; `data-size` mirrors `size` (`small` | `medium` | `large`); `data-fluid` is present only when `fluid` is set.
-- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`ai ai-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
+- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`az az-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
@@ -11621,7 +11621,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
           <ArtifactPreview
             title="top-orders.sql"
             meta="SQL"
-            icon="ai ai-code"
+            icon="az az-code"
             openable
             @open="show"
           />
@@ -11703,7 +11703,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 | `title` | `string` | `—` | true | File name or title of what was generated (`cache-rules.json`). |
 | `description` | `string` | `''` | false | One line on what it is or does. |
 | `meta` | `string` | `''` | false | Facts that help recognize it: size, rows, language (`2.4 KB · JSON`). |
-| `icon` | `string` | `'ai ai-file'` | false | Icon class for the file type. |
+| `icon` | `string` | `'az az-file'` | false | Icon class for the file type. |
 | `copyValue` | `string` | `''` | false | Text the Copy control puts on the clipboard. Empty hides Copy. |
 | `downloadHref` | `string` | `''` | false | URL of the file for the Download control. Empty hides Download. |
 | `openable` | `boolean` | `false` | false | Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview). |
@@ -11770,7 +11770,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
       title="cache-rules.json"
       description="Cache settings for storefront"
       meta="1 KB · JSON"
-      icon="ai ai-code"
+      icon="az az-code"
       :copy-value="rules"
       openable
       @open="opened = true"
@@ -12469,8 +12469,8 @@ Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed
 ## States
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`.
-- `ready`: Submit (primary `IconButton`, `ai ai-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
-- `pending` / `streaming`: Stop (secondary `IconButton`, `ai ai-stop`) replaces Submit; Enter does nothing.
+- `ready`: Submit (primary `IconButton`, `az az-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
+- `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 
 ## Accessibility
@@ -12745,7 +12745,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
             :value="versions[active]"
           />
           <IconButton
-            icon="ai ai-refresh"
+            icon="az az-refresh"
             aria-label="Regenerate response"
             variant="ghost"
             size="small"
@@ -14860,7 +14860,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 | --- | --- |
 | Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset) | `tabs.length > 1` |
 | Filename bar (`FileName`, 40 px) | active tab has `fileName` |
-| Label header (40 px, `ai ai-code` / `ai ai-align-left` + label) | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
+| Label header (40 px, `az az-code` / `az az-align-left` + label) | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
 | Diff gutter (`+`/`-` + 8 px spacer on unchanged lines) | active tab `lineChanges.length > 0`, or the active tab has an `original` |
 | Unified diff (removed lines from `original` before the added lines of `code` in each change, numbered on their own side) | active tab has an `original` and `diffView="unified"` |
 | Split diff (two columns, Original and Modified, rows aligned, a change paired line for line) | active tab has an `original` and `diffView="split"` |
@@ -15483,7 +15483,7 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
 - `accordion-item/accordion-item.vue` — One disclosure row.
   - Props: `value: string` (**required** — unique identifier used by the open-state model), `disabled?: boolean` (default `false` — prevents this item from toggling; from the Figma component description).
   - Slot: `default` — the item's `Accordion.Trigger` and `Accordion.Content`.
-- `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `ai ai-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded`…
+- `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `az az-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded`…
   - Props: `headingLevel?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{headingLevel}>` for correct document outline).
   - Slot: `default` — header title content.
 - `accordion-content/accordion-content.vue` — The collapsible panel.
@@ -15595,7 +15595,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 - Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
-- Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `ai ai-user`).
+- Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
 - `size` maps to 24 / 32 / 48 px with `medium` as the default; `variant` is `circle` (default) or `square`.
 
@@ -15618,7 +15618,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | `src` | `string` | `''` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
 | `alt` | `string` | `''` | false | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
 | `label` | `string` | `''` | false | Initials shown when no image (normalized to two uppercase characters). |
-| `icon` | `string` | `'ai ai-user'` | false | Icon class for the fallback when no image or label (Azion icon class). |
+| `icon` | `string` | `'az az-user'` | false | Icon class for the fallback when no image or label (Azion icon class). |
 | `variant` | `AvatarVariant` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
 | `pattern` | `AvatarPattern` | `undefined` | false | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
@@ -15996,7 +15996,7 @@ The frame is static apart from its resize handles.
             <CardGrid.Cell variant="canvas">
               <FeatureItem
                 :heading-level="3"
-                icon="ai ai-edge-application"
+                icon="az az-applications"
                 title="Applications"
                 description="Deploy web apps and APIs close to every user, with no servers to provision."
               />
@@ -16004,7 +16004,7 @@ The frame is static apart from its resize handles.
             <CardGrid.Cell variant="canvas">
               <FeatureItem
                 :heading-level="3"
-                icon="ai ai-edge-firewall"
+                icon="az az-firewall"
                 title="Firewall"
                 description="Stop DDoS, bots and injection attacks before a request reaches your origin."
               />
@@ -16012,7 +16012,7 @@ The frame is static apart from its resize handles.
             <CardGrid.Cell variant="canvas">
               <FeatureItem
                 :heading-level="3"
-                icon="ai ai-tiered-cache"
+                icon="az az-tiered-cache"
                 title="Tiered Cache"
                 description="Answer repeat requests from the nearest location and offload your origin."
               />
@@ -16878,7 +16878,7 @@ name.
 
 ## Don’t
 
-- A single glyph is enough → use an icon from `@aziontech/icons` (`<i class="ai ai-…">`).
+- A single glyph is enough → use an icon from `@aziontech/icons` (`<i class="az az-…">`).
 - The artwork is a brand mark (a client logo, a framework mark) → those are brand assets, not illustrations.
 - The whole component is "no data here, with a title and an action" → use `empty-state`, which already owns that layout and may embed an `Illustration`.
 - The graphic is a live data visualization → that is a chart, not an illustration.
@@ -17035,7 +17035,7 @@ name.
     <IntegrationCard
       title="Request Signer"
       vendor="Acme Inc."
-      logo="ai ai-key"
+      logo="az az-key"
       description="Sign every request at the edge with a rotating key, so the origin only answers traffic that passed through."
       :badges="[{ label: 'Firewall' }]"
       @select="opened = 'Request Signer'"
@@ -17893,7 +17893,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 # Plan Feature List
 
-> Use PlanFeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList. The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `ai ai-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
+> Use PlanFeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList. The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `az az-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
 
 - Import: `import PlanFeatureList from '@aziontech/webkit/plan-feature-list'`
 - Category: content · Surface: app · Structure: monolithic
@@ -18783,7 +18783,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
           <Hotspot hotspot-id="new-service">
             <Button
               label="New service"
-              icon="ai ai-plus"
+              icon="az az-plus"
               size="medium"
             />
           </Hotspot>
@@ -19387,7 +19387,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
 - Reorderable rows (`reorderable`): a 40 px leading column holds a grip `IconButton` per row (`data-reorder-handle`), frozen at the start edge when other columns are; the row being dragged sets `data-dragging` (dashed accent outline, 60% opacity) and the row under the pointer `data-drop="before" | "after"` (a 2 px accent line on that edge). While a sort is applied every grip is disabled and its description says to clear the sort.
-- Tree rows (`getSubRows`): the grid element is `role="treegrid"` and sets `data-tree`. Each body row carries `aria-level` (1-based depth), `aria-setsize` and `aria-posinset` among its siblings, `aria-expanded` when it has children, and `data-depth`; the principal cell starts with one `aria-hidden` gutter (`data-tree-gutter`) `calc(var(--spacing-md) * depth + var(--size-7))` wide, which holds the 28 px chevron toggle (`__expand-toggle`, `ai-chevron-right` mirrored in RTL, `ai-chevron-down` when open) at its end on rows with children, so the content of every row at one depth starts on one column and each level shifts it by exactly one step. Rows use a roving tab stop (one row has `tabindex="0"`, the rest `-1`) and draw an inset `var(--ring-color)` outline on `focus-visible`.
+- Tree rows (`getSubRows`): the grid element is `role="treegrid"` and sets `data-tree`. Each body row carries `aria-level` (1-based depth), `aria-setsize` and `aria-posinset` among its siblings, `aria-expanded` when it has children, and `data-depth`; the principal cell starts with one `aria-hidden` gutter (`data-tree-gutter`) `calc(var(--spacing-md) * depth + var(--size-7))` wide, which holds the 28 px chevron toggle (`__expand-toggle`, `az-chevron-right` mirrored in RTL, `az-chevron-down` when open) at its end on rows with children, so the content of every row at one depth starts on one column and each level shifts it by exactly one step. Rows use a roving tab stop (one row has `tabindex="0"`, the rest `-1`) and draw an inset `var(--ring-color)` outline on `focus-visible`.
 
 ## Accessibility
 
@@ -19466,11 +19466,11 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
   const rowActionGroups = [
     [
-      { value: 'view', label: 'View details', icon: 'ai ai-eye' },
-      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },
-      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }
+      { value: 'view', label: 'View details', icon: 'az az-eye' },
+      { value: 'edit', label: 'Edit', icon: 'az az-pencil' },
+      { value: 'duplicate', label: 'Duplicate', icon: 'az az-copy' }
     ],
-    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]
+    [{ value: 'delete', label: 'Delete', icon: 'az az-trash' }]
   ]
 
   const statusSeverity = (status) =>
@@ -19509,7 +19509,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
       <DropdownMenuRoot @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
         <DropdownMenuTrigger>
           <IconButton
-            icon="ai ai-ellipsis-vertical"
+            icon="az az-ellipsis-vertical"
             aria-label="Row actions"
             variant="ghost"
             size="small"
@@ -20048,7 +20048,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 - Visual states: `default`, `hover`, `active`, `focus-visible`, current page (`active` prop), `disabled`.
 - Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `type` is `more` (inert: not focusable, no hover / active layer, no `active` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
-- `data-type` mirrors `type` (`previous` | `next` | `number` | `more`). `previous` renders `ai ai-chevron-left`, `next` renders `ai ai-chevron-right`, `more` renders `ai ai-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `data-type` mirrors `type` (`previous` | `next` | `number` | `more`). `previous` renders `az az-chevron-left`, `next` renders `az az-chevron-right`, `more` renders `az az-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
 - `data-active` is present when `active` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the type's own surface.
@@ -20448,8 +20448,8 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.
 - Mark the last node of each branch `terminal` so no connector leaves it.
 - Give every unbound slot a message that says what happens without it.
-- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`ai ai-external-link`), as every resource name in the console does.
-- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`ai ai-plus`, `variant="outline"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
+- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`az az-external-link`), as every resource name in the console does.
+- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`az az-plus`, `variant="outline"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
 
 ## Don’t
 
@@ -20531,7 +20531,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'domains',
           type: 'Domains',
-          icon: 'ai ai-globe',
+          icon: 'az az-globe',
           name: 'shop.example.com',
           status: '2 domains',
           severity: 'info',
@@ -20559,7 +20559,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'project',
           type: 'Project',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           name: 'web-app',
           status: 'Live',
           severity: 'success',
@@ -20578,7 +20578,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'policy',
           type: 'Policy',
-          icon: 'ai ai-shield',
+          icon: 'az az-shield',
           name: 'edge-guard',
           status: 'Active',
           severity: 'success',
@@ -20598,7 +20598,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'service',
           type: 'Service',
-          icon: 'ai ai-server',
+          icon: 'az az-server',
           name: 'web-app',
           status: 'Active',
           severity: 'success',
@@ -20608,7 +20608,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'error-page',
           type: 'Error page',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           terminal: true,
           bindable: true,
           bindOptions: errorPages,
@@ -20623,7 +20623,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'cache-static',
           type: 'Cache rule',
-          icon: 'ai ai-bolt',
+          icon: 'az az-bolt',
           name: 'static-assets',
           status: 'Active',
           severity: 'success',
@@ -20632,7 +20632,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'cache-api',
           type: 'Cache rule',
-          icon: 'ai ai-bolt',
+          icon: 'az az-bolt',
           name: 'api-bypass',
           status: 'Active',
           severity: 'success',
@@ -20647,7 +20647,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'integration',
           type: 'Integration',
-          icon: 'ai ai-link',
+          icon: 'az az-link',
           name: 'web-app-origin',
           status: 'Active',
           severity: 'success',
@@ -20664,7 +20664,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'storage',
           type: 'Storage',
-          icon: 'ai ai-inbox',
+          icon: 'az az-inbox',
           name: 'web-app-assets',
           status: 'Private',
           severity: 'neutral',
@@ -20695,7 +20695,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
             content="Add domain"
           >
             <IconButton
-              icon="ai ai-plus"
+              icon="az az-plus"
               variant="outline"
               size="small"
               aria-label="Add domain"
@@ -20999,23 +20999,23 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
     {
       id: 'assets',
       label: 'assets',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
         {
           id: 'assets/images',
           label: 'images',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           children: [
             {
               id: 'assets/images/hero.webp',
               label: 'hero.webp',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '248 KB'
             },
             {
               id: 'assets/images/logo.svg',
               label: 'logo.svg',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '12 KB'
             }
           ]
@@ -21023,12 +21023,12 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'assets/fonts',
           label: 'fonts',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           children: [
             {
               id: 'assets/fonts/rubik.woff2',
               label: 'rubik.woff2',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '64 KB'
             }
           ]
@@ -21036,7 +21036,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
         {
           id: 'assets/styles.css',
           label: 'styles.css',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '18 KB'
         }
       ]
@@ -21044,18 +21044,18 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
     {
       id: 'reports',
       label: 'reports',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
         {
           id: 'reports/2026-10.csv',
           label: '2026-10.csv',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '1.2 MB'
         },
         {
           id: 'reports/2026-11.csv',
           label: '2026-11.csv',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '840 KB'
         }
       ]
@@ -21063,13 +21063,13 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
     {
       id: 'index.html',
       label: 'index.html',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: '4 KB'
     },
     {
       id: 'robots.txt',
       label: 'robots.txt',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: '1 KB'
     }
   ]
@@ -21240,7 +21240,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `—` | true | Primary heading announcing the empty resource. |
 | `description` | `string` | `''` | false | Supporting body copy below the title. |
-| `icon` | `string` | `''` | false | Azion icon class for the standardized adornment (e.g. `ai ai-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. |
+| `icon` | `string` | `''` | false | Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
 | `bordered` | `boolean` | `false` | false | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background. |
 
@@ -21286,7 +21286,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
   <EmptyState
     title="No resource yet"
     description="Get started by creating your first resource."
-    icon="ai ai-inbox"
+    icon="az az-inbox"
   >
     <template #actions>
       <div class="flex gap-(--spacing-3)">
@@ -21301,7 +21301,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
       </div>
       <Link
         label="Docs"
-        icon="ai ai-arrow-right"
+        icon="az az-arrow-right"
         size="medium"
         href="#"
       />
@@ -21931,7 +21931,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`).
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`).
 - `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`variant="ghost"`, `size="small"`).
-- `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`ai ai-x`, `variant="ghost"`, `size="small"`, `aria-label="Close notification"`).
+- `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`az az-x`, `variant="ghost"`, `size="small"`, `aria-label="Close notification"`).
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
@@ -22133,7 +22133,7 @@ The imperative API is backed by a small reactive store composable, declared here
       label="Start upload"
       variant="secondary"
       size="medium"
-      icon="ai ai-upload"
+      icon="az az-upload"
       @click="start"
     />
     <UploadProgress
@@ -22494,7 +22494,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 - Visible focus: both the clickable root (when `clickable`) and the remove button use `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: when `clickable` or `selectable` (and not `disabled`), the root is focusable (`tabindex="0"`) and `Enter` / `Space` **dispatch a real DOM click** on the root (`preventDefault`ed first, so `Space` does not scroll), which in turn emits `click` (and, when `selectable`, toggles `selected`). Dispatching rather than emitting directly is what lets a chip serve as an overlay trigger — `Popover.Trigger` and friends open on the DOM click that bubbles out of their child, so a chip that only emitted a Vue event would work with the mouse and do nothing from the keyboard. When `removable`, `Tab` reaches the remove button and `Enter` / `Space` activate it and emit `remove`. Keystrokes that originate on the remove button do not bubble to the root activation (the handler ignores events whose `target` is not the root itself). When a chip is both interactive and `removable`, the button role, `tabindex`, `aria-pressed` and the `Enter` / `Space` handler move from the root to an inner body element (`data-slot="chip-body"`, testid `<testid>__body`) that holds the label, and the remove button sits beside it, not inside it: a `role="button"` with a `<button>` inside is `nested-interactive`, and screen readers flatten the inner control away. The root keeps the click handler and draws the focus ring when the body is focused (`has-[[data-slot=chip-body]:focus-visible]`). Tab order is body, then remove button.
-- ARIA: when neither `clickable` nor `selectable`, the root is a non-interactive `<span>` container; when either is set, it is `role="button"` with `tabindex="0"`. A `selectable` chip is a toggle button: `aria-pressed="true|false"` mirrors the `selected` model and flips on every activation, so the state is announced, not only painted. When `disabled`, the root carries `aria-disabled="true"` (interactive or not) and an interactive root drops `tabindex`; the remove control is a native disabled `<button>`. The remove control is a real `<button type="button">`; the `ai ai-x` glyph is `aria-hidden="true"`. Its `aria-label` and its tooltip text are **the same derived string** — `Remove <label>` when `label` is set, `Remove` otherwise — so what is shown and what is announced cannot drift.
+- ARIA: when neither `clickable` nor `selectable`, the root is a non-interactive `<span>` container; when either is set, it is `role="button"` with `tabindex="0"`. A `selectable` chip is a toggle button: `aria-pressed="true|false"` mirrors the `selected` model and flips on every activation, so the state is announced, not only painted. When `disabled`, the root carries `aria-disabled="true"` (interactive or not) and an interactive root drops `tabindex`; the remove control is a native disabled `<button>`. The remove control is a real `<button type="button">`; the `az az-x` glyph is `aria-hidden="true"`. Its `aria-label` and its tooltip text are **the same derived string** — `Remove <label>` when `label` is set, `Remove` otherwise — so what is shown and what is announced cannot drift.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
 - `motion-reduce:transition-none` on every transition the chip declares (variant/border colour, remove-button colour). The chip declares no dismiss animation at all, so there is nothing to suppress there.
 - Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer.
@@ -23109,7 +23109,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 | `directories` | `boolean` | `false` | false | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk. |
 | `disabled` | `boolean` | `false` | false | Ignores drags and drops: no active state, no events. |
 | `invalid` | `boolean` | `false` | false | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. |
-| `icon` | `string` | `''` | false | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`ai ai-cloud-upload`). |
+| `icon` | `string` | `''` | false | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`az az-cloud-upload`). |
 
 ## Events
 
@@ -23342,7 +23342,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 # Hint
 
-> Small info affordance — a muted `ai ai-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.
+> Small info affordance — a muted `az az-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.
 
 - Import: `import Hint from '@aziontech/webkit/hint'`
 - Category: input · Surface: app · Structure: monolithic
@@ -23782,7 +23782,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Keyboard map (`searchable` field): typing filters and opens the panel; `ArrowDown` opens and focuses the first visible option, `ArrowUp` the last; `Enter` activates the `Add "…"` row when it is offered, else opens the panel; `Backspace` in an empty field removes the last selected value; `Escape` closes the panel, then clears the text; `Tab` closes and moves on. From the list, `Escape`, `Tab` and `Shift+Tab` return focus to the field instead of a trigger button.
 - Chips: each chip's remove button is in the tab order and named `Remove <label>` (from `Chip`); removing one never opens the panel. The `+N more` chip is plain text.
 - Keyboard map (open panel): opening focuses the search field when there is one, else the first selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move between enabled options and wrap; `Home`/`End` jump to first/last enabled; `Enter`/`Space` toggles the focused option and keeps the panel open; typing a printable character moves focus to the next enabled option whose label starts with the typed text (characters typed within 500 ms add up; ignored while the search field has focus); `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `multi-select.test.ts` › keyboard map (spec).
-- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the list. The teleported content is a plain panel holding the optional search field, the list and the optional footer; the list (not the panel) carries `role="listbox"`, so the search field sits outside it, and is named by the root's `aria-label`, else by the root's `aria-labelledby`, else by the enclosing `Field` label, else by the trigger (which always has an `id`). The list uses `role="listbox"` with `aria-multiselectable="true"`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`ai ai-chevron-down`, `ai-heart`, etc.) are `aria-hidden="true"`. The checkbox indicator is decorative for screen readers (the `role="option"` + `aria-selected` carries the semantic); the inner `Checkbox` sits in an `inert`, `aria-hidden="true"` wrapper, so the option has no focusable descendant.
+- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the list. The teleported content is a plain panel holding the optional search field, the list and the optional footer; the list (not the panel) carries `role="listbox"`, so the search field sits outside it, and is named by the root's `aria-label`, else by the root's `aria-labelledby`, else by the enclosing `Field` label, else by the trigger (which always has an `id`). The list uses `role="listbox"` with `aria-multiselectable="true"`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`az az-chevron-down`, `az-heart`, etc.) are `aria-hidden="true"`. The checkbox indicator is decorative for screen readers (the `role="option"` + `aria-selected` carries the semantic); the inner `Checkbox` sits in an `inert`, `aria-hidden="true"` wrapper, so the option has no focusable descendant.
 - Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`), so inside a `Popover`, `Dialog` or `Drawer` an option click or `Escape` in the list closes only the list; the host overlay stays open.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - With `variant="chips"` or `searchable`, the `combobox` role, `id`, name and `aria-*` move from the field to its control (the `input` gets `aria-autocomplete="list"`); the field itself is a plain container.
@@ -24672,7 +24672,7 @@ packages/webkit/src/components/input/radio-group/
 
 # Select
 
-> Select control for choosing exactly one option from a list; several values are `multi-select`. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. A selected option shows a trailing check (`ai ai-check`) (the shadcn pattern), optionally a leading slot/icon and a trailing tag. The trigger shows the selected option's label (each option records its text, as Radix `SelectValue` does), not its raw value. Search and "Create new" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
+> Select control for choosing exactly one option from a list; several values are `multi-select`. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. A selected option shows a trailing check (`az az-check`) (the shadcn pattern), optionally a leading slot/icon and a trailing tag. The trigger shows the selected option's label (each option records its text, as Radix `SelectValue` does), not its raw value. Search and "Create new" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
 
 - Import: `import SelectRoot from '@aziontech/webkit/select-root'`
 - Compound import (dot notation, not tree-shakeable): `import Select from '@aziontech/webkit/select'`
@@ -24773,7 +24773,7 @@ packages/webkit/src/components/input/radio-group/
 - Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
 - Keyboard map (closed trigger): `Enter`, `Space`, `ArrowDown` and `ArrowUp` open the list (focus lands as described below); `Home` opens it on the first enabled option and `End` on the last; typing a printable character opens it on the first enabled option whose label starts with that character (with a search field, focus goes to the search field instead). Clicking the trigger while the list is open closes it. Tests: `select.test.ts` › Select keyboard and naming (APG select-only combobox).
 - Keyboard map (open panel): opening focuses the search field when there is one, else the selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move the active option and wrap; `Home`/`End` jump to first/last; `Enter`/`Space` select, close and return focus to the trigger; typing a printable character moves focus to the next enabled option whose label starts with the typed text (characters typed within 500 ms add up; ignored while the search field has focus); `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `select.test.ts` › keyboard map (spec).
-- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the list. The teleported content is a plain panel holding the optional search field, the list and the optional footer; the list (not the panel) carries `role="listbox"`, so the search field sits outside it, and is named by the root's `aria-label`, else by the root's `aria-labelledby`, else by the enclosing `Field` label, else by the trigger (which always has an `id`). The list uses `role="listbox"` (single-select, no `aria-multiselectable`). Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`ai ai-chevron-down`, `ai-heart`, etc.) are `aria-hidden="true"`.
+- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the list. The teleported content is a plain panel holding the optional search field, the list and the optional footer; the list (not the panel) carries `role="listbox"`, so the search field sits outside it, and is named by the root's `aria-label`, else by the root's `aria-labelledby`, else by the enclosing `Field` label, else by the trigger (which always has an `id`). The list uses `role="listbox"` (single-select, no `aria-multiselectable`). Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`az az-chevron-down`, `az-heart`, etc.) are `aria-hidden="true"`.
 - Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`), so inside a `Popover`, `Dialog` or `Drawer` an option click or `Escape` in the list closes only the list; the host overlay stays open.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
@@ -24947,7 +24947,7 @@ packages/webkit/src/components/input/radio-group/
 
 # Switch
 
-> Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `ai-lock` / `ai-lock-open` icon mirroring the toggled state; both glyphs render and `group-data-[checked]:` shows the right one, so no class is chosen in script). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
+> Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `az-lock` / `az-lock-open` icon mirroring the toggled state; both glyphs render and `group-data-[checked]:` shows the right one, so no class is chosen in script). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
 
 - Import: `import Switch from '@aziontech/webkit/switch'`
 - Category: input · Surface: app · Structure: monolithic
@@ -25599,18 +25599,18 @@ Unbound, each one keeps its own local state.
             <SidebarMenuGroup>
               <SidebarMenuItem
                 label="Home"
-                icon="ai ai-home"
+                icon="az az-home"
                 href="#"
               />
               <SidebarMenuItem
                 label="Services"
-                icon="ai ai-edge-application"
+                icon="az az-applications"
                 href="#"
                 active
               />
               <SidebarMenuItem
                 label="Variables"
-                icon="ai ai-variables"
+                icon="az az-variables"
                 href="#"
               />
             </SidebarMenuGroup>
@@ -25625,7 +25625,7 @@ Unbound, each one keeps its own local state.
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
-                  icon="ai ai-menu"
+                  icon="az az-menu"
                   aria-label="Open navigation"
                   variant="outline"
                   size="medium"
@@ -25640,7 +25640,7 @@ Unbound, each one keeps its own local state.
                 @open="searchOpen = true"
               />
               <IconButton
-                icon="ai ai-circle-help"
+                icon="az az-circle-help"
                 aria-label="Help"
                 variant="outline"
                 size="medium"
@@ -25896,8 +25896,8 @@ packages/webkit/src/components/layout/console-layout/
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' }
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' }
       ]
     },
     {
@@ -25906,10 +25906,10 @@ packages/webkit/src/components/layout/console-layout/
         {
           id: 'applications',
           label: 'Applications',
-          icon: 'ai ai-edge-application',
+          icon: 'az az-applications',
           href: '/applications'
         },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
       ]
     },
     {
@@ -25918,7 +25918,7 @@ packages/webkit/src/components/layout/console-layout/
         {
           id: 'sql-database',
           label: 'SQL Database',
-          icon: 'ai ai-edge-sql',
+          icon: 'az az-sql-database',
           href: '/sql-database',
           tagValue: 'Preview'
         }
@@ -25930,7 +25930,7 @@ packages/webkit/src/components/layout/console-layout/
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'ai ai-settings',
+          icon: 'az az-settings',
           type: 'drill',
           groups: [
             {
@@ -25969,7 +25969,7 @@ packages/webkit/src/components/layout/console-layout/
         side="bottom"
       >
         <IconButton
-          icon="ai ai-circle-plus"
+          icon="az az-circle-plus"
           variant="primary"
           size="medium"
           aria-label="Create"
@@ -25980,12 +25980,12 @@ packages/webkit/src/components/layout/console-layout/
           label="Create"
           variant="primary"
           size="medium"
-          icon="ai ai-circle-plus"
+          icon="az az-circle-plus"
         />
         <HighlightButton
           label="Agent"
           size="medium"
-          icon="ai ai-ask-azion"
+          icon="az az-ask-azion"
         />
       </template>
     </template>
@@ -26389,7 +26389,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-github"
+        icon="az az-github"
         aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
         target="_blank"
@@ -26397,7 +26397,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-linkedin"
+        icon="az az-linkedin"
         aria-label="Azion on LinkedIn"
         href="https://www.linkedin.com/company/aziontech"
         target="_blank"
@@ -26405,7 +26405,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-youtube"
+        icon="az az-youtube"
         aria-label="Azion on YouTube"
         href="https://www.youtube.com/aziontech"
         target="_blank"
@@ -26413,7 +26413,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-x-brand"
+        icon="az az-x-brand"
         aria-label="Azion on X"
         href="https://x.com/aziontech"
         target="_blank"
@@ -26421,7 +26421,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-instagram"
+        icon="az az-instagram"
         aria-label="Azion on Instagram"
         href="https://www.instagram.com/aziontech"
         target="_blank"
@@ -26429,7 +26429,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-discord"
+        icon="az az-discord"
         aria-label="Azion on Discord"
         href="https://discord.gg/azion"
         target="_blank"
@@ -26437,7 +26437,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-reddit"
+        icon="az az-reddit"
         aria-label="Azion on Reddit"
         href="https://www.reddit.com/r/aziontech"
         target="_blank"
@@ -26579,7 +26579,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
     <template #actions>
       <Button
         label="Documentation"
-        icon="ai ai-book"
+        icon="az az-book"
         variant="outline"
         size="medium"
         href="https://example.com/docs/resources"
@@ -26587,7 +26587,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       />
       <Button
         label="Create Resource"
-        icon="ai ai-plus"
+        icon="az az-plus"
         variant="outline"
         size="medium"
       />
@@ -27304,7 +27304,7 @@ context, so a consumer never wires one part to the other.
 | `hint` | `string` | `''` | false | One-sentence guidance shown in a Hint glyph beside the title. |
 | `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
 | `collapsible` | `boolean` | `false` | false | Turns the title into a disclosure that folds the band body. |
-| `icon` | `string` | `''` | false | Glyph shown before the title of a collapsible band (e.g. `ai ai-settings`). |
+| `icon` | `string` | `''` | false | Glyph shown before the title of a collapsible band (e.g. `az az-settings`). |
 | `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Slots
@@ -27669,7 +27669,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <CommandItem value="nav:applications">
                   <template #leading
                     ><i
-                      class="ai ai-edge-application"
+                      class="az az-applications"
                       aria-hidden="true"
                   /></template>
                   Applications
@@ -27677,7 +27677,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <CommandItem value="nav:variables">
                   <template #leading
                     ><i
-                      class="ai ai-variables"
+                      class="az az-variables"
                       aria-hidden="true"
                   /></template>
                   Variables
@@ -27690,7 +27690,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <CommandItem value="cmd:settings">
                   <template #leading
                     ><i
-                      class="ai ai-settings"
+                      class="az az-settings"
                       aria-hidden="true"
                   /></template>
                   Account Settings
@@ -27707,20 +27707,20 @@ with `defineModel`, so their `update:*` events are not hand-declared.
         <SidebarMenuGroup>
           <SidebarMenuItem
             label="Home"
-            icon="ai ai-home"
+            icon="az az-home"
             href="/"
             active
           />
           <SidebarMenuItem
             label="Marketplace"
-            icon="ai ai-marketplace"
+            icon="az az-marketplace"
             href="/marketplace"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Build">
           <SidebarMenuItem
             label="Applications"
-            icon="ai ai-edge-application"
+            icon="az az-applications"
             href="/applications"
           />
           <SidebarMenuSub default-open>
@@ -27741,19 +27741,19 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           </SidebarMenuSub>
           <SidebarMenuItem
             label="Variables"
-            icon="ai ai-variables"
+            icon="az az-variables"
             href="/variables"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Store">
           <SidebarMenuItem
             label="Object Storage"
-            icon="ai ai-edge-storage"
+            icon="az az-object-storage"
             href="/object-storage"
           />
           <SidebarMenuItem
             label="SQL Database"
-            icon="ai ai-edge-sql"
+            icon="az az-sql-database"
             href="/sql-database"
             tag-value="Preview"
             tag-variant="primary"
@@ -27763,7 +27763,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Settings"
-              icon="ai ai-settings"
+              icon="az az-settings"
               type="drill"
             />
             <SidebarMenuSubContent>
@@ -27804,7 +27804,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             >
               <DropdownMenuTrigger>
                 <IconButton
-                  icon="ai ai-ellipsis-vertical"
+                  icon="az az-ellipsis-vertical"
                   aria-label="Account menu"
                   variant="outline"
                   size="small"
@@ -27835,7 +27835,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 >
                   <template #trailing
                     ><i
-                      class="ai ai-log-out"
+                      class="az az-log-out"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuItem>
@@ -27988,7 +27988,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 - Set `active` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
 - Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.
-- Use `show-icon` together with `icon` (an Azion icon class; empty shows `ai ai-box`); `icon` alone renders nothing.
+- Use `show-icon` together with `icon` (an Azion icon class; empty shows `az az-box`); `icon` alone renders nothing.
 - `disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
 
 ## Don’t
@@ -28010,7 +28010,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | `href` | `string` | `''` | false | Destination when the segment is a link (ignored when `active` is true); empty renders `#`. |
 | `active` | `boolean` | `false` | false | Marks the current page (last segment); renders as span with `aria-current="page"`. |
 | `showIcon` | `boolean` | `false` | false | When true, renders a leading icon before the label. |
-| `icon` | `string` | `''` | false | Azion icon class for the leading icon when `showIcon` is true; empty shows `ai ai-box`. |
+| `icon` | `string` | `''` | false | Azion icon class for the leading icon when `showIcon` is true; empty shows `az az-box`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 ## Events
@@ -28318,7 +28318,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
     - `command: string` default `''` — keyboard-shortcut hint rendered on the trailing side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
-    - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `ai ai-check`.
+    - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
     - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
   - Events: _none_ (root emits `select`).
@@ -28388,7 +28388,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"
-        icon="ai ai-plus"
+        icon="az az-plus"
         aria-label="Open menu"
       />
     </DropdownMenuTrigger>
@@ -28445,7 +28445,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 - Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).
 - Pass the label as the default slot or the `label` prop; the slot wins when both are set.
-- `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `ai ai-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
+- `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
 - An icon is shown when `icon` is set.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
 - `disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
@@ -28468,7 +28468,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | `label` | `string` | `''` | false | Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `icon` | `string` | `''` | false | Azion icon class for the trailing icon; set shows it. Empty shows `ai ai-external-link` only when `target` is `_blank`. |
+| `icon` | `string` | `''` | false | Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`. |
 | `href` | `string` | `''` | false | Destination URL for the anchor. Empty renders `#`. |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
 
@@ -28706,7 +28706,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
                       close-on-click
                     >
                       <template #icon>
-                        <i class="ai ai-edge-functions" />
+                        <i class="az az-functions" />
                       </template>
                       Functions
                     </NavigationMenu.Item>
@@ -28717,7 +28717,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
                       close-on-click
                     >
                       <template #icon>
-                        <i class="ai ai-tiered-cache" />
+                        <i class="az az-tiered-cache" />
                       </template>
                       Cache
                     </NavigationMenu.Item>
@@ -29006,7 +29006,7 @@ element instead of three.
     - **Without one** the label is a `<button>` that **reveals the children too**, so the whole row does. There is no destination to protect, and leaving the arrow as the only live target is a 28 px box — **7 % of the row's area**, with the other 93 % doing nothing — which on a phone reads as a broken menu. This is the shape most containers have (a console module's settings drill, every one of the 28 container rows in the sample's docs tree), so it is the one that must be right by default.
     - `href` is the signal rather than a boolean because it is the same data every other row in this menu uses to say where it goes, and because it makes the behaviour fall out of the tree in data-driven mode: `SidebarMenuNode.href` already exists. It also follows [`root-element.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/root-element.md) — the root switches element on a **data** prop, never an `as`/`is` string.
     - The **link** is an `<a href>` carrying `sub.triggerId`, the icon column and the row's typography (`min-w-0 flex-1`, so it fills what the arrow leaves). A real anchor, so middle-click and open-in-new-tab work; the consumer intercepts a plain left click for SPA routing. It announces its activation through `click` and does **nothing else** — it neither expands nor pushes. **A disabled row drops its `href` outright** (an anchor with no destination is not a link) and takes `tabindex="-1"` + `aria-disabled`.
-    - The **arrow** is an `IconButton variant="ghost" size="small"` (28 px box, 12 px glyph), on every row. With `type="inline"` it is a rotating `ai ai-chevron-down` that toggles the sub; with `type="drill"` a static `ai ai-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--sidebar-menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
+    - The **arrow** is an `IconButton variant="ghost" size="small"` (28 px box, 12 px glyph), on every row. With `type="inline"` it is a rotating `az az-chevron-down` that toggles the sub; with `type="drill"` a static `az az-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--sidebar-menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
     - **`aria-expanded` / `aria-controls` sit on whichever control expands the children, and on exactly one of them.** With a link that is the arrow. Without one the **label** already reveals, so it carries them and the arrow becomes a **redundant pointer affordance** for the same action: `tabindex="-1"` + `aria-hidden="true"`, so it leaves the tab order and the accessibility tree rather than announcing a second control for one thing. One tab stop per row either way.
     - **The arrow keys work from the row's own control**: `ArrowRight` expands / pushes and `ArrowLeft` collapses, so a keyboard reader reaches the children without first tabbing to an arrow.
     - Focus returns, on pop, to **whichever control pushed the level** — the arrow when the label is a link, the label otherwise.
@@ -29143,36 +29143,36 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
       <SidebarMenuGroup label="User agents">
         <SidebarMenuItem
           label="End User"
-          icon="ai ai-user"
+          icon="az az-user"
           href="/end-user"
           active
         />
         <SidebarMenuItem
           label="Web Browser"
-          icon="ai ai-domains"
+          icon="az az-domains"
           href="/web-browser"
         />
         <SidebarMenuItem
           label="Device Groups"
-          icon="ai ai-mobile"
+          icon="az az-mobile"
           href="/device-groups"
         />
       </SidebarMenuGroup>
       <SidebarMenuGroup label="Azion platform">
         <SidebarMenuItem
           label="Applications"
-          icon="ai ai-layout-grid"
+          icon="az az-layout-grid"
           href="/applications"
         />
         <SidebarMenuItem
           label="Edge Firewall"
-          icon="ai ai-shield"
+          icon="az az-shield"
           href="/edge-firewall"
           tag-value="Beta"
         />
         <SidebarMenuItem
           label="Real-Time Metrics"
-          icon="ai ai-chart-bar"
+          icon="az az-chart-bar"
           href="/metrics"
         />
       </SidebarMenuGroup>
@@ -29295,8 +29295,8 @@ The five dot looks, and what each one renders:
 | --- | --- | --- | --- |
 | `data-status="pending"` | not reached, nothing known | outlined, muted, shows its number | muted track |
 | `data-active` | `value` equals the root's `v-model` | outlined in `--secondary` with a filled inner disc | muted track |
-| `data-completed` | the owner set `status="success"` | filled `--secondary`, `ai ai-check` glyph | filled `--secondary` |
-| `data-status="error"` | the owner set `status="error"` | filled `--danger`, `ai ai-triangle-alert` glyph | muted track |
+| `data-completed` | the owner set `status="success"` | filled `--secondary`, `az az-check` glyph | filled `--secondary` |
+| `data-status="error"` | the owner set `status="error"` | filled `--danger`, `az az-triangle-alert` glyph | muted track |
 | `data-status="running"` | the owner set `status="running"` | outlined in `--secondary`, `Spinner` in place of the number | muted track |
 
 `error` and `running` outrank active: a step that is both on screen and wrong must say it is wrong.

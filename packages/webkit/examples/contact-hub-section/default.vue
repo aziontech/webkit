@@ -6,14 +6,14 @@
   <ContactHubSection
     :lanes="[
       {
-        icon: 'ai ai-briefcase',
+        icon: 'az az-briefcase',
         title: 'Sales',
         description:
           'Discuss your requirements, get custom pricing, or see the platform running on your own workload.',
         action: { label: 'Talk to sales', href: '/contact/sales' }
       },
       {
-        icon: 'ai ai-headphones',
+        icon: 'az az-headphones',
         title: 'Support',
         description:
           'Log in with your Azion account to open a ticket. Our engineers pick it up 24/7 on paid support plans.',
@@ -27,7 +27,7 @@
     ]"
     :channels="[
       {
-        icon: 'ai ai-shield',
+        icon: 'az az-shield',
         title: 'Under a cyberattack?',
         description:
           'Get emergency mitigation for an attack in progress, even before you become a customer.',
@@ -35,14 +35,14 @@
         target: '_blank'
       },
       {
-        icon: 'ai ai-discord',
+        icon: 'az az-discord',
         title: 'Join the community',
         description: 'Ask developers and the Azion team on Discord. Open to everyone, on any plan.',
         href: 'https://discord.com/invite/pM8ANzztuB',
         target: '_blank'
       },
       {
-        icon: 'ai ai-book',
+        icon: 'az az-book',
         title: 'Read the docs',
         description: 'Guides, API reference, and troubleshooting for every Azion product.',
         href: 'https://www.azion.com/en/documentation/',

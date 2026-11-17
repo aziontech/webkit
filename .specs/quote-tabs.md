@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: cfc8d927a5d2c9c7348d8ec90e8cec2d31ecbd6cddd19a8a8ee26c23ba15bf3f
+checksum: 9858278cabe0e737211a52128968850bf9e9939dff27a6d9bbb2972d67d10c04
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
@@ -92,7 +92,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
       <Button
         variant="secondary"
         label="See success stories"
-        icon="ai ai-chevron-right"
+        icon="az az-chevron-right"
         icon-position="trailing"
         animated
         href="/success-stories"

@@ -162,7 +162,7 @@
       class="pointer-events-none absolute inset-x-0 bottom-(--spacing-sm) flex justify-center"
     >
       <IconButton
-        icon="ai ai-arrow-down"
+        icon="az az-arrow-down"
         variant="outline"
         size="medium"
         class="pointer-events-auto bg-(--bg-surface) shadow-(--shadow-sm)"

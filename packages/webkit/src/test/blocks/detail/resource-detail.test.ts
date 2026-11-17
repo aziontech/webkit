@@ -73,7 +73,7 @@ describe('detail/resource-detail', () => {
           createdAt: new Date(Date.UTC(2026, 10, 1)),
           createdBy: 'Jane Doe',
           framework: 'Astro',
-          frameworkIcon: 'ai-color ai-astro'
+          frameworkIcon: 'az-color az-astro'
         }
       }
     })

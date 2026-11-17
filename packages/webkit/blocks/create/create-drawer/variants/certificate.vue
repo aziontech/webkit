@@ -257,7 +257,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
       <div class="w-full md:w-fit">
         <Button
           label="Create Certificate"
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="primary"
           size="large"
           class="w-full"
@@ -329,7 +329,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
                     <Button
                       type="button"
                       label="Upload file"
-                      icon="ai ai-upload"
+                      icon="az az-upload"
                       variant="outline"
                       size="small"
                       @click="fileInputEl?.click()"

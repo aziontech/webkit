@@ -314,7 +314,7 @@
         variant="outline"
         :size="size"
         :disabled="disabled"
-        icon="ai ai-filter"
+        icon="az az-filter"
       />
       <Transition
         enter-from-class="scale-75 opacity-0"
@@ -368,7 +368,7 @@
               >
                 <IconButton
                   :data-testid="`${testId}__previous`"
-                  icon="ai ai-chevron-left"
+                  icon="az az-chevron-left"
                   variant="outline"
                   size="small"
                   :aria-label="customField ? t('filterMenu.backToPeriods') : t('filterMenu.back')"
@@ -409,7 +409,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -438,7 +438,7 @@
                         {{ summaryOf(field) }}
                       </bdi>
                       <i
-                        class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                        class="az az-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                         aria-hidden="true"
                       />
                     </button>
@@ -472,7 +472,7 @@
                       />
                       <bdi class="grow truncate">{{ option.label }}</bdi>
                       <i
-                        class="ai ai-check shrink-0 text-(--text-default) data-[selected=false]:invisible"
+                        class="az az-check shrink-0 text-(--text-default) data-[selected=false]:invisible"
                         :data-selected="isPicked(option.value)"
                         aria-hidden="true"
                       />
@@ -504,7 +504,7 @@
                   >
                     <span class="grow truncate">{{ t('filterMenu.customRange') }}</span>
                     <i
-                      class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                      class="az az-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                       aria-hidden="true"
                     />
                   </button>
@@ -521,7 +521,7 @@
                     @click="clear(activeField)"
                   >
                     <i
-                      class="ai ai-filter-off text-(--text-muted)"
+                      class="az az-filter-off text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <bdi class="truncate">{{

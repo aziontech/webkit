@@ -66,8 +66,8 @@
   )
   const icon = computed<string>(
     () =>
-      ({ code: 'ai ai-code', table: 'ai ai-table', document: 'ai ai-file' })[props.type] ??
-      'ai ai-file'
+      ({ code: 'az az-code', table: 'az az-table', document: 'az az-file' })[props.type] ??
+      'az az-file'
   )
   const hasToolbar = () =>
     props.versions > 1 || !!props.copyValue || !!props.downloadHref || !!slots.actions
@@ -123,7 +123,7 @@
         </p>
       </div>
       <IconButton
-        icon="ai ai-x"
+        icon="az az-x"
         variant="ghost"
         size="small"
         :ariaLabel="t('artifactCanvas.close', { title })"
@@ -155,7 +155,7 @@
         />
         <IconButton
           v-if="downloadHref"
-          icon="ai ai-download"
+          icon="az az-download"
           variant="ghost"
           size="small"
           :href="downloadHref"

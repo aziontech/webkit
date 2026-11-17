@@ -57,7 +57,7 @@
 ## Right-to-left
 
 - Layout: the glyph sits at the inline end (`ms-*`).
-- Icons: `ai-link` is not mirrored.
+- Icons: `az-link` is not mirrored.
 - Keyboard: unchanged.
 
 ## Internationalization

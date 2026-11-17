@@ -154,7 +154,7 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           :href="docsHref"
           @click="(event: MouseEvent) => emit('docs', event)"
         />

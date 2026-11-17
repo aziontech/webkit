@@ -156,7 +156,7 @@
       key: 'github',
       name: 'GitHub',
       href: 'https://github.com/settings/installations',
-      icon: 'ai ai-github',
+      icon: 'az az-github',
       connected: true,
       tag: 'Active',
       description:
@@ -167,7 +167,7 @@
       key: 'gitlab',
       name: 'GitLab',
       href: '/account/integrations/gitlab',
-      icon: 'ai-color ai-gitlab',
+      icon: 'az-color az-gitlab',
       connected: false,
       tag: '',
       description: 'Connect GitLab to build and deploy from its repositories.',
@@ -177,7 +177,7 @@
       key: 'bitbucket',
       name: 'Bitbucket',
       href: '/account/integrations/bitbucket',
-      icon: 'ai-color ai-bitbucket',
+      icon: 'az-color az-bitbucket',
       connected: false,
       tag: '',
       description: 'Connect Bitbucket to build and deploy from its repositories.',
@@ -533,7 +533,7 @@
                             :icon="
                               provider.connected || !provider.href.startsWith('http')
                                 ? undefined
-                                : 'ai ai-external-link'
+                                : 'az az-external-link'
                             "
                             :href="provider.href"
                             :target="provider.href.startsWith('http') ? '_blank' : undefined"
@@ -627,7 +627,7 @@
                           label="Delete account"
                           variant="danger"
                           size="medium"
-                          icon="ai ai-trash"
+                          icon="az az-trash"
                           @click="openDelete"
                         />
                       </SettingsRow>

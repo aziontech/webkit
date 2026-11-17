@@ -130,7 +130,7 @@ element instead of three.
     - **Without one** the label is a `<button>` that **reveals the children too**, so the whole row does. There is no destination to protect, and leaving the arrow as the only live target is a 28 px box — **7 % of the row's area**, with the other 93 % doing nothing — which on a phone reads as a broken menu. This is the shape most containers have (a console module's settings drill, every one of the 28 container rows in the sample's docs tree), so it is the one that must be right by default.
     - `href` is the signal rather than a boolean because it is the same data every other row in this menu uses to say where it goes, and because it makes the behaviour fall out of the tree in data-driven mode: `SidebarMenuNode.href` already exists. It also follows [`root-element.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/root-element.md) — the root switches element on a **data** prop, never an `as`/`is` string.
     - The **link** is an `<a href>` carrying `sub.triggerId`, the icon column and the row's typography (`min-w-0 flex-1`, so it fills what the arrow leaves). A real anchor, so middle-click and open-in-new-tab work; the consumer intercepts a plain left click for SPA routing. It announces its activation through `click` and does **nothing else** — it neither expands nor pushes. **A disabled row drops its `href` outright** (an anchor with no destination is not a link) and takes `tabindex="-1"` + `aria-disabled`.
-    - The **arrow** is an `IconButton variant="ghost" size="small"` (28 px box, 12 px glyph), on every row. With `type="inline"` it is a rotating `ai ai-chevron-down` that toggles the sub; with `type="drill"` a static `ai ai-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--sidebar-menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
+    - The **arrow** is an `IconButton variant="ghost" size="small"` (28 px box, 12 px glyph), on every row. With `type="inline"` it is a rotating `az az-chevron-down` that toggles the sub; with `type="drill"` a static `az az-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--sidebar-menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
     - **`aria-expanded` / `aria-controls` sit on whichever control expands the children, and on exactly one of them.** With a link that is the arrow. Without one the **label** already reveals, so it carries them and the arrow becomes a **redundant pointer affordance** for the same action: `tabindex="-1"` + `aria-hidden="true"`, so it leaves the tab order and the accessibility tree rather than announcing a second control for one thing. One tab stop per row either way.
     - **The arrow keys work from the row's own control**: `ArrowRight` expands / pushes and `ArrowLeft` collapses, so a keyboard reader reaches the children without first tabbing to an arrow.
     - Focus returns, on pop, to **whichever control pushed the level** — the arrow when the label is a link, the label otherwise.
@@ -275,36 +275,36 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
       <SidebarMenuGroup label="User agents">
         <SidebarMenuItem
           label="End User"
-          icon="ai ai-user"
+          icon="az az-user"
           href="/end-user"
           active
         />
         <SidebarMenuItem
           label="Web Browser"
-          icon="ai ai-domains"
+          icon="az az-domains"
           href="/web-browser"
         />
         <SidebarMenuItem
           label="Device Groups"
-          icon="ai ai-mobile"
+          icon="az az-mobile"
           href="/device-groups"
         />
       </SidebarMenuGroup>
       <SidebarMenuGroup label="Azion platform">
         <SidebarMenuItem
           label="Applications"
-          icon="ai ai-layout-grid"
+          icon="az az-layout-grid"
           href="/applications"
         />
         <SidebarMenuItem
           label="Edge Firewall"
-          icon="ai ai-shield"
+          icon="az az-shield"
           href="/edge-firewall"
           tag-value="Beta"
         />
         <SidebarMenuItem
           label="Real-Time Metrics"
-          icon="ai ai-chart-bar"
+          icon="az az-chart-bar"
           href="/metrics"
         />
       </SidebarMenuGroup>
@@ -360,7 +360,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
             <SidebarMenuSubTrigger
               label="Settings"
               type="drill"
-              icon="ai ai-settings"
+              icon="az az-settings"
             />
             <SidebarMenuSubContent>
               <SidebarMenuItem

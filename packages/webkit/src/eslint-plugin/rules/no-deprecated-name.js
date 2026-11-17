@@ -3,7 +3,7 @@ import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const PREFIX = '@aziontech/webkit/'
 const ICON =
-  /(?<![\w-])(?:pi\s+(pi-[a-z0-9]+(?:-[a-z0-9]+)*)|(ai-[a-z0-9]+(?:-[a-z0-9]+)*))(?![\w-])/g
+  /(?<![\w-])(?:pi\s+(pi-[a-z0-9]+(?:-[a-z0-9]+)*)|(ai-color|ai-cor|ai)\s+(ai-[a-z0-9]+(?:-[a-z0-9]+)*))(?![\w-])/g
 
 let cached = null
 function migration() {
@@ -20,22 +20,21 @@ function migration() {
 const camel = (s) => s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase())
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
-function flatIcons(icons) {
-  if (!icons.primeicons && !icons.azionicons) return icons
-  const azion = Object.fromEntries(
-    Object.entries(icons.azionicons || {}).filter(([, rule]) => typeof rule === 'string')
-  )
-  return { ...icons.primeicons, ...azion }
-}
-
 function iconFindings(text, icons) {
+  const { base = {}, azionicons = {}, color = {}, primeicons = {} } = icons
   const out = []
   for (const m of String(text).matchAll(ICON)) {
-    const name = m[1] || m[2]
-    if (!Object.hasOwn(icons, name)) continue
-    const rule = icons[name]
-    const next = typeof rule === 'string' ? rule : null
-    out.push(m[1] ? { old: `pi ${name}`, next: next && `ai ${next}` } : { old: name, next })
+    if (m[1]) {
+      if (!Object.hasOwn(primeicons, m[1])) continue
+      const rule = primeicons[m[1]]
+      out.push({ old: `pi ${m[1]}`, next: typeof rule === 'string' ? `az ${rule}` : null })
+      continue
+    }
+    const [, , from, name] = m
+    if (!base[from]) continue
+    const rule = from === 'ai' ? azionicons[name] : color[name]
+    const next = typeof rule === 'string' ? rule : `az-${name.slice(3)}`
+    out.push({ old: `${from} ${name}`, next: `${base[from]} ${next}` })
   }
   return out
 }
@@ -79,7 +78,7 @@ export default {
     }
 
     function checkIcons(node, text) {
-      for (const f of iconFindings(text, flatIcons(icons))) {
+      for (const f of iconFindings(text, icons)) {
         if (f.next) context.report({ node, messageId: 'icon', data: f })
         else context.report({ node, messageId: 'iconRemoved', data: f })
       }

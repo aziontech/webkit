@@ -289,7 +289,7 @@
               :target="action.target"
               :variant="index === 0 && primary ? 'secondary' : 'outline'"
               size="large"
-              :icon="action.trailing ? 'ai ai-chevron-right' : ''"
+              :icon="action.trailing ? 'az az-chevron-right' : ''"
               :icon-position="action.trailing ? 'trailing' : 'leading'"
               :animated="Boolean(action.trailing)"
             />

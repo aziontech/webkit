@@ -13,13 +13,13 @@ const groups = [
     title: 'Build',
     items: [
       {
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         title: 'Functions',
         description: 'Run code globally with no cold starts',
         href: '/products/functions'
       },
       {
-        icon: 'ai ai-edge-ai',
+        icon: 'az az-ai-inference',
         title: 'AI Inference',
         description: 'Run models close to the user',
         href: '/products/ai-inference'
@@ -30,7 +30,7 @@ const groups = [
     title: 'Store',
     items: [
       {
-        icon: 'ai ai-edge-kv',
+        icon: 'az az-kv-store',
         title: 'KV Store',
         description: 'Store key-value data with low latency',
         href: '/products/kv-store'

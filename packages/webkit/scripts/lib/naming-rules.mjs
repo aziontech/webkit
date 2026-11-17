@@ -908,10 +908,12 @@ export function checkFillPairs(keys, file = 'packages/theme/src/tokens/theme') {
 
 export function iconProblem(name, ctx) {
   if (name.startsWith('pi-')) return 'is from the removed pi icon set'
+  if (!name.startsWith('az-')) return 'does not carry the "az-" prefix'
   const renamed = ctx?.iconRenames?.[name]
-  if (renamed) return `was renamed to "${typeof renamed === 'string' ? renamed : 'nothing'}"`
+  if (renamed && !ctx?.icons?.has(name))
+    return `was renamed to "${typeof renamed === 'string' ? renamed : 'nothing'}"`
   const legacy = name
-    .replace(/^ai-/, '')
+    .replace(/^az-/, '')
     .split('-')
     .find((w) => Object.hasOwn(LEGACY_ICON_WORDS, w))
   if (legacy) return `uses the legacy word "${legacy}" (say "${LEGACY_ICON_WORDS[legacy]}")`
@@ -920,31 +922,25 @@ export function iconProblem(name, ctx) {
   return null
 }
 
+const RETIRED_ICON_BASES = { ai: 'az', 'ai-cor': 'az-color', 'ai-color': 'az-color', pi: 'az' }
+
 export function checkIconUsage(rel, text, ctx) {
   const out = []
   const seen = new Set()
   for (const m of text.matchAll(
-    /\b(?:ai|pi|ai-cor|ai-color)\s+((?:ai|pi)-[a-z0-9]+(?:-[a-z0-9]+)*)/g
+    /(?<![\w-])(ai-color|ai-cor|az-color|ai|pi|az)\s+((?:ai|pi|az)-[a-z0-9]+(?:-[a-z0-9]+)*)/g
   )) {
-    const name = m[1]
-    if (seen.has(name)) continue
-    seen.add(name)
-    const problem = iconProblem(name, ctx)
+    const [, base, name] = m
+    const key = `${base} ${name}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    const problem = RETIRED_ICON_BASES[base]
+      ? `uses the retired base class "${base}" (write "${RETIRED_ICON_BASES[base]} az-…")`
+      : iconProblem(name, ctx)
     if (problem)
       out.push(
-        v('icon-name', rel, lineOf(text, m.index), `icon "${name}" ${problem} (${RULE_DOC}).`)
+        v('icon-name', rel, lineOf(text, m.index), `icon "${key}" ${problem} (${RULE_DOC}).`)
       )
-  }
-  for (const m of text.matchAll(/(?<![\w-])ai-cor(?![\w-])/g)) {
-    out.push(
-      v(
-        'icon-name',
-        rel,
-        lineOf(text, m.index),
-        `icon base class "ai-cor" is "ai-color" (${RULE_DOC}).`
-      )
-    )
-    break
   }
   return out
 }
@@ -953,10 +949,15 @@ export function checkIconFile(rel) {
   const m = rel.match(/^packages\/icons\/src\/svg-raw\/([^/]+)\/([^/]+)\.svg$/)
   if (!m) return []
   const [, set, name] = m
-  if (set === 'pi')
-    return [v('icon-name', rel, 1, `the pi icon set (svg-raw/pi) is removed in 6.0 (${RULE_DOC}).`)]
-  if (set === 'ai-cor')
-    return [v('icon-name', rel, 1, `colour icon folder "ai-cor" is "ai-color" (${RULE_DOC}).`)]
+  if (set !== 'az' && set !== 'az-color')
+    return [
+      v(
+        'icon-name',
+        rel,
+        1,
+        `icon folder "${set}" is retired: use svg-raw/az or svg-raw/az-color (${RULE_DOC}).`
+      )
+    ]
   const problem = iconProblem(name, { iconRenames: {} })
   return problem ? [v('icon-name', rel, 1, `icon file "${name}" ${problem} (${RULE_DOC}).`)] : []
 }
@@ -2101,16 +2102,17 @@ export function loadContext(root) {
       .map((k) => k.slice(2))
   )
   const icons = new Set()
-  for (const set of ['ai', 'ai-cor', 'ai-color']) {
+  for (const set of ['az', 'az-color']) {
     const dir = join(root, 'packages/icons/src/svg-raw', set)
     if (!existsSync(dir)) continue
     for (const f of readdirSync(dir)) if (f.endsWith('.svg')) icons.add(f.replace(/\.svg$/, ''))
   }
   const iconMap = readJson(join(root, 'packages/webkit/src/cli/migrations/v6-icons.json')) || {}
   const iconRenames = Object.fromEntries(
-    Object.entries(iconMap)
-      .filter(([from]) => from.startsWith('ai-'))
-      .map(([from, to]) => [from, typeof to === 'string' ? to : null])
+    Object.entries(iconMap.azionicons || {}).map(([from, to]) => [
+      `az-${from.replace(/^ai-/, '')}`,
+      typeof to === 'string' ? to : (to?.to ?? null)
+    ])
   )
   const retired = retiredNames(
     readJson(join(root, 'packages/webkit/src/cli/migrations/v6.json')) || {}

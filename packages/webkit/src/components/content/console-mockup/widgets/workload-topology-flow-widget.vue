@@ -31,7 +31,7 @@
         {
           key: 'domain-shop',
           eyebrow: 'Domain',
-          icon: 'ai ai-domains',
+          icon: 'az az-domains',
           title: 'shop.example.com',
           label: 'Public',
           severity: 'info'
@@ -39,7 +39,7 @@
         {
           key: 'domain-api',
           eyebrow: 'Domain',
-          icon: 'ai ai-domains',
+          icon: 'az az-domains',
           title: 'api.example.com',
           label: 'Public',
           severity: 'info'
@@ -52,7 +52,7 @@
         {
           key: 'workload',
           eyebrow: 'Workload',
-          icon: 'ai ai-workloads',
+          icon: 'az az-workloads',
           title: 'shop-prod',
           label: 'Live',
           severity: 'success'
@@ -65,7 +65,7 @@
         {
           key: 'application',
           eyebrow: 'Application',
-          icon: 'ai ai-edge-application',
+          icon: 'az az-applications',
           title: 'storefront',
           label: 'Active',
           severity: 'success'
@@ -73,7 +73,7 @@
         {
           key: 'firewall',
           eyebrow: 'Firewall',
-          icon: 'ai ai-edge-firewall',
+          icon: 'az az-firewall',
           title: 'shop-rules',
           label: 'Active',
           severity: 'success'

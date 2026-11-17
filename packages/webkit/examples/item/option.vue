@@ -31,7 +31,7 @@
       >
         <Item.Media>
           <i
-            class="ai ai-workloads text-body-md leading-none text-(--text-muted)"
+            class="az az-workloads text-body-md leading-none text-(--text-muted)"
             aria-hidden="true"
           />
         </Item.Media>
@@ -40,7 +40,7 @@
         </Item.Content>
         <Item.Actions v-if="selected === name">
           <i
-            class="ai ai-check text-body-sm leading-none text-(--text-default)"
+            class="az az-check text-body-sm leading-none text-(--text-default)"
             aria-hidden="true"
           />
         </Item.Actions>

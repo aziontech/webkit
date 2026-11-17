@@ -188,7 +188,7 @@
           size="large"
           href="https://www.azion.com/en/success-case/"
           target="_blank"
-          icon="ai ai-chevron-right"
+          icon="az az-chevron-right"
           icon-position="trailing"
           animated
         />

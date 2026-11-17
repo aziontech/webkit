@@ -205,7 +205,7 @@ packages/webkit/src/components/ai/chat-message/
             :value="answer"
           />
           <IconButton
-            icon="ai ai-refresh"
+            icon="az az-refresh"
             aria-label="Regenerate response"
             variant="ghost"
             size="small"
@@ -284,7 +284,7 @@ packages/webkit/src/components/ai/chat-message/
       label="Replay"
       variant="outline"
       size="small"
-      icon="ai ai-refresh"
+      icon="az az-refresh"
       :disabled="status !== 'success'"
       @click="play"
     />

@@ -80,7 +80,7 @@
 | `default` | — | Description body; replaces the `description` prop when provided. |
 | `content` | — | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure. |
 | `media` | — | The band's media; replaces the image built from `src`. |
-| `actions` | — | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="ai ai-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
+| `actions` | — | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="az az-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
 
 ## States
 

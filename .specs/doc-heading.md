@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 02c5eebe0b8bcbe0d57b9cab0bb1ee720395fbe7321799b4f00f46d8b59a608b
+checksum: 771cdfb1b0e589ec73a4a472f1c5b7b593a94b6c456062a7bb1120f2be53f2f9
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -109,7 +109,7 @@ The glyph fades in with `transition-opacity duration-150`; `motion-reduce:transi
 ## Right-to-left
 
 - Layout: the glyph sits at the inline end (`ms-*`).
-- Icons: `ai-link` is not mirrored.
+- Icons: `az-link` is not mirrored.
 - Keyboard: unchanged.
 
 ## Responsive

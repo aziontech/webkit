@@ -33,7 +33,7 @@ describe('deploy-success', () => {
   })
 
   it('renders the records it is given and emits the next step and manage', async () => {
-    const step = { icon: 'ai ai-box', title: 'Open the store', description: 'Go to the store.' }
+    const step = { icon: 'az az-box', title: 'Open the store', description: 'Go to the store.' }
     const view = render(DeploySuccess, {
       props: {
         deployment: {
@@ -47,7 +47,7 @@ describe('deploy-success', () => {
           {
             key: 'store',
             kind: 'Storage',
-            icon: 'ai ai-inbox',
+            icon: 'az az-inbox',
             name: 'acme-assets',
             state: 'bound',
             reference: '3 files'

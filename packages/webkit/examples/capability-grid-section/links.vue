@@ -10,40 +10,40 @@
     description="Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose."
     :items="[
       {
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         title: 'Accelerate REST and GraphQL APIs',
         description:
           'Cache API responses with query string and cookie-based segmentation for faster client applications.',
         href: 'https://www.azion.com/en/solutions/api-gateway/'
       },
       {
-        icon: 'ai ai-shopping-cart',
+        icon: 'az az-shopping-cart',
         title: 'Optimize product catalogs',
         description:
           'Segment listings by category, region, and user preferences with cache key rules.',
         href: 'https://www.azion.com/en/solutions/application-acceleration/'
       },
       {
-        icon: 'ai ai-layers',
+        icon: 'az az-layers',
         title: 'Personalize multi-tenant apps',
         description: 'Serve tenant-specific content with cookie-based cache variation rules.',
         href: 'https://www.azion.com/en/documentation/'
       },
       {
-        icon: 'ai ai-live-ingest',
+        icon: 'az az-live-ingest',
         title: 'Stream content faster',
         description:
           'Cache playlists and user preferences while serving browsing content efficiently.',
         href: 'https://www.azion.com/en/documentation/'
       },
       {
-        icon: 'ai ai-bolt',
+        icon: 'az az-bolt',
         title: 'Reduce API latency',
         description: 'Short TTLs for rapidly changing data endpoints and real-time applications.',
         href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/'
       },
       {
-        icon: 'ai ai-user',
+        icon: 'az az-user',
         title: 'Deliver personalized experiences',
         description:
           'Cache user-specific content with session-based cookie variation for tailored delivery.',

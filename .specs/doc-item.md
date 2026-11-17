@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: e42690fd3f9361184cd45acdf08bb7bde8e40fd4483447f9be57a9b18ac50a7f
+checksum: cd0a05366988462735a09a519658d18f4a9a35246da9e03c853959caa5488472
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -52,14 +52,14 @@ One row of the documentation's related-content list: a leading glyph in a framed
     <ItemList>
       <DocItem
         title="Edge Functions"
-        icon="ai ai-code"
+        icon="az az-code"
         href="/docs/edge-functions"
       >
         Build serverless applications on Azion's global network.
       </DocItem>
       <DocItem
         title="Edge SQL"
-        icon="ai ai-database"
+        icon="az az-database"
         href="/docs/edge-sql"
       >
         Store relational data across the network.

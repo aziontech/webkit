@@ -219,7 +219,7 @@
                 class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
               >
                 <i
-                  class="ai ai-chevron-right text-body-xs text-(--text-muted) rtl:-scale-x-100"
+                  class="az az-chevron-right text-body-xs text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
                 <span class="flex min-w-0 flex-1 flex-col">
@@ -229,7 +229,7 @@
                   <span class="text-body-xs text-(--text-muted)">Value: q</span>
                 </span>
                 <IconButton
-                  icon="ai ai-trash"
+                  icon="az az-trash"
                   variant="outline"
                   size="small"
                   ariaLabel="Remove condition"
@@ -256,14 +256,14 @@
                       class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
                     >
                       <i
-                        class="ai ai-chevron-down text-body-xs text-(--text-muted)"
+                        class="az az-chevron-down text-body-xs text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span class="min-w-0 flex-1 truncate text-label-md text-(--text-default)">
                         Match {{ frame.condition }}
                       </span>
                       <IconButton
-                        icon="ai ai-trash"
+                        icon="az az-trash"
                         variant="outline"
                         size="small"
                         ariaLabel="Remove condition"
@@ -303,7 +303,7 @@
                 label="Condition"
                 variant="outline"
                 size="small"
-                icon="ai ai-plus"
+                icon="az az-plus"
               />
             </span>
           </ConsoleMockupShellItem>

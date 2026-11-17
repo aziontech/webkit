@@ -73,7 +73,16 @@ export type Token = {
   responsive?: Record<string, string>
 }
 
-export type IconAsset = { name: string; class: string; set: string; keywords: string }
+export type IconAsset = {
+  name: string
+  class: string
+  set: string
+  group: string
+  category: string
+  label: string
+  product?: string
+  keywords: string
+}
 
 export type DocsAssets = {
   icons: IconAsset[]

@@ -169,12 +169,12 @@
   const runToast = (description: string) => ({ id: RUN_TOAST, description })
 
   const resourceTypes: Record<ReleaseImpactResourceType, ResourceTypeMeta> = {
-    service: { label: 'Service', icon: 'ai ai-server' },
-    policy: { label: 'Policy', icon: 'ai ai-shield' },
-    storage: { label: 'Storage', icon: 'ai ai-inbox' },
-    errorPage: { label: 'Error page', icon: 'ai ai-file' },
-    module: { label: 'Modules', icon: 'ai ai-code' },
-    integration: { label: 'Integrations', icon: 'ai ai-link' }
+    service: { label: 'Service', icon: 'az az-server' },
+    policy: { label: 'Policy', icon: 'az az-shield' },
+    storage: { label: 'Storage', icon: 'az az-inbox' },
+    errorPage: { label: 'Error page', icon: 'az az-file' },
+    module: { label: 'Modules', icon: 'az az-code' },
+    integration: { label: 'Integrations', icon: 'az az-link' }
   }
 
   const impactViews = [
@@ -377,7 +377,7 @@
                 label="Redeploy"
                 variant="outline"
                 size="small"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="deploy"
               />
             </div>
@@ -401,7 +401,7 @@
                 label="Redeploy"
                 variant="outline"
                 size="small"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="deploy"
               />
             </div>
@@ -449,7 +449,7 @@
                       v-if="card.readonly"
                       label="Read-only"
                       severity="neutral"
-                      icon="ai ai-lock"
+                      icon="az az-lock"
                       size="small"
                     />
                     <Tag
@@ -519,7 +519,7 @@
                         <Select.Content>
                           <Select.Item
                             :value="LATEST"
-                            icon="ai ai-sync"
+                            icon="az az-sync"
                           >
                             Track latest Ready
                             <template #tag>
@@ -567,7 +567,7 @@
                     label="Build a version"
                     variant="ghost"
                     size="small"
-                    icon="ai ai-external-link"
+                    icon="az az-external-link"
                     href="/services/edge-policy/versions"
                   />
 
@@ -642,7 +642,7 @@
                                     <Tag
                                       label="Shared"
                                       severity="info"
-                                      icon="ai ai-link"
+                                      icon="az az-link"
                                       size="small"
                                     />
                                   </span>
@@ -661,7 +661,7 @@
                                 <Select.Content>
                                   <Select.Item
                                     :value="LATEST"
-                                    icon="ai ai-sync"
+                                    icon="az az-sync"
                                   >
                                     Track latest Ready
                                   </Select.Item>
@@ -706,7 +706,7 @@
                 <div class="flex min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)">
                   <h2 class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-bullseye shrink-0 text-(--text-muted)"
+                      class="az az-bullseye shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate text-label-md text-(--text-default)">Impact</span>
@@ -764,7 +764,7 @@
                       label="Retry"
                       variant="outline"
                       size="small"
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       @click="emit('retry', $event)"
                     />
                   </div>
@@ -792,7 +792,7 @@
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="ai ai-sliders-horizontal shrink-0 text-(--text-muted)"
+                              class="az az-sliders-horizontal shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-md text-(--text-default)">
@@ -823,7 +823,7 @@
                             >
                               <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                                 <i
-                                  class="ai ai-sitemap shrink-0 text-(--text-muted)"
+                                  class="az az-sitemap shrink-0 text-(--text-muted)"
                                   aria-hidden="true"
                                 />
                                 <span class="truncate text-label-md text-(--text-default)">
@@ -845,7 +845,7 @@
                                 >
                                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                                     <i
-                                      class="ai ai-folder shrink-0 text-(--text-muted)"
+                                      class="az az-folder shrink-0 text-(--text-muted)"
                                       aria-hidden="true"
                                     />
                                     <span class="truncate text-body-sm text-(--text-default)">
@@ -880,7 +880,7 @@
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="ai ai-sliders-horizontal shrink-0 text-(--text-muted)"
+                              class="az az-sliders-horizontal shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-md text-(--text-default)">
@@ -892,7 +892,7 @@
                           </span>
                         </span>
                         <i
-                          class="ai ai-arrow-right hidden shrink-0 text-body-xs text-(--text-muted) sm:block"
+                          class="az az-arrow-right hidden shrink-0 text-body-xs text-(--text-muted) sm:block"
                           aria-hidden="true"
                         />
                         <span
@@ -913,7 +913,7 @@
                           >
                             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                               <i
-                                class="ai ai-sitemap shrink-0 text-(--text-muted)"
+                                class="az az-sitemap shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                               <span class="truncate text-label-md text-(--text-default)">
@@ -931,7 +931,7 @@
                               class="flex min-w-0 items-center gap-(--spacing-xs)"
                             >
                               <i
-                                class="ai ai-folder shrink-0 text-(--text-muted)"
+                                class="az az-folder shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                               <span class="truncate text-body-sm text-(--text-muted)">
@@ -974,7 +974,7 @@
             class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
           >
             <i
-              class="ai ai-triangle-alert shrink-0"
+              class="az az-triangle-alert shrink-0"
               aria-hidden="true"
             />
             {{ blocker }}
@@ -1006,7 +1006,7 @@
                   :label="deploying ? 'Deploying…' : 'Deploy release'"
                   variant="primary"
                   size="medium"
-                  icon="ai ai-cloud-upload"
+                  icon="az az-cloud-upload"
                   :disabled="!canDeploy"
                   :loading="deploying"
                 />

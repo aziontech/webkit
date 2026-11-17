@@ -47,15 +47,15 @@
   const SUMMARY_HOLD_MS = 4800
 
   const DEPLOYED = [
-    { key: 'workload', icon: 'ai ai-workloads', eyebrow: 'Workload', name: 'storefront-prod' },
+    { key: 'workload', icon: 'az az-workloads', eyebrow: 'Workload', name: 'storefront-prod' },
     {
       key: 'application',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       eyebrow: 'Application',
       name: 'storefront'
     },
-    { key: 'firewall', icon: 'ai ai-edge-firewall', eyebrow: 'Firewall', name: 'edge-rules' },
-    { key: 'domains', icon: 'ai ai-domains', eyebrow: 'Domains', name: 'shop.example.com +2' }
+    { key: 'firewall', icon: 'az az-firewall', eyebrow: 'Firewall', name: 'edge-rules' },
+    { key: 'domains', icon: 'az az-domains', eyebrow: 'Domains', name: 'shop.example.com +2' }
   ]
 
   const rowDelay = (index: number) => ({

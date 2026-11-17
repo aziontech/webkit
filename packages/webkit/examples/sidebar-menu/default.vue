@@ -10,36 +10,36 @@
       <SidebarMenuGroup label="User agents">
         <SidebarMenuItem
           label="End User"
-          icon="ai ai-user"
+          icon="az az-user"
           href="/end-user"
           active
         />
         <SidebarMenuItem
           label="Web Browser"
-          icon="ai ai-domains"
+          icon="az az-domains"
           href="/web-browser"
         />
         <SidebarMenuItem
           label="Device Groups"
-          icon="ai ai-mobile"
+          icon="az az-mobile"
           href="/device-groups"
         />
       </SidebarMenuGroup>
       <SidebarMenuGroup label="Azion platform">
         <SidebarMenuItem
           label="Applications"
-          icon="ai ai-layout-grid"
+          icon="az az-layout-grid"
           href="/applications"
         />
         <SidebarMenuItem
           label="Edge Firewall"
-          icon="ai ai-shield"
+          icon="az az-shield"
           href="/edge-firewall"
           tag-value="Beta"
         />
         <SidebarMenuItem
           label="Real-Time Metrics"
-          icon="ai ai-chart-bar"
+          icon="az az-chart-bar"
           href="/metrics"
         />
       </SidebarMenuGroup>

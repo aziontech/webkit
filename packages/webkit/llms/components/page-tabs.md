@@ -154,7 +154,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
         label="Deploy"
         variant="outline"
         size="medium"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
       />
     </template>
   </PageTabs>

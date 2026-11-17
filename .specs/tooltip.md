@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 8e20ae00709bcfbde87bbbd5ca29f5067e05cbb62c91d75a3c9bfbf96c895659
+checksum: a52e86f0e2399989a5573709dfba70c745dd1fc25e44ee0a0be4e3b88dae0962
 created: 2026-06-02
 last_updated: 2026-11-16
 ---
@@ -62,7 +62,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
     side="top"
   >
     <IconButton
-      icon="ai ai-trash"
+      icon="az az-trash"
       aria-label="Delete"
     />
   </Tooltip>

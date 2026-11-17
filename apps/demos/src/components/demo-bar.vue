@@ -55,19 +55,19 @@
   const first = computed(() => resources.value[0]?.id ?? '')
 
   const flows = computed(() => [
-    { value: '/resources', label: t.value.list, icon: 'ai ai-list' },
-    { value: '/resources/new', label: t.value.create, icon: 'ai ai-plus' },
-    { value: `/resources/${first.value}`, label: t.value.detail, icon: 'ai ai-eye' },
-    { value: `/resources/${first.value}/edit`, label: t.value.edit, icon: 'ai ai-pencil' },
-    { value: `/resources/${first.value}/delete`, label: t.value.remove, icon: 'ai ai-trash' },
+    { value: '/resources', label: t.value.list, icon: 'az az-list' },
+    { value: '/resources/new', label: t.value.create, icon: 'az az-plus' },
+    { value: `/resources/${first.value}`, label: t.value.detail, icon: 'az az-eye' },
+    { value: `/resources/${first.value}/edit`, label: t.value.edit, icon: 'az az-pencil' },
+    { value: `/resources/${first.value}/delete`, label: t.value.remove, icon: 'az az-trash' },
     {
       value: `/resources/${first.value}/deploy`,
       label: t.value.deploy,
-      icon: 'ai ai-cloud-upload'
+      icon: 'az az-cloud-upload'
     },
-    { value: '/settings', label: t.value.settings, icon: 'ai ai-settings' },
-    { value: '/onboarding', label: t.value.onboarding, icon: 'ai ai-flag' },
-    { value: '/assistant', label: t.value.assistant, icon: 'ai ai-ask-azion' }
+    { value: '/settings', label: t.value.settings, icon: 'az az-settings' },
+    { value: '/onboarding', label: t.value.onboarding, icon: 'az az-flag' },
+    { value: '/assistant', label: t.value.assistant, icon: 'az az-ask-azion' }
   ])
 
   const localeLabel = (value: unknown) =>
@@ -91,7 +91,7 @@
       <DropdownMenu.Trigger>
         <Tooltip :content="t.flows">
           <IconButton
-            icon="ai ai-compass"
+            icon="az az-compass"
             variant="outline"
             size="medium"
             :aria-label="t.flows"
@@ -116,7 +116,7 @@
     </DropdownMenu>
     <Tooltip :content="settings.theme === 'dark' ? t.light : t.dark">
       <IconButton
-        :icon="settings.theme === 'dark' ? 'ai ai-sun' : 'ai ai-moon'"
+        :icon="settings.theme === 'dark' ? 'az az-sun' : 'az az-moon'"
         variant="outline"
         size="medium"
         :aria-label="settings.theme === 'dark' ? t.light : t.dark"
@@ -125,7 +125,7 @@
     </Tooltip>
     <Tooltip :content="settings.dir === 'rtl' ? t.ltr : t.rtl">
       <IconButton
-        icon="ai ai-arrow-right-left"
+        icon="az az-arrow-right-left"
         variant="outline"
         size="medium"
         :aria-label="settings.dir === 'rtl' ? t.ltr : t.rtl"
@@ -142,7 +142,7 @@
         <Select.Trigger :aria-label="t.language">
           <template #leading>
             <i
-              class="ai ai-globe text-(--text-muted)"
+              class="az az-globe text-(--text-muted)"
               aria-hidden="true"
             />
           </template>

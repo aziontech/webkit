@@ -130,7 +130,7 @@
               :href="primaryAction.href"
               :target="primaryAction.target"
               variant="secondary"
-              :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
+              :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(primaryAction.trailing)"
             />
@@ -194,7 +194,7 @@
             :label="primaryAction.label"
             :href="primaryAction.href"
             :target="primaryAction.target"
-            :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
+            :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
           />
         </div>
       </RegistrationFrame>

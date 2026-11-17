@@ -540,7 +540,7 @@
                       <IconButton
                         variant="outline"
                         size="medium"
-                        icon="ai ai-link"
+                        icon="az az-link"
                         :ariaLabel="share.copyLink"
                         @click="copyLink"
                       />
@@ -552,7 +552,7 @@
                       <IconButton
                         variant="outline"
                         size="medium"
-                        icon="ai ai-rss"
+                        icon="az az-rss"
                         :ariaLabel="share.copyFeed ?? ''"
                         @click="copyFeed"
                       />
@@ -561,7 +561,7 @@
                       <IconButton
                         variant="outline"
                         size="medium"
-                        icon="ai ai-x-brand"
+                        icon="az az-x-brand"
                         :ariaLabel="share.shareX"
                         :href="shareX"
                         target="_blank"
@@ -571,7 +571,7 @@
                       <IconButton
                         variant="outline"
                         size="medium"
-                        icon="ai ai-linkedin"
+                        icon="az az-linkedin"
                         :ariaLabel="share.shareLinkedIn"
                         :href="shareLinkedIn"
                         target="_blank"
@@ -615,7 +615,7 @@
                   v-if="copyPage"
                   variant="outline"
                   size="medium"
-                  icon="ai ai-copy"
+                  icon="az az-copy"
                   :label="copyPage.label"
                   :items="copyPage.menu"
                   class="self-start"

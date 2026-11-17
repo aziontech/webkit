@@ -3,17 +3,17 @@
 
   const items = [
     {
-      icon: 'ai ai-bolt',
+      icon: 'az az-bolt',
       title: 'Functions',
       description: 'Run JavaScript and WebAssembly close to every user.'
     },
     {
-      icon: 'ai ai-database',
+      icon: 'az az-database',
       title: 'Object Storage',
       description: 'Keep files where they are read, with no egress to plan for.'
     },
     {
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       title: 'Firewall',
       description: 'Stop bots and attacks before they reach your origin.'
     }

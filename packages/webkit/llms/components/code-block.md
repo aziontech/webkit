@@ -94,7 +94,7 @@
 | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset)                                               | `tabs.length > 1`                                                        |
 | Filename bar (`FileName`, 40 px)                                                                                         | active tab has `fileName`                                                |
-| Label header (40 px, `ai ai-code` / `ai ai-align-left` + label)                                                          | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
+| Label header (40 px, `az az-code` / `az az-align-left` + label)                                                          | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
 | Diff gutter (`+`/`-` + 8 px spacer on unchanged lines)                                                                   | active tab `lineChanges.length > 0`, or the active tab has an `original` |
 | Unified diff (removed lines from `original` before the added lines of `code` in each change, numbered on their own side) | active tab has an `original` and `diffView="unified"`                    |
 | Split diff (two columns, Original and Modified, rows aligned, a change paired line for line)                             | active tab has an `original` and `diffView="split"`                      |

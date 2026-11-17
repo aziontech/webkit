@@ -170,13 +170,13 @@
               label="And"
               variant="outline"
               size="small"
-              icon="ai ai-circle-plus"
+              icon="az az-circle-plus"
             />
             <Button
               label="Or"
               variant="outline"
               size="small"
-              icon="ai ai-circle-plus"
+              icon="az az-circle-plus"
             />
           </span>
         </ConsoleMockupShellItem>
@@ -201,7 +201,7 @@
             label="Add Behavior"
             variant="outline"
             size="small"
-            icon="ai ai-circle-plus"
+            icon="az az-circle-plus"
           />
         </ConsoleMockupShellItem>
       </div>

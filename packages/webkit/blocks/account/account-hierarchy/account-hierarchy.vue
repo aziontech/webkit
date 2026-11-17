@@ -116,9 +116,9 @@
   const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
 
   const types: Record<ResourceType, ResourceTypeMeta> = {
-    organization: { label: 'Organization', icon: 'ai ai-building', variant: 'accent' },
-    group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
+    organization: { label: 'Organization', icon: 'az az-building', variant: 'accent' },
+    group: { label: 'Group', icon: 'az az-users', severity: 'info' },
+    workspace: { label: 'Workspace', icon: 'az az-layout-grid', severity: 'neutral' }
   }
 
   const uid = useId()
@@ -393,7 +393,7 @@
         <template #actions>
           <Button
             label="Create Workspace"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="primary"
             size="large"
             href="/account/resources/new"
@@ -408,7 +408,7 @@
       >
         <Button
           label="Create Group"
-          icon="ai ai-folder"
+          icon="az az-folder"
           variant="outline"
           size="medium"
           href="/account/resources/new-group"
@@ -419,7 +419,7 @@
         />
         <Button
           label="Move"
-          icon="ai ai-arrow-right-left"
+          icon="az az-arrow-right-left"
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
@@ -427,7 +427,7 @@
         />
         <Button
           label="Labels"
-          icon="ai ai-tag"
+          icon="az az-tag"
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
@@ -435,7 +435,7 @@
         />
         <Button
           label="Delete"
-          icon="ai ai-trash"
+          icon="az az-trash"
           variant="outline"
           size="medium"
           :disabled="!selectedCount"
@@ -444,7 +444,7 @@
         <div class="ms-auto flex items-center gap-(--spacing-xs)">
           <Tooltip content="Refresh">
             <IconButton
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               variant="outline"
               size="medium"
               :loading="refreshing"
@@ -454,7 +454,7 @@
           </Tooltip>
           <Button
             :label="detailsOpen ? 'Hide details' : 'Show details'"
-            :icon="detailsOpen ? 'ai ai-eye-off' : 'ai ai-eye'"
+            :icon="detailsOpen ? 'az az-eye-off' : 'az az-eye'"
             variant="ghost"
             size="medium"
             :aria-expanded="detailsOpen"
@@ -508,14 +508,14 @@
             <template #default>
               <EmptyState
                 size="medium"
-                icon="ai ai-sitemap"
+                icon="az az-sitemap"
                 title="No resources yet"
                 description="Create a workspace, then group workspaces under organizations and groups to share role bindings."
               >
                 <template #actions>
                   <Button
                     label="Create Workspace"
-                    icon="ai ai-plus"
+                    icon="az az-plus"
                     variant="secondary"
                     size="small"
                     href="/account/resources/new"
@@ -534,7 +534,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -548,7 +548,7 @@
               <template #default>
                 <EmptyState
                   size="small"
-                  icon="ai ai-search"
+                  icon="az az-search"
                   title="No matching resources"
                   :description="`No resource matches “${query.trim()}”.`"
                 >
@@ -606,7 +606,7 @@
                         content="Current workspace"
                       >
                         <i
-                          class="ai ai-check shrink-0 text-body-xs text-(--text-muted)"
+                          class="az az-check shrink-0 text-body-xs text-(--text-muted)"
                           aria-label="Current workspace"
                           role="img"
                         />
@@ -655,7 +655,7 @@
                       Charges
                       <Tooltip content="Estimated month-to-date charges.">
                         <i
-                          class="ai ai-circle-help text-body-xs text-(--text-muted)"
+                          class="az az-circle-help text-body-xs text-(--text-muted)"
                           role="img"
                           aria-label="About charges"
                           tabindex="0"
@@ -666,7 +666,7 @@
                   <template #cell-labels="{ value }">
                     <TableCellTags
                       :items="value ?? []"
-                      icon="ai ai-tag"
+                      icon="az az-tag"
                       :noun="{ one: 'label', other: 'labels' }"
                     />
                   </template>
@@ -747,7 +747,7 @@
                         <EmptyState
                           v-if="!focused"
                           size="small"
-                          icon="ai ai-sitemap"
+                          icon="az az-sitemap"
                           :title="
                             selectedCount ? 'Several resources selected' : 'Select a resource'
                           "
@@ -790,7 +790,7 @@
                         <EmptyState
                           v-if="!focused"
                           size="small"
-                          icon="ai ai-tag"
+                          icon="az az-tag"
                           :title="
                             selectedCount ? 'Several resources selected' : 'Select a resource'
                           "
@@ -823,13 +823,13 @@
                           <EmptyState
                             v-else
                             size="small"
-                            icon="ai ai-tag"
+                            icon="az az-tag"
                             title="No labels"
                             description="This resource has no labels."
                           />
                           <Button
                             label="Edit labels"
-                            icon="ai ai-tag"
+                            icon="az az-tag"
                             variant="outline"
                             size="small"
                             class="self-start"

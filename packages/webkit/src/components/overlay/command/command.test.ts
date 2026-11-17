@@ -90,7 +90,7 @@ const mixedPrefixes = () =>
         <CommandList>
           <CommandGroup label="Actions">
             <CommandItem value="deploy">
-              <template #leading><i class="ai ai-cloud-upload" aria-hidden="true" /></template>
+              <template #leading><i class="az az-cloud-upload" aria-hidden="true" /></template>
               Deploy Project
             </CommandItem>
             <CommandItem value="new-app">Create Application</CommandItem>
@@ -365,7 +365,7 @@ describe('Command', () => {
 
         const iconed = items[0].querySelector('[data-testid="command-item__leading"]')
         expect(iconed).not.toBeNull()
-        expect(items[0].querySelector('i.ai-cloud-upload')).not.toBeNull()
+        expect(items[0].querySelector('i.az-cloud-upload')).not.toBeNull()
 
         // The icon-less row puts no empty box in the DOM, so it carries no indent.
         expect(items[1].querySelector('[data-testid="command-item__leading"]')).toBeNull()

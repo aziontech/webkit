@@ -256,7 +256,7 @@
                   label="Add Functions Instance"
                   variant="outline"
                   size="medium"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   @click="openInstance()"
                 />
               </template>
@@ -274,7 +274,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -286,7 +286,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       variant="outline"
                       size="medium"
                       aria-label="Refresh"
@@ -297,7 +297,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-download"
+                      icon="az az-download"
                       variant="outline"
                       size="medium"
                       :disabled="!tableEl"
@@ -310,7 +310,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-column"
+                      icon="az az-columns-3"
                       variant="outline"
                       size="medium"
                       aria-label="Columns"
@@ -346,7 +346,7 @@
                       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                         <Tooltip content="JavaScript">
                           <i
-                            class="ai-color ai-javascript shrink-0 text-body-lg"
+                            class="az-color az-javascript shrink-0 text-body-lg"
                             role="img"
                             aria-label="JavaScript"
                           />
@@ -360,7 +360,7 @@
                               value
                             }}</span>
                             <i
-                              class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                              class="az az-external-link shrink-0 text-body-xs leading-none"
                               aria-hidden="true"
                             />
                           </a>
@@ -399,7 +399,7 @@
                         key="empty-state-1"
                         v-if="search.trim()"
                         size="medium"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No matching functions instances"
                         :description="`Nothing matches ${search.trim()}.`"
                       >
@@ -416,14 +416,14 @@
                         key="empty-state-2"
                         v-else
                         size="medium"
-                        icon="ai ai-edge-functions"
+                        icon="az az-functions"
                         title="No functions instances yet"
                         description="Add the first one to this version."
                       >
                         <template #actions>
                           <Button
                             label="Add Functions Instance"
-                            icon="ai ai-plus"
+                            icon="az az-plus"
                             variant="secondary"
                             size="small"
                             @click="openInstance()"
@@ -509,7 +509,7 @@
                                 >
                                   <span class="flex items-center gap-(--spacing-xs)">
                                     <i
-                                      class="ai ai-circle-plus"
+                                      class="az az-circle-plus"
                                       aria-hidden="true"
                                     />
                                     Create Function

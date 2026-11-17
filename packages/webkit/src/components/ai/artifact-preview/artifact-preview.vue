@@ -32,7 +32,7 @@
   withDefaults(defineProps<ArtifactPreviewProps>(), {
     description: '',
     meta: '',
-    icon: 'ai ai-file',
+    icon: 'az az-file',
     copyValue: '',
     downloadHref: '',
     openable: false
@@ -110,7 +110,7 @@
         />
         <IconButton
           v-if="downloadHref"
-          icon="ai ai-download"
+          icon="az az-download"
           variant="ghost"
           size="small"
           :href="downloadHref"
@@ -124,7 +124,7 @@
           :aria-label="t('artifactPreview.openLabel', { title })"
           variant="outline"
           size="small"
-          icon="ai ai-external-link"
+          icon="az az-external-link"
           icon-position="trailing"
           :data-testid="`${testId}__open`"
           @click="(event: MouseEvent) => emit('open', event)"

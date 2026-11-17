@@ -209,7 +209,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -233,7 +233,7 @@
                     class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                   >
                     <i
-                      class="ai ai-box text-body-md leading-none text-(--text-default)"
+                      class="az az-box text-body-md leading-none text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
@@ -245,7 +245,7 @@
                 <Item.Actions>
                   <i
                     v-if="option.value === projectPicker.chosen"
-                    class="ai ai-check shrink-0 text-(--text-default)"
+                    class="az az-check shrink-0 text-(--text-default)"
                     aria-hidden="true"
                   />
                 </Item.Actions>

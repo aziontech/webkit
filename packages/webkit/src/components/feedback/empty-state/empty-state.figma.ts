@@ -23,7 +23,7 @@ export default {
   }${
     showIcon
       ? figma.code`
-  icon="ai ai-inbox"`
+  icon="az az-inbox"`
       : ''
   }${
     bordered

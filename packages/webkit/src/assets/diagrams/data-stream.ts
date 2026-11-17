@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Requests',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Data Stream',
       title: 'HTTP, firewall and function logs',
-      icon: 'ai ai-data-stream',
+      icon: 'az az-data-stream',
       status: {
         label: 'Near real time',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'SIEM',
       title: 'Splunk, Datadog',
-      icon: 'ai ai-chart-bar',
+      icon: 'az az-chart-bar',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Data lake',
       title: 'S3, Kafka, Elasticsearch',
-      icon: 'ai ai-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

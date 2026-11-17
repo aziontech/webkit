@@ -15,19 +15,19 @@
           value: 'explain',
           label: 'explain',
           description: 'Explain a configuration',
-          icon: 'ai ai-circle-info'
+          icon: 'az az-circle-info'
         },
         {
           value: 'troubleshoot',
           label: 'troubleshoot',
           description: 'Find why a request failed',
-          icon: 'ai ai-wrench'
+          icon: 'az az-wrench'
         },
         {
           value: 'summarize',
           label: 'summarize',
           description: 'Summarize recent events',
-          icon: 'ai ai-list'
+          icon: 'az az-list'
         }
       ]
     },
@@ -35,9 +35,9 @@
       trigger: '@',
       label: 'Resources',
       options: [
-        { value: 'app-1', label: 'checkout-web', description: 'Application', icon: 'ai ai-box' },
-        { value: 'fn-7', label: 'image-resize', description: 'Function', icon: 'ai ai-code' },
-        { value: 'fw-2', label: 'login-protection', description: 'Firewall', icon: 'ai ai-shield' }
+        { value: 'app-1', label: 'checkout-web', description: 'Application', icon: 'az az-box' },
+        { value: 'fn-7', label: 'image-resize', description: 'Function', icon: 'az az-code' },
+        { value: 'fw-2', label: 'login-protection', description: 'Firewall', icon: 'az az-shield' }
       ]
     }
   ]

@@ -170,7 +170,7 @@
             class="absolute inset-[min(0rem,calc(50%-12px))] pointer-coarse:inset-[min(0rem,calc(50%-22px))]"
           />
           <i
-            class="ai ai-x flex shrink-0 items-center size-[14px] data-[size=small]:size-[10px]"
+            class="az az-x flex shrink-0 items-center size-[14px] data-[size=small]:size-[10px]"
             :data-size="size"
             aria-hidden="true"
             :data-testid="`${testId}__remove-icon`"

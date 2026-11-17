@@ -178,7 +178,7 @@
                 variant="secondary"
                 size="large"
                 :target="primaryAction.target"
-                :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
+                :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(primaryAction.trailing)"
               />
@@ -190,7 +190,7 @@
                 variant="outline"
                 size="large"
                 :target="secondaryAction.target"
-                :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
+                :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(secondaryAction.trailing)"
               />
@@ -268,7 +268,7 @@
                   variant="secondary"
                   size="large"
                   :target="primaryAction.target"
-                  :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
+                  :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(primaryAction.trailing)"
                 />
@@ -280,7 +280,7 @@
                   variant="outline"
                   size="large"
                   :target="secondaryAction.target"
-                  :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
+                  :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(secondaryAction.trailing)"
                 />

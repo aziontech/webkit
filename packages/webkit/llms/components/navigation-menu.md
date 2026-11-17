@@ -80,7 +80,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 
 - `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`; `show-highlight` (default `true`) shows the sliding highlight on the root horizontal list.
 - `navigation-menu-item.vue` — Public sub-component `navigation-menu-item`.
-- `navigation-menu-trigger.vue` — Public sub-component `navigation-menu-trigger`. A panel trigger (no `href`) renders a trailing `ai ai-chevron-down` in an `aria-hidden` span (`__icon`) whose `data-state="open|closed"` follows its panel and turns 180° when open; a link trigger (`href`) has no chevron.
+- `navigation-menu-trigger.vue` — Public sub-component `navigation-menu-trigger`. A panel trigger (no `href`) renders a trailing `az az-chevron-down` in an `aria-hidden` span (`__icon`) whose `data-state="open|closed"` follows its panel and turns 180° when open; a link trigger (`href`) has no chevron.
 - `navigation-menu-content.vue` — Public sub-component `navigation-menu-content`.
 - `navigation-menu-link.vue` — Public sub-component `navigation-menu-link`, reached as `NavigationMenu.Link`: a top-level link of the bar (`href`, `active`, `close-on-click`) that renders the same anchor as a trigger with an `href`. Attributes it does not declare still flow to the trigger it renders, so a `NavigationMenu.Link` written as a panel trigger keeps working.
 - `navigation-menu-viewport.vue` — Public sub-component `navigation-menu-viewport`, the one overlay that hosts every panel. It teleports (`container`, default `body`; `keep-mounted`, default `true`), places the popup on the active trigger and renders the popup surface with the shared panel frame. Props: `side?: NavigationMenuSide` (`top | bottom | start | end`, logical: `start`/`end` follow the reading direction; default `'bottom'`), `align?: NavigationMenuAlign` (`start | center | end`, default `'center'`; on `top`/`bottom`, `start`/`end` follow the reading direction too), `sideOffset?: number` (default `8`), `alignOffset?: number` (default `0`), `arrowPadding?: number` (default `8`), `collisionPadding?: NavigationMenuCollisionPadding` (default `8`), `sticky?: boolean` (default `false`), `trackAnchor?: boolean` (default `true`, keeps the popup on the active trigger), `kind?: NavigationMenuPopoverVariant` (`default | contrast`, default `'default'`, the popup surface), `arrow?: boolean` (default `false`, an arrow pointing at the trigger), `backdrop?: boolean` (default `false`, a dimmed layer behind the popup; a click on it closes the menu), `container?: object | string` (default `undefined`), `keepMounted?: boolean` (default `true`). Attributes it does not declare land on the popup.
@@ -188,7 +188,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
                       close-on-click
                     >
                       <template #icon>
-                        <i class="ai ai-edge-functions" />
+                        <i class="az az-functions" />
                       </template>
                       Functions
                     </NavigationMenu.Item>
@@ -199,7 +199,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
                       close-on-click
                     >
                       <template #icon>
-                        <i class="ai ai-tiered-cache" />
+                        <i class="az az-tiered-cache" />
                       </template>
                       Cache
                     </NavigationMenu.Item>

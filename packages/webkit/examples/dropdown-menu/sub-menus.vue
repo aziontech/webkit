@@ -8,7 +8,7 @@
     <DropdownMenu.Trigger>
       <Button
         variant="secondary"
-        icon="ai ai-ellipsis"
+        icon="az az-ellipsis"
         label="Actions"
       />
     </DropdownMenu.Trigger>
@@ -26,7 +26,7 @@
         <DropdownMenu.SubTrigger label="Move to">
           <template #leading>
             <i
-              class="ai ai-folder"
+              class="az az-folder"
               aria-hidden="true"
             />
           </template>

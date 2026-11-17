@@ -128,7 +128,7 @@
   > = {
     firewall: {
       kind: 'Firewall',
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       options: [
         { value: 'edge-guard', label: 'edge-guard' },
         { value: 'strict-waf', label: 'strict-waf' }
@@ -137,7 +137,7 @@
     },
     function: {
       kind: 'Function instance',
-      icon: 'ai ai-code',
+      icon: 'az az-code',
       options: [
         { value: 'geo-redirect', label: 'geo-redirect' },
         { value: 'ab-split', label: 'ab-split' }
@@ -192,7 +192,7 @@
         {
           id: 'domain',
           type: 'Domain',
-          icon: 'ai ai-globe',
+          icon: 'az az-globe',
           name: 'shop.example.com',
           status: 'Live',
           severity: 'success'
@@ -205,7 +205,7 @@
         {
           id: 'workload',
           type: 'Workload',
-          icon: 'ai ai-sitemap',
+          icon: 'az az-sitemap',
           name: 'storefront',
           status: 'Active',
           severity: 'success'
@@ -219,7 +219,7 @@
         {
           id: 'application',
           type: 'Application',
-          icon: 'ai ai-box',
+          icon: 'az az-box',
           name: APP.name,
           status: 'Active',
           severity: 'success'
@@ -321,7 +321,7 @@
               label="Deploy"
               variant="outline"
               size="medium"
-              icon="ai ai-cloud-upload"
+              icon="az az-cloud-upload"
               :loading="deploying"
               @click="deployOpen = true"
             />
@@ -345,7 +345,7 @@
                   class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
                 >
                   <i
-                    class="ai ai-box shrink-0 text-body-lg text-(--text-muted)"
+                    class="az az-box shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <div class="flex min-w-0">
@@ -364,7 +364,7 @@
                         }}</span>
                         <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                         <i
-                          class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                          class="az az-external-link shrink-0 text-body-xs leading-none"
                           aria-hidden="true"
                         />
                       </a>
@@ -378,7 +378,7 @@
                     target="_blank"
                     variant="secondary"
                     size="medium"
-                    icon="ai ai-external-link"
+                    icon="az az-external-link"
                   />
                   <DropdownMenu
                     side="bottom"
@@ -387,7 +387,7 @@
                     <DropdownMenu.Trigger>
                       <Tooltip content="Application actions">
                         <IconButton
-                          icon="ai ai-ellipsis"
+                          icon="az az-ellipsis"
                           variant="outline"
                           size="medium"
                           aria-label="Application actions"
@@ -490,7 +490,7 @@
                 label="Add Version"
                 variant="outline"
                 size="medium"
-                icon="ai ai-plus"
+                icon="az az-plus"
               />
             </template>
           </SectionHeader>
@@ -527,7 +527,7 @@
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="ai ai-history"
+                    icon="az az-history"
                     title="No versions yet"
                     description="Every deploy creates a version of this application."
                   />
@@ -565,7 +565,7 @@
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="ai ai-cloud-upload"
+                    icon="az az-cloud-upload"
                     title="No deployments yet"
                     description="Deploy this application and each run lands here."
                   />
@@ -664,7 +664,7 @@
             <Button
               label="Deploy"
               variant="primary"
-              icon="ai ai-cloud-upload"
+              icon="az az-cloud-upload"
               @click="runDeploy"
             />
           </div>

@@ -110,7 +110,7 @@
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Databases"
           variant="outline"
           size="small"
@@ -209,7 +209,7 @@
               <SettingsSection
                 v-model:open="advancedOpen"
                 title="Advanced"
-                icon="ai ai-settings"
+                icon="az az-settings"
                 collapsible
               >
                 <Card :padded="false">

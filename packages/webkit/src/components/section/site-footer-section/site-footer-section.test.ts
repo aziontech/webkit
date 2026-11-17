@@ -26,9 +26,9 @@ const columns = [
 ]
 
 const socials = [
-  { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+  { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
   {
-    icon: 'ai ai-linkedin',
+    icon: 'az az-linkedin',
     label: 'Azion on LinkedIn',
     href: 'https://www.linkedin.com/company/aziontech'
   }

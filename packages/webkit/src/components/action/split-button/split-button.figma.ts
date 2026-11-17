@@ -24,7 +24,7 @@ export default {
   label="${label}"${
     showIcon
       ? figma.code`
-  icon="ai ai-plus"`
+  icon="az az-plus"`
       : ''
   }${
     variant === 'primary'

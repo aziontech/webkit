@@ -22,14 +22,14 @@ describe('CapabilityGridSection', () => {
   it('warns in development when only some items carry an icon', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     render(CapabilityGridSection, {
-      props: { items: [{ ...items[0], icon: 'ai ai-bolt' }, items[1], items[1]] }
+      props: { items: [{ ...items[0], icon: 'az az-bolt' }, items[1], items[1]] }
     })
     expect(warn).toHaveBeenCalledOnce()
     expect(warn.mock.calls[0]?.[0]).toContain('2 of 3 items have no icon')
   })
 
   it.each([
-    ['every item', items.map((item) => ({ ...item, icon: 'ai ai-bolt' }))],
+    ['every item', items.map((item) => ({ ...item, icon: 'az az-bolt' }))],
     ['no item', items]
   ])('does not warn when %s carries an icon', (_label, list) => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
@@ -118,7 +118,7 @@ describe('CapabilityGridSection', () => {
 
   it('draws a cell without an icon when the item has none', () => {
     const { container } = render(CapabilityGridSection, { props: { items } })
-    expect(container.querySelector('i, [class*="ai ai-"]')).toBeNull()
+    expect(container.querySelector('i, [class*="az az-"]')).toBeNull()
   })
 
   it('renders the links example as six linked use cases with no axe violations', async () => {

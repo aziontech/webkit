@@ -479,7 +479,7 @@
         @click="step(-1)"
       >
         <i
-          class="ai ai-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
+          class="az az-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
           aria-hidden="true"
         />
       </button>
@@ -504,7 +504,7 @@
         @click="setOpen(!isOpen)"
       >
         <i
-          :class="model?.type === 'absolute' ? 'ai ai-calendar' : 'ai ai-clock'"
+          :class="model?.type === 'absolute' ? 'az az-calendar' : 'az az-clock'"
           class="shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
           aria-hidden="true"
         />
@@ -513,7 +513,7 @@
         >
         <i
           :data-state="isOpen ? 'open' : 'closed'"
-          class="ai ai-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
+          class="az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
           aria-hidden="true"
         />
       </button>
@@ -528,7 +528,7 @@
         @click="step(1)"
       >
         <i
-          class="ai ai-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
+          class="az az-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
           aria-hidden="true"
         />
       </button>
@@ -595,7 +595,7 @@
               <span class="min-w-0 truncate">{{ optionLabel(option) }}</span>
               <i
                 v-if="draftKey === option.key"
-                class="ai ai-check shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
                 aria-hidden="true"
               />
             </label>
@@ -614,7 +614,7 @@
               <span class="min-w-0 truncate">{{ t('dateRangePicker.custom') }}</span>
               <i
                 v-if="draftKey === CUSTOM"
-                class="ai ai-check shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
                 aria-hidden="true"
               />
             </label>
@@ -661,7 +661,7 @@
                     </option>
                   </select>
                   <i
-                    class="ai ai-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none text-(--text-muted)"
+                    class="az az-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </span>

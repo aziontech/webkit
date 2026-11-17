@@ -464,7 +464,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
     return {
       label: `${rising ? '+' : ''}${change.toFixed(2)}%`,
       severity: (rising ? 'danger' : 'success') as TagSeverity,
-      icon: rising ? 'ai ai-arrow-up-right' : 'ai ai-arrow-down-left'
+      icon: rising ? 'az az-arrow-up-right' : 'az az-arrow-down-left'
     }
   }
 
@@ -759,7 +759,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
         v-if="empty"
         title="No security rules protect your services"
         description="Security metrics and the Needs attention list appear once a rule set protects a service."
-        icon="ai ai-shield"
+        icon="az az-shield"
         bordered
       >
         <template #actions>
@@ -767,7 +767,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
             label="Add rule set"
             variant="primary"
             size="medium"
-            icon="ai ai-plus"
+            icon="az az-plus"
             href="/security/rules"
           />
         </template>
@@ -792,7 +792,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="changeTag('matched')"
@@ -810,7 +810,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Matched requests over time"
@@ -825,7 +825,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Matched requests over time"
@@ -969,7 +969,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="changeTag('categories')"
@@ -981,7 +981,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
@@ -996,7 +996,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
@@ -1048,7 +1048,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="changeTag('countries')"
@@ -1060,7 +1060,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by country"
@@ -1075,7 +1075,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by country"
@@ -1130,7 +1130,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="changeTag('ips')"
@@ -1142,7 +1142,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
@@ -1157,7 +1157,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"
@@ -1199,7 +1199,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -1222,7 +1222,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                 <template #empty>
                   <EmptyState
                     size="small"
-                    icon="ai ai-search"
+                    icon="az az-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -1301,7 +1301,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-shield"
+                  icon="az az-shield"
                   title="No blocked requests in this period"
                   description="Nothing was recorded in this period."
                 />
@@ -1478,7 +1478,7 @@ export const sampleSourceIps: SecuritySourceIp[] = [
 export const sampleAttention: SecurityAttentionEntry[] = [
   {
     id: 'log-only',
-    icon: 'ai ai-eye',
+    icon: 'az az-eye',
     title: 'A rule set logs requests it does not block',
     description: 'The shop service runs its rule set in log-only mode: 1.2K requests passed.',
     severity: 'warning',
@@ -1487,7 +1487,7 @@ export const sampleAttention: SecurityAttentionEntry[] = [
   },
   {
     id: 'spike',
-    icon: 'ai ai-chart-line',
+    icon: 'az az-chart-line',
     title: 'Attack spike on api.example.com',
     description: 'SQL injection against the API rose 64% in the last hour.',
     severity: 'danger',
@@ -1496,7 +1496,7 @@ export const sampleAttention: SecurityAttentionEntry[] = [
   },
   {
     id: 'no-rules',
-    icon: 'ai ai-shield',
+    icon: 'az az-shield',
     title: 'Service without a rule set',
     description: 'The docs service has no security rule set attached.',
     severity: 'warning',

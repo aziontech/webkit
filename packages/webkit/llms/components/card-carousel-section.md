@@ -68,7 +68,7 @@
 ## Right-to-left
 
 - Layout: logical utilities only; the title row keeps the title at the start edge and the controls at the end edge.
-- Icons: the link arrow (`ai ai-arrow-right`) mirrors under `rtl:-scale-x-100` and its hover nudge runs toward the end edge (`rtl:group-hover/card:-translate-x-0.5`); the carousel's chevrons mirror in `carousel`.
+- Icons: the link arrow (`az az-arrow-right`) mirrors under `rtl:-scale-x-100` and its hover nudge runs toward the end edge (`rtl:group-hover/card:-translate-x-0.5`); the carousel's chevrons mirror in `carousel`.
 - Keyboard: the next control steps toward the end edge in both directions (`carousel`).
 - User data: none.
 

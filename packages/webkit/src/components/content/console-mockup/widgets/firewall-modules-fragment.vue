@@ -172,7 +172,7 @@
             >
               <Tag
                 label="Automatically enabled in all accounts"
-                icon="ai ai-lock"
+                icon="az az-lock"
                 severity="info"
                 size="small"
               />

@@ -43,7 +43,7 @@
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-github"
+        icon="az az-github"
         aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
         target="_blank"
@@ -51,7 +51,7 @@
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-linkedin"
+        icon="az az-linkedin"
         aria-label="Azion on LinkedIn"
         href="https://www.linkedin.com/company/aziontech"
         target="_blank"
@@ -59,7 +59,7 @@
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-youtube"
+        icon="az az-youtube"
         aria-label="Azion on YouTube"
         href="https://www.youtube.com/aziontech"
         target="_blank"
@@ -67,7 +67,7 @@
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-x-brand"
+        icon="az az-x-brand"
         aria-label="Azion on X"
         href="https://x.com/aziontech"
         target="_blank"
@@ -75,7 +75,7 @@
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-instagram"
+        icon="az az-instagram"
         aria-label="Azion on Instagram"
         href="https://www.instagram.com/aziontech"
         target="_blank"
@@ -83,7 +83,7 @@
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-discord"
+        icon="az az-discord"
         aria-label="Azion on Discord"
         href="https://discord.gg/azion"
         target="_blank"
@@ -91,7 +91,7 @@
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-reddit"
+        icon="az az-reddit"
         aria-label="Azion on Reddit"
         href="https://www.reddit.com/r/aziontech"
         target="_blank"

@@ -40,7 +40,7 @@
 | --- | --- | --- | --- | --- |
 | `variant` | `'block' \| 'line'` | `'block'` | false | Wrapping paragraph capped at four lines, or one line that scrolls sideways. |
 | `title` | `string` | `''` | false | What the block is, in a word or two. Renders as a titled row above the prompt. |
-| `icon` | `string` | `'ai ai-sparkles'` | false | Azion icon class for the glyph beside the title. |
+| `icon` | `string` | `'az az-sparkles'` | false | Azion icon class for the glyph beside the title. |
 | `label` | `string` | `''` | false | Fallback prompt text when the default slot is empty. |
 
 ## Slots

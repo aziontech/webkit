@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 463f985d727f3b67f4b29a9df63a09b8b2ec26ff10906bd2d40b57603845ae6d
+checksum: 6b5b44aa20bf7cd3ed0966b0f37a78d07639dd6eed37e14c5f63e7ea9db83b27
 created: 2026-06-26
 last_updated: 2026-11-15
 ---
@@ -97,7 +97,7 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
 - `accordion-item/accordion-item.vue` — One disclosure row. Registers itself with the root by `value`, derives its own open/closed state from the injected context, and groups a `Trigger` + a `Content`.
   - Props: `value: string` (**required** — unique identifier used by the open-state model), `disabled?: boolean` (default `false` — prevents this item from toggling; from the Figma component description).
   - Slot: `default` — the item's `Accordion.Trigger` and `Accordion.Content`.
-- `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `ai ai-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded` / `aria-controls`. To satisfy the ARIA accordion pattern, the `<button>` is wrapped in a heading element.
+- `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `az az-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded` / `aria-controls`. To satisfy the ARIA accordion pattern, the `<button>` is wrapped in a heading element.
   - Props: `headingLevel?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{headingLevel}>` for correct document outline).
   - Slot: `default` — header title content.
 - `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The container applies no padding — the slotted content owns its own spacing.

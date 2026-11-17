@@ -28,7 +28,7 @@
             <Button
               label="Switch account"
               variant="outline"
-              icon="ai ai-sync"
+              icon="az az-sync"
               size="medium"
             />
           </div>

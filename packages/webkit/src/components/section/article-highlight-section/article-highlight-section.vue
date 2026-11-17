@@ -223,7 +223,7 @@
         >
           <IconButton
             v-if="autoplaying"
-            :icon="paused ? 'ai ai-play' : 'ai ai-pause'"
+            :icon="paused ? 'az az-play' : 'az az-pause'"
             :aria-label="pauseLabel"
             variant="outline"
             size="small"
@@ -313,7 +313,7 @@
                       variant="secondary"
                       size="large"
                       :href="current.href"
-                      icon="ai ai-chevron-right"
+                      icon="az az-chevron-right"
                       icon-position="trailing"
                       animated
                       class="relative mt-(--spacing-sm) self-start"

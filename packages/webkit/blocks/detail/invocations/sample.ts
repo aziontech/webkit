@@ -39,7 +39,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         id: 'root',
         name: 'image-resizer',
         service: 'Function',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         start: 0,
         duration: 412
       },
@@ -48,7 +48,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'parse-request',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 4,
         duration: 12
       },
@@ -57,7 +57,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'fetch-origin',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 16,
         duration: 186
       },
@@ -66,7 +66,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'dns-lookup',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 16,
         duration: 14
       },
@@ -75,7 +75,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'tls-handshake',
         service: 'Security',
-        icon: 'ai ai-lock',
+        icon: 'az az-lock',
         start: 30,
         duration: 31
       },
@@ -84,7 +84,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'origin-response',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 61,
         duration: 141
       },
@@ -93,7 +93,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'decode',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 202,
         duration: 54
       },
@@ -102,7 +102,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'transform',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 256,
         duration: 92
       },
@@ -111,7 +111,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'put-cache',
         service: 'Storage',
-        icon: 'ai ai-edge-storage',
+        icon: 'az az-object-storage',
         start: 348,
         duration: 38
       }
@@ -140,7 +140,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         id: 'root',
         name: 'image-resizer',
         service: 'Function',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         start: 0,
         duration: 1240,
         status: 'error'
@@ -150,7 +150,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'parse-request',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 4,
         duration: 11
       },
@@ -159,7 +159,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'fetch-origin',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 15,
         duration: 1201,
         status: 'error'
@@ -169,7 +169,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'dns-lookup',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 15,
         duration: 12
       },
@@ -178,7 +178,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'tls-handshake',
         service: 'Security',
-        icon: 'ai ai-lock',
+        icon: 'az az-lock',
         start: 27,
         duration: 34
       },
@@ -187,7 +187,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'origin-response',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 61,
         duration: 1155,
         status: 'error',
@@ -214,7 +214,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         id: 'root',
         name: 'image-resizer',
         service: 'Function',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         start: 0,
         duration: 168,
         status: 'running'
@@ -224,7 +224,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'parse-request',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 3,
         duration: 10
       },
@@ -233,7 +233,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'fetch-origin',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 13,
         duration: 155,
         status: 'running'

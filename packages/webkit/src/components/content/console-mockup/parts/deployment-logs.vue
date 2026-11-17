@@ -361,17 +361,17 @@
             <span class="flex size-5 shrink-0 items-center justify-center">
               <i
                 v-if="stepStatus(i) === 'success'"
-                class="ai ai-circle-check text-(--success-foreground)"
+                class="az az-circle-check text-(--success-foreground)"
                 aria-hidden="true"
               />
               <i
                 v-else-if="stepStatus(i) === 'error'"
-                class="ai ai-circle-x text-(--danger-foreground)"
+                class="az az-circle-x text-(--danger-foreground)"
                 aria-hidden="true"
               />
               <i
                 v-else-if="stepStatus(i) === 'skipped'"
-                class="ai ai-circle-minus text-(--text-muted) opacity-60"
+                class="az az-circle-minus text-(--text-muted) opacity-60"
                 aria-hidden="true"
               />
               <Spinner

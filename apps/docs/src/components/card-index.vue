@@ -45,7 +45,7 @@
       >
         <template #leading>
           <i
-            class="ai ai-filter text-(--text-muted)"
+            class="az az-filter text-(--text-muted)"
             aria-hidden="true"
           />
         </template>

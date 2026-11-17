@@ -109,7 +109,7 @@
           @keydown="onSearchKeydown"
         >
           <template #leading>
-            <i class="ai ai-search" />
+            <i class="az az-search" />
           </template>
         </Input>
       </template>

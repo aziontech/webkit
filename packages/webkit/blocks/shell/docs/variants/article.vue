@@ -20,12 +20,12 @@
   ]
 
   const metaActions = [
-    { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
-    { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' },
+    { value: 'copy', label: 'Copy as Markdown', icon: 'az az-copy' },
+    { value: 'markdown', label: 'View as Markdown', icon: 'az az-eye' },
     {
       value: 'agent-setup',
       label: 'Agent setup',
-      icon: 'ai ai-microchip-ai',
+      icon: 'az az-microchip-ai',
       href: '/docs/agent-setup'
     }
   ]
@@ -54,19 +54,19 @@
   const related = [
     {
       title: 'Applications',
-      icon: 'ai ai-layout-grid',
+      icon: 'az az-layout-grid',
       href: '/docs/applications',
       text: 'Route requests, cache responses and run code with rules.'
     },
     {
       title: 'Functions',
-      icon: 'ai ai-code',
+      icon: 'az az-code',
       href: '/docs/functions',
       text: 'Serverless code that runs close to your users.'
     },
     {
       title: 'Azion CLI',
-      icon: 'ai ai-desktop',
+      icon: 'az az-desktop',
       href: '/docs/azion-cli',
       text: 'Build and deploy from your terminal.'
     }
@@ -92,19 +92,19 @@
       <DocCardGroup :columns="3">
         <DocCard
           title="Deploy a template"
-          icon="ai ai-layout-grid"
+          icon="az az-layout-grid"
           href="#deploy-a-template"
           >A ready-made project, live in a few clicks.</DocCard
         >
         <DocCard
           title="Import from GitHub"
-          icon="ai ai-github"
+          icon="az az-github"
           href="/docs/get-started/import-from-github"
           >Connect a repository; every push deploys.</DocCard
         >
         <DocCard
           title="Deploy with CLI"
-          icon="ai ai-desktop"
+          icon="az az-desktop"
           href="#deploy-with-cli"
           >Build and deploy from your terminal.</DocCard
         >
@@ -181,19 +181,19 @@
       <DocCardGroup :columns="3">
         <DocCard
           title="Go live"
-          icon="ai ai-globe"
+          icon="az az-globe"
           href="/docs/get-started/go-live"
           >Point your own domain at the workload.</DocCard
         >
         <DocCard
           title="Secure your application"
-          icon="ai ai-shield"
+          icon="az az-shield"
           href="/docs/secure"
           >Add a firewall and WAF rules.</DocCard
         >
         <DocCard
           title="Observe your application"
-          icon="ai ai-chart-line"
+          icon="az az-chart-line"
           href="/docs/observe"
           >Read metrics and events in real time.</DocCard
         >

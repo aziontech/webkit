@@ -387,7 +387,7 @@
               </h2>
               <IconButton
                 v-if="!compact"
-                icon="ai ai-window-maximize"
+                icon="az az-window-maximize"
                 :ariaLabel="t('appLayout.showAtSide')"
                 variant="ghost"
                 size="small"
@@ -395,7 +395,7 @@
                 @click="togglePosition"
               />
               <IconButton
-                icon="ai ai-x"
+                icon="az az-x"
                 :ariaLabel="t('appLayout.closeSplitPanel')"
                 variant="ghost"
                 size="small"
@@ -448,7 +448,7 @@
               {{ splitPanelTitle || t('appLayout.splitPanel') }}
             </h2>
             <IconButton
-              icon="ai ai-window-minimize"
+              icon="az az-window-minimize"
               :ariaLabel="t('appLayout.showAtBottom')"
               variant="ghost"
               size="small"
@@ -456,7 +456,7 @@
               @click="togglePosition"
             />
             <IconButton
-              icon="ai ai-x"
+              icon="az az-x"
               :ariaLabel="t('appLayout.closeSplitPanel')"
               variant="ghost"
               size="small"
@@ -491,7 +491,7 @@
               {{ toolsLabel || t('appLayout.tools') }}
             </h2>
             <IconButton
-              icon="ai ai-x"
+              icon="az az-x"
               :ariaLabel="t('appLayout.closeTools')"
               variant="ghost"
               size="small"

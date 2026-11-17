@@ -3,17 +3,17 @@
 
   const items = [
     {
-      icon: 'ai ai-check',
+      icon: 'az az-check',
       title: 'Grow with Azion',
       description: 'Offer a platform your customers already trust, with pricing built for resale.'
     },
     {
-      icon: 'ai ai-check',
+      icon: 'az az-check',
       title: 'Get certified',
       description: 'Train your team on the platform and earn the certifications your projects need.'
     },
     {
-      icon: 'ai ai-check',
+      icon: 'az az-check',
       title: 'Sell together',
       description:
         'Work joint accounts with our sales engineers, from the first call to production.'

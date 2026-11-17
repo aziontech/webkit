@@ -15,7 +15,7 @@
       <SidebarMenuGroup label="Account">
         <SidebarMenuItem
           label="Overview"
-          icon="ai ai-home"
+          icon="az az-home"
           href="/overview"
           active
         />

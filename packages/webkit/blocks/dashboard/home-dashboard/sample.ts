@@ -14,7 +14,7 @@ const marketingSite: HomeDashboardResource = {
   name: 'marketing-site',
   href: '/projects/4410203040',
   typeLabel: 'Project',
-  presetIcon: 'ai-color ai-astro',
+  presetIcon: 'az-color az-astro',
   presetLabel: 'Astro'
 }
 
@@ -23,7 +23,7 @@ const docsSite: HomeDashboardResource = {
   name: 'docs-site',
   href: '/projects/6630405070',
   typeLabel: 'Project',
-  presetIcon: 'ai-color ai-nextjs',
+  presetIcon: 'az-color az-nextjs',
   presetLabel: 'Next.js'
 }
 
@@ -32,7 +32,7 @@ const blackFriday: HomeDashboardResource = {
   name: 'black-friday-2026',
   href: '/projects/5520304060',
   typeLabel: 'Project',
-  presetIcon: 'ai-color ai-nextjs',
+  presetIcon: 'az-color az-nextjs',
   presetLabel: 'Next.js'
 }
 
@@ -59,7 +59,7 @@ export const sampleProjects: HomeDashboardResource[] = [
     name: 'hello-world',
     href: '/projects/2041778390',
     typeLabel: 'Project',
-    presetIcon: 'ai-color ai-javascript',
+    presetIcon: 'az-color az-javascript',
     presetLabel: 'JavaScript'
   },
   {
@@ -67,7 +67,7 @@ export const sampleProjects: HomeDashboardResource[] = [
     name: 'web-app',
     href: '/projects/1784552864',
     typeLabel: 'Project',
-    presetIcon: 'ai-color ai-vue',
+    presetIcon: 'az-color az-vue',
     presetLabel: 'Vue'
   }
 ]

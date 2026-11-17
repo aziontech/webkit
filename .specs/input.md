@@ -4,7 +4,7 @@ category: input
 structure: monolithic
 status: implemented
 spec_version: 8
-checksum: fcc34b8fb7ec8054a216b748923819096ad53d4317735ce3c781c638179f0838
+checksum: 5a6d1114ee415daccfb10620c4cbc713b5f8431683c95d5f8052cc50f03250fb
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -61,7 +61,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
     aria-label="Domain"
   >
     <template #leading>
-      <i class="ai ai-globe" />
+      <i class="az az-globe" />
     </template>
   </Input>
 </template>

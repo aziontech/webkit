@@ -212,7 +212,7 @@ test('every asset kind has a foundation page, linked from llms.txt, that lists e
       assert.ok(page.includes(`\`${item.class ?? item.name}\``), `${kind} ${item.name}`)
   }
   assert.match(files['foundations/illustrations.md'], /`ddos-protection`/)
-  assert.match(files['foundations/icons.md'], /`ai-color ai-react`/)
+  assert.match(files['foundations/icons.md'], /`az-color az-react`/)
 })
 
 test('a component that draws a registry asset links its asset page', () => {

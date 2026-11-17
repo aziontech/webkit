@@ -94,13 +94,13 @@
         title: 'Build',
         items: [
           {
-            icon: 'ai ai-edge-functions',
+            icon: 'az az-functions',
             title: 'Functions',
             description: 'Run code globally with no cold starts',
             href: '/products/functions'
           },
           {
-            icon: 'ai ai-edge-ai',
+            icon: 'az az-ai-inference',
             title: 'AI Inference',
             description: 'Run models close to the user',
             href: 'https://www.azion.com/en/products/ai-inference/'
@@ -111,7 +111,7 @@
         title: 'Store',
         items: [
           {
-            icon: 'ai ai-edge-kv',
+            icon: 'az az-kv-store',
             title: 'KV Store',
             description: 'Store key-value data with low latency',
             href: 'https://www.azion.com/en/products/kv-store/'
@@ -122,7 +122,7 @@
         title: 'Secure',
         items: [
           {
-            icon: 'ai ai-waf-rules',
+            icon: 'az az-waf',
             title: 'WAF',
             description: 'Block common attacks close to traffic',
             href: 'https://www.azion.com/en/products/web-application-firewall/'
@@ -133,7 +133,7 @@
         title: 'Observe',
         items: [
           {
-            icon: 'ai ai-real-time-metrics',
+            icon: 'az az-real-time-metrics',
             title: 'Real-Time Metrics',
             description: 'Watch traffic, errors and latency as they happen',
             href: 'https://www.azion.com/en/products/real-time-metrics/'
@@ -161,13 +161,13 @@
         title: 'Build',
         items: [
           {
-            icon: 'ai ai-edge-functions',
+            icon: 'az az-functions',
             title: 'Functions',
             description: 'Run code globally with no cold starts',
             href: '/products/functions'
           },
           {
-            icon: 'ai ai-edge-ai',
+            icon: 'az az-ai-inference',
             title: 'AI Inference',
             description: 'Run models close to the user',
             href: 'https://www.azion.com/en/products/ai-inference/'
@@ -178,7 +178,7 @@
         title: 'Store',
         items: [
           {
-            icon: 'ai ai-edge-kv',
+            icon: 'az az-kv-store',
             title: 'KV Store',
             description: 'Store key-value data with low latency',
             href: 'https://www.azion.com/en/products/kv-store/'
@@ -189,7 +189,7 @@
         title: 'Secure',
         items: [
           {
-            icon: 'ai ai-waf-rules',
+            icon: 'az az-waf',
             title: 'WAF',
             description: 'Block common attacks close to traffic',
             href: 'https://www.azion.com/en/products/web-application-firewall/'
@@ -219,7 +219,7 @@
         title: 'Build',
         items: [
           {
-            icon: 'ai ai-edge-functions',
+            icon: 'az az-functions',
             title: 'Functions',
             description: 'Run code globally with no cold starts',
             href: '/products/functions'
@@ -230,7 +230,7 @@
         title: 'Store',
         items: [
           {
-            icon: 'ai ai-edge-kv',
+            icon: 'az az-kv-store',
             title: 'KV Store',
             description: 'Store key-value data with low latency',
             href: '/products/kv-store'
@@ -241,7 +241,7 @@
         title: 'Secure',
         items: [
           {
-            icon: 'ai ai-waf-rules',
+            icon: 'az az-waf',
             title: 'WAF',
             description: 'Block common attacks close to traffic',
             href: '/products/web-application-firewall'
@@ -252,7 +252,7 @@
         title: 'Observe',
         items: [
           {
-            icon: 'ai ai-real-time-metrics',
+            icon: 'az az-real-time-metrics',
             title: 'Real-Time Metrics',
             description: 'Watch traffic and errors as they happen',
             href: '/products/real-time-metrics'

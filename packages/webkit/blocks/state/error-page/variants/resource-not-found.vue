@@ -12,7 +12,7 @@
       <EmptyState
         :title="`Service ${resourceId} not found`"
         description="No service with this ID exists in the account. It may have been deleted, or the link may be out of date."
-        icon="ai ai-search"
+        icon="az az-search"
         bordered
       >
         <template #actions>

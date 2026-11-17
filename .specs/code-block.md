@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 32e1554b78eeaa2cc3f5bb46ee265aae51896125aeea7e2149e9f7f589a4fe7a
+checksum: 570283b3cd32860e92ef831b2b6304e6568a3f82932112e7676b33fbb0cc3f08
 created: 2026-05-28
 last_updated: 2026-11-16
 ---
@@ -163,7 +163,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 | `code`            | `string`                | true     | Raw source; split on `\n` for rendering.                                                                                                                                                                                                                                   |
 | `language`        | `string`                | false    | Drives syntax highlighting and default file icon when `fileIcon` is omitted.                                                                                                                                                                                               |
 | `fileName`        | `string`                | false    | When set on the active tab, renders the 40 px filename bar below the tab header (or as the top region when tabs are hidden).                                                                                                                                               |
-| `fileIcon`        | `string`                | false    | Icon name for the filename bar (Azion icon class, e.g. `'ai ai-file'`). Falls back to a language-derived icon when omitted.                                                                                                                                                |
+| `fileIcon`        | `string`                | false    | Icon name for the filename bar (Azion icon class, e.g. `'az az-file'`). Falls back to a language-derived icon when omitted.                                                                                                                                                |
 | `highlightedLine` | `number`                | false    | 1-based line index. Applies info background + leading bar on that row (Figma: Highlighted).                                                                                                                                                                                |
 | `lineChanges`     | `CodeBlockLineChange[]` | false    | Per-line diff metadata. When non-empty, renders diff gutter markers and row backgrounds (Figma: Diff).                                                                                                                                                                     |
 | `original`        | `string`                | false    | The previous version of `code`. When set, the block computes a line diff of `original` against `code` in-house (Myers, no dependency) and draws it per `diffView`; `lineChanges` is ignored on that tab, and `highlightedLine` counts lines of `code`. Copy copies `code`. |
@@ -208,7 +208,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset)                                               | `tabs.length > 1`                                                        |
 | Filename bar (`FileName`, 40 px)                                                                                         | active tab has `fileName`                                                |
-| Label header (40 px, `ai ai-code` / `ai ai-align-left` + label)                                                          | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
+| Label header (40 px, `az az-code` / `az az-align-left` + label)                                                          | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
 | Diff gutter (`+`/`-` + 8 px spacer on unchanged lines)                                                                   | active tab `lineChanges.length > 0`, or the active tab has an `original` |
 | Unified diff (removed lines from `original` before the added lines of `code` in each change, numbered on their own side) | active tab has an `original` and `diffView="unified"`                    |
 | Split diff (two columns, Original and Modified, rows aligned, a change paired line for line)                             | active tab has an `original` and `diffView="split"`                      |

@@ -244,7 +244,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-search"
+                          class="az az-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -357,7 +357,7 @@
                             <IconButton
                               variant="ghost"
                               size="small"
-                              icon="ai ai-circle-info"
+                              icon="az az-circle-info"
                               :aria-label="t('planComparisonSection.about', { label: row.label })"
                             />
                           </PopoverTrigger>
@@ -391,7 +391,7 @@
                   <template v-if="isIncluded(row.values[index])">
                     <Tooltip :content="includedText">
                       <i
-                        class="ai ai-circle-check text-body-md text-(--success-foreground)"
+                        class="az az-circle-check text-body-md text-(--success-foreground)"
                         aria-hidden="true"
                       />
                     </Tooltip>
@@ -400,7 +400,7 @@
                   <template v-else-if="isExcluded(row.values[index])">
                     <Tooltip :content="excludedText">
                       <i
-                        class="ai ai-circle-minus text-body-md text-(--text-muted)"
+                        class="az az-circle-minus text-body-md text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </Tooltip>
@@ -419,7 +419,7 @@
                   :label="closingOf(section)?.label"
                   :href="closingOf(section)?.href"
                   target="_blank"
-                  icon="ai ai-arrow-right"
+                  icon="az az-arrow-right"
                   size="medium"
                 />
               </td>
@@ -436,7 +436,7 @@
                 :label="primaryAction.label"
                 :href="primaryAction.href"
                 target="_blank"
-                icon="ai ai-arrow-right"
+                icon="az az-arrow-right"
                 size="medium"
               />
             </td>

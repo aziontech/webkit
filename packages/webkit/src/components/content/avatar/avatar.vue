@@ -38,7 +38,7 @@
     src: '',
     alt: '',
     label: '',
-    icon: 'ai ai-user',
+    icon: 'az az-user',
     variant: 'circle',
     size: 'medium',
     pattern: undefined,

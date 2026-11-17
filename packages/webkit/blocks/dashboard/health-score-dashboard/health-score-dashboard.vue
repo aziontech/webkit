@@ -375,7 +375,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="ai ai-chart-bar"
+              icon="az az-chart-bar"
               :title="'No samples in ' + phrase"
               description="Each application gets a row once its first sample arrives. Select a longer period."
             />
@@ -466,7 +466,7 @@
           >
             <EmptyState
               size="small"
-              icon="ai ai-circle-check"
+              icon="az az-circle-check"
               :title="'No open incidents in ' + phrase"
               description="An incident opens when an application or a location stays poor for several samples in a row."
             />

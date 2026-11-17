@@ -74,7 +74,7 @@
               label="Delete resource"
               variant="danger"
               size="medium"
-              icon="ai ai-trash"
+              icon="az az-trash"
             />
           </template>
           <div class="flex flex-col gap-(--spacing-md)">

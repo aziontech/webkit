@@ -7,8 +7,8 @@
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
       ]
     }
   ]

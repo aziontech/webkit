@@ -32,7 +32,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Amazon Bedrock',
       title: 'Claude Haiku 5.5',
-      icon: 'ai ai-cloud',
+      icon: 'az az-cloud',
       active: true,
       lit: true
     }

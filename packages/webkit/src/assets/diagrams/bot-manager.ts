@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Request',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Firewall',
       title: 'Rule: run Bot Management',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Bot Management',
       title: 'Score, then classify',
-      icon: 'ai ai-bot-manager',
+      icon: 'az az-bot-manager',
       status: {
         label: 'Score 12',
         severity: 'info'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Human',
       title: 'Request allowed',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Bad bot',
       title: 'Deny, drop or delay',
-      icon: 'ai ai-ban'
+      icon: 'az az-ban'
     }
   ],
   layout: {

@@ -8,9 +8,9 @@
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' },
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
       ]
     }
   ]
@@ -41,7 +41,7 @@
           organization
         }}</span>
         <i
-          class="ai ai-sort shrink-0 text-body-xs text-(--text-muted)"
+          class="az az-sort shrink-0 text-body-xs text-(--text-muted)"
           aria-hidden="true"
         />
       </button>
@@ -62,7 +62,7 @@
           variant="square"
         />
         <i
-          class="ai ai-chevron-down shrink-0 text-body-xs text-(--text-muted)"
+          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted)"
           aria-hidden="true"
         />
       </button>

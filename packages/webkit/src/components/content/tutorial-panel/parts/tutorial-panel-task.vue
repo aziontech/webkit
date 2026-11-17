@@ -69,7 +69,7 @@
     >
       <span
         v-if="status === 'success' && !active"
-        class="ai ai-check text-label-sm"
+        class="az az-check text-label-sm"
       />
       <span v-else>{{ index }}</span>
     </span>

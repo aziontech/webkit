@@ -45,7 +45,7 @@ describe('PlanFeatureList', () => {
   it('hides the check glyph from assistive technology', () => {
     const view = render(PlanFeatureList, { props: { items } })
 
-    for (const glyph of view.container.querySelectorAll('.ai-check')) {
+    for (const glyph of view.container.querySelectorAll('.az-check')) {
       expect(glyph.getAttribute('aria-hidden')).toBe('true')
     }
   })

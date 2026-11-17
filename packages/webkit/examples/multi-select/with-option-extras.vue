@@ -8,8 +8,8 @@
 
   const value = ref([])
   const options = [
-    { value: 'heart', label: 'With icon', icon: 'ai ai-heart' },
-    { value: 'left', label: 'With left slot', leftIcon: 'ai ai-star' },
+    { value: 'heart', label: 'With icon', icon: 'az az-heart' },
+    { value: 'left', label: 'With left slot', leftIcon: 'az az-star' },
     { value: 'tag', label: 'With tag', tag: 'Label' }
   ]
 </script>

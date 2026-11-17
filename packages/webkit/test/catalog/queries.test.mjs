@@ -573,9 +573,9 @@ test('list_assets filters by name, label and keyword', () => {
     ['magalu']
   )
   const trash = listAssets(catalog, { kind: 'icons', query: 'delete' }).items.map((i) => i.class)
-  assert.ok(trash.includes('ai ai-trash'), trash.join(', '))
+  assert.ok(trash.includes('az az-trash'), trash.join(', '))
   const colour = listAssets(catalog, { kind: 'icons', query: 'react' }).items.map((i) => i.class)
-  assert.ok(colour.includes('ai-color ai-react'), colour.join(', '))
+  assert.ok(colour.includes('az-color az-react'), colour.join(', '))
   const cache = listAssets(catalog, { kind: 'diagrams', query: 'tiered cache' }).items
   assert.ok(cache.some((i) => i.name === 'cache'))
   assert.equal(listAssets(catalog, { kind: 'figures', query: 'cache' }).kind, 'lineFigures')
@@ -596,8 +596,8 @@ test('every icon carries search keywords', () => {
 test('the Nitro and Stencil glyphs ship as monochrome brand icons', () => {
   const icons = new Map(listAssets(catalog, { kind: 'icons' }).items.map((i) => [i.class, i]))
   for (const [cls, keyword] of [
-    ['ai ai-nitro', 'server'],
-    ['ai ai-stencil', 'web components']
+    ['az az-nitro', 'server'],
+    ['az az-stencil', 'web components']
   ]) {
     const icon = icons.get(cls)
     assert.ok(icon, cls)
@@ -605,15 +605,15 @@ test('the Nitro and Stencil glyphs ship as monochrome brand icons', () => {
     assert.ok(icon.keywords.includes('brand'), cls)
     assert.ok(icon.keywords.includes(keyword), cls)
     const raw = readFileSync(
-      new URL(`../../../icons/src/svg-raw/ai/${icon.name}.svg`, import.meta.url),
+      new URL(`../../../icons/src/svg-raw/az/${icon.name}.svg`, import.meta.url),
       'utf-8'
     )
     assert.match(raw, /<svg[^>]*fill="currentColor"/, cls)
     assert.doesNotMatch(raw, /#[0-9a-f]{3,6}\b|gradient|<mask|<filter|stroke=/i, cls)
     assert.equal(raw.match(/<path\b/g).length, 1, cls)
   }
-  assert.ok(!icons.has('ai-color ai-nitro'))
-  assert.ok(!icons.has('ai-color ai-stencil'))
+  assert.ok(!icons.has('az-color az-nitro'))
+  assert.ok(!icons.has('az-color az-stencil'))
 })
 
 test('get_component points a consuming component at its asset list', () => {

@@ -160,7 +160,7 @@
                   class="h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
                 >
                   <i
-                    class="ai ai-ellipsis size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
+                    class="az az-ellipsis size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
                     aria-hidden="true"
                   />
                 </DropdownMenu.Trigger>

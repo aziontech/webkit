@@ -367,7 +367,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/applications"
@@ -375,7 +375,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
           />
           <Button
             label="Create Application"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="primary"
             size="large"
             @click="(event: MouseEvent) => emit('create', event)"
@@ -402,7 +402,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                 <template #trigger>
                   <Button
                     :label="selectedCount ? `Delete (${selectedCount})` : 'Delete'"
-                    icon="ai ai-trash"
+                    icon="az az-trash"
                     variant="outline"
                     size="medium"
                     :disabled="blocked || !selectedCount"
@@ -473,14 +473,14 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
             <template #default>
               <EmptyState
                 size="medium"
-                icon="ai ai-layout-grid"
+                icon="az az-layout-grid"
                 title="No applications yet"
                 description="Create an application to start serving traffic."
               >
                 <template #actions>
                   <Button
                     label="Create Application"
-                    icon="ai ai-plus"
+                    icon="az az-plus"
                     variant="secondary"
                     size="small"
                     @click="(event: MouseEvent) => emit('create', event)"
@@ -533,7 +533,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
               <template #empty>
                 <EmptyState
                   size="medium"
-                  icon="ai ai-filter-off"
+                  icon="az az-filter-off"
                   title="No matching applications"
                   description="No application matches these filters."
                 >

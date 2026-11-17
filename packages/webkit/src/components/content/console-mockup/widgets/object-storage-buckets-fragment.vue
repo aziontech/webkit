@@ -141,7 +141,7 @@
           >
             <template #leading>
               <i
-                class="ai ai-search"
+                class="az az-search"
                 aria-hidden="true"
               />
             </template>
@@ -163,7 +163,7 @@
               <template #cell-name="cell">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-edge-storage shrink-0 text-body-lg text-(--text-muted)"
+                    class="az az-object-storage shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span class="truncate">{{ cellValue(cell) }}</span>

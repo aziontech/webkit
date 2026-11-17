@@ -44,7 +44,7 @@
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           :href="docsHref"
           @click="(event: MouseEvent) => emit('docs', event)"
         />

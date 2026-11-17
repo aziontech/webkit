@@ -7,7 +7,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 6e89542596e1f6236e21df8ad1adeac0cdb64ca2f885ed95cc34e40c9c962b8c
+checksum: 4df1a0ec83657277362f1da3dd8c27dd37c8e9a4ff67b468e3abc24f6ca7b83d
 ---
 
 # TemplateGallerySection — Component Spec
@@ -60,13 +60,13 @@ The templates band of a solution page: a framed media split whose copy side invi
       {
         title: 'Astro Odyssey',
         description: 'A marketing website starter built with Astro.',
-        icon: 'ai-color ai-astro',
+        icon: 'az-color az-astro',
         href: '/templates/astro-odyssey'
       },
       {
         title: 'Next.js Commerce',
         description: 'Ecommerce template built with Next.js.',
-        icon: 'ai-color ai-nextjs',
+        icon: 'az-color az-nextjs',
         invertInDark: true,
         href: '/templates/nextjs-commerce'
       }

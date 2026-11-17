@@ -247,7 +247,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Creation Center"
           variant="outline"
           size="small"
@@ -334,7 +334,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
                       class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
                     >
                       <i
-                        class="ai ai-folder text-[length:inherit] leading-none"
+                        class="az az-folder text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
                       {{ currentTemplate.path }}
@@ -371,7 +371,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
                   class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
                 >
                   <i
-                    class="ai ai-github text-body-md leading-none text-(--text-default)"
+                    class="az az-github text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
@@ -380,7 +380,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
             <template #actions>
               <Button
                 label="Continue with GitHub"
-                icon="ai ai-github"
+                icon="az az-github"
                 variant="secondary"
                 size="large"
                 @click="(event: MouseEvent) => emit('connect', event)"
@@ -420,9 +420,9 @@ import type { DeployTemplateTemplate } from './deploy-template.vue'
 export const sampleTemplate: DeployTemplateTemplate = {
   name: 'Nuxt E-commerce',
   description: 'Launch a Nuxt e-commerce or content app in a few steps.',
-  icon: 'ai-color ai-nuxt',
+  icon: 'az-color az-nuxt',
   provider: 'GitHub',
-  providerIcon: 'ai ai-github',
+  providerIcon: 'az az-github',
   scope: 'acme',
   path: 'templates/nuxt-ecommerce'
 }

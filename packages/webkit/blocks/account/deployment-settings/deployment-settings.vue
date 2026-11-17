@@ -588,7 +588,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/deployment-settings"
@@ -596,7 +596,7 @@
           />
           <Button
             label="Create Deployment Setting"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="primary"
             size="large"
             @click="openCreate"
@@ -715,7 +715,7 @@
                 <EmptyState
                   v-else-if="!serviceList.length"
                   size="small"
-                  icon="ai ai-server"
+                  icon="az az-server"
                   title="No services yet"
                   description="Each environment of a new service is linked to a matching Deployment Setting automatically."
                 />
@@ -751,7 +751,7 @@
                         >
                           <template #leading>
                             <i
-                              class="ai ai-search"
+                              class="az az-search"
                               aria-hidden="true"
                             />
                           </template>
@@ -762,7 +762,7 @@
                         >
                           <EmptyState
                             size="small"
-                            icon="ai ai-search"
+                            icon="az az-search"
                             title="No matching services"
                             :description="`No service or setting matches “${serviceFilterProps.modelValue}”.`"
                           >
@@ -877,7 +877,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       variant="outline"
                       size="medium"
                       :loading="loading && !firstLoad"
@@ -890,7 +890,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-download"
+                      icon="az az-download"
                       variant="outline"
                       size="medium"
                       :disabled="!matchingItems.length"
@@ -1009,7 +1009,7 @@
                     <template #empty>
                       <EmptyState
                         size="small"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No matching Deployment Settings"
                         description="No setting matches these filters."
                       >

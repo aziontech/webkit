@@ -106,7 +106,7 @@
           label="Redeploy"
           variant="primary"
           size="medium"
-          icon="ai ai-refresh"
+          icon="az az-refresh"
           :loading="redeploying"
           @click="redeploy"
         />

@@ -2,7 +2,7 @@
 name: webkit-create-surface
 description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
@@ -121,7 +121,7 @@ Each piece of the anatomy is a component — compose them, never re-type their m
 | Piece                        | Component                                                                                                                                                                                                                                                               |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                                                                                                                                                        |
-| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="ai ai-settings"`                                                                                                                                                               |
+| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="az az-settings"`                                                                                                                                                               |
 | Row (field, switch, stacked) | `SettingsRow` (`@aziontech/webkit/settings-row`) with `variant` `field`, `compact` or `stacked`                                                                                                                                                                         |
 | Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `variant="centered"` on a create page (Cancel and Create in a raised card centred at the bottom), `variant="plain"` on an in-page form saved as one unit, `variant="fade"` on a wizard step, the floating default on settings |
 | Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                                                                                                                                                    |
@@ -211,7 +211,7 @@ reuses one or makes one, and the form says which in one place.
 - **Existing is the default when at least one exists.** When none exist, there is no choice to
   offer: the segment is not rendered and the band opens on the New fields.
 - **Existing** shows an inline picker: one selectable `Item` row per resource (icon, name,
-  description), the chosen row marked with `data-selected`, a trailing `ai-check`, and
+  description), the chosen row marked with `data-selected`, a trailing `az-check`, and
   `aria-pressed`. **New** shows the resource's own create fields in the same band.
 - Switching modes keeps both answers: going to New and back finds the same resource still chosen.
 

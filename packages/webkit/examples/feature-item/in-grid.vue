@@ -10,7 +10,7 @@
   >
     <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
       <FeatureItem
-        icon="ai ai-edge-nodes"
+        icon="az az-edge-nodes"
         title="Consistent global speed"
         description="Serve content across hundreds of locations with median latency under 30 ms."
         href="/products/edge-application"
@@ -18,7 +18,7 @@
     </div>
     <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
       <FeatureItem
-        icon="ai ai-load-balancer"
+        icon="az az-load-balancer"
         title="Safer high-traffic launches"
         description="Scale from routine traffic to campaign spikes without cold starts."
         href="/products/load-balancer"
@@ -26,7 +26,7 @@
     </div>
     <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
       <FeatureItem
-        icon="ai ai-code"
+        icon="az az-code"
         title="Compatible with your framework"
         description="Deploy any modern framework or build tool, from Next.js to Astro."
         href="/products/build"

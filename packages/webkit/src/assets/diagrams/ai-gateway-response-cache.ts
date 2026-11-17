@@ -20,7 +20,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Cache API',
       title: 'Stored response',
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-tiered-cache',
       status: {
         label: 'No tokens spent',
         severity: 'success'
@@ -33,7 +33,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'AI Inference',
       title: 'Model call',
-      icon: 'ai ai-edge-ai'
+      icon: 'az az-ai-inference'
     }
   ],
   layout: {

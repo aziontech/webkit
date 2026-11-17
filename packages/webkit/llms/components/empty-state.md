@@ -39,7 +39,7 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `—` | true | Primary heading announcing the empty resource. |
 | `description` | `string` | `''` | false | Supporting body copy below the title. |
-| `icon` | `string` | `''` | false | Azion icon class for the standardized adornment (e.g. `ai ai-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. |
+| `icon` | `string` | `''` | false | Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
 | `bordered` | `boolean` | `false` | false | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background. |
 
@@ -85,7 +85,7 @@
   <EmptyState
     title="No resource yet"
     description="Get started by creating your first resource."
-    icon="ai ai-inbox"
+    icon="az az-inbox"
   >
     <template #actions>
       <div class="flex gap-(--spacing-3)">
@@ -100,7 +100,7 @@
       </div>
       <Link
         label="Docs"
-        icon="ai ai-arrow-right"
+        icon="az az-arrow-right"
         size="medium"
         href="#"
       />
@@ -126,7 +126,7 @@
       :size="size"
       title="No resource yet"
       description="Get started by creating your first resource."
-      icon="ai ai-inbox"
+      icon="az az-inbox"
     >
       <template #actions>
         <div class="flex gap-(--spacing-3)">
@@ -141,7 +141,7 @@
         </div>
         <Link
           label="Docs"
-          icon="ai ai-arrow-right"
+          icon="az az-arrow-right"
           size="medium"
           href="#"
         />
@@ -164,7 +164,7 @@
   <EmptyState
     title="No resource yet"
     description="Get started by creating your first resource."
-    icon="ai ai-inbox"
+    icon="az az-inbox"
   >
     <template #actions>
       <div class="flex gap-(--spacing-3)">
@@ -179,7 +179,7 @@
       </div>
       <Link
         label="Docs"
-        icon="ai ai-arrow-right"
+        icon="az az-arrow-right"
         size="medium"
         href="#"
       />

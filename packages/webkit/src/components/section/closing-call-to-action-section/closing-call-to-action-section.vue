@@ -184,7 +184,7 @@
                 :href="primaryAction.href"
                 variant="secondary"
                 size="large"
-                :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
+                :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(primaryAction.trailing)"
               />
@@ -195,7 +195,7 @@
                 :href="secondaryAction.href"
                 variant="outline"
                 size="large"
-                :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
+                :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(secondaryAction.trailing)"
               />

@@ -152,7 +152,7 @@
         label="New chat"
         variant="ghost"
         size="small"
-        icon="ai ai-plus"
+        icon="az az-plus"
         :disabled="!turns.length"
         @click="newChat"
       />
@@ -165,7 +165,7 @@
         <EmptyState
           title="How can I help with your Azion account?"
           description="Ask about your workloads, cache, security rules and deployments. Answers cite the documentation they come from."
-          icon="ai ai-ask-azion"
+          icon="az az-ask-azion"
         />
         <SuggestionGroup
           :items="starters"
@@ -223,7 +223,7 @@
                 :value="turn.content"
               />
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 aria-label="Regenerate response"
                 variant="ghost"
                 size="small"

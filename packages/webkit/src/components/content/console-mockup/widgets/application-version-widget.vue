@@ -210,12 +210,12 @@
           >
             <span class="px-0.5 text-(--text-muted)">Applications</span>
             <i
-              class="ai ai-chevron-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
+              class="az az-chevron-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">qa-p-app</span>
             <i
-              class="ai ai-chevron-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
+              class="az az-chevron-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">A7TEE0XR</span>
@@ -228,7 +228,7 @@
               label="Ready"
               severity="success"
               size="small"
-              icon="ai ai-circle-fill"
+              icon="az az-circle-fill"
             />
           </div>
         </div>
@@ -312,7 +312,7 @@
                         class="mt-1 inline-flex w-fit items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) px-2 py-1 text-body-xs text-(--text-default)"
                       >
                         <i
-                          class="ai ai-lock text-body-xs"
+                          class="az az-lock text-body-xs"
                           aria-hidden="true"
                         />
                         {{ module.locked }}
@@ -327,7 +327,7 @@
                       label="Contact sales"
                       variant="outline"
                       size="medium"
-                      icon="ai ai-shopping-cart"
+                      icon="az az-shopping-cart"
                     />
                   </span>
                 </div>
@@ -350,7 +350,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -358,19 +358,19 @@
                 </div>
                 <span class="ms-auto inline-flex gap-(--spacing-xs)">
                   <IconButton
-                    icon="ai ai-refresh"
+                    icon="az az-refresh"
                     variant="outline"
                     size="medium"
                     ariaLabel="Refresh"
                   />
                   <IconButton
-                    icon="ai ai-download"
+                    icon="az az-download"
                     variant="outline"
                     size="medium"
                     ariaLabel="Export"
                   />
                   <IconButton
-                    icon="ai ai-column"
+                    icon="az az-columns-3"
                     variant="outline"
                     size="medium"
                     ariaLabel="Columns"
@@ -399,7 +399,7 @@
                 <template v-if="row.group">
                   <span class="inline-flex items-center gap-(--spacing-xs) px-3.5 font-medium">
                     <i
-                      class="ai ai-chevron-down text-body-xs"
+                      class="az az-chevron-down text-body-xs"
                       aria-hidden="true"
                     />
                     {{ row.cells['name'] }}
@@ -431,11 +431,11 @@
                 >
                 <span class="inline-flex items-center gap-(--spacing-sm)">
                   <i
-                    class="ai ai-chevrons-left rtl:-scale-x-100"
+                    class="az az-chevrons-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="ai ai-chevron-left rtl:-scale-x-100"
+                    class="az az-chevron-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -443,11 +443,11 @@
                     >1</span
                   >
                   <i
-                    class="ai ai-chevron-right rtl:-scale-x-100"
+                    class="az az-chevron-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="ai ai-chevrons-right rtl:-scale-x-100"
+                    class="az az-chevrons-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -455,7 +455,7 @@
                   >
                     50
                     <i
-                      class="ai ai-chevron-down"
+                      class="az az-chevron-down"
                       aria-hidden="true"
                     />
                   </span>
@@ -478,7 +478,7 @@
             class="inline-flex size-9 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-canvas)"
           >
             <i
-              class="ai ai-circle-check text-body-lg text-(--text-muted)"
+              class="az az-circle-check text-body-lg text-(--text-muted)"
               aria-hidden="true"
             />
           </span>
@@ -491,13 +491,13 @@
                 label="Ready"
                 severity="success"
                 size="small"
-                icon="ai ai-circle-fill"
+                icon="az az-circle-fill"
               />
               <span
                 class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) px-2 py-0.5 text-body-xs text-(--text-muted)"
               >
                 <i
-                  class="ai ai-lock text-body-xs"
+                  class="az az-lock text-body-xs"
                   aria-hidden="true"
                 />
                 Read Only
@@ -513,13 +513,13 @@
               label="New Version"
               variant="outline"
               size="small"
-              icon="ai ai-plus"
+              icon="az az-plus"
             />
             <Button
               label="Deploy"
               variant="primary"
               size="small"
-              icon="ai ai-cloud-upload"
+              icon="az az-cloud-upload"
             />
           </span>
         </div>

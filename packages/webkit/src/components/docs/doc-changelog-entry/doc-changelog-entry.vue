@@ -96,7 +96,7 @@
           >
           <span class="ms-(--spacing-xs) inline-flex h-lh items-center align-top">
             <i
-              class="ai ai-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
+              class="az az-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
               aria-hidden="true"
             />
           </span>
@@ -151,7 +151,7 @@
             >
             <span class="ms-(--spacing-xs) inline-flex h-lh items-center align-top">
               <i
-                class="ai ai-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
+                class="az az-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
                 aria-hidden="true"
               />
             </span>

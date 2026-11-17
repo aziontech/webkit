@@ -402,10 +402,10 @@ Each variant is the same screen in another state: `get_block("account/billing", 
     `${method.brand} •••• ${method.last4}`
 
   const enterprisePerks = [
-    { icon: 'ai ai-chart-line', label: 'On-demand pricing' },
-    { icon: 'ai ai-arrow-down', label: 'Cut costs with commitments' },
-    { icon: 'ai ai-calendar', label: 'Savings Plan available' },
-    { icon: 'ai ai-headphones', label: 'Advanced support available' }
+    { icon: 'az az-chart-line', label: 'On-demand pricing' },
+    { icon: 'az az-arrow-down', label: 'Cut costs with commitments' },
+    { icon: 'az az-calendar', label: 'Savings Plan available' },
+    { icon: 'az az-headphones', label: 'Advanced support available' }
   ]
 
   const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
@@ -523,7 +523,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
             class="shrink-0"
           >
             <IconButton
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               variant="outline"
               size="medium"
               :loading="loading"
@@ -533,7 +533,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
           </Tooltip>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/billing"
@@ -723,7 +723,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="ai ai-refresh"
+                    icon="az az-refresh"
                     variant="outline"
                     size="medium"
                     :loading="loading"
@@ -736,7 +736,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="ai ai-download"
+                    icon="az az-download"
                     variant="outline"
                     size="medium"
                     :disabled="!matchingItems.length"
@@ -759,7 +759,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
               <template #default>
                 <EmptyState
                   size="medium"
-                  icon="ai ai-file"
+                  icon="az az-file"
                   title="No invoices yet"
                   description="Your first invoice appears here when the first billing cycle closes."
                 >
@@ -768,7 +768,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                       label="How billing works"
                       variant="outline"
                       size="small"
-                      icon="ai ai-external-link"
+                      icon="az az-external-link"
                       href="https://example.com/docs/billing"
                       target="_blank"
                     />
@@ -835,7 +835,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                   <template #cell-actions="{ row }">
                     <Tooltip content="Download invoice">
                       <IconButton
-                        icon="ai ai-file-pdf"
+                        icon="az az-file-pdf"
                         variant="outline"
                         size="small"
                         :href="`https://example.com/invoices/${row.id}.pdf`"
@@ -847,7 +847,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                   <template #empty>
                     <EmptyState
                       size="small"
-                      icon="ai ai-search"
+                      icon="az az-search"
                       title="No matching invoices"
                       description="No invoice matches these filters."
                     >
@@ -929,7 +929,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
               <template #actions>
                 <Button
                   label="Add payment method"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                   variant="outline"
                   size="medium"
                   href="/account/billing/payment-methods/new"

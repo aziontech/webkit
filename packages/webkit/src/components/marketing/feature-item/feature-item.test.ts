@@ -65,13 +65,13 @@ describe('FeatureItem', () => {
 
   it('renders the glyph as decorative and mirrors it on data-icon', () => {
     const { getByTestId, container } = render(FeatureItem, {
-      props: { title: TITLE, icon: 'ai ai-edge-nodes' }
+      props: { title: TITLE, icon: 'az az-edge-nodes' }
     })
     const glyph = container.querySelector('i')
 
     expect(getByTestId(TESTID)).toHaveAttribute('data-icon', 'true')
     expect(glyph).toHaveAttribute('aria-hidden', 'true')
-    expect(glyph).toHaveClass('ai-edge-nodes')
+    expect(glyph).toHaveClass('az-edge-nodes')
   })
 
   it('renders no glyph, and no data-icon, without an icon', () => {
@@ -96,7 +96,7 @@ describe('FeatureItem', () => {
 
   it('closes a linked headline on a decorative arrow', () => {
     const { container } = render(FeatureItem, { props: { title: TITLE, href: '/products/cache' } })
-    const arrow = container.querySelector('.ai-arrow-up-right')
+    const arrow = container.querySelector('.az-arrow-up-right')
 
     expect(arrow).not.toBeNull()
     expect(arrow).toHaveAttribute('aria-hidden', 'true')
@@ -107,7 +107,7 @@ describe('FeatureItem', () => {
 
     expect(getByTestId(TESTID).tagName).toBe('DIV')
     expect(getByTestId(TESTID)).not.toHaveAttribute('data-linked')
-    expect(container.querySelector('.ai-arrow-up-right')).toBeNull()
+    expect(container.querySelector('.az-arrow-up-right')).toBeNull()
     expect(queryByRole('link')).toBeNull()
   })
 
@@ -116,7 +116,7 @@ describe('FeatureItem', () => {
       props: {
         title: TITLE,
         description: DESCRIPTION,
-        icon: 'ai ai-edge-nodes',
+        icon: 'az az-edge-nodes',
         href: '/products/cache'
       }
     })
@@ -125,7 +125,7 @@ describe('FeatureItem', () => {
 
   it('has no accessibility violations', async () => {
     const { container } = render(FeatureItem, {
-      props: { title: TITLE, description: DESCRIPTION, icon: 'ai ai-edge-nodes' }
+      props: { title: TITLE, description: DESCRIPTION, icon: 'az az-edge-nodes' }
     })
     await expectNoA11yViolations(container)
   })

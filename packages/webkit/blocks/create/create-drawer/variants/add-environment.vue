@@ -40,7 +40,7 @@
               :label="selectedEnvironment"
               variant="outline"
               size="medium"
-              icon="ai ai-chevron-down"
+              icon="az az-chevron-down"
               icon-position="trailing"
             />
           </DropdownMenuTrigger>
@@ -60,7 +60,7 @@
             >
               <template #leading
                 ><i
-                  class="ai ai-plus"
+                  class="az az-plus"
                   aria-hidden="true"
               /></template>
             </DropdownMenuItem>

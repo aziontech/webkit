@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 9ebc2de3273c99eb8f765a5c1f220dbefdb912dc0ef6f9c5dd40f69ddd807158
+checksum: 5f3f7f3052f0a0c9c8ac9dd0e1483aeececcf5809c71ad7f31ab099d7ba6ab84
 created: 2026-11-12
 last_updated: 2026-11-16
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-16
 
 Use PlanFeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList.
 
-The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `ai ai-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
+The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `az az-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
 
 ## When to use
 
@@ -99,7 +99,7 @@ _none_
 
 | Region                  | Token (DESIGN.md)                          |
 | ----------------------- | ------------------------------------------ |
-| check glyph             | `ai ai-check`, `var(--success-foreground)` |
+| check glyph             | `az az-check`, `var(--success-foreground)` |
 | label                   | `.text-label-sm`, `var(--text-default)`    |
 | description             | `.text-body-xs`, `var(--text-muted)`       |
 | row gap / column gap    | `var(--spacing-sm)` / `var(--spacing-lg)`  |

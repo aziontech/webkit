@@ -99,13 +99,13 @@
       >
         <i
           :data-streaming="streaming || null"
-          class="ai ai-sparkles data-[streaming]:animate-pulse motion-reduce:animate-none"
+          class="az az-sparkles data-[streaming]:animate-pulse motion-reduce:animate-none"
           aria-hidden="true"
         />
         <span :data-testid="`${testId}__label`">{{ label }}</span>
         <i
           :data-state="isOpen ? 'open' : 'closed'"
-          class="ai ai-chevron-down text-body-xs transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+          class="az az-chevron-down text-body-xs transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
           aria-hidden="true"
         />
       </button>

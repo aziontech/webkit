@@ -51,7 +51,7 @@
       <Button
         size="small"
         variant="secondary"
-        icon="ai ai-filter"
+        icon="az az-filter"
         label="Filter"
       />
     </PopoverTrigger>

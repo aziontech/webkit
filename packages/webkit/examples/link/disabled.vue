@@ -5,7 +5,7 @@
 <template>
   <Link
     label="Learn more"
-    icon="ai ai-external-link"
+    icon="az az-external-link"
     disabled
   />
 </template>

@@ -12,12 +12,12 @@ import DocCallout from './doc-callout.vue'
 // asserted instead: the severity/glyph each variant resolves to, testid, and copy.
 
 const VARIANTS = [
-  { variant: 'note', severity: 'info', icon: 'ai ai-circle-info', neutral: false },
-  { variant: 'info', severity: 'info', icon: 'ai ai-circle-info', neutral: false },
-  { variant: 'tip', severity: 'info', icon: 'ai ai-lightbulb', neutral: true },
-  { variant: 'check', severity: 'success', icon: 'ai ai-circle-check', neutral: false },
-  { variant: 'warning', severity: 'warning', icon: 'ai ai-triangle-alert', neutral: false },
-  { variant: 'danger', severity: 'danger', icon: 'ai ai-circle-x', neutral: false }
+  { variant: 'note', severity: 'info', icon: 'az az-circle-info', neutral: false },
+  { variant: 'info', severity: 'info', icon: 'az az-circle-info', neutral: false },
+  { variant: 'tip', severity: 'info', icon: 'az az-lightbulb', neutral: true },
+  { variant: 'check', severity: 'success', icon: 'az az-circle-check', neutral: false },
+  { variant: 'warning', severity: 'warning', icon: 'az az-triangle-alert', neutral: false },
+  { variant: 'danger', severity: 'danger', icon: 'az az-circle-x', neutral: false }
 ] as const
 
 describe('DocCallout', () => {
@@ -100,7 +100,7 @@ describe('DocCallout', () => {
         slots: { default: 'Copy.' }
       })
       expect(getByTestId('doc-callout').hasAttribute('data-neutral')).toBe(false)
-      expect(container.querySelector('i.ai.ai-circle-info')).toBeInTheDocument()
+      expect(container.querySelector('i.az.az-circle-info')).toBeInTheDocument()
     })
   })
 

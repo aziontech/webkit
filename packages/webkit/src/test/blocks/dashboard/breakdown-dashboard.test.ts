@@ -17,7 +17,7 @@ describe('dashboard/breakdown-dashboard', () => {
             id: 'acme-store',
             rank: 1,
             name: 'acme-store',
-            icon: 'ai ai-server',
+            icon: 'az az-server',
             category: 'Compute',
             amount: 1200,
             share: 100,

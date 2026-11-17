@@ -1005,7 +1005,7 @@
         </div>
         <Tooltip content="New investigation">
           <IconButton
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="ghost"
             size="small"
             aria-label="New investigation"
@@ -1021,7 +1021,7 @@
           <DropdownMenu.Trigger>
             <Tooltip content="Investigation actions">
               <IconButton
-                icon="ai ai-ellipsis"
+                icon="az az-ellipsis"
                 variant="ghost"
                 size="small"
                 :aria-label="`Actions for ${currentSession.name}`"
@@ -1093,7 +1093,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -1106,7 +1106,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               variant="outline"
               size="medium"
               :loading="loading"
@@ -1120,7 +1120,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="ai ai-download"
+              icon="az az-download"
               variant="outline"
               size="medium"
               :disabled="!tableEl"
@@ -1176,7 +1176,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-search"
+                          class="az az-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -1259,7 +1259,7 @@
                               </span>
                               <i
                                 v-if="isValueApplied(field.id, entry.value)"
-                                class="ai ai-check shrink-0 text-(--primary)"
+                                class="az az-check shrink-0 text-(--primary)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1381,7 +1381,7 @@
                                       </span>
                                       <i
                                         v-if="isValueApplied(field.id, entry.value)"
-                                        class="ai ai-check shrink-0 text-(--primary)"
+                                        class="az az-check shrink-0 text-(--primary)"
                                         aria-hidden="true"
                                       />
                                     </span>
@@ -1505,7 +1505,7 @@
 
                     <template #cell-detail="{ row }">
                       <IconButton
-                        :icon="row.id === selectedId ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
+                        :icon="row.id === selectedId ? 'az az-chevron-down' : 'az az-chevron-right'"
                         variant="ghost"
                         size="small"
                         :aria-label="`Open event ${row.id}`"
@@ -1562,7 +1562,7 @@
                         v-if="!events.length"
                         key="no-traffic"
                         size="small"
-                        icon="ai ai-inbox"
+                        icon="az az-inbox"
                         title="No events yet"
                         description="Events appear here as soon as traffic reaches this workspace's resources."
                       />
@@ -1570,7 +1570,7 @@
                         v-else-if="search.trim()"
                         key="no-match"
                         size="small"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No events match this search"
                         description="Clear the search, or widen the period to cover more of the log."
                       />
@@ -1578,7 +1578,7 @@
                         v-else
                         key="no-events"
                         size="small"
-                        icon="ai ai-filter-off"
+                        icon="az az-filter-off"
                         title="No events in this window"
                         description="Widen the period or clear a filter to see more of the log."
                       />
@@ -1617,7 +1617,7 @@
               </h2>
               <Tooltip content="Close">
                 <IconButton
-                  icon="ai ai-x"
+                  icon="az az-x"
                   variant="ghost"
                   size="small"
                   aria-label="Close the event document"

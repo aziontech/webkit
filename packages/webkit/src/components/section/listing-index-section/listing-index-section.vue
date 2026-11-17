@@ -345,7 +345,7 @@
               :label="filterButtonLabel"
               variant="outline"
               size="large"
-              icon="ai ai-filter"
+              icon="az az-filter"
               :aria-expanded="filtersOpen ? 'true' : 'false'"
               :aria-controls="panelId"
               class="shrink-0 lg:hidden"
@@ -361,7 +361,7 @@
               class="min-w-0 flex-1"
             >
               <template #leading>
-                <i class="ai ai-search text-(--text-muted)" />
+                <i class="az az-search text-(--text-muted)" />
               </template>
             </Input>
           </div>
@@ -399,7 +399,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -447,7 +447,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>

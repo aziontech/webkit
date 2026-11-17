@@ -22,7 +22,7 @@
     <template #trigger="{ open }">
       <Button
         label="Table settings"
-        icon="ai ai-settings"
+        icon="az az-settings"
         variant="outline"
         size="medium"
         @click="open"

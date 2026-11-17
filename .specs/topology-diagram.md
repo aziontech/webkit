@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 41be54b349347a7c953be6161ee0306001670d0d49e54957fc8cd50080872c95
+checksum: 192cacfd79ccd711e251bfea08c0122113d27a298f7e6b188d69059b1a3fafa5
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -40,8 +40,8 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 - Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.
 - Mark the last node of each branch `terminal` so no connector leaves it.
 - Give every unbound slot a message that says what happens without it.
-- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`ai ai-external-link`), as every resource name in the console does.
-- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`ai ai-plus`, `variant="outline"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
+- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`az az-external-link`), as every resource name in the console does.
+- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`az az-plus`, `variant="outline"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
 
 ## Usage
 
@@ -59,7 +59,7 @@ The deployment topology of a resource as a left-to-right diagram: each column is
         {
           id: 'domains',
           type: 'Domains',
-          icon: 'ai ai-globe',
+          icon: 'az az-globe',
           name: 'web-app.azion.app',
           status: '1 domain'
         }
@@ -106,7 +106,7 @@ The deployment topology of a resource as a left-to-right diagram: each column is
         content="Add domain"
       >
         <IconButton
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="outline"
           size="small"
           aria-label="Add domain"
@@ -169,7 +169,7 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 | body divider | `var(--border-muted)`                                                                                        |
 | connector    | `var(--accent)`                                                                                              |
 | muted text   | `var(--text-muted)`                                                                                          |
-| name link    | `.text-label-sm` `var(--text-default)`, open glyph `ai ai-external-link` `.text-body-xs`, underline on hover |
+| name link    | `.text-label-sm` `var(--text-default)`, open glyph `az az-external-link` `.text-body-xs`, underline on hover |
 | column gap   | `var(--spacing-xl)`; node gap `var(--spacing-md)`                                                            |
 
 ## Theme gaps
@@ -230,7 +230,7 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 
 ## Decisions and open questions
 
-- **Open glyph on linked names (2026-11-12).** A node with `href` renders its name as a link followed by `ai ai-external-link`, as the design sample's `ResourceLink` and WebKit's `TableCellLink` do for every resource name, internal or not; the link keeps same-tab navigation and the glyph is `aria-hidden`. No `external` flag: the sample never draws a linked name without it.
+- **Open glyph on linked names (2026-11-12).** A node with `href` renders its name as a link followed by `az az-external-link`, as the design sample's `ResourceLink` and WebKit's `TableCellLink` do for every resource name, internal or not; the link keeps same-tab navigation and the glyph is `aria-hidden`. No `external` flag: the sample never draws a linked name without it.
 - **The Domains `+` stays in the `actions` slot.** A battery-2 builder left it out though the slot already existed; the fix is discoverability (Best practices, Usage, the Default example), not a new prop.
 
 ## Constraints — DO NOT

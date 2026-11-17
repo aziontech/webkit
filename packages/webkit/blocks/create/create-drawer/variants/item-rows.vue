@@ -95,7 +95,7 @@
       <template #actions>
         <Button
           label="Add Origin"
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="outline"
           size="medium"
           @click="openCreate"

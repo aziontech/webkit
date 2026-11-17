@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-05-24
 last_updated: 2026-11-16
-checksum: cddc9e25c408ff6c57388abd2c07e626dfb276d277328540c28f3ddc1ae0b29a
+checksum: c0edea5818a15ca46a1e7176d0099ff71887cd368a3edc2576a5a0cabf141191
 ---
 
 # Item — Component Spec
@@ -62,7 +62,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
       <Item.Header>Updated 2 hours ago</Item.Header>
       <Item.Media type="icon">
         <i
-          class="ai ai-edge-firewall"
+          class="az az-firewall"
           aria-hidden="true"
         />
       </Item.Media>

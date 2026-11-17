@@ -159,23 +159,23 @@
     {
       id: 'assets',
       label: 'assets',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
         {
           id: 'assets/images',
           label: 'images',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           children: [
             {
               id: 'assets/images/hero.webp',
               label: 'hero.webp',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '248 KB'
             },
             {
               id: 'assets/images/logo.svg',
               label: 'logo.svg',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '12 KB'
             }
           ]
@@ -183,12 +183,12 @@
         {
           id: 'assets/fonts',
           label: 'fonts',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           children: [
             {
               id: 'assets/fonts/rubik.woff2',
               label: 'rubik.woff2',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '64 KB'
             }
           ]
@@ -196,7 +196,7 @@
         {
           id: 'assets/styles.css',
           label: 'styles.css',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '18 KB'
         }
       ]
@@ -204,18 +204,18 @@
     {
       id: 'reports',
       label: 'reports',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
         {
           id: 'reports/2026-10.csv',
           label: '2026-10.csv',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '1.2 MB'
         },
         {
           id: 'reports/2026-11.csv',
           label: '2026-11.csv',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '840 KB'
         }
       ]
@@ -223,13 +223,13 @@
     {
       id: 'index.html',
       label: 'index.html',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: '4 KB'
     },
     {
       id: 'robots.txt',
       label: 'robots.txt',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: '1 KB'
     }
   ]
@@ -259,23 +259,23 @@
     {
       id: 'assets',
       label: 'assets',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
         {
           id: 'assets/images',
           label: 'images',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           children: [
             {
               id: 'assets/images/hero.webp',
               label: 'hero.webp',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '248 KB'
             },
             {
               id: 'assets/images/logo.svg',
               label: 'logo.svg',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '12 KB'
             }
           ]
@@ -283,12 +283,12 @@
         {
           id: 'assets/fonts',
           label: 'fonts',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           children: [
             {
               id: 'assets/fonts/rubik.woff2',
               label: 'rubik.woff2',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '64 KB'
             }
           ]
@@ -296,7 +296,7 @@
         {
           id: 'assets/styles.css',
           label: 'styles.css',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '18 KB'
         }
       ]
@@ -304,18 +304,18 @@
     {
       id: 'reports',
       label: 'reports',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
         {
           id: 'reports/2026-10.csv',
           label: '2026-10.csv',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '1.2 MB'
         },
         {
           id: 'reports/2026-11.csv',
           label: '2026-11.csv',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '840 KB'
         }
       ]
@@ -323,13 +323,13 @@
     {
       id: 'index.html',
       label: 'index.html',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: '4 KB'
     },
     {
       id: 'robots.txt',
       label: 'robots.txt',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: '1 KB'
     }
   ]
@@ -365,23 +365,23 @@
     {
       id: 'assets',
       label: 'assets',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
         {
           id: 'assets/images',
           label: 'images',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           children: [
             {
               id: 'assets/images/hero.webp',
               label: 'hero.webp',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '248 KB'
             },
             {
               id: 'assets/images/logo.svg',
               label: 'logo.svg',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '12 KB'
             }
           ]
@@ -389,12 +389,12 @@
         {
           id: 'assets/fonts',
           label: 'fonts',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           children: [
             {
               id: 'assets/fonts/rubik.woff2',
               label: 'rubik.woff2',
-              icon: 'ai ai-file',
+              icon: 'az az-file',
               description: '64 KB'
             }
           ]
@@ -402,7 +402,7 @@
         {
           id: 'assets/styles.css',
           label: 'styles.css',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '18 KB'
         }
       ]
@@ -410,18 +410,18 @@
     {
       id: 'reports',
       label: 'reports',
-      icon: 'ai ai-folder',
+      icon: 'az az-folder',
       children: [
         {
           id: 'reports/2026-10.csv',
           label: '2026-10.csv',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '1.2 MB'
         },
         {
           id: 'reports/2026-11.csv',
           label: '2026-11.csv',
-          icon: 'ai ai-file',
+          icon: 'az az-file',
           description: '840 KB'
         }
       ]
@@ -429,13 +429,13 @@
     {
       id: 'index.html',
       label: 'index.html',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: '4 KB'
     },
     {
       id: 'robots.txt',
       label: 'robots.txt',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       description: '1 KB'
     }
   ]
@@ -482,7 +482,7 @@
       </template>
       <template #actions="{ item }">
         <IconButton
-          icon="ai ai-ellipsis"
+          icon="az az-ellipsis"
           variant="ghost"
           size="small"
           :aria-label="'More actions for ' + item.label"

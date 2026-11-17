@@ -42,7 +42,7 @@
     createdBy: string
     /** The framework preset label. */
     framework: string
-    /** The framework icon class, a colored icon such as ai-color ai-nextjs. */
+    /** The framework icon class, a colored icon such as az-color az-nextjs. */
     frameworkIcon: string
   }
 
@@ -229,7 +229,7 @@ jobs:
                       class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
                     >
                       <i
-                        class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
+                        class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <div class="flex min-w-0">
@@ -249,7 +249,7 @@ jobs:
                             }}</span>
                             <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                             <i
-                              class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                              class="az az-external-link shrink-0 text-body-xs leading-none"
                               aria-hidden="true"
                             />
                           </a>
@@ -264,7 +264,7 @@ jobs:
                         target="_blank"
                         variant="secondary"
                         size="medium"
-                        icon="ai ai-external-link"
+                        icon="az az-external-link"
                       />
 
                       <DropdownMenu
@@ -275,7 +275,7 @@ jobs:
                         <DropdownMenu.Trigger>
                           <Tooltip content="Resource actions">
                             <IconButton
-                              icon="ai ai-ellipsis"
+                              icon="az az-ellipsis"
                               variant="outline"
                               size="medium"
                               aria-label="Resource actions"
@@ -290,7 +290,7 @@ jobs:
                           >
                             <template #leading>
                               <i
-                                class="ai ai-copy"
+                                class="az az-copy"
                                 aria-hidden="true"
                               />
                             </template>
@@ -304,7 +304,7 @@ jobs:
                           >
                             <template #leading>
                               <i
-                                class="ai ai-settings"
+                                class="az az-settings"
                                 aria-hidden="true"
                               />
                             </template>
@@ -362,7 +362,7 @@ jobs:
                               >
                               <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                               <i
-                                class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                                class="az az-external-link shrink-0 text-body-xs leading-none"
                                 aria-hidden="true"
                               />
                             </a>
@@ -444,7 +444,7 @@ jobs:
                         label="Documentation"
                         variant="outline"
                         size="medium"
-                        icon="ai ai-book"
+                        icon="az az-book"
                         href="https://example.com/docs/cli"
                         target="_blank"
                       />
@@ -535,7 +535,7 @@ jobs:
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="ai ai-external-link"
+            icon="az az-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >

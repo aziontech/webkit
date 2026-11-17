@@ -96,8 +96,8 @@
     isFiniteNumber(props.delta) ? formatSignedPercent(props.delta, 2, locale.value) : ''
   )
   const deltaIcon = computed(() => {
-    if (!isFiniteNumber(props.delta) || trendKind.value === 'flat') return 'ai ai-minus'
-    return props.delta > 0 ? 'ai ai-arrow-up' : 'ai ai-arrow-down'
+    if (!isFiniteNumber(props.delta) || trendKind.value === 'flat') return 'az az-minus'
+    return props.delta > 0 ? 'az az-arrow-up' : 'az az-arrow-down'
   })
   const deltaMeaning = computed(() => {
     if (trendKind.value === 'good') return t('statTile.better')

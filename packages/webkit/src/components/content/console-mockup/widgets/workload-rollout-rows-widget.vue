@@ -46,7 +46,7 @@
       version: 'v43',
       application: 'storefront',
       framework: 'Next.js',
-      frameworkIcon: 'ai-color ai-nextjs',
+      frameworkIcon: 'az-color az-nextjs',
       environment: 'Preview',
       action: ''
     },
@@ -54,7 +54,7 @@
       version: 'v42',
       application: 'storefront',
       framework: 'Next.js',
-      frameworkIcon: 'ai-color ai-nextjs',
+      frameworkIcon: 'az-color az-nextjs',
       environment: 'Preview',
       action: 'Promote'
     },
@@ -62,7 +62,7 @@
       version: 'v41',
       application: 'storefront',
       framework: 'Next.js',
-      frameworkIcon: 'ai-color ai-nextjs',
+      frameworkIcon: 'az-color az-nextjs',
       environment: 'Production',
       action: ''
     },
@@ -70,7 +70,7 @@
       version: 'v18',
       application: 'marketing-site',
       framework: 'Astro',
-      frameworkIcon: 'ai-color ai-astro',
+      frameworkIcon: 'az-color az-astro',
       environment: 'Production',
       action: ''
     },
@@ -78,7 +78,7 @@
       version: 'v12',
       application: 'docs',
       framework: 'Nuxt',
-      frameworkIcon: 'ai-color ai-nuxt',
+      frameworkIcon: 'az-color az-nuxt',
       environment: 'Preview',
       action: 'Promote'
     },
@@ -86,7 +86,7 @@
       version: 'v31',
       application: 'dashboard',
       framework: 'React',
-      frameworkIcon: 'ai-color ai-react',
+      frameworkIcon: 'az-color az-react',
       environment: 'Production',
       action: ''
     },
@@ -94,10 +94,10 @@
       version: 'v30',
       application: 'dashboard',
       framework: 'React',
-      frameworkIcon: 'ai-color ai-react',
+      frameworkIcon: 'az-color az-react',
       environment: 'Production',
       action: 'Rollback',
-      actionIcon: 'ai ai-undo'
+      actionIcon: 'az az-undo'
     }
   ]
 
@@ -125,7 +125,7 @@
                 label="New Version"
                 variant="outline"
                 size="medium"
-                icon="ai ai-plus"
+                icon="az az-plus"
               />
             </span>
           </template>
@@ -144,7 +144,7 @@
                 <span class="text-label-sm text-(--text-default)">{{ row.version }}</span>
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-edge-application shrink-0 text-body-md leading-none text-(--text-muted)"
+                    class="az az-applications shrink-0 text-body-md leading-none text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span class="truncate text-body-sm text-(--text-default)">{{

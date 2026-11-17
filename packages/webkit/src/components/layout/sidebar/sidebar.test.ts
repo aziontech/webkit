@@ -598,7 +598,7 @@ describe('Sidebar', () => {
       <Sidebar v-model:open="open" collapsible="icon" shortcut>
         <SidebarMenu role="presentation">
           <SidebarMenuGroup label="Build">
-            <SidebarMenuItem label="Applications" icon="ai ai-edge-application" href="/applications" />
+            <SidebarMenuItem label="Applications" icon="az az-applications" href="/applications" />
             <SidebarMenuItem label="No glyph" icon="" href="/plain" />
           </SidebarMenuGroup>
         </SidebarMenu>

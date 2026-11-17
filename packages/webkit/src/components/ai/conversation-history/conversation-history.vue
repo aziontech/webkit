@@ -185,7 +185,7 @@
                 </button>
                 <IconButton
                   v-if="removable"
-                  icon="ai ai-trash"
+                  icon="az az-trash"
                   :ariaLabel="t('conversationHistory.delete', { title: item.title })"
                   variant="ghost"
                   size="small"

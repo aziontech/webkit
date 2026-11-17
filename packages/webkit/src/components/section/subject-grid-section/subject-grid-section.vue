@@ -180,7 +180,7 @@
                   :target="closing.primaryAction.target"
                   variant="secondary"
                   size="large"
-                  :icon="closing.primaryAction.trailing ? 'ai ai-chevron-right' : ''"
+                  :icon="closing.primaryAction.trailing ? 'az az-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(closing.primaryAction.trailing)"
                 />
@@ -192,7 +192,7 @@
                   :target="closing.secondaryAction.target"
                   variant="outline"
                   size="large"
-                  :icon="closing.secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
+                  :icon="closing.secondaryAction.trailing ? 'az az-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(closing.secondaryAction.trailing)"
                 />

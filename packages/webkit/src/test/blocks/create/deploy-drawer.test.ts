@@ -29,7 +29,7 @@ describe('deploy-drawer', () => {
         key: 'service',
         label: 'Service',
         name: 'acme-store',
-        icon: 'ai ai-server',
+        icon: 'az az-server',
         note: '',
         total: 1,
         owner: true,

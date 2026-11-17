@@ -369,7 +369,7 @@
                   variant="secondary"
                   size="large"
                   :href="`#${applyId}`"
-                  icon="ai ai-chevron-right"
+                  icon="az az-chevron-right"
                   icon-position="trailing"
                   animated
                   class="w-full"

@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Requests',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Real-Time Metrics',
       title: 'Traffic, errors and latency',
-      icon: 'ai ai-real-time-metrics',
+      icon: 'az az-real-time-metrics',
       status: {
         label: 'Live',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Dashboards',
       title: 'Per product, per workload',
-      icon: 'ai ai-chart-line',
+      icon: 'az az-chart-line',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'GraphQL API',
       title: 'Metrics in your tools',
-      icon: 'ai ai-graphql'
+      icon: 'az az-graphql'
     }
   ],
   layout: {

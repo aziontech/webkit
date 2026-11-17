@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 30c86dfe07e4a98a198c8158c22e7947d45a19dc8c6ab862c9c7d2fa1fa9b733
+checksum: 0169e30a8187e1d43bba92a032d182cbab95080a80e36fae9699da2d9b470d0a
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 - Set `active` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
 - Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.
-- Use `show-icon` together with `icon` (an Azion icon class; empty shows `ai ai-box`); `icon` alone renders nothing.
+- Use `show-icon` together with `icon` (an Azion icon class; empty shows `az az-box`); `icon` alone renders nothing.
 - `disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
 
 ## Usage
@@ -54,7 +54,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
     label="Applications"
     href="/applications"
     show-icon
-    icon="ai ai-box"
+    icon="az az-box"
   />
 </template>
 ```
@@ -67,7 +67,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 | `href`     | `string`  | `''`    | false    | Destination when the segment is a link (ignored when `active` is true); empty renders `#`. |
 | `active`   | `boolean` | `false` | false    | Marks the current page (last segment); renders as span with `aria-current="page"`.         |
 | `showIcon` | `boolean` | `false` | false    | When true, renders a leading icon before the label.                                        |
-| `icon`     | `string`  | `''`    | false    | Azion icon class for the leading icon when `showIcon` is true; empty shows `ai ai-box`.    |
+| `icon`     | `string`  | `''`    | false    | Azion icon class for the leading icon when `showIcon` is true; empty shows `az az-box`.    |
 | `disabled` | `boolean` | `false` | false    | Disables interaction and applies disabled tokens.                                          |
 
 ## Events

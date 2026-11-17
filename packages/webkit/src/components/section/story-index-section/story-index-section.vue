@@ -277,7 +277,7 @@
               :label="filterButtonLabel"
               variant="outline"
               size="large"
-              icon="ai ai-filter"
+              icon="az az-filter"
               :aria-expanded="filtersOpen ? 'true' : 'false'"
               :aria-controls="panelId"
               class="shrink-0 lg:hidden"
@@ -293,7 +293,7 @@
               class="min-w-0 flex-1"
             >
               <template #leading>
-                <i class="ai ai-search text-(--text-muted)" />
+                <i class="az az-search text-(--text-muted)" />
               </template>
             </Input>
           </div>
@@ -330,7 +330,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -413,7 +413,7 @@
                 >
                   {{ linkLabel }}
                   <i
-                    class="ai ai-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
+                    class="az az-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
                   />
                 </span>
               </a>
@@ -447,7 +447,7 @@
       >
         <EmptyState
           :title="emptyTitle"
-          icon="ai ai-search"
+          icon="az az-search"
           class="p-(--spacing-2xl)"
         >
           <template

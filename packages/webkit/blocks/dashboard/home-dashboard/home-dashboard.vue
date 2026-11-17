@@ -351,7 +351,7 @@
                 side="top"
               >
                 <IconButton
-                  icon="ai ai-x"
+                  icon="az az-x"
                   variant="ghost"
                   size="small"
                   aria-label="Dismiss agent setup"
@@ -386,7 +386,7 @@
               :href="panel.path"
               :label="panel.label"
               size="small"
-              icon="ai ai-chevron-right"
+              icon="az az-chevron-right"
             />
             <span v-else>{{ panel.label }}</span>
           </h2>
@@ -427,7 +427,7 @@
                         class="flex shrink-0 items-center justify-center"
                         aria-hidden="true"
                       >
-                        <i class="ai ai-history text-body-xs leading-none text-(--text-muted)" />
+                        <i class="az az-history text-body-xs leading-none text-(--text-muted)" />
                       </span>
                       <span class="min-w-(--size-24) shrink-0 text-body-sm text-(--text-muted)"
                         >{{ resource.typeLabel }} /</span
@@ -454,7 +454,7 @@
 
                 <Item.Actions>
                   <i
-                    class="ai ai-chevron-right shrink-0 text-body-xs text-(--text-muted)"
+                    class="az az-chevron-right shrink-0 text-body-xs text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Actions>
@@ -655,7 +655,7 @@
                     label="Copy prompt"
                     variant="outline"
                     size="medium"
-                    icon="ai ai-copy"
+                    icon="az az-copy"
                     @click="(event) => emit('copy-prompt', event)"
                   />
                 </div>

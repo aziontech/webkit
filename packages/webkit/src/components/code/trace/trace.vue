@@ -547,7 +547,7 @@
         >
           <template #leading>
             <i
-              class="ai ai-search text-(--text-muted)"
+              class="az az-search text-(--text-muted)"
               aria-hidden="true"
             />
           </template>
@@ -724,7 +724,7 @@
             >
               <i
                 :class="
-                  row.expanded ? 'ai ai-chevron-down' : 'ai ai-chevron-right rtl:-scale-x-100'
+                  row.expanded ? 'az az-chevron-down' : 'az az-chevron-right rtl:-scale-x-100'
                 "
                 class="text-[0.7em]"
               />
@@ -755,12 +755,12 @@
             >
               <i
                 v-if="row.span.id === slowestId"
-                class="ai ai-clock text-(--text-default)"
+                class="az az-clock text-(--text-default)"
                 :data-testid="`${testId}__slowest`"
               />
               <i
                 v-if="row.span.status === 'error'"
-                class="ai ai-circle-alert text-(--danger-foreground)"
+                class="az az-circle-alert text-(--danger-foreground)"
               />
             </span>
           </span>
@@ -806,7 +806,7 @@
       >
         <EmptyState
           size="small"
-          :icon="term ? 'ai ai-search' : 'ai ai-sitemap'"
+          :icon="term ? 'az az-search' : 'az az-sitemap'"
           :title="term ? t('trace.noMatch', { query: search.trim() }) : t('trace.emptyTitle')"
         >
           <template

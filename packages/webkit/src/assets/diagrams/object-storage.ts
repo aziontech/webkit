@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'User',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'Rule: origin is a bucket',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Object Storage',
       title: 'assets bucket',
-      icon: 'ai ai-edge-storage',
+      icon: 'az az-object-storage',
       status: {
         label: '$0 egress',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Cache',
       title: 'Object cached at the edge',
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-tiered-cache',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'S3 API',
       title: 'Any S3-compatible client',
-      icon: 'ai ai-code'
+      icon: 'az az-code'
     }
   ],
   layout: {

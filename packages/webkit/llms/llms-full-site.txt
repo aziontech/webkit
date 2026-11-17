@@ -513,7 +513,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 <template>
   <DocCard
     title="Edge Application"
-    icon="ai ai-server"
+    icon="az az-server"
     href="/docs/edge-application"
     link-label="Read the guide"
   >
@@ -598,14 +598,14 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
   <DocCardGroup :columns="2">
     <DocCard
       title="Start from a template"
-      icon="ai ai-layout-grid"
+      icon="az az-layout-grid"
       href="#templates"
     >
       Ready-made projects that go live in a few clicks. No local tooling.
     </DocCard>
     <DocCard
       title="Import from GitHub"
-      icon="ai ai-github"
+      icon="az az-github"
       href="#github"
     >
       Connect a repository and let Azion build it on every push.
@@ -1147,7 +1147,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
     <ItemList>
       <DocItem
         title="Edge Functions"
-        icon="ai ai-code"
+        icon="az az-code"
         href="#edge-functions"
       >
         Build serverless applications on Azion's global network. Workloads integrate with functions
@@ -1155,7 +1155,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
       </DocItem>
       <DocItem
         title="Edge SQL"
-        icon="ai ai-database"
+        icon="az az-database"
         href="#edge-sql"
       >
         Store relational data across the network. A workload reads it from the location that served
@@ -1163,7 +1163,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
       </DocItem>
       <DocItem
         title="Edge Cache"
-        icon="ai ai-bolt"
+        icon="az az-bolt"
         href="#edge-cache"
       >
         Decide what is cached, for how long, and by which key.
@@ -1497,8 +1497,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
     '## Next steps',
     '',
     '<CardGroup cols={2}>',
-    '  <Card title="Domains" icon="ai ai-globe" href="/docs/domains">Point your own domain at the deploy.</Card>',
-    '  <Card title="Cache" icon="ai ai-bolt" href="/docs/cache">Cache static assets at the edge.</Card>',
+    '  <Card title="Domains" icon="az az-globe" href="/docs/domains">Point your own domain at the deploy.</Card>',
+    '  <Card title="Cache" icon="az az-bolt" href="/docs/cache">Cache static assets at the edge.</Card>',
     '</CardGroup>'
   ].join('\n')
 </script>
@@ -1598,7 +1598,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
       {
         label: 'Repository',
         links: [
-          { label: 'View source', href: 'https://github.com/aziontech', icon: 'ai ai-github' }
+          { label: 'View source', href: 'https://github.com/aziontech', icon: 'az az-github' }
         ]
       }
     ]"
@@ -1706,19 +1706,19 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
       {
         value: 'copy',
         label: 'Copy as Markdown',
-        icon: 'ai ai-copy',
+        icon: 'az az-copy',
         tip: 'Copy this page as Markdown, ready to paste into an assistant.'
       },
       {
         value: 'markdown',
         label: 'View as Markdown',
-        icon: 'ai ai-eye',
+        icon: 'az az-eye',
         tip: 'Open this page as plain Markdown in a new tab.'
       },
       {
         value: 'agent-setup',
         label: 'Agent setup',
-        icon: 'ai ai-microchip-ai',
+        icon: 'az az-microchip-ai',
         href: '/docs/agent-setup',
         tip: 'Set up your coding agent to build on Azion.'
       }
@@ -1854,7 +1854,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 | --- | --- | --- | --- | --- |
 | `variant` | `'block' \| 'line'` | `'block'` | false | Wrapping paragraph capped at four lines, or one line that scrolls sideways. |
 | `title` | `string` | `''` | false | What the block is, in a word or two. Renders as a titled row above the prompt. |
-| `icon` | `string` | `'ai ai-sparkles'` | false | Azion icon class for the glyph beside the title. |
+| `icon` | `string` | `'az az-sparkles'` | false | Azion icon class for the glyph beside the title. |
 | `label` | `string` | `''` | false | Fallback prompt text when the default slot is empty. |
 
 ## Slots
@@ -2477,7 +2477,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
       }
     ],
     socials: [
-      { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
+      { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
     ],
     statusLabel: 'All Systems Operational',
     languages: ['EN', 'PT-BR', 'ES']
@@ -3505,7 +3505,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <template>
   <div class="relative">
     <FeatureItem
-      icon="ai ai-edge-nodes"
+      icon="az az-edge-nodes"
       title="Consistent global speed"
       description="Serve content and run web apps across hundreds of locations with median latency under 30 ms. No infra to manage."
     />
@@ -3739,7 +3739,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 Column props: `title` (`string`, default `''`) — the column's overline heading, which also names its list for a screen reader. Column slot: `default` — the column's rows, composed as `LinkDirectory.Item` elements.
 
-Item props: `icon` (`string`, default `''`) — icon-font class for the glyph, e.g. `ai ai-workloads`; `title` (`string`, default `''`) — the destination's name, the row's first line; `description` (`string`, default `''`) — one line of what the destination is, omitted when empty; `href` (`string`, default `''`) — the destination, where empty renders a row that is not a link and not focusable. Item event: `click` — `(event: MouseEvent, item: LinkDirectoryItemTarget)`, fired only by a row that has an `href`, with `item` carrying `{ title, href }` so a consuming app can `preventDefault()` and route the destination itself instead of reloading.
+Item props: `icon` (`string`, default `''`) — icon-font class for the glyph, e.g. `az az-workloads`; `title` (`string`, default `''`) — the destination's name, the row's first line; `description` (`string`, default `''`) — one line of what the destination is, omitted when empty; `href` (`string`, default `''`) — the destination, where empty renders a row that is not a link and not focusable. Item event: `click` — `(event: MouseEvent, item: LinkDirectoryItemTarget)`, fired only by a row that has an `href`, with `item` carrying `{ title, href }` so a consuming app can `preventDefault()` and route the destination itself instead of reloading.
 
 The compound `index.ts` annotates the `Object.assign` result with an explicit `typeof LinkDirectory & { Column: typeof LinkDirectoryColumn; Item: typeof LinkDirectoryItem }` type. Without it, declaration emit expands the root's private `Props` interface and `vue-tsc` fails with TS4082 ("default export of the module has or is using private name"). Do not simplify it back to a bare `Object.assign`.
 
@@ -3778,19 +3778,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   >
     <LinkDirectoryColumn title="Compute">
       <LinkDirectoryItem
-        icon="ai ai-edge-functions"
+        icon="az az-functions"
         title="Functions"
         description="Run serverless code closer to users"
         href="/functions"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-orchestrator"
+        icon="az az-edge-orchestrator"
         title="Rules Engine"
         description="Automate request handling with programmable rules"
         href="/rules-engine"
       />
       <LinkDirectoryItem
-        icon="ai ai-load-balancer"
+        icon="az az-load-balancer"
         title="Load Balancer"
         description="Distribute traffic for performance and availability"
         href="/load-balancer"
@@ -3798,19 +3798,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Data">
       <LinkDirectoryItem
-        icon="ai ai-edge-storage"
+        icon="az az-object-storage"
         title="Object Storage"
         description="Scalable, durable storage for unstructured data"
         href="/object-storage"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-sql"
+        icon="az az-sql-database"
         title="SQL Database"
         description="Relational database built for distributed applications"
         href="/sql-database"
       />
       <LinkDirectoryItem
-        icon="ai ai-tiered-cache"
+        icon="az az-tiered-cache"
         title="Cache"
         description="Accelerate content delivery and reduce origin load"
         href="/cache"
@@ -3818,19 +3818,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Security">
       <LinkDirectoryItem
-        icon="ai ai-waf-rules"
+        icon="az az-waf"
         title="WAF"
         description="Block application attacks at the edge"
         href="/waf"
       />
       <LinkDirectoryItem
-        icon="ai ai-network-lists"
+        icon="az az-network-lists"
         title="Network Shield"
         description="Absorb volumetric and protocol attacks"
         href="/network-shield"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-dns"
+        icon="az az-edge-dns"
         title="Edge DNS"
         description="Authoritative DNS answered from every location"
         href="/edge-dns"
@@ -3838,19 +3838,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Observe">
       <LinkDirectoryItem
-        icon="ai ai-real-time-metrics"
+        icon="az az-real-time-metrics"
         title="Real-Time Metrics"
         description="Watch traffic and errors as they happen"
         href="/real-time-metrics"
       />
       <LinkDirectoryItem
-        icon="ai ai-data-stream"
+        icon="az az-data-stream"
         title="Data Stream"
         description="Ship events to the tools you already run"
         href="/data-stream"
       />
       <LinkDirectoryItem
-        icon="ai ai-real-time-events"
+        icon="az az-real-time-events"
         title="Real-Time Events"
         description="Query every request without sampling"
         href="/real-time-events"
@@ -4205,7 +4205,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `default` | — | Description body; replaces the `description` prop when provided. |
 | `content` | — | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure. |
 | `media` | — | The band's media; replaces the image built from `src`. |
-| `actions` | — | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="ai ai-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
+| `actions` | — | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="az az-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
 
 ## States
 
@@ -4791,7 +4791,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           size="large"
           href="https://www.azion.com/en/success-case/"
           target="_blank"
-          icon="ai ai-chevron-right"
+          icon="az az-chevron-right"
           icon-position="trailing"
           animated
         />
@@ -5427,22 +5427,22 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         primaryAction: { label: 'Docs', href: '/docs', trailing: true },
         items: [
           {
-            icon: 'ai ai-comments',
+            icon: 'az az-comments',
             title: 'RAG applications',
             description: 'Build topic-specific chatbots on data stored in SQL Database.'
           },
           {
-            icon: 'ai ai-search',
+            icon: 'az az-search',
             title: 'Search applications',
             description: 'Power search with vector similarity queries on stored embeddings.'
           },
           {
-            icon: 'ai ai-sync',
+            icon: 'az az-sync',
             title: 'AI context injection',
             description: 'Give AI applications relevant context from vector embeddings.'
           },
           {
-            icon: 'ai ai-globe',
+            icon: 'az az-globe',
             title: 'AI workflows',
             description: 'Pair stored embeddings with AI Inference to run RAG on Azion.'
           }
@@ -6038,17 +6038,17 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         {
           label: 'Join us on Discord',
           href: 'https://discord.com/invite/Yp9N7RMVZy',
-          icon: 'ai ai-discord'
+          icon: 'az az-discord'
         },
-        { label: 'Read our blog posts', href: '/blog', icon: 'ai ai-comment' },
-        { label: 'Follow us on X', href: 'https://twitter.com/aziontech', icon: 'ai ai-x-brand' }
+        { label: 'Read our blog posts', href: '/blog', icon: 'az az-comment' },
+        { label: 'Follow us on X', href: 'https://twitter.com/aziontech', icon: 'az az-x-brand' }
       ]
     }"
     :copy-page="{
       label: 'Copy page',
       menu: [
-        { value: 'link', label: 'Get page link', icon: 'ai ai-link' },
-        { value: 'markdown', label: 'View page as markdown', icon: 'ai ai-eye' }
+        { value: 'link', label: 'Get page link', icon: 'az az-link' },
+        { value: 'markdown', label: 'View page as markdown', icon: 'az az-eye' }
       ]
     }"
   />
@@ -6529,17 +6529,17 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
   const items = [
     {
-      icon: 'ai ai-bolt',
+      icon: 'az az-bolt',
       title: 'Functions',
       description: 'Run JavaScript and WebAssembly close to every user.'
     },
     {
-      icon: 'ai ai-database',
+      icon: 'az az-database',
       title: 'Object Storage',
       description: 'Keep files where they are read, with no egress to plan for.'
     },
     {
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       title: 'Firewall',
       description: 'Stop bots and attacks before they reach your origin.'
     }
@@ -7140,7 +7140,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the link line ink follows `brand.ink`; the story text is `var(--text-default)` on `var(--bg-canvas)`.
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.
-- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `ai-arrow-up-right` mirrors under right-to-left.
+- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `az-arrow-up-right` mirrors under right-to-left.
 
 ## Examples
 
@@ -7863,14 +7863,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   <ContactHubSection
     :lanes="[
       {
-        icon: 'ai ai-briefcase',
+        icon: 'az az-briefcase',
         title: 'Sales',
         description:
           'Discuss your requirements, get custom pricing, or see the platform running on your own workload.',
         action: { label: 'Talk to sales', href: '/contact/sales' }
       },
       {
-        icon: 'ai ai-headphones',
+        icon: 'az az-headphones',
         title: 'Support',
         description:
           'Log in with your Azion account to open a ticket. Our engineers pick it up 24/7 on paid support plans.',
@@ -7884,7 +7884,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     ]"
     :channels="[
       {
-        icon: 'ai ai-shield',
+        icon: 'az az-shield',
         title: 'Under a cyberattack?',
         description:
           'Get emergency mitigation for an attack in progress, even before you become a customer.',
@@ -7892,14 +7892,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         target: '_blank'
       },
       {
-        icon: 'ai ai-discord',
+        icon: 'az az-discord',
         title: 'Join the community',
         description: 'Ask developers and the Azion team on Discord. Open to everyone, on any plan.',
         href: 'https://discord.com/invite/pM8ANzztuB',
         target: '_blank'
       },
       {
-        icon: 'ai ai-book',
+        icon: 'az az-book',
         title: 'Read the docs',
         description: 'Guides, API reference, and troubleshooting for every Azion product.',
         href: 'https://www.azion.com/en/documentation/',
@@ -8056,22 +8056,22 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     :primary-action="{ label: 'Docs', href: '/site/docs', trailing: true }"
     :items="[
       {
-        icon: 'ai ai-comments',
+        icon: 'az az-comments',
         title: 'RAG Applications',
         description: 'Build topic-specific chatbots with the topic data stored in SQL Database.'
       },
       {
-        icon: 'ai ai-search',
+        icon: 'az az-search',
         title: 'Search Applications',
         description: 'Power search with vector similarity queries on stored embeddings.'
       },
       {
-        icon: 'ai ai-sync',
+        icon: 'az az-sync',
         title: 'AI Context Injection',
         description: 'Give AI applications relevant context from vector embeddings.'
       },
       {
-        icon: 'ai ai-globe',
+        icon: 'az az-globe',
         title: 'AI Workflows',
         description: 'Pair stored embeddings with AI Inference to run RAG applications on Azion.'
       }
@@ -8758,22 +8758,22 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
   const items = [
     {
-      icon: 'ai ai-edge-ai',
+      icon: 'az az-ai-inference',
       title: 'Build AI applications',
       description: 'Run AI agents and inference close to your users.'
     },
     {
-      icon: 'ai ai-build-pillar',
+      icon: 'az az-build-pillar',
       title: 'Modernize applications',
       description: 'Go from commit to a live URL in minutes.'
     },
     {
-      icon: 'ai ai-secure-pillar',
+      icon: 'az az-secure-pillar',
       title: 'Protect applications and APIs',
       description: 'Block DDoS attacks, malicious bots, and API abuse.'
     },
     {
-      icon: 'ai ai-app-accelerator',
+      icon: 'az az-application-accelerator',
       title: 'Speed up every workload',
       description: '100+ data centers, with a 30 ms median latency.'
     }
@@ -9230,19 +9230,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   const facets = [
     {
       label: 'Engineering',
-      icon: 'ai ai-sitemap'
+      icon: 'az az-sitemap'
     },
     {
       label: 'San Francisco, California',
-      icon: 'ai ai-map-pin'
+      icon: 'az az-map-pin'
     },
     {
       label: 'Hybrid',
-      icon: 'ai ai-building'
+      icon: 'az az-building'
     },
     {
       label: 'Full-time',
-      icon: 'ai ai-clock'
+      icon: 'az az-clock'
     }
   ]
 
@@ -10495,7 +10495,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - The highlighted plan carries the accent bar and the secondary button; the others carry an outlined button
 - Below the large breakpoint only the picked plan's column shows (`data-folded` on the others); the picker opens on the highlighted plan, or the first
 - Picker search: the picker's list carries a search field that narrows the plans by name; with no match it shows a `role="status"` line from the locale catalog (`No results found.`); the query clears each time the list opens or closes
-- Cells: an included cell is a `ai ai-circle-check` mark and a not-included cell an `ai ai-circle-minus` mark, each with a tooltip of its label on hover and the same label as `sr-only` text
+- Cells: an included cell is a `az az-circle-check` mark and a not-included cell an `az az-circle-minus` mark, each with a tooltip of its label on hover and the same label as `sr-only` text
 - Hint: a row with `hint` ends its label with an info icon button that opens a popover titled with the label and described by the hint
 - Closing rule: when neither the last band nor the table carries a closing link, the last row draws a bottom rule (`data-closing`) so the table never ends open
 - Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.
@@ -10660,13 +10660,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Build',
         items: [
           {
-            icon: 'ai ai-edge-functions',
+            icon: 'az az-functions',
             title: 'Functions',
             description: 'Run code globally with no cold starts',
             href: '/products/functions'
           },
           {
-            icon: 'ai ai-edge-ai',
+            icon: 'az az-ai-inference',
             title: 'AI Inference',
             description: 'Run models close to the user',
             href: 'https://www.azion.com/en/products/ai-inference/'
@@ -10677,7 +10677,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Store',
         items: [
           {
-            icon: 'ai ai-edge-kv',
+            icon: 'az az-kv-store',
             title: 'KV Store',
             description: 'Store key-value data with low latency',
             href: 'https://www.azion.com/en/products/kv-store/'
@@ -10688,7 +10688,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Secure',
         items: [
           {
-            icon: 'ai ai-waf-rules',
+            icon: 'az az-waf',
             title: 'WAF',
             description: 'Block common attacks close to traffic',
             href: 'https://www.azion.com/en/products/web-application-firewall/'
@@ -10699,7 +10699,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Observe',
         items: [
           {
-            icon: 'ai ai-real-time-metrics',
+            icon: 'az az-real-time-metrics',
             title: 'Real-Time Metrics',
             description: 'Watch traffic, errors and latency as they happen',
             href: 'https://www.azion.com/en/products/real-time-metrics/'
@@ -10805,23 +10805,23 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       featuresTitle: 'All features included.',
       features: [
         {
-          icon: 'ai ai-globe',
+          icon: 'az az-globe',
           label: 'Global infrastructure'
         },
         {
-          icon: 'ai ai-edge-functions',
+          icon: 'az az-functions',
           label: 'Serverless functions'
         },
         {
-          icon: 'ai ai-edge-storage',
+          icon: 'az az-object-storage',
           label: 'Storage and database'
         },
         {
-          icon: 'ai ai-image',
+          icon: 'az az-image',
           label: 'Image Processor'
         },
         {
-          icon: 'ai ai-edge-firewall',
+          icon: 'az az-firewall',
           label: 'DDoS mitigation and firewall'
         }
       ],
@@ -10854,23 +10854,23 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       featuresTitle: 'All Hobby features, plus:',
       features: [
         {
-          icon: 'ai ai-workloads',
+          icon: 'az az-workloads',
           label: 'Additional workloads'
         },
         {
-          icon: 'ai ai-edge-application',
+          icon: 'az az-applications',
           label: 'Higher application limits'
         },
         {
-          icon: 'ai ai-store',
+          icon: 'az az-store-pillar',
           label: 'More storage capacity'
         },
         {
-          icon: 'ai ai-waf-rules',
+          icon: 'az az-waf',
           label: 'Broader security coverage'
         },
         {
-          icon: 'ai ai-wallet',
+          icon: 'az az-wallet',
           label: 'Configurable spend limit'
         }
       ],
@@ -10887,23 +10887,23 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       featuresTitle: 'All Pro features, plus:',
       features: [
         {
-          icon: 'ai ai-chart-line',
+          icon: 'az az-chart-line',
           label: 'On-demand pricing'
         },
         {
-          icon: 'ai ai-arrow-down',
+          icon: 'az az-arrow-down',
           label: 'Cut costs with commitments'
         },
         {
-          icon: 'ai ai-layers',
+          icon: 'az az-layers',
           label: 'Capacity Reservation available'
         },
         {
-          icon: 'ai ai-calendar',
+          icon: 'az az-calendar',
           label: 'Savings Plan available'
         },
         {
-          icon: 'ai ai-business-support',
+          icon: 'az az-business-support',
           label: 'Advanced support available'
         }
       ],
@@ -11218,7 +11218,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `ai ai-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
+- A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `az az-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
 - Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Accessibility
@@ -11364,37 +11364,37 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
   const socials = [
     {
-      icon: 'ai ai-github',
+      icon: 'az az-github',
       label: 'Azion on GitHub',
       href: 'https://github.com/aziontech'
     },
     {
-      icon: 'ai ai-linkedin',
+      icon: 'az az-linkedin',
       label: 'Azion on LinkedIn',
       href: 'https://www.linkedin.com/company/aziontech'
     },
     {
-      icon: 'ai ai-youtube',
+      icon: 'az az-youtube',
       label: 'Azion on YouTube',
       href: 'https://www.youtube.com/aziontech'
     },
     {
-      icon: 'ai ai-x-brand',
+      icon: 'az az-x-brand',
       label: 'Azion on X',
       href: 'https://x.com/aziontech'
     },
     {
-      icon: 'ai ai-instagram',
+      icon: 'az az-instagram',
       label: 'Azion on Instagram',
       href: 'https://www.instagram.com/aziontech'
     },
     {
-      icon: 'ai ai-discord',
+      icon: 'az az-discord',
       label: 'Azion on Discord',
       href: 'https://discord.gg/azion'
     },
     {
-      icon: 'ai ai-reddit',
+      icon: 'az az-reddit',
       label: 'Azion on Reddit',
       href: 'https://www.reddit.com/r/aziontech'
     }
@@ -11975,26 +11975,26 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       {
         title: 'AI Inference Starter Kit',
         description: 'Create an application that runs AI models close to users.',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'Next.js Commerce',
         description: 'Ecommerce template built with Next.js and Shopify.',
-        icon: 'ai-color ai-nextjs',
+        icon: 'az-color az-nextjs',
         invertInDark: true,
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'Astro Odyssey',
         description: 'A modern business marketing website theme/starter built with Astro.',
-        icon: 'ai-color ai-astro',
+        icon: 'az-color az-astro',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'SvelteKit Commerce',
         description: 'Ecommerce template built with SvelteKit and Shopify.',
-        icon: 'ai-color ai-svelte',
+        icon: 'az-color az-svelte',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       }
     ]"

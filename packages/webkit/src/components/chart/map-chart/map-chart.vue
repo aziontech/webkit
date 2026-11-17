@@ -461,7 +461,7 @@
         <EmptyState
           :title="emptyTitle || t('mapChart.emptyTitle')"
           :description="emptyDescription"
-          icon="ai ai-globe"
+          icon="az az-globe"
           size="small"
           bordered
           :data-testid="`${testId}__empty`"

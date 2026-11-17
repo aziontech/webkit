@@ -165,7 +165,7 @@
       placeholder="Leading icon"
     >
       <template #leading>
-        <i class="ai ai-globe" />
+        <i class="az az-globe" />
       </template>
     </Input>
     <Input
@@ -173,7 +173,7 @@
       placeholder="Trailing icon"
     >
       <template #trailing>
-        <i class="ai ai-search" />
+        <i class="az az-search" />
       </template>
     </Input>
     <Input
@@ -181,10 +181,10 @@
       placeholder="Both icons"
     >
       <template #leading>
-        <i class="ai ai-globe" />
+        <i class="az az-globe" />
       </template>
       <template #trailing>
-        <i class="ai ai-search" />
+        <i class="az az-search" />
       </template>
     </Input>
   </div>

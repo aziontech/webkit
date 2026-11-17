@@ -67,7 +67,7 @@
 
 Column props: `title` (`string`, default `''`) — the column's overline heading, which also names its list for a screen reader. Column slot: `default` — the column's rows, composed as `LinkDirectory.Item` elements.
 
-Item props: `icon` (`string`, default `''`) — icon-font class for the glyph, e.g. `ai ai-workloads`; `title` (`string`, default `''`) — the destination's name, the row's first line; `description` (`string`, default `''`) — one line of what the destination is, omitted when empty; `href` (`string`, default `''`) — the destination, where empty renders a row that is not a link and not focusable. Item event: `click` — `(event: MouseEvent, item: LinkDirectoryItemTarget)`, fired only by a row that has an `href`, with `item` carrying `{ title, href }` so a consuming app can `preventDefault()` and route the destination itself instead of reloading.
+Item props: `icon` (`string`, default `''`) — icon-font class for the glyph, e.g. `az az-workloads`; `title` (`string`, default `''`) — the destination's name, the row's first line; `description` (`string`, default `''`) — one line of what the destination is, omitted when empty; `href` (`string`, default `''`) — the destination, where empty renders a row that is not a link and not focusable. Item event: `click` — `(event: MouseEvent, item: LinkDirectoryItemTarget)`, fired only by a row that has an `href`, with `item` carrying `{ title, href }` so a consuming app can `preventDefault()` and route the destination itself instead of reloading.
 
 The compound `index.ts` annotates the `Object.assign` result with an explicit `typeof LinkDirectory & { Column: typeof LinkDirectoryColumn; Item: typeof LinkDirectoryItem }` type. Without it, declaration emit expands the root's private `Props` interface and `vue-tsc` fails with TS4082 ("default export of the module has or is using private name"). Do not simplify it back to a bare `Object.assign`.
 
@@ -106,19 +106,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   >
     <LinkDirectoryColumn title="Compute">
       <LinkDirectoryItem
-        icon="ai ai-edge-functions"
+        icon="az az-functions"
         title="Functions"
         description="Run serverless code closer to users"
         href="/functions"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-orchestrator"
+        icon="az az-edge-orchestrator"
         title="Rules Engine"
         description="Automate request handling with programmable rules"
         href="/rules-engine"
       />
       <LinkDirectoryItem
-        icon="ai ai-load-balancer"
+        icon="az az-load-balancer"
         title="Load Balancer"
         description="Distribute traffic for performance and availability"
         href="/load-balancer"
@@ -126,19 +126,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Data">
       <LinkDirectoryItem
-        icon="ai ai-edge-storage"
+        icon="az az-object-storage"
         title="Object Storage"
         description="Scalable, durable storage for unstructured data"
         href="/object-storage"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-sql"
+        icon="az az-sql-database"
         title="SQL Database"
         description="Relational database built for distributed applications"
         href="/sql-database"
       />
       <LinkDirectoryItem
-        icon="ai ai-tiered-cache"
+        icon="az az-tiered-cache"
         title="Cache"
         description="Accelerate content delivery and reduce origin load"
         href="/cache"
@@ -146,19 +146,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Security">
       <LinkDirectoryItem
-        icon="ai ai-waf-rules"
+        icon="az az-waf"
         title="WAF"
         description="Block application attacks at the edge"
         href="/waf"
       />
       <LinkDirectoryItem
-        icon="ai ai-network-lists"
+        icon="az az-network-lists"
         title="Network Shield"
         description="Absorb volumetric and protocol attacks"
         href="/network-shield"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-dns"
+        icon="az az-edge-dns"
         title="Edge DNS"
         description="Authoritative DNS answered from every location"
         href="/edge-dns"
@@ -166,19 +166,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="Observe">
       <LinkDirectoryItem
-        icon="ai ai-real-time-metrics"
+        icon="az az-real-time-metrics"
         title="Real-Time Metrics"
         description="Watch traffic and errors as they happen"
         href="/real-time-metrics"
       />
       <LinkDirectoryItem
-        icon="ai ai-data-stream"
+        icon="az az-data-stream"
         title="Data Stream"
         description="Ship events to the tools you already run"
         href="/data-stream"
       />
       <LinkDirectoryItem
-        icon="ai ai-real-time-events"
+        icon="az az-real-time-events"
         title="Real-Time Events"
         description="Query every request without sampling"
         href="/real-time-events"
@@ -205,13 +205,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     >
       <LinkDirectoryColumn title="Compute">
         <LinkDirectoryItem
-          icon="ai ai-edge-functions"
+          icon="az az-functions"
           title="Functions"
           description="Run serverless code closer to users"
           href="/functions"
         />
         <LinkDirectoryItem
-          icon="ai ai-load-balancer"
+          icon="az az-load-balancer"
           title="Load Balancer"
           description="Distribute traffic for performance and availability"
           href="/load-balancer"
@@ -219,13 +219,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Data">
         <LinkDirectoryItem
-          icon="ai ai-edge-sql"
+          icon="az az-sql-database"
           title="SQL Database"
           description="Relational database built for distributed applications"
           href="/sql-database"
         />
         <LinkDirectoryItem
-          icon="ai ai-tiered-cache"
+          icon="az az-tiered-cache"
           title="Cache"
           description="Accelerate content delivery and reduce origin load"
           href="/cache"
@@ -239,7 +239,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     >
       <LinkDirectoryColumn title="Compute">
         <LinkDirectoryItem
-          icon="ai ai-edge-functions"
+          icon="az az-functions"
           title="Functions"
           description="Run serverless code closer to users"
           href="/functions"
@@ -247,7 +247,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Data">
         <LinkDirectoryItem
-          icon="ai ai-edge-sql"
+          icon="az az-sql-database"
           title="SQL Database"
           description="Relational database built for distributed applications"
           href="/sql-database"
@@ -255,7 +255,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Security">
         <LinkDirectoryItem
-          icon="ai ai-waf-rules"
+          icon="az az-waf"
           title="WAF"
           description="Block application attacks at the edge"
           href="/waf"
@@ -269,7 +269,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     >
       <LinkDirectoryColumn title="Compute">
         <LinkDirectoryItem
-          icon="ai ai-edge-functions"
+          icon="az az-functions"
           title="Functions"
           description="Run serverless code closer to users"
           href="/functions"
@@ -277,7 +277,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Data">
         <LinkDirectoryItem
-          icon="ai ai-edge-sql"
+          icon="az az-sql-database"
           title="SQL Database"
           description="Relational database built for distributed applications"
           href="/sql-database"
@@ -285,7 +285,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Security">
         <LinkDirectoryItem
-          icon="ai ai-waf-rules"
+          icon="az az-waf"
           title="WAF"
           description="Block application attacks at the edge"
           href="/waf"
@@ -293,7 +293,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       </LinkDirectoryColumn>
       <LinkDirectoryColumn title="Observe">
         <LinkDirectoryItem
-          icon="ai ai-real-time-metrics"
+          icon="az az-real-time-metrics"
           title="Real-Time Metrics"
           description="Watch traffic and errors as they happen"
           href="/real-time-metrics"
@@ -320,25 +320,25 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   >
     <LinkDirectoryColumn title="Available now">
       <LinkDirectoryItem
-        icon="ai ai-edge-functions"
+        icon="az az-functions"
         title="Functions"
         description="Run serverless code closer to users"
         href="/functions"
       />
       <LinkDirectoryItem
-        icon="ai ai-edge-sql"
+        icon="az az-sql-database"
         title="SQL Database"
         href="/sql-database"
       />
     </LinkDirectoryColumn>
     <LinkDirectoryColumn title="On the way">
       <LinkDirectoryItem
-        icon="ai ai-edge-ai"
+        icon="az az-ai-inference"
         title="AI Inference"
         description="Run AI models closer to users"
       />
       <LinkDirectoryItem
-        icon="ai ai-gateway"
+        icon="az az-ai-gateway"
         title="AI Gateway"
         description="Secure, manage, and optimize AI traffic"
       />

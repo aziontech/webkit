@@ -85,7 +85,7 @@
     key: `${prefix}:module-auth-gateway`,
     label: 'Module',
     name: 'auth-gateway',
-    icon: 'ai ai-code',
+    icon: 'az az-code',
     note: '',
     sharedWith: ['checkout-api', 'account-api'],
     total: 8,
@@ -100,7 +100,7 @@
     key: `${prefix}:integration-payments-api`,
     label: 'Integration',
     name: 'payments-api',
-    icon: 'ai ai-link',
+    icon: 'az az-link',
     note: 'Not versioned. Deploys with its current settings.',
     sharedWith: [],
     total: 0,
@@ -111,7 +111,7 @@
     key: `${prefix}:module-geo-redirect`,
     label: 'Module',
     name: 'geo-redirect',
-    icon: 'ai ai-code',
+    icon: 'az az-code',
     note: '',
     sharedWith: [],
     total: ready ? 11 : 0,
@@ -134,7 +134,7 @@
       key: 'service',
       label: 'Service',
       name: 'web-app',
-      icon: 'ai ai-server',
+      icon: 'az az-server',
       note: '',
       total: 6,
       versions: [
@@ -150,7 +150,7 @@
       key: 'config',
       label: 'Resource',
       name: 'web-app-config',
-      icon: 'ai ai-box',
+      icon: 'az az-box',
       note: '',
       total: 2,
       versions: [
@@ -569,7 +569,7 @@
           label="Deploy"
           variant="outline"
           size="medium"
-          icon="ai ai-cloud-upload"
+          icon="az az-cloud-upload"
         />
       </DrawerTrigger>
 
@@ -646,7 +646,7 @@
                                 :aria-label="`Change version of ${row.name}`"
                                 variant="outline"
                                 size="small"
-                                icon="ai ai-chevron-down"
+                                icon="az az-chevron-down"
                                 icon-position="trailing"
                                 :disabled="!row.versions.length"
                               />
@@ -666,7 +666,7 @@
                                 >
                                   <template #leading>
                                     <i
-                                      class="ai ai-search"
+                                      class="az az-search"
                                       aria-hidden="true"
                                     />
                                   </template>
@@ -822,7 +822,7 @@
                                                 label="Shared"
                                                 severity="info"
                                                 size="small"
-                                                icon="ai ai-link"
+                                                icon="az az-link"
                                               />
                                             </span>
                                           </Tooltip>
@@ -863,7 +863,7 @@
                                               :aria-label="`Change version of ${dependency.name}`"
                                               variant="outline"
                                               size="small"
-                                              icon="ai ai-chevron-down"
+                                              icon="az az-chevron-down"
                                               icon-position="trailing"
                                               :disabled="!dependency.versions.length"
                                             />
@@ -883,7 +883,7 @@
                                               >
                                                 <template #leading>
                                                   <i
-                                                    class="ai ai-search"
+                                                    class="az az-search"
                                                     aria-hidden="true"
                                                   />
                                                 </template>
@@ -990,7 +990,7 @@
                             class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              class="ai ai-box text-body-xs text-(--text-default)"
+                              class="az az-box text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
                           </span>
@@ -1069,7 +1069,7 @@
                                     >
                                       <template #leading>
                                         <i
-                                          class="ai ai-search"
+                                          class="az az-search"
                                           aria-hidden="true"
                                         />
                                       </template>
@@ -1127,7 +1127,7 @@
                                 label="Change"
                                 variant="outline"
                                 size="small"
-                                icon="ai ai-chevron-down"
+                                icon="az az-chevron-down"
                                 icon-position="trailing"
                               />
                             </DropdownMenu.Trigger>
@@ -1217,7 +1217,7 @@
                               class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
-                                class="ai ai-box text-body-xs text-(--text-default)"
+                                class="az az-box text-body-xs text-(--text-default)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1290,7 +1290,7 @@
                                       >
                                         <template #leading>
                                           <i
-                                            class="ai ai-search"
+                                            class="az az-search"
                                             aria-hidden="true"
                                           />
                                         </template>
@@ -1360,7 +1360,7 @@
                   class="flex min-w-0 items-start gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
                 >
                   <i
-                    class="ai ai-triangle-alert mt-0.5 shrink-0 text-body-xs"
+                    class="az az-triangle-alert mt-0.5 shrink-0 text-body-xs"
                     aria-hidden="true"
                   />
                   <span>{{ blocker }}</span>

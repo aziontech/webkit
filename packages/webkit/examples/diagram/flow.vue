@@ -5,13 +5,13 @@
     ariaLabel:
       'You run azion deploy in a terminal, in the project folder; the Azion CLI calls the Azion API, which creates the resources in your account.',
     nodes: [
-      { key: 'terminal', type: 'pill', title: 'Terminal', icon: 'ai ai-desktop', active: true },
+      { key: 'terminal', type: 'pill', title: 'Terminal', icon: 'az az-desktop', active: true },
       {
         key: 'project',
         type: 'card',
         eyebrow: 'Project folder',
         title: 'azion.config.js',
-        icon: 'ai ai-folder',
+        icon: 'az az-folder',
         active: true
       },
       {
@@ -19,7 +19,7 @@
         type: 'card',
         eyebrow: 'Azion CLI',
         title: 'azion deploy',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         active: true,
         lit: true
       },
@@ -28,14 +28,14 @@
         type: 'card',
         eyebrow: 'Azion API',
         title: 'api.azion.com',
-        icon: 'ai ai-cloud'
+        icon: 'az az-cloud'
       },
       {
         key: 'resources',
         type: 'card',
         eyebrow: 'Account resources',
         title: 'Workloads, applications, functions',
-        icon: 'ai ai-server'
+        icon: 'az az-server'
       }
     ],
     layout: {

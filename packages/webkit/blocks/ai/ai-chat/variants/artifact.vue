@@ -99,7 +99,7 @@
         label="Show artifact"
         variant="ghost"
         size="small"
-        icon="ai ai-window-maximize"
+        icon="az az-window-maximize"
         @click="openCanvas"
       />
     </header>
@@ -128,7 +128,7 @@
                       :title="ARTIFACT"
                       :description="`Version ${(turn.version ?? 0) + 1}`"
                       meta="SQL"
-                      icon="ai ai-code"
+                      icon="az az-code"
                       openable
                       @open="((version = turn.version ?? 0), openCanvas($event))"
                     />

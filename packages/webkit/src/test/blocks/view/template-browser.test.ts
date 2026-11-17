@@ -37,7 +37,7 @@ describe('view/template-browser block', () => {
         title: 'Acme Shop',
         category: 'starters',
         framework: 'vite',
-        icon: 'ai ai-edge-storage',
+        icon: 'az az-object-storage',
         description: 'A small storefront for Acme products.',
         updated: 'Nov 3, 2026',
         repository: 'example-org/templates/acme-shop'

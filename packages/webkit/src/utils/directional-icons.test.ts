@@ -10,26 +10,26 @@ import {
 
 describe('directional icons', () => {
   it('mirrors arrows and chevrons, never external links, media or logos', () => {
-    expect(isDirectionalIcon('ai ai-chevron-right')).toBe(true)
-    expect(isDirectionalIcon('ai ai-arrow-left')).toBe(true)
-    expect(isDirectionalIcon('ai ai-log-out')).toBe(true)
+    expect(isDirectionalIcon('az az-chevron-right')).toBe(true)
+    expect(isDirectionalIcon('az az-arrow-left')).toBe(true)
+    expect(isDirectionalIcon('az az-log-out')).toBe(true)
     for (const icon of [
-      'ai ai-external-link',
-      'ai ai-arrow-up-right',
-      'ai ai-play',
-      'ai ai-github',
-      'ai ai-chevron-down',
+      'az az-external-link',
+      'az az-arrow-up-right',
+      'az az-play',
+      'az az-github',
+      'az az-chevron-down',
       '',
       undefined
     ]) {
       expect(isDirectionalIcon(icon)).toBe(false)
     }
-    expect(directionalIconClass('ai ai-chevron-left')).toBe(MIRROR_CLASS)
-    expect(directionalIconClass('ai ai-box')).toBe('')
+    expect(directionalIconClass('az az-chevron-left')).toBe(MIRROR_CLASS)
+    expect(directionalIconClass('az az-box')).toBe('')
   })
 
   it('keeps the stylesheet rule in sync with the list', () => {
-    const selectors = [...styles.matchAll(/\.(ai-[a-z0-9-]+)/g)].map((m) => m[1])
+    const selectors = [...styles.matchAll(/\.(az-[a-z0-9-]+)/g)].map((m) => m[1])
     expect(new Set(selectors)).toEqual(new Set(DIRECTIONAL_ICONS))
   })
 
@@ -40,13 +40,13 @@ describe('directional icons', () => {
       expect(isDirectionalIcon(`x${icon}`)).toBe(false)
     }
     for (const icon of [
-      'ai-arrow-up-left',
-      'ai-circle-arrow-up',
+      'az-arrow-up-left',
+      'az-circle-arrow-up',
       'pi-chevron-left',
       'ai-chevron-double-left',
       'ai-angle-left',
       'ai-sign-in',
-      'ai-circle-chevron-up'
+      'az-circle-chevron-up'
     ]) {
       expect(isDirectionalIcon(icon)).toBe(false)
     }

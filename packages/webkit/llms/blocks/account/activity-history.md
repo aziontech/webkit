@@ -343,7 +343,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/activity-history"
@@ -373,7 +373,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="outline"
                 size="medium"
                 :loading="loading"
@@ -386,7 +386,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-download"
+                icon="az az-download"
                 variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -424,7 +424,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
           <template #default>
             <EmptyState
               size="medium"
-              icon="ai ai-history"
+              icon="az az-history"
               title="No activity in this period"
               :description="
                 widerRange
@@ -497,7 +497,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-search"
+                  icon="az az-search"
                   title="No matching events"
                   description="No event in this period matches these filters."
                 >

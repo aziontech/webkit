@@ -301,7 +301,7 @@
                             label="Delete project"
                             variant="danger"
                             size="medium"
-                            icon="ai ai-trash"
+                            icon="az az-trash"
                             data-testid="danger-zone-delete"
                             @click="deleteOpen = true"
                           />

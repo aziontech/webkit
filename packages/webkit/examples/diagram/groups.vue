@@ -7,40 +7,40 @@
         key: 'user',
         type: 'pill',
         title: 'User',
-        icon: 'ai ai-user',
+        icon: 'az az-user',
         active: true
       },
       {
         key: 'functions',
         type: 'tile',
         title: 'Functions',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         lit: true
       },
       {
         key: 'cache',
         type: 'tile',
         title: 'Cache',
-        icon: 'ai ai-tiered-cache'
+        icon: 'az az-tiered-cache'
       },
       {
         key: 'firewall',
         type: 'tile',
         title: 'Firewall',
-        icon: 'ai ai-edge-firewall'
+        icon: 'az az-firewall'
       },
       {
         key: 'storage',
         type: 'tile',
         title: 'Object Storage',
-        icon: 'ai ai-edge-storage'
+        icon: 'az az-object-storage'
       },
       {
         key: 'origin',
         type: 'item',
         eyebrow: 'Origin',
         title: 'origin.example.com',
-        icon: 'ai ai-database'
+        icon: 'az az-database'
       }
     ],
     layout: {

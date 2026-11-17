@@ -47,7 +47,7 @@
       >
         <template #leading>
           <i
-            class="ai ai-filter text-(--text-muted)"
+            class="az az-filter text-(--text-muted)"
             aria-hidden="true"
           />
         </template>
@@ -106,7 +106,7 @@
             >
               <span class="truncate">{{ item.label }}</span>
               <i
-                class="ai ai-arrow-right shrink-0 text-(--text-muted) rtl:rotate-180"
+                class="az az-arrow-right shrink-0 text-(--text-muted) rtl:rotate-180"
                 aria-hidden="true"
               />
             </a>
@@ -122,7 +122,7 @@
     <EmptyState
       v-if="!groups.length"
       :title="t.noResults"
-      icon="ai ai-filter"
+      icon="az az-filter"
       bordered
     />
   </div>

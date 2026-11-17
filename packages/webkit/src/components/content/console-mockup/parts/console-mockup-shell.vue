@@ -91,32 +91,32 @@
       key: 'start',
       label: '',
       entries: [
-        { key: 'overview', icon: 'ai ai-home', label: 'Overview' },
-        { key: 'workloads', icon: 'ai ai-workloads', label: 'Workloads' },
-        { key: 'deployments', icon: 'ai ai-deploy-pillar', label: 'Deployments' }
+        { key: 'overview', icon: 'az az-home', label: 'Overview' },
+        { key: 'workloads', icon: 'az az-workloads', label: 'Workloads' },
+        { key: 'deployments', icon: 'az az-deploy-pillar', label: 'Deployments' }
       ]
     },
     {
       key: 'build',
       label: 'Build',
       entries: [
-        { key: 'applications', icon: 'ai ai-edge-application', label: 'Applications' },
-        { key: 'functions', icon: 'ai ai-edge-functions', label: 'Functions' },
-        { key: 'variables', icon: 'ai ai-variables', label: 'Variables' },
-        { key: 'connectors', icon: 'ai ai-edge-connectors', label: 'Connectors' },
-        { key: 'custom-pages', icon: 'ai ai-custom-pages', label: 'Custom Pages' }
+        { key: 'applications', icon: 'az az-applications', label: 'Applications' },
+        { key: 'functions', icon: 'az az-functions', label: 'Functions' },
+        { key: 'variables', icon: 'az az-variables', label: 'Variables' },
+        { key: 'connectors', icon: 'az az-connectors', label: 'Connectors' },
+        { key: 'custom-pages', icon: 'az az-custom-pages', label: 'Custom Pages' }
       ]
     },
     {
       key: 'secure',
       label: 'Secure',
       entries: [
-        { key: 'firewall', icon: 'ai ai-edge-firewall', label: 'Firewall' },
-        { key: 'edge-dns', icon: 'ai ai-edge-dns', label: 'Edge DNS' },
-        { key: 'waf-rules', icon: 'ai ai-waf-rules', label: 'WAF Rules' },
+        { key: 'firewall', icon: 'az az-firewall', label: 'Firewall' },
+        { key: 'edge-dns', icon: 'az az-edge-dns', label: 'Edge DNS' },
+        { key: 'waf-rules', icon: 'az az-waf', label: 'WAF Rules' },
         {
           key: 'certificate-manager',
-          icon: 'ai ai-certificate-manager',
+          icon: 'az az-certificate-manager',
           label: 'Certificate Manager'
         }
       ]
@@ -304,7 +304,7 @@
         class="relative z-10 flex h-14 shrink-0 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xl)"
       >
         <IconButton
-          icon="ai ai-menu"
+          icon="az az-menu"
           variant="outline"
           size="small"
           ariaLabel="Open navigation"
@@ -318,27 +318,27 @@
             label="Create"
             variant="primary"
             size="small"
-            icon="ai ai-plus"
+            icon="az az-plus"
           />
           <HighlightButton
             label="Copilot"
             size="small"
-            icon="ai ai-ask-azion"
+            icon="az az-ask-azion"
           />
           <Button
             label="Feedback"
             variant="outline"
             size="small"
-            icon="ai ai-flag"
+            icon="az az-flag"
           />
           <IconButton
-            icon="ai ai-circle-help"
+            icon="az az-circle-help"
             variant="outline"
             size="small"
             ariaLabel="Help"
           />
           <IconButton
-            icon="ai ai-user"
+            icon="az az-user"
             variant="outline"
             size="small"
             ariaLabel="Account"
@@ -403,7 +403,7 @@
               >
                 <i
                   v-if="index > 0"
-                  class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                  class="az az-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
                 <li
@@ -419,7 +419,7 @@
                 class="flex h-8 w-56 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm)"
               >
                 <i
-                  class="ai ai-search text-(--text-muted)"
+                  class="az az-search text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)"
@@ -435,12 +435,12 @@
                 label="Create"
                 variant="primary"
                 size="medium"
-                icon="ai ai-circle-plus"
+                icon="az az-circle-plus"
               />
               <HighlightButton
                 label="Agent"
                 size="medium"
-                icon="ai ai-ask-azion"
+                icon="az az-ask-azion"
               />
               <Avatar
                 label="myemail@example.com"

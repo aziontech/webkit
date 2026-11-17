@@ -3,45 +3,45 @@ import type { ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-roo
 export const navigation: ConsoleLayoutNavGroup[] = [
   {
     items: [
-      { id: 'home', label: 'Home', icon: 'ai ai-home', href: '/onboarding' },
-      { id: 'projects', label: 'Projects', icon: 'ai ai-folder' },
-      { id: 'deployments', label: 'Deployments', icon: 'ai ai-cloud-upload' }
+      { id: 'home', label: 'Home', icon: 'az az-home', href: '/onboarding' },
+      { id: 'projects', label: 'Projects', icon: 'az az-folder' },
+      { id: 'deployments', label: 'Deployments', icon: 'az az-cloud-upload' }
     ]
   },
   {
     label: 'Build',
     items: [
-      { id: 'resources', label: 'Resources', icon: 'ai ai-box', href: '/resources' },
-      { id: 'services', label: 'Services', icon: 'ai ai-server' },
-      { id: 'variables', label: 'Variables', icon: 'ai ai-sliders-horizontal' },
-      { id: 'integrations', label: 'Integrations', icon: 'ai ai-link' },
-      { id: 'templates', label: 'Templates', icon: 'ai ai-copy' }
+      { id: 'resources', label: 'Resources', icon: 'az az-box', href: '/resources' },
+      { id: 'services', label: 'Services', icon: 'az az-server' },
+      { id: 'variables', label: 'Variables', icon: 'az az-sliders-horizontal' },
+      { id: 'integrations', label: 'Integrations', icon: 'az az-link' },
+      { id: 'templates', label: 'Templates', icon: 'az az-copy' }
     ]
   },
   {
     label: 'Security',
     items: [
-      { id: 'domains', label: 'Domains', icon: 'ai ai-globe' },
-      { id: 'policies', label: 'Policies', icon: 'ai ai-shield' },
-      { id: 'rule-sets', label: 'Rule sets', icon: 'ai ai-list' },
-      { id: 'keys', label: 'Keys', icon: 'ai ai-key' }
+      { id: 'domains', label: 'Domains', icon: 'az az-globe' },
+      { id: 'policies', label: 'Policies', icon: 'az az-shield' },
+      { id: 'rule-sets', label: 'Rule sets', icon: 'az az-list' },
+      { id: 'keys', label: 'Keys', icon: 'az az-key' }
     ]
   },
   {
     label: 'Data',
     items: [
-      { id: 'databases', label: 'Databases', icon: 'ai ai-database', tagValue: 'Preview' },
-      { id: 'storage', label: 'Storage', icon: 'ai ai-inbox' }
+      { id: 'databases', label: 'Databases', icon: 'az az-database', tagValue: 'Preview' },
+      { id: 'storage', label: 'Storage', icon: 'az az-inbox' }
     ]
   },
   {
     label: 'Observability',
     items: [
-      { id: 'logs', label: 'Logs', icon: 'ai ai-file' },
+      { id: 'logs', label: 'Logs', icon: 'az az-file' },
       {
         id: 'metrics-module',
         label: 'Metrics',
-        icon: 'ai ai-chart-bar',
+        icon: 'az az-chart-bar',
         type: 'drill',
         groups: [
           { items: [{ id: 'metrics', label: 'Overview' }] },
@@ -70,17 +70,17 @@ export const navigation: ConsoleLayoutNavGroup[] = [
           }
         ]
       },
-      { id: 'events', label: 'Events', icon: 'ai ai-bolt' }
+      { id: 'events', label: 'Events', icon: 'az az-bolt' }
     ]
   },
   {
     label: 'More',
     items: [
-      { id: 'catalog', label: 'Catalog', icon: 'ai ai-layout-grid' },
+      { id: 'catalog', label: 'Catalog', icon: 'az az-layout-grid' },
       {
         id: 'settings',
         label: 'Settings',
-        icon: 'ai ai-settings',
+        icon: 'az az-settings',
         type: 'drill',
         groups: [
           {

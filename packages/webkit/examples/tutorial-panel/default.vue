@@ -93,7 +93,7 @@
           <Hotspot hotspot-id="new-service">
             <Button
               label="New service"
-              icon="ai ai-plus"
+              icon="az az-plus"
               size="medium"
             />
           </Hotspot>

@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-15
 last_updated: 2026-11-16
-checksum: fce16d5baf5c9d56cec91d556a9184f226835a2bb220e47039b8fa8f0661c888
+checksum: c1cd4bbaa32415d6a2223b81ae247887bac7cfafb1220b595cbec84c29793cc4
 ---
 
 # ArticleIndexSection — Component Spec
@@ -201,7 +201,7 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 ## Right-to-left
 
 - Layout: logical utilities only (`border-e`, `ps-`/`pe-`); the cover cell sits at the inline start.
-- Icons: the read cue's `ai-arrow-up-right` and the search glyph do not mirror; client marks never mirror.
+- Icons: the read cue's `az-arrow-up-right` and the search glyph do not mirror; client marks never mirror.
 - Keyboard: the category picker and the dropdowns own their keyboard maps under `rtl`.
 - User data: none.
 

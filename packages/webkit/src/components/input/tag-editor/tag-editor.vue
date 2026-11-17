@@ -236,7 +236,7 @@
           :content="removeLabel"
         >
           <IconButton
-            icon="ai ai-trash"
+            icon="az az-trash"
             variant="outline"
             size="medium"
             :ariaLabel="removeLabel"

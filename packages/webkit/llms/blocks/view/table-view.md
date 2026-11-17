@@ -366,7 +366,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/resources"
@@ -374,7 +374,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
           />
           <Button
             label="Create Resource"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="primary"
             size="large"
             @click="(event: MouseEvent) => emit('create', event)"
@@ -398,7 +398,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                 class="shrink-0"
               >
                 <IconButton
-                  icon="ai ai-refresh"
+                  icon="az az-refresh"
                   variant="outline"
                   size="medium"
                   :loading="loading"
@@ -411,7 +411,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                 class="shrink-0"
               >
                 <IconButton
-                  icon="ai ai-download"
+                  icon="az az-download"
                   variant="outline"
                   size="medium"
                   :disabled="blocked || !matchingItems.length"
@@ -442,7 +442,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
               <template #default>
                 <EmptyState
                   size="medium"
-                  icon="ai ai-box"
+                  icon="az az-box"
                   title="No resources yet"
                   description="Create a resource to start serving traffic on your domains."
                 >
@@ -450,14 +450,14 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                     <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                       <Button
                         label="Create Resource"
-                        icon="ai ai-plus"
+                        icon="az az-plus"
                         variant="secondary"
                         size="small"
                         @click="(event: MouseEvent) => emit('create', event)"
                       />
                       <Button
                         label="Documentation"
-                        icon="ai ai-book"
+                        icon="az az-book"
                         variant="outline"
                         size="small"
                         href="https://example.com/docs/resources"
@@ -529,7 +529,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                         >
                           <template #leading
                             ><i
-                              class="ai ai-cloud-upload"
+                              class="az az-cloud-upload"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -539,7 +539,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                         >
                           <template #leading
                             ><i
-                              class="ai ai-eye"
+                              class="az az-eye"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -549,7 +549,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                         >
                           <template #leading
                             ><i
-                              class="ai ai-copy"
+                              class="az az-copy"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -561,7 +561,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                         >
                           <template #leading
                             ><i
-                              class="ai ai-trash"
+                              class="az az-trash"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -571,7 +571,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                   <template #empty>
                     <EmptyState
                       size="medium"
-                      icon="ai ai-filter-off"
+                      icon="az az-filter-off"
                       title="No matching resources"
                       description="No resource matches these filters."
                     >

@@ -212,10 +212,10 @@ describe('PlanComparisonSection', () => {
       (row) => within(row).queryByRole('rowheader') && !isBandHead(row)
     )
     const included = within(rows[1]).getAllByRole('cell')[0]!
-    expect(included.querySelector('.ai-circle-check')).not.toBeNull()
+    expect(included.querySelector('.az-circle-check')).not.toBeNull()
     expect(within(included).getByTestId('tooltip')).toBeInTheDocument()
     const excluded = within(rows[3]).getAllByRole('cell')[0]!
-    expect(excluded.querySelector('.ai-circle-minus')).not.toBeNull()
+    expect(excluded.querySelector('.az-circle-minus')).not.toBeNull()
   })
 
   it('falls back to the locale labels when the cell labels are empty', () => {

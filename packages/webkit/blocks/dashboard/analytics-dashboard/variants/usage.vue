@@ -505,13 +505,13 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="comparison.delta !== null"
                   :label="(comparison.delta > 0 ? '+' : '') + comparison.delta.toFixed(2) + '%'"
                   :severity="comparison.delta > 0 ? 'success' : 'danger'"
-                  :icon="comparison.delta > 0 ? 'ai ai-arrow-up-right' : 'ai ai-arrow-down-left'"
+                  :icon="comparison.delta > 0 ? 'az az-arrow-up-right' : 'az az-arrow-down-left'"
                   size="small"
                 />
                 <ToggleGroup
@@ -523,7 +523,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Data transferred, this period vs previous"
@@ -538,7 +538,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Data transferred, this period vs previous"
@@ -597,12 +597,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Data transferred by project"
@@ -617,7 +617,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Data transferred by project"
@@ -671,12 +671,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Usage by project"
@@ -691,7 +691,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Usage by project"
@@ -723,7 +723,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -749,7 +749,7 @@
                     key="empty-state-1"
                     v-if="!rows.length"
                     size="small"
-                    icon="ai ai-chart-line"
+                    icon="az az-chart-line"
                     title="No usage yet"
                     description="Usage appears here once a project serves requests."
                   />
@@ -757,7 +757,7 @@
                     key="empty-state-2"
                     v-else
                     size="small"
-                    icon="ai ai-search"
+                    icon="az az-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -847,7 +847,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-chart-line"
+                  icon="az az-chart-line"
                   title="No usage yet"
                   description="Usage appears here once a project serves requests."
                 />

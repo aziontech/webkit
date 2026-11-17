@@ -486,9 +486,19 @@ function assetItems<T>(name: string): T[] {
 
 export function buildAssets() {
   return {
-    icons: assetItems<{ name: string; class: string; set: string; keywords: string[] }>(
-      'icons'
-    ).map((icon) => ({ ...icon, keywords: icon.keywords.join(' ') })),
+    icons: assetItems<{
+      name: string
+      class: string
+      set: string
+      group: string
+      category: string
+      label: string
+      product?: string
+      keywords: string[]
+    }>('icons').map((icon) => ({
+      ...icon,
+      keywords: [icon.label, icon.product ?? '', ...icon.keywords].join(' ')
+    })),
     illustrations: assetItems<{ name: string; canvas?: string }>('illustrations').map(
       (item) => item.name
     ),

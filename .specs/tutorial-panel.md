@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 8
 template: 2
-checksum: 53c3fba4aaef4d46315611b90d1eb5db556394896c1721c69498fd573b638fed
+checksum: 5510f462e7835ae41eaa971b002c87e3305d1546e634e8ec358eb9b4cbc372d4
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -260,7 +260,7 @@ _None._
 ## Right-to-left
 
 - Layout: logical utilities only; every row is a flex row that follows `dir`.
-- Icons: `ai ai-circle-check` (not mirrored), `ai ai-log-out` on Exit (not mirrored; it names the action, not a direction).
+- Icons: `az az-circle-check` (not mirrored), `az az-log-out` on Exit (not mirrored; it names the action, not a direction).
 - Keyboard: no arrow keys.
 - User data: none.
 

@@ -116,12 +116,12 @@
         <i
           aria-hidden="true"
           :data-testid="`${testId}__lock`"
-          class="ai ai-lock text-body-2xs leading-none text-(--bg-surface) group-data-[checked]:hidden"
+          class="az az-lock text-body-2xs leading-none text-(--bg-surface) group-data-[checked]:hidden"
         />
         <i
           aria-hidden="true"
           :data-testid="`${testId}__lock-open`"
-          class="ai ai-lock-open hidden text-body-2xs leading-none text-(--color-base-black) group-data-[checked]:inline"
+          class="az az-lock-open hidden text-body-2xs leading-none text-(--color-base-black) group-data-[checked]:inline"
         />
       </template>
     </span>

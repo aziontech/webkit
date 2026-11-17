@@ -165,7 +165,7 @@
       >
         <span class="flex min-w-0 items-center gap-(--spacing-2xs) text-label-sm">
           <i
-            class="ai ai-edge-application shrink-0 leading-none text-(--primary)"
+            class="az az-applications shrink-0 leading-none text-(--primary)"
             aria-hidden="true"
           />
           <span class="text-(--text-muted)">Applications</span>
@@ -201,7 +201,7 @@
             :label="step.action"
             variant="outline"
             size="medium"
-            icon="ai ai-plus"
+            icon="az az-plus"
             class="shrink-0"
           />
         </div>
@@ -216,7 +216,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -225,7 +225,7 @@
               label="Filter"
               variant="outline"
               size="medium"
-              icon="ai ai-filter"
+              icon="az az-filter"
               class="shrink-0"
             />
           </div>
@@ -304,7 +304,7 @@
         >
           <template #leading>
             <i
-              class="ai ai-circle-info shrink-0 text-(--text-muted)"
+              class="az az-circle-info shrink-0 text-(--text-muted)"
               aria-hidden="true"
             />
             <span class="min-w-0">
@@ -351,7 +351,7 @@
               drawer.title
             }}</span>
             <IconButton
-              icon="ai ai-x"
+              icon="az az-x"
               aria-label="Close"
               variant="ghost"
               size="small"

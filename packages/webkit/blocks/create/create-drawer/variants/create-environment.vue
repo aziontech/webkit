@@ -313,7 +313,7 @@
       label="Create Environment"
       variant="outline"
       size="medium"
-      icon="ai ai-plus"
+      icon="az az-plus"
       @click="environmentOpen = true"
     />
     <Button
@@ -321,7 +321,7 @@
       label="Add Domain"
       variant="outline"
       size="medium"
-      icon="ai ai-plus"
+      icon="az az-plus"
       @click="open = true"
     />
   </div>

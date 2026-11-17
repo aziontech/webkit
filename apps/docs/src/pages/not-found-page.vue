@@ -15,7 +15,7 @@
     <EmptyState
       :title="t.notFound"
       :description="t.notFoundLead"
-      icon="ai ai-compass"
+      icon="az az-compass"
     >
       <template #actions>
         <Button

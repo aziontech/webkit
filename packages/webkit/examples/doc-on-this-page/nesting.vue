@@ -17,14 +17,14 @@
         {
           label: 'Repository',
           links: [
-            { label: 'View source', href: 'https://github.com/aziontech', icon: 'ai ai-github' }
+            { label: 'View source', href: 'https://github.com/aziontech', icon: 'az az-github' }
           ]
         },
         {
           label: 'Community',
           links: [
-            { label: 'Discord', href: 'https://discord.gg', icon: 'ai ai-comments' },
-            { label: 'Forum', href: 'https://forum.example', icon: 'ai ai-users' }
+            { label: 'Discord', href: 'https://discord.gg', icon: 'az az-comments' },
+            { label: 'Forum', href: 'https://forum.example', icon: 'az az-users' }
           ]
         }
       ]"

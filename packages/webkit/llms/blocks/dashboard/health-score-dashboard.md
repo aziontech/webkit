@@ -598,7 +598,7 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
             <EmptyState
               v-else
               size="small"
-              icon="ai ai-chart-bar"
+              icon="az az-chart-bar"
               :title="'No samples in ' + phrase"
               description="Each application gets a row once its first sample arrives. Select a longer period."
             />
@@ -689,7 +689,7 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
           >
             <EmptyState
               size="small"
-              icon="ai ai-circle-check"
+              icon="az az-circle-check"
               :title="'No open incidents in ' + phrase"
               description="An incident opens when an application or a location stays poor for several samples in a row."
             />
@@ -1608,7 +1608,7 @@ export const sampleIncidents: HealthScoreIncident[] = [
     id: 'incident-03',
     name: 'Video calls',
     scope: 'Application',
-    icon: 'ai ai-layout-grid',
+    icon: 'az az-layout-grid',
     devices: 34,
     share: 12,
     cause: 'Packet loss',
@@ -1623,7 +1623,7 @@ export const sampleIncidents: HealthScoreIncident[] = [
     id: 'incident-02',
     name: 'Travel',
     scope: 'Location',
-    icon: 'ai ai-map-pin',
+    icon: 'az az-map-pin',
     devices: 9,
     share: 31,
     cause: 'High latency',
@@ -1638,7 +1638,7 @@ export const sampleIncidents: HealthScoreIncident[] = [
     id: 'incident-01',
     name: 'File storage',
     scope: 'Application',
-    icon: 'ai ai-layout-grid',
+    icon: 'az az-layout-grid',
     devices: 18,
     share: 7,
     cause: 'Slow server response',

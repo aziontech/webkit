@@ -34,8 +34,8 @@ const C = 'packages/webkit/src/components'
 
 const ctx = {
   exports: new Set(['button', 'button-group', 'dialog', 'dialog-header', 'chip', 'chips', 'tabs']),
-  icons: new Set(['ai-search', 'ai-x', 'ai-settings', 'ai-github']),
-  iconRenames: { 'ai-times': 'ai-x' },
+  icons: new Set(['az-search', 'az-x', 'az-settings', 'az-github']),
+  iconRenames: { 'az-times': 'az-x' },
   retired: { paginator: 'pagination' },
   parts: [
     {
@@ -269,9 +269,9 @@ const FIXTURES = {
     `${C}/action/button/button.vue`,
     sfc(
       '',
-      '<i class="ai ai-times" /><i class="pi pi-search" /><i class="ai ai-cog" /><i class="ai ai-serch" /><i class="ai-cor ai-github" />'
+      '<i class="az az-times" /><i class="pi pi-search" /><i class="az az-cog" /><i class="az az-serch" /><i class="ai-cor ai-github" /><i class="ai ai-x" />'
     ),
-    sfc('', '<i class="ai ai-x" /><i class="ai ai-settings" /><i class="ai-color ai-github" />')
+    sfc('', '<i class="az az-x" /><i class="az az-settings" /><i class="az-color az-github" />')
   ],
   'file-name': [
     ['apps/docs/src/components/ApiTable.vue', 'apps/docs/src/components/api-table.vue'],
@@ -370,7 +370,8 @@ test('false positives the checker skips: test artifacts, element ids, kept token
     ),
     []
   )
-  const legacy = "const help = 'pi pi-times becomes ai ai-x; ai-cor becomes ai-color'\n"
+  const legacy =
+    "const help = 'pi pi-times becomes az az-x; ai-cor ai-next becomes az-color az-nextjs'\n"
   for (const rel of [
     'packages/webkit/src/cli/cli.js',
     'packages/webkit/src/cli/migrate.js',

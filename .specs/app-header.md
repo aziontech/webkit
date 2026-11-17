@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 6911702b1fdb2fb0e748fc778d95d49df1bf7af627d54293c3a2216b445316b6
+checksum: dfd55cf613e0f1eacd5e8c35cb29b7b6da0fbecebc0576e50ab56a18502875ab
 created: 2026-05-23
 last_updated: 2026-11-16
 ---
@@ -70,7 +70,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
     <AppHeader.Container>
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-menu"
+          icon="az az-menu"
           aria-label="Open navigation"
           variant="ghost"
         />
@@ -93,7 +93,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
         label="Create"
         variant="secondary"
         size="medium"
-        icon="ai ai-circle-plus"
+        icon="az az-circle-plus"
       />
     </AppHeader.End>
   </AppHeader>

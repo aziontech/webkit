@@ -22,7 +22,7 @@
       <EmptyState
         title="Something went wrong on our side"
         description="This page could not load. Nothing you saved was lost. Retry in a moment; if it keeps failing, check the system status."
-        icon="ai ai-triangle-alert"
+        icon="az az-triangle-alert"
       >
         <template #actions>
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
@@ -30,14 +30,14 @@
               label="Retry"
               variant="primary"
               size="medium"
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               :loading="retrying"
               @click="retry"
             />
             <Button
               label="System status"
               variant="outline"
-              icon="ai ai-external-link"
+              icon="az az-external-link"
               size="medium"
               href="https://status.example.com"
               target="_blank"

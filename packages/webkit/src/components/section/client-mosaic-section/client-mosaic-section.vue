@@ -200,7 +200,7 @@
                 </p>
                 <Link
                   :label="linkLabel"
-                  icon="ai ai-chevron-right"
+                  icon="az az-chevron-right"
                   :href="cell.href"
                 />
               </div>

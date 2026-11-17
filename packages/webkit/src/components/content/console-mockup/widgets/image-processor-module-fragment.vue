@@ -193,7 +193,7 @@
               >
                 <Tag
                   label="Automatically enabled in all accounts."
-                  icon="ai ai-lock"
+                  icon="az az-lock"
                   severity="neutral"
                   size="small"
                 />
@@ -209,7 +209,7 @@
               label="Contact sales"
               variant="outline"
               size="medium"
-              icon="ai ai-shopping-cart"
+              icon="az az-shopping-cart"
             />
           </span>
         </div>

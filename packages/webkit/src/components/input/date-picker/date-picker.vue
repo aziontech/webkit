@@ -317,14 +317,14 @@
             @click="toggleOpen"
           >
             <i
-              class="ai ai-calendar shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+              class="az az-calendar shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
               aria-hidden="true"
             />
             <span class="min-w-0 flex-1 truncate text-start">{{ triggerText }}</span>
             <i
               v-if="!split && !(clearable && hasCommitted)"
               :data-state="isOpen ? 'open' : 'closed'"
-              class="ai ai-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
+              class="az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
               aria-hidden="true"
             />
           </button>
@@ -339,7 +339,7 @@
             @click="clearCommitted"
           >
             <i
-              class="ai ai-x text-[length:inherit] leading-none"
+              class="az az-x text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </button>
@@ -356,7 +356,7 @@
           >
             <i
               :data-state="isOpen ? 'open' : 'closed'"
-              class="ai ai-chevron-down text-[length:inherit] leading-none transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
+              class="az az-chevron-down text-[length:inherit] leading-none transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
               aria-hidden="true"
             />
           </button>
@@ -417,7 +417,7 @@
                 variant="outline"
                 :size="size"
                 :disabled="isDisabled"
-                icon="ai ai-arrow-down-left"
+                icon="az az-arrow-down-left"
                 class="w-full justify-center"
                 :data-testid="`${testId}__apply`"
                 @click="applySelection"

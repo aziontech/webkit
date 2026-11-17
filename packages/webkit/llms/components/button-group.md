@@ -113,14 +113,14 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
   const last = ref('')
 
   const items = [
-    { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
-    { id: 'format', label: 'Format document', icon: 'ai ai-align-left' },
-    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-move-horizontal' },
+    { id: 'copy', label: 'Copy code', icon: 'az az-copy' },
+    { id: 'format', label: 'Format document', icon: 'az az-align-left' },
+    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'az az-move-horizontal' },
     {
       id: 'download',
       type: 'menu',
       label: 'Download',
-      icon: 'ai ai-download',
+      icon: 'az az-download',
       options: [
         { id: 'download-js', label: 'Download as .js' },
         { id: 'download-zip', label: 'Download as .zip' }
@@ -166,23 +166,23 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
   const pinned = ref(true)
 
   const items = computed(() => [
-    { id: 'refresh', label: 'Refresh', icon: 'ai ai-refresh' },
+    { id: 'refresh', label: 'Refresh', icon: 'az az-refresh' },
     {
       id: 'pin',
       type: 'toggle',
       label: 'Pin to home',
-      icon: 'ai ai-star',
-      pressedIcon: 'ai ai-star-fill',
+      icon: 'az az-star',
+      pressedIcon: 'az az-star-fill',
       pressed: pinned.value
     },
-    { id: 'share', label: 'Share', icon: 'ai ai-share' },
-    { id: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' },
-    { id: 'archive', label: 'Archive', icon: 'ai ai-inbox', disabled: true },
+    { id: 'share', label: 'Share', icon: 'az az-share' },
+    { id: 'duplicate', label: 'Duplicate', icon: 'az az-copy' },
+    { id: 'archive', label: 'Archive', icon: 'az az-inbox', disabled: true },
     {
       id: 'export',
       type: 'menu',
       label: 'Export',
-      icon: 'ai ai-file-export',
+      icon: 'az az-file-export',
       options: [
         { id: 'export-csv', label: 'Export as CSV' },
         { id: 'export-json', label: 'Export as JSON' }

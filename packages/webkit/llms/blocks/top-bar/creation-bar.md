@@ -203,7 +203,7 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
           side="bottom"
         >
           <IconButton
-            icon="ai ai-chevron-left"
+            icon="az az-chevron-left"
             :aria-label="backLabel"
             variant="outline"
             size="small"
@@ -261,7 +261,7 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
             >
               <template #trailing>
                 <i
-                  class="ai ai-settings"
+                  class="az az-settings"
                   aria-hidden="true"
                 />
               </template>
@@ -274,7 +274,7 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
             >
               <template #trailing>
                 <i
-                  class="ai ai-book"
+                  class="az az-book"
                   aria-hidden="true"
                 />
               </template>
@@ -285,7 +285,7 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
             >
               <template #trailing>
                 <i
-                  class="ai ai-log-out"
+                  class="az az-log-out"
                   aria-hidden="true"
                 />
               </template>

@@ -5,12 +5,12 @@
 
   const surface = ref<string>('Editor')
   const items: ButtonGroupItem[] = [
-    { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
+    { id: 'copy', label: 'Copy code', icon: 'az az-copy' },
     {
       id: 'wrap',
       type: 'toggle',
       label: 'Wrap lines',
-      icon: 'ai ai-move-horizontal',
+      icon: 'az az-move-horizontal',
       pressed: false
     }
   ]

@@ -100,7 +100,7 @@
         <slot />
       </span>
       <i
-        class="ai ai-chevron-down shrink-0 text-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none group-data-[state=open]:rotate-180 group-data-[disabled]:text-(--text-disabled)"
+        class="az az-chevron-down shrink-0 text-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none group-data-[state=open]:rotate-180 group-data-[disabled]:text-(--text-disabled)"
         aria-hidden="true"
         :data-testid="`${testId}__chevron`"
       />

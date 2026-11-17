@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 347e20d5db51bd0fd957aff5342dc952a9a90cade156cf09b1d74722ef08e98d
+checksum: 847bb844c37a783b03f62c14dcbe41cf21ac9d68cabc26874160b92addc5b54b
 template: 2
 ---
 
@@ -70,7 +70,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
     description="Get a custom demo, plan your migration, and explore plans and pricing built for your company."
     :items="[
       {
-        icon: 'ai ai-edge-ai',
+        icon: 'az az-ai-inference',
         title: 'Build AI applications',
         description: 'Run AI agents and inference close to your users.'
       }

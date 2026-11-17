@@ -3,7 +3,7 @@ import type { ProductionChecklistStep } from './production-checklist.vue'
 export const sampleSteps: ProductionChecklistStep[] = [
   {
     id: 'domain',
-    icon: 'ai ai-globe',
+    icon: 'az az-globe',
     title: 'Add a custom domain',
     description:
       'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
@@ -13,7 +13,7 @@ export const sampleSteps: ProductionChecklistStep[] = [
   },
   {
     id: 'policy',
-    icon: 'ai ai-shield',
+    icon: 'az az-shield',
     title: 'Enable a security policy',
     description:
       'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',
@@ -23,7 +23,7 @@ export const sampleSteps: ProductionChecklistStep[] = [
   },
   {
     id: 'customPage',
-    icon: 'ai ai-file',
+    icon: 'az az-file',
     title: 'Set custom error pages',
     description: 'Answer 4xx and 5xx with your own page instead of the default response.',
     actionLabel: 'Add Error Page',

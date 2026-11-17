@@ -3,7 +3,7 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 82837f1e85e6b769a2dc28fa160a25c18e626009ed3202f7ea31b51cce68f925
+checksum: b111022caf81ea36576bcfd854420b1de159a33e4c0cbc7473bad91f67134964
 spec_version: 8
 template: 2
 created: 2026-11-10
@@ -68,7 +68,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
         label="Deploy"
         variant="outline"
         size="medium"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
       />
     </template>
   </PageTabs>

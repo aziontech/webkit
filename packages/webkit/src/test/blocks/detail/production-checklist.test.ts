@@ -30,7 +30,7 @@ describe('detail/production-checklist', () => {
     const steps = [
       {
         id: 'domain',
-        icon: 'ai ai-globe',
+        icon: 'az az-globe',
         title: 'Point the Acme domain',
         description: 'Serve acme-store on www.example.com.',
         actionLabel: 'Add Domain',

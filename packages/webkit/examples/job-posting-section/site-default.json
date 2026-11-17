@@ -5,10 +5,10 @@
     "title": "Senior Platform Engineer",
     "applyLabel": "Apply for this position",
     "facets": [
-      { "label": "Engineering", "icon": "ai ai-sitemap" },
-      { "label": "San Francisco, California", "icon": "ai ai-map-pin" },
-      { "label": "Hybrid", "icon": "ai ai-building" },
-      { "label": "Full-time", "icon": "ai ai-clock" }
+      { "label": "Engineering", "icon": "az az-sitemap" },
+      { "label": "San Francisco, California", "icon": "az az-map-pin" },
+      { "label": "Hybrid", "icon": "az az-building" },
+      { "label": "Full-time", "icon": "az az-clock" }
     ],
     "sections": [
       {

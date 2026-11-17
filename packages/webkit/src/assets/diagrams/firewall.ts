@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Request',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Firewall',
       title: 'Rules in order, before any code',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true,
       lit: true
     },
@@ -25,7 +25,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Network lists',
       title: 'IP, ASN and country',
-      icon: 'ai ai-network-lists',
+      icon: 'az az-network-lists',
       active: true
     },
     {
@@ -33,7 +33,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'WAF',
       title: 'Payload inspection',
-      icon: 'ai ai-waf-rules',
+      icon: 'az az-waf',
       active: true
     },
     {
@@ -41,7 +41,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Rate limit',
       title: 'Requests per second',
-      icon: 'ai ai-clock',
+      icon: 'az az-clock',
       active: true
     },
     {
@@ -49,7 +49,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'storefront',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       active: true
     }
   ],

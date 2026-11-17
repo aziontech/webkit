@@ -126,7 +126,7 @@
       <template v-if="!grouped">
         <slot name="avatar">
           <Avatar
-            :icon="from === 'user' ? 'ai ai-user' : 'ai ai-ask-azion'"
+            :icon="from === 'user' ? 'az az-user' : 'az az-ask-azion'"
             :alt="name"
             size="medium"
           />
@@ -173,7 +173,7 @@
       >
         <span class="inline-flex items-center gap-(--spacing-xs)">
           <i
-            class="ai ai-circle-alert"
+            class="az az-circle-alert"
             aria-hidden="true"
           />
           {{ errorMessage || t('chatMessage.error') }}
@@ -182,7 +182,7 @@
           :label="t('chatMessage.retry')"
           variant="outline"
           size="small"
-          icon="ai ai-refresh"
+          icon="az az-refresh"
           :data-testid="`${testId}__retry`"
           @click="(event: MouseEvent) => emit('retry', event)"
         />

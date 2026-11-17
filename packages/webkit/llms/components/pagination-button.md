@@ -59,7 +59,7 @@
 
 - Visual states: `default`, `hover`, `active`, `focus-visible`, current page (`active` prop), `disabled`.
 - Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `type` is `more` (inert: not focusable, no hover / active layer, no `active` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
-- `data-type` mirrors `type` (`previous` | `next` | `number` | `more`). `previous` renders `ai ai-chevron-left`, `next` renders `ai ai-chevron-right`, `more` renders `ai ai-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `data-type` mirrors `type` (`previous` | `next` | `number` | `more`). `previous` renders `az az-chevron-left`, `next` renders `az az-chevron-right`, `more` renders `az az-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
 - `data-active` is present when `active` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the type's own surface.

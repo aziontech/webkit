@@ -23,22 +23,22 @@
     {
       to: '/foundations',
       label: t.value.foundations,
-      icon: 'ai ai-palette',
+      icon: 'az az-palette',
       text: t.value.exploreFoundations
     },
     {
       to: '/components',
       label: t.value.components,
-      icon: 'ai ai-layout-grid',
+      icon: 'az az-layout-grid',
       text: t.value.exploreComponents
     },
     {
       to: '/blocks',
       label: t.value.blocks,
-      icon: 'ai ai-window-maximize',
+      icon: 'az az-window-maximize',
       text: t.value.exploreBlocks
     },
-    { to: '/assets', label: t.value.assets, icon: 'ai ai-images', text: t.value.exploreAssets }
+    { to: '/assets', label: t.value.assets, icon: 'az az-images', text: t.value.exploreAssets }
   ])
 
   const features = computed(() => [
@@ -129,7 +129,7 @@
             class="flex flex-col gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl)"
           >
             <i
-              class="ai ai-asterisk text-heading-sm text-(--primary)"
+              class="az az-asterisk text-heading-sm text-(--primary)"
               aria-hidden="true"
             />
             <h3 class="max-w-[20ch] text-balance text-heading-xs text-(--text-default)">

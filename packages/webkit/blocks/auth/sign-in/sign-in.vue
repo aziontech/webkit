@@ -351,7 +351,7 @@
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           :href="docsHref"
         />
       </AppHeader.End>
@@ -437,7 +437,7 @@
                               label="Continue with Google"
                               variant="outline"
                               size="large"
-                              icon="ai-color ai-google"
+                              icon="az-color az-google"
                               class="w-full"
                               @click="
                                 (event: MouseEvent) => emit('provider-click', event, 'google')
@@ -448,7 +448,7 @@
                               label="Continue with GitHub"
                               variant="outline"
                               size="large"
-                              icon="ai ai-github"
+                              icon="az az-github"
                               class="w-full"
                               @click="
                                 (event: MouseEvent) => emit('provider-click', event, 'github')
@@ -491,7 +491,7 @@
                           <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip content="Change email">
                               <IconButton
-                                icon="ai ai-chevron-left"
+                                icon="az az-chevron-left"
                                 aria-label="Change email"
                                 variant="outline"
                                 size="small"
@@ -539,7 +539,7 @@
                           <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip content="Back to sign in">
                               <IconButton
-                                icon="ai ai-chevron-left"
+                                icon="az az-chevron-left"
                                 aria-label="Back to sign in"
                                 variant="outline"
                                 size="small"

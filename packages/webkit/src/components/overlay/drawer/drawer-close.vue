@@ -32,7 +32,7 @@
 <template>
   <IconButton
     v-if="ctx"
-    icon="ai ai-x"
+    icon="az az-x"
     variant="outline"
     size="small"
     :ariaLabel="props.ariaLabel || t('drawer.close')"

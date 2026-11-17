@@ -39,7 +39,7 @@
       slug: 'cursor',
       name: 'Cursor',
       vendor: 'Cursor',
-      icon: 'ai ai-cursor',
+      icon: 'az az-cursor',
       logo: cursorMark,
       mono: true,
       description:
@@ -49,7 +49,7 @@
       slug: 'github-copilot',
       name: 'GitHub Copilot',
       vendor: 'GitHub',
-      icon: 'ai ai-github',
+      icon: 'az az-github',
       logo: copilotMark,
       mono: false,
       description:
@@ -59,7 +59,7 @@
       slug: 'windsurf',
       name: 'Windsurf',
       vendor: 'Cognition',
-      icon: 'ai ai-windsurf',
+      icon: 'az az-windsurf',
       logo: '',
       mono: true,
       description: 'Agentic IDE built around multi-step tasks. Connects through mcp-remote.'
@@ -68,7 +68,7 @@
       slug: 'codex',
       name: 'Codex',
       vendor: 'OpenAI',
-      icon: 'ai ai-code',
+      icon: 'az az-code',
       logo: codexMark,
       mono: true,
       description: 'Terminal agent that runs commands in a sandbox and reads AGENTS.md natively.'
@@ -77,7 +77,7 @@
       slug: 'gemini-cli',
       name: 'Gemini CLI',
       vendor: 'Google',
-      icon: 'ai ai-gemini',
+      icon: 'az az-gemini',
       logo: geminiMark,
       mono: false,
       description: 'Open source terminal agent with a free tier. Verify the server with /mcp.'
@@ -86,7 +86,7 @@
       slug: 'opencode',
       name: 'OpenCode',
       vendor: 'SST',
-      icon: 'ai ai-desktop',
+      icon: 'az az-desktop',
       logo: opencodeMark,
       mono: true,
       description: 'Open source, provider-agnostic terminal agent, whichever model you choose.'
@@ -100,8 +100,8 @@
   ]
 
   const metaActions = [
-    { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
-    { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' }
+    { value: 'copy', label: 'Copy as Markdown', icon: 'az az-copy' },
+    { value: 'markdown', label: 'View as Markdown', icon: 'az az-eye' }
   ]
 
   const facts = ['Terminal', 'Subscription', 'Locked', 'Project memory']
@@ -212,19 +212,19 @@
   const docLinks = [
     {
       title: 'llms.txt',
-      icon: 'ai ai-list',
+      icon: 'az az-list',
       href: 'https://www.azion.com/llms.txt',
       description: 'Machine-readable index of the whole documentation.'
     },
     {
       title: 'For AI agents',
-      icon: 'ai ai-sparkles',
+      icon: 'az az-sparkles',
       href: 'https://www.azion.com/en/documentation/devtools/for-ai-agents/',
       description: 'Canonical facts: current product names, API base URL, auth format.'
     },
     {
       title: 'AGENTS.md',
-      icon: 'ai ai-file-pen',
+      icon: 'az az-file-pen',
       href: '/docs/get-started/first-deploy',
       description:
         'Your own conventions, committed at the repository root: workload names, what not to touch.'
@@ -290,7 +290,7 @@
             class="flex size-14 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised) sm:size-16"
           >
             <i
-              class="ai ai-claude text-heading-md text-(--text-default)"
+              class="az az-claude text-heading-md text-(--text-default)"
               aria-hidden="true"
             />
           </span>
@@ -331,7 +331,7 @@
               >
                 {{ link.label }}
                 <i
-                  class="ai ai-arrow-up-right text-body-xs"
+                  class="az az-arrow-up-right text-body-xs"
                   aria-hidden="true"
                 />
               </a>
@@ -457,7 +457,7 @@
       <p>No MCP support in the tool you are using? Prime it by hand, once per session:</p>
       <DocPrompt
         title="Any assistant"
-        icon="ai ai-comment"
+        icon="az az-comment"
         >{{ browserPrimer }}</DocPrompt
       >
 

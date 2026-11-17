@@ -369,7 +369,7 @@ Each variant is the same screen in another state: `get_block("state/async-submit
                 label="Redeploy"
                 variant="secondary"
                 size="medium"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="redeploy"
               />
             </div>
@@ -398,7 +398,7 @@ Each variant is the same screen in another state: `get_block("state/async-submit
                 label="Redeploy"
                 variant="ghost"
                 size="medium"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="redeploy"
               />
               <Button
@@ -491,7 +491,7 @@ Each variant is the same screen in another state: `get_block("state/async-submit
       >
         <EmptyState
           bordered
-          icon="ai ai-cloud-upload"
+          icon="az az-cloud-upload"
           title="No deployment running"
           description="Deploy web-app to build it and publish it to production. It takes about 25 seconds, and you can leave this page while it runs."
         >
@@ -500,7 +500,7 @@ Each variant is the same screen in another state: `get_block("state/async-submit
               label="Deploy"
               variant="primary"
               size="medium"
-              icon="ai ai-play"
+              icon="az az-play"
               @click="deploy"
             />
           </template>

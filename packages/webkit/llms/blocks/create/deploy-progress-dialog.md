@@ -351,7 +351,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
         label="Show progress"
         variant="outline"
         size="medium"
-        icon="ai ai-list"
+        icon="az az-list"
         @click="open = true"
       />
     </div>
@@ -424,7 +424,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
                   />
                   <i
                     v-else
-                    class="ai ai-sliders-horizontal text-(--text-muted)"
+                    class="az az-sliders-horizontal text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Media>
@@ -456,7 +456,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
             <EmptyState
               v-else
               size="small"
-              icon="ai ai-filter"
+              icon="az az-filter"
               :title="emptyLabel"
             />
             <span
@@ -479,7 +479,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
                 label="Retry failed"
                 variant="outline"
                 size="medium"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="retryFailed"
               />
             </div>

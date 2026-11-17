@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: c1d242f5fee5985d8c1dfb76cc4c2ef19818a338bf8f65441b09ac7d922dd8c4
+checksum: ad9dce41751b2542b9ae693070fcde2d1bc8e97d22a9104cb4b7a4d5a1e48649
 created: 2026-08-05
 last_updated: 2026-11-15
 ---
@@ -36,7 +36,7 @@ export follows light and dark like the rest of the page.
 
 ## When NOT to use
 
-- A single glyph is enough → use an icon from `@aziontech/icons` (`<i class="ai ai-…">`).
+- A single glyph is enough → use an icon from `@aziontech/icons` (`<i class="az az-…">`).
 - The artwork is a brand mark (a client logo, a framework mark) → those are brand assets, not illustrations.
 - The whole component is "no data here, with a title and an action" → use `empty-state`, which already owns that layout and may embed an `Illustration`.
 - The graphic is a live data visualization → that is a chart, not an illustration.

@@ -153,15 +153,15 @@
             >
               <i
                 v-if="step.status === 'success'"
-                class="ai ai-circle-check text-(--success-foreground)"
+                class="az az-circle-check text-(--success-foreground)"
               />
               <i
                 v-else-if="step.status === 'error'"
-                class="ai ai-circle-x text-(--danger-foreground)"
+                class="az az-circle-x text-(--danger-foreground)"
               />
               <i
                 v-else-if="step.status === 'skipped'"
-                class="ai ai-circle-minus text-(--text-muted)"
+                class="az az-circle-minus text-(--text-muted)"
               />
               <Spinner v-else-if="step.status === 'running'" />
               <span

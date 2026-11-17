@@ -62,7 +62,8 @@ export const FOUNDATIONS: FoundationPage[] = [
   {
     slug: 'icon',
     title: 'Icons',
-    summary: 'Every class of @aziontech/icons: Azion and colored. Select one to copy it.',
+    summary:
+      'Every icon of @aziontech/icons, grouped as Azion products and platform, interface glyphs and third-party logos. Select one to copy it.',
     view: 'icons'
   },
   {

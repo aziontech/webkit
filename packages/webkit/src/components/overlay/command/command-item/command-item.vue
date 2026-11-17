@@ -231,7 +231,7 @@
     <i
       v-else-if="page"
       :data-testid="`${testId}__page`"
-      class="ai ai-chevron-right shrink-0 text-label-sm text-(--text-muted) rtl:-scale-x-100"
+      class="az az-chevron-right shrink-0 text-label-sm text-(--text-muted) rtl:-scale-x-100"
       aria-hidden="true"
     />
   </div>

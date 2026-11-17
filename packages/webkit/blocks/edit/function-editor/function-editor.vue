@@ -443,7 +443,7 @@
                           label="Add field"
                           variant="outline"
                           size="medium"
-                          icon="ai ai-plus"
+                          icon="az az-plus"
                           :disabled="saving"
                           @click="addField"
                         />
@@ -451,7 +451,7 @@
                           label="Remove form"
                           variant="outline"
                           size="medium"
-                          icon="ai ai-x"
+                          icon="az az-x"
                           :disabled="saving"
                           @click="removeForm"
                         />
@@ -496,7 +496,7 @@
                             <div class="flex min-h-0 flex-1">
                               <EmptyState
                                 bordered
-                                icon="ai ai-circle-plus"
+                                icon="az az-circle-plus"
                                 title="This form has no fields"
                                 description="Add the first argument the service reads."
                                 class="w-full"
@@ -506,7 +506,7 @@
                                     label="Add field"
                                     variant="secondary"
                                     size="medium"
-                                    icon="ai ai-plus"
+                                    icon="az az-plus"
                                     @click="addField"
                                   />
                                   <Link
@@ -549,7 +549,7 @@
                                             >
                                               <IconButton
                                                 :id="`${formId}-up-${field.id}`"
-                                                icon="ai ai-arrow-up"
+                                                icon="az az-arrow-up"
                                                 variant="ghost"
                                                 size="small"
                                                 :disabled="index === 0"
@@ -558,7 +558,7 @@
                                               />
                                               <IconButton
                                                 :id="`${formId}-down-${field.id}`"
-                                                icon="ai ai-arrow-down"
+                                                icon="az az-arrow-down"
                                                 variant="ghost"
                                                 size="small"
                                                 :disabled="index === draftFields.length - 1"
@@ -600,7 +600,7 @@
                                               />
                                               <Tooltip content="Duplicate this field">
                                                 <IconButton
-                                                  icon="ai ai-copy"
+                                                  icon="az az-copy"
                                                   variant="outline"
                                                   size="small"
                                                   :aria-label="
@@ -611,7 +611,7 @@
                                               </Tooltip>
                                               <Tooltip content="Remove this field">
                                                 <IconButton
-                                                  icon="ai ai-trash"
+                                                  icon="az az-trash"
                                                   variant="outline"
                                                   size="small"
                                                   :aria-label="
@@ -623,8 +623,8 @@
                                               <IconButton
                                                 :icon="
                                                   isExpanded(field.id)
-                                                    ? 'ai ai-chevron-up'
-                                                    : 'ai ai-chevron-down'
+                                                    ? 'az az-chevron-up'
+                                                    : 'az az-chevron-down'
                                                 "
                                                 variant="outline"
                                                 size="small"
@@ -1038,7 +1038,7 @@
                         >
                           <template #trailing>
                             <i
-                              class="ai ai-lock"
+                              class="az az-lock"
                               aria-hidden="true"
                             />
                           </template>

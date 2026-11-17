@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: d776610579e97febb49ed605517b6ae339a448845849aed603d99c11cf2ceff7
+checksum: 6dfd26d281d98de5d18dfd3be623953b4873451f8c0802590849ee96a2f4c6c7
 created: 2026-06-30
 last_updated: 2026-11-16
 ---
@@ -52,15 +52,15 @@ A primary command button visually joined to a chevron toggle that opens an overl
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
-    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'az az-refresh' },
+    { label: 'Delete', value: 'delete', icon: 'az az-trash', disabled: true }
   ]
 </script>
 
 <template>
   <SplitButton
     label="Save"
-    icon="ai ai-check"
+    icon="az az-check"
     :items="items"
     @click="onSave"
     @item-click="onAction"

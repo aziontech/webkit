@@ -122,7 +122,7 @@
       <div class="w-full md:w-fit">
         <Button
           label="Add Record"
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="outline"
           size="medium"
           class="w-full"

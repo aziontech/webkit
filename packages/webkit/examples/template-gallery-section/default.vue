@@ -14,26 +14,26 @@
       {
         title: 'AI Inference Starter Kit',
         description: 'Create an application that runs AI models close to users.',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'Next.js Commerce',
         description: 'Ecommerce template built with Next.js and Shopify.',
-        icon: 'ai-color ai-nextjs',
+        icon: 'az-color az-nextjs',
         invertInDark: true,
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'Astro Odyssey',
         description: 'A modern business marketing website theme/starter built with Astro.',
-        icon: 'ai-color ai-astro',
+        icon: 'az-color az-astro',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'SvelteKit Commerce',
         description: 'Ecommerce template built with SvelteKit and Shopify.',
-        icon: 'ai-color ai-svelte',
+        icon: 'az-color az-svelte',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       }
     ]"

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 65690c9458c4c75ab2a3d038575618ea913b21ada5d68fe2584fe1083803456d
+checksum: 5eb9cb352678ce89539e8e54b1f41ddc0c3a278480654d339ba7ef21b36c5cc2
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -60,20 +60,20 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
 
   const wrap = ref(false)
   const items = computed(() => [
-    { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
-    { id: 'format', label: 'Format document', icon: 'ai ai-align-left' },
+    { id: 'copy', label: 'Copy code', icon: 'az az-copy' },
+    { id: 'format', label: 'Format document', icon: 'az az-align-left' },
     {
       id: 'wrap',
       type: 'toggle',
       label: 'Wrap lines',
-      icon: 'ai ai-move-horizontal',
+      icon: 'az az-move-horizontal',
       pressed: wrap.value
     },
     {
       id: 'download',
       type: 'menu',
       label: 'Download',
-      icon: 'ai ai-download',
+      icon: 'az az-download',
       options: [
         { id: 'download-js', label: 'Download as .js' },
         { id: 'download-zip', label: 'Download as .zip' }

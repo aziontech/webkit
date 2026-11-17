@@ -124,7 +124,7 @@
       side="top"
     >
       <IconButton
-        icon="ai ai-arrow-up"
+        icon="az az-arrow-up"
         aria-label="top side"
         variant="outline"
         size="medium"
@@ -135,7 +135,7 @@
       side="end"
     >
       <IconButton
-        icon="ai ai-arrow-right"
+        icon="az az-arrow-right"
         aria-label="end side"
         variant="outline"
         size="medium"
@@ -146,7 +146,7 @@
       side="bottom"
     >
       <IconButton
-        icon="ai ai-arrow-down"
+        icon="az az-arrow-down"
         aria-label="bottom side"
         variant="outline"
         size="medium"
@@ -157,7 +157,7 @@
       side="start"
     >
       <IconButton
-        icon="ai ai-arrow-left"
+        icon="az az-arrow-left"
         aria-label="start side"
         variant="outline"
         size="medium"
@@ -191,7 +191,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="ai ai-arrow-up"
+          icon="az az-arrow-up"
           aria-label="top-edge trigger"
           variant="outline"
           size="medium"
@@ -206,7 +206,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="ai ai-arrow-down"
+          icon="az az-arrow-down"
           aria-label="bottom-edge trigger"
           variant="outline"
           size="medium"
@@ -221,7 +221,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="ai ai-arrow-left"
+          icon="az az-arrow-left"
           aria-label="left-edge trigger"
           variant="outline"
           size="medium"
@@ -236,7 +236,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="ai ai-arrow-right"
+          icon="az az-arrow-right"
           aria-label="right-edge trigger"
           variant="outline"
           size="medium"

@@ -9,9 +9,9 @@
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' },
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
       ]
     }
   ]
@@ -35,7 +35,7 @@
         <Command.Item value="action:sidebar">
           <template #leading>
             <i
-              :class="navigationOpen ? 'ai ai-chevrons-left' : 'ai ai-chevrons-right'"
+              :class="navigationOpen ? 'az az-chevrons-left' : 'az az-chevrons-right'"
               aria-hidden="true"
             />
           </template>

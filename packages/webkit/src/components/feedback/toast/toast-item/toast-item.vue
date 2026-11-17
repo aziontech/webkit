@@ -41,10 +41,10 @@
 
   const icons: Record<ToastSeverity, string> = {
     neutral: '',
-    success: 'ai ai-check',
-    info: 'ai ai-circle-info',
-    warning: 'ai ai-triangle-alert',
-    danger: 'ai ai-circle-alert'
+    success: 'az az-check',
+    info: 'az az-circle-info',
+    warning: 'az az-triangle-alert',
+    danger: 'az az-circle-alert'
   }
   const icon = computed(() => icons[props.severity])
 </script>

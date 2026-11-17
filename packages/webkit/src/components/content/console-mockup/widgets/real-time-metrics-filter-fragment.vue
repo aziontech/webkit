@@ -144,7 +144,7 @@
               label="Filter"
               variant="outline"
               size="medium"
-              icon="ai ai-filter"
+              icon="az az-filter"
             />
             <span class="pointer-events-none absolute -top-2 -end-2 flex">
               <Badge
@@ -169,7 +169,7 @@
                 class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
               >
                 <IconButton
-                  icon="ai ai-chevron-left"
+                  icon="az az-chevron-left"
                   variant="outline"
                   size="small"
                   ariaLabel="Back to all filters"
@@ -186,7 +186,7 @@
                 >
                   <template #leading>
                     <i
-                      class="ai ai-search"
+                      class="az az-search"
                       aria-hidden="true"
                     />
                   </template>
@@ -204,7 +204,7 @@
                   <span class="grow truncate">{{ period }}</span>
                   <i
                     :data-selected="frame.period === period || null"
-                    class="ai ai-check invisible shrink-0 text-(--text-default) data-selected:visible"
+                    class="az az-check invisible shrink-0 text-(--text-default) data-selected:visible"
                     aria-hidden="true"
                   />
                 </span>
@@ -215,7 +215,7 @@
                   class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
                 >
                   <i
-                    class="ai ai-filter-off text-(--text-muted)"
+                    class="az az-filter-off text-(--text-muted)"
                     aria-hidden="true"
                   />
                   Clear Period

@@ -55,7 +55,7 @@
     @keydown="onKeydown"
   >
     <i
-      class="ai ai-menu"
+      class="az az-menu"
       aria-hidden="true"
     />
   </button>

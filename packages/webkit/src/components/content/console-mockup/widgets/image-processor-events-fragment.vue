@@ -148,7 +148,7 @@
               label="Refresh"
               variant="outline"
               size="small"
-              icon="ai ai-refresh"
+              icon="az az-refresh"
             />
           </span>
           <span

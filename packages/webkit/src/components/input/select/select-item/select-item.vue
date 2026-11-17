@@ -100,7 +100,7 @@
     />
     <i
       v-if="selected"
-      class="ai ai-check shrink-0 text-(--text-default)"
+      class="az az-check shrink-0 text-(--text-default)"
       aria-hidden="true"
       :data-testid="`${testId}__check`"
     />

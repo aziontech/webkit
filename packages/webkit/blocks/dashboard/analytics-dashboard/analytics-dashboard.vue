@@ -245,7 +245,7 @@
       : {
           label: `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`,
           severity: change >= 0 ? 'success' : 'danger',
-          icon: change >= 0 ? 'ai ai-arrow-up-right' : 'ai ai-arrow-down-right'
+          icon: change >= 0 ? 'az az-arrow-up-right' : 'az az-arrow-down-right'
         }
   const variations = computed(() => {
     const changes = fallback(props.changes, sampleChanges, { requests: null, statusCodes: null })
@@ -528,7 +528,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="variations.requests"
@@ -546,7 +546,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests over time"
@@ -561,7 +561,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Requests over time"
@@ -628,7 +628,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
                 <Tag
                   v-if="variations.statusCodes"
@@ -646,7 +646,7 @@
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Status codes"
@@ -661,7 +661,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Status codes"
@@ -729,12 +729,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Requests by country"
@@ -749,7 +749,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Requests by country"
@@ -815,12 +815,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-calculator"
+                  icon="az az-calculator"
                 />
               </span>
               <Tooltip content="Expand">
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top hosts"
@@ -835,7 +835,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Top hosts"
@@ -877,7 +877,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -903,7 +903,7 @@
                     key="empty-state-1"
                     v-if="!hosts.length"
                     size="small"
-                    icon="ai ai-chart-line"
+                    icon="az az-chart-line"
                     title="No traffic yet"
                     description="Metrics appear here once a service serves requests."
                   />
@@ -911,7 +911,7 @@
                     key="empty-state-2"
                     v-else
                     size="small"
-                    icon="ai ai-search"
+                    icon="az az-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -1025,7 +1025,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-chart-line"
+                  icon="az az-chart-line"
                   title="No traffic yet"
                   description="Metrics appear here once a service serves requests."
                 />

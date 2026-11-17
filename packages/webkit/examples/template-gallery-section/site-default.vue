@@ -18,52 +18,52 @@
     {
       title: 'AI Inference Starter Kit',
       description: 'Create an application that runs AI models close to users.',
-      icon: 'ai ai-edge-functions',
+      icon: 'az az-functions',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Next.js Commerce',
       description: 'Ecommerce template built with Next.js and Shopify.',
-      icon: 'ai-color ai-nextjs',
+      icon: 'az-color az-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Astro Odyssey',
       description: 'A modern business marketing website theme/starter built with Astro.',
-      icon: 'ai-color ai-astro',
+      icon: 'az-color az-astro',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Next.js AI Chatbot',
       description: 'A high-performance, server-rendered Next.js App Router AI Chatbot.',
-      icon: 'ai-color ai-nextjs',
+      icon: 'az-color az-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'SvelteKit Commerce',
       description: 'Ecommerce template built with SvelteKit and Shopify.',
-      icon: 'ai-color ai-svelte',
+      icon: 'az-color az-svelte',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Next.js Multi-tenant Starter',
       description: 'A minimalistic multi-tenant Next.js starter template.',
-      icon: 'ai-color ai-nextjs',
+      icon: 'az-color az-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Functions Starter Kit',
       description: 'Launch a “Hello World” originless application powered by functions.',
-      icon: 'ai ai-edge-functions',
+      icon: 'az az-functions',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Cosmic Agency Website',
       description: "A custom template built using Cosmic's React components, Blocks.",
-      icon: 'ai-color ai-react',
+      icon: 'az-color az-react',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     }
   ]

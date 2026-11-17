@@ -32,19 +32,19 @@
     {
       title: 'Next.js Boilerplate',
       description: 'Deploy a full-stack Next.js application in a few steps.',
-      icon: 'ai-color ai-nextjs',
+      icon: 'az-color az-nextjs',
       markClass: DARK_INK
     },
     {
       title: 'React Boilerplate',
       description: 'Automate your React.js deployments.',
-      icon: 'ai-color ai-react',
+      icon: 'az-color az-react',
       markClass: ''
     },
     {
       title: 'Preact Starter',
       description: 'Deploy a Preact app — the React API in a fraction of the bundle.',
-      icon: 'ai ai-preact',
+      icon: 'az az-preact',
       markClass: ''
     }
   ]
@@ -66,19 +66,19 @@
     {
       title: 'OpenNext Starter',
       description: 'Deploy Next.js through the OpenNext adapter, server routes included.',
-      icon: 'ai-color ai-nextjs',
+      icon: 'az-color az-nextjs',
       markClass: DARK_INK
     },
     {
       title: 'JavaScript Starter',
       description: 'Run plain JavaScript close to users — no framework, just a handler.',
-      icon: 'ai-color ai-javascript',
+      icon: 'az-color az-javascript',
       markClass: ''
     },
     {
       title: 'TypeScript Starter',
       description: 'Run a TypeScript handler close to users, compiled on build.',
-      icon: 'ai-color ai-typescript',
+      icon: 'az-color az-typescript',
       markClass: ''
     }
   ]
@@ -176,7 +176,7 @@
                 label="Filter"
                 variant="outline"
                 size="medium"
-                icon="ai ai-filter"
+                icon="az az-filter"
               />
               <Badge
                 label="1"

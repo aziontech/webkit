@@ -7,13 +7,13 @@
       {
         id: 'logs/2026-11-01.log',
         label: '2026-11-01.log',
-        icon: 'ai ai-file',
+        icon: 'az az-file',
         description: '2.4 MB'
       },
       {
         id: 'logs/2026-11-02.log',
         label: '2026-11-02.log',
-        icon: 'ai ai-file',
+        icon: 'az az-file',
         description: '2.1 MB'
       }
     ],
@@ -21,29 +21,29 @@
       {
         id: 'backups/acme-store.sql',
         label: 'acme-store.sql',
-        icon: 'ai ai-file',
+        icon: 'az az-file',
         description: '48 MB'
       }
     ],
     media: [
-      { id: 'media/videos', label: 'videos', icon: 'ai ai-folder', lazy: true },
-      { id: 'media/banner.webp', label: 'banner.webp', icon: 'ai ai-image', description: '320 KB' }
+      { id: 'media/videos', label: 'videos', icon: 'az az-folder', lazy: true },
+      { id: 'media/banner.webp', label: 'banner.webp', icon: 'az az-image', description: '320 KB' }
     ],
     'media/videos': [
       {
         id: 'media/videos/intro.mp4',
         label: 'intro.mp4',
-        icon: 'ai ai-video',
+        icon: 'az az-video',
         description: '18 MB'
       }
     ]
   }
 
   const items = ref([
-    { id: 'logs', label: 'logs', icon: 'ai ai-folder', lazy: true, loading: true },
-    { id: 'backups', label: 'backups', icon: 'ai ai-folder', lazy: true },
-    { id: 'media', label: 'media', icon: 'ai ai-folder', lazy: true },
-    { id: 'index.html', label: 'index.html', icon: 'ai ai-file', description: '4 KB' }
+    { id: 'logs', label: 'logs', icon: 'az az-folder', lazy: true, loading: true },
+    { id: 'backups', label: 'backups', icon: 'az az-folder', lazy: true },
+    { id: 'media', label: 'media', icon: 'az az-folder', lazy: true },
+    { id: 'index.html', label: 'index.html', icon: 'az az-file', description: '4 KB' }
   ])
   const expanded = ref(['logs'])
   const timers = []

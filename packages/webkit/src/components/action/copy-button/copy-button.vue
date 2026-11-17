@@ -54,7 +54,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'copy-button')
 
-  const icon = computed(() => (copied.value ? 'ai ai-check' : 'ai ai-copy'))
+  const icon = computed(() => (copied.value ? 'az az-check' : 'az az-copy'))
 
   const label = computed(() =>
     copied.value ? props.copiedLabel || t('common.copied') : props.ariaLabel || t('common.copy')

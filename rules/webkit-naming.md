@@ -53,23 +53,25 @@ The full dictionary is [`webkit-prop-vocabulary.md`](./webkit-prop-vocabulary.md
 
 ```vue
 <Input v-model="query">
-  <template #leading><i class="ai ai-search" aria-hidden="true" /></template>
+  <template #leading><i class="az az-search" aria-hidden="true" /></template>
 </Input>
 <DataTable :data="rows" @row-click="(event, row) => openRow(row)" />
 ```
 
 ## Icons
 
-Use `ai ai-<name>` with the Lucide-style names the icons package ships (colour icons:
-`ai-color ai-<name>`). Brands are spelled out.
+Use `az az-<name>` with the names the icons package ships (colour logos: `az-color az-<name>`).
+Interface glyphs take Lucide-style names, Azion product icons take the product's name
+(`az az-functions`, `az az-sql-database`), and brands are spelled out. Every icon is documented in
+`@aziontech/icons/manifest` (group, category, what it stands for).
 
-| ✅                   | ❌                           |
-| -------------------- | ---------------------------- |
-| `ai ai-x`            | `ai ai-times`, `pi pi-times` |
-| `ai ai-menu`         | `ai ai-bars`                 |
-| `ai ai-settings`     | `ai ai-cog`                  |
-| `ai ai-chevron-down` | `ai ai-angle-down`           |
-| `ai-color ai-openai` | `ai-cor ai-open`             |
+| ✅                   | ❌                                      |
+| -------------------- | --------------------------------------- |
+| `az az-x`            | `ai ai-x`, `ai ai-times`, `pi pi-times` |
+| `az az-menu`         | `ai ai-bars`                            |
+| `az az-settings`     | `ai ai-cog`                             |
+| `az az-chevron-down` | `ai ai-angle-down`                      |
+| `az-color az-openai` | `ai-cor ai-open`, `ai-color ai-openai`  |
 
 ## Test ids
 
@@ -118,7 +120,7 @@ npx @aziontech/webkit add create/create-hub#repositories-loading
   corners): those keep `left` / `right` because they name the picture's own edges, not the
   reading direction.
 - Never prefix a boolean with `is` / `has`, and never name one negatively.
-- Never pass a `pi pi-*` icon class or `ai-cor`.
+- Never pass a `pi pi-*` icon class or the retired `ai`, `ai-cor` and `ai-color` base classes.
 
 ## Enforcement
 

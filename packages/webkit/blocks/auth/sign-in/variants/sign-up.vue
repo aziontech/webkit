@@ -101,7 +101,7 @@
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           href="/docs"
         />
       </AppHeader.End>
@@ -158,7 +158,7 @@
                       label="Continue with Google"
                       variant="outline"
                       size="large"
-                      icon="ai-color ai-google"
+                      icon="az-color az-google"
                       class="w-full"
                       :disabled="verifying"
                     />
@@ -167,7 +167,7 @@
                       label="Continue with GitHub"
                       variant="outline"
                       size="large"
-                      icon="ai ai-github"
+                      icon="az az-github"
                       class="w-full"
                       :disabled="verifying"
                     />

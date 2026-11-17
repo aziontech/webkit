@@ -68,9 +68,9 @@ export const TERMINAL_SCRIPTS: Record<TerminalScriptName, TerminalScriptLine[]> 
 }
 
 export const AGENT_CLIENTS: AgentClient[] = [
-  { mark: 'claude', name: 'Claude Code', label: 'Claude Code', icon: 'ai-color ai-claude' },
-  { mark: 'cursor', name: 'Cursor', label: 'Cursor', icon: 'ai-color ai-cursor' },
-  { mark: 'chatgpt', name: 'ChatGPT', label: 'ChatGPT', icon: 'ai-color ai-openai' }
+  { mark: 'claude', name: 'Claude Code', label: 'Claude Code', icon: 'az-color az-claude' },
+  { mark: 'cursor', name: 'Cursor', label: 'Cursor', icon: 'az-color az-cursor' },
+  { mark: 'chatgpt', name: 'ChatGPT', label: 'ChatGPT', icon: 'az-color az-openai' }
 ]
 
 export const AGENT_TRANSCRIPT: AgentTranscriptEntry[] = [

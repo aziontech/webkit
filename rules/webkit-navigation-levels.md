@@ -70,8 +70,8 @@ const navigation = [
   {
     label: 'Security',
     items: [
-      { id: 'policies', label: 'Policies', icon: 'ai ai-shield', href: '/policies' },
-      { id: 'certificates', label: 'Certificates', icon: 'ai ai-lock', href: '/certificates' }
+      { id: 'policies', label: 'Policies', icon: 'az az-shield', href: '/policies' },
+      { id: 'certificates', label: 'Certificates', icon: 'az az-lock', href: '/certificates' }
     ]
   }
 ]
@@ -90,7 +90,7 @@ const navigation = [
       {
         id: 'private-access',
         label: 'Private access',
-        icon: 'ai ai-lock',
+        icon: 'az az-lock',
         type: 'drill',
         groups: [
           {

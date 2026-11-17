@@ -321,7 +321,7 @@
               :aria-label="searchAriaLabel || undefined"
             >
               <template #leading>
-                <i class="ai ai-search text-(--text-muted)" />
+                <i class="az az-search text-(--text-muted)" />
               </template>
             </Input>
           </div>
@@ -356,7 +356,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -484,7 +484,7 @@
                     class="flex shrink-0 translate-y-1 items-center self-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md text-(--text-default) uppercase opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/row:translate-y-0 group-hover/row:opacity-100 group-has-[a:focus-visible]/row:translate-y-0 group-has-[a:focus-visible]/row:opacity-100 motion-reduce:transition-none max-lg:hidden"
                   >
                     {{ rowLabel }}
-                    <i class="ai ai-arrow-up-right leading-none" />
+                    <i class="az az-arrow-up-right leading-none" />
                   </span>
                 </div>
               </article>
@@ -519,7 +519,7 @@
         <EmptyState
           :title="emptyTitle"
           :description="emptyDescription"
-          icon="ai ai-search"
+          icon="az az-search"
           class="p-(--spacing-2xl)"
         >
           <template

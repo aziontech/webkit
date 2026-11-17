@@ -287,7 +287,7 @@
       <Tooltip :content="overflowName">
         <DropdownMenuTrigger>
           <IconButton
-            icon="ai ai-ellipsis"
+            icon="az az-ellipsis"
             :ariaLabel="overflowName"
             :variant="variant"
             :size="size"
@@ -334,7 +334,7 @@
               #trailing
             >
               <i
-                class="ai ai-check text-(--text-default)"
+                class="az az-check text-(--text-default)"
                 aria-hidden="true"
               />
               <span class="sr-only">{{ t('buttonGroup.pressed') }}</span>

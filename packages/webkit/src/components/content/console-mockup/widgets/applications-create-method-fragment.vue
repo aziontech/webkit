@@ -17,19 +17,19 @@
 
   const METHODS = [
     {
-      icon: 'ai ai-github',
+      icon: 'az az-github',
       title: 'Import from Git',
       description:
         'Deploy from a repository you already have. Connect the Git account that owns it and select the repository to import.'
     },
     {
-      icon: 'ai ai-azion-cli',
+      icon: 'az az-azion-cli',
       title: 'Sync with Azion CLI',
       description:
         'Create the application now and push to it from your own terminal. Azion links the local project, builds it with your framework preset, and keeps azion.json in sync. No repository required.'
     },
     {
-      icon: 'ai ai-layout-grid',
+      icon: 'az az-layout-grid',
       title: 'Start from a template',
       description:
         'Clone a framework starter already wired to build and deploy on Azion. Next, Astro, Vue, Nuxt, and more.'
@@ -77,7 +77,7 @@
                 </Item.Content>
                 <Item.Actions>
                   <i
-                    class="ai ai-chevron-right text-(--text-muted) rtl:-scale-x-100"
+                    class="az az-chevron-right text-(--text-muted) rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                 </Item.Actions>

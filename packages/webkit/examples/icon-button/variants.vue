@@ -6,27 +6,27 @@
   <div class="flex flex-wrap items-center gap-4">
     <IconButton
       variant="primary"
-      icon="ai ai-plus"
+      icon="az az-plus"
       aria-label="Add"
     />
     <IconButton
       variant="secondary"
-      icon="ai ai-plus"
+      icon="az az-plus"
       aria-label="Add"
     />
     <IconButton
       variant="outline"
-      icon="ai ai-plus"
+      icon="az az-plus"
       aria-label="Add"
     />
     <IconButton
       variant="ghost"
-      icon="ai ai-plus"
+      icon="az az-plus"
       aria-label="Add"
     />
     <IconButton
       variant="danger"
-      icon="ai ai-trash"
+      icon="az az-trash"
       aria-label="Delete"
     />
   </div>

@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'User',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'Rule: balance the origin pool',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Load Balancer',
       title: 'Weighted, with health checks',
-      icon: 'ai ai-load-balancer',
+      icon: 'az az-load-balancer',
       status: {
         label: '3 origins',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Origin',
       title: 'origin-a · us-east',
-      icon: 'ai ai-server',
+      icon: 'az az-server',
       active: true
     },
     {
@@ -45,14 +45,14 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Origin',
       title: 'origin-b · eu-west',
-      icon: 'ai ai-server'
+      icon: 'az az-server'
     },
     {
       key: 'south',
       type: 'item',
       eyebrow: 'Origin',
       title: 'origin-c · sa-east',
-      icon: 'ai ai-server',
+      icon: 'az az-server',
       status: {
         label: 'Unhealthy',
         severity: 'warning'

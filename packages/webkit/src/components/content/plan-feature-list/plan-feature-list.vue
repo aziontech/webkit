@@ -57,7 +57,7 @@
         class="flex min-w-0 items-start gap-(--spacing-xs)"
       >
         <i
-          class="ai ai-check mt-0.5 shrink-0 text-body-sm text-(--success-foreground)"
+          class="az az-check mt-0.5 shrink-0 text-body-sm text-(--success-foreground)"
           aria-hidden="true"
         />
         <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">

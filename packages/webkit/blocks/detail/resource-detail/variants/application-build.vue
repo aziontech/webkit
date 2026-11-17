@@ -253,7 +253,7 @@
             label="Deploy"
             variant="outline"
             size="medium"
-            icon="ai ai-cloud-upload"
+            icon="az az-cloud-upload"
             :loading="deploying"
             @click="openDeploy"
           />
@@ -278,7 +278,7 @@
               class="flex size-12 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised)"
             >
               <i
-                class="ai ai-cloud-upload text-body-lg leading-none text-(--text-default)"
+                class="az az-cloud-upload text-body-lg leading-none text-(--text-default)"
                 aria-hidden="true"
               />
             </span>
@@ -328,7 +328,7 @@
                       <template #description>
                         <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                           <i
-                            class="ai ai-github shrink-0"
+                            class="az az-github shrink-0"
                             aria-hidden="true"
                           />
                           <a
@@ -508,7 +508,7 @@
                   class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
                 >
                   <i
-                    class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
+                    class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <div class="flex min-w-0">
@@ -527,7 +527,7 @@
                         }}</span>
                         <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                         <i
-                          class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                          class="az az-external-link shrink-0 text-body-xs leading-none"
                           aria-hidden="true"
                         />
                       </a>
@@ -539,7 +539,7 @@
                     label="Visit"
                     variant="secondary"
                     size="medium"
-                    icon="ai ai-external-link"
+                    icon="az az-external-link"
                     :href="`https://${APP.host}`"
                     target="_blank"
                   />
@@ -550,7 +550,7 @@
                     <DropdownMenu.Trigger>
                       <Tooltip content="Application actions">
                         <IconButton
-                          icon="ai ai-ellipsis"
+                          icon="az az-ellipsis"
                           variant="outline"
                           size="medium"
                           aria-label="Application actions"
@@ -564,7 +564,7 @@
                       >
                         <template #leading>
                           <i
-                            class="ai ai-copy"
+                            class="az az-copy"
                             aria-hidden="true"
                           />
                         </template>
@@ -577,7 +577,7 @@
                       >
                         <template #leading>
                           <i
-                            class="ai ai-settings"
+                            class="az az-settings"
                             aria-hidden="true"
                           />
                         </template>
@@ -641,7 +641,7 @@
                   <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
                     <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
-                        class="ai ai-github shrink-0 text-(--text-muted)"
+                        class="az az-github shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span class="truncate text-body-sm text-(--text-default)">{{
@@ -650,7 +650,7 @@
                     </span>
                     <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                       <i
-                        class="ai ai-git-branch shrink-0 text-(--text-muted)"
+                        class="az az-git-branch shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span class="truncate text-body-sm text-(--text-default)">{{
@@ -663,7 +663,7 @@
                   <span class="text-label-sm text-(--text-muted)">Framework</span>
                   <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai-color ai-vue shrink-0 text-body-lg"
+                      class="az-color az-vue shrink-0 text-body-lg"
                       aria-hidden="true"
                     />
                     <span class="truncate text-body-sm text-(--text-default)">Vue</span>
@@ -694,7 +694,7 @@
                     label="Documentation"
                     variant="outline"
                     size="medium"
-                    icon="ai ai-book"
+                    icon="az az-book"
                     href="https://example.com/docs/cli"
                     target="_blank"
                   />
@@ -717,7 +717,7 @@
                 label="Add Version"
                 variant="outline"
                 size="medium"
-                icon="ai ai-plus"
+                icon="az az-plus"
               />
             </template>
           </SectionHeader>
@@ -754,7 +754,7 @@
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="ai ai-history"
+                    icon="az az-history"
                     title="No versions yet"
                     description="Every deploy creates a version of this application."
                   />
@@ -792,7 +792,7 @@
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="ai ai-cloud-upload"
+                    icon="az az-cloud-upload"
                     title="No deployments yet"
                     description="Deploy this application and each run lands here."
                   />
@@ -843,7 +843,7 @@
             <Button
               label="Deploy"
               variant="primary"
-              icon="ai ai-cloud-upload"
+              icon="az az-cloud-upload"
               @click="runDeploy"
             />
           </div>

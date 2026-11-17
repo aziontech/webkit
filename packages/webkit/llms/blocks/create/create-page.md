@@ -42,7 +42,7 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ### C. Sections — `SettingsSection`, `Card`, `Item` (required)
 
-Each band is a `SettingsSection` with a title and a `hint` (the glyph that reveals guidance on hover or focus) over a flush `Card :padded="false"` whose content is an `Item.List` of rows. Required fields go in the first band, General. The last band is Advanced: `collapsible`, `icon="ai ai-settings"`, closed by default (`v-model:open`), holding only fields the endpoint does not require, that already carry its default and that are not the point of the form.
+Each band is a `SettingsSection` with a title and a `hint` (the glyph that reveals guidance on hover or focus) over a flush `Card :padded="false"` whose content is an `Item.List` of rows. Required fields go in the first band, General. The last band is Advanced: `collapsible`, `icon="az az-settings"`, closed by default (`v-model:open`), holding only fields the endpoint does not require, that already carry its default and that are not the point of the form.
 
 ### D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 
@@ -299,7 +299,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
-          icon="ai ai-chevron-left"
+          icon="az az-chevron-left"
           aria-label="Back to Domains"
           variant="outline"
           size="small"
@@ -419,7 +419,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
               <SettingsSection
                 title="Advanced"
                 v-model:open="advancedOpen"
-                icon="ai ai-settings"
+                icon="az az-settings"
                 collapsible
               >
                 <Card :padded="false">

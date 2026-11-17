@@ -346,7 +346,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/users"
@@ -354,7 +354,7 @@
           />
           <Button
             label="Invite User"
-            icon="ai ai-user-plus"
+            icon="az az-user-plus"
             variant="primary"
             size="large"
             @click="openInvite"
@@ -380,7 +380,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="outline"
                 size="medium"
                 :loading="loading"
@@ -393,7 +393,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-download"
+                icon="az az-download"
                 variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -554,7 +554,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-search"
+                  icon="az az-search"
                   title="No matching users"
                   description="No user matches these filters."
                 >
@@ -575,14 +575,14 @@
         <EmptyState
           v-if="alone && !error"
           size="small"
-          icon="ai ai-users"
+          icon="az az-users"
           title="You are the only user"
           description="Invite the people you work with and choose the teams that give them access."
         >
           <template #actions>
             <Button
               label="Invite User"
-              icon="ai ai-user-plus"
+              icon="az az-user-plus"
               variant="secondary"
               size="small"
               @click="openInvite"
@@ -676,7 +676,7 @@
                 type="submit"
                 label="Send invitation"
                 variant="primary"
-                icon="ai ai-send"
+                icon="az az-send"
               />
             </div>
           </PanelFooter>

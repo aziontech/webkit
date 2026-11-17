@@ -89,21 +89,21 @@
     item.error ? 'error' : item.warning ? 'warning' : item.loading ? 'loading' : 'idle'
 
   const GLYPHS: Array<[RegExp, string]> = [
-    [/^image\/|\.(png|jpe?g|gif|svg|webp|avif|ico)$/i, 'ai ai-image'],
-    [/pdf$/i, 'ai ai-file-pdf'],
-    [/^video\/|\.(mp4|webm|mov)$/i, 'ai ai-video'],
-    [/(zip|tar|gzip|x-7z|rar)$|\.(zip|tar|gz|tgz|7z|rar)$/i, 'ai ai-box'],
+    [/^image\/|\.(png|jpe?g|gif|svg|webp|avif|ico)$/i, 'az az-image'],
+    [/pdf$/i, 'az az-file-pdf'],
+    [/^video\/|\.(mp4|webm|mov)$/i, 'az az-video'],
+    [/(zip|tar|gzip|x-7z|rar)$|\.(zip|tar|gz|tgz|7z|rar)$/i, 'az az-box'],
     [
       /(json|javascript|typescript|html|css|xml|sql)$|\.(json|m?js|ts|vue|html|css|xml|sql|ya?ml)$/i,
-      'ai ai-code'
+      'az az-code'
     ],
-    [/(csv|spreadsheet|excel)|\.(csv|xlsx?)$/i, 'ai ai-file-excel']
+    [/(csv|spreadsheet|excel)|\.(csv|xlsx?)$/i, 'az az-file-excel']
   ]
   const glyphOf = (file: FileTokenGroupFile): string => {
     for (const [pattern, glyph] of GLYPHS) {
       if (pattern.test(file.type ?? '') || pattern.test(file.name)) return glyph
     }
-    return 'ai ai-file'
+    return 'az az-file'
   }
 
   const mounted = ref(false)
@@ -195,7 +195,7 @@
             class="ms-auto flex shrink-0"
           >
             <IconButton
-              icon="ai ai-x"
+              icon="az az-x"
               variant="ghost"
               size="small"
               :ariaLabel="t('fileTokenGroup.remove', { name: relativePathOf(item.file) })"
@@ -221,7 +221,7 @@
           class="m-0 flex items-center gap-(--spacing-2xs) text-label-sm text-(--warning-foreground) data-[status=error]:text-(--danger-foreground)"
         >
           <i
-            :class="item.error ? 'ai ai-circle-x' : 'ai ai-triangle-alert'"
+            :class="item.error ? 'az az-circle-x' : 'az az-triangle-alert'"
             class="shrink-0"
             aria-hidden="true"
           />
@@ -239,7 +239,7 @@
         :label="
           expanded ? t('fileTokenGroup.showLess') : t('fileTokenGroup.showMore', { count: hidden })
         "
-        :icon="expanded ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
+        :icon="expanded ? 'az az-chevron-up' : 'az az-chevron-down'"
         :aria-expanded="expanded ? 'true' : 'false'"
         :data-testid="`${testId}__toggle`"
         @click="expanded = !expanded"

@@ -144,7 +144,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `-end-2` for the badge, `text-start`).
-- Icons: the Back chevron (`ai ai-chevron-left`) and the row chevrons (`ai ai-chevron-right`) mirror under rtl (`rtl:-scale-x-100`; IconButton mirrors its own directional icons); the funnel, search, check and filter-slash glyphs do not.
+- Icons: the Back chevron (`az az-chevron-left`) and the row chevrons (`az az-chevron-right`) mirror under rtl (`rtl:-scale-x-100`; IconButton mirrors its own directional icons); the funnel, search, check and filter-slash glyphs do not.
 - Keyboard: `ArrowUp` / `ArrowDown` are vertical and unchanged. The level slide enters from the inline end going forward and from the inline start going back, so it mirrors with the direction from `WebkitProvider`.
 - User data: field labels, value labels and summaries render in `<bdi>` so an author name or a domain keeps its own direction.
 

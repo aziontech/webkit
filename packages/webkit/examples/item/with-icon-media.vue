@@ -7,7 +7,7 @@
   <Item variant="outline">
     <Item.Media type="icon">
       <i
-        class="ai ai-edge-firewall text-[length:inherit] leading-none"
+        class="az az-firewall text-[length:inherit] leading-none"
         aria-hidden="true"
       />
     </Item.Media>

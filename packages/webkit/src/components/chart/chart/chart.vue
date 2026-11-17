@@ -664,7 +664,7 @@
         <EmptyState
           :title="emptyTitle || t('chart.emptyTitle')"
           :description="emptyDescription"
-          :icon="vertical ? 'ai ai-chart-line' : 'ai ai-chart-bar'"
+          :icon="vertical ? 'az az-chart-line' : 'az az-chart-bar'"
           size="small"
           bordered
           :data-testid="`${testId}__empty`"

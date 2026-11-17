@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: d1e41e1c4f8b5475379cb56494d4bab0200462096a3a2f438bf2354d4600c74b
+checksum: 50880748a9bd8faa94c56969e10ddd6e278c16c4b5d6987c4941abdf690f5e69
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -56,7 +56,7 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
       {
         label: 'Repository',
         links: [
-          { label: 'View source', href: 'https://github.com/aziontech', icon: 'ai ai-github' }
+          { label: 'View source', href: 'https://github.com/aziontech', icon: 'az az-github' }
         ]
       }
     ]"

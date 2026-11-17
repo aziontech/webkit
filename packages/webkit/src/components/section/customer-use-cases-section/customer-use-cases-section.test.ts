@@ -12,17 +12,17 @@ const primaryAction = { label: 'Docs', href: '/docs', trailing: true }
 
 const items = [
   {
-    icon: 'ai ai-comments',
+    icon: 'az az-comments',
     title: 'RAG Applications',
     description: 'Build topic-specific chatbots with the data stored in SQL Database.'
   },
   {
-    icon: 'ai ai-search',
+    icon: 'az az-search',
     title: 'Search Applications',
     description: 'Power search with vector similarity queries on stored embeddings.'
   },
   {
-    icon: 'ai ai-chart-line',
+    icon: 'az az-chart-line',
     title: 'Analytics',
     description: 'Run aggregations close to the user without leaving the edge.'
   }

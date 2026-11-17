@@ -36,7 +36,7 @@
         <DropdownMenuTrigger>
           <Tooltip content="Row actions">
             <IconButton
-              icon="ai ai-ellipsis"
+              icon="az az-ellipsis"
               variant="outline"
               size="small"
               aria-label="Actions for www.example.com"
@@ -50,7 +50,7 @@
           >
             <template #leading
               ><i
-                class="ai ai-pencil"
+                class="az az-pencil"
                 aria-hidden="true"
             /></template>
           </DropdownMenuItem>
@@ -62,7 +62,7 @@
           >
             <template #leading
               ><i
-                class="ai ai-trash"
+                class="az az-trash"
                 aria-hidden="true"
             /></template>
           </DropdownMenuItem>

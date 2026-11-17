@@ -66,7 +66,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Glyph shown before the title of a collapsible band (e.g. `ai ai-settings`)."
+   "doc": "Glyph shown before the title of a collapsible band (e.g. `az az-settings`)."
   },
   {
    "name": "open",

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: ef7ed209bff08fd498cf156f1293cbd237aac110d883f578e44f95b4d46929ee
+checksum: 59766c4810a15e5791d5c86f37a639232c45de58d541d32cc2aaa34aa26d926d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -89,7 +89,7 @@ keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame t
         <AppHeader.Start>
           <IconButton
             v-if="compact"
-            icon="ai ai-menu"
+            icon="az az-menu"
             aria-label="Open navigation"
             variant="outline"
             size="medium"
@@ -98,7 +98,7 @@ keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame t
         </AppHeader.Start>
         <AppHeader.End>
           <IconButton
-            icon="ai ai-circle-help"
+            icon="az az-circle-help"
             aria-label="Help"
             variant="outline"
             size="medium"
@@ -224,7 +224,7 @@ The only events are the `update:*` of the models above.
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s`, `border-e`, `ms-auto`); the navigation sits at the inline start and the tools and side split panel at the inline end.
-- Icons: the position toggle icons (`ai ai-window-maximize` family) are not mirrored; close is not mirrored.
+- Icons: the position toggle icons (`az az-window-maximize` family) are not mirrored; close is not mirrored.
 - Keyboard: on a side split panel, the arrow that points away from the panel grows it — `ArrowLeft` in LTR, `ArrowRight` in RTL.
 - User data: none.
 

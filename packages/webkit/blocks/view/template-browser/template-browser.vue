@@ -154,7 +154,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/templates"
@@ -232,14 +232,14 @@
           />
           <EmptyState
             size="medium"
-            icon="ai ai-layout-grid"
+            icon="az az-layout-grid"
             title="Templates are unavailable"
             description="The catalog shows here once it loads. You can still deploy from your own repository."
           >
             <template #actions>
               <Button
                 label="Import from Git"
-                icon="ai ai-github"
+                icon="az az-github"
                 variant="secondary"
                 size="small"
                 href="/create/import"
@@ -251,7 +251,7 @@
         <EmptyState
           v-else-if="status === 'no-match'"
           size="medium"
-          icon="ai ai-filter-off"
+          icon="az az-filter-off"
           title="No matching templates"
           description="No template matches this search. Remove a filter to widen the results."
         >
@@ -381,7 +381,7 @@ npm run dev</code></pre>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="View repository"
-              icon="ai ai-external-link"
+              icon="az az-external-link"
               icon-position="trailing"
               variant="outline"
               size="medium"
@@ -390,7 +390,7 @@ npm run dev</code></pre>
             />
             <Button
               label="Deploy"
-              icon="ai ai-cloud-upload"
+              icon="az az-cloud-upload"
               variant="primary"
               size="medium"
               :href="`/create/deploy?template=${selected.id}`"

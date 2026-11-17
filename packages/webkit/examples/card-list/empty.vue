@@ -9,7 +9,7 @@
     <template #empty>
       <EmptyState
         size="small"
-        icon="ai ai-layout-grid"
+        icon="az az-layout-grid"
         title="No applications yet"
         description="Create an application to serve your site from the edge."
       >
@@ -17,7 +17,7 @@
           <Button
             label="Create application"
             size="small"
-            icon="ai ai-plus"
+            icon="az az-plus"
           />
         </template>
       </EmptyState>

@@ -56,7 +56,7 @@
         }}</code>
         <i
           v-if="at < layers.length - 1"
-          class="ai ai-arrow-right absolute end-[calc(var(--spacing-sm)/-2)] top-1/2 z-1 hidden -translate-y-1/2 translate-x-1/2 rounded-full bg-(--bg-canvas) p-(--spacing-2xs) text-(--text-muted) md:block rtl:-translate-x-1/2 rtl:rotate-180"
+          class="az az-arrow-right absolute end-[calc(var(--spacing-sm)/-2)] top-1/2 z-1 hidden -translate-y-1/2 translate-x-1/2 rounded-full bg-(--bg-canvas) p-(--spacing-2xs) text-(--text-muted) md:block rtl:-translate-x-1/2 rtl:rotate-180"
           aria-hidden="true"
         />
       </li>

@@ -387,20 +387,24 @@ A component's own custom property is **`--<component>-<part>-<property>`**, whol
 
 ## 17. Icons
 
-The class is `ai ai-<name>`; the colour set is `ai-color ai-<name>`. Names come from the icons
-package (`packages/icons/src/svg-raw/ai`, colour set `ai-color`), are Lucide-style words and
-spell brands out.
+The class is `az az-<name>`; the colour set is `az-color az-<name>` (owner, 2026-11-17: `ai` read as
+"artificial intelligence", so the base class is `az`). Names come from the icons package
+(`packages/icons/src/svg-raw/az`, colour set `az-color`, documented one by one in
+`packages/icons/src/icons.json`): interface glyphs are Lucide-style words, an Azion product icon
+is the product's name as WebKit spells it (`functions`, `sql-database`; `edge-` only for Edge DNS,
+Edge Pulse and Edge Orchestrator), and brands are spelled out.
 
-| ✅                   | ❌                           |
-| -------------------- | ---------------------------- |
-| `ai ai-x`            | `ai ai-times`, `pi pi-times` |
-| `ai ai-menu`         | `ai ai-bars`                 |
-| `ai ai-settings`     | `ai ai-cog`                  |
-| `ai ai-chevron-down` | `ai ai-angle-down`           |
-| `ai-color ai-openai` | `ai-cor ai-open`             |
-| `ai ai-scissors`     | `ai ai-scizors` (typo)       |
+| ✅                   | ❌                                      |
+| -------------------- | --------------------------------------- |
+| `az az-x`            | `ai ai-x`, `ai ai-times`, `pi pi-times` |
+| `az az-menu`         | `ai ai-bars`                            |
+| `az az-settings`     | `ai ai-cog`                             |
+| `az az-chevron-down` | `ai ai-angle-down`                      |
+| `az-color az-openai` | `ai-cor ai-open`, `ai-color ai-openai`  |
+| `az az-scissors`     | `ai ai-scizors` (typo)                  |
 
-The old `pi` icon set is removed; `v6-icons.json` maps every old name.
+The old `pi` icon set and the `ai` / `ai-cor` / `ai-color` base classes are removed; `v6-icons.json`
+maps every old name and base class.
 
 > Supabase uses Lucide (`x`, `menu`, `settings`); Material says `close` — we follow Lucide
 > because that is the set agents and designers reach for.

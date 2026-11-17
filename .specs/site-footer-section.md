@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 69d15b2d3bc805aaebfde76ccc30b8939bd00320a201693a460a5fdb37f19635
+checksum: 29677a4599a85bbcf8bf6e6a52322bdbf989a43cefc9da05ef3bb9a251cd69cf
 ---
 
 # SiteFooterSection — Component Spec
@@ -54,7 +54,7 @@ The footer under every marketing page: the link columns, then the social row bes
     home="/"
     :columns="[{ title: 'Products', links: [{ label: 'Functions', href: '/products/functions' }] }]"
     :socials="[
-      { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
+      { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
     ]"
     status-label="All Systems Operational"
     :languages="['EN', 'PT-BR', 'ES']"
@@ -98,7 +98,7 @@ The footer under every marketing page: the link columns, then the social row bes
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `ai ai-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
+- A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `az az-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
 - Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Motion & Animations

@@ -71,7 +71,10 @@ export default {
           }
         }
 
-        if (ICON_BUTTONS.has(raw) && /\b(?:ai|pi)-search\b/.test(staticAttr(node, 'icon') ?? '')) {
+        if (
+          ICON_BUTTONS.has(raw) &&
+          /\b(?:az|ai|pi)-search\b/.test(staticAttr(node, 'icon') ?? '')
+        ) {
           if (insideHeader(node)) context.report({ node: node.startTag, messageId: 'bareIcon' })
           return
         }

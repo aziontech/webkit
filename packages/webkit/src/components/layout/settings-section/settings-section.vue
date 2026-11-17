@@ -19,7 +19,7 @@
     anchor?: string
     /** Turns the title into a disclosure that folds the band body. */
     collapsible?: boolean
-    /** Glyph shown before the title of a collapsible band (e.g. `ai ai-settings`). */
+    /** Glyph shown before the title of a collapsible band (e.g. `az az-settings`). */
     icon?: string
   }
 
@@ -93,7 +93,7 @@
         @click="copyLink"
       >
         <i
-          :class="copied ? 'ai ai-check' : 'ai ai-link'"
+          :class="copied ? 'az az-check' : 'az az-link'"
           class="text-body-xs"
           aria-hidden="true"
         />
@@ -121,7 +121,7 @@
           />
           <slot name="title">{{ title }}</slot>
           <i
-            class="ai ai-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
+            class="az az-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
             aria-hidden="true"
           />
         </button>

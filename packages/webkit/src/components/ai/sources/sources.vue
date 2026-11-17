@@ -93,13 +93,13 @@
       @click="toggle"
     >
       <i
-        class="ai ai-book"
+        class="az az-book"
         aria-hidden="true"
       />
       <span>{{ heading }}</span>
       <i
         :data-state="isOpen ? 'open' : 'closed'"
-        class="ai ai-chevron-down text-body-xs transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+        class="az az-chevron-down text-body-xs transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
         aria-hidden="true"
       />
     </button>

@@ -100,7 +100,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`ai ai-cloud-upload`)."
+   "doc": "Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`az az-cloud-upload`)."
   }
  ],
  "events": [

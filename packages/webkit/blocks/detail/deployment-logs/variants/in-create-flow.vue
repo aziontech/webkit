@@ -37,7 +37,7 @@
             <span
               class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) text-(--text-default)"
             >
-              <i class="ai ai-github text-body-lg leading-none" />
+              <i class="az az-github text-body-lg leading-none" />
             </span>
             <svg
               class="h-0.5 w-20 shrink-0 text-(--primary)"
@@ -58,7 +58,7 @@
             <span
               class="flex size-20 shrink-0 items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) text-(--primary)"
             >
-              <i class="ai ai-azion text-heading-lg leading-none" />
+              <i class="az az-azion text-heading-lg leading-none" />
             </span>
           </div>
         </div>

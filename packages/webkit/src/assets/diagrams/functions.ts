@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'Request',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'Rule: run a function on /account',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Functions',
       title: 'auth-handler',
-      icon: 'ai ai-edge-functions',
+      icon: 'az az-functions',
       status: {
         label: 'No cold start',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Answered here',
       title: 'Response from the edge',
-      icon: 'ai ai-check',
+      icon: 'az az-check',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Origin',
       title: 'Your API',
-      icon: 'ai ai-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

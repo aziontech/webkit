@@ -108,8 +108,8 @@ The five dot looks, and what each one renders:
 | ----------------------- | ----------------------------------- | ----------------------------------------------------------- | -------------------- |
 | `data-status="pending"` | not reached, nothing known          | outlined, muted, shows its number                           | muted track          |
 | `data-active`           | `value` equals the root's `v-model` | outlined in `--secondary` with a filled inner disc          | muted track          |
-| `data-completed`        | the owner set `status="success"`    | filled `--secondary`, `ai ai-check` glyph                   | filled `--secondary` |
-| `data-status="error"`   | the owner set `status="error"`      | filled `--danger`, `ai ai-triangle-alert` glyph             | muted track          |
+| `data-completed`        | the owner set `status="success"`    | filled `--secondary`, `az az-check` glyph                   | filled `--secondary` |
+| `data-status="error"`   | the owner set `status="error"`      | filled `--danger`, `az az-triangle-alert` glyph             | muted track          |
 | `data-status="running"` | the owner set `status="running"`    | outlined in `--secondary`, `Spinner` in place of the number | muted track          |
 
 `error` and `running` outrank active: a step that is both on screen and wrong must say it is wrong.

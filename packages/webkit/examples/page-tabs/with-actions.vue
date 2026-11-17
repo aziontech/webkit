@@ -31,7 +31,7 @@
         label="Deploy"
         variant="outline"
         size="medium"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
       />
     </template>
   </PageTabs>

@@ -125,7 +125,7 @@
           >
             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
               <i
-                class="ai ai-table shrink-0 text-(--text-muted)"
+                class="az az-table shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="truncate text-heading-2xs text-(--text-default)">users</span>
@@ -151,7 +151,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-search"
+                    class="az az-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -159,7 +159,7 @@
             </span>
             <span class="ms-auto flex items-center gap-(--spacing-xs)">
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="outline"
                 size="medium"
                 ariaLabel="Refresh"
@@ -172,7 +172,7 @@
                   label="Insert"
                   variant="primary"
                   size="medium"
-                  icon="ai ai-plus"
+                  icon="az az-plus"
                 />
               </span>
             </span>
@@ -204,7 +204,7 @@
                   <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
                   <i
                     v-if="column.primaryKey"
-                    class="ai ai-key ms-auto shrink-0 ps-(--spacing-xs) text-(--primary)"
+                    class="az az-key ms-auto shrink-0 ps-(--spacing-xs) text-(--primary)"
                     aria-label="Primary key"
                   />
                 </span>

@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'User',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'Rules in order, every request',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true,
       status: {
         label: '2 phases',
@@ -28,7 +28,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Deliver',
       title: 'Static assets from cache',
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-tiered-cache',
       active: true
     },
     {
@@ -36,14 +36,14 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Run',
       title: 'auth-handler on /account',
-      icon: 'ai ai-edge-functions'
+      icon: 'az az-functions'
     },
     {
       key: 'origin',
       type: 'item',
       eyebrow: 'Origin',
       title: 'Your API on /api',
-      icon: 'ai ai-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

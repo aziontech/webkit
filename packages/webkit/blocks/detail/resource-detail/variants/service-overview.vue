@@ -87,7 +87,7 @@
   const productionSteps: ProductionStep[] = [
     {
       id: 'domain',
-      icon: 'ai ai-globe',
+      icon: 'az az-globe',
       title: 'Add a custom domain',
       description:
         'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
@@ -96,7 +96,7 @@
     },
     {
       id: 'policy',
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       title: 'Enable a security policy',
       description:
         'Bind a policy so requests are inspected before they reach the resource. Rate limiting, request inspection, and IP filtering.',
@@ -105,7 +105,7 @@
     },
     {
       id: 'errorPage',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       title: 'Set custom error pages',
       description: 'Answer 4xx and 5xx with your own page instead of the default response.',
       actionLabel: 'Bind Error Page',
@@ -120,7 +120,7 @@
   const targets: Record<string, Target> = {
     policy: {
       kind: 'Policy',
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       options: [
         { value: 'payments-api', label: 'payments-api' },
         { value: 'api-hardening', label: 'api-hardening' },
@@ -132,7 +132,7 @@
     },
     errorPage: {
       kind: 'Error Page',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       options: [
         { value: 'Branded 404', label: 'Branded 404' },
         { value: 'Maintenance window', label: 'Maintenance window' },
@@ -144,7 +144,7 @@
     },
     origin: {
       kind: 'Origin',
-      icon: 'ai ai-link',
+      icon: 'az az-link',
       options: [
         { value: 'web-app-storage', label: 'web-app-storage' },
         { value: 'api-primary', label: 'api-primary' },
@@ -217,7 +217,7 @@
         {
           id: 'domains',
           type: 'Domains',
-          icon: 'ai ai-globe',
+          icon: 'az az-globe',
           name: 'service-01.example.com',
           status: '1 domain',
           severity: 'neutral',
@@ -238,7 +238,7 @@
         {
           id: 'service',
           type: 'Service',
-          icon: 'ai ai-server',
+          icon: 'az az-server',
           name: SERVICE.name,
           status: 'Live',
           severity: 'success',
@@ -263,7 +263,7 @@
         {
           id: 'resource',
           type: 'Resource',
-          icon: 'ai ai-box',
+          icon: 'az az-box',
           name: 'web-app',
           status: 'Active',
           severity: 'success',
@@ -284,7 +284,7 @@
         {
           id: 'storage',
           type: 'Storage',
-          icon: 'ai ai-inbox',
+          icon: 'az az-inbox',
           name: 'web-app-assets',
           status: 'Public',
           severity: 'info',
@@ -415,7 +415,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -450,7 +450,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-circle-plus"
+                  class="az az-circle-plus"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -480,7 +480,7 @@
               label="Deploy"
               variant="outline"
               size="medium"
-              icon="ai ai-cloud-upload"
+              icon="az az-cloud-upload"
               :loading="deploying"
               @click="deployOpen = true"
             />
@@ -505,7 +505,7 @@
                     class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
                   >
                     <i
-                      class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
+                      class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <div class="flex min-w-0">
@@ -525,7 +525,7 @@
                           >
                           <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                           <i
-                            class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                            class="az az-external-link shrink-0 text-body-xs leading-none"
                             aria-hidden="true"
                           />
                         </a>
@@ -566,7 +566,7 @@
                           >
                             <span class="truncate">{{ domain }}</span>
                             <i
-                              class="ai ai-external-link ms-auto shrink-0 text-body-xs leading-none"
+                              class="az az-external-link ms-auto shrink-0 text-body-xs leading-none"
                               aria-hidden="true"
                             />
                           </a>
@@ -588,7 +588,7 @@
                       target="_blank"
                       variant="secondary"
                       size="medium"
-                      icon="ai ai-external-link"
+                      icon="az az-external-link"
                     />
 
                     <div class="contents md:hidden">
@@ -609,12 +609,12 @@
                               class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
                             >
                               <i
-                                class="ai ai-layers shrink-0 text-(--text-muted)"
+                                class="az az-layers shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                               <span class="truncate">{{ environment }}</span>
                               <i
-                                class="ai ai-chevron-down shrink-0 text-(--text-muted)"
+                                class="az az-chevron-down shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -637,7 +637,7 @@
                             >
                               <template #leading>
                                 <i
-                                  class="ai ai-plus"
+                                  class="az az-plus"
                                   aria-hidden="true"
                                 />
                               </template>
@@ -654,7 +654,7 @@
                       <DropdownMenu.Trigger>
                         <Tooltip content="Service actions">
                           <IconButton
-                            icon="ai ai-ellipsis"
+                            icon="az az-ellipsis"
                             variant="outline"
                             size="medium"
                             aria-label="Service actions"
@@ -669,7 +669,7 @@
                         >
                           <template #leading>
                             <i
-                              class="ai ai-copy"
+                              class="az az-copy"
                               aria-hidden="true"
                             />
                           </template>
@@ -683,7 +683,7 @@
                         >
                           <template #leading>
                             <i
-                              class="ai ai-globe"
+                              class="az az-globe"
                               aria-hidden="true"
                             />
                           </template>
@@ -694,7 +694,7 @@
                         >
                           <template #leading>
                             <i
-                              class="ai ai-settings"
+                              class="az az-settings"
                               aria-hidden="true"
                             />
                           </template>
@@ -712,7 +712,7 @@
                       <span class="text-label-sm text-(--text-muted)">Custom domains</span>
                       <Tooltip content="Add a custom domain">
                         <IconButton
-                          icon="ai ai-circle-plus"
+                          icon="az az-circle-plus"
                           variant="ghost"
                           size="small"
                           aria-label="Add a custom domain"
@@ -808,7 +808,7 @@
                                   acme-production
                                 </span>
                                 <i
-                                  class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                                  class="az az-external-link shrink-0 text-body-xs leading-none"
                                   aria-hidden="true"
                                 />
                               </a>
@@ -912,7 +912,7 @@
                 </div>
 
                 <IconButton
-                  icon="ai ai-window-maximize"
+                  icon="az az-window-maximize"
                   aria-label="Expand the production checklist"
                   variant="outline"
                   size="small"
@@ -953,7 +953,7 @@
                       <Item.Actions>
                         <i
                           v-if="step.done"
-                          class="ai ai-check text-body-sm leading-none text-(--primary)"
+                          class="az az-check text-body-sm leading-none text-(--primary)"
                           aria-hidden="true"
                         />
                         <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
@@ -1006,7 +1006,7 @@
                           aria-hidden="true"
                         >
                           <i
-                            :class="step.done ? 'ai ai-check' : step.icon"
+                            :class="step.done ? 'az az-check' : step.icon"
                             class="text-body-sm leading-none"
                           />
                         </span>
@@ -1024,7 +1024,7 @@
                       <Item.Footer>
                         <Tag
                           v-if="step.done"
-                          icon="ai ai-check"
+                          icon="az az-check"
                           :label="step.doneNote || 'Done'"
                           severity="neutral"
                           size="medium"
@@ -1079,7 +1079,7 @@
                       content="Add domain"
                     >
                       <IconButton
-                        icon="ai ai-plus"
+                        icon="az az-plus"
                         variant="outline"
                         size="small"
                         aria-label="Add domain"
@@ -1110,7 +1110,7 @@
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="ai ai-external-link"
+            icon="az az-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >
@@ -1186,7 +1186,7 @@
             <Button
               label="Deploy"
               variant="primary"
-              icon="ai ai-cloud-upload"
+              icon="az az-cloud-upload"
               @click="runDeploy"
             />
           </div>

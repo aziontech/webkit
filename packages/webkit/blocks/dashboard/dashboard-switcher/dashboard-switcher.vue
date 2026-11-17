@@ -233,7 +233,7 @@
               <Select.Trigger aria-label="Dashboard">
                 <template #leading>
                   <i
-                    class="ai ai-chart-bar text-(--text-muted)"
+                    class="az az-chart-bar text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </template>
@@ -275,7 +275,7 @@
           <div class="ms-auto flex shrink-0 items-center">
             <Tooltip content="Refresh">
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="outline"
                 size="medium"
                 aria-label="Refresh"

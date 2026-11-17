@@ -170,7 +170,7 @@
       {
         key: 'service',
         eyebrow: 'Service',
-        icon: 'ai ai-globe',
+        icon: 'az az-globe',
         title: fn.value.service,
         label: 'Live',
         severity: 'success',
@@ -183,7 +183,7 @@
       {
         key: 'resource',
         eyebrow: 'Resource',
-        icon: 'ai ai-box',
+        icon: 'az az-box',
         title: fn.value.resource,
         label: 'Active',
         severity: 'success',
@@ -196,7 +196,7 @@
       {
         key: 'function',
         eyebrow: 'Function',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         title: fn.value.name,
         label: failed ? 'Failed' : running.value ? 'Running' : 'Active',
         severity: failed ? 'danger' : running.value ? 'warning' : 'success',
@@ -209,7 +209,7 @@
       {
         key: 'origin',
         eyebrow: 'Origin',
-        icon: 'ai ai-server',
+        icon: 'az az-server',
         title: fn.value.origin,
         label: failed ? 'Timed out' : running.value ? 'Waiting' : 'Answered',
         severity: failed ? 'danger' : running.value ? 'warning' : 'success',
@@ -275,7 +275,7 @@
                 class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
               >
                 <i
-                  class="ai ai-edge-functions shrink-0 text-body-lg text-(--text-muted)"
+                  class="az az-functions shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <div class="flex min-w-0">
@@ -316,7 +316,7 @@
                   label="Replay"
                   variant="secondary"
                   size="medium"
-                  icon="ai ai-replay"
+                  icon="az az-replay"
                   :disabled="running"
                   @click="replay"
                 />
@@ -332,7 +332,7 @@
                         label="Recent"
                         variant="outline"
                         size="medium"
-                        icon="ai ai-history"
+                        icon="az az-history"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -362,7 +362,7 @@
                   <DropdownMenu.Trigger>
                     <Tooltip content="Invocation actions">
                       <IconButton
-                        icon="ai ai-ellipsis"
+                        icon="az az-ellipsis"
                         variant="outline"
                         size="medium"
                         aria-label="Invocation actions"
@@ -377,7 +377,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-real-time-events"
+                          class="az az-real-time-events"
                           aria-hidden="true"
                         />
                       </template>
@@ -388,7 +388,7 @@
                     >
                       <template #leading>
                         <i
-                          class="ai ai-settings"
+                          class="az az-settings"
                           aria-hidden="true"
                         />
                       </template>
@@ -423,7 +423,7 @@
               >
                 <i
                   :data-severity="severity"
-                  class="ai ai-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
+                  class="az az-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-label-code-sm text-(--text-muted)">{{
@@ -507,7 +507,7 @@
                     >
                       <Tooltip :content="`Show ${node.title} in the trace`">
                         <IconButton
-                          icon="ai ai-align-left"
+                          icon="az az-align-left"
                           variant="outline"
                           size="small"
                           :aria-label="`Show ${node.title} in the trace`"

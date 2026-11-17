@@ -62,7 +62,7 @@
                       close-on-click
                     >
                       <template #icon>
-                        <i class="ai ai-edge-functions" />
+                        <i class="az az-functions" />
                       </template>
                       Functions
                     </NavigationMenu.Item>
@@ -73,7 +73,7 @@
                       close-on-click
                     >
                       <template #icon>
-                        <i class="ai ai-tiered-cache" />
+                        <i class="az az-tiered-cache" />
                       </template>
                       Cache
                     </NavigationMenu.Item>

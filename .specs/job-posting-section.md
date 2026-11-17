@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 1ee3475a15f5b93b1d4f6e4c3d293890d2223d33569575e90d4b222ba05afb1b
+checksum: f8bfcb122d9ed06a30eba09630138186dde6ef663ce0fe07955f6fcbabadf89b
 created: 2026-11-14
 last_updated: 2026-11-16
 ---
@@ -68,8 +68,8 @@ The body of a careers posting page, under the posting's title band: the descript
     title="Senior Platform Engineer"
     apply-label="Apply for this position"
     :facets="[
-      { label: 'Engineering', icon: 'ai ai-sitemap' },
-      { label: 'San Francisco, California', icon: 'ai ai-map-pin' }
+      { label: 'Engineering', icon: 'az az-sitemap' },
+      { label: 'San Francisco, California', icon: 'az az-map-pin' }
     ]"
     :sections="[
       {
@@ -191,7 +191,7 @@ No built-in strings: every visible string and accessible name comes from the pro
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s` on the rail, `ps-` on the bullet lists, `text-start`); the rail sits at the inline end.
-- Icons: the apply button's `ai ai-chevron-right` is mirrored by `button`; facet glyphs are not mirrored.
+- Icons: the apply button's `az az-chevron-right` is mirrored by `button`; facet glyphs are not mirrored.
 - Keyboard: no arrow-key interaction of its own.
 - User data: the posting copy is passed as props and inherits the page direction; field values are typed by the reader.
 

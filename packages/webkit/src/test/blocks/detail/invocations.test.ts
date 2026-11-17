@@ -78,7 +78,7 @@ describe('detail/invocations', () => {
                 id: 'root',
                 name: 'acme-auth',
                 service: 'Function',
-                icon: 'ai ai-edge-functions',
+                icon: 'az az-functions',
                 start: 0,
                 duration: 88
               }

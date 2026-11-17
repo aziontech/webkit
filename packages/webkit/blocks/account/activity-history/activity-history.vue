@@ -190,7 +190,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/activity-history"
@@ -220,7 +220,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 variant="outline"
                 size="medium"
                 :loading="loading"
@@ -233,7 +233,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="ai ai-download"
+                icon="az az-download"
                 variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -271,7 +271,7 @@
           <template #default>
             <EmptyState
               size="medium"
-              icon="ai ai-history"
+              icon="az az-history"
               title="No activity in this period"
               :description="
                 widerRange
@@ -344,7 +344,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-search"
+                  icon="az az-search"
                   title="No matching events"
                   description="No event in this period matches these filters."
                 >

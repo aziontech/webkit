@@ -41,7 +41,7 @@
     <IconButton
       v-bind="$attrs"
       :data-testid="testId"
-      icon="ai ai-refresh"
+      icon="az az-refresh"
       :ariaLabel="t('tableRefreshButton.label')"
       variant="outline"
       size="medium"

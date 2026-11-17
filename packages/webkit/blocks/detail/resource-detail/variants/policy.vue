@@ -17,7 +17,7 @@
       >
         <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
           <i
-            class="ai ai-box shrink-0 text-body-lg text-(--text-muted)"
+            class="az az-box shrink-0 text-body-lg text-(--text-muted)"
             aria-hidden="true"
           />
           <div class="flex min-w-0">
@@ -32,7 +32,7 @@
               >
                 <span class="truncate underline-offset-2 group-hover/link:underline">web-app</span>
                 <i
-                  class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                  class="az az-external-link shrink-0 text-body-xs leading-none"
                   aria-hidden="true"
                 />
               </a>
@@ -45,7 +45,7 @@
             label="Rules"
             variant="secondary"
             size="medium"
-            icon="ai ai-list"
+            icon="az az-list"
           />
 
           <DropdownMenu
@@ -55,7 +55,7 @@
             <DropdownMenu.Trigger>
               <Tooltip content="Policy actions">
                 <IconButton
-                  icon="ai ai-ellipsis"
+                  icon="az az-ellipsis"
                   variant="outline"
                   size="medium"
                   aria-label="Policy actions"
@@ -70,7 +70,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-copy"
+                    class="az az-copy"
                     aria-hidden="true"
                   />
                 </template>
@@ -84,7 +84,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-settings"
+                    class="az az-settings"
                     aria-hidden="true"
                   />
                 </template>
@@ -192,7 +192,7 @@
             label="Documentation"
             variant="outline"
             size="medium"
-            icon="ai ai-book"
+            icon="az az-book"
             href="https://example.com/docs/policies"
             target="_blank"
           />

@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 9c9e0a90322d95dc5ec4149b0549fc9685858ee435335cd8ae9cd1693d2510a3
+checksum: ebfafac9557a0276b32ffd2a52078c64a1d34c51bca117b8ef4edc3f4e00b58b
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -48,7 +48,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 <template>
   <DocCard
     title="Edge Application"
-    icon="ai ai-server"
+    icon="az az-server"
     href="/docs/edge-application"
     link-label="Read the guide"
   >

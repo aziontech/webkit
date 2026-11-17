@@ -4,22 +4,22 @@
 
   const items = [
     {
-      icon: 'ai ai-edge-ai',
+      icon: 'az az-ai-inference',
       title: 'Build AI applications',
       description: 'Run AI agents and inference close to your users.'
     },
     {
-      icon: 'ai ai-build-pillar',
+      icon: 'az az-build-pillar',
       title: 'Modernize applications',
       description: 'Go from commit to a live URL in minutes.'
     },
     {
-      icon: 'ai ai-secure-pillar',
+      icon: 'az az-secure-pillar',
       title: 'Protect applications and APIs',
       description: 'Block DDoS attacks, malicious bots, and API abuse.'
     },
     {
-      icon: 'ai ai-app-accelerator',
+      icon: 'az az-application-accelerator',
       title: 'Speed up every workload',
       description: '100+ data centers, with a 30 ms median latency.'
     }

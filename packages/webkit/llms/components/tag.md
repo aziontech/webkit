@@ -164,13 +164,13 @@
         label="Label"
         variant="primary"
         size="medium"
-        icon="ai ai-box"
+        icon="az az-box"
       />
       <Tag
         label="Label"
         variant="primary"
         size="medium"
-        icon="ai ai-box"
+        icon="az az-box"
         rounded
       />
     </div>
@@ -190,13 +190,13 @@
         label="Label"
         variant="primary"
         size="small"
-        icon="ai ai-box"
+        icon="az az-box"
       />
       <Tag
         label="Label"
         variant="primary"
         size="small"
-        icon="ai ai-box"
+        icon="az az-box"
         rounded
       />
     </div>

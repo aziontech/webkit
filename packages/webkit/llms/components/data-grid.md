@@ -212,7 +212,7 @@
     <template #toolbar="{ add, remove, selectedCount }">
       <Button
         label="Add row"
-        icon="ai ai-plus"
+        icon="az az-plus"
         variant="outline"
         size="small"
         @click="add"

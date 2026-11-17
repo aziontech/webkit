@@ -376,7 +376,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
         <template #actions>
           <Button
             label="Export to CSV"
-            icon="ai ai-download"
+            icon="az az-download"
             variant="outline"
             size="medium"
             :disabled="!rows.length || loading || loadFailed"
@@ -384,7 +384,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
           />
           <Button
             :label="selected.length ? `Allow ${selected.length} selected` : 'Allow selected'"
-            icon="ai ai-check"
+            icon="az az-check"
             variant="outline"
             size="medium"
             :disabled="!selected.length || loading"
@@ -449,7 +449,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -457,7 +457,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
           </div>
           <Tooltip content="Refresh">
             <IconButton
-              icon="ai ai-refresh"
+              icon="az az-refresh"
               variant="outline"
               size="medium"
               aria-label="Refresh matched requests"
@@ -481,7 +481,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
           <template #default>
             <EmptyState
               v-if="noMatches"
-              icon="ai ai-shield"
+              icon="az az-shield"
               title="No matches yet"
               description="This rule set has not matched any request. Matches appear here as traffic arrives."
             />
@@ -529,7 +529,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
                   key="empty-state-1"
                   v-if="search.trim()"
                   size="small"
-                  icon="ai ai-search"
+                  icon="az az-search"
                   title="No matching rules"
                   :description="`No rule, IP address, country or path matches “${search.trim()}”.`"
                 >

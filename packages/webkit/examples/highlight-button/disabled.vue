@@ -5,7 +5,7 @@
 <template>
   <HighlightButton
     label="Ask Azion"
-    icon="ai ai-sparkles"
+    icon="az az-sparkles"
     disabled
   />
 </template>

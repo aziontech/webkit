@@ -203,7 +203,7 @@
       data-testid="navigation-menu__icon"
       :data-state="itemOpen ? 'open' : 'closed'"
     >
-      <i class="ai ai-chevron-down" />
+      <i class="az az-chevron-down" />
     </span>
   </component>
 </template>

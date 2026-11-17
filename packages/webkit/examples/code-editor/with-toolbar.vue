@@ -55,7 +55,7 @@
         label="Run"
         variant="secondary"
         size="small"
-        icon="ai ai-play"
+        icon="az az-play"
       />
     </template>
   </CodeEditor>

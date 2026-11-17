@@ -327,7 +327,7 @@
           </div>
           <Button
             label="Export CSV"
-            icon="ai ai-download"
+            icon="az az-download"
             variant="outline"
             size="medium"
             :disabled="!exportable"
@@ -384,7 +384,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Spend by category"
@@ -449,7 +449,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Current split"
@@ -502,7 +502,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis"
+                    icon="az az-ellipsis"
                     variant="ghost"
                     size="small"
                     aria-label="More options for Top contributors"
@@ -539,7 +539,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="ai ai-chart-bar"
+                  icon="az az-chart-bar"
                   title="No spend in this range"
                   description="Nothing was billed to the organization in the selected period."
                 />
@@ -591,10 +591,10 @@
                   :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
                   :icon="
                     row.change > 0
-                      ? 'ai ai-arrow-up-right'
+                      ? 'az az-arrow-up-right'
                       : row.change < 0
-                        ? 'ai ai-arrow-down-right'
-                        : 'ai ai-minus'
+                        ? 'az az-arrow-down-right'
+                        : 'az az-minus'
                   "
                   size="small"
                 />

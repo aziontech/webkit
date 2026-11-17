@@ -188,7 +188,7 @@
       @click.stop="onCloseClick"
     >
       <i
-        class="ai ai-x"
+        class="az az-x"
         aria-hidden="true"
       />
     </span>

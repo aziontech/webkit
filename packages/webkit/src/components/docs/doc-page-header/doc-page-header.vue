@@ -134,7 +134,7 @@
         class="m-0 flex items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
       >
         <i
-          class="ai ai-history shrink-0 text-label-sm leading-none"
+          class="az az-history shrink-0 text-label-sm leading-none"
           aria-hidden="true"
         />
         <span>

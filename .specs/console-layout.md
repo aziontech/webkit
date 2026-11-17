@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 12
 template: 2
-checksum: c298f04f11b1d22064948d9700640d6553e5d7c04fee312f5432b58f8691c0eb
+checksum: b95be349880bfb99ad433e5cf333706908ce8c243d7d458f6b794d8f7bc6b2dc
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -103,8 +103,8 @@ The app's root renders only `<ConsoleLayout>`, so it imports the standalone root
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'ai ai-home', href: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' }
+        { id: 'home', label: 'Home', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' }
       ]
     }
   ]

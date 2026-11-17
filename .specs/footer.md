@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: abad1e506641fc418d189cdac7ed3eafd8adaa79a28998d180fc54a228291cf2
+checksum: d363f488613ffef944d8912e966d3368d8252f16f87c848d67a4452d1adda675
 created: 2026-08-10
 last_updated: 2026-11-16
 ---
@@ -99,7 +99,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
       <IconButton
         variant="ghost"
         size="small"
-        icon="ai ai-github"
+        icon="az az-github"
         ariaLabel="Azion on GitHub"
         href="https://github.com/aziontech"
       />

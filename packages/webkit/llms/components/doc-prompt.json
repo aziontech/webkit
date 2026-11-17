@@ -51,7 +51,7 @@
   {
    "name": "icon",
    "type": "string",
-   "default": "'ai ai-sparkles'",
+   "default": "'az az-sparkles'",
    "required": "false",
    "doc": "Azion icon class for the glyph beside the title."
   },

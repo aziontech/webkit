@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 0fda1b316607c44f4a6f1201b126ced426d7ffcc720770b2b31c9957bb62e0d2
+checksum: ff01e1da7ea1e42795ec2cd9ed8fdf399b9bef1305f22f8c310d11763170a01b
 created: 2026-11-16
 last_updated: 2026-11-16
 ---
@@ -58,7 +58,7 @@ A catalog tile laid out from props: a logo mark, the item name, its vendor, a sh
   <IntegrationCard
     title="Request Signer"
     vendor="Acme Inc."
-    logo="ai ai-key"
+    logo="az az-key"
     description="Sign every request at the edge with a rotating key."
     :badges="[{ label: 'Firewall' }]"
     @select="openDetail"

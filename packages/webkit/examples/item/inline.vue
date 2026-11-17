@@ -10,7 +10,7 @@
     >
       <Item.Media type="icon">
         <i
-          class="ai ai-domains text-[length:inherit] leading-none"
+          class="az az-domains text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Media>
@@ -19,7 +19,7 @@
         <Item.Description>Link custom domains and subdomains to Azion.</Item.Description>
       </Item.Content>
       <i
-        class="ai ai-arrow-right text-(--text-muted)"
+        class="az az-arrow-right text-(--text-muted)"
         aria-hidden="true"
       />
     </Item>
@@ -29,7 +29,7 @@
     >
       <Item.Media type="icon">
         <i
-          class="ai ai-network-lists text-[length:inherit] leading-none"
+          class="az az-network-lists text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Media>
@@ -38,7 +38,7 @@
         <Item.Description>Redirect domain traffic to Azion.</Item.Description>
       </Item.Content>
       <i
-        class="ai ai-arrow-right text-(--text-muted)"
+        class="az az-arrow-right text-(--text-muted)"
         aria-hidden="true"
       />
     </Item>
@@ -48,7 +48,7 @@
     >
       <Item.Media type="icon">
         <i
-          class="ai ai-real-time-metrics text-[length:inherit] leading-none"
+          class="az az-real-time-metrics text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Media>
@@ -57,7 +57,7 @@
         <Item.Description>Monitor performance, availability, and security.</Item.Description>
       </Item.Content>
       <i
-        class="ai ai-arrow-right text-(--text-muted)"
+        class="az az-arrow-right text-(--text-muted)"
         aria-hidden="true"
       />
     </Item>

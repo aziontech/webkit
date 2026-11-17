@@ -12,7 +12,7 @@ const STYLES = join(PKG_ROOT, 'src', 'styles.css')
 const STYLES_ALL = join(PKG_ROOT, 'src', 'styles', 'all.css')
 const requireFromWebkit = createRequire(join(PKG_ROOT, 'package.json'))
 
-const flipped = [...new Set(readFileSync(STYLES, 'utf8').match(/\.ai-[a-z-]+/g))]
+const flipped = [...new Set(readFileSync(STYLES, 'utf8').match(/\.az-[a-z-]+/g))]
 
 async function buildConsumerCss() {
   const { build } = await import(requireFromWebkit.resolve('vite'))
@@ -54,10 +54,10 @@ function rulesWith(css, declaration) {
 
 test('styles.css flips at least the chevrons and arrows', () => {
   for (const name of [
-    '.ai-chevron-right',
-    '.ai-arrow-left',
-    '.ai-chevron-left',
-    '.ai-arrow-right'
+    '.az-chevron-right',
+    '.az-arrow-left',
+    '.az-chevron-left',
+    '.az-arrow-right'
   ]) {
     assert.ok(flipped.includes(name), `${name} is not in the flip list`)
   }

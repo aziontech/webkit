@@ -83,7 +83,7 @@
                 label="Add Domain"
                 variant="outline"
                 size="medium"
-                icon="ai ai-plus"
+                icon="az az-plus"
               />
             </span>
           </template>
@@ -98,7 +98,7 @@
                 class="flex items-center gap-(--spacing-sm) border-b border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)"
               >
                 <i
-                  class="ai ai-domains shrink-0 text-body-md leading-none text-(--text-muted)"
+                  class="az az-domains shrink-0 text-body-md leading-none text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="flex min-w-0 flex-col">

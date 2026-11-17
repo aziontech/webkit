@@ -493,7 +493,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
       :label="title"
       variant="outline"
       size="medium"
-      icon="ai ai-plus"
+      icon="az az-plus"
       @click="openDrawer"
     />
   </slot>

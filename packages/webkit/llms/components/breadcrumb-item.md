@@ -16,7 +16,7 @@
 
 - Set `active` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
 - Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.
-- Use `show-icon` together with `icon` (an Azion icon class; empty shows `ai ai-box`); `icon` alone renders nothing.
+- Use `show-icon` together with `icon` (an Azion icon class; empty shows `az az-box`); `icon` alone renders nothing.
 - `disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
 
 ## Don’t
@@ -39,7 +39,7 @@
 | `href` | `string` | `''` | false | Destination when the segment is a link (ignored when `active` is true); empty renders `#`. |
 | `active` | `boolean` | `false` | false | Marks the current page (last segment); renders as span with `aria-current="page"`. |
 | `showIcon` | `boolean` | `false` | false | When true, renders a leading icon before the label. |
-| `icon` | `string` | `''` | false | Azion icon class for the leading icon when `showIcon` is true; empty shows `ai ai-box`. |
+| `icon` | `string` | `''` | false | Azion icon class for the leading icon when `showIcon` is true; empty shows `az az-box`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 ## Events
@@ -114,7 +114,7 @@
     label="Page Name"
     href="#"
     show-icon
-    icon="ai ai-box"
+    icon="az az-box"
   />
 </template>
 ```

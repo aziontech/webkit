@@ -57,7 +57,7 @@
             <Button
               label="Docs"
               variant="outline"
-              icon="ai ai-book"
+              icon="az az-book"
               size="medium"
               :href="docsHref"
               target="_blank"

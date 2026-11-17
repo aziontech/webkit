@@ -37,7 +37,7 @@ export default {
   }${
     showIcon
       ? figma.code`
-  icon="ai ai-plus"`
+  icon="az az-plus"`
       : ''
   }${
     disabled

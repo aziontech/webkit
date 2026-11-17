@@ -590,7 +590,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
                 side="top"
               >
                 <IconButton
-                  icon="ai ai-x"
+                  icon="az az-x"
                   variant="ghost"
                   size="small"
                   aria-label="Dismiss agent setup"
@@ -625,7 +625,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
               :href="panel.path"
               :label="panel.label"
               size="small"
-              icon="ai ai-chevron-right"
+              icon="az az-chevron-right"
             />
             <span v-else>{{ panel.label }}</span>
           </h2>
@@ -666,7 +666,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
                         class="flex shrink-0 items-center justify-center"
                         aria-hidden="true"
                       >
-                        <i class="ai ai-history text-body-xs leading-none text-(--text-muted)" />
+                        <i class="az az-history text-body-xs leading-none text-(--text-muted)" />
                       </span>
                       <span class="min-w-(--size-24) shrink-0 text-body-sm text-(--text-muted)"
                         >{{ resource.typeLabel }} /</span
@@ -693,7 +693,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
 
                 <Item.Actions>
                   <i
-                    class="ai ai-chevron-right shrink-0 text-body-xs text-(--text-muted)"
+                    class="az az-chevron-right shrink-0 text-body-xs text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Actions>
@@ -894,7 +894,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
                     label="Copy prompt"
                     variant="outline"
                     size="medium"
-                    icon="ai ai-copy"
+                    icon="az az-copy"
                     @click="(event) => emit('copy-prompt', event)"
                   />
                 </div>
@@ -927,7 +927,7 @@ const marketingSite: HomeDashboardResource = {
   name: 'marketing-site',
   href: '/projects/4410203040',
   typeLabel: 'Project',
-  presetIcon: 'ai-color ai-astro',
+  presetIcon: 'az-color az-astro',
   presetLabel: 'Astro'
 }
 
@@ -936,7 +936,7 @@ const docsSite: HomeDashboardResource = {
   name: 'docs-site',
   href: '/projects/6630405070',
   typeLabel: 'Project',
-  presetIcon: 'ai-color ai-nextjs',
+  presetIcon: 'az-color az-nextjs',
   presetLabel: 'Next.js'
 }
 
@@ -945,7 +945,7 @@ const blackFriday: HomeDashboardResource = {
   name: 'black-friday-2026',
   href: '/projects/5520304060',
   typeLabel: 'Project',
-  presetIcon: 'ai-color ai-nextjs',
+  presetIcon: 'az-color az-nextjs',
   presetLabel: 'Next.js'
 }
 
@@ -972,7 +972,7 @@ export const sampleProjects: HomeDashboardResource[] = [
     name: 'hello-world',
     href: '/projects/2041778390',
     typeLabel: 'Project',
-    presetIcon: 'ai-color ai-javascript',
+    presetIcon: 'az-color az-javascript',
     presetLabel: 'JavaScript'
   },
   {
@@ -980,7 +980,7 @@ export const sampleProjects: HomeDashboardResource[] = [
     name: 'web-app',
     href: '/projects/1784552864',
     typeLabel: 'Project',
-    presetIcon: 'ai-color ai-vue',
+    presetIcon: 'az-color az-vue',
     presetLabel: 'Vue'
   }
 ]

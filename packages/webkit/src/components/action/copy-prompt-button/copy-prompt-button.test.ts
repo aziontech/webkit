@@ -41,7 +41,7 @@ describe('CopyPromptButton', () => {
       'Gemini',
       'Cursor'
     ])
-    expect(marks.querySelector('i')).toHaveClass('ai', 'ai-claude')
+    expect(marks.querySelector('i')).toHaveClass('az', 'az-claude')
     expect(getByRole('button')).toHaveAccessibleDescription(
       'Works with Claude, ChatGPT, Gemini, Cursor'
     )
@@ -49,7 +49,7 @@ describe('CopyPromptButton', () => {
 
   it('takes a custom agent list and draws no marks for an empty one', () => {
     const custom = render(CopyPromptButton, {
-      props: { value: PROMPT, agents: [{ name: 'Windsurf', icon: 'ai ai-windsurf' }] }
+      props: { value: PROMPT, agents: [{ name: 'Windsurf', icon: 'az az-windsurf' }] }
     })
     expect(custom.getByRole('button')).toHaveAccessibleDescription('Works with Windsurf')
     custom.unmount()
@@ -64,7 +64,7 @@ describe('CopyPromptButton', () => {
         value: PROMPT,
         agents: [
           { name: 'Claude', logo: 'https://example.com/claude.svg' },
-          { name: 'Cursor', icon: 'ai ai-cursor' }
+          { name: 'Cursor', icon: 'az az-cursor' }
         ]
       }
     })
@@ -74,7 +74,7 @@ describe('CopyPromptButton', () => {
     expect(logo).toHaveAttribute('data-testid', 'logo')
     expect(logo).toHaveAttribute('data-variant', 'current')
     expect(logo).toHaveAttribute('aria-hidden', 'true')
-    expect(marks.querySelector('i[data-agent="Cursor"]')).toHaveClass('ai-cursor')
+    expect(marks.querySelector('i[data-agent="Cursor"]')).toHaveClass('az-cursor')
   })
 
   it('wraps the chip in a tooltip that says what it does', async () => {

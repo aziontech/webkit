@@ -92,7 +92,7 @@
         class="shrink-0"
       >
         <IconButton
-          icon="ai ai-window-maximize"
+          icon="az az-window-maximize"
           aria-label="Expand the production checklist"
           variant="outline"
           size="small"
@@ -134,7 +134,7 @@
             <Item.Actions>
               <i
                 v-if="step.done"
-                class="ai ai-check text-body-sm leading-none text-(--primary)"
+                class="az az-check text-body-sm leading-none text-(--primary)"
                 aria-hidden="true"
               />
               <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
@@ -182,7 +182,7 @@
                 aria-hidden="true"
               >
                 <i
-                  :class="step.done ? 'ai ai-check' : step.icon"
+                  :class="step.done ? 'az az-check' : step.icon"
                   class="text-body-sm leading-none"
                 />
               </span>
@@ -203,7 +203,7 @@
                 class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
               >
                 <Tag
-                  icon="ai ai-check"
+                  icon="az az-check"
                   label="Done"
                   severity="neutral"
                   size="medium"

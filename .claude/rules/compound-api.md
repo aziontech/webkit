@@ -82,12 +82,12 @@ Anything slot-shaped stays a slot/sub-component; do not collapse it into a confi
 ```vue
 <!-- ✅ Compose real elements -->
 <template #toolbar>
-  <IconButton icon="ai ai-filter" />
+  <IconButton icon="az az-filter" />
   <TableSearch placeholder="Search" />
 </template>
 
 <!-- ❌ Config-array for UI — inextensible on the first customization -->
-<Table :toolbar-actions="[{ icon: 'ai ai-filter' }, { type: 'search' }]" />
+<Table :toolbar-actions="[{ icon: 'az az-filter' }, { type: 'search' }]" />
 ```
 
 Repeated **data** is the one thing that earns props (`:data` + `:columns`) — hand-authoring N rows as elements is the wrong trade. That data-driven mode renders through the same sub-components (our markup / tokens / a11y); it does not bypass them.

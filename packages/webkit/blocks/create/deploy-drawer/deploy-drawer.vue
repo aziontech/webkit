@@ -333,7 +333,7 @@
         label="Deploy"
         variant="outline"
         size="medium"
-        icon="ai ai-cloud-upload"
+        icon="az az-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -402,7 +402,7 @@
                 label="Retry"
                 variant="outline"
                 size="small"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="(event: MouseEvent) => emit('retry', event)"
               />
             </div>
@@ -428,7 +428,7 @@
                     class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                   >
                     <i
-                      class="ai ai-server text-body-xs text-(--text-default)"
+                      class="az az-server text-body-xs text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
@@ -512,7 +512,7 @@
                               :aria-label="`Change version of ${row.name}`"
                               variant="outline"
                               size="small"
-                              icon="ai ai-chevron-down"
+                              icon="az az-chevron-down"
                               icon-position="trailing"
                               :disabled="!row.versions.length"
                             />
@@ -532,7 +532,7 @@
                               >
                                 <template #leading>
                                   <i
-                                    class="ai ai-search"
+                                    class="az az-search"
                                     aria-hidden="true"
                                   />
                                 </template>
@@ -661,7 +661,7 @@
                                           :aria-label="`Change version of ${dependency.name}`"
                                           variant="outline"
                                           size="small"
-                                          icon="ai ai-chevron-down"
+                                          icon="az az-chevron-down"
                                           icon-position="trailing"
                                           :disabled="!dependency.versions.length"
                                         />
@@ -681,7 +681,7 @@
                                           >
                                             <template #leading>
                                               <i
-                                                class="ai ai-search"
+                                                class="az az-search"
                                                 aria-hidden="true"
                                               />
                                             </template>
@@ -785,7 +785,7 @@
                           class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
-                            class="ai ai-box text-body-xs text-(--text-default)"
+                            class="az az-box text-body-xs text-(--text-default)"
                             aria-hidden="true"
                           />
                         </span>
@@ -864,7 +864,7 @@
                                   >
                                     <template #leading>
                                       <i
-                                        class="ai ai-search"
+                                        class="az az-search"
                                         aria-hidden="true"
                                       />
                                     </template>
@@ -922,7 +922,7 @@
                               label="Change"
                               variant="outline"
                               size="small"
-                              icon="ai ai-chevron-down"
+                              icon="az az-chevron-down"
                               icon-position="trailing"
                             />
                           </DropdownMenu.Trigger>
@@ -1016,7 +1016,7 @@
                             class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              class="ai ai-box text-body-xs text-(--text-default)"
+                              class="az az-box text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
                           </span>
@@ -1089,7 +1089,7 @@
                                     >
                                       <template #leading>
                                         <i
-                                          class="ai ai-search"
+                                          class="az az-search"
                                           aria-hidden="true"
                                         />
                                       </template>
@@ -1157,7 +1157,7 @@
               class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
             >
               <i
-                class="ai ai-circle-info shrink-0"
+                class="az az-circle-info shrink-0"
                 aria-hidden="true"
               />
               <span class="truncate">{{ changeSummary }}</span>

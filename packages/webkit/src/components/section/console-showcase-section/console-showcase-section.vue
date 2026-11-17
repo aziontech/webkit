@@ -175,7 +175,7 @@
               :target="action.target"
               :variant="action.variant"
               size="large"
-              :icon="action.trailing ? 'ai ai-chevron-right' : ''"
+              :icon="action.trailing ? 'az az-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(action.trailing)"
             />

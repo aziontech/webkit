@@ -357,12 +357,12 @@ Each variant is the same screen in another state: `get_block("create/release-imp
   const runToast = (description: string) => ({ id: RUN_TOAST, description })
 
   const resourceTypes: Record<ReleaseImpactResourceType, ResourceTypeMeta> = {
-    service: { label: 'Service', icon: 'ai ai-server' },
-    policy: { label: 'Policy', icon: 'ai ai-shield' },
-    storage: { label: 'Storage', icon: 'ai ai-inbox' },
-    errorPage: { label: 'Error page', icon: 'ai ai-file' },
-    module: { label: 'Modules', icon: 'ai ai-code' },
-    integration: { label: 'Integrations', icon: 'ai ai-link' }
+    service: { label: 'Service', icon: 'az az-server' },
+    policy: { label: 'Policy', icon: 'az az-shield' },
+    storage: { label: 'Storage', icon: 'az az-inbox' },
+    errorPage: { label: 'Error page', icon: 'az az-file' },
+    module: { label: 'Modules', icon: 'az az-code' },
+    integration: { label: 'Integrations', icon: 'az az-link' }
   }
 
   const impactViews = [
@@ -565,7 +565,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                 label="Redeploy"
                 variant="outline"
                 size="small"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="deploy"
               />
             </div>
@@ -589,7 +589,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                 label="Redeploy"
                 variant="outline"
                 size="small"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="deploy"
               />
             </div>
@@ -637,7 +637,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                       v-if="card.readonly"
                       label="Read-only"
                       severity="neutral"
-                      icon="ai ai-lock"
+                      icon="az az-lock"
                       size="small"
                     />
                     <Tag
@@ -707,7 +707,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                         <Select.Content>
                           <Select.Item
                             :value="LATEST"
-                            icon="ai ai-sync"
+                            icon="az az-sync"
                           >
                             Track latest Ready
                             <template #tag>
@@ -755,7 +755,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                     label="Build a version"
                     variant="ghost"
                     size="small"
-                    icon="ai ai-external-link"
+                    icon="az az-external-link"
                     href="/services/edge-policy/versions"
                   />
 
@@ -830,7 +830,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                                     <Tag
                                       label="Shared"
                                       severity="info"
-                                      icon="ai ai-link"
+                                      icon="az az-link"
                                       size="small"
                                     />
                                   </span>
@@ -849,7 +849,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                                 <Select.Content>
                                   <Select.Item
                                     :value="LATEST"
-                                    icon="ai ai-sync"
+                                    icon="az az-sync"
                                   >
                                     Track latest Ready
                                   </Select.Item>
@@ -894,7 +894,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                 <div class="flex min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)">
                   <h2 class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-bullseye shrink-0 text-(--text-muted)"
+                      class="az az-bullseye shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate text-label-md text-(--text-default)">Impact</span>
@@ -952,7 +952,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                       label="Retry"
                       variant="outline"
                       size="small"
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       @click="emit('retry', $event)"
                     />
                   </div>
@@ -980,7 +980,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="ai ai-sliders-horizontal shrink-0 text-(--text-muted)"
+                              class="az az-sliders-horizontal shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-md text-(--text-default)">
@@ -1011,7 +1011,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                             >
                               <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                                 <i
-                                  class="ai ai-sitemap shrink-0 text-(--text-muted)"
+                                  class="az az-sitemap shrink-0 text-(--text-muted)"
                                   aria-hidden="true"
                                 />
                                 <span class="truncate text-label-md text-(--text-default)">
@@ -1033,7 +1033,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                                 >
                                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                                     <i
-                                      class="ai ai-folder shrink-0 text-(--text-muted)"
+                                      class="az az-folder shrink-0 text-(--text-muted)"
                                       aria-hidden="true"
                                     />
                                     <span class="truncate text-body-sm text-(--text-default)">
@@ -1068,7 +1068,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="ai ai-sliders-horizontal shrink-0 text-(--text-muted)"
+                              class="az az-sliders-horizontal shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-md text-(--text-default)">
@@ -1080,7 +1080,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                           </span>
                         </span>
                         <i
-                          class="ai ai-arrow-right hidden shrink-0 text-body-xs text-(--text-muted) sm:block"
+                          class="az az-arrow-right hidden shrink-0 text-body-xs text-(--text-muted) sm:block"
                           aria-hidden="true"
                         />
                         <span
@@ -1101,7 +1101,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                           >
                             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                               <i
-                                class="ai ai-sitemap shrink-0 text-(--text-muted)"
+                                class="az az-sitemap shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                               <span class="truncate text-label-md text-(--text-default)">
@@ -1119,7 +1119,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                               class="flex min-w-0 items-center gap-(--spacing-xs)"
                             >
                               <i
-                                class="ai ai-folder shrink-0 text-(--text-muted)"
+                                class="az az-folder shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                               <span class="truncate text-body-sm text-(--text-muted)">
@@ -1162,7 +1162,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
             class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
           >
             <i
-              class="ai ai-triangle-alert shrink-0"
+              class="az az-triangle-alert shrink-0"
               aria-hidden="true"
             />
             {{ blocker }}
@@ -1194,7 +1194,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                   :label="deploying ? 'Deploying…' : 'Deploy release'"
                   variant="primary"
                   size="medium"
-                  icon="ai ai-cloud-upload"
+                  icon="az az-cloud-upload"
                   :disabled="!canDeploy"
                   :loading="deploying"
                 />

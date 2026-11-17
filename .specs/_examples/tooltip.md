@@ -33,7 +33,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
     side="top"
   >
     <IconButton
-      icon="ai ai-trash"
+      icon="az az-trash"
       aria-label="Delete"
     />
   </Tooltip>

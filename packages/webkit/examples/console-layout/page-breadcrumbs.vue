@@ -10,11 +10,11 @@
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
         {
           id: 'applications',
           label: 'Applications',
-          icon: 'ai ai-edge-application',
+          icon: 'az az-applications',
           href: '/applications'
         }
       ]

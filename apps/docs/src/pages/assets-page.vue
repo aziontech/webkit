@@ -105,7 +105,7 @@
           :label="t.viewMarkdown"
           variant="ghost"
           size="medium"
-          icon="ai ai-file"
+          icon="az az-file"
           :href="llms('illustrations')"
           target="_blank"
         />
@@ -150,7 +150,7 @@
           :label="t.viewMarkdown"
           variant="ghost"
           size="medium"
-          icon="ai ai-file"
+          icon="az az-file"
           :href="llms('line-figures')"
           target="_blank"
         />
@@ -193,7 +193,7 @@
         variant="secondary"
         size="medium"
         href="/foundations/icon"
-        icon="ai ai-arrow-right"
+        icon="az az-arrow-right"
         icon-position="trailing"
       />
     </section>

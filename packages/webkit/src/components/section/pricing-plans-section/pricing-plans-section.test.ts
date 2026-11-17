@@ -16,7 +16,7 @@ const plans = [
     name: 'Hobby',
     prices: [{ value: 'Free', details: 'Free forever.' }],
     featuresTitle: 'All features included.',
-    features: [{ icon: 'ai ai-globe', label: 'Global infrastructure' }],
+    features: [{ icon: 'az az-globe', label: 'Global infrastructure' }],
     action: { label: 'Start for free', href: '/signup?plan=hobby' }
   },
   {
@@ -29,15 +29,15 @@ const plans = [
     ],
     featuresTitle: 'All Hobby features, plus:',
     features: [
-      { icon: 'ai ai-workloads', label: 'Additional workloads' },
-      { icon: 'ai ai-wallet', label: 'Configurable spend limit' }
+      { icon: 'az az-workloads', label: 'Additional workloads' },
+      { icon: 'az az-wallet', label: 'Configurable spend limit' }
     ],
     action: { label: 'Start with Pro', href: '/signup?plan=pro' }
   },
   {
     name: 'Enterprise',
     prices: [{ value: 'Custom', details: 'Custom terms.' }],
-    features: [{ icon: 'ai ai-calendar', label: 'Savings Plan available' }],
+    features: [{ icon: 'az az-calendar', label: 'Savings Plan available' }],
     action: { label: 'Talk to sales', href: '' }
   }
 ]

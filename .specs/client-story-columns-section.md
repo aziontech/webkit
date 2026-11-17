@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 66b232dc65d94e01137c3a27493e2bea0e8b689a6001ff643a12ade025766b23
+checksum: 36e1a3cf3ae46c76ed167810e1cc51bd1c887fc185ecb7520805e94cc95860ef
 ---
 
 # ClientStoryColumnsSection — Component Spec
@@ -127,7 +127,7 @@ Three featured success stories side by side: each column is a client's mark on a
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the link line ink follows `brand.ink`; the story text is `var(--text-default)` on `var(--bg-canvas)`.
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.
-- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `ai-arrow-up-right` mirrors under right-to-left.
+- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `az-arrow-up-right` mirrors under right-to-left.
 
 ## Internationalization
 

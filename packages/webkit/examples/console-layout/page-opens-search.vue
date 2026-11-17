@@ -10,9 +10,9 @@
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' },
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
       ]
     }
   ]
@@ -24,7 +24,7 @@
       return () =>
         h(Button, {
           label: 'Find a workload',
-          icon: 'ai ai-search',
+          icon: 'az az-search',
           variant: 'outline',
           size: 'medium',
           onClick: openSearch

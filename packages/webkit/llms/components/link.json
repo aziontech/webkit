@@ -27,7 +27,7 @@
  "bestPractices": [
   "Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).",
   "Pass the label as the default slot or the `label` prop; the slot wins when both are set.",
-  "`target=\"_blank\"` adds `rel=\"noopener noreferrer\"` and, when `icon` is empty, the `ai ai-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.",
+  "`target=\"_blank\"` adds `rel=\"noopener noreferrer\"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.",
   "An icon is shown when `icon` is set.",
   "Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).",
   "`disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead."
@@ -59,7 +59,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Azion icon class for the trailing icon; set shows it. Empty shows `ai ai-external-link` only when `target` is `_blank`."
+   "doc": "Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`."
   },
   {
    "name": "href",

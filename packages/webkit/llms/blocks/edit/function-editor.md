@@ -646,7 +646,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                           label="Add field"
                           variant="outline"
                           size="medium"
-                          icon="ai ai-plus"
+                          icon="az az-plus"
                           :disabled="saving"
                           @click="addField"
                         />
@@ -654,7 +654,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                           label="Remove form"
                           variant="outline"
                           size="medium"
-                          icon="ai ai-x"
+                          icon="az az-x"
                           :disabled="saving"
                           @click="removeForm"
                         />
@@ -699,7 +699,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                             <div class="flex min-h-0 flex-1">
                               <EmptyState
                                 bordered
-                                icon="ai ai-circle-plus"
+                                icon="az az-circle-plus"
                                 title="This form has no fields"
                                 description="Add the first argument the service reads."
                                 class="w-full"
@@ -709,7 +709,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                                     label="Add field"
                                     variant="secondary"
                                     size="medium"
-                                    icon="ai ai-plus"
+                                    icon="az az-plus"
                                     @click="addField"
                                   />
                                   <Link
@@ -752,7 +752,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                                             >
                                               <IconButton
                                                 :id="`${formId}-up-${field.id}`"
-                                                icon="ai ai-arrow-up"
+                                                icon="az az-arrow-up"
                                                 variant="ghost"
                                                 size="small"
                                                 :disabled="index === 0"
@@ -761,7 +761,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                                               />
                                               <IconButton
                                                 :id="`${formId}-down-${field.id}`"
-                                                icon="ai ai-arrow-down"
+                                                icon="az az-arrow-down"
                                                 variant="ghost"
                                                 size="small"
                                                 :disabled="index === draftFields.length - 1"
@@ -803,7 +803,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                                               />
                                               <Tooltip content="Duplicate this field">
                                                 <IconButton
-                                                  icon="ai ai-copy"
+                                                  icon="az az-copy"
                                                   variant="outline"
                                                   size="small"
                                                   :aria-label="
@@ -814,7 +814,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                                               </Tooltip>
                                               <Tooltip content="Remove this field">
                                                 <IconButton
-                                                  icon="ai ai-trash"
+                                                  icon="az az-trash"
                                                   variant="outline"
                                                   size="small"
                                                   :aria-label="
@@ -826,8 +826,8 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                                               <IconButton
                                                 :icon="
                                                   isExpanded(field.id)
-                                                    ? 'ai ai-chevron-up'
-                                                    : 'ai ai-chevron-down'
+                                                    ? 'az az-chevron-up'
+                                                    : 'az az-chevron-down'
                                                 "
                                                 variant="outline"
                                                 size="small"
@@ -1241,7 +1241,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                         >
                           <template #trailing>
                             <i
-                              class="ai ai-lock"
+                              class="az az-lock"
                               aria-hidden="true"
                             />
                           </template>

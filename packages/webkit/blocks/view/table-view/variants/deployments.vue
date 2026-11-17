@@ -230,7 +230,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/deployments"
@@ -254,7 +254,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="ai ai-refresh"
+                  icon="az az-refresh"
                   variant="outline"
                   size="medium"
                   :loading="loading"
@@ -267,7 +267,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="ai ai-download"
+                  icon="az az-download"
                   variant="outline"
                   size="medium"
                   :disabled="!matchingItems.length"
@@ -290,14 +290,14 @@
               <template #default>
                 <EmptyState
                   size="medium"
-                  icon="ai ai-cloud-upload"
+                  icon="az az-cloud-upload"
                   title="No deployments yet"
                   description="Deploy a project and every run shows up here, with its version, status and environment."
                 >
                   <template #actions>
                     <Button
                       label="Documentation"
-                      icon="ai ai-book"
+                      icon="az az-book"
                       variant="outline"
                       size="small"
                       href="https://example.com/docs/deployments"
@@ -331,7 +331,7 @@
                         label="Current"
                         severity="info"
                         size="small"
-                        icon="ai ai-circle-arrow-up"
+                        icon="az az-circle-arrow-up"
                         class="shrink-0"
                       />
                     </span>
@@ -362,7 +362,7 @@
                       :label="row.project"
                       :to="`/projects/${row.projectId}`"
                       destination="Projects"
-                      icon="ai ai-box"
+                      icon="az az-box"
                     />
                   </template>
                   <template #cell-environment="{ value }">
@@ -391,7 +391,7 @@
                         >
                           <template #leading
                             ><i
-                              class="ai ai-eye"
+                              class="az az-eye"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -401,7 +401,7 @@
                         >
                           <template #leading
                             ><i
-                              class="ai ai-refresh"
+                              class="az az-refresh"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -412,7 +412,7 @@
                         >
                           <template #leading
                             ><i
-                              class="ai ai-circle-arrow-up"
+                              class="az az-circle-arrow-up"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuItem>
@@ -422,7 +422,7 @@
                   <template #empty>
                     <EmptyState
                       size="medium"
-                      icon="ai ai-filter-off"
+                      icon="az az-filter-off"
                       title="No matching deployments"
                       description="No deployment matches these filters."
                     >

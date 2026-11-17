@@ -24,12 +24,12 @@ export default {
       ? figma.code`<Tabs.Trigger${attrs}>${
           showLeftIcon
             ? figma.code`
-  <template #leading><i class="ai ai-box" aria-hidden="true" /></template>`
+  <template #leading><i class="az az-box" aria-hidden="true" /></template>`
             : ''
         }${
           showRightIcon
             ? figma.code`
-  <template #trailing><i class="ai ai-box" aria-hidden="true" /></template>`
+  <template #trailing><i class="az az-box" aria-hidden="true" /></template>`
             : ''
         }
 </Tabs.Trigger>`

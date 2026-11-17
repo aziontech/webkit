@@ -155,7 +155,7 @@ export const sampleSourceIps: SecuritySourceIp[] = [
 export const sampleAttention: SecurityAttentionEntry[] = [
   {
     id: 'log-only',
-    icon: 'ai ai-eye',
+    icon: 'az az-eye',
     title: 'A rule set logs requests it does not block',
     description: 'The shop service runs its rule set in log-only mode: 1.2K requests passed.',
     severity: 'warning',
@@ -164,7 +164,7 @@ export const sampleAttention: SecurityAttentionEntry[] = [
   },
   {
     id: 'spike',
-    icon: 'ai ai-chart-line',
+    icon: 'az az-chart-line',
     title: 'Attack spike on api.example.com',
     description: 'SQL injection against the API rose 64% in the last hour.',
     severity: 'danger',
@@ -173,7 +173,7 @@ export const sampleAttention: SecurityAttentionEntry[] = [
   },
   {
     id: 'no-rules',
-    icon: 'ai ai-shield',
+    icon: 'az az-shield',
     title: 'Service without a rule set',
     description: 'The docs service has no security rule set attached.',
     severity: 'warning',

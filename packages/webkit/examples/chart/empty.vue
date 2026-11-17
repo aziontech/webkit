@@ -74,7 +74,7 @@
           label="Add firewall"
           variant="secondary"
           size="small"
-          icon="ai ai-plus"
+          icon="az az-plus"
         />
       </template>
     </Chart>

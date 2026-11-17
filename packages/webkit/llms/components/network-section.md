@@ -210,19 +210,19 @@
       ]"
       :benefits="[
         {
-          icon: 'ai ai-globe',
+          icon: 'az az-globe',
           title: 'Global resilience beyond anycast',
           description:
             'Azion\'s software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide.'
         },
         {
-          icon: 'ai ai-stopwatch',
+          icon: 'az az-stopwatch',
           title: 'Low latency everywhere',
           description:
             'Compute, AI, databases, and security run in every data center, close to your users. Median global latency stays under 30 ms, with a built-in CDN and tiered caching for every app.'
         },
         {
-          icon: 'ai ai-move-vertical',
+          icon: 'az az-move-vertical',
           title: 'Zero-ops autoscaling and failover',
           description:
             'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
@@ -302,25 +302,25 @@
 
   const benefits = [
     {
-      icon: 'ai ai-globe',
+      icon: 'az az-globe',
       title: 'Global resilience beyond anycast',
       description:
         'Traffic is steered around failures and network degradation faster than BGP can reconverge.'
     },
     {
-      icon: 'ai ai-stopwatch',
+      icon: 'az az-stopwatch',
       title: 'Low latency everywhere',
       description:
         'Compute, AI, databases, and security run in every data center, close to your users.'
     },
     {
-      icon: 'ai ai-move-vertical',
+      icon: 'az az-move-vertical',
       title: 'Zero-ops autoscaling and failover',
       description:
         'Absorbs any traffic spike with no cold starts, no capacity planning and no provisioning.'
     },
     {
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       title: 'Always-on protection',
       description:
         'DDoS mitigation and a programmable security layer run in front of every application.'

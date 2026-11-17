@@ -3,7 +3,7 @@ name: section-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 9276abd9b0776407cda9667a4bc1d210b3abee8fc6ec02a10bfa0e326d96e4ec
+checksum: 008a2619d1d22293b0953fc728d2dc5f7848a2d7138e176045cc491569eeaafc
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -58,7 +58,7 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
         label="Add payment method"
         variant="outline"
         size="medium"
-        icon="ai ai-plus"
+        icon="az az-plus"
       />
     </template>
   </SectionHeader>

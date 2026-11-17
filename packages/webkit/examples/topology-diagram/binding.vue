@@ -5,7 +5,7 @@
   const targets = {
     policy: {
       type: 'Policy',
-      icon: 'ai ai-shield',
+      icon: 'az az-shield',
       options: [
         { value: 'edge-guard', label: 'edge-guard' },
         { value: 'strict-waf', label: 'strict-waf' }
@@ -14,7 +14,7 @@
     },
     'error-page': {
       type: 'Error page',
-      icon: 'ai ai-file',
+      icon: 'az az-file',
       options: [{ value: 'maintenance', label: 'maintenance' }],
       unbound: 'Errors answer with the default page.'
     }
@@ -65,7 +65,7 @@
         {
           id: 'project',
           type: 'Project',
-          icon: 'ai ai-folder',
+          icon: 'az az-folder',
           name: 'web-app',
           status: 'Live',
           severity: 'success'
@@ -79,7 +79,7 @@
         {
           id: 'service',
           type: 'Service',
-          icon: 'ai ai-server',
+          icon: 'az az-server',
           name: 'web-app',
           status: 'Active',
           severity: 'success'

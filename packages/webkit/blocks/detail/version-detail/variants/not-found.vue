@@ -20,7 +20,7 @@
     >
       <h1 class="sr-only">Version not found</h1>
       <EmptyState
-        icon="ai ai-history"
+        icon="az az-history"
         title="Version not found"
         :description="`web-app has no version ${versionId}. It may have been deleted, or the link may be out of date.`"
         bordered

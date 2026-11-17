@@ -423,7 +423,7 @@
       <div class="w-full md:w-fit">
         <Button
           label="Create Variable"
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="primary"
           size="large"
           class="w-full"
@@ -462,7 +462,7 @@
                   <Button
                     ref="pasteToggleEl"
                     label="Paste .env"
-                    icon="ai ai-clipboard"
+                    icon="az az-clipboard"
                     variant="outline"
                     size="medium"
                     :aria-expanded="pasteOpen"
@@ -472,7 +472,7 @@
                   />
                   <Button
                     label="Upload"
-                    icon="ai ai-upload"
+                    icon="az az-upload"
                     variant="outline"
                     size="medium"
                     @click="fileInputEl?.click()"
@@ -608,7 +608,7 @@
                               content="Remove variable"
                             >
                               <IconButton
-                                icon="ai ai-trash"
+                                icon="az az-trash"
                                 variant="outline"
                                 size="large"
                                 :aria-label="removeLabel"
@@ -655,7 +655,7 @@
                               :content="entries[index].visible ? 'Hide value' : 'Show value'"
                             >
                               <IconButton
-                                :icon="entries[index].visible ? 'ai ai-eye-off' : 'ai ai-eye'"
+                                :icon="entries[index].visible ? 'az az-eye-off' : 'az az-eye'"
                                 variant="outline"
                                 size="large"
                                 :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"
@@ -777,7 +777,7 @@
                             >
                               <template #leading>
                                 <i
-                                  class="ai ai-search"
+                                  class="az az-search"
                                   aria-hidden="true"
                                 />
                               </template>

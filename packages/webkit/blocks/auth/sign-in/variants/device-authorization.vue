@@ -26,13 +26,13 @@
   const scopes = [
     {
       id: 'workloads:read',
-      icon: 'ai ai-globe',
+      icon: 'az az-globe',
       title: 'Read your workloads',
       description: 'Names, domains and status.'
     },
     {
       id: 'applications:deploy',
-      icon: 'ai ai-upload',
+      icon: 'az az-upload',
       title: 'Deploy your applications',
       description: 'Create and publish new versions from the terminal.'
     }
@@ -122,7 +122,7 @@
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           href="/docs"
         />
       </AppHeader.End>

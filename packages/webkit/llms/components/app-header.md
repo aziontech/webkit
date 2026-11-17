@@ -131,7 +131,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
           label="Create"
           variant="secondary"
           size="medium"
-          icon="ai ai-circle-plus"
+          icon="az az-circle-plus"
         />
       </AppHeader.End>
     </AppHeader>

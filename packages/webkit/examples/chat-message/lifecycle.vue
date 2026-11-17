@@ -57,7 +57,7 @@
       label="Replay"
       variant="outline"
       size="small"
-      icon="ai ai-refresh"
+      icon="az az-refresh"
       :disabled="status !== 'success'"
       @click="play"
     />

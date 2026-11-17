@@ -34,9 +34,9 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'theme-switcher')
 
   const MODES = [
-    { value: 'system', icon: 'ai ai-desktop', key: 'themeSwitcher.system' },
-    { value: 'dark', icon: 'ai ai-moon', key: 'themeSwitcher.dark' },
-    { value: 'light', icon: 'ai ai-sun', key: 'themeSwitcher.light' }
+    { value: 'system', icon: 'az az-desktop', key: 'themeSwitcher.system' },
+    { value: 'dark', icon: 'az az-moon', key: 'themeSwitcher.dark' },
+    { value: 'light', icon: 'az az-sun', key: 'themeSwitcher.light' }
   ] as const
 
   const rootEl = ref<globalThis.HTMLElement | null>(null)

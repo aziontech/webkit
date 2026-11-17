@@ -641,7 +641,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
           label="Documentation"
           variant="outline"
           size="medium"
-          icon="ai ai-book"
+          icon="az az-book"
           href="https://example.com/docs"
         />
       </AppHeader.End>

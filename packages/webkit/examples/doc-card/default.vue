@@ -5,7 +5,7 @@
 <template>
   <DocCard
     title="Edge Application"
-    icon="ai ai-server"
+    icon="az az-server"
     href="/docs/edge-application"
     link-label="Read the guide"
   >

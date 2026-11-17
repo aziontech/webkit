@@ -86,7 +86,7 @@
       <template #cell-repository="{ value }">
         <TableCellLink
           v-if="value"
-          icon="ai ai-github"
+          icon="az az-github"
           :label="value"
           :href="`https://github.com/${value}`"
         />

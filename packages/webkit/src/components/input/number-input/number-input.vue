@@ -205,7 +205,7 @@
       class="relative z-(--z-control) flex items-center pe-(--spacing-md) text-(--text-disabled)"
       aria-hidden="true"
     >
-      <i class="ai ai-lock text-label-sm leading-none" />
+      <i class="az az-lock text-label-sm leading-none" />
     </span>
 
     <span
@@ -221,7 +221,7 @@
         @click="onIncrement"
       >
         <i
-          class="ai ai-chevron-up text-[0.625rem] leading-none"
+          class="az az-chevron-up text-[0.625rem] leading-none"
           aria-hidden="true"
         />
       </button>
@@ -234,7 +234,7 @@
         @click="onDecrement"
       >
         <i
-          class="ai ai-chevron-down text-[0.625rem] leading-none"
+          class="az az-chevron-down text-[0.625rem] leading-none"
           aria-hidden="true"
         />
       </button>

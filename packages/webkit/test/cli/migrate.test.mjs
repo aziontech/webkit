@@ -319,25 +319,25 @@ test('migrateIcons rewrites PrimeIcons pairs to the Azion set and flags what it 
     '</script>'
   ].join('\n')
   const { source, changes, warnings } = migrateIcons(sfc, icons)
-  assert.match(source, /icon="ai ai-check"/)
-  assert.match(source, /class="ai ai-circle-minus text-\(--text-muted\)"/)
-  assert.match(source, /'ai ai-chevron-up' : 'ai {2}ai-chevron-down'/)
-  assert.match(source, /icon: 'ai ai-x-brand'/)
-  assert.match(source, /icon: 'ai ai-x' \}/)
+  assert.match(source, /icon="az az-check"/)
+  assert.match(source, /class="az az-circle-minus text-\(--text-muted\)"/)
+  assert.match(source, /'az az-chevron-up' : 'az {2}az-chevron-down'/)
+  assert.match(source, /icon: 'az az-x-brand'/)
+  assert.match(source, /icon: 'az az-x' \}/)
   assert.match(source, /class="pi pi-amazon"/)
   assert.match(source, /'api-pi-check'/)
-  assert.ok(changes.includes('pi pi-check → ai ai-check'))
+  assert.ok(changes.includes('pi pi-check → az az-check'))
   assert.deepEqual(warnings, [
     'PrimeIcons class pi-amazon has no Azion icon: third-party mark with no Azion glyph: draw your own SVG or install the primeicons package',
-    'PrimeIcons class pi-cog outside a "pi pi-cog" pair: rewrite it to ai ai-settings by hand'
+    'PrimeIcons class pi-cog outside a "pi pi-cog" pair: rewrite it to az az-settings by hand'
   ])
   assert.equal(migrateIcons(source, icons).source, source)
 })
 
-test('migrateIcons renames v5 Azion glyphs, the colored base class and brand marks', () => {
+test('migrateIcons moves v5 Azion icons to the az classes, product names and brand marks', () => {
   const { icons } = loadMigration(6)
   const sfc = [
-    '<i class="ai ai-times" />',
+    '<i class="ai ai-times" /><i class="ai ai-edge-functions" /><i class="ai ai-home" />',
     "const nav = [{ icon: 'ai ai-cog' }, { icon: 'ai ai-angle-down' }, { icon: 'ai ai-bars' }]",
     '<i class="ai-cor ai-next" /><i class="ai-cor ai-js" /><i class="ai-cor ai-x" />',
     "const mark = ['ai-cor', 'ai-ellipsis-v']",
@@ -347,33 +347,33 @@ test('migrateIcons renames v5 Azion glyphs, the colored base class and brand mar
   assert.equal(
     source,
     [
-      '<i class="ai ai-x" />',
-      "const nav = [{ icon: 'ai ai-settings' }, { icon: 'ai ai-chevron-down' }, { icon: 'ai ai-menu' }]",
-      '<i class="ai-color ai-nextjs" /><i class="ai-color ai-javascript" /><i class="ai-color ai-x-brand" />',
-      "const mark = ['ai-color', 'ai-ellipsis-v']",
-      '.ai-color.ai-openai { inline-size: 1em }'
+      '<i class="az az-x" /><i class="az az-functions" /><i class="az az-home" />',
+      "const nav = [{ icon: 'az az-settings' }, { icon: 'az az-chevron-down' }, { icon: 'az az-menu' }]",
+      '<i class="az-color az-nextjs" /><i class="az-color az-javascript" /><i class="az-color az-x-brand" />',
+      "const mark = ['az-color', 'ai-ellipsis-v']",
+      '.az-color.az-openai { inline-size: 1em }'
     ].join('\n')
   )
-  assert.ok(changes.includes('ai ai-times → ai ai-x'))
+  assert.ok(changes.includes('ai ai-times → az az-x'))
   assert.deepEqual(warnings, [
-    'Azion icon class ai-ellipsis-v outside an "ai ai-ellipsis-v" pair: rewrite it to ai-ellipsis-vertical by hand'
+    'Azion icon class ai-ellipsis-v outside an "ai ai-ellipsis-v" pair: rewrite it to az-ellipsis-vertical by hand'
   ])
 })
 
-test('migrateIcons moves the v5 X mark to ai-x-brand only for a v5 project', () => {
+test('migrateIcons moves the v5 X mark to az-x-brand only for a v5 project', () => {
   const { icons } = loadMigration(6)
   const sfc = '<i class="ai ai-x" />'
-  assert.equal(migrateIcons(sfc, icons, { fromMajor: 5 }).source, '<i class="ai ai-x-brand" />')
+  assert.equal(migrateIcons(sfc, icons, { fromMajor: 5 }).source, '<i class="az az-x-brand" />')
   const v6 = migrateIcons(sfc, icons, { declaredMajor: 6 })
-  assert.equal(v6.source, sfc)
+  assert.equal(v6.source, '<i class="az az-x" />')
   assert.deepEqual(v6.warnings, [])
   const unknown = migrateIcons(sfc, icons)
-  assert.equal(unknown.source, sfc)
+  assert.equal(unknown.source, '<i class="az az-x" />')
   assert.match(unknown.warnings[0], /ai ai-x: ai-x is the close glyph in v6/)
   const once = migrateIcons('<i class="ai ai-times" /><i class="ai ai-x" />', icons, {
     fromMajor: 5
   }).source
-  assert.equal(once, '<i class="ai ai-x" /><i class="ai ai-x-brand" />')
+  assert.equal(once, '<i class="az az-x" /><i class="az az-x-brand" />')
 })
 
 test('migrateSource rewrites a renamed logo asset path and keeps its binding', () => {
@@ -397,22 +397,27 @@ test('migrateSource rewrites a renamed logo asset path and keeps its binding', (
 test('the icon map points every old name at a real Azion glyph', () => {
   const { icons } = loadMigration(6)
   const svgRaw = join(PKG, '../icons/src/svg-raw')
-  const ai = new Set(readdirSync(join(svgRaw, 'ai')).map((f) => f.slice(0, -4)))
-  const colored = new Set(readdirSync(join(svgRaw, 'ai-color')).map((f) => f.slice(0, -4)))
+  const az = new Set(readdirSync(join(svgRaw, 'az')).map((f) => f.slice(0, -4)))
+  const colored = new Set(readdirSync(join(svgRaw, 'az-color')).map((f) => f.slice(0, -4)))
+  assert.deepEqual(icons.base, { ai: 'az', 'ai-cor': 'az-color', 'ai-color': 'az-color' })
+  for (const name of az) assert.ok(name.startsWith('az-'), `${name} carries the az- prefix`)
   assert.ok(!existsSync(join(svgRaw, 'pi')), 'the PrimeIcons set is not shipped in v6')
   assert.ok(Object.keys(icons.primeicons).length > 300)
   for (const [from, to] of Object.entries(icons.primeicons)) {
-    if (typeof to === 'string') assert.ok(ai.has(to), `${from} → ${to} is not an Azion glyph`)
+    if (typeof to === 'string') assert.ok(az.has(to), `${from} → ${to} is not an Azion glyph`)
     else assert.ok(to.removed, `${from} needs a target or a removed note`)
   }
   for (const [from, to] of Object.entries(icons.azionicons)) {
     const target = typeof to === 'string' ? to : to.to
-    assert.ok(ai.has(target), `${from} → ${target} is not an Azion glyph`)
-    assert.ok(!ai.has(from) || from === 'ai-x', `${from} still ships`)
+    assert.ok(az.has(target), `${from} → ${target} is not an Azion glyph`)
+    assert.ok(
+      !az.has(`az-${from.slice(3)}`) || from === 'ai-x',
+      `${from} still ships under its old name`
+    )
   }
   for (const [from, to] of Object.entries(icons.color)) {
     assert.ok(colored.has(to), `${from} → ${to} is not a colored icon`)
-    assert.ok(!colored.has(from), `${from} still ships`)
+    assert.ok(!colored.has(`az-${from.slice(3)}`), `${from} still ships under its old name`)
   }
 })
 
@@ -421,8 +426,8 @@ test('migrateSource rewrites icons in a file that imports no WebKit component', 
     "export const nav = [{ label: 'Home', icon: 'pi pi-home' }]\n",
     loadMigration(6)
   )
-  assert.equal(source, "export const nav = [{ label: 'Home', icon: 'ai ai-home' }]\n")
-  assert.deepEqual(changes, ['pi pi-home → ai ai-home'])
+  assert.equal(source, "export const nav = [{ label: 'Home', icon: 'az az-home' }]\n")
+  assert.deepEqual(changes, ['pi pi-home → az az-home'])
 })
 
 test('planMigrate rewrites files under the project and honours --dry-run', () => {

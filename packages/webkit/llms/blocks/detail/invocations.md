@@ -327,7 +327,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
       {
         key: 'service',
         eyebrow: 'Service',
-        icon: 'ai ai-globe',
+        icon: 'az az-globe',
         title: fn.value.service,
         label: 'Live',
         severity: 'success',
@@ -340,7 +340,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
       {
         key: 'resource',
         eyebrow: 'Resource',
-        icon: 'ai ai-box',
+        icon: 'az az-box',
         title: fn.value.resource,
         label: 'Active',
         severity: 'success',
@@ -353,7 +353,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
       {
         key: 'function',
         eyebrow: 'Function',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         title: fn.value.name,
         label: failed ? 'Failed' : running.value ? 'Running' : 'Active',
         severity: failed ? 'danger' : running.value ? 'warning' : 'success',
@@ -366,7 +366,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
       {
         key: 'origin',
         eyebrow: 'Origin',
-        icon: 'ai ai-server',
+        icon: 'az az-server',
         title: fn.value.origin,
         label: failed ? 'Timed out' : running.value ? 'Waiting' : 'Answered',
         severity: failed ? 'danger' : running.value ? 'warning' : 'success',
@@ -432,7 +432,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                 class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
               >
                 <i
-                  class="ai ai-edge-functions shrink-0 text-body-lg text-(--text-muted)"
+                  class="az az-functions shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <div class="flex min-w-0">
@@ -473,7 +473,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                   label="Replay"
                   variant="secondary"
                   size="medium"
-                  icon="ai ai-replay"
+                  icon="az az-replay"
                   :disabled="running"
                   @click="replay"
                 />
@@ -489,7 +489,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                         label="Recent"
                         variant="outline"
                         size="medium"
-                        icon="ai ai-history"
+                        icon="az az-history"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -519,7 +519,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                   <DropdownMenu.Trigger>
                     <Tooltip content="Invocation actions">
                       <IconButton
-                        icon="ai ai-ellipsis"
+                        icon="az az-ellipsis"
                         variant="outline"
                         size="medium"
                         aria-label="Invocation actions"
@@ -534,7 +534,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                     >
                       <template #leading>
                         <i
-                          class="ai ai-real-time-events"
+                          class="az az-real-time-events"
                           aria-hidden="true"
                         />
                       </template>
@@ -545,7 +545,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                     >
                       <template #leading>
                         <i
-                          class="ai ai-settings"
+                          class="az az-settings"
                           aria-hidden="true"
                         />
                       </template>
@@ -580,7 +580,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
               >
                 <i
                   :data-severity="severity"
-                  class="ai ai-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
+                  class="az az-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-label-code-sm text-(--text-muted)">{{
@@ -664,7 +664,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                     >
                       <Tooltip :content="`Show ${node.title} in the trace`">
                         <IconButton
-                          icon="ai ai-align-left"
+                          icon="az az-align-left"
                           variant="outline"
                           size="small"
                           :aria-label="`Show ${node.title} in the trace`"
@@ -794,7 +794,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         id: 'root',
         name: 'image-resizer',
         service: 'Function',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         start: 0,
         duration: 412
       },
@@ -803,7 +803,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'parse-request',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 4,
         duration: 12
       },
@@ -812,7 +812,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'fetch-origin',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 16,
         duration: 186
       },
@@ -821,7 +821,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'dns-lookup',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 16,
         duration: 14
       },
@@ -830,7 +830,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'tls-handshake',
         service: 'Security',
-        icon: 'ai ai-lock',
+        icon: 'az az-lock',
         start: 30,
         duration: 31
       },
@@ -839,7 +839,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'origin-response',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 61,
         duration: 141
       },
@@ -848,7 +848,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'decode',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 202,
         duration: 54
       },
@@ -857,7 +857,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'transform',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 256,
         duration: 92
       },
@@ -866,7 +866,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'put-cache',
         service: 'Storage',
-        icon: 'ai ai-edge-storage',
+        icon: 'az az-object-storage',
         start: 348,
         duration: 38
       }
@@ -895,7 +895,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         id: 'root',
         name: 'image-resizer',
         service: 'Function',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         start: 0,
         duration: 1240,
         status: 'error'
@@ -905,7 +905,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'parse-request',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 4,
         duration: 11
       },
@@ -914,7 +914,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'fetch-origin',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 15,
         duration: 1201,
         status: 'error'
@@ -924,7 +924,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'dns-lookup',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 15,
         duration: 12
       },
@@ -933,7 +933,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'tls-handshake',
         service: 'Security',
-        icon: 'ai ai-lock',
+        icon: 'az az-lock',
         start: 27,
         duration: 34
       },
@@ -942,7 +942,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'origin',
         name: 'origin-response',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 61,
         duration: 1155,
         status: 'error',
@@ -969,7 +969,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         id: 'root',
         name: 'image-resizer',
         service: 'Function',
-        icon: 'ai ai-edge-functions',
+        icon: 'az az-functions',
         start: 0,
         duration: 168,
         status: 'running'
@@ -979,7 +979,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'parse-request',
         service: 'Compute',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         start: 3,
         duration: 10
       },
@@ -988,7 +988,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
         parentId: 'root',
         name: 'fetch-origin',
         service: 'Network',
-        icon: 'ai ai-send',
+        icon: 'az az-send',
         start: 13,
         duration: 155,
         status: 'running'

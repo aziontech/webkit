@@ -99,7 +99,7 @@ describe('view/marketplace block', () => {
         id: 'log-shipper',
         name: 'Log Shipper',
         vendor: 'Acme',
-        logo: 'ai ai-inbox',
+        logo: 'az az-inbox',
         category: 'Observability',
         context: 'application',
         description: 'Send request logs to a collector you run.',

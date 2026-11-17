@@ -133,7 +133,7 @@
               class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
             >
               <i
-                class="ai ai-chevron-down text-body-xs text-(--text-default)"
+                class="az az-chevron-down text-body-xs text-(--text-default)"
                 aria-hidden="true"
               />
               <span class="flex min-w-0 flex-col">
@@ -181,7 +181,7 @@
             class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
           >
             <i
-              class="ai ai-chevron-right text-body-xs text-(--text-default) rtl:-scale-x-100"
+              class="az az-chevron-right text-body-xs text-(--text-default) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="flex min-w-0 flex-col">

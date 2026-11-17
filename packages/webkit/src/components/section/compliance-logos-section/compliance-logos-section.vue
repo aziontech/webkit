@@ -113,7 +113,7 @@
                     aria-hidden="true"
                     class="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--success-foreground) text-tag-sm text-(--success)"
                   >
-                    <i class="ai ai-check text-[length:inherit] leading-none" />
+                    <i class="az az-check text-[length:inherit] leading-none" />
                   </span>
                   {{ certification.label }}
                 </span>
@@ -132,7 +132,7 @@
                 {{ primaryAction.label }}
                 <i
                   aria-hidden="true"
-                  class="ai ai-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/more:translate-x-0.5 rtl:group-hover/more:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
+                  class="az az-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/more:translate-x-0.5 rtl:group-hover/more:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
                 />
               </a>
             </CardGridCell>

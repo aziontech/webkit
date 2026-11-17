@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 7ae076b2b4c3e8aef3e6598581f99dc6534bde7a61d6bc8e1f8c01bade56fd4a
+checksum: acbbd623b00424cb59c52bd7d490fc344e98121b92ba097428e48c8cffa73683
 created: 2026-06-26
 last_updated: 2026-11-16
 ---
@@ -175,7 +175,7 @@ Sub-menus and checkable options:
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
     - `command: string` default `''` — keyboard-shortcut hint rendered on the trailing side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
-    - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `ai ai-check`.
+    - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
     - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
   - Events: _none_ (root emits `select`).
@@ -184,7 +184,7 @@ Sub-menus and checkable options:
   - Props: `defaultOpen: boolean` default `false` — opens the sub-menu when the parent panel opens (for documentation and screenshots); the user can still close it.
   - Events: _none_ (activation inside bubbles to the root `select`).
   - Slots: `default` — one `<DropdownMenu.SubTrigger>` followed by one `<DropdownMenu.SubContent>`.
-- `dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue` — the row that opens the sub-menu. Same 32 px row as an option, with a trailing chevron (`ai ai-chevron-right`, mirrored under rtl). `role="menuitem"`, `aria-haspopup="menu"`, `aria-expanded`, `aria-controls` pointing at the sub-panel; keeps the hover background while its sub-menu is open (`data-state="open"`). Opens on pointer enter, click, `Enter`, `Space` and `ArrowRight` (`ArrowLeft` under rtl); the keyboard paths move focus to the first sub-menu item.
+- `dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue` — the row that opens the sub-menu. Same 32 px row as an option, with a trailing chevron (`az az-chevron-right`, mirrored under rtl). `role="menuitem"`, `aria-haspopup="menu"`, `aria-expanded`, `aria-controls` pointing at the sub-panel; keeps the hover background while its sub-menu is open (`data-state="open"`). Opens on pointer enter, click, `Enter`, `Space` and `ArrowRight` (`ArrowLeft` under rtl); the keyboard paths move focus to the first sub-menu item.
   - Props: `label: string` default `''` — plain-text label; falls back to the default slot. `disabled: boolean` default `false` — the row cannot open its sub-menu and applies disabled tokens.
   - Events: _none_.
   - Slots: `default` (rich label), `leading` (icon before the label).
@@ -264,8 +264,8 @@ Sub-menus and checkable options:
 | option selected surface         | `var(--bg-selected)`                                                                                                            |
 | option disabled text            | `var(--text-disabled)`                                                                                                          |
 | option command text             | `text-(--text-muted)`                                                                                                           |
-| checkable indicator             | `ai ai-check` / a `size-1.5` `rounded-full` `bg-current` dot in `text-(--text-default)`, in a `size-4` column                   |
-| sub-trigger chevron             | `ai ai-chevron-right` + `text-(--text-muted)`, `rtl:-scale-x-100`                                                               |
+| checkable indicator             | `az az-check` / a `size-1.5` `rounded-full` `bg-current` dot in `text-(--text-default)`, in a `size-4` column                   |
+| sub-trigger chevron             | `az az-chevron-right` + `text-(--text-muted)`, `rtl:-scale-x-100`                                                               |
 | sub-trigger open surface        | `var(--bg-hover)`                                                                                                               |
 | group divider                   | `border-t border-(--border-default)`, full-bleed (no horizontal padding on the panel or the group root)                         |
 | group divider spacing.above     | `var(--spacing-sm)`                                                                                                             |

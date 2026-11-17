@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'User',
-      icon: 'ai ai-user',
+      icon: 'az az-user',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-domains',
+      icon: 'az az-domains',
       status: {
         label: 'TLS on',
         severity: 'success'
@@ -29,7 +29,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Firewall',
       title: 'WAF, rate limits, network lists',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true
     },
     {
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Application',
       title: 'storefront',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       active: true
     }
   ],

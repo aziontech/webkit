@@ -36,7 +36,7 @@ describe('IntegrationCard', () => {
   const tile = {
     title: 'Request Signer',
     vendor: 'Acme Inc.',
-    logo: 'ai ai-key',
+    logo: 'az az-key',
     description: 'Sign every request at the edge.',
     badges: [{ label: 'Firewall' }, { label: 'Paid', severity: 'warning' as const }]
   }
@@ -50,7 +50,7 @@ describe('IntegrationCard', () => {
     expect(view.getByText('Sign every request at the edge.')).toBeTruthy()
     expect(view.getByText('Firewall')).toBeTruthy()
     expect(view.getByText('Paid')).toBeTruthy()
-    expect(view.getByTestId('integration-card__logo').querySelector('.ai-key')).toBeTruthy()
+    expect(view.getByTestId('integration-card__logo').querySelector('.az-key')).toBeTruthy()
     expect(view.queryByTestId('integration-card__installed')).toBeNull()
   })
 
@@ -121,7 +121,7 @@ describe('IntegrationCard', () => {
     })
 
     expect(view.getByTestId('integration-card__logo').querySelector('img')).toBeTruthy()
-    expect(view.getByTestId('integration-card__logo').querySelector('.ai-key')).toBeNull()
+    expect(view.getByTestId('integration-card__logo').querySelector('.az-key')).toBeNull()
   })
 
   it('reads its strings from the provider locale', () => {

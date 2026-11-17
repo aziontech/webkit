@@ -264,7 +264,7 @@ packages/webkit/src/components/overlay/command/
         <CommandItem value="deploy">
           <template #leading
             ><i
-              class="ai ai-cloud-upload"
+              class="az az-cloud-upload"
               aria-hidden="true"
           /></template>
           Deploy Project
@@ -276,7 +276,7 @@ packages/webkit/src/components/overlay/command/
         <CommandItem value="settings">
           <template #leading
             ><i
-              class="ai ai-settings"
+              class="az az-settings"
               aria-hidden="true"
           /></template>
           Go to Settings
@@ -287,7 +287,7 @@ packages/webkit/src/components/overlay/command/
         <CommandItem value="profile">
           <template #leading
             ><i
-              class="ai ai-user"
+              class="az az-user"
               aria-hidden="true"
           /></template>
           View Profile

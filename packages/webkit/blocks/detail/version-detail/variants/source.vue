@@ -58,13 +58,13 @@
     'robots.txt': file('64 B', 'txt', 'Alex Morgan')
   }
   const GLYPHS: Record<string, string> = {
-    js: 'ai ai-code',
-    css: 'ai ai-palette',
-    html: 'ai ai-code',
-    svg: 'ai ai-image',
-    webp: 'ai ai-image',
-    png: 'ai ai-image',
-    txt: 'ai ai-file'
+    js: 'az az-code',
+    css: 'az az-palette',
+    html: 'az az-code',
+    svg: 'az az-image',
+    webp: 'az az-image',
+    png: 'az az-image',
+    txt: 'az az-file'
   }
 
   const fileColumns: TableColumn[] = [
@@ -93,7 +93,7 @@
         id: name,
         name,
         kind: 'folder',
-        icon: 'ai ai-folder',
+        icon: 'az az-folder',
         size: '-',
         modifiedAt: '',
         author: ''
@@ -106,7 +106,7 @@
               id: name,
               name,
               kind: 'file',
-              icon: GLYPHS[entry.ext] ?? 'ai ai-file',
+              icon: GLYPHS[entry.ext] ?? 'az az-file',
               size: entry.size,
               modifiedAt: entry.modifiedAt,
               author: entry.author
@@ -119,7 +119,7 @@
             id: '..',
             name: '..',
             kind: 'parent',
-            icon: 'ai ai-folder-open',
+            icon: 'az az-folder-open',
             size: '-',
             modifiedAt: '',
             author: ''
@@ -171,7 +171,7 @@
                   label="Upload Files"
                   variant="outline"
                   size="medium"
-                  icon="ai ai-upload"
+                  icon="az az-upload"
                   @click="upload"
                 />
               </template>
@@ -189,7 +189,7 @@
                   >
                     <template #leading>
                       <i
-                        class="ai ai-search"
+                        class="az az-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -201,7 +201,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       variant="outline"
                       size="medium"
                       aria-label="Refresh"
@@ -212,7 +212,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-download"
+                      icon="az az-download"
                       variant="outline"
                       size="medium"
                       :disabled="!tableEl"
@@ -225,7 +225,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-column"
+                      icon="az az-columns-3"
                       variant="outline"
                       size="medium"
                       aria-label="Columns"
@@ -236,7 +236,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="ai ai-external-link"
+                      icon="az az-external-link"
                       variant="outline"
                       size="medium"
                       :href="`/object-storage/${bucket}`"
@@ -303,7 +303,7 @@
                         key="empty-state-1"
                         v-if="search.trim()"
                         size="medium"
-                        icon="ai ai-search"
+                        icon="az az-search"
                         title="No matching source files"
                         :description="`Nothing matches ${search.trim()}.`"
                       >
@@ -320,7 +320,7 @@
                         key="empty-state-2"
                         v-else
                         size="medium"
-                        icon="ai ai-edge-storage"
+                        icon="az az-object-storage"
                         title="No source files yet"
                         :description="`${bucket} is empty. Build this version to publish its files here, or upload them directly.`"
                       >
@@ -329,7 +329,7 @@
                             label="Upload Files"
                             variant="outline"
                             size="medium"
-                            icon="ai ai-upload"
+                            icon="az az-upload"
                             @click="upload"
                           />
                           <Button

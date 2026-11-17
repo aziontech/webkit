@@ -174,7 +174,7 @@
               label="Filter"
               variant="outline"
               size="medium"
-              icon="ai ai-filter"
+              icon="az az-filter"
             />
             <Badge
               label="1"
@@ -193,13 +193,13 @@
           >
             <template #leading>
               <i
-                class="ai ai-search"
+                class="az az-search"
                 aria-hidden="true"
               />
             </template>
           </Input>
           <IconButton
-            icon="ai ai-refresh"
+            icon="az az-refresh"
             variant="outline"
             size="medium"
             ariaLabel="Refresh"
@@ -210,7 +210,7 @@
             class="inline-flex shrink-0 rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-pressed:ring-2 data-pressed:ring-offset-2 motion-reduce:transition-none"
           >
             <IconButton
-              icon="ai ai-download"
+              icon="az az-download"
               variant="outline"
               size="medium"
               ariaLabel="Download CSV"
@@ -245,7 +245,7 @@
             >
               <i
                 :data-state="selected(index) ? 'open' : 'closed'"
-                class="ai ai-chevron-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-[state=open]:rotate-90 data-[state=open]:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-[state=open]:-rotate-90"
+                class="az az-chevron-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-[state=open]:rotate-90 data-[state=open]:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-[state=open]:-rotate-90"
                 aria-hidden="true"
               />
             </span>

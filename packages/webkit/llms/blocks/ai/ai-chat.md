@@ -341,7 +341,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
         label="New chat"
         variant="ghost"
         size="small"
-        icon="ai ai-plus"
+        icon="az az-plus"
         :disabled="!turns.length"
         @click="newChat"
       />
@@ -354,7 +354,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
         <EmptyState
           title="How can I help with your Azion account?"
           description="Ask about your workloads, cache, security rules and deployments. Answers cite the documentation they come from."
-          icon="ai ai-ask-azion"
+          icon="az az-ask-azion"
         />
         <SuggestionGroup
           :items="starters"
@@ -412,7 +412,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
                 :value="turn.content"
               />
               <IconButton
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 aria-label="Regenerate response"
                 variant="ghost"
                 size="small"
@@ -590,14 +590,14 @@ export const sampleLongThreadFollowUps: SuggestionGroupItem[] = [
 ]
 
 export const sampleSuggestions: SuggestionGroupItem[] = [
-  { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
+  { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
   {
     id: 'errors',
     label: 'Why is storefront answering with 502 errors?',
-    icon: 'ai ai-triangle-alert'
+    icon: 'az az-triangle-alert'
   },
-  { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },
-  { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' }
+  { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' },
+  { id: 'waf', label: 'Protect my site with a WAF', icon: 'az az-shield' }
 ]
 
 export const sampleArtifactVersions: string[] = [

@@ -39,7 +39,7 @@
           label="Browse folder"
           variant="secondary"
           size="medium"
-          icon="ai ai-folder-open"
+          icon="az az-folder-open"
           @click="folderInputEl?.click()"
         />
       </div>

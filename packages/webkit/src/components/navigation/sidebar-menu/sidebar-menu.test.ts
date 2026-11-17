@@ -43,7 +43,7 @@ const composed = (
       <SidebarMenu v-bind="props" aria-label="Console navigation">
         <SidebarMenuBack />
         <SidebarMenuGroup label="User agents">
-          <SidebarMenuItem label="End User" icon="ai ai-user" href="/end-user" />
+          <SidebarMenuItem label="End User" icon="az az-user" href="/end-user" />
           <SidebarMenuItem label="Web Browser" href="/web-browser" />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Azion platform">
@@ -75,7 +75,7 @@ const GROUPS: SidebarMenuGroupNode[] = [
   {
     label: 'User agents',
     items: [
-      { id: 'end-user', label: 'End User', icon: 'ai ai-user', href: '/end-user' },
+      { id: 'end-user', label: 'End User', icon: 'az az-user', href: '/end-user' },
       { id: 'web-browser', label: 'Web Browser', href: '/web-browser' }
     ]
   },
@@ -379,14 +379,14 @@ describe('SidebarMenu', () => {
                 {
                   id: 'settings',
                   label: 'Settings',
-                  icon: 'ai ai-settings',
+                  icon: 'az az-settings',
                   type: 'drill',
                   children: [{ id: 'general', label: 'General', href: '/settings/general' }]
                 },
                 {
                   id: 'getting-started',
                   label: 'Getting started',
-                  icon: 'ai ai-book',
+                  icon: 'az az-book',
                   children: [{ id: 'install', label: 'Installation', href: '/docs/install' }]
                 }
               ]
@@ -778,7 +778,7 @@ describe('SidebarMenu', () => {
           components: { SidebarMenuItem },
           template: `
           <ul>
-            <SidebarMenuItem label="Home" href="https://example.com" icon="ai ai-home" active />
+            <SidebarMenuItem label="Home" href="https://example.com" icon="az az-home" active />
             <SidebarMenuItem label="Billing" disabled />
           </ul>`
         })

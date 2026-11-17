@@ -50,7 +50,7 @@ describe('SaveBar', () => {
       const message = getByTestId('save-bar__message')
       expect(message.contains(getByTestId('status'))).toBe(true)
       expect(message.textContent).not.toContain('You have unsaved changes.')
-      expect(message.querySelector('.ai-circle-info')).toBeNull()
+      expect(message.querySelector('.az-circle-info')).toBeNull()
     }
   )
 

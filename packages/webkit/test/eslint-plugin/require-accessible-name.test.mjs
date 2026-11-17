@@ -19,24 +19,24 @@ const missing = (body, component = 'IconButton') => ({
 test('require-accessible-name', () => {
   vue.run('require-accessible-name', requireAccessibleName, {
     valid: [
-      sfc('<IconButton icon="ai ai-trash" aria-label="Delete domain" />'),
-      sfc('<IconButton icon="ai ai-eye" :aria-label="label" />'),
-      sfc('<IconButton icon="ai ai-eye" v-bind:aria-label="label" />'),
-      sfc('<IconButton icon="ai ai-x" ariaLabel="Close" />'),
-      sfc('<IconButton icon="ai ai-x" :ariaLabel="label" />'),
-      sfc('<icon-button icon="ai ai-x" aria-label="Close" />'),
-      sfc('<IconButton icon="ai ai-x" aria-labelledby="panel-title" />'),
-      sfc('<IconButton icon="ai ai-x" :aria-labelledby="titleId" />'),
+      sfc('<IconButton icon="az az-trash" aria-label="Delete domain" />'),
+      sfc('<IconButton icon="az az-eye" :aria-label="label" />'),
+      sfc('<IconButton icon="az az-eye" v-bind:aria-label="label" />'),
+      sfc('<IconButton icon="az az-x" ariaLabel="Close" />'),
+      sfc('<IconButton icon="az az-x" :ariaLabel="label" />'),
+      sfc('<icon-button icon="az az-x" aria-label="Close" />'),
+      sfc('<IconButton icon="az az-x" aria-labelledby="panel-title" />'),
+      sfc('<IconButton icon="az az-x" :aria-labelledby="titleId" />'),
       sfc('<IconButton v-bind="closeButton" />'),
       sfc('<ButtonGroup aria-label="Text alignment"><Button label="Left" /></ButtonGroup>'),
-      sfc('<Button icon="ai ai-plus" label="Add" />'),
+      sfc('<Button icon="az az-plus" label="Add" />'),
       sfc('<button type="button">Plain</button>')
     ],
     invalid: [
-      missing('<IconButton icon="ai ai-trash" />'),
-      missing('<IconButton icon="ai ai-trash" aria-label="" />'),
-      missing('<icon-button icon="ai ai-trash" kind="transparent" />'),
-      missing('<IconButton icon="ai ai-trash" :title="label" />'),
+      missing('<IconButton icon="az az-trash" />'),
+      missing('<IconButton icon="az az-trash" aria-label="" />'),
+      missing('<icon-button icon="az az-trash" kind="transparent" />'),
+      missing('<IconButton icon="az az-trash" :title="label" />'),
       missing('<ButtonGroup><Button label="Left" /></ButtonGroup>', 'ButtonGroup')
     ]
   })

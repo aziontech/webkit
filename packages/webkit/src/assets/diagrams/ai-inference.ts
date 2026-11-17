@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       type: 'pill',
       title: 'App',
-      icon: 'ai ai-comments',
+      icon: 'az az-comments',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Application',
       title: 'Rule: run the model',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'AI Inference',
       title: 'Mistral 3 Small on Azion',
-      icon: 'ai ai-edge-ai',
+      icon: 'az az-ai-inference',
       status: {
         label: 'Under 30 ms',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'SQL Database',
       title: 'Vector search for context',
-      icon: 'ai ai-edge-sql',
+      icon: 'az az-sql-database',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'LoRA',
       title: 'Your fine-tuned adapter',
-      icon: 'ai ai-lora'
+      icon: 'az az-lora'
     }
   ],
   layout: {

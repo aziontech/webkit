@@ -756,7 +756,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
       <Button
         v-if="editing"
         label="Edit Rule"
-        icon="ai ai-pencil"
+        icon="az az-pencil"
         variant="outline"
         size="medium"
       />
@@ -766,7 +766,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
       >
         <Button
           label="Add Rule"
-          icon="ai ai-plus"
+          icon="az az-plus"
           variant="outline"
           size="medium"
           class="w-full"
@@ -1007,7 +1007,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                                 >
                                   <template #leading>
                                     <i
-                                      class="ai ai-search"
+                                      class="az az-search"
                                       aria-hidden="true"
                                     />
                                   </template>

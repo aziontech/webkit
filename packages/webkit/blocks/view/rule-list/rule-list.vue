@@ -405,7 +405,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/rules"
@@ -413,7 +413,7 @@
           />
           <Button
             label="Add Rule"
-            icon="ai ai-plus"
+            icon="az az-plus"
             variant="outline"
             size="medium"
             :disabled="loading || loadFailed"
@@ -440,7 +440,7 @@
             >
               <template #leading>
                 <i
-                  class="ai ai-search"
+                  class="az az-search"
                   aria-hidden="true"
                 />
               </template>
@@ -547,7 +547,7 @@
                           </Tooltip>
                           <Tooltip :content="lockReason(group.value, row) || 'Move up'">
                             <IconButton
-                              icon="ai ai-chevron-up"
+                              icon="az az-chevron-up"
                               variant="outline"
                               size="small"
                               data-control="up"
@@ -562,7 +562,7 @@
                           </Tooltip>
                           <Tooltip :content="lockReason(group.value, row) || 'Move down'">
                             <IconButton
-                              icon="ai ai-chevron-down"
+                              icon="az az-chevron-down"
                               variant="outline"
                               size="small"
                               data-control="down"
@@ -627,7 +627,7 @@
                       <template #empty>
                         <EmptyState
                           size="small"
-                          icon="ai ai-search"
+                          icon="az az-search"
                           :title="`No ${group.label.toLowerCase()} rule matches “${search.trim()}”`"
                         >
                           <template #actions>
@@ -650,7 +650,7 @@
                       <template #actions>
                         <Button
                           label="Add Rule"
-                          icon="ai ai-plus"
+                          icon="az az-plus"
                           variant="outline"
                           size="medium"
                           @click="(event: MouseEvent) => emit('create', event, group.value)"

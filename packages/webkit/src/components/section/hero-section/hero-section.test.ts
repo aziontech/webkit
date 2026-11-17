@@ -21,14 +21,14 @@ const levels: HeroSectionLevel[] = [
     nodes: [
       {
         eyebrow: 'Domain',
-        icon: 'ai ai-domains',
+        icon: 'az az-domains',
         title: 'shop.example.com',
         label: 'Public',
         severity: 'info'
       },
       {
         eyebrow: 'Domain',
-        icon: 'ai ai-domains',
+        icon: 'az az-domains',
         title: 'api.example.com',
         label: 'Public',
         severity: 'info'
@@ -39,7 +39,7 @@ const levels: HeroSectionLevel[] = [
     nodes: [
       {
         eyebrow: 'Workload',
-        icon: 'ai ai-workloads',
+        icon: 'az az-workloads',
         title: 'shop-prod',
         label: 'Live',
         severity: 'success',
@@ -51,7 +51,7 @@ const levels: HeroSectionLevel[] = [
     nodes: [
       {
         eyebrow: 'Application',
-        icon: 'ai ai-edge-application',
+        icon: 'az az-applications',
         title: 'storefront',
         label: 'Active',
         severity: 'success'
@@ -62,17 +62,17 @@ const levels: HeroSectionLevel[] = [
 
 const items = [
   {
-    icon: 'ai ai-shield',
+    icon: 'az az-shield',
     title: 'Programmable rule engine',
     description: 'Define custom rules across OSI layers L3-L7.'
   },
   {
-    icon: 'ai ai-code',
+    icon: 'az az-code',
     title: 'Extensible with Functions',
     description: 'Run custom JavaScript security code.'
   },
   {
-    icon: 'ai ai-sync',
+    icon: 'az az-sync',
     title: 'Real-time synchronization',
     description: 'Rules sync automatically across every data center.'
   }

@@ -108,11 +108,11 @@
           />
           <span
             v-else-if="shown === 'success'"
-            class="ai ai-check text-label-sm"
+            class="az az-check text-label-sm"
           />
           <span
             v-else-if="shown === 'error'"
-            class="ai ai-triangle-alert text-label-sm"
+            class="az az-triangle-alert text-label-sm"
           />
           <span v-else-if="shown !== 'active'">{{ index }}</span>
         </span>

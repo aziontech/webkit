@@ -131,7 +131,7 @@
                 class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-md) flex translate-y-1 items-center justify-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/investor:translate-y-0 group-hover/investor:opacity-100 group-focus-visible/investor:translate-y-0 group-focus-visible/investor:opacity-100 motion-reduce:transition-none"
               >
                 {{ linkLabel }}
-                <i class="ai ai-arrow-up-right leading-none" />
+                <i class="az az-arrow-up-right leading-none" />
               </span>
             </a>
           </BentoGridCell>

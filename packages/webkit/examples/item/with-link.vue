@@ -14,7 +14,7 @@
       </Item.Content>
       <Item.Actions>
         <i
-          class="ai ai-chevron-right text-[length:inherit] leading-none"
+          class="az az-chevron-right text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Actions>
@@ -26,7 +26,7 @@
     >
       <Item.Media type="icon">
         <i
-          class="ai ai-verified text-[length:inherit] leading-none"
+          class="az az-verified text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Media>
@@ -35,7 +35,7 @@
       </Item.Content>
       <Item.Actions>
         <i
-          class="ai ai-chevron-right text-[length:inherit] leading-none"
+          class="az az-chevron-right text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Actions>

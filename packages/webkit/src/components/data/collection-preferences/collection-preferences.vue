@@ -273,7 +273,7 @@
       :open="openPanel"
     >
       <IconButton
-        icon="ai ai-settings"
+        icon="az az-settings"
         variant="outline"
         size="medium"
         :ariaLabel="heading"
@@ -371,7 +371,7 @@
                       >
                     </label>
                     <IconButton
-                      icon="ai ai-arrow-up"
+                      icon="az az-arrow-up"
                       variant="ghost"
                       size="small"
                       data-move="up"
@@ -382,7 +382,7 @@
                       @click="move(index, -1)"
                     />
                     <IconButton
-                      icon="ai ai-arrow-down"
+                      icon="az az-arrow-down"
                       variant="ghost"
                       size="small"
                       data-move="down"

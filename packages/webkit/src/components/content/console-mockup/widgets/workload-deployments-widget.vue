@@ -102,7 +102,7 @@
             <span class="text-label-sm text-(--text-default)">{{ row.version }}</span>
             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
               <i
-                class="ai ai-edge-application shrink-0 text-body-md leading-none text-(--text-muted)"
+                class="az az-applications shrink-0 text-body-md leading-none text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="truncate text-body-sm text-(--text-default)">{{ row.application }}</span>

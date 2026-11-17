@@ -295,7 +295,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="ai ai-book"
+            icon="az az-book"
             variant="outline"
             size="medium"
             href="https://example.com/docs/marketplace"
@@ -416,7 +416,7 @@
             <EmptyState
               v-if="status === 'no-match'"
               size="medium"
-              icon="ai ai-filter-off"
+              icon="az az-filter-off"
               title="No matching integrations"
               description="No integration matches this search. Remove a filter to widen the results."
             >
@@ -576,7 +576,7 @@
                     class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
                   >
                     <i
-                      class="ai ai-check shrink-0 text-(--success-foreground)"
+                      class="az az-check shrink-0 text-(--success-foreground)"
                       aria-hidden="true"
                     />
                     {{ permission }}
@@ -638,7 +638,7 @@
               <Button
                 v-if="selected.installedOn.length"
                 label="Configure"
-                icon="ai ai-settings"
+                icon="az az-settings"
                 variant="outline"
                 size="medium"
                 :href="`/marketplace/${selected.id}/configure`"

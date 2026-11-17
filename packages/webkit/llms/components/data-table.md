@@ -158,7 +158,7 @@
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
 - Reorderable rows (`reorderable`): a 40 px leading column holds a grip `IconButton` per row (`data-reorder-handle`), frozen at the start edge when other columns are; the row being dragged sets `data-dragging` (dashed accent outline, 60% opacity) and the row under the pointer `data-drop="before" | "after"` (a 2 px accent line on that edge). While a sort is applied every grip is disabled and its description says to clear the sort.
-- Tree rows (`getSubRows`): the grid element is `role="treegrid"` and sets `data-tree`. Each body row carries `aria-level` (1-based depth), `aria-setsize` and `aria-posinset` among its siblings, `aria-expanded` when it has children, and `data-depth`; the principal cell starts with one `aria-hidden` gutter (`data-tree-gutter`) `calc(var(--spacing-md) * depth + var(--size-7))` wide, which holds the 28 px chevron toggle (`__expand-toggle`, `ai-chevron-right` mirrored in RTL, `ai-chevron-down` when open) at its end on rows with children, so the content of every row at one depth starts on one column and each level shifts it by exactly one step. Rows use a roving tab stop (one row has `tabindex="0"`, the rest `-1`) and draw an inset `var(--ring-color)` outline on `focus-visible`.
+- Tree rows (`getSubRows`): the grid element is `role="treegrid"` and sets `data-tree`. Each body row carries `aria-level` (1-based depth), `aria-setsize` and `aria-posinset` among its siblings, `aria-expanded` when it has children, and `data-depth`; the principal cell starts with one `aria-hidden` gutter (`data-tree-gutter`) `calc(var(--spacing-md) * depth + var(--size-7))` wide, which holds the 28 px chevron toggle (`__expand-toggle`, `az-chevron-right` mirrored in RTL, `az-chevron-down` when open) at its end on rows with children, so the content of every row at one depth starts on one column and each level shifts it by exactly one step. Rows use a roving tab stop (one row has `tabindex="0"`, the rest `-1`) and draw an inset `var(--ring-color)` outline on `focus-visible`.
 
 ## Accessibility
 
@@ -266,11 +266,11 @@
 
   const rowActionGroups = [
     [
-      { value: 'view', label: 'View details', icon: 'ai ai-eye' },
-      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },
-      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }
+      { value: 'view', label: 'View details', icon: 'az az-eye' },
+      { value: 'edit', label: 'Edit', icon: 'az az-pencil' },
+      { value: 'duplicate', label: 'Duplicate', icon: 'az az-copy' }
     ],
-    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]
+    [{ value: 'delete', label: 'Delete', icon: 'az az-trash' }]
   ]
 
   const statusSeverity = (status) =>
@@ -309,7 +309,7 @@
       <DropdownMenuRoot @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
         <DropdownMenuTrigger>
           <IconButton
-            icon="ai ai-ellipsis-vertical"
+            icon="az az-ellipsis-vertical"
             aria-label="Row actions"
             variant="ghost"
             size="small"
@@ -401,11 +401,11 @@
 
   const rowActionGroups = [
     [
-      { value: 'view', label: 'View details', icon: 'ai ai-eye' },
-      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },
-      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }
+      { value: 'view', label: 'View details', icon: 'az az-eye' },
+      { value: 'edit', label: 'Edit', icon: 'az az-pencil' },
+      { value: 'duplicate', label: 'Duplicate', icon: 'az az-copy' }
     ],
-    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]
+    [{ value: 'delete', label: 'Delete', icon: 'az az-trash' }]
   ]
 
   const statusSeverity = (status) =>
@@ -445,7 +445,7 @@
       <DropdownMenuRoot @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
         <DropdownMenuTrigger>
           <IconButton
-            icon="ai ai-ellipsis-vertical"
+            icon="az az-ellipsis-vertical"
             aria-label="Row actions"
             variant="ghost"
             size="small"
@@ -536,11 +536,11 @@
 
   const rowActionGroups = [
     [
-      { value: 'view', label: 'View details', icon: 'ai ai-eye' },
-      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },
-      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }
+      { value: 'view', label: 'View details', icon: 'az az-eye' },
+      { value: 'edit', label: 'Edit', icon: 'az az-pencil' },
+      { value: 'duplicate', label: 'Duplicate', icon: 'az az-copy' }
     ],
-    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]
+    [{ value: 'delete', label: 'Delete', icon: 'az az-trash' }]
   ]
 
   const statusSeverity = (status) =>
@@ -577,7 +577,7 @@
       <DropdownMenuRoot @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
         <DropdownMenuTrigger>
           <IconButton
-            icon="ai ai-ellipsis-vertical"
+            icon="az az-ellipsis-vertical"
             aria-label="Row actions"
             variant="ghost"
             size="small"

@@ -89,7 +89,7 @@
     <ItemList>
       <DocItem
         title="Edge Functions"
-        icon="ai ai-code"
+        icon="az az-code"
         href="#edge-functions"
       >
         Build serverless applications on Azion's global network. Workloads integrate with functions
@@ -97,7 +97,7 @@
       </DocItem>
       <DocItem
         title="Edge SQL"
-        icon="ai ai-database"
+        icon="az az-database"
         href="#edge-sql"
       >
         Store relational data across the network. A workload reads it from the location that served
@@ -105,7 +105,7 @@
       </DocItem>
       <DocItem
         title="Edge Cache"
-        icon="ai ai-bolt"
+        icon="az az-bolt"
         href="#edge-cache"
       >
         Decide what is cached, for how long, and by which key.
@@ -129,7 +129,7 @@
     <ItemList>
       <DocItem
         title="Community templates"
-        icon="ai ai-github"
+        icon="az az-github"
         href="https://github.com/aziontech"
         target="_blank"
       >
@@ -137,7 +137,7 @@
       </DocItem>
       <DocItem
         title="Rule"
-        icon="ai ai-filter"
+        icon="az az-filter"
       >
         With no href the row is inert — no hover, no anchor, no trailing arrow.
       </DocItem>

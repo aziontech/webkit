@@ -115,7 +115,7 @@
               variant="secondary"
               size="large"
               :target="primaryAction.target"
-              :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
+              :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(primaryAction.trailing)"
             />

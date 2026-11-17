@@ -26,7 +26,7 @@
         @click="advance"
       />
       <IconButton
-        icon="ai ai-refresh"
+        icon="az az-refresh"
         aria-label="Reset"
         size="small"
         variant="outline"

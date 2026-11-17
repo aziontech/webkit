@@ -12,7 +12,7 @@ export const sampleResources: DeployDrawerResource[] = [
     key: 'service',
     label: 'Service',
     name: 'web-app',
-    icon: 'ai ai-server',
+    icon: 'az az-server',
     note: '',
     total: 6,
     versions: [
@@ -49,7 +49,7 @@ export const sampleResources: DeployDrawerResource[] = [
         key: 'service@AG1VVDJP:module-auth-gateway',
         label: 'Module',
         name: 'auth-gateway',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         note: '',
         total: 8,
         versions: [
@@ -89,7 +89,7 @@ export const sampleResources: DeployDrawerResource[] = [
         key: 'service@AG1VVDJP:module-geo-redirect',
         label: 'Module',
         name: 'geo-redirect',
-        icon: 'ai ai-code',
+        icon: 'az az-code',
         note: '',
         total: 11,
         versions: [
@@ -129,7 +129,7 @@ export const sampleResources: DeployDrawerResource[] = [
         key: 'service@AG1VVDJP:integration-payments-api',
         label: 'Integration',
         name: 'payments-api',
-        icon: 'ai ai-link',
+        icon: 'az az-link',
         note: '',
         total: 11,
         versions: [

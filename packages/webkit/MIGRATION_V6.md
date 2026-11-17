@@ -26,15 +26,19 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   `DocCardGroupMobileCols` → `DocCardGroupMobileColumns`, `SegmentedButtonOption` →
   `ToggleGroupOption`, …; the `types` map of `src/cli/migrations/v6.json`);
 - PrimeIcons classes, in every source file whether it imports WebKit or not: each `pi pi-<name>`
-  pair becomes its Azion twin (`pi pi-check` → `ai ai-check`, `pi pi-minus-circle` →
-  `ai ai-circle-minus`, `pi pi-times` → `ai ai-x`, `pi pi-twitter` → `ai ai-x-brand`; the map is
+  pair becomes its Azion twin (`pi pi-check` → `az az-check`, `pi pi-minus-circle` →
+  `az az-circle-minus`, `pi pi-times` → `az az-x`, `pi pi-twitter` → `az az-x-brand`; the map is
   `src/cli/migrations/v6-icons.json`). A `pi-<name>` outside a pair, and a third-party mark with no
   Azion glyph, is listed to fix by hand;
-- renamed Azion icons: each `ai ai-<old>` pair takes its v6 name (`ai ai-times` → `ai ai-x`,
-  `ai ai-cog` → `ai ai-settings`, `ai ai-angle-down` → `ai ai-chevron-down`), and the colored base
-  class `ai-cor` becomes `ai-color` with its brand names (`ai-cor ai-next` → `ai-color ai-nextjs`).
-  The v5 X mark `ai ai-x` becomes `ai ai-x-brand` only when `package.json` shows WebKit 5 (or
-  `--from 5`), because `ai-x` is the close glyph in v6; otherwise it is listed to check by hand;
+- Azion icons: the base classes are `az` and `az-color` (`ai ai-<name>` → `az az-<name>`,
+  `ai-cor ai-<name>` → `az-color az-<name>`), product icons take today's product names
+  (`ai ai-edge-functions` → `az az-functions`, `ai ai-edge-application` → `az az-applications`,
+  `ai ai-edge-storage` → `az az-object-storage`, `ai ai-edge-sql` → `az az-sql-database`), and
+  glyphs take their v6 name (`ai ai-times` → `az az-x`, `ai ai-cog` → `az az-settings`,
+  `ai ai-angle-down` → `az az-chevron-down`; colour logos `ai-cor ai-next` → `az-color az-nextjs`).
+  The v5 X mark `ai ai-x` becomes `az az-x-brand` only when `package.json` shows WebKit 5 (or
+  `--from 5`), because `az-x` is the close glyph in v6; otherwise it becomes `az az-x` and is
+  listed to check by hand;
 - theme tokens and utilities, in every `.vue`, `.ts`, `.js`, `.css`, `.scss` and `.html` file:
   `--primary-contrast` → `--primary-foreground`, `--spacing-xxs` → `--spacing-2xs`,
   `text-heading-xxs` → `text-heading-2xs`, `animate-slide-in-left` → `animate-slide-in-start`, and
@@ -788,54 +792,69 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 
 ## 4. Manual changes
 
-### Icons: the Azion set replaces PrimeIcons, with Lucide names
+### Icons: `az` classes, product names, Lucide names, no PrimeIcons
 
-Every WebKit component, default `icon` and example now draws `ai ai-<name>` from `@aziontech/icons`;
+Every WebKit component, default `icon` and example now draws `az az-<name>` from `@aziontech/icons`;
 no component renders a PrimeIcons (`pi pi-*`) class, and `@aziontech/icons` no longer ships the
 PrimeIcons font or its `@aziontech/icons/primeicons` entry. If your app still renders one of the
 third-party marks the codemod lists (`pi-apple`, `pi-paypal`, …), draw your own SVG or install the
 `primeicons` package.
 
-The Azion glyphs take the [Lucide](https://lucide.dev/icons) names, and `migrate v6` rewrites them
-(every pair is in the `azionicons` and `color` maps of `src/cli/migrations/v6-icons.json`):
+The base classes are `az` (was `ai`, which read as "artificial intelligence") and `az-color` (was
+`ai-cor`). Product icons take the product names WebKit uses, and the other glyphs take the
+[Lucide](https://lucide.dev/icons) names. `migrate v6` rewrites them all (the `base`, `azionicons`
+and `color` maps of `src/cli/migrations/v6-icons.json`); every icon, with what it stands for, is
+listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
 
-- close and status: `ai-times` → `ai-x`, `ai-times-circle` → `ai-circle-x`, `ai-check-circle` →
-  `ai-circle-check`, `ai-info-circle` → `ai-circle-info`, `ai-question-circle` → `ai-circle-help`,
-  `ai-exclamation-circle` → `ai-circle-alert`, `ai-exclamation-triangle` → `ai-triangle-alert`,
-  `ai-check-square` → `ai-square-check`; every `ai-<x>-circle` is `ai-circle-<x>`
-  (`ai-plus-circle` → `ai-circle-plus`, `ai-arrow-circle-up` → `ai-circle-arrow-up`, …);
-- Font Awesome words: `ai-bars` → `ai-menu`, `ai-cog` → `ai-settings`, `ai-th-large` and
-  `ai-objects-column` → `ai-layout-grid`, `ai-ellipsis-h` / `-v` → `ai-ellipsis` /
-  `ai-ellipsis-vertical`, `ai-sliders-h` / `-v` → `ai-sliders-horizontal` / `-vertical`,
-  `ai-arrows-h` / `-v` / `-alt` → `ai-move-horizontal` / `ai-move-vertical` / `ai-move`,
-  `ai-share-alt` → `ai-share`, `ai-directions-alt` → `ai-signpost`, `ai-map-marker` →
-  `ai-map-pin`, `ai-sign-in` / `-out` → `ai-log-in` / `ai-log-out`, `ai-pen-to-square` →
-  `ai-square-pen`, `ai-user-edit` → `ai-user-pen`, `ai-file-edit` → `ai-file-pen`,
-  `ai-envelope` → `ai-mail`, `ai-hashtag` → `ai-hash`, `ai-thumbtack` → `ai-pin`,
-  `ai-search-plus` / `-minus` → `ai-zoom-in` / `ai-zoom-out`, `ai-calendar-times` →
-  `ai-calendar-x`, `ai-arrow-right-arrow-left` → `ai-arrow-right-left`, the two long
-  `ai-arrow-…-center` names → `ai-minimize` / `ai-maximize`;
-- `-slash` is `-off`: `ai-eye-off`, `ai-bell-off`, `ai-filter-off`, `ai-sort-off`;
-- one glyph, one name: `ai-angle-*` → `ai-chevron-*`, `ai-angle-double-*` → `ai-chevrons-*`,
-  `ai-file-o` → `ai-file`, `ai-filter-alt` → `ai-filter`, `ai-sort-alt` → `ai-sort`,
-  `ai-sort-up` / `-down` → `ai-arrow-up` / `ai-arrow-down`, `ai-clone` → `ai-copy`, `ai-branch`
-  → `ai-git-branch`, `ai-unlock` → `ai-lock-open`, `ai-step-backward-alt` / `ai-step-forward-alt`
-  → `ai-fast-backward` / `ai-fast-forward`, `ai-step-backward` → `ai-step-back`;
-- sort order in the name: `ai-sort-alpha-down` → `ai-arrow-down-a-z` (`-alt` → `ai-arrow-down-z-a`),
-  `ai-sort-numeric-down` → `ai-arrow-down-0-1`, `ai-sort-amount-down` → `ai-arrow-down-wide-narrow`,
+- products: `ai-edge-functions` → `az-functions`, `ai-edge-application` → `az-applications`,
+  `ai-edge-firewall` → `az-firewall`, `ai-edge-storage` → `az-object-storage`, `ai-edge-sql` →
+  `az-sql-database`, `ai-edge-kv` → `az-kv-store`, `ai-edge-connectors` → `az-connectors`,
+  `ai-edge-ai` → `az-ai-inference`, `ai-waf-rules` → `az-waf`, `ai-app-accelerator` →
+  `az-application-accelerator`, `ai-store` → `az-store-pillar`, `ai-origin-accelerator` →
+  `az-application-accelerator`; Edge DNS, Edge Pulse and Edge Orchestrator (with `az-edge-nodes`,
+  `az-edge-services`, `az-edge-libraries`) keep `edge-`;
+- one drawing, one name: `ai-digital-certificates` → `az-verified`, `ai-instructor` →
+  `az-graduation-cap`; and names that say the drawing: `ai-datasheet` → `az-sheet`, `ai-column` →
+  `az-columns-3`, `ai-gateway` (the winding path, not AI Gateway) → `az-route`, `ai-eject` →
+  `az-arrow-up-from-line`, `ai-fast-backward` / `ai-fast-forward` → `az-skip-back` /
+  `az-skip-forward`;
+- close and status: `ai-times` → `az-x`, `ai-times-circle` → `az-circle-x`, `ai-check-circle` →
+  `az-circle-check`, `ai-info-circle` → `az-circle-info`, `ai-question-circle` → `az-circle-help`,
+  `ai-exclamation-circle` → `az-circle-alert`, `ai-exclamation-triangle` → `az-triangle-alert`,
+  `ai-check-square` → `az-square-check`; every `ai-<x>-circle` is `az-circle-<x>`
+  (`ai-plus-circle` → `az-circle-plus`, `ai-arrow-circle-up` → `az-circle-arrow-up`, …);
+- Font Awesome words: `ai-bars` → `az-menu`, `ai-cog` → `az-settings`, `ai-th-large` and
+  `ai-objects-column` → `az-layout-grid`, `ai-ellipsis-h` / `-v` → `az-ellipsis` /
+  `az-ellipsis-vertical`, `ai-sliders-h` / `-v` → `az-sliders-horizontal` / `-vertical`,
+  `ai-arrows-h` / `-v` / `-alt` → `az-move-horizontal` / `az-move-vertical` / `az-move`,
+  `ai-share-alt` → `az-share`, `ai-directions-alt` → `az-signpost`, `ai-map-marker` →
+  `az-map-pin`, `ai-sign-in` / `-out` → `az-log-in` / `az-log-out`, `ai-pen-to-square` →
+  `az-square-pen`, `ai-user-edit` → `az-user-pen`, `ai-file-edit` → `az-file-pen`,
+  `ai-envelope` → `az-mail`, `ai-hashtag` → `az-hash`, `ai-thumbtack` → `az-pin`,
+  `ai-search-plus` / `-minus` → `az-zoom-in` / `az-zoom-out`, `ai-calendar-times` →
+  `az-calendar-x`, `ai-arrow-right-arrow-left` → `az-arrow-right-left`, the two long
+  `ai-arrow-…-center` names → `az-minimize` / `az-maximize`;
+- `-slash` is `-off`: `az-eye-off`, `az-bell-off`, `az-filter-off`, `az-sort-off`;
+- one glyph, one name: `ai-angle-*` → `az-chevron-*`, `ai-angle-double-*` → `az-chevrons-*`,
+  `ai-file-o` → `az-file`, `ai-filter-alt` → `az-filter`, `ai-sort-alt` → `az-sort`,
+  `ai-sort-up` / `-down` → `az-arrow-up` / `az-arrow-down`, `ai-clone` → `az-copy`, `ai-branch`
+  → `az-git-branch`, `ai-unlock` → `az-lock-open`, `ai-step-backward-alt` / `ai-step-forward-alt`
+  → `az-skip-back` / `az-skip-forward`, `ai-step-backward` → `az-step-back`;
+- sort order in the name: `ai-sort-alpha-down` → `az-arrow-down-a-z` (`-alt` → `az-arrow-down-z-a`),
+  `ai-sort-numeric-down` → `az-arrow-down-0-1`, `ai-sort-amount-down` → `az-arrow-down-wide-narrow`,
   and the same for `-up`;
-- spelling and brands: `ai-pratices-review` → `ai-practices-review`, `ai-scizors` → `ai-scissors`,
-  `ai-open` → `ai-openai`, `ai-next` → `ai-nextjs`, `ai-mcp-logo` → `ai-mcp`, the X mark `ai-x` →
-  `ai-x-brand`;
-- colored icons: the base class `ai-cor` is `ai-color` (`<i class="ai-color ai-google">`), and
-  `ai-open`, `ai-next`, `ai-js`, `ai-ts`, `ai-azuredevops`, `ai-x` are `ai-openai`, `ai-nextjs`,
-  `ai-javascript`, `ai-typescript`, `ai-azure-devops`, `ai-x-brand`.
+- spelling and brands: `ai-pratices-review` → `az-practices-review`, `ai-scizors` → `az-scissors`,
+  `ai-open` → `az-openai`, `ai-next` → `az-nextjs`, `ai-mcp-logo` → `az-mcp`, the X mark `ai-x` →
+  `az-x-brand`;
+- colored icons: the base class `ai-cor` is `az-color` (`<i class="az-color az-google">`), and
+  `ai-open`, `ai-next`, `ai-js`, `ai-ts`, `ai-azuredevops`, `ai-x` are `az-openai`, `az-nextjs`,
+  `az-javascript`, `az-typescript`, `az-azure-devops`, `az-x-brand`.
 
 The brand mark `workers-cloudflare` (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`,
 `HeroSection` `carouselMarks`) is `cloudflare-workers`; rename the string by hand.
 
-The RTL mirror of `@aziontech/webkit/styles` targets the `ai` names (`ai-chevron-left`,
-`ai-arrow-right`, `ai-log-out`, …).
+The RTL mirror of `@aziontech/webkit/styles` targets the `az` names (`az-chevron-left`,
+`az-arrow-right`, `az-log-out`, …).
 
 ### `@aziontech/theme` is a peer dependency
 
@@ -1025,7 +1044,7 @@ These shipped only in the 6.0 previews (`feat/webkit-ai-ready`), never in 5.x; t
 - `UploadProgress`: `v-model:collapsed` → `v-model:open`, inverted (`open = !collapsed`).
 - `ConsoleLayout`: `v-model:navigation-expanded` → `v-model:navigation-open` (same value);
   `Wizard`: `v-model:activeStep` → `v-model`; the codemod rewrites both.
-- `DocPrompt`: the default `icon` is `ai ai-sparkles` (was `pi pi-sparkles`), like every icon in
+- `DocPrompt`: the default `icon` is `az az-sparkles` (was `pi pi-sparkles`), like every icon in
   the Azion set above.
 
 ### Documentation components
@@ -1803,7 +1822,7 @@ Optional text props that defaulted to `undefined` now default to `''`, and an em
 - `Kbd`: `keyName` defaults to `''`; an empty `keyName` draws no named key, only the modifiers and the slot.
 - `OverflowCount`: `noun` defaults to `''`; an empty `noun` uses the catalog (`item` / `items`).
 - `Tag`: `icon` defaults to `''`; an empty `icon` draws no glyph.
-- `FileDropzone`: `icon` defaults to `''` and still draws `ai ai-cloud-upload`; pass an icon class
+- `FileDropzone`: `icon` defaults to `''` and still draws `az az-cloud-upload`; pass an icon class
   to change it, as before.
 - `StatTile`: `trend` accepts `null` entries (`(number | null)[]`) for gaps in the sparkline. Arrays
   of numbers keep working; a typed `number[]` variable still assigns to it.

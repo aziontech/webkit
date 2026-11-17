@@ -649,7 +649,7 @@ test('require-header-search', () => {
         code: '<template><SearchTrigger aria-keyshortcuts="Meta+K Control+K" /></template>',
         filename: 'b.vue'
       },
-      { code: '<template><IconButton icon="ai ai-search" /></template>', filename: 'toolbar.vue' },
+      { code: '<template><IconButton icon="az az-search" /></template>', filename: 'toolbar.vue' },
       { code: '<template><Kbd meta>K</Kbd></template>', filename: 'kbd.vue' }
     ],
     invalid: [
@@ -675,7 +675,7 @@ test('require-header-search', () => {
         errors: [{ messageId: 'bareIcon' }]
       },
       {
-        code: header('<SearchTrigger /><IconButton icon="ai ai-search" aria-label="Search" />'),
+        code: header('<SearchTrigger /><IconButton icon="az az-search" aria-label="Search" />'),
         filename: 'g.vue',
         errors: [{ messageId: 'bareIcon' }]
       }
@@ -767,12 +767,12 @@ test('no-dropped-children', () => {
       },
       // a named slot the spec lists, as a template child
       {
-        code: `${imp('Button', 'button')}<template><Button label="Deploy"><template #prefix><i class="ai ai-bolt" /></template></Button></template>`,
+        code: `${imp('Button', 'button')}<template><Button label="Deploy"><template #prefix><i class="az az-bolt" /></template></Button></template>`,
         filename: 'b.vue'
       },
       // a named slot on the component tag itself
       {
-        code: `${imp('Button', 'button')}<template><Button label="Deploy" #prefix><i class="ai ai-bolt" /></Button></template>`,
+        code: `${imp('Button', 'button')}<template><Button label="Deploy" #prefix><i class="az az-bolt" /></Button></template>`,
         filename: 'c.vue'
       },
       // whitespace between the tags renders nothing either way
@@ -1592,7 +1592,7 @@ test('prefer-href-in-menu-node', () => {
     ],
     invalid: [
       {
-        code: "const nav = [{ id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' }]",
+        code: "const nav = [{ id: 'home', label: 'Home', icon: 'az az-home', path: '/home' }]",
         errors: [{ messageId: 'alias', data: { key: 'path' } }]
       },
       {

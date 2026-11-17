@@ -13,7 +13,7 @@
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"
-        icon="ai ai-plus"
+        icon="az az-plus"
         aria-label="Open menu"
       />
     </DropdownMenuTrigger>

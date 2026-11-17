@@ -28,7 +28,7 @@
     label: string
     /** Where the link goes. */
     href: string
-    /** Leading icon class, e.g. a `ai ai-github` glyph. */
+    /** Leading icon class, e.g. a `az az-github` glyph. */
     icon?: string
   }
 

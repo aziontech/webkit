@@ -196,7 +196,7 @@
                 label="Redeploy"
                 variant="secondary"
                 size="medium"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="redeploy"
               />
             </div>
@@ -225,7 +225,7 @@
                 label="Redeploy"
                 variant="ghost"
                 size="medium"
-                icon="ai ai-refresh"
+                icon="az az-refresh"
                 @click="redeploy"
               />
               <Button
@@ -318,7 +318,7 @@
       >
         <EmptyState
           bordered
-          icon="ai ai-cloud-upload"
+          icon="az az-cloud-upload"
           title="No deployment running"
           description="Deploy web-app to build it and publish it to production. It takes about 25 seconds, and you can leave this page while it runs."
         >
@@ -327,7 +327,7 @@
               label="Deploy"
               variant="primary"
               size="medium"
-              icon="ai ai-play"
+              icon="az az-play"
               @click="deploy"
             />
           </template>

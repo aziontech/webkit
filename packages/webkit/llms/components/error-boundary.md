@@ -219,7 +219,7 @@
             <EmptyState
               title="This chart failed to load"
               description="The rest of the dashboard still works."
-              icon="ai ai-triangle-alert"
+              icon="az az-triangle-alert"
               size="small"
             >
               <template #actions>
@@ -227,7 +227,7 @@
                   label="Try again"
                   variant="outline"
                   size="medium"
-                  icon="ai ai-refresh"
+                  icon="az az-refresh"
                   @click="retry"
                 />
               </template>

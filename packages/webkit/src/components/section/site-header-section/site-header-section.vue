@@ -210,7 +210,7 @@
       <AppHeaderStart class="justify-start!">
         <IconButton
           ref="opener"
-          icon="ai ai-menu"
+          icon="az az-menu"
           variant="outline"
           size="medium"
           :ariaLabel="t('siteHeaderSection.open')"

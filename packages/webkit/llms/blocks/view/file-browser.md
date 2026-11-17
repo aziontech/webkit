@@ -423,17 +423,17 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
   )
 
   const GLYPHS: Record<string, string> = {
-    svg: 'ai ai-image',
-    webp: 'ai ai-image',
-    png: 'ai ai-image',
-    mp4: 'ai ai-video',
-    html: 'ai ai-code',
-    js: 'ai ai-code',
-    css: 'ai ai-code',
-    json: 'ai ai-database',
-    woff2: 'ai ai-star',
-    log: 'ai ai-align-left',
-    txt: 'ai ai-file'
+    svg: 'az az-image',
+    webp: 'az az-image',
+    png: 'az az-image',
+    mp4: 'az az-video',
+    html: 'az az-code',
+    js: 'az az-code',
+    css: 'az az-code',
+    json: 'az az-database',
+    woff2: 'az az-star',
+    log: 'az az-align-left',
+    txt: 'az az-file'
   }
 
   const columns: TableColumn[] = [
@@ -451,9 +451,9 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
   ]
 
   const addToFilesActions = [
-    { label: 'Upload file', value: 'upload', icon: 'ai ai-upload' },
-    { label: 'Upload folder', value: 'upload-folder', icon: 'ai ai-folder-open' },
-    { label: 'Add folder', value: 'folder', icon: 'ai ai-folder-plus' }
+    { label: 'Upload file', value: 'upload', icon: 'az az-upload' },
+    { label: 'Upload folder', value: 'upload-folder', icon: 'az az-folder-open' },
+    { label: 'Add folder', value: 'folder', icon: 'az az-folder-plus' }
   ]
 
   const LIMIT = 300 * 1024 * 1024
@@ -471,7 +471,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
       name,
       id: name,
       kind,
-      icon: file ? (GLYPHS[extensionOf(name)] ?? 'ai ai-file') : undefined,
+      icon: file ? (GLYPHS[extensionOf(name)] ?? 'az az-file') : undefined,
       size: file ? formatBytes(entry?.bytes ?? 0) : '-',
       bytes: file ? (entry?.bytes ?? 0) : 0,
       modifiedAt: file ? entry?.modifiedAt : undefined,
@@ -724,7 +724,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
             <div class="flex w-full flex-col gap-(--spacing-sm)">
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-database shrink-0 text-body-lg text-(--text-muted)"
+                  class="az az-database shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <h1 class="min-w-0 truncate text-heading-2xs text-(--text-default)">
@@ -742,7 +742,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                 <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                   <Tooltip content="Refresh">
                     <IconButton
-                      icon="ai ai-refresh"
+                      icon="az az-refresh"
                       variant="outline"
                       size="medium"
                       aria-label="Refresh"
@@ -751,7 +751,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                   </Tooltip>
                   <SplitButton
                     label="Add to files"
-                    icon="ai ai-plus"
+                    icon="az az-plus"
                     variant="primary"
                     size="medium"
                     :items="addToFilesActions"
@@ -809,7 +809,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                 >
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-database shrink-0 text-body-lg text-(--text-muted)"
+                      class="az az-database shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <h1 class="min-w-0 truncate text-heading-2xs text-(--text-default)">
@@ -830,7 +830,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                       class="shrink-0"
                     >
                       <IconButton
-                        icon="ai ai-refresh"
+                        icon="az az-refresh"
                         variant="outline"
                         size="large"
                         :loading="loading"
@@ -843,7 +843,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                       class="shrink-0"
                     >
                       <IconButton
-                        icon="ai ai-download"
+                        icon="az az-download"
                         variant="outline"
                         size="large"
                         :disabled="!tableEl"
@@ -871,7 +871,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     >
                       <SplitButton
                         label="Add to files"
-                        icon="ai ai-plus"
+                        icon="az az-plus"
                         variant="primary"
                         size="medium"
                         :items="addToFilesActions"
@@ -897,7 +897,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     <div class="ms-auto flex items-center gap-(--spacing-xs)">
                       <Button
                         label="Move"
-                        icon="ai ai-arrow-right-left"
+                        icon="az az-arrow-right-left"
                         variant="outline"
                         size="small"
                         :disabled="!hasSelectedFiles(selectedRows)"
@@ -912,12 +912,12 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
                     v-if="item.kind === 'parent'"
-                    class="ai ai-folder-open shrink-0 text-body-lg text-(--text-muted)"
+                    class="az az-folder-open shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <i
                     v-else-if="item.kind === 'folder'"
-                    class="ai ai-folder shrink-0 text-body-lg text-(--text-link)"
+                    class="az az-folder shrink-0 text-body-lg text-(--text-link)"
                     aria-hidden="true"
                   />
                   <i
@@ -977,7 +977,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     >
                       <template #leading
                         ><i
-                          class="ai ai-folder-open"
+                          class="az az-folder-open"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuItem>
@@ -989,7 +989,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     >
                       <template #leading
                         ><i
-                          class="ai ai-download"
+                          class="az az-download"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuItem>
@@ -1001,7 +1001,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     >
                       <template #leading
                         ><i
-                          class="ai ai-arrow-right-left"
+                          class="az az-arrow-right-left"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuItem>
@@ -1013,7 +1013,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     >
                       <template #leading
                         ><i
-                          class="ai ai-trash"
+                          class="az az-trash"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuItem>
@@ -1026,7 +1026,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                   key="empty-state-1"
                   v-if="search"
                   size="medium"
-                  icon="ai ai-search"
+                  icon="az az-search"
                   title="No matching files"
                   :description="`Nothing in this folder matches “${search}”.`"
                 >
@@ -1049,7 +1049,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                   <template #actions>
                     <SplitButton
                       label="Add to files"
-                      icon="ai ai-plus"
+                      icon="az az-plus"
                       variant="secondary"
                       size="medium"
                       :items="addToFilesActions"
@@ -1141,7 +1141,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                 label="Browse folder"
                 variant="secondary"
                 size="medium"
-                icon="ai ai-folder-open"
+                icon="az az-folder-open"
                 @click="folderInputEl?.click()"
               />
               <Button
@@ -1192,7 +1192,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
               :label="pickable.length > 1 ? `Upload ${pickable.length} files` : 'Upload file'"
               variant="primary"
               size="medium"
-              icon="ai ai-upload"
+              icon="az az-upload"
               :disabled="!pickable.length"
               @click="startUpload"
             />
@@ -1231,7 +1231,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                 class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
               >
                 <i
-                  class="ai ai-file shrink-0 text-(--text-muted)"
+                  class="az az-file shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="min-w-0 truncate">{{ item.name }}</span>
