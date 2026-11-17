@@ -386,7 +386,7 @@
           >
             <i
               :class="value ? 'az-check text-(--primary)' : 'az-minus text-(--text-muted)'"
-              class="ai text-label-md"
+              class="az text-label-md"
               aria-hidden="true"
             />
             <span class="sr-only">{{ value ? 'Yes' : 'No' }}</span>
