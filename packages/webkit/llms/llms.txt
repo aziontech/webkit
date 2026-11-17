@@ -85,7 +85,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Invocations (detail/invocations)](blocks/detail/invocations.md): The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print.
 - [ProductionChecklist (detail/production-checklist)](blocks/detail/production-checklist.md): A service that is live on its generated hostname is not yet ready for real traffic.
 - [ResourceDetail (detail/resource-detail)](blocks/detail/resource-detail.md): The second-level page of one resource.
-- [SectionedResource (detail/sectioned-resource)](blocks/detail/sectioned-resource.md): The page of one resource whose tab holds more sibling pages than a tab row can carry: the rules of a policy, the records of a zone, the settings of one application.
 - [VersionDetail (detail/version-detail)](blocks/detail/version-detail.md): One version of a resource, opened from its Versions tab.
 
 ## Blocks: Edit

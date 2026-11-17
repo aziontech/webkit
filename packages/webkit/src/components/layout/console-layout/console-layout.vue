@@ -337,7 +337,7 @@
       if (!pairs.length) return
       warnedRoutes.add(route)
       console.warn(
-        `[webkit] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ${[...new Set(pairs)].join('; ')}. A destination appears once per screen: reach these pages through the resource (block detail/sectioned-resource) or drop the duplicate rows (rule webkit-navigation-levels, rule 2).`
+        `[webkit] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ${[...new Set(pairs)].join('; ')}. A destination appears once per screen, and a page has only its PageTabs: drop the in-page menu and keep these pages in the rail or in the resource's tabs (rule webkit-navigation-levels).`
       )
     }
 

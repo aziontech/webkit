@@ -1,38 +1,36 @@
-# Rule: navigation levels — one owner per level, a destination once per screen
+# Rule: navigation levels — the rail navigates, the page has only tabs
 
-A console screen has at most three navigation levels, and each has one owner. When two controls list
-the same pages, their active rows disagree, the reader cannot tell which one says "where I am", and
-the extra column squeezes the content.
+A console screen navigates in two places: the rail, which holds up to two levels, and the
+`PageTabs` of the page. Nothing else inside a page navigates: no menu, no side list of pages, no
+second row of tabs. When a page carries its own navigation, it repeats the rail, the reader cannot
+tell which control says "where I am", and the extra column squeezes the content.
 
-| Level | Owner                                                        | Lists                                            |
-| ----- | ------------------------------------------------------------ | ------------------------------------------------ |
-| 1     | the rail: `ConsoleLayout` `navigation`, its drill levels too | modules and first-level pages                    |
-| 2     | `PageTabs` of a resource or of a split module                | the pages of that resource or module             |
-| 3     | the `detail/sectioned-resource` block, in one tab            | more than 7 sibling pages of that tab, in groups |
+| Where         | Control                                       | Lists                                                                     |
+| ------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
+| Rail, level 1 | `ConsoleLayout` `navigation`                  | products, and the resources of a product that has 3 or fewer, right there |
+| Rail, level 2 | a drill level of the rail (`type: 'drill'`)   | the resources of a product that has more than 3                           |
+| Page          | `PageTabs` of a resource or of a split module | the pages of that resource or module                                      |
 
 The breadcrumb is not a level: it names where the reader is.
 
 A drawer is not a level either. It has no route, and it opens only at the end of the path, over the
-screen that owns its item: `rail → module list → resource page → tab → drawer (large) → nested
-drawer (medium)`.
+screen that owns its item: `rail (level 1 → level 2) → resource list → resource page → tab → drawer
+(large) → nested drawer (medium)`.
 
 ## Do
 
-- Give each level one control. A screen shows the rail, at most one `PageTabs`, and at most one
-  local navigation inside the active tab.
+- Put every product in the rail at level 1. A product with 3 or fewer resources lists them as rows
+  under its name, on level 1. A product with more than 3 resources is one row that drills into
+  level 2, where its resources are listed.
+- Point each rail row at a page that needs no resource: a first-level page or a resource list.
+- Give a resource page one `PageTabs` row for its own pages, and nothing else that navigates.
+- Keep a resource to 7 or fewer tabs. More pages than that are grouped: related pages become
+  sections of one tab's page, under headings, not a menu.
 - Offer each destination once per screen. Compare the `href`s (path without query and hash) of the
-  rail rows, the current drill level included, the tabs and the local navigation: no route appears
-  twice.
-- Point a rail row at a page that needs no resource: a module list, a first-level page, or the
-  resource list. Pages that exist only inside a resource (the rule families of a policy, the records
-  of a zone, the settings of one application) are reached through that resource: its list row, its
-  tabs, its local navigation.
-- Put 7 or fewer sibling pages on tabs, a `ToggleGroup` or sections of one page. Only past 7 does a
-  tab carry a local navigation, and only as the `detail/sectioned-resource` block: a
-  `--container-3xs` column that folds into a labelled `Select` below `@3xl` of the tab body.
-- Derive every active row from the route. Each level marks exactly one row `aria-current="page"`,
-  the marked rows of all levels describe the same place, and a level whose rows do not hold the
-  current page marks none.
+  rail rows, the open drill level included, and the tabs: no route appears twice.
+- Derive every active row from the route. The rail and the tabs each mark exactly one row
+  `aria-current="page"`, the marked rows describe the same place, and a control whose rows do not
+  hold the current page marks none.
 - Navigate to the resource's page when the reader opens, configures or edits a product or a
   resource (Configure, Settings, Edit), on the tab that holds it (`?tab=settings`).
 - Open a drawer only over the screen that owns its item: a tab of the resource, or the list that
@@ -45,10 +43,12 @@ drawer (medium)`.
 
 ## Do not
 
-- Do not render a free `SidebarMenu` in a page body, least of all one whose rows repeat the rail.
-- Do not add rail rows that route into a resource, not even as shortcuts into a default resource.
-  When a module needs a shortcut, the rail row opens the resource list or the resource itself.
-- Do not add a fourth level, or a second local navigation in one tab.
+- Do not render a navigation inside a page body: no `SidebarMenu`, no side list or column of pages,
+  no `ToggleGroup`, `Select` or second tab row that switches between pages. Page navigation is the
+  rail; a page has only its `PageTabs`.
+- Do not add a third rail level, or a drill level for a product with 3 or fewer resources.
+- Do not add rail rows that route into one resource, not even as shortcuts into a default resource.
+  The rail opens the resource list; the resource's own pages are its tabs.
 - Do not set an active row by hand (`activeId`, a hard-coded `aria-current`) on a page whose route
   already matches a row.
 - Do not open a drawer as the first surface of a product or a resource, or over a screen that does
@@ -57,21 +57,43 @@ drawer (medium)`.
   layer is a page: open it in a new tab.
 - Do not send the reader to another page to create a missing resource and come back. Only a create
   of several steps opens its page, in a new tab, with a `Refresh` on the field.
-- Do not put `PageTabs`, a breadcrumb or a local navigation inside a drawer. A drawer that needs one
-  is a page.
+- Do not put `PageTabs`, a breadcrumb or any other navigation inside a drawer. A drawer that needs
+  one is a page.
 
 ## Correct
 
-The rail lists the module and opens the resource list; the policy's own pages live in its tabs and,
-past 7, in the block:
+Edge DNS has 2 resources, so they sit on level 1. Security has more than 3, so it drills into
+level 2. Every row opens a list; a policy's own pages are its tabs:
 
 ```ts
 const navigation = [
   {
-    label: 'Security',
+    label: 'Edge DNS',
     items: [
-      { id: 'policies', label: 'Policies', icon: 'az az-shield', href: '/policies' },
-      { id: 'certificates', label: 'Certificates', icon: 'az az-lock', href: '/certificates' }
+      { id: 'zones', label: 'Zones', icon: 'az az-edge-dns', href: '/dns/zones' },
+      { id: 'secondary', label: 'Secondary zones', icon: 'az az-edge-dns', href: '/dns/secondary' }
+    ]
+  },
+  {
+    label: 'Products',
+    items: [
+      {
+        id: 'security',
+        label: 'Security',
+        icon: 'az az-shield',
+        type: 'drill',
+        groups: [
+          {
+            label: 'Security',
+            items: [
+              { id: 'policies', label: 'Policies', href: '/policies' },
+              { id: 'certificates', label: 'Certificates', href: '/certificates' },
+              { id: 'network-lists', label: 'Network lists', href: '/network-lists' },
+              { id: 'waf', label: 'WAF rule sets', href: '/waf' }
+            ]
+          }
+        ]
+      }
     ]
   }
 ]
@@ -79,8 +101,8 @@ const navigation = [
 
 ## Wrong
 
-A rail drill level whose rows route into one default policy, repeated by a `SidebarMenu` inside that
-policy's tab:
+A rail drill level whose rows route into one default policy; the same pages repeated by a
+`SidebarMenu` inside that policy's tab would be wrong too:
 
 ```ts
 const navigation = [
@@ -111,9 +133,8 @@ const navigation = [
 
 - `webkit/no-page-navigation-menu` (ESLint, warning) flags a `SidebarMenu` rendered in a page body (under
   `views/` or `pages/`, or with a `PageHeader` / `PageTabs` import) outside a navigation host
-  (`Sidebar`, `ConsoleLayout`, `DocLayout`, `AppLayout`), unless the file is the
-  `detail/sectioned-resource` block or carries `/* webkit-local-navigation */`. It is
-  static and approximate, so it warns.
+  (`Sidebar`, `ConsoleLayout`, `DocLayout`, `AppLayout`). It has no exception. It is static and
+  approximate, so it warns.
 - `ConsoleLayout` warns in development when a `SidebarMenu` in its default slot has a row whose `href`
   matches a rail row, naming both labels and the route.
 - `npx @aziontech/webkit check --url <url,...>` and `/webkit-ui-verify` fail a visited route with a duplicate

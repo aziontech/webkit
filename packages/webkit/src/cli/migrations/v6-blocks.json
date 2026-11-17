@@ -1,4 +1,5 @@
 {
+  "detail/sectioned-resource": "detail/resource-detail",
   "headers/auth-header": "top-bar/auth-bar",
   "headers/creation-header": "top-bar/creation-bar",
   "headers/creation-header#CreateHub": "top-bar/creation-bar#create-hub",
@@ -139,7 +140,6 @@
   "platform/detail/production-checklist": "detail/production-checklist",
   "platform/detail/production-checklist#Complete": "detail/production-checklist#success",
   "platform/detail/record-table": "detail/dns-zone-detail",
-  "platform/detail/sectioned-resource": "detail/sectioned-resource",
   "platform/detail/version-detail": "detail/version-detail",
   "platform/edit/attribute-editor": "edit/variables",
   "platform/edit/attribute-editor#Create": "edit/variables#create",

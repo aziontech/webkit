@@ -66,7 +66,7 @@ test('the query and the hash do not make two routes different', () => {
   assert.equal(f.route, ACCESS_RULES)
 })
 
-test('a control with two current rows fails (rule 5)', () => {
+test('a control with two current rows fails (rule 6)', () => {
   const menu = control('Private access', 'role=navigation', [
     link('/policies/acme/private-access/app-segments', 'App segments', true),
     link(ACCESS_RULES, 'Access rules', true)
@@ -77,7 +77,7 @@ test('a control with two current rows fails (rule 5)', () => {
   assert.match(findings[0].message, /2 rows as aria-current="page"/)
 })
 
-test('current rows that point at different places fail; an ancestor agrees (rule 5)', () => {
+test('current rows that point at different places fail; an ancestor agrees (rule 6)', () => {
   const railElsewhere = control('Console navigation', 'nav', [
     link('/policies/default/private-access/server-groups', 'Server groups', true)
   ])

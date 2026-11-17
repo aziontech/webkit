@@ -76,14 +76,14 @@ await page.route('**/api/workloads', (r) => r.fulfill({ json: [] })) // empty
   `role="tablist"`; the breadcrumb, pagination, hidden or inert levels and `#anchor` links are left
   out) and fails on:
   - **a route offered twice**: the same path (query and hash ignored) in two controls, such as a rail
-    row and an in-page `SidebarMenu` row (rule 2);
-  - **more than one current row** (`aria-current="page"`) in one control (rule 5);
+    row and an in-page `SidebarMenu` row (rule 5);
+  - **more than one current row** (`aria-current="page"`) in one control (rule 6);
   - **current rows that disagree**: two controls whose current rows point at different routes, where
-    neither is a parent of the other (rule 5).
+    neither is a parent of the other (rule 6).
 
   The message names both controls (by their accessible name) and the route. The fix is the rule's:
-  keep the destination in one level, reach the resource's pages through the resource (block
-  `detail/sectioned-resource`), never through rail rows.
+  keep the destination in one place: page navigation is the rail, and a resource's own pages are its
+  `PageTabs`, never rail rows and never a menu inside the page.
 
 ```bash
 npx @aziontech/webkit check --no-lint --url http://localhost:5173/policies/acme/access-rules,http://localhost:5173/workloads
@@ -191,7 +191,7 @@ Route: /workloads
 [✓] Interaction dialog traps + restores focus; success toast appears
 
 fix: pass :label to <Alert>; darken the pill text token; add EmptyState to the no-data branch;
-     drop the Access rules rows from the rail (the policy's local navigation owns them).
+     drop the Access rules rows from the rail and the in-page menu (the policy's tabs own them).
 ```
 
 End with: `verified — ship` or `N findings — fix before ship`.

@@ -100,9 +100,9 @@ text-body-* > text-label-* > text-overline-*`). See `/webkit-quick-cleanup`.
     dozen copies of the same link turned into four glyphs, four icon sizes, two underline states and
     a tooltip on two of twelve. The tell is a `<template>` you could paste into another file
     unchanged; extract it instead. Details in `/webkit-tables`.
-11. **One navigation per level** — the rail, `PageTabs`, and at most one local navigation (the
-    `detail/sectioned-resource` block, only past 7 sibling pages). A destination appears
-    once per screen, the rail never routes into a resource, and every level's active row agrees with
+11. **The rail navigates; a page has only tabs** — the rail holds two levels at most (a product's
+    resources on level 1 when it has 3 or fewer, a drill level when it has more), and a page has
+    only its `PageTabs` (at most 7), never a menu. A destination appears once per screen, the rail never routes into a resource, and every level's active row agrees with
     the route. Details in `/webkit-navigation` (rule `webkit-navigation-levels`).
 
 > Accessibility is enforced by the shipped `accessibility` rule and verified at runtime by

@@ -1,10 +1,7 @@
-import assert from 'node:assert/strict'
 import test from 'node:test'
 import { RuleTester } from 'eslint'
 import * as vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
-
-import { findComments } from '../../src/eslint-plugin/lib/comment-scan.js'
 
 const rule = (await import('../../src/eslint-plugin/rules/no-page-navigation-menu.js')).default
 
@@ -30,18 +27,6 @@ test('no-page-navigation-menu', () => {
     valid: [
       { code: sfc(MENU), filename: 'src/components/AppSidebar.vue' },
       { code: sfc(PAGE_TABS), filename: 'src/views/PolicyView.vue' },
-      {
-        code: sfc(`${MENU}\n${PAGE_TABS}`),
-        filename: 'packages/webkit/blocks/detail/sectioned-resource/sectioned-resource.vue'
-      },
-      {
-        code: sfc(`/* webkit-local-navigation */\n${MENU}`),
-        filename: 'src/views/PolicyView.vue'
-      },
-      {
-        code: sfc(MENU, '<!-- webkit-local-navigation --><div />'),
-        filename: 'src/pages/policy.vue'
-      },
       {
         code: sfc(
           `${MENU}\n${PAGE_HEADER}\nimport Sidebar from '@aziontech/webkit/sidebar'`,
@@ -101,8 +86,18 @@ test('no-page-navigation-menu', () => {
         errors: [{ messageId: 'pageMenu' }]
       },
       {
-        code: sfc(`// webkit-local-navigation\n${MENU}`, '<SidebarMenu />'),
+        code: sfc(`${MENU}\n${PAGE_TABS}`, '<div><PageTabs /><SidebarMenu /></div>'),
+        filename: 'packages/webkit/blocks/detail/resource-detail/resource-detail.vue',
+        errors: [{ messageId: 'pageMenu' }]
+      },
+      {
+        code: sfc(`/* webkit-local-navigation */\n${MENU}`, '<SidebarMenu />'),
         filename: 'C:\\app\\src\\views\\PolicyView.vue',
+        errors: [{ messageId: 'pageMenu' }]
+      },
+      {
+        code: sfc(MENU, '<!-- webkit-local-navigation --><SidebarMenu />'),
+        filename: 'src/pages/policy.vue',
         errors: [{ messageId: 'pageMenu' }]
       }
     ]
@@ -118,21 +113,4 @@ test('no-page-navigation-menu', () => {
       }
     ]
   })
-})
-
-test('the webkit-local-navigation marker is a tool directive, not a prose comment', () => {
-  const text = sfc(
-    `/* webkit-local-navigation */\n${MENU}`,
-    '<!-- webkit-local-navigation --><div />'
-  )
-  const kinds = findComments('src/views/a.vue', text).map((c) => c.kind)
-  assert.deepEqual(kinds, ['directive', 'directive'])
-  const prose = findComments(
-    'src/a.ts',
-    '/* webkit-local-navigation is used here */\nconst a = 1\n'
-  )
-  assert.deepEqual(
-    prose.map((c) => c.kind),
-    ['prose']
-  )
 })

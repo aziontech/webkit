@@ -32830,93 +32830,6 @@
    ],
    "file": "catalog/blocks/detail/resource-detail.json"
   },
-  "detail/sectioned-resource": {
-   "name": "SectionedResource",
-   "title": "Blocks/Detail/SectionedResource",
-   "source": "blocks/detail/sectioned-resource/sectioned-resource.vue",
-   "surface": "app",
-   "summary": "A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `SidebarMenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `SidebarMenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `DataTable` driven by `useCollection`, with an `EmptyState` inside the table that tells a page with no entries (Add) apart from a filter that matches nothing (Clear filters); another tab shows an `EmptyState` linking to that tab's route. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
-   "intents": [
-    "local navigation",
-    "in-page navigation",
-    "section navigation",
-    "sub navigation",
-    "third level navigation",
-    "level 3 navigation",
-    "sectioned resource",
-    "resource sections",
-    "tab with many pages",
-    "many sibling pages",
-    "grouped sub pages",
-    "policy sections",
-    "side menu in page",
-    "navigation levels",
-    "navegação local",
-    "navegação de terceiro nível",
-    "submenu da página",
-    "seções do recurso",
-    "navegación local",
-    "secciones del recurso"
-   ],
-   "skills": [
-    "webkit-navigation",
-    "webkit-layout",
-    "webkit-tables"
-   ],
-   "components": [
-    "Button",
-    "Card",
-    "DataTable",
-    "EmptyState",
-    "Field",
-    "IconButton",
-    "PageHeader",
-    "PageTabs",
-    "PropertyFilter",
-    "Select",
-    "SidebarMenuRoot",
-    "TableCellId",
-    "TableCellLink",
-    "TableCellStatus",
-    "TableCellTime",
-    "Tabs",
-    "ToggleGroup",
-    "Tooltip",
-    "use-collection"
-   ],
-   "imports": [
-    "@aziontech/webkit/button",
-    "@aziontech/webkit/card",
-    "@aziontech/webkit/data-table",
-    "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/field",
-    "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/page-header",
-    "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/property-filter",
-    "@aziontech/webkit/select",
-    "@aziontech/webkit/sidebar-menu-root",
-    "@aziontech/webkit/table-cell-id",
-    "@aziontech/webkit/table-cell-link",
-    "@aziontech/webkit/table-cell-status",
-    "@aziontech/webkit/table-cell-time",
-    "@aziontech/webkit/tabs",
-    "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
-   ],
-   "primary": "Default",
-   "guidelinesSummary": "The page of one resource whose tab holds more sibling pages than a tab row can carry: the rules of a policy, the records of a zone, the settings of one application. The user arrives from the resource's list row or its tabs and moves between the sibling pages without leaving the resource. A console screen shows one navigation per level: the rail lists modules and first-level pages, `PageTabs` lists the resource's sections, and this block adds the third level, at most one local navigation inside the active tab. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`.",
-   "variants": [
-    {
-     "name": "Narrow"
-    },
-    {
-     "name": "FewSiblings"
-    }
-   ],
-   "file": "catalog/blocks/detail/sectioned-resource.json"
-  },
   "detail/version-detail": {
    "name": "VersionDetail",
    "title": "Blocks/Detail/VersionDetail",
@@ -35883,6 +35796,7 @@
  },
  "blockAliases": {
   "detail/attached-resources": "detail/domains-card",
+  "detail/sectioned-resource": "detail/resource-detail",
   "headers/auth-header": "top-bar/auth-bar",
   "headers/creation-header": "top-bar/creation-bar",
   "headers/creation-header#CreateHub": "top-bar/creation-bar#create-hub",
@@ -36023,7 +35937,6 @@
   "platform/detail/production-checklist": "detail/production-checklist",
   "platform/detail/production-checklist#Complete": "detail/production-checklist#success",
   "platform/detail/record-table": "detail/dns-zone-detail",
-  "platform/detail/sectioned-resource": "detail/sectioned-resource",
   "platform/detail/version-detail": "detail/version-detail",
   "platform/edit/attribute-editor": "edit/variables",
   "platform/edit/attribute-editor#Create": "edit/variables#create",

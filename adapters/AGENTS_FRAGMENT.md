@@ -63,8 +63,9 @@ product components in one file (`llms-full-site.txt` for the site and docs compo
 
 - **One layout, composed once.** `ConsoleLayout`, `SiteLayout` or `DocLayout` in `App.vue`; pages
   are bodies in its slot, never a second shell, `<main>` or ⌘K palette (above).
-- **One navigation per level.** Rail, page tabs, at most one local navigation; a destination
-  appears once per screen; the rail never routes into a resource (rule `webkit-navigation-levels`).
+- **The rail navigates; a page has only tabs.** The rail holds two levels at most (a product's
+  resources on level 1 when it has 3 or fewer, a drill level when it has more); a page has only its
+  `PageTabs` and no menu; a destination appears once per screen; the rail never routes into a resource (rule `webkit-navigation-levels`).
 - **A drawer is never the way in.** Opening, configuring or editing a product or a resource goes to
   its page (Configure → the resource page, on its settings tab); a drawer opens only over the screen
   that owns its item (a tab of that page). The first drawer is `size="large"`, at most one

@@ -1,6 +1,6 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/creation-bar` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/creation-bar` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: page navigation lives in the rail, two levels at most (a product's resources on level 1 when it has 3 or fewer, a drill level when it has more), a page has only its PageTabs (at most 7) and no in-page menu, a destination offered once per screen, no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
 status: active
 last_updated: 2026-11-17
 scope: general
@@ -218,7 +218,8 @@ What each part of the layout takes:
 
 - **`navigation`** — groups of rows `{ id, label, icon, href }`. An in-app `href` (`/workloads`) is
   followed with the app's router, a named route becomes one through `router.resolve(...).href`, an
-  external URL loads normally. `type: 'drill'` with `groups` opens a level in place (Settings);
+  external URL loads normally. `type: 'drill'` with `groups` opens level 2 in place (Settings): use it for a product with more than
+  3 resources, list 3 or fewer right on level 1, and never nest a third level (see "Navigation levels");
   `tagValue` adds a badge (`Preview`). Never `to`, `path` or `route` on a row (lint
   `webkit/prefer-href-in-menu-node`). Leave `active-id` empty: the active row follows the route.
 - **`breadcrumbs`** — the trail, `{ label, href? }[]`, derived from the route meta; empty on a
@@ -641,51 +642,52 @@ Each tab renders one of two bodies:
   `Item.List` of `SettingsRow` rows, committed as **one block** by a single `SaveBar` pinned below the
   scroll region (see `webkit-form` and `webkit-ui-states`).
 
-## Navigation levels: one owner per level
+## Navigation levels: the rail navigates, the page has only tabs
 
-A console screen has at most three navigation levels, and each level has one control. The breadcrumb
-is not a level; it names where the reader is (below).
+> **Page navigation lives in the rail. The rail has two levels at most, and a page has only its
+> `PageTabs`. Nothing inside a page navigates to another page.**
 
-| Level | Owner                                                        | Lists                                            |
-| ----- | ------------------------------------------------------------ | ------------------------------------------------ |
-| 1     | the rail: `ConsoleLayout` `navigation`, its drill levels too | modules and first-level pages                    |
-| 2     | `PageTabs` of a resource or of a split module                | the pages of that resource or module             |
-| 3     | the `detail/sectioned-resource` block, in one tab body       | more than 7 sibling pages of that tab, in groups |
+| Where         | Control                                       | Lists                                                                     |
+| ------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
+| Rail, level 1 | `ConsoleLayout` `navigation`                  | products, and the resources of a product that has 3 or fewer, right there |
+| Rail, level 2 | a drill level of the rail (`type: 'drill'`)   | the resources of a product that has more than 3                           |
+| Page          | `PageTabs` of a resource or of a split module | the pages of that resource or module                                      |
 
-1. **One owner per level.** At most one control per level on a screen: the rail, one `PageTabs`, and
-   at most one local navigation inside the active tab.
-2. **A destination appears once per screen.** Compare the `href`s (path without query and hash) of
-   the rail rows (the current drill level included), the tabs and the local navigation: no route
-   appears twice.
-3. **The rail never routes into a resource.** A rail row leads to a page that needs no resource.
-   Pages that exist only inside a resource (the rule families of a policy, the records of a zone, the
-   settings of one application) are reached through that resource: its list row, its tabs, its local
-   navigation. Never as rail rows, not even as shortcuts into a default resource; a module that needs
-   a shortcut opens the resource list or the resource itself.
-4. **Local navigation is a block, not a free `SidebarMenu`.** Only when a tab holds more than 7 sibling
-   pages does its body carry one local navigation, and that is the
-   `detail/sectioned-resource` block, allowed only when rules 2 and 3 hold. Seven or fewer
-   siblings are tabs, a `ToggleGroup` or sections of one page.
-5. **Active states agree with the route.** Each level marks exactly one row `aria-current="page"`,
-   derived from the route, and the marked rows of all levels describe the same place. A level whose
-   rows do not hold the current page marks none.
-6. **The content keeps its measure.** The local navigation takes a `--container-3xs` column and folds
-   into a `Select` labelled with the tab name below `@3xl` of the tab body, so the content column
-   never drops below `layout-column` minus that column.
+The breadcrumb is not a level; it names where the reader is (below).
+
+1. **Three or fewer resources: level 1. More: level 2.** A product with 3 or fewer resources lists
+   them as rows under its name on level 1. A product with more than 3 is one row that drills into
+   level 2, where its resources are listed. There is no third rail level.
+2. **A page has only its tabs.** A resource page carries one `PageTabs` row for its own pages and
+   nothing else that navigates: no `SidebarMenu`, no side column of pages, no `ToggleGroup`, `Select`
+   or second tab row that switches pages.
+3. **Seven tabs at most.** A resource with more pages groups them: related pages become sections of
+   one tab's page, under headings. A resource that still does not fit is split into two resources,
+   each with its own rail row.
+4. **The rail never routes into a resource.** A rail row leads to a page that needs no resource: a
+   first-level page or a resource list. Pages that exist only inside a resource (the rules of a
+   policy, the records of a zone, the settings of one application) are that resource's tabs, reached
+   from its list row. Never rail rows, not even as shortcuts into a default resource.
+5. **A destination appears once per screen.** Compare the `href`s (path without query and hash) of
+   the rail rows (the open drill level included) and the tabs: no route appears twice.
+6. **Active states agree with the route.** The rail and the tabs each mark exactly one row
+   `aria-current="page"`, derived from the route, and the marked rows describe the same place. A
+   control whose rows do not hold the current page marks none.
 
 **The counter-example.** A policy's Private access tab rendered four navigations at once: the rail
 drilled into "Private access" with 12 rows (App segments, Segment groups, Server groups, Access
-rules…), the breadcrumb `Policies › Teste`, the policy's `PageTabs`, and a vertical `SidebarMenu` in a left
-column of the tab with 16 rows, the same pages again. The rail rows pointed at the default policy, so
-the rail marked "Server groups" while the page showed "Access rules" of another policy; three columns
-of navigation left the table about 45% of the width, cut at the right edge at 1440 px. The fix: drop
-the rail rows (the rail opens Policies), keep the pages inside the policy, and render them through the
-`detail/sectioned-resource` block in the tab.
+rules…), the breadcrumb `Policies › Teste`, the policy's `PageTabs`, and a vertical `SidebarMenu` in a
+left column of the tab with 16 rows, the same pages again. The rail rows pointed at the default
+policy, so the rail marked "Server groups" while the page showed "Access rules" of another policy;
+three columns of navigation left the table about 45% of the width, cut at the right edge at 1440 px.
+The fix: the rail drills into Security and lists its resources (Policies, Certificates, Network
+lists…), Policies opens the policy list, and a policy shows its pages as at most 7 tabs, with related
+pages as sections of one tab, and no menu in the page.
 
 Rule `webkit-navigation-levels` states the invariant. The lint `webkit/no-page-navigation-menu` warns
-on a `SidebarMenu` in a page body, `ConsoleLayout` warns in development when an in-page `SidebarMenu` repeats a rail
-row, and `npx @aziontech/webkit check` with `/webkit-ui-verify` fail a duplicate route or disagreeing
-active rows at runtime.
+on a `SidebarMenu` in a page body, `ConsoleLayout` warns in development when an in-page `SidebarMenu`
+repeats a rail row, and `npx @aziontech/webkit check` with `/webkit-ui-verify` fail a duplicate route
+or disagreeing active rows at runtime.
 
 ## Drawers — opened from inside a screen, never the way in
 
@@ -701,11 +703,11 @@ Every step towards a thing is a page with a URL until the reader stands on the s
 Only then does a drawer open, over that screen:
 
 ```
-rail ─▶ module list ─▶ resource page ─▶ tab ─▶ drawer (large) ─▶ nested drawer (medium)
-└───────────── pages: routes, breadcrumb, back button ─────────┘  └────── overlays: no route ──────┘
+rail (level 1 ─▶ level 2) ─▶ resource list ─▶ resource page ─▶ tab ─▶ drawer (large) ─▶ nested drawer (medium)
+└──────────────────── pages: routes, breadcrumb, back button ──────────────────┘  └────── overlays: no route ──────┘
 ```
 
-The levels above (rail, `PageTabs`, local navigation) are routes. A drawer is not a level: it has no
+The levels above (the rail's two levels and `PageTabs`) are routes. A drawer is not a level: it has no
 route, no breadcrumb entry and no `aria-current` row, and closing it leaves the reader exactly where
 they were.
 
@@ -809,7 +811,7 @@ column, and the page it talks about must stay visible. It never opens a nested d
 - **Focus returns down the stack.** Closing the child returns focus to the control that opened it in
   the parent; closing the parent returns it to the trigger on the page. `Escape` closes the top
   layer only.
-- **No navigation inside a drawer.** No `PageTabs`, no breadcrumb, no local navigation. A link that
+- **No navigation inside a drawer.** No `PageTabs`, no breadcrumb, no menu. A link that
   leaves the screen opens in a new tab, so the open drawers keep their work.
 - **Phones.** Below `md` each drawer is a bottom sheet and below `sm` a full-screen sheet; the nested
   one covers its parent fully. The depth limit still holds.
@@ -978,9 +980,10 @@ With Vue Router, keep the rows real links and let the router do the navigation:
   already carries.
 - **A tabbed page renders no `PageHeader`.** The tab bar is navigation; each tab's heading lives
   inside that tab's view. The active tab travels in `?tab=`.
-- **One navigation per level.** Rail, `PageTabs`, at most one local navigation (the
-  `detail/sectioned-resource` block); a destination appears once per screen, and the rail
-  never routes into a resource (rule `webkit-navigation-levels`).
+- **The rail navigates; the page has only tabs.** The rail holds two levels at most (a product's
+  resources on level 1 when it has 3 or fewer, in a drill level when it has more); a page has only
+  its `PageTabs`, at most 7, and no menu or other navigation. A destination appears once per screen,
+  and the rail never routes into a resource (rule `webkit-navigation-levels`).
 - **A drawer is never the way in.** Opening, configuring or editing a product or a resource navigates
   to its page; a drawer opens only over the screen that owns its item (a tab of the resource, the list
   that holds it). The first drawer is `large`, at most one `medium` drawer stacks on it, never a
@@ -1023,9 +1026,9 @@ For `/webkit-navigation <file>`, list gaps. Each:
   rule: A tab is never a crumb — it is navigation within one page and travels in ?tab=.
   fix: end the trail at the resource name: [{ label: 'Applications', href }, { label: app.name }].
 
-✗ PolicyPage.vue:22  in-page SidebarMenu repeats 12 rail destinations
-  rule: A destination appears once per screen; local navigation is the sectioned-resource block.
-  fix: move the pages into the resource (block detail/sectioned-resource) and drop the rail rows.
+✗ PolicyPage.vue:22  in-page SidebarMenu lists 16 pages of the policy
+  rule: Nothing inside a page navigates; page navigation is the rail, and a page has only its tabs.
+  fix: drop the menu; show the policy's pages as at most 7 PageTabs, related pages as sections of one tab.
 
 ✗ navigation.ts:31  rail row /policy-pages/... routes into a resource
   rule: The rail never routes into a resource — those pages are reached through the resource.
@@ -1094,14 +1097,15 @@ End with: `navigation sound` or `N gaps — fix before polish`.
       reserved, and carries the active tab in `?tab=`.
 - [ ] The breadcrumb matches the level (no trail at first level; `module › resource name` at second
       level), every non-last crumb links, and no tab appears in the trail.
-- [ ] One control per navigation level (rail, `PageTabs`, at most one local navigation from the
-      `detail/sectioned-resource` block, only past 7 siblings); no route appears twice on the
-      screen, and each level's `aria-current="page"` row agrees with the route.
+- [ ] Page navigation is the rail, two levels at most (a product's resources on level 1 when it has
+      3 or fewer, a drill level when it has more); a page has only its `PageTabs` (at most 7) and
+      no menu or other in-page navigation; no route appears twice on the screen, and each
+      control's `aria-current="page"` row agrees with the route.
 - [ ] No rail row routes into a resource (a default policy, zone or application); those pages are
-      reached through the resource's list row, tabs or local navigation.
+      reached through the resource's list row and its tabs.
 - [ ] Opening, configuring or editing a product or a resource navigates to its page; no drawer is
       the first surface of a resource, and every drawer opens over the screen that owns its item.
 - [ ] The first drawer is `size="large"`; a nested drawer is `size="medium"`, at most one, never a
-      third; no drawer carries `PageTabs`, a breadcrumb or a local navigation.
+      third; no drawer carries `PageTabs`, a breadcrumb or any other navigation.
 - [ ] Every field that needs another resource offers to create it in a drawer when it does not exist
       yet, and selects it on save; the reader never leaves the form to create it.

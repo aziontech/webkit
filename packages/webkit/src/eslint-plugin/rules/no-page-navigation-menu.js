@@ -19,11 +19,6 @@ const MENU_HOST = /^(?:sidebar|console-layout|doc-layout|app-layout)(?:-|$)/
 
 const PAGE_PATH = /(?:^|\/)(?:views|pages)\//
 
-const SECTIONED_RESOURCE =
-  /(?:^|\/)blocks\/detail\/sectioned-resource\/|(?:^|\/)detail__sectioned-resource__/
-
-const MARKER = /\/\*\s*webkit-local-navigation\s*\*\/|<!--\s*webkit-local-navigation\s*-->/
-
 function entryOf(source) {
   if (typeof source !== 'string' || !source.startsWith(WEBKIT_PREFIX)) return null
   return source.slice(WEBKIT_PREFIX.length)
@@ -55,19 +50,17 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Warn when a page body (a file under views/ or pages/, or one that imports PageHeader or PageTabs) renders a Menu outside a navigation host (Sidebar, ConsoleLayout, DocLayout, AppLayout): a free in-page Menu repeats the rail or the page tabs. Local navigation inside a tab is the detail/sectioned-resource block.'
+        'Warn when a page body (a file under views/ or pages/, or one that imports PageHeader or PageTabs) renders a Menu outside a navigation host (Sidebar, ConsoleLayout, DocLayout, AppLayout): page navigation lives in the rail, and a page has only its PageTabs.'
     },
     schema: [],
     messages: {
       pageMenu:
-        "'{{source}}' in a page body: a screen shows one navigation per level (rail, page tabs, at most one local navigation), and a free Menu in the page repeats their destinations. Drop it and reach these pages through the rail or the resource's PageTabs; when a tab holds more than 7 sibling pages, use the `detail/sectioned-resource` block (rule `webkit-navigation-levels`). An intended local navigation carries the `webkit-local-navigation` marker comment."
+        "'{{source}}' in a page body: page navigation lives in the rail (two levels at most), and a page has only its PageTabs, so a Menu in the page repeats their destinations. Drop it: list the pages in the rail, or show a resource's pages as its PageTabs (at most 7, related pages as sections of one tab) (rule `webkit-navigation-levels`)."
     }
   },
   create(context) {
     const filename = filenameOf(context)
-    if (SECTIONED_RESOURCE.test(filename)) return {}
     const sourceCode = context.sourceCode ?? context.getSourceCode()
-    if (MARKER.test(sourceCode.text)) return {}
 
     const menuImports = []
     const menuNames = new Set()
