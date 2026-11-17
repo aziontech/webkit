@@ -3,11 +3,11 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: b9dfbe3d7e4720475ec43de861c7eae51ddc4fe6b3e1a4c9398a6a8cf15c1021
-spec_version: 13
+checksum: 0c8c5eebb6214271a1e0f83b9e1fafcd67eb5ed2c301446f81a87204fb66df7e
+spec_version: 14
 template: 2
 created: 2026-10-20
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Chart — Component Spec
@@ -48,7 +48,8 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 - Pass series in a stable order: the slot follows the series position, so color follows the entity. A filter that hides a series keeps the others' colors.
 - Keep one value axis. Index two measures to a common base or split them into two charts.
 - Let the legend carry identity for two or more series; a single series needs no legend, its title names it.
-- Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.
+- Leave `color` unset by default: each series takes the next categorical slot (`--chart-series-1` … `-8`) in order, and the palette follows the theme. Most series name an entity (a host, a country, a metric), not a state.
+- Set a status `color` only when the series itself means a state, and keep it to that series: blocked requests or an error rate take `color: 'danger'`, while the series around it keep their categorical slots. Never reuse a status color as series 4.
 - Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.
 - Keep filters and the time range in one row above the dashboard, never inside a chart.
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
@@ -67,12 +68,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
   const labels = ['14:00', '14:05', '14:10', '14:15', '14:20', '14:25']
   const series = [
     { id: 'allowed', name: 'WAF requests allowed', values: [1200, 1350, 1280, 1500, 1460, 1610] },
-    {
-      id: 'blocked',
-      name: 'WAF requests blocked',
-      values: [320, 410, 380, 520, 470, 430],
-      color: 'danger'
-    },
+    { id: 'blocked', name: 'WAF requests blocked', values: [320, 410, 380, 520, 470, 430] },
     { id: 'threat', name: 'WAF requests threat', values: [80, 95, 70, 120, 110, 90] }
   ]
 </script>
@@ -345,16 +341,17 @@ The entrance is a composition assembling on first paint with a per-series stagge
 
 The stories share one WAF fixture so every canvas tells the same story.
 
-- Default — the Threats vs requests chart: area plus two lines, grid, axes, crosshair, tooltip, legend.
+- Default — the Threats vs requests chart on the default categorical palette (no series sets `color`): area plus two lines, grid, axes, crosshair, tooltip, legend.
 - Forms — composite: the same series as lines, as areas, as bars.
 - Stacked — stacked areas and stacked bars of allowed / blocked / logged.
 - MultiSeries — ten hosts, so the ninth and tenth fold into Other; legend with totals.
+- StatusColors — composite: the one example with semantic colors. A blocked series in `danger` beside an allowed series on its slot, and a count per findings level on the severity ramp.
 - Horizontal — ordered horizontal bars with value labels (top countries).
 - Mixed — requests as bars and cached requests as a line on one axis.
 - Scatter — response time by object size on a linear label scale.
 - Brush — a stacked event-volume histogram (`Chart.Bar type="histogram" stacked`) whose selected span filters a log.
 - Threshold — p95 latency with an SLO reference line in `danger` and the normal range as a band (`Chart.Reference`).
-- TooltipTotal — the event-volume histogram coloured from the severity ramp, its tooltip with a Total row and a footer hint (`Chart.Tooltip total` + `#footer`).
+- TooltipTotal — the event-volume histogram, its tooltip with a Total row and a footer hint (`Chart.Tooltip total` + `#footer`).
 - Loading — `loading`.
 - Empty — composite: the three reasons a range comes back empty, each with its own copy: nothing in the range, filters that match nothing (with a Clear filters action), and a source not set up yet (with a setup link).
 - Error — `error` set.

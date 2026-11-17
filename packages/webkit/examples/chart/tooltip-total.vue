@@ -20,25 +20,21 @@
     {
       id: 'error',
       name: 'Error',
-      color: 'severity-critical',
       values: [4, 6, 3, 12, 18, 9, 5, 4, 7, 3, 2, 5]
     },
     {
       id: 'warning',
       name: 'Warning',
-      color: 'severity-medium',
       values: [20, 24, 18, 31, 40, 28, 22, 19, 25, 17, 16, 21]
     },
     {
       id: 'info',
       name: 'Info',
-      color: 'severity-low',
       values: [210, 240, 220, 260, 280, 250, 230, 225, 245, 215, 205, 235]
     },
     {
       id: 'debug',
       name: 'Debug',
-      color: 'severity-info',
       values: [60, 72, 58, 80, 95, 70, 64, 61, 69, 55, 52, 66]
     }
   ]

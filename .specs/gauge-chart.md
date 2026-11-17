@@ -3,11 +3,11 @@ name: gauge-chart
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 9a0fb2718138cf478748a261109500cc96574b64da73ccc90d4baab9aedfbbab
+checksum: 8527951bfbe417abd8030e6ff69effab91b3329d9a651a14aecf42caf3e5a815
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # GaugeChart — Component Spec
@@ -40,11 +40,29 @@ One reading against a known range, drawn as a half-circle dial with the value un
 ## Best practices
 
 - Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.
+- Add bands only when the range has agreed limits (a quota, an SLO, a CPU ceiling); without them the arc draws in `--chart-series-1`, the default chart color, and the reading carries no judgment.
 - Name every band (`label`) so the value is read with its meaning, not only with a color.
 - Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.
 - Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`.
 
 ## Usage
+
+```vue
+<script setup>
+  import GaugeChart from '@aziontech/webkit/gauge-chart'
+
+</script>
+
+<template>
+  <GaugeChart
+    :value="74"
+    label="Cache hit ratio"
+    :format-value="(value) => `${value}%`"
+  />
+</template>
+```
+
+With bands, when the reading means a state (the arc takes the color of the band the value falls in):
 
 ```vue
 <script setup>
@@ -60,7 +78,7 @@ One reading against a known range, drawn as a half-circle dial with the value un
 <template>
   <GaugeChart
     :value="74"
-    label="Cache hit ratio"
+    label="CPU usage"
     :thresholds="thresholds"
     :format-value="(value) => `${value}%`"
   />
@@ -173,7 +191,8 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 
 ## Examples
 
-- Default — a cache hit ratio with three named bands.
+- Default — a cache hit ratio with no bands, so the arc takes the first categorical slot.
+- Bands — CPU usage with three named status bands; the one example with semantic colors.
 - Sizes — composite: small, medium and large dials.
 - States — composite: loading, empty and error (the gauge has no `disabled`; its three data states share one frame, as in the examples).
 

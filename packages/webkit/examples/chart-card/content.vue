@@ -20,19 +20,16 @@
     {
       id: 'allowed',
       name: 'WAF requests allowed',
-      color: 'success',
       values: [1210, 1340, 1295, 1480, 1530, 1460, 1610, 1580, 1720, 1690, 1810, 1760]
     },
     {
       id: 'blocked',
       name: 'WAF requests blocked',
-      color: 'danger',
       values: [320, 410, 380, 520, 470, 430, 610, 580, 540, 690, 650, 720]
     },
     {
       id: 'threat',
       name: 'WAF requests threat',
-      color: 'warning',
       values: [80, 95, 70, 120, 110, 90, 140, 130, 115, 160, 150, 170]
     }
   ]

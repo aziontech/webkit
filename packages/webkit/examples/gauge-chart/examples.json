@@ -4,8 +4,13 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "One reading against its range. The bands name what the value means: the arc takes the color of the band it falls in and the name is read after the value.",
+      "summary": "One reading against its range. With no bands the arc takes the first categorical slot, the same color as the first series of a Chart.",
       "file": "default.vue"
+    },
+    {
+      "name": "Bands",
+      "summary": "Status colors, when the reading means a state. The bands name what CPU usage means: the arc takes the color of the band the value falls in, each band start is marked on the track, and the band name is read after the value.",
+      "file": "bands.vue"
     },
     {
       "name": "Sizes",

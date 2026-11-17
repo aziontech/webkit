@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Threats vs requests chart: allowed requests as an area, blocked and logged threats as lines. Each series means a state, so it wears a status color. Hover, or focus the plot and use the arrow keys, to read every series at one point.",
+      "summary": "The Threats vs requests chart: allowed requests as an area, blocked and threat requests as lines. No series sets a color, so each takes the next categorical slot in order and the palette follows the theme. Hover, or focus the plot and use the arrow keys, to read every series at one point.",
       "file": "default.vue"
     },
     {
@@ -21,6 +21,11 @@
       "name": "MultiSeries",
       "summary": "Ten hosts. The first eight take the eight series slots in order and the last two fold into Other, so no hue is ever generated or reused. Toggle a host in the legend: the others keep their colors.",
       "file": "multi-series.vue"
+    },
+    {
+      "name": "StatusColors",
+      "summary": "Set a color only when the series means a state. Left: blocked requests take danger, while allowed keeps its categorical slot. Right: a count per findings level takes the severity ramp, so its bars match the SeverityTag of the same level in a findings table. Any other series stays on the categorical slots.",
+      "file": "status-colors.vue"
     },
     {
       "name": "Horizontal",
@@ -49,7 +54,7 @@
     },
     {
       "name": "TooltipTotal",
-      "summary": "Event volume by level, each level coloured from the severity ramp. The tooltip adds a Total row that sums the visible levels in the bucket and a footer hint that says what a click or a drag on the plot does.",
+      "summary": "Event volume by level. The tooltip adds a Total row that sums the visible levels in the bucket and a footer hint that says what a click or a drag on the plot does.",
       "file": "tooltip-total.vue"
     },
     {
