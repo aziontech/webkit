@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import HeroSection from '@aziontech/webkit/hero-section'
   import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
@@ -93,7 +93,11 @@
       :secondary-action="{ label: 'Talk to an expert', href: '/en/contact/' }"
     />
     <SectionContainer max-width="site">
-      <SectionGap hatch />
+      <SectionModule
+        :divided="false"
+        title="Deploy from the CLI or from Git"
+        description="Push a change and it goes live on every edge location in seconds."
+      />
     </SectionContainer>
   </SiteLayout>
 </template>

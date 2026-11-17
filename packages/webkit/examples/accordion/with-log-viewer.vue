@@ -44,6 +44,7 @@
             :lines="lines"
             v-model:search="search"
             v-model:level="level"
+            :bordered="false"
             class="h-full"
           >
             <LogViewerHeader />

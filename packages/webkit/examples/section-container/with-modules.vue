@@ -25,6 +25,7 @@
     <SectionGap hatch />
 
     <SectionModule
+      :divided="false"
       :padded="false"
       title="A module with an edge-to-edge body"
       description='With :padded="false" the body runs to the column&apos;s own rules, for a grid that pads its own cells.'

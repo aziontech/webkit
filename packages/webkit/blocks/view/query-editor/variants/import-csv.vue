@@ -1363,6 +1363,7 @@ LIMIT 3;`
           language="sql"
           path="query.sql"
           height="14rem"
+          :bordered="false"
           :readonly="running"
           :markers="editorMarkers"
           aria-label="SQL editor"
