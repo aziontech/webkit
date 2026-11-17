@@ -3,13 +3,13 @@ name: breadcrumb
 category: navigation
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 720bcc9f158da339c6d5062eb4d3417c6f78c44009f531abc13c2175c9044e03
+checksum: 931a749fafef46cea7b4ddacfaebcdf9074c659d7d0ae6219aa58aa75bde13d4
 created: 2026-05-25
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Breadcrumb — Component Spec
@@ -128,14 +128,15 @@ _none_
 
 ## Tokens
 
-| Region          | Token (DESIGN.md)      |
-| --------------- | ---------------------- |
-| typography      | `.text-label-lg`       |
-| text (ancestor) | `var(--text-muted)`    |
-| text (current)  | `var(--text-default)`  |
-| separator icon  | `var(--text-muted)`    |
-| spacing gap     | `var(--spacing-1)`     |
-| shape           | `var(--shape-control)` |
+| Region          | Token (DESIGN.md)                                                                                                                                             |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| typography      | `.text-label-lg`                                                                                                                                              |
+| text (ancestor) | `var(--text-muted)`                                                                                                                                           |
+| text (current)  | `var(--text-default)`                                                                                                                                         |
+| separator icon  | `var(--text-muted)`                                                                                                                                           |
+| spacing gap     | `var(--spacing-1)`                                                                                                                                            |
+| shape           | `var(--shape-control)`                                                                                                                                        |
+| optical inset   | root `-ms-(--spacing-xs)`: pulls the trail back by the item padding, so the first item's text lines up with the page column and its hover fill bleeds outward |
 
 ## Theme gaps
 

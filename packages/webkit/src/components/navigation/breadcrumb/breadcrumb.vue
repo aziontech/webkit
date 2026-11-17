@@ -95,7 +95,12 @@
   <nav
     ref="navEl"
     v-bind="attrs"
-    :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
+    :class="
+      cn(
+        '-ms-(--spacing-xs) inline-flex w-full min-w-0 items-center',
+        attrs.class as string | undefined
+      )
+    "
     :aria-label="ariaLabel || t('breadcrumb.label')"
     :data-testid="testId"
   >
