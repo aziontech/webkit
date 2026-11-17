@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import DocProse from '@aziontech/webkit/doc-prose'
   import { type Component, computed } from 'vue'
 
   import { cached, keys } from '../lib/data'
@@ -32,12 +33,12 @@
       >
         {{ title }}
       </h3>
-      <RawHtml
-        v-if="example.summary"
-        tag="p"
-        :html="example.summary"
-        class="text-body-sm text-(--text-muted)"
-      />
+      <DocProse v-if="example.summary">
+        <RawHtml
+          tag="p"
+          :html="example.summary"
+        />
+      </DocProse>
     </div>
     <div class="flex flex-col gap-(--spacing-sm)">
       <div
