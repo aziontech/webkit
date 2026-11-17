@@ -137,10 +137,12 @@
   }
 
   function goTo(index: number): void {
-    if (!pinnedMetrics()) return
-    const anchor = track.value?.querySelectorAll('[data-sticky-stack-anchor]')[index]
-    if (!(anchor instanceof globalThis.HTMLElement)) return
-    anchor.scrollIntoView({ block: 'start' })
+    const metrics = pinnedMetrics()
+    if (!metrics || !track.value || !frame.value || count.value === 0) return
+    const pinnedTop = Number.parseFloat(globalThis.getComputedStyle(frame.value).top) || 0
+    const trackTop = track.value.getBoundingClientRect().top + globalThis.scrollY
+    const share = metrics.total / count.value
+    globalThis.scrollTo({ top: trackTop - pinnedTop + share * (index + 0.5) })
   }
 </script>
 
@@ -155,15 +157,6 @@
     :style="{ '--sticky-stack-span': span, '--sticky-stack-dwell': dwell }"
     class="relative [--sticky-stack-open:calc(var(--spacing-xl)*4)] data-[size=large]:[--sticky-stack-open:calc(var(--spacing-xl)*5)] data-[size=small]:[--sticky-stack-open:calc(var(--spacing-xl)*3)] lg:h-[calc(100dvh*var(--sticky-stack-span))]"
   >
-    <span
-      v-for="(item, index) in items"
-      :key="`anchor-${item.title}-${index}`"
-      data-sticky-stack-anchor
-      aria-hidden="true"
-      :style="{ '--sticky-stack-slot': index }"
-      class="pointer-events-none absolute left-0 hidden w-px lg:block lg:scroll-mt-[var(--sticky-stack-top,0)] lg:top-[calc(100dvh*var(--sticky-stack-dwell)*var(--sticky-stack-slot)+var(--sticky-stack-top,0rem))]"
-    />
-
     <div
       ref="frame"
       class="lg:sticky lg:top-[var(--sticky-stack-top,0)] lg:h-[calc(100dvh-var(--sticky-stack-top,0rem))] lg:flex lg:flex-col lg:overflow-hidden"
