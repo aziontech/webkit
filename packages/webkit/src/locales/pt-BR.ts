@@ -174,6 +174,16 @@ export const ptBR: Messages = {
     fallbackLabel: 'Avatar do usuário',
     imageAlt: 'Avatar'
   },
+  avatarGroup: {
+    people: {
+      one: '{count} pessoa',
+      other: '{count} pessoas'
+    },
+    more: {
+      one: 'mais {count} pessoa',
+      other: 'mais {count} pessoas'
+    }
+  },
   barList: {
     emptyTitle: 'Nenhum dado disponível',
     errorTitle: 'Não foi possível carregar os dados'

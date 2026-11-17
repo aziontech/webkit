@@ -463,6 +463,10 @@
       "types": "./types/components/content/avatar/avatar.vue.d.ts",
       "default": "./src/components/content/avatar/avatar.vue"
     },
+    "./avatar-group": {
+      "types": "./types/components/content/avatar-group/avatar-group.vue.d.ts",
+      "default": "./src/components/content/avatar-group/avatar-group.vue"
+    },
     "./badge": {
       "types": "./types/components/content/badge/badge.vue.d.ts",
       "default": "./src/components/content/badge/badge.vue"
@@ -2822,6 +2826,9 @@
       ],
       "avatar": [
         "./types/components/content/avatar/avatar.vue.d.ts"
+      ],
+      "avatar-group": [
+        "./types/components/content/avatar-group/avatar-group.vue.d.ts"
       ],
       "badge": [
         "./types/components/content/badge/badge.vue.d.ts"

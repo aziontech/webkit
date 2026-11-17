@@ -1091,7 +1091,7 @@
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "10.35 KB"
+    "limit": "10.4 KB"
   },
   {
     "name": "locales-es",
@@ -1485,6 +1485,11 @@
     "path": "src/components/content/avatar/avatar.vue",
     "limit": "12.25 KB",
     "entryOnly": true
+  },
+  {
+    "name": "avatar-group",
+    "path": "src/components/content/avatar-group/avatar-group.vue",
+    "limit": "3 KB"
   },
   {
     "name": "badge",

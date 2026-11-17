@@ -187,6 +187,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [Accordion](components/accordion.md): A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel.
 - [Avatar](components/avatar.md): Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name.
+- [AvatarGroup](components/avatar-group.md): Shows the people behind one thing as a row of overlapping avatars: the members of a team, the owners of a resource, who is viewing a page now.
 - [Badge](components/badge.md): Use Badge only for a number attached to something else (unread count, 12, 99+).
 - [Brand](components/brand.md): The Azion brand logo, rendered as an inline SVG lockup.
 - [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.

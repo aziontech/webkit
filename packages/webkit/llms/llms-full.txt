@@ -15956,6 +15956,99 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 ---
 
+<!-- components/avatar-group.md -->
+
+# Avatar Group
+
+> Shows the people behind one thing as a row of overlapping avatars: the members of a team, the owners of a resource, who is viewing a page now. It shows up to `max` avatars, each named by its person, and counts the rest in a `+N` button that opens a list of their names. It draws its avatars with the same tokens as `avatar` but without importing it, and opens the list with the native popover, so the whole group stays under 5 KB gzip.
+
+- Import: `import AvatarGroup from '@aziontech/webkit/avatar-group'`
+- Category: content · Surface: app · Structure: monolithic
+
+## When to use
+
+- A table cell, card or header that names the people on something: team members, owners, reviewers, collaborators.
+- A presence bar showing who else has the page open.
+
+## Do
+
+- Pass the full name in `name` ("Jane Doe"): it is the accessible name, the pointer hint and the source of the initials ("JD"). Pass `label` only to override the initials, and `src` for a photo.
+- Keep `max` small (3 to 5): the group is a glance, not a list. The `+N` button opens the full list of the rest.
+- Order `items` by relevance (owner first, or most recent viewer first); the first `max` are the ones shown.
+- Use `size="small"` in table cells, `medium` in cards and headers.
+- Use `orientation="vertical"` only in a narrow side rail; the horizontal row is the default.
+- Give the group an `aria-label` when "5 people" says less than the context ("Owners", "Viewing now").
+
+## Don’t
+
+- One person → use `avatar` beside their name.
+- The people are the content of the page (a members list you edit) → use a `table` or an `item` list.
+- A count with no people behind it → use `badge`.
+- A long list of things that are not people → use `overflow-count`.
+
+## Related
+
+- `avatar` — one person; the group draws each entry with the same shape, sizes and tokens.
+- `overflow-count` — a `+N` chip for any list, with search and paging; the group's own `+N` list is lighter and names people only.
+- `tooltip` — a styled hint; the group names each avatar with the native `title` instead, so it carries no overlay code.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `AvatarGroupItem[]` | `() => []` | false | The people, in display order: `{ name, src?, label? }`; `name` is the accessible name, the hint and the initials. |
+| `max` | `number` | `4` | false | Avatars shown before the rest collapse into the `+N` button; `0` shows every avatar. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size of each avatar (24 / 32 / 48 px), the same steps as `Avatar`. |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false | Direction the avatars stack and overlap in. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the group; empty uses the catalog count (`5 people`). |
+
+## States
+
+- Visual states: `default`; each avatar `hover` (raised above its neighbours, `z-1`); the `+N` button `hover`, `focus-visible`, and `data-state="open|closed"` while its list is shown.
+- `data-orientation` on the root mirrors `orientation`: horizontal overlaps each avatar onto the previous one's end edge, vertical onto its bottom edge.
+- `data-size` on the root mirrors `size` and sets the overlap: `var(--spacing-2xs)` for `small` and `medium`, `var(--spacing-xs)` for `large`, so the initials of each avatar stay readable under the next.
+- Each avatar (`__avatar`) carries a `var(--bg-canvas)` ring so the overlap reads as separate circles on any surface. It shows the photo when `src` loads, else the initials from `label` or the first letters of the first and last words of `name`; a photo that fails to load falls back to the initials.
+- Overflow: when `max` is above 0 and `items` holds more than `max` people, the first `max` render and a `+N` button (`__overflow`) closes the stack. It toggles a native popover (`__list`) anchored below it that lists the names of the rest, scrolling past `var(--container-3xs)` of height. With `max` 0 or few enough items, no button renders.
+- Empty: with no `items` the group renders nothing but its empty `group` root.
+
+## Accessibility
+
+- Visible focus: the avatars are not focusable; the `+N` button shows `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
+- Keyboard map: `Tab` reaches the `+N` button; `Enter` / `Space` opens and closes the list; `Tab` from the button moves into the list when it scrolls; `Esc` closes it and returns focus to the button; a click outside closes it.
+- ARIA: the root is `role="group"` named by `ariaLabel` or the catalog count. Each avatar is named by `name` (the image `alt`, or `role="img"` with `aria-label`), so a screen reader hears every visible name; the `title` repeats it for pointer users. The `+N` button is named `2 more people`, carries `aria-expanded` and `aria-controls`, and the list is a `ul` named the same.
+- Contrast ≥4.5:1 for the initials, the button and the names (`--text-default` on `--bg-surface-raised`); the separator ring is decorative.
+- Touch target: the `+N` button is the size of an avatar (24 px at `small`, the floor); avatars are not interactive.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import AvatarGroup from '@aziontech/webkit/avatar-group'
+
+  const team = [
+    { name: 'Jane Doe' },
+    { name: 'John Smith' },
+    { name: 'Alex Morgan' },
+    { name: 'Sam Lee' },
+    { name: 'Priya Patel' }
+  ]
+</script>
+
+<template>
+  <AvatarGroup
+    :items="team"
+    :max="3"
+    aria-label="Team members"
+  />
+</template>
+```
+
+2 more example(s) in [components/avatar-group.md](components/avatar-group.md).
+
+---
+
 <!-- components/badge.md -->
 
 # Badge

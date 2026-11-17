@@ -174,6 +174,16 @@ export const es: Messages = {
     fallbackLabel: 'Avatar del usuario',
     imageAlt: 'Avatar'
   },
+  avatarGroup: {
+    people: {
+      one: '{count} persona',
+      other: '{count} personas'
+    },
+    more: {
+      one: '{count} persona más',
+      other: '{count} personas más'
+    }
+  },
   barList: {
     emptyTitle: 'No hay datos disponibles',
     errorTitle: 'No se pudieron cargar los datos'

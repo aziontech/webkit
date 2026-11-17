@@ -365,5 +365,6 @@ Budget-raise: console-application-scene 115.7 KB → 115.8 KB (measured 115.76 K
 Budget-raise: code-block 31.55 KB → 32.4 KB (measured 32.37 KB): JSON, SQL and Python highlighting merged from main (#1189), plus the copy-button backing so long lines do not show around it (#1187) (2026-11-17).
 Budget-raise: streaming-response 35.25 KB → 36.15 KB (measured 36.10 KB): it renders a code-block, which gained JSON, SQL and Python highlighting merged from main (#1189) (2026-11-17).
 Budget-raise: doc-frame 5.75 KB → 8.2 KB (measured 8.16 KB): an autoplaying clip now carries a pause control (an `IconButton`) and starts itself after mount so it can stay paused under a reduced-motion preference — WCAG 2.2.2, owner decision AU4 (2026-11-17).
+Budget-raise: locales-pt-BR 10.35 KB → 10.4 KB (measured 10.37 KB): AvatarGroup (C-07) adds its two plural messages to the catalog, which had 15 bytes of headroom.
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.
