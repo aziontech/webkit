@@ -2,7 +2,7 @@
  "variants": [
   {
    "name": "ValidationErrors",
-   "summary": "Create pressed with gaps. The empty Value and Environment and the malformed key take the invalid state, each helper text carries its own message, and focus moves to Key.",
+   "summary": "Create pressed with gaps. The empty Value and Environment and the malformed key take the invalid state, each shows its own Field.Error under the kept description, and focus moves to Key.",
    "file": "blocks/state/form-validation/variants/validation-errors.vue"
   },
   {

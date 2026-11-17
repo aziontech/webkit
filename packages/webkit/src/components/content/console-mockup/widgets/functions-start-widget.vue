@@ -2,10 +2,12 @@
   import { ref } from 'vue'
 
   import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
+  import { useMockupPause } from '../composables/use-mockup-pause'
   import { AGENT_CLIENTS } from '../lib/functions-start'
   import CliTerminal from '../parts/cli-terminal.vue'
   import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import FunctionsAgent from '../parts/functions-agent.vue'
+  import MockupPauseButton from '../parts/mockup-pause-button.vue'
   import FunctionCodeFragment from './function-code-fragment.vue'
 
   defineOptions({ name: 'FunctionsStartWidget' })
@@ -27,6 +29,8 @@
   const AGENTS = AGENT_CLIENTS.map(({ mark, label }) => ({ label, value: mark }))
 
   const client = ref(AGENTS[0].value)
+
+  const { paused, label, toggle } = useMockupPause()
 </script>
 
 <template>
@@ -34,29 +38,46 @@
     v-if="tab === 'console'"
     :active="active"
   />
-  <ConsoleMockupShell
+  <div
     v-else-if="tab === 'cli'"
-    variant="bare"
-    fade="bottom"
-    class="[--console-mockup-fade-start:82%]"
-    :chrome="false"
-    :active="active"
-    :width="520"
-    :mobile-width="460"
+    class="flex h-full w-full min-w-0 flex-col gap-(--spacing-xs)"
   >
-    <div class="h-full py-(--spacing-xs)">
-      <CliTerminal
-        :active="active"
-        :texture="false"
-        flush
-      />
-    </div>
-  </ConsoleMockupShell>
+    <MockupPauseButton
+      class="ms-(--spacing-xs) mt-(--spacing-xs) self-start"
+      :paused="paused"
+      :label="label"
+      @click="toggle"
+    />
+    <ConsoleMockupShell
+      variant="bare"
+      fade="bottom"
+      class="min-h-0 flex-1 [--console-mockup-fade-start:82%]"
+      :chrome="false"
+      :active="active"
+      :width="520"
+      :mobile-width="460"
+    >
+      <div class="h-full py-(--spacing-xs)">
+        <CliTerminal
+          :active="active"
+          :texture="false"
+          flush
+          :paused="paused"
+        />
+      </div>
+    </ConsoleMockupShell>
+  </div>
   <div
     v-else
     class="flex h-full min-w-0 flex-col gap-(--spacing-sm)"
   >
-    <span class="flex shrink-0 justify-center px-(--spacing-md) pt-(--spacing-lg)">
+    <MockupPauseButton
+      class="ms-(--spacing-xs) mt-(--spacing-xs) self-start"
+      :paused="paused"
+      :label="label"
+      @click="toggle"
+    />
+    <span class="flex shrink-0 justify-center px-(--spacing-md)">
       <ToggleGroup
         v-model="client"
         :options="AGENTS"
@@ -76,6 +97,7 @@
           :key="client"
           :active="active"
           :client="client"
+          :paused="paused"
         />
       </ConsoleMockupShell>
     </div>

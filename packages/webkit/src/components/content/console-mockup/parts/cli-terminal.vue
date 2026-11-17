@@ -32,6 +32,8 @@
     flush?: boolean
     /** Shows the block's copy control. */
     copyable?: boolean
+    /** Holds the session on its last line; unset follows the reduced-motion preference. */
+    paused?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -41,7 +43,8 @@
     fit: false,
     speed: 1,
     flush: false,
-    copyable: true
+    copyable: true,
+    paused: undefined
   })
 
   const LINE_HEIGHT = 20
@@ -124,6 +127,7 @@
     hold: 6000 / props.speed,
     lead: 0,
     active: () => props.active,
+    paused: () => props.paused,
     reset: () => {
       shown.value = []
     },

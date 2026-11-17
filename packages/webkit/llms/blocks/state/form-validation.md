@@ -1,6 +1,6 @@
 # FormValidation (`state/form-validation`)
 
-> A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. A required field carries the Required marker from the start; on submit an empty or filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. The block fetches nothing: Create emits `submit` with the values, and the page passes back `submitting`, `error`, `takenKey` or `saved`. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `SectionHeader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select asks for another origin. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/creation-bar), not in ConsoleLayout.
+> A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. A required field carries the Required marker from the start; on submit an empty or filled but wrong one takes `invalid`, and a `Field.Error` (danger text with a leading alert icon) adds the message under the description, which keeps its guidance; there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. The block fetches nothing: Create emits `submit` with the values, and the page passes back `submitting`, `error`, `takenKey` or `saved`. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `SectionHeader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select asks for another origin. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/creation-bar), not in ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/state/form-validation/form-validation.vue` in `@aziontech/webkit`
@@ -35,7 +35,7 @@ This block is a page body for a create page: render it under the focused creatio
 
 | Error                                                                   | Where it renders                                                                                                                                                                     | Variant          |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
-| A value the user left empty or typed wrong (client-side)                | On the field: `invalid`, its message in the description, focus on the first field in error                                                                                           | ValidationErrors |
+| A value the user left empty or typed wrong (client-side)                | On the field: `invalid`, its message in a `Field.Error` under the description, focus on the first field in error                                                                     | ValidationErrors |
 | A value the server refused that one field owns (a key already in use)   | On the field (`invalid` with its reason) and in a danger `Alert` above the fields of its section; never a toast                                                                      | Conflict         |
 | A rejection one section of a long form owns (a linked resource deleted) | A danger `Alert` under that section's heading with the recovery action, the field `invalid` with its own reason, the section scrolled into view and the field focused; never a toast | SectionRejected  |
 | A failure no field or section owns (network, timeout, 500)              | `toast.error` with Retry, every entry kept                                                                                                                                           | ServerError      |
@@ -53,7 +53,7 @@ While the form's data loads (the options a select offers, the record an edit for
 
 ### C. Field — `Field` (required)
 
-Each control sits in a `Field` with `Field.Label` (bound by `for`) and `Field.Description`. The description carries the guidance until a submit finds a problem, then swaps to the message, so each field speaks in one place. A required field takes `required` from the first render, so its label shows the Required marker; a submit sets `invalid` when the value is empty or filled but wrong (malformed, too long, or already taken on the server). All fields take `disabled` while the request is in flight.
+Each control sits in a `Field` with `Field.Label` (bound by `for`), `Field.Description` and, after a submit finds a problem, `Field.Error`. The description keeps its guidance at all times; the message goes in a `Field.Error` under it (danger text with a leading `az-circle-alert` icon), never in place of the guidance. A required field takes `required` from the first render, so its label shows the Required marker; a submit sets `invalid` and adds the `Field.Error` when the value is empty or filled but wrong (malformed, too long, or already taken on the server), and both go away as the user fixes the value. All fields take `disabled` while the request is in flight.
 
 ### D. Text value — `Input` (required)
 
@@ -139,6 +139,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## Don't
 
 - Don't show a validation summary at the top; each field carries its own message.
+- Don't write the message into `Field.Description`; the guidance stays and the message is its own `Field.Error`.
 - Don't toast a rejection a field owns (a key already in use, a deleted origin). The toast dismisses itself and points nowhere.
 - Don't colour a required field before a failed submit; `required` is static and only `invalid` turns the field red.
 - Don't disable Create to signal missing values; let submit run and show the messages.
@@ -161,7 +162,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## Accessibility
 
 - The `<form>` is labelled by the heading (`aria-labelledby`), uses `novalidate`, and sets `aria-busy` while loading or submitting.
-- Every control has a `Field.Label` bound by `for`; the description and message are wired to the control by `Field`.
+- Every control has a `Field.Label` bound by `for`; the description and the `Field.Error` are wired to the control by `Field` (`aria-describedby`), and `invalid` sets `aria-invalid`.
 - The loading region is `role="status"` with an accessible name (`Loading the form`).
 - Focus moves to the first field in error, only after the lock is released, since a disabled control cannot take focus.
 - Toasts are announced by the app's `Toaster` region; the error toast keeps its Retry reachable by keyboard.
@@ -171,7 +172,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## States
 
 - Default: no prop set; the empty Create Variable form, idle.
-- ValidationErrors: `defaultValues` with a malformed key and `defaultSubmitted`, as after Create pressed with gaps; empty Value and Environment and the malformed Key take `invalid`, each with its own message, and focus moves to Key.
+- ValidationErrors: `defaultValues` with a malformed key and `defaultSubmitted`, as after Create pressed with gaps; empty Value and Environment and the malformed Key take `invalid`, each with its own `Field.Error` under the kept description, and focus moves to Key.
 - Submitting: `submitting`, the request is in flight; Create shows `loading`, the fields and Cancel are disabled.
 - ServerError: `error`, the request failed and no field owns it; an error toast with Retry, the lock released, every entry kept.
 - Conflict: `takenKey`, the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
@@ -188,12 +189,12 @@ Then delete `sample.ts` and its imports in the variants.
 - `create/create-page` — the sectioned create page these states apply to.
 - `auth/sign-in` — the signed-out version, where every outcome lands in one card `Alert` and nothing toasts.
 - `settings/settings-form` — the same field states on an existing object.
-- `Field` — the label, description and state triad every field here uses.
+- `Field` — the label, description, error and state every field here uses.
 
 ## Variants
 
 - `Default` — primary (the code below)
-- `ValidationErrors` — Create pressed with gaps. The empty Value and Environment and the malformed key take the invalid state, each helper text carries its own message, and focus moves to Key.
+- `ValidationErrors` — Create pressed with gaps. The empty Value and Environment and the malformed key take the invalid state, each shows its own Field.Error under the kept description, and focus moves to Key.
 - `Submitting` — The request is in flight. Create shows its loading state, and the fields and Cancel are disabled so the entries cannot change mid-save.
 - `ServerError` — The request failed and no field owns the failure. An error Toast says what failed and carries Retry, the lock is released, and every entry stays as typed.
 - `Conflict` — The server rejected a value one field owns: the key is already in use. A danger Alert above the fields says so and that the entries are kept, Key takes the invalid state with its reason and the focus, and nothing toasts.
@@ -317,11 +318,7 @@ Each variant is the same screen in another state: `get_block("state/form-validat
     () => submitted.value && Boolean(form.key) && form.key === props.takenKey
   )
   const busy = computed(() => props.loading || props.submitting)
-  const missing = (field: FormValidationField) => submitted.value && !form[field]
-  const invalid = (field: FormValidationField) =>
-    submitted.value && Boolean(form[field]) && Boolean(errors.value[field])
-  const helper = (field: FormValidationField, guidance: string) =>
-    submitted.value && errors.value[field] ? errors.value[field] : guidance
+  const message = (field: FormValidationField) => (submitted.value ? errors.value[field] : '')
 
   const focusField = async (field: FormValidationField) => {
     await nextTick()
@@ -432,7 +429,7 @@ Each variant is the same screen in another state: `get_block("state/form-validat
           />
           <Field
             required
-            :invalid="missing('key') || invalid('key')"
+            :invalid="Boolean(message('key'))"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.key">Key</Field.Label>
@@ -442,15 +439,14 @@ Each variant is the same screen in another state: `get_block("state/form-validat
               name="key"
               placeholder="API_TOKEN"
             />
-            <Field.Description>
-              {{
-                helper('key', 'Uppercase letters, digits and underscores, for example API_TOKEN.')
-              }}
-            </Field.Description>
+            <Field.Description
+              >Uppercase letters, digits and underscores, for example API_TOKEN.</Field.Description
+            >
+            <Field.Error v-if="message('key')">{{ message('key') }}</Field.Error>
           </Field>
           <Field
             required
-            :invalid="missing('value') || invalid('value')"
+            :invalid="Boolean(message('value'))"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.value">Value</Field.Label>
@@ -459,13 +455,12 @@ Each variant is the same screen in another state: `get_block("state/form-validat
               v-model="form.value"
               name="value"
             />
-            <Field.Description>
-              {{ helper('value', 'The value your services read at runtime.') }}
-            </Field.Description>
+            <Field.Description>The value your services read at runtime.</Field.Description>
+            <Field.Error v-if="message('value')">{{ message('value') }}</Field.Error>
           </Field>
           <Field
             required
-            :invalid="missing('environment')"
+            :invalid="Boolean(message('environment'))"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.environment">Environment</Field.Label>
@@ -484,12 +479,11 @@ Each variant is the same screen in another state: `get_block("state/form-validat
                 </Select.Item>
               </Select.Content>
             </Select>
-            <Field.Description>
-              {{ helper('environment', 'Where this variable is available.') }}
-            </Field.Description>
+            <Field.Description>Where this variable is available.</Field.Description>
+            <Field.Error v-if="message('environment')">{{ message('environment') }}</Field.Error>
           </Field>
           <Field
-            :invalid="invalid('description')"
+            :invalid="Boolean(message('description'))"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.description">Description</Field.Label>
@@ -498,9 +492,8 @@ Each variant is the same screen in another state: `get_block("state/form-validat
               v-model="form.description"
               name="description"
             />
-            <Field.Description>
-              {{ helper('description', 'Optional. Up to 200 characters.') }}
-            </Field.Description>
+            <Field.Description>Optional. Up to 200 characters.</Field.Description>
+            <Field.Error v-if="message('description')">{{ message('description') }}</Field.Error>
           </Field>
         </div>
       </div>

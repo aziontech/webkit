@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 
@@ -373,6 +373,54 @@ describe('ClosingCallToActionSection', () => {
       ).nextElementSibling
       expect(visible?.getAttribute('aria-hidden')).toBe('true')
       expect(visible?.textContent).toContain('Console, CLI, MCP server')
+    })
+
+    it('pauses the typed line from its button and plays it again from the first word', async () => {
+      reduceMotion(false)
+      vi.useFakeTimers()
+      const { container, getByTestId } = render(ClosingCallToActionSectionAudiences, {
+        props: audienceProps
+      })
+      const typed = () =>
+        container.querySelector('[aria-hidden="true"] .text-\\(--text-default\\)')?.textContent ??
+        ''
+      const control = getByTestId('closing-call-to-action-section-audiences__pause')
+      expect(control.tagName).toBe('BUTTON')
+      expect(control.getAttribute('aria-label')).toBe('Pause animation')
+
+      vi.advanceTimersByTime(90 * 3)
+      await nextTick()
+      expect(typed()).toBe('Con')
+
+      await fireEvent.click(control)
+      expect(control.getAttribute('aria-label')).toBe('Play animation')
+      expect(typed()).toBe('Console, CLI, MCP server')
+      expect(vi.getTimerCount()).toBe(0)
+
+      await fireEvent.click(control)
+      expect(control.getAttribute('aria-label')).toBe('Pause animation')
+      expect(typed()).toBe('')
+      vi.advanceTimersByTime(90)
+      await nextTick()
+      expect(typed()).toBe('C')
+    })
+
+    it('starts paused under reduced motion, and play still types the line', async () => {
+      reduceMotion(true)
+      const { container, getByTestId } = render(ClosingCallToActionSectionAudiences, {
+        props: audienceProps
+      })
+      await nextTick()
+      const control = getByTestId('closing-call-to-action-section-audiences__pause')
+      expect(control.getAttribute('aria-label')).toBe('Play animation')
+      vi.useFakeTimers()
+      await fireEvent.click(control)
+      expect(control.getAttribute('aria-label')).toBe('Pause animation')
+      vi.advanceTimersByTime(90)
+      await nextTick()
+      expect(
+        container.querySelector('[aria-hidden="true"] .text-\\(--text-default\\)')?.textContent
+      ).toBe('C')
     })
 
     it('clears its timer when unmounted', () => {
