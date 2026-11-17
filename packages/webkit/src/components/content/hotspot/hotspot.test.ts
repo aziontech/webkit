@@ -65,7 +65,7 @@ describe('Hotspot', () => {
     const current = container.querySelector('[data-active]') as HTMLElement
     expect(container.querySelectorAll('[data-marker]')).toHaveLength(2)
     expect(current.textContent).toContain('Beta')
-    expect(current.querySelector('.animate-ping')).not.toBeNull()
+    expect(current.querySelector('.animate-ping-settle')).not.toBeNull()
     expect(markers()[1]?.getAttribute('aria-label')).toBe('Tutorial step: Second')
     expect(markers()[1]?.getAttribute('aria-expanded')).toBe('true')
     const panel = document.querySelector('[data-testid="hotspot__popover__panel"]')

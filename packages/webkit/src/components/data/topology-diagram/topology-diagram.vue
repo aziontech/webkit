@@ -156,7 +156,7 @@
             stroke-width="1"
             stroke-dasharray="4 4"
             :data-faded="path.faded || null"
-            class="animate-flow-dash stroke-(--accent) motion-reduce:animate-none data-[faded]:animate-none data-[faded]:opacity-50"
+            class="animate-flow-dash-settle stroke-(--accent) motion-reduce:animate-none data-[faded]:animate-none data-[faded]:opacity-50"
           />
         </svg>
         <ol

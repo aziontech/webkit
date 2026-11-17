@@ -70,7 +70,7 @@ describe('Eyebrow', () => {
   it('does not render the cursor span by default (cursor=false)', () => {
     const { container } = render(Eyebrow, { slots: { default: 'NO CURSOR' } })
     // The cursor is the only span carrying the blink animation utility.
-    expect(container.querySelector('.animate-blink')).toBeNull()
+    expect(container.querySelector('.animate-blink-settle')).toBeNull()
   })
 
   it('renders the cursor span when cursor is true', () => {
@@ -78,7 +78,7 @@ describe('Eyebrow', () => {
       props: { cursor: true },
       slots: { default: 'WITH CURSOR' }
     })
-    expect(container.querySelector('.animate-blink')).not.toBeNull()
+    expect(container.querySelector('.animate-blink-settle')).not.toBeNull()
   })
 
   it('hides the cursor from assistive tech and mirrors it and singleLine on data attributes', () => {
@@ -89,7 +89,7 @@ describe('Eyebrow', () => {
     const root = getByTestId('eyebrow')
     expect(root).toHaveAttribute('data-cursor')
     expect(root).toHaveAttribute('data-single-line')
-    expect(container.querySelector('.animate-blink')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.animate-blink-settle')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('renders prefix and cursor together', () => {
@@ -99,7 +99,7 @@ describe('Eyebrow', () => {
     })
     expect(getByText('//')).toBeInTheDocument()
     expect(getByText('TERMINAL OUTPUT')).toBeInTheDocument()
-    expect(container.querySelector('.animate-blink')).not.toBeNull()
+    expect(container.querySelector('.animate-blink-settle')).not.toBeNull()
   })
 
   it.each([
@@ -140,7 +140,7 @@ describe('Eyebrow', () => {
     expect(getByText('OVERLINE TEXT')).toBeInTheDocument()
     expect(getByText('//')).toBeInTheDocument()
     expect(getByText('NO PREFIX')).toBeInTheDocument()
-    expect(container.querySelectorAll('.animate-blink')).toHaveLength(2)
+    expect(container.querySelectorAll('.animate-blink-settle')).toHaveLength(2)
   })
 
   it('composes the Prefixes story with all three preset prefixes rendered', () => {
@@ -181,7 +181,9 @@ describe('Eyebrow', () => {
         slots: { default: 'LABEL' }
       })
 
-      expect(container.querySelector('.animate-blink')?.className).toContain('bg-(--brand-blue)')
+      expect(container.querySelector('.animate-blink-settle')?.className).toContain(
+        'bg-(--brand-blue)'
+      )
     })
   })
 })

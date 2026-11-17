@@ -68,7 +68,7 @@
 
   const GLOW_CLASS =
     'absolute inset-0 pointer-events-none ' +
-    'animate-spin [animation-duration:8s] [animation-timing-function:linear] ' +
+    'animate-spin-settle ' +
     '[background:linear-gradient(90deg,var(--text-default),var(--brand-blue),var(--primary))] ' +
     '[filter:blur(12px)] ' +
     'motion-reduce:animate-none ' +

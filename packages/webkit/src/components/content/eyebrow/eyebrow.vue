@@ -53,7 +53,7 @@
     <span
       v-if="cursor"
       aria-hidden="true"
-      class="w-1 h-5 shrink-0 relative bg-(--brand-blue) animate-blink motion-reduce:animate-none"
+      class="w-1 h-5 shrink-0 relative bg-(--brand-blue) animate-blink-settle motion-reduce:animate-none"
     />
   </div>
 </template>

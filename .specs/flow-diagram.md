@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: 998e7e951afa169fe2892d7de6e928aa2a558c33f7a223bf564f8d634890bbff
+checksum: e665bebb3a712606d235503ed126507b838f53d3cc8cef65b4b35fffa365a4df
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -146,10 +146,10 @@ Each part is also a standalone import (`import FlowDiagramNode from '@aziontech/
 
 ## Motion & Animations
 
-| Trigger                                              | Animation / Transition                                                                                                                                                                                | Token                         | Reduced-motion fallback      |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ---------------------------- |
-| connector at rest (always, on every drawn connector) | `stroke-dasharray="4 4"` + `animate-flow-dash` — marching dashes along the stroke (`stroke-dashoffset` 24 → 0, 700ms linear infinite), so a connection reads as a live link rather than a static rule | `animate-flow-dash` (catalog) | `motion-reduce:animate-none` |
-| connector whose endpoint node is `disabled`          | motion suppressed via `data-[faded]:animate-none` — the dashes stay, the flow stops, because a disabled step is not carrying anything                                                                 | —                             | already static               |
+| Trigger                                     | Animation / Transition                                                                                                                                                                                               | Token                                | Reduced-motion fallback      |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---------------------------- |
+| connector on mount (every drawn connector)  | `stroke-dasharray="4 4"` + `animate-flow-dash-settle` — marching dashes along the stroke (`stroke-dashoffset` 24 → 0, 700ms linear, six runs), so a connection reads as a live link, then the dashes rest after 4.2s | `animate-flow-dash-settle` (catalog) | `motion-reduce:animate-none` |
+| connector whose endpoint node is `disabled` | motion suppressed via `data-[faded]:animate-none` — the dashes stay, the flow stops, because a disabled step is not carrying anything                                                                                | —                                    | already static               |
 
 > The dash cycle (8) divides the keyframe's travel (24), so the loop repeats seamlessly. A `stroke-dasharray` whose cycle does not divide 24 would visibly jump on each repeat. `linear` is deliberate: an endlessly looping animation must not accelerate, or the seam between repeats becomes visible (same reasoning as `spin` / `shimmer` in the catalog).
 
@@ -185,7 +185,8 @@ Each part is also a standalone import (`import FlowDiagramNode from '@aziontech/
 - Keyboard map: `Tab` moves focus through focusable nodes in document order; no arrow-key roving (the diagram is a static list). When the diagram is wider than its box, the scroll root itself takes `tabindex="0"` (measured with a resize observer, removed again when it fits) so keyboard users can scroll it with the arrow keys; it shows the focus ring inset.
 - ARIA: root `flow-diagram` is `role="list"`; each `flow-diagram-node` is `role="listitem"` with accessible text content; `flow-diagram-parallel` is a `role="listitem"` (one step of the outer list) holding a nested `role="list"` (`data-flow-branches`, testid `<parallel testid>-branches`; it is the flex column that stacks and aligns the branches) of its branch nodes, because a `group` is not an allowed child of a `list` and its nodes would lose their `list` parent; the connector SVG is decorative and carries `aria-hidden="true"`, as does every connector port (`data-flow-port`) — the ports are a visual attachment affordance and carry no meaning for AT. A `flow-diagram-anchor` wraps meaningful node content and is therefore not hidden.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` not required — the component is static (no motion).
+- `motion-reduce:animate-none` on the connector dashes; no other part moves.
+- Pause, Stop, Hide (WCAG 2.2.2): the connector dashes march six times on mount and stop by themselves after 4.2 seconds, so the diagram needs no pause control.
 - Touch target ≥40×40 px where a node is interactive.
 - Right-to-left: under `dir="rtl"` the flow runs from the inline start (right) to the inline end (left). Connectors leave a node's inline-end edge and enter the next node's inline-start edge, the elbow bus sits between them, and the ports (`data-flow-port`) sit outside the node on the edge they mark.
 

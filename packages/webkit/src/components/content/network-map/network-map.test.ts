@@ -290,4 +290,17 @@ describe('NetworkMap', () => {
     const reduced = globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
     for (const packet of packets) expect(packet.getAnimations()).toHaveLength(reduced ? 0 : 1)
   })
+
+  it('stops every packet within five seconds', () => {
+    const props = { region: 'atlantic', density: 'high', traffic: true, animated: true } as const
+    const { container } = render(NetworkMap, { props })
+    const animations = Array.from(container.querySelectorAll('[data-traffic-packet]')).flatMap(
+      (packet) => packet.getAnimations()
+    )
+    for (const animation of animations) {
+      const end = Number(animation.effect!.getComputedTiming().endTime)
+      expect(Number.isFinite(end)).toBe(true)
+      expect(end).toBeLessThanOrEqual(5000)
+    }
+  })
 })

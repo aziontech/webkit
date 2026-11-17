@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: 01f354d0fb9b0a82ccf3d653f2e34ffc9c46ee2dc9009a142fe8a99fd21e1cc8
+checksum: 0d202424d530b2f61d55441be363d6611efce9301c755113be9402e3e9316742
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -162,7 +162,7 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 
 | Trigger                | Animation / Transition                                                          | Token                                               | Reduced-motion fallback         |
 | ---------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------- |
-| connectors             | `animate-flow-dash`                                                             | semantic `flow-dash`                                | `motion-reduce:animate-none`    |
+| connectors, on mount   | `animate-flow-dash-settle` (six runs, then the dashes rest)                     | catalog `flow-dash-settle` (700ms × 6 = 4.2s)       | `motion-reduce:animate-none`    |
 | card open / close      | `transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance` | duration `moderate-01`, curve `productive-entrance` | `motion-reduce:transition-none` |
 | chevron, hover, border | `transition-transform` / `transition-colors` `duration-moderate-01`             | duration `moderate-01`                              | `motion-reduce:transition-none` |
 
@@ -191,6 +191,7 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 - Keyboard map: `Tab` moves through header buttons, links, copy, bind and remove controls in reading order; `Enter`/`Space` on a header toggles its card; the bind menu follows `dropdown-menu` (arrows, `Enter`, `Esc`). Picking an option that differs from the bound one moves focus to Apply, so `Enter` confirms it; `Esc` anywhere in the node's action area cancels the pending pick; after Apply or Cancel focus returns to the bind (pencil) control. The scroll area is focusable (`tabindex="0"`) only when it overflows, so arrow keys scroll it.
 - ARIA: the root is a `section` named by `ariaLabel`; columns are an `ol` of `li`, each with an optional visually hidden label; each header is a `button` with `aria-expanded` and `aria-controls`; the collapsed body is `inert`; connectors are `aria-hidden`; icon-only controls are named (`Bind Policy`, `Remove Policy`, `Apply Policy`, `Cancel`, `Copy Domains Custom domain`) and carry a `Tooltip`; Apply is described by the pending label (`aria-describedby`), so focusing it reads what it applies, and no extra live region is added (the component's only one is the loading line); loading announces once through a `role="status"` line.
 - The unbound dash is `aria-hidden`; the status tag says Not bound in words.
+- Pause, Stop, Hide (WCAG 2.2.2): the connector dashes march six times on mount and stop by themselves after 4.2 seconds; `motion-reduce:animate-none` keeps them still.
 - Contrast ≥4.5:1 from the semantic text tokens.
 
 ## Internationalization

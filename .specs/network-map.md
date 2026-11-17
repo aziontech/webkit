@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 698ce85e6481bb2ff3d40851a9b9f64108343ad83598b908685cd73c2b3c2294
+checksum: a8ddb9634d369dc3db46708d17fde283365b4671c2fd5b6573a9dca4d0dda93a
 created: 2026-09-26
 last_updated: 2026-11-15
 ---
@@ -72,7 +72,7 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's PoP
 | ---------- | -------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `region`   | `'world' \| 'atlantic' \| 'americas' \| 'north-america' \| 'south-america' \| 'europe' \| 'africa' \| 'asia' \| 'oceania'` | `'world'`  | false    | Which part of the world has its PoPs lit; the map always frames the whole world.                                                  |
 | `density`  | `'none' \| 'low' \| 'medium' \| 'high'`                                                                                    | `'medium'` | false    | How many PoPs are lit, from `none` to `high`.                                                                                     |
-| `animated` | `boolean`                                                                                                                  | `false`    | false    | Pulses the PoPs in three staggered waves; static when false.                                                                      |
+| `animated` | `boolean`                                                                                                                  | `false`    | false    | Pulses the PoPs in three staggered waves that settle within five seconds; static when false.                                      |
 | `opacity`  | `number`                                                                                                                   | `0.4`      | false    | Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength.                                                        |
 | `position` | `'center' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`       | `'center'` | false    | Where the map parks in the space the box leaves over.                                                                             |
 | `scale`    | `number`                                                                                                                   | `0.85`     | false    | Size of the map relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it.                      |
@@ -105,11 +105,11 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's PoP
 
 ## Motion & Animations
 
-| Trigger                                                     | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                    |
-| ----------------------------------------------------------- | ---------------------- | ------------------------------------------------- | ------------------------------------------ |
-| `animated` set — PoP pulse, three waves at 0 / 700 / 1400ms | `animate-pulse`        | catalog (`animate.js`, Tailwind stock loop)       | `motion-reduce:animate-none` (static PoPs) |
+| Trigger                                                                                 | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations)           | Reduced-motion fallback                    |
+| --------------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------- | ------------------------------------------ |
+| `animated` set — PoP pulse, three waves at 0 / 350 / 700ms, two pulses each, then still | `animate-pulse-settle` | catalog `pulse-settle` (2s, 2 runs; last wave ends at 4.7s) | `motion-reduce:animate-none` (static PoPs) |
 
-| `traffic` with `animated` — a packet grows out of one PoP, crosses its ray and is absorbed into the other (dash length 0 → 30 → 0 and offset 0 → −100 over the first 45% of the ray's cycle, then parked) | Web Animations API on each packet path; every ray on its own 3.4–6.2 s clock so the field never pulses in step | — (one-off geometry, no token) | none: the packets stay parked at zero length and the links draw at 0.24 instead of 0.12, the still frame of the mesh |
+| `traffic` with `animated` — a packet grows out of one PoP, crosses its ray and is absorbed into the other (dash length 0 → 30 → 0 and offset 0 → −100 over the first 45% of the ray's cycle, then parked); each ray stops by itself within 4.8 s of mount, on a parked frame | Web Animations API on each packet path; every ray on its own 3.4–6.2 s clock so the field never pulses in step, with a finite iteration count that ends either at the 4.8 s mark (when that falls in the parked part of the cycle) or at the last whole cycle before it | — (one-off geometry, no token) | none: the packets stay parked at zero length and the links draw at 0.24 instead of 0.12, the still frame of the mesh |
 
 Static by default: without `animated` no PoP carries an animation class. `traffic` builds the mesh from the lit PoPs, deterministically (a fixed-seed generator, so server and client and every export draw the same network): 14 participants by farthest-point sampling, each linked to at least two and at most three others no closer than 60 map units, each ray a quadratic bowed 5–9% of its length to a random side. Links are `--border-strong`, packets `--primary`, both `non-scaling-stroke` so they stay hairlines at any size. The server renders the links and the parked packets; the packets start on mount.
 
@@ -133,6 +133,7 @@ Static by default: without `animated` no PoP carries an animation class. `traffi
 - Visible focus: not applicable (nothing receives focus)
 - Contrast: not applicable to the artwork (decorative); the copy above it keeps its own ≥4.5:1 against the band, which the low default `opacity` protects
 - `motion-reduce:animate-none` stops the pulse under reduced motion
+- Pause, Stop, Hide (WCAG 2.2.2): with `animated`, the PoP pulse and the traffic packets stop by themselves within 5 seconds of mount (pulses by 4.7 s, packets by 4.8 s) and rest on the static map, so the layer needs no pause control
 - Touch target: not applicable (no interactive parts)
 
 ## Examples

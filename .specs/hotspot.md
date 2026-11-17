@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 248c7a3a2230351454263f1330e541b4afe61fbfc58295683395e01c80baffc6
+checksum: 4f7833c6ee5e1eec14da5e191c43ef0c94d294ead041b19577dcc779eb68b11d
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -88,12 +88,12 @@ _No events — moves go through the `TutorialPanel.Provider`, which emits `updat
 
 ## Motion & Animations
 
-| Trigger                    | Animation / Transition                     | Token                                                    | Reduced-motion fallback                           |
-| -------------------------- | ------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------- |
-| current step, popover open | `animate-ping` on a ring behind the marker | semantic (`ping`, attention ring)                        | `motion-reduce:animate-none` (static ring)        |
-| marker becomes current     | `transition-colors` on the dot             | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                   |
-| popover open / close       | owned by `Popover` (its scale in and out)  | component                                                | handled by `Popover`                              |
-| scroll to the marker       | `scrollIntoView` smooth                    | browser                                                  | `behavior: 'auto'` under `prefers-reduced-motion` |
+| Trigger                    | Animation / Transition                                                     | Token                                                    | Reduced-motion fallback                           |
+| -------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------- |
+| current step, popover open | `animate-ping-settle` on a ring behind the marker: three rings, then still | catalog `ping-settle` (3s)                               | `motion-reduce:animate-none` (static ring)        |
+| marker becomes current     | `transition-colors` on the dot                                             | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                   |
+| popover open / close       | owned by `Popover` (its scale in and out)                                  | component                                                | handled by `Popover`                              |
+| scroll to the marker       | `scrollIntoView` smooth                                                    | browser                                                  | `behavior: 'auto'` under `prefers-reduced-motion` |
 
 ## Tokens
 
@@ -118,6 +118,7 @@ _None._
 - Keyboard map: the marker is a `button` in the tab order after the wrapped control (before it with `side="start"`); `Enter` / `Space` opens its step (and makes it current). Inside the popover `Tab` cycles Close, Previous and Next (the `Popover` loop); `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover; Finish moves focus to the panel's completion heading.
 - ARIA: the marker is named `Tutorial step: <title>` and carries `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` (from `Popover.Trigger`). The popover is a non-modal `dialog` labelled by the step title and described by `Step n of N`. The pulse ring and dot are `aria-hidden`.
 - Contrast: the marker's `--primary` against the canvas ≥3:1 (non-text) in both themes.
+- Pause, Stop, Hide (WCAG 2.2.2): the pulse ring pings three times when a step opens and stops by itself after 3 seconds; opening the next step replays it.
 - Touch target: the visible marker is 24 px; a `before:` pseudo-element extends the hit area by 8 px on each side (40 px). While the marker shows, the root reserves those 8 px on the marker's outer side (`--spacing-xs` padding), so a hotspot flush with the end of a narrow row does not scroll the page sideways.
 
 ## Internationalization
@@ -160,7 +161,7 @@ _None._
 
 ## Open questions
 
-- The pulse runs while the step is open (`animate-ping` is infinite). If it proves distracting, stop it after a few cycles with an iteration token in the theme.
+- Resolved 2026-11-17: the pulse pings three times (`animate-ping-settle`) and stops, instead of looping while the step is open.
 
 ## Constraints — DO NOT
 
