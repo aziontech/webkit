@@ -56,7 +56,7 @@ export const typography = {
     fontSize: { _: fontSize['3xl'], sm: fontSize['4xl'], md: fontSize['5xl'] },
     lineHeight: leading.none,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tighter
+    letterSpacing: '-0.053em'
   },
   'text-heading-xl': {
     textWrapStyle: 'balance',

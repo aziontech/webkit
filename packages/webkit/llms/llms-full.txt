@@ -54,6 +54,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 - Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `2xs…2xl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
 - Let the class pick the family: headings, body copy and buttons are sans (`text-heading-*`, `text-body-*`, `text-button-*`); eyebrows, big numbers and code are mono (`text-overline-*`, `text-big-number-*`, `text-label-code-*`, `text-body-code-sm`). The heading and big-number classes change size by breakpoint, so a page never sets its own type scale.
+- Keep heading letter spacing in `em`: the heading classes shrink on phones, and a tracking in `rem` stays the same width while the letters get smaller, so a small display heading runs its words together. `text-heading-3xl` tracks at `-0.046em` and `text-heading-2xl` at `-0.053em` (2.56px at their desktop size); a new heading role with tracking takes `em` or `0`, never `rem` or `px`.
 - Import the styles once, near your app entry: `import './webkit.css'` (the theme, `@aziontech/theme/fonts.css` for the Azion font faces, and `./webkit.sources.css`, the WebKit files Tailwind compiles; `npx @aziontech/webkit init` writes it) and `import '@aziontech/icons'` for icons.
 
 ## Do not
@@ -21793,7 +21794,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Name: the bar takes `aria-label` or `aria-labelledby` from the consumer; with neither it is named by the locale catalog (`progress.label`, "Progress"), so a bare bar never fails `aria-progressbar-name`.
 - ARIA: root uses `role="progressbar"`. Determinate sets `aria-valuemin="0"`, `aria-valuemax="<max>"`, `aria-valuenow="<value>"`; indeterminate omits `aria-valuenow` and sets `aria-busy="true"`.
 - Contrast ≥3:1 between the fill (`var(--primary)`) and the track (`var(--bg-placeholder)`). The track is an alpha overlay, not an opaque surface, so it keeps that contrast on any background the bar is placed over (canvas, surface, raised, overlay).
-- `motion-reduce:transition-none` on the determinate width morph and `motion-reduce:animate-none` on the indeterminate animation (it falls back to a static fill under reduced motion).
+- `motion-reduce:transition-none` on the determinate width morph and `motion-reduce:animate-none` on the indeterminate animation (under reduced motion it holds a still segment over the middle third of the track, never a full bar, so an unfinished task never reads as done).
 
 ## Examples
 
