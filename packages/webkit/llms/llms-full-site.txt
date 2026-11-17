@@ -6674,7 +6674,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       linkLabel: 'See example'
     },
     {
-      eyebrow: 'UGC',
+      eyebrow: 'Community',
       title: 'User-generated content optimization',
       description:
         'Optimize user-uploaded images on-the-fly from your storage. Apply consistent sizing, quality, and format standards without preprocessing.',

@@ -489,3 +489,13 @@ Reviewed from the styled visual suite (docs pages at 1440 and 390, light and dar
 - `DocAgentCard`: (fixed) the halftone first covered the whole aside, behind the question; it now fades in from the bottom corner (`fade="top"`, ramp toward the bottom end). No overline or eyebrow, as in the reference.
 - Landing: (fixed) sections stacked their own `gap` on top of `DocProse`'s paragraph and block spacing, so heading → lead → card ran ~55 px against ~40 px in the reference; the gap is gone and prose spacing alone sets the rhythm.
 - Open: the folded `SearchTrigger` has no visual tooltip (M2.10 row 55).
+
+## CardCarouselSection (M2.10 row 82, 2026-11-17)
+
+Reviewed `card-carousel-section` (L6's `CardCarousel`, renamed in the 6.0 naming change) and its two examples: code read against the ui-craft progression, the component suite with axe (linked, plain, untitled with only `ariaLabel`, rtl), and both examples rendered in the docs frame at 390 and 1280 px, light and dark.
+
+- Finding: below the `sm` breakpoint `text-heading-sm` is 14 px while the card copy was `text-body-md` (16 px), so on phones a card's description outsized its heading. Fixed: the copy is `text-body-sm` below `sm` and `text-body-md` from `sm` (spec token table updated), the pairing `subject-grid-section` and `plan-comparison-section` already use; a test pins the pair.
+- Finding (microcopy): the examples' summaries called the card label an "overline", a retired word; they say eyebrow now. The default example's `UGC` eyebrow became `Community` (no unexplained acronym).
+- Holds: one content column (eyebrow, heading, copy and link label start on the same x), the whole card is the heading link's hit area with an inset focus ring, the link label is hidden from assistive technology so the card reads once, motion carries `motion-reduce:` escapes, no page overflow at 390 px, both themes through role tokens.
+- Not verified here: the step controls' arrow glyphs and the link-label arrow, whose icon font did not load in the worktree's dev server (a serving-path limit of the symlinked install, not the component); the styled visual suite covers them.
+- Usage check: not run in this lane (see the M2.10 row 82 report).

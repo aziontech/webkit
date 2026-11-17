@@ -89,6 +89,14 @@ describe('CardCarouselSection', () => {
     for (const card of cards) expect(card).toHaveAttribute('data-size', 'medium')
   })
 
+  it('steps the card copy up with the heading from the sm breakpoint, so it never outsizes it', () => {
+    const { container } = band()
+
+    const copy = container.querySelector('h3 ~ p') as HTMLElement
+    expect(copy.classList.contains('text-body-sm')).toBe(true)
+    expect(copy.classList.contains('sm:text-body-md')).toBe(true)
+  })
+
   it('renders one h3 per card, in order', () => {
     const { getAllByRole } = band()
 
