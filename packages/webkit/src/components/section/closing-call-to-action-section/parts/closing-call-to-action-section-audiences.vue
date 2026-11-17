@@ -1,9 +1,13 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
   import { PASSWORD_MANAGER_IGNORE } from '../../../../utils/autofill'
   import Button from '../../../action/button/button.vue'
   import CopyButton from '../../../action/copy-button/copy-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
   import InputGroup from '../../../input/input-group/input-group.vue'
   import InputGroupAddon from '../../../input/input-group/input-group-addon/input-group-addon.vue'
@@ -44,6 +48,8 @@
   const NEXT_DELAY = 270
 
   const attrs = useAttrs()
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const { t } = useTranslate({ common: en.common })
 
   const audience = ref(props.audiences[0]?.value ?? '')
   const word = ref('')
@@ -52,6 +58,9 @@
   let index = 0
   let length = 0
   let erasing = false
+
+  const mounted = ref(false)
+  const chosenPaused = ref<boolean | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'closing-call-to-action-section-audiences'
@@ -63,6 +72,11 @@
 
   const options = computed(() =>
     props.audiences.map((item) => ({ value: item.value, label: item.label }))
+  )
+
+  const paused = computed(() => chosenPaused.value ?? reduced.value)
+  const pauseLabel = computed(() =>
+    paused.value ? t('common.playAnimation') : t('common.pauseAnimation')
   )
 
   const spoken = computed(() =>
@@ -90,16 +104,37 @@
     schedule(NEXT_DELAY)
   }
 
-  onMounted(() => {
-    if (props.typedWords.length === 0) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const halt = () => {
+    clearTimeout(timer)
+    timer = undefined
+  }
+
+  const sync = () => {
+    if (!mounted.value || props.typedWords.length === 0) return
+    halt()
+    if (paused.value) {
       word.value = props.typedWords.join(', ')
       return
     }
+    index = 0
+    length = 0
+    erasing = false
+    word.value = ''
     schedule(TYPE_DELAY)
+  }
+
+  const onPauseToggle = () => {
+    chosenPaused.value = !paused.value
+  }
+
+  onMounted(() => {
+    mounted.value = true
+    sync()
   })
 
-  onScopeDispose(() => clearTimeout(timer))
+  watch(paused, sync)
+
+  onScopeDispose(halt)
 </script>
 
 <template>
@@ -173,7 +208,14 @@
         <span class="sr-only">{{ spoken }}</span>
         <span aria-hidden="true">
           {{ typedLead }}
-          <span class="text-(--text-default)"
+          <span
+            v-if="paused"
+            class="text-(--text-default)"
+            >{{ word }}</span
+          >
+          <span
+            v-else
+            class="text-(--text-default)"
             ><TransitionGroup
               tag="span"
               enter-from-class="-translate-x-1 opacity-0"
@@ -195,5 +237,14 @@
         >{{ description }}</span
       >
     </p>
+    <IconButton
+      v-if="typedWords.length > 0"
+      :data-testid="`${testId}__pause`"
+      :icon="paused ? 'az az-play' : 'az az-pause'"
+      :aria-label="pauseLabel"
+      variant="outline"
+      size="small"
+      @click="onPauseToggle"
+    />
   </div>
 </template>

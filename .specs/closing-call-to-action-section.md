@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 8
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: 6948731727c36656feb81d49e9716e5acd32b83a1109273076980d331a4c6590
+last_updated: 2026-11-17
+checksum: 2130bab9e497e3dc4203766b141c8d47889e766dbcb5430377b29e50e90f7df6
 template: 2
 ---
 
@@ -102,7 +102,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 - `hatch` off: the band renders without its closing frame
 - Empty: when `title` is empty the band renders nothing but its root (except in `frame`)
 - Each action and the command line render only when given
-- `audiences` (in `primary`): picking an audience swaps the copyable line and the actions; the swapped row sits in a polite live region and fades in. After mount the typed words are typed (90 ms a character), held (1.8 s), erased (45 ms a character) and the next one typed (after 270 ms), in a loop; the timer is cleared on scope dispose. Under reduced motion every word shows at once, joined by commas, and the cursor is hidden
+- `audiences` (in `primary`): picking an audience swaps the copyable line and the actions; the swapped row sits in a polite live region and fades in. After mount the typed words are typed (90 ms a character), held (1.8 s), erased (45 ms a character) and the next one typed (after 270 ms), in a loop; the timer is cleared on scope dispose. The loop runs past five seconds, so a pause control sits under the typed line and the description: an outline `IconButton` (`closing-call-to-action-section-audiences__pause`, size `small`) that reads "Pause animation" (`common.pauseAnimation`, icon `az-pause`) while the words type, and "Play animation" (`common.playAnimation`, icon `az-play`) while paused. Paused, every word shows at once, joined by commas, and the cursor is hidden; play types again from the first word. Under reduced motion it starts paused; the viewer's own choice then wins over the preference
 
 ## Motion & Animations
 
@@ -128,8 +128,9 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the composed buttons.
-- Keyboard map: `Tab` reaches the command line and its copy button, then the primary and the secondary action; `Enter` follows an action. With `audiences`, `Tab` reaches the switch (arrow keys move it, owned by `toggle-group`), the copy button and each action.
-- With `audiences`: the switch is a `radiogroup` named by `audiencesAriaLabel`; the swapped row is `aria-live="polite"`; the read-only field is named by `lineAriaLabel` and the copy button by the audience's `copy.label`. The typed line reads its whole sentence from a visually hidden copy while the animated letters are `aria-hidden`.
+- Keyboard map: `Tab` reaches the command line and its copy button, then the primary and the secondary action; `Enter` follows an action. With `audiences`, `Tab` reaches the switch (arrow keys move it, owned by `toggle-group`), the copy button, each action and, with `typedWords`, the pause control; `Enter` / `Space` pauses or plays the typed line.
+- With `audiences`: the switch is a `radiogroup` named by `audiencesAriaLabel`; the swapped row is `aria-live="polite"`; the read-only field is named by `lineAriaLabel` and the copy button by the audience's `copy.label`. The typed line reads its whole sentence from a visually hidden copy while the animated letters are `aria-hidden`. The pause control is a real button whose label switches between "Pause animation" and "Play animation" (no `aria-pressed`).
+- Moving content (WCAG 2.2.2 Pause, Stop, Hide): the typed line loops for longer than five seconds, so it always ships the visible, keyboard-reachable pause control, and it does not start under a reduced-motion preference. The `primary` texture's waves are owned by `texture`.
 - ARIA: the `call-to-action` renders the band's `<section>` named by its title; the root is a plain `div` so the band has one landmark. The closing frame is decorative.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `call-to-action` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — see the Motion table; under reduced motion nothing types or blinks, and the texture and the buttons carry their own fallback.
@@ -137,7 +138,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 
 ## Internationalization
 
-No built-in strings of its own: every visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `copy-command-section` (`copyCommandSection.command`, `copyCommandSection.copyCommandSection`).
+One built-in string pair: the typed line's pause control reads `common.pauseAnimation` / `common.playAnimation` from the locale catalogs. Every other visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `copy-command-section` (`copyCommandSection.command`, `copyCommandSection.copyCommandSection`).
 
 - Formatting: none.
 
@@ -158,7 +159,7 @@ No built-in strings of its own: every visible text is a prop from the page JSON,
 ## Performance
 
 - Bundle budget: 6.15 KB gzip, the `.size-limit.json` entry `closing-call-to-action-section` (entry chunk only: `copy-command-section` loads on demand, only when `command` is set, and the audience switch only when `audiences` is set).
-- Runtime budget: one timer for the typed word with `audiences` and `typedWords`, cleared on scope dispose; none under reduced motion. The `primary` texture animates on the compositor and stops under reduced motion.
+- Runtime budget: one timer for the typed word with `audiences` and `typedWords`, cleared on scope dispose and while paused; none under reduced motion until the viewer plays it. The `primary` texture animates on the compositor and stops under reduced motion.
 - Heavy parts: none.
 
 ## Examples
