@@ -103,7 +103,7 @@
           <div
             v-if="hasEnd()"
             :data-testid="`${testId}__status`"
-            class="order-3 flex min-w-0 items-center justify-between gap-(--spacing-lg) md:ms-auto md:justify-end group-data-[variant=console]/footer:ms-auto"
+            class="order-3 flex min-w-0 flex-wrap items-center justify-between gap-x-(--spacing-lg) gap-y-(--spacing-xs) md:ms-auto md:justify-end group-data-[variant=console]/footer:ms-auto"
           >
             <slot name="status" />
             <slot name="language" />
