@@ -625,11 +625,11 @@
       :data-testid="`${testId}__filename`"
     >
       <span
-        class="flex size-4 shrink-0 items-center justify-center"
+        class="text-label-code-sm flex size-4 shrink-0 items-center justify-center"
         :data-testid="`${testId}__filename-icon`"
       >
         <i
-          :class="cn('text-label-code-sm text-(--text-default)', activeFileIcon)"
+          :class="cn('text-(--text-default)', activeFileIcon)"
           aria-hidden="true"
         />
       </span>
