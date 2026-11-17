@@ -5,6 +5,7 @@
 
 import { spawnSync } from 'node:child_process'
 import {
+  copyFileSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
@@ -60,8 +61,9 @@ const walk = (dir) =>
 
 // The theme's JS entry points (`@aziontech/theme/animations`, …) get their declarations from
 // the theme's `build:types`, which runs on prepack, so a published theme carries them but a fresh
-// checkout does not. Emit them into a temp dir on the same filesystem and rename each file into place: renames are
-// atomic, so test files running in parallel never read a half-written declaration.
+// checkout does not. Emit them into a temp dir, copy each file next to its target and rename it into
+// place: a rename within one directory is atomic even when node_modules sits on another filesystem,
+// so test files running in parallel never read a half-written declaration.
 export function ensureThemeTypes() {
   const dts = `${THEME_TYPED_ENTRY}.d.ts`
   if (existsSync(dts) && statSync(dts).mtimeMs >= statSync(`${THEME_TYPED_ENTRY}.js`).mtimeMs) {
@@ -90,7 +92,9 @@ export function ensureThemeTypes() {
     for (const file of walk(out).filter((path) => path.endsWith('.d.ts'))) {
       const target = join(THEME_DIR, relative(out, file))
       mkdirSync(dirname(target), { recursive: true })
-      renameSync(file, target)
+      const staged = `${target}.${process.pid}.tmp`
+      copyFileSync(file, staged)
+      renameSync(staged, target)
     }
   } finally {
     rmSync(out, { recursive: true, force: true })
