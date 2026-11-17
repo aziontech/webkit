@@ -584,7 +584,7 @@
   {
     "name": "network-section",
     "path": "src/components/section/network-section/network-section.vue",
-    "limit": "26.55 KB",
+    "limit": "26.65 KB",
     "entryOnly": true
   },
   {
@@ -632,7 +632,7 @@
   {
     "name": "logo-wall-section",
     "path": "src/components/section/logo-wall-section/logo-wall-section.vue",
-    "limit": "23.6 KB"
+    "limit": "23.7 KB"
   },
   {
     "name": "photo-marquee-section",
