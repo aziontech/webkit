@@ -78,7 +78,7 @@
 - `data-disabled` is present when the `disabled` prop is true. A disabled dropzone is always `data-state="idle"`.
 - `data-invalid` is present when the `invalid` prop is true.
 - **Inline / invalid**: the dashed border turns `--danger-border` while idle; the active state still wins while files are dragged over it. Overlay ignores `invalid`.
-- **Inline / idle**: dashed `--border-strong` border on a `--bg-surface` fill. Icon, title, description and slot are centered.
+- **Inline / idle**: dashed `--border-input` border (the field outline, so it reads like the other inputs and never glares) on a `--bg-surface` fill; on hover the dashes step up to `--border-strong`, as an input outline does. Icon, title, description and slot are centered.
 - **Inline / active**: the border turns `--border-selected` and the fill `--bg-selected`. Layout does not move (same border width in both states).
 - **Inline / disabled**: `--border-default` dashed border, `--bg-disabled` fill, icon, title and description in `--text-disabled`, `cursor-not-allowed`. The slot still renders, and the consumer disables its own Browse button.
 - **Overlay / idle**: not displayed (`v-show`). The root stays in the DOM so `data-testid` and `$attrs` are always present.

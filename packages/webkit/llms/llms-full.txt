@@ -708,6 +708,14 @@ are already direct siblings of the page stack, where adding a wrapper is the wro
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 
+**The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
+table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
+parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsSection` lands
+flush against that section's heading, because the band only spaces itself from the bands before it.
+A banner that speaks for the whole page is a child of the parent section like any band, and the
+parent's `gap-(--layout-section-gap)` spaces it. Tighter steps belong _inside_ one unit — a card's
+rows, a list's items, a chat message's parts, a label over its own field.
+
 ## 5. Every value is a reference
 
 Layout tokens are a **derived** group: each one is a `var()` reference to the spacing or container
@@ -23121,7 +23129,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 - `data-disabled` is present when the `disabled` prop is true. A disabled dropzone is always `data-state="idle"`.
 - `data-invalid` is present when the `invalid` prop is true.
 - **Inline / invalid**: the dashed border turns `--danger-border` while idle; the active state still wins while files are dragged over it. Overlay ignores `invalid`.
-- **Inline / idle**: dashed `--border-strong` border on a `--bg-surface` fill. Icon, title, description and slot are centered.
+- **Inline / idle**: dashed `--border-input` border (the field outline, so it reads like the other inputs and never glares) on a `--bg-surface` fill; on hover the dashes step up to `--border-strong`, as an input outline does. Icon, title, description and slot are centered.
 - **Inline / active**: the border turns `--border-selected` and the fill `--bg-selected`. Layout does not move (same border width in both states).
 - **Inline / disabled**: `--border-default` dashed border, `--bg-disabled` fill, icon, title and description in `--text-disabled`, `cursor-not-allowed`. The slot still renders, and the consumer disables its own Browse button.
 - **Overlay / idle**: not displayed (`v-show`). The root stays in the DOM so `data-testid` and `$attrs` are always present.

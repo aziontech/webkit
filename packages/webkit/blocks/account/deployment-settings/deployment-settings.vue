@@ -604,7 +604,7 @@
         </template>
       </PageHeader>
 
-      <section class="layout-section-start flex min-w-0 flex-col">
+      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <Alert
           v-if="infoOpen"
           severity="info"

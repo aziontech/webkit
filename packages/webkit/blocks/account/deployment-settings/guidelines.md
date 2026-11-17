@@ -22,7 +22,7 @@ Title `Build and deployment` and one sentence that says every environment is lin
 
 ### B. What a Deployment Setting is — `Alert` (required)
 
-A small info `Alert`, closable, that explains the binding policy, the deployment policy, the automatic link and what sharing a setting does. It closes for the session.
+A small info `Alert`, closable, that explains the binding policy, the deployment policy, the automatic link and what sharing a setting does. It closes for the session. It sits in the page's parent section, one section gap (`--layout-section-gap`) above the first `SettingsSection`, never flush against its heading.
 
 ### C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
 

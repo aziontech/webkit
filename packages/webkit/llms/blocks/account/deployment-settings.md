@@ -34,7 +34,7 @@ Title `Build and deployment` and one sentence that says every environment is lin
 
 ### B. What a Deployment Setting is — `Alert` (required)
 
-A small info `Alert`, closable, that explains the binding policy, the deployment policy, the automatic link and what sharing a setting does. It closes for the session.
+A small info `Alert`, closable, that explains the binding policy, the deployment policy, the automatic link and what sharing a setting does. It closes for the session. It sits in the page's parent section, one section gap (`--layout-section-gap`) above the first `SettingsSection`, never flush against its heading.
 
 ### C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
 
@@ -782,7 +782,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
         </template>
       </PageHeader>
 
-      <section class="layout-section-start flex min-w-0 flex-col">
+      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <Alert
           v-if="infoOpen"
           severity="info"
