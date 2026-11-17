@@ -258,26 +258,29 @@ test('rtl-double-flip covers exactly DIRECTIONAL_ICONS', async () => {
   }
 })
 
-test('tokenChecksFor runs only the wide checks over docs, demos, blocks and examples', () => {
-  const idsFor = (rel) => tokenChecksFor(rel).map((c) => c.id)
+test('tokenChecksFor runs only the wide checks over blocks, examples and given extra dirs', () => {
+  const idsFor = (rel, dirs) => tokenChecksFor(rel, dirs).map((c) => c.id)
   assert.ok(idsFor('packages/webkit/src/components/action/button/button.vue').includes('hex-color'))
   for (const rel of [
-    'apps/docs/src/components/doc-nav.vue',
-    'apps/demos/src/pages/home.vue',
     'packages/webkit/blocks/login/login.vue',
     'packages/webkit/examples/button/default.vue'
   ]) {
     assert.deepEqual(idsFor(rel), ['rtl-double-flip'], rel)
   }
+  assert.deepEqual(idsFor('site/src/nav.vue'), [])
+  assert.deepEqual(idsFor('site/src/nav.vue', ['site/src/']), ['rtl-double-flip'])
   for (const rel of [
-    'apps/docs/src/components/doc-nav.test.ts',
-    'apps/docs/README.md',
+    'packages/webkit/examples/button/button.test.ts',
+    'packages/webkit/examples/button/examples.json',
     'packages/webkit/src/composables/use-controllable.ts'
   ]) {
     assert.deepEqual(idsFor(rel), [], rel)
   }
   assert.ok(
-    !scanTokens('class="text-sm ai ai-arrow-right"', tokenChecksFor('apps/docs/src/a.vue')).length
+    !scanTokens(
+      'class="text-sm ai ai-arrow-right"',
+      tokenChecksFor('packages/webkit/examples/a/a.vue')
+    ).length
   )
 })
 

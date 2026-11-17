@@ -146,19 +146,14 @@ export function tokenChecksApply(rel) {
   )
 }
 
-export const WIDE_TOKEN_DIRS = [
-  'apps/docs/src/',
-  'apps/demos/src/',
-  'packages/webkit/blocks/',
-  'packages/webkit/examples/'
-]
+export const WIDE_TOKEN_DIRS = ['packages/webkit/blocks/', 'packages/webkit/examples/']
 
 export const WIDE_TOKEN_CHECKS = TOKEN_CHECKS.filter((c) => c.wide)
 
-export function tokenChecksFor(rel) {
+export function tokenChecksFor(rel, wideDirs = WIDE_TOKEN_DIRS) {
   if (tokenChecksApply(rel)) return TOKEN_CHECKS
   if (
-    WIDE_TOKEN_DIRS.some((dir) => rel.startsWith(dir)) &&
+    wideDirs.some((dir) => rel.startsWith(dir)) &&
     !/\.(test|spec)\.[tj]s$/.test(rel) &&
     /\.(vue|css|scss|ts|js)$/.test(rel)
   ) {

@@ -8,7 +8,7 @@
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
-import { tokenChecksFor } from './lib/token-checks.mjs'
+import { repoTokenChecksFor } from './lib/token-checks.mjs'
 
 const ROOT = process.cwd()
 
@@ -86,7 +86,7 @@ async function main() {
   // Outside components only the WIDE_TOKEN_CHECKS (rtl-double-flip) run, over the
   // apps/docs, apps/demos, blocks and examples sources the ratchet also scans.
   const relPath = relative(ROOT, resolve(filePath)).split('\\').join('/')
-  const checks = tokenChecksFor(relPath)
+  const checks = repoTokenChecksFor(relPath)
   if (checks.length === 0) process.exit(0)
 
   // For Edit/MultiEdit, baseline = existing file. For Write of new file, baseline = ''.

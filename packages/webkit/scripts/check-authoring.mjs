@@ -8,9 +8,7 @@ import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/lib/aut
 import {
   scanTokens,
   tokenChecksApply,
-  tokenChecksFor,
-  TOKEN_MESSAGES,
-  WIDE_TOKEN_DIRS
+  TOKEN_MESSAGES
 } from '../src/eslint-plugin/lib/token-checks.js'
 import { scanSignatures } from '../src/eslint-plugin/lib/signature-checks.js'
 import {
@@ -31,6 +29,10 @@ import {
   STRING_MESSAGES
 } from '../src/eslint-plugin/lib/built-in-strings.js'
 import { collectSpecViolations } from '../../../.claude/hooks/lib/spec-compliance-checks.mjs'
+import {
+  REPO_WIDE_TOKEN_DIRS,
+  repoTokenChecksFor
+} from '../../../.claude/hooks/lib/token-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
 const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']
@@ -183,11 +185,11 @@ function exampleDataViolations() {
 
 function wideTokenViolations() {
   const keys = []
-  for (const dir of WIDE_TOKEN_DIRS) {
+  for (const dir of REPO_WIDE_TOKEN_DIRS) {
     for (const abs of walkAll(join(ROOT, dir))) {
       const rel = relative(ROOT, abs).split('\\').join('/')
       if (tokenChecksApply(rel)) continue
-      const checks = tokenChecksFor(rel)
+      const checks = repoTokenChecksFor(rel)
       if (checks.length === 0) continue
       for (const id of scanTokens(readFileSync(abs, 'utf-8'), checks)) {
         keys.push(`${rel}::token:${id}`)
