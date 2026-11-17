@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: 54701660fdaa7b4c332f66118ddf2cc8daff51e3433de14ba72c5d67b6aba3a1
+checksum: 8f4f5a50b5b6b1487bb2ea5c43dc3a9b772794c5d8388ea393c7c9a09c978b6b
 created: 2026-11-12
 last_updated: 2026-11-17
 ---
@@ -257,7 +257,7 @@ packages/webkit/src/components/layout/console-layout/
 ## Responsive
 
 - Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs; a page's control crumbs (the environment `Select`) stay, in place of the brand. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
-- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates; while compact the crumbs are hidden and the page's control crumbs stay, so the environment is never lost on a phone. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-leading` and the actions fit; the brand stays in the navigation drawer.
+- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates only when the header runs out of room (its wrapper alone pulls the trail to the start edge, and the `Breadcrumb` inside drops its own negative start margin, so a trail that fits is never cut short); while compact the crumbs are hidden and the page's control crumbs stay, so the environment is never lost on a phone. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-leading` and the actions fit; the brand stays in the navigation drawer.
 - Rail header: `sidebar-header` sits under the wordmark at the rail's width; it is hidden with the rest of the rail content when the rail collapses, and in the compact drawer it renders with `compact: true`.
 - Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.
 - Reflow: no horizontal scroll at 320 px; the page body scrolls inside `AppLayout`'s content region.

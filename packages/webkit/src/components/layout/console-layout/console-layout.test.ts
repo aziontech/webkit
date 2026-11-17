@@ -775,6 +775,26 @@ describe('ConsoleLayout', () => {
       expect(crumbs).toHaveLength(3)
       expect(within(crumbs[2]!).getByRole('button', { name: 'Switch environment' })).toBeTruthy()
       expect(within(getByTestId('console-layout__main')).queryByText('Production')).toBeNull()
+      expect(trail.classList.contains('ms-0')).toBe(true)
+    })
+
+    it('lets only the wrapper pull a wide trail to the start, so no crumb is cut short', () => {
+      const { getByRole } = mount({ breadcrumbs: [{ label: 'Workloads' }, { label: 'edge-shop' }] })
+      const trail = within(getByRole('banner')).getByRole('navigation', { name: 'Breadcrumb' })
+      expect(trail.classList.contains('ms-0')).toBe(true)
+      expect(trail.parentElement?.classList.contains('-ms-(--spacing-xs)')).toBe(true)
+    })
+
+    it('resets the start margin of a composed breadcrumbs trail', () => {
+      const { getByRole } = mount(
+        {},
+        {},
+        { breadcrumbs: () => h('nav', { 'aria-label': 'Composed' }, 'Composed trail') }
+      )
+      const wrapper = within(getByRole('banner')).getByRole('navigation', {
+        name: 'Composed'
+      }).parentElement
+      expect(wrapper?.classList.contains('*:ms-0')).toBe(true)
     })
 
     it('keeps only the control crumbs of the page trail while compact', async () => {
