@@ -176,6 +176,16 @@ describe('DocProse', () => {
       await fireEvent.click(getByText('azion'))
       expect(writeText).not.toHaveBeenCalled()
     })
+
+    it('offers no copy tooltip on a chip inside a link', async () => {
+      stubClipboard()
+      const { getByText } = render(DocProse, {
+        slots: { default: '<p><a href="#cli"><code>azion</code></a></p>' }
+      })
+      await fireEvent.pointerOver(getByText('azion'))
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      expect(copyTip()).toBeNull()
+    })
   })
 
   describe('accessibility', () => {
