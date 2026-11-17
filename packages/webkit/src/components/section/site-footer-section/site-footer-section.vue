@@ -108,11 +108,10 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-variant="variant"
-    class="w-full border-t border-(--border-default)"
+    class="w-full data-[variant=content]:border-t data-[variant=content]:border-(--border-default)"
   >
     <Footer
       :variant="variant"
-      signature="compact"
       :aria-label="ariaLabel || t('siteFooterSection.label')"
     >
       <FooterColumn
@@ -139,15 +138,23 @@
         </FooterLink>
       </FooterColumn>
 
-      <template #social>
+      <template
+        v-if="hasHome"
+        #brand
+      >
         <a
-          v-if="hasHome"
           :href="home"
           :aria-label="homeAriaLabel || t('siteFooterSection.home')"
-          class="me-(--spacing-xs) hidden w-fit lg:inline-flex items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+          class="inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         >
           <Brand size="small" />
         </a>
+      </template>
+
+      <template
+        v-if="socials.length > 0"
+        #social
+      >
         <IconButton
           v-for="social in socials"
           :key="social.label"
@@ -198,19 +205,6 @@
             </SelectContent>
           </Select>
         </div>
-      </template>
-
-      <template
-        v-if="hasHome"
-        #brand
-      >
-        <a
-          :href="home"
-          :aria-label="homeAriaLabel || t('siteFooterSection.home')"
-          class="mx-auto inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
-        >
-          <Brand size="small" />
-        </a>
       </template>
     </Footer>
   </div>

@@ -12,38 +12,31 @@
   })
 
   /** Where the footer sits. */
-  export type FooterVariant = 'content' | 'site'
-  /** Widths at which the signature band renders. */
-  export type FooterSignature = 'always' | 'compact'
+  export type FooterVariant = 'content' | 'site' | 'console'
 
   export interface FooterProps {
     /** Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
-    /** Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. */
+    /** Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a full-width rule with corner marks and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end. */
     variant?: FooterVariant
-    /** Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same. */
-    signature?: FooterSignature
   }
 
   withDefaults(defineProps<FooterProps>(), {
     ariaLabel: '',
-    variant: 'content',
-    signature: 'always'
+    variant: 'content'
   })
 
   const slots = defineSlots<{
-    /** The Footer.Column items; laid out as a 2-column grid that becomes 4 columns at md. */
+    /** The Footer.Column items; a 2-column grid that becomes 4 columns at md, or one inline row in the console variant. */
     default(): unknown
-    /** The social icon buttons. */
+    /** The social icon buttons, after the brand at the start of the bottom bar. */
     social(): unknown
-    /** The system status indicator. */
+    /** The system status indicator, at the end of the bottom bar. */
     status(): unknown
-    /** The language select. */
+    /** The language select, after the status. */
     language(): unknown
-    /** The brand lockup of the signature band. */
+    /** The brand lockup that opens the bottom bar. */
     brand(): unknown
-    /** The one-line tagline beside the brand. */
-    tagline(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -51,9 +44,11 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'footer')
 
-  const hasStatusBar = () => Boolean(slots.status || slots.language)
+  const hasColumns = () => Boolean(slots.default)
 
-  const hasSignature = () => Boolean(slots.brand || slots.tagline)
+  const hasStart = () => Boolean(slots.brand || slots.social)
+
+  const hasEnd = () => Boolean(slots.status || slots.language)
 
   provide(FooterInjectionKey, {
     testId: testId.value
@@ -66,84 +61,55 @@
     :aria-label="ariaLabel || t('footer.label')"
     :data-testid="testId"
     :data-variant="variant"
-    :data-signature="signature"
-    class="group flex w-full flex-col bg-(--bg-canvas)"
+    class="group/footer flex w-full flex-col bg-(--bg-canvas) data-[variant=site]:[--footer-inset:max(0%,calc((100%_-_var(--layout-measure-site-header))_/_2))]"
   >
-    <div
-      class="flex w-full items-stretch justify-center group-data-[variant=site]:border-b group-data-[variant=site]:border-b-(length:--border-width-default) group-data-[variant=site]:border-b-(--border-default)"
+    <RegistrationFrame
+      :borders="variant === 'content' ? 'none' : 'top'"
+      :marks="variant === 'site' ? 'top' : 'none'"
+      :data-testid="`${testId}__frame`"
+      class="w-full"
     >
-      <RegistrationFrame
-        v-if="variant === 'site'"
-        key="gutter-start"
-        :borders="['left']"
-        marks="all"
-        aria-hidden="true"
-        :data-testid="`${testId}__gutter`"
-        class="hidden flex-1 2xl:block"
-      />
-      <RegistrationFrame
-        :borders="variant === 'site' ? 'x' : 'none'"
-        :marks="variant === 'site' ? 'all' : 'none'"
-        :data-testid="`${testId}__frame`"
-        class="w-full shrink-0 group-data-[variant=site]:layout-column-site"
+      <div
+        class="flex w-full flex-col group-data-[variant=console]/footer:flex-row group-data-[variant=console]/footer:flex-wrap group-data-[variant=console]/footer:items-center group-data-[variant=console]/footer:gap-x-(--spacing-lg) group-data-[variant=console]/footer:gap-y-(--spacing-sm) group-data-[variant=console]/footer:px-(--spacing-lg) group-data-[variant=console]/footer:py-(--spacing-sm)"
       >
-        <div class="grid w-full grid-cols-1 md:grid-cols-[auto_auto]">
+        <div
+          v-if="hasColumns()"
+          :data-testid="`${testId}__columns`"
+          class="order-2 grid w-full grid-cols-2 gap-y-(--spacing-lg) px-(--footer-inset) md:grid-cols-4 md:gap-y-0 group-data-[variant=console]/footer:flex group-data-[variant=console]/footer:w-auto group-data-[variant=console]/footer:min-w-0 group-data-[variant=console]/footer:flex-wrap group-data-[variant=console]/footer:items-center group-data-[variant=console]/footer:gap-x-(--spacing-lg) group-data-[variant=console]/footer:gap-y-(--spacing-xs) group-data-[variant=console]/footer:md:gap-y-(--spacing-xs)"
+        >
+          <slot />
+        </div>
+
+        <div
+          v-if="hasStart() || hasEnd()"
+          :data-testid="`${testId}__bar`"
+          class="order-3 flex flex-col gap-y-(--spacing-md) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-[calc(var(--footer-inset,0%)_+_var(--spacing-lg))] py-(--spacing-md) first:border-t-0 md:min-h-14 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-(--spacing-lg) md:py-(--spacing-sm) group-data-[variant=console]/footer:contents"
+        >
           <div
-            :data-testid="`${testId}__columns`"
-            class="order-1 grid w-full grid-cols-2 gap-y-(--spacing-lg) md:grid-cols-4 md:gap-y-0 md:col-span-2 md:row-start-1"
+            v-if="hasStart()"
+            :data-testid="`${testId}__social`"
+            class="order-1 flex min-w-0 flex-wrap items-center gap-(--spacing-2xs)"
           >
-            <slot />
+            <div
+              v-if="slots.brand"
+              :data-testid="`${testId}__brand`"
+              class="me-(--spacing-xs) flex shrink-0 items-center *:flex *:items-center [&_svg]:block [&_svg]:h-[18px] [&_svg]:w-auto"
+            >
+              <slot name="brand" />
+            </div>
+            <slot name="social" />
           </div>
 
           <div
-            v-if="hasStatusBar()"
+            v-if="hasEnd()"
             :data-testid="`${testId}__status`"
-            class="order-2 flex min-w-0 flex-row-reverse items-center justify-between gap-(--spacing-lg) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-2 md:row-start-2 md:min-h-14 md:flex-row md:justify-end md:py-0"
+            class="order-3 flex min-w-0 items-center justify-between gap-(--spacing-lg) md:ms-auto md:justify-end group-data-[variant=console]/footer:ms-auto"
           >
             <slot name="status" />
             <slot name="language" />
           </div>
-
-          <RegistrationFrame
-            v-if="hasSignature()"
-            borders="top"
-            marks="all"
-            flush="x"
-            :data-testid="`${testId}__signature`"
-            class="order-3 w-full px-(--spacing-sm) py-(--spacing-xl) md:order-none md:col-span-2 md:row-start-3 group-data-[signature=compact]:lg:hidden"
-          >
-            <div
-              class="flex flex-col items-start gap-(--spacing-md) p-(--spacing-lg) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"
-            >
-              <slot name="brand" />
-              <p
-                v-if="slots.tagline"
-                class="text-heading-xl text-(--text-default) md:text-end"
-              >
-                <slot name="tagline" />
-              </p>
-            </div>
-          </RegistrationFrame>
-
-          <div
-            v-if="slots.social"
-            :data-testid="`${testId}__social`"
-            class="order-4 flex min-w-0 flex-wrap items-center justify-center gap-(--spacing-2xs) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-1 md:row-start-2 md:min-h-14 md:justify-start md:py-0"
-          >
-            <slot name="social" />
-          </div>
         </div>
-      </RegistrationFrame>
-
-      <RegistrationFrame
-        v-if="variant === 'site'"
-        key="gutter-end"
-        :borders="['right']"
-        marks="all"
-        aria-hidden="true"
-        :data-testid="`${testId}__gutter`"
-        class="hidden flex-1 2xl:block"
-      />
-    </div>
+      </div>
+    </RegistrationFrame>
   </footer>
 </template>

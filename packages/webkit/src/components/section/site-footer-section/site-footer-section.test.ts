@@ -128,15 +128,16 @@ describe('SiteFooterSection', () => {
     })
   })
 
-  it('renders the Azion mark in the social row and again in the compact signature band', () => {
+  it('renders the Azion mark once, leading the bottom bar before the social icons', () => {
     const { getAllByRole, getByTestId } = footer({ homeAriaLabel: 'Go home' })
 
     const marks = getAllByRole('link', { name: 'Go home' })
-    expect(marks).toHaveLength(2)
-    for (const mark of marks) expect(mark.getAttribute('href')).toBe('/')
-    expect(getByTestId('footer__signature')).toContainElement(marks[0] ?? null)
-    expect(getByTestId('footer__social')).toContainElement(marks[1] ?? null)
-    expect(getByTestId('footer')).toHaveAttribute('data-signature', 'compact')
+    expect(marks).toHaveLength(1)
+    expect(marks[0]?.getAttribute('href')).toBe('/')
+    expect(getByTestId('footer__brand')).toContainElement(marks[0] ?? null)
+    const start = getByTestId('footer__social')
+    expect(start.firstElementChild).toBe(getByTestId('footer__brand'))
+    expect(getByTestId('footer__bar')).toContainElement(getByTestId('footer__status'))
   })
 
   it('fills the status slot with the status line and the language slot with the select, in order', () => {
@@ -156,11 +157,11 @@ describe('SiteFooterSection', () => {
     expect(queryByTestId('footer__status')).toBeNull()
   })
 
-  it('renders no Azion mark and no signature band when home is empty', () => {
+  it('renders no Azion mark when home is empty', () => {
     const { queryByRole, queryByTestId } = footer({ home: '' })
 
     expect(queryByRole('link', { name: 'Azion home' })).toBeNull()
-    expect(queryByTestId('footer__signature')).toBeNull()
+    expect(queryByTestId('footer__brand')).toBeNull()
   })
 
   it('renders the status line when set and nothing when empty', () => {

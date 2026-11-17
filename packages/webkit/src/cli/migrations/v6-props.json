@@ -1506,10 +1506,16 @@
     "kind": "variant"
   },
   "footer": {
-    "kind": "variant"
+    "kind": "variant",
+    "signature": {
+      "removed": "delete it: the footer has no signature band any more; put the brand in the brand slot, which leads the bottom bar at every width."
+    }
   },
   "footer-root": {
-    "kind": "variant"
+    "kind": "variant",
+    "signature": {
+      "removed": "delete it: the footer has no signature band any more; put the brand in the brand slot, which leads the bottom bar at every width."
+    }
   },
   "app-header": {
     "kind": "variant"

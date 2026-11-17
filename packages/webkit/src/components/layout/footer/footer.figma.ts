@@ -34,14 +34,15 @@ const social = connected('icon-button')
 const status = connected('status-indicator')
 const language = connected('select')
 const brand = connected('brand')
-const taglineLayer = instance.findLayers((node) => node.type === 'TEXT', {
-  traverseInstances: true,
-  path: ['Signature']
-})[0]
-const tagline = taglineLayer && taglineLayer.type === 'TEXT' ? taglineLayer.textContent : ''
 
 export default {
   example: figma.code`<Footer variant="site">${columns}${
+    brand
+      ? figma.code`
+  <template #brand>${brand}
+  </template>`
+      : ''
+  }${
     status
       ? figma.code`
   <template #status>${status}
@@ -52,17 +53,6 @@ export default {
       ? figma.code`
   <template #language>${language}
   </template>`
-      : ''
-  }${
-    brand
-      ? figma.code`
-  <template #brand>${brand}
-  </template>`
-      : ''
-  }${
-    tagline
-      ? figma.code`
-  <template #tagline>${tagline}</template>`
       : ''
   }${
     social

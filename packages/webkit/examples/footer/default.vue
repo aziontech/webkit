@@ -36,6 +36,14 @@
       <Footer.Link href="/support">Help center</Footer.Link>
       <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
     </Footer.Column>
+    <template #brand>
+      <a
+        href="/"
+        aria-label="Azion home"
+      >
+        <Brand size="small" />
+      </a>
+    </template>
     <template #social>
       <IconButton
         variant="ghost"
@@ -101,12 +109,19 @@
       />
     </template>
     <template #language>
-      <div class="w-24">
+      <div class="w-28">
         <Select
           v-model="language"
           placeholder="Language"
         >
-          <Select.Trigger aria-label="Language" />
+          <Select.Trigger aria-label="Language">
+            <template #leading>
+              <i
+                class="ai ai-globe text-(--text-muted)"
+                aria-hidden="true"
+              />
+            </template>
+          </Select.Trigger>
           <Select.Content>
             <Select.Item
               v-for="o in languageOptions"
@@ -118,14 +133,5 @@
         </Select>
       </div>
     </template>
-    <template #brand>
-      <a
-        href="/"
-        aria-label="Azion home"
-      >
-        <Brand size="large" />
-      </a>
-    </template>
-    <template #tagline>The web platform for modern workloads</template>
   </Footer>
 </template>

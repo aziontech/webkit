@@ -639,27 +639,28 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 
 #### Slots
 
-| Component              | v5                   | v6                                                                 |
-| ---------------------- | -------------------- | ------------------------------------------------------------------ |
-| `log-viewer-header`    | `#left`, `#right`    | `#start`, `#end` (test ids `__left`/`__right` → `__start`/`__end`) |
-| `console-layout`       | `#header-start`      | `#header-leading`                                                  |
-| `page-header`          | `#breadcrumb`        | `#breadcrumbs`                                                     |
-| `doc-page-header`      | `#breadcrumb`        | `#breadcrumbs`                                                     |
-| `dropdown-menu`        | `#top` / `#bottom`   | `#header` / `#footer`                                              |
-| `dropdown-menu-group`  | `#top` / `#bottom`   | `#header` / `#footer`                                              |
-| `alert`                | `#action`            | `#actions`                                                         |
-| `button`               | `#prefix`            | `#leading`                                                         |
-| `card`                 | `#action`            | `#actions`                                                         |
-| `card`                 | `#header-action`     | `#header-actions`                                                  |
-| `card`                 | `#content`           | the default slot                                                   |
-| `command-item`         | `#prefix`, `#suffix` | `#leading`, `#trailing`                                            |
-| `input`                | `#prefix`, `#suffix` | `#leading`, `#trailing`                                            |
-| `multi-select-item`    | `#left`              | `#leading`                                                         |
-| `multi-select-trigger` | `#prefix`            | `#leading`                                                         |
-| `number-input`         | `#prefix`, `#suffix` | `#leading`, `#trailing`                                            |
-| `password-input`       | `#prefix`, `#suffix` | `#leading`, `#trailing`                                            |
-| `select-item`          | `#left`              | `#leading`                                                         |
-| `select-trigger`       | `#prefix`            | `#leading`                                                         |
+| Component              | v5                   | v6                                                                                                                                         |
+| ---------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `log-viewer-header`    | `#left`, `#right`    | `#start`, `#end` (test ids `__left`/`__right` → `__start`/`__end`)                                                                         |
+| `console-layout`       | `#header-start`      | `#header-leading`                                                                                                                          |
+| `page-header`          | `#breadcrumb`        | `#breadcrumbs`                                                                                                                             |
+| `doc-page-header`      | `#breadcrumb`        | `#breadcrumbs`                                                                                                                             |
+| `dropdown-menu`        | `#top` / `#bottom`   | `#header` / `#footer`                                                                                                                      |
+| `dropdown-menu-group`  | `#top` / `#bottom`   | `#header` / `#footer`                                                                                                                      |
+| `alert`                | `#action`            | `#actions`                                                                                                                                 |
+| `button`               | `#prefix`            | `#leading`                                                                                                                                 |
+| `card`                 | `#action`            | `#actions`                                                                                                                                 |
+| `card`                 | `#header-action`     | `#header-actions`                                                                                                                          |
+| `card`                 | `#content`           | the default slot                                                                                                                           |
+| `command-item`         | `#prefix`, `#suffix` | `#leading`, `#trailing`                                                                                                                    |
+| `input`                | `#prefix`, `#suffix` | `#leading`, `#trailing`                                                                                                                    |
+| `multi-select-item`    | `#left`              | `#leading`                                                                                                                                 |
+| `multi-select-trigger` | `#prefix`            | `#leading`                                                                                                                                 |
+| `number-input`         | `#prefix`, `#suffix` | `#leading`, `#trailing`                                                                                                                    |
+| `password-input`       | `#prefix`, `#suffix` | `#leading`, `#trailing`                                                                                                                    |
+| `select-item`          | `#left`              | `#leading`                                                                                                                                 |
+| `select-trigger`       | `#prefix`            | `#leading`                                                                                                                                 |
+| `footer`               | `#tagline`           | removed with the signature band: put the brand in `#brand`, which now leads the bottom bar; test ids `__signature` and `__gutter` are gone |
 
 #### Events
 

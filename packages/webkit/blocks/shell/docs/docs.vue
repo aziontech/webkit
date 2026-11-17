@@ -262,7 +262,6 @@
       <div class="w-full border-t border-(--border-default)">
         <Footer
           variant="content"
-          signature="compact"
           aria-label="Footer"
         >
           <Footer.Column
@@ -279,13 +278,6 @@
           </Footer.Column>
 
           <template #social>
-            <a
-              href="/"
-              aria-label="Azion home"
-              class="me-(--spacing-xs) hidden w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none lg:inline-flex"
-            >
-              <Brand size="small" />
-            </a>
             <IconButton
               v-for="social in socials"
               :key="social.label"
@@ -336,7 +328,7 @@
             <a
               href="/"
               aria-label="Azion home"
-              class="mx-auto inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+              class="inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
             >
               <Brand size="small" />
             </a>

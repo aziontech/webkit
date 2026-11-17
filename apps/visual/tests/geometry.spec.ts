@@ -212,24 +212,23 @@ for (const theme of THEMES) {
       await prepare(page, mode)
       const preview = await openExample(page, 'site-footer-section/default', mode)
       const footer = preview.locator('footer[data-testid="footer"]')
-      const signature = footer.locator('[data-testid="footer__signature"]')
-      const social = footer.locator('[data-testid="footer__social"]')
-      const home = 'a[aria-label="Azion home"]'
-      if (width >= 1024) {
-        await expect(signature).toBeHidden()
-        await expect(social.locator(home)).toBeVisible()
-      } else {
-        await expect(signature).toBeVisible()
-        await expect(social.locator(home)).toBeHidden()
-      }
-      if (width >= 1024) {
-        const footerBox = await footer.boundingBox()
-        const socialBox = await social.boundingBox()
-        if (!footerBox || !socialBox) throw new Error('no footer')
+      const bar = footer.locator('[data-testid="footer__bar"]')
+      const brand = footer.locator('[data-testid="footer__brand"]')
+      const status = footer.locator('[data-testid="footer__status"]')
+      await expect(brand.locator('a[aria-label="Azion home"]')).toBeVisible()
+      await expect(footer.locator('a[aria-label="Azion home"]')).toHaveCount(1)
+      const brandBox = await brand.boundingBox()
+      const statusBox = await status.boundingBox()
+      if (!brandBox || !statusBox) throw new Error('no bottom bar')
+      if (width >= 768)
         expect(
-          footerBox.y + footerBox.height - (socialBox.y + socialBox.height)
-        ).toBeLessThanOrEqual(1)
-      }
+          Math.abs(brandBox.y + brandBox.height / 2 - (statusBox.y + statusBox.height / 2))
+        ).toBeLessThanOrEqual(2)
+      else expect(statusBox.y).toBeGreaterThan(brandBox.y)
+      const footerBox = await footer.boundingBox()
+      const barBox = await bar.boundingBox()
+      if (!footerBox || !barBox) throw new Error('no footer')
+      expect(footerBox.y + footerBox.height - (barBox.y + barBox.height)).toBeLessThanOrEqual(1)
       await expect(footer).toHaveScreenshot(shot(`geometry/site-footer-end--${label(mode)}.png`))
     })
   }

@@ -46,7 +46,7 @@ One per section, with an `anchor`: an anchored level 2 or 3 heading is an outlin
 
 ### I. Footer — `Footer` (required)
 
-In the `footer` slot, `variant="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. With `signature="compact"` the brand leads the social row from `lg` (`hidden lg:inline-flex`) and the signature band carries it below `lg`, in CSS.
+In the `footer` slot, `variant="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the brand, social, status and language slots. The footer lays the bottom bar out as one row (the brand and the social icons at the start, the status and the language at the end) and stacks it below `md`, in CSS.
 
 ### J. Brand — `Brand` (required)
 
@@ -81,7 +81,7 @@ In the footer's language slot, trigger labelled `Language`.
 - Don't hand-write the outline, the pager or the masthead; the layout's outline rail (fed by the anchored headings), `DocPreviousNext` and `DocPageHeader` own their markup and labels.
 - Don't pass page data up to the layout through route meta or props: the page's headings register on their own.
 - Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`.
-- Don't measure the viewport in script to place the footer brand; the `lg:` utilities and `signature="compact"` decide it in CSS.
+- Don't measure the viewport in script to place the footer brand; put it in the `brand` slot and the footer places it in CSS.
 - Don't reuse the console rail here; docs navigation is pages, not modules.
 
 ## Copy

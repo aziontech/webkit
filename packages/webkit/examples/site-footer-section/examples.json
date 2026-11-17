@@ -16,7 +16,7 @@
   "site": [
     {
       "name": "Default",
-      "summary": "The site’s own footer: four link columns, then the social row beside the status indicator and the language select. From `lg` the Azion mark leads the social row; below it the mark moves to the signature band.",
+      "summary": "The site’s own footer: four link columns, then one bottom bar with the Azion mark and the social icons at the start and the status indicator and the language select at the end.",
       "file": "site-default.vue",
       "json": "site-default.json"
     }
