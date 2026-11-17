@@ -1,15 +1,18 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Brand from '@aziontech/webkit/brand'
+  import Button from '@aziontech/webkit/button'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import AppHeader from '@aziontech/webkit/app-header'
   import IconButton from '@aziontech/webkit/icon-button'
+  import NavigationMenu from '@aziontech/webkit/navigation-menu'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
+  import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -86,29 +89,30 @@
                   variant="default"
                   size="small"
                 />
-                <span
-                  class="rounded-(--shape-control) border border-(--border-muted) px-(--spacing-2xs) text-overline-sm text-(--text-muted)"
-                >
-                  WebKit
-                </span>
+                <Tag
+                  label="WebKit"
+                  severity="neutral"
+                  size="small"
+                />
               </a>
             </AppHeader.Brand>
-            <nav
+            <NavigationMenu
               :aria-label="t.navigation"
-              class="ms-(--spacing-sm) hidden items-center gap-(--spacing-2xs) lg:flex"
+              class="ms-(--spacing-sm) hidden lg:flex"
             >
-              <a
-                v-for="section in sections"
-                :key="section.to"
-                :href="section.to"
-                :aria-current="activeSection === section.to ? 'page' : undefined"
-                :class="[
-                  'rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-md transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none',
-                  activeSection === section.to ? 'text-(--text-default)' : 'text-(--text-muted)'
-                ]"
-                >{{ section.label }}</a
-              >
-            </nav>
+              <NavigationMenu.List>
+                <NavigationMenu.Item
+                  v-for="section in sections"
+                  :key="section.to"
+                >
+                  <NavigationMenu.Link
+                    :href="section.to"
+                    :active="activeSection === section.to"
+                    >{{ section.label }}</NavigationMenu.Link
+                  >
+                </NavigationMenu.Item>
+              </NavigationMenu.List>
+            </NavigationMenu>
           </div>
         </AppHeader.Start>
         <AppHeader.Center />
@@ -206,13 +210,15 @@
         <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <div class="flex flex-wrap gap-(--spacing-xs)">
-              <a
+              <Button
                 v-for="section in sections"
                 :key="section.to"
                 :href="section.to"
-                class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-label-md"
-                >{{ section.label }}</a
-              >
+                :label="section.label"
+                :aria-current="activeSection === section.to ? 'page' : undefined"
+                :variant="activeSection === section.to ? 'secondary' : 'outline'"
+                size="medium"
+              />
             </div>
             <ThemeSwitcher
               v-model="settings.theme"
