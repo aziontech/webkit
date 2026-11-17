@@ -93,6 +93,8 @@ describe('TopologyDiagram', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Change Policy' }))
     await settle()
     await fireEvent.click(within(menu()).getByRole('menuitem', { name: /strict-waf/ }))
+    await settle()
+    await fireEvent.click(view.getByRole('button', { name: 'Apply Policy' }))
     const bind = view.emitted()['bind']?.[0] as unknown[]
     expect(bind[0]).toBeInstanceOf(MouseEvent)
     expect(bind[1]).toEqual({ id: 'policy', value: 'strict-waf' })
@@ -109,6 +111,83 @@ describe('TopologyDiagram', () => {
     expect(remove[1]).toBe('policy')
   })
 
+  const pickPolicy = async (view: ReturnType<typeof render>, name: RegExp) => {
+    await fireEvent.click(view.getByRole('button', { name: 'Change Policy' }))
+    await settle()
+    await fireEvent.click(within(menu()).getByRole('menuitem', { name }))
+    await settle()
+  }
+
+  it('holds a picked option as pending until it is applied', async () => {
+    const view = render(TopologyDiagram, { props: { levels } })
+    await pickPolicy(view, /strict-waf/)
+    expect(view.emitted()['bind']).toBeUndefined()
+    const node = view.getAllByTestId('topology-diagram__node')[1]!
+    expect(node).toHaveAttribute('data-pending')
+    expect(within(node).getByTestId('topology-diagram__node-pending').textContent).toBe(
+      'strict-waf'
+    )
+    expect(within(node).getByText('Pending')).toBeTruthy()
+    const apply = view.getByRole('button', { name: 'Apply Policy' })
+    expect(view.getByRole('button', { name: 'Cancel' })).toBeTruthy()
+    expect(view.queryByRole('button', { name: 'Remove Policy' })).toBeNull()
+    await waitFor(() => expect(document.activeElement).toBe(apply))
+    expect(apply.getAttribute('aria-describedby')?.split(' ')).toContain(
+      within(node).getByTestId('topology-diagram__node-pending').id
+    )
+    await userEvent.keyboard('{Enter}')
+    const bind = view.emitted()['bind'] as unknown[][]
+    expect(bind).toHaveLength(1)
+    expect(bind[0]![0]).toBeInstanceOf(Event)
+    expect(bind[0]![1]).toEqual({ id: 'policy', value: 'strict-waf' })
+    await settle()
+    expect(node).not.toHaveAttribute('data-pending')
+    expect(view.queryByRole('button', { name: 'Apply Policy' })).toBeNull()
+    expect(view.getByRole('button', { name: 'Remove Policy' })).toBeTruthy()
+  })
+
+  it('discards a pending pick with Cancel and returns focus to the edit control', async () => {
+    const view = render(TopologyDiagram, { props: { levels } })
+    await pickPolicy(view, /strict-waf/)
+    await fireEvent.click(view.getByRole('button', { name: 'Cancel' }))
+    await settle()
+    expect(view.emitted()['bind']).toBeUndefined()
+    expect(view.queryByRole('button', { name: 'Apply Policy' })).toBeNull()
+    expect(view.getByRole('button', { name: 'Remove Policy' })).toBeTruthy()
+    await waitFor(() =>
+      expect(document.activeElement).toBe(view.getByRole('button', { name: 'Change Policy' }))
+    )
+  })
+
+  it('discards a pending pick with Escape from the action area', async () => {
+    const view = render(TopologyDiagram, { props: { levels } })
+    await pickPolicy(view, /strict-waf/)
+    view.getByRole('button', { name: 'Apply Policy' }).focus()
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(view.emitted()['bind']).toBeUndefined()
+    expect(view.queryByRole('button', { name: 'Apply Policy' })).toBeNull()
+    await waitFor(() =>
+      expect(document.activeElement).toBe(view.getByRole('button', { name: 'Change Policy' }))
+    )
+  })
+
+  it('clears pending when the current value is picked again', async () => {
+    const view = render(TopologyDiagram, { props: { levels } })
+    await pickPolicy(view, /strict-waf/)
+    expect(view.getByRole('button', { name: 'Apply Policy' })).toBeTruthy()
+    await pickPolicy(view, /edge-guard/)
+    expect(view.queryByRole('button', { name: 'Apply Policy' })).toBeNull()
+    expect(view.emitted()['bind']).toBeUndefined()
+    expect(view.getAllByTestId('topology-diagram__node')[1]).not.toHaveAttribute('data-pending')
+  })
+
+  it('has no axe violations while a binding is pending', async () => {
+    const view = render(TopologyDiagram, { props: { levels } })
+    await pickPolicy(view, /strict-waf/)
+    await expectNoA11yViolations(view.container)
+  })
+
   it('emits remove with the DOM event first from the keyboard', async () => {
     const view = render(TopologyDiagram, { props: { levels } })
     view.getByRole('button', { name: 'Remove Policy' }).focus()
@@ -123,6 +202,8 @@ describe('TopologyDiagram', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Bind Error page' }))
     await settle()
     await fireEvent.click(within(menu()).getByRole('menuitem', { name: /maintenance/ }))
+    await settle()
+    await fireEvent.click(view.getByRole('button', { name: 'Apply Error page' }))
     await settle()
     expect(view.getAllByText('Staged').length).toBeGreaterThan(0)
     expect(view.getByText(/1 staged/)).toBeTruthy()

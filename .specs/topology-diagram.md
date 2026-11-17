@@ -3,18 +3,18 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 192cacfd79ccd711e251bfea08c0122113d27a298f7e6b188d69059b1a3fafa5
+checksum: 14f04b8b2805c277a18416e9f70e23cfa47108031d9700ccbfabcc4284ea0cba
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # TopologyDiagram — Component Spec
 
 ## Purpose
 
-The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `FlowDiagram`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
+The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it); a picked resource stays pending on the node until it is applied. Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `FlowDiagram`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
 
 ## When to use
 
@@ -133,11 +133,11 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 
 ## Events
 
-| Event    | Payload                                                                        | Notes                                                                     |
-| -------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `bind`   | `(event: MouseEvent \| KeyboardEvent, binding: { id: string; value: string })` | An existing option was picked in the bind control; `id` is the node's id. |
-| `remove` | `(event: MouseEvent, id: string)`                                              | Remove was activated on a bound, removable node.                          |
-| `create` | `(event: MouseEvent \| KeyboardEvent, id: string)`                             | Create was picked in the bind control.                                    |
+| Event    | Payload                                                                        | Notes                                                                                                                                         |
+| -------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bind`   | `(event: MouseEvent \| KeyboardEvent, binding: { id: string; value: string })` | A pending pick was confirmed with Apply; `id` is the node's id, `value` the picked option. Picking an option no longer emits on its own (v6). |
+| `remove` | `(event: MouseEvent, id: string)`                                              | Remove was activated on a bound, removable node.                                                                                              |
+| `create` | `(event: MouseEvent \| KeyboardEvent, id: string)`                             | Create was picked in the bind control.                                                                                                        |
 
 ## Slots
 
@@ -149,7 +149,8 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 ## States
 
 - Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
-- Node card: `data-state` `open` | `closed`; `data-dashed` for a staged or unbound node.
+- Node card: `data-state` `open` | `closed`; `data-dashed` for a staged, unbound or pending node.
+- Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`az az-check`, primary, `Apply {kind}`) and **Cancel** (`az az-x`, `Cancel`). Apply emits `bind` and clears it; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
 - Connectors: dashed, flowing; faded never (no disabled nodes).
 
 ## Motion & Animations
@@ -181,8 +182,8 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: header buttons `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the scroll area when it scrolls.
-- Keyboard map: `Tab` moves through header buttons, links, copy, bind and remove controls in reading order; `Enter`/`Space` on a header toggles its card; the bind menu follows `dropdown-menu` (arrows, `Enter`, `Esc`). The scroll area is focusable (`tabindex="0"`) only when it overflows, so arrow keys scroll it.
-- ARIA: the root is a `section` named by `ariaLabel`; columns are an `ol` of `li`, each with an optional visually hidden label; each header is a `button` with `aria-expanded` and `aria-controls`; the collapsed body is `inert`; connectors are `aria-hidden`; icon-only controls are named (`Bind Policy`, `Remove Policy`, `Copy Domains Custom domain`) and carry a `Tooltip`; loading announces once through a `role="status"` line.
+- Keyboard map: `Tab` moves through header buttons, links, copy, bind and remove controls in reading order; `Enter`/`Space` on a header toggles its card; the bind menu follows `dropdown-menu` (arrows, `Enter`, `Esc`). Picking an option that differs from the bound one moves focus to Apply, so `Enter` confirms it; `Esc` anywhere in the node's action area cancels the pending pick; after Apply or Cancel focus returns to the bind (pencil) control. The scroll area is focusable (`tabindex="0"`) only when it overflows, so arrow keys scroll it.
+- ARIA: the root is a `section` named by `ariaLabel`; columns are an `ol` of `li`, each with an optional visually hidden label; each header is a `button` with `aria-expanded` and `aria-controls`; the collapsed body is `inert`; connectors are `aria-hidden`; icon-only controls are named (`Bind Policy`, `Remove Policy`, `Apply Policy`, `Cancel`, `Copy Domains Custom domain`) and carry a `Tooltip`; Apply is described by the pending label (`aria-describedby`), so focusing it reads what it applies, and no extra live region is added (the component's only one is the loading line); loading announces once through a `role="status"` line.
 - The unbound dash is `aria-hidden`; the status tag says Not bound in words.
 - Contrast ≥4.5:1 from the semantic text tokens.
 
@@ -193,6 +194,8 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 | `topologyDiagram.label`                                 | Deployment topology                                         | `ariaLabel`   |
 | `topologyDiagram.notBound`                              | Not bound                                                   | node `status` |
 | `topologyDiagram.bind` / `change` / `remove` / `create` | Bind {kind} / Change {kind} / Remove {kind} / Create {kind} | —             |
+| `topologyDiagram.apply` / `cancel`                      | Apply {kind} / Cancel                                       | —             |
+| `topologyDiagram.pending`                               | Pending                                                     | —             |
 | `topologyDiagram.existing`                              | Existing                                                    | —             |
 | `topologyDiagram.noOptions`                             | No options yet.                                             | —             |
 | `topologyDiagram.copy`                                  | Copy {field}                                                | —             |
@@ -212,12 +215,12 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 
 - Container queries: none; each column keeps `min-w-(--size-56)` and grows to share the width.
 - Narrow (≤ 640 px or a narrow container): the diagram scrolls inline in its own focusable area; the page does not.
-- Touch: header buttons are full-width rows; bind, remove and copy are small icon buttons with tooltips that also work on focus.
+- Touch: header buttons are full-width rows; bind, remove, apply, cancel and copy are small icon buttons with tooltips that also work on focus.
 - Reflow: the diagram is a two-dimensional figure, an accepted exception to 1.4.10 inside its own scroll area.
 
 ## Performance
 
-- Bundle budget: 34.75 KB gzip for `./topology-diagram` (it carries `dropdown-menu`, `tooltip`, `copy-button` and `empty-state`) in `.size-limit.json`.
+- Bundle budget: 27.75 KB gzip for `./topology-diagram` (it carries `dropdown-menu`, `tooltip`, `copy-button` and `empty-state`) in `.size-limit.json`.
 - Runtime budget: connectors re-measure on resize and DOM mutations; a 7-column, 10-node topology measures in one frame.
 - Heavy parts: none; no node-graph library.
 
@@ -231,6 +234,7 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 ## Decisions and open questions
 
 - **Open glyph on linked names (2026-11-12).** A node with `href` renders its name as a link followed by `az az-external-link`, as the design sample's `ResourceLink` and WebKit's `TableCellLink` do for every resource name, internal or not; the link keeps same-tab navigation and the glyph is `aria-hidden`. No `external` flag: the sample never draws a linked name without it.
+- **A bind is confirmed before it applies (2026-11-17, v6).** Picking from the bind menu used to emit `bind` at once, so a stray pick staged a change. Following Cloudscape's inline edit, the pick is pending on the node and Apply (check) or Cancel (x) replace Remove until one is chosen; only Apply emits `bind`, with the same payload. This changes when `bind` fires, so it rides the v6 break. The pending state is internal: no new prop, event or slot.
 - **The Domains `+` stays in the `actions` slot.** A battery-2 builder left it out though the slot already existed; the fix is discoverability (Best practices, Usage, the Default example), not a new prop.
 
 ## Constraints — DO NOT

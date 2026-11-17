@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useId } from 'vue'
+  import { computed, nextTick, ref, useId } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
@@ -42,29 +42,75 @@
   const uid = useId()
   const triggerId = `${uid}-trigger`
   const bodyId = `${uid}-body`
+  const pendingId = `${uid}-pending`
   const CREATE = '__create__'
 
-  const unbound = computed<boolean>(() => !props.node.name)
-  const status = computed<string>(
-    () => props.node.status || (unbound.value ? t('topologyDiagram.notBound') : '')
+  const actionsEl = ref<globalThis.HTMLElement | null>(null)
+  const pendingValue = ref<string>('')
+
+  const options = computed(() => props.node.bindOptions ?? [])
+  const pending = computed<boolean>(() => pendingValue.value !== '')
+  const pendingLabel = computed<string>(
+    () =>
+      options.value.find((option) => option.value === pendingValue.value)?.label ??
+      pendingValue.value
   )
-  const tagSeverity = computed(() => props.node.severity ?? 'neutral')
+  const unbound = computed<boolean>(() => !props.node.name && !pending.value)
+  const status = computed<string>(() => {
+    if (pending.value) return t('topologyDiagram.pending')
+    return props.node.status || (unbound.value ? t('topologyDiagram.notBound') : '')
+  })
+  const tagSeverity = computed(() =>
+    pending.value ? 'warning' : (props.node.severity ?? 'neutral')
+  )
   const resourceType = computed<string>(() => props.node.type ?? '')
   const bound = computed<boolean>(() => !unbound.value && Boolean(props.node.boundValue))
-  const options = computed(() => props.node.bindOptions ?? [])
   const bindLabel = computed<string>(() =>
     t(bound.value ? 'topologyDiagram.change' : 'topologyDiagram.bind', { kind: resourceType.value })
   )
   const removeLabel = computed<string>(() =>
     t('topologyDiagram.remove', { kind: resourceType.value })
   )
+  const applyLabel = computed<string>(() =>
+    t('topologyDiagram.apply', { kind: resourceType.value })
+  )
+
+  const focusAction = async (part: string): Promise<void> => {
+    await nextTick()
+    actionsEl.value
+      ?.querySelector<globalThis.HTMLElement>(`[data-testid="${props.testId}__${part}"]`)
+      ?.focus()
+  }
 
   const onSelect = (
     event: globalThis.MouseEvent | globalThis.KeyboardEvent,
     value: string | number
   ): void => {
-    if (value === CREATE) emit('create', event)
-    else emit('bind', event, String(value))
+    if (value === CREATE) {
+      pendingValue.value = ''
+      emit('create', event)
+      return
+    }
+    const next = String(value)
+    if (next === (props.node.boundValue ?? '')) {
+      pendingValue.value = ''
+      return
+    }
+    pendingValue.value = next
+    void focusAction('bind-apply')
+  }
+
+  const apply = (event: globalThis.MouseEvent | globalThis.KeyboardEvent): void => {
+    const value = pendingValue.value
+    pendingValue.value = ''
+    emit('bind', event, value)
+    void focusAction('bind-trigger')
+  }
+
+  const cancel = (): void => {
+    if (!pending.value) return
+    pendingValue.value = ''
+    void focusAction('bind-trigger')
   }
 </script>
 
@@ -72,7 +118,8 @@
   <div
     :data-testid="`${testId}__node`"
     :data-state="open ? 'open' : 'closed'"
-    :data-dashed="node.dashed || unbound || null"
+    :data-dashed="node.dashed || unbound || pending || null"
+    :data-pending="pending || null"
     class="w-full rounded-(--shape-card) border border-solid border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) data-[dashed]:border-dashed motion-reduce:transition-none"
   >
     <FlowDiagramAnchor>
@@ -112,7 +159,15 @@
       class="flex min-h-9 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
     >
       <span
-        v-if="unbound"
+        v-if="pending"
+        :id="pendingId"
+        :data-testid="`${testId}__node-pending`"
+        dir="auto"
+        class="min-w-0 truncate text-label-sm text-(--text-default)"
+        >{{ pendingLabel }}</span
+      >
+      <span
+        v-else-if="unbound"
         aria-hidden="true"
         class="min-w-0 truncate text-label-sm text-(--text-muted)"
         >—</span
@@ -141,7 +196,9 @@
       >
       <div
         v-if="node.bindable || $slots['actions']"
+        ref="actionsEl"
         class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"
+        @keydown.esc="cancel"
       >
         <slot name="actions" />
         <template v-if="node.bindable">
@@ -158,6 +215,7 @@
                   variant="outline"
                   size="small"
                   :ariaLabel="bindLabel"
+                  :data-testid="`${testId}__bind-trigger`"
                 />
               </Tooltip>
             </DropdownMenuTrigger>
@@ -175,7 +233,7 @@
                 :key="option.value"
                 :value="option.value"
                 :label="option.label"
-                :selected="option.value === node.boundValue"
+                :selected="option.value === (pending ? pendingValue : node.boundValue)"
               />
             </DropdownMenuGroup>
             <DropdownMenuGroup>
@@ -185,8 +243,31 @@
               />
             </DropdownMenuGroup>
           </DropdownMenu>
+          <template v-if="pending">
+            <Tooltip :content="applyLabel">
+              <IconButton
+                icon="ai ai-check"
+                variant="primary"
+                size="small"
+                :ariaLabel="applyLabel"
+                :aria-describedby="pendingId"
+                :data-testid="`${testId}__bind-apply`"
+                @click="apply"
+              />
+            </Tooltip>
+            <Tooltip :content="t('topologyDiagram.cancel')">
+              <IconButton
+                icon="ai ai-x"
+                variant="outline"
+                size="small"
+                :ariaLabel="t('topologyDiagram.cancel')"
+                :data-testid="`${testId}__bind-cancel`"
+                @click="cancel"
+              />
+            </Tooltip>
+          </template>
           <Tooltip
-            v-if="bound && node.removable"
+            v-else-if="bound && node.removable"
             :content="removeLabel"
           >
             <IconButton
