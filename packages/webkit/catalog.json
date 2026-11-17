@@ -9065,7 +9065,7 @@
     {
      "name": "change",
      "payload": "(event: Event, edit: DataGridCellEdit)",
-     "notes": "A cell edit was committed (Enter, Tab, blur, a toggle); `edit` is `{ row, columnId, value, previous }`."
+     "notes": "A cell edit was committed (Enter, Tab, blur, a toggle), or once per changed cell of a paste (`event` is the `ClipboardEvent`); `edit` is `{ row, columnId, value, previous }`."
     },
     {
      "name": "row-add",
