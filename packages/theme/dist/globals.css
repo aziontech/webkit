@@ -828,7 +828,11 @@
   --chart-sequential-6: #4F46E5;
   --chart-sequential-7: #4338CA;
   --chart-diverging-negative: #D94A03;
+  --chart-diverging-negative-2: #C96746;
+  --chart-diverging-negative-3: #B57D6A;
   --chart-diverging-neutral: #ECECEC;
+  --chart-diverging-positive-3: #6E8CB8;
+  --chart-diverging-positive-2: #4377C3;
   --chart-diverging-positive: #005FCC;
   --severity-critical: #B71515;
   --severity-high: #D94A03;
@@ -954,7 +958,11 @@
   --chart-sequential-6: #818CF8;
   --chart-sequential-7: #A5B4FC;
   --chart-diverging-negative: #FF8E4D;
+  --chart-diverging-negative-2: #CD8157;
+  --chart-diverging-negative-3: #9D725C;
   --chart-diverging-neutral: #2B2B2B;
+  --chart-diverging-positive-3: #5D7EA7;
+  --chart-diverging-positive-2: #4D89D2;
   --chart-diverging-positive: #3392FF;
   --severity-critical: #ED7878;
   --severity-high: #FF8E4D;
@@ -1088,7 +1096,11 @@
     --chart-sequential-6: #818CF8;
     --chart-sequential-7: #A5B4FC;
     --chart-diverging-negative: #FF8E4D;
+    --chart-diverging-negative-2: #CD8157;
+    --chart-diverging-negative-3: #9D725C;
     --chart-diverging-neutral: #2B2B2B;
+    --chart-diverging-positive-3: #5D7EA7;
+    --chart-diverging-positive-2: #4D89D2;
     --chart-diverging-positive: #3392FF;
     --severity-critical: #ED7878;
     --severity-high: #FF8E4D;

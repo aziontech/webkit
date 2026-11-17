@@ -2,7 +2,11 @@ export const CHART_PALETTE_VARIABLES = Object.freeze([
   ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `--chart-series-${n}`),
   ...[1, 2, 3, 4, 5, 6, 7].map((n) => `--chart-sequential-${n}`),
   '--chart-diverging-negative',
+  '--chart-diverging-negative-2',
+  '--chart-diverging-negative-3',
   '--chart-diverging-neutral',
+  '--chart-diverging-positive-3',
+  '--chart-diverging-positive-2',
   '--chart-diverging-positive'
 ])
 

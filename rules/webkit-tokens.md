@@ -85,11 +85,11 @@ WebKit ships **one** chart palette: the values of the `--chart-*` tokens. There 
 palettes in `@aziontech/theme`. An app that offers other palettes (the console API's palette picker)
 sets these variables on the dashboard's root element, and every chart inside re-colours:
 
-| A palette may set                                                                       | A palette never sets                                                                                   |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `--chart-series-1` … `--chart-series-8`                                                 | `--chart-series-other` (the grey a ninth series folds into)                                            |
-| `--chart-sequential-1` (lowest) … `--chart-sequential-7`                                | `--chart-status-*` and `--severity-*` (they mean a state)                                              |
-| `--chart-diverging-negative`, `--chart-diverging-neutral`, `--chart-diverging-positive` | `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*` (the chrome) |
+| A palette may set                                                                                                 | A palette never sets                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `--chart-series-1` … `--chart-series-8`                                                                           | `--chart-series-other` (the grey a ninth series folds into)                                            |
+| `--chart-sequential-1` (lowest) … `--chart-sequential-7`                                                          | `--chart-status-*` and `--severity-*` (they mean a state)                                              |
+| `--chart-diverging-negative` (`-2`, `-3`), `--chart-diverging-neutral`, `--chart-diverging-positive` (`-3`, `-2`) | `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*` (the chrome) |
 
 - **Gridlines are half a border.** `--chart-grid` (the lines behind the marks) sits halfway, in
   perceived lightness, between `--border-default` and `--bg-surface`: it keeps half the border's
@@ -104,6 +104,12 @@ sets these variables on the dashboard's root element, and every chart inside re-
   `--bg-surface`, `--bg-canvas` and `--chart-tooltip-bg` in its theme, the eight series are eight
   distinct colours, and a series keeps its hue family across the theme switch. These are the checks
   `packages/theme/test/chart-role.test.mjs` and `apca-contrast.test.mjs` run on the default.
+- **Diverging runs in three or seven steps.** Three: `--chart-diverging-negative`, `-neutral`,
+  `-positive`. Seven, from the negative end to the positive end: `-negative`, `-negative-2`,
+  `-negative-3`, `-neutral`, `-positive-3`, `-positive-2`, `-positive`. The intermediate steps keep
+  the end's hue and lose chroma toward the neutral; every coloured step clears 3:1 and Lc 30 on the
+  chart surfaces, and neighbours stay at least 0.05 apart in OKLab (`chart-role.test.mjs`). A palette
+  that sets the diverging variables sets all seven.
 - **Eight series, then Other.** A palette has at most eight series; a chart with more folds the
   rest into `--chart-series-other`. A palette never adds `--chart-series-9`.
 - **Where.** On your own root element, or on a webkit tag as a static `style`, an object-literal

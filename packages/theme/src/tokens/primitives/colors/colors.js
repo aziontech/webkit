@@ -139,7 +139,11 @@ export const primitives = {
     orange: { light: '#E8590C', dark: '#E65A1E' },
     cyan: { light: '#0891B2', dark: '#0EA5C6' },
     lime: { light: '#4D7C0F', dark: '#6AA51A' },
-    fuchsia: { light: '#C026D3', dark: '#D946EF' }
+    fuchsia: { light: '#C026D3', dark: '#D946EF' },
+    'diverging-orange-2': { light: '#C96746', dark: '#CD8157' },
+    'diverging-orange-3': { light: '#B57D6A', dark: '#9D725C' },
+    'diverging-blue-2': { light: '#4377C3', dark: '#4D89D2' },
+    'diverging-blue-3': { light: '#6E8CB8', dark: '#5D7EA7' }
   },
   brand,
   alpha
