@@ -27,9 +27,9 @@
 
   const contentClasses = computed(() =>
     cn(
-      '@container/panel p-(--spacing-lg)',
+      '@container/panel min-h-24 p-(--spacing-lg) text-body-sm text-(--text-default)',
       !drawerScrollHost
-        ? 'min-h-0 flex-1 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
+        ? 'flex-1 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
         : undefined,
       !drawerScrollHost ? (attrs.class as string | undefined) : undefined
     )

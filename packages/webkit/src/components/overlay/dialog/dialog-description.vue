@@ -23,7 +23,7 @@
 <template>
   <p
     :id="ctx?.descriptionId"
-    :class="cn('text-body-xs text-(--text-muted)', attrs.class as string | undefined)"
+    :class="cn('text-body-sm text-(--text-muted)', attrs.class as string | undefined)"
     :data-testid="`${ctx?.testId}__description`"
   >
     <slot />

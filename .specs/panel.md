@@ -3,10 +3,10 @@ name: panel
 category: overlay
 structure: composition
 status: implemented
-spec_version: 7
-checksum: 6252e657cd9b30d64adfb36e7d5c2c264bf912cc275272ee763752aed5f42510
+spec_version: 8
+checksum: f182a5874103d3fa79c79fde5da96e5c10e5239e93e86964637015a382bf2437
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Panel — Component Spec
@@ -37,6 +37,7 @@ The shell inside an overlay: a sized surface with a header for the title and the
 
 - Inside a dialog or drawer, use only `PanelHeader`, `PanelBody` and `PanelFooter`. The overlay already renders the `Panel` root, so a second `Panel` inside it nests two shells.
 - Put long content in `PanelBody`. It is the only region that scrolls; the header and footer stay in place.
+- `PanelBody` is the dominant block. Its copy defaults to `.text-body-sm` (14px) in `var(--text-default)`, its padding (`var(--spacing-lg)`) is larger than the header and footer block padding (`var(--spacing-md)`), and it is at least `min-h-24` tall, so a one-line body still reads taller than the header and footer bands. The extra height falls after the text. Children with their own text class keep it.
 - `size` caps the max width (`small`, `medium`, `large` map to the `--container-sm` / `--container-xl` / `--container-2xl` tokens). `sizeAtMd` applies that cap from `md` up only and is meant for the dialog's mobile bottom sheet.
 - `Panel` has no open state, no dismissal and no focus management. Don't use it alone as a modal.
 
@@ -111,14 +112,17 @@ _none_
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)      |
-| ---------- | ---------------------- |
-| typography | .text-body-sm          |
-| surface    | `var(--bg-surface)`    |
-| text       | `var(--text-default)`  |
-| spacing    | `var(--spacing-3)`     |
-| shape      | `var(--shape-control)` |
-| ring       | `var(--ring-color)`    |
+| Region                          | Token (DESIGN.md)                                    |
+| ------------------------------- | ---------------------------------------------------- |
+| surface                         | `var(--bg-surface)`                                  |
+| shape (root)                    | `var(--shape-card)`                                  |
+| region dividers                 | `var(--border-muted)`                                |
+| body copy (inherited)           | `.text-body-sm`, `var(--text-default)`               |
+| body padding                    | `var(--spacing-lg)`                                  |
+| body minimum height             | `min-h-24`                                           |
+| header and footer block padding | `var(--spacing-md)`                                  |
+| header and footer inline pad    | `var(--spacing-lg)` (header end `var(--spacing-md)`) |
+| ring (scrollable body)          | `var(--ring-color)`                                  |
 
 ## Theme gaps
 

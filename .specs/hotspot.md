@@ -3,11 +3,11 @@ name: hotspot
 category: content
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 9eccfc3e2ec415d47bc657fed95108d706ba3793dd7bf36ade125bddae6f634d
+checksum: 248c7a3a2230351454263f1330e541b4afe61fbfc58295683395e01c80baffc6
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Hotspot — Component Spec
@@ -97,16 +97,16 @@ _No events — moves go through the `TutorialPanel.Provider`, which emits `updat
 
 ## Tokens
 
-| Region                   | Token (DESIGN.md)                        |
-| ------------------------ | ---------------------------------------- |
-| marker ring and fill     | `var(--primary)`                         |
-| marker dot (not current) | `var(--bg-surface)`                      |
-| shape                    | `var(--radius-full)`                     |
-| ring                     | `var(--ring-color)`                      |
-| step content typography  | `.text-body-sm`                          |
-| step content ink         | `var(--text-default)`                    |
-| padding (step content)   | `var(--spacing-md)`, `var(--spacing-sm)` |
-| gap (control to marker)  | `var(--spacing-2xs)`                     |
+| Region                   | Token (DESIGN.md)                                                                                                            |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| marker ring and fill     | `var(--primary)`                                                                                                             |
+| marker dot (not current) | `var(--bg-surface)`                                                                                                          |
+| shape                    | `var(--radius-full)`                                                                                                         |
+| ring                     | `var(--ring-color)`                                                                                                          |
+| step content typography  | `.text-body-sm`                                                                                                              |
+| step content ink         | `var(--text-default)`                                                                                                        |
+| padding (step content)   | `var(--spacing-md)` inline and top, `var(--spacing-lg)` bottom (larger than the `var(--spacing-sm)` header and footer bands) |
+| gap (control to marker)  | `var(--spacing-2xs)`                                                                                                         |
 
 ## Theme gaps
 

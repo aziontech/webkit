@@ -3,10 +3,10 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: f81ec9e4e058703ea190a7accc8b702ff56a77da188f84e0d27684f65fcc4cca
-spec_version: 7
+checksum: ec21c039194e3024a0c623e26aec3b1372cc1df37cac5e7c13078fd239e1530d
+spec_version: 8
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # ConfirmDialog — Component Spec
@@ -115,9 +115,11 @@ _none_ — the open and close motion is owned by `dialog`.
 
 ## Tokens
 
-| Region      | Token (DESIGN.md)   |
-| ----------- | ------------------- |
-| actions gap | `var(--spacing-sm)` |
+| Region      | Token (DESIGN.md)                                             |
+| ----------- | ------------------------------------------------------------- |
+| actions gap | `var(--spacing-sm)`                                           |
+| description | `.text-body-sm`, `var(--text-muted)` (`DialogDescription`)    |
+| body        | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24` |
 
 ## Theme gaps
 

@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 10
-checksum: 7610a85d219b4e6509b75a4136d522313824c2b5810ee0e5df276882a43feb1b
+checksum: 46b69b1511a5c1eac1ecd6146eed047c60e033f2b95766afeab7e819abbacf54
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -155,14 +155,14 @@ No element sets an inline `transition`, so `motion-reduce:transition-none` wins 
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)      |
-| ---------- | ---------------------- |
-| typography | .text-body-sm          |
-| surface    | `var(--bg-surface)`    |
-| text       | `var(--text-default)`  |
-| spacing    | `var(--spacing-3)`     |
-| shape      | `var(--shape-control)` |
-| ring       | `var(--ring-color)`    |
+| Region         | Token (DESIGN.md)                                                |
+| -------------- | ---------------------------------------------------------------- |
+| title          | `.text-heading-sm`, `var(--text-default)`                        |
+| description    | `.text-body-sm`, `var(--text-muted)`                             |
+| body           | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24`    |
+| header, footer | `PanelHeader` / `PanelFooter`: `var(--spacing-md)` block padding |
+| surface        | `var(--bg-surface)`                                              |
+| ring           | `var(--ring-color)`                                              |
 
 ## Theme gaps
 

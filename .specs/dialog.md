@@ -3,13 +3,13 @@ name: dialog
 category: overlay
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 270318ea8b42de42f19081157ab514a112cd902a242894ef164c36f67e88b13e
+checksum: 1151f7106d6bdecd839304d7563b96d7fbc267b22aaa03c69cdb8b7d5ccb8a2f
 created: 2026-05-22
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Dialog — Component Spec
@@ -154,14 +154,14 @@ No element sets an inline `transition` (an inline style beats `motion-reduce:tra
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)      |
-| ---------- | ---------------------- |
-| typography | .text-body-sm          |
-| surface    | `var(--bg-surface)`    |
-| text       | `var(--text-default)`  |
-| spacing    | `var(--spacing-3)`     |
-| shape      | `var(--shape-control)` |
-| ring       | `var(--ring-color)`    |
+| Region         | Token (DESIGN.md)                                                |
+| -------------- | ---------------------------------------------------------------- |
+| title          | `.text-heading-sm`, `var(--text-default)`                        |
+| description    | `.text-body-sm`, `var(--text-muted)`                             |
+| body           | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24`    |
+| header, footer | `PanelHeader` / `PanelFooter`: `var(--spacing-md)` block padding |
+| surface        | `var(--bg-surface)`                                              |
+| ring           | `var(--ring-color)`                                              |
 
 ## Theme gaps
 

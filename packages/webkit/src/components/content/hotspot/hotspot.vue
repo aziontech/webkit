@@ -143,7 +143,9 @@
             </PopoverDescription>
             <PopoverClose :data-testid="`${testId}__close`" />
           </PopoverHeader>
-          <p class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-default)">
+          <p
+            class="px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg) text-body-sm text-(--text-default)"
+          >
             {{ entry.content }}
           </p>
           <PopoverFooter>
