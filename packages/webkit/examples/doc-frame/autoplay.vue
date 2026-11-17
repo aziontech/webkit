@@ -9,7 +9,7 @@
       :src="placeholderClip"
       alt="Landing on step 3 of Create application"
       autoplay
-      caption="Autoplay: muted, inline, looping, no controls"
+      caption="Autoplay: muted, inline and looping, with a pause control"
     />
     <DocFrame caption="The same rule reaches a clip written by hand">
       <video

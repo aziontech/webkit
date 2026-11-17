@@ -10756,7 +10756,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Plays the clip on its own, muted, inline and looping, with no controls."
+     "doc": "Plays the clip on its own, muted, inline and looping, with a pause control instead of the player controls; off under reduced motion."
     }
    ],
    "slots": [

@@ -1,6 +1,6 @@
 # Doc Frame
 
-> The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset. Pass `src` and the frame decides from the extension whether it holds a still or a clip; compose the default slot when the framed thing is markup. A still opens full screen out of its own frame — the picture is the button — while a clip keeps its player controls and composed content has no source to open. The caption reads under the frame, centered, as part of the picture; the hint reads above it on the text's own left edge, as part of the sentence that led the reader here; each is a string prop for the plain case with a slot of the same name for rich content.
+> The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset. Pass `src` and the frame decides from the extension whether it holds a still or a clip; compose the default slot when the framed thing is markup. A still opens full screen out of its own frame — the picture is the button — while a clip keeps its player controls (or, when it plays on its own, a pause control) and composed content has no source to open. The caption reads under the frame, centered, as part of the picture; the hint reads above it on the text's own left edge, as part of the sentence that led the reader here; each is a string prop for the plain case with a slot of the same name for rich content.
 
 - Import: `import DocFrame from '@aziontech/webkit/doc-frame'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -18,7 +18,7 @@
 - Always pass `alt` for a still or a clip: it labels the media, names the zoom trigger, and titles the full-screen dialog.
 - Keep the caption to one line that belongs to the picture; a paragraph of context belongs in the prose above, or in `hint` when it leads directly into the frame.
 - Use the `caption` / `hint` slots only when the sentence needs markup (a link, a bold run, a code chip); the string props cover the plain case in one attribute.
-- Reach for `autoplay` only when the clip is decoration: it mutes, inlines and loops the clip and removes its controls, on the prop path and for a clip written by hand in the slot alike.
+- Reach for `autoplay` only when the clip is decoration: it mutes, inlines and loops the clip and swaps its player controls for one pause control, on the prop path and for a clip written by hand in the slot alike. Under a reduced-motion preference it does not play until the reader presses play.
 
 ## Don’t
 
@@ -40,7 +40,7 @@
 | `hint` | `string` | `''` | false | Lead-in above the frame, left aligned; plain-text fallback for the hint slot. |
 | `src` | `string` | `''` | false | Media source; omit to frame slot content instead. |
 | `alt` | `string` | `''` | false | Alternative text for the framed media. |
-| `autoplay` | `boolean` | `false` | false | Plays the clip on its own, muted, inline and looping, with no controls. |
+| `autoplay` | `boolean` | `false` | false | Plays the clip on its own, muted, inline and looping, with a pause control instead of the player controls; off under reduced motion. |
 
 ## Slots
 
@@ -56,14 +56,16 @@
 - The framed element is decided by data, not by a prop: a source matching a clip extension (`.mp4`, `.webm`, `.ogv`, `.ogg`, `.mov`, `.m4v`) renders a player, any other source renders a still, and no source renders the default slot.
 - The lightbox contract: only a **still** opens full screen — the picture itself is the trigger. `Escape`, the backdrop, the close control and a click on the opened picture all close it, and focus returns to the thumbnail trigger. A **clip** does not zoom (it carries controls a click would fight, and a player has fullscreen of its own), and **composed slot content** does not zoom (there is no source to open).
 - While open: the overlay carries `data-state="open"`, body scroll is locked, and the full-size copy carries `data-flip="start|armed"` — the attribute that arms the FLIP transition only after the starting transform has committed.
-- `autoplay` is applied on both authoring paths: to the prop, and by rewriting a hand-written autoplaying clip in the default slot with the same muted/inline/loop attributes and no controls.
+- `autoplay` is applied on both authoring paths: to the prop, and by rewriting a hand-written autoplaying clip in the default slot with the same muted/inline/loop attributes, no player controls and no native `autoplay` attribute. The frame starts the clip itself after mount, so it can honour the reader's preference: the clip carries `data-autoplay`, and a pause control (`IconButton`, `${testId}__pause`) sits on the frame's bottom end corner.
+- Autoplay playback: `playing` → the clip loops and the control reads "Pause animation" (`common.pauseAnimation`, icon `az-pause`); `paused` → the clip holds its current frame and the control reads "Play animation" (`common.playAnimation`, icon `az-play`). Under `prefers-reduced-motion: reduce` the clip starts paused on its first frame; the reader's own choice then wins over the preference. If the browser refuses to play, the frame falls back to `paused`.
 - `data-doc-block` is the `DocProse` contract (the frame takes the block rung of the prose ladder).
 
 ## Accessibility
 
 - Visible focus: the zoom trigger is a real button with `focus-visible:outline-2 focus-visible:outline-(--ring-color)`; the close control carries the same ring. The full-screen badge fades in on keyboard focus as well as hover, so the zoom affordance is never pointer-only.
-- Keyboard map: `Tab` reaches the zoom trigger of a still; `Enter` / `Space` opens the lightbox. While open, focus moves to the close control, `Tab` / `Shift+Tab` are trapped inside the dialog, and `Escape` closes it. On close — by any path — focus returns to the thumbnail trigger.
-- ARIA: the trigger's `aria-label` names the picture ("View full screen: {alt}"). The lightbox is `role="dialog"` with `aria-modal="true"`, labelled from `alt`. The backdrop is `aria-hidden` — the pointer shortcut whose keyboard equivalents are `Escape` and the real close button. The badge is `aria-hidden` (the trigger already carries the name). A clip takes `aria-label` from `alt`; an autoplaying clip is muted so it never seizes a screen reader's audio.
+- Keyboard map: `Tab` reaches the zoom trigger of a still; `Enter` / `Space` opens the lightbox. On an autoplaying clip `Tab` reaches the pause control; `Enter` / `Space` pauses or plays the clip. While open, focus moves to the close control, `Tab` / `Shift+Tab` are trapped inside the dialog, and `Escape` closes it. On close — by any path — focus returns to the thumbnail trigger.
+- ARIA: the trigger's `aria-label` names the picture ("View full screen: {alt}"). The lightbox is `role="dialog"` with `aria-modal="true"`, labelled from `alt`. The backdrop is `aria-hidden` — the pointer shortcut whose keyboard equivalents are `Escape` and the real close button. The badge is `aria-hidden` (the trigger already carries the name). A clip takes `aria-label` from `alt`; an autoplaying clip is muted so it never seizes a screen reader's audio. The pause control is a real button whose label switches between "Pause animation" and "Play animation" (no `aria-pressed`, so the name and the state never contradict).
+- Moving content (WCAG 2.2.2 Pause, Stop, Hide): an autoplaying clip loops for longer than five seconds, so it always ships the visible, keyboard-reachable pause control, and it does not start at all under a reduced-motion preference.
 - The lightbox Teleports to `body` and locks body scroll while open, so assistive tech and the pointer agree on what is interactive.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on all frame chrome tokens.
 - Touch target: the zoom trigger is the whole picture; the close control is a padded button at the viewport corner.
@@ -132,7 +134,7 @@
       :src="placeholderClip"
       alt="Landing on step 3 of Create application"
       autoplay
-      caption="Autoplay: muted, inline, looping, no controls"
+      caption="Autoplay: muted, inline and looping, with a pause control"
     />
     <DocFrame caption="The same rule reaches a clip written by hand">
       <video

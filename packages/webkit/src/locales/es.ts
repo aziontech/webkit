@@ -1217,6 +1217,8 @@ export const es: Messages = {
     resumeRotation: 'Reanudar rotación',
     pauseScrolling: 'Pausar desplazamiento',
     resumeScrolling: 'Reanudar desplazamiento',
+    pauseAnimation: 'Pausar animación',
+    playAnimation: 'Reproducir animación',
     copy: 'Copiar',
     copied: 'Copiado',
     newTab: '(se abre en una pestaña nueva)'
