@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/theme-switcher/default.vue'
 import Disabled from '../../../../examples/theme-switcher/disabled.vue'
+import Sizes from '../../../../examples/theme-switcher/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ThemeSwitcher from './theme-switcher.vue'
 
@@ -67,6 +68,32 @@ describe('ThemeSwitcher', () => {
 
     expect(getByRole('radio', { name: 'Light' }).getAttribute('aria-checked')).toBe('true')
     expect(getByRole('radio', { name: 'Dark' }).getAttribute('aria-checked')).toBe('false')
+  })
+
+  it('maps size to data-size, medium by default', async () => {
+    const { getByTestId, rerender } = render(ThemeSwitcher)
+    const root = getByTestId('theme-switcher')
+    expect(root.getAttribute('data-size')).toBe('medium')
+
+    for (const size of ['small', 'large'] as const) {
+      await rerender({ size })
+      expect(root.getAttribute('data-size')).toBe(size)
+    }
+  })
+
+  it('renders the Sizes example: one switcher per size, sharing one value', async () => {
+    const { getAllByRole } = render(Sizes)
+    const groups = getAllByRole('radiogroup')
+    expect(groups.map((group) => group.getAttribute('data-size'))).toEqual([
+      'small',
+      'medium',
+      'large'
+    ])
+
+    await userEvent.click(getAllByRole('radio', { name: 'Light' })[0]!)
+    for (const radio of getAllByRole('radio', { name: 'Light' })) {
+      expect(radio.getAttribute('aria-checked')).toBe('true')
+    }
   })
 
   it('applies a custom ariaLabel to the radiogroup', () => {

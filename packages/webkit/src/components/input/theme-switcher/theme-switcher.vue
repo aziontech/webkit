@@ -14,13 +14,19 @@
 
   export type ThemeSwitcherValue = 'system' | 'dark' | 'light'
 
+  /** Size token. Sets the control's height on the 28 / 32 / 40 rhythm every other control uses. */
+  export type ThemeSwitcherSize = 'small' | 'medium' | 'large'
+
   export interface ThemeSwitcherProps {
+    /** Size token, matching the height of a neighbouring IconButton, Select or ToggleGroup of the same size. */
+    size?: ThemeSwitcherSize
     /** Disables the whole control and applies disabled tokens. */
     disabled?: boolean
     /** Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). */
     ariaLabel?: string
   }
   const props = withDefaults(defineProps<ThemeSwitcherProps>(), {
+    size: 'medium',
     disabled: false,
     ariaLabel: ''
   })
@@ -41,9 +47,7 @@
 
   const rootEl = ref<globalThis.HTMLElement | null>(null)
   const segmentEls = ref<globalThis.HTMLButtonElement[]>([])
-  const indicatorVisible = ref(false)
-  const indicatorOffsetX = ref(0)
-  const indicatorOffsetY = ref(0)
+  const indicator = ref<Record<string, string> | null>(null)
 
   const selectedIndex = computed(() => MODES.findIndex((mode) => mode.value === model.value))
 
@@ -103,14 +107,15 @@
   function syncIndicator() {
     const activeSegmentEl = segmentEls.value[selectedIndex.value]
 
-    if (!rootEl.value || !activeSegmentEl || selectedIndex.value < 0) {
-      indicatorVisible.value = false
-      return
-    }
-
-    indicatorOffsetX.value = activeSegmentEl.offsetLeft
-    indicatorOffsetY.value = activeSegmentEl.offsetTop
-    indicatorVisible.value = true
+    indicator.value =
+      rootEl.value && activeSegmentEl
+        ? {
+            left: '0',
+            width: `${activeSegmentEl.offsetWidth}px`,
+            height: `${activeSegmentEl.offsetHeight}px`,
+            transform: `translate3d(${activeSegmentEl.offsetLeft}px, ${activeSegmentEl.offsetTop}px, 0)`
+          }
+        : null
   }
 
   function scheduleIndicatorSync() {
@@ -137,13 +142,13 @@
     resizeObserver = null
   })
 
-  watch(() => model.value, scheduleIndicatorSync)
+  watch(() => [model.value, props.size], scheduleIndicatorSync)
 
   const ROOT_CLASS =
-    'relative inline-flex h-7 w-fit items-center gap-(--spacing-2xs) p-(--spacing-2xs) rounded-full border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface)'
+    'group relative inline-flex w-fit shrink-0 items-stretch gap-(--spacing-2xs) p-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10'
 
   const SEGMENT_CLASS =
-    'relative z-(--z-control) inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-full cursor-pointer text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) [&:not([data-state=active])]:hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
+    'relative z-(--z-control) inline-flex shrink-0 items-center justify-center rounded-(--shape-button) cursor-pointer group-data-[size=small]:w-6 group-data-[size=medium]:w-7 group-data-[size=large]:w-9 text-label-sm group-data-[size=large]:text-label-md data-[state=active]:text-(--text-default) data-[state=inactive]:text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) [&:not([data-state=active])]:hover:bg-(--bg-hover) hover:text-(--text-default) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 
 <template>
@@ -153,19 +158,17 @@
     role="radiogroup"
     :aria-label="ariaLabel || t('themeSwitcher.label')"
     :aria-disabled="disabled || undefined"
+    :data-size="size"
     :data-disabled="disabled || undefined"
     :data-testid="testId"
     :class="cn(ROOT_CLASS, attrs.class as string)"
   >
     <span
-      v-show="indicatorVisible"
+      v-show="indicator"
       aria-hidden="true"
       :data-testid="`${testId}__indicator`"
-      :style="{
-        left: 0,
-        transform: `translate3d(${indicatorOffsetX}px, ${indicatorOffsetY}px, 0)`
-      }"
-      class="pointer-events-none absolute top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      :style="indicator ?? undefined"
+      class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
     />
     <Tooltip
       v-for="(mode, index) in MODES"

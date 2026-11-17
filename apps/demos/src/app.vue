@@ -197,6 +197,7 @@
             >
             <ThemeSwitcher
               v-model="theme"
+              size="small"
               aria-label="Theme"
             />
           </div>

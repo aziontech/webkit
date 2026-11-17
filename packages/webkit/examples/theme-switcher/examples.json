@@ -8,6 +8,11 @@
       "file": "default.vue"
     },
     {
+      "name": "Sizes",
+      "summary": "Small, medium and large, each beside an outline IconButton of the same size: the heights, radius and border match, so the switcher sits in a row of header controls.",
+      "file": "sizes.vue"
+    },
+    {
       "name": "Disabled",
       "summary": "The whole control is disabled and applies disabled tokens; no segment can be selected.",
       "file": "disabled.vue"

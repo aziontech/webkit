@@ -3,20 +3,20 @@ name: theme-switcher
 category: input
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: cacfd805814c105f1bfba62aa15296ae675dbb8f29c6b3b1396343c9005c2bcf
+checksum: 895b75334cb953283eb11b2273426e28a545f094723e3467242674dd59451bcb
 created: 2026-07-13
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Theme Switcher — Component Spec
 
 ## Purpose
 
-A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
+A compact segmented control drawn like `toggle-group` (same radius, border, surface and 28 / 32 / 40 heights, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size) that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
 
 ## When to use
 
@@ -31,13 +31,14 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 
 ## Related
 
-- `toggle-group` — the generic mutually exclusive option group, with labels and sizes.
+- `toggle-group` — the generic mutually exclusive option group, with labels and sizes; ThemeSwitcher shares its look (radius, border, surface, indicator, sizes).
 - `switch` — boolean toggle for a single setting.
 
 ## Best practices
 
 - Bind with `v-model` and apply the mode in the app (for example a `data-theme` attribute, resolving `system` from `prefers-color-scheme`); the component has no side effects.
 - Persist the chosen mode on the app side so it survives a reload.
+- Match `size` to the neighbouring controls: `medium` beside the 32 px header controls, `small` inside a 32 px menu row, `large` beside 40 px controls.
 - Localize `ariaLabel`; the segment names (System, Dark, Light) are fixed in the component.
 
 ## Usage
@@ -57,10 +58,11 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 
 ## Props
 
-| Prop        | Type      | Default | Required | JSDoc                                                                                       |
-| ----------- | --------- | ------- | -------- | ------------------------------------------------------------------------------------------- |
-| `disabled`  | `boolean` | `false` | false    | Disables the whole control and applies disabled tokens.                                     |
-| `ariaLabel` | `string`  | `''`    | false    | Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). |
+| Prop        | Type                                                   | Default    | Required | JSDoc                                                                                                 |
+| ----------- | ------------------------------------------------------ | ---------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `size`      | `ThemeSwitcherSize` (`'small' \| 'medium' \| 'large'`) | `'medium'` | false    | Size token, matching the height of a neighbouring IconButton, Select or ToggleGroup of the same size. |
+| `disabled`  | `boolean`                                              | `false`    | false    | Disables the whole control and applies disabled tokens.                                               |
+| `ariaLabel` | `string`                                               | `''`       | false    | Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`).           |
 
 ## v-model
 
@@ -79,9 +81,10 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- `data-size` mirrors `size` on the root: 28 px (`small`), 32 px (`medium`), 40 px (`large`) tall, the same rhythm as `toggle-group`, `icon-button` and `select`; segments are 24 / 28 / 36 px wide and fill the inner height
 - `data-disabled` mirrors the `disabled` prop on the root
 - Selected segment carries `aria-checked="true"` and `data-state="active"`; unselected segments `aria-checked="false"` and `data-state="inactive"`
-- A single `aria-hidden` indicator element renders the selection highlight (`var(--bg-selected)`) and slides to the active segment (position measured from the active segment's box); segments themselves stay transparent
+- A single `aria-hidden` indicator element renders the selection highlight (`var(--bg-selected)`) and slides to the active segment (position and size measured from the active segment's box, so it follows every size); segments themselves stay transparent; the active icon uses `var(--text-default)`, the others `var(--text-muted)` until hovered
 
 ## Motion & Animations
 
@@ -92,46 +95,50 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 
 ## Tokens
 
-| Region                   | Token (DESIGN.md)       |
-| ------------------------ | ----------------------- |
-| pill surface             | `var(--bg-surface)`     |
-| pill border              | `var(--border-default)` |
-| selected segment surface | `var(--bg-selected)`    |
-| hover segment surface    | `var(--bg-hover)`       |
-| icon color               | `var(--text-default)`   |
-| disabled icon            | `var(--text-disabled)`  |
-| gap / padding            | `var(--spacing-2xs)`    |
-| ring                     | `var(--ring-color)`     |
-| ring offset              | `var(--bg-canvas)`      |
+| Region                   | Token (DESIGN.md)                                                     |
+| ------------------------ | --------------------------------------------------------------------- |
+| group surface            | `var(--bg-surface)`                                                   |
+| group border             | `var(--border-muted)` (as `toggle-group`)                             |
+| group and segment radius | `var(--shape-button)` (as `toggle-group`, `button`, `icon-button`)    |
+| height                   | `h-7` / `h-8` / `h-10` by `size`                                      |
+| selected segment surface | `var(--bg-selected)`                                                  |
+| hover segment surface    | `var(--bg-hover)`                                                     |
+| icon color               | `var(--text-default)` (active, hover), `var(--text-muted)` (inactive) |
+| icon size                | `text-label-sm` (`small`, `medium`), `text-label-md` (`large`)        |
+| disabled icon            | `var(--text-disabled)`                                                |
+| gap / padding            | `var(--spacing-2xs)`                                                  |
+| ring                     | `var(--ring-color)`                                                   |
+| ring offset              | `var(--bg-canvas)`                                                    |
 
 ## Theme gaps
 
-| Figma variable                   | Temporary primitive                                                  | Follow-up                                            |
-| -------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------- |
-| `--border-width-default` (0.8px) | `border-(length:--border-width-default)` (real compiled theme token) | `TODO: document --border-width-default in DESIGN.md` |
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the focused segment.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the focused segment, drawn inside the group as on `toggle-group`.
 - Keyboard map: `Tab` moves focus into the group (roving tabindex lands on the selected segment); `ArrowLeft`/`ArrowRight` (and `ArrowUp`/`ArrowDown`) move selection between segments; `Space`/`Enter` selects the focused segment.
 - ARIA: root is `role="radiogroup"` with `aria-label` from `ariaLabel`; each segment is `role="radio"` with `aria-checked` and its own `aria-label` (`System` / `Dark` / `Light`); the glyph is `aria-hidden`. `aria-disabled` mirrors `disabled`.
 - Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
-- Touch target: segments follow the compact Figma sizing (28px pill height, 28×20px segments) and are below the 40×40 px target; justified deviation for a dense global control, consistent with the design.
+- Touch target: `large` segments are 36×30 px; `small` and `medium` segments are below the 40×40 px target, a justified deviation for a dense global control that matches `toggle-group` at the same sizes.
 
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the sun, moon and monitor glyphs do not mirror.
 - Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous theme, swapped under `dir="rtl"` (`logicalArrowKey`).
-- Indicator: the selection pill is anchored with a physical `left: 0` and moved by the measured offset, so it lands on the selected option in both directions.
+- Indicator: the selection highlight is anchored with a physical `left: 0` and moved by the measured offset, so it lands on the selected option in both directions.
 - User data: none.
 
 ## Examples
 
 - Default
-- Disabled — only state story; the component has a single `variant` and a single `size`, so Types/Sizes are omitted.
+- Sizes — `small`, `medium` and `large`, each beside an outline `IconButton` of the same size, so the matching height and radius are visible.
+- Disabled — the only state example; the component has a single `variant`, so Types are omitted.
 
 ## Constraints — DO NOT
 
