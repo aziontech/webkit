@@ -76,22 +76,20 @@
                 @click="navOpen = true"
               />
             </div>
-            <AppHeader.Brand>
-              <a
-                href="/"
-                :aria-label="t.home"
-                class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-              >
-                <Brand
-                  variant="default"
-                  size="small"
-                />
-                <Tag
-                  label="WebKit"
-                  severity="neutral"
-                  size="small"
-                />
-              </a>
+            <AppHeader.Brand
+              href="/"
+              :aria-label="t.home"
+              class="gap-(--spacing-xs)"
+            >
+              <Brand
+                variant="default"
+                size="small"
+              />
+              <Tag
+                label="WebKit"
+                severity="neutral"
+                size="small"
+              />
             </AppHeader.Brand>
             <NavigationMenu
               :aria-label="t.navigation"
