@@ -106,7 +106,7 @@
   })
 
   const side = computed(() => (ctx?.side === 'start' ? 'start' : 'end'))
-  const drawerSize = computed(() => unref(ctx?.size) ?? 'medium')
+  const drawerSize = computed(() => unref(ctx?.size) ?? 'large')
 
   const onOverlayClick = () => {
     if (!ctx?.dismissible) return
@@ -139,7 +139,7 @@
         v-bind="forwardedAttrs"
         :class="
           cn(
-            'pointer-events-none fixed z-1001 flex p-0 transition-[translate] duration-slow-02 ease-expressive-entrance data-[state=closed]:duration-slow-01 data-[state=closed]:ease-expressive-exit motion-reduce:transition-none max-md:inset-x-0 max-md:top-auto max-md:bottom-0 max-md:h-fit max-md:max-h-[80dvh] max-md:w-full max-md:justify-center max-md:translate-x-0 max-md:data-[state=closed]:translate-y-full max-md:data-[state=open]:translate-y-0 max-sm:top-0 max-sm:h-dvh max-sm:max-h-dvh md:inset-y-0 md:h-full md:min-h-full md:w-full md:translate-y-0 md:data-[state=open]:translate-x-0 data-[side=start]:md:start-0 data-[side=start]:md:justify-start data-[side=start]:md:data-[state=closed]:-translate-x-full data-[side=start]:rtl:md:data-[state=closed]:translate-x-full data-[side=end]:md:end-0 data-[side=end]:md:justify-end data-[side=end]:md:data-[state=closed]:translate-x-full data-[side=end]:rtl:md:data-[state=closed]:-translate-x-full data-[size=small]:md:max-w-(--container-sm) data-[size=medium]:md:max-w-(--container-xl) data-[size=large]:md:max-w-(--container-4xl)',
+            'pointer-events-none fixed z-1001 flex p-0 transition-[translate] duration-slow-02 ease-expressive-entrance data-[state=closed]:duration-slow-01 data-[state=closed]:ease-expressive-exit motion-reduce:transition-none max-md:inset-x-0 max-md:top-auto max-md:bottom-0 max-md:h-fit max-md:max-h-[80dvh] max-md:w-full max-md:justify-center max-md:translate-x-0 max-md:data-[state=closed]:translate-y-full max-md:data-[state=open]:translate-y-0 max-sm:top-0 max-sm:h-dvh max-sm:max-h-dvh md:inset-y-0 md:h-full md:min-h-full md:w-full md:translate-y-0 md:data-[state=open]:translate-x-0 data-[side=start]:md:start-0 data-[side=start]:md:justify-start data-[side=start]:md:data-[state=closed]:-translate-x-full data-[side=start]:rtl:md:data-[state=closed]:translate-x-full data-[side=end]:md:end-0 data-[side=end]:md:justify-end data-[side=end]:md:data-[state=closed]:translate-x-full data-[side=end]:rtl:md:data-[state=closed]:-translate-x-full data-[size=small]:md:max-w-(--container-sm) data-[size=medium]:md:max-w-[max(30vw,var(--container-md))] data-[size=large]:md:max-w-[max(40vw,var(--container-lg))]',
             attrs.class as string | undefined
           )
         "

@@ -3,10 +3,10 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 9
-checksum: 8b828795d3a0dc28f46004fed23c93fb75c3e34cd6f662a769d6a49412a20d99
+spec_version: 10
+checksum: 7610a85d219b4e6509b75a4136d522313824c2b5810ee0e5df276882a43feb1b
 created: 2026-05-22
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Drawer — Component Spec
@@ -37,7 +37,7 @@ A panel that slides in from an edge of the screen and keeps the page behind it i
 ## Best practices
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
-- The first drawer of a flow is `large`, the default. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
+- The first drawer of a flow is `large`, the default and the widest: 40% of the screen. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
 - Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).
 - Keep the drawer modal (the default). Use `:modal="false"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.
 - While an action is in flight, set `:dismissible="false"` and `:closable="false"` together so nothing can close it.
@@ -112,7 +112,7 @@ Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attache
 | `dismissible` | `boolean`    | `true`     | false    | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`.                                                                                                     |
 | `modal`       | `boolean`    | `true`     | false    | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
 | `side`        | `DrawerSide` | `'end'`    | false    | Edge the drawer panel slides from, in reading direction (`start` or `end`).                                                                                                                                                   |
-| `size`        | `DrawerSize` | `'large'`  | false    | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport.                                                                                      |
+| `size`        | `DrawerSize` | `'large'`  | false    | Panel width preset: `small` `--container-sm`, `medium` 30% of the screen (at least `--container-md`), `large` 40% of the screen (at least `--container-lg`), the widest and the default. Height is always 100% viewport.                                                                                      |
 
 - Two close paths: `dismissible` gates the light-dismiss paths (`Esc`, overlay click); `closable` shows or removes the close (X) button, as Radix and the prop vocabulary separate them. `Drawer.Close` and the context `close()` always close. Tests: `drawer.test.ts` › closable.
 - `modal` (default `true`) is the only way to drop the overlay. Tests: `drawer.test.ts` › modal.
@@ -139,7 +139,7 @@ Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attache
 - `data-state` values: `open` | `closed` (where applicable)
 - Phones: below `md` the drawer is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`top-0`, `h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content with full-width actions.
 - Server render and hydration: the phone layout is CSS breakpoints only (`max-md:` / `md:`), so the server HTML and the hydrated DOM are identical at every width.
-- `data-side` and `data-size` on the `role="dialog"` element mirror `side` and `size`, reactively; `side`, `size` and `dismissible` are read live from the root, so `:dismissible="!saving"` locks an open drawer while it saves. The width comes from container tokens (`data-[size=small]:md:max-w-(--container-sm)`, `medium` `--container-xl`, `large` `--container-4xl`), not a JS map or an inline `max-width`.
+- `data-side` and `data-size` on the `role="dialog"` element mirror `side` and `size`, reactively; `side`, `size` and `dismissible` are read live from the root, so `:dismissible="!saving"` locks an open drawer while it saves. The width comes from utilities on the element (`data-[size=small]:md:max-w-(--container-sm)`, `medium` `max(30vw, var(--container-md))`, `large` `max(40vw, var(--container-lg))`), not a JS map or an inline `max-width`.
 - Attributes: the `Drawer` root forwards every consumer attribute to its root element; `DrawerContent` forwards its attributes to the `role="dialog"` element.
 
 ## Motion & Animations

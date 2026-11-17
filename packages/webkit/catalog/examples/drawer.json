@@ -7,7 +7,7 @@
   },
   {
    "name": "Sizes",
-   "summary": "Small (384px), medium (672px), and large (1024px) max-width presets side by side.",
+   "summary": "Small (408px), medium (30% of the screen) and large (40%, the default and the widest) side by side.",
    "file": "examples/drawer/sizes.vue"
   },
   {

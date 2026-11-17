@@ -1324,8 +1324,8 @@ Behaviour that changed with them: `ConfirmDialog` renders `role="alertdialog"`; 
 no longer a `role="status"` live region (announce a change you need heard through a toast);
 `Toaster` announces through two hidden live regions: a `danger` toast (`toast.error`) interrupts
 (assertive), every other kind is polite; the visible stack is no longer `aria-live`;
-`Drawer` widths come from container tokens (`small` 408px, `medium` 644px, `large` 1024px instead of
-384 / 672 / 1024 px); `Alert` `close` and `ErrorBoundary` `retry` now pass the triggering event
+`Drawer` widths changed (`small` 408px; `medium` 30% of the screen, at least 472px; `large`, now the
+default, 40% of the screen, at least 552px; instead of 384 / 672 / 1024 px); `Alert` `close` and `ErrorBoundary` `retry` now pass the triggering event
 (handlers that take no argument keep working).
 
 `Alert` has a `title` prop: it draws a bold heading line over the copy. A `title="…"` you set to get

@@ -37,7 +37,7 @@
  ],
  "bestPractices": [
   "Pick the edge (side) intentionally and keep it consistent across the app.",
-  "The first drawer of a flow is `large`, the default. A nested drawer stacked on it is `size=\"medium\"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.",
+  "The first drawer of a flow is `large`, the default and the widest: 40% of the screen. A nested drawer stacked on it is `size=\"medium\"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.",
   "Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).",
   "Keep the drawer modal (the default). Use `:modal=\"false\"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.",
   "While an action is in flight, set `:dismissible=\"false\"` and `:closable=\"false\"` together so nothing can close it.",
@@ -84,7 +84,7 @@
    "type": "DrawerSize",
    "default": "'large'",
    "required": "false",
-   "doc": "Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport."
+   "doc": "Panel width preset: `small` `--container-sm`, `medium` 30% of the screen (at least `--container-md`), `large` 40% of the screen (at least `--container-lg`), the widest and the default. Height is always 100% viewport."
   },
   {
    "name": "open",

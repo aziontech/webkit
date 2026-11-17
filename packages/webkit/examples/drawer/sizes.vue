@@ -12,9 +12,9 @@
 
   const sizes = ['small', 'medium', 'large']
   const sizeLabels = {
-    small: 'Small (384px)',
-    medium: 'Medium (672px)',
-    large: 'Large (1024px)'
+    small: 'Small (408px)',
+    medium: 'Medium (30%)',
+    large: 'Large (40%)'
   }
   const openBySize = reactive({ small: false, medium: false, large: false })
 

@@ -777,11 +777,15 @@ certificate` on the Certificates list). When another form needs it, the same for
 
 ### Sizes and stacking
 
-| Layer                       | `size`   | Max width | Holds                                                       |
-| --------------------------- | -------- | --------- | ----------------------------------------------------------- |
-| First drawer (the standard) | `large`  | 1024 px   | one item of the screen behind it, or a missing resource     |
-| Nested drawer (at most one) | `medium` | 672 px    | the create of one resource or item the parent's field needs |
-| —                           | `small`  | 384 px    | not part of this stack: a narrow panel that holds no form   |
+| Layer                       | `size`               | Width                              | Holds                                                       |
+| --------------------------- | -------------------- | ---------------------------------- | ----------------------------------------------------------- |
+| First drawer (the standard) | `large`, the default | 40% of the screen, at least 552 px | one item of the screen behind it, or a missing resource     |
+| Nested drawer (at most one) | `medium`             | 30% of the screen, at least 472 px | the create of one resource or item the parent's field needs |
+| —                           | `small`              | 408 px                             | not part of this stack: a narrow panel that holds no form   |
+
+The large and medium widths are shares of the screen, so the page behind a drawer stays in view at
+every desktop width, and large is always the widest. Below the `md` breakpoint every size becomes a
+full-width sheet.
 
 **One drawer is not an item drawer: the AI assistant.** The `ai/ai-chat-drawer` block opens
 a conversation beside the page, not an item of it, so it stays `medium`: a chat reads as a narrow

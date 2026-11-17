@@ -24,7 +24,7 @@
     modal?: boolean
     /** Edge the drawer panel slides from, in reading direction: start is the left edge in ltr and the right edge in rtl. */
     side?: DrawerSide
-    /** Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. */
+    /** Panel width preset: `small` `--container-sm`, `medium` 30% of the screen (at least `--container-md`), `large` 40% of the screen (at least `--container-lg`), the widest and the default. Height is always 100% viewport. */
     size?: DrawerSize
   }
 
