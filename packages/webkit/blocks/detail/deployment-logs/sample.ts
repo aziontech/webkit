@@ -244,6 +244,7 @@ const publishStep: DeploymentLogsStep = {
 
 const failedRulesStep: DeploymentLogsStep = {
   ...rulesStep,
+  description: 'The rules rejected this deployment (409 Conflict).',
   status: 'error',
   lines: [
     {
@@ -275,8 +276,13 @@ const failedRulesStep: DeploymentLogsStep = {
   ]
 }
 
-const notRun = (step: DeploymentLogsStep, status: 'pending' | 'skipped'): DeploymentLogsStep => ({
+const notRun = (
+  step: DeploymentLogsStep,
+  status: 'pending' | 'skipped',
+  description: string
+): DeploymentLogsStep => ({
   ...step,
+  description,
   status,
   duration: '',
   lines: []
@@ -287,10 +293,10 @@ export const sampleSteps: DeploymentLogsStep[] = [
   cloneStep,
   installStep,
   { ...buildStep, status: 'running' },
-  notRun(uploadStep, 'pending'),
-  notRun(serviceStep, 'pending'),
-  notRun(rulesStep, 'pending'),
-  notRun(publishStep, 'pending')
+  notRun(uploadStep, 'pending', 'Runs after Build'),
+  notRun(serviceStep, 'pending', 'Runs after Upload'),
+  notRun(rulesStep, 'pending', 'Runs after Service'),
+  notRun(publishStep, 'pending', 'Runs after Routing Rules')
 ]
 
 export const sampleSucceededSteps: DeploymentLogsStep[] = [
@@ -312,11 +318,12 @@ export const sampleFailedSteps: DeploymentLogsStep[] = [
   uploadStep,
   serviceStep,
   failedRulesStep,
-  notRun(publishStep, 'skipped')
+  notRun(publishStep, 'skipped', 'Never ran. The deployment stopped at Routing Rules')
 ]
 
 export const sampleCreateFlowFailedSteps: DeploymentLogsStep[] = sampleFailedSteps.map((step) => ({
   ...step,
   title: step.id === 'rules' ? 'Routing rules' : step.title,
+  description: step.description?.replace('Routing Rules', 'Routing rules'),
   lines: step.lines.map((line) => ({ ...line, message: line.message.replace(/!$/, '.') }))
 }))

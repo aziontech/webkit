@@ -4279,7 +4279,7 @@ What each prop and event does, and the go-live code: [blocks/create/deploy-progr
 - Let each Deployment Setting settle on its own and keep the ones that succeeded live.
 - Say why a row failed on the row itself.
 - Offer Retry failed for the failed rows only.
-- Report the outcome through the toast as well, so the user can close the dialog.
+- Report the run through the toast while the dialog is hidden, so the user can hide it and leave; never raise the toast over the open dialog.
 
 ## Don't
 
@@ -4307,8 +4307,8 @@ What each prop and event does, and the go-live code: [blocks/create/deploy-progr
 
 - Running: `items` has two settled, one deploying and two queued; it advances as the page updates their `status`.
 - Drop: the confirm that starts a drop-to-deploy run.
-- PartialError: `items` settled with one failed row and its `message`; Retry failed, error toast.
-- Success: every row in `items` is done; success toast.
+- PartialError: `items` settled with one failed row and its `message`; Retry failed. The dialog shows the outcome, so no toast covers it; the error toast appears only for a run that settles while the dialog is hidden.
+- Success: every row in `items` is done; the dialog shows the outcome, and the success toast appears only for a run that settles while the dialog is hidden.
 
 ## Related
 
@@ -7249,7 +7249,7 @@ What each prop and event does, and the go-live code: [blocks/edit/delete-dialog.
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -7278,7 +7278,7 @@ The settings page of one existing resource. The user comes here to change how th
 - A. Resource tabs — `PageTabs`, `Tabs` (optional)
 - B. Page heading — `PageHeader` (required)
 - C. Settings sections — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
-- D. Locked settings — `Tooltip`, `Switch` (optional)
+- D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 - E. Save bar — `SaveBar`, `Button` (required)
 - F. Conditional fields — `SettingsRow`, `Input`, `FieldError` (optional)
 - G. Template editor — `SettingsRow`, `FieldError` (optional)
@@ -8116,7 +8116,7 @@ What each prop and event does, and the go-live code: [blocks/shell/console.md](b
 ## States
 
 - ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) over the page body. The controls row and the table belong to `view/table-view`, which builds them from the Table toolbar parts; the shell does not draw them.
-- DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as `items`, then the environment in its slot, a `Select` with `variant="ghost"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
+- DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as `items`, then the environment in its slot, a `Select` with `variant="ghost"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The header hides that trail below 768 px, so the body repeats it under `md` in its own `nav` row (a ghost back `IconButton` to Applications, the application name, the same environment `Select` at full width) and Deploy always has its target in view. The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
 - Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list as `Item.List` of `Item` rows (`Item.Media type="icon"` toned through `data-type`, title, description, time, `Item.Actions`), five at a time with `Show older` for the rest: unread items marked with a `New` tag (and a visually hidden `Unread:` prefix), Edit and Redeploy on each deploy, Mark all as read, Clear all (it empties the list and toasts `Notifications cleared.` with Undo, which brings them back), and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
 - AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-leading` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `TableCellStatus`, ID and client ID as `TableCellId`. Each name is a `Button` with `variant="link"`. The table pages ten rows at a time (`paginated`), and while the list loads on open it shows the `Table` loading rows. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search. The search `Input` takes its `id` from `useId()` so the dialog can focus it on open.
 - AccountSwitchError: the AccountSwitch dialog when the account list fails to load. A danger `Alert` (`The account list could not be loaded.`, action `Retry`) takes the place of the account `Table` under the search; the search, the title and the footer stay. Retry loads the list again and shows the table.
@@ -9882,7 +9882,7 @@ What each prop and event does, and the go-live code: [blocks/view/query-editor.m
 - Surface: app
 - Source: `blocks/view/rule-list/rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/rule-list")`
-- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tag, Toast, Tooltip
+- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tag, Toast, Tooltip
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -9911,7 +9911,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - B. Search — `Input`, `Alert` (required)
 - C. Phases — `Card`, `Accordion` (required)
 - D. Rules table — `DataTable`, `Tag`, `Field`, `Switch` (required)
-- E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
+- E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 - F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 - G. States — `EmptyState`, `Alert` (required)
 
@@ -23827,14 +23827,15 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
+  import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
 </script>
 
 <template>
   <InputGroupRoot>
-    <input
+    <InputGroupInput
+      aria-label="Domain"
       placeholder="domain"
-      class="flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)"
     />
   </InputGroupRoot>
 </template>
@@ -24002,7 +24003,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <div style="width: 280px">
+  <div class="w-full max-w-70">
     <MultiSelectRoot
       aria-label="Options"
       v-model="value"
@@ -24120,7 +24121,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <div class="w-[20rem]">
+  <div class="w-full max-w-80">
     <NumberInput
       v-model="value"
       :min="0"
@@ -28845,92 +28846,95 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
   <div class="min-h-screen bg-(--bg-canvas) text-(--text-default)">
     <header class="border-b border-solid border-(--border-default)">
       <div
-        class="mx-auto flex w-full max-w-(--container-xl) flex-wrap items-center gap-(--spacing-6) px-(--spacing-6) py-(--spacing-4)"
+        class="@container mx-auto w-full max-w-(--layout-measure-site) px-(--spacing-md) py-(--spacing-md) sm:px-(--spacing-lg)"
       >
         <NavigationMenu
           :delay="50"
           :close-delay="300"
           orientation="horizontal"
-          aria-label="Azion"
+          aria-label="Acme"
+          class="w-full min-w-0"
         >
-          <NavigationMenu.List>
-            <NavigationMenu.Item value="solucoes">
-              <NavigationMenu.Trigger> Soluções </NavigationMenu.Trigger>
-              <NavigationMenu.Content class="w-full">
-                <div class="grid grid-cols-2 gap-(--spacing-6) p-(--spacing-2)">
-                  <NavigationMenu.List label="Por Caso de Uso">
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/solucoes/desenvolvimento-de-aplicacoes/"
-                      description="Acelere o desenvolvimento de aplicações"
-                      close-on-click
-                    >
-                      Desenvolvimento de Aplicações
-                    </NavigationMenu.Item>
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/solucoes/performance-e-confiabilidade/"
-                      description="Otimize performance e entrega de conteúdo"
-                      close-on-click
-                    >
-                      Performance e Confiabilidade
-                    </NavigationMenu.Item>
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/solucoes/"
-                      featured
-                      close-on-click
-                    >
-                      Ver todas as soluções
-                    </NavigationMenu.Item>
-                  </NavigationMenu.List>
-                </div>
-              </NavigationMenu.Content>
-            </NavigationMenu.Item>
+          <div class="flex min-w-0 items-center gap-(--spacing-lg)">
+            <NavigationMenu.List>
+              <NavigationMenu.Item value="solutions">
+                <NavigationMenu.Trigger> Solutions </NavigationMenu.Trigger>
+                <NavigationMenu.Content class="w-full">
+                  <div class="grid grid-cols-2 gap-(--spacing-xl) p-(--spacing-xs)">
+                    <NavigationMenu.List label="By use case">
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/application-development/"
+                        description="Ship applications faster"
+                        close-on-click
+                      >
+                        Application development
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/performance/"
+                        description="Speed up pages and content delivery"
+                        close-on-click
+                      >
+                        Performance and reliability
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/"
+                        featured
+                        close-on-click
+                      >
+                        See all solutions
+                      </NavigationMenu.Item>
+                    </NavigationMenu.List>
+                  </div>
+                </NavigationMenu.Content>
+              </NavigationMenu.Item>
 
-            <NavigationMenu.Item value="produtos">
-              <NavigationMenu.Trigger> Produtos </NavigationMenu.Trigger>
-              <NavigationMenu.Content class="w-full">
-                <div class="grid grid-cols-2 gap-(--spacing-6) p-(--spacing-2)">
-                  <NavigationMenu.List label="Construir">
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/produtos/functions/"
-                      description="Implemente funções serverless"
-                      close-on-click
-                    >
-                      <template #icon>
-                        <i class="az az-functions" />
-                      </template>
-                      Functions
-                    </NavigationMenu.Item>
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/produtos/cache/"
-                      description="Acelere a entrega de conteúdo"
-                      close-on-click
-                    >
-                      <template #icon>
-                        <i class="az az-cache" />
-                      </template>
-                      Cache
-                    </NavigationMenu.Item>
-                  </NavigationMenu.List>
-                </div>
-              </NavigationMenu.Content>
-            </NavigationMenu.Item>
+              <NavigationMenu.Item value="products">
+                <NavigationMenu.Trigger> Products </NavigationMenu.Trigger>
+                <NavigationMenu.Content class="w-full">
+                  <div class="grid grid-cols-2 gap-(--spacing-xl) p-(--spacing-xs)">
+                    <NavigationMenu.List label="Build">
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/products/functions/"
+                        description="Run serverless functions"
+                        close-on-click
+                      >
+                        <template #icon>
+                          <i class="az az-functions" />
+                        </template>
+                        Functions
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/products/cache/"
+                        description="Speed up content delivery"
+                        close-on-click
+                      >
+                        <template #icon>
+                          <i class="az az-cache" />
+                        </template>
+                        Cache
+                      </NavigationMenu.Item>
+                    </NavigationMenu.List>
+                  </div>
+                </NavigationMenu.Content>
+              </NavigationMenu.Item>
 
-            <NavigationMenu.Item>
-              <NavigationMenu.Trigger href="https://www.azion.com/pt-br/precos/">
-                Preços
+              <NavigationMenu.Item>
+                <NavigationMenu.Trigger href="https://example.com/pricing/">
+                  Pricing
+                </NavigationMenu.Trigger>
+              </NavigationMenu.Item>
+            </NavigationMenu.List>
+
+            <div class="ms-auto hidden items-center gap-(--spacing-xs) @min-[24rem]:flex">
+              <NavigationMenu.Trigger href="https://example.com/contact/">
+                Contact
               </NavigationMenu.Trigger>
-            </NavigationMenu.Item>
-          </NavigationMenu.List>
-
-          <div class="ms-auto flex items-center gap-(--spacing-2)">
-            <NavigationMenu.Trigger href="https://www.azion.com/pt-br/contato-vendas/">
-              Contato
-            </NavigationMenu.Trigger>
+            </div>
           </div>
 
           <NavigationMenu.Viewport
@@ -28944,13 +28948,13 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
     </header>
 
     <div
-      class="mx-auto flex max-w-2xl flex-col items-center px-(--spacing-6) py-(--spacing-24) text-center"
+      class="mx-auto flex max-w-(--container-2xl) flex-col items-center px-(--spacing-lg) py-(--spacing-2xl) text-center"
     >
       <h1 class="text-heading-lg text-(--text-default)">Navigation menu demo</h1>
-      <p class="mt-(--spacing-6) text-body-sm text-(--text-muted)">
-        Hover top-level items to open panels. Keyboard: arrows, Enter, Escape.
+      <p class="mt-(--spacing-xl) text-body-sm text-(--text-muted)">
+        Hover or tap a top-level item to open its panel. Keyboard: arrows, Enter, Escape.
       </p>
-      <div class="mt-(--spacing-10) flex flex-wrap justify-center gap-(--spacing-3)">
+      <div class="mt-(--spacing-2xl) flex flex-wrap justify-center gap-(--spacing-sm)">
         <Button label="Primary action" />
         <Button
           label="Secondary"

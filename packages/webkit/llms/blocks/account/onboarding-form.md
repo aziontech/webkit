@@ -358,43 +358,43 @@ Each variant is the same screen in another state: `get_block("account/onboarding
       value: 'orange',
       label: 'Orange',
       ariaLabel: 'Orange mark',
-      colors: ['var(--color-orange-200)', 'var(--color-orange-700)', 'var(--color-yellow-400)']
+      colors: ['var(--text-primary)', 'var(--primary)', 'var(--warning)']
     },
     {
       value: 'yellow',
       label: 'Yellow',
       ariaLabel: 'Yellow mark',
-      colors: ['var(--color-yellow-200)', 'var(--color-orange-600)', 'var(--color-yellow-600)']
+      colors: ['var(--warning)', 'var(--warning-mark)', 'var(--primary)']
     },
     {
       value: 'red',
       label: 'Red',
       ariaLabel: 'Red mark',
-      colors: ['var(--color-red-200)', 'var(--color-red-700)', 'var(--color-orange-500)']
+      colors: ['var(--danger)', 'var(--danger-mark)', 'var(--primary)']
     },
     {
       value: 'green',
       label: 'Green',
       ariaLabel: 'Green mark',
-      colors: ['var(--color-green-200)', 'var(--color-green-700)', 'var(--color-blue-500)']
+      colors: ['var(--success)', 'var(--success-mark)', 'var(--brand-blue)']
     },
     {
       value: 'blue',
       label: 'Blue',
       ariaLabel: 'Blue mark',
-      colors: ['var(--color-blue-200)', 'var(--color-blue-700)', 'var(--color-violet-500)']
+      colors: ['var(--info)', 'var(--info-mark)', 'var(--accent)']
     },
     {
       value: 'violet',
       label: 'Violet',
       ariaLabel: 'Violet mark',
-      colors: ['var(--color-violet-200)', 'var(--color-violet-700)', 'var(--color-blue-500)']
+      colors: ['var(--chart-sequential-2)', 'var(--chart-series-3)', 'var(--brand-blue)']
     },
     {
       value: 'gray',
       label: 'Gray',
       ariaLabel: 'Gray mark',
-      colors: ['var(--color-gray-200)', 'var(--color-gray-700)', 'var(--color-slate-500)']
+      colors: ['var(--bg-selected)', 'var(--text-muted)', 'var(--text-disabled)']
     }
   ]
 
@@ -1564,18 +1564,18 @@ export const samplePlans: OnboardingFormPlan[] = [
     charge: {
       monthly: {
         rows: [
-          { label: 'Next charge', value: '$200' },
-          { label: 'Subtotal', value: '$3,000', suffix: 'per month' }
+          { label: 'Next charge', value: '$25', suffix: 'on Dec 16, 2026' },
+          { label: 'Subtotal', value: '$25', suffix: 'per month' }
         ],
-        total: { value: '$3,000', suffix: 'per year' }
+        total: { value: '$25', suffix: 'per month' }
       },
       yearly: {
         rows: [
-          { label: 'Next charge', value: '$200' },
-          { label: 'Subtotal', value: '$3,000', suffix: 'per month' },
-          { label: 'Yearly discount', value: '$2,200', suffix: 'per month' }
+          { label: 'Next charge', value: '$240', suffix: 'on Nov 16, 2027' },
+          { label: 'Subtotal', value: '$300', suffix: 'per year' },
+          { label: 'Yearly discount', value: '−$60', suffix: 'per year' }
         ],
-        total: { value: '$2,200', suffix: 'per year' }
+        total: { value: '$240', suffix: 'per year' }
       }
     }
   },
@@ -1605,16 +1605,16 @@ export const samplePlans: OnboardingFormPlan[] = [
     charge: {
       monthly: {
         rows: [
-          { label: 'Next charge', value: '$2,000' },
-          { label: 'Subtotal', value: '$24,000', suffix: 'per month' }
+          { label: 'Next charge', value: '$2,000', suffix: 'on Dec 16, 2026' },
+          { label: 'Subtotal', value: '$2,000', suffix: 'per month' }
         ],
-        total: { value: '$24,000', suffix: 'per year' }
+        total: { value: '$2,000', suffix: 'per month' }
       },
       yearly: {
         rows: [
-          { label: 'Next charge', value: '$2,000' },
-          { label: 'Subtotal', value: '$24,000', suffix: 'per month' },
-          { label: 'Yearly discount', value: '$4,800', suffix: 'per month' }
+          { label: 'Next charge', value: '$19,200', suffix: 'on Nov 16, 2027' },
+          { label: 'Subtotal', value: '$24,000', suffix: 'per year' },
+          { label: 'Yearly discount', value: '−$4,800', suffix: 'per year' }
         ],
         total: { value: '$19,200', suffix: 'per year' }
       }

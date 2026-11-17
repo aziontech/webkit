@@ -1,6 +1,6 @@
 # DeployProgressDialog (`create/deploy-progress-dialog`)
 
-> The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeIcon` once it settles. When the run settles the header gains a large `OutcomeIcon` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeIcon`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
+> The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeIcon` once it settles. When the run settles the header gains a large `OutcomeIcon` and the outcome reports through one toast with Edit and Redeploy, as every async action does, raised only while the dialog is hidden so it never covers the dialog's footer; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeIcon`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/create/deploy-progress-dialog/deploy-progress-dialog.vue` in `@aziontech/webkit`
@@ -55,7 +55,7 @@ Retry failed (outlined) appears only when the run settled with failures; the pri
 
 ### Outcome toast — through `toast`
 
-One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+One toast id for the run, raised only while the dialog is hidden, so it never covers the dialog's own footer: `toast.loading` with "It keeps running if you leave." while the run goes on, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy** when it settles. Opening the dialog dismisses the toast; a run that settled while the dialog was open already showed its outcome there, so closing it raises no toast. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -98,7 +98,7 @@ Then delete `sample.ts` and its import.
 - Let each Deployment Setting settle on its own and keep the ones that succeeded live.
 - Say why a row failed on the row itself.
 - Offer Retry failed for the failed rows only.
-- Report the outcome through the toast as well, so the user can close the dialog.
+- Report the run through the toast while the dialog is hidden, so the user can hide it and leave; never raise the toast over the open dialog.
 
 ## Don't
 
@@ -126,8 +126,8 @@ Then delete `sample.ts` and its import.
 
 - Running: `items` has two settled, one deploying and two queued; it advances as the page updates their `status`.
 - Drop: the confirm that starts a drop-to-deploy run.
-- PartialError: `items` settled with one failed row and its `message`; Retry failed, error toast.
-- Success: every row in `items` is done; success toast.
+- PartialError: `items` settled with one failed row and its `message`; Retry failed. The dialog shows the outcome, so no toast covers it; the error toast appears only for a run that settles while the dialog is hidden.
+- Success: every row in `items` is done; the dialog shows the outcome, and the success toast appears only for a run that settles while the dialog is hidden.
 
 ## Related
 
@@ -140,8 +140,8 @@ Then delete `sample.ts` and its import.
 
 - `Running` — primary (the code below)
 - `Drop` — The drop-to-deploy confirm: New production deployment, the service with a Production `Tag`, what the files replace, and the dropped folder with its file count, total size and a scrollable list of up to 100 paths (an 'and N more' line counts the rest) with sizes formatted by `Intl.NumberFormat`. Cancel closes; Deploy to Production opens the progress dialog and starts the run.
-- `PartialError` — Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeIcon`, staging-settings marked Failed with the reason, Retry failed beside Close, and an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.
-- `Success` — Every Deployment Setting deployed: a large animated success `OutcomeIcon` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and a success toast with Edit and Redeploy.
+- `PartialError` — Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeIcon`, staging-settings marked Failed with the reason, Retry failed beside Close, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.
+- `Success` — Every Deployment Setting deployed: a large animated success `OutcomeIcon` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises a success toast with Edit and Redeploy.
 
 Each variant is the same screen in another state: `get_block("create/deploy-progress-dialog", { variant })`, or the file under `blocks/create/deploy-progress-dialog/variants/`.
 
@@ -297,8 +297,16 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
     emit('retry', event, failed)
   }
 
+  const outcomeSeen = ref(false)
+
   const report = () => {
     const { total, done, failed } = counts.value
+    if (running.value) outcomeSeen.value = false
+    if (open.value) {
+      toast.dismiss(RUN_TOAST)
+      if (!running.value) outcomeSeen.value = true
+      return
+    }
     if (running.value) {
       toast.loading(title.value, {
         description: `${props.resourceName} to every project these settings reach. It keeps running if you leave.`,
@@ -306,6 +314,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
       })
       return
     }
+    if (outcomeSeen.value) return
     const actions = [
       { label: 'Edit', onClick: edit },
       { label: 'Redeploy', onClick: redeploy }
@@ -329,7 +338,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
     })
   }
 
-  watch(running, report)
+  watch([running, open], report)
 
   onMounted(report)
 

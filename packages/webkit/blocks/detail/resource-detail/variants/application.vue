@@ -411,7 +411,7 @@
               </div>
 
               <dl
-                class="m-0 grid grid-cols-2 gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md) sm:grid-cols-3 lg:grid-cols-6"
+                class="m-0 grid grid-cols-1 gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md) sm:grid-cols-3 lg:grid-cols-6"
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <dt class="text-label-sm text-(--text-muted)">Deployment</dt>

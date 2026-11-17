@@ -147,8 +147,16 @@
     emit('retry', event, failed)
   }
 
+  const outcomeSeen = ref(false)
+
   const report = () => {
     const { total, done, failed } = counts.value
+    if (running.value) outcomeSeen.value = false
+    if (open.value) {
+      toast.dismiss(RUN_TOAST)
+      if (!running.value) outcomeSeen.value = true
+      return
+    }
     if (running.value) {
       toast.loading(title.value, {
         description: `${props.resourceName} to every project these settings reach. It keeps running if you leave.`,
@@ -156,6 +164,7 @@
       })
       return
     }
+    if (outcomeSeen.value) return
     const actions = [
       { label: 'Edit', onClick: edit },
       { label: 'Redeploy', onClick: redeploy }
@@ -179,7 +188,7 @@
     })
   }
 
-  watch(running, report)
+  watch([running, open], report)
 
   onMounted(report)
 

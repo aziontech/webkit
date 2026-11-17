@@ -69,7 +69,10 @@
 
   const sized = computed(() => /(^|[\s:])(h|size)-/.test(normalizeClass(attrs.class)))
 
-  const maskStyle = computed(() => ({ '--logo-mask': `url('${file.value}')` }))
+  const cssUrl = (value: string) =>
+    `url("${value.replace(/[\\"]/g, '\\$&').replace(/\n/g, '\\a ')}")`
+
+  const maskStyle = computed(() => ({ '--logo-mask': cssUrl(file.value) }))
 </script>
 
 <template>
@@ -126,7 +129,7 @@
       v-else
       dir="auto"
       :data-ink="variant"
-      class="whitespace-nowrap text-heading-2xs text-(--text-default) data-[ink=current]:text-current data-[ink=knockout]:text-(--color-base-black)"
+      class="whitespace-nowrap text-heading-2xs text-(--text-default) data-[ink=current]:text-current data-[ink=knockout]:text-(--primary-foreground)"
       >{{ name }}</span
     >
   </span>

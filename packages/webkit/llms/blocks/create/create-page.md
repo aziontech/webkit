@@ -46,7 +46,7 @@ Each band is a `SettingsSection` with a title and a `hint` (the glyph that revea
 
 ### D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 
-A `SettingsRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `FieldError type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
+A `SettingsRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width; every field row sets `stackable`, so on a phone the control moves under the copy at full width and the description wraps in full. On submit, an empty required field gets `:required` and a `FieldError type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
 
 ### E. Switch rows — `Switch` (optional)
 
@@ -54,7 +54,7 @@ On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right a
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
-`SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
+`SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. On a phone the muted line hides, so Import keeps its label beside Cancel and Save; the Domain name description already says a paste imports. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
 ## Data
 
@@ -363,6 +363,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        stackable
                         title="Name"
                         description="Identifies the domain in this list. It is not the hostname."
                       >
@@ -385,6 +386,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                         >
                       </SettingsRow>
                       <SettingsRow
+                        stackable
                         title="Domain name"
                         description="The root hostname this domain answers for, without a subdomain."
                       >

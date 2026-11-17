@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "A full navigation header composed from the menu primitives. Hover or focus the \"Soluções\" and \"Produtos\" triggers to open their panels in the shared portal viewport; \"Preços\" and \"Contato\" are plain link triggers. Controls drive the hover delays, orientation, and accessible label.",
+   "summary": "A full navigation header composed from the menu primitives. Hover, tap or focus the \"Solutions\" and \"Products\" triggers to open their panels in the shared portal viewport; \"Pricing\" and \"Contact\" are plain link triggers, and \"Contact\" moves out of the bar below the sm breakpoint so the row never wraps.",
    "file": "examples/navigation-menu/default.vue"
   }
  ]

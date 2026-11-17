@@ -12,9 +12,9 @@
         {
           logo: magaluLogo,
           clientName: 'Magalu',
-          text: 'Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.',
-          name: 'Allan Monteiro',
-          jobTitle: 'CISO & Head of Technology at Magalu'
+          text: 'Magalu guarantees high availability for hundreds of global-scale applications, even during its biggest sale campaigns of the year.',
+          name: 'Magalu',
+          jobTitle: 'Retail'
         },
         {
           clientName: 'Acme',

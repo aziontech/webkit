@@ -221,6 +221,19 @@ describe('AppLayout', () => {
     expect(dialog.textContent).toContain('help body')
   })
 
+  it('gives both compact drawers a close button', async () => {
+    const { getByTestId, getByText, getByRole, findByRole, queryByRole } = render(layout({}, 500))
+    await waitFor(() => expect(getByTestId('compact').textContent).toBe('true'))
+    await fireEvent.click(getByRole('button', { name: 'Help' }))
+    const tools = await findByRole('dialog', { name: 'Help' })
+    await fireEvent.click(within(tools).getByTestId('app-layout__tools-drawer__close'))
+    await waitFor(() => expect(queryByRole('dialog', { name: 'Help' })).toBeNull())
+    await fireEvent.click(getByText('Open navigation'))
+    const navigation = await findByRole('dialog', { name: 'Navigation' })
+    await fireEvent.click(within(navigation).getByTestId('app-layout__navigation-drawer__close'))
+    await waitFor(() => expect(queryByRole('dialog', { name: 'Navigation' })).toBeNull())
+  })
+
   it('keeps the split panel and tools state under the storage key', async () => {
     const first = render(layout({ storageKey: 'test-layout', splitPanelOpen: true }))
     await fireEvent.keyDown(first.getByRole('separator'), { key: 'ArrowUp' })

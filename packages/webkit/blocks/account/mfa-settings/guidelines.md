@@ -33,7 +33,7 @@ The `view/table-view` controls row, as on every account list: a `PropertyFilter`
 
 ### E. People table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
 
-A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it), MFA as `TableCellStatus` (Enabled success, Not set up warning), Method, and Set up as `TableCellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
+A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it, and below `sm` the MFA `TableCellStatus` under the email, hidden from assistive tech, so a phone shows who has MFA without scrolling past the pinned actions), MFA as `TableCellStatus` (Enabled success, Not set up warning), Method, and Set up as `TableCellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
 
 ### F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 

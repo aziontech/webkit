@@ -184,7 +184,7 @@
 </script>
 
 <template>
-  <div style="width: 280px">
+  <div class="w-full max-w-70">
     <MultiSelectRoot
       aria-label="Options"
       v-model="value"
@@ -223,10 +223,7 @@
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-4"
-    style="width: 280px"
-  >
+  <div class="flex w-full max-w-70 flex-col gap-(--spacing-md)">
     <MultiSelectRoot
       :aria-label="`Option, ${s}`"
       v-for="s in sizes"
@@ -280,7 +277,7 @@
 </script>
 
 <template>
-  <div style="width: 280px">
+  <div class="w-full max-w-70">
     <MultiSelectRoot
       aria-label="Options"
       v-model="value"

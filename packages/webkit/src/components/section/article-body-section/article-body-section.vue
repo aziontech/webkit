@@ -394,7 +394,7 @@
           marks="all"
         >
           <div
-            class="grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-2xl) lg:grid-cols-[minmax(0,1fr)_minmax(0,var(--container-2xl))_minmax(0,1fr)] lg:grid-rows-[auto_auto_1fr]"
+            class="grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-2xl) lg:grid-cols-[minmax(var(--size-44),1fr)_minmax(0,var(--container-2xl))_minmax(var(--size-44),1fr)] lg:grid-rows-[auto_auto_1fr]"
           >
             <header class="flex min-w-0 flex-col gap-(--spacing-lg) lg:col-start-2">
               <Breadcrumb
@@ -535,7 +535,7 @@
                   :aria-label="share.title"
                 >
                   <p class="m-0 text-heading-xs text-(--text-default)">{{ share.title }}</p>
-                  <div class="flex items-center gap-(--spacing-sm)">
+                  <div class="flex flex-wrap items-center gap-(--spacing-sm)">
                     <Tooltip :content="share.copyLink">
                       <IconButton
                         variant="outline"

@@ -123,9 +123,7 @@ describe('ClientStoryColumnsSection', () => {
     expect(face('Magalu').getPropertyValue('--client-story-columns-section-wall-face')).toContain(
       CLIENT_BRANDS['magalu']?.base
     )
-    expect(face('Dafiti').getPropertyValue('--client-story-columns-section-wall-ink')).toBe(
-      'var(--color-base-black)'
-    )
+    expect(getByAltText('Dafiti').closest('section')).toHaveAttribute('data-theme', 'light')
   })
 
   it('paints a black face for a client the registry does not know and no brand', () => {
@@ -135,13 +133,11 @@ describe('ClientStoryColumnsSection', () => {
       }
     })
 
-    const style = (getByAltText('Northwind').closest('section') as HTMLElement).style
-    expect(style.getPropertyValue('--client-story-columns-section-wall-face')).toContain(
-      'var(--color-base-black)'
+    const wall = getByAltText('Northwind').closest('section') as HTMLElement
+    expect(wall.style.getPropertyValue('--client-story-columns-section-wall-face')).toContain(
+      'var(--bg-canvas)'
     )
-    expect(style.getPropertyValue('--client-story-columns-section-wall-ink')).toBe(
-      'var(--color-base-white)'
-    )
+    expect(wall).toHaveAttribute('data-theme', 'dark')
   })
 
   it('renders only the section when cells is empty', () => {

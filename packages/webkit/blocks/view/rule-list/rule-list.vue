@@ -8,6 +8,7 @@
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -21,7 +22,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
 
   import { sampleApplicationRules, sampleFirewallRules } from './sample'
 
@@ -109,7 +110,7 @@
 
   type Phase = RuleListPhase
   type Rule = RuleListRule
-  type Control = 'up' | 'down' | 'position'
+  type Control = 'up' | 'down' | 'position' | 'menu'
 
   interface Snapshot {
     order: Record<string, string[]>
@@ -301,13 +302,57 @@
   }
   const reorderable = (phase: Phase) => (row: Rule) => !lockReason(phase, row)
 
-  const columns: TableColumn[] = [
-    { id: 'move', header: 'Position', width: 168, hideable: false },
-    { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
-    { accessorKey: 'description', header: 'Description', grow: 3 },
-    { id: 'status', header: 'Status', width: 152 },
-    { accessorKey: 'modified', header: 'Last modified', grow: 2 }
-  ]
+  const narrow = ref(false)
+  const narrowQuery = globalThis.matchMedia?.('(width < 48rem)')
+  const onNarrowChange = (event: MediaQueryListEvent) => {
+    narrow.value = event.matches
+  }
+  onMounted(() => {
+    if (!narrowQuery) return
+    narrow.value = narrowQuery.matches
+    narrowQuery.addEventListener('change', onNarrowChange)
+  })
+  onScopeDispose(() => narrowQuery?.removeEventListener('change', onNarrowChange))
+
+  const nameColumn: TableColumn = {
+    accessorKey: 'name',
+    header: 'Name',
+    principal: true,
+    hideable: false
+  }
+  const descriptionColumn: TableColumn = {
+    accessorKey: 'description',
+    header: 'Description',
+    grow: 3
+  }
+  const modifiedColumn: TableColumn = { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+  const statusColumn: TableColumn = { id: 'status', header: 'Status' }
+  const moveColumn: TableColumn = { id: 'move', header: 'Position', hideable: false }
+  const columns = computed<TableColumn[]>(() =>
+    narrow.value
+      ? [
+          nameColumn,
+          descriptionColumn,
+          modifiedColumn,
+          { ...statusColumn, width: 64, frozen: 'end' },
+          { ...moveColumn, header: 'Move', width: 56, align: 'center', frozen: 'end' }
+        ]
+      : [
+          { ...moveColumn, width: 168 },
+          nameColumn,
+          descriptionColumn,
+          { ...statusColumn, width: 152 },
+          modifiedColumn
+        ]
+  )
+
+  const onMoveSelect = (phase: Phase, item: Rule, value: DropdownMenuItemValue) => {
+    const from = position(phase, item)
+    if (value === 'top') moveTo(phase, from, pinned(phase), 'menu')
+    if (value === 'up') step(phase, from, -1, 'menu')
+    if (value === 'down') step(phase, from, 1, 'menu')
+    if (value === 'bottom') moveTo(phase, from, draft[phase].length - 1, 'menu')
+  }
 
   const setActive = (item: Rule, value: boolean) => {
     item.active = value
@@ -512,6 +557,56 @@
                     >
                       <template #cell-move="{ row }">
                         <div
+                          v-if="narrow"
+                          :data-rule-id="row.id"
+                          class="flex items-center justify-center"
+                        >
+                          <DropdownMenu
+                            side="bottom"
+                            align="end"
+                            :disabled="Boolean(lockReason(group.value, row))"
+                            @select="(_event, value) => onMoveSelect(group.value, row, value)"
+                          >
+                            <DropdownMenu.Trigger>
+                              <IconButton
+                                icon="az az-move-vertical"
+                                variant="ghost"
+                                size="medium"
+                                data-control="menu"
+                                :disabled="Boolean(lockReason(group.value, row))"
+                                :aria-label="
+                                  lockReason(group.value, row)
+                                    ? `Move ${row.name}, position ${position(group.value, row) + 1} of ${group.total}. ${lockReason(group.value, row)}`
+                                    : `Move ${row.name}, position ${position(group.value, row) + 1} of ${group.total}`
+                                "
+                              />
+                            </DropdownMenu.Trigger>
+                            <DropdownMenu.Group>
+                              <DropdownMenu.Item
+                                value="top"
+                                label="Move to top"
+                                :disabled="!canMove(group.value, position(group.value, row), -1)"
+                              />
+                              <DropdownMenu.Item
+                                value="up"
+                                label="Move up"
+                                :disabled="!canMove(group.value, position(group.value, row), -1)"
+                              />
+                              <DropdownMenu.Item
+                                value="down"
+                                label="Move down"
+                                :disabled="!canMove(group.value, position(group.value, row), 1)"
+                              />
+                              <DropdownMenu.Item
+                                value="bottom"
+                                label="Move to bottom"
+                                :disabled="!canMove(group.value, position(group.value, row), 1)"
+                              />
+                            </DropdownMenu.Group>
+                          </DropdownMenu>
+                        </div>
+                        <div
+                          v-else
                           :data-rule-id="row.id"
                           class="flex items-center gap-(--spacing-2xs)"
                         >
@@ -611,7 +706,7 @@
                             />
                             <Field.Label>
                               <span
-                                class="text-body-sm"
+                                class="text-body-sm max-md:sr-only"
                                 aria-hidden="true"
                                 >{{ row.active ? 'Active' : 'Inactive' }}</span
                               >

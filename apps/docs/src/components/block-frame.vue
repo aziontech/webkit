@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import IconButton from '@aziontech/webkit/icon-button'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, ref, watch } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import { messages } from '../lib/i18n'
   import { resolvedTheme, settings } from '../lib/settings'
@@ -11,6 +11,9 @@
   const t = messages
   const viewport = ref('full')
   const frameEl = ref<HTMLIFrameElement | null>(null)
+  const boxEl = ref<HTMLElement | null>(null)
+  const boxWidth = ref(0)
+  let observer: ResizeObserver | null = null
 
   const VIEWPORTS = [
     { value: '375', label: 'Mobile 375' },
@@ -19,7 +22,40 @@
     { value: 'full', label: 'Full' }
   ]
 
-  const width = computed(() => (viewport.value === 'full' ? '100%' : `${viewport.value}px`))
+  const preset = computed(() => (viewport.value === 'full' ? 0 : Number(viewport.value)))
+  const scale = computed(() =>
+    preset.value && boxWidth.value && preset.value > boxWidth.value
+      ? boxWidth.value / preset.value
+      : 1
+  )
+  const sizerStyle = computed(() =>
+    scale.value < 1 ? { height: `calc(42rem * ${scale.value})` } : undefined
+  )
+  const frameStyle = computed(() => {
+    if (!preset.value) return { width: '100%' }
+    if (scale.value === 1) return { width: `${preset.value}px` }
+    return {
+      position: 'absolute' as const,
+      top: '0',
+      left: '0',
+      width: `${preset.value}px`,
+      maxWidth: 'none',
+      resize: 'none' as const,
+      transform: `scale(${scale.value})`,
+      transformOrigin: 'top left'
+    }
+  })
+
+  onMounted(() => {
+    const box = boxEl.value
+    if (!box || typeof ResizeObserver === 'undefined') return
+    observer = new ResizeObserver((entries) => {
+      boxWidth.value = entries[0]?.contentRect.width ?? 0
+    })
+    observer.observe(box)
+  })
+
+  onBeforeUnmount(() => observer?.disconnect())
 
   const query = computed(
     () =>
@@ -68,20 +104,26 @@
       />
     </div>
     <div
+      ref="boxEl"
       class="overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas)"
     >
       <div
-        class="docs-frame mx-auto"
-        :style="{ width }"
+        class="relative"
+        :style="sizerStyle"
       >
-        <iframe
-          ref="frameEl"
-          :src="initialSrc"
-          :title="title"
-          loading="lazy"
-          class="block h-[42rem] w-full border-0"
-          @load="post"
-        />
+        <div
+          class="docs-frame mx-auto"
+          :style="frameStyle"
+        >
+          <iframe
+            ref="frameEl"
+            :src="initialSrc"
+            :title="title"
+            loading="lazy"
+            class="block h-[42rem] w-full border-0"
+            @load="post"
+          />
+        </div>
       </div>
     </div>
   </div>

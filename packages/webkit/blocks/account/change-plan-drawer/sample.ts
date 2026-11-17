@@ -125,20 +125,20 @@ export const sampleUpgradeFeatures: ChangePlanDrawerFeature[] = [
 export const sampleCharges: Record<ChangePlanDrawerPeriod, ChangePlanDrawerCharges> = {
   monthly: {
     rows: [
-      { label: 'Next charge', value: '$200', suffix: '' },
-      { label: 'Subtotal', value: '$3,000', suffix: 'per month' }
+      { label: 'Next charge', value: '$25', suffix: 'on Dec 16, 2026' },
+      { label: 'Subtotal', value: '$25', suffix: 'per month' }
     ],
-    total: { value: '$3,000', suffix: 'per year' },
-    dueToday: '$200'
+    total: { value: '$25', suffix: 'per month' },
+    dueToday: '$25'
   },
   yearly: {
     rows: [
-      { label: 'Next charge', value: '$200', suffix: '' },
-      { label: 'Subtotal', value: '$3,000', suffix: 'per month' },
-      { label: 'Yearly discount', value: '$2,200', suffix: 'per month' }
+      { label: 'Next charge', value: '$240', suffix: 'on Nov 16, 2027' },
+      { label: 'Subtotal', value: '$300', suffix: 'per year' },
+      { label: 'Yearly discount', value: '−$60', suffix: 'per year' }
     ],
-    total: { value: '$2,200', suffix: 'per year' },
-    dueToday: '$200'
+    total: { value: '$240', suffix: 'per year' },
+    dueToday: '$240'
   }
 }
 

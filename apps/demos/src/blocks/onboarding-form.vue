@@ -161,43 +161,43 @@
       value: 'orange',
       label: 'Orange',
       ariaLabel: 'Orange mark',
-      colors: ['var(--color-orange-200)', 'var(--color-orange-700)', 'var(--color-yellow-400)']
+      colors: ['var(--text-primary)', 'var(--primary)', 'var(--warning)']
     },
     {
       value: 'yellow',
       label: 'Yellow',
       ariaLabel: 'Yellow mark',
-      colors: ['var(--color-yellow-200)', 'var(--color-orange-600)', 'var(--color-yellow-600)']
+      colors: ['var(--warning)', 'var(--warning-mark)', 'var(--primary)']
     },
     {
       value: 'red',
       label: 'Red',
       ariaLabel: 'Red mark',
-      colors: ['var(--color-red-200)', 'var(--color-red-700)', 'var(--color-orange-500)']
+      colors: ['var(--danger)', 'var(--danger-mark)', 'var(--primary)']
     },
     {
       value: 'green',
       label: 'Green',
       ariaLabel: 'Green mark',
-      colors: ['var(--color-green-200)', 'var(--color-green-700)', 'var(--color-blue-500)']
+      colors: ['var(--success)', 'var(--success-mark)', 'var(--brand-blue)']
     },
     {
       value: 'blue',
       label: 'Blue',
       ariaLabel: 'Blue mark',
-      colors: ['var(--color-blue-200)', 'var(--color-blue-700)', 'var(--color-violet-500)']
+      colors: ['var(--info)', 'var(--info-mark)', 'var(--accent)']
     },
     {
       value: 'violet',
       label: 'Violet',
       ariaLabel: 'Violet mark',
-      colors: ['var(--color-violet-200)', 'var(--color-violet-700)', 'var(--color-blue-500)']
+      colors: ['var(--chart-sequential-2)', 'var(--chart-series-3)', 'var(--brand-blue)']
     },
     {
       value: 'gray',
       label: 'Gray',
       ariaLabel: 'Gray mark',
-      colors: ['var(--color-gray-200)', 'var(--color-gray-700)', 'var(--color-slate-500)']
+      colors: ['var(--bg-selected)', 'var(--text-muted)', 'var(--text-disabled)']
     }
   ]
 
@@ -278,7 +278,7 @@
   const pendingPlanId = ref('')
   const upgradeOpen = ref(false)
   const planSubmitted = ref(false)
-  const period = ref<OnboardingFormBillingPeriod>('yearly')
+  const period = ref<OnboardingFormBillingPeriod>('monthly')
   const editing = ref(false)
   const card = reactive({ last4: account.value.cardLast4, ...blankCard })
   const address = reactive({ useAccountInformation: true, ...account.value.address })
@@ -302,7 +302,7 @@
       return
     }
     pendingPlanId.value = value
-    period.value = 'yearly'
+    period.value = 'monthly'
     editing.value = false
     Object.assign(address, { useAccountInformation: true, ...account.value.address })
     upgradeOpen.value = true
@@ -617,7 +617,7 @@
                                   >
                                     <aside
                                       v-if="upgrade"
-                                      class="flex flex-col gap-(--spacing-md)"
+                                      class="order-last flex flex-col gap-(--spacing-md) lg:order-none"
                                     >
                                       <div class="flex flex-col gap-(--spacing-xs)">
                                         <h3

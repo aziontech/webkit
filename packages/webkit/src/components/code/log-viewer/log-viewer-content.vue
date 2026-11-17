@@ -288,7 +288,7 @@
                     dir="auto"
                     class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xl) text-(--text-default) max-sm:whitespace-nowrap"
                   >
-                    <span class="w-16 shrink-0 whitespace-nowrap">
+                    <span class="min-w-16 shrink-0 whitespace-nowrap">
                       <template
                         v-for="(segment, segmentIndex) in segmentsFor(line.message)"
                         :key="`${line.id}-message-${segmentIndex}`"

@@ -116,6 +116,35 @@ const stack = (s: Box, t: Box, radius: number): Route => {
   }
 }
 
+const MIRRORED_SIDE: Record<DiagramSide, DiagramSide> = {
+  left: 'right',
+  right: 'left',
+  top: 'top',
+  bottom: 'bottom'
+}
+
+const mirrorPath = (d: string, width: number): string =>
+  d
+    .replace(/([MVHQC])([^MVHQC]*)/g, (_, command: string, args: string) => {
+      if (command === 'V') return `${command}${args}`
+      const values = args.trim().split(/\s+/).map(Number)
+      const flipped = values.map((value, index) =>
+        command === 'H' || index % 2 === 0 ? width - value : value
+      )
+      return `${command}${flipped.join(' ')} `
+    })
+    .trim()
+
+const mirrorRoute = (routed: Route, width: number): Route => ({
+  d: mirrorPath(routed.d, width),
+  label: { x: width - routed.label.x, y: routed.label.y },
+  ends: routed.ends.map((end) => ({
+    x: width - end.x,
+    y: end.y,
+    side: MIRRORED_SIDE[end.side]
+  })) as [End, End]
+})
+
 const route = (s: Box, t: Box, inset: number, radius: number): Route => {
   if (t.left >= s.right - 0.5) return curve(s, t)
   const below = t.top >= s.bottom - 0.5
@@ -153,18 +182,23 @@ export function useDiagramConnectors(
       ) || 16
     const inset = toPx(style.getPropertyValue('--spacing-md'), rootSize)
     const radius = toPx(style.getPropertyValue('--shape-card'), rootSize)
+    const rtl = style.direction === 'rtl'
+    const span = frameBox.width
+    const inline = (x: number) => (rtl ? span - x : x)
 
     const box = (key: string): Box | null => {
       const node = element.querySelector(`[data-diagram-node="${key}"]`)
       if (!node) return null
       const r = node.getBoundingClientRect()
+      const start = inline(rtl ? r.right - frameBox.left : r.left - frameBox.left)
+      const end = inline(rtl ? r.left - frameBox.left : r.right - frameBox.left)
       return {
-        left: r.left - frameBox.left,
-        right: r.right - frameBox.left,
+        left: start,
+        right: end,
         top: r.top - frameBox.top,
         bottom: r.bottom - frameBox.top,
         middle: (r.top + r.bottom) / 2 - frameBox.top,
-        centre: (r.left + r.right) / 2 - frameBox.left,
+        centre: (start + end) / 2,
         tree: node.parentElement?.closest('[data-stack]')?.getAttribute('data-stack') === 'tree'
       }
     }
@@ -179,7 +213,8 @@ export function useDiagramConnectors(
       if (!source || !target) continue
       const key = `${edge.from}-${edge.to}`
       const active = Boolean(edge.active)
-      const routed = route(source, target, inset, radius)
+      const logical = route(source, target, inset, radius)
+      const routed = rtl ? mirrorRoute(logical, span) : logical
       nextPaths.push({ key, d: routed.d, active })
       if (edge.label) nextLabels.push({ key, ...routed.label, active, label: edge.label })
       for (const end of routed.ends) {

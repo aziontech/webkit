@@ -796,6 +796,7 @@
 
     <div
       ref="contentEl"
+      dir="ltr"
       class="relative flex max-h-[var(--code-block-max-height,320px)] min-h-0 shrink flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :data-testid="`${testId}__content`"
       @transitionend="onContentTransitionend"

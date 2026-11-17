@@ -188,6 +188,28 @@
   const touched = ref(new Set<string>())
   const schemaWidth = ref(420)
   const schemaExpanded = ref(true)
+  const schemaHeight = ref(240)
+  const splitEl = ref<HTMLElement | null>(null)
+  const splitWidth = ref(0)
+  const splitStacked = computed(() => splitWidth.value > 0 && splitWidth.value < 640)
+  const schemaMax = computed(() => {
+    if (splitStacked.value) return 480
+    if (splitWidth.value === 0) return 720
+    return Math.min(720, Math.max(280, Math.floor(splitWidth.value * 0.45)))
+  })
+  const setSchemaBasis = (value: number | undefined) => {
+    if (value === undefined) return
+    if (splitStacked.value) schemaHeight.value = value
+    else schemaWidth.value = value
+  }
+  watch(splitEl, (el, _previous, onCleanup) => {
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(([entry]) => {
+      splitWidth.value = entry.contentRect.width
+    })
+    observer.observe(el)
+    onCleanup(() => observer.disconnect())
+  })
   const nameError = ref('')
   const codeError = ref('')
   const formId = useId()
@@ -458,18 +480,23 @@
                         />
                       </div>
                     </div>
-                    <div class="flex min-h-0 flex-1">
+                    <div
+                      ref="splitEl"
+                      class="flex min-h-0 flex-1"
+                    >
                       <ResizableRoot
                         class="w-full"
+                        :orientation="splitStacked ? 'vertical' : 'horizontal'"
                         aria-label="Argument form"
                       >
                         <ResizablePane
-                          v-model:basis="schemaWidth"
+                          :basis="splitStacked ? schemaHeight : schemaWidth"
                           v-model:open="schemaExpanded"
                           collapsible
-                          :min="280"
-                          :max="720"
+                          :min="splitStacked ? 160 : 280"
+                          :max="schemaMax"
                           aria-label="Schema"
+                          @update:basis="setSchemaBasis"
                         >
                           <div class="flex min-h-0 w-full flex-1 flex-col">
                             <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
@@ -572,7 +599,7 @@
                                               <div
                                                 class="flex min-w-0 flex-row items-baseline gap-(--spacing-xs)"
                                               >
-                                                <Item.Title>
+                                                <Item.Title class="min-w-0">
                                                   <span
                                                     :data-empty="!field.key || null"
                                                     class="truncate font-code text-label-code-sm data-empty:text-(--text-muted)"
@@ -580,9 +607,13 @@
                                                     {{ field.key || 'Unnamed field' }}
                                                   </span>
                                                 </Item.Title>
-                                                <Item.Description class="shrink-0">{{
-                                                  summary(field)
-                                                }}</Item.Description>
+                                                <div class="hidden min-w-0 sm:block">
+                                                  <Item.Description>
+                                                    <span class="block truncate">{{
+                                                      summary(field)
+                                                    }}</span>
+                                                  </Item.Description>
+                                                </div>
                                               </div>
                                             </Item.Content>
                                             <Item.Actions class="shrink-0">
@@ -652,6 +683,7 @@
                                               >
                                                 <Item.List>
                                                   <SettingsRow
+                                                    stackable
                                                     title="Name"
                                                     description="The key in the arguments object, and what the service reads."
                                                   >
@@ -681,6 +713,7 @@
                                                     >
                                                   </SettingsRow>
                                                   <SettingsRow
+                                                    stackable
                                                     title="Type"
                                                     description="What the field accepts, and the control the form renders."
                                                   >
@@ -704,6 +737,7 @@
                                                     </Select>
                                                   </SettingsRow>
                                                   <SettingsRow
+                                                    stackable
                                                     title="Label"
                                                     description="How the field is named in the form. Falls back to the key."
                                                   >
@@ -719,6 +753,7 @@
                                                     />
                                                   </SettingsRow>
                                                   <SettingsRow
+                                                    stackable
                                                     title="Description"
                                                     description="The guidance under the field."
                                                   >
@@ -841,6 +876,7 @@
                                                     </div>
                                                   </Item>
                                                   <SettingsRow
+                                                    stackable
                                                     v-if="field.type === 'string'"
                                                     title="Minimum length"
                                                   >
@@ -854,6 +890,7 @@
                                                     />
                                                   </SettingsRow>
                                                   <SettingsRow
+                                                    stackable
                                                     key="settings-row-2"
                                                     v-if="field.type === 'string'"
                                                     title="Maximum length"
@@ -887,6 +924,7 @@
                                                     </div>
                                                   </SettingsRow>
                                                   <SettingsRow
+                                                    stackable
                                                     key="settings-row-4"
                                                     v-if="
                                                       field.type === 'integer' ||
@@ -904,6 +942,7 @@
                                                     />
                                                   </SettingsRow>
                                                   <SettingsRow
+                                                    stackable
                                                     key="settings-row-5"
                                                     v-if="
                                                       field.type === 'integer' ||
@@ -941,6 +980,7 @@
                                                     </div>
                                                   </SettingsRow>
                                                   <SettingsRow
+                                                    stackable
                                                     key="settings-row-7"
                                                     v-if="field.type === 'array'"
                                                     title="List of"
@@ -997,6 +1037,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        stackable
                         title="Name"
                         description="Give a unique and descriptive name to identify your service."
                       >
@@ -1027,6 +1068,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        stackable
                         title="Runtime"
                         description="The runtime isn't editable after the service is created."
                       >

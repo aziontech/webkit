@@ -196,6 +196,26 @@ describe('SiteHeaderSection', () => {
     await waitFor(() => expect(document.activeElement).toBe(opener), { timeout: OPEN_TIMEOUT })
   })
 
+  it('moves focus into the sheet and closes it from its close button', async () => {
+    const { getByRole } = nav()
+
+    const opener = getByRole('button', { name: 'Open navigation' })
+    await userEvent.click(opener)
+    const sheet = await waitFor(() => body().getByRole('dialog', { name: 'Menu' }), {
+      timeout: OPEN_TIMEOUT
+    })
+    await waitFor(() => expect(sheet.contains(document.activeElement)).toBe(true), {
+      timeout: OPEN_TIMEOUT
+    })
+
+    await userEvent.click(within(sheet).getByRole('button', { name: 'Close' }))
+
+    await waitFor(() => expect(body().queryByRole('dialog', { name: 'Menu' })).toBeNull(), {
+      timeout: OPEN_TIMEOUT
+    })
+    await waitFor(() => expect(document.activeElement).toBe(opener), { timeout: OPEN_TIMEOUT })
+  })
+
   it('closes the sheet when the viewport reaches xl', async () => {
     await page.viewport(414, 896)
     const { getByRole } = nav()

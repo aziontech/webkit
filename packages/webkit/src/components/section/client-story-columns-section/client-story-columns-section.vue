@@ -79,18 +79,19 @@
   )
 
   const NO_BRAND: ClientStoryColumnsSectionBrand = {
-    base: 'var(--color-base-black)',
-    glow: 'var(--color-base-black)'
+    base: 'var(--bg-canvas)',
+    glow: 'var(--bg-canvas)'
   }
 
   const faceStyle = (cell: ClientStoryColumnsSectionCell): Record<string, string> => {
     const brand = cell.brand ?? clientBrand(cell.name) ?? NO_BRAND
     return {
-      '--client-story-columns-section-wall-face': `radial-gradient(354px 354px at -15% -15%, ${brand.glow}, transparent 70%), radial-gradient(354px 354px at 45% 115%, ${brand.glow}, transparent 70%), ${brand.base}`,
-      '--client-story-columns-section-wall-ink':
-        brand.ink === 'dark' ? 'var(--color-base-black)' : 'var(--color-base-white)'
+      '--client-story-columns-section-wall-face': `radial-gradient(354px 354px at -15% -15%, ${brand.glow}, transparent 70%), radial-gradient(354px 354px at 45% 115%, ${brand.glow}, transparent 70%), ${brand.base}`
     }
   }
+
+  const faceTheme = (cell: ClientStoryColumnsSectionCell): 'light' | 'dark' =>
+    (cell.brand ?? clientBrand(cell.name) ?? NO_BRAND).ink === 'dark' ? 'light' : 'dark'
 
   const listName = computed(() => props.ariaLabel || t('clientStoryColumnsSection.list'))
   const story = computed(() => props.linkLabel || t('clientStoryColumnsSection.story'))
@@ -182,6 +183,7 @@
                 <div
                   aria-hidden="true"
                   class="absolute inset-0"
+                  :data-theme="faceTheme(cell)"
                   :style="revealFaceStyle(cell)"
                 />
 
@@ -251,7 +253,8 @@
                 :link-label="linkLabel"
                 :items="[{ src: cell.logo, alt: cell.name, href: cell.href }]"
                 :style="faceStyle(cell)"
-                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--client-story-columns-section-wall-face)] [&_a]:[--text-default:var(--client-story-columns-section-wall-ink)] group-hover/card:[&_a]:before:opacity-100 group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100"
+                :data-theme="faceTheme(cell)"
+                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--client-story-columns-section-wall-face)] group-hover/card:[&_a]:before:opacity-100 group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100"
               >
                 <template #mark>
                   <img

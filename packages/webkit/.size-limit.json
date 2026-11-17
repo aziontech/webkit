@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "73 KB",
+    "limit": "73.3 KB",
     "entryOnly": true
   },
   {
@@ -18,12 +18,12 @@
   {
     "name": "site-layout",
     "path": "src/components/layout/site-layout/site-layout.vue",
-    "limit": "76.95 KB"
+    "limit": "77.05 KB"
   },
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "68.9 KB"
+    "limit": "69.05 KB"
   },
   {
     "name": "doc-markdown",
@@ -67,7 +67,7 @@
   {
     "name": "diagram",
     "path": "src/components/marketing/diagram/diagram.vue",
-    "limit": "11.3 KB",
+    "limit": "11.55 KB",
     "entryOnly": true
   },
   {
@@ -270,7 +270,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "30.5 KB"
+    "limit": "30.6 KB"
   },
   {
     "name": "doc-on-this-page",
@@ -369,7 +369,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "8.7 KB"
+    "limit": "8.75 KB"
   },
   {
     "name": "embed",
@@ -458,7 +458,7 @@
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "69.25 KB"
+    "limit": "69.35 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -478,7 +478,7 @@
   {
     "name": "article-body-section",
     "path": "src/components/section/article-body-section/article-body-section.vue",
-    "limit": "44.85 KB",
+    "limit": "45 KB",
     "entryOnly": true
   },
   {
@@ -494,7 +494,7 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "34.85 KB",
+    "limit": "34.9 KB",
     "entryOnly": true
   },
   {
@@ -517,7 +517,7 @@
   {
     "name": "console-showcase-section",
     "path": "src/components/section/console-showcase-section/console-showcase-section.vue",
-    "limit": "21.45 KB"
+    "limit": "21.6 KB"
   },
   {
     "name": "process-scroll-section",
@@ -545,12 +545,12 @@
   {
     "name": "site-header-section",
     "path": "src/components/section/site-header-section/site-header-section.vue",
-    "limit": "57.45 KB"
+    "limit": "57.5 KB"
   },
   {
     "name": "competitor-comparison-section",
     "path": "src/components/section/competitor-comparison-section/competitor-comparison-section.vue",
-    "limit": "24.55 KB",
+    "limit": "24.65 KB",
     "entryOnly": true
   },
   {
@@ -600,7 +600,7 @@
   {
     "name": "client-mosaic-section",
     "path": "src/components/section/client-mosaic-section/client-mosaic-section.vue",
-    "limit": "7.1 KB"
+    "limit": "7.2 KB"
   },
   {
     "name": "client-story-columns-section",
@@ -664,12 +664,12 @@
   {
     "name": "recognition-marquee-section",
     "path": "src/components/section/recognition-marquee-section/recognition-marquee-section.vue",
-    "limit": "21.1 KB"
+    "limit": "21.15 KB"
   },
   {
     "name": "architecture-tabs-section",
     "path": "src/components/section/architecture-tabs-section/architecture-tabs-section.vue",
-    "limit": "21.75 KB",
+    "limit": "22 KB",
     "entryOnly": true
   },
   {
@@ -1140,7 +1140,7 @@
   {
     "name": "topology-diagram",
     "path": "src/components/data/topology-diagram/topology-diagram.vue",
-    "limit": "27.8 KB"
+    "limit": "27.85 KB"
   },
   {
     "name": "tool-approval",
@@ -1388,7 +1388,7 @@
   {
     "name": "filter-menu",
     "path": "src/components/data/filter-menu/index.ts",
-    "limit": "35.9 KB",
+    "limit": "35.95 KB",
     "entryOnly": true
   },
   {
@@ -1594,7 +1594,7 @@
   {
     "name": "log-viewer",
     "path": "src/components/code/log-viewer/index.ts",
-    "limit": "42.55 KB"
+    "limit": "42.6 KB"
   },
   {
     "name": "log-viewer-root",
@@ -1609,7 +1609,7 @@
   {
     "name": "log-viewer-steps",
     "path": "src/components/code/log-viewer/log-viewer-steps.vue",
-    "limit": "40.45 KB"
+    "limit": "40.5 KB"
   },
   {
     "name": "log-viewer-header",
@@ -2030,7 +2030,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "74.3 KB"
+    "limit": "74.65 KB"
   },
   {
     "name": "use-console-layout",
@@ -2145,12 +2145,12 @@
   {
     "name": "breadcrumb",
     "path": "src/components/navigation/breadcrumb/index.ts",
-    "limit": "25.15 KB"
+    "limit": "25.3 KB"
   },
   {
     "name": "breadcrumb-root",
     "path": "src/components/navigation/breadcrumb/breadcrumb.vue",
-    "limit": "25.15 KB"
+    "limit": "25.25 KB"
   },
   {
     "name": "breadcrumb-item",
@@ -2280,12 +2280,12 @@
   {
     "name": "command",
     "path": "src/components/overlay/command/index.ts",
-    "limit": "26.65 KB"
+    "limit": "26.8 KB"
   },
   {
     "name": "command-root",
     "path": "src/components/overlay/command/command.vue",
-    "limit": "20.9 KB"
+    "limit": "21.05 KB"
   },
   {
     "name": "command-input",

@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "One statement, its attribution, and the company mark above it. Both are real: the mark is Magalu's, served from the docs site's public folder, and the sentence is quoted from the published success case the attribution names — point `logo` at your own asset. The wordmark ships in the brand blue rather than in one ink, so it reads on both themes; `logo` is a single URL with no per-theme swap, which a white-on-dark mark would need. `logoAlt` is empty here, so the mark takes its accessible name from `jobTitle`.",
+      "summary": "One statement, its attribution, and the company mark above it. Acme has no logo file, so the `mark` slot carries a `Logo` that draws the name as a typographic wordmark; for a real client point `logo` at its asset instead. `logo` is a single URL with no per-theme swap, so a mark that needs a white-on-dark file belongs in the slot. With `logo` set and `logoAlt` empty, the image takes its accessible name from `jobTitle`.",
       "file": "default.vue"
     },
     {

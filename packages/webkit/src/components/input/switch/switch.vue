@@ -109,7 +109,7 @@
   >
     <span
       aria-hidden="true"
-      class="pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 rtl:group-data-[checked]:-translate-x-3.5 group-data-[checked]:bg-(--color-base-white) group-data-[disabled]:bg-(--text-disabled) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-data-[disabled]:bg-[GrayText]"
+      class="pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 rtl:group-data-[checked]:-translate-x-3.5 group-data-[checked]:bg-(--accent-foreground) group-data-[disabled]:bg-(--text-disabled) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-data-[disabled]:bg-[GrayText]"
       :data-testid="`${testId}__handle`"
     >
       <template v-if="variant === 'privacy'">
@@ -121,7 +121,7 @@
         <i
           aria-hidden="true"
           :data-testid="`${testId}__lock-open`"
-          class="az az-lock-open hidden text-body-2xs leading-none text-(--color-base-black) group-data-[checked]:inline"
+          class="az az-lock-open hidden text-body-2xs leading-none text-(--accent) group-data-[checked]:inline"
         />
       </template>
     </span>

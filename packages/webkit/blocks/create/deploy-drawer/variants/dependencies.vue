@@ -616,7 +616,7 @@
                           </span>
                         </Item.Media>
                         <Item.Content>
-                          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                          <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                             <span class="shrink-0 text-body-sm text-(--text-muted)">
                               {{ row.label }}
                             </span>
@@ -633,7 +633,10 @@
                             {{ row.note || versionOf(row).name }}
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions v-if="!row.note">
+                        <Item.Actions
+                          v-if="!row.note"
+                          class="basis-full sm:basis-auto"
+                        >
                           <DropdownMenu
                             v-model:open="versionOpen[row.key]"
                             side="bottom"
@@ -804,7 +807,9 @@
                                         </span>
                                       </Item.Media>
                                       <Item.Content>
-                                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                        <span
+                                          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+                                        >
                                           <span class="shrink-0 text-body-sm text-(--text-muted)">
                                             {{ dependency.label }}
                                           </span>
@@ -1030,11 +1035,15 @@
                                   class="w-full"
                                 >
                                   <Link
-                                    :label="domainGroup.domains[0]"
+                                    class="max-w-full"
                                     :href="`https://${domainGroup.domains[0]}`"
                                     target="_blank"
                                     size="small"
-                                  />
+                                  >
+                                    <span class="grid grid-cols-1">
+                                      <span class="truncate">{{ domainGroup.domains[0] }}</span>
+                                    </span>
+                                  </Link>
                                 </Tooltip>
                               </div>
                               <Popover
@@ -1116,7 +1125,10 @@
                             </li>
                           </ul>
                         </Item.Content>
-                        <Item.Actions v-if="projectMode === 'existing'">
+                        <Item.Actions
+                          v-if="projectMode === 'existing'"
+                          class="basis-full sm:basis-auto"
+                        >
                           <DropdownMenu
                             side="bottom"
                             align="end"
@@ -1251,11 +1263,15 @@
                                     class="w-full"
                                   >
                                     <Link
-                                      :label="domainGroup.domains[0]"
+                                      class="max-w-full"
                                       :href="`https://${domainGroup.domains[0]}`"
                                       target="_blank"
                                       size="small"
-                                    />
+                                    >
+                                      <span class="grid grid-cols-1">
+                                        <span class="truncate">{{ domainGroup.domains[0] }}</span>
+                                      </span>
+                                    </Link>
                                   </Tooltip>
                                 </div>
                                 <Popover

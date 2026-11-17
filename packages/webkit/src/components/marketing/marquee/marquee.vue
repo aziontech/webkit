@@ -148,7 +148,7 @@
         <li
           v-for="(item, index) in items"
           :key="`${copy}-item-${index}`"
-          class="flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-md text-(--text-default) group-data-[size=small]/strip:text-body-sm"
+          class="flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-md text-(--text-default) group-data-[size=small]/strip:text-body-sm motion-reduce:max-w-full motion-reduce:shrink motion-reduce:whitespace-normal motion-reduce:text-center"
         >
           <span
             v-if="item.icon"

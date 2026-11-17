@@ -95,7 +95,7 @@
       </div>
 
       <div
-        class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) lg:grid-cols-4"
+        class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-2 lg:grid-cols-4"
       >
         <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <span class="text-label-sm text-(--text-muted)">Status</span>
@@ -145,7 +145,7 @@
           </div>
         </div>
 
-        <div class="col-span-2 flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-4">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs) sm:col-span-2 lg:col-span-4">
           <span class="text-label-sm text-(--text-muted)">Modules</span>
           <div class="flex min-h-7 min-w-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tag

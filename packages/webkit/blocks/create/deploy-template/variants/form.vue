@@ -431,29 +431,38 @@
                                         @click="revealed[field.name] = !revealed[field.name]"
                                       />
                                     </Tooltip>
-                                    <InputGroupAddon>
-                                      <Tooltip
-                                        :content="
-                                          field.secret
-                                            ? 'The template keeps this value secret.'
-                                            : 'The template stores this value as plain text.'
-                                        "
-                                      >
-                                        <span class="flex items-center gap-(--spacing-xs)">
-                                          <label :for="`${field.name}-secret`">Secret</label>
-                                          <Checkbox
-                                            :model-value="field.secret"
-                                            disabled
-                                            :id="`${field.name}-secret`"
-                                          />
-                                          <i
-                                            class="az az-lock text-body-xs"
-                                            aria-hidden="true"
-                                          />
-                                        </span>
-                                      </Tooltip>
-                                    </InputGroupAddon>
+                                    <div class="hidden self-stretch sm:flex">
+                                      <InputGroupAddon>
+                                        <Tooltip
+                                          :content="
+                                            field.secret
+                                              ? 'The template keeps this value secret.'
+                                              : 'The template stores this value as plain text.'
+                                          "
+                                        >
+                                          <span class="flex items-center gap-(--spacing-xs)">
+                                            <label :for="`${field.name}-secret`">Secret</label>
+                                            <Checkbox
+                                              :model-value="field.secret"
+                                              disabled
+                                              :id="`${field.name}-secret`"
+                                            />
+                                            <i
+                                              class="az az-lock text-body-xs"
+                                              aria-hidden="true"
+                                            />
+                                          </span>
+                                        </Tooltip>
+                                      </InputGroupAddon>
+                                    </div>
                                   </InputGroupRoot>
+                                  <p class="text-body-xs text-(--text-muted) sm:hidden">
+                                    {{
+                                      field.secret
+                                        ? 'The template keeps this value secret.'
+                                        : 'The template stores this value as plain text.'
+                                    }}
+                                  </p>
                                 </div>
                                 <Field.Error v-if="errorOf(field)">{{
                                   errorOf(field)

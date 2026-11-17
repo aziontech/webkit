@@ -1,11 +1,11 @@
 # RuleList (`view/rule-list`)
 
-> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s, folded on a phone into one Move `DropdownMenu` (Move to top, Move up, Move down, Move to bottom) in a Move column pinned to the end edge beside a pinned Status; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `DropdownMenu`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/rule-list/rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/rule-list")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -44,11 +44,13 @@ A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, th
 
 ### D. Rules table — `DataTable`, `Tag`, `Field`, `Switch` (required)
 
-A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`, so on a phone the grid keeps its columns and scrolls sideways inside the panel): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
+A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`, so on a phone the grid keeps its columns and scrolls sideways inside the panel, after the narrow reorder below): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
-### E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
+### E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 
 The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Position cell starts with a small numeric `Input` showing the rule's position: type a number and press Enter (or leave the field) to move the rule there, clamped below the pinned rules and to the end of the phase; Escape or a value that is not a number keeps the rule in place, and after Enter focus stays in the field on the moved rule. On a locked rule, while searching and while saving the field is disabled and its name and `Tooltip` carry the reason ("Position 1 of Default rule in the Request phase. The default rule runs first and stays first."). Then the cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7); each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
+
+Below 48rem of the viewport the row leads with Name, Description and Last modified, and the `Switch` (its Active or Inactive text kept for screen readers only) and a Move column are pinned to the end edge (`frozen: 'end'`, 64 px and 56 px), so both stay in view while the rest scrolls under them; the Position cell folds into one medium ghost `IconButton` named "Move Docs rewrite, position 5 of 5" that opens a `DropdownMenu` with Move to top, Move up, Move down and Move to bottom, each disabled when the rule cannot go that way; the typed position is left to the wide layout and the grip still drags. Focus returns to the menu button on the moved rule.
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 
@@ -200,6 +202,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -213,7 +216,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
 
   import { sampleApplicationRules, sampleFirewallRules } from './sample'
 
@@ -301,7 +304,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
 
   type Phase = RuleListPhase
   type Rule = RuleListRule
-  type Control = 'up' | 'down' | 'position'
+  type Control = 'up' | 'down' | 'position' | 'menu'
 
   interface Snapshot {
     order: Record<string, string[]>
@@ -493,13 +496,57 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
   }
   const reorderable = (phase: Phase) => (row: Rule) => !lockReason(phase, row)
 
-  const columns: TableColumn[] = [
-    { id: 'move', header: 'Position', width: 168, hideable: false },
-    { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
-    { accessorKey: 'description', header: 'Description', grow: 3 },
-    { id: 'status', header: 'Status', width: 152 },
-    { accessorKey: 'modified', header: 'Last modified', grow: 2 }
-  ]
+  const narrow = ref(false)
+  const narrowQuery = globalThis.matchMedia?.('(width < 48rem)')
+  const onNarrowChange = (event: MediaQueryListEvent) => {
+    narrow.value = event.matches
+  }
+  onMounted(() => {
+    if (!narrowQuery) return
+    narrow.value = narrowQuery.matches
+    narrowQuery.addEventListener('change', onNarrowChange)
+  })
+  onScopeDispose(() => narrowQuery?.removeEventListener('change', onNarrowChange))
+
+  const nameColumn: TableColumn = {
+    accessorKey: 'name',
+    header: 'Name',
+    principal: true,
+    hideable: false
+  }
+  const descriptionColumn: TableColumn = {
+    accessorKey: 'description',
+    header: 'Description',
+    grow: 3
+  }
+  const modifiedColumn: TableColumn = { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+  const statusColumn: TableColumn = { id: 'status', header: 'Status' }
+  const moveColumn: TableColumn = { id: 'move', header: 'Position', hideable: false }
+  const columns = computed<TableColumn[]>(() =>
+    narrow.value
+      ? [
+          nameColumn,
+          descriptionColumn,
+          modifiedColumn,
+          { ...statusColumn, width: 64, frozen: 'end' },
+          { ...moveColumn, header: 'Move', width: 56, align: 'center', frozen: 'end' }
+        ]
+      : [
+          { ...moveColumn, width: 168 },
+          nameColumn,
+          descriptionColumn,
+          { ...statusColumn, width: 152 },
+          modifiedColumn
+        ]
+  )
+
+  const onMoveSelect = (phase: Phase, item: Rule, value: DropdownMenuItemValue) => {
+    const from = position(phase, item)
+    if (value === 'top') moveTo(phase, from, pinned(phase), 'menu')
+    if (value === 'up') step(phase, from, -1, 'menu')
+    if (value === 'down') step(phase, from, 1, 'menu')
+    if (value === 'bottom') moveTo(phase, from, draft[phase].length - 1, 'menu')
+  }
 
   const setActive = (item: Rule, value: boolean) => {
     item.active = value
@@ -704,6 +751,56 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                     >
                       <template #cell-move="{ row }">
                         <div
+                          v-if="narrow"
+                          :data-rule-id="row.id"
+                          class="flex items-center justify-center"
+                        >
+                          <DropdownMenu
+                            side="bottom"
+                            align="end"
+                            :disabled="Boolean(lockReason(group.value, row))"
+                            @select="(_event, value) => onMoveSelect(group.value, row, value)"
+                          >
+                            <DropdownMenu.Trigger>
+                              <IconButton
+                                icon="az az-move-vertical"
+                                variant="ghost"
+                                size="medium"
+                                data-control="menu"
+                                :disabled="Boolean(lockReason(group.value, row))"
+                                :aria-label="
+                                  lockReason(group.value, row)
+                                    ? `Move ${row.name}, position ${position(group.value, row) + 1} of ${group.total}. ${lockReason(group.value, row)}`
+                                    : `Move ${row.name}, position ${position(group.value, row) + 1} of ${group.total}`
+                                "
+                              />
+                            </DropdownMenu.Trigger>
+                            <DropdownMenu.Group>
+                              <DropdownMenu.Item
+                                value="top"
+                                label="Move to top"
+                                :disabled="!canMove(group.value, position(group.value, row), -1)"
+                              />
+                              <DropdownMenu.Item
+                                value="up"
+                                label="Move up"
+                                :disabled="!canMove(group.value, position(group.value, row), -1)"
+                              />
+                              <DropdownMenu.Item
+                                value="down"
+                                label="Move down"
+                                :disabled="!canMove(group.value, position(group.value, row), 1)"
+                              />
+                              <DropdownMenu.Item
+                                value="bottom"
+                                label="Move to bottom"
+                                :disabled="!canMove(group.value, position(group.value, row), 1)"
+                              />
+                            </DropdownMenu.Group>
+                          </DropdownMenu>
+                        </div>
+                        <div
+                          v-else
                           :data-rule-id="row.id"
                           class="flex items-center gap-(--spacing-2xs)"
                         >
@@ -803,7 +900,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                             />
                             <Field.Label>
                               <span
-                                class="text-body-sm"
+                                class="text-body-sm max-md:sr-only"
                                 aria-hidden="true"
                                 >{{ row.active ? 'Active' : 'Inactive' }}</span
                               >

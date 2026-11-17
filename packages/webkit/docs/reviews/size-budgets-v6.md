@@ -336,5 +336,29 @@ Budget-raise: locales-pt-BR 10.05 KB → 10.35 KB (measured 10.33 KB): new strin
 Budget-raise: locales-es 10.2 KB → 10.5 KB (measured 10.47 KB): new strings for CopyText, SkipLink, PromptInput (attach, dictate, model, tools), DataGrid paste and the topology confirm (moved from review/impeccable, 2026-11-17).
 Budget-raise: topology-diagram 27.35 KB → 27.8 KB (measured 27.75 KB): a binding applies only after Apply, with Cancel to drop it (confirm step), and the node header band is separated from its name row (moved from review/impeccable, 2026-11-17).
 Budget-raise: app-header 1.85 KB → 2.4 KB (measured 2.38 KB): AppHeader.Brand is the home link (href, aria-label) and draws the product label beside the mark (moved from review/impeccable, 2026-11-17).
+Budget-raise: console-layout-root 73 KB → 73.3 KB (measured 73.29 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: site-layout 76.95 KB → 77.05 KB (measured 77.01 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: doc-layout 68.9 KB → 69.05 KB (measured 69.04 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: diagram 11.3 KB → 11.55 KB (measured 11.50 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: doc-page-header 30.5 KB → 30.6 KB (measured 30.56 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: media-tabs 8.7 KB → 8.75 KB (measured 8.72 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: console-trace-scene 69.25 KB → 69.35 KB (measured 69.31 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: article-body-section 44.85 KB → 45 KB (measured 44.96 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: article-index-section 34.85 KB → 34.9 KB (measured 34.86 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: console-showcase-section 21.45 KB → 21.6 KB (measured 21.58 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: site-header-section 57.45 KB → 57.5 KB (measured 57.48 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: competitor-comparison-section 24.55 KB → 24.65 KB (measured 24.63 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: client-mosaic-section 7.1 KB → 7.2 KB (measured 7.16 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: recognition-marquee-section 21.1 KB → 21.15 KB (measured 21.11 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: architecture-tabs-section 21.75 KB → 22 KB (measured 21.99 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: topology-diagram 27.8 KB → 27.85 KB (measured 27.80 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: filter-menu 35.9 KB → 35.95 KB (measured 35.92 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: log-viewer 42.55 KB → 42.6 KB (measured 42.58 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: log-viewer-steps 40.45 KB → 40.5 KB (measured 40.45 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: console-layout 74.3 KB → 74.65 KB (measured 74.60 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: breadcrumb 25.15 KB → 25.3 KB (measured 25.26 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: breadcrumb-root 25.15 KB → 25.25 KB (measured 25.21 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: command 26.65 KB → 26.8 KB (measured 26.75 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: command-root 20.9 KB → 21.05 KB (measured 21.00 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.

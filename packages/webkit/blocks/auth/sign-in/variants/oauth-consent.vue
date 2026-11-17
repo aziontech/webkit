@@ -105,6 +105,7 @@
                         :alt="client.name"
                       />
                       <PageHeader
+                        class="min-w-0 flex-1"
                         title-id="oauth-consent-title"
                         :title="`Authorize ${client.name}`"
                         :description="`${client.name} by ${client.publisher} (${client.site}) wants to access your account.`"

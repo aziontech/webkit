@@ -7,12 +7,12 @@
   },
   {
    "name": "PartialError",
-   "summary": "Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeIcon`, staging-settings marked Failed with the reason, Retry failed beside Close, and an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.",
+   "summary": "Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeIcon`, staging-settings marked Failed with the reason, Retry failed beside Close, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.",
    "file": "blocks/create/deploy-progress-dialog/variants/partial-error.vue"
   },
   {
    "name": "Success",
-   "summary": "Every Deployment Setting deployed: a large animated success `OutcomeIcon` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and a success toast with Edit and Redeploy.",
+   "summary": "Every Deployment Setting deployed: a large animated success `OutcomeIcon` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises a success toast with Edit and Redeploy.",
    "file": "blocks/create/deploy-progress-dialog/variants/success.vue"
   }
  ],

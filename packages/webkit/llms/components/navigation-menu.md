@@ -133,92 +133,95 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
   <div class="min-h-screen bg-(--bg-canvas) text-(--text-default)">
     <header class="border-b border-solid border-(--border-default)">
       <div
-        class="mx-auto flex w-full max-w-(--container-xl) flex-wrap items-center gap-(--spacing-6) px-(--spacing-6) py-(--spacing-4)"
+        class="@container mx-auto w-full max-w-(--layout-measure-site) px-(--spacing-md) py-(--spacing-md) sm:px-(--spacing-lg)"
       >
         <NavigationMenu
           :delay="50"
           :close-delay="300"
           orientation="horizontal"
-          aria-label="Azion"
+          aria-label="Acme"
+          class="w-full min-w-0"
         >
-          <NavigationMenu.List>
-            <NavigationMenu.Item value="solucoes">
-              <NavigationMenu.Trigger> Soluções </NavigationMenu.Trigger>
-              <NavigationMenu.Content class="w-full">
-                <div class="grid grid-cols-2 gap-(--spacing-6) p-(--spacing-2)">
-                  <NavigationMenu.List label="Por Caso de Uso">
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/solucoes/desenvolvimento-de-aplicacoes/"
-                      description="Acelere o desenvolvimento de aplicações"
-                      close-on-click
-                    >
-                      Desenvolvimento de Aplicações
-                    </NavigationMenu.Item>
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/solucoes/performance-e-confiabilidade/"
-                      description="Otimize performance e entrega de conteúdo"
-                      close-on-click
-                    >
-                      Performance e Confiabilidade
-                    </NavigationMenu.Item>
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/solucoes/"
-                      featured
-                      close-on-click
-                    >
-                      Ver todas as soluções
-                    </NavigationMenu.Item>
-                  </NavigationMenu.List>
-                </div>
-              </NavigationMenu.Content>
-            </NavigationMenu.Item>
+          <div class="flex min-w-0 items-center gap-(--spacing-lg)">
+            <NavigationMenu.List>
+              <NavigationMenu.Item value="solutions">
+                <NavigationMenu.Trigger> Solutions </NavigationMenu.Trigger>
+                <NavigationMenu.Content class="w-full">
+                  <div class="grid grid-cols-2 gap-(--spacing-xl) p-(--spacing-xs)">
+                    <NavigationMenu.List label="By use case">
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/application-development/"
+                        description="Ship applications faster"
+                        close-on-click
+                      >
+                        Application development
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/performance/"
+                        description="Speed up pages and content delivery"
+                        close-on-click
+                      >
+                        Performance and reliability
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/"
+                        featured
+                        close-on-click
+                      >
+                        See all solutions
+                      </NavigationMenu.Item>
+                    </NavigationMenu.List>
+                  </div>
+                </NavigationMenu.Content>
+              </NavigationMenu.Item>
 
-            <NavigationMenu.Item value="produtos">
-              <NavigationMenu.Trigger> Produtos </NavigationMenu.Trigger>
-              <NavigationMenu.Content class="w-full">
-                <div class="grid grid-cols-2 gap-(--spacing-6) p-(--spacing-2)">
-                  <NavigationMenu.List label="Construir">
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/produtos/functions/"
-                      description="Implemente funções serverless"
-                      close-on-click
-                    >
-                      <template #icon>
-                        <i class="az az-functions" />
-                      </template>
-                      Functions
-                    </NavigationMenu.Item>
-                    <NavigationMenu.Item
-                      layout="entry"
-                      href="https://www.azion.com/pt-br/produtos/cache/"
-                      description="Acelere a entrega de conteúdo"
-                      close-on-click
-                    >
-                      <template #icon>
-                        <i class="az az-cache" />
-                      </template>
-                      Cache
-                    </NavigationMenu.Item>
-                  </NavigationMenu.List>
-                </div>
-              </NavigationMenu.Content>
-            </NavigationMenu.Item>
+              <NavigationMenu.Item value="products">
+                <NavigationMenu.Trigger> Products </NavigationMenu.Trigger>
+                <NavigationMenu.Content class="w-full">
+                  <div class="grid grid-cols-2 gap-(--spacing-xl) p-(--spacing-xs)">
+                    <NavigationMenu.List label="Build">
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/products/functions/"
+                        description="Run serverless functions"
+                        close-on-click
+                      >
+                        <template #icon>
+                          <i class="az az-functions" />
+                        </template>
+                        Functions
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/products/cache/"
+                        description="Speed up content delivery"
+                        close-on-click
+                      >
+                        <template #icon>
+                          <i class="az az-cache" />
+                        </template>
+                        Cache
+                      </NavigationMenu.Item>
+                    </NavigationMenu.List>
+                  </div>
+                </NavigationMenu.Content>
+              </NavigationMenu.Item>
 
-            <NavigationMenu.Item>
-              <NavigationMenu.Trigger href="https://www.azion.com/pt-br/precos/">
-                Preços
+              <NavigationMenu.Item>
+                <NavigationMenu.Trigger href="https://example.com/pricing/">
+                  Pricing
+                </NavigationMenu.Trigger>
+              </NavigationMenu.Item>
+            </NavigationMenu.List>
+
+            <div class="ms-auto hidden items-center gap-(--spacing-xs) @min-[24rem]:flex">
+              <NavigationMenu.Trigger href="https://example.com/contact/">
+                Contact
               </NavigationMenu.Trigger>
-            </NavigationMenu.Item>
-          </NavigationMenu.List>
-
-          <div class="ms-auto flex items-center gap-(--spacing-2)">
-            <NavigationMenu.Trigger href="https://www.azion.com/pt-br/contato-vendas/">
-              Contato
-            </NavigationMenu.Trigger>
+            </div>
           </div>
 
           <NavigationMenu.Viewport
@@ -232,13 +235,13 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
     </header>
 
     <div
-      class="mx-auto flex max-w-2xl flex-col items-center px-(--spacing-6) py-(--spacing-24) text-center"
+      class="mx-auto flex max-w-(--container-2xl) flex-col items-center px-(--spacing-lg) py-(--spacing-2xl) text-center"
     >
       <h1 class="text-heading-lg text-(--text-default)">Navigation menu demo</h1>
-      <p class="mt-(--spacing-6) text-body-sm text-(--text-muted)">
-        Hover top-level items to open panels. Keyboard: arrows, Enter, Escape.
+      <p class="mt-(--spacing-xl) text-body-sm text-(--text-muted)">
+        Hover or tap a top-level item to open its panel. Keyboard: arrows, Enter, Escape.
       </p>
-      <div class="mt-(--spacing-10) flex flex-wrap justify-center gap-(--spacing-3)">
+      <div class="mt-(--spacing-2xl) flex flex-wrap justify-center gap-(--spacing-sm)">
         <Button label="Primary action" />
         <Button
           label="Secondary"

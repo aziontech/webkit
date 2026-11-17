@@ -89,7 +89,7 @@
       :tabindex="reduced === 'scroll' ? 0 : undefined"
       :data-reduced="reduced"
       :data-faded="faded || null"
-      class="group/loop relative w-full overflow-hidden focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-[faded]:mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] data-[reduced=scroll]:motion-reduce:overflow-x-auto"
+      class="group/loop relative w-full overflow-hidden focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-[faded]:mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] data-[reduced=scroll]:motion-reduce:overflow-x-auto data-[reduced=wrap]:motion-reduce:mask-none"
     >
       <div
         ref="trackEl"

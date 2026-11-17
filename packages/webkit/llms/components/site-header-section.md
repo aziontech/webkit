@@ -91,7 +91,7 @@
 ## Responsive
 
 - Container queries: none; the bar switches at viewport breakpoints.
-- Narrow (below `xl`, 80rem): the menus, links and contact leave the bar for the sheet behind the menu button; below `sm` the secondary action steps out unless `secondaryActionOnPhones`. Reaching `xl` while the sheet is open closes it.
+- Narrow (below `xl`, 80rem): the menus, links and contact leave the bar for the sheet behind the menu button; below `sm` the secondary action steps out unless `secondaryActionOnPhones`. When the bar's content box is under 20rem (a 320 px phone) the AZION wordmark gives way to the reduced "A" mark, so the sign-up button never covers it. Reaching `xl` while the sheet is open closes it.
 - Touch: medium buttons and icon buttons meet 40 px; the mega-menu opens on click as well as hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the sheet scrolls inside `scroll-area`.
 

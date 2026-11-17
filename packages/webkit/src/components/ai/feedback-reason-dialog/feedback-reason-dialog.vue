@@ -168,7 +168,7 @@
             </Field>
           </div>
         </PanelBody>
-        <PanelFooter class="flex-col md:flex-row md:justify-end">
+        <PanelFooter class="flex-col max-sm:*:flex-none md:flex-row md:justify-end">
           <Button
             class="w-full md:w-auto"
             type="button"

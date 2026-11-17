@@ -255,6 +255,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        stackable
                         title="Name"
                         description="Usually your company's name. Everyone you invite sees it."
                       >
@@ -387,6 +388,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        stackable
                         title="Name"
                         description="Where the organization's first workloads and resources live. You can add more workspaces once the organization exists."
                       >
@@ -426,6 +428,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        stackable
                         v-for="question in EXTRA"
                         :key="question.key"
                         :title="question.label"

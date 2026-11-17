@@ -195,6 +195,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        stackable
                         title="Name"
                         description="Identifies the domain in this list. It is not the hostname."
                       >
@@ -217,6 +218,7 @@
                         >
                       </SettingsRow>
                       <SettingsRow
+                        stackable
                         title="Domain name"
                         description="The root hostname this domain answers for, without a subdomain."
                       >

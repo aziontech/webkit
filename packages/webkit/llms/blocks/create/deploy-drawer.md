@@ -45,7 +45,7 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 ### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 
-`Card :padded="false"` with one small inline `Item` per resource, split by `Separator`s. Each row shows a small `Tag` reading Ready, or a warning tag when no version is ready, and the picked version. Change version, an outlined small `Button`, opens a `DropdownMenu`: the summary and a search `Input` in its top slot, one `DropdownMenu.Item` per version (the author `Avatar` on the left, the name with an Active `Tag`, the age on the right, the picked one `selected`), and a transparent Load more `Button` in its bottom slot. The menu gives the rows their roles, arrow-key movement, hover and focus, so the block never re-types them. Disable Change version when there is nothing to change to.
+`Card :padded="false"` with one small inline `Item` per resource, split by `Separator`s. Each row shows a small `Tag` reading Ready, or a warning tag when no version is ready, and the picked version. Change version, an outlined small `Button`, opens a `DropdownMenu`: the summary and a search `Input` in its top slot, one `DropdownMenu.Item` per version (the author `Avatar` on the left, the name with an Active `Tag`, the age on the right, the picked one `selected`), and a transparent Load more `Button` in its bottom slot. The menu gives the rows their roles, arrow-key movement, hover and focus, so the block never re-types them. Disable Change version when there is nothing to change to. On a phone the row title wraps (type, name and tag), the domain links truncate before their +N count, and Change version and the project Change menu move under the row instead of drawing over it.
 
 ### E. Dependencies — `Accordion`, `Item`, `Tag`, `DropdownMenu` (required)
 
@@ -696,7 +696,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                         </span>
                       </Item.Media>
                       <Item.Content>
-                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                        <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                           <span class="shrink-0 text-body-sm text-(--text-muted)">
                             {{ row.label }}
                           </span>
@@ -713,7 +713,10 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                           {{ row.note || versionOf(row).name }}
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions v-if="!row.note">
+                      <Item.Actions
+                        v-if="!row.note"
+                        class="basis-full sm:basis-auto"
+                      >
                         <DropdownMenu
                           v-model:open="versionOpen[row.key]"
                           side="bottom"
@@ -841,7 +844,9 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                     </span>
                                   </Item.Media>
                                   <Item.Content>
-                                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                    <span
+                                      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+                                    >
                                       <span class="shrink-0 text-body-sm text-(--text-muted)">
                                         {{ dependency.label }}
                                       </span>
@@ -1039,11 +1044,15 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                 class="w-full"
                               >
                                 <Link
-                                  :label="domainGroup.domains[0]"
+                                  class="max-w-full"
                                   :href="`https://${domainGroup.domains[0]}`"
                                   target="_blank"
                                   size="small"
-                                />
+                                >
+                                  <span class="grid grid-cols-1">
+                                    <span class="truncate">{{ domainGroup.domains[0] }}</span>
+                                  </span>
+                                </Link>
                               </Tooltip>
                             </div>
                             <Popover
@@ -1125,7 +1134,10 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                           </li>
                         </ul>
                       </Item.Content>
-                      <Item.Actions v-if="projectMode === 'existing'">
+                      <Item.Actions
+                        v-if="projectMode === 'existing'"
+                        class="basis-full sm:basis-auto"
+                      >
                         <DropdownMenu
                           side="bottom"
                           align="end"
@@ -1264,11 +1276,15 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                   class="w-full"
                                 >
                                   <Link
-                                    :label="domainGroup.domains[0]"
+                                    class="max-w-full"
                                     :href="`https://${domainGroup.domains[0]}`"
                                     target="_blank"
                                     size="small"
-                                  />
+                                  >
+                                    <span class="grid grid-cols-1">
+                                      <span class="truncate">{{ domainGroup.domains[0] }}</span>
+                                    </span>
+                                  </Link>
                                 </Tooltip>
                               </div>
                               <Popover

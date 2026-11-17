@@ -11,7 +11,7 @@
       step: '1',
       title: t.value.layerPrimitivesTitle,
       text: t.value.layerPrimitivesText,
-      code: 'var(--color-orange-600)'
+      code: 'primitives.orange[600]'
     },
     {
       step: '2',

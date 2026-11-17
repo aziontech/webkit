@@ -38,7 +38,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
-A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row is an `Item` (`clickable`, `variant="option"`, `aria-pressed` on the open table) that opens it in the pane, beside an `Actions for <table>` `DropdownMenu` with Delete table. While the tables load, `Skeleton` lines hold the list; a search that matches nothing shows a small `EmptyState` with Clear search.
+A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. While it is collapsed below `md`, an outlined small Tables `Button` leads the open table's header (an outlined History `Button` leads the Editor toolbar) and reopens it, and picking a table closes it again, so a phone always sees how to switch tables. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row is an `Item` (`clickable`, `variant="option"`, `aria-pressed` on the open table) that opens it in the pane, beside an `Actions for <table>` `DropdownMenu` with Delete table. While the tables load, `Skeleton` lines hold the list; a search that matches nothing shows a small `EmptyState` with Clear search.
 
 ### C. Empty database — `EmptyState`, `Button` (required)
 
@@ -409,6 +409,7 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
   )
   const selectTable = (id: string) => {
     selectedTableId.value = id
+    if (narrowViewport()) leftOpen.value = false
   }
   const onTableAction = (event: Event, value: unknown, table: QueryEditorTable) => {
     if (value === 'delete') emit('delete-table', event, table)
@@ -432,9 +433,10 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
   })
 
   const leftWidth = ref(288)
+  const narrowViewport = () => Boolean(globalThis.matchMedia?.('(width < 48rem)').matches)
   const leftOpen = ref(true)
   onMounted(() => {
-    if (globalThis.matchMedia?.('(width < 48rem)').matches) leftOpen.value = false
+    if (narrowViewport()) leftOpen.value = false
   })
 
   const tableView = ref<QueryEditorTableView>(props.defaultTableView)
@@ -894,8 +896,20 @@ LIMIT 3;`
             class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
           >
             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <div
+                v-if="!leftOpen"
+                class="flex shrink-0 md:hidden"
+              >
+                <Button
+                  label="Tables"
+                  icon="az az-table"
+                  variant="outline"
+                  size="small"
+                  @click="leftOpen = true"
+                />
+              </div>
               <i
-                class="az az-table shrink-0 text-(--text-muted)"
+                class="az az-table shrink-0 text-(--text-muted) max-md:hidden"
                 aria-hidden="true"
               />
               <span class="truncate text-heading-2xs text-(--text-default)">{{
@@ -1241,6 +1255,18 @@ LIMIT 3;`
         <div
           class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
         >
+          <div
+            v-if="!leftOpen"
+            class="flex shrink-0 md:hidden"
+          >
+            <Button
+              label="History"
+              icon="az az-history"
+              variant="outline"
+              size="medium"
+              @click="leftOpen = true"
+            />
+          </div>
           <Button
             label="Run query"
             variant="primary"

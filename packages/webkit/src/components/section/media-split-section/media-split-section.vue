@@ -149,6 +149,12 @@
 
   const mediaPadded = computed(() => media.value === 'widget' || media.value === 'framed-image')
 
+  const mockup = computed(
+    () =>
+      media.value === 'widget' ||
+      (media.value === 'scene' && props.scene?.component === 'ConsoleMockup')
+  )
+
   const primary = computed(() =>
     props.primaryAction?.label && props.primaryAction.href ? props.primaryAction : null
   )
@@ -213,16 +219,27 @@
           v-if="hasMedia"
           #media
         >
+          <div
+            v-if="mockup"
+            :data-orientation="orientation"
+            class="flex w-full self-stretch max-lg:min-h-(--size-80) data-[orientation=vertical]:min-h-(--size-80)"
+          >
+            <component
+              :is="sceneComponent"
+              v-if="media === 'scene'"
+              v-bind="scene?.props ?? {}"
+            />
+            <ConsoleMockup
+              v-else-if="widget"
+              :name="widget"
+              :hover="hovered"
+              :cursor="false"
+            />
+          </div>
           <component
             :is="sceneComponent"
-            v-if="media === 'scene'"
+            v-else-if="media === 'scene'"
             v-bind="scene?.props ?? {}"
-          />
-          <ConsoleMockup
-            v-else-if="media === 'widget' && widget"
-            :name="widget"
-            :hover="hovered"
-            :cursor="false"
           />
           <div
             v-else-if="media === 'framed-image'"

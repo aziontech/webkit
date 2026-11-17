@@ -88,15 +88,17 @@
       </div>
       <div
         v-else
-        class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)"
+        class="ms-auto flex flex-wrap items-center gap-(--spacing-sm)"
       >
-        <Tag
-          :label="failedStep ? `Failed on ${failedStep.title}` : 'Completed'"
-          :severity="failedStep ? 'danger' : 'success'"
-        />
+        <span class="flex shrink-0 whitespace-nowrap">
+          <Tag
+            :label="failedStep ? `Failed on ${failedStep.title}` : 'Completed'"
+            :severity="failedStep ? 'danger' : 'success'"
+          />
+        </span>
         <span
           v-if="duration"
-          class="text-label-sm text-(--text-muted)"
+          class="whitespace-nowrap text-label-sm text-(--text-muted)"
           >{{ failedStep ? `Failed after ${duration}` : `Deployed in ${duration}` }}</span
         >
       </div>

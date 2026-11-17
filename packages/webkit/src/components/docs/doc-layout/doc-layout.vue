@@ -288,6 +288,7 @@
 
   const onSection = (event: globalThis.MouseEvent, section: DocLayoutSection) => {
     follow(event, section)
+    drawerOpen.value = false
   }
 
   const onQuery = (value: unknown) => {
@@ -457,6 +458,26 @@
           <DrawerTitle>{{ ariaLabel || t('docLayout.navigation') }}</DrawerTitle>
         </PanelHeader>
         <ScrollArea class="min-h-0 w-full min-w-0 flex-1">
+          <NavigationMenu
+            v-if="sectionLinks.length"
+            orientation="vertical"
+            :aria-label="t('docLayout.sections')"
+            :data-testid="`${testId}__drawer-sections`"
+            class="w-full border-b border-(--border-muted) p-(--spacing-md) lg:hidden"
+          >
+            <NavigationMenuList>
+              <NavigationMenuItem
+                v-for="section in sectionLinks"
+                :key="section.label"
+              >
+                <NavigationMenuLink
+                  :href="section.url"
+                  @click="(event: globalThis.MouseEvent) => onSection(event, section)"
+                  >{{ section.label }}</NavigationMenuLink
+                >
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
           <SidebarMenu
             v-model:path="menuPath"
             v-model:open-keys="menuExpanded"
