@@ -796,6 +796,7 @@ describe('ConsoleLayout', () => {
         expect(header.getByRole('button', { name: 'Switch environment' })).toBeTruthy()
       )
       expect(header.queryByRole('link', { name: 'azion-site' })).toBeNull()
+      expect(header.queryByRole('link', { name: 'Azion home' })).toBeNull()
       expect(header.queryByText('Layout crumb')).toBeNull()
       const trail = within(getByTestId('console-layout__page-control')).getByRole('navigation', {
         name: 'Breadcrumb'

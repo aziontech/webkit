@@ -573,6 +573,7 @@
                     />
                   </Tooltip>
                   <a
+                    v-if="!pageControl"
                     :href="home"
                     :aria-label="t('consoleLayout.home')"
                     class="flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-2xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
@@ -590,9 +591,9 @@
                 <div
                   v-if="compact && pageControl"
                   :data-testid="`${testId}__page-control`"
-                  class="flex w-fit min-w-0 shrink"
+                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
                 >
-                  <Breadcrumb class="w-full">
+                  <Breadcrumb class="ms-0 w-full">
                     <BreadcrumbList>
                       <PageCrumbControls />
                     </BreadcrumbList>
