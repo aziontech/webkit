@@ -360,5 +360,9 @@ Budget-raise: breadcrumb 25.15 KB → 25.3 KB (measured 25.26 KB): the review/im
 Budget-raise: breadcrumb-root 25.15 KB → 25.25 KB (measured 25.21 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
 Budget-raise: command 26.65 KB → 26.8 KB (measured 26.75 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
 Budget-raise: command-root 20.9 KB → 21.05 KB (measured 21.00 KB): the review/impeccable fixes and the ai-branch work each grew this entry on their own; merging the two adds both (2026-11-17).
+Budget-raise: doc-code-group 32 KB → 32.85 KB (measured 32.83 KB): it renders a code-block, which gained JSON, SQL and Python highlighting merged from main (#1189) (2026-11-17).
+Budget-raise: console-application-scene 115.7 KB → 115.8 KB (measured 115.76 KB): it draws a code-block, which gained JSON, SQL and Python highlighting from main (#1189) (2026-11-17).
+Budget-raise: code-block 31.55 KB → 32.4 KB (measured 32.37 KB): JSON, SQL and Python highlighting merged from main (#1189), plus the copy-button backing so long lines do not show around it (#1187) (2026-11-17).
+Budget-raise: streaming-response 35.25 KB → 36.15 KB (measured 36.10 KB): it renders a code-block, which gained JSON, SQL and Python highlighting merged from main (#1189) (2026-11-17).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.

@@ -4797,6 +4797,276 @@
       "means": "Secure Internet Access",
       "status": "stable",
       "legacy": []
+    },
+    {
+      "name": "langgraph",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The LangGraph logo",
+      "means": "LangGraph (agent framework)",
+      "status": "stable",
+      "legacy": ["ai ai-langgraph"]
+    },
+    {
+      "name": "neon",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Neon logo",
+      "means": "Neon (serverless Postgres)",
+      "status": "stable",
+      "legacy": ["ai ai-neon"]
+    },
+    {
+      "name": "nodejs",
+      "set": "mono",
+      "group": "external",
+      "category": "language",
+      "shows": "The Node.js logo",
+      "means": "Node.js (runtime)",
+      "status": "stable",
+      "legacy": ["ai ai-nodejs"]
+    },
+    {
+      "name": "python",
+      "set": "mono",
+      "group": "external",
+      "category": "language",
+      "shows": "The Python logo",
+      "means": "Python",
+      "status": "stable",
+      "legacy": ["ai ai-python"]
+    },
+    {
+      "name": "upstash",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Upstash logo",
+      "means": "Upstash (serverless data)",
+      "status": "stable",
+      "legacy": ["ai ai-upstash"]
+    },
+    {
+      "name": "wordpress",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The WordPress logo",
+      "means": "WordPress (CMS)",
+      "status": "stable",
+      "legacy": ["ai ai-wordpress"]
+    },
+    {
+      "name": "terminal",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A prompt chevron and an underscore",
+      "means": "A terminal or command line",
+      "status": "stable",
+      "legacy": ["ai ai-terminal"]
+    },
+    {
+      "name": "docusaurus",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Docusaurus logo in green",
+      "means": "Docusaurus (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-docusaurus", "ai-cor ai-docusaurus"]
+    },
+    {
+      "name": "eleventy",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Eleventy logo",
+      "means": "Eleventy (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-eleventy", "ai-cor ai-eleventy"]
+    },
+    {
+      "name": "gatsby",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Gatsby logo in purple",
+      "means": "Gatsby (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-gatsby", "ai-cor ai-gatsby"]
+    },
+    {
+      "name": "hexo",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Hexo logo in blue",
+      "means": "Hexo (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-hexo", "ai-cor ai-hexo"]
+    },
+    {
+      "name": "hono",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Hono logo in orange",
+      "means": "Hono (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-hono", "ai-cor ai-hono"]
+    },
+    {
+      "name": "hugo",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Hugo logo in pink",
+      "means": "Hugo (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-hugo", "ai-cor ai-hugo"]
+    },
+    {
+      "name": "jekyll",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Jekyll logo in red",
+      "means": "Jekyll (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-jekyll", "ai-cor ai-jekyll"]
+    },
+    {
+      "name": "langgraph",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The LangGraph logo",
+      "means": "LangGraph (agent framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-langgraph", "ai-cor ai-langgraph"]
+    },
+    {
+      "name": "neon",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Neon logo in green",
+      "means": "Neon (serverless Postgres)",
+      "status": "stable",
+      "legacy": ["ai-color ai-neon", "ai-cor ai-neon"]
+    },
+    {
+      "name": "nodejs",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The Node.js logo in green",
+      "means": "Node.js (runtime)",
+      "status": "stable",
+      "legacy": ["ai-color ai-nodejs", "ai-cor ai-nodejs"]
+    },
+    {
+      "name": "preact",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Preact logo in purple",
+      "means": "Preact (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-preact", "ai-cor ai-preact"]
+    },
+    {
+      "name": "python",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The Python logo in blue and yellow",
+      "means": "Python",
+      "status": "stable",
+      "legacy": ["ai-color ai-python", "ai-cor ai-python"]
+    },
+    {
+      "name": "qwik",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Qwik logo in blue and purple",
+      "means": "Qwik (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-qwik", "ai-cor ai-qwik"]
+    },
+    {
+      "name": "remix",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Remix logo",
+      "means": "Remix (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-remix", "ai-cor ai-remix"]
+    },
+    {
+      "name": "turso",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Turso logo in teal",
+      "means": "Turso (edge database)",
+      "status": "stable",
+      "legacy": ["ai-color ai-turso", "ai-cor ai-turso"]
+    },
+    {
+      "name": "upstash",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Upstash logo in green",
+      "means": "Upstash (serverless data)",
+      "status": "stable",
+      "legacy": ["ai-color ai-upstash", "ai-cor ai-upstash"]
+    },
+    {
+      "name": "vite",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Vite logo in purple and yellow",
+      "means": "Vite (build tool)",
+      "status": "stable",
+      "legacy": ["ai-color ai-vite", "ai-cor ai-vite"]
+    },
+    {
+      "name": "vitepress",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The VitePress logo",
+      "means": "VitePress (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-vitepress", "ai-cor ai-vitepress"]
+    },
+    {
+      "name": "vuepress",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The VuePress logo in green",
+      "means": "VuePress (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-vuepress", "ai-cor ai-vuepress"]
+    },
+    {
+      "name": "wordpress",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The WordPress logo in blue",
+      "means": "WordPress (CMS)",
+      "status": "stable",
+      "legacy": ["ai-color ai-wordpress", "ai-cor ai-wordpress"]
     }
   ]
 }

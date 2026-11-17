@@ -5776,6 +5776,317 @@
     "security",
     "protection"
    ]
+  },
+  {
+   "name": "az-langgraph",
+   "class": "az az-langgraph",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "LangGraph (agent framework)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-neon",
+   "class": "az az-neon",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Neon (serverless Postgres)",
+   "keywords": [
+    "online service"
+   ]
+  },
+  {
+   "name": "az-nodejs",
+   "class": "az az-nodejs",
+   "set": "azionicons",
+   "group": "external",
+   "category": "language",
+   "label": "Node.js (runtime)",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-python",
+   "class": "az az-python",
+   "set": "azionicons",
+   "group": "external",
+   "category": "language",
+   "label": "Python",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-upstash",
+   "class": "az az-upstash",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Upstash (serverless data)",
+   "keywords": [
+    "online service"
+   ]
+  },
+  {
+   "name": "az-wordpress",
+   "class": "az az-wordpress",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "WordPress (CMS)",
+   "keywords": [
+    "framework"
+   ]
+  },
+  {
+   "name": "az-terminal",
+   "class": "az az-terminal",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "A terminal or command line",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-docusaurus",
+   "class": "az-color az-docusaurus",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Docusaurus (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-eleventy",
+   "class": "az-color az-eleventy",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Eleventy (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gatsby",
+   "class": "az-color az-gatsby",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Gatsby (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hexo",
+   "class": "az-color az-hexo",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Hexo (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hono",
+   "class": "az-color az-hono",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Hono (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hugo",
+   "class": "az-color az-hugo",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Hugo (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-jekyll",
+   "class": "az-color az-jekyll",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Jekyll (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-langgraph",
+   "class": "az-color az-langgraph",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "LangGraph (agent framework)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-neon",
+   "class": "az-color az-neon",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Neon (serverless Postgres)",
+   "keywords": [
+    "online service"
+   ]
+  },
+  {
+   "name": "az-nodejs",
+   "class": "az-color az-nodejs",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "Node.js (runtime)",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-preact",
+   "class": "az-color az-preact",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Preact (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-python",
+   "class": "az-color az-python",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "Python",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-qwik",
+   "class": "az-color az-qwik",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Qwik (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-remix",
+   "class": "az-color az-remix",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Remix (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-turso",
+   "class": "az-color az-turso",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Turso (edge database)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-upstash",
+   "class": "az-color az-upstash",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Upstash (serverless data)",
+   "keywords": [
+    "online service"
+   ]
+  },
+  {
+   "name": "az-vite",
+   "class": "az-color az-vite",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Vite (build tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vitepress",
+   "class": "az-color az-vitepress",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "VitePress (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vuepress",
+   "class": "az-color az-vuepress",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "VuePress (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-wordpress",
+   "class": "az-color az-wordpress",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "WordPress (CMS)",
+   "keywords": [
+    "framework"
+   ]
   }
  ]
 }

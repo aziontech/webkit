@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: af408c18a72aeed1e1a4056952889a55ea8ff13bcc2586cac85d551e40cc3ea9
+checksum: ee7c1d6025a16bc6c1a2704ce623984c390b75bcc3f4be00466297b38103bb26
 created: 2026-09-25
 last_updated: 2026-11-16
 ---
@@ -166,7 +166,7 @@ _none_
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on every claim's title control
 - Keyboard map: `Tab` reaches each claim's title control in reading order; focusing or activating one scrolls the band to that claim's share of the scroll, so a keyboard reader moves the band exactly as a pointer reader does. There is no key that scrolls the page other than the reader's own — the band never takes the scroll it is given.
-- ARIA: the claim list is an `<ol>` (the run is ordered); the open claim's control carries `aria-current="true"`; the progress hairline is `aria-hidden="true"`; the scroll anchors are `aria-hidden="true"`
+- ARIA: the claim list is an `<ol>` (the run is ordered); the open claim's control carries `aria-current="true"`; the progress hairline is `aria-hidden="true"`
 - Every claim's description stays in the accessibility tree while collapsed (clipped, never `display: none`), so the whole run is readable without scrolling through it
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted tone a read claim rests at
 - `motion-reduce:transition-none` / `motion-reduce:animate-none` on every animated state; the pin itself is not motion and stays

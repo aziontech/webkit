@@ -778,11 +778,11 @@
       :data-testid="`${testId}__filename`"
     >
       <span
-        class="flex size-4 shrink-0 items-center justify-center"
+        class="text-label-code-sm flex size-4 shrink-0 items-center justify-center"
         :data-testid="`${testId}__filename-icon`"
       >
         <i
-          :class="cn('text-label-code-sm text-(--text-default)', activeFileIcon)"
+          :class="cn('text-(--text-default)', activeFileIcon)"
           aria-hidden="true"
         />
       </span>
@@ -803,7 +803,7 @@
     >
       <div
         v-if="canCopy"
-        class="absolute end-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
+        class="absolute end-0 top-0 z-2 bg-(--bg-surface) pe-(--spacing-sm) ps-(--spacing-xs) pt-(--spacing-sm) data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2 data-[single-line]:pt-0"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
       >

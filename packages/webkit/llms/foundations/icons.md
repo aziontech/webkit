@@ -4,7 +4,7 @@
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-456 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+483 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FeatureItem](../components/feature-item.md), [FileDropzone](../components/file-dropzone.md), [HighlightButton](../components/highlight-button.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [SettingsSection](../components/settings-section.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md).
 
@@ -471,6 +471,7 @@ Generic glyphs for the interface. They name an action, an object or a state, nev
 | `az az-truck` | Shipping or delivery | object |
 | `az az-warehouse` | A warehouse or storage | inventory |
 | `az az-wrench` | Tools or configuration | settings, fix, maintenance |
+| `az az-terminal` | A terminal or command line | object |
 
 #### Interface · Git
 
@@ -531,6 +532,21 @@ Logos of other companies and projects. Azion does not own them; each is used to 
 | `az-color az-solidjs` | SolidJS (framework) | brand, logo |
 | `az-color az-svelte` | Svelte (framework) | brand, logo |
 | `az-color az-vue` | Vue (framework) | brand, logo |
+| `az az-wordpress` | WordPress (CMS) | framework |
+| `az-color az-docusaurus` | Docusaurus (framework) | brand, logo |
+| `az-color az-eleventy` | Eleventy (framework) | brand, logo |
+| `az-color az-gatsby` | Gatsby (framework) | brand, logo |
+| `az-color az-hexo` | Hexo (framework) | brand, logo |
+| `az-color az-hono` | Hono (framework) | brand, logo |
+| `az-color az-hugo` | Hugo (framework) | brand, logo |
+| `az-color az-jekyll` | Jekyll (framework) | brand, logo |
+| `az-color az-preact` | Preact (framework) | brand, logo |
+| `az-color az-qwik` | Qwik (framework) | brand, logo |
+| `az-color az-remix` | Remix (framework) | brand, logo |
+| `az-color az-vite` | Vite (build tool) | brand, logo |
+| `az-color az-vitepress` | VitePress (framework) | brand, logo |
+| `az-color az-vuepress` | VuePress (framework) | brand, logo |
+| `az-color az-wordpress` | WordPress (CMS) | framework |
 
 #### External · AI models
 
@@ -556,6 +572,8 @@ Logos of other companies and projects. Azion does not own them; each is used to 
 | `az-color az-openai` | OpenAI | chatgpt, gpt, brand, logo, open |
 | `az-color az-perplexity` | Perplexity (AI model) | brand, logo |
 | `az-color az-qwen` | Qwen (AI model) | brand, logo |
+| `az az-langgraph` | LangGraph (agent framework) | ai model |
+| `az-color az-langgraph` | LangGraph (agent framework) | ai model |
 
 #### External · Developer tools
 
@@ -587,6 +605,10 @@ Logos of other companies and projects. Azion does not own them; each is used to 
 | `az-color az-javascript` | JavaScript | brand, logo, js |
 | `az-color az-kotlin` | Kotlin | brand, logo |
 | `az-color az-typescript` | TypeScript | brand, logo, ts |
+| `az az-nodejs` | Node.js (runtime) | language |
+| `az az-python` | Python | language |
+| `az-color az-nodejs` | Node.js (runtime) | language |
+| `az-color az-python` | Python | language |
 
 #### External · Online services
 
@@ -608,3 +630,8 @@ Logos of other companies and projects. Azion does not own them; each is used to 
 | `az-color az-google` | Google | brand, logo |
 | `az-color az-x-brand` | X (social network) | twitter, logo |
 | `az-color az-youtube` | YouTube | brand, logo |
+| `az az-neon` | Neon (serverless Postgres) | online service |
+| `az az-upstash` | Upstash (serverless data) | online service |
+| `az-color az-neon` | Neon (serverless Postgres) | online service |
+| `az-color az-turso` | Turso (edge database) | brand, logo |
+| `az-color az-upstash` | Upstash (serverless data) | online service |

@@ -2,7 +2,7 @@
 
 > Generated from `src/icons.json` by `scripts/build-docs.mjs`. Edit the JSON, then run `npm run build`; do not edit this page by hand.
 
-456 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
+483 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
 
 ## How the icons are organised
 
@@ -12,7 +12,7 @@
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
   - Solutions (4) — Solutions Azion sells that combine several products.
   - Services (8) — Support plans and professional services.
-- **Interface** (306) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
+- **Interface** (307) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
   - Arrows (48) — Arrows, chevrons, carets, sorting and moving.
   - Actions (37) — Things a person does: edit, copy, delete, search, share, download, zoom.
   - Status (24) — Alerts, information, success, help and states such as on, off or loading.
@@ -24,14 +24,14 @@
   - Devices (9) — Computers, phones, servers, chips and hardware.
   - Data (13) — Charts, tables, lists, databases and measurement.
   - Layout (18) — Alignment, grids, columns, windows, menus and controls.
-  - Objects (64) — Everyday objects and symbols: calendar, clock, lock, key, globe, star, flag, tools.
+  - Objects (65) — Everyday objects and symbols: calendar, clock, lock, key, globe, star, flag, tools.
   - Git (15) — Branches, commits, merges and pull requests.
-- **External** (88) — Logos of other companies and projects. Azion does not own them; each is used to name that third party.
-  - Frameworks (31) — Web frameworks and site generators an app can be built with.
-  - AI models (20) — AI models and the companies that make them.
+- **External** (114) — Logos of other companies and projects. Azion does not own them; each is used to name that third party.
+  - Frameworks (46) — Web frameworks and site generators an app can be built with.
+  - AI models (22) — AI models and the companies that make them.
   - Developer tools (14) — Code hosts, editors, build tools, databases and infrastructure tools.
-  - Languages (7) — Programming and markup languages.
-  - Online services (16) — Social networks, video and community sites, and sign-in providers.
+  - Languages (11) — Programming and markup languages.
+  - Online services (21) — Social networks, video and community sites, and sign-in providers.
 
 Pick an icon by what it stands for, not by how it looks. A product icon names only that product; for a generic idea (a database, a table, a route) use an Interface icon. Never use an External logo to stand for an Azion product.
 
@@ -514,6 +514,7 @@ Everyday objects and symbols: calendar, clock, lock, key, globe, star, flag, too
 | `az az-truck` | Shipping or delivery | A delivery truck |  |
 | `az az-warehouse` | A warehouse or storage | A building with a pitched roof and a stack of shelves inside |  |
 | `az az-wrench` | Tools or configuration | A wrench |  |
+| `az az-terminal` | A terminal or command line | A prompt chevron and an underscore |  |
 
 ### Interface · Git
 
@@ -578,6 +579,21 @@ Web frameworks and site generators an app can be built with.
 | `az-color az-solidjs` | SolidJS (framework) | The SolidJS logo |  |
 | `az-color az-svelte` | Svelte (framework) | The Svelte logo in orange |  |
 | `az-color az-vue` | Vue (framework) | The Vue logo in green |  |
+| `az az-wordpress` | WordPress (CMS) | The WordPress logo |  |
+| `az-color az-docusaurus` | Docusaurus (framework) | The Docusaurus logo in green |  |
+| `az-color az-eleventy` | Eleventy (framework) | The Eleventy logo |  |
+| `az-color az-gatsby` | Gatsby (framework) | The Gatsby logo in purple |  |
+| `az-color az-hexo` | Hexo (framework) | The Hexo logo in blue |  |
+| `az-color az-hono` | Hono (framework) | The Hono logo in orange |  |
+| `az-color az-hugo` | Hugo (framework) | The Hugo logo in pink |  |
+| `az-color az-jekyll` | Jekyll (framework) | The Jekyll logo in red |  |
+| `az-color az-preact` | Preact (framework) | The Preact logo in purple |  |
+| `az-color az-qwik` | Qwik (framework) | The Qwik logo in blue and purple |  |
+| `az-color az-remix` | Remix (framework) | The Remix logo |  |
+| `az-color az-vite` | Vite (build tool) | The Vite logo in purple and yellow |  |
+| `az-color az-vitepress` | VitePress (framework) | The VitePress logo |  |
+| `az-color az-vuepress` | VuePress (framework) | The VuePress logo in green |  |
+| `az-color az-wordpress` | WordPress (CMS) | The WordPress logo in blue |  |
 
 ### External · AI models
 
@@ -605,6 +621,8 @@ AI models and the companies that make them.
 | `az-color az-openai` | OpenAI | The OpenAI logo |  |
 | `az-color az-perplexity` | Perplexity (AI model) | The Perplexity logo |  |
 | `az-color az-qwen` | Qwen (AI model) | The Qwen logo |  |
+| `az az-langgraph` | LangGraph (agent framework) | The LangGraph logo |  |
+| `az-color az-langgraph` | LangGraph (agent framework) | The LangGraph logo |  |
 
 ### External · Developer tools
 
@@ -640,6 +658,10 @@ Programming and markup languages.
 | `az-color az-javascript` | JavaScript | The JS logo in yellow |  |
 | `az-color az-kotlin` | Kotlin | The Kotlin logo |  |
 | `az-color az-typescript` | TypeScript | The TS logo in blue |  |
+| `az az-nodejs` | Node.js (runtime) | The Node.js logo |  |
+| `az az-python` | Python | The Python logo |  |
+| `az-color az-nodejs` | Node.js (runtime) | The Node.js logo in green |  |
+| `az-color az-python` | Python | The Python logo in blue and yellow |  |
 
 ### External · Online services
 
@@ -663,6 +685,11 @@ Social networks, video and community sites, and sign-in providers.
 | `az-color az-google` | Google | The Google G |  |
 | `az-color az-x-brand` | X (social network) | The X logo |  |
 | `az-color az-youtube` | YouTube | The YouTube logo in red |  |
+| `az az-neon` | Neon (serverless Postgres) | The Neon logo |  |
+| `az az-upstash` | Upstash (serverless data) | The Upstash logo |  |
+| `az-color az-neon` | Neon (serverless Postgres) | The Neon logo in green |  |
+| `az-color az-turso` | Turso (edge database) | The Turso logo in teal |  |
+| `az-color az-upstash` | Upstash (serverless data) | The Upstash logo in green |  |
 
 ## Old names
 

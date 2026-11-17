@@ -135,10 +135,12 @@
   }
 
   function goTo(index: number): void {
-    if (!pinnedMetrics()) return
-    const anchor = trackEl.value?.querySelectorAll('[data-sticky-stack-anchor]')[index]
-    if (!(anchor instanceof globalThis.HTMLElement)) return
-    anchor.scrollIntoView({ block: 'start' })
+    const metrics = pinnedMetrics()
+    if (!metrics || !trackEl.value || !frameEl.value || count.value === 0) return
+    const pinnedTop = Number.parseFloat(globalThis.getComputedStyle(frameEl.value).top) || 0
+    const trackTop = trackEl.value.getBoundingClientRect().top + globalThis.scrollY
+    const share = metrics.total / count.value
+    globalThis.scrollTo({ top: trackTop - pinnedTop + share * (index + 0.5) })
   }
 </script>
 
@@ -153,15 +155,6 @@
     :style="{ '--sticky-stack-span': span, '--sticky-stack-dwell': dwell }"
     class="relative [--sticky-stack-open:calc(var(--spacing-xl)*4)] data-[size=large]:[--sticky-stack-open:calc(var(--spacing-xl)*5)] data-[size=small]:[--sticky-stack-open:calc(var(--spacing-xl)*3)] lg:h-[calc(100dvh*var(--sticky-stack-span))]"
   >
-    <span
-      v-for="(item, index) in items"
-      :key="`anchor-${item.title}-${index}`"
-      data-sticky-stack-anchor
-      aria-hidden="true"
-      :style="{ '--sticky-stack-slot': index }"
-      class="pointer-events-none absolute start-0 hidden w-px lg:block lg:scroll-mt-[var(--sticky-stack-top,0)] lg:top-[calc(100dvh*var(--sticky-stack-dwell)*var(--sticky-stack-slot)+var(--sticky-stack-top,0rem))]"
-    />
-
     <div
       ref="frameEl"
       class="lg:sticky lg:top-[var(--sticky-stack-top,0)] lg:h-[calc(100dvh-var(--sticky-stack-top,0rem))] lg:flex lg:flex-col lg:overflow-hidden"
@@ -186,12 +179,12 @@
             class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow lg:data-[active]:pt-(--spacing-xl) motion-reduce:transition-none"
           >
             <h3
-              class="m-0 text-heading-md text-(--text-muted) transition-[color,opacity] duration-moderate-01 ease-out group-data-[active]:text-(--text-default) group-data-[completed]:opacity-55 motion-reduce:transition-none"
+              class="m-0 text-heading-md text-(--text-default) transition-[color,opacity] duration-moderate-01 ease-out motion-reduce:transition-none lg:text-(--text-muted) lg:group-data-[active]:text-(--text-default) lg:group-data-[completed]:opacity-55"
             >
               <button
                 type="button"
                 :aria-current="isActive(index) ? 'true' : undefined"
-                class="m-0 cursor-pointer p-0 text-start after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                class="m-0 cursor-default p-0 text-start lg:cursor-pointer lg:after:absolute lg:after:inset-0 lg:after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
                 @click="goTo(index)"
                 @focus="goTo(index)"
               >

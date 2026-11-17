@@ -238,7 +238,7 @@
   {
     "name": "doc-code-group",
     "path": "src/components/docs/doc-code-group/doc-code-group.vue",
-    "limit": "32 KB",
+    "limit": "32.85 KB",
     "entryOnly": true
   },
   {
@@ -453,7 +453,7 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "115.7 KB"
+    "limit": "115.8 KB"
   },
   {
     "name": "console-trace-scene",
@@ -1117,7 +1117,7 @@
   {
     "name": "code-block",
     "path": "src/components/code/code-block/code-block.vue",
-    "limit": "31.55 KB",
+    "limit": "32.4 KB",
     "entryOnly": true
   },
   {
@@ -1249,7 +1249,7 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "35.25 KB",
+    "limit": "36.15 KB",
     "entryOnly": true
   },
   {

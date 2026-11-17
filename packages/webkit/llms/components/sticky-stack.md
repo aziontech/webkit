@@ -82,7 +82,7 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on every claim's title control
 - Keyboard map: `Tab` reaches each claim's title control in reading order; focusing or activating one scrolls the band to that claim's share of the scroll, so a keyboard reader moves the band exactly as a pointer reader does. There is no key that scrolls the page other than the reader's own — the band never takes the scroll it is given.
-- ARIA: the claim list is an `<ol>` (the run is ordered); the open claim's control carries `aria-current="true"`; the progress hairline is `aria-hidden="true"`; the scroll anchors are `aria-hidden="true"`
+- ARIA: the claim list is an `<ol>` (the run is ordered); the open claim's control carries `aria-current="true"`; the progress hairline is `aria-hidden="true"`
 - Every claim's description stays in the accessibility tree while collapsed (clipped, never `display: none`), so the whole run is readable without scrolling through it
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted tone a read claim rests at
 - `motion-reduce:transition-none` / `motion-reduce:animate-none` on every animated state; the pin itself is not motion and stays
