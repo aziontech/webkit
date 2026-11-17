@@ -12,22 +12,22 @@ const DESCRIPTION = 'Build, ship, and run an application on the same platform th
 
 const artworkTiles = [
   {
-    image: '/illustrations/branches.svg',
+    illustration: 'branches',
     title: 'Build at AI speed.',
     description: 'Go from commit to a live URL in minutes.'
   },
   {
-    image: '/illustrations/personal-tokens.svg',
+    illustration: 'personal-tokens',
     title: 'Secure by default.',
     description: 'Every workload runs in its own isolated environment.'
   },
   {
-    image: '/illustrations/azion-highlight.svg',
+    illustration: 'azion-highlight',
     title: 'No ops required.',
     description: 'Nothing to provision, nothing to manage.'
   },
   {
-    image: '/illustrations/usage-chart.svg',
+    illustration: 'usage-chart',
     title: 'Faster and more efficient workloads.',
     description: 'Compute and security run in the data center closest to the request.'
   }
@@ -146,14 +146,20 @@ describe('FeatureTiles', () => {
     expect(tileLeads(container)).toEqual(artworkTiles.map((tile) => tile.title))
   })
 
-  it('renders an artwork tile as an image from its url', () => {
-    const { getAllByTestId } = band()
-
-    getAllByTestId(TILE_TESTID).forEach((tile, index) => {
-      const image = tile.querySelector('img')
-      expect(image).not.toBeNull()
-      expect(image?.getAttribute('src')).toBe(artworkTiles[index]?.image)
+  it('draws an artwork tile from the registry when it names an illustration', async () => {
+    const { findByTestId, getAllByTestId } = band({
+      tiles: [
+        {
+          illustration: 'azion-highlight',
+          title: 'Highlighted by Azion.',
+          description: 'The scene comes from the illustration registry.'
+        }
+      ]
     })
+
+    const scene = await findByTestId('content-illustration')
+    expect(scene.getAttribute('data-placeholder')).toBeNull()
+    expect(getAllByTestId(TILE_TESTID)[0]?.querySelector('img')).toBeNull()
   })
 
   it('renders an illustrated tile without an image', () => {

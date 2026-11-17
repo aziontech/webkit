@@ -13,12 +13,8 @@ const DESCRIPTION = 'Quality, Drive, Accountability, and Innovation.'
 const primaryAction = { label: 'Join us', href: '/careers' }
 const secondaryAction = { label: 'Read the culture', href: '/culture', trailing: true }
 
-const image = {
-  src: '/marketing-components/illustrations/branches.svg',
-  alt: 'Branches of a deployment',
-  width: 360,
-  height: 165
-}
+const ILLUSTRATION = 'branches'
+const ILLUSTRATION_LABEL = 'Branches of a deployment'
 
 const band = (props: Record<string, unknown> = {}) =>
   render(MediaSplitBand, {
@@ -26,7 +22,8 @@ const band = (props: Record<string, unknown> = {}) =>
       eyebrow: EYEBROW,
       title: TITLE,
       description: DESCRIPTION,
-      image,
+      illustration: ILLUSTRATION,
+      illustrationAriaLabel: ILLUSTRATION_LABEL,
       ...props
     }
   })
@@ -74,19 +71,18 @@ describe('MediaSplitBand', () => {
     expect(getByTestId(SPLIT_TESTID).getAttribute('data-size')).toBe('medium')
   })
 
-  it('renders an image with its alt and intrinsic size', () => {
-    const { getByRole } = band()
+  it('draws the registry illustration under its accessible name', async () => {
+    const { findByRole } = band()
 
-    const picture = getByRole('img', { name: image.alt })
-    expect(picture.getAttribute('src')).toBe(image.src)
-    expect(picture.getAttribute('width')).toBe('360')
-    expect(picture.getAttribute('height')).toBe('165')
+    const scene = await findByRole('img', { name: ILLUSTRATION_LABEL })
+    expect(scene.getAttribute('data-testid')).toBe('content-illustration')
+    expect(scene.getAttribute('data-placeholder')).toBeNull()
   })
 
-  it('draws the scene instead of the image when both are set', async () => {
-    const { container, getByTestId } = band({ scene: { component: 'BrandGlobeScene' } })
+  it('draws the scene instead of the illustration when both are set', async () => {
+    const { getByTestId, queryByTestId } = band({ scene: { component: 'BrandGlobeScene' } })
 
-    expect(container.querySelector(`img[src="${image.src}"]`)).toBeNull()
+    expect(queryByTestId('content-illustration')).toBeNull()
     await waitFor(
       () => expect(getByTestId(SPLIT_TESTID).getAttribute('data-media')).not.toBeNull(),
       { timeout: 5000 }
@@ -94,7 +90,7 @@ describe('MediaSplitBand', () => {
   })
 
   it('omits the media cell when no media is set', () => {
-    const { getByTestId } = band({ image: undefined })
+    const { getByTestId } = band({ illustration: '' })
 
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media')).toBe(false)
   })

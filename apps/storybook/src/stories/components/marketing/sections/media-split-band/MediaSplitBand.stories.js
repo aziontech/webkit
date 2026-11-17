@@ -5,7 +5,8 @@ import { SITE_SECTION } from '../../../../templates/marketing/_sections/media-sp
 
 const IMPORT = "import MediaSplitBand from '@aziontech/webkit/media-split-band'"
 
-const ACTION_SUMMARY = "{ label: string; href: string; trailing?: boolean; target?: '_blank' | '_self' }"
+const ACTION_SUMMARY =
+  "{ label: string; href: string; trailing?: boolean; target?: '_blank' | '_self' }"
 
 /** @type {import('@storybook/vue3').Meta<typeof MediaSplitBand>} */
 const meta = {
@@ -22,7 +23,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked."
+          "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene or an illustration; with one action the whole band links to it, with two the band stays unlinked."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -58,27 +59,17 @@ const meta = {
     scene: {
       control: 'object',
       description:
-        'Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`.',
+        'Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `illustration`.',
       table: {
         category: 'props',
         type: { summary: 'MediaSplitBandScene' },
         defaultValue: { summary: 'undefined' }
       }
     },
-    image: {
-      control: 'object',
-      description:
-        'Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`.',
-      table: {
-        category: 'props',
-        type: { summary: 'MediaSplitBandImage' },
-        defaultValue: { summary: 'undefined' }
-      }
-    },
     illustration: {
       control: 'text',
       description:
-        'Registry name of the illustration drawn in the media cell when neither a scene nor an image is set.',
+        'Registry name of the illustration drawn in the media cell when no scene is set.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     illustrationAriaLabel: {

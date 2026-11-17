@@ -5,14 +5,14 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: cc6dcef50d272a610e449d8a0a1f6e91b2a878539211884fe3171f358764a606
+last_updated: 2026-11-13
+checksum: 0979f0380fce7c7cc4b51171d205955774b44b83dc7f1b09c9bf139a3d79d7ed
 ---
 # MediaSplitBand — Component Spec
 
 ## Purpose
 
-One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked.
+One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene or an illustration; with one action the whole band links to it, with two the band stays unlinked.
 
 ## When to use
 
@@ -30,9 +30,9 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ## Best practices
 
-- Give the band exactly one media: `scene`, `image` or `illustration`; when several are set the first of that order wins.
+- Give the band exactly one media: `scene`, or `illustration`, a name of the illustration registry. A name the registry does not hold draws the placeholder scene and warns in the console.
+- When both are set, `scene` wins over `illustration`.
 - Use `size="large"` for a band that carries only its headline and description.
-- Give an `image` its `width` and `height` so the page reserves its box before it loads.
 
 ## Usage
 
@@ -60,9 +60,8 @@ import MediaSplitBand from '@aziontech/webkit/media-split-band'
 | `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Paragraph under the headline. |
 | `size` | `MediaSplitBandSize` | `'medium'` | false | Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media. |
-| `scene` | `MediaSplitBandScene` | `undefined` | false | Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`. |
-| `image` | `MediaSplitBandImage` | `undefined` | false | Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. |
-| `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when neither a scene nor an image is set. |
+| `scene` | `MediaSplitBandScene` | `undefined` | false | Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `illustration`. |
+| `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when no scene is set. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible name of the illustration; empty keeps it decorative. |
 | `primaryAction` | `MediaSplitBandAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it. |
 | `secondaryAction` | `MediaSplitBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked. |
@@ -103,7 +102,7 @@ _none_
 
 - Visible focus: owned by `button` and `media-split`.
 - Keyboard map: `Tab` moves through the actions, and through the media link when the band links.
-- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an image is named by `alt`, an illustration by `illustrationAriaLabel`, and both are decorative when empty.
+- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an illustration is named by `illustrationAriaLabel`, and is decorative when empty.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
 - Touch target ≥40×40 px — the medium buttons meet it.
