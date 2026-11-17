@@ -6,7 +6,11 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { scanTokens, tokenChecksApply } from '../../src/eslint-plugin/lib/token-checks.js'
+import {
+  scanTokens,
+  tokenChecksApply,
+  tokenChecksFor
+} from '../../src/eslint-plugin/lib/token-checks.js'
 
 /** All violated check ids for a snippet. */
 const ids = (content) => scanTokens(content)
@@ -252,6 +256,29 @@ test('rtl-double-flip covers exactly DIRECTIONAL_ICONS', async () => {
       `${icon} is not directional but rtl-double-flip fires`
     )
   }
+})
+
+test('tokenChecksFor runs only the wide checks over docs, demos, blocks and examples', () => {
+  const idsFor = (rel) => tokenChecksFor(rel).map((c) => c.id)
+  assert.ok(idsFor('packages/webkit/src/components/action/button/button.vue').includes('hex-color'))
+  for (const rel of [
+    'apps/docs/src/components/doc-nav.vue',
+    'apps/demos/src/pages/home.vue',
+    'packages/webkit/blocks/login/login.vue',
+    'packages/webkit/examples/button/default.vue'
+  ]) {
+    assert.deepEqual(idsFor(rel), ['rtl-double-flip'], rel)
+  }
+  for (const rel of [
+    'apps/docs/src/components/doc-nav.test.ts',
+    'apps/docs/README.md',
+    'packages/webkit/src/composables/use-controllable.ts'
+  ]) {
+    assert.deepEqual(idsFor(rel), [], rel)
+  }
+  assert.ok(
+    !scanTokens('class="text-sm ai ai-arrow-right"', tokenChecksFor('apps/docs/src/a.vue')).length
+  )
 })
 
 test('tokenChecksApply scopes enforcement to component sources', () => {

@@ -8,7 +8,9 @@ import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/lib/aut
 import {
   scanTokens,
   tokenChecksApply,
-  TOKEN_MESSAGES
+  tokenChecksFor,
+  TOKEN_MESSAGES,
+  WIDE_TOKEN_DIRS
 } from '../src/eslint-plugin/lib/token-checks.js'
 import { scanSignatures } from '../src/eslint-plugin/lib/signature-checks.js'
 import {
@@ -179,8 +181,25 @@ function exampleDataViolations() {
   return keys
 }
 
+function wideTokenViolations() {
+  const keys = []
+  for (const dir of WIDE_TOKEN_DIRS) {
+    for (const abs of walkAll(join(ROOT, dir))) {
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      if (tokenChecksApply(rel)) continue
+      const checks = tokenChecksFor(rel)
+      if (checks.length === 0) continue
+      for (const id of scanTokens(readFileSync(abs, 'utf-8'), checks)) {
+        keys.push(`${rel}::token:${id}`)
+      }
+    }
+  }
+  return keys
+}
+
 function currentViolations() {
   const keys = [
+    ...wideTokenViolations(),
     ...directionViolations(),
     ...clockViolations(),
     ...viewportHeightViolations(),

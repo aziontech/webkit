@@ -82,6 +82,7 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'rtl-double-flip',
+    wide: true,
     regex:
       /(["'`])(?=[^"'`]*(?<![\w-])ai-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|log-in|log-out|reply|undo)(?![\w-]))[^"'`]*?(?<![^\s"'`])(?:[^\s"'`]*:)?rtl:-?rotate-180(?![^\s"'`])/g,
     message:
@@ -145,9 +146,30 @@ export function tokenChecksApply(rel) {
   )
 }
 
-export function scanTokens(content) {
+export const WIDE_TOKEN_DIRS = [
+  'apps/docs/src/',
+  'apps/demos/src/',
+  'packages/webkit/blocks/',
+  'packages/webkit/examples/'
+]
+
+export const WIDE_TOKEN_CHECKS = TOKEN_CHECKS.filter((c) => c.wide)
+
+export function tokenChecksFor(rel) {
+  if (tokenChecksApply(rel)) return TOKEN_CHECKS
+  if (
+    WIDE_TOKEN_DIRS.some((dir) => rel.startsWith(dir)) &&
+    !/\.(test|spec)\.[tj]s$/.test(rel) &&
+    /\.(vue|css|scss|ts|js)$/.test(rel)
+  ) {
+    return WIDE_TOKEN_CHECKS
+  }
+  return []
+}
+
+export function scanTokens(content, checks = TOKEN_CHECKS) {
   const found = []
-  for (const c of TOKEN_CHECKS) {
+  for (const c of checks) {
     c.regex.lastIndex = 0
     const matches = content.match(c.regex)
     if (matches) for (let i = 0; i < matches.length; i++) found.push(c.id)
