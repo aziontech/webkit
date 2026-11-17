@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 06f091278f0cd4ffae05653831e45cb5aba43cfb176aa6a587ec65b483ec8537
+checksum: e90135c8e5be3d2ec2ecc119bc176c3709511f66565d24e7d0fb7799b5ed33d8
 created: 2026-06-01
 last_updated: 2026-11-15
 ---
@@ -42,7 +42,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 - Keep the label short and verb-led, and pair it with a leading `icon` (for example `az az-sparkles`).
 - It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
 - `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
-- The glow stops under reduced motion, so never use it to convey state.
+- The glow turns once on mount and then rests, and it never moves under reduced motion, so never use it to convey state.
 
 ## Usage
 
@@ -90,11 +90,11 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 
 ## Motion & Animations
 
-| Trigger                                                                                    | Animation / Transition                                                                           | Token                                                                                                   | Reduced-motion fallback         |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| hover / focus state change (border, text)                                                  | `transition-colors duration-fast-02 ease-productive-entrance`                                    | semantic (110ms · productive-entrance)                                                                  | `motion-reduce:transition-none` |
-| hover surface fade (violet base + dark scrim both fade to 25% to reveal the rotating glow) | `transition-opacity duration-300 ease-out` on the base and scrim layers                          | built-in (300ms · ease-out) — matches the `.3s ease` from `azion-console-kit` `.special-button-content` | `motion-reduce:transition-none` |
-| ambient glow rim (decorative)                                                              | `animate-spin [animation-duration:8s]` on a blurred multicolor gradient layer behind the surface | Tailwind built-in `animate-spin` + arbitrary 8s duration                                                | `motion-reduce:animate-none`    |
+| Trigger                                                                                    | Animation / Transition                                                                          | Token                                                                                                   | Reduced-motion fallback         |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| hover / focus state change (border, text)                                                  | `transition-colors duration-fast-02 ease-productive-entrance`                                   | semantic (110ms · productive-entrance)                                                                  | `motion-reduce:transition-none` |
+| hover surface fade (violet base + dark scrim both fade to 25% to reveal the rotating glow) | `transition-opacity duration-300 ease-out` on the base and scrim layers                         | built-in (300ms · ease-out) — matches the `.3s ease` from `azion-console-kit` `.special-button-content` | `motion-reduce:transition-none` |
+| ambient glow rim (decorative), on mount                                                    | `animate-spin-settle` on a blurred multicolor gradient layer behind the surface: one eased turn | catalog `spin-settle` (4.2s, one run, rests on the static glow)                                         | `motion-reduce:animate-none`    |
 
 ## Tokens
 
@@ -135,6 +135,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 - ARIA: `<button>` role by default; renders `<a>` when `href` is set with `aria-disabled` / `aria-busy` mirroring `disabled` / `loading`.
 - Contrast: gradient passes ≥4.5:1 for the `--color-base-white` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.
 - `motion-reduce:transition-none` on every transition class.
+- Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
 - Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
 
 ## Right-to-left
@@ -156,7 +157,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 ## Performance
 
 - Bundle budget: see `.size-limit.json` entry `highlight-button`.
-- Runtime: one element and three decorative layers; the glow animation stops under reduced motion.
+- Runtime: one element and three decorative layers; the glow animation runs once (4.2s) and never under reduced motion.
 
 ## Examples
 

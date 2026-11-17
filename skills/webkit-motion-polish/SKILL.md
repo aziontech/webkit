@@ -2,7 +2,7 @@
 name: webkit-motion-polish
 description: Make motion smooth using only @aziontech/theme animate tokens — animate-* utilities, duration-*/ease-*/curve tokens, compositor-props-only, ≤150ms interaction feedback, and a mandatory motion-reduce escape on every motion class. No external animation library, no inline cubic-bezier, no hardcoded ms.
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-17
 scope: general
 enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
 ---
@@ -47,15 +47,19 @@ Never guess a duration, curve, or utility name. Resolve them the same way every 
 The `animate-*` utilities from the animation token catalog (listed by the webkit MCP) — they ship with
 `motion-safe` / `motion-reduce` variants:
 
-| Utility                                              | Behavior                                                         |
-| ---------------------------------------------------- | ---------------------------------------------------------------- |
-| `animate-fade-in` / `animate-fade-out`               | opacity in / out                                                 |
-| `animate-slide-down`                                 | height 0 → auto (the one catalogued height animation — see note) |
-| `animate-popup-scale-in` / `animate-popup-scale-out` | scale + fade for popovers/menus                                  |
-| `animate-slide-in-start` / `animate-slide-out-start` | start-anchored panel enter/leave (sidebar, nav drawer)           |
-| `animate-slide-in-end` / `animate-slide-out-end`     | end-anchored panel enter/leave (settings/detail drawer)          |
-| `animate-blink`                                      | caret/blink                                                      |
-| `animate-highlight-fade`                             | row-flash highlight                                              |
+| Utility                                                                                                                      | Behavior                                                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `animate-fade-in` / `animate-fade-out`                                                                                       | opacity in / out                                                                               |
+| `animate-slide-down`                                                                                                         | height 0 → auto (the one catalogued height animation — see note)                               |
+| `animate-popup-scale-in` / `animate-popup-scale-out`                                                                         | scale + fade for popovers/menus                                                                |
+| `animate-slide-in-start` / `animate-slide-out-start`                                                                         | start-anchored panel enter/leave (sidebar, nav drawer)                                         |
+| `animate-slide-in-end` / `animate-slide-out-end`                                                                             | end-anchored panel enter/leave (settings/detail drawer)                                        |
+| `animate-blink`                                                                                                              | caret/blink                                                                                    |
+| `animate-blink-settle` / `animate-ping-settle` / `animate-pulse-settle` / `animate-spin-settle` / `animate-flow-dash-settle` | a decorative blink, ring, pulse, turn or dash that runs a few times and stops within 5 seconds |
+| `animate-highlight-fade`                                                                                                     | row-flash highlight                                                                            |
+
+Decorative motion that starts by itself must stop by itself within 5 seconds (WCAG 2.2.2), so a
+decorative loop uses a `*-settle` utility; the infinite ones are for loading and live status only.
 
 For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the trigger anchor.
 

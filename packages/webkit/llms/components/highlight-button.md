@@ -18,7 +18,7 @@
 - Keep the label short and verb-led, and pair it with a leading `icon` (for example `az az-sparkles`).
 - It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
 - `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
-- The glow stops under reduced motion, so never use it to convey state.
+- The glow turns once on mount and then rests, and it never moves under reduced motion, so never use it to convey state.
 
 ## Don’t
 
@@ -68,6 +68,7 @@
 - ARIA: `<button>` role by default; renders `<a>` when `href` is set with `aria-disabled` / `aria-busy` mirroring `disabled` / `loading`.
 - Contrast: gradient passes ≥4.5:1 for the `--color-base-white` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.
 - `motion-reduce:transition-none` on every transition class.
+- Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
 - Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
 
 ## Right-to-left

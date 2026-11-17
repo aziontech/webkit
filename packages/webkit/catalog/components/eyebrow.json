@@ -22,7 +22,7 @@
   "Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.",
   "Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.",
   "Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden=\"true\"`), so never put meaning in it.",
-  "Use `cursor` for one eyebrow per view at most; the blink stops under reduced motion.",
+  "Use `cursor` for one eyebrow per view at most; it blinks four times and then stays solid, and never blinks under reduced motion.",
   "Keep the semantic heading in the element after the Eyebrow; the Eyebrow itself carries no heading role."
  ]
 }

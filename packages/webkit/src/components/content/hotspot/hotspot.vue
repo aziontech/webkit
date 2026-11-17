@@ -121,7 +121,7 @@
           <span
             v-if="isOpen"
             aria-hidden="true"
-            class="absolute inset-0 rounded-(--radius-full) bg-(--primary) opacity-40 animate-ping motion-reduce:animate-none"
+            class="absolute inset-0 rounded-(--radius-full) bg-(--primary) opacity-40 animate-ping-settle motion-reduce:animate-none"
           />
           <span
             aria-hidden="true"

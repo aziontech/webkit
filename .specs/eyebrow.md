@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 4197a6fa5eefaaf06bc622fc3e99b08f53785e20feb7e550aff747aacdc669ea
+checksum: 31115382af7c77cb01a400f3ebb311902ba6498344fe065544f058c0d567e551
 created: 2026-11-10
 last_updated: 2026-11-16
 ---
@@ -44,7 +44,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.
 - Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.
 - Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden="true"`), so never put meaning in it.
-- Use `cursor` for one eyebrow per view at most; the blink stops under reduced motion.
+- Use `cursor` for one eyebrow per view at most; it blinks four times and then stays solid, and never blinks under reduced motion.
 - Keep the semantic heading in the element after the Eyebrow; the Eyebrow itself carries no heading role.
 
 ## Usage
@@ -95,7 +95,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 | Trigger                 | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                           |
 | ----------------------- | ---------------------- | ------------------------------------------------- | ------------------------------------------------- |
-| cursor shown (`cursor`) | `animate-blink`        | theme `blink` (1s step-end, infinite)             | `motion-reduce:animate-none` (cursor stays solid) |
+| cursor shown (`cursor`) | `animate-blink-settle` | theme `blink-settle` (1s step-end, 4 runs, 4s)    | `motion-reduce:animate-none` (cursor stays solid) |
 
 ## Tokens
 
@@ -121,7 +121,8 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
 - Contrast: the prefix uses `var(--text-default)` (≥4.5:1). The label uses `var(--text-brand)`, the logo orange `primary-500` in both themes: 5.5:1 or more on every dark surface, but about 2.9–3.1:1 on the light surfaces, under WCAG 2 AA 4.5:1 and APCA Lc 60. This is an owner-accepted brand exception (the eyebrow matches the logo orange; owner decision 2026-11-16), recorded in `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"; the automated axe checks skip `color-contrast` on the `<root>__label` part in light only.
-- `motion-reduce:animate-none` on the cursor's `animate-blink`.
+- `motion-reduce:animate-none` on the cursor's `animate-blink-settle`.
+- Pause, Stop, Hide (WCAG 2.2.2): the cursor blinks four times and stops by itself after 4 seconds, resting solid, so it needs no pause control.
 - Touch target: not applicable (non-interactive).
 
 ## Examples

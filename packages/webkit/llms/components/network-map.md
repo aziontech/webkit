@@ -42,7 +42,7 @@
 | --- | --- | --- | --- | --- |
 | `region` | `'world' \| 'atlantic' \| 'americas' \| 'north-america' \| 'south-america' \| 'europe' \| 'africa' \| 'asia' \| 'oceania'` | `'world'` | false | Which part of the world has its PoPs lit; the map always frames the whole world. |
 | `density` | `'none' \| 'low' \| 'medium' \| 'high'` | `'medium'` | false | How many PoPs are lit, from `none` to `high`. |
-| `animated` | `boolean` | `false` | false | Pulses the PoPs in three staggered waves; static when false. |
+| `animated` | `boolean` | `false` | false | Pulses the PoPs in three staggered waves that settle within five seconds; static when false. |
 | `opacity` | `number` | `0.4` | false | Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength. |
 | `position` | `'center' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | `'center'` | false | Where the map parks in the space the box leaves over. |
 | `scale` | `number` | `0.85` | false | Size of the map relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it. |
@@ -72,6 +72,7 @@
 - Visible focus: not applicable (nothing receives focus)
 - Contrast: not applicable to the artwork (decorative); the copy above it keeps its own ≥4.5:1 against the band, which the low default `opacity` protects
 - `motion-reduce:animate-none` stops the pulse under reduced motion
+- Pause, Stop, Hide (WCAG 2.2.2): with `animated`, the PoP pulse and the traffic packets stop by themselves within 5 seconds of mount (pulses by 4.7 s, packets by 4.8 s) and rest on the static map, so the layer needs no pause control
 - Touch target: not applicable (no interactive parts)
 
 ## Examples

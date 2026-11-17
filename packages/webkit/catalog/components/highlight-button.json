@@ -19,6 +19,6 @@
   "Keep the label short and verb-led, and pair it with a leading `icon` (for example `az az-sparkles`).",
   "It always renders `type=\"button\"`; use `button` with `type=\"submit\"` to submit a form.",
   "`disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.",
-  "The glow stops under reduced motion, so never use it to convey state."
+  "The glow turns once on mount and then rests, and it never moves under reduced motion, so never use it to convey state."
  ]
 }

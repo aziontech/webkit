@@ -40,7 +40,7 @@
     region?: NetworkMapRegion
     /** How many PoPs are lit, from `none` to `high`. */
     density?: NetworkMapDensity
-    /** Pulses the PoPs in three staggered waves; static when false. */
+    /** Pulses the PoPs in three staggered waves that settle within five seconds; static when false. */
     animated?: boolean
     /** Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength. */
     opacity?: number
@@ -143,6 +143,8 @@
   const MESH_MIN_CHORD = 60
   const MESH_BOW = { min: 0.1, max: 0.18 }
   const MESH_CYCLE = { min: 3400, max: 6200 }
+  const PACKET_TRAVEL = 0.45
+  const MOTION_LIMIT = 4800
 
   interface MeshRay {
     key: string
@@ -221,6 +223,12 @@
   let packetAnimations: Animation[] = []
   let reducedMotion: MediaQueryList | null = null
 
+  const packetIterations = (ray: MeshRay) => {
+    const cycles = (MOTION_LIMIT + ray.delay) / ray.duration
+    const landing = cycles - Math.floor(cycles)
+    return landing >= PACKET_TRAVEL ? cycles : Math.floor(cycles)
+  }
+
   const stopPackets = () => {
     packetAnimations.forEach((animation) => animation.cancel())
     packetAnimations = []
@@ -236,13 +244,13 @@
           [
             { strokeDashoffset: 0, strokeDasharray: '0 200', offset: 0 },
             { strokeDashoffset: -50, strokeDasharray: '30 200', offset: 0.225 },
-            { strokeDashoffset: -100, strokeDasharray: '0 200', offset: 0.45 },
+            { strokeDashoffset: -100, strokeDasharray: '0 200', offset: PACKET_TRAVEL },
             { strokeDashoffset: -100, strokeDasharray: '0 200', offset: 1 }
           ],
           {
             duration: ray.duration,
             delay: -ray.delay,
-            iterations: Infinity,
+            iterations: packetIterations(ray),
             easing: 'linear'
           }
         )
@@ -308,7 +316,7 @@
         :d="pop.d"
         :data-phase="pop.phase"
         :data-animated="animated || null"
-        class="fill-(--primary) data-[animated]:animate-pulse data-[animated]:motion-reduce:animate-none data-[phase=1]:[animation-delay:700ms]! data-[phase=2]:[animation-delay:1400ms]!"
+        class="fill-(--primary) data-[animated]:animate-pulse-settle data-[animated]:motion-reduce:animate-none data-[phase=1]:[animation-delay:350ms]! data-[phase=2]:[animation-delay:700ms]!"
       />
       <g
         v-if="meshRays.length"

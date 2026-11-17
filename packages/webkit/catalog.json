@@ -43,20 +43,24 @@
    "--accent-mask",
    "--accent-selected",
    "--animate-blink",
+   "--animate-blink-settle",
    "--animate-bounce",
    "--animate-brand-marquee",
    "--animate-content-enter",
    "--animate-fade-in",
    "--animate-fade-out",
    "--animate-flow-dash",
+   "--animate-flow-dash-settle",
    "--animate-highlight-fade",
    "--animate-page-enter",
    "--animate-ping",
+   "--animate-ping-settle",
    "--animate-popup-scale-in",
    "--animate-popup-scale-out",
    "--animate-progress-indeterminate",
    "--animate-progress-indeterminate-short",
    "--animate-pulse",
+   "--animate-pulse-settle",
    "--animate-shimmer",
    "--animate-slide-down",
    "--animate-slide-in-end",
@@ -64,6 +68,7 @@
    "--animate-slide-out-end",
    "--animate-slide-out-start",
    "--animate-spin",
+   "--animate-spin-settle",
    "--animate-texture-wave-a",
    "--animate-texture-wave-b",
    "--aspect-video",
@@ -829,20 +834,24 @@
    ],
    "animate": [
     "--animate-blink",
+    "--animate-blink-settle",
     "--animate-bounce",
     "--animate-brand-marquee",
     "--animate-content-enter",
     "--animate-fade-in",
     "--animate-fade-out",
     "--animate-flow-dash",
+    "--animate-flow-dash-settle",
     "--animate-highlight-fade",
     "--animate-page-enter",
     "--animate-ping",
+    "--animate-ping-settle",
     "--animate-popup-scale-in",
     "--animate-popup-scale-out",
     "--animate-progress-indeterminate",
     "--animate-progress-indeterminate-short",
     "--animate-pulse",
+    "--animate-pulse-settle",
     "--animate-shimmer",
     "--animate-slide-down",
     "--animate-slide-in-end",
@@ -850,6 +859,7 @@
     "--animate-slide-out-end",
     "--animate-slide-out-start",
     "--animate-spin",
+    "--animate-spin-settle",
     "--animate-texture-wave-a",
     "--animate-texture-wave-b"
    ],
@@ -1646,20 +1656,24 @@
   },
   "animations": [
    "blink",
+   "blink-settle",
    "bounce",
    "brand-marquee",
    "content-enter",
    "fade-in",
    "fade-out",
    "flow-dash",
+   "flow-dash-settle",
    "highlight-fade",
    "page-enter",
    "ping",
+   "ping-settle",
    "popup-scale-in",
    "popup-scale-out",
    "progress-indeterminate",
    "progress-indeterminate-short",
    "pulse",
+   "pulse-settle",
    "shimmer",
    "slide-down",
    "slide-in-end",
@@ -1667,13 +1681,18 @@
    "slide-out-end",
    "slide-out-start",
    "spin",
+   "spin-settle",
    "texture-wave-a",
    "texture-wave-b"
   ],
   "animationGuide": {
    "blink": {
     "value": "blink 1s step-end infinite",
-    "useWhen": "Text caret / terminal cursor blink."
+    "useWhen": "Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does)."
+   },
+   "blink-settle": {
+    "value": "blink 1s step-end 4",
+    "useWhen": "Four caret blinks, then a solid caret (4s): a decorative cursor that must stop by itself within 5 seconds (WCAG 2.2.2)."
    },
    "bounce": {
     "value": "bounce 1s infinite",
@@ -1699,6 +1718,10 @@
     "value": "flowDash 700ms linear infinite",
     "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
    },
+   "flow-dash-settle": {
+    "value": "flowDash 700ms linear 6",
+    "useWhen": "Marching dashes along a decorative SVG connector, six cycles then still (4.2s, WCAG 2.2.2); same stroke-dasharray contract as flow-dash. Keep the infinite flow-dash for a stroke that shows a live status."
+   },
    "highlight-fade": {
     "value": "highlight 1100ms ease-in forwards",
     "useWhen": "Row/item briefly highlighted after an update (recently changed)."
@@ -1710,6 +1733,10 @@
    "ping": {
     "value": "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
     "useWhen": "One-off attention ring radiating from a small element (notification dot)."
+   },
+   "ping-settle": {
+    "value": "ping 1s cubic-bezier(0, 0, 0.2, 1) 3",
+    "useWhen": "Three attention rings radiating from a small element, then still (3s): draws the eye once without looping (WCAG 2.2.2). Remount the element to replay it."
    },
    "popup-scale-in": {
     "value": "popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1)",
@@ -1730,6 +1757,10 @@
    "pulse": {
     "value": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
     "useWhen": "Skeleton/placeholder opacity pulse while content loads."
+   },
+   "pulse-settle": {
+    "value": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2",
+    "useWhen": "Two opacity pulses, then still at full strength (4s): a decorative pulse that must stop by itself within 5 seconds (WCAG 2.2.2). Keep any stagger delay under 1s so the last pulse still ends within 5 seconds."
    },
    "shimmer": {
     "value": "shimmer 1.6s linear infinite",
@@ -1759,13 +1790,17 @@
     "value": "spin 1s linear infinite",
     "useWhen": "Indeterminate circular spinners (loading icons)."
    },
+   "spin-settle": {
+    "value": "spin 4200ms cubic-bezier(0.4, 0, 0.2, 1)",
+    "useWhen": "One eased revolution, then still (4.2s): a decorative rotating glow that must stop by itself within 5 seconds (WCAG 2.2.2). Ends on its start frame."
+   },
    "texture-wave-a": {
-    "value": "textureWaveA 13s linear infinite",
-    "useWhen": "One of the two crossing bands of a pixelate texture, travelling left. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers mid-cycle."
+    "value": "textureWaveA 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards",
+    "useWhen": "One of the two crossing bands of a pixelate texture, drifting left and easing to a stop (4.8s, WCAG 2.2.2), holding where it lands. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers."
    },
    "texture-wave-b": {
-    "value": "textureWaveB 19s linear infinite",
-    "useWhen": "The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction)."
+    "value": "textureWaveB 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards",
+    "useWhen": "The counter-drifting band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction)."
    }
   },
   "themes": [
@@ -9974,7 +10009,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Pulses the PoPs in three staggered waves; static when false."
+     "doc": "Pulses the PoPs in three staggered waves that settle within five seconds; static when false."
     },
     {
      "name": "opacity",

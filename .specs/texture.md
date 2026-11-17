@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: e0216418291031688751bdfb4d1f099cf1604eceb5b3ab14989d94c3b5174955
+checksum: 94625c59dcaafe32892f4be04213110994720b2c8637d704c11e5d479d42614d
 created: 2026-09-23
 last_updated: 2026-11-15
 ---
@@ -87,7 +87,7 @@ The one decorative surface every band in the system is painted on: a full-bleed,
 - `data-variant`, `data-size` and `data-fade` mirror their props and drive which texture paints, at what pitch, and how it fades out
 - `variant="none"` paints nothing, so a band can switch its texture off without unmounting the layer
 - `fade="none"` leaves the layer unmasked; every other value masks it so the ink reaches zero before the layer's own edge; `top` and `bottom` are a single fade — full ink at the leading edge, zero at `--texture-fade-end`; `left` and `right` fade out toward the named edge in the same way, full ink at the opposite edge, which is how a band keeps its texture behind the media and clears it under the copy. Setting `--texture-fade-lead: transparent` adds a second ramp in from zero at the leading edge, so the layer also clears whatever overlaps that edge; `hero` sets it on its backdrop because its opening band sits under the site header, and no other band needs it
-- Custom properties tune a texture in place, set from the consumer's class: `--texture-ink` (every variant), `--texture-fade-start` / `--texture-fade-end` (where the fade holds full ink and where it reaches zero), `--texture-fade-lead` (the ink at the leading edge of `top` / `bottom`; `black` by default, `transparent` for the double fade), `--texture-from` / `--texture-to` / `--texture-direction` (the `dither` ramp's density span and axis), `--texture-pool-x` (where both `pixelate` light pools sit on the x axis), `--texture-pool-a` / `--texture-pool-b` (each pool's own `x y` position, so the two can sit on opposite edges; either falls back to `--texture-pool-x`), `--texture-wave-gain` (multiplies the ink of both `pixelate` waves, 1 by default, capped at full ink, so a band can make the motion read over the pools), `--texture-wave-pace` (a whole number of wave periods each loop travels, 1 by default; 2 doubles the speed without changing the animation's duration token)
+- Custom properties tune a texture in place, set from the consumer's class: `--texture-ink` (every variant), `--texture-fade-start` / `--texture-fade-end` (where the fade holds full ink and where it reaches zero), `--texture-fade-lead` (the ink at the leading edge of `top` / `bottom`; `black` by default, `transparent` for the double fade), `--texture-from` / `--texture-to` / `--texture-direction` (the `dither` ramp's density span and axis), `--texture-pool-x` (where both `pixelate` light pools sit on the x axis), `--texture-pool-a` / `--texture-pool-b` (each pool's own `x y` position, so the two can sit on opposite edges; either falls back to `--texture-pool-x`), `--texture-wave-gain` (multiplies the ink of both `pixelate` waves, 1 by default, capped at full ink, so a band can make the motion read over the pools), `--texture-wave-pace` (scales how far both waves drift, 1 by default; 2 doubles the distance, and so the speed, without changing the animation's duration token)
 
 ## Motion & Animations
 
@@ -96,7 +96,7 @@ The one decorative surface every band in the system is painted on: a full-bleed,
 | pixelate wave, leading  | `animate-texture-wave-a` | `motion-reduce:animate-none` |
 | pixelate wave, trailing | `animate-texture-wave-b` | `motion-reduce:animate-none` |
 
-Reduced motion keeps both crests — they are part of the picture, not only of the animation — and stops them travelling.
+Both waves drift once on mount, easing to a stop within 4.8 seconds (WCAG 2.2.2 Pause, Stop, Hide), and hold where they land. Reduced motion keeps both crests — they are part of the picture, not only of the animation — and never moves them.
 
 ## Tokens
 
@@ -122,6 +122,7 @@ Reduced motion keeps both crests — they are part of the picture, not only of t
 - ARIA: the root carries `aria-hidden="true"`, so no texture is announced and the layer adds no role.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the ink is mixed down from `var(--text-default)` to a surface step, deliberately below text contrast — content above the layer keeps its own colours and its own contrast against the page canvas.
 - `motion-reduce:animate-none` on both pixelate waves; every other variant is static.
+- Pause, Stop, Hide (WCAG 2.2.2): the pixelate waves run once and stop by themselves within 5 seconds, so the layer needs no pause control.
 - Touch target ≥40×40 px — not applicable, no interactive target.
 
 ## Examples

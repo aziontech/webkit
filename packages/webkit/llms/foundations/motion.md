@@ -83,21 +83,25 @@ stay a review concern:
 
 | Class | Value | Use when |
 | --- | --- | --- |
-| `animate-blink` | `blink 1s step-end infinite` | Text caret / terminal cursor blink. |
+| `animate-blink` | `blink 1s step-end infinite` | Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does). |
+| `animate-blink-settle` | `blink 1s step-end 4` | Four caret blinks, then a solid caret (4s): a decorative cursor that must stop by itself within 5 seconds (WCAG 2.2.2). |
 | `animate-bounce` | `bounce 1s infinite` | Playful attention bounce (scroll-down hints); use sparingly. |
 | `animate-brand-marquee` | `brandMarquee 59s linear infinite` | A strip of logos looping forever (client trust strips, framework strips). Apply to a track holding its row exactly twice, the duplicate aria-hidden, and set animation-duration ON THE ELEMENT from the mark count so every strip on a site moves at one speed rather than one duration — a var in this shorthand would resolve at :root and never see it. Pause it on hover and focus-within so a linked mark can be reached. |
 | `animate-content-enter` | `contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards` | Content settling INSIDE a page that is already on screen — a loading window resolving, a filtered list swapping, a step changing. Never on first paint of a page whose own entrance is already running (use it after that entrance, or after a wire). Stagger a follower with --content-enter-delay. |
 | `animate-fade-in` | `fadeIn 220ms ease-in-out` | Content or backdrop appearing in place (no directional origin). |
 | `animate-fade-out` | `fadeOut 220ms ease-in-out` | Content or backdrop leaving in place (pair of fade-in). |
 | `animate-flow-dash` | `flowDash 700ms linear infinite` | Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless. |
+| `animate-flow-dash-settle` | `flowDash 700ms linear 6` | Marching dashes along a decorative SVG connector, six cycles then still (4.2s, WCAG 2.2.2); same stroke-dasharray contract as flow-dash. Keep the infinite flow-dash for a stroke that shows a live status. |
 | `animate-highlight-fade` | `highlight 1100ms ease-in forwards` | Row/item briefly highlighted after an update (recently changed). |
 | `animate-page-enter` | `pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1)` | A page arriving on a route change — on the CONTENT ZONE only, never the shell. The chrome is the same before and after, and sliding it announces a reload that did not happen. Key it on the route path so a component serving several paths still replays it. Nothing inside the page may animate on mount at the same time: the two run in lockstep and read as one element travelling on a diagonal. |
 | `animate-ping` | `ping 1s cubic-bezier(0, 0, 0.2, 1) infinite` | One-off attention ring radiating from a small element (notification dot). |
+| `animate-ping-settle` | `ping 1s cubic-bezier(0, 0, 0.2, 1) 3` | Three attention rings radiating from a small element, then still (3s): draws the eye once without looping (WCAG 2.2.2). Remount the element to replay it. |
 | `animate-popup-scale-in` | `popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1)` | Anchored overlays opening (dropdown, popover, tooltip, menu); set --popup-origin. |
 | `animate-popup-scale-out` | `popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53)` | Anchored overlays closing (pair of popup-scale-in). |
 | `animate-progress-indeterminate` | `progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite` | Indeterminate linear progress bar (primary sweep). |
 | `animate-progress-indeterminate-short` | `progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite` | Indeterminate linear progress bar (secondary short sweep). |
 | `animate-pulse` | `pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite` | Skeleton/placeholder opacity pulse while content loads. |
+| `animate-pulse-settle` | `pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2` | Two opacity pulses, then still at full strength (4s): a decorative pulse that must stop by itself within 5 seconds (WCAG 2.2.2). Keep any stagger delay under 1s so the last pulse still ends within 5 seconds. |
 | `animate-shimmer` | `shimmer 1.6s linear infinite` | Skeleton shimmer sweep while content loads. |
 | `animate-slide-down` | `slideDown 220ms ease-in-out` | Vertical disclosure expanding (accordion panel, expandable row). |
 | `animate-slide-in-end` | `slideInEnd 240ms cubic-bezier(0.39, 0.57, 0.56, 1)` | End-anchored panel entering (settings/detail drawer); flips with the reading direction. |
@@ -105,8 +109,9 @@ stay a review concern:
 | `animate-slide-out-end` | `slideOutEnd 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)` | End-anchored panel leaving (pair of slide-in-end). |
 | `animate-slide-out-start` | `slideOutStart 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)` | Start-anchored panel leaving (pair of slide-in-start; use as leave-active-class). |
 | `animate-spin` | `spin 1s linear infinite` | Indeterminate circular spinners (loading icons). |
-| `animate-texture-wave-a` | `textureWaveA 13s linear infinite` | One of the two crossing bands of a pixelate texture, travelling left. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers mid-cycle. |
-| `animate-texture-wave-b` | `textureWaveB 19s linear infinite` | The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction). |
+| `animate-spin-settle` | `spin 4200ms cubic-bezier(0.4, 0, 0.2, 1)` | One eased revolution, then still (4.2s): a decorative rotating glow that must stop by itself within 5 seconds (WCAG 2.2.2). Ends on its start frame. |
+| `animate-texture-wave-a` | `textureWaveA 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards` | One of the two crossing bands of a pixelate texture, drifting left and easing to a stop (4.8s, WCAG 2.2.2), holding where it lands. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers. |
+| `animate-texture-wave-b` | `textureWaveB 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards` | The counter-drifting band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction). |
 
 ## Duration and easing tokens
 
@@ -114,4 +119,4 @@ stay a review concern:
 | --- | --- | --- |
 | transition | 8 | `--transition-duration-fast-01` · `--transition-duration-fast-02` · `--transition-duration-moderate-01` · `--transition-duration-moderate-02` · `--transition-duration-slow-01` · `--transition-duration-slow-02` · `--transition-duration-slow-03` · `--transition-duration-slow-04` |
 | ease | 7 | `--ease-expressive-entrance` · `--ease-expressive-exit` · `--ease-in` · `--ease-in-out` · `--ease-out` · `--ease-productive-entrance` · `--ease-productive-exit` |
-| animate | 24 | `--animate-blink` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
+| animate | 29 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
