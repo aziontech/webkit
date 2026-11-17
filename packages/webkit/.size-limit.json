@@ -2108,7 +2108,7 @@
   {
     "name": "breadcrumb-root",
     "path": "src/components/navigation/breadcrumb/breadcrumb.vue",
-    "limit": "25.1 KB"
+    "limit": "25.15 KB"
   },
   {
     "name": "breadcrumb-item",

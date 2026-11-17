@@ -501,3 +501,11 @@ Most entries grew by a few hundredths of a KB because `usePlacement` now records
 | button-group               | 13.26        | 13.3       | `usePlacement` scroll check (see above).                                                                                                                                                                                                                                                                                             |
 | schema-form                | 50.22        | 50.25      | Conditional fields, async option loaders, repeatable object arrays, string maps, `oneOf`, formats, `writeOnly` and sections compose Combobox, MultiSelect, AttributeEditor, Accordion and PasswordInput. Lazy chunks lowered the first load to about 42 KB but raised the counted total to about 65 KB, so they stay static imports. |
 | table-cell-time            | 17.39        | 17.4       | `usePlacement` scroll check (see above).                                                                                                                                                                                                                                                                                             |
+
+## Icon classes `az` (2026-11-17)
+
+The icon base class changed from `ai` to `az` (DECISIONS.md IC01). No code was added; the gzip of the same strings came out a few bytes larger.
+
+| Entry           | Measured now | New budget | Reason                                                                                           |
+| --------------- | ------------ | ---------- | ------------------------------------------------------------------------------------------------ |
+| breadcrumb-root | 25.10        | 25.15      | Under 5 bytes of gzip difference from `ai ai-ellipsis` → `az az-ellipsis`; same as `breadcrumb`. |
