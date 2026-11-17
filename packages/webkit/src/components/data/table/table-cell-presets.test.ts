@@ -347,7 +347,9 @@ describe('Table', () => {
 
     it('the refresh example keeps its rows while refreshing and shows when it updated', async () => {
       const view = render(Refresh)
-      expect(view.container.querySelector('time')!.getAttribute('datetime')).toMatch(/:00\.000Z$/)
+      expect(view.container.querySelector('time')!.getAttribute('datetime')).toBe(
+        '2026-11-10T12:00:00.000Z'
+      )
       await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
       expect(view.getByText('storefront')).toBeTruthy()
       await waitFor(() =>

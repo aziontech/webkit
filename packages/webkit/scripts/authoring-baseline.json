@@ -1,5 +1,4 @@
 [
-  "packages/webkit/examples/data-table/refresh.vue::clock:no-clock-in-setup",
   "packages/webkit/src/components/code/code-block/presets/transitions.ts::token:js-class-preset",
   "packages/webkit/src/components/content/pricing-card/pricing-card.vue::i18n:hardcoded-default-string",
   "packages/webkit/src/components/content/pricing-card/pricing-card.vue::i18n:hardcoded-default-string",
