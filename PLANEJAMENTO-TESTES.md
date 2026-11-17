@@ -35,7 +35,7 @@ Estudei a fundo. A **ideia central é boa e adotamos**; o resto avaliamos e corr
 5. **"Monta sem erro" (`it.each` smoke) como substância** — teste bobo, passa sempre, não pega regressão. Só serve de piso.
 6. **Só provou o Button — o caso trivial** — sem overlay, composição ou recursão. A estratégia não foi validada onde estressa.
 7. **Sem pensar em escala/CI** — 157 componentes × Chromium num job só = lento e flaky; falta sharding/retry.
-8. **Skew de versão** — vitest 2.1.9 na #704 vs 4.1 no icons-gallery.
+8. **Skew de versão** — vitest 2.1.9 na #704 vs 4.1 no storybook.
 9. **axe ≠ a11y de verdade** — axe pega violação estática, não a11y comportamental (foco, Tab, Escape). A a11y real está na Camada 2 (`play()`), que a #704 só exercitou no Button.
 
 ### O que aproveitar (a ideia boa)

@@ -377,7 +377,7 @@ Colored brand icons bypass the font (a glyph is single-color) and ship as a `.ai
 1. Place the **multicolor** SVG in [`src/svg-raw/ai-cor/`](src/svg-raw/ai-cor/) using the naming convention `ai-<icon-name>-cor.svg` (kebab-case, no spaces or dots — e.g. `ai-next-cor.svg`).
 2. Keep a square `viewBox` (`0 0 14 14`). **Do not** convert fills to `currentColor` — the colors are the point.
 3. Run `npm run build`. The icon is picked up by `build-color-catalog.mjs` (→ `dist/color-catalog.json`) and `build-color-css.mjs` (→ a `.ai-<name>-cor` class in `dist/azionicons-color.css`, also imported by the `index.css` barrel). It is intentionally **excluded** from the woff2 font and from `dist/catalog.json`.
-4. Verify `<i class="ai-<name>-cor"></i>` renders in color, and that it appears in the icons gallery (`apps/icons-gallery`).
+4. Verify `<i class="ai-<name>-cor"></i>` renders in color and in Storybook `Foundations/Icons`.
 
 ### Validate the SVG
 

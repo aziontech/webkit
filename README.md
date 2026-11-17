@@ -16,7 +16,6 @@ The shared front-end foundation for Azion products. Webkit ships the Vue compone
 - `@aziontech/theme`: design token system, CSS variables, and Tailwind integration.
 - `@aziontech/icons`: Azion + Prime icon fonts as CSS/woff2 assets.
 - Storybook app for documentation and visual validation.
-- Icons Gallery app for icon exploration and QA.
 
 ## Workspace structure
 
@@ -24,7 +23,6 @@ The shared front-end foundation for Azion products. Webkit ships the Vue compone
 webkit/
 ├── apps/
 │   ├── storybook/      # Component docs and development playground
-│   └── icons-gallery/  # Interactive icon browser
 ├── packages/
 │   ├── webkit/         # Reusable Vue components
 │   ├── theme/          # Tokens and theme styles
@@ -58,7 +56,6 @@ If you are new (human or AI), open these in order — together they describe the
 | App                                   | Description                                      | CI                                                                                                                                                                                                                         |
 | ------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [storybook](./apps/storybook)         | Storybook documentation for `@aziontech/webkit`. Live: <https://webkit.azion.app/> | [![App Storybook](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml?query=branch%3Amain)             |
-| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons. Live: <https://icons-gallery.azion.app/> | [![App Icons Gallery](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml?query=branch%3Amain) |
 
 ## Use in your app
 
@@ -175,7 +172,6 @@ pnpm storybook:preview      # Preview the static build
 # Icons
 pnpm icons:build            # Generate icon artifacts
 pnpm icons:validate         # Validate icon source
-pnpm icons:gallery:serve    # Icons Gallery dev server
 
 # Tests
 pnpm webkit:test            # Unit suite (headless Chromium)
@@ -221,9 +217,7 @@ If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with
 ## Live previews
 
 - **Component playground** — <https://webkit.azion.app/> — Storybook deployment. Source of truth for every component's API, props, and visual states. Start here to explore the design system.
-- **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the Azion + Prime icon sets used by `@aziontech/icons`.
 
-Local equivalents run via `pnpm storybook:dev` and `pnpm icons:gallery:serve`.
 
 ## Related docs
 

@@ -113,7 +113,7 @@ flowchart TD
 - `dist/azionicons-color.css` — as percent-encoded `background-image` data-URIs (**~31.9 KB**)
 - `dist/color-catalog.json` — as raw inline `<svg>` strings (**~32.3 KB**)
 
-A consumer that pulls **both** (the icons-gallery does — CSS for the `<i>` grid, catalog for search/preview) ships the colored vector data **twice**. It gzips well and each mode is usually used alone, so the practical cost is small — but the bytes are genuinely duplicated.
+A consumer that pulls **both** (CSS for the `<i>` grid plus catalog for search/preview) ships the colored vector data **twice**. It gzips well and each mode is usually used alone, so the practical cost is small — but the bytes are genuinely duplicated.
 
 **✅ Duplicated: the source _read_ (at build time).** `build-color-css.mjs` and `build-color-catalog.mjs` each do their own `readdirSync('ai-cor').filter('.svg').sort()` + per-file `readFileSync`. The directory is walked twice. Because both filter+sort identically, **the two outputs cannot drift** — they're always the same icon set. Cost is negligible (17 files).
 

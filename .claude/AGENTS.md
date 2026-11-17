@@ -12,7 +12,6 @@ This repository is a `pnpm` workspace with two top-level domains:
 Current main workspaces:
 
 - `apps/storybook`: visual documentation and component development environment
-- `apps/icons-gallery`: icon browsing/validation app
 - `packages/webkit`: reusable Vue component library (`@aziontech/webkit`)
 - `packages/theme`: tokens, theme, and styling foundations (`@aziontech/theme`)
 - `packages/icons`: icon font pipeline and package (`@aziontech/icons`)
