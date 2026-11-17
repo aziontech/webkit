@@ -3,10 +3,10 @@ name: doc-prose
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: a4de16336167eab9562a4d3166e61965c2ea172118e3eaebd9e5744e26892033
+spec_version: 2
+checksum: 565443707c9b78c534e2b3329b777930adad0f32b4e19d103c78f3ab8a839247
 created: 2026-08-21
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # DocProse — Component Spec
@@ -112,6 +112,11 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 | spacing (base rung)            | `var(--spacing-md)`                                              |
 | spacing (tightened rungs)      | `var(--spacing-sm)` / `var(--spacing-xs)`                        |
 | ring                           | `var(--ring-color)`                                              |
+| table                          | block, `max-w-full`, `overflow-x-auto` (scrolls sideways when wider than the page) |
+| typography (table cell)        | `.text-body-sm`                                                  |
+| text (th / td)                 | `var(--text-default)` / `var(--text-muted)`                      |
+| border (table row)             | `var(--border-default)`                                          |
+| spacing (table cell)           | `var(--spacing-xs)` block / `var(--spacing-sm)` inline           |
 
 ## Theme gaps
 
