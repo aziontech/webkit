@@ -377,6 +377,22 @@ describe('CodeBlock', () => {
       expect(getByTestId('code-code-block__filename-label').textContent?.trim()).toBe('handler.js')
     })
 
+    it('keeps the label typography off the file icon so the icon font applies', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: {
+          tabs: [{ ...fileNameTab[0], fileIcon: 'ai ai-json' }],
+          defaultValue: 'file'
+        }
+      })
+
+      const holder = getByTestId('code-code-block__filename-icon')
+      const icon = holder.querySelector('i')
+
+      expect(holder.classList.contains('text-label-code-sm')).toBe(true)
+      expect(icon?.classList.contains('text-label-code-sm')).toBe(false)
+      expect(icon?.classList.contains('ai-json')).toBe(true)
+    })
+
     it('omits the filename bar when the active tab has no fileName', () => {
       const { queryByTestId } = render(CodeBlock, {
         props: { tabs: singleTab, defaultValue: 'only' }
