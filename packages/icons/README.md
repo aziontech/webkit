@@ -38,7 +38,7 @@ Rules that keep the names honest (checked by `scripts/check-manifest.mjs` on eve
 
 - **A product icon is named after the product**, as WebKit and the console name it: `functions` for Functions, `sql-database` for SQL Database, `waf` for WAF.
 - **`edge-` stays only where the product still carries it**: Edge DNS, Edge Pulse and Edge Orchestrator (with its Edge Nodes, Edge Services and Edge Libraries).
-- **A feature names its product**: Domains belongs to Workloads, Rules Engine and Tiered Cache to Applications, Origin Shield to Connectors.
+- **A feature names its product**: Domains belongs to Workloads, Rules Engine to Applications, Tiered Cache to Cache, Origin Shield to Connectors.
 - **Interface glyphs take [Lucide](https://lucide.dev/icons) names** (`az-x`, `az-menu`, `az-settings`, `az-chevron-down`); brands are spelled out (`az-javascript`, `az-x-brand`).
 - **Names say what the icon is**, never how the file was made: no `-alt`, `-logo`, `-icon`, and no class prefix inside the name.
 - **Pick an icon by what it stands for.** For a generic idea (a database, a route, a table) use an Interface icon, not a product's. Never use an External logo to stand for an Azion product.

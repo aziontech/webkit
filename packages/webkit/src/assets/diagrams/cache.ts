@@ -24,7 +24,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Cache',
       title: 'Edge cache in the nearest data center',
-      icon: 'az az-layers',
+      icon: 'az az-cache',
       status: {
         label: 'Hit',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'Tiered Cache',
       title: 'Second layer before the origin',
-      icon: 'az az-origin-shield'
+      icon: 'az az-tiered-cache'
     },
     {
       key: 'origin',

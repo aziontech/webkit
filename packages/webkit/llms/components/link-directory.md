@@ -138,7 +138,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         href="/sql-database"
       />
       <LinkDirectoryItem
-        icon="az az-layers"
+        icon="az az-cache"
         title="Cache"
         description="Accelerate content delivery and reduce origin load"
         href="/cache"
@@ -225,7 +225,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           href="/sql-database"
         />
         <LinkDirectoryItem
-          icon="az az-layers"
+          icon="az az-cache"
           title="Cache"
           description="Accelerate content delivery and reduce origin load"
           href="/cache"

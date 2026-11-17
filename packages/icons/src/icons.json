@@ -2956,10 +2956,9 @@
       "group": "interface",
       "category": "layout",
       "shows": "Three stacked layers",
-      "means": "Layers or stacked levels; also Tiered Cache in Applications",
+      "means": "Layers or stacked levels",
       "status": "stable",
-      "legacy": ["ai ai-layers", "ai ai-tiered-cache"],
-      "keywords": ["tiered cache", "cache tiers"]
+      "legacy": ["ai ai-layers"]
     },
     {
       "name": "layout-grid",
@@ -4743,6 +4742,61 @@
       "means": "YouTube",
       "status": "stable",
       "legacy": ["ai-color ai-youtube", "ai-cor ai-youtube"]
+    },
+    {
+      "name": "cache",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Cache",
+      "shows": "A database cylinder with a lightning bolt",
+      "means": "Cache",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "tiered-cache",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "Cache",
+      "shows": "Three stacked tiers, narrowest on top",
+      "means": "Tiered Cache (Cache feature)",
+      "status": "stable",
+      "legacy": ["ai ai-tiered-cache"]
+    },
+    {
+      "name": "network-shield",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Network Shield",
+      "shows": "A shield with a list inside",
+      "means": "Network Shield",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "ddos-protection",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "DDoS Protection",
+      "shows": "Flood lines held off by a shield",
+      "means": "DDoS Protection",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "secure-internet-access",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Secure Internet Access",
+      "shows": "A globe with a padlock",
+      "means": "Secure Internet Access",
+      "status": "stable",
+      "legacy": []
     }
   ]
 }

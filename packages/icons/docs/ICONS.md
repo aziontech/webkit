@@ -2,13 +2,13 @@
 
 > Generated from `src/icons.json` by `scripts/build-docs.mjs`. Edit the JSON, then run `npm run build`; do not edit this page by hand.
 
-451 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
+456 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
 
 ## How the icons are organised
 
-- **Azion** (57) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
-  - Products (29) — One icon per Azion product, named after the product as WebKit and the console name it.
-  - Product features (7) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
+- **Azion** (62) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
+  - Products (33) — One icon per Azion product, named after the product as WebKit and the console name it.
+  - Product features (8) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
   - Solutions (4) — Solutions Azion sells that combine several products.
   - Services (8) — Support plans and professional services.
@@ -74,6 +74,10 @@ One icon per Azion product, named after the product as WebKit and the console na
 | `az az-variables` | Variables | Variables | An x in parentheses |  |
 | `az az-waf` | WAF | WAF | A lightning bolt and a shield |  |
 | `az az-workloads` | Workloads | Workloads | An open box with dividers |  |
+| `az az-cache` | Cache | Cache | A database cylinder with a lightning bolt |  |
+| `az az-network-shield` | Network Shield | Network Shield | A shield with a list inside |  |
+| `az az-ddos-protection` | DDoS Protection | DDoS Protection | Flood lines held off by a shield |  |
+| `az az-secure-internet-access` | Secure Internet Access | Secure Internet Access | A globe with a padlock |  |
 
 ### Azion · Product features
 
@@ -88,6 +92,7 @@ A part that lives inside a product, such as Domains in Workloads or Edge Nodes i
 | `az az-lora` | AI Inference | LoRA adapters for AI Inference | Three sliders |  |
 | `az az-origin-shield` | Connectors | Origin Shield (Connectors feature) | A shield with a map pin |  |
 | `az az-rules-engine` | Applications | Rules Engine (part of Applications) | A box with a path and a lightning bolt |  |
+| `az az-tiered-cache` | Cache | Tiered Cache (Cache feature) | Three stacked tiers, narrowest on top |  |
 
 ### Azion · Platform
 
@@ -428,7 +433,7 @@ Alignment, grids, columns, windows, menus and controls.
 | `az az-ellipsis` | More options | Three dots in a row |  |
 | `az az-ellipsis-vertical` | More options menu | Three dots in a column |  |
 | `az az-expand` | Expand or full screen | Four arrows pointing out to the corners |  |
-| `az az-layers` | Layers or stacked levels; also Tiered Cache in Applications | Three stacked layers |  |
+| `az az-layers` | Layers or stacked levels | Three stacked layers |  |
 | `az az-layout-grid` | Grid view | Four squares in a two-by-two grid |  |
 | `az az-maximize` | Maximize or enter full screen | Two diagonal arrows pointing outward |  |
 | `az az-menu` | Open the menu | Three horizontal lines |  |
@@ -753,7 +758,6 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai ai-column` | `az az-columns-3` | Lucide name for a box split into three columns. |
 | `ai ai-ellipsis-h` | `az az-ellipsis` |  |
 | `ai ai-ellipsis-v` | `az az-ellipsis-vertical` |  |
-| `ai ai-tiered-cache` | `az az-layers` |  |
 | `ai ai-objects-column` | `az az-layout-grid` |  |
 | `ai ai-th-large` | `az az-layout-grid` |  |
 | `ai ai-arrow-up-right-and-arrow-down-left-from-center` | `az az-maximize` |  |

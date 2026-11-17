@@ -190,7 +190,7 @@ The frame is static apart from its resize handles.
             <CardGrid.Cell variant="canvas">
               <FeatureItem
                 :heading-level="3"
-                icon="az az-layers"
+                icon="az az-tiered-cache"
                 title="Tiered Cache"
                 description="Answer repeat requests from the nearest location and offload your origin."
               />
@@ -313,7 +313,7 @@ The frame is static apart from its resize handles.
               <CardGrid.Cell variant="canvas">
                 <FeatureItem
                   :heading-level="3"
-                  icon="az az-layers"
+                  icon="az az-tiered-cache"
                   title="Tiered Cache"
                   description="Answer repeat requests from the nearest location and offload your origin."
                 />

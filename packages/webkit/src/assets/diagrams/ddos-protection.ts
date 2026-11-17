@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'DDoS Protection',
       title: 'Always-on mitigation',
-      icon: 'az az-shield',
+      icon: 'az az-ddos-protection',
       status: {
         label: 'Mitigated',
         severity: 'success'

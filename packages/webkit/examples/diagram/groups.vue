@@ -21,7 +21,7 @@
         key: 'cache',
         type: 'tile',
         title: 'Cache',
-        icon: 'az az-layers'
+        icon: 'az az-cache'
       },
       {
         key: 'firewall',

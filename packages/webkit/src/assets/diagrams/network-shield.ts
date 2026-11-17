@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       type: 'card',
       eyebrow: 'Network Shield',
       title: 'Network lists at the border',
-      icon: 'az az-network-lists',
+      icon: 'az az-network-shield',
       status: {
         label: 'L3 and L4',
         severity: 'success'

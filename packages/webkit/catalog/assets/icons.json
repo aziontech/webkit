@@ -3544,10 +3544,9 @@
    "set": "azionicons",
    "group": "interface",
    "category": "layout",
-   "label": "Layers or stacked levels; also Tiered Cache in Applications",
+   "label": "Layers or stacked levels",
    "keywords": [
-    "stack",
-    "cache tiers"
+    "stack"
    ]
   },
   {
@@ -5712,6 +5711,70 @@
    "keywords": [
     "brand",
     "logo"
+   ]
+  },
+  {
+   "name": "az-cache",
+   "class": "az az-cache",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Cache",
+   "product": "Cache",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-tiered-cache",
+   "class": "az az-tiered-cache",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Tiered Cache (Cache feature)",
+   "product": "Cache",
+   "keywords": [
+    "feature"
+   ]
+  },
+  {
+   "name": "az-network-shield",
+   "class": "az az-network-shield",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Network Shield",
+   "product": "Network Shield",
+   "keywords": [
+    "connectivity",
+    "security",
+    "protection",
+    "safe"
+   ]
+  },
+  {
+   "name": "az-ddos-protection",
+   "class": "az az-ddos-protection",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "DDoS Protection",
+   "product": "DDoS Protection",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-secure-internet-access",
+   "class": "az az-secure-internet-access",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Secure Internet Access",
+   "product": "Secure Internet Access",
+   "keywords": [
+    "security",
+    "protection"
    ]
   }
  ]

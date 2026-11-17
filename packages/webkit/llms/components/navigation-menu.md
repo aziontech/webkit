@@ -199,7 +199,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
                       close-on-click
                     >
                       <template #icon>
-                        <i class="az az-layers" />
+                        <i class="az az-cache" />
                       </template>
                       Cache
                     </NavigationMenu.Item>

@@ -4,7 +4,7 @@
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-451 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+456 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FeatureItem](../components/feature-item.md), [FileDropzone](../components/file-dropzone.md), [HighlightButton](../components/highlight-button.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [SettingsSection](../components/settings-section.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md).
 
@@ -63,6 +63,10 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 | `az az-variables` | Variables | Variables | environment, env, config |
 | `az az-waf` | WAF | WAF | web application firewall, security, rules, waf rules |
 | `az az-workloads` | Workloads | Workloads | domains, deploy, traffic |
+| `az az-cache` | Cache | Cache | product |
+| `az az-network-shield` | Network Shield | Network Shield | connectivity, security, protection, safe |
+| `az az-ddos-protection` | DDoS Protection | DDoS Protection | product |
+| `az az-secure-internet-access` | Secure Internet Access | Secure Internet Access | security, protection |
 
 #### Azion · Product features
 
@@ -75,6 +79,7 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 | `az az-lora` | AI Inference | LoRA adapters for AI Inference | fine-tuning, model |
 | `az az-origin-shield` | Connectors | Origin Shield (Connectors feature) | backend, server, security, protection, safe |
 | `az az-rules-engine` | Applications | Rules Engine (part of Applications) | logic, conditions, behavior |
+| `az az-tiered-cache` | Cache | Tiered Cache (Cache feature) | feature |
 
 #### Azion · Platform
 
@@ -387,7 +392,7 @@ Generic glyphs for the interface. They name an action, an object or a state, nev
 | `az az-ellipsis` | More options | menu, actions, overflow, ellipsis h |
 | `az az-ellipsis-vertical` | More options menu | actions, overflow, ellipsis v |
 | `az az-expand` | Expand or full screen | fullscreen, maximize |
-| `az az-layers` | Layers or stacked levels; also Tiered Cache in Applications | stack, cache tiers |
+| `az az-layers` | Layers or stacked levels | stack |
 | `az az-layout-grid` | Grid view | tiles, dashboard, objects column, th large |
 | `az az-maximize` | Maximize or enter full screen | fullscreen, expand, enlarge, arrow up right and arrow down left from center |
 | `az az-menu` | Open the menu | hamburger, navigation, bars |

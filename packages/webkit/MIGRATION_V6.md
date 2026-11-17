@@ -812,9 +812,11 @@ listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
   `ai-edge-ai` → `az-ai-inference`, `ai-waf-rules` → `az-waf`, `ai-app-accelerator` →
   `az-application-accelerator`, `ai-store` → `az-store-pillar`, `ai-origin-accelerator` →
   `az-application-accelerator`; Edge DNS, Edge Pulse and Edge Orchestrator (with `az-edge-nodes`,
-  `az-edge-services`, `az-edge-libraries`) keep `edge-`;
+  `az-edge-services`, `az-edge-libraries`) keep `edge-`; `ai-tiered-cache` → `az-tiered-cache`, now a
+  feature of the new `az-cache`; new product icons `az-cache`, `az-network-shield`,
+  `az-ddos-protection` and `az-secure-internet-access`;
 - one drawing, one name: `ai-digital-certificates` → `az-verified`, `ai-instructor` →
-  `az-graduation-cap`, `ai-ai-pillar` → `az-sparkles`, `ai-tiered-cache` → `az-layers`,
+  `az-graduation-cap`, `ai-ai-pillar` → `az-sparkles`,
   `ai-window-maximize` → `az-app-window`; and names that say the drawing: `ai-datasheet` → `az-sheet`, `ai-column` →
   `az-columns-3`, `ai-gateway` (the winding path, not AI Gateway) → `az-route`, `ai-eject` →
   `az-arrow-up-from-line`, `ai-fast-backward` / `ai-fast-forward` → `az-skip-back` /

@@ -119,7 +119,6 @@
     "ai-waf-rules": "az-waf",
     "ai-origin-accelerator": "az-application-accelerator",
     "ai-ai-pillar": "az-sparkles",
-    "ai-tiered-cache": "az-layers",
     "ai-window-maximize": "az-app-window"
   },
   "color": {

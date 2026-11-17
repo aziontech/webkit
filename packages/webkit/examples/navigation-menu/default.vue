@@ -73,7 +73,7 @@
                       close-on-click
                     >
                       <template #icon>
-                        <i class="az az-layers" />
+                        <i class="az az-cache" />
                       </template>
                       Cache
                     </NavigationMenu.Item>
