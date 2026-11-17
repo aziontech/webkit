@@ -154,7 +154,7 @@
 
   const plating = computed(() => plate.value && (props.variant ?? plate.value.variant))
 
-  provide(ConsoleMockupInjectionKey, { cursor: computed(() => props.cursor) })
+  provide(ConsoleMockupInjectionKey, { cursor: computed(() => props.cursor), testId })
 
   function warnIgnored(name: ConsoleMockupName, keys: string[]) {
     if (!dev) return

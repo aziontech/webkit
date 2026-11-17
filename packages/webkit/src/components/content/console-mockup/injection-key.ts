@@ -3,6 +3,8 @@ import type { ComputedRef, InjectionKey, Ref } from 'vue'
 export interface ConsoleMockupContext {
   /** Whether the widget draws the named collaborator cursor that acts its beat. */
   cursor: ComputedRef<boolean>
+  /** Test id of the root, which inner controls prefix with two underscores. */
+  testId: ComputedRef<string>
 }
 
 export const ConsoleMockupInjectionKey: InjectionKey<ConsoleMockupContext> = Symbol('ConsoleMockup')

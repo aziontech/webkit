@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: b91848a76a27ce8d94446b8663dbae6dd117ce675ff34631dba8a5bc50183bcb
+checksum: ed35b4fbb65d1dc3b0679f329f12fa53d73e853db9d71b161aecc6fdc0d82e36
 created: 2026-10-23
 last_updated: 2026-11-15
 ---
@@ -105,6 +105,7 @@ _No slots — a widget is a closed drawing selected by `name`._
 - Loading: the widget's code is loaded on demand, and the plating registry with the window part beside it. The root keeps its size while it loads and draws nothing until the widget (and its window) arrives, so a framed fragment is never drawn bare first. A `name` change clears the current widget at once, so the root never shows the earlier widget under the new `data-name`, whether the new load is still in flight or has failed.
 - A `name` outside the registry (from untyped code), or a widget chunk that fails to load, warns in development only (`import.meta.env.DEV`) and leaves the root empty; it never throws.
 - A plating prop the loaded widget does not read warns in development only, once per load, and changes nothing.
+- `workload-deploy-logs` replays its deployment over and over while it is active and on screen, so it carries a pause control outside its inert figure: an `IconButton` (`<root testid>__pause`) on the frame's top end corner. `playing` → the log streams and the control reads "Pause animation" (`common.pauseAnimation`, icon `az-pause`); `paused` → the log stops on its settled picture and the control reads "Play animation" (`common.playAnimation`, icon `az-play`); play starts the deployment again from its first step. Under `prefers-reduced-motion: reduce` it starts paused; the viewer's own choice then wins over the preference.
 - `cursor` off: no collaborator cursor or name tag is drawn; the fragment's controls still open, highlight and settle on their beat.
 - Each widget owns its entrance (a `ConsoleMockupShell` replay when `active` turns on) and, for fragments, its beat while `hovered` is set or the device cannot hover. Under reduced motion every widget is drawn in its settled state.
 
@@ -138,12 +139,13 @@ The root's own tokens are the padding and fade color of the window it draws arou
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: none in an inert widget, where nothing takes focus. In `function-code` the code block's file tabs and copy button keep their own focus rings, and the coding-agent switch of `functions-start` keeps the segmented button's.
-- Keyboard map: none in an inert widget. In `function-code`, `Tab` reaches the code block's file tabs and copy button, which keep their own keyboard behaviour. In `functions-start` on its `agents` tab, `Tab` reaches the coding-agent switch, which keeps the segmented button's arrow-key behaviour.
-- ARIA: the root is a plain `div`; the widget inside is a `figure` with `aria-hidden="true"` and `inert` (except `function-code`), and so is the window around a framed fragment, so assistive technology skips the picture. The coding-agent switch of `functions-start` sits outside that figure, named `Coding agent`. The band's own copy carries what it shows.
+- Visible focus: none in an inert widget, where nothing takes focus; the pause control of `workload-deploy-logs` keeps the icon button's focus ring. In `function-code` the code block's file tabs and copy button keep their own focus rings, and the coding-agent switch of `functions-start` keeps the segmented button's.
+- Keyboard map: none in an inert widget. On `workload-deploy-logs`, `Tab` reaches the pause control; `Enter` / `Space` pauses or plays the deployment. In `function-code`, `Tab` reaches the code block's file tabs and copy button, which keep their own keyboard behaviour. In `functions-start` on its `agents` tab, `Tab` reaches the coding-agent switch, which keeps the segmented button's arrow-key behaviour.
+- ARIA: the root is a plain `div`; the widget inside is a `figure` with `aria-hidden="true"` and `inert` (except `function-code`), and so is the window around a framed fragment, so assistive technology skips the picture. The coding-agent switch of `functions-start` sits outside that figure, named `Coding agent`, and so does the pause control of `workload-deploy-logs`, a real button whose label switches between "Pause animation" and "Play animation" (no `aria-pressed`).
+- Moving content (WCAG 2.2.2 Pause, Stop, Hide): `workload-deploy-logs` loops for longer than five seconds, so it always ships the visible, keyboard-reachable pause control, and it does not start under a reduced-motion preference. The band's own copy carries what it shows.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): widgets use the console's own text and surface pairs (`var(--text-default)` / `var(--text-muted)` on `var(--bg-canvas)` / `var(--bg-surface)`).
 - Every motion class inside a widget pairs with `motion-reduce:transition-none`.
-- Touch target: not applicable in an inert widget; `function-code` keeps the code block's own targets, and `functions-start` the segmented button's.
+- Touch target: not applicable in an inert widget; `function-code` keeps the code block's own targets, `functions-start` the segmented button's, and the pause control of `workload-deploy-logs` the icon button's.
 - Reflow: the workload-topology node header wraps (`flex-wrap`), so a status tag moves under the node name in a narrow frame instead of overflowing it.
 
 ## Right-to-left
@@ -155,7 +157,7 @@ The root's own tokens are the padding and fade color of the window it draws arou
 
 ## Internationalization
 
-- No built-in strings in the root. Widget text is console UI copy drawn as part of the picture (hidden from assistive technology), and the collaborator names on the cursors are mock data.
+- No built-in strings in the root. The pause control of `workload-deploy-logs` reads `common.pauseAnimation` / `common.playAnimation` from the locale catalogs. Widget text is console UI copy drawn as part of the picture (hidden from assistive technology), and the collaborator names on the cursors are mock data.
 - Formatting: none.
 
 ## Responsive

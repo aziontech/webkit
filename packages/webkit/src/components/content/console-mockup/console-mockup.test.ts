@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { computed, createSSRApp, defineComponent, h, nextTick, onMounted, provide, ref } from 'vue'
@@ -377,7 +378,10 @@ describe('ConsoleMockup', () => {
 
     const Scene = defineComponent({
       setup() {
-        provide(ConsoleMockupInjectionKey, { cursor: computed(() => false) })
+        provide(ConsoleMockupInjectionKey, {
+          cursor: computed(() => false),
+          testId: computed(() => TESTID)
+        })
         return () => h(ObjectStorageBrowser)
       }
     })
@@ -412,6 +416,60 @@ describe('ConsoleMockup', () => {
   })
 
   describe('deploy logs', () => {
+    const PAUSE_TESTID = `${TESTID}__pause`
+    const logsHost = (props: Record<string, unknown>) =>
+      defineComponent({
+        components: { ConsoleMockup },
+        setup: () => ({ props }),
+        template: `
+          <div style="width: 600px; height: 480px">
+            <ConsoleMockup name="workload-deploy-logs" :autoplay-interval="40" v-bind="props" />
+          </div>
+        `
+      })
+    const settle = () => new Promise((resolve) => globalThis.setTimeout(resolve, 400))
+
+    it('pauses and plays the looping log from a keyboard-reachable control', async () => {
+      const view = render(logsHost({}))
+      const frame = await frameOf(view)
+      const control = await view.findByTestId(PAUSE_TESTID)
+
+      expect(control.tagName).toBe('BUTTON')
+      expect(frame.contains(control)).toBe(false)
+      expect(control.closest('[inert]')).toBeNull()
+      const playing = !reducedMotion()
+      expect(control.getAttribute('aria-label')).toBe(
+        playing ? 'Pause animation' : 'Play animation'
+      )
+
+      control.focus()
+      expect(document.activeElement).toBe(control)
+      await userEvent.keyboard('{Enter}')
+      expect(control.getAttribute('aria-label')).toBe(
+        playing ? 'Play animation' : 'Pause animation'
+      )
+      if (!playing) return
+
+      const held = frame.textContent
+      await settle()
+      expect(frame.textContent).toBe(held)
+
+      await userEvent.keyboard(' ')
+      expect(control.getAttribute('aria-label')).toBe('Pause animation')
+      await expect.poll(() => frame.textContent).not.toBe(held)
+    })
+
+    it('carries a consumer test id onto the pause control', async () => {
+      const view = render(logsHost({ 'data-testid': 'deploy-band' }))
+      expect(await view.findByTestId('deploy-band__pause')).toBeInTheDocument()
+    })
+
+    it('has no violations with the pause control shown', async () => {
+      const view = render(logsHost({}))
+      await view.findByTestId(PAUSE_TESTID)
+      await expectNoA11yViolations(view.container)
+    })
+
     it('marks each step with a job status and lets a fragment take hovered', async () => {
       const view = render(DeploymentLogs, { props: { failAt: 'build' } })
       const status = (title: string) =>
