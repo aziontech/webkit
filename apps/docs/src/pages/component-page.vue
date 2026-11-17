@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import CopyText from '@aziontech/webkit/copy-text'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Tag from '@aziontech/webkit/tag'
@@ -263,11 +264,12 @@
             <li
               v-for="sub in doc.subcomponents"
               :key="sub.name"
+              class="max-w-full min-w-0"
             >
-              <code
-                class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-label-code-sm"
-                >{{ sub.import }}</code
-              >
+              <CopyText
+                :value="sub.import"
+                size="small"
+              />
             </li>
           </ul>
         </template>
