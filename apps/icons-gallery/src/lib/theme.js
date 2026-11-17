@@ -7,7 +7,7 @@ function initializeTheme() {
   } else {
     disableDarkMode()
   }
-  updateThemeIcon() // Garantir que o ícone do tema seja atualizado ao inicializar
+  updateThemeIcon()
 }
 
 function toggleTheme() {
@@ -18,7 +18,7 @@ function toggleTheme() {
     enableDarkMode()
     saveTheme('dark')
   }
-  updateThemeIcon() // Atualizar o ícone do tema após alternar o tema
+  updateThemeIcon()
 }
 
 function enableDarkMode() {
@@ -36,17 +36,16 @@ function saveTheme(theme) {
 }
 
 function getThemeIcon() {
-  return isDarkMode ? 'ai ai-moon text-sm' : 'ai ai-sun text-sm'
+  return isDarkMode ? 'az az-moon text-sm' : 'az az-sun text-sm'
 }
 
 function updateThemeIcon() {
-  const themeIconElement = document.getElementById('themeIcon') // Substitua com o ID do elemento onde você exibe o ícone do tema
+  const themeIconElement = document.getElementById('themeIcon')
   if (themeIconElement) {
     themeIconElement.className = getThemeIcon()
   }
 }
 
-// Chamar initializeTheme() na inicialização da sua aplicação
 initializeTheme()
 
 export { isDarkMode, initializeTheme, toggleTheme, getThemeIcon }

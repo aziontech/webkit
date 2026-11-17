@@ -234,6 +234,13 @@ const WORD_KEYWORDS = {
   window: ['browser', 'app'],
   'square-check': ['checkbox', 'done'],
   workloads: ['domains', 'deploy', 'traffic'],
+  route: ['path', 'routing', 'directions'],
+  sheet: ['spreadsheet', 'grid', 'cells'],
+  inference: ['ai', 'model', 'llm', 'serverless ai'],
+  applications: ['app', 'delivery', 'cache', 'rules'],
+  practices: ['best practices', 'review', 'audit'],
+  skip: ['next', 'previous', 'track'],
+  'circle-half': ['partial', 'half', 'contrast'],
   wrench: ['settings', 'tools', 'fix', 'maintenance'],
   zoom: ['magnify', 'scale']
 }
@@ -251,6 +258,7 @@ const BRANDS = new Set([
   'apple',
   'astro',
   'azure',
+  'devops',
   'bitbucket',
   'bitcoin',
   'claude',
@@ -319,7 +327,7 @@ const BRANDS = new Set([
 ])
 
 function bareName(name) {
-  return name.replace(/^ai-/, '')
+  return name.replace(/^(az|ai|pi)-/, '')
 }
 
 export function iconKeywords(name) {
@@ -341,4 +349,26 @@ export function iconKeywords(name) {
 
 export function iconKeywordString(name) {
   return iconKeywords(name).join(', ')
+}
+
+export function entryKeywords(entry) {
+  const found = new Set(iconKeywords(`az-${entry.name}`))
+  const add = (text) => {
+    const phrase = text.toLowerCase().trim()
+    if (phrase && phrase !== entry.name) found.add(phrase)
+  }
+  if (entry.product) add(entry.product)
+  for (const old of entry.legacy ?? []) {
+    const bare = old
+      .split(' ')
+      .pop()
+      .replace(/^(ai|pi)-/, '')
+    if (bare !== entry.name) add(bare.replace(/-/g, ' '))
+  }
+  for (const keyword of entry.keywords ?? []) add(keyword)
+  const said = new Set(`${entry.name} ${entry.means}`.toLowerCase().split(/[^a-z0-9]+/))
+  const kept = [...found].filter(
+    (keyword) => !keyword.split(/[^a-z0-9]+/).every((w) => said.has(w))
+  )
+  return kept.length ? kept : [entry.category.replace(/-/g, ' ')]
 }

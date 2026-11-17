@@ -1,6 +1,6 @@
 # @aziontech/icons
 
-> Icon font library for Azion — **azionicons** (`ai`) delivered as CSS + woff2, plus colored brand icons (`ai-color`).
+> Icon font library for Azion — **azionicons** (`az`) delivered as CSS + woff2, plus colour logos (`az-color`).
 
 [![Publish Icons](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml)
 [![npm version](https://badge.fury.io/js/%40aziontech%2Ficons.svg)](https://badge.fury.io/js/%40aziontech%2Ficons)
@@ -13,17 +13,35 @@
 
 ## Overview
 
-`@aziontech/icons` is an icon font package that bundles:
+| Set                   | Base class | Icons | What it holds                                                      |
+| --------------------- | ---------- | ----- | ------------------------------------------------------------------ |
+| **azionicons**        | `az`       | 418   | Azion products and platform, interface glyphs, single-colour logos |
+| **azionicons colour** | `az-color` | 35    | Third-party logos in their own colours                             |
 
-| Font           | Prefix | Icons | Description                                      |
-| -------------- | ------ | ----- | ------------------------------------------------ |
-| **azionicons** | `ai`   | 421   | Azion UI, product, platform, and ecosystem icons |
+Monochrome icons ship as a **woff2 icon font** with matching CSS classes, so they take the text colour and work in plain HTML, Vue, React or any web project. A woff2 glyph has one colour, so multicolour logos ship separately as `background-image` CSS classes (`<i class="az-color az-google"></i>`) and as inline SVG strings. See [Colored icons](#colored-icons).
 
-For WebKit 6 the package ships only the Azion set: the legacy `pi` font and its `@aziontech/icons/primeicons` entry are gone, and the glyph names follow [Lucide](https://lucide.dev/icons) (`ai-x`, `ai-menu`, `ai-settings`, `ai-circle-check`, `ai-chevron-down`). `npx @aziontech/webkit migrate v6` rewrites `pi pi-*` classes, the v5 `ai` names (`ai ai-times` → `ai ai-x`) and the colored base class (`ai-cor` → `ai-color`) in your source; the full map is `src/cli/migrations/v6-icons.json` in `@aziontech/webkit`.
+Every icon is documented in [`src/icons.json`](src/icons.json): its group and category, what the drawing shows, what it stands for, the Azion product it belongs to, and the old classes `webkit migrate` rewrites to it. The build fails when an icon has no entry or an entry breaks a naming rule. The full reference generated from it is [`docs/ICONS.md`](docs/ICONS.md); it ships as `dist/ICONS.md`, and the JSON as `@aziontech/icons/manifest`. The docs site shows the same groups on its Icons page.
 
-Icons are distributed as **woff2 icon fonts** with matching CSS class utilities, making them framework-agnostic — usable in plain HTML, Vue, React, or any web project.
+---
 
-In addition, a set of **colored brand icons** ships separately, used with the `ai-color` base class instead of `ai`. Because an icon-font glyph is single-color, multicolor logos (gradients, multiple fills) cannot live in the woff2 font — they are delivered both as `background-image` CSS classes (usable like a font icon: `<i class="ai-color ai-google"></i>`) and as a manifest of inline SVG strings. See [Colored icons](#colored-icons).
+## How the icons are organised
+
+Every icon belongs to one of three groups, so it is always clear whether an icon is Azion's own, a generic interface glyph, or a third party's:
+
+| Group         | Categories                                                                                                  | Use it for                                                                                                                                    |
+| ------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Azion**     | Products, Product features, Platform, Solutions, Services                                                   | An Azion product (`az az-functions`), a part of one (`az az-domains`), the Azion brand and tools (`az az-azion-cli`), a solution or a service |
+| **Interface** | Arrows, Actions, Status, Files, Media, Communication, Commerce, People, Devices, Data, Layout, Objects, Git | A generic action, object or state (`az az-trash`, `az az-chevron-down`, `az az-git-branch`)                                                   |
+| **External**  | Frameworks, AI models, Developer tools, Languages, Online services                                          | A third party, named by its own logo (`az az-react`, `az-color az-openai`)                                                                    |
+
+Rules that keep the names honest (checked by `scripts/check-manifest.mjs` on every build):
+
+- **A product icon is named after the product**, as WebKit and the console name it: `functions` for Functions, `sql-database` for SQL Database, `waf` for WAF.
+- **`edge-` stays only where the product still carries it**: Edge DNS, Edge Pulse and Edge Orchestrator (with its Edge Nodes, Edge Services and Edge Libraries).
+- **A feature names its product**: Domains belongs to Workloads, Rules Engine and Tiered Cache to Applications, Origin Shield to Connectors.
+- **Interface glyphs take [Lucide](https://lucide.dev/icons) names** (`az-x`, `az-menu`, `az-settings`, `az-chevron-down`); brands are spelled out (`az-javascript`, `az-x-brand`).
+- **Names say what the icon is**, never how the file was made: no `-alt`, `-logo`, `-icon`, and no class prefix inside the name.
+- **Pick an icon by what it stands for.** For a generic idea (a database, a route, a table) use an Interface icon, not a product's. Never use an External logo to stand for an Azion product.
 
 ---
 
@@ -37,10 +55,8 @@ npm install @aziontech/icons
 
 ## Usage
 
-### Import via CSS / bundler
-
 ```js
-// Azion set + colored icons (recommended)
+// Azion set + colour logos (recommended)
 import '@aziontech/icons'
 
 // Or import individually
@@ -48,113 +64,60 @@ import '@aziontech/icons/azionicons'
 import '@aziontech/icons/azionicons-color'
 ```
 
-### Import via HTML `<link>`
-
 ```html
-<!-- Azion set + colored icons -->
-<link
-  rel="stylesheet"
-  href="node_modules/@aziontech/icons/dist/index.css"
-/>
-
-<!-- Or individually -->
-<link
-  rel="stylesheet"
-  href="node_modules/@aziontech/icons/dist/azionicons.css"
-/>
-<link
-  rel="stylesheet"
-  href="node_modules/@aziontech/icons/dist/azionicons-color.css"
-/>
-```
-
-### Use in HTML
-
-```html
-<!-- Azion icons (prefix: ai) -->
-<i class="ai ai-azion"></i>
-<i class="ai ai-edge-application"></i>
-<i class="ai ai-edge-functions"></i>
-
-<!-- UI glyphs (prefix: ai) -->
-<i class="ai ai-settings"></i>
-<i class="ai ai-search"></i>
-<i class="ai ai-chevron-right"></i>
+<i class="az az-functions"></i>
+<!-- an Azion product -->
+<i class="az az-settings"></i>
+<!-- an interface glyph -->
+<i class="az-color az-react"></i>
+<!-- a colour logo -->
 ```
 
 ### Package exports
 
-The package exposes the following named exports (defined in `package.json`; every target is a built file in `dist/`):
+Every target is a built file in `dist/`:
 
 ```js
-import '@aziontech/icons' // → dist/index.css (azionicons + colored classes)
+import '@aziontech/icons' // → dist/index.css (azionicons + colour classes)
 import '@aziontech/icons/azionicons' // → dist/azionicons.css
-import '@aziontech/icons/azionicons-color' // → dist/azionicons-color.css (colored `.ai-color.ai-<name>` classes)
-import catalog from '@aziontech/icons/catalog' // → dist/catalog.json (font icon list)
-import colorIcons from '@aziontech/icons/color-catalog' // → dist/color-catalog.json (colored SVGs)
+import '@aziontech/icons/azionicons-color' // → dist/azionicons-color.css (`.az-color.az-<name>` classes)
+import catalog from '@aziontech/icons/catalog' // → dist/catalog.json (font icons with group, category and description)
+import colorIcons from '@aziontech/icons/color-catalog' // → dist/color-catalog.json (colour SVGs)
+import manifest from '@aziontech/icons/manifest' // → dist/icons.json (the documented list of every icon)
 ```
 
 ---
 
-## Icon Reference
+## Old names (WebKit 5)
 
-### Azion Icons (`ai`)
+Until WebKit 6 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and the PrimeIcons `pi pi-<name>`. In 6.0, the one clean break, they are all gone: `ai` read as "artificial intelligence" and `cor` is Portuguese, so the base classes are `az` and `az-color`; product icons take today's product names (`ai ai-edge-functions` → `az az-functions`, `ai ai-edge-storage` → `az az-object-storage`); interface glyphs take Lucide names (`pi pi-times` → `az az-x`). Run `npx @aziontech/webkit migrate` to rewrite an app; the full map is `src/cli/migrations/v6-icons.json` in `@aziontech/webkit`, and the renames are listed in [`docs/ICONS.md`](docs/ICONS.md) (section "Old names").
 
-Azion-specific product and ecosystem icons. All use the `.ai` base class plus a modifier:
+---
 
-```html
-<i class="ai ai-azion"></i>
-<i class="ai ai-edge-application"></i>
-<i class="ai ai-edge-functions"></i>
-<i class="ai ai-edge-firewall"></i>
-<i class="ai ai-edge-dns"></i>
-<i class="ai ai-edge-kv"></i>
-<i class="ai ai-edge-sql"></i>
-<i class="ai ai-edge-storage"></i>
-<i class="ai ai-data-stream"></i>
-<i class="ai ai-real-time-metrics"></i>
-<i class="ai ai-real-time-events"></i>
-<i class="ai ai-marketplace"></i>
-<i class="ai ai-domains"></i>
-<i class="ai ai-digital-certificates"></i>
-```
+## Icon reference
 
-Notable category groupings:
-
-- **Platform pillars** — `ai-ai-pillar`, `ai-build-pillar`, `ai-deploy-pillar`, `ai-secure-pillar`, `ai-observe-pillar`
-- **Products** — `ai-edge-application`, `ai-edge-functions`, `ai-edge-firewall`, `ai-edge-dns`, `ai-gateway`, `ai-load-balancer`, `ai-waf-rules`, `ai-tiered-cache`, `ai-origin-shield`, `ai-edge-ai`, `ai-edge-connectors`, `ai-edge-libraries`, `ai-edge-nodes`, `ai-edge-orchestrator`, `ai-edge-pulse`, `ai-edge-services`, `ai-workloads`
-- **Storage & Data** — `ai-edge-kv`, `ai-edge-sql`, `ai-edge-storage`, `ai-data-stream`, `ai-variables`
-- **Observability** — `ai-real-time-metrics`, `ai-real-time-events`, `ai-real-time-purge`, `ai-live-ingest`
-- **Security** — `ai-edge-firewall`, `ai-waf-rules`, `ai-network-lists`, `ai-digital-certificates`, `ai-custom-pages`
-- **Networking** — `ai-domains`, `ai-load-balancer`, `ai-origin-shield`, `ai-tiered-cache`
-- **Azion Tools** — `ai-azion-api`, `ai-azion-cli`, `ai-ask-azion`, `ai-marketplace`, `ai-configuration-service`, `ai-integration-services`
-- **Frameworks** — `ai-angular`, `ai-astro`, `ai-docusaurus`, `ai-eleventy`, `ai-gatsby`, `ai-hexo`, `ai-hono`, `ai-hugo`, `ai-jekyll`, `ai-nextjs`, `ai-nuxt`, `ai-preact`, `ai-qwik`, `ai-react`, `ai-remix`, `ai-vite`, `ai-vitepress`, `ai-vue`, `ai-vuepress`
-- **Integrations** — `ai-terraform`, `ai-graphql`, `ai-redis`, `ai-turso`, `ai-lora`, `ai-instructor`
-- **Support & Services** — `ai-professional-services`, `ai-technical-support`, `ai-business-support`, `ai-security-team`, `ai-technical-account`, `ai-practices-review`
-- **UI & Utility** — `ai-home`, `ai-filter`, `ai-column`, `ai-layers`, `ai-json`, `ai-openai`, `ai-sparkles`, `ai-scissors`, `ai-datasheet`, `ai-store`
-- **UI glyphs** — `ai-check`, `ai-x`, `ai-plus`, `ai-minus`, `ai-search`, `ai-chevron-down`, `ai-chevron-right`, `ai-arrow-up-right`, `ai-external-link`, `ai-circle-info`, `ai-triangle-alert`, `ai-circle-check`, `ai-trash`, `ai-pencil`, `ai-copy`, `ai-settings`, `ai-user`, `ai-lock`, …
-- **Social & Media** — `ai-medium`, `ai-rss`, `ai-twitch`, `ai-x-brand`, `ai-github`, `ai-discord`, `ai-youtube`, `ai-linkedin`, `ai-instagram`, `ai-reddit`, `ai-facebook`
+See [`docs/ICONS.md`](docs/ICONS.md) for every icon by group and category, with what it shows and what it stands for. To browse the drawings, open the docs site's Icons page or run the icons gallery (`apps/icons-gallery`).
 
 ---
 
 ## Colored icons
 
-Some icons — third-party brand and framework logos — are inherently multicolor (gradients, multiple fills). An icon **font** glyph is single-color, so these cannot ship in the woff2 fonts above. They are delivered two ways instead, under the `ai-color` base class and the same `ai-<name>` name as the logo (`ai-color ai-react`, `ai-color ai-vue`, `ai-color ai-nextjs`, …). There is no `ai-<name>-cor` class.
+Some icons — third-party brand and framework logos — are inherently multicolor (gradients, multiple fills). An icon **font** glyph is single-color, so these cannot ship in the woff2 fonts above. They are delivered two ways instead, under the `az-color` base class and the same `az-<name>` name as the logo (`az-color az-react`, `az-color az-vue`, `az-color az-nextjs`, …). There is no `az-<name>-color` class.
 
 ### How it works
 
-Each `src/svg-raw/ai-color/ai-<name>.svg` is compiled into **two** artifacts — never into the woff2 font:
+Each `src/svg-raw/az-color/az-<name>.svg` is compiled into **two** artifacts — never into the woff2 font:
 
 | Output                      | Generated by              | Shape                                                                                                  |
 | --------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `dist/azionicons-color.css` | `build-color-css.mjs`     | a `.ai-color.ai-<name>` rule that paints the SVG as a `background-image`                               |
-| `dist/color-catalog.json`   | `build-color-catalog.mjs` | `{ icon: 'ai-color ai-<name>', name: 'ai-<name>', colored: true, svg }` with the raw inline SVG string |
+| `dist/azionicons-color.css` | `build-color-css.mjs`     | a `.az-color.az-<name>` rule that paints the SVG as a `background-image`                               |
+| `dist/color-catalog.json`   | `build-color-catalog.mjs` | `{ icon: 'az-color az-<name>', name: 'az-<name>', colored: true, svg }` with the raw inline SVG string |
 
 The CSS is **not** a font glyph and **not** base64. Each SVG is inlined as a **percent-encoded (URL-encoded) `data:image/svg+xml` URI** — smaller than base64, gzip-friendly, and human-readable in the output. The generated stylesheet is one shared box rule plus one `background-image` rule per icon:
 
 ```css
 /* shared box — applies to every colored icon */
-.ai-color {
+.az-color {
   display: inline-block;
   width: 1em; /* scales with font-size, like a glyph's box */
   height: 1em;
@@ -165,21 +128,21 @@ The CSS is **not** a font glyph and **not** base64. Each SVG is inlined as a **p
 }
 
 /* one rule per icon — the vector, percent-encoded (not base64) */
-.ai-color.ai-google {
+.az-color.az-google {
   background-image: url("data:image/svg+xml,%3Csvg width='14' … %3E%3C/svg%3E");
 }
 ```
 
-A colored icon needs **two** classes, exactly like a monochrome one: the base class (`ai-color` instead of `ai`) carries the box, and `ai-<name>` picks the image. Never write `ai ai-<name>` for a colored logo (that is the monochrome glyph, when one exists) and never `ai-<name>-cor` (no such class). A logo can exist in both sets with the same name: `ai ai-svelte` is the single-color glyph, `ai-color ai-svelte` the brand-color one.
+A colored icon needs **two** classes, exactly like a monochrome one: the base class (`az-color` instead of `az`) carries the box, and `az-<name>` picks the image. Never write `az az-<name>` for a colored logo (that is the monochrome glyph, when one exists) and never `az-<name>-color` (no such class). A logo can exist in both sets with the same name: `az az-svelte` is the single-color glyph, `az-color az-svelte` the brand-color one.
 
 ### 1. As a CSS class (recommended — use it like a font icon)
 
-Importing `@aziontech/icons` (or `@aziontech/icons/azionicons-color`) registers an `.ai-color.ai-<name>` rule for each colored icon. It sizes to `1em`, so it drops into the same `<i>` markup as a font icon:
+Importing `@aziontech/icons` (or `@aziontech/icons/azionicons-color`) registers an `.az-color.az-<name>` rule for each colored icon. It sizes to `1em`, so it drops into the same `<i>` markup as a font icon:
 
 ```html
-<i class="ai-color ai-google"></i>
+<i class="az-color az-google"></i>
 <i
-  class="ai-color ai-react"
+  class="az-color az-react"
   style="font-size: 32px;"
 ></i>
 ```
@@ -201,13 +164,13 @@ The same icons are also available as inline SVG strings at [`@aziontech/icons/co
 
 <script setup>
   import colorIcons from '@aziontech/icons/color-catalog'
-  const reactIcon = colorIcons.find((i) => i.name === 'ai-react')
+  const reactIcon = colorIcons.find((i) => i.name === 'az-react')
 </script>
 ```
 
-> Colored icons are **not** recolored by `color` / `currentColor` — that is the whole point. For a themeable, single-color version of a framework logo, use the monochrome font icon instead (`ai ai-react`, `ai ai-vue`, `ai ai-nextjs`, `ai ai-svelte`, `ai ai-nitro`, `ai ai-stencil`, …).
+> Colored icons are **not** recolored by `color` / `currentColor` — that is the whole point. For a themeable, single-color version of a framework logo, use the monochrome font icon instead (`az az-react`, `az az-vue`, `az az-nextjs`, `az az-svelte`, `az az-nitro`, `az az-stencil`, …).
 
-Available colored icons: `ai-color ai-angular`, `ai-color ai-astro`, `ai-color ai-azure-devops`, `ai-color ai-bitbucket`, `ai-color ai-claude`, `ai-color ai-cursor`, `ai-color ai-deepseek`, `ai-color ai-discord`, `ai-color ai-flutter`, `ai-color ai-gemini`, `ai-color ai-gitlab`, `ai-color ai-google`, `ai-color ai-graphql`, `ai-color ai-grok`, `ai-color ai-html`, `ai-color ai-javascript`, `ai-color ai-kotlin`, `ai-color ai-meta`, `ai-color ai-microsoft-copilot`, `ai-color ai-mistral`, `ai-color ai-nextjs`, `ai-color ai-nuxt`, `ai-color ai-openai`, `ai-color ai-perplexity`, `ai-color ai-qwen`, `ai-color ai-react`, `ai-color ai-redwood`, `ai-color ai-solidjs`, `ai-color ai-svelte`, `ai-color ai-terraform`, `ai-color ai-typescript`, `ai-color ai-vue`, `ai-color ai-windsurf`, `ai-color ai-x-brand`, `ai-color ai-youtube`.
+Available colored icons: `az-color az-angular`, `az-color az-astro`, `az-color az-azure-devops`, `az-color az-bitbucket`, `az-color az-claude`, `az-color az-cursor`, `az-color az-deepseek`, `az-color az-discord`, `az-color az-flutter`, `az-color az-gemini`, `az-color az-gitlab`, `az-color az-google`, `az-color az-graphql`, `az-color az-grok`, `az-color az-html`, `az-color az-javascript`, `az-color az-kotlin`, `az-color az-meta`, `az-color az-microsoft-copilot`, `az-color az-mistral`, `az-color az-nextjs`, `az-color az-nuxt`, `az-color az-openai`, `az-color az-perplexity`, `az-color az-qwen`, `az-color az-react`, `az-color az-redwood`, `az-color az-solidjs`, `az-color az-svelte`, `az-color az-terraform`, `az-color az-typescript`, `az-color az-vue`, `az-color az-windsurf`, `az-color az-x-brand`, `az-color az-youtube`.
 
 ---
 
@@ -224,15 +187,15 @@ Icons inherit color via `currentColor`, making them trivially themeable with CSS
 
 ```html
 <i
-  class="ai ai-azion"
+  class="az az-azion"
   style="font-size: 32px; color: var(--brand-color);"
 ></i>
 ```
 
-The generated CSS base class sets the following properties on the icon prefix (`.ai`):
+The generated CSS base class sets the following properties on the icon prefix (`.az`):
 
 ```css
-.ai {
+.az {
   font-family: 'azionicons';
   speak: none;
   font-style: normal;
@@ -308,114 +271,45 @@ Here's how that your SVG needs to looks in code:
 @aziontech/icons/
 ├── dist/                     # npm publishable output (gitignored)
 │   ├── azionicons.css
-│   ├── azionicons-color.css  # colored .ai-color.ai-<name> rules (background-image)
+│   ├── azionicons-color.css  # colour .az-color.az-<name> rules (background-image)
 │   ├── azionicons.woff2
 │   ├── index.css
-│   ├── catalog.json          # font icon list (ai)
-│   ├── color-catalog.json    # colored icons as inline SVG (ai-color ai-<name>)
-│   ├── package.json          # generated for npm publish
-│   ├── LICENSE
-│   └── README.md
+│   ├── catalog.json          # font icons with group, category and description
+│   ├── color-catalog.json    # colour icons as inline SVG (az-color az-<name>)
+│   ├── icons.json            # copy of src/icons.json (@aziontech/icons/manifest)
+│   └── ICONS.md              # copy of docs/ICONS.md
+├── docs/
+│   └── ICONS.md              # grouped icon reference, generated from src/icons.json
 ├── src/
+│   ├── icons.json            # one documented entry per icon (source of truth)
 │   └── svg-raw/
-│       ├── ai/               # Azion SVG source files (421 icons, monochrome → font)
-│       └── ai-color/         # Azion colored brand icons (inline SVG, NOT fonted)
+│       ├── az/               # monochrome SVG sources (418 icons → font)
+│       └── az-color/         # colour logos (inline SVG, NOT fonted)
 ├── scripts/
-│   ├── build-icons.mjs       # Build orchestrator: validate → fonts → catalogs → assemble
+│   ├── build-icons.mjs       # Build orchestrator: validate → fonts → docs → catalogs
 │   ├── build-woff2.mjs       # Font generation via fantasticon
-│   ├── build-catalog.mjs     # Generates dist/catalog.json (font icons only)
-│   ├── build-color-catalog.mjs # Generates dist/color-catalog.json (colored SVGs)
-│   ├── build-color-css.mjs   # Generates dist/azionicons-color.css (colored classes)
-│   └── check-svg.mjs         # SVG validation script
-├── fantasticon.config.mjs    # Font generation configuration (two font configs)
+│   ├── build-catalog.mjs     # Generates dist/catalog.json
+│   ├── build-color-catalog.mjs # Generates dist/color-catalog.json (colour SVGs)
+│   ├── build-color-css.mjs   # Generates dist/azionicons-color.css (colour classes)
+│   ├── build-docs.mjs        # Generates docs/ICONS.md from src/icons.json
+│   ├── check-manifest.mjs    # Fails when an icon has no entry or breaks a naming rule
+│   ├── check-svg.mjs         # SVG validation script
+│   └── lib/                  # icons-manifest.mjs (reads src/icons.json), icon-keywords.mjs
+├── fantasticon.config.mjs    # Font generation configuration
 ├── templates/
 │   └── css.hbs               # Handlebars CSS template for generated font files
 └── jsconfig.json             # JS/TS path aliases (@/ → src/)
-```
-
-### Available scripts
-
-| Command            | Description                                                        |
-| ------------------ | ------------------------------------------------------------------ |
-| `npm run build`    | Validate SVGs → generate fonts → assemble `dist/` for npm          |
-| `npm run validate` | Run SVG validation only (`node scripts/validate.mjs`)              |
-| `npm run test`     | Check the published files and that nothing is a runtime dependency |
-| `npm run pack:dry` | Preview the npm package contents (`npm pack --dry-run`)            |
-| `npm run release`  | Publish to npm (`npm publish`)                                     |
-| `npm run lint`     | Lint source files with ESLint                                      |
-| `npm run format`   | Format `scripts/` and `src/` with Prettier                         |
-
-### Adding a new Azion icon
-
-1. Place the SVG file in [`src/svg-raw/ai/`](src/svg-raw/ai/) following the naming convention `ai-<icon-name>.svg`. Use the [Lucide](https://lucide.dev/icons) name when Lucide has the shape: plain English, shape first (`circle-check`, `square-pen`), `-off` for a crossed-out glyph, no Font Awesome suffixes (`-alt`, `-o`, `-h`, `-v`). A brand mark is the brand name spelled out in kebab case (`openai`, `nextjs`, `azure-devops`), with `-brand` only when it would collide with a glyph (`x-brand`).
-2. Ensure the SVG meets the [requirements](#svg-requirements) below
-3. Run `npm run build` to regenerate the font files
-4. Verify the icon appears correctly in the generated CSS
-
-### Adding a new colored Azion icon
-
-Colored brand icons bypass the font (a glyph is single-color) and ship as an `.ai-color.ai-<name>` CSS rule (`dist/azionicons-color.css`) plus an inline-SVG manifest (`dist/color-catalog.json`).
-
-1. Place the **multicolor** SVG in [`src/svg-raw/ai-color/`](src/svg-raw/ai-color/) using the naming convention `ai-<icon-name>.svg` (kebab-case, no spaces or dots — e.g. `ai-nextjs.svg`; the folder, not the file name, marks it as colored).
-2. Keep a square `viewBox` (`0 0 14 14`). **Do not** convert fills to `currentColor` — the colors are the point.
-3. Run `npm run build`. The icon is picked up by `build-color-catalog.mjs` (→ `dist/color-catalog.json`) and `build-color-css.mjs` (→ an `.ai-color.ai-<name>` rule in `dist/azionicons-color.css`, also imported by the `index.css` barrel). It is intentionally **excluded** from the woff2 font and from `dist/catalog.json`.
-4. Verify `<i class="ai-color ai-<name>"></i>` renders in color, and that it appears in the icons gallery (`apps/icons-gallery`).
-
-### Validate the SVG
-
-All SVG source files are validated by [`scripts/validate.mjs`](scripts/validate.mjs) before font generation. SVGs must:
-
-Run the validation script at any time:
-
-```bash
-node scripts/validate.mjs
-```
-
-The report shows ❌ errors (blocking — build will fail), ⚠️ warnings (may affect rendering), and ℹ️ info messages.
-
-**Error-level checks** (block build):
-
-- Placeholder / incomplete SVGs
-- Missing `<path>` element
-- Filenames with spaces
-
-**Warning-level checks** (non-blocking):
-
-- Stroke-based paths
-- `fill="black"` / `fill="#000"` / `fill="#000000"` (should use `currentColor`)
-- `<clipPath>` usage
-- Non-square viewBox
-
-**Info-level checks**:
-
-- Non-standard viewBox size (anything other than 14x14)
-
----
-
-## Font generation
-
-Fonts are generated using [**fantasticon**](https://github.com/tancredi/fantasticon) configured in [`fantasticon.config.mjs`](fantasticon.config.mjs):
-
-- **Input**: `src/svg-raw/ai/`
-- **Output format**: `woff2` only
-- **Asset types**: `css` only
-- **Output**: `dist/` (CSS + woff2)
-- **Font height**: 1000 units (normalized)
-- **CSS template**: [`templates/css.hbs`](templates/css.hbs) — generates `@font-face` declaration + `.prefix.icon-name::before` rules
-
-```bash
-npm run build
 ```
 
 ### Build pipeline (`build`)
 
 The [`scripts/build-icons.mjs`](scripts/build-icons.mjs) orchestrator runs these steps:
 
-1. **Validate SVGs** — runs `scripts/check-svg.mjs` (blocks on errors)
+1. **Validate SVGs and the manifest** — runs `scripts/check-svg.mjs` and `scripts/check-manifest.mjs` (blocks on errors)
 2. **Clean `dist/`** — removes and recreates the output directory
-3. **Generate fonts** — runs `scripts/build-woff2.mjs` (fantasticon for `ai`; the colored `ai-color` folder is not a font input)
-4. **Create `index.css`** — barrel file importing `azionicons.css` and `azionicons-color.css`
-5. **Generate catalogs & colored CSS** — `dist/catalog.json` (font icons, via `build-catalog.mjs`), `dist/color-catalog.json` (colored SVGs, via `build-color-catalog.mjs`), and `dist/azionicons-color.css` (colored `.ai-color.ai-<name>` rules, via `build-color-css.mjs`)
+3. **Generate fonts** — runs `scripts/build-woff2.mjs` (fantasticon for `az`; the colored `az-color` folder is not a font input)
+4. **Create `index.css` and the docs** — barrel file importing `azionicons.css` and `azionicons-color.css`; writes `docs/ICONS.md` and copies it and `src/icons.json` into `dist/`
+5. **Generate catalogs & colored CSS** — `dist/catalog.json` (font icons, via `build-catalog.mjs`), `dist/color-catalog.json` (colored SVGs, via `build-color-catalog.mjs`), and `dist/azionicons-color.css` (colored `.az-color.az-<name>` rules, via `build-color-css.mjs`)
 
 ### Publishing
 
@@ -454,7 +348,7 @@ npm run publish
 
 Brand glyphs are trademarks of their owners and are included only to refer to their products. Where each one comes from, and under which terms, is recorded in `packages/webkit/src/assets/logos/SOURCES.md` in the WebKit repository.
 
-- `ai ai-nitro` is drawn from the Nitro icon (https://github.com/nitrojs/nitro), MIT License:
+- `az az-nitro` is drawn from the Nitro icon (https://github.com/nitrojs/nitro), MIT License:
 
   > Copyright (c) Pooya Parsa <pooya@pi0.io> and Nitro contributors
   >
@@ -464,4 +358,4 @@ Brand glyphs are trademarks of their owners and are included only to refer to th
   >
   > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-- `ai ai-stencil` is the Stencil logo from Ionicons (https://github.com/ionic-team/ionicons), MIT License, Copyright (c) 2015-present Ionic (http://ionic.io/), under the same permission notice and disclaimer as above.
+- `az az-stencil` is the Stencil logo from Ionicons (https://github.com/ionic-team/ionicons), MIT License, Copyright (c) 2015-present Ionic (http://ionic.io/), under the same permission notice and disclaimer as above.

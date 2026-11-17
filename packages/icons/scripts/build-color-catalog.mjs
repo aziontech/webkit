@@ -1,30 +1,25 @@
-import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { iconKeywordString } from './lib/icon-keywords.mjs'
+import { entryKeywords } from './lib/icon-keywords.mjs'
+import { COLOR_DIR, classOf, describe, glyphName, loadManifest } from './lib/icons-manifest.mjs'
 
-const CHARSET = 'utf-8'
 const DIST_DIR = './dist'
-const COLOR_DIR = './src/svg-raw/ai-color'
+const manifest = loadManifest()
 
 mkdirSync(DIST_DIR, { recursive: true })
 
-const files = readdirSync(COLOR_DIR)
-  .filter((f) => f.endsWith('.svg'))
-  .sort()
-
-const data = files.map((file) => {
-  const name = file.replace('.svg', '')
-
-  return {
-    icon: `ai-color ${name}`,
-    keywords: iconKeywordString(name),
-    name,
+const data = manifest.icons
+  .filter((entry) => entry.set === 'color')
+  .map((entry) => ({
+    icon: classOf(entry),
+    keywords: entryKeywords(entry).join(', '),
+    name: glyphName(entry),
     colored: true,
-    svg: readFileSync(join(COLOR_DIR, file), CHARSET).trim()
-  }
-})
+    ...describe(entry, manifest),
+    svg: readFileSync(join(COLOR_DIR, `${glyphName(entry)}.svg`), 'utf-8').trim()
+  }))
 
-writeFileSync(join(DIST_DIR, 'color-catalog.json'), JSON.stringify(data, null, 2) + '\n', CHARSET)
+writeFileSync(join(DIST_DIR, 'color-catalog.json'), JSON.stringify(data, null, 2) + '\n', 'utf-8')
 
 console.log(`  ✔ dist/color-catalog.json created (${data.length} colored icons)`)

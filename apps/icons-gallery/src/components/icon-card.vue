@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue'
 
-  // SVGs são importados lazily via Vite glob (substitui o require() do webpack)
+  // SVGs are imported lazily through a Vite glob
   const svgModules = import.meta.glob('../../node_modules/@aziontech/icons/src/svg-raw/**/*.svg', {
     query: '?raw',
     import: 'default',
@@ -41,7 +41,7 @@
   const showImageCheckIcon = ref(false)
   const slotEl = ref(null)
 
-  // Extrai pixels de "20px" → 20
+  // Reads the pixels from "20px" → 20
   function getPixelSize(sizeClass) {
     if (typeof sizeClass === 'string' && sizeClass.endsWith('px')) {
       return parseInt(sizeClass.replace('px', ''), 10)
@@ -49,7 +49,7 @@
     return sizeClass
   }
 
-  // Carrega o SVG raw do ícone pelo nome (ex: "ai-ai-pillar" ou "ai-x")
+  // Loads the raw SVG of an icon by name (for example "az-ai-pillar" or "az-x")
   async function loadSvg(iconName) {
     const targetFile = `/${iconName}.svg`
     const key = Object.keys(svgModules).find((k) => k.endsWith(targetFile))
@@ -57,13 +57,13 @@
     return await svgModules[key]()
   }
 
-  // Aplica cor e dimensão ao SVG (substitui currentColor e redimensiona)
+  // Applies the colour and size to the SVG (replaces currentColor and resizes)
   function applyColorAndSize(svg, color, size) {
     const dimension = getPixelSize(size)
     svg = svg.replace(/fill="currentColor"/g, `fill="${color}"`)
 
-    // Os SVGs não têm viewBox: captura o width/height original e cria um,
-    // caso contrário os paths ficam em coordenadas 14×14 e não escalam.
+    // Some SVGs have no viewBox: build one from the original width and height,
+    // otherwise the paths stay in 14×14 coordinates and do not scale.
     if (!svg.includes('viewBox')) {
       const origW = (svg.match(/width="([^"]*)"/) || [])[1] || '14'
       const origH = (svg.match(/height="([^"]*)"/) || [])[1] || '14'
@@ -75,10 +75,10 @@
     return svg
   }
 
-  // Renderiza SVG em canvas e retorna o blob PNG
+  // Renders the SVG on a canvas and returns the PNG blob
   function svgToPngBlob(svgString, dimension) {
     return new Promise((resolve, reject) => {
-      // xmlns é obrigatório para o browser renderizar SVG via img.src/blob URL
+      // The browser needs xmlns to render an SVG through img.src or a blob URL
       if (!svgString.includes('xmlns=')) {
         svgString = svgString.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"')
       }
@@ -246,11 +246,11 @@
         >
           <i
             v-if="!showCheckIcon"
-            class="ai ai-code"
+            class="az az-code"
           ></i>
           <i
             v-if="showCheckIcon"
-            class="ai ai-check text-green-500 dark:text-green-400"
+            class="az az-check text-green-500 dark:text-green-400"
           ></i>
         </button>
         <button
@@ -260,11 +260,11 @@
         >
           <i
             v-if="!showImageCheckIcon"
-            class="ai ai-copy"
+            class="az az-copy"
           ></i>
           <i
             v-if="showImageCheckIcon"
-            class="ai ai-check text-green-500 dark:text-green-400"
+            class="az az-check text-green-500 dark:text-green-400"
           ></i>
         </button>
         <button
@@ -272,7 +272,7 @@
           @click="downloadIcon"
           class="rounded-none border-none bg-transparent h-10 w-10 text-xs"
         >
-          <i class="ai ai-download"></i>
+          <i class="az az-download"></i>
         </button>
       </div>
     </div>

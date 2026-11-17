@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process'
-import { rmSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs'
+import { copyFileSync, rmSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
 const CHARSET = 'utf-8'
@@ -8,6 +8,7 @@ const DIST_DIR = './dist'
 console.log('\n🔍 Step 1/7 — Validating SVG files...\n')
 try {
   execSync('node scripts/check-svg.mjs', { stdio: 'inherit' })
+  execSync('node scripts/check-manifest.mjs', { stdio: 'inherit' })
 } catch {
   console.error('\n🔴 SVG validation failed. Fix the errors above before building.\n')
   process.exit(1)
@@ -33,6 +34,10 @@ writeFileSync(join(DIST_DIR, 'index.css'), barrelContent, CHARSET)
 console.log('  ✔ dist/index.css created')
 writeFileSync(join(DIST_DIR, 'index.d.ts'), 'export {}\n', CHARSET)
 console.log('  ✔ dist/index.d.ts created')
+execSync('node scripts/build-docs.mjs', { stdio: 'inherit' })
+copyFileSync('./src/icons.json', join(DIST_DIR, 'icons.json'))
+copyFileSync('./docs/ICONS.md', join(DIST_DIR, 'ICONS.md'))
+console.log('  ✔ dist/icons.json and dist/ICONS.md copied')
 
 console.log('\n📦 Step 5/7 — Generating dist/catalog.json + dist/color-catalog.json...\n')
 try {

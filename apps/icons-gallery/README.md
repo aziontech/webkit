@@ -1,6 +1,6 @@
 # Icons Gallery
 
-> Visual showcase and documentation for **@aziontech/icons** — Azion's icon font library featuring azionicons (`ai`) and colored brand icons (`ai-color`).
+> Visual showcase and documentation for **@aziontech/icons** — Azion's icon font library featuring azionicons (`az`) and colour logos (`az-color`).
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vue.js)](https://vuejs.org/)
@@ -236,103 +236,21 @@ Configures edge deployment with:
 
 ## Icon Showcase
 
-The gallery displays icons from two font families. Counts below match the current `@aziontech/icons/catalog` snapshot:
+The gallery displays every icon of `@aziontech/icons`, read from `@aziontech/icons/catalog` and `@aziontech/icons/color-catalog`. Icons come in three groups:
 
-### Azionicons (`ai`) — 88 icons
+| Group     | What it holds                                                                                               | Example                             |
+| --------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Azion     | Products, product features, the platform (brand, CLI, API, pillars), solutions and services                 | `az az-functions`, `az az-edge-dns` |
+| Interface | Arrows, actions, status, files, media, communication, commerce, people, devices, data, layout, objects, git | `az az-trash`, `az az-chevron-down` |
+| External  | Third-party logos: frameworks, AI models, developer tools, languages, online services                       | `az az-react`, `az-color az-openai` |
 
-Azion-specific product and platform icons organized by category:
-
-#### Platform Pillars
-
-| Icon           | Class                  | Usage               |
-| -------------- | ---------------------- | ------------------- |
-| AI Pillar      | `ai ai-ai-pillar`      | AI/ML capabilities  |
-| Build Pillar   | `ai ai-build-pillar`   | Build processes     |
-| Deploy Pillar  | `ai ai-deploy-pillar`  | Deployment services |
-| Secure Pillar  | `ai ai-secure-pillar`  | Security features   |
-| Observe Pillar | `ai ai-observe-pillar` | Observability tools |
-
-#### Edge Products
-
-| Icon              | Class                     | Usage                    |
-| ----------------- | ------------------------- | ------------------------ |
-| Edge Application  | `ai ai-edge-application`  | Edge applications        |
-| Edge Functions    | `ai ai-edge-functions`    | Serverless functions     |
-| Edge Firewall     | `ai ai-edge-firewall`     | Web application firewall |
-| Edge DNS          | `ai ai-edge-dns`          | DNS services             |
-| Edge KV           | `ai ai-edge-kv`           | Key-value storage        |
-| Edge SQL          | `ai ai-edge-sql`          | SQL database             |
-| Edge Storage      | `ai ai-edge-storage`      | Object storage           |
-| Edge Orchestrator | `ai ai-edge-orchestrator` | Workflow orchestration   |
-
-#### Framework Integrations
-
-| Icon    | Class           | Usage             |
-| ------- | --------------- | ----------------- |
-| Angular | `ai ai-angular` | Angular framework |
-| React   | `ai ai-react`   | React framework   |
-| Vue     | `ai ai-vue`     | Vue framework     |
-| Next.js | `ai ai-nextjs`  | Next.js framework |
-| Nuxt    | `ai ai-nuxt`    | Nuxt framework    |
-| Astro   | `ai ai-astro`   | Astro framework   |
-| Vite    | `ai ai-vite`    | Vite build tool   |
-
-#### Tools & Services
-
-| Icon        | Class               | Usage                |
-| ----------- | ------------------- | -------------------- |
-| Azion CLI   | `ai ai-azion-cli`   | Command-line tool    |
-| Azion API   | `ai ai-azion-api`   | API services         |
-| Ask Azion   | `ai ai-ask-azion`   | AI assistant         |
-| Marketplace | `ai ai-marketplace` | Marketplace services |
-
-#### UI glyphs
-
-General-purpose UI glyphs, named after [Lucide](https://lucide.dev/icons). Some commonly used icons:
-
-##### Navigation & Arrows
-
-| Icon          | Class                 | Usage           |
-| ------------- | --------------------- | --------------- |
-| Home          | `ai ai-home`          | Home navigation |
-| Arrow Right   | `ai ai-arrow-right`   | Right direction |
-| Arrow Left    | `ai ai-arrow-left`    | Left direction  |
-| Arrow Up      | `ai ai-arrow-up`      | Up direction    |
-| Arrow Down    | `ai ai-arrow-down`    | Down direction  |
-| Chevron Right | `ai ai-chevron-right` | Chevron right   |
-| Chevron Left  | `ai ai-chevron-left`  | Chevron left    |
-
-##### Actions
-
-| Icon     | Class            | Usage           |
-| -------- | ---------------- | --------------- |
-| Search   | `ai ai-search`   | Search action   |
-| Plus     | `ai ai-plus`     | Add/create      |
-| X        | `ai ai-x`        | Close/cancel    |
-| Check    | `ai ai-check`    | Confirm/success |
-| Edit     | `ai ai-pencil`   | Edit action     |
-| Delete   | `ai ai-trash`    | Delete action   |
-| Download | `ai ai-download` | Download action |
-| Copy     | `ai ai-copy`     | Copy action     |
-| Settings | `ai ai-settings` | Settings        |
-
-##### Status & Feedback
-
-| Icon           | Class                  | Usage             |
-| -------------- | ---------------------- | ----------------- |
-| Circle Info    | `ai ai-circle-info`    | Information       |
-| Triangle Alert | `ai ai-triangle-alert` | Warning           |
-| Ban            | `ai ai-ban`            | Forbidden/blocked |
-| Bell           | `ai ai-bell`           | Notifications     |
-| Spinner        | `ai ai-spinner`        | Loading state     |
-
----
+Each card's keywords include the old class names, so `edge functions` finds `az az-functions` and `times` finds `az az-x`. What every icon shows and stands for is documented in [`packages/icons/docs/ICONS.md`](../../packages/icons/docs/ICONS.md), generated from `packages/icons/src/icons.json`.
 
 ## Adding New Icons
 
 The gallery has no local icon list — it consumes the catalog generated by `@aziontech/icons`. To make new icons show up:
 
-1. Add the icon to `packages/icons` (SVG sources + catalog entry as the package's build expects).
+1. Add the icon to `packages/icons`: the SVG in `src/svg-raw/az` (or `az-color`) and its entry in `src/icons.json`.
 2. Rebuild the icons package:
    ```bash
    pnpm --filter @aziontech/icons build

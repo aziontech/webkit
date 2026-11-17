@@ -22,11 +22,11 @@ export default [
         indent: JSONIdent
       }
     },
-    inputDir: svgInputDir('ai'),
+    inputDir: svgInputDir('az'),
     name: 'azionicons',
     normalize: true,
     outputDir: OUTPUTDIR,
-    prefix: 'ai',
+    prefix: 'az',
     tag: '',
     templates: {
       css: TEMPLATE.css

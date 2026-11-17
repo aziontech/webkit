@@ -10,3 +10,5 @@ packages/webkit/catalog/
 lint-canaries/
 
 packages/webkit/llms/
+
+packages/icons/docs/ICONS.md

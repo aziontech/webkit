@@ -20,7 +20,7 @@
     "preview:icons-gallery": "pnpm --filter @aziontech/icons-gallery run preview",
     "deploy:icons-gallery": "pnpm --filter @aziontech/icons-gallery run deploy",
     "build:icons": "pnpm --filter @aziontech/icons run build",
-    "check:icons": "pnpm --filter @aziontech/icons run check:svg",
+    "check:icons": "pnpm --filter @aziontech/icons run check:svg && pnpm --filter @aziontech/icons run check:manifest",
     "release:icons": "pnpm --filter @aziontech/icons run release",
     "dev:docs": "pnpm build:icons && pnpm --filter @aziontech/webkit-docs run dev",
     "build:docs": "pnpm build:icons && pnpm --filter @aziontech/webkit-docs run build",

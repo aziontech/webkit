@@ -1,29 +1,18 @@
-import { writeFileSync, readdirSync } from 'node:fs'
+import { writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { iconKeywordString } from './lib/icon-keywords.mjs'
+import { entryKeywords } from './lib/icon-keywords.mjs'
+import { classOf, describe, glyphName, loadManifest } from './lib/icons-manifest.mjs'
 
-const CWD = process.cwd()
-const CHARSET = 'utf-8'
-const DIST_DIR = './dist'
-const SVG_DIR = join(CWD, 'src/svg-raw')
-const FONT_FOLDERS = ['ai']
-const svgFolder = readdirSync(SVG_DIR).filter((folder) => FONT_FOLDERS.includes(folder))
-const data = []
+const manifest = loadManifest()
 
-svgFolder.map(function (folder) {
-  const iconsFolder = join(SVG_DIR, folder)
-  const listIcons = readdirSync(iconsFolder)
+const data = manifest.icons
+  .filter((entry) => entry.set === 'mono')
+  .map((entry) => ({
+    icon: classOf(entry),
+    keywords: entryKeywords(entry).join(', '),
+    name: glyphName(entry),
+    ...describe(entry, manifest)
+  }))
 
-  listIcons.map(function (iconName) {
-    iconName = iconName.replace('.svg', '')
-
-    data.push({
-      icon: `${folder} ${iconName}`,
-      keywords: iconKeywordString(iconName),
-      name: `${iconName}`
-    })
-  })
-})
-
-writeFileSync(join(DIST_DIR, `catalog.json`), JSON.stringify(data, null, 2) + '\n', CHARSET)
+writeFileSync(join('./dist', 'catalog.json'), JSON.stringify(data, null, 2) + '\n', 'utf-8')

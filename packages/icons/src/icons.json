@@ -1,0 +1,4774 @@
+{
+  "groups": {
+    "azion": {
+      "title": "Azion",
+      "summary": "Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.",
+      "categories": {
+        "product": {
+          "title": "Products",
+          "summary": "One icon per Azion product, named after the product as WebKit and the console name it."
+        },
+        "feature": {
+          "title": "Product features",
+          "summary": "A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product."
+        },
+        "platform": {
+          "title": "Platform",
+          "summary": "The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars."
+        },
+        "solution": {
+          "title": "Solutions",
+          "summary": "Solutions Azion sells that combine several products."
+        },
+        "service": {
+          "title": "Services",
+          "summary": "Support plans and professional services."
+        }
+      }
+    },
+    "interface": {
+      "title": "Interface",
+      "summary": "Generic glyphs for the interface. They name an action, an object or a state, never a product.",
+      "categories": {
+        "arrow": {
+          "title": "Arrows",
+          "summary": "Arrows, chevrons, carets, sorting and moving."
+        },
+        "action": {
+          "title": "Actions",
+          "summary": "Things a person does: edit, copy, delete, search, share, download, zoom."
+        },
+        "status": {
+          "title": "Status",
+          "summary": "Alerts, information, success, help and states such as on, off or loading."
+        },
+        "file": {
+          "title": "Files",
+          "summary": "Files, folders, documents and attachments."
+        },
+        "media": {
+          "title": "Media",
+          "summary": "Playback, sound, images, video and recording."
+        },
+        "communication": {
+          "title": "Communication",
+          "summary": "Mail, chat, notifications, calls, feeds and webhooks."
+        },
+        "commerce": {
+          "title": "Commerce",
+          "summary": "Money, currencies, carts, shops, payment and billing."
+        },
+        "person": {
+          "title": "People",
+          "summary": "People, accounts and identity."
+        },
+        "device": {
+          "title": "Devices",
+          "summary": "Computers, phones, servers, chips and hardware."
+        },
+        "data": {
+          "title": "Data",
+          "summary": "Charts, tables, lists, databases and measurement."
+        },
+        "layout": {
+          "title": "Layout",
+          "summary": "Alignment, grids, columns, windows, menus and controls."
+        },
+        "object": {
+          "title": "Objects",
+          "summary": "Everyday objects and symbols: calendar, clock, lock, key, globe, star, flag, tools."
+        },
+        "git": {
+          "title": "Git",
+          "summary": "Branches, commits, merges and pull requests."
+        }
+      }
+    },
+    "external": {
+      "title": "External",
+      "summary": "Logos of other companies and projects. Azion does not own them; each is used to name that third party.",
+      "categories": {
+        "framework": {
+          "title": "Frameworks",
+          "summary": "Web frameworks and site generators an app can be built with."
+        },
+        "ai-model": {
+          "title": "AI models",
+          "summary": "AI models and the companies that make them."
+        },
+        "developer-tool": {
+          "title": "Developer tools",
+          "summary": "Code hosts, editors, build tools, databases and infrastructure tools."
+        },
+        "language": {
+          "title": "Languages",
+          "summary": "Programming and markup languages."
+        },
+        "online-service": {
+          "title": "Online services",
+          "summary": "Social networks, video and community sites, and sign-in providers."
+        }
+      }
+    }
+  },
+  "icons": [
+    {
+      "name": "ai-gateway",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "AI Gateway",
+      "shows": "Arrows that split and merge",
+      "means": "AI Gateway",
+      "status": "stable",
+      "renamedBecause": "With the az prefix the double \"ai-ai-\" goes away.",
+      "legacy": ["ai ai-ai-gateway"]
+    },
+    {
+      "name": "ai-inference",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "AI Inference",
+      "shows": "A chip with a sparkle",
+      "means": "AI Inference",
+      "status": "stable",
+      "renamedBecause": "Old name Edge AI.",
+      "legacy": ["ai ai-edge-ai"]
+    },
+    {
+      "name": "application-accelerator",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Application Accelerator",
+      "shows": "A browser window with a lightning bolt",
+      "means": "Application Accelerator",
+      "status": "stable",
+      "renamedBecause": "Product name is Application Accelerator, not \"App\".",
+      "legacy": ["ai ai-app-accelerator"]
+    },
+    {
+      "name": "applications",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Applications",
+      "shows": "A browser window",
+      "means": "Applications",
+      "status": "stable",
+      "renamedBecause": "Old name Edge Application.",
+      "legacy": ["ai ai-edge-application"]
+    },
+    {
+      "name": "bot-manager",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Bot Manager",
+      "shows": "A robot head",
+      "means": "Bot Manager",
+      "status": "stable",
+      "legacy": ["ai ai-bot-manager"]
+    },
+    {
+      "name": "certificate-manager",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Certificate Manager",
+      "shows": "A card with a check mark",
+      "means": "Certificate Manager",
+      "status": "stable",
+      "legacy": ["ai ai-certificate-manager"]
+    },
+    {
+      "name": "connectors",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Connectors",
+      "shows": "A plug and socket",
+      "means": "Connectors",
+      "status": "stable",
+      "renamedBecause": "Old name Edge Connectors.",
+      "legacy": ["ai ai-edge-connectors"]
+    },
+    {
+      "name": "custom-pages",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Custom Pages",
+      "shows": "A page with a pencil",
+      "means": "Custom Pages",
+      "status": "stable",
+      "legacy": ["ai ai-custom-pages"]
+    },
+    {
+      "name": "data-stream",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Data Stream",
+      "shows": "A wave line",
+      "means": "Data Stream",
+      "status": "stable",
+      "legacy": ["ai ai-data-stream"]
+    },
+    {
+      "name": "durable-objects",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Durable Objects",
+      "shows": "A cube inside a focus frame",
+      "means": "Durable Objects",
+      "status": "stable",
+      "legacy": ["ai ai-durable-objects"]
+    },
+    {
+      "name": "edge-dns",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Edge DNS",
+      "shows": "Three connected boxes in a tree",
+      "means": "Edge DNS",
+      "status": "stable",
+      "legacy": ["ai ai-edge-dns"]
+    },
+    {
+      "name": "edge-orchestrator",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Edge Orchestrator",
+      "shows": "Two boxes joined by a path",
+      "means": "Edge Orchestrator",
+      "status": "stable",
+      "legacy": ["ai ai-edge-orchestrator"]
+    },
+    {
+      "name": "edge-pulse",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Edge Pulse",
+      "shows": "A heartbeat line",
+      "means": "Edge Pulse",
+      "status": "stable",
+      "legacy": ["ai ai-edge-pulse"]
+    },
+    {
+      "name": "firewall",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Firewall",
+      "shows": "A brick wall with a flame",
+      "means": "Firewall",
+      "status": "stable",
+      "renamedBecause": "Old name Edge Firewall.",
+      "legacy": ["ai ai-edge-firewall"]
+    },
+    {
+      "name": "functions",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Functions",
+      "shows": "The letter f in parentheses",
+      "means": "Functions",
+      "status": "stable",
+      "renamedBecause": "Old name Edge Functions.",
+      "legacy": ["ai ai-edge-functions"]
+    },
+    {
+      "name": "image-processor",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Image Processor",
+      "shows": "A picture with a lightning bolt",
+      "means": "Image Processor",
+      "status": "stable",
+      "legacy": ["ai ai-image-processor"]
+    },
+    {
+      "name": "kv-store",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "KV Store",
+      "shows": "A database with a key",
+      "means": "KV Store",
+      "status": "stable",
+      "renamedBecause": "Old name Edge KV.",
+      "legacy": ["ai ai-edge-kv"]
+    },
+    {
+      "name": "live-ingest",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Live Ingest",
+      "shows": "A broadcast signal",
+      "means": "Live Ingest",
+      "status": "stable",
+      "legacy": ["ai ai-live-ingest"]
+    },
+    {
+      "name": "load-balancer",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Load Balancer",
+      "shows": "Crossing arrows",
+      "means": "Load Balancer",
+      "status": "stable",
+      "legacy": ["ai ai-load-balancer"]
+    },
+    {
+      "name": "marketplace",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Marketplace",
+      "shows": "Three squares and a plus sign",
+      "means": "Marketplace",
+      "status": "stable",
+      "legacy": ["ai ai-marketplace"]
+    },
+    {
+      "name": "network-lists",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Network Lists",
+      "shows": "A list with check boxes",
+      "means": "Network Lists",
+      "status": "stable",
+      "legacy": ["ai ai-network-lists"]
+    },
+    {
+      "name": "object-storage",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Object Storage",
+      "shows": "A server with a database",
+      "means": "Object Storage",
+      "status": "stable",
+      "renamedBecause": "Old name Edge Storage.",
+      "legacy": ["ai ai-edge-storage"]
+    },
+    {
+      "name": "real-time-events",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Real-Time Events",
+      "shows": "A magnifying glass in a frame",
+      "means": "Real-Time Events",
+      "status": "stable",
+      "legacy": ["ai ai-real-time-events"]
+    },
+    {
+      "name": "real-time-metrics",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Real-Time Metrics",
+      "shows": "A line chart",
+      "means": "Real-Time Metrics",
+      "status": "stable",
+      "legacy": ["ai ai-real-time-metrics"]
+    },
+    {
+      "name": "real-time-purge",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Real-Time Purge",
+      "shows": "A frame with a brush",
+      "means": "Real-Time Purge",
+      "status": "stable",
+      "legacy": ["ai ai-real-time-purge"]
+    },
+    {
+      "name": "sql-database",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "SQL Database",
+      "shows": "A database with the letters SQL",
+      "means": "SQL Database",
+      "status": "stable",
+      "renamedBecause": "Old name Edge SQL.",
+      "legacy": ["ai ai-edge-sql"]
+    },
+    {
+      "name": "variables",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Variables",
+      "shows": "An x in parentheses",
+      "means": "Variables",
+      "status": "stable",
+      "legacy": ["ai ai-variables"]
+    },
+    {
+      "name": "waf",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "WAF",
+      "shows": "A lightning bolt and a shield",
+      "means": "WAF",
+      "status": "stable",
+      "renamedBecause": "The product is WAF; WAF Rules is its list in the console.",
+      "legacy": ["ai ai-waf-rules"]
+    },
+    {
+      "name": "workloads",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Workloads",
+      "shows": "An open box with dividers",
+      "means": "Workloads",
+      "status": "stable",
+      "legacy": ["ai ai-workloads"]
+    },
+    {
+      "name": "domains",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "Workloads",
+      "shows": "A globe",
+      "means": "Domains (inside Workloads)",
+      "status": "stable",
+      "legacy": ["ai ai-domains"]
+    },
+    {
+      "name": "edge-libraries",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "Edge Orchestrator",
+      "shows": "Books on a shelf",
+      "means": "Edge Libraries, where Edge Orchestrator keeps the services it can install",
+      "status": "stable",
+      "legacy": ["ai ai-edge-libraries"]
+    },
+    {
+      "name": "edge-nodes",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "Edge Orchestrator",
+      "shows": "Two server racks",
+      "means": "Edge Nodes, the servers Edge Orchestrator manages",
+      "status": "stable",
+      "legacy": ["ai ai-edge-nodes"]
+    },
+    {
+      "name": "edge-services",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "Edge Orchestrator",
+      "shows": "Four squares in a grid",
+      "means": "Edge Services, the services Edge Orchestrator installs on an edge node",
+      "status": "stable",
+      "legacy": ["ai ai-edge-services"]
+    },
+    {
+      "name": "lora",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "AI Inference",
+      "shows": "Three sliders",
+      "means": "LoRA adapters for AI Inference",
+      "status": "stable",
+      "legacy": ["ai ai-lora"]
+    },
+    {
+      "name": "origin-shield",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "Connectors",
+      "shows": "A shield with a map pin",
+      "means": "Origin Shield (Connectors feature)",
+      "status": "stable",
+      "legacy": ["ai ai-origin-shield"]
+    },
+    {
+      "name": "rules-engine",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "Applications",
+      "shows": "A box with a path and a lightning bolt",
+      "means": "Rules Engine (part of Applications)",
+      "status": "stable",
+      "legacy": ["ai ai-rules-engine"]
+    },
+    {
+      "name": "tiered-cache",
+      "set": "mono",
+      "group": "azion",
+      "category": "feature",
+      "product": "Applications",
+      "shows": "Three stacked layers",
+      "means": "Tiered Cache",
+      "status": "stable",
+      "issue": "Same drawing as layers. One of the two needs a new drawing.",
+      "legacy": ["ai ai-tiered-cache"]
+    },
+    {
+      "name": "ai-pillar",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "Three sparkles",
+      "means": "The AI pillar of the platform",
+      "status": "stable",
+      "issue": "Looks the same as sparkles. The pillar needs its own drawing, or sparkles is dropped.",
+      "legacy": ["ai ai-ai-pillar"]
+    },
+    {
+      "name": "ask-azion",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "A speech bubble with the letters AI",
+      "means": "Ask Azion (the Azion assistant)",
+      "status": "stable",
+      "legacy": ["ai ai-ask-azion"]
+    },
+    {
+      "name": "azion",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "The Azion logo mark",
+      "means": "Azion",
+      "status": "stable",
+      "legacy": ["ai ai-azion"]
+    },
+    {
+      "name": "azion-api",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "The letters API",
+      "means": "Azion API",
+      "status": "stable",
+      "legacy": ["ai ai-azion-api"]
+    },
+    {
+      "name": "azion-cli",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "A terminal prompt in a box",
+      "means": "Azion CLI",
+      "status": "stable",
+      "legacy": ["ai ai-azion-cli"]
+    },
+    {
+      "name": "build-pillar",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "An open box",
+      "means": "The Build pillar of the platform",
+      "status": "stable",
+      "legacy": ["ai ai-build-pillar"]
+    },
+    {
+      "name": "deploy-pillar",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "A globe with an up arrow",
+      "means": "The Deploy pillar of the platform",
+      "status": "stable",
+      "legacy": ["ai ai-deploy-pillar"]
+    },
+    {
+      "name": "observe-pillar",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "An eye with a magnifying glass",
+      "means": "The Observe pillar of the platform",
+      "status": "stable",
+      "legacy": ["ai ai-observe-pillar"]
+    },
+    {
+      "name": "secure-pillar",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "A shield with a padlock",
+      "means": "The Secure pillar of the platform",
+      "status": "stable",
+      "legacy": ["ai ai-secure-pillar"]
+    },
+    {
+      "name": "store-pillar",
+      "set": "mono",
+      "group": "azion",
+      "category": "platform",
+      "shows": "A database stack",
+      "means": "The Store pillar of the platform",
+      "status": "stable",
+      "renamedBecause": "\"store\" alone reads as a shop. Matches the other pillars.",
+      "legacy": ["ai ai-store"]
+    },
+    {
+      "name": "abuse-prevention",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "A skull with a no-entry sign",
+      "means": "Abuse prevention (security solution)",
+      "status": "stable",
+      "legacy": ["ai ai-abuse-prevention"]
+    },
+    {
+      "name": "adaptive-security",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "A shield with a magnifying glass",
+      "means": "Adaptive security (security solution)",
+      "status": "stable",
+      "legacy": ["ai ai-adaptive-security"]
+    },
+    {
+      "name": "content-delivery",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "A globe with a person",
+      "means": "Content delivery (solution)",
+      "status": "stable",
+      "legacy": ["ai ai-content-delivery"]
+    },
+    {
+      "name": "sase",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "A shield with a triangle",
+      "means": "SASE (secure access solution)",
+      "status": "stable",
+      "legacy": ["ai ai-sase"]
+    },
+    {
+      "name": "business-support",
+      "set": "mono",
+      "group": "azion",
+      "category": "service",
+      "shows": "A briefcase",
+      "means": "Business support plan",
+      "status": "stable",
+      "legacy": ["ai ai-business-support"]
+    },
+    {
+      "name": "configuration-service",
+      "set": "mono",
+      "group": "azion",
+      "category": "service",
+      "shows": "A gear",
+      "means": "Configuration service (professional service)",
+      "status": "stable",
+      "legacy": ["ai ai-configuration-service"]
+    },
+    {
+      "name": "integration-services",
+      "set": "mono",
+      "group": "azion",
+      "category": "service",
+      "shows": "A puzzle piece",
+      "means": "Integration services (professional service)",
+      "status": "stable",
+      "legacy": ["ai ai-integration-services"]
+    },
+    {
+      "name": "practices-review",
+      "set": "mono",
+      "group": "azion",
+      "category": "service",
+      "shows": "A badge with a check and a person",
+      "means": "Best practices review (professional service)",
+      "status": "stable",
+      "renamedBecause": "Spelling: practices.",
+      "legacy": ["ai ai-practices-review", "ai ai-pratices-review"]
+    },
+    {
+      "name": "professional-services",
+      "set": "mono",
+      "group": "azion",
+      "category": "service",
+      "shows": "A briefcase with a person",
+      "means": "Professional services",
+      "status": "stable",
+      "legacy": ["ai ai-professional-services"]
+    },
+    {
+      "name": "security-team",
+      "set": "mono",
+      "group": "azion",
+      "category": "service",
+      "shows": "A person with a shield",
+      "means": "Security team (managed service)",
+      "status": "stable",
+      "legacy": ["ai ai-security-team"]
+    },
+    {
+      "name": "technical-account",
+      "set": "mono",
+      "group": "azion",
+      "category": "service",
+      "shows": "A person with a gear",
+      "means": "Technical account manager",
+      "status": "stable",
+      "legacy": ["ai ai-technical-account"]
+    },
+    {
+      "name": "technical-support",
+      "set": "mono",
+      "group": "azion",
+      "category": "service",
+      "shows": "A question mark with a wrench",
+      "means": "Technical support",
+      "status": "stable",
+      "legacy": ["ai ai-technical-support"]
+    },
+    {
+      "name": "arrow-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing down",
+      "means": "Move down or go down",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-down", "ai ai-sort-down", "pi pi-arrow-down", "pi pi-sort-down"]
+    },
+    {
+      "name": "arrow-down-0-1",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A down arrow beside a 0 above a 1",
+      "means": "Sort ascending, 0 to 9",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-down-0-1", "ai ai-sort-numeric-down", "pi pi-sort-numeric-down"]
+    },
+    {
+      "name": "arrow-down-1-0",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A down arrow beside a 1 above a 0",
+      "means": "Sort descending, 9 to 0",
+      "status": "stable",
+      "legacy": [
+        "ai ai-arrow-down-1-0",
+        "ai ai-sort-numeric-down-alt",
+        "pi pi-sort-numeric-down-alt"
+      ]
+    },
+    {
+      "name": "arrow-down-a-z",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A down arrow beside an A above a Z",
+      "means": "Sort ascending, A to Z",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-down-a-z", "ai ai-sort-alpha-down", "pi pi-sort-alpha-down"]
+    },
+    {
+      "name": "arrow-down-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing diagonally down and left",
+      "means": "Move toward the lower left",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-down-left", "pi pi-arrow-down-left"]
+    },
+    {
+      "name": "arrow-down-narrow-wide",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A down arrow beside three lines growing longer from top to bottom",
+      "means": "Sort ascending, smallest first",
+      "status": "stable",
+      "legacy": [
+        "ai ai-arrow-down-narrow-wide",
+        "ai ai-sort-amount-down-alt",
+        "pi pi-sort-amount-down-alt"
+      ]
+    },
+    {
+      "name": "arrow-down-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing diagonally down and right",
+      "means": "Move toward the lower right",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-down-right", "pi pi-arrow-down-right"]
+    },
+    {
+      "name": "arrow-down-wide-narrow",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A down arrow beside three lines growing shorter from top to bottom",
+      "means": "Sort descending, largest first",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-down-wide-narrow", "ai ai-sort-amount-down", "pi pi-sort-amount-down"]
+    },
+    {
+      "name": "arrow-down-z-a",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A down arrow beside a Z above an A",
+      "means": "Sort descending, Z to A",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-down-z-a", "ai ai-sort-alpha-down-alt", "pi pi-sort-alpha-down-alt"]
+    },
+    {
+      "name": "arrow-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing left",
+      "means": "Go back or move left",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-left", "pi pi-arrow-left"]
+    },
+    {
+      "name": "arrow-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing right",
+      "means": "Go forward or move right",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-right", "pi pi-arrow-right"]
+    },
+    {
+      "name": "arrow-right-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "Two arrows, the top pointing right and the bottom pointing left",
+      "means": "Swap or exchange",
+      "status": "stable",
+      "legacy": [
+        "ai ai-arrow-right-arrow-left",
+        "ai ai-arrow-right-left",
+        "pi pi-arrow-right-arrow-left"
+      ]
+    },
+    {
+      "name": "arrow-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing up",
+      "means": "Move up or go up",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-up", "ai ai-sort-up", "pi pi-arrow-up", "pi pi-sort-up"]
+    },
+    {
+      "name": "arrow-up-0-1",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An up arrow beside a 0 above a 1",
+      "means": "Sort ascending, 0 to 9",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-up-0-1", "ai ai-sort-numeric-up", "pi pi-sort-numeric-up"]
+    },
+    {
+      "name": "arrow-up-1-0",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An up arrow beside a 1 above a 0",
+      "means": "Sort descending, 9 to 0",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-up-1-0", "ai ai-sort-numeric-up-alt", "pi pi-sort-numeric-up-alt"]
+    },
+    {
+      "name": "arrow-up-a-z",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An up arrow beside an A above a Z",
+      "means": "Sort ascending, A to Z",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-up-a-z", "ai ai-sort-alpha-up", "pi pi-sort-alpha-up"]
+    },
+    {
+      "name": "arrow-up-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing diagonally up and left",
+      "means": "Move toward the upper left",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-up-left", "pi pi-arrow-up-left"]
+    },
+    {
+      "name": "arrow-up-narrow-wide",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An up arrow beside three lines growing longer from top to bottom",
+      "means": "Sort ascending, smallest first",
+      "status": "stable",
+      "legacy": [
+        "ai ai-arrow-up-narrow-wide",
+        "ai ai-sort-amount-up-alt",
+        "pi pi-sort-amount-up-alt"
+      ]
+    },
+    {
+      "name": "arrow-up-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing diagonally up and right",
+      "means": "Open externally or move toward the upper right",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-up-right", "pi pi-arrow-up-right"]
+    },
+    {
+      "name": "arrow-up-wide-narrow",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An up arrow beside three lines growing shorter from top to bottom",
+      "means": "Sort descending, largest first",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-up-wide-narrow", "ai ai-sort-amount-up", "pi pi-sort-amount-up"]
+    },
+    {
+      "name": "arrow-up-z-a",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An up arrow beside a Z above an A",
+      "means": "Sort Z to A, upwards",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-up-z-a", "ai ai-sort-alpha-up-alt", "pi pi-sort-alpha-up-alt"]
+    },
+    {
+      "name": "caret-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An outlined triangle pointing down",
+      "means": "Expand or open a dropdown",
+      "status": "stable",
+      "legacy": ["ai ai-caret-down", "pi pi-caret-down"]
+    },
+    {
+      "name": "caret-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An outlined triangle pointing left",
+      "means": "Previous or collapse left",
+      "status": "stable",
+      "legacy": ["ai ai-caret-left", "pi pi-caret-left"]
+    },
+    {
+      "name": "caret-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An outlined triangle pointing right",
+      "means": "Next or expand right",
+      "status": "stable",
+      "legacy": ["ai ai-caret-right", "pi pi-caret-right"]
+    },
+    {
+      "name": "caret-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An outlined triangle pointing up",
+      "means": "Collapse or move up",
+      "status": "stable",
+      "legacy": ["ai ai-caret-up", "pi pi-caret-up"]
+    },
+    {
+      "name": "chevron-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A chevron pointing down",
+      "means": "Expand or open a menu downward",
+      "status": "stable",
+      "legacy": ["ai ai-angle-down", "ai ai-chevron-down", "pi pi-angle-down", "pi pi-chevron-down"]
+    },
+    {
+      "name": "chevron-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A chevron pointing left",
+      "means": "Go back or previous",
+      "status": "stable",
+      "legacy": ["ai ai-angle-left", "ai ai-chevron-left", "pi pi-angle-left", "pi pi-chevron-left"]
+    },
+    {
+      "name": "chevron-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A chevron pointing right",
+      "means": "Go forward or next",
+      "status": "stable",
+      "legacy": [
+        "ai ai-angle-right",
+        "ai ai-chevron-right",
+        "pi pi-angle-right",
+        "pi pi-chevron-right"
+      ]
+    },
+    {
+      "name": "chevron-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A chevron pointing up",
+      "means": "Collapse or move up",
+      "status": "stable",
+      "legacy": ["ai ai-angle-up", "ai ai-chevron-up", "pi pi-angle-up", "pi pi-chevron-up"]
+    },
+    {
+      "name": "chevrons-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "Two stacked chevrons pointing down",
+      "means": "Expand all or jump down",
+      "status": "stable",
+      "legacy": ["ai ai-angle-double-down", "ai ai-chevrons-down", "pi pi-angle-double-down"]
+    },
+    {
+      "name": "chevrons-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "Two chevrons pointing left",
+      "means": "Go to the first item or page",
+      "status": "stable",
+      "legacy": ["ai ai-angle-double-left", "ai ai-chevrons-left", "pi pi-angle-double-left"]
+    },
+    {
+      "name": "chevrons-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "Two chevrons pointing right",
+      "means": "Go to the last item or page",
+      "status": "stable",
+      "legacy": ["ai ai-angle-double-right", "ai ai-chevrons-right", "pi pi-angle-double-right"]
+    },
+    {
+      "name": "chevrons-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "Two stacked chevrons pointing up",
+      "means": "Collapse all or jump to the top",
+      "status": "stable",
+      "legacy": ["ai ai-angle-double-up", "ai ai-chevrons-up", "pi pi-angle-double-up"]
+    },
+    {
+      "name": "circle-arrow-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing down in a circle",
+      "means": "Move down or download",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-circle-down", "ai ai-circle-arrow-down", "pi pi-arrow-circle-down"]
+    },
+    {
+      "name": "circle-arrow-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing left in a circle",
+      "means": "Go back or move left",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-circle-left", "ai ai-circle-arrow-left", "pi pi-arrow-circle-left"]
+    },
+    {
+      "name": "circle-arrow-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing right in a circle",
+      "means": "Go forward or proceed",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-circle-right", "ai ai-circle-arrow-right", "pi pi-arrow-circle-right"]
+    },
+    {
+      "name": "circle-arrow-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing up in a circle",
+      "means": "Move up or upload",
+      "status": "stable",
+      "legacy": ["ai ai-arrow-circle-up", "ai ai-circle-arrow-up", "pi pi-arrow-circle-up"]
+    },
+    {
+      "name": "circle-chevron-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A chevron pointing down in a circle",
+      "means": "Expand or show more below",
+      "status": "stable",
+      "legacy": [
+        "ai ai-chevron-circle-down",
+        "ai ai-circle-chevron-down",
+        "pi pi-chevron-circle-down"
+      ]
+    },
+    {
+      "name": "circle-chevron-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A chevron pointing left in a circle",
+      "means": "Previous",
+      "status": "stable",
+      "legacy": [
+        "ai ai-chevron-circle-left",
+        "ai ai-circle-chevron-left",
+        "pi pi-chevron-circle-left"
+      ]
+    },
+    {
+      "name": "circle-chevron-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A chevron pointing right in a circle",
+      "means": "Next",
+      "status": "stable",
+      "legacy": [
+        "ai ai-chevron-circle-right",
+        "ai ai-circle-chevron-right",
+        "pi pi-chevron-circle-right"
+      ]
+    },
+    {
+      "name": "circle-chevron-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A chevron pointing up in a circle",
+      "means": "Collapse or show less",
+      "status": "stable",
+      "legacy": ["ai ai-chevron-circle-up", "ai ai-circle-chevron-up", "pi pi-chevron-circle-up"]
+    },
+    {
+      "name": "move",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "Four arrows pointing up, down, left and right from a center",
+      "means": "Move or drag in any direction",
+      "status": "stable",
+      "legacy": ["ai ai-arrows-alt", "ai ai-move", "pi pi-arrows-alt"]
+    },
+    {
+      "name": "move-horizontal",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A double-headed arrow pointing left and right",
+      "means": "Move or resize horizontally",
+      "status": "stable",
+      "legacy": ["ai ai-arrows-h", "ai ai-move-horizontal", "pi pi-arrows-h"]
+    },
+    {
+      "name": "move-vertical",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A double-headed arrow pointing up and down",
+      "means": "Move or resize vertically",
+      "status": "stable",
+      "legacy": ["ai ai-arrows-v", "ai ai-move-vertical", "pi pi-arrows-v"]
+    },
+    {
+      "name": "sort",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "Two arrows, one pointing up and one pointing down",
+      "means": "Sort",
+      "status": "stable",
+      "legacy": ["ai ai-sort", "ai ai-sort-alt", "pi pi-sort", "pi pi-sort-alt"]
+    },
+    {
+      "name": "sort-down-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A filled triangle pointing down",
+      "means": "Sort descending",
+      "status": "stable",
+      "legacy": ["ai ai-sort-down-fill", "pi pi-sort-down-fill"]
+    },
+    {
+      "name": "sort-off",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "Two arrows, one pointing down and one pointing up, with no slash",
+      "means": "Unsorted or sorting off",
+      "status": "stable",
+      "issue": "The drawing does not match the name: the drawing is the sort arrows mirrored, with no slash or other mark showing sorting is off.",
+      "legacy": ["ai ai-sort-alt-slash", "ai ai-sort-off", "pi pi-sort-alt-slash"]
+    },
+    {
+      "name": "sort-up-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "A filled triangle pointing up",
+      "means": "Sort ascending",
+      "status": "stable",
+      "legacy": ["ai ai-sort-up-fill", "pi pi-sort-up-fill"]
+    },
+    {
+      "name": "arrow-up-from-line",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An arrow pointing up above a horizontal line",
+      "means": "Eject",
+      "status": "stable",
+      "renamedBecause": "The old name did not match the drawing: the drawing is an up arrow standing on a line (upload / arrow-up-from-line), not the usual eject triangle above a bar.",
+      "legacy": ["ai ai-eject", "pi pi-eject"]
+    },
+    {
+      "name": "circle-plus",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A plus sign in a circle",
+      "means": "Add or create",
+      "status": "stable",
+      "legacy": ["ai ai-circle-plus", "ai ai-plus-circle", "pi pi-plus-circle"]
+    },
+    {
+      "name": "cloud-download",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A cloud with an arrow pointing down",
+      "means": "Download from the cloud",
+      "status": "stable",
+      "legacy": ["ai ai-cloud-download", "pi pi-cloud-download"]
+    },
+    {
+      "name": "cloud-upload",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A cloud with an arrow pointing up",
+      "means": "Upload to the cloud",
+      "status": "stable",
+      "legacy": ["ai ai-cloud-upload", "pi pi-cloud-upload"]
+    },
+    {
+      "name": "copy",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "Two overlapping squares",
+      "means": "Copy",
+      "status": "stable",
+      "legacy": ["ai ai-clone", "ai ai-copy", "pi pi-clone", "pi pi-copy"]
+    },
+    {
+      "name": "delete-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A left-pointing key shape with an X inside",
+      "means": "Backspace, delete the previous character",
+      "status": "stable",
+      "legacy": ["ai ai-delete-left", "pi pi-delete-left"]
+    },
+    {
+      "name": "download",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An arrow pointing down into a tray",
+      "means": "Download",
+      "status": "stable",
+      "legacy": ["ai ai-download", "pi pi-download"]
+    },
+    {
+      "name": "eraser",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A tilted eraser on a baseline",
+      "means": "Erase or clear",
+      "status": "stable",
+      "legacy": ["ai ai-eraser", "pi pi-eraser"]
+    },
+    {
+      "name": "external-link",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An arrow leaving the corner of a square",
+      "means": "Open in a new tab or external site",
+      "status": "stable",
+      "legacy": ["ai ai-external-link", "pi pi-external-link"]
+    },
+    {
+      "name": "eye",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An open eye",
+      "means": "Show or view",
+      "status": "stable",
+      "legacy": ["ai ai-eye", "pi pi-eye"]
+    },
+    {
+      "name": "eye-off",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An eye with a diagonal slash",
+      "means": "Hide",
+      "status": "stable",
+      "legacy": ["ai ai-eye-off", "ai ai-eye-slash", "pi pi-eye-slash"]
+    },
+    {
+      "name": "filter",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A funnel",
+      "means": "Filter a list",
+      "status": "stable",
+      "legacy": ["ai ai-filter", "ai ai-filter-alt", "pi pi-filter"]
+    },
+    {
+      "name": "filter-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A filled funnel",
+      "means": "Filter (active filter applied)",
+      "status": "stable",
+      "legacy": ["ai ai-filter-fill", "pi pi-filter-fill"]
+    },
+    {
+      "name": "filter-off",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A funnel with a diagonal slash",
+      "means": "Remove the filter",
+      "status": "stable",
+      "legacy": ["ai ai-filter-off", "ai ai-filter-slash", "pi pi-filter-slash"]
+    },
+    {
+      "name": "history",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A clock face with a counter-clockwise arrow around it",
+      "means": "History or recent activity",
+      "status": "stable",
+      "legacy": ["ai ai-history", "pi pi-history"]
+    },
+    {
+      "name": "link",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "Two chain links",
+      "means": "Link or URL",
+      "status": "stable",
+      "legacy": ["ai ai-link", "pi pi-link"]
+    },
+    {
+      "name": "log-in",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An arrow pointing right into a door frame",
+      "means": "Sign in",
+      "status": "stable",
+      "legacy": ["ai ai-log-in", "ai ai-sign-in", "pi pi-sign-in"]
+    },
+    {
+      "name": "log-out",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An arrow pointing right out of a door frame",
+      "means": "Sign out",
+      "status": "stable",
+      "legacy": ["ai ai-log-out", "ai ai-sign-out", "pi pi-sign-out"]
+    },
+    {
+      "name": "minus",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A horizontal line",
+      "means": "Remove, subtract or collapse",
+      "status": "stable",
+      "legacy": ["ai ai-minus", "pi pi-minus"]
+    },
+    {
+      "name": "pencil",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A pencil",
+      "means": "Edit",
+      "status": "stable",
+      "legacy": ["ai ai-pencil", "pi pi-pencil"]
+    },
+    {
+      "name": "plus",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A plus sign",
+      "means": "Add or create",
+      "status": "stable",
+      "legacy": ["ai ai-plus", "pi pi-plus"]
+    },
+    {
+      "name": "power-off",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A power symbol: a broken circle with a vertical line",
+      "means": "Power off or shut down",
+      "status": "stable",
+      "legacy": ["ai ai-power-off", "pi pi-power-off"]
+    },
+    {
+      "name": "refresh",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "Two curved arrows chasing each other around a circle",
+      "means": "Refresh or reload",
+      "status": "stable",
+      "legacy": ["ai ai-refresh", "pi pi-refresh"]
+    },
+    {
+      "name": "replay",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A circular arrow turning counterclockwise",
+      "means": "Replay or restart from the beginning",
+      "status": "stable",
+      "legacy": ["ai ai-replay", "pi pi-replay"]
+    },
+    {
+      "name": "save",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A floppy disk",
+      "means": "Save changes",
+      "status": "stable",
+      "legacy": ["ai ai-save", "pi pi-save"]
+    },
+    {
+      "name": "scissors",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A pair of scissors",
+      "means": "Cut",
+      "status": "stable",
+      "renamedBecause": "Spelling: scissors.",
+      "legacy": ["ai ai-scissors", "ai ai-scizors"]
+    },
+    {
+      "name": "search",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A magnifying glass",
+      "means": "Search",
+      "status": "stable",
+      "legacy": ["ai ai-search", "pi pi-search"]
+    },
+    {
+      "name": "settings",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A gear",
+      "means": "Open settings",
+      "status": "stable",
+      "legacy": ["ai ai-cog", "ai ai-settings", "pi pi-cog"]
+    },
+    {
+      "name": "share",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "Three connected dots forming a share graph",
+      "means": "Share",
+      "status": "stable",
+      "legacy": ["ai ai-share", "ai ai-share-alt", "pi pi-share-alt"]
+    },
+    {
+      "name": "square-pen",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A pencil over an open square",
+      "means": "Edit",
+      "status": "stable",
+      "legacy": ["ai ai-pen-to-square", "ai ai-square-pen", "pi pi-pen-to-square"]
+    },
+    {
+      "name": "sync",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "Two curved arrows forming a circle",
+      "means": "Synchronize",
+      "status": "stable",
+      "legacy": ["ai ai-sync", "pi pi-sync"]
+    },
+    {
+      "name": "trash",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A trash can",
+      "means": "Delete",
+      "status": "stable",
+      "legacy": ["ai ai-trash", "pi pi-trash"]
+    },
+    {
+      "name": "undo",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An arrow curving back to the left from above",
+      "means": "Undo",
+      "status": "stable",
+      "legacy": ["ai ai-undo", "pi pi-undo"]
+    },
+    {
+      "name": "upload",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An arrow pointing up out of a tray",
+      "means": "Upload",
+      "status": "stable",
+      "legacy": ["ai ai-upload", "pi pi-upload"]
+    },
+    {
+      "name": "x",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "An X",
+      "means": "Close or dismiss",
+      "status": "stable",
+      "legacy": ["ai ai-times", "ai ai-x", "pi pi-times"]
+    },
+    {
+      "name": "zoom-in",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A magnifying glass with a plus sign",
+      "means": "Zoom in",
+      "status": "stable",
+      "legacy": ["ai ai-search-plus", "ai ai-zoom-in", "pi pi-search-plus"]
+    },
+    {
+      "name": "zoom-out",
+      "set": "mono",
+      "group": "interface",
+      "category": "action",
+      "shows": "A magnifying glass with a minus sign",
+      "means": "Zoom out",
+      "status": "stable",
+      "legacy": ["ai ai-search-minus", "ai ai-zoom-out", "pi pi-search-minus"]
+    },
+    {
+      "name": "attack",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A skull",
+      "means": "An attack or threat",
+      "status": "stable",
+      "legacy": ["ai ai-attack"]
+    },
+    {
+      "name": "ban",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A circle with a diagonal slash",
+      "means": "Not allowed or blocked",
+      "status": "stable",
+      "legacy": ["ai ai-ban", "pi pi-ban"]
+    },
+    {
+      "name": "check",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A check mark",
+      "means": "Done, confirmed or selected",
+      "status": "stable",
+      "legacy": ["ai ai-check", "pi pi-check"]
+    },
+    {
+      "name": "circle",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "An empty circle",
+      "means": "Unselected or inactive state",
+      "status": "stable",
+      "legacy": ["ai ai-circle", "pi pi-circle"]
+    },
+    {
+      "name": "circle-alert",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "An exclamation mark in a circle",
+      "means": "Warning or error alert",
+      "status": "stable",
+      "legacy": ["ai ai-circle-alert", "ai ai-exclamation-circle", "pi pi-exclamation-circle"]
+    },
+    {
+      "name": "circle-check",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A check mark in a circle",
+      "means": "Success or completed",
+      "status": "stable",
+      "legacy": ["ai ai-check-circle", "ai ai-circle-check", "pi pi-check-circle"]
+    },
+    {
+      "name": "circle-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A filled circle",
+      "means": "Active or status dot",
+      "status": "stable",
+      "legacy": ["ai ai-circle-fill", "pi pi-circle-fill"]
+    },
+    {
+      "name": "circle-half",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A half-filled circle",
+      "means": "Partial, half done; also light and dark contrast",
+      "status": "stable",
+      "legacy": ["ai ai-circle-half"]
+    },
+    {
+      "name": "circle-help",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A question mark in a circle",
+      "means": "Help or more information",
+      "status": "stable",
+      "legacy": ["ai ai-circle-help", "ai ai-question-circle", "pi pi-question-circle"]
+    },
+    {
+      "name": "circle-info",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A lowercase i in a circle",
+      "means": "Information",
+      "status": "stable",
+      "legacy": ["ai ai-circle-info", "ai ai-info-circle", "pi pi-info-circle"]
+    },
+    {
+      "name": "circle-minus",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A circle with a minus sign",
+      "means": "Remove, collapse",
+      "status": "stable",
+      "legacy": ["ai ai-circle-minus", "pi pi-minus-circle"]
+    },
+    {
+      "name": "circle-off",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A circle with a diagonal slash through it",
+      "means": "Off, disabled or not available",
+      "status": "stable",
+      "legacy": ["ai ai-circle-off", "pi pi-circle-off"]
+    },
+    {
+      "name": "circle-on",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A circle with a dot in the center",
+      "means": "On or selected (radio state)",
+      "status": "stable",
+      "legacy": ["ai ai-circle-on", "pi pi-circle-on"]
+    },
+    {
+      "name": "circle-x",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "An X in a circle",
+      "means": "Error, cancel or clear",
+      "status": "stable",
+      "legacy": ["ai ai-circle-x", "ai ai-times-circle", "pi pi-times-circle"]
+    },
+    {
+      "name": "disabled",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A filled circle with a minus sign",
+      "means": "Disabled status",
+      "status": "stable",
+      "legacy": ["ai ai-disabled"]
+    },
+    {
+      "name": "enabled",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A filled circle with a check mark",
+      "means": "Enabled status",
+      "status": "stable",
+      "legacy": ["ai ai-enabled"]
+    },
+    {
+      "name": "hourglass",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "An hourglass",
+      "means": "Waiting, pending or time running",
+      "status": "stable",
+      "legacy": ["ai ai-hourglass", "pi pi-hourglass"]
+    },
+    {
+      "name": "info",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "The letter i in a circle",
+      "means": "Information",
+      "status": "stable",
+      "legacy": ["ai ai-info", "pi pi-info"]
+    },
+    {
+      "name": "question",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A question mark",
+      "means": "Help or question",
+      "status": "stable",
+      "legacy": ["ai ai-question", "pi pi-question"]
+    },
+    {
+      "name": "spinner",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "An open circular arc",
+      "means": "Loading in progress",
+      "status": "stable",
+      "legacy": ["ai ai-spinner", "pi pi-spinner"]
+    },
+    {
+      "name": "spinner-dotted",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "Eight short dashes arranged in a circle",
+      "means": "Loading in progress",
+      "status": "stable",
+      "legacy": ["ai ai-spinner-dotted", "pi pi-spinner-dotted"]
+    },
+    {
+      "name": "square-check",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A check mark inside a square",
+      "means": "Checked or selected",
+      "status": "stable",
+      "legacy": ["ai ai-check-square", "ai ai-square-check", "pi pi-check-square"]
+    },
+    {
+      "name": "triangle-alert",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "An exclamation mark inside a triangle",
+      "means": "Warning",
+      "status": "stable",
+      "legacy": ["ai ai-exclamation-triangle", "ai ai-triangle-alert", "pi pi-exclamation-triangle"]
+    },
+    {
+      "name": "verified",
+      "set": "mono",
+      "group": "interface",
+      "category": "status",
+      "shows": "A check mark inside a scalloped badge",
+      "means": "Verified",
+      "status": "stable",
+      "legacy": ["ai ai-digital-certificates", "ai ai-verified", "pi pi-verified"]
+    },
+    {
+      "name": "clipboard",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "An empty clipboard",
+      "means": "Clipboard or paste",
+      "status": "stable",
+      "legacy": ["ai ai-clipboard", "pi pi-clipboard"]
+    },
+    {
+      "name": "file",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A page with a folded corner",
+      "means": "File or document",
+      "status": "stable",
+      "legacy": ["ai ai-file", "ai ai-file-o", "pi pi-file", "pi pi-file-o"]
+    },
+    {
+      "name": "file-arrow-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A page with an arrow pointing up",
+      "means": "Upload a file",
+      "status": "stable",
+      "legacy": ["ai ai-file-arrow-up", "pi pi-file-arrow-up"]
+    },
+    {
+      "name": "file-check",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A page with a check mark",
+      "means": "File approved or verified",
+      "status": "stable",
+      "legacy": ["ai ai-file-check", "pi pi-file-check"]
+    },
+    {
+      "name": "file-excel",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A document with a spreadsheet grid on it",
+      "means": "Spreadsheet or Excel file",
+      "status": "stable",
+      "legacy": ["ai ai-file-excel", "pi pi-file-excel"]
+    },
+    {
+      "name": "file-export",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A document with an arrow pointing left out of its side",
+      "means": "Export to a file",
+      "status": "stable",
+      "legacy": ["ai ai-file-export", "pi pi-file-export"]
+    },
+    {
+      "name": "file-import",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A document with an arrow pointing right into its side",
+      "means": "Import from a file",
+      "status": "stable",
+      "legacy": ["ai ai-file-import", "pi pi-file-import"]
+    },
+    {
+      "name": "file-pdf",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A document with the letters PDF across its bottom",
+      "means": "PDF file",
+      "status": "stable",
+      "legacy": ["ai ai-file-pdf", "pi pi-file-pdf"]
+    },
+    {
+      "name": "file-pen",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A document with a pencil on it",
+      "means": "Edit a file",
+      "status": "stable",
+      "legacy": ["ai ai-file-edit", "ai ai-file-pen", "pi pi-file-edit"]
+    },
+    {
+      "name": "file-plus",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A document with a plus sign on it",
+      "means": "Create a new file",
+      "status": "stable",
+      "legacy": ["ai ai-file-plus", "pi pi-file-plus"]
+    },
+    {
+      "name": "file-word",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A document with the letter W on it",
+      "means": "Word document file",
+      "status": "stable",
+      "legacy": ["ai ai-file-word", "pi pi-file-word"]
+    },
+    {
+      "name": "folder",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A closed folder",
+      "means": "Folder",
+      "status": "stable",
+      "legacy": ["ai ai-folder", "pi pi-folder"]
+    },
+    {
+      "name": "folder-open",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "An open folder",
+      "means": "Open folder",
+      "status": "stable",
+      "legacy": ["ai ai-folder-open", "pi pi-folder-open"]
+    },
+    {
+      "name": "folder-plus",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A folder with a plus sign at the bottom right",
+      "means": "Create a new folder",
+      "status": "stable",
+      "legacy": ["ai ai-folder-plus", "pi pi-folder-plus"]
+    },
+    {
+      "name": "json",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "Curly braces with dots",
+      "means": "JSON or code object",
+      "status": "stable",
+      "legacy": ["ai ai-json"]
+    },
+    {
+      "name": "json-text",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "The word JSON",
+      "means": "JSON as a file type",
+      "status": "stable",
+      "legacy": ["ai ai-json-text"]
+    },
+    {
+      "name": "paperclip",
+      "set": "mono",
+      "group": "interface",
+      "category": "file",
+      "shows": "A paperclip",
+      "means": "Attachment",
+      "status": "stable",
+      "legacy": ["ai ai-paperclip", "pi pi-paperclip"]
+    },
+    {
+      "name": "backward",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "Two left-pointing triangles side by side",
+      "means": "Rewind or skip back",
+      "status": "stable",
+      "legacy": ["ai ai-backward", "pi pi-backward"]
+    },
+    {
+      "name": "camera",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A camera",
+      "means": "Take a photo",
+      "status": "stable",
+      "legacy": ["ai ai-camera", "pi pi-camera"]
+    },
+    {
+      "name": "circle-pause",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "Two vertical bars in a circle",
+      "means": "Pause",
+      "status": "stable",
+      "legacy": ["ai ai-circle-pause", "ai ai-pause-circle", "pi pi-pause-circle"]
+    },
+    {
+      "name": "circle-play",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A play triangle in a circle",
+      "means": "Play or start",
+      "status": "stable",
+      "legacy": ["ai ai-circle-play", "ai ai-play-circle", "pi pi-play-circle"]
+    },
+    {
+      "name": "circle-stop",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A small square in a circle",
+      "means": "Stop",
+      "status": "stable",
+      "legacy": ["ai ai-circle-stop", "ai ai-stop-circle", "pi pi-stop-circle"]
+    },
+    {
+      "name": "forward",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "Two right-pointing triangles side by side",
+      "means": "Fast forward or skip ahead",
+      "status": "stable",
+      "legacy": ["ai ai-forward", "pi pi-forward"]
+    },
+    {
+      "name": "image",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A picture frame with a sun and a mountain",
+      "means": "Image or photo",
+      "status": "stable",
+      "legacy": ["ai ai-image", "pi pi-image"]
+    },
+    {
+      "name": "images",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "Two overlapping picture frames",
+      "means": "Image gallery or multiple images",
+      "status": "stable",
+      "legacy": ["ai ai-images", "pi pi-images"]
+    },
+    {
+      "name": "microphone",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A microphone on a stand",
+      "means": "Microphone, voice input or recording",
+      "status": "stable",
+      "legacy": ["ai ai-microphone", "pi pi-microphone"]
+    },
+    {
+      "name": "pause",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "Two vertical bars",
+      "means": "Pause",
+      "status": "stable",
+      "legacy": ["ai ai-pause", "pi pi-pause"]
+    },
+    {
+      "name": "play",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A right-pointing triangle",
+      "means": "Play",
+      "status": "stable",
+      "legacy": ["ai ai-play", "pi pi-play"]
+    },
+    {
+      "name": "skip-back",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A left-pointing triangle with a vertical bar on its left",
+      "means": "Skip to the start or previous track",
+      "status": "stable",
+      "renamedBecause": "The old name did not match the drawing: the drawing is a single triangle against a bar (skip back / previous), not the double triangles of fast backward.",
+      "legacy": [
+        "ai ai-fast-backward",
+        "ai ai-step-backward-alt",
+        "pi pi-fast-backward",
+        "pi pi-step-backward-alt"
+      ]
+    },
+    {
+      "name": "skip-forward",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A right-pointing triangle with a vertical bar on its right",
+      "means": "Skip to the end or next track",
+      "status": "stable",
+      "renamedBecause": "The old name did not match the drawing: the drawing is a single triangle against a bar (skip forward / next), not the double triangles of fast forward.",
+      "legacy": [
+        "ai ai-fast-forward",
+        "ai ai-step-forward-alt",
+        "pi pi-fast-forward",
+        "pi pi-step-forward-alt"
+      ]
+    },
+    {
+      "name": "step-back",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A triangle pointing left against a vertical bar",
+      "means": "Skip back or previous",
+      "status": "stable",
+      "legacy": ["ai ai-step-back", "ai ai-step-backward", "pi pi-step-backward"]
+    },
+    {
+      "name": "step-forward",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A triangle pointing right after a vertical bar",
+      "means": "Skip forward or next",
+      "status": "stable",
+      "legacy": ["ai ai-step-forward", "pi pi-step-forward"]
+    },
+    {
+      "name": "stop",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A square outline",
+      "means": "Stop playback",
+      "status": "stable",
+      "legacy": ["ai ai-stop", "pi pi-stop"]
+    },
+    {
+      "name": "video",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A video camera",
+      "means": "Video",
+      "status": "stable",
+      "legacy": ["ai ai-video", "pi pi-video"]
+    },
+    {
+      "name": "volume-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A speaker with one sound wave",
+      "means": "Lower the volume",
+      "status": "stable",
+      "legacy": ["ai ai-volume-down", "pi pi-volume-down"]
+    },
+    {
+      "name": "volume-off",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A speaker with an X",
+      "means": "Mute",
+      "status": "stable",
+      "legacy": ["ai ai-volume-off", "pi pi-volume-off"]
+    },
+    {
+      "name": "volume-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A speaker with two sound waves",
+      "means": "Raise the volume",
+      "status": "stable",
+      "legacy": ["ai ai-volume-up", "pi pi-volume-up"]
+    },
+    {
+      "name": "at",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "An at sign",
+      "means": "Email address or mention",
+      "status": "stable",
+      "legacy": ["ai ai-at", "pi pi-at"]
+    },
+    {
+      "name": "bell",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "A bell",
+      "means": "Notifications",
+      "status": "stable",
+      "legacy": ["ai ai-bell", "pi pi-bell"]
+    },
+    {
+      "name": "bell-off",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "A bell crossed by a diagonal slash",
+      "means": "Notifications turned off",
+      "status": "stable",
+      "legacy": ["ai ai-bell-off", "ai ai-bell-slash", "pi pi-bell-slash"]
+    },
+    {
+      "name": "comment",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "A speech bubble",
+      "means": "Comment or message",
+      "status": "stable",
+      "legacy": ["ai ai-comment", "pi pi-comment"]
+    },
+    {
+      "name": "comments",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "Two overlapping speech bubbles",
+      "means": "Conversation or discussion",
+      "status": "stable",
+      "legacy": ["ai ai-comments", "pi pi-comments"]
+    },
+    {
+      "name": "inbox",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "An inbox tray",
+      "means": "Inbox or received items",
+      "status": "stable",
+      "legacy": ["ai ai-inbox", "pi pi-inbox"]
+    },
+    {
+      "name": "mail",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "An envelope",
+      "means": "Email",
+      "status": "stable",
+      "legacy": ["ai ai-envelope", "ai ai-mail", "pi pi-envelope"]
+    },
+    {
+      "name": "megaphone",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "A megaphone",
+      "means": "Announcement or marketing",
+      "status": "stable",
+      "legacy": ["ai ai-megaphone", "pi pi-megaphone"]
+    },
+    {
+      "name": "phone",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "A telephone handset",
+      "means": "Phone call",
+      "status": "stable",
+      "legacy": ["ai ai-phone", "pi pi-phone"]
+    },
+    {
+      "name": "reply",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "An arrow curving back to the left",
+      "means": "Reply to a message",
+      "status": "stable",
+      "legacy": ["ai ai-reply", "pi pi-reply"]
+    },
+    {
+      "name": "rss",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "The RSS waves",
+      "means": "RSS feed",
+      "status": "stable",
+      "legacy": ["ai ai-rss"]
+    },
+    {
+      "name": "send",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "A paper plane",
+      "means": "Send a message",
+      "status": "stable",
+      "legacy": ["ai ai-send", "pi pi-send"]
+    },
+    {
+      "name": "webhook",
+      "set": "mono",
+      "group": "interface",
+      "category": "communication",
+      "shows": "The webhook symbol",
+      "means": "Webhook",
+      "status": "stable",
+      "legacy": ["ai ai-webhook"]
+    },
+    {
+      "name": "barcode",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "Five vertical bars",
+      "means": "Barcode or product code",
+      "status": "stable",
+      "legacy": ["ai ai-barcode", "pi pi-barcode"]
+    },
+    {
+      "name": "cart-arrow-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A shopping cart with a down arrow",
+      "means": "Add to cart",
+      "status": "stable",
+      "legacy": ["ai ai-cart-arrow-down", "pi pi-cart-arrow-down"]
+    },
+    {
+      "name": "cart-minus",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A shopping cart with a minus sign",
+      "means": "Remove from cart",
+      "status": "stable",
+      "legacy": ["ai ai-cart-minus", "pi pi-cart-minus"]
+    },
+    {
+      "name": "cart-plus",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A shopping cart with a plus sign",
+      "means": "Add to cart",
+      "status": "stable",
+      "legacy": ["ai ai-cart-plus", "pi pi-cart-plus"]
+    },
+    {
+      "name": "credit-card",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A credit card with a stripe",
+      "means": "Payment or billing",
+      "status": "stable",
+      "legacy": ["ai ai-credit-card", "pi pi-credit-card"]
+    },
+    {
+      "name": "dollar",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A dollar sign",
+      "means": "Money, price or USD",
+      "status": "stable",
+      "legacy": ["ai ai-dollar", "pi pi-dollar"]
+    },
+    {
+      "name": "euro",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A euro sign",
+      "means": "Money, price or EUR",
+      "status": "stable",
+      "legacy": ["ai ai-euro", "pi pi-euro"]
+    },
+    {
+      "name": "gift",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A wrapped gift box with a bow",
+      "means": "Gift, reward or promotion",
+      "status": "stable",
+      "legacy": ["ai ai-gift", "pi pi-gift"]
+    },
+    {
+      "name": "indian-rupee",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "The Indian rupee sign (₹)",
+      "means": "Indian rupee currency",
+      "status": "stable",
+      "legacy": ["ai ai-indian-rupee", "pi pi-indian-rupee"]
+    },
+    {
+      "name": "money-bill",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A banknote with a circle in the middle",
+      "means": "Money, payment or cash",
+      "status": "stable",
+      "legacy": ["ai ai-money-bill", "pi pi-money-bill"]
+    },
+    {
+      "name": "pound",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "The pound sterling sign (£)",
+      "means": "British pound currency",
+      "status": "stable",
+      "legacy": ["ai ai-pound", "pi pi-pound"]
+    },
+    {
+      "name": "receipt",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A receipt with a dollar sign and jagged edges",
+      "means": "Receipt, invoice or billing",
+      "status": "stable",
+      "legacy": ["ai ai-receipt", "pi pi-receipt"]
+    },
+    {
+      "name": "shop",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A storefront with an awning and a door",
+      "means": "A shop or store",
+      "status": "stable",
+      "legacy": ["ai ai-shop", "pi pi-shop"]
+    },
+    {
+      "name": "shopping-bag",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A shopping bag with a handle",
+      "means": "Shopping bag or purchases",
+      "status": "stable",
+      "legacy": ["ai ai-shopping-bag", "pi pi-shopping-bag"]
+    },
+    {
+      "name": "shopping-cart",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A shopping cart",
+      "means": "Shopping cart",
+      "status": "stable",
+      "legacy": ["ai ai-shopping-cart", "pi pi-shopping-cart"]
+    },
+    {
+      "name": "ticket",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A ticket with notched sides and a perforated line",
+      "means": "A ticket or pass",
+      "status": "stable",
+      "legacy": ["ai ai-ticket", "pi pi-ticket"]
+    },
+    {
+      "name": "turkish-lira",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "The Turkish lira sign",
+      "means": "Turkish lira currency",
+      "status": "stable",
+      "legacy": ["ai ai-turkish-lira", "pi pi-turkish-lira"]
+    },
+    {
+      "name": "wallet",
+      "set": "mono",
+      "group": "interface",
+      "category": "commerce",
+      "shows": "A wallet",
+      "means": "Wallet or payment method",
+      "status": "stable",
+      "legacy": ["ai ai-wallet", "pi pi-wallet"]
+    },
+    {
+      "name": "address-book",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "An address book with a person inside",
+      "means": "Contacts or address book",
+      "status": "stable",
+      "legacy": ["ai ai-address-book", "pi pi-address-book"]
+    },
+    {
+      "name": "face-smile",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "A smiling face in a circle",
+      "means": "Happy, emoji or positive feedback",
+      "status": "stable",
+      "legacy": ["ai ai-face-smile", "pi pi-face-smile"]
+    },
+    {
+      "name": "id-card",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "An identity card with a person and text lines",
+      "means": "Identity, profile or account details",
+      "status": "stable",
+      "legacy": ["ai ai-id-card", "pi pi-id-card"]
+    },
+    {
+      "name": "mars",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "The Mars symbol: a circle with an arrow pointing up-right",
+      "means": "Male gender",
+      "status": "stable",
+      "legacy": ["ai ai-mars", "pi pi-mars"]
+    },
+    {
+      "name": "user",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "A person's head and shoulders",
+      "means": "A user or account",
+      "status": "stable",
+      "legacy": ["ai ai-user", "pi pi-user"]
+    },
+    {
+      "name": "user-minus",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "A person with a minus sign",
+      "means": "Remove a user",
+      "status": "stable",
+      "legacy": ["ai ai-user-minus", "pi pi-user-minus"]
+    },
+    {
+      "name": "user-pen",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "A person with a pencil",
+      "means": "Edit a user",
+      "status": "stable",
+      "legacy": ["ai ai-user-edit", "ai ai-user-pen", "pi pi-user-edit"]
+    },
+    {
+      "name": "user-plus",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "A person with a plus sign",
+      "means": "Add a user",
+      "status": "stable",
+      "legacy": ["ai ai-user-plus", "pi pi-user-plus"]
+    },
+    {
+      "name": "users",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "Two people, one behind the other",
+      "means": "Users or a group",
+      "status": "stable",
+      "legacy": ["ai ai-users", "pi pi-users"]
+    },
+    {
+      "name": "venus",
+      "set": "mono",
+      "group": "interface",
+      "category": "person",
+      "shows": "The Venus symbol, a circle with a cross below",
+      "means": "Female",
+      "status": "stable",
+      "legacy": ["ai ai-venus", "pi pi-venus"]
+    },
+    {
+      "name": "desktop",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "A computer monitor on a stand",
+      "means": "Desktop computer or desktop view",
+      "status": "stable",
+      "legacy": ["ai ai-desktop", "pi pi-desktop"]
+    },
+    {
+      "name": "headphones",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "A pair of over-ear headphones",
+      "means": "Audio, listening or support",
+      "status": "stable",
+      "legacy": ["ai ai-headphones", "pi pi-headphones"]
+    },
+    {
+      "name": "microchip",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "A microchip with pins on all sides",
+      "means": "Processor or hardware",
+      "status": "stable",
+      "legacy": ["ai ai-microchip", "pi pi-microchip"]
+    },
+    {
+      "name": "microchip-ai",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "A microchip with two short diagonal slashes inside",
+      "means": "AI processing or AI model",
+      "status": "stable",
+      "legacy": ["ai ai-microchip-ai", "pi pi-microchip-ai"]
+    },
+    {
+      "name": "mobile",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "A mobile phone",
+      "means": "Mobile device",
+      "status": "stable",
+      "legacy": ["ai ai-mobile", "pi pi-mobile"]
+    },
+    {
+      "name": "print",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "A printer",
+      "means": "Print",
+      "status": "stable",
+      "legacy": ["ai ai-print", "pi pi-print"]
+    },
+    {
+      "name": "server",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "Two stacked server units, each with a status dot",
+      "means": "A server or host",
+      "status": "stable",
+      "legacy": ["ai ai-server", "pi pi-server"]
+    },
+    {
+      "name": "tablet",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "A tall rounded rectangle tablet",
+      "means": "A tablet device",
+      "status": "stable",
+      "legacy": ["ai ai-tablet", "pi pi-tablet"]
+    },
+    {
+      "name": "wifi",
+      "set": "mono",
+      "group": "interface",
+      "category": "device",
+      "shows": "A Wi-Fi signal with three arcs and a dot",
+      "means": "Wi-Fi or wireless connection",
+      "status": "stable",
+      "legacy": ["ai ai-wifi", "pi pi-wifi"]
+    },
+    {
+      "name": "calculator",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "A calculator with a display and buttons",
+      "means": "Calculate or estimate",
+      "status": "stable",
+      "legacy": ["ai ai-calculator", "pi pi-calculator"]
+    },
+    {
+      "name": "chart-bar",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "Vertical bars on an L-shaped axis",
+      "means": "Bar chart",
+      "status": "stable",
+      "legacy": ["ai ai-chart-bar", "pi pi-chart-bar"]
+    },
+    {
+      "name": "chart-line",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "A zigzag line on an L-shaped axis",
+      "means": "Line chart or trend",
+      "status": "stable",
+      "legacy": ["ai ai-chart-line", "pi pi-chart-line"]
+    },
+    {
+      "name": "chart-pie",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "A circle with one slice pulled out",
+      "means": "Pie chart or share",
+      "status": "stable",
+      "legacy": ["ai ai-chart-pie", "pi pi-chart-pie"]
+    },
+    {
+      "name": "chart-scatter",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "Scattered dots on an L-shaped axis",
+      "means": "Scatter plot",
+      "status": "stable",
+      "legacy": ["ai ai-chart-scatter", "pi pi-chart-scatter"]
+    },
+    {
+      "name": "database",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "A database cylinder",
+      "means": "A database in general (not a product)",
+      "status": "stable",
+      "legacy": ["ai ai-database", "pi pi-database"]
+    },
+    {
+      "name": "gauge",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "A half-circle dial with a needle",
+      "means": "Gauge, performance or speed metric",
+      "status": "stable",
+      "legacy": ["ai ai-gauge", "pi pi-gauge"]
+    },
+    {
+      "name": "list",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "Three lines each with a bullet dot",
+      "means": "List or list view",
+      "status": "stable",
+      "legacy": ["ai ai-list", "pi pi-list"]
+    },
+    {
+      "name": "list-check",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "Lines with check marks beside them",
+      "means": "Checklist or completed tasks",
+      "status": "stable",
+      "legacy": ["ai ai-list-check", "pi pi-list-check"]
+    },
+    {
+      "name": "sheet",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "A grid of cells",
+      "means": "A table or spreadsheet",
+      "status": "stable",
+      "renamedBecause": "\"datasheet\" is a document type; the drawing is a spreadsheet grid, and table is a different drawing.",
+      "legacy": ["ai ai-datasheet"]
+    },
+    {
+      "name": "sql",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "The letters SQL",
+      "means": "SQL as a language (not the product)",
+      "status": "stable",
+      "legacy": ["ai ai-sql"]
+    },
+    {
+      "name": "table",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "A grid of four cells inside a rounded square",
+      "means": "A table",
+      "status": "stable",
+      "legacy": ["ai ai-table", "pi pi-table"]
+    },
+    {
+      "name": "wave-pulse",
+      "set": "mono",
+      "group": "interface",
+      "category": "data",
+      "shows": "A zigzag pulse line inside a rounded square",
+      "means": "Activity or monitoring",
+      "status": "stable",
+      "legacy": ["ai ai-wave-pulse", "pi pi-wave-pulse"]
+    },
+    {
+      "name": "align-center",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three horizontal lines of different lengths, centered",
+      "means": "Center-align text",
+      "status": "stable",
+      "legacy": ["ai ai-align-center", "pi pi-align-center"]
+    },
+    {
+      "name": "align-justify",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three horizontal lines of equal length",
+      "means": "Justify text",
+      "status": "stable",
+      "legacy": ["ai ai-align-justify", "pi pi-align-justify"]
+    },
+    {
+      "name": "align-left",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three horizontal lines aligned to the left edge",
+      "means": "Left-align text",
+      "status": "stable",
+      "legacy": ["ai ai-align-left", "pi pi-align-left"]
+    },
+    {
+      "name": "align-right",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three horizontal lines aligned to the right edge",
+      "means": "Right-align text",
+      "status": "stable",
+      "legacy": ["ai ai-align-right", "pi pi-align-right"]
+    },
+    {
+      "name": "columns-3",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "A box split into three columns",
+      "means": "A column layout, show or hide columns",
+      "status": "stable",
+      "renamedBecause": "Lucide name for a box split into three columns.",
+      "legacy": ["ai ai-column"]
+    },
+    {
+      "name": "ellipsis",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three dots in a row",
+      "means": "More options",
+      "status": "stable",
+      "legacy": ["ai ai-ellipsis", "ai ai-ellipsis-h", "pi pi-ellipsis-h"]
+    },
+    {
+      "name": "ellipsis-vertical",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three dots in a column",
+      "means": "More options menu",
+      "status": "stable",
+      "legacy": ["ai ai-ellipsis-v", "ai ai-ellipsis-vertical", "pi pi-ellipsis-v"]
+    },
+    {
+      "name": "expand",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Four arrows pointing out to the corners",
+      "means": "Expand or full screen",
+      "status": "stable",
+      "legacy": ["ai ai-expand", "pi pi-expand"]
+    },
+    {
+      "name": "layers",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three stacked layers",
+      "means": "Layers",
+      "status": "stable",
+      "issue": "Same drawing as tiered-cache. One of the two needs a new drawing.",
+      "legacy": ["ai ai-layers"]
+    },
+    {
+      "name": "layout-grid",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Four squares in a two-by-two grid",
+      "means": "Grid view",
+      "status": "stable",
+      "legacy": [
+        "ai ai-layout-grid",
+        "ai ai-objects-column",
+        "ai ai-th-large",
+        "pi pi-objects-column",
+        "pi pi-th-large"
+      ]
+    },
+    {
+      "name": "maximize",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Two diagonal arrows pointing outward",
+      "means": "Maximize or enter full screen",
+      "status": "stable",
+      "legacy": [
+        "ai ai-arrow-up-right-and-arrow-down-left-from-center",
+        "ai ai-maximize",
+        "pi pi-arrow-up-right-and-arrow-down-left-from-center"
+      ]
+    },
+    {
+      "name": "menu",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three horizontal lines",
+      "means": "Open the menu",
+      "status": "stable",
+      "legacy": ["ai ai-bars", "ai ai-menu", "pi pi-bars"]
+    },
+    {
+      "name": "minimize",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Two diagonal arrows pointing inward",
+      "means": "Minimize or exit full screen",
+      "status": "stable",
+      "legacy": [
+        "ai ai-arrow-down-left-and-arrow-up-right-to-center",
+        "ai ai-minimize",
+        "pi pi-arrow-down-left-and-arrow-up-right-to-center"
+      ]
+    },
+    {
+      "name": "sitemap",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "One box connected down to two boxes in a tree",
+      "means": "Sitemap or hierarchy",
+      "status": "stable",
+      "legacy": ["ai ai-sitemap", "pi pi-sitemap"]
+    },
+    {
+      "name": "sliders-horizontal",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three horizontal sliders with knobs",
+      "means": "Adjust settings or filters",
+      "status": "stable",
+      "legacy": ["ai ai-sliders-h", "ai ai-sliders-horizontal", "pi pi-sliders-h"]
+    },
+    {
+      "name": "sliders-vertical",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three vertical sliders with knobs",
+      "means": "Adjust settings or levels",
+      "status": "stable",
+      "legacy": ["ai ai-sliders-v", "ai ai-sliders-vertical", "pi pi-sliders-v"]
+    },
+    {
+      "name": "window-maximize",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "A browser window with two dots in its top bar",
+      "means": "Maximize the window",
+      "status": "stable",
+      "issue": "The drawing does not match the name: the drawing is a plain window with two dots, with no expand arrow or mark showing maximize.",
+      "legacy": ["ai ai-window-maximize", "pi pi-window-maximize"]
+    },
+    {
+      "name": "window-minimize",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "An arrow pointing into a small square at the lower left of a larger square",
+      "means": "Minimize the window",
+      "status": "stable",
+      "legacy": ["ai ai-window-minimize", "pi pi-window-minimize"]
+    },
+    {
+      "name": "asterisk",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "An asterisk with six arms",
+      "means": "Required field or wildcard",
+      "status": "stable",
+      "legacy": ["ai ai-asterisk", "pi pi-asterisk"]
+    },
+    {
+      "name": "bolt",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A lightning bolt",
+      "means": "Power, energy or speed",
+      "status": "stable",
+      "legacy": ["ai ai-bolt", "pi pi-bolt"]
+    },
+    {
+      "name": "book",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A closed book",
+      "means": "Documentation or reading",
+      "status": "stable",
+      "legacy": ["ai ai-book", "pi pi-book"]
+    },
+    {
+      "name": "bookmark",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A bookmark ribbon outline",
+      "means": "Save for later",
+      "status": "stable",
+      "legacy": ["ai ai-bookmark", "pi pi-bookmark"]
+    },
+    {
+      "name": "bookmark-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A filled bookmark ribbon",
+      "means": "Saved item",
+      "status": "stable",
+      "legacy": ["ai ai-bookmark-fill", "pi pi-bookmark-fill"]
+    },
+    {
+      "name": "box",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A cube-shaped box",
+      "means": "Package, product or bundle",
+      "status": "stable",
+      "legacy": ["ai ai-box", "pi pi-box"]
+    },
+    {
+      "name": "briefcase",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A briefcase",
+      "means": "Work or business",
+      "status": "stable",
+      "legacy": ["ai ai-briefcase", "pi pi-briefcase"]
+    },
+    {
+      "name": "building",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "An office building with a grid of windows and a door",
+      "means": "Company or organization",
+      "status": "stable",
+      "legacy": ["ai ai-building", "pi pi-building"]
+    },
+    {
+      "name": "building-columns",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A building with columns under a triangular roof",
+      "means": "Bank or institution",
+      "status": "stable",
+      "legacy": ["ai ai-building-columns", "pi pi-building-columns"]
+    },
+    {
+      "name": "bullseye",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A target of concentric circles with a center dot",
+      "means": "Goal or target",
+      "status": "stable",
+      "legacy": ["ai ai-bullseye", "pi pi-bullseye"]
+    },
+    {
+      "name": "calendar",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A calendar page showing the number 1",
+      "means": "Date or schedule",
+      "status": "stable",
+      "legacy": ["ai ai-calendar", "pi pi-calendar"]
+    },
+    {
+      "name": "calendar-clock",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A calendar with a small clock at the lower right",
+      "means": "Scheduled date and time",
+      "status": "stable",
+      "legacy": ["ai ai-calendar-clock", "pi pi-calendar-clock"]
+    },
+    {
+      "name": "calendar-minus",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A calendar with a minus sign",
+      "means": "Remove an event or date",
+      "status": "stable",
+      "legacy": ["ai ai-calendar-minus", "pi pi-calendar-minus"]
+    },
+    {
+      "name": "calendar-plus",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A calendar with a plus sign",
+      "means": "Add an event or date",
+      "status": "stable",
+      "legacy": ["ai ai-calendar-plus", "pi pi-calendar-plus"]
+    },
+    {
+      "name": "calendar-x",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A calendar with an X",
+      "means": "Cancel an event or clear a date",
+      "status": "stable",
+      "legacy": ["ai ai-calendar-times", "ai ai-calendar-x", "pi pi-calendar-times"]
+    },
+    {
+      "name": "car",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A car seen from the side",
+      "means": "Vehicle or transport",
+      "status": "stable",
+      "legacy": ["ai ai-car", "pi pi-car"]
+    },
+    {
+      "name": "clock",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A clock face with two hands",
+      "means": "Time, schedule or history",
+      "status": "stable",
+      "legacy": ["ai ai-clock", "pi pi-clock"]
+    },
+    {
+      "name": "cloud",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A cloud outline",
+      "means": "Cloud or hosted service",
+      "status": "stable",
+      "legacy": ["ai ai-cloud", "pi pi-cloud"]
+    },
+    {
+      "name": "code",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "Angle brackets around a slash",
+      "means": "Code or source view",
+      "status": "stable",
+      "legacy": ["ai ai-code", "pi pi-code"]
+    },
+    {
+      "name": "compass",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A compass with a needle in a circle",
+      "means": "Explore or navigate",
+      "status": "stable",
+      "legacy": ["ai ai-compass", "pi pi-compass"]
+    },
+    {
+      "name": "crown",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A crown above a line",
+      "means": "Premium, owner or top rank",
+      "status": "stable",
+      "legacy": ["ai ai-crown", "pi pi-crown"]
+    },
+    {
+      "name": "directions",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A right arrow inside a diamond sign",
+      "means": "Directions or route",
+      "status": "stable",
+      "legacy": ["ai ai-directions", "pi pi-directions"]
+    },
+    {
+      "name": "equals",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "An equals sign",
+      "means": "Equals or equal to",
+      "status": "stable",
+      "legacy": ["ai ai-equals", "pi pi-equals"]
+    },
+    {
+      "name": "flag",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A flag on a pole",
+      "means": "Flag, mark or report an item",
+      "status": "stable",
+      "legacy": ["ai ai-flag", "pi pi-flag"]
+    },
+    {
+      "name": "flag-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A filled flag on a pole",
+      "means": "Flagged item",
+      "status": "stable",
+      "legacy": ["ai ai-flag-fill", "pi pi-flag-fill"]
+    },
+    {
+      "name": "globe",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A globe with meridian and equator lines",
+      "means": "World, internet or language/region",
+      "status": "stable",
+      "legacy": ["ai ai-globe", "pi pi-globe"]
+    },
+    {
+      "name": "graduation-cap",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A mortarboard graduation cap with a tassel",
+      "means": "Education, learning or courses",
+      "status": "stable",
+      "legacy": ["ai ai-graduation-cap", "ai ai-instructor", "pi pi-graduation-cap"]
+    },
+    {
+      "name": "hammer",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A hammer",
+      "means": "Build, tools or settings",
+      "status": "stable",
+      "legacy": ["ai ai-hammer", "pi pi-hammer"]
+    },
+    {
+      "name": "hash",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A hash sign (#)",
+      "means": "Number, ID or hashtag",
+      "status": "stable",
+      "legacy": ["ai ai-hash", "ai ai-hashtag", "pi pi-hashtag"]
+    },
+    {
+      "name": "heart",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A heart outline",
+      "means": "Favorite or like",
+      "status": "stable",
+      "legacy": ["ai ai-heart", "pi pi-heart"]
+    },
+    {
+      "name": "heart-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A filled heart",
+      "means": "Favorited or liked",
+      "status": "stable",
+      "legacy": ["ai ai-heart-fill", "pi pi-heart-fill"]
+    },
+    {
+      "name": "home",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A house",
+      "means": "Home, overview",
+      "status": "stable",
+      "legacy": ["ai ai-home", "pi pi-home"]
+    },
+    {
+      "name": "key",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A key",
+      "means": "Key, credentials or access",
+      "status": "stable",
+      "legacy": ["ai ai-key", "pi pi-key"]
+    },
+    {
+      "name": "language",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A Chinese-style character next to the letter A",
+      "means": "Language or translation",
+      "status": "stable",
+      "legacy": ["ai ai-language", "pi pi-language"]
+    },
+    {
+      "name": "lightbulb",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A light bulb with rays",
+      "means": "Idea, tip or hint",
+      "status": "stable",
+      "legacy": ["ai ai-lightbulb", "pi pi-lightbulb"]
+    },
+    {
+      "name": "lock",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A closed padlock",
+      "means": "Locked or secure",
+      "status": "stable",
+      "legacy": ["ai ai-lock", "pi pi-lock"]
+    },
+    {
+      "name": "lock-open",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "An open padlock",
+      "means": "Unlocked",
+      "status": "stable",
+      "legacy": ["ai ai-lock-open", "ai ai-unlock", "pi pi-lock-open", "pi pi-unlock"]
+    },
+    {
+      "name": "map",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A folded map",
+      "means": "Map",
+      "status": "stable",
+      "legacy": ["ai ai-map", "pi pi-map"]
+    },
+    {
+      "name": "map-pin",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A map pin marker",
+      "means": "Location",
+      "status": "stable",
+      "legacy": ["ai ai-map-marker", "ai ai-map-pin", "pi pi-map-marker"]
+    },
+    {
+      "name": "moon",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A crescent moon",
+      "means": "Dark mode or night",
+      "status": "stable",
+      "legacy": ["ai ai-moon", "pi pi-moon"]
+    },
+    {
+      "name": "palette",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A painter's palette with paint dots",
+      "means": "Colors, theme or appearance",
+      "status": "stable",
+      "legacy": ["ai ai-palette", "pi pi-palette"]
+    },
+    {
+      "name": "percentage",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A percent sign",
+      "means": "Percentage or discount",
+      "status": "stable",
+      "legacy": ["ai ai-percentage", "pi pi-percentage"]
+    },
+    {
+      "name": "pin",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A push pin",
+      "means": "Pin an item",
+      "status": "stable",
+      "legacy": ["ai ai-pin", "ai ai-thumbtack", "pi pi-thumbtack"]
+    },
+    {
+      "name": "qrcode",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A QR code pattern",
+      "means": "QR code",
+      "status": "stable",
+      "legacy": ["ai ai-qrcode", "pi pi-qrcode"]
+    },
+    {
+      "name": "route",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A winding path between two dots",
+      "means": "A route or path",
+      "status": "stable",
+      "renamedBecause": "Too close to ai-gateway (AI Gateway); Lucide name for a winding path between two dots.",
+      "legacy": ["ai ai-gateway"]
+    },
+    {
+      "name": "shield",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A shield outline",
+      "means": "Security or protection",
+      "status": "stable",
+      "legacy": ["ai ai-shield", "pi pi-shield"]
+    },
+    {
+      "name": "signpost",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A signpost with two direction boards pointing opposite ways",
+      "means": "Directions, routing or navigation",
+      "status": "stable",
+      "legacy": ["ai ai-directions-alt", "ai ai-signpost", "pi pi-directions-alt"]
+    },
+    {
+      "name": "sparkles",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "Three sparkles",
+      "means": "AI features, magic",
+      "status": "stable",
+      "legacy": ["ai ai-sparkles", "pi pi-sparkles"]
+    },
+    {
+      "name": "star",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A star outline",
+      "means": "Favorite or rating",
+      "status": "stable",
+      "legacy": ["ai ai-star", "pi pi-star"]
+    },
+    {
+      "name": "star-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A filled star",
+      "means": "Favorited or full rating",
+      "status": "stable",
+      "legacy": ["ai ai-star-fill", "pi pi-star-fill"]
+    },
+    {
+      "name": "star-half",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "The outline of the left half of a star",
+      "means": "Half-star rating",
+      "status": "stable",
+      "legacy": ["ai ai-star-half", "pi pi-star-half"]
+    },
+    {
+      "name": "star-half-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "The outline of the left half of a star, not filled",
+      "means": "Half-star rating, filled",
+      "status": "stable",
+      "issue": "The drawing does not match the name: the drawing is the same unfilled half-star outline as star-half, not a filled half star.",
+      "legacy": ["ai ai-star-half-fill", "pi pi-star-half-fill"]
+    },
+    {
+      "name": "stopwatch",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A stopwatch",
+      "means": "Timer or elapsed time",
+      "status": "stable",
+      "legacy": ["ai ai-stopwatch", "pi pi-stopwatch"]
+    },
+    {
+      "name": "sun",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A sun with rays",
+      "means": "Light mode or daytime",
+      "status": "stable",
+      "legacy": ["ai ai-sun", "pi pi-sun"]
+    },
+    {
+      "name": "tag",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A price tag with a hole",
+      "means": "A tag or label",
+      "status": "stable",
+      "legacy": ["ai ai-tag", "pi pi-tag"]
+    },
+    {
+      "name": "tags",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "Two overlapping price tags",
+      "means": "Tags or labels",
+      "status": "stable",
+      "legacy": ["ai ai-tags", "pi pi-tags"]
+    },
+    {
+      "name": "thumbs-down",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A thumbs-down hand",
+      "means": "Dislike or negative feedback",
+      "status": "stable",
+      "legacy": ["ai ai-thumbs-down", "pi pi-thumbs-down"]
+    },
+    {
+      "name": "thumbs-down-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A filled thumbs-down hand",
+      "means": "Disliked",
+      "status": "stable",
+      "legacy": ["ai ai-thumbs-down-fill", "pi pi-thumbs-down-fill"]
+    },
+    {
+      "name": "thumbs-up",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A thumbs-up hand",
+      "means": "Like or positive feedback",
+      "status": "stable",
+      "legacy": ["ai ai-thumbs-up", "pi pi-thumbs-up"]
+    },
+    {
+      "name": "thumbs-up-fill",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A filled thumbs-up hand",
+      "means": "Liked",
+      "status": "stable",
+      "legacy": ["ai ai-thumbs-up-fill", "pi pi-thumbs-up-fill"]
+    },
+    {
+      "name": "trophy",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A trophy cup",
+      "means": "Achievement or winner",
+      "status": "stable",
+      "legacy": ["ai ai-trophy", "pi pi-trophy"]
+    },
+    {
+      "name": "truck",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A delivery truck",
+      "means": "Shipping or delivery",
+      "status": "stable",
+      "legacy": ["ai ai-truck", "pi pi-truck"]
+    },
+    {
+      "name": "warehouse",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A building with a pitched roof and a stack of shelves inside",
+      "means": "A warehouse or storage",
+      "status": "stable",
+      "legacy": ["ai ai-warehouse", "pi pi-warehouse"]
+    },
+    {
+      "name": "wrench",
+      "set": "mono",
+      "group": "interface",
+      "category": "object",
+      "shows": "A wrench",
+      "means": "Tools or configuration",
+      "status": "stable",
+      "legacy": ["ai ai-wrench", "pi pi-wrench"]
+    },
+    {
+      "name": "git-branch",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A branch",
+      "means": "A git branch",
+      "status": "stable",
+      "legacy": ["ai ai-branch", "ai ai-git-branch"]
+    },
+    {
+      "name": "git-branch-delete",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A branch with a minus sign",
+      "means": "Delete a branch",
+      "status": "stable",
+      "legacy": ["ai ai-git-branch-delete"]
+    },
+    {
+      "name": "git-branch-plus",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A branch with a plus sign",
+      "means": "Create a branch",
+      "status": "stable",
+      "legacy": ["ai ai-git-branch-plus"]
+    },
+    {
+      "name": "git-cherry-pick",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A commit with an arrow off the line",
+      "means": "Cherry-pick a commit",
+      "status": "stable",
+      "legacy": ["ai ai-git-cherry-pick"]
+    },
+    {
+      "name": "git-commit",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A dot on a vertical line",
+      "means": "A commit",
+      "status": "stable",
+      "legacy": ["ai ai-git-commit"]
+    },
+    {
+      "name": "git-compare",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "Two dots with arrows between them",
+      "means": "Compare two versions",
+      "status": "stable",
+      "legacy": ["ai ai-git-compare"]
+    },
+    {
+      "name": "git-diff",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A plus over a minus",
+      "means": "A diff",
+      "status": "stable",
+      "legacy": ["ai ai-git-diff"]
+    },
+    {
+      "name": "git-fork",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "Two lines joining into one",
+      "means": "A fork",
+      "status": "stable",
+      "legacy": ["ai ai-git-fork"]
+    },
+    {
+      "name": "git-graph",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "Three lines with dots",
+      "means": "A commit graph",
+      "status": "stable",
+      "legacy": ["ai ai-git-graph"]
+    },
+    {
+      "name": "git-merge",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "Two lines merging",
+      "means": "A merge",
+      "status": "stable",
+      "legacy": ["ai ai-git-merge"]
+    },
+    {
+      "name": "git-merge-conflict",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "An X beside a merge path",
+      "means": "A merge conflict",
+      "status": "stable",
+      "legacy": ["ai ai-git-merge-conflict"]
+    },
+    {
+      "name": "git-pull-request",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A pull request",
+      "means": "A pull request",
+      "status": "stable",
+      "legacy": ["ai ai-git-pull-request"]
+    },
+    {
+      "name": "git-pull-request-closed",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A pull request with an X",
+      "means": "A closed pull request",
+      "status": "stable",
+      "legacy": ["ai ai-git-pull-request-closed"]
+    },
+    {
+      "name": "git-pull-request-draft",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A pull request with a dashed line",
+      "means": "A draft pull request",
+      "status": "stable",
+      "legacy": ["ai ai-git-pull-request-draft"]
+    },
+    {
+      "name": "git-repository",
+      "set": "mono",
+      "group": "interface",
+      "category": "git",
+      "shows": "A book with a bookmark",
+      "means": "A repository",
+      "status": "stable",
+      "legacy": ["ai ai-git-repository"]
+    },
+    {
+      "name": "angular",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Angular logo",
+      "means": "Angular (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-angular"]
+    },
+    {
+      "name": "astro",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Astro logo",
+      "means": "Astro (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-astro"]
+    },
+    {
+      "name": "docusaurus",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Docusaurus logo",
+      "means": "Docusaurus (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-docusaurus"]
+    },
+    {
+      "name": "eleventy",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Eleventy logo",
+      "means": "Eleventy (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-eleventy"]
+    },
+    {
+      "name": "gatsby",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Gatsby logo",
+      "means": "Gatsby (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-gatsby"]
+    },
+    {
+      "name": "hexo",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Hexo logo",
+      "means": "Hexo (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-hexo"]
+    },
+    {
+      "name": "hono",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Hono logo",
+      "means": "Hono (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-hono"]
+    },
+    {
+      "name": "hugo",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Hugo logo",
+      "means": "Hugo (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-hugo"]
+    },
+    {
+      "name": "jekyll",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Jekyll logo",
+      "means": "Jekyll (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-jekyll"]
+    },
+    {
+      "name": "nextjs",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Next.js logo",
+      "means": "Next.js (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-next", "ai ai-nextjs"]
+    },
+    {
+      "name": "nitro",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Nitro logo",
+      "means": "Nitro (framework)",
+      "status": "stable",
+      "issue": "Source drawn at 40px, the rest at 14px. Redraw on the 14px grid.",
+      "legacy": ["ai ai-nitro"]
+    },
+    {
+      "name": "nuxt",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Nuxt logo",
+      "means": "Nuxt (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-nuxt"]
+    },
+    {
+      "name": "preact",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Preact logo",
+      "means": "Preact (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-preact"]
+    },
+    {
+      "name": "qwik",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Qwik logo",
+      "means": "Qwik (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-qwik"]
+    },
+    {
+      "name": "react",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The React logo",
+      "means": "React (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-react"]
+    },
+    {
+      "name": "remix",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Remix logo",
+      "means": "Remix (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-remix"]
+    },
+    {
+      "name": "stencil",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Stencil logo",
+      "means": "Stencil (framework)",
+      "status": "stable",
+      "issue": "Source drawn at 24px, the rest at 14px. Redraw on the 14px grid.",
+      "legacy": ["ai ai-stencil"]
+    },
+    {
+      "name": "svelte",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Svelte logo",
+      "means": "Svelte (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-svelte"]
+    },
+    {
+      "name": "vitepress",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The VitePress logo",
+      "means": "VitePress (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-vitepress"]
+    },
+    {
+      "name": "vue",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Vue logo",
+      "means": "Vue (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-vue"]
+    },
+    {
+      "name": "vuepress",
+      "set": "mono",
+      "group": "external",
+      "category": "framework",
+      "shows": "The VuePress logo",
+      "means": "VuePress (framework)",
+      "status": "stable",
+      "legacy": ["ai ai-vuepress"]
+    },
+    {
+      "name": "claude",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Claude logo",
+      "means": "Claude (AI model)",
+      "status": "stable",
+      "legacy": ["ai ai-claude", "pi pi-claude"]
+    },
+    {
+      "name": "deepseek",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The DeepSeek logo",
+      "means": "DeepSeek (AI model)",
+      "status": "stable",
+      "legacy": ["ai ai-deepseek"]
+    },
+    {
+      "name": "gemini",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Gemini logo",
+      "means": "Gemini (AI model)",
+      "status": "stable",
+      "legacy": ["ai ai-gemini", "pi pi-gemini"]
+    },
+    {
+      "name": "grok",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Grok logo",
+      "means": "Grok (AI model)",
+      "status": "stable",
+      "legacy": ["ai ai-grok"]
+    },
+    {
+      "name": "meta",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Meta logo",
+      "means": "Meta (AI models)",
+      "status": "stable",
+      "legacy": ["ai ai-meta"]
+    },
+    {
+      "name": "microsoft-copilot",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Microsoft Copilot logo",
+      "means": "Microsoft Copilot",
+      "status": "stable",
+      "legacy": ["ai ai-microsoft-copilot"]
+    },
+    {
+      "name": "mistral",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Mistral logo",
+      "means": "Mistral (AI model)",
+      "status": "stable",
+      "legacy": ["ai ai-mistral"]
+    },
+    {
+      "name": "openai",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The OpenAI logo",
+      "means": "OpenAI",
+      "status": "stable",
+      "renamedBecause": "\"open\" does not say whose logo it is.",
+      "legacy": ["ai ai-open", "ai ai-openai"]
+    },
+    {
+      "name": "perplexity",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Perplexity logo",
+      "means": "Perplexity (AI model)",
+      "status": "stable",
+      "legacy": ["ai ai-perplexity"]
+    },
+    {
+      "name": "qwen",
+      "set": "mono",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Qwen logo",
+      "means": "Qwen (AI model)",
+      "status": "stable",
+      "legacy": ["ai ai-qwen"]
+    },
+    {
+      "name": "cursor",
+      "set": "mono",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Cursor logo",
+      "means": "Cursor (code editor)",
+      "status": "stable",
+      "legacy": ["ai ai-cursor"]
+    },
+    {
+      "name": "github",
+      "set": "mono",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The GitHub logo",
+      "means": "GitHub",
+      "status": "stable",
+      "legacy": ["ai ai-github", "pi pi-github"]
+    },
+    {
+      "name": "mcp",
+      "set": "mono",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The MCP logo",
+      "means": "Model Context Protocol",
+      "status": "stable",
+      "renamedBecause": "Other brand icons have no \"-logo\" suffix.",
+      "legacy": ["ai ai-mcp", "ai ai-mcp-logo"]
+    },
+    {
+      "name": "redis",
+      "set": "mono",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Redis logo",
+      "means": "Redis",
+      "status": "stable",
+      "legacy": ["ai ai-redis"]
+    },
+    {
+      "name": "terraform",
+      "set": "mono",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Terraform logo",
+      "means": "Terraform",
+      "status": "stable",
+      "legacy": ["ai ai-terraform"]
+    },
+    {
+      "name": "turso",
+      "set": "mono",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Turso logo",
+      "means": "Turso (database)",
+      "status": "stable",
+      "legacy": ["ai ai-turso"]
+    },
+    {
+      "name": "vite",
+      "set": "mono",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Vite logo",
+      "means": "Vite (build tool)",
+      "status": "stable",
+      "legacy": ["ai ai-vite"]
+    },
+    {
+      "name": "windsurf",
+      "set": "mono",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Windsurf logo",
+      "means": "Windsurf (code editor)",
+      "status": "stable",
+      "legacy": ["ai ai-windsurf"]
+    },
+    {
+      "name": "graphql",
+      "set": "mono",
+      "group": "external",
+      "category": "language",
+      "shows": "The GraphQL logo",
+      "means": "GraphQL",
+      "status": "stable",
+      "legacy": ["ai ai-graphql"]
+    },
+    {
+      "name": "html",
+      "set": "mono",
+      "group": "external",
+      "category": "language",
+      "shows": "The HTML5 shield",
+      "means": "HTML",
+      "status": "stable",
+      "legacy": ["ai ai-html"]
+    },
+    {
+      "name": "discord",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Discord logo",
+      "means": "Discord (community)",
+      "status": "stable",
+      "legacy": ["ai ai-discord", "pi pi-discord"]
+    },
+    {
+      "name": "facebook",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "A filled circle with a lowercase f",
+      "means": "Facebook (social network)",
+      "status": "stable",
+      "legacy": ["ai ai-facebook", "pi pi-facebook"]
+    },
+    {
+      "name": "google",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Google G logo",
+      "means": "Google (search and cloud services)",
+      "status": "stable",
+      "legacy": ["ai ai-google", "pi pi-google"]
+    },
+    {
+      "name": "instagram",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Instagram camera logo: a rounded square with a circle and a dot",
+      "means": "Instagram (photo social network)",
+      "status": "stable",
+      "legacy": ["ai ai-instagram", "pi pi-instagram"]
+    },
+    {
+      "name": "linkedin",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The LinkedIn \"in\" logo in a filled rounded square",
+      "means": "LinkedIn (professional social network)",
+      "status": "stable",
+      "legacy": ["ai ai-linkedin", "pi pi-linkedin"]
+    },
+    {
+      "name": "medium",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Medium logo",
+      "means": "Medium (blog)",
+      "status": "stable",
+      "legacy": ["ai ai-medium"]
+    },
+    {
+      "name": "reddit",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Reddit alien in a filled circle",
+      "means": "Reddit (online discussion community)",
+      "status": "stable",
+      "legacy": ["ai ai-reddit", "pi pi-reddit"]
+    },
+    {
+      "name": "slack",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Slack hash logo",
+      "means": "Slack (team messaging app)",
+      "status": "stable",
+      "legacy": ["ai ai-slack", "pi pi-slack"]
+    },
+    {
+      "name": "twitch",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Twitch logo",
+      "means": "Twitch",
+      "status": "stable",
+      "legacy": ["ai ai-twitch", "pi pi-twitch"]
+    },
+    {
+      "name": "whatsapp",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The WhatsApp speech bubble with a phone",
+      "means": "WhatsApp (messaging app)",
+      "status": "stable",
+      "legacy": ["ai ai-whatsapp", "pi pi-whatsapp"]
+    },
+    {
+      "name": "x-brand",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The X logo",
+      "means": "X (social network)",
+      "status": "stable",
+      "legacy": ["ai ai-x-brand", "pi pi-twitter"]
+    },
+    {
+      "name": "youtube",
+      "set": "mono",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The YouTube logo",
+      "means": "YouTube",
+      "status": "stable",
+      "legacy": ["ai ai-youtube", "pi pi-youtube"]
+    },
+    {
+      "name": "angular",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Angular logo in red",
+      "means": "Angular (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-angular", "ai-cor ai-angular"]
+    },
+    {
+      "name": "astro",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Astro logo in black and pink",
+      "means": "Astro (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-astro", "ai-cor ai-astro"]
+    },
+    {
+      "name": "flutter",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Flutter logo",
+      "means": "Flutter (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-flutter", "ai-cor ai-flutter"]
+    },
+    {
+      "name": "nextjs",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Next.js logo",
+      "means": "Next.js (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-nextjs", "ai-cor ai-next", "ai-cor ai-nextjs"]
+    },
+    {
+      "name": "nuxt",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Nuxt logo in green",
+      "means": "Nuxt (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-nuxt", "ai-cor ai-nuxt"]
+    },
+    {
+      "name": "react",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The React logo in cyan",
+      "means": "React (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-react", "ai-cor ai-react"]
+    },
+    {
+      "name": "redwood",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The RedwoodJS logo",
+      "means": "RedwoodJS (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-redwood", "ai-cor ai-redwood"]
+    },
+    {
+      "name": "solidjs",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The SolidJS logo",
+      "means": "SolidJS (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-solidjs", "ai-cor ai-solidjs"]
+    },
+    {
+      "name": "svelte",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Svelte logo in orange",
+      "means": "Svelte (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-svelte", "ai-cor ai-svelte"]
+    },
+    {
+      "name": "vue",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Vue logo in green",
+      "means": "Vue (framework)",
+      "status": "stable",
+      "legacy": ["ai-color ai-vue", "ai-cor ai-vue"]
+    },
+    {
+      "name": "claude",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Claude logo in orange",
+      "means": "Claude (AI model)",
+      "status": "stable",
+      "legacy": ["ai-color ai-claude", "ai-cor ai-claude"]
+    },
+    {
+      "name": "deepseek",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The DeepSeek logo in blue",
+      "means": "DeepSeek (AI model)",
+      "status": "stable",
+      "legacy": ["ai-color ai-deepseek", "ai-cor ai-deepseek"]
+    },
+    {
+      "name": "gemini",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Gemini logo",
+      "means": "Gemini (AI model)",
+      "status": "stable",
+      "legacy": ["ai-color ai-gemini", "ai-cor ai-gemini"]
+    },
+    {
+      "name": "grok",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Grok logo",
+      "means": "Grok (AI model)",
+      "status": "stable",
+      "legacy": ["ai-color ai-grok", "ai-cor ai-grok"]
+    },
+    {
+      "name": "meta",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Meta logo in blue",
+      "means": "Meta (AI models)",
+      "status": "stable",
+      "legacy": ["ai-color ai-meta", "ai-cor ai-meta"]
+    },
+    {
+      "name": "microsoft-copilot",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Microsoft Copilot logo",
+      "means": "Microsoft Copilot",
+      "status": "stable",
+      "legacy": ["ai-color ai-microsoft-copilot", "ai-cor ai-microsoft-copilot"]
+    },
+    {
+      "name": "mistral",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Mistral logo",
+      "means": "Mistral (AI model)",
+      "status": "stable",
+      "legacy": ["ai-color ai-mistral", "ai-cor ai-mistral"]
+    },
+    {
+      "name": "openai",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The OpenAI logo",
+      "means": "OpenAI",
+      "status": "stable",
+      "renamedBecause": "\"open\" does not say whose logo it is.",
+      "legacy": ["ai-color ai-openai", "ai-cor ai-open", "ai-cor ai-openai"]
+    },
+    {
+      "name": "perplexity",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Perplexity logo",
+      "means": "Perplexity (AI model)",
+      "status": "stable",
+      "legacy": ["ai-color ai-perplexity", "ai-cor ai-perplexity"]
+    },
+    {
+      "name": "qwen",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Qwen logo",
+      "means": "Qwen (AI model)",
+      "status": "stable",
+      "legacy": ["ai-color ai-qwen", "ai-cor ai-qwen"]
+    },
+    {
+      "name": "azure-devops",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Azure DevOps logo",
+      "means": "Azure DevOps",
+      "status": "stable",
+      "renamedBecause": "Words split with a hyphen like every other name.",
+      "legacy": ["ai-color ai-azure-devops", "ai-cor ai-azure-devops", "ai-cor ai-azuredevops"]
+    },
+    {
+      "name": "bitbucket",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Bitbucket logo",
+      "means": "Bitbucket",
+      "status": "stable",
+      "legacy": ["ai-color ai-bitbucket", "ai-cor ai-bitbucket"]
+    },
+    {
+      "name": "cursor",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Cursor logo",
+      "means": "Cursor (code editor)",
+      "status": "stable",
+      "legacy": ["ai-color ai-cursor", "ai-cor ai-cursor"]
+    },
+    {
+      "name": "gitlab",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The GitLab logo",
+      "means": "GitLab",
+      "status": "stable",
+      "legacy": ["ai-color ai-gitlab", "ai-cor ai-gitlab"]
+    },
+    {
+      "name": "terraform",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Terraform logo in purple",
+      "means": "Terraform",
+      "status": "stable",
+      "legacy": ["ai-color ai-terraform", "ai-cor ai-terraform"]
+    },
+    {
+      "name": "windsurf",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Windsurf logo",
+      "means": "Windsurf (code editor)",
+      "status": "stable",
+      "legacy": ["ai-color ai-windsurf", "ai-cor ai-windsurf"]
+    },
+    {
+      "name": "graphql",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The GraphQL logo in pink",
+      "means": "GraphQL",
+      "status": "stable",
+      "legacy": ["ai-color ai-graphql", "ai-cor ai-graphql"]
+    },
+    {
+      "name": "html",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The HTML5 shield in orange",
+      "means": "HTML",
+      "status": "stable",
+      "legacy": ["ai-color ai-html", "ai-cor ai-html"]
+    },
+    {
+      "name": "javascript",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The JS logo in yellow",
+      "means": "JavaScript",
+      "status": "stable",
+      "renamedBecause": "Spelled out, like typescript.",
+      "legacy": ["ai-color ai-javascript", "ai-cor ai-javascript", "ai-cor ai-js"]
+    },
+    {
+      "name": "kotlin",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The Kotlin logo",
+      "means": "Kotlin",
+      "status": "stable",
+      "legacy": ["ai-color ai-kotlin", "ai-cor ai-kotlin"]
+    },
+    {
+      "name": "typescript",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The TS logo in blue",
+      "means": "TypeScript",
+      "status": "stable",
+      "renamedBecause": "Spelled out, so search finds it.",
+      "legacy": ["ai-color ai-typescript", "ai-cor ai-ts", "ai-cor ai-typescript"]
+    },
+    {
+      "name": "discord",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Discord logo in purple",
+      "means": "Discord (community)",
+      "status": "stable",
+      "legacy": ["ai-color ai-discord", "ai-cor ai-discord"]
+    },
+    {
+      "name": "google",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Google G",
+      "means": "Google",
+      "status": "stable",
+      "legacy": ["ai-color ai-google", "ai-cor ai-google"]
+    },
+    {
+      "name": "x-brand",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The X logo",
+      "means": "X (social network)",
+      "status": "stable",
+      "legacy": ["ai-color ai-x-brand", "ai-cor ai-x", "ai-cor ai-x-brand"]
+    },
+    {
+      "name": "youtube",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The YouTube logo in red",
+      "means": "YouTube",
+      "status": "stable",
+      "legacy": ["ai-color ai-youtube", "ai-cor ai-youtube"]
+    }
+  ]
+}

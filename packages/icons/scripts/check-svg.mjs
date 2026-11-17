@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-const SVG_DIRS = ['./src/svg-raw/ai/']
+const SVG_DIRS = ['./src/svg-raw/az/']
 
 const issues = {
   placeholder: [],

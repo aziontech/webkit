@@ -16,8 +16,8 @@ describe('IconCard', () => {
     host = document.createElement('div')
     document.body.append(host)
     const props = {
-      name: 'ai-azion',
-      icon: 'ai-azion',
+      name: 'az-azion',
+      icon: 'az-azion',
       color: '#000000',
       size: 'text-base',
       downloadFormat: 'svg'
@@ -26,7 +26,7 @@ describe('IconCard', () => {
     app.mount(host)
     await nextTick()
 
-    expect(host.textContent).toContain('ai-azion')
+    expect(host.textContent).toContain('az-azion')
     expect(host.querySelector('button[title="Copy code"]')).not.toBeNull()
     expect(host.querySelector('button[title="Download SVG"]')).not.toBeNull()
   })
