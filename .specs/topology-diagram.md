@@ -3,9 +3,9 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
-checksum: 14f04b8b2805c277a18416e9f70e23cfa47108031d9700ccbfabcc4284ea0cba
+checksum: ff3dec6c82973fedeaaaf71f1132a855c4e41ea3853e63d3b0a4b5e0d15a33a3
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -50,9 +50,10 @@ The deployment topology of a resource as a left-to-right diagram: each column is
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
   import TopologyDiagram from '@aziontech/webkit/topology-diagram'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
-  const levels = [
+  const policy = ref('')
+  const levels = computed(() => [
     {
       id: 'domains',
       nodes: [
@@ -84,13 +85,16 @@ The deployment topology of a resource as a left-to-right diagram: each column is
         {
           id: 'policy',
           type: 'Policy',
+          name: policy.value,
+          boundValue: policy.value,
           bindable: true,
+          removable: true,
           bindOptions: [{ value: 'edge-guard', label: 'edge-guard' }],
           terminal: true
         }
       ]
     }
-  ]
+  ])
   const openKeys = ref([])
 </script>
 
@@ -98,7 +102,8 @@ The deployment topology of a resource as a left-to-right diagram: each column is
   <TopologyDiagram
     v-model:open-keys="openKeys"
     :levels="levels"
-    @bind="(event, { id, value }) => {}"
+    @bind="(event, { value }) => (policy = value)"
+    @remove="() => (policy = '')"
   >
     <template #actions="{ node }">
       <Tooltip
@@ -150,7 +155,7 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 
 - Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
 - Node card: `data-state` `open` | `closed`; `data-dashed` for a staged, unbound or pending node.
-- Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`az az-check`, primary, `Apply {kind}`) and **Cancel** (`az az-x`, `Cancel`). Apply emits `bind` and clears it; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
+- Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`az az-check`, primary, `Apply {kind}`) and **Cancel** (`az az-x`, `Cancel`). Apply emits `bind` and clears it; the node is controlled, so it then shows the `name` and `boundValue` its `levels` entry carries, and the app writes the applied value back in its `bind` handler (and clears it in `remove`) or the card returns to the previous binding; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
 - Connectors: dashed, flowing; faded never (no disabled nodes).
 
 ## Motion & Animations

@@ -2,7 +2,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
   import TopologyDiagram from '@aziontech/webkit/topology-diagram'
-  import { ref } from 'vue'
+  import { computed, reactive, ref } from 'vue'
 
   const policies = [
     { value: 'edge-guard', label: 'edge-guard' },
@@ -10,7 +10,14 @@
   ]
   const errorPages = [{ value: 'maintenance', label: 'maintenance' }]
 
-  const levels = [
+  const bound = reactive({ policy: 'edge-guard', 'error-page': '' })
+
+  const bindingFields = (value, unbound) =>
+    value
+      ? { name: value, boundValue: value, status: 'Active', severity: 'success', message: '' }
+      : { name: '', boundValue: '', status: '', severity: 'neutral', message: unbound }
+
+  const levels = computed(() => [
     {
       id: 'domains',
       label: 'Domains',
@@ -66,14 +73,11 @@
           id: 'policy',
           type: 'Policy',
           icon: 'az az-shield',
-          name: 'edge-guard',
-          status: 'Active',
-          severity: 'success',
           href: '#policy',
           bindable: true,
           bindOptions: policies,
-          boundValue: 'edge-guard',
           removable: true,
+          ...bindingFields(bound.policy, 'Requests reach the service without inspection.'),
           fields: [{ label: 'Rules', value: '12 rules, 3 rate limits' }]
         }
       ]
@@ -99,7 +103,8 @@
           terminal: true,
           bindable: true,
           bindOptions: errorPages,
-          message: 'Errors answer with the default page.'
+          removable: true,
+          ...bindingFields(bound['error-page'], 'Errors answer with the default page.')
         }
       ]
     },
@@ -160,10 +165,19 @@
         }
       ]
     }
-  ]
+  ])
 
   const openKeys = ref(['project'])
   const note = ref('')
+
+  const bind = (event, { id, value }) => {
+    bound[id] = value
+    note.value = `${value} bound to ${id}.`
+  }
+  const remove = (event, id) => {
+    bound[id] = ''
+    note.value = `Removed the ${id} binding.`
+  }
 </script>
 
 <template>
@@ -172,8 +186,8 @@
       <TopologyDiagram
         v-model:open-keys="openKeys"
         :levels="levels"
-        @bind="(event, { id, value }) => (note = `Bind ${value} to ${id}.`)"
-        @remove="(event, id) => (note = `Remove ${id}.`)"
+        @bind="bind"
+        @remove="remove"
         @create="(event, id) => (note = `Create a new ${id}.`)"
       >
         <template #actions="{ node }">

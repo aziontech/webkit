@@ -209,6 +209,30 @@ describe('TopologyDiagram', () => {
     expect(view.getByText(/1 staged/)).toBeTruthy()
   })
 
+  it('keeps the applied policy in the default example, and a removal sticks too', async () => {
+    const view = render(Default)
+    await fireEvent.click(view.getByRole('button', { name: 'Change Policy' }))
+    await settle()
+    await fireEvent.click(within(menu()).getByRole('menuitem', { name: /strict-waf/ }))
+    await settle()
+    await fireEvent.click(view.getByRole('button', { name: 'Apply Policy' }))
+    await settle()
+    const policy = () =>
+      view
+        .getAllByTestId('topology-diagram__node')
+        .find((node) => within(node).queryByText('Policy'))!
+    expect(within(policy()).getByText('strict-waf')).toBeTruthy()
+    expect(within(policy()).queryByText('edge-guard')).toBeNull()
+    expect(policy()).not.toHaveAttribute('data-pending')
+    expect(view.getByText('strict-waf bound to policy.')).toHaveAttribute('role', 'status')
+    await fireEvent.click(view.getByRole('button', { name: 'Remove Policy' }))
+    await settle()
+    expect(within(policy()).queryByText('strict-waf')).toBeNull()
+    expect(
+      within(policy()).getByText('Requests reach the service without inspection.')
+    ).toBeTruthy()
+  })
+
   it('links a named node with href and ends the link in the open glyph', () => {
     const view = render(Default)
     const link = view
