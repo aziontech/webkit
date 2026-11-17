@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
   import { computed } from 'vue'
 
   import { messages } from '../../lib/i18n'
@@ -45,20 +46,24 @@
       <li
         v-for="(layer, at) in layers"
         :key="layer.step"
-        class="relative flex flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
+        class="relative flex"
       >
-        <span class="text-overline-sm text-(--text-muted)"
-          >{{ layer.step }} · {{ layer.title }}</span
-        >
-        <p class="text-body-sm text-(--text-default)">{{ layer.text }}</p>
-        <code class="mt-auto break-all text-label-code-sm text-(--text-muted)">{{
-          layer.code
-        }}</code>
-        <i
+        <Card class="w-full">
+          <div class="flex h-full flex-col gap-(--spacing-xs)">
+            <span class="text-overline-sm text-(--text-muted)"
+              >{{ layer.step }} · {{ layer.title }}</span
+            >
+            <p class="text-body-sm text-(--text-default)">{{ layer.text }}</p>
+            <code class="mt-auto text-label-code-sm text-(--text-muted)">{{ layer.code }}</code>
+          </div>
+        </Card>
+        <span
           v-if="at < layers.length - 1"
-          class="az az-arrow-right absolute end-[calc(var(--spacing-sm)/-2)] top-1/2 z-1 hidden -translate-y-1/2 translate-x-1/2 rounded-full bg-(--bg-canvas) p-(--spacing-2xs) text-(--text-muted) md:block rtl:-translate-x-1/2 rtl:rotate-180"
+          class="absolute end-[calc(var(--spacing-sm)/-2)] top-1/2 z-1 hidden -translate-y-1/2 translate-x-1/2 rounded-full bg-(--bg-canvas) p-(--spacing-2xs) text-(--text-muted) md:flex rtl:-translate-x-1/2"
           aria-hidden="true"
-        />
+        >
+          <i class="az az-arrow-right" />
+        </span>
       </li>
     </ol>
   </section>

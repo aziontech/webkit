@@ -139,7 +139,7 @@
             />
             <code class="text-label-code-sm">{{ token.value }}</code>
             <i
-              class="az az-arrow-right text-(--text-muted) rtl:rotate-180"
+              class="az az-arrow-right text-(--text-muted)"
               aria-hidden="true"
             />
             <span
