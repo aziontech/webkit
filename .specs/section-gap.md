@@ -3,13 +3,13 @@ name: section-gap
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 7
-checksum: 5e0c20829d49cb8c7bf14eff7a9666e85aa0af94a5828c8dc08fae85b1799321
+spec_version: 8
+checksum: 2873e0e2c680be8585e05245d95c8a1c4cf4839ad510bd39c9593cc346662be2
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
 created: 2026-08-11
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Section Gap — Component Spec
@@ -44,6 +44,7 @@ The empty registration frame that divides two page sections. On a page with no m
 - On the Blog, the gap right after the `title-band` hero (`size="medium"`) is `small`, so the article highlight reads as part of the opening.
 - Do not override the height from the call site. The steps are multiples of `--spacing-2xl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.
 - Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.
+- The gap draws its own bottom rule, so the `section-module` that follows it passes `divided` as `false`: two rules never share one seam.
 - Let it carry the shared rule: it renders `flush`, so its top rule is subtracted and the section above supplies it instead of doubling it. It still ticks every corner (`marks="all"`): the shared rule is given away, the registration mark is not.
 - Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.
 - Leave the ruling unmasked. Each line is one solid ink edge to edge and its transparency is the ink's own, so the field reads as ruled page material rather than as a fill that fades out; a vignette on a band this short reads as a smear.

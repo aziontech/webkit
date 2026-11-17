@@ -140,7 +140,7 @@
 
       <RegistrationFrame
         flush
-        borders="y"
+        :borders="primaryAction && !hasHeader ? 'y' : 'none'"
         marks="bottom"
       >
         <div

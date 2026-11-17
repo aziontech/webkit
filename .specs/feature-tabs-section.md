@@ -3,10 +3,10 @@ name: feature-tabs-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: f12f190308e29b1c53d60f600d7dcb68e3effcd1be42bdeb70b3045923c2a51b
+last_updated: 2026-11-17
+checksum: 1387a1d70cdf6a2dcd9f14d83924328b9b39ad345a27cc78bb97bfa45dd60bd4
 ---
 
 # FeatureTabsSection — Component Spec
@@ -95,6 +95,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 
 - Visual states: `default`; the active tab, its progress and the timer are owned by `media-tabs`
 - Empty: when `tabs` is empty the band renders nothing — not the header, not the frame
+- The frame draws no rule of its own under the tabs: the tab cells close the band with their own bottom rules, so the frame adds its bottom rule only when the under-frame link follows them
 - The header renders only when `title` is set; the action renders only when `primaryAction` is set — as a secondary `button` in the header, or as a `link` under the frame when there is no header
 - Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing.
 

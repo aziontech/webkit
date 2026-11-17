@@ -101,7 +101,7 @@
         />
       </div>
 
-      <div class="shrink-0 border-b border-(--border-default) px-(--spacing-md)">
+      <div class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)">
         <TabsRoot :model-value="step.value">
           <TabsList>
             <TabsTrigger

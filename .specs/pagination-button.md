@@ -3,10 +3,10 @@ name: pagination-button
 category: data
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: 7edced585ffa915ac9b8d55481428c43612bf79d88ed12ab559cdbaf9c36607a
+spec_version: 7
+checksum: cef48f17d709fa94f203efaf1802c17328aaa2c8a56bfacc9c62f99d8c3518df
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # PaginationButton — Component Spec
@@ -99,7 +99,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 - Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `type` is `more` (inert: not focusable, no hover / active layer, no `active` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
 - `data-type` mirrors `type` (`previous` | `next` | `number` | `more`). `previous` renders `az az-chevron-left`, `next` renders `az az-chevron-right`, `more` renders `az az-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
-- `data-active` is present when `active` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
+- `data-active` is present when `active` is set; it adds `var(--bg-selected)` and a `var(--border-default)` rule on each inline side that faces a neighbouring segment (the strip's own frame draws the top, the bottom and the two outer ends, so the current page never doubles a line), and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the type's own surface.
 - Coarse pointer: a `number`, `previous` or `next` button renders an empty `aria-hidden` `span` (`data-slot="touch-target"`) that is shown only under `pointer-coarse:` and extends the hit area vertically to 44 px; the drawn button does not grow.
 - Test ids: `<pagination testId>__button` when rendered inside a `pagination` (`data-pagination__button` by default), `data-pagination__button` outside one; a consumer `data-testid` wins.

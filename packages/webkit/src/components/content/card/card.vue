@@ -60,7 +60,7 @@
   >
     <header
       v-if="showHeaderRegion()"
-      class="group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+      class="group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) [&:has(+:empty:not([data-padded]))]:border-b-0 px-(--spacing-md) py-(--spacing-sm)"
       :data-testid="`${testId}__header`"
     >
       <slot
@@ -86,7 +86,7 @@
     </header>
 
     <div
-      class="@container/card relative flex min-h-0 flex-1 flex-col data-[padded]:p-(--spacing-md)"
+      class="@container/card relative flex min-h-0 flex-1 flex-col not-data-[padded]:empty:hidden data-[padded]:p-(--spacing-md)"
       :data-padded="props.padded || null"
       :data-testid="`${testId}__content`"
     >

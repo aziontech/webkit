@@ -92,7 +92,7 @@
     :data-testid="testId"
     :data-type="type"
     :data-streaming="streaming || null"
-    class="flex h-full w-full min-w-0 flex-col overflow-hidden border-s border-(--border-default) bg-(--bg-surface)"
+    class="flex h-full w-full min-w-0 flex-col overflow-hidden bg-(--bg-surface)"
     @keydown="onKeydown"
   >
     <header

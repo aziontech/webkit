@@ -15,7 +15,7 @@
 ## Do
 
 - Open the canvas from `ArtifactPreview`'s Open, then call `focus()` so the reader lands on its title; on Close return focus to the Open that opened it.
-- Put it in a `Resizable.Pane` with a `min` that keeps the toolbar on one row (about 320 px) and a handle named after the canvas (`Resize the artifact`).
+- Put it in a `Resizable.Pane` with a `min` that keeps the toolbar on one row (about 320 px) and a handle named after the canvas (`Resize the artifact`). The handle is the seam between the thread and the canvas, so the canvas draws no edge rule of its own and never doubles the handle's line.
 - Show the newest version when a new one finishes (set `v-model:version` to the last index); while it is generated set `streaming`, which locks the pager and marks the body busy.
 - Keep Copy and Download about the version shown; `copyValue` and `downloadHref` change with `version`.
 - One canvas at a time. Opening another artifact replaces the content and keeps the pane width.

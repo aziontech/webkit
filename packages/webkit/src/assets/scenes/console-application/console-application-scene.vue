@@ -175,7 +175,7 @@
         <span class="shrink-0 text-label-code-sm text-(--text-muted)">{{ counter }}</span>
       </div>
 
-      <div class="shrink-0 border-b border-(--border-default) px-(--spacing-md)">
+      <div class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)">
         <TabsRoot :model-value="step.value">
           <TabsList>
             <TabsTrigger

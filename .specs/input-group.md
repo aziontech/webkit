@@ -3,13 +3,13 @@ name: input-group
 category: input
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 58723245024d54c40e4dd2e4f4e30486ff4ef1a3d362ec3751b39e015f7615cb
+checksum: 5313da226a79bc97028fb9a0017a0de4ceb351670f576242ae966604dfef76aa
 created: 2026-07-01
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # InputGroup — Component Spec
@@ -39,7 +39,7 @@ Composition container that joins an input primitive with any number of adjacent 
 - Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.
 - Set the same `size` on the group and on its child controls so heights line up.
 - `disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` styles the group only; set it on the input or on the enclosing `Field`. Inside a `Field`, the Field's state reaches the root and the controls the same way.
-- Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string.
+- Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string. An `Input` placed in the group loses its own border and radius (the group reads its `data-slot="input"`), so the group's frame and its dividers stay the only lines: the group never doubles a line.
 - The root is `role="group"`; label the inner input itself, or give the group an `aria-label`.
 
 ## Usage

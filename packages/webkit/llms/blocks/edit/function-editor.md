@@ -614,6 +614,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                           language="javascript"
                           path="index.js"
                           fill
+                          :bordered="false"
                           pad-line-numbers
                           :loader="loadMonaco"
                           :invalid="!!codeError"
@@ -682,6 +683,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                                   language="json"
                                   path="args.json"
                                   fill
+                                  :bordered="false"
                                   pad-line-numbers
                                   :loader="loadMonaco"
                                   aria-label="Argument form schema, as JSON"

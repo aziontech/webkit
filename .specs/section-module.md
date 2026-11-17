@@ -3,11 +3,11 @@ name: section-module
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: fe9f5cf3f8c25bf900e330abdd65a9e2bea6c27213bb045a3e9ec59d1d6dc77d
+spec_version: 6
+checksum: 90aa7a401faa59def387a7e3952a78578a217583028d519d9b1b6bbe7c0cc022
 style_seam: true
 created: 2026-09-23
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Section Module — Component Spec
@@ -40,7 +40,7 @@ The brick of the page column: a section whose header row is divided from its bod
 ## Best practices
 
 - Pass `divided` as `false` on the first module in a column: its top edge is already the hero's bottom rule, and drawing its own would put two hairlines on one pixel.
-- Pass `padded` as `false` when the body is an edge-to-edge `card-grid`, so the grid's rules meet the frame with no gutter.
+- Pass `padded` as `false` when the body is an edge-to-edge `card-grid` or `doc-card-group`, so the grid's rules meet the frame with no gutter. The unpadded body's top and side edges are drawn for it, by the header's bottom rule and the column's two side rules, so a framed part placed directly in it (a `registration-frame`, and the `doc-card-group` built on one) drops its own top and side rules and its top corner marks instead of drawing a second hairline beside them. Its bottom rule stays and closes the body, so pass `divided` as `false` on the module that follows — two modules never stack two rules on one seam.
 - Use `title` and `eyebrow` for the ordinary header, and reach for the `header` slot only when the row needs markup the default header cannot express.
 
 ## Usage
@@ -90,6 +90,7 @@ The brick of the page column: a section whose header row is divided from its bod
 - `data-align` carries the header layout
 - `data-divided` present when the top rule is drawn
 - `data-padded` present when the body is padded
+- `data-frame-edges` present on the body when it is not padded: the header and the column draw the body's top and side edges, so a `registration-frame` placed directly in it drops its own top and side rules and its top corner marks
 
 ## Motion & Animations
 

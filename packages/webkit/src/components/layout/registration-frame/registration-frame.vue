@@ -112,7 +112,7 @@
     :data-marks="marksAttr"
     :data-hatch="hatchAttr"
     :data-flush="flushAttr"
-    class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-s data-[borders~=right]:border-e data-[borders~=top]:border-t"
+    class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-s data-[borders~=right]:border-e data-[borders~=top]:border-t [[data-frame-edges]>&]:border-x-0! [[data-frame-edges]>&]:border-t-0!"
   >
     <div
       v-if="hatch"
@@ -123,12 +123,12 @@
     <span
       v-if="hasCorner('top-left')"
       aria-hidden="true"
-      :class="[MARK_CLASS, 'start-0 top-0']"
+      :class="[MARK_CLASS, 'start-0 top-0 [[data-frame-edges]>*>&]:hidden']"
     />
     <span
       v-if="hasCorner('top-right')"
       aria-hidden="true"
-      :class="[MARK_CLASS, 'end-0 top-0']"
+      :class="[MARK_CLASS, 'end-0 top-0 [[data-frame-edges]>*>&]:hidden']"
     />
     <span
       v-if="hasCorner('bottom-left')"

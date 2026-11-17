@@ -56,7 +56,7 @@
     v-else
     class="flex h-full min-w-0 flex-col gap-(--spacing-sm)"
   >
-    <span class="flex shrink-0 justify-center">
+    <span class="flex shrink-0 justify-center px-(--spacing-md) pt-(--spacing-lg)">
       <ToggleGroup
         v-model="client"
         :options="AGENTS"

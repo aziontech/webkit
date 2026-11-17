@@ -3,10 +3,10 @@ name: doc-card-group
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 88c965581fc870169bfb14b2a186c755247749638aeae7c30d992fb49dc4deb1
+spec_version: 5
+checksum: 33d610641c35d5e31a6bf7c3ea2dc72aa4ab89608d00e9b22914d869e93d8e55
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # DocCardGroup — Component Spec
@@ -36,6 +36,7 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 - Pick `columns` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.
 - Leave `mobileColumns` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.
 - Let an incomplete last row be empty; do not stretch the last card to fill it.
+- Inside a `section-module` with `padded` off, place the group directly in the body: the header's bottom rule and the column's side rules become the group's top and sides, the group drops its own top and side rules and top corner marks, and the cells' rings land on those rules. The group's bottom rule closes the module, so the module after it passes `divided` as `false` — every seam stays one hairline.
 
 ## Usage
 

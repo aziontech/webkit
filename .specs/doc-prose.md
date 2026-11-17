@@ -3,8 +3,8 @@ name: doc-prose
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 39a74925d6980a877c61226a2771e586ae269e3c193d9a25f618e94ae73b02b1
+spec_version: 3
+checksum: 61ac15f024b8c0ae55bf2b152207167745f24aee1ebe58180026736a6bee0034
 created: 2026-08-21
 last_updated: 2026-11-17
 ---
@@ -117,6 +117,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 | text (th / td)                 | `var(--text-default)` / `var(--text-muted)`                      |
 | border (table row)             | `var(--border-default)`                                          |
 | spacing (table cell)           | `var(--spacing-xs)` block / `var(--spacing-sm)` inline           |
+| spacing (before a table or a fenced block) | `var(--spacing-md)` — two framed blocks never touch, so their rules never stack |
 
 ## Theme gaps
 

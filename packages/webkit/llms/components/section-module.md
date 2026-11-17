@@ -16,7 +16,7 @@
 ## Do
 
 - Pass `divided` as `false` on the first module in a column: its top edge is already the hero's bottom rule, and drawing its own would put two hairlines on one pixel.
-- Pass `padded` as `false` when the body is an edge-to-edge `card-grid`, so the grid's rules meet the frame with no gutter.
+- Pass `padded` as `false` when the body is an edge-to-edge `card-grid` or `doc-card-group`, so the grid's rules meet the frame with no gutter. The unpadded body's top and side edges are drawn for it, by the header's bottom rule and the column's two side rules, so a framed part placed directly in it (a `registration-frame`, and the `doc-card-group` built on one) drops its own top and side rules and its top corner marks instead of drawing a second hairline beside them. Its bottom rule stays and closes the body, so pass `divided` as `false` on the module that follows — two modules never stack two rules on one seam.
 - Use `title` and `eyebrow` for the ordinary header, and reach for the `header` slot only when the row needs markup the default header cannot express.
 
 ## Don’t
@@ -59,6 +59,7 @@
 - `data-align` carries the header layout
 - `data-divided` present when the top rule is drawn
 - `data-padded` present when the body is padded
+- `data-frame-edges` present on the body when it is not padded: the header and the column draw the body's top and side edges, so a `registration-frame` placed directly in it drops its own top and side rules and its top corner marks
 
 ## Accessibility
 

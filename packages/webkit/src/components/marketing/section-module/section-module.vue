@@ -79,6 +79,7 @@
 
     <div
       :data-padded="props.padded || null"
+      :data-frame-edges="!props.padded || null"
       class="data-[padded]:p-(--spacing-xl)"
     >
       <slot />

@@ -125,6 +125,7 @@
 
 <template>
   <span
+    data-slot="input"
     :data-size="size"
     :data-disabled="isDisabled || null"
     :data-readonly="readonly || null"

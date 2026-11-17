@@ -84,7 +84,8 @@
   <div
     v-bind="attrs"
     :data-testid="testId"
-    class="relative min-h-0 flex-1"
+    :data-copyable="(ctx.copyable.value && !ctx.loading.value && !ctx.error.value) || null"
+    class="relative min-h-0 flex-1 data-[copyable]:min-h-13"
   >
     <div
       v-if="ctx.copyable.value && !ctx.loading.value && !ctx.error.value"

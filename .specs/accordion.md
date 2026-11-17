@@ -3,13 +3,13 @@ name: accordion
 category: content
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 6b5b44aa20bf7cd3ed0966b0f37a78d07639dd6eed37e14c5f63e7ea9db83b27
+checksum: 524cecf022fef93a4e71304a3bb81e036b6fe964e4defe794ae26be15abae553
 created: 2026-06-26
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Accordion — Component Spec
@@ -185,7 +185,7 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 | content body text                        | `var(--text-muted)`                                                                |
 | disabled text                            | `var(--text-disabled)`                                                             |
 | header divider (bottom border, open)     | `var(--border-default)`                                                            |
-| item divider when closed                 | `var(--border-muted)`                                                              |
+| item divider between closed items        | `var(--border-muted)` — none under the last item, whose bottom edge belongs to the container |
 | header padding-x                         | `--accordion-inset`, default `var(--spacing-md)`                                   |
 | content padding                          | _none_ — the panel is flush; its inset belongs to whatever the consumer puts in it |
 | header gap (icon trailing / leading)     | `var(--spacing-sm)` / `var(--spacing-xs)`                                          |

@@ -3,10 +3,10 @@ name: input
 category: input
 structure: monolithic
 status: implemented
-spec_version: 8
-checksum: 5a6d1114ee415daccfb10620c4cbc713b5f8431683c95d5f8052cc50f03250fb
+spec_version: 9
+checksum: 4034a07214c5b9a03a841f5c9b852fb584c33449ab1633d87eba4923ae4b001f
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Input Text — Component Spec
@@ -112,6 +112,7 @@ _none_
 - Password managers: the `<input>` carries `data-1p-ignore`, `data-lpignore`, `data-bwignore` and `data-form-type="other"` unless it is a credential or identity field — `autocomplete` set to any token but `off`, or `type="email"`. A read-only field always carries them. This keeps 1Password, LastPass, Bitwarden and Dashlane from offering a sign-in on ordinary fields (names, IDs, searches) while login fields stay fillable. A consumer attr (e.g. `data-1p-ignore="false"`) wins.
 - `data-readonly` mirrors the `readonly` prop: a read-only field keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` (readable and copyable, unlike `disabled`) and the field stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
 - `data-monospace` mirrors the `monospace` prop: the value and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
+- `data-slot="input"` marks the root, so an `InputGroup` that holds the field drops its border and radius and the group's own frame is the only line around it
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop

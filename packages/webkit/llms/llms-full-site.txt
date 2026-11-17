@@ -545,6 +545,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - Pick `columns` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.
 - Leave `mobileColumns` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.
 - Let an incomplete last row be empty; do not stretch the last card to fill it.
+- Inside a `section-module` with `padded` off, place the group directly in the body: the header's bottom rule and the column's side rules become the group's top and sides, the group drops its own top and side rules and top corner marks, and the cells' rings land on those rules. The group's bottom rule closes the module, so the module after it passes `divided` as `false` — every seam stays one hairline.
 
 ## Don’t
 
@@ -2253,6 +2254,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush="left"`) with the same mechanic.
 - Use `borders` rather than overriding the border utilities from the call site: `y` for a full-bleed band that keeps only its top and bottom rules, `none` for a cell of a `gap-px` divider grid whose edges are already drawn by the grid's seams.
 - Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid. On a shared edge, pair `flush` with the opposite `marks` keyword (`flush` + `marks="bottom"`, `flush="left"` + `marks="right"`) so the junction carries one rule and one mark per corner.
+- Never double a line. A frame placed directly in a box whose top and side edges its container already draws (a `section-module` body with `padded` off, marked `data-frame-edges`) drops its own top and side rules and its two top corner marks: the header's bottom rule and the column's side rules are its edge there, so each seam stays one hairline at every width. Its bottom rule and bottom marks stay; the module that follows it passes `divided` as `false`.
 - Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise. For a ruled ground, compose `texture` at its `lines` kind inside the frame instead: it is the system's texture layer, and its ink and pitch are tunable from the call site.
 
 ## Don’t
@@ -2291,6 +2293,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - `data-marks` carries the RESOLVED, space-separated corner list, or `none`
 - `data-hatch` present when the hatch texture is drawn, or when a consumer sets it — a component that paints its own texture inside the frame keeps the attribute on this root
 - `data-flush` carries the space-separated list of sides a neighbour draws; absent when none do
+- Directly inside an element marked `data-frame-edges`, the frame's top and side rules and its two top corner marks are dropped, whatever `borders` and `marks` resolve to; the bottom rule and the bottom marks follow `borders` and `marks` as usual
 
 ## Accessibility
 
@@ -2407,7 +2410,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 <script setup lang="ts">
   import HeroSection from '@aziontech/webkit/hero-section'
   import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
@@ -2498,7 +2501,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
       :secondary-action="{ label: 'Talk to an expert', href: '/en/contact/' }"
     />
     <SectionContainer max-width="site">
-      <SectionGap hatch />
+      <SectionModule
+        :divided="false"
+        title="Deploy from the CLI or from Git"
+        description="Push a change and it goes live on every edge location in seconds."
+      />
     </SectionContainer>
   </SiteLayout>
 </template>
@@ -4924,6 +4931,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - On the Blog, the gap right after the `title-band` hero (`size="medium"`) is `small`, so the article highlight reads as part of the opening.
 - Do not override the height from the call site. The steps are multiples of `--spacing-2xl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.
 - Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.
+- The gap draws its own bottom rule, so the `section-module` that follows it passes `divided` as `false`: two rules never share one seam.
 - Let it carry the shared rule: it renders `flush`, so its top rule is subtracted and the section above supplies it instead of doubling it. It still ticks every corner (`marks="all"`): the shared rule is given away, the registration mark is not.
 - Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.
 - Leave the ruling unmasked. Each line is one solid ink edge to edge and its transparency is the ink's own, so the field reads as ruled page material rather than as a fill that fades out; a vignette on a band this short reads as a smear.
@@ -5014,7 +5022,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - Pass `divided` as `false` on the first module in a column: its top edge is already the hero's bottom rule, and drawing its own would put two hairlines on one pixel.
-- Pass `padded` as `false` when the body is an edge-to-edge `card-grid`, so the grid's rules meet the frame with no gutter.
+- Pass `padded` as `false` when the body is an edge-to-edge `card-grid` or `doc-card-group`, so the grid's rules meet the frame with no gutter. The unpadded body's top and side edges are drawn for it, by the header's bottom rule and the column's two side rules, so a framed part placed directly in it (a `registration-frame`, and the `doc-card-group` built on one) drops its own top and side rules and its top corner marks instead of drawing a second hairline beside them. Its bottom rule stays and closes the body, so pass `divided` as `false` on the module that follows — two modules never stack two rules on one seam.
 - Use `title` and `eyebrow` for the ordinary header, and reach for the `header` slot only when the row needs markup the default header cannot express.
 
 ## Don’t
@@ -5057,6 +5065,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-align` carries the header layout
 - `data-divided` present when the top rule is drawn
 - `data-padded` present when the body is padded
+- `data-frame-edges` present on the body when it is not padded: the header and the column draw the body's top and side edges, so a `registration-frame` placed directly in it drops its own top and side rules and its top corner marks
 
 ## Accessibility
 
@@ -8371,6 +8380,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`; the active tab, its progress and the timer are owned by `media-tabs`
 - Empty: when `tabs` is empty the band renders nothing — not the header, not the frame
+- The frame draws no rule of its own under the tabs: the tab cells close the band with their own bottom rules, so the frame adds its bottom rule only when the under-frame link follows them
 - The header renders only when `title` is set; the action renders only when `primaryAction` is set — as a secondary `button` in the header, or as a `link` under the frame when there is no header
 - Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing.
 

@@ -60,6 +60,7 @@
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValueList`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
+- Header only: with `padded` off and nothing in the default slot, the empty content region collapses and the header draws no bottom rule, so the card's own frame is the only line under it.
 
 ## Accessibility
 

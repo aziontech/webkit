@@ -3,14 +3,14 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 12
+spec_version: 13
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 8fbc740f66c07d371924619887804ef030a212732ff398b3656371c3eeab1c7b
+checksum: 6ccbb2b41ffc10e89f58b75c6273dcd444e9b71d64df104351d284669c8ef04d
 created: 2026-05-22
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # Card Box — Component Spec
@@ -109,6 +109,7 @@ A bordered surface that groups related content under a title, with a header, a b
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValueList`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
+- Header only: with `padded` off and nothing in the default slot, the empty content region collapses and the header draws no bottom rule, so the card's own frame is the only line under it.
 
 ## Motion & Animations
 

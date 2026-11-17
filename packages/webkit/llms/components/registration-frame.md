@@ -17,6 +17,7 @@
 - Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush="left"`) with the same mechanic.
 - Use `borders` rather than overriding the border utilities from the call site: `y` for a full-bleed band that keeps only its top and bottom rules, `none` for a cell of a `gap-px` divider grid whose edges are already drawn by the grid's seams.
 - Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid. On a shared edge, pair `flush` with the opposite `marks` keyword (`flush` + `marks="bottom"`, `flush="left"` + `marks="right"`) so the junction carries one rule and one mark per corner.
+- Never double a line. A frame placed directly in a box whose top and side edges its container already draws (a `section-module` body with `padded` off, marked `data-frame-edges`) drops its own top and side rules and its two top corner marks: the header's bottom rule and the column's side rules are its edge there, so each seam stays one hairline at every width. Its bottom rule and bottom marks stay; the module that follows it passes `divided` as `false`.
 - Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise. For a ruled ground, compose `texture` at its `lines` kind inside the frame instead: it is the system's texture layer, and its ink and pitch are tunable from the call site.
 
 ## Don’t
@@ -55,6 +56,7 @@
 - `data-marks` carries the RESOLVED, space-separated corner list, or `none`
 - `data-hatch` present when the hatch texture is drawn, or when a consumer sets it — a component that paints its own texture inside the frame keeps the attribute on this root
 - `data-flush` carries the space-separated list of sides a neighbour draws; absent when none do
+- Directly inside an element marked `data-frame-edges`, the frame's top and side rules and its two top corner marks are dropped, whatever `borders` and `marks` resolve to; the bottom rule and the bottom marks follow `borders` and `marks` as usual
 
 ## Accessibility
 

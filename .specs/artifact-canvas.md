@@ -3,11 +3,11 @@ name: artifact-canvas
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: f2c7176869d0409cb65506b6950b066bb437528db7725de2cb333a69474a39f9
+checksum: f43e1676747cd2eacc5256a97462c3611f50bd4176c5f18d47a16a05ae898de1
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # ArtifactCanvas — Component Spec
@@ -40,7 +40,7 @@ The side panel that shows one generated artifact in full next to the conversatio
 ## Best practices
 
 - Open the canvas from `ArtifactPreview`'s Open, then call `focus()` so the reader lands on its title; on Close return focus to the Open that opened it.
-- Put it in a `Resizable.Pane` with a `min` that keeps the toolbar on one row (about 320 px) and a handle named after the canvas (`Resize the artifact`).
+- Put it in a `Resizable.Pane` with a `min` that keeps the toolbar on one row (about 320 px) and a handle named after the canvas (`Resize the artifact`). The handle is the seam between the thread and the canvas, so the canvas draws no edge rule of its own and never doubles the handle's line.
 - Show the newest version when a new one finishes (set `v-model:version` to the last index); while it is generated set `streaming`, which locks the pager and marks the body busy.
 - Keep Copy and Download about the version shown; `copyValue` and `downloadHref` change with `version`.
 - One canvas at a time. Opening another artifact replaces the content and keeps the pane width.
