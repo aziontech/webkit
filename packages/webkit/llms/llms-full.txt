@@ -31526,3 +31526,470 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```
 
 2 more example(s) in [components/config-provider.md](components/config-provider.md).
+
+---
+
+<!-- composables/use-collection.md -->
+
+# useCollection
+
+Composable `@aziontech/webkit/use-collection`. The signatures and option tables below are read from its typed source, [`src/composables/use-collection/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-collection/index.ts).
+
+```ts
+import { useCollection, matchesQuery, matchesText, parseFilterText, tokenText, historyAdapter, routerAdapter } from '@aziontech/webkit/use-collection'
+import type { UseCollectionOptions, UseCollectionReturn, CollectionColumnPreference, CollectionDensity, CollectionPreferencesValue, PreferencesStorage, FilteringProperty, PropertyFilterOperation, PropertyFilterOperator, PropertyFilterOption, PropertyFilterQuery, PropertyFilterToken, PropertyFilterTokenGroup, CollectionUrlAdapter, RouterLike, CollectionCardListProps, CollectionColumn, CollectionExportParams, CollectionExportScope, CollectionFetchParams, CollectionFetchResult, CollectionPaginationProps, CollectionPreferenceColumn, CollectionPreferencesProps, CollectionPropertyFilterProps, CollectionSelectionMode, CollectionSort, CollectionStatus, CollectionTableProps, CollectionTextFilterProps } from '@aziontech/webkit/use-collection'
+```
+
+## `useCollection`
+
+```ts
+function useCollection<T extends object, C extends CollectionColumn = CollectionColumn>(options: UseCollectionOptions<T, C>): UseCollectionReturn<T, C>
+```
+
+## `UseCollectionOptions<T extends object, C extends CollectionColumn = CollectionColumn>`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `MaybeRefOrGetter<readonly T[]>` | no | Client mode: every item, filtered, sorted and paged in memory. |
+| `fetch` | `(params: CollectionFetchParams) => Promise<CollectionFetchResult<T>>` | no | Server mode: loads one page for the current filter, sort and page. |
+| `exportAll` | `(params: CollectionExportParams) => Promise<T[]>` | no | Server mode: loads every item an export writes (`TableExportButton`, `exportCsv()`, `exportItems`); without it the loaded page is exported. |
+| `itemKey` | `keyof T & string` | no | Field that identifies an item (selection, row keys). |
+| `columns` | `MaybeRefOrGetter<readonly C[]>` | no | Columns bound to a Table; their order and visibility follow the preferences. |
+| `filtering` | `{ fields?: string[]; defaultText?: string; debounce?: number }` | no | Free-text filtering: fields searched (all scalar fields by default), initial text, server debounce in ms. |
+| `propertyFiltering` | `{ properties: MaybeRefOrGetter<readonly FilteringProperty[]> defaultQuery?: PropertyFilterQuery }` | no | Property filtering: the properties offered and the initial query. |
+| `sorting` | `{ defaultState?: CollectionSort[] multiple?: boolean comparators?: Record<string, (a: T, b: T) => number> }` | no | Sorting: initial state, several columns at once, custom comparators by column id. |
+| `pagination` | `{ pageSize?: number; pageSizeOptions?: number[] }` | no | Pagination: page size and the sizes offered. Without it every match shows on one page. |
+| `selection` | `{ mode?: CollectionSelectionMode defaultSelectedKeys?: string[] keepSelection?: boolean }` | no | Selection: single or multi, initial keys, keep selected items hidden by a filter. |
+| `url` | `boolean \| CollectionUrlAdapter \| { adapter?: CollectionUrlAdapter; prefix?: string }` | no | Keep filter, sort and page in the query string: `true` (history), an adapter, or an adapter with a key prefix. |
+| `preferences` | `{ storageKey?: string defaults?: CollectionPreferencesValue storage?: PreferencesStorage \| null }` | no | Saved preferences: storage key, defaults, storage (`localStorage` by default). |
+
+## `UseCollectionReturn<T, C>`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `ComputedRef<T[]>` | yes |  |
+| `matchingItems` | `ComputedRef<T[]>` | yes |  |
+| `totalCount` | `ComputedRef<number>` | yes |  |
+| `pageCount` | `ComputedRef<number>` | yes |  |
+| `loading` | `Readonly<Ref<boolean>>` | yes |  |
+| `error` | `Readonly<Ref<unknown>>` | yes |  |
+| `status` | `ComputedRef<CollectionStatus>` | yes |  |
+| `filtersActive` | `ComputedRef<boolean>` | yes |  |
+| `filteringText` | `Readonly<Ref<string>>` | yes |  |
+| `query` | `Readonly<Ref<PropertyFilterQuery>>` | yes |  |
+| `sorting` | `Readonly<Ref<CollectionSort[]>>` | yes |  |
+| `page` | `Readonly<Ref<number>>` | yes |  |
+| `pageSize` | `ComputedRef<number>` | yes |  |
+| `preferences` | `ComputedRef<Required<CollectionPreferencesValue>>` | yes |  |
+| `selectedKeys` | `ComputedRef<string[]>` | yes |  |
+| `selectedItems` | `ComputedRef<T[]>` | yes |  |
+| `selectedCount` | `ComputedRef<number>` | yes |  |
+| `allMatchingSelected` | `Readonly<Ref<boolean>>` | yes |  |
+| `pageSelected` | `ComputedRef<boolean>` | yes |  |
+| `setFilteringText` | `(text: string) => void` | yes |  |
+| `setQuery` | `(query: PropertyFilterQuery) => void` | yes |  |
+| `setSorting` | `(sorting: CollectionSort[]) => void` | yes |  |
+| `setPage` | `(page: number) => void` | yes |  |
+| `setPageSize` | `(size: number) => void` | yes |  |
+| `setPreferences` | `(value: CollectionPreferencesValue) => void` | yes |  |
+| `clearFilters` | `() => void` | yes |  |
+| `refresh` | `() => Promise<void>` | yes |  |
+| `exportItems` | `(scope?: CollectionExportScope) => Promise<T[]>` | yes |  |
+| `isSelected` | `(key: string) => boolean` | yes |  |
+| `toggleSelection` | `(key: string, selected?: boolean) => void` | yes |  |
+| `selectPage` | `(selected?: boolean) => void` | yes |  |
+| `selectAllMatching` | `() => void` | yes |  |
+| `clearSelection` | `() => void` | yes |  |
+| `tableProps` | `ComputedRef<CollectionTableProps<T, C>>` | yes |  |
+| `paginationProps` | `ComputedRef<CollectionPaginationProps>` | yes |  |
+| `filterProps` | `ComputedRef<CollectionTextFilterProps>` | yes |  |
+| `propertyFilterProps` | `ComputedRef<CollectionPropertyFilterProps>` | yes |  |
+| `preferencesProps` | `ComputedRef<CollectionPreferencesProps>` | yes |  |
+| `cardListProps` | `ComputedRef<CollectionCardListProps<T>>` | yes |  |
+
+## Other exports
+
+`matchesQuery` · `matchesText` · `parseFilterText` · `tokenText` · `historyAdapter` · `routerAdapter` · `CollectionColumnPreference` · `CollectionDensity` · `CollectionPreferencesValue` · `PreferencesStorage` · `FilteringProperty` · `PropertyFilterOperation` · `PropertyFilterOperator` · `PropertyFilterOption` · `PropertyFilterQuery` · `PropertyFilterToken` · `PropertyFilterTokenGroup` · `CollectionUrlAdapter` · `RouterLike` · `CollectionCardListProps` · `CollectionColumn` · `CollectionExportParams` · `CollectionExportScope` · `CollectionFetchParams` · `CollectionFetchResult` · `CollectionPaginationProps` · `CollectionPreferenceColumn` · `CollectionPreferencesProps` · `CollectionPropertyFilterProps` · `CollectionSelectionMode` · `CollectionSort` · `CollectionStatus` · `CollectionTableProps` · `CollectionTextFilterProps`. Signatures and fields: [composables/use-collection.md](composables/use-collection.md).
+
+---
+
+<!-- composables/use-color-mode.md -->
+
+# useColorMode
+
+Composable `@aziontech/webkit/use-color-mode`. The signatures and option tables below are read from its typed source, [`src/composables/use-color-mode/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-color-mode/index.ts).
+
+```ts
+import { useColorMode, setColorMode, COLOR_MODE_STORAGE_KEY, colorModeScript } from '@aziontech/webkit/use-color-mode'
+import type { UseColorModeReturn, ColorMode, ResolvedColorMode } from '@aziontech/webkit/use-color-mode'
+```
+
+## `useColorMode`
+
+```ts
+function useColorMode(): UseColorModeReturn
+```
+
+## `UseColorModeReturn`
+
+What `useColorMode()` returns.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `mode` | `WritableComputedRef<ColorMode>` | yes | The stored choice; bind it to ThemeSwitcher with v-model. Writing it stores and applies the choice. |
+| `resolved` | `Readonly<Ref<ResolvedColorMode>>` | yes | The theme on screen: `mode`, or the operating-system preference when `mode` is `system`. |
+| `setMode` | `(next: ColorMode) => void` | yes | Stores the choice and sets `data-theme` on the document element. |
+
+## Other exports
+
+`setColorMode` · `ColorMode` · `ResolvedColorMode` · `COLOR_MODE_STORAGE_KEY` · `colorModeScript`. Signatures and fields: [composables/use-color-mode.md](composables/use-color-mode.md).
+
+---
+
+<!-- composables/use-console-layout.md -->
+
+# useConsoleLayout
+
+Composable `@aziontech/webkit/use-console-layout`. The signatures and option tables below are read from its typed source, [`src/components/layout/console-layout/composables/use-console-layout.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/layout/console-layout/composables/use-console-layout.ts).
+
+```ts
+import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+import type { UseConsoleLayoutOptions, UseConsoleLayoutReturn } from '@aziontech/webkit/use-console-layout'
+```
+
+## `useConsoleLayout`
+
+```ts
+function useConsoleLayout<Optional extends boolean = false>(options: UseConsoleLayoutOptions<Optional> = {}): UseConsoleLayoutReturn<Optional>
+```
+
+## `UseConsoleLayoutOptions<Optional extends boolean = boolean>`
+
+Options of `useConsoleLayout`.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `optional` | `Optional` | no | Returns null outside a ConsoleLayout instead of throwing, for a page body that also renders standalone. |
+
+## `UseConsoleLayoutReturn<Optional extends boolean = false>`
+
+The context, or null when `optional` is true and no ConsoleLayout is above the caller.
+
+```ts
+type UseConsoleLayoutReturn<Optional extends boolean = false> = Optional extends true ? ConsoleLayoutContext | null : ConsoleLayoutContext
+```
+
+---
+
+<!-- composables/use-controllable.md -->
+
+# useControllable
+
+Composable `@aziontech/webkit/use-controllable`. The signatures and option tables below are read from its typed source, [`src/composables/use-controllable/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-controllable/index.ts).
+
+```ts
+import { useControllable } from '@aziontech/webkit/use-controllable'
+import type { UseControllableOptions, UseControllableReturn } from '@aziontech/webkit/use-controllable'
+```
+
+## `useControllable`
+
+```ts
+function useControllable<T>({ prop, defaultProp, onChange }: UseControllableOptions<T>): UseControllableReturn<T>
+```
+
+## `UseControllableOptions<T>`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `prop` | `MaybeRefOrGetter<T \| undefined>` | yes |  |
+| `defaultProp` | `T` | yes |  |
+| `onChange` | `(next: T) => void` | yes |  |
+
+## `UseControllableReturn<T>`
+
+```ts
+type UseControllableReturn<T> = ComputedRef<T> & { set: (next: T) => void }
+```
+
+---
+
+<!-- composables/use-direction.md -->
+
+# useDirection
+
+Composable `@aziontech/webkit/use-direction`. The signatures and option tables below are read from its typed source, [`src/composables/use-direction/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-direction/index.ts).
+
+```ts
+import { useDirection, resolveDirection, eventDirection, logicalArrowKey } from '@aziontech/webkit/use-direction'
+import type { Direction } from '@aziontech/webkit/use-direction'
+```
+
+## `useDirection`
+
+```ts
+function useDirection(target?: MaybeRefOrGetter<Target>): Readonly<Ref<Direction>>
+```
+
+## Other exports
+
+`resolveDirection` · `eventDirection` · `logicalArrowKey` · `Direction`. Signatures and fields: [composables/use-direction.md](composables/use-direction.md).
+
+---
+
+<!-- composables/use-focus-trap.md -->
+
+# useFocusTrap
+
+Composable `@aziontech/webkit/use-focus-trap`. The signatures and option tables below are read from its typed source, [`src/composables/use-focus-trap/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-focus-trap/index.ts).
+
+```ts
+import { useFocusTrap } from '@aziontech/webkit/use-focus-trap'
+```
+
+## `useFocusTrap`
+
+```ts
+function useFocusTrap(containerEl: MaybeRefOrGetter<HTMLElement | null | undefined>, active: MaybeRefOrGetter<boolean>, isTop: MaybeRefOrGetter<boolean> = true): void
+```
+
+---
+
+<!-- composables/use-heading-navigation.md -->
+
+# useHeadingNavigation
+
+Composable `@aziontech/webkit/use-heading-navigation`. The signatures and option tables below are read from its typed source, [`src/composables/use-heading-navigation/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-heading-navigation/index.ts).
+
+```ts
+import { useHeadingNavigation, provideHeadingNavigation, provideHeadingOutline, useHeadingOutline } from '@aziontech/webkit/use-heading-navigation'
+import type { HeadingNavigationItem, HeadingNavigate, HeadingOutlineItem, RegisterHeading } from '@aziontech/webkit/use-heading-navigation'
+```
+
+## `useHeadingNavigation`
+
+```ts
+function useHeadingNavigation(): HeadingNavigate
+```
+
+## Other exports
+
+`provideHeadingNavigation` · `provideHeadingOutline` · `useHeadingOutline` · `HeadingNavigationItem` · `HeadingNavigate` · `HeadingOutlineItem` · `RegisterHeading`. Signatures and fields: [composables/use-heading-navigation.md](composables/use-heading-navigation.md).
+
+---
+
+<!-- composables/use-locale.md -->
+
+# useLocale
+
+Composable `@aziontech/webkit/use-locale`. The signatures and option tables below are read from its typed source, [`src/composables/use-locale/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-locale/index.ts).
+
+```ts
+import { useLocale, usePortalLocale, createTranslator, directionOf, mergeMessages, pickCatalog, provideLocale, BUILT_IN_CATALOGS } from '@aziontech/webkit/use-locale'
+import type { UseLocaleReturn, Direction, MessageKey, MessageParams, Messages, PartialMessages, PluralMessage, PortalLocaleAttrs, DirectionSetting, FileSizeUnit, PluralForms, ProvideLocaleOptions } from '@aziontech/webkit/use-locale'
+```
+
+## `useLocale`
+
+```ts
+function useLocale(fallback: PartialMessages = {}): UseLocaleReturn
+```
+
+## `UseLocaleReturn`
+
+What `useLocale()` returns.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `locale` | `ComputedRef<string>` | yes | Active BCP 47 locale tag (the device locale with no provider, `en-US` until mount). |
+| `dir` | `ComputedRef<Direction>` | yes | Active text direction (`ltr` with no provider). |
+| `t` | `(key: MessageKey, params?: MessageParams) => string` | yes | Reads a catalog message and fills its `{name}` placeholders. |
+| `formatNumber` | `(value: number, options?: Intl.NumberFormatOptions) => string` | yes | Formats a number with `Intl.NumberFormat`. |
+| `formatDate` | `(value: Date \| number \| string, options?: Intl.DateTimeFormatOptions) => string` | yes | Formats a date with `Intl.DateTimeFormat`. |
+| `formatRelativeTime` | `( value: number \| Date, unit?: Intl.RelativeTimeFormatUnit, options?: Intl.RelativeTimeFormatOptions ) => string` | yes | Formats a relative time; a `Date` picks the unit from its distance to now (the provider's `now`, else the real clock). |
+| `formatList` | `(items: string[], options?: Intl.ListFormatOptions) => string` | yes | Joins a list with `Intl.ListFormat`. |
+| `formatFileSize` | `(bytes: number, options?: Intl.NumberFormatOptions) => string` | yes | Formats a byte count with the largest whole unit (`1.5 MB`). |
+| `plural` | `(count: number, forms: PluralForms, options?: Intl.PluralRulesOptions) => string` | yes | Picks the plural form for `count` with `Intl.PluralRules`. |
+
+## Other exports
+
+`usePortalLocale` · `createTranslator` · `directionOf` · `mergeMessages` · `pickCatalog` · `provideLocale` · `BUILT_IN_CATALOGS` · `Direction` · `MessageKey` · `MessageParams` · `Messages` · `PartialMessages` · `PluralMessage` · `PortalLocaleAttrs` · `DirectionSetting` · `FileSizeUnit` · `PluralForms` · `ProvideLocaleOptions`. Signatures and fields: [composables/use-locale.md](composables/use-locale.md).
+
+---
+
+<!-- composables/use-pinned-row.md -->
+
+# usePinnedRow
+
+Composable `@aziontech/webkit/use-pinned-row`. The signatures and option tables below are read from its typed source, [`src/composables/use-pinned-row/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-pinned-row/index.ts).
+
+```ts
+import { usePinnedRow } from '@aziontech/webkit/use-pinned-row'
+import type { UsePinnedRowReturn, PinnedRowElements } from '@aziontech/webkit/use-pinned-row'
+```
+
+## `usePinnedRow`
+
+```ts
+function usePinnedRow(elements: PinnedRowElements, enabled: MaybeRefOrGetter<boolean>): UsePinnedRowReturn
+```
+
+## `UsePinnedRowReturn`
+
+What a pinned row exposes to its band.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `runwayHeight` | `Readonly<Ref<string>>` | yes | Height the runway takes so the page scroll covers the row's overflow; empty when not pinned. |
+| `shift` | `ComputedRef<string \| undefined>` | yes | The row's `translate` value for the current scroll; undefined at rest. |
+
+## Other exports
+
+`PinnedRowElements`. Signatures and fields: [composables/use-pinned-row.md](composables/use-pinned-row.md).
+
+---
+
+<!-- composables/use-placement.md -->
+
+# usePlacement
+
+Composable `@aziontech/webkit/use-placement`. The signatures and option tables below are read from its typed source, [`src/composables/use-placement/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-placement/index.ts).
+
+```ts
+import { usePlacement, computePlacement, getClippingBoundary } from '@aziontech/webkit/use-placement'
+import type { UsePlacementOptions, UsePlacementReturn, Side, Align, PhysicalSide, Rect, Size, CollisionPadding, ComputePlacementInput, ComputePlacementResult } from '@aziontech/webkit/use-placement'
+```
+
+## `usePlacement`
+
+```ts
+function usePlacement({ triggerRef, panelRef, isOpen, side, align = 'center', sideOffset = 4, alignOffset = 0, collisionPadding = 8, flip = true, autoSides, dir, zIndex = 1100, onDismiss, matchTriggerWidth = false }: UsePlacementOptions): UsePlacementReturn
+```
+
+## `UsePlacementOptions`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `triggerRef` | `MaybeRefOrGetter<globalThis.HTMLElement \| null>` | yes |  |
+| `panelRef` | `MaybeRefOrGetter<globalThis.HTMLElement \| null>` | yes |  |
+| `isOpen` | `MaybeRefOrGetter<boolean>` | yes |  |
+| `side` | `MaybeRefOrGetter<Side \| 'auto'>` | yes |  |
+| `align` | `MaybeRefOrGetter<Align>` | no |  |
+| `sideOffset` | `MaybeRefOrGetter<number>` | no |  |
+| `alignOffset` | `MaybeRefOrGetter<number>` | no |  |
+| `collisionPadding` | `CollisionPadding` | no |  |
+| `flip` | `boolean` | no |  |
+| `autoSides` | `Side[]` | no |  |
+| `dir` | `MaybeRefOrGetter<Direction \| undefined>` | no | Text direction that resolves `start`/`end`; read from the trigger's nearest `dir` when omitted. |
+| `zIndex` | `number` | no |  |
+| `onDismiss` | `() => void` | no | When provided, a scroll that moves the trigger dismisses the panel through this callback (the panel is anchored once and does not follow the page): the scrolled node must be the document or an ancestor of the trigger, and the trigger must have moved more than 1px from where the panel was last anchored. Scrolls inside the panel, of unrelated scrollers, and scroll events that leave the trigger in place are ignored. When omitted, a scroll repositions the panel. Resize always repositions. |
+| `matchTriggerWidth` | `boolean` | no | Lock the panel width to the trigger width (list boxes anchored under a field). |
+
+## `UsePlacementReturn`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `resolvedSide` | `Readonly<Ref<Side>>` | yes | Side the panel landed on, after flipping. |
+| `resolvedAlign` | `Readonly<Ref<Align>>` | yes | Alignment the panel landed on. |
+| `panelStyle` | `Readonly<Ref<Record<string, string>>>` | yes |  |
+| `anchored` | `Readonly<Ref<boolean>>` | yes | True one frame after the opening placements landed, so only re-anchors transition. |
+| `updatePosition` | `() => void` | yes |  |
+
+## Other exports
+
+`computePlacement` · `getClippingBoundary` · `Side` · `Align` · `PhysicalSide` · `Rect` · `Size` · `CollisionPadding` · `ComputePlacementInput` · `ComputePlacementResult`. Signatures and fields: [composables/use-placement.md](composables/use-placement.md).
+
+---
+
+<!-- composables/use-time-range.md -->
+
+# useTimeRange
+
+Composable `@aziontech/webkit/use-time-range`. The signatures and option tables below are read from its typed source, [`src/composables/use-time-range/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-time-range/index.ts).
+
+```ts
+import { useTimeRange, timeRangePreset, TIME_RANGE_PRESETS } from '@aziontech/webkit/use-time-range'
+import type { UseTimeRangeOptions, UseTimeRangeReturn, TimeRangePresetKey } from '@aziontech/webkit/use-time-range'
+```
+
+## `useTimeRange`
+
+```ts
+function useTimeRange(value: MaybeRefOrGetter<DateRangeValue | null | undefined>, options: UseTimeRangeOptions = {}): UseTimeRangeReturn
+```
+
+## `UseTimeRangeOptions`
+
+Options of `useTimeRange`.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `now` | `MaybeRefOrGetter<Date \| number \| undefined>` | no | Reference clock. A ref or getter that changes re-resolves the range; unset reads the nearest ConfigProvider now, then the real clock. |
+
+## `UseTimeRangeReturn`
+
+What `useTimeRange` returns.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `from` | `ComputedRef<Date \| null>` | yes | Start instant of the range; null with no range. |
+| `to` | `ComputedRef<Date \| null>` | yes | End instant of the range; null with no range. |
+| `refresh` | `() => void` | yes | Resolves a relative range again against the clock, so the window ends now. |
+
+## Other exports
+
+`timeRangePreset` · `TimeRangePresetKey` · `TIME_RANGE_PRESETS`. Signatures and fields: [composables/use-time-range.md](composables/use-time-range.md).
+
+---
+
+<!-- composables/use-unsaved-changes.md -->
+
+# useUnsavedChanges
+
+Composable `@aziontech/webkit/use-unsaved-changes`. The signatures and option tables below are read from its typed source, [`src/composables/use-unsaved-changes/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-unsaved-changes/index.ts).
+
+```ts
+import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+import type { UseUnsavedChangesOptions, UseUnsavedChangesReturn, UnsavedChangesDialogProps } from '@aziontech/webkit/use-unsaved-changes'
+```
+
+## `useUnsavedChanges`
+
+```ts
+function useUnsavedChanges<T>(source: MaybeRefOrGetter<T>, options: UseUnsavedChangesOptions<T> = {}): UseUnsavedChangesReturn<T>
+```
+
+## `UseUnsavedChangesOptions<T>`
+
+Options of `useUnsavedChanges`.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `savable` | `MaybeRefOrGetter<boolean>` | no | Offers Save changes in the leave dialog; needs `onSave`. Defaults to true when `onSave` is set. |
+| `onSave` | `() => unknown` | no | Saves the form from the leave dialog. The page leaves when it resolves and the form is clean. |
+| `onDiscard` | `(baseline: T) => void` | no | Called by `discard()` with a copy of the baseline when the source is a getter, not a ref. |
+| `enabled` | `MaybeRefOrGetter<boolean>` | no | Turns the guards off (for example while a successful save navigates away). |
+| `beforeUnload` | `boolean` | no | Asks the browser to confirm a reload or a tab close while dirty. |
+
+## `UseUnsavedChangesReturn<T>`
+
+What `useUnsavedChanges` returns.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `isDirty` | `ComputedRef<boolean>` | yes | True while the source differs from the baseline. |
+| `baseline` | `Readonly<Ref<T>>` | yes | The last committed value. |
+| `saving` | `Readonly<Ref<boolean>>` | yes | True while `onSave` runs from the leave dialog. |
+| `commit` | `(next?: T) => void` | yes | Makes the current value (or `next`) the new baseline, after a save. |
+| `discard` | `() => T` | yes | Puts the baseline back into the source and returns a copy of it. |
+| `confirmLeave` | `() => Promise<boolean>` | yes | Resolves true when the page may leave: at once when clean, after the dialog when dirty. |
+| `savable` | `ComputedRef<boolean>` | yes | Whether Save changes is offered in the dialog. |
+| `dialogProps` | `ComputedRef<UnsavedChangesDialogProps>` | yes | `ConfirmDialog` props: open state, built-in title and description. |
+| `labels` | `ComputedRef<{ keepEditing: string; discard: string; save: string }>` | yes | Built-in labels for the dialog actions. |
+| `keepEditing` | `() => void` | yes | Closes the dialog and stays on the page. |
+| `discardAndLeave` | `() => void` | yes | Discards the changes and leaves. |
+| `saveAndLeave` | `() => Promise<void>` | yes | Runs `onSave`, then leaves when the form is clean. |
+
+## Other exports
+
+`UnsavedChangesDialogProps`. Signatures and fields: [composables/use-unsaved-changes.md](composables/use-unsaved-changes.md).

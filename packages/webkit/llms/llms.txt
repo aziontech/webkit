@@ -429,6 +429,21 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SubjectGridSection](components/subject-grid-section.md): A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells s…
 - [TemplateGallerySection](components/template-gallery-section.md): The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a mar…
 
+## Composables
+
+- [useCollection](composables/use-collection.md): `useCollection` and 36 more exports (options, return, helpers and types).
+- [useColorMode](composables/use-color-mode.md): `useColorMode` and 6 more exports (options, return, helpers and types).
+- [useConsoleLayout](composables/use-console-layout.md): `useConsoleLayout` and 2 more exports (options, return, helpers and types).
+- [useControllable](composables/use-controllable.md): `useControllable` and 2 more exports (options, return, helpers and types).
+- [useDirection](composables/use-direction.md): `useDirection` and 4 more exports (options, return, helpers and types).
+- [useFocusTrap](composables/use-focus-trap.md): `useFocusTrap`.
+- [useHeadingNavigation](composables/use-heading-navigation.md): `useHeadingNavigation` and 7 more exports (options, return, helpers and types).
+- [useLocale](composables/use-locale.md): `useLocale` and 19 more exports (options, return, helpers and types).
+- [usePinnedRow](composables/use-pinned-row.md): `usePinnedRow` and 2 more exports (options, return, helpers and types).
+- [usePlacement](composables/use-placement.md): `usePlacement` and 12 more exports (options, return, helpers and types).
+- [useTimeRange](composables/use-time-range.md): `useTimeRange` and 5 more exports (options, return, helpers and types).
+- [useUnsavedChanges](composables/use-unsaved-changes.md): `useUnsavedChanges` and 3 more exports (options, return, helpers and types).
+
 ## Optional
 
 - [llms-full.txt](llms-full.txt): every foundation, block and product (`app`) component page in one file: block guidelines with their parts and variants as names and without their code, and the first example of each component (the pages above hold the code, every example and every detail).
