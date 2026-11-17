@@ -10,14 +10,14 @@
       variant="site"
       aria-label="Azion"
     >
-      <AppHeader.Brand>
-        <a
-          href="/"
-          aria-label="Azion home"
-          ><Brand
-            variant="default"
-            size="small"
-        /></a>
+      <AppHeader.Brand
+        href="/"
+        aria-label="Azion home"
+      >
+        <Brand
+          variant="default"
+          size="small"
+        />
       </AppHeader.Brand>
       <AppHeader.Center>
         <div class="flex w-full min-w-0 items-center">

@@ -6,13 +6,11 @@
 <template>
   <AppHeader aria-label="Global header">
     <AppHeader.Start>
-      <AppHeader.Brand>
-        <a
-          href="/"
-          aria-label="Azion home"
-        >
-          <Default />
-        </a>
+      <AppHeader.Brand
+        href="/"
+        aria-label="Azion home"
+      >
+        <Default />
       </AppHeader.Brand>
     </AppHeader.Start>
     <AppHeader.Center />

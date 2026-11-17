@@ -21,7 +21,7 @@ The signed-out bar (`top-bar/auth-bar`): brand at the start, Documentation at th
 
 ### B. Brand — `Brand` (required)
 
-In the bar, linked home with `aria-label="Azion home"`.
+In the bar, inside `AppHeader.Brand` linked home through its `href` with `aria-label="Azion home"`.
 
 ### C. Actions — `Button` (required)
 

@@ -21,7 +21,7 @@ The bar in its default `content` placement, labelled `aria-label="Console"`. Fil
 
 ### B. Brand — `Brand` (required)
 
-`variant="default"`, `size="small"`, wrapped in a link to the home route with `aria-label="Azion home"`. The link carries the focus ring and a hover opacity that respects `motion-reduce`.
+`variant="default"`, `size="small"`, inside `AppHeader.Brand` with `href` set to the home route and `aria-label="Azion home"`, so the brand renders as the link. `AppHeader.Brand` carries the focus ring and a hover opacity that respects `motion-reduce`; do not wrap the logo in a hand-made anchor.
 
 ### C. Documentation — `Button` (required)
 
