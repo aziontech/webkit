@@ -890,6 +890,9 @@ export const es: Messages = {
     noMatch: 'Ninguna página coincide con la búsqueda.',
     pages: 'Páginas'
   },
+  skipLink: {
+    label: 'Saltar al contenido'
+  },
   siteHeaderSection: {
     open: 'Abrir navegación',
     home: 'Página de inicio de Azion',

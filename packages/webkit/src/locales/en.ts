@@ -1318,6 +1318,10 @@ export const siteLayout = {
   pages: 'Pages'
 } as const
 
+export const skipLink = {
+  label: 'Skip to content'
+} as const
+
 export const dataTable = {
   loadingMore: 'Loading more rows',
   loadMore: 'Load more',
@@ -1428,6 +1432,7 @@ export const en = {
   sidebar,
   siteFooterSection,
   siteLayout,
+  skipLink,
   siteHeaderSection,
   sources,
   splitButton,

@@ -890,6 +890,9 @@ export const ptBR: Messages = {
     noMatch: 'Nenhuma página corresponde à busca.',
     pages: 'Páginas'
   },
+  skipLink: {
+    label: 'Pular para o conteúdo'
+  },
   siteHeaderSection: {
     open: 'Abrir navegação',
     home: 'Página inicial da Azion',

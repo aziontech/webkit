@@ -1499,6 +1499,10 @@
       "types": "./types/components/navigation/link/link.vue.d.ts",
       "default": "./src/components/navigation/link/link.vue"
     },
+    "./skip-link": {
+      "types": "./types/components/navigation/skip-link/skip-link.vue.d.ts",
+      "default": "./src/components/navigation/skip-link/skip-link.vue"
+    },
     "./sidebar-menu": {
       "types": "./types/components/navigation/sidebar-menu/index.d.ts",
       "default": "./src/components/navigation/sidebar-menu/index.ts"

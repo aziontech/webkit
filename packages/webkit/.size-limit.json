@@ -2127,6 +2127,11 @@
     "limit": "2.2 KB"
   },
   {
+    "name": "skip-link",
+    "path": "src/components/navigation/skip-link/skip-link.vue",
+    "limit": "1.9 KB"
+  },
+  {
     "name": "sidebar-menu",
     "path": "src/components/navigation/sidebar-menu/index.ts",
     "limit": "21.5 KB"
