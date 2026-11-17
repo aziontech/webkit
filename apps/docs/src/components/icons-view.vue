@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item-root'
   import Slider from '@aziontech/webkit/slider'
   import assets from 'virtual:docs-assets'
   import { computed, ref } from 'vue'
@@ -132,10 +133,11 @@
               :key="icon.class"
               class="flex"
             >
-              <button
-                type="button"
+              <Item
+                clickable
+                size="small"
                 :title="`${icon.label} · ${format('{label}: {value}', { label: t.iconsCopy, value: icon.class })}`"
-                class="group relative flex min-h-24 w-full flex-col items-center justify-center gap-(--spacing-xs) bg-(--bg-canvas) p-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface) focus-visible:z-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                class="min-h-24 flex-col justify-center gap-(--spacing-xs) rounded-none bg-(--bg-canvas) focus-visible:z-1 focus-visible:ring-inset focus-visible:ring-offset-0"
                 @click="copyValue(icon.class)"
               >
                 <i
@@ -150,10 +152,10 @@
                 >
                 <span class="sr-only">{{ icon.class }}, {{ icon.label }}</span>
                 <i
-                  class="az az-copy absolute end-(--spacing-xs) top-(--spacing-xs) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
+                  class="az az-copy absolute end-(--spacing-xs) top-(--spacing-xs) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover/item:opacity-100 group-focus-visible/item:opacity-100 motion-reduce:transition-none"
                   aria-hidden="true"
                 />
-              </button>
+              </Item>
             </li>
           </ul>
         </div>

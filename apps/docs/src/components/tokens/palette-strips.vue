@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import Item from '@aziontech/webkit/item-root'
+
   import { titleCase } from '../../lib/nav'
   import { copyValue } from '../../lib/tokens'
   import type { Token } from '../../lib/types'
@@ -18,16 +20,18 @@
     >
       <h3 class="text-label-md text-(--text-default)">{{ titleCase(group.id) }}</h3>
       <div class="flex gap-(--spacing-2xs) overflow-x-auto pb-(--spacing-2xs)">
-        <button
+        <Item
           v-for="token in group.vars"
           :key="token.name"
-          type="button"
+          clickable
+          variant="inline"
+          size="small"
           :title="`${token.name} · ${token.value}`"
-          class="group flex min-w-14 flex-1 flex-col gap-(--spacing-2xs) rounded-(--shape-control) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          class="min-w-14 flex-1 flex-col items-stretch gap-(--spacing-2xs)"
           @click="copyValue(token.name)"
         >
           <span
-            class="h-12 w-full rounded-(--shape-control) border border-(--border-muted) transition-[scale] duration-fast-02 ease-productive-entrance group-hover:scale-y-110 motion-reduce:transition-none"
+            class="h-12 w-full rounded-(--shape-control) border border-(--border-muted) transition-[scale] duration-fast-02 ease-productive-entrance group-hover/item:scale-y-110 motion-reduce:transition-none"
             :style="{ background: `var(${token.name})` }"
             aria-hidden="true"
           />
@@ -36,7 +40,7 @@
           }}</span>
           <span class="sr-only">{{ token.name }}</span>
           <span class="text-label-code-sm text-(--text-muted)">{{ token.value }}</span>
-        </button>
+        </Item>
       </div>
     </li>
   </ul>

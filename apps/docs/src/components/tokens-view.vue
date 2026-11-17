@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item-root'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import tokens from 'virtual:docs-tokens'
   import { computed, ref } from 'vue'
@@ -99,14 +101,15 @@
           v-for="name in tokens.typography"
           :key="name"
         >
-          <button
-            type="button"
-            class="flex w-full flex-col gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-sm) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+          <Item
+            clickable
+            size="small"
+            class="flex-col items-start gap-(--spacing-2xs)"
             @click="copyValue(name)"
           >
             <code class="text-label-code-sm text-(--text-muted)">{{ name }}</code>
             <span :class="name">{{ t.sampleText }}</span>
-          </button>
+          </Item>
         </li>
       </ul>
       <section class="flex flex-col gap-(--spacing-sm)">
@@ -182,11 +185,15 @@
           <li
             v-for="animation in tokens.motion.animations"
             :key="animation.name"
-            class="flex flex-col items-start gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) p-(--spacing-sm)"
+            class="flex"
           >
-            <CopyChip :value="`animate-${animation.name}`" />
-            <code class="text-label-code-sm text-(--text-muted)">{{ animation.value }}</code>
-            <p class="text-body-sm text-(--text-muted)">{{ animation.useWhen }}</p>
+            <Card class="w-full">
+              <div class="flex flex-col items-start gap-(--spacing-2xs)">
+                <CopyChip :value="`animate-${animation.name}`" />
+                <code class="text-label-code-sm text-(--text-muted)">{{ animation.value }}</code>
+                <p class="text-body-sm text-(--text-muted)">{{ animation.useWhen }}</p>
+              </div>
+            </Card>
           </li>
         </ul>
       </section>
