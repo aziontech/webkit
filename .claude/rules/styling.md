@@ -255,6 +255,20 @@ The **`dead-token-shorthand`** token-check blocks both spellings at write time a
 
 Shipped in `Trace` (its name column stayed at 9rem in every panel) until 2026-11-13. The **`container-query-on-container`** token check blocks it at write time and in the CI ratchet.
 
+## A directional icon already mirrors — never rotate it under `rtl`
+
+`@aziontech/webkit/styles` mirrors every directional glyph (`ai-arrow-right`, `ai-chevron-left`, `ai-caret-*`, `ai-log-in`, `ai-reply`, … — the `DIRECTIONAL_ICONS` set in `src/utils/directional-icons.ts`) under `dir="rtl"` with `scale: -1 1`. Adding `rtl:rotate-180` (or `rtl:-rotate-180`) on the same glyph composes a rotation with that scale, which flips it vertically instead of horizontally: the arrow points the wrong way, and nothing errors.
+
+```html
+<!-- ❌ mirrored twice — points the wrong way in rtl -->
+<i class="ai ai-arrow-right rtl:rotate-180"></i>
+
+<!-- ✅ the stylesheet already mirrors it -->
+<i class="ai ai-arrow-right"></i>
+```
+
+`rtl:-scale-x-100` is harmless (it sets the same scale), and a non-directional glyph (`ai-chevron-down`) may rotate freely. Shipped in `apps/docs` until 2026-11-17. The **`rtl-double-flip`** token check blocks it at write time and in the CI ratchet.
+
 ## A zero length carries no unit
 
 A zero is the one value that is identical in every unit, so the unit is pure noise — and it makes the same zero read three different ways across the codebase (`0px` here, `0rem` there, `0em` in a token). **Write `0`.**
@@ -385,6 +399,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - `component-scaffolder` (agent) refuses to emit the `variantClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
 - **`container-query-on-container`** (same engine, write-time hook and CI ratchet) blocks a class string that declares `@container/<name>` and also uses an `@…/<name>:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
+- **`rtl-double-flip`** (same engine, write-time hook and CI ratchet) blocks a class string that holds a directional `ai-*` glyph together with `rtl:rotate-180` / `rtl:-rotate-180` under any variant chain; pinned both ways, and against `DIRECTIONAL_ICONS`, in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
 - **The `rem`-in-math-function carve-out** is gated by the two engines we own — the `zero-unit-in-calc` token check and the same assertion in `build:tokens`. Stylelint's `length-zero-no-unit` deliberately skips math functions (a unit is required there), so it accepts `calc(100% - 0px)`; the token check is what makes that `0rem`.

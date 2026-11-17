@@ -16,7 +16,9 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
 - Mirror what points along the reading direction: arrows, chevrons, carets, "back"/"next", sign-in /
   sign-out. Webkit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
   and `@aziontech/webkit/styles` for any `az az-chevron-right`-style glyph); on your own glyph add
-  `rtl:-scale-x-100`.
+  `rtl:-scale-x-100`. Never add `rtl:rotate-180` to an `ai-*` arrow, chevron or caret: the
+  stylesheet already mirrors it, the rotation flips it a second time and it points the wrong way
+  (blocked inside the package by the `rtl-double-flip` check).
 - Place overlays with `side` and `align` (`Tooltip`, `Popover`, `HoverCard`, `DropdownMenu`,
   `Hint`, `NavigationMenu.Viewport`): `side="end"` opens on the right in `ltr` and on the left in
   `rtl`, and `align="start"` lines the panel up with the trigger's start edge in both. Select,
