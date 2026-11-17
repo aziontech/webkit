@@ -4,10 +4,14 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import Separator from '../../../layout/separator/separator.vue'
   import Card from '../../card/card.vue'
   import Tag from '../../tag/tag.vue'
+  import { useConsoleMockupContext } from '../composables/use-console-mockup-context'
   import { DEFAULT_DEPLOYMENT_STEPS } from '../lib/deployment-steps'
   import ConsoleMockupShell, {
     type ConsoleMockupShellFade,
@@ -67,9 +71,18 @@
   const shellEl = ref<InstanceType<typeof ConsoleMockupShell> | null>(null)
   const visible = useElementVisibility(shellEl, { threshold: 0.35 })
 
+  const { testId } = useConsoleMockupContext()
+  const { t } = useTranslate({ common: en.common })
+
+  const chosenPaused = ref<boolean | null>(null)
+  const paused = computed(() => chosenPaused.value ?? reduced.value)
+  const pauseLabel = computed(() =>
+    paused.value ? t('common.playAnimation') : t('common.pauseAnimation')
+  )
+
   const run = ref(0)
   const deployed = ref(false)
-  const streaming = computed(() => props.active && visible.value && !reduced.value)
+  const streaming = computed(() => props.active && visible.value && !paused.value)
 
   let restartTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -89,6 +102,10 @@
     restartTimer = setTimeout(restart, SUMMARY_HOLD_MS)
   }
 
+  const onPauseToggle = () => {
+    chosenPaused.value = !paused.value
+  }
+
   watch(streaming, (live) => {
     if (live) restart()
     else clearRestart()
@@ -98,98 +115,110 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    ref="shellEl"
-    :variant="variant"
-    :chrome="chrome"
-    :width="width"
-    :fade="fade"
-    :active="active"
-  >
-    <div class="flex h-full flex-col justify-center p-(--spacing-xs)">
-      <ConsoleMockupShellItem :order="0">
-        <Card
-          :padded="false"
-          class="w-full"
-        >
-          <template #header>
-            <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
-            <StatusIndicator
-              :loading="!deployed"
-              :severity="deployed ? 'success' : 'info'"
-              :label="deployed ? 'Deployed' : 'Building'"
-            />
-          </template>
+  <div class="flex h-full w-full min-w-0 flex-col gap-(--spacing-xs)">
+    <IconButton
+      :data-testid="`${testId}__pause`"
+      :icon="paused ? 'az az-play' : 'az az-pause'"
+      :aria-label="pauseLabel"
+      variant="outline"
+      size="small"
+      class="self-end"
+      @click="onPauseToggle"
+    />
+    <ConsoleMockupShell
+      ref="shellEl"
+      class="min-h-0 flex-1"
+      :variant="variant"
+      :chrome="chrome"
+      :width="width"
+      :fade="fade"
+      :active="active"
+    >
+      <div class="flex h-full flex-col justify-center-safe p-(--spacing-xs)">
+        <ConsoleMockupShellItem :order="0">
+          <Card
+            :padded="false"
+            class="w-full"
+          >
+            <template #header>
+              <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
+              <StatusIndicator
+                :loading="!deployed"
+                :severity="deployed ? 'success' : 'info'"
+                :label="deployed ? 'Deployed' : 'Building'"
+              />
+            </template>
 
-          <template #default>
-            <Transition
-              mode="out-in"
-              leave-to-class="opacity-0"
-              leave-active-class="transition-opacity duration-moderate-02 ease-in-out motion-reduce:transition-none"
-            >
-              <div
-                v-if="deployed"
-                key="summary"
+            <template #default>
+              <Transition
+                mode="out-in"
+                leave-to-class="opacity-0"
+                leave-active-class="transition-opacity duration-moderate-02 ease-in-out motion-reduce:transition-none"
               >
-                <TransitionGroup
-                  appear
-                  tag="ul"
-                  class="m-0 flex list-none flex-col p-0"
-                  enter-from-class="translate-y-2 opacity-0"
-                  enter-active-class="transition-[translate,opacity] duration-slow-01 ease-expressive-entrance motion-reduce:transition-none"
+                <div
+                  v-if="deployed"
+                  key="summary"
                 >
-                  <li
-                    v-for="(resource, index) in DEPLOYED"
-                    :key="resource.key"
-                    :style="rowDelay(index)"
+                  <TransitionGroup
+                    appear
+                    tag="ul"
+                    class="m-0 flex list-none flex-col p-0"
+                    enter-from-class="translate-y-2 opacity-0"
+                    enter-active-class="transition-[translate,opacity] duration-slow-01 ease-expressive-entrance motion-reduce:transition-none"
                   >
-                    <Separator v-if="index" />
-                    <div
-                      class="flex items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm)"
+                    <li
+                      v-for="(resource, index) in DEPLOYED"
+                      :key="resource.key"
+                      :style="rowDelay(index)"
                     >
-                      <i
-                        :class="resource.icon"
-                        class="shrink-0 text-body-md leading-none text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                      <span class="flex min-w-0 flex-col">
-                        <span class="truncate text-label-sm text-(--text-muted)">
-                          {{ resource.eyebrow }}
+                      <Separator v-if="index" />
+                      <div
+                        class="flex items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm)"
+                      >
+                        <i
+                          :class="resource.icon"
+                          class="shrink-0 text-body-md leading-none text-(--text-muted)"
+                          aria-hidden="true"
+                        />
+                        <span class="flex min-w-0 flex-col">
+                          <span class="truncate text-label-sm text-(--text-muted)">
+                            {{ resource.eyebrow }}
+                          </span>
+                          <span class="truncate text-label-md text-(--text-default)">
+                            {{ resource.name }}
+                          </span>
                         </span>
-                        <span class="truncate text-label-md text-(--text-default)">
-                          {{ resource.name }}
-                        </span>
-                      </span>
-                      <Tag
-                        class="ms-auto shrink-0"
-                        label="Deployed"
-                        severity="success"
-                        size="small"
-                      />
-                    </div>
-                  </li>
-                </TransitionGroup>
-              </div>
-              <div
-                v-else
-                key="logs"
-              >
-                <DeploymentLogs
-                  :key="streaming ? run : 'idle'"
-                  :live="streaming"
-                  active-at="build"
-                  label="Logs"
-                  :show-controls="false"
-                  :show-progress="false"
-                  :steps="STEPS"
-                  :autoplay-interval="autoplayInterval"
-                  @complete="onComplete"
-                />
-              </div>
-            </Transition>
-          </template>
-        </Card>
-      </ConsoleMockupShellItem>
-    </div>
-  </ConsoleMockupShell>
+                        <Tag
+                          class="ms-auto shrink-0"
+                          label="Deployed"
+                          severity="success"
+                          size="small"
+                        />
+                      </div>
+                    </li>
+                  </TransitionGroup>
+                </div>
+                <div
+                  v-else
+                  key="logs"
+                >
+                  <DeploymentLogs
+                    :key="streaming ? run : 'idle'"
+                    :live="streaming"
+                    active-at="build"
+                    label="Logs"
+                    :show-controls="false"
+                    :show-progress="false"
+                    :steps="STEPS"
+                    :autoplay-interval="autoplayInterval"
+                    @complete="onComplete"
+                  />
+                </div>
+              </Transition>
+            </template>
+          </Card>
+        </ConsoleMockupShellItem>
+      </div>
+    </ConsoleMockupShell>
+  </div>
 </template>

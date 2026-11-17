@@ -15,6 +15,7 @@
       <video
         autoplay
         :src="placeholderClip"
+        aria-label="Opening the Rules engine tab"
         class="block h-auto w-full rounded-(--shape-control)"
       ></video>
     </DocFrame>

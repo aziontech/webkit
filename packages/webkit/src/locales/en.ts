@@ -368,6 +368,8 @@ export const dialog = {
 export const docFrame = {
   zoom: 'View image full screen',
   zoomNamed: 'View full screen: {alt}',
+  pauseNamed: 'Pause animation: {alt}',
+  playNamed: 'Play animation: {alt}',
   fullScreen: 'Full screen',
   zoomedImage: 'Image, full screen',
   closeFullScreen: 'Close full screen',

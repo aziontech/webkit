@@ -603,7 +603,7 @@
                   v-else-if="!compact && pageControl"
                   class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
                 >
-                  <Breadcrumb class="w-full">
+                  <Breadcrumb class="ms-0 w-full">
                     <BreadcrumbList>
                       <template
                         v-for="(crumb, index) in activeCrumbs"
@@ -624,7 +624,7 @@
                 </div>
                 <div
                   v-else-if="!compact && !pageTrail && $slots['breadcrumbs']"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
+                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink *:ms-0"
                 >
                   <slot name="breadcrumbs" />
                 </div>
@@ -634,7 +634,7 @@
                 >
                   <Breadcrumb
                     :items="crumbItems"
-                    class="w-full"
+                    class="ms-0 w-full"
                     @navigate="onCrumbNavigate"
                   />
                 </div>

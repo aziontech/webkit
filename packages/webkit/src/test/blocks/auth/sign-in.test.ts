@@ -113,6 +113,20 @@ describe('auth/sign-in#OauthConsent', () => {
   })
 })
 
+describe.each([
+  ['OauthConsent', OauthConsent],
+  ['DeviceAuthorization', DeviceAuthorization]
+])('auth/sign-in#%s signed-in account', (_, Variant) => {
+  it('ends a long name or email on an ellipsis and keeps the full value in its title', () => {
+    const view = render(Variant)
+    for (const value of ['Jane Doe', 'jane.doe@example.com']) {
+      const text = view.getByText(value)
+      expect(text).toHaveAttribute('title', value)
+      expect(text.classList.contains('truncate')).toBe(true)
+    }
+  })
+})
+
 describe('auth/sign-in#DeviceAuthorization', () => {
   it('shows the code to compare with the request details', async () => {
     const view = render(DeviceAuthorization)

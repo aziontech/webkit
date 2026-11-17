@@ -140,8 +140,20 @@
                           />
                         </Item.Media>
                         <Item.Content>
-                          <Item.Title>{{ account.name }}</Item.Title>
-                          <Item.Description>{{ account.email }}</Item.Description>
+                          <Item.Title class="max-w-full">
+                            <span
+                              class="min-w-0 truncate"
+                              :title="account.name"
+                              >{{ account.name }}</span
+                            >
+                          </Item.Title>
+                          <Item.Description>
+                            <span
+                              class="block truncate"
+                              :title="account.email"
+                              >{{ account.email }}</span
+                            >
+                          </Item.Description>
                         </Item.Content>
                         <Item.Actions>
                           <Button
