@@ -2,6 +2,7 @@
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CopyText from '@aziontech/webkit/copy-text'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import Illustration from '@aziontech/webkit/illustration'
   import LineFigure from '@aziontech/webkit/line-figure'
@@ -9,7 +10,6 @@
   import assets from 'virtual:docs-assets'
   import { computed } from 'vue'
 
-  import CopyChip from '../components/tokens/copy-chip.vue'
   import { index } from '../lib/data'
   import { messages } from '../lib/i18n'
 
@@ -74,7 +74,7 @@
               <h3 class="text-heading-xs">{{ lockup.label }}</h3>
               <p class="max-w-sm text-body-xs text-(--text-muted)">{{ lockup.text }}</p>
             </div>
-            <CopyChip :value="snippet(lockup.variant)" />
+            <CopyText :value="snippet(lockup.variant)" />
           </div>
           <Brand
             :variant="lockup.variant"
@@ -127,7 +127,7 @@
                   class="max-h-full w-full"
                 />
               </div>
-              <CopyChip :value="name" />
+              <CopyText :value="name" />
             </div>
           </Card>
         </li>
@@ -176,7 +176,7 @@
                   class="h-full w-full"
                 />
               </div>
-              <CopyChip :value="figure.name" />
+              <CopyText :value="figure.name" />
               <p class="text-body-xs text-(--text-muted)">{{ figure.label }}</p>
             </div>
           </Card>

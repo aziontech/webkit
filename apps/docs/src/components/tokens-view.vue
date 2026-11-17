@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
+  import CopyText from '@aziontech/webkit/copy-text'
   import Item from '@aziontech/webkit/item-root'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import tokens from 'virtual:docs-tokens'
@@ -10,7 +11,6 @@
   import { copyValue } from '../lib/tokens'
   import ArchitectureIntro from './tokens/architecture-intro.vue'
   import ColorPlayground from './tokens/color-playground.vue'
-  import CopyChip from './tokens/copy-chip.vue'
   import PaletteStrips from './tokens/palette-strips.vue'
   import SpacingRhythm from './tokens/spacing-rhythm.vue'
   import ThemePairs from './tokens/theme-pairs.vue'
@@ -189,7 +189,7 @@
           >
             <Card class="w-full">
               <div class="flex flex-col items-start gap-(--spacing-2xs)">
-                <CopyChip :value="`animate-${animation.name}`" />
+                <CopyText :value="`animate-${animation.name}`" />
                 <code class="text-label-code-sm text-(--text-muted)">{{ animation.value }}</code>
                 <p class="text-body-sm text-(--text-muted)">{{ animation.useWhen }}</p>
               </div>

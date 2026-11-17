@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import CopyText from '@aziontech/webkit/copy-text'
   import Select from '@aziontech/webkit/select'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import tokens from 'virtual:docs-tokens'
@@ -8,7 +9,6 @@
   import { resolvedTheme, settings } from '../../lib/settings'
   import { tailwindClass } from '../../lib/tokens'
   import type { Token } from '../../lib/types'
-  import CopyChip from './copy-chip.vue'
   import InlineCode from './inline-code.vue'
 
   type Category = 'theme' | 'background' | 'text' | 'border'
@@ -109,11 +109,11 @@
       >
         <div class="flex flex-col gap-(--spacing-2xs)">
           <dt class="text-overline-sm text-(--text-muted)">{{ t.tailwind }}</dt>
-          <dd><CopyChip :value="tailwindClass(token.name, 'color')" /></dd>
+          <dd><CopyText :value="tailwindClass(token.name, 'color')" /></dd>
         </div>
         <div class="flex flex-col gap-(--spacing-2xs)">
           <dt class="text-overline-sm text-(--text-muted)">{{ t.cssVariable }}</dt>
-          <dd><CopyChip :value="`var(${token.name})`" /></dd>
+          <dd><CopyText :value="`var(${token.name})`" /></dd>
         </div>
         <div class="flex flex-col gap-(--spacing-2xs)">
           <dt class="text-overline-sm text-(--text-muted)">

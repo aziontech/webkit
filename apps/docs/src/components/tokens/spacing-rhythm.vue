@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import CopyText from '@aziontech/webkit/copy-text'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
@@ -7,7 +8,6 @@
   import { messages } from '../../lib/i18n'
   import { BREAKPOINT_ORDER, tailwindClass } from '../../lib/tokens'
   import type { Token } from '../../lib/types'
-  import CopyChip from './copy-chip.vue'
 
   const props = defineProps<{ tokens: Token[] }>()
 
@@ -29,7 +29,6 @@
   <Table
     bordered
     wrap-lines
-    :stackable="false"
   >
     <template #caption>
       <span class="sr-only">{{ t.spacingRhythm }}</span>
@@ -37,7 +36,7 @@
     <Table.Header>
       <Table.Row>
         <Table.HeadCell principal>{{ t.token }}</Table.HeadCell>
-        <Table.HeadCell>{{ t.tailwind }}</Table.HeadCell>
+        <Table.HeadCell :grow="2">{{ t.tailwind }}</Table.HeadCell>
         <Table.HeadCell
           v-for="column in columns"
           :key="column"
@@ -52,10 +51,16 @@
         :key="token.name"
       >
         <Table.Cell principal>
-          <CopyChip :value="token.name" />
+          <CopyText
+            :value="token.name"
+            size="small"
+          />
         </Table.Cell>
         <Table.Cell>
-          <CopyChip :value="tailwindClass(token.name, 'spacing')" />
+          <CopyText
+            :value="tailwindClass(token.name, 'spacing')"
+            size="small"
+          />
         </Table.Cell>
         <Table.Cell
           v-for="column in columns"

@@ -1,11 +1,11 @@
 <script setup lang="ts">
+  import CopyText from '@aziontech/webkit/copy-text'
   import Table from '@aziontech/webkit/table'
   import { computed } from 'vue'
 
   import { messages } from '../../lib/i18n'
   import { tailwindClass, type TokenKind } from '../../lib/tokens'
   import type { Token } from '../../lib/types'
-  import CopyChip from './copy-chip.vue'
   import InlineCode from './inline-code.vue'
   import TokenSample from './token-sample.vue'
 
@@ -28,7 +28,6 @@
   <Table
     bordered
     wrap-lines
-    :stackable="false"
   >
     <template #caption>
       <span class="sr-only">{{ caption }}</span>
@@ -65,13 +64,17 @@
               :name="token.name"
               :sample="sample"
             />
-            <CopyChip :value="token.name" />
+            <CopyText
+              :value="token.name"
+              size="small"
+            />
           </span>
         </Table.Cell>
         <Table.Cell v-if="withClass">
-          <CopyChip
+          <CopyText
             v-if="tailwindClass(token.name, kind)"
             :value="tailwindClass(token.name, kind)"
+            size="small"
           />
           <span
             v-else

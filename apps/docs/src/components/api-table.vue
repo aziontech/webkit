@@ -15,7 +15,6 @@
   <Table
     bordered
     wrap-lines
-    :stackable="false"
   >
     <template #caption>
       <span class="sr-only">{{ caption }}</span>
