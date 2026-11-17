@@ -10,6 +10,14 @@
 
 * bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
 
+## [4.5.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.4.0...@aziontech/icons@4.5.0) (2026-11-17)
+
+
+### Features
+
+* **icons:** add colored framework icons and neon, upstash, wordpress, langgraph ([#1193](https://github.com/aziontech/webkit/issues/1193)) ([89520ae](https://github.com/aziontech/webkit/commit/89520aed593680ac7078fb40111f44c5eb06491b))
+* **icons:** add python, nodejs, terminal and code icons ([#1192](https://github.com/aziontech/webkit/issues/1192)) ([6f3c654](https://github.com/aziontech/webkit/commit/6f3c654d7496f2f4b91eaea88f89fa6676953f3d))
+
 ## [4.4.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.3.0...@aziontech/icons@4.4.0) (2026-11-03)
 
 
