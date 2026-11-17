@@ -63,7 +63,7 @@
   async function onCopy(event: MouseEvent) {
     event.stopPropagation()
 
-    if (props.disabled || !props.value || typeof globalThis.navigator === 'undefined') return
+    if (props.disabled || !props.value) return
 
     if (!(await copyText(props.value))) {
       fallbackRequested.value = true

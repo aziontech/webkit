@@ -1,4 +1,5 @@
 import { toast } from '@aziontech/webkit/toast'
+import { copyText } from '@aziontech/webkit/utils/clipboard'
 
 import { messages } from './i18n'
 
@@ -51,12 +52,8 @@ export function tailwindClass(name: string, kind: TokenKind): string {
 }
 
 export async function copyValue(value: string): Promise<void> {
-  try {
-    await navigator.clipboard.writeText(value)
-    toast.success(messages.value.copiedValue, { description: value })
-  } catch {
-    toast.error(messages.value.copyFailed, { description: value })
-  }
+  if (await copyText(value)) toast.success(messages.value.copiedValue, { description: value })
+  else toast.error(messages.value.copyFailed, { description: value })
 }
 
 export const BREAKPOINT_ORDER = ['_', 'sm', 'md', 'lg', 'xl', '2xl']

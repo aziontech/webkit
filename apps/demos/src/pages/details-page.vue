@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import ConsoleLayout from '@aziontech/webkit/console-layout'
   import { toast } from '@aziontech/webkit/toast'
+  import { copyText } from '@aziontech/webkit/utils/clipboard'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -38,8 +39,8 @@
   const onResourceAction = async (_event: Event, value: unknown) => {
     if (value === 'settings' && record.value) router.push(`/resources/${record.value.id}/edit`)
     if (value === 'copy-url') {
-      await globalThis.navigator.clipboard?.writeText(`https://${resource.value.domain}`)
-      toast.success('URL copied.', { closable: true })
+      if (await copyText(`https://${resource.value.domain}`))
+        toast.success('URL copied.', { closable: true })
     }
   }
 </script>

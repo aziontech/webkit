@@ -68,6 +68,7 @@ const stubClipboard = () => {
 }
 
 afterEach(() => {
+  vi.restoreAllMocks()
   if (originalClipboard) {
     Object.defineProperty(navigator, 'clipboard', originalClipboard)
   } else {
@@ -188,6 +189,7 @@ describe('FeatureWidgetsSection', () => {
       value: { writeText: vi.fn(() => Promise.reject(new Error('denied'))) },
       configurable: true
     })
+    vi.spyOn(document, 'execCommand').mockReturnValue(false)
     const { getByRole, queryByRole } = band()
 
     await fireEvent.click(getByRole('button', { name: copy.label }))

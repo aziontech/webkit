@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent as browserEvent } from 'vitest/browser'
 import { defineComponent, h, ref } from 'vue'
 
 import Default from '../../../../examples/data-grid/default.vue'
@@ -278,14 +279,44 @@ describe('DataGrid', () => {
     expect(view.queryByTestId('data-grid__error')).toBeNull()
   })
 
-  it('copies the range with a real Ctrl+C key press', async () => {
-    const { events, cell } = mount()
-    cell(1, 'name').focus()
-    await userEvent.keyboard('{Shift>}{ArrowRight}{/Shift}')
-    await userEvent.keyboard('{Control>}c{/Control}')
-    const [event, text] = events['copy']?.at(-1) ?? []
-    expect(event).toBeInstanceOf(KeyboardEvent)
-    expect(text).toBe('Jane Doe\tfree')
+  it.each(['Control', 'Meta'])(
+    'copies the range through the native copy event on a real %s+C key press',
+    async (modifier) => {
+      const { events, cell } = mount()
+      cell(1, 'name').focus()
+      await browserEvent.keyboard('{Shift>}{ArrowRight}{/Shift}')
+      await browserEvent.keyboard(`{${modifier}>}c{/${modifier}}`)
+      await waitFor(() => expect(events['copy']).toHaveLength(1))
+      const [event, text] = events['copy']?.at(-1) ?? []
+      expect(event).toBeInstanceOf(ClipboardEvent)
+      expect(text).toBe('Jane Doe\tfree')
+    }
+  )
+
+  it('quotes a copied cell holding a tab, a line break or a quote, so it pastes back as one cell', async () => {
+    const { view, rows, events, cell } = mount()
+    rows.value = [
+      { ...seed()[0]!, name: 'Acme\t"Inc."' },
+      { ...seed()[1]!, name: 'Jane\nDoe' },
+      seed()[2]!
+    ]
+    await waitFor(() => expect(cell(0, 'name').textContent).toContain('Acme'))
+    cell(0, 'name').focus()
+    await browserEvent.keyboard('{Shift>}{ArrowDown}{ArrowRight}{/Shift}')
+    const copy = new ClipboardEvent('copy', {
+      bubbles: true,
+      cancelable: true,
+      clipboardData: new DataTransfer()
+    })
+    view.getByTestId('data-grid__cell-0-name').dispatchEvent(copy)
+    expect(copy.defaultPrevented).toBe(true)
+    const text = copy.clipboardData?.getData('text/plain') ?? ''
+    expect(text).toBe('"Acme\t""Inc."""\tpro\n"Jane\nDoe"\tfree')
+    expect(events['copy']?.at(-1)?.[1]).toBe(text)
+    cell(2, 'name').focus()
+    paste(cell(2, 'name'), text)
+    expect(rows.value[2]).toMatchObject({ name: 'Acme\t"Inc."', plan: 'pro' })
+    expect(rows.value[3]).toBeUndefined()
   })
 
   it('selects a range with Shift and copies it as tab-separated text', async () => {

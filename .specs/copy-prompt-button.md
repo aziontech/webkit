@@ -3,9 +3,9 @@ name: copy-prompt-button
 category: action
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: b4f73e5d5fcfeb2ee5dda5dcf750ce10521c78fe10439b044bd1cbe7721b4ade
+checksum: 36feb329bcf71af4711a2e1d6ab2102cae20a2e065701966ed585c4ca2e688fa
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -89,7 +89,7 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 
 | Event   | Payload                              | Notes                                                                                                                                    |
 | ------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `copy`  | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead. |
+| `copy`  | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds (the async clipboard, or the copy-command fallback of `@aziontech/webkit/utils/clipboard` on an insecure origin). When both are refused, the copy fallback popover opens instead. |
 | `close` | `MouseEvent`                         | Fires with the click on the dismiss button (`closable`), after the chip removes itself; whether it stays away is the page's decision.    |
 
 ## Slots

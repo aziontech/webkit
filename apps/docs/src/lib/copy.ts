@@ -1,3 +1,5 @@
+import { copyText as writeClipboard } from '@aziontech/webkit/utils/clipboard'
+
 import { cached, keys } from './data'
 import type { BlockIndexItem, ComponentDoc, ComponentIndexItem, Highlighted, Row } from './types'
 
@@ -68,7 +70,7 @@ export function blockMarkdown(block: BlockIndexItem, summary: string): string {
   return parts.join('\n\n') + '\n'
 }
 
-export async function copyText(value: string, llms: string | null): Promise<void> {
+export async function copyText(value: string, llms: string | null): Promise<boolean> {
   let content = value
   if (llms) {
     try {
@@ -76,5 +78,5 @@ export async function copyText(value: string, llms: string | null): Promise<void
       if (response.ok) content = await response.text()
     } catch {}
   }
-  await navigator.clipboard.writeText(content)
+  return writeClipboard(content)
 }

@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { copyText } from '../../../utils/clipboard'
   import Hint from '../../input/hint/hint.vue'
 
   defineOptions({
@@ -50,18 +51,14 @@
   const copied = ref(false)
   let copiedTimer: ReturnType<typeof setTimeout> | null = null
 
-  const copyLink = () => {
-    globalThis.navigator?.clipboard
-      ?.writeText(`${globalThis.location.href.split('#')[0]}#${props.anchor}`)
-      .then(() => {
-        copied.value = true
-        if (copiedTimer) clearTimeout(copiedTimer)
-        copiedTimer = setTimeout(() => {
-          copied.value = false
-          copiedTimer = null
-        }, 2000)
-      })
-      .catch(() => undefined)
+  const copyLink = async () => {
+    if (!(await copyText(`${globalThis.location.href.split('#')[0]}#${props.anchor}`))) return
+    copied.value = true
+    if (copiedTimer) clearTimeout(copiedTimer)
+    copiedTimer = setTimeout(() => {
+      copied.value = false
+      copiedTimer = null
+    }, 2000)
   }
 
   onBeforeUnmount(() => {

@@ -4,6 +4,7 @@
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { intlLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { copyText } from '../../../utils/clipboard'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Checkbox from '../../input/checkbox/checkbox.vue'
   import type { DataGridCellEdit, DataGridColumn } from './types'
@@ -45,7 +46,7 @@
     change: [event: Event, edit: DataGridCellEdit<TRow>]
     'row-add': [event: Event]
     'row-remove': [event: Event, rows: TRow[]]
-    copy: [event: KeyboardEvent | ClipboardEvent, text: string]
+    copy: [event: ClipboardEvent, text: string]
   }>()
 
   /** The rows, the value the grid edits; a committed edit writes a new array with a copy of the edited row. */
@@ -313,6 +314,8 @@
     invalid.value = false
   }
 
+  const tsvCell = (value: string): string =>
+    /[\t\r\n"]/.test(value) ? `"${value.replaceAll('"', '""')}"` : value
   const rangeText = (): string => {
     const { top, bottom, start, end } = bounds.value
     const lines: string[] = []
@@ -322,23 +325,31 @@
       const cells: string[] = []
       for (let c = Math.max(start, offset.value); c <= end; c++) {
         const column = columnAt(c)
-        if (column) cells.push(raw(entry, column))
+        if (column) cells.push(tsvCell(raw(entry, column)))
       }
       lines.push(cells.join('\t'))
     }
     return lines.join('\n')
   }
-  const copyRange = (event: KeyboardEvent): void => {
-    const text = rangeText()
-    void globalThis.navigator?.clipboard?.writeText(text).catch(() => undefined)
-    emit('copy', event, text)
-  }
+  let copyPending = false
   const onCopy = (event: ClipboardEvent): void => {
-    if (editing.value) return
+    if (editing.value || !event.clipboardData) return
+    copyPending = false
     const text = rangeText()
-    event.clipboardData?.setData('text/plain', text)
+    event.clipboardData.setData('text/plain', text)
     event.preventDefault()
     emit('copy', event, text)
+  }
+  const copyRange = (): void => {
+    copyPending = true
+    globalThis.setTimeout(() => {
+      if (!copyPending) return
+      copyPending = false
+      document.addEventListener('copy', onCopy, { once: true })
+      const copied = document.execCommand('copy')
+      document.removeEventListener('copy', onCopy)
+      if (!copied) void copyText(rangeText())
+    })
   }
 
   const tsv = (text: string): string[][] => {
@@ -453,10 +464,7 @@
       default:
         break
     }
-    if (command && key.toLowerCase() === 'c') {
-      event.preventDefault()
-      return copyRange(event)
-    }
+    if (command && key.toLowerCase() === 'c') return copyRange()
     if (command && key.toLowerCase() === 'a') {
       event.preventDefault()
       anchor.value = { row: 0, col: 0 }
