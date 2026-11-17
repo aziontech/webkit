@@ -128,9 +128,7 @@
             />
           </template>
           <template #media="{ index }">
-            <div
-              class="relative z-10 flex w-full min-w-0 flex-col items-start gap-(--spacing-md) lg:h-90"
-            >
+            <div class="relative z-10 flex w-full min-w-0 flex-col items-start gap-(--spacing-md)">
               <div class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
                 <CodeBlock
                   :tabs="sampleTabs(items[index].code)"
