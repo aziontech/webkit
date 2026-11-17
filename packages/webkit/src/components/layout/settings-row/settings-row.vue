@@ -27,7 +27,7 @@
     variant?: SettingsRowVariant
     /** Indent depth under a rule, for a setting that only applies when its parent is on. */
     depth?: SettingsRowDepth
-    /** Below the md container of the row, move a field control under the copy at full width. */
+    /** Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. */
     stackable?: boolean
     /** Extra guidance in a Hint glyph beside the title; empty renders no glyph. */
     hint?: string
@@ -73,7 +73,7 @@
       <ItemContent>
         <div
           :data-depth="depth"
-          class="flex flex-col data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)"
+          class="flex flex-col [&>[data-slot=item-description]]:line-clamp-none data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)"
         >
           <ItemTitle :data-testid="`${testId}__title`">
             <slot name="title">{{ title }}</slot>
@@ -94,7 +94,7 @@
       <div
         :data-variant="variant"
         :data-stackable="stackable || null"
-        class="contents data-[variant=field]:flex data-[variant=field]:min-w-0 data-[variant=field]:max-w-(--container-3xs) data-[variant=field]:flex-1 data-[variant=field]:justify-end @max-md/settings-row:data-[variant=field]:data-[stackable]:max-w-none @max-md/settings-row:data-[variant=field]:data-[stackable]:basis-full @max-md/settings-row:data-[variant=field]:data-[stackable]:justify-start"
+        class="contents data-[variant=field]:flex data-[variant=field]:min-w-0 data-[variant=field]:max-w-(--container-3xs) data-[variant=field]:flex-1 data-[variant=field]:justify-end @max-md/settings-row:data-[variant=field]:max-w-none @max-md/settings-row:data-[variant=field]:basis-full @max-md/settings-row:data-[variant=field]:justify-start @max-lg/settings-row:data-[variant=field]:data-[stackable]:max-w-none @max-lg/settings-row:data-[variant=field]:data-[stackable]:basis-full @max-lg/settings-row:data-[variant=field]:data-[stackable]:justify-start"
       >
         <ItemActions
           :data-testid="`${testId}__control`"

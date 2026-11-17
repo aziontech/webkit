@@ -366,5 +366,7 @@ Budget-raise: code-block 31.55 KB → 32.4 KB (measured 32.37 KB): JSON, SQL and
 Budget-raise: streaming-response 35.25 KB → 36.15 KB (measured 36.10 KB): it renders a code-block, which gained JSON, SQL and Python highlighting merged from main (#1189) (2026-11-17).
 Budget-raise: doc-frame 5.75 KB → 8.2 KB (measured 8.16 KB): an autoplaying clip now carries a pause control (an `IconButton`) and starts itself after mount so it can stay paused under a reduced-motion preference — WCAG 2.2.2, owner decision AU4 (2026-11-17).
 Budget-raise: locales-pt-BR 10.35 KB → 10.4 KB (measured 10.37 KB): AvatarGroup (C-07) adds its two plural messages to the catalog, which had 15 bytes of headroom.
+Budget-raise: console-layout-root 73.3 KB → 73.4 KB (measured 73.35 KB): the compact header keeps a page trail's control crumbs (the environment switch) in place of the brand, owner decision AU5 (2026-11-17).
+Budget-raise: console-layout 74.65 KB → 74.75 KB (measured 74.67 KB): the same compact control crumbs, owner decision AU5 (2026-11-17).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.

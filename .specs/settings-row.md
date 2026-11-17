@@ -3,17 +3,17 @@ name: settings-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: e5cefae405d74bf1b6812d848b39eb00e0207f3110e0a89c3f5f7759b35df5be
-spec_version: 7
+checksum: 6401413b88e7552161258879ffeb5b2231a79d22663a503905491423b71af9f4
+spec_version: 8
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # SettingsRow — Component Spec
 
 ## Purpose
 
-One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the row keeps its two columns at every width (the description clamps to two lines); `stackable` opts a row into moving a `field` control under the copy in a narrow box.
+One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the description always wraps in full, never truncated. In a narrow row (below `@md` of the row, a phone) a `field` control stacks under the copy at full width; a `compact` switch or button stays at the end side beside the wrapped copy. `stackable` moves the stacking point up to `@lg` for a field that needs the full measure in a drawer-width box.
 
 ## When to use
 
@@ -38,12 +38,12 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 - Pick `variant` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.
 - Show a validation message only after Save was pressed.
 - Use `depth` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.
-- Keep the default two columns on a phone: the title and the clamped description sit on the start side, the control on the end side, both aligned to the top. This is the console layout at every width.
-- Set `stackable` only when the field needs the full measure to be usable in a narrow box (a long URL or a code value in a side drawer); never to fix a centred or cramped look.
+- Let the row stack on a phone: the title and the full description on top, a `field` control under them at full width. A `compact` switch or button keeps the end side, beside the wrapped copy.
+- Set `stackable` only when the field needs the full measure in a drawer-width box (a long URL or a code value in a side drawer), where a default row would still sit beside its copy; never to fix a centred or cramped look.
 - Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
 - Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `variant` and `stackable`.
 - Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
-- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description clamps to two lines, and the Hint glyph beside the title reveals the full text on hover or focus.
+- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until hover or focus.
 
 ## Usage
 
@@ -98,7 +98,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 | `description` | `string`                            | `''`      | false    | One sentence under the title that says what the setting does.                         |
 | `variant`     | `'field' \| 'compact' \| 'stacked'` | `'field'` | false    | Where the control sits relative to the copy.                                          |
 | `depth`       | `0 \| 1 \| 2`                       | `0`       | false    | Indent depth under a rule, for a setting that only applies when its parent is on.     |
-| `stackable`   | `boolean`                           | `false`   | false    | Below the md container of the row, move a field control under the copy at full width. |
+| `stackable`   | `boolean`                           | `false`   | false    | Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. |
 | `hint`        | `string`                            | `''`      | false    | Extra guidance in a Hint glyph beside the title; empty renders no glyph.              |
 
 ## Events
@@ -118,7 +118,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 - Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
 - `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
-- Responsive: the row is the `@container/settings-row`. By default the row keeps its two columns at every width: the copy shrinks (the description clamps to two lines with an ellipsis) and a `field` control keeps the end cell, capped at the 3xs container. With `stackable`, below `@md` of the row a `field` control moves under the copy at full width.
+- Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
 
 ## Motion & Animations
 
@@ -143,7 +143,7 @@ _none_
 - Visible focus: owned by the control in the default slot.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
-- Truncation: the two-line clamp of the description is visual only; the full text stays in the DOM, so assistive technology reads all of it. For sighted users, `hint` is the way to the full explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
+- No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
 - Contrast ≥4.5:1 for the title and the muted description.
 
 ## Examples
@@ -153,7 +153,7 @@ _none_
 - WithMessage — a field with its required message; justified because the message placement is part of the contract.
 - Nested — `depth` 1 and 2; justified because the indent rule is a distinct rendered state.
 - WithHint — a row whose one-sentence description is backed by a longer `hint` beside the title; justified because the Hint glyph is a distinct rendered state.
-- Stackable — a narrow drawer-width card whose Origin URL row sets `stackable` beside a default row; justified because the opt-in stacked layout is a distinct rendered state.
+- Stackable — a drawer-width card whose Origin URL row sets `stackable` beside a default row; justified because the earlier stacking point is a distinct rendered state.
 
 ## Constraints — DO NOT
 

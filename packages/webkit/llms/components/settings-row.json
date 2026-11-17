@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the row keeps its two columns at every width (the description clamps to two lines); `stackable` opts a row into moving a `field` control under the copy in a narrow box.",
+ "purpose": "One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the description always wraps in full, never truncated. In a narrow row (below `@md` of the row, a phone) a `field` control stacks under the copy at full width; a `compact` switch or button stays at the end side beside the wrapped copy. `stackable` moves the stacking point up to `@lg` for a field that needs the full measure in a drawer-width box.",
  "setup": null,
  "useWhen": [
   "Every row of a settings card: account settings, build settings, create pages, resource settings.",
@@ -29,12 +29,12 @@
   "Pick `variant` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.",
   "Show a validation message only after Save was pressed.",
   "Use `depth` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.",
-  "Keep the default two columns on a phone: the title and the clamped description sit on the start side, the control on the end side, both aligned to the top. This is the console layout at every width.",
-  "Set `stackable` only when the field needs the full measure to be usable in a narrow box (a long URL or a code value in a side drawer); never to fix a centred or cramped look.",
+  "Let the row stack on a phone: the title and the full description on top, a `field` control under them at full width. A `compact` switch or button keeps the end side, beside the wrapped copy.",
+  "Set `stackable` only when the field needs the full measure in a drawer-width box (a long URL or a code value in a side drawer), where a default row would still sit beside its copy; never to fix a centred or cramped look.",
   "Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.",
   "Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `variant` and `stackable`.",
   "Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.",
-  "Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description clamps to two lines, and the Hint glyph beside the title reveals the full text on hover or focus."
+  "Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until hover or focus."
  ],
  "props": [
   {
@@ -70,7 +70,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Below the md container of the row, move a field control under the copy at full width."
+   "doc": "Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure."
   },
   {
    "name": "hint",

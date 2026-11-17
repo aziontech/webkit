@@ -166,6 +166,16 @@ describe('Command', () => {
         expect(input.getAttribute('aria-controls')).toBe(byTestId('command-list')!.id)
       })
 
+      it('anchors the panel near the top of the viewport instead of the centre', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        const classes = panel()!.classList
+        expect(classes.contains('md:items-start')).toBe(true)
+        expect(classes.contains('md:pt-[15dvh]')).toBe(true)
+        expect(classes.contains('md:items-center')).toBe(false)
+      })
+
       it('names each group with its label prop', async () => {
         render(composed({ defaultOpen: true }))
         await settle()

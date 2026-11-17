@@ -51,7 +51,7 @@
   "variants": [
     {
       "name": "DetailPage",
-      "summary": "A resource detail page rendered through `ConsoleLayout`: the page body sets its own trail with `ConsoleLayout.Breadcrumb` (Applications, the application) ending on its environment as a control crumb, a `Select` with `variant=\"ghost\"` and `size=\"small\"` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; below `md`, where the header hides the trail, the body repeats it in its own row (back to Applications, the application name, the environment `Select`); the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.",
+      "summary": "A resource detail page rendered through `ConsoleLayout`: the page body sets its own trail with `ConsoleLayout.Breadcrumb` (Applications, the application) ending on its environment as a control crumb, a `Select` with `variant=\"ghost\"` and `size=\"small\"` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; while compact the header hides the crumbs but keeps the environment `Select` in place of the brand, and below `md` the body repeats the rest of the trail in its own row (back to Applications, the application name); the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.",
       "file": "variants/detail-page.vue"
     },
     {
