@@ -75,18 +75,85 @@ function installedVersion(projectDir, dep) {
   }
 }
 
+function gitRootDir(projectDir, git) {
+  if (git.repo && git.root) return git.root
+  let dir = projectDir
+  for (;;) {
+    if (existsSync(join(dir, '.git'))) return dir
+    const parent = dirname(dir)
+    if (parent === dir) return null
+    dir = parent
+  }
+}
+
+function readPackage(dir) {
+  try {
+    return JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
+  } catch {
+    return null
+  }
+}
+
+const LINT_STAGED_FILES = [
+  '.lintstagedrc',
+  '.lintstagedrc.json',
+  '.lintstagedrc.yaml',
+  '.lintstagedrc.yml',
+  '.lintstagedrc.mjs',
+  '.lintstagedrc.cjs',
+  '.lintstagedrc.js',
+  'lint-staged.config.mjs',
+  'lint-staged.config.cjs',
+  'lint-staged.config.js'
+]
+
+function lintStagedRunsStylelint(dir, dirPkg) {
+  if (dirPkg?.['lint-staged'] && /stylelint/.test(JSON.stringify(dirPkg['lint-staged']))) {
+    return true
+  }
+  return LINT_STAGED_FILES.some((file) => /stylelint/.test(read(join(dir, file)) || ''))
+}
+
+function hookLints(dir, dirPkg, hook) {
+  if (!hook) return false
+  if (/stylelint/.test(hook)) return true
+  return /lint-staged/.test(hook) && lintStagedRunsStylelint(dir, dirPkg)
+}
+
 function checkGitHooks(projectDir, pkg, git, add) {
+  const root = gitRootDir(projectDir, git)
+  const rootPkg = root && root !== projectDir ? readPackage(root) : null
+  const where = (dir) => {
+    const rel = relative(projectDir, dir).split('\\').join('/')
+    return rel ? `${rel}/` : ''
+  }
+  const runsHusky = (prepare) => typeof prepare === 'string' && /\bhusky\b/.test(prepare)
+
   const prepare = pkg?.scripts?.prepare
+  const rootPrepare = rootPkg?.scripts?.prepare
+  const prepareOwner = runsHusky(prepare)
+    ? projectDir
+    : runsHusky(rootPrepare)
+      ? root
+      : null
   add(
     'husky prepare script',
-    prepare === 'husky' ? 'ok' : 'warn',
-    prepare === 'husky'
-      ? 'scripts.prepare = husky'
-      : 'missing scripts.prepare="husky" — git hooks will not activate on install.'
+    prepareOwner ? 'ok' : 'warn',
+    prepareOwner === projectDir
+      ? `scripts.prepare = ${prepare}`
+      : prepareOwner
+        ? `${where(root)}package.json scripts.prepare = ${rootPrepare}`
+        : 'missing scripts.prepare="husky" — git hooks will not activate on install.'
   )
 
-  const hook = read(join(projectDir, '.husky/pre-commit'))
-  const hasHook = Boolean(hook && /stylelint/.test(hook))
+  const candidates = [{ dir: projectDir, pkg }]
+  if (root && root !== projectDir) candidates.push({ dir: root, pkg: rootPkg })
+  const found = candidates
+    .map((c) => ({ ...c, hook: read(join(c.dir, '.husky/pre-commit')) }))
+    .find((c) => hookLints(c.dir, c.pkg, c.hook))
+  const hook = found ? found.hook : read(join(projectDir, '.husky/pre-commit'))
+  const hookDir = found ? found.dir : projectDir
+  const hasHook = Boolean(found)
   const legacyHook = Boolean(hook && hook.includes(LEGACY_HUSKY_HOOK_MARKER))
   add(
     'pre-commit hook',
@@ -94,8 +161,8 @@ function checkGitHooks(projectDir, pkg, git, add) {
     !hasHook
       ? 'no .husky/pre-commit lint block — commits are not linted locally.'
       : legacyHook
-        ? '.husky/pre-commit lints the whole tree, build output included (`npx stylelint "**/*…"`), so the first commit after a build fails on compiled CSS — re-run `npx @aziontech/webkit init` to lint `src/` only.'
-        : '.husky/pre-commit lints on commit'
+        ? `${where(hookDir)}.husky/pre-commit lints the whole tree, build output included (\`npx stylelint "**/*…"\`), so the first commit after a build fails on compiled CSS — re-run \`npx @aziontech/webkit init\` to lint \`src/\` only.`
+        : `${where(hookDir)}.husky/pre-commit lints on commit`
   )
 
   if (hasHook) {
