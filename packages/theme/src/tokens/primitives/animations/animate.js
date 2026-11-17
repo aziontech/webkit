@@ -10,6 +10,8 @@ const SLOW_01 = '400ms'
 const SLOW_02 = '700ms'
 const SLOW_03 = '1100ms'
 const SLOW_04 = '2100ms'
+const SETTLE_SPIN = '4200ms'
+const SETTLE_WAVE = '4800ms'
 
 export const curve = {
   'productive-entrance': PRODUCTIVE_ENTRANCE,
@@ -36,6 +38,10 @@ export const animate = {
   bounce: 'bounce 1s infinite',
   shimmer: 'shimmer 1.6s linear infinite',
   blink: 'blink 1s step-end infinite',
+  'spin-settle': `spin ${SETTLE_SPIN} cubic-bezier(0.4, 0, 0.2, 1)`,
+  'ping-settle': 'ping 1s cubic-bezier(0, 0, 0.2, 1) 3',
+  'pulse-settle': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2',
+  'blink-settle': 'blink 1s step-end 4',
   'fade-in': 'fadeIn 220ms ease-in-out',
   'fade-out': 'fadeOut 220ms ease-in-out',
   'slide-down': 'slideDown 220ms ease-in-out',
@@ -51,8 +57,9 @@ export const animate = {
   'progress-indeterminate': `progressIndeterminate ${SLOW_04} ${PRODUCTIVE_ENTRANCE} infinite`,
   'progress-indeterminate-short': `progressIndeterminateShort ${SLOW_04} ${EXPRESSIVE_ENTRANCE} ${SLOW_03} infinite`,
   'flow-dash': `flowDash ${SLOW_02} linear infinite`,
-  'texture-wave-a': 'textureWaveA 13s linear infinite',
-  'texture-wave-b': 'textureWaveB 19s linear infinite',
+  'flow-dash-settle': `flowDash ${SLOW_02} linear 6`,
+  'texture-wave-a': `textureWaveA ${SETTLE_WAVE} ${PRODUCTIVE_ENTRANCE} forwards`,
+  'texture-wave-b': `textureWaveB ${SETTLE_WAVE} ${PRODUCTIVE_ENTRANCE} forwards`,
   'brand-marquee': 'brandMarquee 59s linear infinite'
 }
 
@@ -66,7 +73,15 @@ export const useWhen = {
   pulse: 'Skeleton/placeholder opacity pulse while content loads.',
   bounce: 'Playful attention bounce (scroll-down hints); use sparingly.',
   shimmer: 'Skeleton shimmer sweep while content loads.',
-  blink: 'Text caret / terminal cursor blink.',
+  blink: 'Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does).',
+  'spin-settle':
+    'One eased revolution, then still (4.2s): a decorative rotating glow that must stop by itself within 5 seconds (WCAG 2.2.2). Ends on its start frame.',
+  'ping-settle':
+    'Three attention rings radiating from a small element, then still (3s): draws the eye once without looping (WCAG 2.2.2). Remount the element to replay it.',
+  'pulse-settle':
+    'Two opacity pulses, then still at full strength (4s): a decorative pulse that must stop by itself within 5 seconds (WCAG 2.2.2). Keep any stagger delay under 1s so the last pulse still ends within 5 seconds.',
+  'blink-settle':
+    'Four caret blinks, then a solid caret (4s): a decorative cursor that must stop by itself within 5 seconds (WCAG 2.2.2).',
   'fade-in': 'Content or backdrop appearing in place (no directional origin).',
   'fade-out': 'Content or backdrop leaving in place (pair of fade-in).',
   'slide-down': 'Vertical disclosure expanding (accordion panel, expandable row).',
@@ -85,10 +100,12 @@ export const useWhen = {
   'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
   'flow-dash':
     'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.',
+  'flow-dash-settle':
+    'Marching dashes along a decorative SVG connector, six cycles then still (4.2s, WCAG 2.2.2); same stroke-dasharray contract as flow-dash. Keep the infinite flow-dash for a stroke that shows a live status.',
   'texture-wave-a':
-    'One of the two crossing bands of a pixelate texture, travelling left. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers mid-cycle.',
+    'One of the two crossing bands of a pixelate texture, drifting left and easing to a stop (4.8s, WCAG 2.2.2), holding where it lands. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers.',
   'texture-wave-b':
-    'The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction).',
+    'The counter-drifting band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction).',
   'brand-marquee':
     'A strip of logos looping forever (client trust strips, framework strips). Apply to a track holding its row exactly twice, the duplicate aria-hidden, and set animation-duration ON THE ELEMENT from the mark count so every strip on a site moves at one speed rather than one duration — a var in this shorthand would resolve at :root and never see it. Pause it on hover and focus-within so a linked mark can be reached.'
 }

@@ -254,6 +254,10 @@
   --animate-bounce: bounce 1s infinite;
   --animate-shimmer: shimmer 1.6s linear infinite;
   --animate-blink: blink 1s step-end infinite;
+  --animate-spin-settle: spin 4200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-ping-settle: ping 1s cubic-bezier(0, 0, 0.2, 1) 3;
+  --animate-pulse-settle: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2;
+  --animate-blink-settle: blink 1s step-end 4;
   --animate-fade-in: fadeIn 220ms ease-in-out;
   --animate-fade-out: fadeOut 220ms ease-in-out;
   --animate-slide-down: slideDown 220ms ease-in-out;
@@ -269,8 +273,9 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
-  --animate-texture-wave-a: textureWaveA 13s linear infinite;
-  --animate-texture-wave-b: textureWaveB 19s linear infinite;
+  --animate-flow-dash-settle: flowDash 700ms linear 6;
+  --animate-texture-wave-a: textureWaveA 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards;
+  --animate-texture-wave-b: textureWaveB 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards;
   --animate-brand-marquee: brandMarquee 59s linear infinite;
   --transition-duration-fast-01: 70ms;
   --transition-duration-fast-02: 110ms;
@@ -468,6 +473,10 @@
   --animate-bounce: bounce 1s infinite;
   --animate-shimmer: shimmer 1.6s linear infinite;
   --animate-blink: blink 1s step-end infinite;
+  --animate-spin-settle: spin 4200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-ping-settle: ping 1s cubic-bezier(0, 0, 0.2, 1) 3;
+  --animate-pulse-settle: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2;
+  --animate-blink-settle: blink 1s step-end 4;
   --animate-fade-in: fadeIn 220ms ease-in-out;
   --animate-fade-out: fadeOut 220ms ease-in-out;
   --animate-slide-down: slideDown 220ms ease-in-out;
@@ -483,8 +492,9 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
-  --animate-texture-wave-a: textureWaveA 13s linear infinite;
-  --animate-texture-wave-b: textureWaveB 19s linear infinite;
+  --animate-flow-dash-settle: flowDash 700ms linear 6;
+  --animate-texture-wave-a: textureWaveA 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards;
+  --animate-texture-wave-b: textureWaveB 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards;
   --animate-brand-marquee: brandMarquee 59s linear infinite;
   --ring-offset: 1px;
   --spacing-2xl: 2rem;
@@ -1208,11 +1218,11 @@
 }
 
 @keyframes textureWaveA {
-  to { transform: translate3d(calc(-1 * var(--texture-wave-shift)), 0, 0); }
+  to { transform: translate3d(calc(-0.25 * var(--texture-wave-shift)), 0, 0); }
 }
 
 @keyframes textureWaveB {
-  to { transform: translate3d(var(--texture-wave-shift), 0, 0); }
+  to { transform: translate3d(calc(0.17 * var(--texture-wave-shift)), 0, 0); }
 }
 
 @keyframes brandMarquee {
