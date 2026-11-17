@@ -67,7 +67,10 @@ validated for color-vision separation and 3:1 contrast in both themes:
   avoid it.
 - **Sequential** (magnitude, e.g. a heatmap): `--chart-sequential-1` (lowest) … `--chart-sequential-7`.
 - **Diverging** (+/- around a midpoint): `--chart-diverging-negative` (orange), `--chart-diverging-neutral`,
-  `--chart-diverging-positive` (blue).
+  `--chart-diverging-positive` (blue). A scale with more than one step per side adds the intermediate
+  steps, ordered from the negative end to the positive end: `-negative`, `-negative-2`, `-negative-3`,
+  `-neutral`, `-positive-3`, `-positive-2`, `-positive` (seven steps; use three or seven, never a
+  hand-mixed shade).
 - **Status** (`--chart-status-success` / `-warning` / `-danger` / `-info`): only for a series whose
   color MEANS a state — blocked requests, an error rate. Never borrow one as a categorical accent, or a
   green series reads as "healthy" when it just means "series 3".
@@ -98,7 +101,8 @@ variables on the dashboard's root element; every chart inside reads them by inhe
 palette to `@aziontech/theme` or hand-pick colours per chart.
 
 - **Settable**: `--chart-series-1` … `--chart-series-8`, `--chart-sequential-1` … `--chart-sequential-7`,
-  `--chart-diverging-negative` / `-neutral` / `-positive`. **Fixed**: `--chart-series-other`,
+  `--chart-diverging-negative` / `-negative-2` / `-negative-3` / `-neutral` / `-positive-3` / `-positive-2` /
+  `-positive`. **Fixed**: `--chart-series-other`,
   `--chart-status-*`, `--severity-*`, grid, axis, label, crosshair and tooltip.
 - A palette sets a **light and a dark** value for every variable it sets, and every series value
   passes the default's checks: 3:1 and APCA Lc 30 on `--bg-surface`, `--bg-canvas` and

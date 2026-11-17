@@ -44,6 +44,9 @@ const PAIRS = [
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `--chart-series-${n}`),
     '--chart-series-other',
     ...STATUS.map((s) => `--chart-status-${s}`),
+    ...['negative', 'negative-2', 'negative-3', 'positive-3', 'positive-2', 'positive'].map(
+      (step) => `--chart-diverging-${step}`
+    ),
     ...['critical', 'high', 'medium', 'low'].map((l) => `--severity-${l}`),
     '--primary',
     '--accent',

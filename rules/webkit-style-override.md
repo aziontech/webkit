@@ -38,7 +38,9 @@ variables are allowed, nothing else on the same attribute:
 
 - `--chart-series-1` … `--chart-series-8`
 - `--chart-sequential-1` … `--chart-sequential-7`
-- `--chart-diverging-negative`, `--chart-diverging-neutral`, `--chart-diverging-positive`
+- `--chart-diverging-negative`, `--chart-diverging-negative-2`, `--chart-diverging-negative-3`,
+  `--chart-diverging-neutral`, `--chart-diverging-positive-3`, `--chart-diverging-positive-2`,
+  `--chart-diverging-positive`
 
 Write them as a static `style` (`style="--chart-series-1: var(--palette-1)"`), an object-literal
 `:style` whose keys are all palette variables (`:style="{ '--chart-series-1': palette[0] }"`), or

@@ -35,7 +35,11 @@ export const chart = {
     'chart-sequential-6': tokenRef('primitives.indigo.600'),
     'chart-sequential-7': tokenRef('primitives.indigo.700'),
     'chart-diverging-negative': tokenRef('primitives.orange.600'),
+    'chart-diverging-negative-2': tokenRef('primitives.chart.diverging-orange-2.light'),
+    'chart-diverging-negative-3': tokenRef('primitives.chart.diverging-orange-3.light'),
     'chart-diverging-neutral': tokenRef('primitives.gray.150'),
+    'chart-diverging-positive-3': tokenRef('primitives.chart.diverging-blue-3.light'),
+    'chart-diverging-positive-2': tokenRef('primitives.chart.diverging-blue-2.light'),
     'chart-diverging-positive': tokenRef('primitives.blue.600')
   },
   dark: {
@@ -62,7 +66,11 @@ export const chart = {
     'chart-sequential-6': tokenRef('primitives.indigo.400'),
     'chart-sequential-7': tokenRef('primitives.indigo.300'),
     'chart-diverging-negative': tokenRef('primitives.orange.400'),
+    'chart-diverging-negative-2': tokenRef('primitives.chart.diverging-orange-2.dark'),
+    'chart-diverging-negative-3': tokenRef('primitives.chart.diverging-orange-3.dark'),
     'chart-diverging-neutral': tokenRef('primitives.gray.750'),
+    'chart-diverging-positive-3': tokenRef('primitives.chart.diverging-blue-3.dark'),
+    'chart-diverging-positive-2': tokenRef('primitives.chart.diverging-blue-2.dark'),
     'chart-diverging-positive': tokenRef('primitives.blue.400')
   }
 }

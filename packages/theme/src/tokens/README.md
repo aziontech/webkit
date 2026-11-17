@@ -246,7 +246,13 @@ Only useful if you can't precompile and import `globals.css` — production usag
    }
    ```
 
-3. Rebuild. The new variable lands in both `:root` and `[data-theme=dark]` blocks.
+3. Give it a one-line purpose in `tokens/token-purpose.js` (what the token is for, not its value).
+4. Rebuild. The new variable lands in both `:root` and `[data-theme=dark]` blocks.
+5. Run `pnpm --filter @aziontech/webkit build:catalog`: the token export (`tokens/token-export.js`) carries the light and dark value and the purpose into `catalog.json` and the MCP `list_tokens`.
+
+### The token export
+
+`buildTokenExport()` in `tokens/token-export.js` lists every semantic token (the colour families, spacing, layout, z-index, code, the shape aliases and the typography classes) with its light and dark value (colours), or its base value and breakpoints (lengths and type classes), its group, the token it aliases, and its purpose from `tokens/token-purpose.js`. `test/token-export.test.mjs` fails when a semantic token has no purpose, a purpose names a token that is gone, or a value disagrees with the compiled theme; `check:catalog` fails when `catalog.json` was not rebuilt after a token change.
 
 ### Add a new responsive semantic token
 
@@ -260,7 +266,7 @@ Only useful if you can't precompile and import `globals.css` — production usag
    }
    ```
 
-2. Rebuild. `build-tokens.mjs` emits the base var in `:root`, per-breakpoint `@media` overrides, **and** a matching `.gap-2xl { gap: var(--gap-2xl) }` utility.
+2. Give it a one-line purpose in `tokens/token-purpose.js`, then rebuild. `build-tokens.mjs` emits the base var in `:root`, per-breakpoint `@media` overrides, **and** a matching `.gap-2xl { gap: var(--gap-2xl) }` utility.
 
 For typography bundles that need hover/focus without Tailwind utilities, add an optional `states` object (not flattened to CSS vars). Example — inline prose links in `typography.js`:
 

@@ -20,6 +20,36 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 - No off-scale magic numbers for spacing (`p-[13px]`) when a spacing token exists.
 - No zero with a length unit: write `0`, never `0px` / `0rem` / `0em`. A zero is identical in every unit, so the unit is noise — and it makes the same value read three different ways. This covers tokens, arbitrary values (`p-[0px]`), inline `style`, and authored CSS. Units that carry meaning at zero are fine: `0%`, `0s`, `0deg`, `0fr`. One exception: inside `calc()`/`min()`/`max()`/`clamp()` CSS requires a unit on the zero — there, write `0rem` (never `0px` / `0em`).
 
+## Values and purposes
+
+Every semantic token ships with its value and a one-line purpose: a colour has a light and a dark
+value, a length or type class has a base value and the breakpoints it steps to. Ask the MCP
+`list_tokens` (a group such as `bg` or `chart`, or one name such as `--bg-surface`), or read
+`tokens.values` in `catalog.json` or `llms/foundations/tokens.md`. Pick a token by its purpose, never
+by its value: two tokens can share a value today and part tomorrow.
+
+## Design intent
+
+The rules behind the groups, which no single token's purpose states:
+
+- **Surfaces stack in one order.** `--bg-canvas` is the page, `--bg-surface` sits on it (cards,
+  panels, tables) and `--bg-surface-raised` floats above a surface (menus, popovers, the chart
+  tooltip). A raised layer also takes a shadow through its variable, `shadow-(--shadow-md)`, never
+  Tailwind's `shadow-md`: the dark theme redefines every step.
+- **Placeholders are translucent.** A loading placeholder uses `--bg-placeholder` and its sweep
+  `--bg-placeholder-highlight`, never an opaque surface token: the translucent fill reads on every
+  surface, an opaque one only on the surface it was picked against.
+- **Two rhythm steps.** `--layout-section-gap` between the sections of a parent,
+  `--layout-group-gap` between the parts of one section; tighter `--spacing-*` steps only inside one
+  unit. The `--spacing-*` scale grows by breakpoint on its own, so never restate it per breakpoint.
+- **Radius by role.** `--shape-card` for cards, panels and dialogs, `--shape-button` for buttons,
+  `--shape-control` for fields and chips, `--shape-flat` for a surface that meets an edge.
+- **Type by role.** A text class carries family, size, line height and tracking, and steps up by
+  breakpoint (the headings and big numbers): choose the class for the job and never add a size,
+  `leading-*` or `tracking-*` beside it.
+- **Every colour token is a plain colour.** No token is an opacity or a `color-mix()` of another,
+  so canvas charts and contrast checks can read it; never fake a lighter step with `opacity`.
+
 ## Which color token does which job
 
 A color token names a job, not a hue. Use the component that already does the job, and pick a token
@@ -86,11 +116,11 @@ WebKit ships **one** chart palette: the values of the `--chart-*` tokens. There 
 palettes in `@aziontech/theme`. An app that offers other palettes (the console API's palette picker)
 sets these variables on the dashboard's root element, and every chart inside re-colours:
 
-| A palette may set                                                                       | A palette never sets                                                                                   |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `--chart-series-1` … `--chart-series-8`                                                 | `--chart-series-other` (the grey a ninth series folds into)                                            |
-| `--chart-sequential-1` (lowest) … `--chart-sequential-7`                                | `--chart-status-*` and `--severity-*` (they mean a state)                                              |
-| `--chart-diverging-negative`, `--chart-diverging-neutral`, `--chart-diverging-positive` | `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*` (the chrome) |
+| A palette may set                                                                                                 | A palette never sets                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `--chart-series-1` … `--chart-series-8`                                                                           | `--chart-series-other` (the grey a ninth series folds into)                                            |
+| `--chart-sequential-1` (lowest) … `--chart-sequential-7`                                                          | `--chart-status-*` and `--severity-*` (they mean a state)                                              |
+| `--chart-diverging-negative` (`-2`, `-3`), `--chart-diverging-neutral`, `--chart-diverging-positive` (`-3`, `-2`) | `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*` (the chrome) |
 
 - **Gridlines are half a border.** `--chart-grid` (the lines behind the marks) sits halfway, in
   perceived lightness, between `--border-default` and `--bg-surface`: it keeps half the border's
@@ -105,6 +135,12 @@ sets these variables on the dashboard's root element, and every chart inside re-
   `--bg-surface`, `--bg-canvas` and `--chart-tooltip-bg` in its theme, the eight series are eight
   distinct colours, and a series keeps its hue family across the theme switch. These are the checks
   `packages/theme/test/chart-role.test.mjs` and `apca-contrast.test.mjs` run on the default.
+- **Diverging runs in three or seven steps.** Three: `--chart-diverging-negative`, `-neutral`,
+  `-positive`. Seven, from the negative end to the positive end: `-negative`, `-negative-2`,
+  `-negative-3`, `-neutral`, `-positive-3`, `-positive-2`, `-positive`. The intermediate steps keep
+  the end's hue and lose chroma toward the neutral; every coloured step clears 3:1 and Lc 30 on the
+  chart surfaces, and neighbours stay at least 0.05 apart in OKLab (`chart-role.test.mjs`). A palette
+  that sets the diverging variables sets all seven.
 - **Eight series, then Other.** A palette has at most eight series; a chart with more folds the
   rest into `--chart-series-other`. A palette never adds `--chart-series-9`.
 - **Where.** On your own root element, or on a webkit tag as a static `style`, an object-literal

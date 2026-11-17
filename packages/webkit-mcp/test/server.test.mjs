@@ -141,6 +141,20 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
   assert.equal(second.components[0].name > first.components[59].name, true)
   assert.ok(Buffer.byteLength(JSON.stringify(first)) < 20_000)
 
+  const tokens = JSON.parse(
+    (
+      await server.request('tools/call', {
+        name: 'list_tokens',
+        arguments: { category: '--chart-diverging-negative-2' }
+      })
+    ).result.content[0].text
+  )
+  const [step] = tokens.tokens
+  assert.equal(step.name, '--chart-diverging-negative-2')
+  assert.match(step.light, /^#[0-9A-F]{6}$/i)
+  assert.match(step.dark, /^#[0-9A-F]{6}$/i)
+  assert.ok(step.purpose)
+
   const block = JSON.parse(
     (
       await server.request('tools/call', {

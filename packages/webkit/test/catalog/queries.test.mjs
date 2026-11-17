@@ -92,10 +92,72 @@ test('listTokens expands a category to its CSS custom properties', () => {
   const res = listTokens(catalog, { category: 'primary' })
   assert.equal(res.ok, true)
   assert.equal(res.found, true)
-  assert.ok(res.tokens.includes('--primary'), 'primary group should contain --primary')
+  const names = res.tokens.map((t) => t.name)
+  assert.ok(names.includes('--primary'), 'primary group should contain --primary')
 
   const bg = listTokens(catalog, { category: 'bg' })
-  assert.ok(bg.tokens.includes('--bg-surface'), 'bg group should contain --bg-surface')
+  assert.ok(
+    bg.tokens.some((t) => t.name === '--bg-surface'),
+    'bg group should contain --bg-surface'
+  )
+})
+
+test('listTokens returns light and dark values and a purpose for a semantic colour', () => {
+  const bg = listTokens(catalog, { category: 'bg' })
+  const surface = bg.tokens.find((t) => t.name === '--bg-surface')
+  assert.equal(surface.type, 'color')
+  assert.equal(surface.light, '#FFFFFF')
+  assert.equal(surface.dark, '#0A0A0A')
+  assert.match(surface.purpose, /\.$/)
+
+  const chart = listTokens(catalog, { category: 'chart' })
+  for (const step of ['negative-2', 'negative-3', 'positive-3', 'positive-2']) {
+    const token = chart.tokens.find((t) => t.name === `--chart-diverging-${step}`)
+    assert.ok(token, `--chart-diverging-${step} is listed`)
+    assert.match(token.light, /^#[0-9A-F]{6}$/i)
+    assert.match(token.dark, /^#[0-9A-F]{6}$/i)
+    assert.ok(token.purpose)
+  }
+
+  const muted = listTokens(catalog, { category: 'chart' }).tokens.find(
+    (t) => t.name === '--chart-tooltip-muted'
+  )
+  assert.deepEqual(muted.alias, { light: '--text-muted' })
+})
+
+test('listTokens returns the value, breakpoints and purpose of a spacing token and a type class', () => {
+  const spacing = listTokens(catalog, { category: 'spacing' })
+  const xl = spacing.tokens.find((t) => t.name === '--spacing-xl')
+  assert.equal(xl.value, '1.5rem')
+  assert.deepEqual(xl.breakpoints, { sm: '2rem', xl: '3rem' })
+  assert.ok(xl.purpose)
+  const primitive = spacing.tokens.find((t) => !t.purpose)
+  assert.ok(primitive && Object.keys(primitive).length === 1, 'a primitive carries its name only')
+
+  const type = listTokens(catalog, { category: 'typography' })
+  const heading = type.tokens.find((t) => t.name === 'text-heading-md')
+  assert.equal(heading.type, 'typography')
+  assert.equal(heading.value['font-size'], '1rem')
+  assert.ok(heading.breakpoints.md['font-size'])
+  assert.ok(heading.purpose)
+})
+
+test('listTokens looks up a single token by name', () => {
+  const res = listTokens(catalog, { category: '--text-muted' })
+  assert.equal(res.ok, true)
+  assert.equal(res.tokens.length, 1)
+  assert.equal(res.tokens[0].name, '--text-muted')
+  assert.equal(res.tokens[0].light, '#535353')
+  assert.equal(res.category, 'text')
+})
+
+test('every semantic token in the catalog has a purpose and the index counts them', () => {
+  const values = Object.entries(catalog.tokens.values)
+  assert.ok(values.length > 150)
+  for (const [name, entry] of values) assert.ok(entry.purpose, `${name} has no purpose`)
+  const index = listTokens(catalog)
+  assert.equal(index.semanticCount, values.length)
+  assert.deepEqual(index.themes, ['light', 'dark'])
 })
 
 test('listTokens reports an unknown category with the available groups', () => {
@@ -104,6 +166,7 @@ test('listTokens reports an unknown category with the available groups', () => {
   assert.equal(res.found, false)
   assert.ok(Array.isArray(res.groups) && res.groups.length > 0)
   assert.ok(res.groups.includes('animations'), 'animations must be advertised as a group')
+  assert.ok(res.groups.includes('typography'), 'typography must be advertised as a group')
 })
 
 test('listTokens surfaces the animations catalog with timing + use-when', () => {

@@ -748,6 +748,30 @@ function groupsTable(groups, keys) {
   )
 }
 
+const breakpointText = (steps) =>
+  Object.entries(steps || {})
+    .map(([bp, v]) => `${bp}: ${typeof v === 'object' ? Object.values(v).join(' ') : v}`)
+    .join(', ')
+
+function semanticTable(values, filter) {
+  const rows = Object.entries(values || {}).filter(([, v]) => filter(v))
+  if (rows.every(([, v]) => v.type === 'color')) {
+    return table(
+      ['Token', 'Light', 'Dark', 'Purpose'],
+      rows.map(([name, v]) => [`\`${name}\``, `\`${v.light}\``, `\`${v.dark}\``, v.purpose])
+    )
+  }
+  return table(
+    ['Token', 'Value', 'Breakpoints', 'Purpose'],
+    rows.map(([name, v]) => [
+      `\`${name}\``,
+      typeof v.value === 'object' ? `\`${v.value['font-size'] ?? ''}\`` : `\`${v.value}\``,
+      breakpointText(v.breakpoints),
+      v.purpose
+    ])
+  )
+}
+
 const COLOR_GROUPS = [
   'primary',
   'secondary',
@@ -798,7 +822,13 @@ function foundations(catalog) {
         rule('webkit-tokens'),
         '## Token groups',
         `${(t.cssVars || []).length} CSS custom properties from \`@aziontech/theme\`, grouped by their first segment. The MCP tool \`list_tokens\` returns the same list.`,
-        groupsTable(t.groups, Object.keys(t.groups).sort())
+        groupsTable(t.groups, Object.keys(t.groups).sort()),
+        '## Semantic tokens',
+        `${Object.keys(t.values || {}).length} semantic tokens with their value and a one-line purpose: pick a token by its purpose, never by its value. \`catalog.json\` holds the same export under \`tokens.values\`, and the MCP tool \`list_tokens\` returns it per group or per token.`,
+        '### Colours (light and dark)',
+        semanticTable(t.values, (v) => v.type === 'color'),
+        '### Spacing, layout, shape and layers',
+        semanticTable(t.values, (v) => v.type === 'length' || v.type === 'number')
       ]
     },
     {
@@ -819,7 +849,18 @@ function foundations(catalog) {
       body: [
         'Text uses the generated classes from `@aziontech/theme`. Each one bundles font family, size, line height and tracking, so a raw Tailwind size (`text-sm`), `leading-*`, `tracking-*` or a `font-family` is never needed and lint blocks them.',
         '## Classes',
-        bullets((t.typography || []).map((c) => `\`${c}\``)),
+        table(
+          ['Class', 'Base size', 'Steps to', 'Purpose'],
+          (t.typography || []).map((c) => {
+            const v = t.values?.[c]
+            return [
+              `\`${c}\``,
+              v?.value?.['font-size'] ? `\`${v.value['font-size']}\`` : '',
+              breakpointText(v?.breakpoints),
+              v?.purpose ?? ''
+            ]
+          })
+        ),
         '## Related tokens',
         groupsTable(t.groups, ['font', 'leading', 'tracking', 'line'])
       ]

@@ -6,41 +6,43 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 
 ## Classes
 
-- `text-amount-lg`
-- `text-amount-md`
-- `text-amount-sm`
-- `text-big-number-lg`
-- `text-big-number-md`
-- `text-big-number-sm`
-- `text-body-2xs`
-- `text-body-code-sm`
-- `text-body-lg`
-- `text-body-md`
-- `text-body-prose-md`
-- `text-body-sm`
-- `text-body-xs`
-- `text-button-lg`
-- `text-button-md`
-- `text-heading-2xl`
-- `text-heading-2xs`
-- `text-heading-3xl`
-- `text-heading-lg`
-- `text-heading-md`
-- `text-heading-sm`
-- `text-heading-xl`
-- `text-heading-xs`
-- `text-label-code-lg`
-- `text-label-code-md`
-- `text-label-code-sm`
-- `text-label-lg`
-- `text-label-md`
-- `text-label-sm`
-- `text-link`
-- `text-overline-md`
-- `text-overline-sm`
-- `text-overline-xs`
-- `text-tag-md`
-- `text-tag-sm`
+| Class | Base size | Steps to | Purpose |
+| --- | --- | --- | --- |
+| `text-amount-lg` | `1.875rem` | sm: 3rem, md: 3.5rem | The largest price or amount. |
+| `text-amount-md` | `1rem` | sm: 1.25rem, md: 1.5rem | A price or amount in a card. |
+| `text-amount-sm` | `1rem` |  | A compact price or amount. |
+| `text-big-number-lg` | `1.5rem` | sm: 2.25rem, md: 3.5rem | The largest numeric display, such as a hero metric. |
+| `text-big-number-md` | `1.25rem` | sm: 1.5rem, md: 2.25rem | A numeric display in a stat card. |
+| `text-big-number-sm` | `1rem` | sm: 1.25rem | A compact numeric display. |
+| `text-body-2xs` | `0.75rem` |  | The smallest body text, such as footnotes. |
+| `text-body-code-sm` | `0.75rem` |  | A monospace paragraph that wraps. |
+| `text-body-lg` | `1rem` | md: 1.125rem | Lead paragraphs. |
+| `text-body-md` | `1rem` |  | Body copy. |
+| `text-body-prose-md` | `1rem` |  | Long-form prose at a relaxed line height. |
+| `text-body-sm` | `0.875rem` |  | Secondary body copy and descriptions. |
+| `text-body-xs` | `0.75rem` |  | Captions and helper text. |
+| `text-button-lg` | `0.875rem` |  | The label of a large button. |
+| `text-button-md` | `0.75rem` |  | The label of a medium or small button. |
+| `text-heading-2xl` | `1.875rem` | sm: 2.25rem, md: 3rem | A marketing section heading. |
+| `text-heading-2xs` | `0.875rem` |  | A small title or a wordmark written in type, a flat 14px. |
+| `text-heading-3xl` | `1.875rem` | sm: 3rem, md: 3.5rem | The largest page heading, for a marketing hero. |
+| `text-heading-lg` | `1.125rem` | md: 1.875rem | A large section heading. |
+| `text-heading-md` | `1rem` | sm: 1.25rem, md: 1.5rem | A section heading. |
+| `text-heading-sm` | `0.875rem` | sm: 1rem, md: 1.125rem | A subsection or dialog heading. |
+| `text-heading-xl` | `1.25rem` | sm: 1.875rem, md: 2.25rem | A page title. |
+| `text-heading-xs` | `1rem` |  | A card title, a flat 16px. |
+| `text-label-code-lg` | `1rem` |  | A large monospace label. |
+| `text-label-code-md` | `0.875rem` |  | A monospace label such as a file name bar. |
+| `text-label-code-sm` | `0.75rem` |  | Monospace code lines and line numbers, one row per line. |
+| `text-label-lg` | `1rem` |  | A large label of compact interface text. |
+| `text-label-md` | `0.875rem` |  | Labels and compact interface text. |
+| `text-label-sm` | `0.75rem` |  | Small labels and metadata. |
+| `text-link` | `inherit` |  | An inline link inside body or heading copy; inherits the size. |
+| `text-overline-md` | `0.75rem` | sm: 0.875rem | An uppercase overline above a heading. |
+| `text-overline-sm` | `0.75rem` |  | A small uppercase overline or eyebrow. |
+| `text-overline-xs` | `0.75rem` |  | The smallest uppercase overline. |
+| `text-tag-md` | `0.75rem` |  | The label of a tag or badge. |
+| `text-tag-sm` | `0.75rem` |  | The label of a small tag or badge. |
 
 ## Related tokens
 

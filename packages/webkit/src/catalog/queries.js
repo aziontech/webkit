@@ -97,10 +97,16 @@ export function listCategories(catalog) {
   return { ok: true, available: true, categories: [...cats].sort() }
 }
 
+const describeToken = (tokens, name) => {
+  const entry = tokens.values?.[name]
+  return entry ? { name, ...entry } : { name }
+}
+
 export function listTokens(catalog, { category } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const tokens = catalog.tokens || { cssVars: [], typography: [], groups: {} }
   const groupNames = Object.keys(tokens.groups)
+  const semanticCount = Object.keys(tokens.values || {}).length
 
   if (category != null && String(category).length) {
     const key = String(category).toLowerCase().trim()
@@ -117,6 +123,26 @@ export function listTokens(catalog, { category } = {}) {
         hint: 'Every motion-bearing class pairs with a motion-reduce: fallback (e.g. `animate-slide-in-start motion-reduce:animate-none`). Panel/drawer open-close wraps the v-if region in a Vue Transition with enter-active-class / leave-active-class.'
       }
     }
+    if (key === 'typography' || key === 'type' || key === 'font' || key === 'fonts') {
+      return {
+        ok: true,
+        available: true,
+        found: true,
+        category: 'typography',
+        tokens: (tokens.typography || []).map((name) => describeToken(tokens, name)),
+        hint: 'Each entry is a utility class: `value` holds its base declarations and `breakpoints` the sizes it steps to (mobile first). Never restate them in a component.'
+      }
+    }
+    const tokenName = key.startsWith('--') ? key : `--${key}`
+    if (tokens.values?.[tokenName] && !tokens.groups[key]) {
+      return {
+        ok: true,
+        available: true,
+        found: true,
+        category: tokens.values[tokenName].group,
+        tokens: [describeToken(tokens, tokenName)]
+      }
+    }
     const group = tokens.groups[key]
     if (!group) {
       return {
@@ -124,23 +150,37 @@ export function listTokens(catalog, { category } = {}) {
         available: true,
         found: false,
         category: key,
-        groups: [...groupNames, 'animations'],
-        message: `No token group "${key}". Available groups: ${groupNames.join(', ')}, animations.`
+        groups: [...groupNames, 'typography', 'animations'],
+        message: `No token group "${key}". Available groups: ${groupNames.join(', ')}, typography, animations.`
       }
     }
-    return { ok: true, available: true, found: true, category: key, tokens: group }
+    return {
+      ok: true,
+      available: true,
+      found: true,
+      category: key,
+      tokens: group.map((name) => describeToken(tokens, name)),
+      hint: 'A semantic token carries its `light` and `dark` value (a colour) or its `value` and `breakpoints` (a length), and its `purpose`. A token with only a name is a primitive: use the semantic token whose purpose fits instead.'
+    }
   }
 
   return {
     ok: true,
     available: true,
     groups: [
-      ...groupNames.map((name) => ({ name, count: tokens.groups[name].length })),
+      ...groupNames.map((name) => ({
+        name,
+        count: tokens.groups[name].length,
+        semantic: tokens.groups[name].filter((n) => tokens.values?.[n]).length
+      })),
+      { name: 'typography', count: (tokens.typography || []).length },
       { name: 'animations', count: (tokens.animations || []).length }
     ],
+    semanticCount,
+    themes: tokens.themes || ['light', 'dark'],
     typography: tokens.typography,
     vocabulary: catalog.vocabulary || null,
-    hint: 'Call list_tokens with a category (e.g. "primary", "bg", "text", "spacing", "radius", "shadow", "animations") for that group — "animations" returns each animate-* class with its timing and when to use it.'
+    hint: 'Call list_tokens with a category (e.g. "primary", "bg", "text", "chart", "spacing", "shape", "layout", "typography", "animations") for that group, or with one token name (e.g. "--bg-surface"). Semantic tokens come with their light and dark values and a one-line purpose; pick by purpose, never by the value.'
   }
 }
 

@@ -205,8 +205,8 @@ rule `rules/webkit-tokens.md` (§ "Contrast: APCA and WCAG 2").
 The theme ships one chart palette, the values of the `--chart-*` tokens; it ships no alternates.
 An app that offers other palettes (the Azion console API does) sets only these variables on a
 dashboard root, with a light and a dark value each: `--chart-series-1`…`--chart-series-8`,
-`--chart-sequential-1`…`--chart-sequential-7` and `--chart-diverging-negative` / `-neutral` /
-`-positive`. Status, severity, Other, grid, axis, label, crosshair and tooltip variables are fixed.
+`--chart-sequential-1`…`--chart-sequential-7` and `--chart-diverging-negative` / `-negative-2` /
+`-negative-3` / `-neutral` / `-positive-3` / `-positive-2` / `-positive`. Status, severity, Other, grid, axis, label, crosshair and tooltip variables are fixed.
 Every value must pass the checks `test/chart-role.test.mjs` and `test/apca-contrast.test.mjs` run on the default (3:1 and APCA Lc 30
 on the chart surfaces, eight distinct series, the same hue family in both themes); a ninth series
 folds into `--chart-series-other`. The full contract is in `rules/webkit-tokens.md` § "Chart palettes".

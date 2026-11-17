@@ -116,14 +116,16 @@ async function main() {
         'The POSITIVE token inventory (what to USE instead of hardcoding): without a category, ' +
         'returns the token group index + typography classes + the canonical prop/event vocabulary ' +
         '(variant over kind or appearance, severity over tone for colour meaning, status for job ' +
-        'state, …); with a category ("primary", "bg", ' +
-        '"text", "spacing", "radius", "shadow", …) returns that group\'s CSS custom properties.',
+        'state, …); with a category ("primary", "bg", "text", "chart", "spacing", "shape", ' +
+        '"typography", "animations", …) returns that group, and with a token name ("--bg-surface") ' +
+        'that one token. Every semantic token carries its light and dark value (colours) or its ' +
+        'value and breakpoints (lengths, type classes), and a one-line purpose: pick by purpose.',
       inputSchema: {
         category: z
           .string()
           .optional()
           .describe(
-            'Token group to expand (e.g. "primary", "bg", "text", "spacing"). Omit for the index.'
+            'Token group to expand (e.g. "primary", "bg", "chart", "spacing", "typography") or one token name (e.g. "--bg-surface"). Omit for the index.'
           )
       }
     },
