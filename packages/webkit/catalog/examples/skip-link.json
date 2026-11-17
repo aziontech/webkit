@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A skip link before a row of navigation links; press Tab to reveal it, then Enter to move focus to the content it skips to.",
+   "file": "examples/skip-link/default.vue"
+  }
+ ]
+}

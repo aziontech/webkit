@@ -16149,6 +16149,95 @@ The frame is static apart from its resize handles.
 
 ---
 
+<!-- components/copy-text.md -->
+
+# Copy Text
+
+> CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies the value. It composes `CopyButton` for the clipboard write, the copied confirmation, the live announcement and the manual-copy fallback, so it re-implements none of them. Unlike `CopyButton` (icon only, no visible value) and `TableCellId` (an identifier laid out for a table cell), CopyText is the inline "show this value and let me copy it" pattern for prose, key/value lists, token tables and cards.
+
+- Import: `import CopyText from '@aziontech/webkit/copy-text'`
+- Category: content · Surface: app · Structure: monolithic
+
+## When to use
+
+- Show a short code value the reader will paste elsewhere, next to its label: a design token (`--spacing-2xl`), a class (`p-(--spacing-2xl)`), a CNAME, an API key ID, a one-line CLI command.
+- Token tables, key/value rows, setup steps and cards outside a data table.
+
+## Do
+
+- Pass the exact text in `value`; CopyText shows and copies the same string.
+- Keep values to one line. A long value truncates with an ellipsis; the full value stays in the `title`, in the accessible name of the copy button and in the clipboard.
+- Pass `ariaLabel` when the value alone does not say what it is (`Copy CNAME`); the default reads `Copy {value}`.
+- Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
+- Use `size="small"` in dense tables and lists.
+
+## Don’t
+
+- The value is not shown, only copied → use `copy-button`.
+- An identifier inside a data table cell → use `table-cell-id`.
+- A multi-line snippet or a block of code → use `code-block`.
+- A keyboard shortcut → use `kbd`.
+- A secret that must stay masked until revealed → use `password` (read-only) with a `copy-button`.
+
+## Related
+
+- `copy-button` — the control CopyText composes; use it alone when the value is not displayed.
+- `table-cell-id` — the same idea laid out for a table cell (fills the cell, outline button).
+- `code-block` — multi-line code with its own copy control.
+- `kbd` — keycaps for shortcuts, not copyable values.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | `—` | true | The code value shown and copied to the clipboard. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the copy button. Empty uses the locale catalog (`Copy {value}`). |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; sets the code typography and the size of the copy button (28 px or 32 px). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `copy` | `(event: MouseEvent, value: string)` | Re-emitted from the composed `CopyButton` after a successful write; `value` is the copied text. |
+
+## States
+
+- Visual states: `idle`, `copied` (owned by the composed `CopyButton`: check glyph, tooltip and `role="status"` announcement for 2 s), `focus-visible` on the copy button.
+- `data-size` mirrors `size` on the root.
+- The composed `CopyButton` carries `data-state` (`idle` | `copied`).
+- Clipboard blocked: the composed `CopyButton` opens its manual-copy popover (see `.specs/copy-button.md`); CopyText adds nothing.
+- Empty `value`: the box renders empty and the copy click is a no-op (CopyButton ignores an empty value).
+- `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`: not states of this component — it is a static value with one action.
+
+## Accessibility
+
+- Pattern: static text plus a native `button` (WAI-ARIA APG Button pattern, provided by `CopyButton`). The value is plain text, readable and selectable; only the copy button is interactive, so there is one tab stop.
+- Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`).
+- Keyboard map: `Tab` focuses the copy button; `Enter` / `Space` copies; `Esc` closes the manual-copy popover when the clipboard is blocked (owned by `CopyButton`).
+- ARIA: the copy button's name is `ariaLabel` or `Copy {value}` (it carries the full value even when the visible text truncates); `Copied` replaces it for 2 s and is announced through CopyButton's `role="status"` region. The value has `title` set to the full value.
+- Attributes: consumer `class`, `id` and listeners land on the root `span` (`inheritAttrs: false` + `v-bind="$attrs"`).
+- Contrast ≥4.5:1 for the value (`--text-default` on `--bg-surface`) and ≥3:1 for the copy glyph.
+- `motion-reduce:transition-none` on every motion (inherited).
+- Touch target: the copy button is 28 px (`small`) or 32 px (`medium`), above the 24 px minimum, with IconButton's 44 px hit area on `pointer: coarse`.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import CopyText from '@aziontech/webkit/copy-text'
+</script>
+
+<template>
+  <CopyText value="--spacing-2xl" />
+</template>
+```
+
+2 more example(s) in [components/copy-text.md](components/copy-text.md).
+
+---
+
 <!-- components/currency-amount.md -->
 
 # Currency Amount
@@ -20186,7 +20275,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | `maxHeight` | `string` | `''` | false | Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under a frozen header). |
 | `bordered` | `boolean` | `false` | false | Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); the internal row dividers are unaffected. |
 | `density` | `'comfortable' \| 'compact'` | `'comfortable'` | false | Density of the body cells: `compact` shrinks their height and padding. Set `density` on `Table.Header` too for a compact header. |
-| `wrapLines` | `boolean` | `false` | false | Cell text wraps onto several lines instead of truncating. |
+| `wrapLines` | `boolean` | `false` | false | Cell text wraps onto several lines instead of truncating. Identifiers stay on one line and truncate: `code`, `kbd`, `samp`, a `dir="ltr"` span (the `TableCellId` value) and code-typography text (`text-label-code-*`). |
 
 ## Slots
 
@@ -20255,7 +20344,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - `data-sortable` and `data-sort` (`none` | `ascending` | `descending`) on TableHeadCell; `aria-sort` mirrors `data-sort`.
 - `data-sort` (`none` | `ascending` | `descending`) on TableSortButton.
 - `data-clickable` on TableCell mirrors the `clickable` prop.
-- Density and wrapping: `data-density="compact"` on the root shrinks the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. A compact header is `Table.Header density="compact"`.
+- Density and wrapping: `data-density="compact"` on the root shrinks the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap, except identifiers: `code`, `kbd`, `samp`, `[dir=ltr]` and `text-label-code-*` elements, and any `.truncate` inside them, keep `white-space: nowrap`, so a token such as `p-(--spacing-2xl)` or an ID never splits at a hyphen; they truncate instead. A compact header is `Table.Header density="compact"`.
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a touch screen shows the sort glyph only on the sorted column, as on a pointer screen with no hover; tapping a sortable header sorts it, and keyboard focus reveals the sort button.
 
@@ -25242,7 +25331,7 @@ packages/webkit/src/components/input/radio-group/
 
 - Keep the default `variant="content"` for app shells; use `variant="site"` only on framed marketing pages.
 - Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.
-- Wrap the logo in `AppHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
+- Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href="/" aria-label="Azion home">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
 - Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`).
@@ -25286,19 +25375,21 @@ The regions are named start / center / end, not left / right, because the bar mi
 right-to-left: the start region is on the right there. 6.0 removed the physical names (`Left`,
 `Middle`, `Nav`, `Right`). The parts derive `__start`, `__center` and `__end` testids from the root.
 
-- `app-header-brand.vue` — Brand slot wrapper sized for Azion logo SVGs (default / min).
+- `app-header-brand.vue` — `AppHeader.Brand`.
 
 ## States
 
 - Visual states: `default`
 - Placement: `data-variant="content" | "site"` on the root (from `variant`).
 - No interactive states on the shell; children own focus/hover/disabled.
+- `AppHeader.Brand` with `href`: `data-link` on its anchor; hover (opacity) and `focus-visible` (ring) are its only states.
 
 ## Accessibility
 
 - Root renders as `<header role="banner">` with `aria-label` from `ariaLabel`.
 - Keyboard map: none on the shell; interactive children supply Tab order.
-- ARIA: landmark only on root; brand slot should include an accessible name on the logo link or `aria-label` on the SVG parent.
+- ARIA: landmark only on root. `AppHeader.Brand` with `href` is a native anchor named by `ariaLabel` (locale fallback `appHeader.home`), so the logo link always has an accessible name; without `href` it stays a non-interactive `div`.
+- Keyboard (brand link): Tab reaches it, Enter follows it; the `focus-visible` ring uses `--ring-color`.
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).
 - Touch target ≥40×40 px on slotted buttons (owned by children).
@@ -25316,13 +25407,11 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 <template>
   <AppHeader aria-label="Global header">
     <AppHeader.Start>
-      <AppHeader.Brand>
-        <a
-          href="/"
-          aria-label="Azion home"
-        >
-          <Default />
-        </a>
+      <AppHeader.Brand
+        href="/"
+        aria-label="Azion home"
+      >
+        <Default />
       </AppHeader.Brand>
     </AppHeader.Start>
     <AppHeader.Center />
@@ -29073,6 +29162,114 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
 ```
 
 2 more example(s) in [components/sidebar-menu.md](components/sidebar-menu.md).
+
+---
+
+<!-- components/skip-link.md -->
+
+# Skip Link
+
+> The first focusable element of a page: a link that is visually hidden until it receives keyboard focus, then appears at the top-start corner and jumps to the page's main content, so a keyboard or screen-reader user bypasses the repeated header and navigation (WCAG 2.4.1 Bypass Blocks). On activation it also moves focus into the target, so the next `Tab` continues from the main content in every browser. It differs from `link` in that it is invisible at rest and owns its placement and focus hand-off.
+
+- Import: `import SkipLink from '@aziontech/webkit/skip-link'`
+- Category: navigation · Surface: app · Structure: monolithic
+
+## When to use
+
+- Every page shell (console, marketing site, docs) that renders repeated navigation before the main content: place it as the first child of the shell.
+- A layout whose `<main>` (or other main landmark) carries the `id` the link targets (`main` by default).
+
+## Do
+
+- Render one skip link per page, as the first element inside the shell, before the header; do not wrap it in `nav` or move it into the header.
+- Give the main landmark the `id` the link points at (`id="main"` for the default `href`); a missing target makes the link a no-op.
+- Keep the label short and name the destination ("Skip to content"); override it with `label` or the default slot only when the target is not the main content.
+
+## Don’t
+
+- A link inside content that should always be visible → use `link`.
+- Jumping between sections of one page (an in-page table of contents) → use `link` with a `#hash` `href`.
+- A page with no repeated block before its content (a bare sign-in form) gains nothing from one; do not add it there.
+
+## Related
+
+- `link` — the always-visible navigation link; use it for any visible jump.
+- `console-layout`, `site-layout`, `doc-layout` — the page shells that render the main landmark the skip link targets.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | `''` | false | Visible label, the default slot's fallback. Empty uses the locale catalog (`Skip to content`). |
+| `href` | `string` | `'#main'` | false | In-page hash of the element to jump to; the element with that `id` receives focus on activation. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The link text. Fallback: `label`, then the locale catalog. |
+
+## States
+
+- Visual states: `hidden` (at rest: clipped to 1 px and out of the layout, still in the tab order and the accessibility tree), `focused` (shown at the top-start corner of the viewport with the surface, border, shadow and focus ring), `hover` while shown (label underlined).
+- Activation: when `href` is a `#hash` that resolves to an element, the element is focused; if it is not natively focusable and has no `tabindex`, it gets `tabindex="-1"` for the hand-off and loses it on `blur`. Native hash navigation (scroll and URL hash) still runs.
+- A `href` that is empty, external or names no element: the link behaves as a plain anchor; no focus hand-off.
+- Not applicable: `disabled`, `loading`, `readonly`, `invalid`, `empty`, `error`, `open`/`closed` — a skip link has none of these states; no `data-*` state attribute is rendered.
+- Consumer attributes (`id`, `aria-*`, `data-*`, listeners, `class`) land on the anchor through `v-bind="$attrs"`.
+
+## Accessibility
+
+- Pattern: a native `a href` (no ARIA role); its accessible name is the visible label. It is the first focusable element so it is reached by the first `Tab` (WCAG 2.4.1 Bypass Blocks).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`; the link is fully shown on any focus (`:focus`), so it is never focused while invisible (WCAG 2.4.7), and the border keeps the outline in forced-colors mode.
+- Keyboard map: `Tab` (first in the page) focuses and reveals it; `Enter` activates: the page jumps to the target and focus moves into it; `Tab` from there continues inside the main content; `Shift+Tab` / moving focus away hides it again.
+- ARIA: none needed; the hidden state is visual only (clipped, not `display: none`, not `aria-hidden`), so screen readers list it.
+- Contrast: `--text-default` on `--bg-surface` ≥ 4.5:1 in light and dark; the ring token ≥ 3:1 against `--bg-canvas`.
+- Motion: none (see `## Motion & Animations`).
+- Touch target: min height 40 px while shown (44 px on coarse pointers).
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Link from '@aziontech/webkit/link'
+  import SkipLink from '@aziontech/webkit/skip-link'
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-md)">
+    <SkipLink href="#skip-link-demo-content" />
+    <nav
+      aria-label="Product"
+      class="flex flex-wrap gap-(--spacing-md)"
+    >
+      <Link
+        label="Overview"
+        href="https://example.com/overview"
+        size="medium"
+      />
+      <Link
+        label="Pricing"
+        href="https://example.com/pricing"
+        size="medium"
+      />
+      <Link
+        label="Documentation"
+        href="https://example.com/docs"
+        size="medium"
+      />
+    </nav>
+    <section
+      id="skip-link-demo-content"
+      aria-label="Content"
+      class="text-body-md text-(--text-default)"
+    >
+      Focus lands here after the skip link is activated.
+    </section>
+  </div>
+</template>
+```
 
 ---
 

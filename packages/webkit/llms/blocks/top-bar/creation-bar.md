@@ -38,7 +38,7 @@ Small, outlined, chevron icon, a link (`href`) to the list the flow started from
 
 ### C. Brand — `Brand` (required)
 
-Inside `AppHeader.Brand`, linked to the home route with `aria-label="Azion home"`.
+Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria-label="Azion home"`.
 
 ### D. Breadcrumb — `Breadcrumb` (required until the flow is terminal)
 
@@ -210,17 +210,14 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
             :href="backHref"
           />
         </Tooltip>
-        <AppHeader.Brand>
-          <a
-            :href="homeHref"
-            aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-          >
-            <Brand
-              variant="default"
-              size="small"
-            />
-          </a>
+        <AppHeader.Brand
+          :href="homeHref"
+          aria-label="Azion home"
+        >
+          <Brand
+            variant="default"
+            size="small"
+          />
         </AppHeader.Brand>
         <Breadcrumb
           v-if="breadcrumb.length > 0"

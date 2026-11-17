@@ -30,7 +30,7 @@
  "bestPractices": [
   "Keep the default `variant=\"content\"` for app shells; use `variant=\"site\"` only on framed marketing pages.",
   "Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.",
-  "Wrap the logo in `AppHeader.Brand` inside a link with its own accessible name (for example `aria-label=\"Azion home\"`).",
+  "Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href=\"/\" aria-label=\"Azion home\">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).",
   "Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.",
   "Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.",
   "Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`)."

@@ -39,7 +39,7 @@ The bar above the card, labelled `aria-label="Console"`. Brand on the start side
 
 ### B. Product mark — `Brand` (required)
 
-`variant="default"`, `size="small"`, inside a link to the home route with `aria-label="Azion home"`. The link owns the focus ring.
+`variant="default"`, `size="small"`, inside `AppHeader.Brand` with `href` set to the home route and `aria-label="Azion home"`, so the brand renders as the link and owns the focus ring.
 
 ### C. Actions — `Button` (required)
 
@@ -700,17 +700,14 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
       aria-label="Console"
       class="shrink-0"
     >
-      <AppHeader.Brand>
-        <a
-          :href="homeHref"
-          aria-label="Azion home"
-          class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </a>
+      <AppHeader.Brand
+        :href="homeHref"
+        aria-label="Azion home"
+      >
+        <Brand
+          variant="default"
+          size="small"
+        />
       </AppHeader.Brand>
       <AppHeader.Center />
       <AppHeader.End>
@@ -1206,17 +1203,14 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
       aria-label="Console"
       class="shrink-0"
     >
-      <AppHeader.Brand>
-        <a
-          :href="homeHref"
-          aria-label="Azion home"
-          class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </a>
+      <AppHeader.Brand
+        :href="homeHref"
+        aria-label="Azion home"
+      >
+        <Brand
+          variant="default"
+          size="small"
+        />
       </AppHeader.Brand>
       <AppHeader.Center />
       <AppHeader.End>

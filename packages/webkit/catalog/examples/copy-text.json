@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A design token in monospace with an always-visible copy button; activating it copies the value and briefly confirms.",
+   "file": "examples/copy-text/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Both sizes side by side: `small` for dense tables and lists, `medium` for prose and cards.",
+   "file": "examples/copy-text/sizes.vue"
+  },
+  {
+   "name": "Long value",
+   "summary": "A long CNAME in a narrow container: the value stays on one line and truncates, and the copy button keeps the full value in its accessible name.",
+   "file": "examples/copy-text/long-value.vue"
+  }
+ ]
+}

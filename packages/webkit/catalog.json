@@ -3917,6 +3917,47 @@
    "examplesFile": "catalog/examples/copy-button.json",
    "docsFile": "catalog/components/copy-button.json"
   },
+  "copy-text": {
+   "import": "@aziontech/webkit/copy-text",
+   "target": "./src/components/content/copy-text/copy-text.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/copy-text",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "value",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The code value shown and copied to the clipboard."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the copy button. Empty uses the locale catalog (`Copy {value}`)."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token; sets the code typography and the size of the copy button (28 px or 32 px)."
+    }
+   ],
+   "events": [
+    {
+     "name": "copy",
+     "payload": "(event: MouseEvent, value: string)",
+     "notes": "Re-emitted from the composed `CopyButton` after a successful write; `value` is the copied text."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/copy-text.json",
+   "docsFile": "catalog/components/copy-text.json"
+  },
   "search-trigger": {
    "import": "@aziontech/webkit/search-trigger",
    "target": "./src/components/action/search-trigger/search-trigger.vue",
@@ -8463,7 +8504,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Cell text wraps onto several lines instead of truncating."
+     "doc": "Cell text wraps onto several lines instead of truncating. Identifiers stay on one line and truncate: `code`, `kbd`, `samp`, a `dir=\"ltr\"` span (the `TableCellId` value) and code-typography text (`text-label-code-*`)."
     }
    ],
    "slots": [
@@ -8527,7 +8568,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Cell text wraps onto several lines instead of truncating."
+     "doc": "Cell text wraps onto several lines instead of truncating. Identifiers stay on one line and truncate: `code`, `kbd`, `samp`, a `dir=\"ltr\"` span (the `TableCellId` value) and code-typography text (`text-label-code-*`)."
     }
    ],
    "slots": [
@@ -18721,6 +18762,40 @@
    "surface": "app",
    "examplesFile": "catalog/examples/link.json",
    "docsFile": "catalog/components/link.json"
+  },
+  "skip-link": {
+   "import": "@aziontech/webkit/skip-link",
+   "target": "./src/components/navigation/skip-link/skip-link.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/skip-link",
+   "category": "navigation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Visible label, the default slot's fallback. Empty uses the locale catalog (`Skip to content`)."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "'#main'",
+     "required": "false",
+     "doc": "In-page hash of the element to jump to; the element with that `id` receives focus on activation."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The link text. Fallback: `label`, then the locale catalog."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/skip-link.json",
+   "docsFile": "catalog/components/skip-link.json"
   },
   "sidebar-menu": {
    "import": "@aziontech/webkit/sidebar-menu",

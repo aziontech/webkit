@@ -89,7 +89,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Cell text wraps onto several lines instead of truncating."
+   "doc": "Cell text wraps onto several lines instead of truncating. Identifiers stay on one line and truncate: `code`, `kbd`, `samp`, a `dir=\"ltr\"` span (the `TableCellId` value) and code-typography text (`text-label-code-*`)."
   }
  ],
  "events": [],

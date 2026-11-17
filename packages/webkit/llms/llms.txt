@@ -192,6 +192,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
 - [Card](components/card.md): Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard.
 - [ConsoleMockup](components/console-mockup.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketin…
+- [CopyText](components/copy-text.md): CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies…
 - [CurrencyAmount](components/currency-amount.md): Use CurrencyAmount to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
 - [Eyebrow](components/eyebrow.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
 - [FilePreview](components/file-preview.md): The preview of one stored file in a storage or object browser: a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read.
@@ -359,6 +360,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [NavigationMenu](components/navigation-menu.md): The top bar of a site: a row of links and triggers whose items open large panels of grouped links (product and solution menus).
 - [PageTabs](components/page-tabs.md): The second-level navigation strip of a resource detail page: a full-bleed bar ruled at the bottom, its `Tabs` at the page boundary inset, with room for the actions the whole resource owns on the right (a staged-change…
 - [SidebarMenu](components/sidebar-menu.md): A vertical, hierarchical navigation menu.
+- [SkipLink](components/skip-link.md): The first focusable element of a page: a link that is visually hidden until it receives keyboard focus, then appears at the top-start corner and jumps to the page's main content, so a keyboard or screen-reader user by…
 - [Stepper](components/stepper.md): A vertical rail that names the steps of one task, says which step the reader is on, and carries the progress between them on the line that joins the dots.
 - [Tabs](components/tabs.md): Switches between peer views of one page or panel, showing one at a time: Overview, Settings and Logs on a resource page.
 - [Wizard](components/wizard.md): A multi-step create flow in one surface.
