@@ -1,5 +1,8 @@
+import '../../../test/reflow.css'
+
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { commands } from 'vitest/browser'
 
 import Default from '../../../../examples/progress/default.vue'
 import Indeterminate from '../../../../examples/progress/indeterminate.vue'
@@ -147,5 +150,46 @@ describe('Progress', () => {
     const bar = getByRole('progressbar')
     expect(bar.getAttribute('aria-busy')).toBe('true')
     expect(bar.getAttribute('data-indeterminate')).toBe('true')
+  })
+
+  describe('indeterminate under reduced motion', () => {
+    afterEach(async () => {
+      await commands.emulateMedia({ reducedMotion: null })
+    })
+
+    const segment = (getByRole: (role: string) => HTMLElement) => {
+      const track = getByRole('progressbar')
+      const fill = track.firstElementChild as HTMLElement
+      const trackBox = track.getBoundingClientRect()
+      const before = getComputedStyle(fill, '::before')
+      return { trackBox, before, after: getComputedStyle(fill, '::after') }
+    }
+
+    it('holds a still segment about a third of the track, never a full bar', async () => {
+      await commands.emulateMedia({ reducedMotion: 'reduce' })
+      const { getByRole } = render(Progress, {
+        props: { indeterminate: true },
+        attrs: { style: 'width: 300px' }
+      })
+      const { trackBox, before, after } = segment(getByRole)
+
+      expect(before.animationName).toBe('none')
+      expect(after.display).toBe('none')
+      const width = parseFloat(before.width)
+      expect(width).toBeGreaterThan(trackBox.width * 0.25)
+      expect(width).toBeLessThan(trackBox.width * 0.5)
+      expect(parseFloat(before.left)).toBeGreaterThan(0)
+    })
+
+    it('sweeps when motion is allowed', async () => {
+      await commands.emulateMedia({ reducedMotion: 'no-preference' })
+      const { getByRole } = render(Progress, {
+        props: { indeterminate: true },
+        attrs: { style: 'width: 300px' }
+      })
+      const { before } = segment(getByRole)
+
+      expect(before.animationName).not.toBe('none')
+    })
   })
 })

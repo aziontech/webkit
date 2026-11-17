@@ -4,12 +4,12 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 36e79a60ee57d240aea761af65ef4bbe46d231805721f74318a9dbce6f44d141
+checksum: a8b00ca7dcf196ed3c408ead0eab5b5bb19a33dc0f7c5e0c43b8bc151ee95269
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
 created: 2026-06-26
-last_updated: 2026-11-15
+last_updated: 2026-11-17
 ---
 
 # Progress Bar — Component Spec
@@ -90,7 +90,7 @@ quantity.
 | Trigger                         | Animation / Transition                                                                                                                                            | Token (see `.claude/docs/DESIGN.md` § Animations)                      | Reduced-motion fallback                    |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------ |
 | `value` change (determinate)    | `transition-[width] duration-moderate-02 ease-productive-entrance` (width morph)                                                                                  | duration/curve aliases from `animate.js` (240ms · productive-entrance) | `motion-reduce:transition-none`            |
-| `indeterminate` (loading sweep) | `animate-progress-indeterminate` + `animate-progress-indeterminate-short` (two offset bars sweeping across the track via `inset-inline-start`/`inset-inline-end`) | semantic (2.1s · infinite)                                             | `motion-reduce:animate-none` (static fill) |
+| `indeterminate` (loading sweep) | `animate-progress-indeterminate` + `animate-progress-indeterminate-short` (two offset bars sweeping across the track via `inset-inline-start`/`inset-inline-end`) | semantic (2.1s · infinite)                                             | `motion-reduce:animate-none` + `motion-reduce:before:inset-x-1/3` (a still segment over the middle third of the track, so the bar never reads as done) |
 
 ## Tokens
 
@@ -115,7 +115,7 @@ quantity.
 - Name: the bar takes `aria-label` or `aria-labelledby` from the consumer; with neither it is named by the locale catalog (`progress.label`, "Progress"), so a bare bar never fails `aria-progressbar-name`.
 - ARIA: root uses `role="progressbar"`. Determinate sets `aria-valuemin="0"`, `aria-valuemax="<max>"`, `aria-valuenow="<value>"`; indeterminate omits `aria-valuenow` and sets `aria-busy="true"`.
 - Contrast ≥3:1 between the fill (`var(--primary)`) and the track (`var(--bg-placeholder)`). The track is an alpha overlay, not an opaque surface, so it keeps that contrast on any background the bar is placed over (canvas, surface, raised, overlay).
-- `motion-reduce:transition-none` on the determinate width morph and `motion-reduce:animate-none` on the indeterminate animation (it falls back to a static fill under reduced motion).
+- `motion-reduce:transition-none` on the determinate width morph and `motion-reduce:animate-none` on the indeterminate animation (under reduced motion it holds a still segment over the middle third of the track, never a full bar, so an unfinished task never reads as done).
 
 ## Examples
 
