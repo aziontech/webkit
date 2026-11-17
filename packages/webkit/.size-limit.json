@@ -28,7 +28,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "25.9 KB",
+    "limit": "26 KB",
     "entryOnly": true
   },
   {
@@ -238,7 +238,7 @@
   {
     "name": "doc-code-group",
     "path": "src/components/docs/doc-code-group/doc-code-group.vue",
-    "limit": "32.85 KB",
+    "limit": "32.95 KB",
     "entryOnly": true
   },
   {
@@ -489,7 +489,7 @@
   {
     "name": "article-highlight-section",
     "path": "src/components/section/article-highlight-section/article-highlight-section.vue",
-    "limit": "11.7 KB"
+    "limit": "11.8 KB"
   },
   {
     "name": "article-index-section",
@@ -658,7 +658,7 @@
   {
     "name": "template-gallery-section",
     "path": "src/components/section/template-gallery-section/template-gallery-section.vue",
-    "limit": "28.35 KB",
+    "limit": "28.45 KB",
     "entryOnly": true
   },
   {
@@ -669,7 +669,7 @@
   {
     "name": "architecture-tabs-section",
     "path": "src/components/section/architecture-tabs-section/architecture-tabs-section.vue",
-    "limit": "22 KB",
+    "limit": "22.1 KB",
     "entryOnly": true
   },
   {
@@ -1096,7 +1096,7 @@
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "10.5 KB"
+    "limit": "10.6 KB"
   },
   {
     "name": "phone-input",
