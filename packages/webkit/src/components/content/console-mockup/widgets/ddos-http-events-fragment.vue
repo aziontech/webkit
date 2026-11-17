@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import Input from '../../../input/input/input.vue'
@@ -17,8 +16,6 @@
   }
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
 
   const EVENTS = [
     {
@@ -153,7 +150,7 @@
           <div class="min-h-0 flex-1 px-(--spacing-md)">
             <MockupElevator
               :count="EVENTS.length"
-              :active="hovered || !canHover"
+              :active="hovered"
             >
               <template #default="{ index }">
                 <div class="flex items-start gap-(--spacing-sm) py-(--spacing-2xs)">

@@ -3,15 +3,11 @@
   import { useElementVisibility } from '@vueuse/core'
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
-  import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../locales/en'
-  import IconButton from '../../../action/icon-button/icon-button.vue'
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import Separator from '../../../layout/separator/separator.vue'
   import Card from '../../card/card.vue'
   import Tag from '../../tag/tag.vue'
-  import { useConsoleMockupContext } from '../composables/use-console-mockup-context'
+  import { useMockupPause } from '../composables/use-mockup-pause'
   import { DEFAULT_DEPLOYMENT_STEPS } from '../lib/deployment-steps'
   import ConsoleMockupShell, {
     type ConsoleMockupShellFade,
@@ -19,6 +15,7 @@
   } from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import DeploymentLogs from '../parts/deployment-logs.vue'
+  import MockupPauseButton from '../parts/mockup-pause-button.vue'
 
   defineOptions({ name: 'WorkloadDeployLogsWidget' })
 
@@ -66,19 +63,10 @@
     transitionDelay: `${Math.round(globalThis.parseFloat(duration['fast-02']) * index)}ms`
   })
 
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
-
   const shellEl = ref<InstanceType<typeof ConsoleMockupShell> | null>(null)
   const visible = useElementVisibility(shellEl, { threshold: 0.35 })
 
-  const { testId } = useConsoleMockupContext()
-  const { t } = useTranslate({ common: en.common })
-
-  const chosenPaused = ref<boolean | null>(null)
-  const paused = computed(() => chosenPaused.value ?? reduced.value)
-  const pauseLabel = computed(() =>
-    paused.value ? t('common.playAnimation') : t('common.pauseAnimation')
-  )
+  const { paused, label, toggle } = useMockupPause()
 
   const run = ref(0)
   const deployed = ref(false)
@@ -102,10 +90,6 @@
     restartTimer = setTimeout(restart, SUMMARY_HOLD_MS)
   }
 
-  const onPauseToggle = () => {
-    chosenPaused.value = !paused.value
-  }
-
   watch(streaming, (live) => {
     if (live) restart()
     else clearRestart()
@@ -116,14 +100,11 @@
 
 <template>
   <div class="flex h-full w-full min-w-0 flex-col gap-(--spacing-xs)">
-    <IconButton
-      :data-testid="`${testId}__pause`"
-      :icon="paused ? 'az az-play' : 'az az-pause'"
-      :aria-label="pauseLabel"
-      variant="outline"
-      size="small"
+    <MockupPauseButton
       class="self-end"
-      @click="onPauseToggle"
+      :paused="paused"
+      :label="label"
+      @click="toggle"
     />
     <ConsoleMockupShell
       ref="shellEl"

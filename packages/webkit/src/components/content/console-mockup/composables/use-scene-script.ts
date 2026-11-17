@@ -11,6 +11,7 @@ export interface SceneScriptOptions {
   hold?: number
   lead?: number
   active?: () => boolean
+  paused?: () => boolean | undefined
 }
 
 export interface UseSceneScriptReturn {
@@ -21,7 +22,15 @@ class Cancelled extends Error {}
 
 export function useSceneScript(
   target: MaybeRefOrGetter<Element | null>,
-  { reset, settle, play, hold = 3200, lead = 600, active = () => true }: SceneScriptOptions
+  {
+    reset,
+    settle,
+    play,
+    hold = 3200,
+    lead = 600,
+    active = () => true,
+    paused = () => undefined
+  }: SceneScriptOptions
 ): UseSceneScriptReturn {
   const playing = ref(false)
   let run = 0
@@ -64,9 +73,10 @@ export function useSceneScript(
   let observer: globalThis.IntersectionObserver | null = null
 
   const onScreen = ref(false)
+  const halted = () => paused() ?? reduced.value
 
   const start = () => {
-    if (reduced.value) {
+    if (halted()) {
       stop()
       settle()
       return
@@ -77,6 +87,7 @@ export function useSceneScript(
   }
 
   watch(active, start)
+  watch(halted, start)
 
   watch(
     () => toValue(target),

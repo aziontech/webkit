@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { useLocale } from '../../../../composables/use-locale'
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Card from '../../card/card.vue'
   import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
@@ -17,7 +16,6 @@
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = useMediaQuery('(hover: hover)', true)
   const { formatNumber } = useLocale()
 
   const WIDTH = 100
@@ -95,7 +93,7 @@
       >
         <MockupElevator
           :count="PANELS.length"
-          :active="hovered || !canHover"
+          :active="hovered"
         >
           <template #default="{ index }">
             <Card>

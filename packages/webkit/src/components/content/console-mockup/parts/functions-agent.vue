@@ -26,9 +26,15 @@
     active?: boolean
     /** Mark of the coding agent the transcript runs in. */
     client?: string
+    /** Holds the transcript on its last entry; unset follows the reduced-motion preference. */
+    paused?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), { active: true, client: 'claude' })
+  const props = withDefaults(defineProps<Props>(), {
+    active: true,
+    client: 'claude',
+    paused: undefined
+  })
 
   const STATUSES = {
     preview: { label: 'Dry run', severity: 'info' },
@@ -93,6 +99,7 @@
 
   useSceneScript(rootEl, {
     active: () => props.active,
+    paused: () => props.paused,
     reset: () => {
       glide.value = false
       shown.value = []

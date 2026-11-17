@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Spinner from '../../../feedback/spinner/spinner.vue'
   import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
@@ -15,8 +14,6 @@
   }
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
 
   const EVENTS = [
     { icon: 'az az-settings', label: 'Build started', note: 'vue preset' },
@@ -61,7 +58,7 @@
       >
         <MockupElevator
           :count="EVENTS.length"
-          :active="hovered || !canHover"
+          :active="hovered"
         >
           <template #default="{ index }">
             <div

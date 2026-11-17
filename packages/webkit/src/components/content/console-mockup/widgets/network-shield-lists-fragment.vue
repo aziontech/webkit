@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Tag from '../../tag/tag.vue'
   import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
@@ -15,8 +14,6 @@
   }
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
 
   const ROWS = [
     { name: 'qa-p-nl-ip', id: '56585', type: 'IP/CIDR' },
@@ -46,7 +43,7 @@
       >
         <MockupElevator
           :count="ROWS.length"
-          :active="hovered || !canHover"
+          :active="hovered"
         >
           <template #default="{ index }">
             <div

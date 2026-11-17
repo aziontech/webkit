@@ -14,6 +14,7 @@ import { ConsoleMockupInjectionKey } from './injection-key'
 import DeploymentLogs from './parts/deployment-logs.vue'
 import { productWidgets } from './registry'
 import ObjectStorageBrowser from './widgets/object-storage-browser-fragment.vue'
+import WorkloadDeployFragment from './widgets/workload-deploy-fragment.vue'
 
 const TESTID = 'console-mockup'
 const FRAME_TESTID = 'console-mockup-shell'
@@ -413,6 +414,94 @@ describe('ConsoleMockup', () => {
 
       expect(mismatches, mismatches.join('\n')).toEqual([])
       expect(shown).toEqual([true])
+    })
+
+    it('keeps an elevator fragment parked on a device that cannot hover', async () => {
+      vi.stubGlobal('matchMedia', touchScreen)
+      const Elevator = defineComponent({
+        setup() {
+          provide(ConsoleMockupInjectionKey, {
+            cursor: computed(() => false),
+            testId: computed(() => TESTID)
+          })
+          return () =>
+            h('div', { style: 'width: 420px; height: 320px' }, [h(WorkloadDeployFragment)])
+        }
+      })
+      const view = render(Elevator)
+      const centered = () => {
+        const row = view.container.querySelector('[data-active]')
+        return row ? [...row.parentElement!.children].indexOf(row) : -1
+      }
+      const parked = centered()
+      expect(parked).toBeGreaterThanOrEqual(0)
+      await new Promise((resolve) => globalThis.setTimeout(resolve, 1200))
+      expect(centered()).toBe(parked)
+    })
+  })
+
+  describe('looping sessions', () => {
+    const PAUSE_TESTID = `${TESTID}__pause`
+
+    afterEach(async () => {
+      await page.viewport(414, 896)
+    })
+
+    const sessionHost = (props: Record<string, unknown>) =>
+      defineComponent({
+        components: { ConsoleMockup },
+        setup: () => ({ props }),
+        template: `
+          <div style="width: 860px; height: 520px">
+            <ConsoleMockup v-bind="props" />
+          </div>
+        `
+      })
+    const settle = () => new Promise((resolve) => globalThis.setTimeout(resolve, 500))
+
+    it.each([
+      { props: { name: 'cli-terminal-start' }, width: 414 },
+      { props: { name: 'cli-terminal-deploy' }, width: 414 },
+      { props: { name: 'functions-start', tab: 'cli' }, width: 414 },
+      { props: { name: 'functions-start', tab: 'agents' }, width: 1280 }
+    ])(
+      'pauses and plays $props.name $props.tab from a keyboard-reachable control',
+      async ({ props, width }) => {
+        await page.viewport(width, 896)
+        const view = render(sessionHost(props))
+        const control = await view.findByTestId(PAUSE_TESTID, {}, { timeout: 5000 })
+        const frame = await frameOf(view)
+
+        expect(control.tagName).toBe('BUTTON')
+        expect(frame.contains(control)).toBe(false)
+        expect(control.closest('[inert]')).toBeNull()
+        const playing = !reducedMotion()
+        expect(control.getAttribute('aria-label')).toBe(
+          playing ? 'Pause animation' : 'Play animation'
+        )
+
+        control.focus()
+        await userEvent.keyboard('{Enter}')
+        expect(control.getAttribute('aria-label')).toBe(
+          playing ? 'Play animation' : 'Pause animation'
+        )
+        if (!playing) return
+
+        await settle()
+        const held = frame.textContent
+        await settle()
+        expect(frame.textContent).toBe(held)
+
+        await userEvent.keyboard(' ')
+        expect(control.getAttribute('aria-label')).toBe('Pause animation')
+        await expect.poll(() => frame.textContent, { timeout: 3000 }).not.toBe(held)
+      }
+    )
+
+    it('has no violations with the session pause control shown', async () => {
+      const view = render(sessionHost({ name: 'cli-terminal-start' }))
+      await view.findByTestId(PAUSE_TESTID, {}, { timeout: 5000 })
+      await expectNoA11yViolations(view.container)
     })
   })
 
