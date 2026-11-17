@@ -106,7 +106,7 @@
             >
             <template v-else>{{ item.title }}</template>
           </h3>
-          <p class="m-0 text-body-md text-pretty text-(--text-muted)">
+          <p class="m-0 text-body-sm text-pretty text-(--text-muted) sm:text-body-md">
             {{ item.description }}
           </p>
           <span

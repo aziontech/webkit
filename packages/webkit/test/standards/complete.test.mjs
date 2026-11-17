@@ -19,7 +19,7 @@ import {
   limitToBytes,
   raisedBudgets
 } from '../../scripts/check-size-ratchet.mjs'
-import { initialOutputs } from '../../scripts/check-size.mjs'
+import { initialOutputs, lazyEntries } from '../../scripts/check-size.mjs'
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), 'fixtures/complete-examples')
 const fixture = (name) => readFileSync(join(FIXTURES, name), 'utf-8')
@@ -214,6 +214,26 @@ test('initialOutputs counts the entry and every chunk it imports statically, not
   assert.deepEqual(
     initialOutputs(outputs).map((o) => o.fileName),
     ['entry.js', 'shared.js', 'deep.js']
+  )
+})
+
+test('lazyEntries lists each chunk an entryOnly build excludes with what it would load', () => {
+  const chunk = (fileName, extra) => ({ type: 'chunk', fileName, imports: [], ...extra })
+  const outputs = [
+    chunk('entry.js', { isEntry: true, imports: ['shared.js'], dynamicImports: ['scene.js'] }),
+    chunk('shared.js', { dynamicImports: ['registry.js'] }),
+    chunk('scene.js', { imports: ['shared.js', 'scene-data.js'] }),
+    chunk('scene-data.js'),
+    chunk('registry.js', { dynamicImports: ['drawing.js'] }),
+    chunk('drawing.js')
+  ]
+  const lazy = lazyEntries(outputs, initialOutputs(outputs))
+  assert.deepEqual(
+    lazy.map((l) => [l.fileName, l.outputs.map((o) => o.fileName)]),
+    [
+      ['scene.js', ['scene.js', 'scene-data.js']],
+      ['registry.js', ['registry.js']]
+    ]
   )
 })
 

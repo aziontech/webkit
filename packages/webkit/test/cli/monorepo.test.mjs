@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { spawnSync } from 'node:child_process'
 
 import { ESLint } from 'eslint'
 
@@ -105,3 +106,44 @@ test('an app config can spread the repository ESLint config and the strict prese
   const direction = result.messages.filter((m) => m.ruleId === 'webkit/no-physical-direction')
   assert.equal(direction.length, 1)
 })
+
+const hasGit = !spawnSync('git', ['--version']).error
+
+test(
+  'doctor reads husky from the git root of a monorepo app',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const { root, app } = makeMonorepo({ git: false })
+    try {
+      spawnSync('git', ['init', '-q'], { cwd: root })
+      spawnSync('git', ['config', 'core.hooksPath', '.husky/_'], { cwd: root })
+      writeFileSync(
+        join(root, 'package.json'),
+        JSON.stringify({
+          name: 'mono',
+          private: true,
+          scripts: { prepare: 'husky' },
+          'lint-staged': { '**/*.{css,vue}': ['stylelint --fix'] }
+        })
+      )
+      mkdirSync(join(root, '.husky'))
+      writeFileSync(join(root, '.husky', 'pre-commit'), 'pnpm lint-staged\n')
+      const report = planDoctor(app)
+      const of = (name) => report.find((c) => c.check === name)
+      assert.equal(of('husky prepare script').status, 'ok')
+      assert.match(of('husky prepare script').detail, /\.\.\/\.\.\/package\.json/)
+      assert.equal(of('pre-commit hook').status, 'ok')
+      assert.match(of('pre-commit hook').detail, /\.\.\/\.\.\/\.husky\/pre-commit lints on commit/)
+      assert.equal(of('git hooks').status, 'ok')
+
+      writeFileSync(join(root, '.husky', 'pre-commit'), 'echo nothing\n')
+      assert.equal(
+        planDoctor(app).find((c) => c.check === 'pre-commit hook').status,
+        'warn',
+        'a root hook that lints nothing still warns'
+      )
+    } finally {
+      rmSync(root, { recursive: true, force: true })
+    }
+  }
+)

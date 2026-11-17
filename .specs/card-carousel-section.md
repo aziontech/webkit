@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: df4fd877ca59a1e5192a653bd91aaf6e4ec1386c1635f2c86f3f4a59e90bb655
+checksum: 31555d6a5b91d294966d53acf68d7eed5ceb28248b216638f38ac737e80c17e1
 created: 2026-11-12
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 ---
 
 # CardCarouselSection — Component Spec
@@ -115,18 +115,18 @@ It is a page section — the site places it from a `{ _id: 'card-carousel-sectio
 
 ## Tokens
 
-| Region                              | Token (DESIGN.md)                                                         |
-| ----------------------------------- | ------------------------------------------------------------------------- |
-| band inset                          | `var(--spacing-lg)`                                                       |
-| card surface, border, shape, gutter | owned by `carousel` (`variant="cards"`)                                   |
-| card stack gap                      | `var(--spacing-sm)`                                                       |
-| link label gap above                | `var(--spacing-lg)`                                                       |
-| card heading                        | `.text-heading-sm`, `var(--text-default)`                                 |
-| card copy                           | `.text-body-md`, `var(--text-muted)`                                      |
-| link label                          | `.text-overline-sm`, `var(--text-muted)` → `var(--text-default)` on hover |
-| link arrow                          | `var(--text-primary)`                                                     |
-| focus ring                          | `var(--ring-color)`                                                       |
-| card overline                       | owned by `eyebrow`                                                        |
+| Region                              | Token (DESIGN.md)                                                          |
+| ----------------------------------- | -------------------------------------------------------------------------- |
+| band inset                          | `var(--spacing-lg)`                                                        |
+| card surface, border, shape, gutter | owned by `carousel` (`variant="cards"`)                                    |
+| card stack gap                      | `var(--spacing-sm)`                                                        |
+| link label gap above                | `var(--spacing-lg)`                                                        |
+| card heading                        | `.text-heading-sm`, `var(--text-default)`                                  |
+| card copy                           | `.text-body-sm` below `sm`, `.text-body-md` from `sm`, `var(--text-muted)` |
+| link label                          | `.text-overline-sm`, `var(--text-muted)` → `var(--text-default)` on hover  |
+| link arrow                          | `var(--text-primary)`                                                      |
+| focus ring                          | `var(--ring-color)`                                                        |
+| card overline                       | owned by `eyebrow`                                                         |
 
 ## Theme gaps
 

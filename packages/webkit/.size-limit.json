@@ -2475,7 +2475,7 @@
   {
     "name": "popover",
     "path": "src/components/overlay/popover/index.ts",
-    "limit": "10.8 KB"
+    "limit": "10.85 KB"
   },
   {
     "name": "popover-root",

@@ -118,7 +118,7 @@ export const TriggerHost = defineComponent({
     disabled: Boolean,
     asButton: Boolean
   },
-  emits: ['control'],
+  emits: ['control', 'click', 'keydown'],
   setup(props, { slots, emit }) {
     const hostEl = ref<globalThis.HTMLElement | null>(null)
     let control: globalThis.HTMLElement | null = null
@@ -156,9 +156,20 @@ export const TriggerHost = defineComponent({
       emit('control', next)
     }
 
-    onMounted(sync)
+    const relay = (event: globalThis.Event) => emit(event.type as 'click' | 'keydown', event)
+    const listen = (on?: boolean) => {
+      for (const type of ['click', 'keydown'])
+        if (on) hostEl.value?.addEventListener(type, relay)
+        else hostEl.value?.removeEventListener(type, relay)
+    }
+
+    onMounted(() => {
+      listen(true)
+      sync()
+    })
     onUpdated(sync)
     onBeforeUnmount(() => {
+      listen()
       if (control) release(control)
       emit('control', null)
     })

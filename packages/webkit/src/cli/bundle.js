@@ -83,11 +83,28 @@ function findFencedBlocks(source, startMarker, endMarker) {
     if (start === -1) break
     const end = source.indexOf(endMarker, start)
     if (end === -1) break
+    const nextStart = source.indexOf(startMarker, start + startMarker.length)
+    if (nextStart !== -1 && nextStart < end) {
+      searchFrom = nextStart
+      continue
+    }
     const endLineEnd = source.indexOf('\n', end)
     blocks.push({ start, end: endLineEnd === -1 ? source.length : endLineEnd + 1 })
     searchFrom = blocks[blocks.length - 1].end
   }
   return blocks
+}
+
+function markerIndexesOf(source, marker) {
+  const indexes = []
+  let searchFrom = 0
+  for (;;) {
+    const idx = source.indexOf(marker, searchFrom)
+    if (idx === -1) break
+    indexes.push(idx)
+    searchFrom = idx + marker.length
+  }
+  return indexes
 }
 
 const HEADING_RE = /^#{1,2}\s/
@@ -101,20 +118,11 @@ function headingsOf(text) {
   )
 }
 
-function findLegacyBlocks(source, body = '') {
+function blocksFromMarkers(source, body, markerIndexes, boundaries = markerIndexes) {
   const ownHeadings = headingsOf(body)
   const blocks = []
-  const markerIndexes = []
-  let searchFrom = 0
-  for (;;) {
-    const idx = source.indexOf(LEGACY_MARKER, searchFrom)
-    if (idx === -1) break
-    markerIndexes.push(idx)
-    searchFrom = idx + LEGACY_MARKER.length
-  }
-  for (let i = 0; i < markerIndexes.length; i += 1) {
-    const start = markerIndexes[i]
-    const nextMarker = markerIndexes[i + 1]
+  for (const start of markerIndexes) {
+    const nextMarker = boundaries.find((idx) => idx > start)
     let end = source.length
     let cursor = source.indexOf('\n', start)
     cursor = cursor === -1 ? source.length : cursor + 1
@@ -140,6 +148,30 @@ function findLegacyBlocks(source, body = '') {
   return blocks
 }
 
+function findLegacyBlocks(source, body = '') {
+  return blocksFromMarkers(source, body, markerIndexesOf(source, LEGACY_MARKER))
+}
+
+function findLoneStartBlocks(source, body, startMarker, endMarker) {
+  const starts = markerIndexesOf(source, startMarker)
+  const fenced = findFencedBlocks(source, startMarker, endMarker).map((block) => block.start)
+  const lone = starts.filter((idx) => !fenced.includes(idx))
+  const boundaries = [...starts, ...markerIndexesOf(source, endMarker)].sort((a, b) => a - b)
+  return blocksFromMarkers(source, body, lone, boundaries)
+}
+
+function replaceLoneStarts(source, body, start, end) {
+  const lone = findLoneStartBlocks(source, body, start, end)
+  if (!lone.length) return source
+  const keepFirst = findFencedBlocks(source, start, end).length === 0
+  let result = source
+  for (let i = lone.length - 1; i >= 0; i -= 1) {
+    const replacement = i === 0 && keepFirst ? `${fence(body, start, end)}\n` : ''
+    result = result.slice(0, lone[i].start) + replacement + result.slice(lone[i].end)
+  }
+  return result
+}
+
 function fence(body, startMarker, endMarker) {
   return `${startMarker}\n${body}\n${endMarker}`
 }
@@ -152,7 +184,8 @@ function normalize(text) {
     .replace(/\s+$/, '')}\n`
 }
 
-export function spliceFragment(source, body, { start = FRAGMENT_START, end = FRAGMENT_END } = {}) {
+export function spliceFragment(input, body, { start = FRAGMENT_START, end = FRAGMENT_END } = {}) {
+  const source = replaceLoneStarts(input, body, start, end)
   const fenced = findFencedBlocks(source, start, end)
   if (fenced.length) {
     let result =

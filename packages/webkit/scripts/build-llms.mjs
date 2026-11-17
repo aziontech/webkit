@@ -7,6 +7,7 @@ import { loadManifest as loadIconManifest } from '../../icons/scripts/lib/icons-
 
 import { getSection, parseSpecFile } from '../../../.claude/hooks/lib/spec.mjs'
 import { hydratePart } from '../src/catalog/catalog.js'
+import { composableExports } from './lib/composable-docs.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const PKG_ROOT = resolve(SCRIPT_DIR, '..')
@@ -742,6 +743,121 @@ function blockPage(catalog, id, { full = true } = {}) {
   )
 }
 
+function composableNames(catalog) {
+  return Object.keys(catalog.imports)
+    .filter((n) => /^use-[a-z0-9-]+$/.test(n) && /\.ts$/.test(catalog.imports[n].target || ''))
+    .sort()
+}
+
+function camel(name) {
+  return name.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase())
+}
+
+function composableOrder(fn, exports) {
+  const pascal = fn.charAt(0).toUpperCase() + fn.slice(1)
+  const rank = (e) =>
+    e.name === fn
+      ? 0
+      : e.name === `${pascal}Options`
+        ? 1
+        : e.name === `${pascal}Return`
+          ? 2
+          : e.kind === 'function'
+            ? 3
+            : 4
+  return exports
+    .map((e, i) => ({ e, i }))
+    .sort((a, b) => rank(a.e) - rank(b.e) || a.i - b.i)
+    .map(({ e }) => e)
+}
+
+function membersTable(members) {
+  return table(
+    ['Field', 'Type', 'Required', 'Description'],
+    members.map((m) => [
+      `\`${m.readonly ? 'readonly ' : ''}${m.name}\``,
+      `\`${m.type}\``,
+      m.required ? 'yes' : 'no',
+      m.doc || ''
+    ])
+  )
+}
+
+function composableSection(e) {
+  const out = []
+  if (e.kind === 'function') {
+    out.push(`## \`${e.name}\``, '')
+    if (e.doc) out.push(e.doc, '')
+    out.push(code(e.signature, 'ts'), '')
+  } else if (e.kind === 'interface') {
+    out.push(`## \`${e.name}${e.generics}\``, '')
+    if (e.doc) out.push(e.doc, '')
+    if (e.extends.length) out.push(`Extends ${e.extends.map((x) => `\`${x}\``).join(', ')}.`, '')
+    if (e.members.length) out.push(membersTable(e.members), '')
+  } else if (e.kind === 'type') {
+    out.push(`## \`${e.name}${e.generics}\``, '')
+    if (e.doc) out.push(e.doc, '')
+    if (e.members?.length) out.push(membersTable(e.members), '')
+    else out.push(code(`type ${e.name}${e.generics} = ${e.definition}`, 'ts'), '')
+  } else if (e.kind === 'const') {
+    out.push(`## \`${e.name}\``, '')
+    if (e.doc) out.push(e.doc, '')
+    if (e.type) out.push(code(`const ${e.name}: ${e.type}`, 'ts'), '')
+  }
+  return out
+}
+
+function composablePage(catalog, name) {
+  const entry = catalog.imports[name]
+  const parsed = composableExports(PKG_ROOT, entry.target)
+  if (!parsed) return null
+  const fn = camel(name)
+  const exports = composableOrder(fn, parsed.exports)
+  const values = exports.filter((e) => e.kind === 'function' || e.kind === 'const').map((e) => e.name)
+  const types = exports.filter((e) => e.kind === 'interface' || e.kind === 'type').map((e) => e.name)
+  const imports = [
+    values.length ? `import { ${values.join(', ')} } from '${entry.import}'` : null,
+    types.length ? `import type { ${types.join(', ')} } from '${entry.import}'` : null
+  ].filter(Boolean)
+  const out = [
+    `# ${fn}`,
+    '',
+    `Composable \`${entry.import}\`. The signatures and option tables below are read from its typed source, [\`${parsed.file}\`](${REPO_URL}/packages/webkit/${parsed.file}).`,
+    '',
+    code(imports.join('\n'), 'ts'),
+    ''
+  ]
+  const head = out.slice()
+  for (const e of exports) out.push(...composableSection(e))
+  const pascal = fn.charAt(0).toUpperCase() + fn.slice(1)
+  const main = new Set([fn, `${pascal}Options`, `${pascal}Return`])
+  const rest = exports.filter((e) => !main.has(e.name))
+  const compact = head.slice()
+  for (const e of exports.filter((x) => main.has(x.name))) compact.push(...composableSection(e))
+  if (rest.length)
+    compact.push(
+      '## Other exports',
+      '',
+      `${rest.map((e) => `\`${e.name}\``).join(' · ')}. Signatures and fields: [composables/${name}.md](composables/${name}.md).`,
+      ''
+    )
+  const tidy = (lines) =>
+    lines
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trimEnd() + '\n'
+  return {
+    compact: tidy(compact),
+    fn,
+    summary: `\`${fn}\`${exports.length > 1 ? ` and ${exports.length - 1} more exports (options, return, helpers and types)` : ''}.`,
+    md:
+      out
+        .join('\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .trimEnd() + '\n'
+  }
+}
+
 function tokenList(vars) {
   return vars.map((v) => `\`${v}\``).join(' · ')
 }
@@ -1049,6 +1165,19 @@ export function buildLlms(catalog = loadCatalog()) {
     index.push('')
   }
 
+  const composables = composableNames(catalog)
+    .map((n) => [n, composablePage(catalog, n)])
+    .filter(([, page]) => page)
+  if (composables.length) {
+    index.push('## Composables', '')
+    for (const [n, page] of composables) {
+      files[`composables/${n}.md`] = page.md
+      index.push(`- [${page.fn}](composables/${n}.md): ${page.summary}`)
+      fullParts.push(`<!-- composables/${n}.md -->\n\n${page.compact}`)
+    }
+    index.push('')
+  }
+
   index.push(
     '## Optional',
     '',
@@ -1109,7 +1238,7 @@ export function writeLlms(files = buildLlms()) {
 export function summary(files) {
   const count = (re) => Object.keys(files).filter((f) => re.test(f)).length
   const kb = (f) => Math.round(Buffer.byteLength(files[f]) / 1024)
-  return `llms/ written: llms.txt (${kb('llms.txt')} KB), llms-full.txt (${kb('llms-full.txt')} KB), llms-full-site.txt (${kb('llms-full-site.txt')} KB), ${count(/^components\/.*\.md$/)} component pages + ${count(/\.json$/)} JSON, ${count(/^blocks\//)} block pages, ${count(/^foundations\//)} foundation pages`
+  return `llms/ written: llms.txt (${kb('llms.txt')} KB), llms-full.txt (${kb('llms-full.txt')} KB), llms-full-site.txt (${kb('llms-full-site.txt')} KB), ${count(/^components\/.*\.md$/)} component pages + ${count(/\.json$/)} JSON, ${count(/^blocks\//)} block pages, ${count(/^foundations\//)} foundation pages, ${count(/^composables\//)} composable pages`
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {

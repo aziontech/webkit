@@ -1,4 +1,5 @@
 <script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import DataTable from '@aziontech/webkit/data-table'
   import Switch from '@aziontech/webkit/switch'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
@@ -7,7 +8,7 @@
   import { onBeforeUnmount, ref, watch } from 'vue'
 
   const AUTO_REFRESH_MS = 30_000
-  const MINUTE = 60_000
+  const NOW = Date.UTC(2026, 10, 10, 12)
   const STATES = ['Active', 'Pending', 'Active', 'Failed']
 
   const deploymentsAt = (round) =>
@@ -26,7 +27,8 @@
   ]
 
   const rows = ref(deploymentsAt(0))
-  const updatedAt = ref(new Date(Math.floor(Date.now() / MINUTE) * MINUTE))
+  const now = ref(NOW)
+  const updatedAt = ref(new Date(NOW))
   const refreshing = ref(false)
   const autoRefresh = ref(false)
   let round = 0
@@ -38,7 +40,8 @@
     await new Promise((resolve) => setTimeout(resolve, 600))
     round += 1
     rows.value = deploymentsAt(round)
-    updatedAt.value = new Date()
+    now.value = Date.now()
+    updatedAt.value = new Date(now.value)
     refreshing.value = false
   }
 
@@ -59,33 +62,35 @@
 </script>
 
 <template>
-  <DataTable
-    :data="rows"
-    :columns="columns"
-    row-key="id"
-    aria-label="Deployments"
-    @refresh="refresh"
-  >
-    <template #title>Deployments</template>
-    <template #toolbar>
-      <div class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
-        <span class="shrink-0">Updated</span>
-        <TableCellTime :value="updatedAt" />
-      </div>
-      <div class="flex items-center gap-(--spacing-xs) text-body-sm text-(--text-default)">
-        <Switch
-          v-model="autoRefresh"
-          aria-label="Auto-refresh every 30 seconds"
+  <ConfigProvider :now="now">
+    <DataTable
+      :data="rows"
+      :columns="columns"
+      row-key="id"
+      aria-label="Deployments"
+      @refresh="refresh"
+    >
+      <template #title>Deployments</template>
+      <template #toolbar>
+        <div class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
+          <span class="shrink-0">Updated</span>
+          <TableCellTime :value="updatedAt" />
+        </div>
+        <div class="flex items-center gap-(--spacing-xs) text-body-sm text-(--text-default)">
+          <Switch
+            v-model="autoRefresh"
+            aria-label="Auto-refresh every 30 seconds"
+          />
+          <span aria-hidden="true">Auto-refresh</span>
+        </div>
+        <TableRefreshButton :loading="refreshing" />
+      </template>
+      <template #cell-status="{ value }">
+        <TableCellStatus
+          :label="value"
+          :severity="severityOf(value)"
         />
-        <span aria-hidden="true">Auto-refresh</span>
-      </div>
-      <TableRefreshButton :loading="refreshing" />
-    </template>
-    <template #cell-status="{ value }">
-      <TableCellStatus
-        :label="value"
-        :severity="severityOf(value)"
-      />
-    </template>
-  </DataTable>
+      </template>
+    </DataTable>
+  </ConfigProvider>
 </template>

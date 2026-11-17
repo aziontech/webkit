@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, onMounted, ref } from 'vue'
 
 import Default from '../../../../examples/drawer/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -746,5 +746,34 @@ describe('Drawer', () => {
       expect(byTestId('drawer__panel')).not.toBeNull()
       expect(byTestId('drawer__close')).not.toBeNull()
     })
+  })
+})
+
+describe('DrawerTrigger in the mount tick', () => {
+  it('opens on a synthetic click fired in the same millisecond the trigger mounted', async () => {
+    const Host = defineComponent({
+      setup() {
+        const buttonEl = ref<HTMLButtonElement | null>(null)
+        onMounted(() => buttonEl.value?.click())
+        return () =>
+          h(Drawer, null, {
+            default: () => [
+              h(DrawerTrigger, null, {
+                default: () =>
+                  h('button', { ref: buttonEl, type: 'button', onClick: () => {} }, 'Open')
+              }),
+              h(DrawerContent, null, { default: () => h(DrawerTitle, null, () => 'Edit') })
+            ]
+          })
+      }
+    })
+    const frozen = vi.spyOn(Date, 'now').mockReturnValue(Date.now())
+    try {
+      render(Host)
+    } finally {
+      frozen.mockRestore()
+    }
+    await settle()
+    expect(panel()).not.toBeNull()
   })
 })

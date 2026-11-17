@@ -243,3 +243,21 @@ test('every public component export is documented in llms/components', () => {
   )
   assert.deepEqual(undocumentedExports({ imports: catalog.imports }, files), [])
 })
+
+test('every composable export has an llms page built from its typed options', () => {
+  const composables = Object.keys(catalog.imports).filter((n) => /^use-[a-z0-9-]+$/.test(n))
+  assert.ok(composables.includes('use-collection'))
+  for (const n of composables) {
+    assert.ok(files[`composables/${n}.md`], n)
+    assert.match(files['llms.txt'], new RegExp(`\\(composables/${n}\\.md\\)`))
+  }
+  const page = files['composables/use-collection.md']
+  assert.match(page, /^# useCollection\n/)
+  assert.match(page, /import \{ useCollection[^}]*\} from '@aziontech\/webkit\/use-collection'/)
+  assert.match(page, /```ts\nfunction useCollection<[^\n]*\(options: UseCollectionOptions<T, C>\)/)
+  assert.match(page, /## `UseCollectionOptions<T extends object, C extends CollectionColumn = CollectionColumn>`/)
+  assert.match(page, /\| `items` \| `MaybeRefOrGetter<readonly T\[\]>` \| no \| Client mode: every item/)
+  assert.match(page, /\| `pagination` \| `\{ pageSize\?: number; pageSizeOptions\?: number\[\] \}` \| no \|/)
+  assert.ok(page.indexOf('## `useCollection`') < page.indexOf('## `UseCollectionOptions'))
+  assert.ok(page.indexOf('## `UseCollectionOptions') < page.indexOf('## `UseCollectionReturn'))
+})

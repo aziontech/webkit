@@ -73,7 +73,8 @@ function classifyFragment(claudeMdContent, fragmentBody) {
   const hasFence =
     claudeMdContent.includes(FRAGMENT_START) && claudeMdContent.includes(FRAGMENT_END)
   if (!hasFence) {
-    return claudeMdContent.includes(LEGACY_MARKER) ? 'legacy' : 'missing'
+    if (claudeMdContent.includes(LEGACY_MARKER)) return 'legacy'
+    return claudeMdContent.includes(FRAGMENT_START) ? 'stale' : 'missing'
   }
   const next = spliceFragment(claudeMdContent, fragmentBody, {
     start: FRAGMENT_START,
