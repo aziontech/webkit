@@ -77,6 +77,32 @@ describe('state async-submit and form-validation', () => {
     expect(view.container.textContent).toContain('Select an environment.')
   })
 
+  it('form-validation: required shows from the start and a failed submit adds a Field.Error under the kept description', async () => {
+    const view = render(FormValidation, { props: { defaultValues: { key: 'api token' } } })
+    const key = view.getByRole('textbox', { name: /Key/ })
+    expect(key.getAttribute('aria-required')).toBe('true')
+    expect(key.getAttribute('aria-invalid')).not.toBe('true')
+    expect(view.queryAllByTestId('field-error')).toHaveLength(0)
+    await fireEvent.click(view.getByRole('button', { name: 'Create' }))
+    await waitFor(() => expect(key.getAttribute('aria-invalid')).toBe('true'))
+    const errors = view.getAllByTestId('field-error')
+    expect(errors.map((error) => error.textContent?.trim())).toEqual([
+      'Use uppercase letters, digits and underscores, starting with a letter.',
+      'This field is required.',
+      'Select an environment.'
+    ])
+    expect(errors[0]!.querySelector('.az-circle-alert')).not.toBeNull()
+    const descriptions = view.getAllByTestId('field-description').map((d) => d.textContent?.trim())
+    expect(descriptions).toContain(
+      'Uppercase letters, digits and underscores, for example API_TOKEN.'
+    )
+    expect(descriptions).toContain('Where this variable is available.')
+    expect(key.getAttribute('aria-describedby')).toContain(errors[0]!.id)
+    await fireEvent.update(key, 'API_TOKEN')
+    await waitFor(() => expect(key.getAttribute('aria-invalid')).not.toBe('true'))
+    expect(view.getAllByTestId('field-error')).toHaveLength(2)
+  })
+
   it('form-validation SectionRejected: Reload origins emits, and a reloaded list flags the origin', async () => {
     const view = render(SectionRejected)
     expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()

@@ -23,7 +23,7 @@ This block is a page body for a create page: render it under the focused creatio
 
 | Error                                                                   | Where it renders                                                                                                                                                                     | Variant          |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
-| A value the user left empty or typed wrong (client-side)                | On the field: `invalid`, its message in the description, focus on the first field in error                                                                                           | ValidationErrors |
+| A value the user left empty or typed wrong (client-side)                | On the field: `invalid`, its message in a `Field.Error` under the description, focus on the first field in error                                                                     | ValidationErrors |
 | A value the server refused that one field owns (a key already in use)   | On the field (`invalid` with its reason) and in a danger `Alert` above the fields of its section; never a toast                                                                      | Conflict         |
 | A rejection one section of a long form owns (a linked resource deleted) | A danger `Alert` under that section's heading with the recovery action, the field `invalid` with its own reason, the section scrolled into view and the field focused; never a toast | SectionRejected  |
 | A failure no field or section owns (network, timeout, 500)              | `toast.error` with Retry, every entry kept                                                                                                                                           | ServerError      |
@@ -41,7 +41,7 @@ While the form's data loads (the options a select offers, the record an edit for
 
 ### C. Field — `Field` (required)
 
-Each control sits in a `Field` with `Field.Label` (bound by `for`) and `Field.Description`. The description carries the guidance until a submit finds a problem, then swaps to the message, so each field speaks in one place. A required field takes `required` from the first render, so its label shows the Required marker; a submit sets `invalid` when the value is empty or filled but wrong (malformed, too long, or already taken on the server). All fields take `disabled` while the request is in flight.
+Each control sits in a `Field` with `Field.Label` (bound by `for`), `Field.Description` and, after a submit finds a problem, `Field.Error`. The description keeps its guidance at all times; the message goes in a `Field.Error` under it (danger text with a leading `az-circle-alert` icon), never in place of the guidance. A required field takes `required` from the first render, so its label shows the Required marker; a submit sets `invalid` and adds the `Field.Error` when the value is empty or filled but wrong (malformed, too long, or already taken on the server), and both go away as the user fixes the value. All fields take `disabled` while the request is in flight.
 
 ### D. Text value — `Input` (required)
 
@@ -127,6 +127,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## Don't
 
 - Don't show a validation summary at the top; each field carries its own message.
+- Don't write the message into `Field.Description`; the guidance stays and the message is its own `Field.Error`.
 - Don't toast a rejection a field owns (a key already in use, a deleted origin). The toast dismisses itself and points nowhere.
 - Don't colour a required field before a failed submit; `required` is static and only `invalid` turns the field red.
 - Don't disable Create to signal missing values; let submit run and show the messages.
@@ -149,7 +150,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## Accessibility
 
 - The `<form>` is labelled by the heading (`aria-labelledby`), uses `novalidate`, and sets `aria-busy` while loading or submitting.
-- Every control has a `Field.Label` bound by `for`; the description and message are wired to the control by `Field`.
+- Every control has a `Field.Label` bound by `for`; the description and the `Field.Error` are wired to the control by `Field` (`aria-describedby`), and `invalid` sets `aria-invalid`.
 - The loading region is `role="status"` with an accessible name (`Loading the form`).
 - Focus moves to the first field in error, only after the lock is released, since a disabled control cannot take focus.
 - Toasts are announced by the app's `Toaster` region; the error toast keeps its Retry reachable by keyboard.
@@ -159,7 +160,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## States
 
 - Default: no prop set; the empty Create Variable form, idle.
-- ValidationErrors: `defaultValues` with a malformed key and `defaultSubmitted`, as after Create pressed with gaps; empty Value and Environment and the malformed Key take `invalid`, each with its own message, and focus moves to Key.
+- ValidationErrors: `defaultValues` with a malformed key and `defaultSubmitted`, as after Create pressed with gaps; empty Value and Environment and the malformed Key take `invalid`, each with its own `Field.Error` under the kept description, and focus moves to Key.
 - Submitting: `submitting`, the request is in flight; Create shows `loading`, the fields and Cancel are disabled.
 - ServerError: `error`, the request failed and no field owns it; an error toast with Retry, the lock released, every entry kept.
 - Conflict: `takenKey`, the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
@@ -176,4 +177,4 @@ Then delete `sample.ts` and its imports in the variants.
 - `create/create-page` — the sectioned create page these states apply to.
 - `auth/sign-in` — the signed-out version, where every outcome lands in one card `Alert` and nothing toasts.
 - `settings/settings-form` — the same field states on an existing object.
-- `Field` — the label, description and state triad every field here uses.
+- `Field` — the label, description, error and state every field here uses.

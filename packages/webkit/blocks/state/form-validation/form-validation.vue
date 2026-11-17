@@ -107,11 +107,7 @@
     () => submitted.value && Boolean(form.key) && form.key === props.takenKey
   )
   const busy = computed(() => props.loading || props.submitting)
-  const missing = (field: FormValidationField) => submitted.value && !form[field]
-  const invalid = (field: FormValidationField) =>
-    submitted.value && Boolean(form[field]) && Boolean(errors.value[field])
-  const helper = (field: FormValidationField, guidance: string) =>
-    submitted.value && errors.value[field] ? errors.value[field] : guidance
+  const message = (field: FormValidationField) => (submitted.value ? errors.value[field] : '')
 
   const focusField = async (field: FormValidationField) => {
     await nextTick()
@@ -222,7 +218,7 @@
           />
           <Field
             required
-            :invalid="missing('key') || invalid('key')"
+            :invalid="Boolean(message('key'))"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.key">Key</Field.Label>
@@ -232,15 +228,14 @@
               name="key"
               placeholder="API_TOKEN"
             />
-            <Field.Description>
-              {{
-                helper('key', 'Uppercase letters, digits and underscores, for example API_TOKEN.')
-              }}
-            </Field.Description>
+            <Field.Description
+              >Uppercase letters, digits and underscores, for example API_TOKEN.</Field.Description
+            >
+            <Field.Error v-if="message('key')">{{ message('key') }}</Field.Error>
           </Field>
           <Field
             required
-            :invalid="missing('value') || invalid('value')"
+            :invalid="Boolean(message('value'))"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.value">Value</Field.Label>
@@ -249,13 +244,12 @@
               v-model="form.value"
               name="value"
             />
-            <Field.Description>
-              {{ helper('value', 'The value your services read at runtime.') }}
-            </Field.Description>
+            <Field.Description>The value your services read at runtime.</Field.Description>
+            <Field.Error v-if="message('value')">{{ message('value') }}</Field.Error>
           </Field>
           <Field
             required
-            :invalid="missing('environment')"
+            :invalid="Boolean(message('environment'))"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.environment">Environment</Field.Label>
@@ -274,12 +268,11 @@
                 </Select.Item>
               </Select.Content>
             </Select>
-            <Field.Description>
-              {{ helper('environment', 'Where this variable is available.') }}
-            </Field.Description>
+            <Field.Description>Where this variable is available.</Field.Description>
+            <Field.Error v-if="message('environment')">{{ message('environment') }}</Field.Error>
           </Field>
           <Field
-            :invalid="invalid('description')"
+            :invalid="Boolean(message('description'))"
             :disabled="busy"
           >
             <Field.Label :for="fieldIds.description">Description</Field.Label>
@@ -288,9 +281,8 @@
               v-model="form.description"
               name="description"
             />
-            <Field.Description>
-              {{ helper('description', 'Optional. Up to 200 characters.') }}
-            </Field.Description>
+            <Field.Description>Optional. Up to 200 characters.</Field.Description>
+            <Field.Error v-if="message('description')">{{ message('description') }}</Field.Error>
           </Field>
         </div>
       </div>
