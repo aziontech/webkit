@@ -1210,7 +1210,7 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | ----------------------- | ------------------- | -------------------------------- | --------------------------------------------------- |
 | `SuggestionGroup`       | `select`            | `(item)`                         | `(event, item)`                                     |
 | `ConversationHistory`   | `remove`            | `(id)`                           | `(event, id)`                                       |
-| `PromptInput`           | `submit`            | `(value, references)`            | `(event, { value, references })`                    |
+| `PromptInput`           | `submit`            | `(value, references)`            | `(event, { value, references, files })`             |
 | `PromptInput`           | `stop`              | `()`                             | `(event)`                                           |
 | `ToolApproval`          | `approve`, `deny`   | `()`                             | `(event)`                                           |
 | `ArtifactCanvas`        | `close`             | `()`                             | `(event)` (a `KeyboardEvent` when Escape closes it) |
