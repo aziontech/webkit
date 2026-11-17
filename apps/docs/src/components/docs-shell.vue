@@ -5,6 +5,7 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -178,12 +179,45 @@
         </Sidebar>
       </aside>
 
-      <main
-        id="main"
-        class="@container/main min-w-0 flex-1"
-      >
-        <slot />
-      </main>
+      <div class="flex min-w-0 flex-1 flex-col">
+        <main
+          id="main"
+          class="@container/main min-w-0 flex-1"
+        >
+          <slot />
+        </main>
+        <Footer
+          variant="console"
+          :aria-label="t.footer"
+        >
+          <Footer.Column :title="t.footerWebkit">
+            <Footer.Link href="https://github.com/aziontech/webkit">{{
+              t.footerGithub
+            }}</Footer.Link>
+            <Footer.Link href="https://www.npmjs.com/package/@aziontech/webkit">{{
+              t.footerNpm
+            }}</Footer.Link>
+          </Footer.Column>
+          <Footer.Column :title="t.footerAzion">
+            <Footer.Link href="https://www.azion.com/en/documentation/">{{
+              t.footerAzionDocs
+            }}</Footer.Link>
+            <Footer.Link href="https://console.azion.com">{{ t.footerConsole }}</Footer.Link>
+          </Footer.Column>
+          <template #brand>
+            <AppHeader.Brand
+              href="/"
+              :aria-label="t.home"
+              label="WebKit"
+            >
+              <Brand
+                variant="default"
+                size="small"
+              />
+            </AppHeader.Brand>
+          </template>
+        </Footer>
+      </div>
     </div>
 
     <Drawer
