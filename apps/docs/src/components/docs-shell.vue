@@ -186,7 +186,7 @@
 
       <main
         id="main"
-        class="min-w-0 flex-1"
+        class="@container/main min-w-0 flex-1"
       >
         <slot />
       </main>

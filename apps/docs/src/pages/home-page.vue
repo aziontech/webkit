@@ -87,7 +87,10 @@
       </Hero.Title>
     </Hero>
 
-    <SectionContainer max-width="7xl">
+    <SectionContainer
+      max-width="7xl"
+      class="lg:@max-7xl/main:border-s-0!"
+    >
       <SectionModule
         :divided="false"
         :padded="false"
@@ -110,6 +113,7 @@
       </SectionModule>
 
       <SectionModule
+        :divided="false"
         :padded="false"
         :title="t.whyTitle"
         :description="whyLead"

@@ -47,6 +47,11 @@ body {
   direction: ltr;
 }
 
+.docs-code .docs-html pre.shiki {
+  border: 0;
+  border-radius: 0;
+}
+
 .docs-html pre.shiki code {
   padding: 0;
   border: 0;
