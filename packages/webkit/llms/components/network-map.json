@@ -55,7 +55,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Pulses the PoPs in three staggered waves; static when false."
+   "doc": "Pulses the PoPs in three staggered waves that settle within five seconds; static when false."
   },
   {
    "name": "opacity",
