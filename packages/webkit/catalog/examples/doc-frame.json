@@ -12,7 +12,7 @@
   },
   {
    "name": "Autoplay",
-   "summary": "A clip that plays on its own is decoration, so it must not seize the reader's speakers or take over an iOS viewport, and — with nobody there to replay it — it loops. `autoplay` therefore implies muted, inline and looping, and drops the controls. The frame applies the rule on both authoring paths: to the `autoplay` prop, and to a clip written by hand in the slot. WebKit ships no recordings, so the clip here is the neutral `@aziontech/webkit/assets/placeholder-clip.webm`; pass your own.",
+   "summary": "A clip that plays on its own is decoration, so it must not seize the reader's speakers or take over an iOS viewport, and — with nobody there to replay it — it loops. `autoplay` therefore implies muted, inline and looping, and swaps the player controls for one pause control the keyboard reaches; under a reduced-motion preference the clip waits on its first frame until the reader presses play. The frame applies the rule on both authoring paths: to the `autoplay` prop, and to a clip written by hand in the slot. WebKit ships no recordings, so the clip here is the neutral `@aziontech/webkit/assets/placeholder-clip.webm`; pass your own.",
    "file": "examples/doc-frame/autoplay.vue"
   }
  ]

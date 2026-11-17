@@ -218,7 +218,7 @@
   {
     "name": "doc-frame",
     "path": "src/components/docs/doc-frame/doc-frame.vue",
-    "limit": "5.75 KB"
+    "limit": "8.2 KB"
   },
   {
     "name": "doc-changelog-entry",

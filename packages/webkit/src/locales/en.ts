@@ -1288,6 +1288,8 @@ export const common = {
   resumeRotation: 'Resume rotation',
   pauseScrolling: 'Pause scrolling',
   resumeScrolling: 'Resume scrolling',
+  pauseAnimation: 'Pause animation',
+  playAnimation: 'Play animation',
   copy: 'Copy',
   copied: 'Copied',
   newTab: '(opens in a new tab)'

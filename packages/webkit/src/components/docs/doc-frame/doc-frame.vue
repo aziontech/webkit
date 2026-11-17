@@ -1,11 +1,18 @@
 <script setup lang="ts">
-  import { defaultDocument, useEventListener, useScrollLock } from '@vueuse/core'
+  import {
+    defaultDocument,
+    useEventListener,
+    useMediaQuery,
+    useMounted,
+    useScrollLock
+  } from '@vueuse/core'
   import type { VNode } from 'vue'
   import { cloneVNode, computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import { flattenSlot } from './flatten-slot'
 
   defineOptions({ name: 'DocFrame', inheritAttrs: false })
@@ -19,7 +26,7 @@
     src?: string
     /** Alternative text for the framed media. */
     alt?: string
-    /** Plays the clip on its own, muted, inline and looping, with no controls. */
+    /** Plays the clip on its own, muted, inline and looping, with a pause control instead of the player controls; off under reduced motion. */
     autoplay?: boolean
   }
 
@@ -42,7 +49,7 @@
 
   const slots = useSlots()
   const attrs = useAttrs()
-  const { t } = useTranslate({ docFrame: en.docFrame })
+  const { t } = useTranslate({ docFrame: en.docFrame, common: en.common })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-frame')
 
@@ -50,7 +57,15 @@
 
   const isClip = computed(() => CLIP_EXTENSIONS.test(props.src))
 
-  const AUTOPLAY_ATTRS = { playsinline: '', loop: '', muted: '' }
+  const AUTOPLAY_ATTRS = {
+    playsinline: '',
+    loop: '',
+    muted: '',
+    autoplay: null,
+    autoPlay: null,
+    controls: null,
+    'data-autoplay': ''
+  }
 
   const playsOnItsOwn = (nodeAttrs: Record<string, unknown> | null) => {
     if (!nodeAttrs) return false
@@ -58,10 +73,50 @@
     return value !== undefined && value !== null && value !== false
   }
 
-  const normalizeClip = (node: VNode) =>
-    node?.type === 'video' && playsOnItsOwn(node.props) ? cloneVNode(node, AUTOPLAY_ATTRS) : node
+  const isAutoplayClip = (node: VNode) => node?.type === 'video' && playsOnItsOwn(node.props)
 
-  const framed = computed(() => flattenSlot(slots['default']?.() ?? []).map(normalizeClip))
+  const slotNodes = computed(() => flattenSlot(slots['default']?.() ?? []))
+
+  const framed = computed(() =>
+    slotNodes.value.map((node) => (isAutoplayClip(node) ? cloneVNode(node, AUTOPLAY_ATTRS) : node))
+  )
+
+  const autoplays = computed(() =>
+    props.src ? isClip.value && props.autoplay : slotNodes.value.some(isAutoplayClip)
+  )
+
+  const mounted = useMounted()
+  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const surfaceEl = ref<HTMLElement | null>(null)
+  const chosenPaused = ref<boolean | null>(null)
+  const paused = computed(() => chosenPaused.value ?? reducedMotion.value)
+  const playing = computed(() => mounted.value && autoplays.value && !paused.value)
+  const pauseLabel = computed(() =>
+    paused.value ? t('common.playAnimation') : t('common.pauseAnimation')
+  )
+
+  const autoplayClipEls = () =>
+    Array.from(surfaceEl.value?.querySelectorAll<HTMLVideoElement>('video[data-autoplay]') ?? [])
+
+  watch(
+    [playing, () => props.src],
+    ([isPlaying]) => {
+      for (const clip of autoplayClipEls()) {
+        if (!isPlaying) {
+          clip.pause()
+          continue
+        }
+        clip.play()?.catch(() => {
+          chosenPaused.value = true
+        })
+      }
+    },
+    { flush: 'post' }
+  )
+
+  const onPauseToggle = () => {
+    chosenPaused.value = !paused.value
+  }
 
   const zoomable = computed(() => Boolean(props.src) && !isClip.value)
 
@@ -160,13 +215,14 @@
       <slot name="hint">{{ hint }}</slot>
     </div>
     <div
-      class="flex flex-col items-center justify-center overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm)"
+      ref="surfaceEl"
+      class="relative flex flex-col items-center justify-center overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm)"
     >
       <video
         v-if="isClip"
         :src="src"
         :aria-label="alt || undefined"
-        :autoplay="autoplay || undefined"
+        :data-autoplay="autoplay || undefined"
         :playsinline="autoplay || undefined"
         :loop="autoplay || undefined"
         :muted="autoplay || undefined"
@@ -209,6 +265,16 @@
           :key="position"
         />
       </template>
+      <IconButton
+        v-if="mounted && autoplays"
+        :data-testid="`${testId}__pause`"
+        :icon="paused ? 'az az-play' : 'az az-pause'"
+        :aria-label="pauseLabel"
+        variant="outline"
+        size="small"
+        class="absolute end-(--spacing-xs) bottom-(--spacing-xs)"
+        @click="onPauseToggle"
+      />
     </div>
     <figcaption
       v-if="$slots['caption'] || caption"

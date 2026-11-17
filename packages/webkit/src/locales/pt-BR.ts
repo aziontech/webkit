@@ -1218,6 +1218,8 @@ export const ptBR: Messages = {
     resumeRotation: 'Retomar rotação',
     pauseScrolling: 'Pausar rolagem',
     resumeScrolling: 'Retomar rolagem',
+    pauseAnimation: 'Pausar animação',
+    playAnimation: 'Reproduzir animação',
     copy: 'Copiar',
     copied: 'Copiado',
     newTab: '(abre em uma nova aba)'

@@ -1,7 +1,9 @@
+import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import Autoplay from '../../../../examples/doc-frame/autoplay.vue'
 import Default from '../../../../examples/doc-frame/default.vue'
 import Media from '../../../../examples/doc-frame/media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -124,12 +126,13 @@ describe('DocFrame', () => {
       expect(queryByTestId('doc-frame__zoom-trigger')).not.toBeInTheDocument()
     })
 
-    it('autoplay implies inline and looping and drops the controls', () => {
+    it('autoplay implies muted, inline and looping and drops the controls', () => {
       const { container } = render(DocFrame, {
         props: { src: '/media/loop.webm', alt: 'The loop', autoplay: true }
       })
       const video = container.querySelector('video')
-      expect(video?.hasAttribute('autoplay')).toBe(true)
+      expect(video?.hasAttribute('data-autoplay')).toBe(true)
+      expect(video?.muted).toBe(true)
       expect(video?.hasAttribute('loop')).toBe(true)
       expect(video?.hasAttribute('playsinline')).toBe(true)
       expect(video?.hasAttribute('controls')).toBe(false)
@@ -142,6 +145,77 @@ describe('DocFrame', () => {
       expect(getByText('Composed markup')).toBeInTheDocument()
       expect(queryByTestId('doc-frame__zoom-trigger')).not.toBeInTheDocument()
       expect(container.querySelector('video')).toBeNull()
+    })
+  })
+
+  describe('autoplay: pausable, and still under reduced motion', () => {
+    const clips = (container: Element) => Array.from(container.querySelectorAll('video'))
+    const pauseControls = () =>
+      Array.from(document.body.querySelectorAll<HTMLButtonElement>('[data-testid="doc-frame__pause"]'))
+
+    it('plays both authoring paths on mount and shows a named pause control on each', async () => {
+      const { container } = render(Autoplay)
+      await flush()
+      const videos = clips(container)
+      expect(videos).toHaveLength(2)
+      for (const video of videos) {
+        expect(video.paused).toBe(false)
+        expect(video.hasAttribute('controls')).toBe(false)
+        expect(video.hasAttribute('autoplay')).toBe(false)
+      }
+      const controls = pauseControls()
+      expect(controls).toHaveLength(2)
+      for (const control of controls) {
+        expect(control.tagName).toBe('BUTTON')
+        expect(control.getAttribute('aria-label')).toBe('Pause animation')
+      }
+    })
+
+    it('pauses and plays again from the keyboard, switching the label', async () => {
+      const { container } = render(DocFrame, {
+        props: { src: placeholderClip, alt: 'The loop', autoplay: true }
+      })
+      await flush()
+      const video = container.querySelector('video') as HTMLVideoElement
+      const control = pauseControls()[0] as HTMLButtonElement
+      control.focus()
+      expect(document.activeElement).toBe(control)
+      await userEvent.keyboard('{Enter}')
+      await flush()
+      expect(video.paused).toBe(true)
+      expect(control.getAttribute('aria-label')).toBe('Play animation')
+      await userEvent.keyboard(' ')
+      await flush()
+      expect(video.paused).toBe(false)
+      expect(control.getAttribute('aria-label')).toBe('Pause animation')
+    })
+
+    it('does not play under reduced motion and offers the play control', async () => {
+      const restore = emulateReducedMotion()
+      try {
+        const { container } = render(Autoplay)
+        await flush()
+        for (const video of clips(container)) expect(video.paused).toBe(true)
+        const controls = pauseControls()
+        expect(controls).toHaveLength(2)
+        expect(controls[0]?.getAttribute('aria-label')).toBe('Play animation')
+        await userEvent.click(controls[0] as HTMLButtonElement)
+        await flush()
+        expect(clips(container)[0]?.paused).toBe(false)
+      } finally {
+        restore()
+      }
+    })
+
+    it('shows no pause control on a clip the reader plays with its own controls', () => {
+      render(DocFrame, { props: { src: '/media/flow-diagram.webm', alt: 'The flow' } })
+      expect(pauseControls()).toHaveLength(0)
+    })
+
+    it('has no violations with the pause control shown', async () => {
+      const { container } = render(Autoplay)
+      await flush()
+      await expectNoA11yViolations(container)
     })
   })
 
