@@ -71,15 +71,15 @@
     fit.value = Math.max(1, count)
   }
 
-  let watched: HTMLElement | null = null
+  let watched: HTMLElement[] = []
   onMounted(() => {
-    watched = rowEl.value
-    if (watched) watchSize(watched, measure)
+    watched = [rowEl.value, rulerEl.value].filter((el): el is HTMLElement => el !== null)
+    for (const el of watched) watchSize(el, measure)
     measure()
   })
   onBeforeUnmount(() => {
-    if (watched) unwatchSize(watched, measure)
-    watched = null
+    for (const el of watched) unwatchSize(el, measure)
+    watched = []
   })
   watch(
     () => props.items,
