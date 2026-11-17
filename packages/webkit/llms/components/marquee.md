@@ -16,7 +16,7 @@
 
 ## Do
 
-- Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.
+- Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete. A brand whose terms refuse its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in one ink) is a registered text wordmark: name it like any mark (`splunk`, `amazon-s3`) and the row writes its proper name in the same fallback type, never the raw id.
 - Let `duration` derive itself. The component holds speed constant rather than duration (two seconds per mark, six per item, since a claim is read and a mark is not), so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.
 - Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.
 - Use `size="small"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.

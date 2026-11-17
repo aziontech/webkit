@@ -420,6 +420,11 @@ function assetRows(kind, items) {
       ])
     )
   if (kind === 'icons') return iconTables(items)
+  if (kind === 'brandMarks')
+    return table(
+      ['Name', 'Description', 'Drawn as'],
+      items.map((i) => [`\`${i.name}\``, i.label ?? '', i.wordmark ? 'Text wordmark' : 'Mark'])
+    )
   return table(
     ['Name', 'Description'],
     items.map((i) => [`\`${i.name}\``, i.label ?? ''])

@@ -28865,7 +28865,7 @@
   },
   "brandMarks": {
    "title": "Brand marks",
-   "summary": "Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name.",
+   "summary": "Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let WebKit ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in WebKit type and colour, until its owner grants the logo.",
    "unknown": "An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark.",
    "registry": "src/assets/brands/registry.ts",
    "usedBy": [
@@ -28878,7 +28878,7 @@
     "site-page",
     "template-gallery-section"
    ],
-   "count": 60,
+   "count": 69,
    "file": "catalog/assets/brand-marks.json"
   },
   "icons": {
