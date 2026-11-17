@@ -465,6 +465,22 @@ describe('SitePage', () => {
     ).toEqual({ bands: [{ title: 'A' }] })
   })
 
+  it('drops the removed image art field of an old media band and of an old run band', () => {
+    expect(
+      resolveSectionEntry('media-split-section', {
+        title: 'T',
+        image: { src: 'https://example.com/art.svg', framed: true }
+      })
+    ).toEqual({ id: 'media-split-section', props: { title: 'T' } })
+    expect(
+      resolveSectionEntry('media-split-stack-section', {
+        bands: [
+          { title: 'A', image: 'https://example.com/art.svg', imageAlt: 'Art', imageFramed: true }
+        ]
+      }).props
+    ).toEqual({ bands: [{ title: 'A' }] })
+  })
+
   it('draws an old diagram band through the scene slot of the diagram showcase', async () => {
     const { findByTestId } = page({
       sections: [{ _id: 'media-split-section', props: { title: HEADLINE, diagram: 'cache' } }]

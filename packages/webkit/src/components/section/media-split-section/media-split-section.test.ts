@@ -14,12 +14,8 @@ const DESCRIPTION = 'Quality, Drive, Accountability, and Innovation.'
 const primaryAction = { label: 'Join us', href: '/careers' }
 const secondaryAction = { label: 'Read the culture', href: '/culture', trailing: true }
 
-const image = {
-  src: '/marketing-components/illustrations/branches.svg',
-  alt: 'Branches of a deployment',
-  width: 360,
-  height: 165
-}
+const ILLUSTRATION = 'branches'
+const ILLUSTRATION_LABEL = 'Branches of a deployment'
 
 const band = (props: Record<string, unknown> = {}) =>
   render(MediaSplitSection, {
@@ -27,7 +23,7 @@ const band = (props: Record<string, unknown> = {}) =>
       eyebrow: EYEBROW,
       title: TITLE,
       description: DESCRIPTION,
-      image,
+      illustration: ILLUSTRATION,
       ...props
     }
   })
@@ -79,19 +75,18 @@ describe('MediaSplitSection', () => {
     expect(getByTestId(SPLIT_TESTID).getAttribute('data-size')).toBe('medium')
   })
 
-  it('renders an image with its alt and intrinsic size', () => {
-    const { getByRole } = band()
+  it('draws the illustration from the registry under its accessible name', async () => {
+    const { findByTestId } = band({ illustrationAriaLabel: ILLUSTRATION_LABEL })
 
-    const picture = getByRole('img', { name: image.alt })
-    expect(picture.getAttribute('src')).toBe(image.src)
-    expect(picture.getAttribute('width')).toBe('360')
-    expect(picture.getAttribute('height')).toBe('165')
+    const scene = await findByTestId('illustration')
+    expect(scene.getAttribute('data-placeholder')).toBeNull()
+    expect(scene).toHaveAttribute('aria-label', ILLUSTRATION_LABEL)
   })
 
-  it('draws the scene instead of the image when both are set', async () => {
-    const { container, getByTestId } = band({ scene: { component: 'BrandGlobeScene' } })
+  it('draws the scene instead of the illustration when both are set', async () => {
+    const { getByTestId, queryByTestId } = band({ scene: { component: 'BrandGlobeScene' } })
 
-    expect(container.querySelector(`img[src="${image.src}"]`)).toBeNull()
+    expect(queryByTestId('illustration')).toBeNull()
     await waitFor(
       () => expect(getByTestId(SPLIT_TESTID).getAttribute('data-media')).not.toBeNull(),
       { timeout: 5000 }
@@ -99,7 +94,7 @@ describe('MediaSplitSection', () => {
   })
 
   it('omits the media cell when no media is set', () => {
-    const { getByTestId } = band({ image: undefined })
+    const { getByTestId } = band({ illustration: '' })
 
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media')).toBe(false)
   })
@@ -190,7 +185,7 @@ describe('MediaSplitSection', () => {
 
   it('binds the scene props onto the scene', async () => {
     const { findByTestId } = band({
-      image: undefined,
+      illustration: '',
       scene: { component: 'ConsoleMockup', props: { name: 'kv-store-key' } }
     })
 
@@ -226,19 +221,19 @@ describe('MediaSplitSection', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('draws a product widget, inset, instead of the image', async () => {
-    const { container, findByTestId, getByTestId } = band({ widget: 'data-stream-source' })
+  it('draws a product widget, inset, instead of the illustration', async () => {
+    const { findByTestId, getByTestId, queryByTestId } = band({ widget: 'data-stream-source' })
 
     const widget = await findByTestId('console-mockup', {}, { timeout: 5000 })
     expect(widget.getAttribute('data-name')).toBe('data-stream-source')
-    expect(container.querySelector(`img[src="${image.src}"]`)).toBeNull()
+    expect(queryByTestId('illustration')).toBeNull()
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
   })
 
   it('draws neither a diagram nor code: a band with only those has no media and warns', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const { getByTestId, queryByTestId, queryAllByRole } = band({
-      image: undefined,
+      illustration: '',
       diagram: 'cache',
       codeTabs: [{ label: 'A', value: 'a', code: 'const a = 1' }]
     })
@@ -253,7 +248,7 @@ describe('MediaSplitSection', () => {
 
   it('treats a Diagram scene as no media', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    band({ image: undefined, scene: { component: 'Diagram', props: { name: 'cache' } } })
+    band({ illustration: '', scene: { component: 'Diagram', props: { name: 'cache' } } })
 
     expect(warn).toHaveBeenCalledOnce()
   })
@@ -265,20 +260,13 @@ describe('MediaSplitSection', () => {
     expect(warn).not.toHaveBeenCalled()
   })
 
-  it('frames an image whole on a plate when image.framed is set', () => {
-    const { getByRole, getByTestId } = band({ image: { ...image, framed: true } })
-
-    expect(getByRole('img', { name: image.alt }).getAttribute('src')).toBe(image.src)
-    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
-  })
-
-  it('lets a plain image run flush', () => {
+  it('lets an illustration run flush', () => {
     const { getByTestId } = band()
 
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(false)
   })
 
-  it('has no a11y violations with a widget and with a framed image', async () => {
+  it('has no a11y violations with a widget and with an illustration', async () => {
     const { container, findByTestId } = render(ProductMedia)
 
     await findByTestId('console-mockup', {}, { timeout: 5000 })

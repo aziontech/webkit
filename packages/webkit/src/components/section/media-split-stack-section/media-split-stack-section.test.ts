@@ -12,8 +12,8 @@ const TITLE = 'Stop managing regions and capacity by hand'
 
 const bands = [
   {
-    image: '/illustrations/quick-start-with-templates.svg',
-    imageAlt: 'A project started from a template',
+    illustration: 'quick-start-with-templates',
+    illustrationLabel: 'A project started from a template',
     title: 'Modern applications',
     description: 'Build static sites, run serverless applications.',
     action: { label: 'Learn more about apps', href: '/solutions/web-apps/' }
@@ -75,12 +75,12 @@ describe('MediaSplitStackSection', () => {
     })
   })
 
-  it('renders the image of a band with its alt text', () => {
-    const { getByAltText } = run()
+  it('draws the illustration of a band from the registry under its label', async () => {
+    const { findByRole } = run({ bands: [bands[0]] })
 
-    expect(getByAltText('A project started from a template').getAttribute('src')).toBe(
-      bands[0]?.image
-    )
+    const scene = await findByRole('img', { name: 'A project started from a template' })
+    expect(scene).toHaveAttribute('data-testid', 'illustration')
+    expect(scene.getAttribute('data-placeholder')).toBeNull()
   })
 
   it('renders each band action as a link to its href', () => {
@@ -203,16 +203,18 @@ describe('MediaSplitStackSection', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('draws a widget and a framed image, each inset from the cell', async () => {
-    const { container, findByTestId, getByRole } = render(ProductMedia)
+  it('draws a widget inset from the cell and an illustration flush to it', async () => {
+    const { container, findByRole, findByTestId } = render(ProductMedia)
 
     const widget = await findByTestId('console-mockup', {}, { timeout: 5000 })
     expect(widget.getAttribute('data-name')).toBe('data-stream-source')
-    expect(getByRole('img', { name: 'G2' })).toBeInTheDocument()
+    expect(
+      await findByRole('img', { name: 'A chart of the error rate over time' })
+    ).toHaveAttribute('data-testid', 'illustration')
     await expect.poll(() => widget.textContent).toContain('Data Source')
     expect(widget.textContent).not.toContain('Priya')
     const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
-    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([true, true])
+    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([true, false])
   })
 
   it('draws no diagram, and warns in development about a band left without a picture', async () => {
@@ -237,7 +239,7 @@ describe('MediaSplitStackSection', () => {
     expect(warn.mock.calls[0]?.[0]).toContain('"Failover", "Cache" has no picture')
   })
 
-  it('runs an illustration and a plain image flush', () => {
+  it('runs every illustration flush', () => {
     const { container } = run()
 
     const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
@@ -248,13 +250,12 @@ describe('MediaSplitStackSection', () => {
     ])
   })
 
-  it('prefers a widget over the illustration and the image of the same band', async () => {
+  it('prefers a widget over the illustration of the same band', async () => {
     const { container, findByTestId } = run({
-      bands: [{ ...bands[0], illustration: 'ai-applications', widget: 'kv-store-key' }]
+      bands: [{ ...bands[0], widget: 'kv-store-key' }]
     })
 
     await findByTestId('console-mockup', {}, { timeout: 5000 })
-    expect(container.querySelector(`img[src="${bands[0].image}"]`)).toBeNull()
     expect(container.querySelector('[data-testid="illustration"]')).toBeNull()
   })
 

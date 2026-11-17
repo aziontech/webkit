@@ -12,22 +12,22 @@ const DESCRIPTION = 'Build, ship, and run an application on the same platform th
 
 const artworkTiles = [
   {
-    image: '/illustrations/branches.svg',
+    illustration: 'branches',
     title: 'Build at AI speed.',
     description: 'Go from commit to a live URL in minutes.'
   },
   {
-    image: '/illustrations/personal-tokens.svg',
+    illustration: 'personal-tokens',
     title: 'Secure by default.',
     description: 'Every workload runs in its own isolated environment.'
   },
   {
-    image: '/illustrations/azion-highlight.svg',
+    illustration: 'azion-highlight',
     title: 'No ops required.',
     description: 'Nothing to provision, nothing to manage.'
   },
   {
-    image: '/illustrations/usage-chart.svg',
+    illustration: 'usage-chart',
     title: 'Faster and more efficient workloads.',
     description: 'Compute and security run in the data center closest to the request.'
   }
@@ -146,33 +146,25 @@ describe('FeatureTilesSection', () => {
     expect(tileLeads(container as HTMLElement)).toEqual(artworkTiles.map((tile) => tile.title))
   })
 
-  it('renders an artwork tile as an image from its url', () => {
-    const { getAllByTestId } = band()
+  it('draws an artwork tile from the registry when it names an illustration', async () => {
+    const { findByTestId, getAllByTestId } = band({ tiles: [artworkTiles[2]] })
 
-    getAllByTestId(TILE_TESTID).forEach((tile, index) => {
-      const image = tile.querySelector('img')
-      expect(image).not.toBeNull()
-      expect(image?.getAttribute('src')).toBe(artworkTiles[index]?.image)
-    })
+    const scene = await findByTestId('illustration')
+    expect(scene.getAttribute('data-placeholder')).toBeNull()
+    expect(getAllByTestId(TILE_TESTID)[0]?.querySelector('img')).toBeNull()
   })
 
-  it('keeps an artwork picture decorative when its tile has no alt', () => {
-    const { getAllByTestId } = band()
-
-    const image = getAllByTestId(TILE_TESTID)[0]?.querySelector('img')
-    expect(image?.getAttribute('alt')).toBe('')
-    expect(image).toHaveAttribute('aria-hidden', 'true')
-  })
-
-  it('names an artwork picture by its tile alt', () => {
-    const { getByRole } = band({
-      tiles: [{ ...artworkTiles[0], alt: 'A branch diagram of two environments' }]
+  it('renders a tile without an illustration with no media', () => {
+    const { getAllByTestId, queryByTestId } = band({
+      tiles: [
+        { title: 'Build at AI speed.', description: 'Go from commit to a live URL in minutes.' }
+      ]
     })
 
-    expect(getByRole('img', { name: 'A branch diagram of two environments' })).toHaveAttribute(
-      'src',
-      artworkTiles[0]?.image
-    )
+    const tile = getAllByTestId(TILE_TESTID)[0]
+    expect(queryByTestId('illustration')).toBeNull()
+    expect(tile?.querySelector('img')).toBeNull()
+    expect(tile?.hasAttribute('data-media')).toBe(false)
   })
 
   it('renders an illustrated tile without an image', () => {

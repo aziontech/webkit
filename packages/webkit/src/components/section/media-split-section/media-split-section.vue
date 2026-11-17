@@ -31,20 +31,6 @@
     props?: Record<string, unknown>
   }
 
-  /** A picture drawn in the media cell. */
-  export type MediaSplitSectionImage = {
-    /** URL of the picture. */
-    src: string
-    /** Alternative text describing the picture; empty keeps it decorative. */
-    alt?: string
-    /** Intrinsic width of the picture, in pixels. */
-    width?: number
-    /** Intrinsic height of the picture, in pixels. */
-    height?: number
-    /** Sets the picture whole on a rounded, bordered plate inset in the cell instead of covering the cell, for a badge, a logo or a screenshot. */
-    framed?: boolean
-  }
-
   /** Button variant of an action, overriding the one the band draws. */
   export type MediaSplitSectionActionVariant = 'secondary' | 'outline' | 'ghost'
 
@@ -85,9 +71,7 @@
     scene?: MediaSplitSectionScene
     /** Name of the product console widget drawn in the media cell when no scene is set. */
     widget?: ConsoleMockupName
-    /** Picture drawn in the media cell when neither a scene nor a widget is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. */
-    image?: MediaSplitSectionImage
-    /** Registry name of the illustration drawn in the media cell when no other media is set. */
+    /** Registry name of the illustration drawn in the media cell when neither a scene nor a widget is set. */
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
@@ -108,7 +92,6 @@
     linked: true,
     scene: undefined,
     widget: undefined,
-    image: undefined,
     illustration: '',
     illustrationAriaLabel: '',
     primaryAction: undefined,
@@ -135,19 +118,16 @@
       : null
   )
 
-  const hasImage = computed(() => Boolean(props.image?.src))
-
   const media = computed(() => {
     if (sceneComponent.value) return 'scene'
     if (props.widget) return 'widget'
-    if (hasImage.value) return props.image?.framed ? 'framed-image' : 'image'
     if (props.illustration.length > 0) return 'illustration'
     return null
   })
 
   const hasMedia = computed(() => media.value !== null)
 
-  const mediaPadded = computed(() => media.value === 'widget' || media.value === 'framed-image')
+  const mediaPadded = computed(() => media.value === 'widget')
 
   const mockup = computed(
     () =>
@@ -176,7 +156,7 @@
       (bare) => {
         if (bare)
           console.warn(
-            `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. Give it an illustration, an image or a scene; code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.`
+            `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. Give it an illustration, a widget or a scene; code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.`
           )
       },
       { immediate: true }
@@ -240,32 +220,6 @@
             :is="sceneComponent"
             v-else-if="media === 'scene'"
             v-bind="scene?.props ?? {}"
-          />
-          <div
-            v-else-if="media === 'framed-image'"
-            class="flex w-full items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) p-(--spacing-md)"
-          >
-            <img
-              :src="image?.src"
-              :alt="image?.alt ?? ''"
-              :width="image?.width"
-              :height="image?.height"
-              :aria-hidden="image?.alt ? undefined : 'true'"
-              loading="lazy"
-              decoding="async"
-              class="block h-auto max-h-80 w-auto max-w-full object-contain"
-            />
-          </div>
-          <img
-            v-else-if="media === 'image'"
-            :src="image?.src"
-            :alt="image?.alt ?? ''"
-            :width="image?.width"
-            :height="image?.height"
-            :aria-hidden="image?.alt ? undefined : 'true'"
-            loading="lazy"
-            decoding="async"
-            class="h-full w-full object-cover"
           />
           <Illustration
             v-else-if="media === 'illustration'"

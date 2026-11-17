@@ -1,10 +1,9 @@
 <script setup>
-  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
   import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
 
   const bands = [
     {
-      image: quickStartWithTemplates,
+      illustration: 'quick-start-with-templates',
       eyebrow: 'Web applications',
       title: 'Modern applications',
       description: 'Build static sites, run serverless applications, or modernize legacy systems.',

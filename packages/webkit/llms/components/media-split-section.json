@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the webkit scene assets. The media is required and is a drawn asset: an illustration, an image (cover or framed) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.",
+ "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the webkit scene assets. The media is required and is a drawn asset: an illustration (a name of the illustration registry) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.",
  "setup": null,
  "useWhen": [
   "Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).",
@@ -27,13 +27,12 @@
   "`media-split-stack-section` — the stacked sibling for a run of claims."
  ],
  "bestPractices": [
-  "Give the band exactly one media: `scene`, `widget` (a `ConsoleMockup` name), `image` or `illustration`; when several are set the first of that order wins. A band with a title and no media logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON. A `Diagram` scene counts as no media.",
-  "Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.",
+  "Give the band exactly one media: `scene`, `widget` (a `ConsoleMockup` name) or `illustration` (a registry name); when several are set the first of that order wins. A band with a title and no media logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON. A `Diagram` scene counts as no media.",
   "Use `size=\"large\"` for a band that carries only its headline and description.",
   "Use `orientation=\"vertical\"` for a wide scene that needs the full width of the frame under the copy.",
   "Turn `linked` off when the media holds controls of its own, so a click in it is not taken as a click on the band.",
   "Set `anchor` when another part of the page links to the band.",
-  "Give an `image` its `width` and `height` so the page reserves its box before it loads."
+  "Name a registry scene in `illustration` for art; the band takes no picture URL."
  ],
  "props": [
   {
@@ -107,18 +106,11 @@
    "doc": "Name of the product console widget drawn in the media cell when no scene is set."
   },
   {
-   "name": "image",
-   "type": "MediaSplitSectionImage",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Picture drawn in the media cell when neither a scene nor a widget is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell."
-  },
-  {
    "name": "illustration",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Registry name of the illustration drawn in the media cell when no other media is set."
+   "doc": "Registry name of the illustration drawn in the media cell when neither a scene nor a widget is set."
   },
   {
    "name": "illustrationAriaLabel",

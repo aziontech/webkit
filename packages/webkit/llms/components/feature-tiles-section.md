@@ -1,6 +1,6 @@
 # Feature Tiles Section
 
-> The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+> The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 - Import: `import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -14,7 +14,7 @@
 ## Do
 
 - Match the tile count to the variant: four tiles for `artwork`, three for `illustrated`.
-- Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.
+- Give a tile its art as `illustration`, a name of the illustration registry; a tile without one renders without a picture. `scale` sizes the illustration in its frame.
 - Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band.
 
 ## Don’t
@@ -37,7 +37,7 @@
 | `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `tiles` | `FeatureTilesSectionTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale. |
+| `tiles` | `FeatureTilesSectionTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid above the caption, and `scale` its media scale. |
 
 ## Assets
 
@@ -49,13 +49,13 @@
 - `data-variant` mirrors the `variant` prop and drives the column count and the frame marks
 - Empty: when `tiles` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
-- A tile picture carries its `alt`; without one it is decorative (`alt=""`, `aria-hidden`)
+- A tile without an `illustration` renders without media; in the `artwork` layout an illustration is drawn in a 170:128 frame at the tile's width
 
 ## Accessibility
 
 - Visible focus: nothing in the band is interactive.
 - Keyboard map: none.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading; a tile picture is named by its `alt`, or hidden from assistive technology when `alt` is empty.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title` and `media-tile`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
@@ -66,8 +66,6 @@
 
 ```vue
 <script setup>
-  import branches from '@aziontech/webkit/assets/branches.svg'
-  import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
   import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'
 </script>
 
@@ -79,13 +77,13 @@
     description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
     :tiles="[
       {
-        image: branches,
+        illustration: 'branches',
         title: 'Build at AI speed.',
         description:
           'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
       },
       {
-        image: personalTokens,
+        illustration: 'personal-tokens',
         title: 'Secure by default.',
         description:
           'Every workload runs in its own isolated environment, with WAF, rate limits, and leading compliance practices. No configuration required.'
@@ -99,8 +97,6 @@
 
 ```vue
 <script setup>
-  import branches from '@aziontech/webkit/assets/branches.svg'
-  import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
   import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'
 </script>
 
@@ -113,13 +109,13 @@
       description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
       :tiles="[
         {
-          image: branches,
+          illustration: 'branches',
           title: 'Build at AI speed.',
           description:
             'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
         },
         {
-          image: personalTokens,
+          illustration: 'personal-tokens',
           title: 'Secure by default.',
           description:
             'Every workload runs in its own isolated environment, with WAF, rate limits, and leading compliance practices. No configuration required.'

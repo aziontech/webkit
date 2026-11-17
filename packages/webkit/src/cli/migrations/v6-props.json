@@ -1804,7 +1804,10 @@
       "removed": "a media band shows no code; set copyAriaLabel on each FeatureScrollSection item.code."
     },
     "diagram": {
-      "removed": "a media band shows no request-flow diagram; use ConsoleShowcaseSection with variant=\"diagram\" and the Diagram in its scene slot, or give the band an illustration, an image or a scene."
+      "removed": "a media band shows no request-flow diagram; use ConsoleShowcaseSection with variant=\"diagram\" and the Diagram in its scene slot, or give the band an illustration, a widget or a scene."
+    },
+    "image": {
+      "removed": "the sections take art from the illustration registry only; name a registry scene in illustration (with illustrationAriaLabel) instead of passing a picture URL."
     },
     "illustration": {
       "to": "illustration",

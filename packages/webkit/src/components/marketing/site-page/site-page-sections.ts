@@ -367,7 +367,11 @@ const legacyShapes: Record<string, (props: SitePageSectionProps) => SitePageSect
   'media-split-stack-section': (p) => ({
     ...without(p, 'kind', 'variant'),
     ...(Array.isArray(p['bands'])
-      ? { bands: records(p['bands']).map((band) => without(band, 'diagram')) }
+      ? {
+          bands: records(p['bands']).map((band) =>
+            without(band, 'diagram', 'image', 'imageAlt', 'imageFramed')
+          )
+        }
       : {})
   })
 }
@@ -416,17 +420,10 @@ export type SitePageResolvedEntry = {
 const pick = (props: SitePageSectionProps, ...keys: string[]): SitePageSectionProps =>
   Object.fromEntries(Object.entries(props).filter(([key]) => keys.includes(key)))
 
-const RETIRED_MEDIA = ['codeTabs', 'defaultFile', 'copyAriaLabel', 'diagram']
+const RETIRED_MEDIA = ['codeTabs', 'defaultFile', 'copyAriaLabel', 'diagram', 'image']
 
-const hasPicture = (p: SitePageSectionProps): boolean => {
-  const image = p['image']
-  return Boolean(
-    p['scene'] ||
-    p['widget'] ||
-    p['illustration'] ||
-    (image && typeof image === 'object' && (image as { src?: unknown }).src)
-  )
-}
+const hasPicture = (p: SitePageSectionProps): boolean =>
+  Boolean(p['scene'] || p['widget'] || p['illustration'])
 
 const codeSteps = (p: SitePageSectionProps): SitePageSectionProps[] => {
   const action = p['primaryAction'] ?? p['secondaryAction']

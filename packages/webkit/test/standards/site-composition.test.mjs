@@ -32,20 +32,25 @@ function networkBenefitIconGaps(props) {
     .map((benefit) => `benefit "${benefit.title}" has no icon`)
 }
 
-const RETIRED_MEDIA = ['codeTabs', 'defaultFile', 'copyAriaLabel', 'diagram']
+const RETIRED_MEDIA = [
+  'codeTabs',
+  'defaultFile',
+  'copyAriaLabel',
+  'diagram',
+  'image',
+  'imageAlt',
+  'imageFramed'
+]
 
 const drawn = (media) =>
   Boolean(
-    (media.scene && media.scene.component !== 'Diagram') ||
-    media.widget ||
-    media.illustration ||
-    (typeof media.image === 'string' ? media.image : media.image?.src)
+    (media.scene && media.scene.component !== 'Diagram') || media.widget || media.illustration
   )
 
 function mediaBandGaps(id, props) {
   const bands = id === 'media-split-stack-section' ? (props.bands ?? []) : [props]
   return bands.flatMap((band) => [
-    ...(drawn(band) ? [] : [`"${band.title}" has no illustration, image or scene`]),
+    ...(drawn(band) ? [] : [`"${band.title}" has no illustration, widget or scene`]),
     ...RETIRED_MEDIA.filter((key) => key in band).map((key) => `"${band.title}" sets ${key}`)
   ])
 }

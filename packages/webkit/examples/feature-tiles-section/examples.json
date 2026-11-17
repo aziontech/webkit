@@ -16,7 +16,7 @@
   "site": [
     {
       "name": "Artwork",
-      "summary": "The Why Azion band: an eyebrow, a title and a description over four tiles, each picture an image URL.",
+      "summary": "The Why Azion band: an eyebrow, a title and a description over four tiles, each picture a registry illustration.",
       "file": "site-artwork.vue",
       "json": "site-artwork.json"
     },

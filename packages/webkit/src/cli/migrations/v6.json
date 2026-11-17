@@ -1027,7 +1027,6 @@
     "MediaSplitBandOrientation": "MediaSplitSectionOrientation",
     "MediaSplitBandSceneName": "MediaSplitSectionSceneName",
     "MediaSplitBandScene": "MediaSplitSectionScene",
-    "MediaSplitBandImage": "MediaSplitSectionImage",
     "MediaSplitBandActionVariant": "MediaSplitSectionActionVariant",
     "MediaSplitBandAction": "MediaSplitSectionAction",
     "MediaSplitBandProps": "MediaSplitSectionProps",

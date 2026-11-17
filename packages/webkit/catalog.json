@@ -27026,7 +27026,7 @@
      "type": "FeatureTilesSectionTile[]",
      "default": "[]",
      "required": "false",
-     "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale."
+     "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid above the caption, and `scale` its media scale."
     }
    ],
    "surface": "site",
@@ -28225,18 +28225,11 @@
      "doc": "Name of the product console widget drawn in the media cell when no scene is set."
     },
     {
-     "name": "image",
-     "type": "MediaSplitSectionImage",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Picture drawn in the media cell when neither a scene nor a widget is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell."
-    },
-    {
      "name": "illustration",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Registry name of the illustration drawn in the media cell when no other media is set."
+     "doc": "Registry name of the illustration drawn in the media cell when neither a scene nor a widget is set."
     },
     {
      "name": "illustrationAriaLabel",
@@ -28305,7 +28298,7 @@
      "type": "MediaSplitStackSectionBand[]",
      "default": "[]",
      "required": "false",
-     "doc": "The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget`, `illustration` (with `illustrationLabel?`) or `image` (with `imageAlt?`, `imageFramed?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button."
+     "doc": "The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button."
     }
    ],
    "surface": "site",

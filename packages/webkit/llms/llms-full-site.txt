@@ -8466,7 +8466,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Feature Tiles Section
 
-> The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+> The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 - Import: `import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -8479,7 +8479,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - Match the tile count to the variant: four tiles for `artwork`, three for `illustrated`.
-- Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.
+- Give a tile its art as `illustration`, a name of the illustration registry; a tile without one renders without a picture. `scale` sizes the illustration in its frame.
 - Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band.
 
 ## Don’t
@@ -8501,7 +8501,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `tiles` | `FeatureTilesSectionTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale. |
+| `tiles` | `FeatureTilesSectionTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid above the caption, and `scale` its media scale. |
 
 ## Assets
 
@@ -8513,13 +8513,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-variant` mirrors the `variant` prop and drives the column count and the frame marks
 - Empty: when `tiles` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
-- A tile picture carries its `alt`; without one it is decorative (`alt=""`, `aria-hidden`)
+- A tile without an `illustration` renders without media; in the `artwork` layout an illustration is drawn in a 170:128 frame at the tile's width
 
 ## Accessibility
 
 - Visible focus: nothing in the band is interactive.
 - Keyboard map: none.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading; a tile picture is named by its `alt`, or hidden from assistive technology when `alt` is empty.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title` and `media-tile`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
@@ -8530,8 +8530,6 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import branches from '@aziontech/webkit/assets/branches.svg'
-  import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
   import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'
 </script>
 
@@ -8543,13 +8541,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
     :tiles="[
       {
-        image: branches,
+        illustration: 'branches',
         title: 'Build at AI speed.',
         description:
           'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
       },
       {
-        image: personalTokens,
+        illustration: 'personal-tokens',
         title: 'Secure by default.',
         description:
           'Every workload runs in its own isolated environment, with WAF, rate limits, and leading compliance practices. No configuration required.'
@@ -9859,7 +9857,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Media Split Section
 
-> One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the webkit scene assets. The media is required and is a drawn asset: an illustration, an image (cover or framed) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
+> One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the webkit scene assets. The media is required and is a drawn asset: an illustration (a name of the illustration registry) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
 
 - Import: `import MediaSplitSection from '@aziontech/webkit/media-split-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -9872,13 +9870,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Do
 
-- Give the band exactly one media: `scene`, `widget` (a `ConsoleMockup` name), `image` or `illustration`; when several are set the first of that order wins. A band with a title and no media logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON. A `Diagram` scene counts as no media.
-- Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.
+- Give the band exactly one media: `scene`, `widget` (a `ConsoleMockup` name) or `illustration` (a registry name); when several are set the first of that order wins. A band with a title and no media logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON. A `Diagram` scene counts as no media.
 - Use `size="large"` for a band that carries only its headline and description.
 - Use `orientation="vertical"` for a wide scene that needs the full width of the frame under the copy.
 - Turn `linked` off when the media holds controls of its own, so a click in it is not taken as a click on the band.
 - Set `anchor` when another part of the page links to the band.
-- Give an `image` its `width` and `height` so the page reserves its box before it loads.
+- Name a registry scene in `illustration` for art; the band takes no picture URL.
 
 ## Don’t
 
@@ -9907,8 +9904,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `linked` | `boolean` | `true` | false | Links the whole band to a lone action; turn it off when the media holds controls of its own. |
 | `scene` | `MediaSplitSectionScene` | `undefined` | false | Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset other than `Diagram` and the props bound onto it; wins over every other media. |
 | `widget` | `ConsoleMockupName` | `undefined` | false | Name of the product console widget drawn in the media cell when no scene is set. |
-| `image` | `MediaSplitSectionImage` | `undefined` | false | Picture drawn in the media cell when neither a scene nor a widget is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. |
-| `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when no other media is set. |
+| `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when neither a scene nor a widget is set. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible name of the illustration; empty keeps it decorative. |
 | `primaryAction` | `MediaSplitSectionAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it; `variant` overrides the drawn variant. |
 | `secondaryAction` | `MediaSplitSectionAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked. |
@@ -9926,7 +9922,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - With exactly one action the band is a link to that action's `href` (unless `linked` is `false`), and that lone action renders as an outlined button closed by the trailing chevron; with two the first is secondary, the second outlined, and the band is not a link
 - `size="medium"` aligns the copy to the top of the media, `size="large"` centres it
 - `orientation` and `texture` are forwarded to the media split
-- Media precedence: `scene`, `widget`, `image`, `illustration`. A widget and a framed image are inset from the cell's edges (`media-split`'s `mediaPadded`); a scene, a plain image (which covers the cell) and an illustration run flush
+- Media precedence: `scene`, `widget`, `illustration`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`); a scene and an illustration run flush
 - A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Scenes and the widget load on demand (`defineAsyncComponent`)
 - An action's `variant` (`secondary`, `outline`, `ghost`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
@@ -9935,7 +9931,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visible focus: owned by `button` and `media-split`.
 - Keyboard map: `Tab` moves through the actions, and through the media link when the band links.
-- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an image is named by `alt`, an illustration by `illustrationAriaLabel`, and both are decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
+- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an illustration is named by `illustrationAriaLabel`, and is decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
 - Touch target ≥40×40 px — the medium buttons meet it.
@@ -9968,7 +9964,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Media Split Stack Section
 
-> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup` and `button`. Every band has a picture, and it is a drawn asset: a registered `scene`, a `ConsoleMockup` console mock (`widget`, itself a registered scene), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. The band type is a union that requires one of them; request-flow diagrams and code do not go in a media band. Every band sets its picture at the closing end, so the run reads down one edge.
+> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup` and `button`. Every band has a picture, and it is a drawn asset: a registered `scene`, a `ConsoleMockup` console mock (`widget`, itself a registered scene), or a registry `illustration`. The band type is a union that requires one of them; request-flow diagrams and code do not go in a media band. Every band sets its picture at the closing end, so the run reads down one edge.
 
 - Import: `import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -9980,8 +9976,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Do
 
-- Give every band one picture: `scene`, `widget` (a `ConsoleMockup` name — the product's console screen), `illustration` (a registry name, with `illustrationLabel`) or `image` (a URL, with `imageAlt` when it says something). The type requires one; when several are set the first in that order wins. Page JSON is untyped, so a band with none renders without its media cell, logs a development warning, and fails the site-composition check (`test/standards/site-composition.test.mjs`). A `Diagram` scene counts as none.
-- Set `imageFramed` for a picture that is an object rather than a scene — a badge, a logo, a screenshot: it sits whole on a rounded, bordered plate inset in the cell. A plain `image` is scaled to fit the cell and never overflows it.
+- Give every band one picture: `scene`, `widget` (a `ConsoleMockup` name — the product's console screen), or `illustration` (a name of the illustration registry, with `illustrationLabel`); a band takes no picture URL. The type requires one; when several are set the first in that order wins. Page JSON is untyped, so a band with none renders without its media cell, logs a development warning, and fails the site-composition check (`test/standards/site-composition.test.mjs`). A `Diagram` scene counts as none.
 - Give every band an `action`; it is both the button and the link the whole band follows.
 
 ## Don’t
@@ -10003,7 +9998,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`. |
 | `description` | `string` | `''` | false | Supporting sentence under the section title. |
-| `bands` | `MediaSplitStackSectionBand[]` | `[]` | false | The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget`, `illustration` (with `illustrationLabel?`) or `image` (with `imageAlt?`, `imageFramed?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. |
+| `bands` | `MediaSplitStackSectionBand[]` | `[]` | false | The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button. |
 
 ## Assets
 
@@ -10016,7 +10011,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
 - The header renders only when `title` is set; a band renders its button only when it has an `action`, links as a whole to its `href` (or its action's when it has none), and renders its media cell only when it has a picture; a band's `eyebrow` sits above its headline
 - Band headlines are `h2` when the run has no header and `h3` under the section title, so the outline never repeats a level
-- Media precedence per band: `scene`, then `widget`, then `illustration`, then `image`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
+- Media precedence per band: `scene`, then `widget`, then `illustration`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`); a scene and an illustration run flush
 - A widget plays its beat while the pointer is over its band (`hover`), and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - The widget loads on demand (`defineAsyncComponent`): a run that uses none never downloads it
 
@@ -10024,7 +10019,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.
@@ -10035,12 +10030,11 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
   import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
 
   const bands = [
     {
-      image: quickStartWithTemplates,
+      illustration: 'quick-start-with-templates',
       eyebrow: 'Web applications',
       title: 'Modern applications',
       description: 'Build static sites, run serverless applications, or modernize legacy systems.',

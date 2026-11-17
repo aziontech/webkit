@@ -3,18 +3,18 @@ name: media-split-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: 2b0f1e52d4ac321c40a3339027bea12329fdb3c3076a7e00ddb5ae7819c95d34
+last_updated: 2026-11-17
+checksum: ad562d2920ec5254ca271c951d511c21b4572dd0759b4fdabdbf3d671e4da2a0
 ---
 
 # MediaSplitSection — Component Spec
 
 ## Purpose
 
-One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the webkit scene assets. The media is required and is a drawn asset: an illustration, an image (cover or framed) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
+One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the webkit scene assets. The media is required and is a drawn asset: an illustration (a name of the illustration registry) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
 
 ## When to use
 
@@ -37,13 +37,12 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ## Best practices
 
-- Give the band exactly one media: `scene`, `widget` (a `ConsoleMockup` name), `image` or `illustration`; when several are set the first of that order wins. A band with a title and no media logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON. A `Diagram` scene counts as no media.
-- Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.
+- Give the band exactly one media: `scene`, `widget` (a `ConsoleMockup` name) or `illustration` (a registry name); when several are set the first of that order wins. A band with a title and no media logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON. A `Diagram` scene counts as no media.
 - Use `size="large"` for a band that carries only its headline and description.
 - Use `orientation="vertical"` for a wide scene that needs the full width of the frame under the copy.
 - Turn `linked` off when the media holds controls of its own, so a click in it is not taken as a click on the band.
 - Set `anchor` when another part of the page links to the band.
-- Give an `image` its `width` and `height` so the page reserves its box before it loads.
+- Name a registry scene in `illustration` for art; the band takes no picture URL.
 
 ## Usage
 
@@ -77,8 +76,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 | `linked`                | `boolean`                      | `true`         | false    | Links the whole band to a lone action; turn it off when the media holds controls of its own.                                                                                                                                        |
 | `scene`                 | `MediaSplitSectionScene`       | `undefined`    | false    | Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset other than `Diagram` and the props bound onto it; wins over every other media.                                                                   |
 | `widget`                | `ConsoleMockupName`            | `undefined`    | false    | Name of the product console widget drawn in the media cell when no scene is set.                                                                                                                                                    |
-| `image`                 | `MediaSplitSectionImage`       | `undefined`    | false    | Picture drawn in the media cell when neither a scene nor a widget is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell.                                  |
-| `illustration`          | `string`                       | `''`           | false    | Registry name of the illustration drawn in the media cell when no other media is set.                                                                                                                                               |
+| `illustration`          | `string`                       | `''`           | false    | Registry name of the illustration drawn in the media cell when neither a scene nor a widget is set.                                                                                                                                 |
 | `illustrationAriaLabel` | `string`                       | `''`           | false    | Accessible name of the illustration; empty keeps it decorative.                                                                                                                                                                     |
 | `primaryAction`         | `MediaSplitSectionAction`      | `undefined`    | false    | First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it; `variant` overrides the drawn variant. |
 | `secondaryAction`       | `MediaSplitSectionAction`      | `undefined`    | false    | Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked.                                                                                         |
@@ -99,7 +97,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 - With exactly one action the band is a link to that action's `href` (unless `linked` is `false`), and that lone action renders as an outlined button closed by the trailing chevron; with two the first is secondary, the second outlined, and the band is not a link
 - `size="medium"` aligns the copy to the top of the media, `size="large"` centres it
 - `orientation` and `texture` are forwarded to the media split
-- Media precedence: `scene`, `widget`, `image`, `illustration`. A widget and a framed image are inset from the cell's edges (`media-split`'s `mediaPadded`); a scene, a plain image (which covers the cell) and an illustration run flush
+- Media precedence: `scene`, `widget`, `illustration`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`); a scene and an illustration run flush
 - A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Scenes and the widget load on demand (`defineAsyncComponent`)
 - An action's `variant` (`secondary`, `outline`, `ghost`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
@@ -110,13 +108,11 @@ _none_
 
 ## Tokens
 
-| Region                | Token (DESIGN.md)                                                |
-| --------------------- | ---------------------------------------------------------------- |
-| media cell fill       | `var(--bg-surface)`                                              |
-| frame rules and marks | `var(--border-default)`                                          |
-| framed image plate    | `var(--bg-canvas)`, `var(--border-default)`, `var(--shape-card)` |
-| framed image inset    | `var(--spacing-md)`                                              |
-| anchor scroll offset  | `var(--spacing-2xl)`                                             |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| media cell fill       | `var(--bg-surface)`     |
+| frame rules and marks | `var(--border-default)` |
+| anchor scroll offset  | `var(--spacing-2xl)`    |
 
 ## Theme gaps
 
@@ -128,7 +124,7 @@ _none_
 
 - Visible focus: owned by `button` and `media-split`.
 - Keyboard map: `Tab` moves through the actions, and through the media link when the band links.
-- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an image is named by `alt`, an illustration by `illustrationAriaLabel`, and both are decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
+- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an illustration is named by `illustrationAriaLabel`, and is decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
 - Touch target ≥40×40 px — the medium buttons meet it.
@@ -148,7 +144,7 @@ _none_
 ## Responsive
 
 - Container queries: none; `media-split` stacks the media under the copy below `lg`.
-- Narrow (≤ 640 px): one column; a widget and a framed image scale down with the cell.
+- Narrow (≤ 640 px): one column; a widget and an illustration scale down with the cell.
 - Touch: a widget shows its finished state instead of the hover beat.
 - Reflow: no horizontal scroll at 320 px.
 
@@ -161,7 +157,7 @@ _none_
 ## Examples
 
 - Default
-- Product media — the band with a `ConsoleMockup`, then with a framed image (justified: `widget` and `image.framed` are render paths the default does not reach).
+- Product media — the band with a `ConsoleMockup`, then with a registry `illustration` (justified: `widget` and `illustration` are render paths the default does not reach).
 - Vertical — a wide scene stacked under the copy with `orientation="vertical"`, a lone outlined action and `linked` off (justified: the vertical split and the unlinked lone action are layouts the default does not reach).
 
 ## Constraints — DO NOT
