@@ -539,7 +539,8 @@ export const footer = {
 
 export const appHeader = {
   label: 'Global header',
-  home: 'Azion home'
+  home: 'Azion home',
+  productHome: 'Azion {product} home'
 } as const
 
 export const helpPanel = {

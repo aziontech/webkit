@@ -3,9 +3,9 @@ name: doc-layout
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: 2dbdeaf749f3107697725a3cdf9665d20725830cdd3d640e4b4057feeda7d1f8
+checksum: bde8f55aabf8e2e169008b11d6a50cb234e9db61ea711680233a5c6182e21f22
 created: 2026-11-12
 last_updated: 2026-11-17
 ---
@@ -138,7 +138,7 @@ A page (the route's component) is only its article; its anchored headings fill t
 | ----------------------------- | ------------------------------------- | ------------------------------------------------- | --------------------------------------------- |
 | rail collapse, expand, resize | `Sidebar` rail width and panel slide  | component                                         | handled by `Sidebar`                          |
 | outline jump                  | smooth window scroll                  | browser                                           | instant scroll under `prefers-reduced-motion` |
-| brand hover                   | `transition-opacity` on the mark link | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none`               |
+| brand hover                   | `transition-opacity` on the `AppHeader.Brand` link | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none`               |
 | drawer, palette               | `Drawer`, `Command`                   | component                                         | handled by those components                   |
 
 ## Tokens
@@ -149,7 +149,7 @@ A page (the route's component) is only its article; its anchored headings fill t
 | sticky rail offset | `var(--layout-header-height)`                                                                                  |
 | rail widths        | `var(--container-2xs)` (navigation, natural width through `--sidebar-width`), `var(--container-3xs)` (outline) |
 | rail rules         | `var(--border-default)`                                                                                        |
-| badge              | `.text-overline-sm`, `var(--text-muted)`, `var(--border-muted)`                                                |
+| badge              | `AppHeader.Brand` `label` (`.text-overline-sm`, `var(--text-muted)`, `var(--border-muted)`)                    |
 | end rail padding   | `var(--spacing-md)`, `var(--spacing-lg)`                                                                       |
 | gaps               | `var(--spacing-xs)`, `var(--spacing-lg)`                                                                       |
 | ring               | `var(--ring-color)`, offset `var(--bg-canvas)`                                                                 |
@@ -204,7 +204,7 @@ A page (the route's component) is only its article; its anchored headings fill t
 
 ## Performance
 
-- Bundle budget: 68.4 KB gzip for `./doc-layout` in `.size-limit.json` (68.35 KB measured; it pulls `AppHeader`, `NavigationMenu`, `Sidebar`, `SidebarMenu`, `Drawer`, `DocOnThisPage` and `Command`).
+- Bundle budget: 69.1 KB gzip for `./doc-layout` in `.size-limit.json` (69.03 KB measured; it pulls `AppHeader`, `NavigationMenu`, `Sidebar`, `SidebarMenu`, `Drawer`, `DocOnThisPage` and `Command`).
 - Runtime budget: the rail's pointer listeners exist only while dragging (owned by `Sidebar`); one passive `scroll` listener (throttled to one read per animation frame); heading registration is one entry per anchored heading, ordered by document position when the outline is read; one `popstate` listener without a router.
 - Heavy parts: none beyond the composed components.
 

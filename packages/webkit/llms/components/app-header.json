@@ -31,6 +31,7 @@
   "Keep the default `variant=\"content\"` for app shells; use `variant=\"site\"` only on framed marketing pages.",
   "Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.",
   "Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href=\"/\" aria-label=\"Azion home\">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).",
+  "Name the product beside the mark with `label` on `AppHeader.Brand` (`label=\"Docs\"`, `label=\"Console\"`) instead of a `Tag` or a hand-made span: the brand draws the one product lockup every Azion header shares.",
   "Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.",
   "Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.",
   "Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`)."
@@ -77,12 +78,12 @@
    "file": "examples/app-header/default.vue"
   },
   {
-   "name": "ContentZone",
-   "file": "examples/app-header/content-zone.vue"
+   "name": "WithLabel",
+   "file": "examples/app-header/with-label.vue"
   },
   {
-   "name": "SitePlacement",
-   "file": "examples/app-header/site-placement.vue"
+   "name": "ContentZone",
+   "file": "examples/app-header/content-zone.vue"
   }
  ],
  "docs": "components/app-header.md"

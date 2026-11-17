@@ -19,6 +19,7 @@
 - Keep the default `variant="content"` for app shells; use `variant="site"` only on framed marketing pages.
 - Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.
 - Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href="/" aria-label="Azion home">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).
+- Name the product beside the mark with `label` on `AppHeader.Brand` (`label="Docs"`, `label="Console"`) instead of a `Tag` or a hand-made span: the brand draws the one product lockup every Azion header shares.
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
 - Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`).
@@ -63,7 +64,7 @@ The regions are named start / center / end, not left / right, because the bar mi
 right-to-left: the start region is on the right there. 6.0 removed the physical names (`Left`,
 `Middle`, `Nav`, `Right`). The parts derive `__start`, `__center` and `__end` testids from the root.
 
-- `app-header-brand.vue` — `AppHeader.Brand`. Brand slot wrapper sized for Azion logo SVGs (default / min). Props `href?: string` (default `''`; when set the brand renders as an anchor to it, and `data-link` on the root carries the link styling: a 40px minimum hit area (44px on `pointer: coarse`), the `--ring-color` focus ring offset against `--bg-surface`, and an opacity hover with a `motion-reduce` fallback; empty renders the plain `div`, unchanged) and `ariaLabel?: string` (default `''`; the link's accessible name, written `aria-label="…"` by the consumer; empty with `href` set uses the locale catalog `appHeader.home`, `Azion home` in English). No events.
+- `app-header-brand.vue` — `AppHeader.Brand`. Brand slot wrapper sized for Azion logo SVGs (default / min). Props `href?: string` (default `''`; when set the brand renders as an anchor to it, and `data-link` on the root carries the link styling: a 40px minimum hit area (44px on `pointer: coarse`), the `--ring-color` focus ring offset against `--bg-surface`, and an opacity hover with a `motion-reduce` fallback; empty renders the plain `div`, unchanged), `ariaLabel?: string` (default `''`; the link's accessible name, written `aria-label="…"` by the consumer; empty with `href` set uses the locale catalog `appHeader.home`, `Azion home` in English) and `label?: string` (default `''`; the product name drawn after the slotted mark as an uppercase label in `.text-overline-sm`, `--text-muted`, inside a `--border-muted` hairline box with `--shape-control` corners and `--spacing-2xs` inline padding, `--spacing-xs` from the mark; `data-label` on the root and `${testId}__label` on the label; empty draws nothing and leaves the part unchanged). With `href` set and no `ariaLabel`, a label names the link from the locale catalog `appHeader.productHome` (`Azion {product} home`, e.g. `Azion Docs home`) instead of `appHeader.home`. No events.
 
 ## States
 
@@ -71,12 +72,14 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - Placement: `data-variant="content" | "site"` on the root (from `variant`).
 - No interactive states on the shell; children own focus/hover/disabled.
 - `AppHeader.Brand` with `href`: `data-link` on its anchor; hover (opacity) and `focus-visible` (ring) are its only states.
+- `AppHeader.Brand` with `label`: `data-label` on its root; the label is static (no states of its own).
 
 ## Accessibility
 
 - Root renders as `<header role="banner">` with `aria-label` from `ariaLabel`.
 - Keyboard map: none on the shell; interactive children supply Tab order.
 - ARIA: landmark only on root. `AppHeader.Brand` with `href` is a native anchor named by `ariaLabel` (locale fallback `appHeader.home`), so the logo link always has an accessible name; without `href` it stays a non-interactive `div`.
+- Brand label: with `href` the visible `label` is `aria-hidden` and the link name says where it goes, product included (`appHeader.productHome`, `Azion Docs home`), so the product is read once and the visible word is inside the name (WCAG 2.5.3); a consumer `aria-label` should keep the product word. Without `href` the label stays readable text after the mark. Spacing is logical (`gap`, `px`), so the label follows the mark in the inline direction under `dir="rtl"`.
 - Keyboard (brand link): Tab reaches it, Enter follows it; the `focus-visible` ring uses `--ring-color`.
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).
@@ -100,6 +103,33 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
         aria-label="Azion home"
       >
         <Default />
+      </AppHeader.Brand>
+    </AppHeader.Start>
+    <AppHeader.Center />
+    <AppHeader.End />
+  </AppHeader>
+</template>
+```
+
+### WithLabel
+
+```vue
+<script setup>
+  import AppHeader from '@aziontech/webkit/app-header'
+  import Brand from '@aziontech/webkit/brand'
+</script>
+
+<template>
+  <AppHeader aria-label="Global header">
+    <AppHeader.Start>
+      <AppHeader.Brand
+        href="/"
+        label="Console"
+      >
+        <Brand
+          variant="default"
+          size="small"
+        />
       </AppHeader.Brand>
     </AppHeader.Start>
     <AppHeader.Center />
@@ -141,62 +171,6 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
         Manage the pages served for an error or a maintenance window.
       </p>
     </div>
-  </div>
-</template>
-```
-
-### SitePlacement
-
-```vue
-<script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
-</script>
-
-<template>
-  <div class="flex w-full flex-col bg-(--bg-canvas)">
-    <AppHeader
-      variant="site"
-      aria-label="Azion"
-    >
-      <AppHeader.Brand
-        href="/"
-        aria-label="Azion home"
-      >
-        <Brand
-          variant="default"
-          size="small"
-        />
-      </AppHeader.Brand>
-      <AppHeader.Center>
-        <div class="flex w-full min-w-0 items-center">
-          <a
-            class="text-label-md text-(--text-default) no-underline"
-            href="/pricing"
-            >Pricing</a
-          >
-        </div>
-      </AppHeader.Center>
-      <AppHeader.End>
-        <Button
-          label="Start for free"
-          variant="primary"
-          size="medium"
-        />
-      </AppHeader.End>
-    </AppHeader>
-    <section
-      class="mx-auto w-full max-w-(--layout-measure-site) px-(--layout-boundary-inline) py-(--spacing-xl)"
-    >
-      <h1 class="text-heading-xl text-(--text-default)">
-        Distributed infrastructure for modern workloads
-      </h1>
-      <p class="text-body-md text-(--text-muted)">
-        The page frame is one rung narrower than the bar above it: the two share an inset until the
-        window passes their caps.
-      </p>
-    </section>
   </div>
 </template>
 ```

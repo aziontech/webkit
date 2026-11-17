@@ -25338,6 +25338,7 @@ packages/webkit/src/components/input/radio-group/
 - Keep the default `variant="content"` for app shells; use `variant="site"` only on framed marketing pages.
 - Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.
 - Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href="/" aria-label="Azion home">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).
+- Name the product beside the mark with `label` on `AppHeader.Brand` (`label="Docs"`, `label="Console"`) instead of a `Tag` or a hand-made span: the brand draws the one product lockup every Azion header shares.
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
 - Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`).
@@ -25389,12 +25390,14 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - Placement: `data-variant="content" | "site"` on the root (from `variant`).
 - No interactive states on the shell; children own focus/hover/disabled.
 - `AppHeader.Brand` with `href`: `data-link` on its anchor; hover (opacity) and `focus-visible` (ring) are its only states.
+- `AppHeader.Brand` with `label`: `data-label` on its root; the label is static (no states of its own).
 
 ## Accessibility
 
 - Root renders as `<header role="banner">` with `aria-label` from `ariaLabel`.
 - Keyboard map: none on the shell; interactive children supply Tab order.
 - ARIA: landmark only on root. `AppHeader.Brand` with `href` is a native anchor named by `ariaLabel` (locale fallback `appHeader.home`), so the logo link always has an accessible name; without `href` it stays a non-interactive `div`.
+- Brand label: with `href` the visible `label` is `aria-hidden` and the link name says where it goes, product included (`appHeader.productHome`, `Azion Docs home`), so the product is read once and the visible word is inside the name (WCAG 2.5.3); a consumer `aria-label` should keep the product word. Without `href` the label stays readable text after the mark. Spacing is logical (`gap`, `px`), so the label follows the mark in the inline direction under `dir="rtl"`.
 - Keyboard (brand link): Tab reaches it, Enter follows it; the `focus-visible` ring uses `--ring-color`.
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).

@@ -14,11 +14,14 @@
     href?: string
     /** Accessible name for the brand link. Empty uses the locale catalog (`Azion home`) when href is set. */
     ariaLabel?: string
+    /** Product name drawn beside the mark as an uppercase outlined label. Empty draws no label. */
+    label?: string
   }
 
   const props = withDefaults(defineProps<AppHeaderBrandProps>(), {
     href: '',
-    ariaLabel: ''
+    ariaLabel: '',
+    label: ''
   })
 
   defineSlots<{
@@ -30,8 +33,14 @@
 
   const isLink = computed(() => props.href.length > 0)
 
+  const hasLabel = computed(() => props.label.length > 0)
+
+  const linkName = computed(() =>
+    hasLabel.value ? t('appHeader.productHome', { product: props.label }) : t('appHeader.home')
+  )
+
   const accessibleName = computed(() =>
-    isLink.value ? props.ariaLabel || t('appHeader.home') : props.ariaLabel || undefined
+    isLink.value ? props.ariaLabel || linkName.value : props.ariaLabel || undefined
   )
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'app-header-brand')
@@ -45,8 +54,16 @@
     :aria-label="accessibleName"
     :data-testid="testId"
     :data-link="isLink || null"
-    class="flex shrink-0 items-center [&_svg]:block [&_svg]:h-[18px] [&_svg]:w-auto [&_svg]:max-w-full data-[link]:min-h-10 data-[link]:self-center data-[link]:rounded-(--shape-control) data-[link]:transition-opacity data-[link]:duration-fast-02 data-[link]:ease-productive-entrance data-[link]:hover:opacity-80 data-[link]:focus-visible:outline-none data-[link]:focus-visible:ring-2 data-[link]:focus-visible:ring-(--ring-color) data-[link]:focus-visible:ring-offset-2 data-[link]:focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none pointer-coarse:data-[link]:min-h-11"
+    :data-label="hasLabel || null"
+    class="flex shrink-0 items-center data-[label]:gap-(--spacing-xs) [&_svg]:block [&_svg]:h-[18px] [&_svg]:w-auto [&_svg]:max-w-full data-[link]:min-h-10 data-[link]:self-center data-[link]:rounded-(--shape-control) data-[link]:transition-opacity data-[link]:duration-fast-02 data-[link]:ease-productive-entrance data-[link]:hover:opacity-80 data-[link]:focus-visible:outline-none data-[link]:focus-visible:ring-2 data-[link]:focus-visible:ring-(--ring-color) data-[link]:focus-visible:ring-offset-2 data-[link]:focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none pointer-coarse:data-[link]:min-h-11"
   >
     <slot />
+    <span
+      v-if="hasLabel"
+      :aria-hidden="isLink || undefined"
+      :data-testid="`${testId}__label`"
+      class="rounded-(--shape-control) border border-(--border-muted) px-(--spacing-2xs) text-overline-sm text-(--text-muted)"
+      >{{ label }}</span
+    >
   </component>
 </template>

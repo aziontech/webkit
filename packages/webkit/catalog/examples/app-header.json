@@ -6,14 +6,14 @@
    "file": "examples/app-header/default.vue"
   },
   {
+   "name": "WithLabel",
+   "summary": "The brand link with a product label: `label=\"Console\"` draws the product name beside the Azion mark as an uppercase outlined label, the same lockup the docs header uses. The link is named `Azion Console home` from the locale catalog, and the visible label is hidden from assistive technology so the name is read once.",
+   "file": "examples/app-header/with-label.vue"
+  },
+  {
    "name": "ContentZone",
    "summary": "The default placement, against a page: full bleed across the zone that holds it, with its regions inset by the page boundary — so the breadcrumb starts on the same vertical as the heading under it, and retuning the boundary moves both. The mock page is here to make that vertical visible.",
    "file": "examples/app-header/content-zone.vue"
-  },
-  {
-   "name": "SitePlacement",
-   "summary": "The marketing placement: the bar's surface still spans the window, but its regions are capped at the site header measure (`--layout-measure-site-header`) and centred, so the brand answers to the page instead of drifting to the window edge as the viewport grows. That cap is one rung wider than the page frame the hero, sections and footer share (`--layout-measure-site`): a bar carries the brand at one end and the account actions at the other, so it is the one band deliberately outside the frame.",
-   "file": "examples/app-header/site-placement.vue"
   }
  ]
 }

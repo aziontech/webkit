@@ -334,22 +334,15 @@
               class="shrink-0 lg:hidden"
               @click="drawerOpen = true"
             />
-            <AppHeaderBrand>
-              <a
-                :href="home"
-                :aria-label="t('docLayout.home')"
-                class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-              >
-                <Brand
-                  variant="default"
-                  size="small"
-                />
-                <span
-                  aria-hidden="true"
-                  class="rounded-(--shape-control) border border-(--border-muted) px-(--spacing-2xs) text-overline-sm text-(--text-muted)"
-                  >{{ t('docLayout.badge') }}</span
-                >
-              </a>
+            <AppHeaderBrand
+              :href="home"
+              :aria-label="t('docLayout.home')"
+              :label="t('docLayout.badge')"
+            >
+              <Brand
+                variant="default"
+                size="small"
+              />
             </AppHeaderBrand>
             <NavigationMenu
               v-if="sectionLinks.length"

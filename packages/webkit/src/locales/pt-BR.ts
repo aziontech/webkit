@@ -632,7 +632,8 @@ export const ptBR: Messages = {
   },
   appHeader: {
     label: 'Cabeçalho global',
-    home: 'Página inicial da Azion'
+    home: 'Página inicial da Azion',
+    productHome: 'Página inicial da Azion {product}'
   },
   helpPanel: {
     label: 'Ajuda',

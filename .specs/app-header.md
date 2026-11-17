@@ -3,11 +3,11 @@ name: app-header
 category: layout
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: d54a3b988cbfbfb637c92c5cd7033de4f66c3b9f93cee63f2c6943b8e940b5b0
+checksum: 119eb4cb815d9aa755afe75d2d08e587ee80620823776c26d6005796bba36d5e
 created: 2026-05-23
 last_updated: 2026-11-17
 ---
@@ -51,6 +51,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 - Keep the default `variant="content"` for app shells; use `variant="site"` only on framed marketing pages.
 - Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.
 - Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href="/" aria-label="Azion home">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).
+- Name the product beside the mark with `label` on `AppHeader.Brand` (`label="Docs"`, `label="Console"`) instead of a `Tag` or a hand-made span: the brand draws the one product lockup every Azion header shares.
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
 - Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`).
@@ -109,7 +110,7 @@ The regions are named start / center / end, not left / right, because the bar mi
 right-to-left: the start region is on the right there. 6.0 removed the physical names (`Left`,
 `Middle`, `Nav`, `Right`). The parts derive `__start`, `__center` and `__end` testids from the root.
 
-- `app-header-brand.vue` — `AppHeader.Brand`. Brand slot wrapper sized for Azion logo SVGs (default / min). Props `href?: string` (default `''`; when set the brand renders as an anchor to it, and `data-link` on the root carries the link styling: a 40px minimum hit area (44px on `pointer: coarse`), the `--ring-color` focus ring offset against `--bg-surface`, and an opacity hover with a `motion-reduce` fallback; empty renders the plain `div`, unchanged) and `ariaLabel?: string` (default `''`; the link's accessible name, written `aria-label="…"` by the consumer; empty with `href` set uses the locale catalog `appHeader.home`, `Azion home` in English). No events.
+- `app-header-brand.vue` — `AppHeader.Brand`. Brand slot wrapper sized for Azion logo SVGs (default / min). Props `href?: string` (default `''`; when set the brand renders as an anchor to it, and `data-link` on the root carries the link styling: a 40px minimum hit area (44px on `pointer: coarse`), the `--ring-color` focus ring offset against `--bg-surface`, and an opacity hover with a `motion-reduce` fallback; empty renders the plain `div`, unchanged), `ariaLabel?: string` (default `''`; the link's accessible name, written `aria-label="…"` by the consumer; empty with `href` set uses the locale catalog `appHeader.home`, `Azion home` in English) and `label?: string` (default `''`; the product name drawn after the slotted mark as an uppercase label in `.text-overline-sm`, `--text-muted`, inside a `--border-muted` hairline box with `--shape-control` corners and `--spacing-2xs` inline padding, `--spacing-xs` from the mark; `data-label` on the root and `${testId}__label` on the label; empty draws nothing and leaves the part unchanged). With `href` set and no `ariaLabel`, a label names the link from the locale catalog `appHeader.productHome` (`Azion {product} home`, e.g. `Azion Docs home`) instead of `appHeader.home`. No events.
 
 ## Props
 
@@ -136,6 +137,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - Placement: `data-variant="content" | "site"` on the root (from `variant`).
 - No interactive states on the shell; children own focus/hover/disabled.
 - `AppHeader.Brand` with `href`: `data-link` on its anchor; hover (opacity) and `focus-visible` (ring) are its only states.
+- `AppHeader.Brand` with `label`: `data-label` on its root; the label is static (no states of its own).
 
 ## Motion & Animations
 
@@ -160,6 +162,12 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 | ring (focus on children)              | `var(--ring-color)`                                                                                                        |
 | brand link focus ring offset          | `var(--bg-surface)`                                                                                                        |
 | brand link corner                     | `var(--shape-control)`                                                                                                     |
+| brand label type                      | `.text-overline-sm`                                                                                                        |
+| brand label text                      | `var(--text-muted)`                                                                                                        |
+| brand label border                    | `var(--border-muted)`                                                                                                      |
+| brand label corner                    | `var(--shape-control)`                                                                                                     |
+| brand label padding-inline            | `var(--spacing-2xs)`                                                                                                       |
+| brand mark-to-label gap               | `var(--spacing-xs)`                                                                                                        |
 
 ## Theme gaps
 
@@ -172,6 +180,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - Root renders as `<header role="banner">` with `aria-label` from `ariaLabel`.
 - Keyboard map: none on the shell; interactive children supply Tab order.
 - ARIA: landmark only on root. `AppHeader.Brand` with `href` is a native anchor named by `ariaLabel` (locale fallback `appHeader.home`), so the logo link always has an accessible name; without `href` it stays a non-interactive `div`.
+- Brand label: with `href` the visible `label` is `aria-hidden` and the link name says where it goes, product included (`appHeader.productHome`, `Azion Docs home`), so the product is read once and the visible word is inside the name (WCAG 2.5.3); a consumer `aria-label` should keep the product word. Without `href` the label stays readable text after the mark. Spacing is logical (`gap`, `px`), so the label follows the mark in the inline direction under `dir="rtl"`.
 - Keyboard (brand link): Tab reaches it, Enter follows it; the `focus-visible` ring uses `--ring-color`.
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).
@@ -180,6 +189,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 ## Examples
 
 - Default — the bar's anatomy: brand cluster, centre region, trailing actions.
+- WithLabel — the brand link with a product label (`label="Console"`), the lockup every Azion product header shares; shown because `label` is a prop the anatomy example does not cover.
 - ContentZone — the default placement shown against a mock page, for the one claim the anatomy cannot show: the first region and the page heading on one vertical.
 - SitePlacement — the `variant="site"` bar over a framed marketing column, its regions on the bar's own measure, one rung wider than the page frame.
 

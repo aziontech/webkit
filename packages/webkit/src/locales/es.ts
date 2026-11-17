@@ -632,7 +632,8 @@ export const es: Messages = {
   },
   appHeader: {
     label: 'Encabezado global',
-    home: 'Inicio de Azion'
+    home: 'Inicio de Azion',
+    productHome: 'Inicio de Azion {product}'
   },
   helpPanel: {
     label: 'Ayuda',

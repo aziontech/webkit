@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import ContentZone from '../../../../examples/app-header/content-zone.vue'
 import DefaultHeader from '../../../../examples/app-header/default.vue'
 import SitePlacement from '../../../../examples/app-header/site-placement.vue'
+import WithLabel from '../../../../examples/app-header/with-label.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import AppHeader from './index.js'
 
@@ -326,6 +327,76 @@ describe('AppHeader', () => {
           </AppHeader>
         `
       })
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('Brand — label names the product beside the mark', () => {
+    const mark = '<svg viewBox="0 0 10 10" aria-hidden="true"><rect width="10" height="10" /></svg>'
+
+    it('draws no label and no data-label when label is empty', () => {
+      const { getByTestId, queryByTestId } = render(AppHeader.Brand, {
+        props: { href: '/' },
+        slots: { default: mark }
+      })
+      expect(queryByTestId('app-header-brand__label')).toBeNull()
+      expect(getByTestId('app-header-brand').hasAttribute('data-label')).toBe(false)
+    })
+
+    it('renders the label text after the mark inside the link', () => {
+      const { getByTestId } = render(AppHeader.Brand, {
+        props: { href: '/', label: 'Docs' },
+        slots: { default: mark }
+      })
+      const brand = getByTestId('app-header-brand')
+      const label = getByTestId('app-header-brand__label')
+      expect(label.textContent).toBe('Docs')
+      expect(brand.contains(label)).toBe(true)
+      expect(brand.lastElementChild).toBe(label)
+      expect(brand.hasAttribute('data-label')).toBe(true)
+    })
+
+    it('names the link with the product from the locale catalog and hides the visible label', () => {
+      const { getByRole, getByTestId } = render(AppHeader.Brand, {
+        props: { href: '/', label: 'Docs' },
+        slots: { default: mark }
+      })
+      expect(getByRole('link', { name: 'Azion Docs home' })).toBe(getByTestId('app-header-brand'))
+      expect(getByTestId('app-header-brand__label').getAttribute('aria-hidden')).toBe('true')
+    })
+
+    it('keeps a consumer aria-label over the catalog name', () => {
+      const { getByRole } = render(AppHeader.Brand, {
+        attrs: { 'aria-label': 'WebKit home' },
+        props: { href: '/', label: 'WebKit' },
+        slots: { default: mark }
+      })
+      expect(getByRole('link', { name: 'WebKit home' })).toBeTruthy()
+    })
+
+    it('leaves the label readable when the brand is not a link', () => {
+      const { getByTestId } = render(AppHeader.Brand, {
+        props: { label: 'Console' },
+        slots: { default: mark }
+      })
+      const label = getByTestId('app-header-brand__label')
+      expect(label.hasAttribute('aria-hidden')).toBe(false)
+      expect(getByTestId('app-header-brand').hasAttribute('aria-label')).toBe(false)
+    })
+
+    it('carries a consumer test id to the label', () => {
+      const { getByTestId } = render(AppHeader.Brand, {
+        attrs: { 'data-testid': 'docs-brand' },
+        props: { href: '/', label: 'Docs' },
+        slots: { default: mark }
+      })
+      expect(getByTestId('docs-brand__label').textContent).toBe('Docs')
+    })
+
+    it('With label example names the Console home link and has no violations', async () => {
+      const { container, getByRole, getByTestId } = render(WithLabel)
+      expect(getByRole('link', { name: 'Azion Console home' })).toBeTruthy()
+      expect(getByTestId('app-header-brand__label').textContent).toBe('Console')
       await expectNoA11yViolations(container)
     })
   })
