@@ -28,6 +28,34 @@ export function initialOutputs(outputs) {
   return outputs.filter((o) => initial.has(o))
 }
 
+export function lazyEntries(outputs, counted) {
+  const byName = new Map(outputs.map((o) => [o.fileName, o]))
+  const seen = new Set(counted)
+  const closure = (start) => {
+    const own = []
+    const visit = (o) => {
+      if (!o || seen.has(o) || own.includes(o)) return
+      own.push(o)
+      if (o.type !== 'chunk') return
+      for (const name of o.imports ?? []) visit(byName.get(name))
+      for (const name of o.viteMetadata?.importedCss ?? []) visit(byName.get(name))
+    }
+    visit(start)
+    return own
+  }
+  const firstLevel = []
+  for (const o of counted) {
+    if (o.type !== 'chunk') continue
+    for (const name of o.dynamicImports ?? []) {
+      const target = byName.get(name)
+      if (target && !seen.has(target) && !firstLevel.includes(target)) firstLevel.push(target)
+    }
+  }
+  return firstLevel.map((o) => ({ fileName: o.fileName, outputs: closure(o) }))
+}
+
+const gzipOf = (o) => gzipSync(Buffer.from(o.type === 'chunk' ? o.code : o.source)).length
+
 async function gzippedSize(entryPath, { entryOnly = false } = {}) {
   const result = await build({
     root: PKG,
@@ -46,16 +74,21 @@ async function gzippedSize(entryPath, { entryOnly = false } = {}) {
   const outputs = (Array.isArray(result) ? result : [result]).flatMap((r) => r.output)
   const counted = entryOnly ? initialOutputs(outputs) : outputs
   let bytes = 0
-  for (const o of counted) {
-    const content = o.type === 'chunk' ? o.code : o.source
-    bytes += gzipSync(Buffer.from(content)).length
-  }
-  return { bytes, split: outputs.length - counted.length }
+  for (const o of counted) bytes += gzipOf(o)
+  const lazy = entryOnly
+    ? lazyEntries(outputs, counted).map((l) => ({
+        fileName: l.fileName,
+        bytes: l.outputs.reduce((sum, o) => sum + gzipOf(o), 0)
+      }))
+    : []
+  return { bytes, split: outputs.length - counted.length, lazy }
 }
 
 const kb = (n) => `${(n / 1024).toFixed(2)} KB`
 
-async function main(only) {
+async function main(args) {
+  const listLazy = args.includes('--lazy')
+  const only = args.filter((a) => !a.startsWith('--'))
   const all = JSON.parse(readFileSync(join(PKG, '.size-limit.json'), 'utf-8'))
   const entries = only.length ? all.filter((e) => only.includes(e.name)) : all
   const unknown = only.filter((name) => !all.some((e) => e.name === name))
@@ -67,7 +100,7 @@ async function main(only) {
 
   for (const e of entries) {
     const limit = limitToBytes(e.limit)
-    const { bytes: size, split } = await gzippedSize(e.path, { entryOnly: e.entryOnly })
+    const { bytes: size, split, lazy } = await gzippedSize(e.path, { entryOnly: e.entryOnly })
     const over = size > limit
     if (over) failures.push(e.name)
     const note = e.entryOnly
@@ -76,6 +109,9 @@ async function main(only) {
     console.log(
       `${over ? '✖' : '✓'} ${e.name.padEnd(18)} ${kb(size).padStart(10)}  (budget ${e.limit})${over ? '  OVER' : ''}${note}`
     )
+    if (listLazy)
+      for (const l of [...lazy].sort((a, b) => b.bytes - a.bytes))
+        console.log(`    lazy ${kb(l.bytes).padStart(10)}  ${l.fileName}`)
   }
 
   const exportsMap = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf-8')).exports ?? {}
