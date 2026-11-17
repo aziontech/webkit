@@ -1,6 +1,17 @@
 <script setup lang="ts">
   import { useEventListener } from '@vueuse/core'
-  import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
+  import {
+    Comment,
+    computed,
+    Fragment,
+    isVNode,
+    onMounted,
+    onScopeDispose,
+    ref,
+    Text,
+    useAttrs,
+    watch
+  } from 'vue'
 
   import Texture from '../texture/texture.vue'
 
@@ -47,7 +58,7 @@
     'active-index-change': [index: number]
   }>()
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** The claim's medium; replaces the image built from the item's own source. */
     media?(props: { item: StickyStackItem; index: number; active: boolean }): unknown
     /** The claim's own controls, under its description; shown while the claim is open. */
@@ -66,8 +77,11 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sticky-stack')
 
+  const DENSE_FROM = 6
+
   const count = computed(() => props.items.length)
   const hasItems = computed(() => count.value > 0)
+  const dense = computed(() => count.value >= DENSE_FROM)
   const span = computed(() => 1 + count.value * props.dwell)
   const activeItem = computed<StickyStackItem | null>(() => props.items[activeIndex.value] ?? null)
 
@@ -97,6 +111,20 @@
     globalThis.cancelAnimationFrame(pending)
     pending = null
   })
+
+  function hasActions(item: StickyStackItem, index: number): boolean {
+    return rendersContent(slots.actions?.({ item, index, active: isActive(index) }))
+  }
+
+  function rendersContent(nodes: unknown): boolean {
+    if (!Array.isArray(nodes)) return false
+    return nodes.some((node) => {
+      if (!isVNode(node) || node.type === Comment) return false
+      if (node.type === Fragment) return rendersContent(node.children)
+      if (node.type === Text) return String(node.children ?? '').trim().length > 0
+      return true
+    })
+  }
 
   function isActive(index: number): boolean {
     return index === activeIndex.value
@@ -176,7 +204,9 @@
             :key="`${item.title}-${index}`"
             :data-active="isActive(index) || null"
             :data-completed="index < activeIndex || null"
-            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow lg:data-[active]:pt-(--spacing-xl) motion-reduce:transition-none"
+            :data-actions="hasActions(item, index) || null"
+            :data-dense="dense || null"
+            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[dense]:py-(--spacing-md) lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow lg:data-[active]:justify-center lg:data-[active]:py-(--spacing-xl) lg:data-[active]:data-[actions]:justify-start lg:data-[active]:data-[actions]:pb-(--spacing-lg) lg:data-[active]:data-[dense]:py-(--spacing-lg) lg:data-[active]:data-[dense]:data-[actions]:pb-(--spacing-md) motion-reduce:transition-none"
           >
             <h3
               class="m-0 text-heading-md text-(--text-default) transition-[color,opacity] duration-moderate-01 ease-out motion-reduce:transition-none lg:text-(--text-muted) lg:group-data-[active]:text-(--text-default) lg:group-data-[completed]:opacity-55"
@@ -193,7 +223,7 @@
             </h3>
 
             <div
-              class="grid grid-rows-[1fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none lg:min-h-0 lg:grid-rows-[0fr] lg:group-data-[active]:flex-1 lg:group-data-[active]:grid-rows-[1fr]"
+              class="grid grid-rows-[1fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none lg:min-h-0 lg:grid-rows-[0fr] lg:group-data-[active]:grid-rows-[1fr] lg:group-data-[active]:group-data-[actions]:flex-1"
             >
               <div class="min-h-0 overflow-hidden lg:flex lg:flex-col">
                 <p
@@ -203,7 +233,7 @@
                 </p>
 
                 <div
-                  v-if="$slots['actions']"
+                  v-if="hasActions(item, index)"
                   class="mt-(--spacing-xl) flex items-center gap-(--spacing-sm) transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none lg:invisible lg:mt-auto lg:translate-y-(--spacing-sm) lg:pt-(--spacing-xl) lg:opacity-0 lg:group-data-[active]:visible lg:group-data-[active]:translate-y-0 lg:group-data-[active]:opacity-100 lg:group-data-[active]:delay-200"
                 >
                   <slot
