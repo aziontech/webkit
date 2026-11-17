@@ -130,7 +130,7 @@
         :aria-controls="bodyId"
         :data-state="open ? 'open' : 'closed'"
         :data-testid="`${testId}__node-trigger`"
-        class="group flex w-full items-center gap-(--spacing-2xs) rounded-t-(--shape-card) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs) text-start outline-none transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
+        class="group flex w-full items-center gap-(--spacing-2xs) rounded-t-(--shape-card) border-b border-solid border-(--border-muted) px-(--spacing-md) py-(--spacing-sm) text-start outline-none transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
         @click="(event: globalThis.MouseEvent) => emit('toggle', event)"
       >
         <i
@@ -156,7 +156,7 @@
     </FlowDiagramAnchor>
 
     <div
-      class="flex min-h-9 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
+      class="flex min-h-9 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-sm)"
     >
       <span
         v-if="pending"

@@ -3,9 +3,9 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
-checksum: ff3dec6c82973fedeaaaf71f1132a855c4e41ea3853e63d3b0a4b5e0d15a33a3
+checksum: 01f354d0fb9b0a82ccf3d653f2e34ffc9c46ee2dc9009a142fe8a99fd21e1cc8
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -168,15 +168,16 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 
 ## Tokens
 
-| Region       | Token                                                                                                        |
-| ------------ | ------------------------------------------------------------------------------------------------------------ |
-| card surface | `var(--bg-surface)`, `var(--shape-card)`                                                                     |
-| card border  | `var(--border-default)`, hover `var(--border-strong)`                                                        |
-| body divider | `var(--border-muted)`                                                                                        |
-| connector    | `var(--accent)`                                                                                              |
-| muted text   | `var(--text-muted)`                                                                                          |
-| name link    | `.text-label-sm` `var(--text-default)`, open glyph `az az-external-link` `.text-body-xs`, underline on hover |
-| column gap   | `var(--spacing-xl)`; node gap `var(--spacing-md)`                                                            |
+| Region         | Token                                                                                                           |
+| -------------- | --------------------------------------------------------------------------------------------------------------- |
+| card surface   | `var(--bg-surface)`, `var(--shape-card)`                                                                        |
+| card border    | `var(--border-default)`, hover `var(--border-strong)`                                                           |
+| header divider | `var(--border-muted)`, a hairline under the type and status band so its hover fill never runs into the name row |
+| body divider   | `var(--border-muted)`                                                                                           |
+| connector      | `var(--accent)`                                                                                                 |
+| muted text     | `var(--text-muted)`                                                                                             |
+| name link      | `.text-label-sm` `var(--text-default)`, open glyph `az az-external-link` `.text-body-xs`, underline on hover    |
+| column gap     | `var(--spacing-xl)`; node gap `var(--spacing-md)`                                                               |
 
 ## Theme gaps
 
