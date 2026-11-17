@@ -117,7 +117,7 @@
         flush
         borders="y"
         marks="bottom"
-        class="[--sticky-stack-top:3.5rem] [--sticky-stack-height:min(40rem,calc(100dvh-3.5rem))] [--sticky-stack-align:stretch] [--sticky-stack-frame-border:1px]"
+        class="[--sticky-stack-top:3.5rem] [--sticky-stack-align:stretch]"
       >
         <StickyStack :items="items">
           <template #backdrop>
