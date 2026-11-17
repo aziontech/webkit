@@ -332,7 +332,7 @@ export const VARIANT_EXTRAS = {
   'doc-prompt': ['block', 'line'],
   'feature-tiles-section': ['artwork', 'illustrated'],
   'file-dropzone': ['inline', 'overlay'],
-  footer: ['content', 'site'],
+  footer: ['content', 'site', 'console'],
   hero: ['band', 'screen'],
   'hero-section': [
     'center',
