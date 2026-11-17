@@ -166,6 +166,14 @@ are already direct siblings of the page stack, where adding a wrapper is the wro
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 
+**The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
+table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
+parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsSection` lands
+flush against that section's heading, because the band only spaces itself from the bands before it.
+A banner that speaks for the whole page is a child of the parent section like any band, and the
+parent's `gap-(--layout-section-gap)` spaces it. Tighter steps belong _inside_ one unit — a card's
+rows, a list's items, a chat message's parts, a label over its own field.
+
 ## 5. Every value is a reference
 
 Layout tokens are a **derived** group: each one is a `var()` reference to the spacing or container

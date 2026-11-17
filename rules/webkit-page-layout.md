@@ -72,6 +72,10 @@ follows the nearest container.
 - Never hand-roll a page cap: no `mx-auto max-w-[1200px]` or `max-w-7xl` on a page root.
 - Never use `w-full` to mean full-bleed. Full-bleed is the absence of a container class.
 - Never add a third rhythm step (`gap-12`, `mt-16`) between sections or groups.
+- Never stack two regions of a page closer than the group step (`--layout-group-gap`): a banner
+  (`Alert`), a card or a framed table never sits flush against the next card or section heading.
+  The stack that holds them carries the gap: the parent section `gap-(--layout-section-gap)`, even
+  when its first child is a banner rather than a section.
 - Never write a literal length (`px`, `rem`) for a layout width; every measure is a token.
 - Never use a viewport breakpoint (`md:`, `lg:`) for a layout that lives inside a band; it breaks
   the moment the band moves into a drawer or a split view.

@@ -292,6 +292,25 @@ How the library keeps it, so a page composed from it inherits the single line:
 
 A static lint cannot see rendered borders, so this rule is gated where the CSS is real: the styled visual suite measures every page it visits and fails on a doubled line (see Enforcement).
 
+## Never stack regions flush
+
+Two regions of a page never sit closer than the group step, `--layout-group-gap` (`--spacing-md`, 16px). A region is a banner (`Alert`), a card, a framed table or any bordered or filled surface, and a section heading; the step between two of them is `--layout-section-gap` between the sections of a parent and `--layout-group-gap` between the parts of one section (the two steps of [`webkit-layout`](../../skills/webkit-layout/SKILL.md)), so the group step is the floor.
+
+```html
+<!-- ❌ the parent section carries no gap: the banner lands flush on the band's heading -->
+<section class="layout-section-start flex flex-col">
+  <Alert … />
+  <div><SettingsSection title="Defaults">…</SettingsSection></div>
+</section>
+
+<!-- ✅ the parent section spaces every band, the banner included -->
+<section class="layout-section-start flex flex-col gap-(--layout-section-gap)">…</section>
+```
+
+`SettingsSection` spaces itself from the bands before it with its own top margin, and only from a `SettingsSection` sibling, so a page-level banner above the first band is spaced by the parent section's `gap`, never by the band. Tighter steps are right **inside one unit**: a card's rows, a list's items, a chat message's parts, a label over its own field, a controls row inside a card, anything inside an overlay. The gate reads them as one unit and stays silent.
+
+A static lint cannot see a rendered gap either; the styled visual suite measures it (see Enforcement).
+
 ## A zero length carries no unit
 
 A zero is the one value that is identical in every unit, so the unit is pure noise — and it makes the same zero read three different ways across the codebase (`0px` here, `0rem` there, `0em` in a token). **Write `0`.**
@@ -331,6 +350,7 @@ padding: 0 var(--spacing-md);
 ## Hard prohibitions
 
 - Never double a line — no two visible borders flush side by side or 1px apart. The container draws the outer frame; the parts inside draw only the dividers between themselves.
+- Never stack two page regions (a banner, a card, a framed table, a section heading) closer than `--layout-group-gap`; the stack that holds them carries the gap.
 - No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS). The single exception is inside `calc()`/`min()`/`max()`/`clamp()`, where CSS requires a unit and that unit is **`rem`**.
 - No malformed token shorthand — no whitespace inside the parens (`bg-(--token )`, `bg-( --token)`) and never the inverted `[--(token)]`. The style silently never applies; blocked by `dead-token-shorthand`.
 - No `const sharedClasses = [...]`, `const variantClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`. The whole "class map" pattern goes away.
@@ -428,6 +448,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
 - **The `rem`-in-math-function carve-out** is gated by the two engines we own — the `zero-unit-in-calc` token check and the same assertion in `build:tokens`. Stylelint's `length-zero-no-unit` deliberately skips math functions (a unit is required there), so it accepts `calc(100% - 0px)`; the token check is what makes that `0rem`.
 - **Never double a line** is gated by the `visual` CI job: [`apps/visual/tests/doubled-lines.spec.ts`](../../apps/visual/tests/doubled-lines.spec.ts) runs [`findDoubledLines`](../../apps/visual/tests/doubled-lines.ts) once per page in the browser — the first example of every component, the primary state of every block, and the docs home and foundation pages, at 390 and 1280 — and fails listing every pair of visible borders (non-zero width, opaque color, not inside a form control, not hidden or zero-size) that lie flush or 1px apart and overlap along at least 4px. [`apps/visual/scripts/doubled-lines.mjs`](../../apps/visual/scripts/doubled-lines.mjs) runs the same detector over every docs route, example and block state against a built docs site, for a full sweep before a PR.
+- **Never stack regions flush** is gated by the same `visual` job: [`apps/visual/tests/region-gaps.spec.ts`](../../apps/visual/tests/region-gaps.spec.ts) runs [`findTightRegions`](../../apps/visual/tests/region-gaps.ts) over the same pages at the same widths. For every vertical stack (a block flow, a column flex or a grid) that is not inside a unit — a bordered or filled surface, a fixed or sticky layer, an `article`, a list item, a log or a dialog — it takes each pair of consecutive visible children and fails when the first ends on a surface (bordered on four sides or filled with a radius, at least 120 × 32px, not a control or a field wrapper) and the second starts on a surface or a heading, closer than the resolved `--layout-group-gap`. A heading is measured from its content box, so a heading's own top padding counts as space; two surfaces of the same kind (a list of like cards) are a list, not two regions. [`apps/visual/scripts/region-gaps.mjs`](../../apps/visual/scripts/region-gaps.mjs) sweeps every docs route, example and block state.
 - A future PostToolUse hook may grep `.vue` files for `const \w+Classes\s*=\s*[\{[]` and emit `BLOCKED: forbidden class preset` — until then, `echo-reporter` flags the pattern.
 - `.claude/docs/COMPONENT_REQUIREMENTS.md` § 13.w "Styling discipline" supersedes any older example in the same file that still shows the JS-presets pattern. **The data-attribute approach is the canonical pattern for new components.**
 

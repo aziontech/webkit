@@ -2,7 +2,7 @@
 name: webkit-layout
 description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, the control cap inside an item-group field row, and the device contract (viewport breakpoints for the shell, container queries for anything that can sit in a drawer, split view or card, touch targets, reflow at 320 px). Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
 status: active
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 scope: general
 enforced_by: [webkit-styling, webkit-tokens, webkit-direction, ui-verify, review]
 ---
@@ -224,6 +224,14 @@ are already direct siblings of the page stack, where adding a wrapper is the wro
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 
+**The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
+table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
+parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsSection` lands
+flush against that section's heading, because the band only spaces itself from the bands before it.
+A banner that speaks for the whole page is a child of the parent section like any band, and the
+parent's `gap-(--layout-section-gap)` spaces it. Tighter steps belong _inside_ one unit — a card's
+rows, a list's items, a chat message's parts, a label over its own field.
+
 ## 5. Every value is a reference
 
 Layout tokens are a **derived** group: each one is a `var()` reference to the spacing or container
@@ -382,6 +390,8 @@ truncating text `min-w-0`.
   inside the parent — `gap` and `margin` add up.
 - **NEVER** put a vertical `gap` on the page stack itself.
 - **NEVER** introduce a third rhythm step beside `--layout-section-gap` and `--layout-group-gap`.
+- **NEVER** stack two page regions (a banner, a card, a framed table, a section heading) closer than
+  `--layout-group-gap`; the parent section carries its `gap` even when its first child is a banner.
 - **NEVER** write a responsive variant for the boundary or the rhythm — the tokens are already fluid.
 - **MUST** pick the measure from the payload, never from the route, and only ever narrower than
   `layout-column`.
@@ -429,6 +439,13 @@ Per gap:
   fix:    drop it from the inner section — the parent's gap already spaces it; carrying both
           lands this section at twice the step
 
+✗ DeploymentSettings.vue:27
+  quoted: <section class="layout-section-start flex min-w-0 flex-col">
+            <Alert … />  <div><SettingsSection …/></div>
+  rule:   the parent section carries the section step; without it the banner sits flush on the
+          first band's heading
+  fix:    <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+
 ✗ Settings.vue:55
   quoted: <div class="flex flex-1 justify-end" style="max-width: 256px">
   rule:   the control cap is a token so a band retunes all of its rows at once
@@ -456,6 +473,7 @@ Close with `Layout sound` or `N gaps — fix before polish`.
 - [ ] The page renders no `<main>`, shell or chrome of its own: it is the body of the app layout's slot.
 - [ ] Exactly one `layout-section-start` per page stack; no vertical `gap` on the page stack.
 - [ ] Rhythm is the two steps only — section between sections, group inside one.
+- [ ] No two page regions (banner, card, framed table, section heading) closer than the group step.
 - [ ] A controls row and the thing it narrows sit in one band at the group step.
 - [ ] A sticky bar carries the same column class and `layout-boundary-inline` as its body.
 - [ ] Sibling states of the page (empty, populated, each tab) resolve to the same column.
