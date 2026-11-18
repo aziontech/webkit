@@ -611,10 +611,6 @@
       "types": "./types/components/content/illustration/illustration.vue.d.ts",
       "default": "./src/components/content/illustration/illustration.vue"
     },
-    "./line-figure": {
-      "types": "./types/components/content/line-figure/line-figure.vue.d.ts",
-      "default": "./src/components/content/line-figure/line-figure.vue"
-    },
     "./logo": {
       "types": "./types/components/content/logo/logo.vue.d.ts",
       "default": "./src/components/content/logo/logo.vue"
@@ -2937,9 +2933,6 @@
       ],
       "illustration": [
         "./types/components/content/illustration/illustration.vue.d.ts"
-      ],
-      "line-figure": [
-        "./types/components/content/line-figure/line-figure.vue.d.ts"
       ],
       "logo": [
         "./types/components/content/logo/logo.vue.d.ts"

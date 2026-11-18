@@ -190,12 +190,6 @@ const ASSET_KIND_ALIASES = {
   scene: 'illustrations',
   diagram: 'diagrams',
   diagrams: 'diagrams',
-  'line-figure': 'lineFigures',
-  'line-figures': 'lineFigures',
-  linefigure: 'lineFigures',
-  linefigures: 'lineFigures',
-  figure: 'lineFigures',
-  figures: 'lineFigures',
   'brand-mark': 'brandMarks',
   'brand-marks': 'brandMarks',
   brandmark: 'brandMarks',
@@ -240,7 +234,7 @@ export function listAssets(catalog, { kind, query } = {}) {
           : undefined
         return { kind: k, ...meta, ...(matches != null ? { matches } : {}) }
       }),
-      hint: 'Call list_assets with a kind ("illustrations", "diagrams", "lineFigures", "brandMarks", "icons") for every valid name, and a query to filter by name, label or keyword. Never guess a name from a file in src/: an unregistered name renders a placeholder or nothing.'
+      hint: 'Call list_assets with a kind ("illustrations", "diagrams", "brandMarks", "icons") for every valid name, and a query to filter by name, label or keyword. Never guess a name from a file in src/: an unregistered name renders a placeholder or nothing.'
     }
   }
   const resolved = assetKindOf(catalog, kind)

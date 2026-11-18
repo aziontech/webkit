@@ -526,17 +526,6 @@ const ASSET_KINDS = {
     registry: 'src/assets/diagrams/registry.ts',
     unknown: 'An unknown name draws nothing.'
   },
-  lineFigures: {
-    title: 'Line figures',
-    summary:
-      'The isometric line-art figures that answer the pointer, one per product. Pass the name to `LineFigure` (`name`); the label is the figure\u2019s own English description.',
-    markers: [
-      'components/content/line-figure/figures/registry.ts',
-      'components/content/line-figure/line-figure.vue'
-    ],
-    registry: 'src/components/content/line-figure/figures/registry.ts',
-    unknown: 'An unknown or empty name draws nothing.'
-  },
   brandMarks: {
     title: 'Brand marks',
     summary:
@@ -645,18 +634,6 @@ export function buildAssets(imports) {
           'ariaLabel'
         )
       }))
-      .sort((a, b) => a.name.localeCompare(b.name)),
-    lineFigures: objectKeys(ASSET_KINDS.lineFigures.registry, 'lineFigures')
-      .map(({ name }) => {
-        const src = readFileSync(
-          resolve(SRC, 'components/content/line-figure/figures', `${name}.ts`),
-          'utf-8'
-        )
-        return {
-          name,
-          label: quoted(src, 'label', Math.max(0, src.indexOf('FigureDefinition = {')))
-        }
-      })
       .sort((a, b) => a.name.localeCompare(b.name)),
     brandMarks: (() => {
       const labels = new Map(

@@ -152,7 +152,6 @@ test('list_assets returns the same names from the split catalog as from one file
 
 test('asset parts and block parts are written under kebab-case file names in catalog/', () => {
   const { catalog, files } = splitCatalog(full)
-  assert.equal(catalog.assets.lineFigures.file, 'catalog/assets/line-figures.json')
   assert.equal(catalog.assets.brandMarks.file, 'catalog/assets/brand-marks.json')
   for (const file of Object.keys(files)) {
     for (const segment of file.replace(/\.json$/, '').split('/')) {

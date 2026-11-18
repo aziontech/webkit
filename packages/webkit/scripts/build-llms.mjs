@@ -351,7 +351,6 @@ function specSections(name) {
 const ASSET_PAGES = {
   illustrations: 'illustrations',
   diagrams: 'diagrams',
-  lineFigures: 'line-figures',
   brandMarks: 'brand-marks',
   icons: 'icons'
 }
@@ -368,10 +367,6 @@ function assetUsage(kind) {
   if (kind === 'diagrams')
     return code(
       '<script setup>\n  import Diagram from \'@aziontech/webkit/diagram\'\n</script>\n\n<template>\n  <Diagram name="cache" />\n</template>'
-    )
-  if (kind === 'lineFigures')
-    return code(
-      '<script setup>\n  import LineFigure from \'@aziontech/webkit/line-figure\'\n</script>\n\n<template>\n  <LineFigure name="cache-ttl" />\n</template>'
     )
   if (kind === 'brandMarks')
     return code(
@@ -1093,7 +1088,7 @@ function header(catalog) {
     '',
     `> The Vue 3 design system of Azion (\`${catalog.package}\` ${catalog.webkitVersion}): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.`,
     '',
-    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
+    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
     '',
     `Installed copy: \`node_modules/${catalog.package}/llms/\`. Every component also has a JSON API next to its page (\`components/<name>.json\`).`,
     ''

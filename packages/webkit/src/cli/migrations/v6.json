@@ -739,7 +739,8 @@
     "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config",
     "doc-cta": "use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action=\"{ label, href }\", secondary-label and secondary-href become :secondary-action=\"{ label, href }\"",
     "helper-text": "use FieldDescription for guidance or FieldError for a validation message (Field.Description / Field.Error); both work outside a Field",
-    "doc-step": "import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound"
+    "doc-step": "import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound",
+    "line-figure": "remove it; no replacement: WebKit no longer ships line figures"
   },
   "types": {
     "BoxGridSelectionItem": "RadioGroupOption",
