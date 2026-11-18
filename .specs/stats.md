@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: deb46068cf55653b290c2b5008f3cb0df2f9b415fdeb3f094b220abc5d02cbf7
+checksum: db824db5da581eb9e924dec4fee1b81f50f5eaf09230838a373ed3fbbec42d8a
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -66,6 +66,8 @@ A band of headline figures — throughput, uptime, data centers — set in the d
   />
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<Stats>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site places it through `stats-section`.
 
 ## Props
 
@@ -131,6 +133,7 @@ _none_
 
 - Default
 - Sizes — composite story rendering every `size` value one under the other
+- Markdown — the figures as a `<Stats items={[…]} />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

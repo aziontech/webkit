@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 1180a4ab22d41ae122b7a5a145f1208cecc3e4b328400561eadabc175bf030bd
+checksum: d3d759cfeb94c3c4713acab5c9fa9afbdbcd69be2dbd7077d4d7d8401da65142
 created: 2026-11-14
 last_updated: 2026-11-18
 ---
@@ -53,6 +53,8 @@ The closing offer of a documentation page, parked at the foot of the "On this pa
   </DocCallToAction>
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<CallToAction>` tag `DocMarkdown` mounts (braced attribute values are JSON); the text between the tags is the offer copy. It is a docs piece, so the site has no entry.
 
 ## Props
 
@@ -129,6 +131,7 @@ _none_
 
 - Default — headline, copy and one action.
 - Two actions — Start for free and Talk to sales.
+- Markdown — a `<CallToAction>` tag with its copy between the tags rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

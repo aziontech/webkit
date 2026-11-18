@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 3
 created: 2026-10-20
-last_updated: 2026-11-15
-checksum: d1ec034d86b8210c9414cf2594865694f7f5453e25ce6a58c5bc0ed85f9ae356
+last_updated: 2026-11-18
+checksum: 3cc72d9f1bd376b06728a50d5e3cba805c3e09dbe6e410faa45a8beb899de982
 ---
 
 # BrowserFrame — Component Spec
@@ -30,6 +30,7 @@ A browser window that renders live webkit components inside a viewport of its ow
 - For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.
 - For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.
 - For a framed page section or grid cell → use `registration-frame`.
+- In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `webkit-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself.
 
 ## Related
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 48f980a6f57ccb3d2bf0061635f031c29a98e3cdde8d8eceb6781483c6a84218
+checksum: 3ceedf69eaadffe8bdf0e2ff5d09f2ccd8efb29b3c72e77199233c0badb592f1
 created: 2026-11-14
 last_updated: 2026-11-18
 ---
@@ -68,6 +68,8 @@ A third-party mark (a client, a competitor, an analyst firm, a standard or certi
   />
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<ThirdPartyLogo>` tag `DocMarkdown` mounts (braced attribute values are JSON); `src` is the URL of the logo file. The site places logos through `logo-wall-section`.
 
 ## Props
 
@@ -158,6 +160,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 - Default — a client from the registry with its light/dark pair.
 - Sizes — `small`, `medium` and `large` on the same client pair and a wordmark.
 - Types — the four inks (`color`, `monochrome`, `current`, `knockout`) on the same row of marks: a client pair, a single `light` artwork file inverted on the light theme, a coding agent and a wordmark with no file.
+- Markdown — a logo as a `<ThirdPartyLogo />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

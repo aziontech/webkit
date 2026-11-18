@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: ce1488253080f7678f0612a66e4706b2aea2ae3dfbdf65e2907ca98343ca5bab
+checksum: d92e19ce88fd397f91066243a88265665f993786ae43e66d9ecb7100f0644706
 created: 2026-08-05
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Illustration — Component Spec
@@ -98,6 +98,8 @@ import) when an image, not an inline themed scene, is wanted.
 </template>
 ```
 
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<Illustration>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site draws it as the `Illustration` scene.
+
 ## Props
 
 | Prop        | Type     | Default | Required | JSDoc                                                                                    |
@@ -179,6 +181,7 @@ export palette in `src/assets/illustrations/palette.ts`. Each role aliases a glo
 - Labeled — the accessible-name form (an args delta of `ariaLabel`).
 - Placeholder — the fallback frame, rendered by an unnamed `Illustration`. **Justified addition:** it is a rendered state of the component (see § States), not a variant, and it is the one thing in the component a consumer cannot reach from the `name` dropdown — every option in that list resolves to a scene.
 - Files — the drawings that also ship as files, each imported by its final name from `@aziontech/webkit/assets/` and rendered as an image. **Justified addition:** the file import is a second way to use a drawing that neither Controls nor `Assets` shows, and the import path is the one thing a consumer has to know to use one.
+- Markdown — an `<Illustration name="…" />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 There is no `Types` or `Sizes` story: the root declares neither `kind` nor `size`. There are no `Loading` / `Disabled` stories: the component declares neither prop (see § States).
 

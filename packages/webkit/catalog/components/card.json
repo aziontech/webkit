@@ -29,6 +29,7 @@
   "The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space."
  ],
  "channels": [
-  "app"
+  "app",
+  "site"
  ]
 }

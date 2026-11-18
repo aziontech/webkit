@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: ef629a0e53776e65478778ad23e9a7aa63869716f0b9efae98853c793bffbb9b
+checksum: d1b18b23d1c6808b9ea1ef8287ca3c3ee1bf2e30e9da847bc0d18e90ab15983d
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Quote — Component Spec
@@ -69,6 +69,8 @@ The register changes the weight and the arrangement, never the anatomy: every re
   />
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<Quote>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site places quotes through `recognition-marquee-section`; the `mark` and `actions` slots stay Vue.
 
 ## Props
 
@@ -156,6 +158,7 @@ _none_
 - Types — the `inline`, `signed` and `highlight` registers
 - WithoutLogo — the quotation leading the block with no company mark (mutually-exclusive rendered state of the `logo` prop)
 - Highlights — the quotation muted around its highlighted phrases (rendered state of the `highlights` prop)
+- Markdown — the quote as a `<Quote />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

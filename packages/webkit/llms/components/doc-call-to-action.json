@@ -75,6 +75,10 @@
   {
    "name": "Two actions",
    "file": "examples/doc-call-to-action/two-actions.vue"
+  },
+  {
+   "name": "Markdown",
+   "file": "examples/doc-call-to-action/markdown.vue"
   }
  ],
  "docs": "components/doc-call-to-action.md"

@@ -16,6 +16,11 @@
       "name": "Rich answer",
       "summary": "The `answer` slot replaces each rendered answer, so an answer can carry a link: here every answer ends on a link to the page that settles it.",
       "file": "rich-answer.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<Faq>` tag into a real `Faq`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
     }
   ]
 }

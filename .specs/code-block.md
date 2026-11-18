@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 541aba51fb1b0a71becc1ef806da6f2cc5eed09b0bb0cc33b19236f09f87c361
+checksum: 85f73a94135f436a854e7a1a7b544aa25a75328cf382dabc243a666d543bb7b8
 created: 2026-05-28
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # CodeBlock — Component Spec
@@ -133,6 +133,8 @@ For several languages or files, pass one entry per snippet in **`tabs`** (each w
 ```
 
 Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should update reactively.
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). Markdown writes a code fence, which renders `DocCodeGroup`. From the site's page JSON it is the `CodeBlock` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the props are data (`code`, `language`, `title`, `tabs`), and the `tab-icon` slot and the events stay Vue.
 
 ## Props
 
@@ -336,6 +338,7 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 - SingleLine — one `bash` line passed as `code` + `language` (the single-snippet API), `show-line-numbers` off, no tabs and no filename bar: the minimal shell, and the one geometry where the copy control centres on its row instead of hanging from the top inset.
 - Borderless — Default sample with `bordered={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
 - CommandAndOutput — a `$ `-prompted `curl -I` command with `show-label` ("Shell" header) and, under it, a second block with `type="output"` holding `HTTP/2 200`; justified because the label header and the output type are two rendered surfaces no other example shows, and they are the docs pattern for a command and what it prints.
+- Page JSON — a `CodeBlock` scene with a function in a `console-showcase-section` entry with `texture: "none"`, rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

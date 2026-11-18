@@ -21,6 +21,7 @@
   "Do not add an overline or an eyebrow above the title; the card has none."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs"
  ]
 }

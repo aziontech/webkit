@@ -1,0 +1,32 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "texture": "none",
+    "eyebrow": "Pricing",
+    "title": "Everything in Pro",
+    "description": "The features every Pro workspace gets."
+  },
+  "scenes": {
+    "scene": {
+      "component": "PlanFeatureList",
+      "props": {
+        "ariaLabel": "Pro plan features",
+        "items": [
+          {
+            "label": "Unlimited Applications"
+          },
+          {
+            "label": "Unlimited Workloads"
+          },
+          {
+            "label": "Custom Domains"
+          },
+          {
+            "label": "Priority Support"
+          }
+        ]
+      }
+    }
+  }
+}

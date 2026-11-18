@@ -2,12 +2,19 @@ import userEvent from '@testing-library/user-event'
 import { render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import AccordionPageEntry from '../../../../examples/accordion/page-entry.vue'
 import BarListPageEntry from '../../../../examples/bar-list/page-entry.vue'
+import CardPageEntry from '../../../../examples/card/page-entry.vue'
 import ChartPageEntry from '../../../../examples/chart/page-entry.vue'
+import CodeBlockPageEntry from '../../../../examples/code-block/page-entry.vue'
 import DonutChartPageEntry from '../../../../examples/donut-chart/page-entry.vue'
+import EmbedPageEntry from '../../../../examples/embed/page-entry.vue'
 import PageEntry from '../../../../examples/flow-diagram/page-entry.vue'
 import GaugeChartPageEntry from '../../../../examples/gauge-chart/page-entry.vue'
+import IntegrationCardPageEntry from '../../../../examples/integration-card/page-entry.vue'
+import KeyValueListPageEntry from '../../../../examples/key-value-list/page-entry.vue'
 import MapChartPageEntry from '../../../../examples/map-chart/page-entry.vue'
+import PlanFeatureListPageEntry from '../../../../examples/plan-feature-list/page-entry.vue'
 import SparkChartPageEntry from '../../../../examples/spark-chart/page-entry.vue'
 import StatTilePageEntry from '../../../../examples/stat-tile/page-entry.vue'
 import StatTileGroupPageEntry from '../../../../examples/stat-tile-group/page-entry.vue'
@@ -241,6 +248,13 @@ describe('SitePage', () => {
     ['chart', ChartPageEntry],
     ['donut-chart', DonutChartPageEntry],
     ['gauge-chart', GaugeChartPageEntry],
+    ['key-value-list', KeyValueListPageEntry],
+    ['accordion', AccordionPageEntry],
+    ['card', CardPageEntry],
+    ['code-block', CodeBlockPageEntry],
+    ['embed', EmbedPageEntry],
+    ['integration-card', IntegrationCardPageEntry],
+    ['plan-feature-list', PlanFeatureListPageEntry],
     ['map-chart', MapChartPageEntry],
     ['spark-chart', SparkChartPageEntry],
     ['stat-tile', StatTilePageEntry],
@@ -268,6 +282,34 @@ describe('SitePage', () => {
       expect.stringContaining('Requests / second'),
       expect.stringContaining('Bandwidth saving'),
       expect.stringContaining('Data offload')
+    ])
+  })
+
+  it('composes an Accordion from nested scene children with text', async () => {
+    const { findAllByRole, findByText } = render(AccordionPageEntry)
+    const triggers = await findAllByRole('button', { expanded: false })
+    await waitFor(async () =>
+      expect((await findAllByRole('button')).map((button) => button.textContent?.trim())).toEqual([
+        'What is Azion?',
+        'How does pricing work?',
+        'Enterprise support'
+      ])
+    )
+    expect(triggers.length).toBeGreaterThan(0)
+    expect(await findByText('Azion runs your code at the edge, close to users.')).toBeVisible()
+  })
+
+  it('draws a text child of a scene as the text of its default slot', async () => {
+    const { findAllByTestId } = render(KeyValueListPageEntry)
+    const items = await findAllByTestId('key-value-list-item')
+    await waitFor(() => expect(items).toHaveLength(6))
+    expect(items.map((item) => item.querySelector('dd')!.textContent)).toEqual([
+      '1752167890',
+      'Active',
+      'Nov 10, 2026, 14:32',
+      'US East (Virginia)',
+      'shop.example.com',
+      expect.stringContaining('—')
     ])
   })
 

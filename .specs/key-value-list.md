@@ -3,10 +3,10 @@ name: key-value-list
 category: content
 structure: composition
 status: implemented
-checksum: 5b4218717e1e36c2b389a27a9a6e52297a3164e315a4d0844f9baea88fb11416
+checksum: affca7d0f01428086e0b83127d611edb04c75cf928566d32e0277223e20502d3
 spec_version: 6
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # KeyValueList — Component Spec
@@ -115,6 +115,27 @@ Tree-shaking alternative — the standalone root plus each sub-component from it
   import KeyValueListGroup from '@aziontech/webkit/key-value-list-group'
 </script>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same facts render from a docs page as tags (`DocMarkdown`) and from the site's page JSON as the `KeyValueList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot). The items nest: in Markdown each `<KeyValueListItem label="…">` (and `<KeyValueListGroup label="…">`) sits inside the `<KeyValueList>` tag and its value is the text between the tags, with inline Markdown (bold, emphasis, code, links); in page JSON the items are the scene's `children` and a value is a text child:
+
+```mdx
+<KeyValueList aria-label="Workload details">
+  <KeyValueListItem label="Region">US East (Virginia)</KeyValueListItem>
+  <KeyValueListItem label="Domain">[shop.example.com](https://shop.example.com)</KeyValueListItem>
+</KeyValueList>
+```
+
+```json
+{
+  "component": "KeyValueList",
+  "props": { "ariaLabel": "Workload details" },
+  "children": [
+    { "component": "KeyValueListItem", "props": { "label": "Region" }, "children": ["US East (Virginia)"] }
+  ]
+}
+```
+
+A value composed of other components (a `CopyButton`, a `StatusIndicator`) and the `info` slot stay Vue. `DocMarkdown` and the scene registry load the list and its parts as async chunks.
 
 ## Sub-components
 
@@ -230,6 +251,8 @@ Layout notes: the `<dd>` is `flex flex-wrap items-center` with `min-w-0` and `br
 - Groups — two to three `KeyValueList.Group` columns (General, Networking, Source) with an `info` `Hint` on one key and one empty value.
 - Loading — `loading: true` on the Default facts.
 - Split — a subscription plan card with `variant="split"` (Plan Price, Billing Period, Next Invoice, Payment Method); justified because `variant` changes the layout of every pair.
+- Markdown — the workload facts as `<KeyValueList>` with `<KeyValueListItem>` tags rendered by `DocMarkdown`, values with inline code, bold and a link, and one empty value. Justified: the docs channel (RV-K2-1).
+- Page JSON — the same facts as a `KeyValueList` scene with item `children` and text values in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 Justification: KeyValueList has a two-value `variant` axis (`Split` shows the non-default one) and no `size` axis; its other axes are `columns` (shown as the composite `Columns` story) and the Group shape, a distinct anatomy the consumer must see composed. `Loading` is the state story for the declared `loading` prop.
 

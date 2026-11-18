@@ -66,6 +66,10 @@
   {
    "name": "Sizes",
    "file": "examples/stats/sizes.vue"
+  },
+  {
+   "name": "Markdown",
+   "file": "examples/stats/markdown.vue"
   }
  ],
  "docs": "components/stats.md"

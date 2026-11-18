@@ -12,7 +12,8 @@
   "For third-party content loaded from another origin → use `embed`.",
   "For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.",
   "For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.",
-  "For a framed page section or grid cell → use `registration-frame`."
+  "For a framed page section or grid cell → use `registration-frame`.",
+  "In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `webkit-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself."
  ],
  "related": [
   "`doc-frame` — the documentation figure frame for stills and clips; no live viewport.",

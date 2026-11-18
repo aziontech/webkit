@@ -31,6 +31,11 @@
       "name": "Traffic",
       "summary": "`traffic` draws a mesh between lit data centers: faint grey links and orange packets that grow out of one data center and are absorbed into another, each ray on its own clock. Under reduced motion only the links remain.",
       "file": "traffic.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<NetworkMap>` tag into a real `NetworkMap`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component. `NetworkMap` is a background layer, so `DocMarkdown` sets it in a framed 2:1 box.",
+      "file": "markdown.vue"
     }
   ]
 }

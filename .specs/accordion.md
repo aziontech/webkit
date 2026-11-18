@@ -7,9 +7,9 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 524cecf022fef93a4e71304a3bb81e036b6fe964e4defe794ae26be15abae553
+checksum: 7980c006e06cc50b6e5f9f94669e3c3969a6d5d229829f3cf738928e4fb057ae
 created: 2026-06-26
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # Accordion — Component Spec
@@ -89,6 +89,8 @@ Tree-shaking alternative — the same sub-components as standalone imports:
   import AccordionContent from '@aziontech/webkit/accordion-content'
 </script>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). Markdown writes `<AccordionGroup>` and `<Accordion>`, which render `DocAccordionGroup` (a docs piece). From the site's page JSON it is the `Accordion` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); its items are the scene's `children`, each `AccordionItem` holding an `AccordionTrigger` and an `AccordionContent` whose text is a text child.
 
 ## Sub-components
 
@@ -177,19 +179,19 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 
 ## Tokens
 
-| Region                                   | Token (DESIGN.md)                                                                  |
-| ---------------------------------------- | ---------------------------------------------------------------------------------- |
-| header title typography (large / medium) | `.text-body-md` / `.text-body-sm`                                                  |
-| content body typography (large / medium) | `.text-body-sm` / `.text-body-xs`                                                  |
-| header title text                        | `var(--text-default)`                                                              |
-| content body text                        | `var(--text-muted)`                                                                |
-| disabled text                            | `var(--text-disabled)`                                                             |
-| header divider (bottom border, open)     | `var(--border-default)`                                                            |
+| Region                                   | Token (DESIGN.md)                                                                            |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------- |
+| header title typography (large / medium) | `.text-body-md` / `.text-body-sm`                                                            |
+| content body typography (large / medium) | `.text-body-sm` / `.text-body-xs`                                                            |
+| header title text                        | `var(--text-default)`                                                                        |
+| content body text                        | `var(--text-muted)`                                                                          |
+| disabled text                            | `var(--text-disabled)`                                                                       |
+| header divider (bottom border, open)     | `var(--border-default)`                                                                      |
 | item divider between closed items        | `var(--border-muted)` — none under the last item, whose bottom edge belongs to the container |
-| header padding-x                         | `--accordion-inset`, default `var(--spacing-md)`                                   |
-| content padding                          | _none_ — the panel is flush; its inset belongs to whatever the consumer puts in it |
-| header gap (icon trailing / leading)     | `var(--spacing-sm)` / `var(--spacing-xs)`                                          |
-| focus ring / ring offset                 | `var(--ring-color)` / `var(--bg-canvas)`                                           |
+| header padding-x                         | `--accordion-inset`, default `var(--spacing-md)`                                             |
+| content padding                          | _none_ — the panel is flush; its inset belongs to whatever the consumer puts in it           |
+| header gap (icon trailing / leading)     | `var(--spacing-sm)` / `var(--spacing-xs)`                                                    |
+| focus ring / ring offset                 | `var(--ring-color)` / `var(--bg-canvas)`                                                     |
 
 ## Theme gaps
 
@@ -215,6 +217,7 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 - **IconPosition** — composite story rendering `trailing` and `leading` chevron placement side by side. _Justification:_ `iconPosition` is a visual variant axis taken straight from the Figma variant matrix, exactly like `size`; the canonical one-composite-story-per-axis pattern applies.
 - **Disabled** — an accordion whose middle item carries the per-item `disabled` prop, demonstrating the non-toggling state.
 - **Multiple** — an accordion with `type="multiple"` and two items open at once. _Justification:_ single-vs-multiple is the component's core behavioral contract (called out in the Figma component description) and is the one mode the single-mode Default story cannot show.
+- Page JSON — the three Default questions as an `Accordion` scene with nested `children` in a `console-showcase-section` entry with `texture: "none"`, rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

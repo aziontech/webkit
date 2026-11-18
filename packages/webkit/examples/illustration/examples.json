@@ -26,6 +26,11 @@
       "name": "Files",
       "summary": "The drawings a section shows as a picture also ship as files. Import one by its final name from `@aziontech/webkit/assets/` — the folder it lives in is not part of the path, so the file can move without breaking the import — and render it as an image where an inline, theme-following scene is not wanted.",
       "file": "files.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<Illustration>` tag into a real `Illustration`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
     }
   ]
 }

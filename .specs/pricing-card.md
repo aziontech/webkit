@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: 10f4984659ce600499474b9f109f5ef7c393c88aca2f7de65acdaacaca48f231
+checksum: eb0babf9fd363a3b6d17f8a1dc1586b3457fb0b66d10053fbcc32ad55b1a2f6a
 created: 2026-05-22
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # Card Pricing — Component Spec
@@ -94,6 +94,8 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 </template>
 ```
 
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<PricingCard>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site places it through `pricing-plans-section`; the slots stay Vue.
+
 ## Props
 
 | Prop                 | Type                     | Default       | Required | JSDoc                                                                                                                                              |
@@ -177,6 +179,7 @@ _none_
 - WithTag
 - Slots
 - Animated — a billing-period toggle switches the prices of a card with `animated`, the old price fading out and the new one in.
+- Markdown — a plan as a `<PricingCard />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

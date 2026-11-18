@@ -13,6 +13,7 @@
   import { useAppNavigation } from '../../../composables/use-app-navigation'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { plainText } from '../../ai/lib/parse-markdown'
   import ItemList from '../../content/item/item-list.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Link from '../../navigation/link/link.vue'
@@ -72,17 +73,32 @@
 
   const CONTENT_ROOTS: ContentSceneName[] = [
     'BarList',
+    'Carousel',
     'Chart',
+    'ConsoleMockup',
+    'Diagram',
     'DonutChart',
+    'Embed',
+    'Faq',
     'GaugeChart',
+    'Illustration',
+    'IntegrationCard',
+    'KeyValueList',
     'MapChart',
+    'NetworkMap',
+    'PlanFeatureList',
+    'PricingCard',
+    'Quote',
     'SparkChart',
     'StatTile',
     'StatTileGroup',
+    'Stats',
+    'ThirdPartyLogo',
     'Tracker'
   ]
 
   const CONTENT_PARTS: ContentSceneName[] = [
+    'CarouselItem',
     'ChartArea',
     'ChartAxis',
     'ChartBar',
@@ -92,12 +108,33 @@
     'ChartLine',
     'ChartReference',
     'ChartScatter',
-    'ChartTooltip'
+    'ChartTooltip',
+    'KeyValueListGroup',
+    'KeyValueListItem'
   ]
 
   const CONTENT_TAGS = Object.fromEntries(
-    [...CONTENT_ROOTS, ...CONTENT_PARTS].map((name) => [name, contentTag(name)])
+    [...CONTENT_ROOTS, ...CONTENT_PARTS, 'CarouselNext', 'CarouselPrevious'].map((name) => [
+      name,
+      contentTag(name as ContentSceneName)
+    ])
   ) as Record<ContentSceneName, Component>
+
+  const DocAgentCard = defineAsyncComponent(() => import('../doc-agent-card/doc-agent-card.vue'))
+  const DocCallToAction = defineAsyncComponent(
+    () => import('../doc-call-to-action/doc-call-to-action.vue')
+  )
+
+  const TableRoot = defineAsyncComponent(() => import('../../data/table/table.vue'))
+  const TableHeader = defineAsyncComponent(
+    () => import('../../data/table/table-header/table-header.vue')
+  )
+  const TableBody = defineAsyncComponent(() => import('../../data/table/table-body/table-body.vue'))
+  const TableRow = defineAsyncComponent(() => import('../../data/table/table-row/table-row.vue'))
+  const TableHeadCell = defineAsyncComponent(
+    () => import('../../data/table/table-head-cell/table-head-cell.vue')
+  )
+  const TableCell = defineAsyncComponent(() => import('../../data/table/table-cell/table-cell.vue'))
 
   const TabsRoot = defineAsyncComponent(() => import('../../navigation/tabs/tabs.vue'))
   const TabsList = defineAsyncComponent(() => import('../../navigation/tabs/tabs-list.vue'))
@@ -114,6 +151,7 @@
   }
 
   const BLOCK_COMPONENTS: Record<string, Component> = {
+    ...CONTENT_TAGS,
     Note: DocCallout,
     Info: DocCallout,
     Tip: DocCallout,
@@ -131,14 +169,23 @@
     Frame: DocFrame,
     Prompt: DocPrompt,
     Update: DocChangelogEntry,
-    FlowDiagram,
-    ...CONTENT_TAGS
+    AgentCard: DocAgentCard,
+    CallToAction: DocCallToAction,
+    FlowDiagram
   }
 
   const CHROME_BLOCKS = new Set<Component>([
+    DocCallToAction,
     FlowDiagram,
     ...CONTENT_ROOTS.map((name) => CONTENT_TAGS[name])
   ])
+
+  const FRAMED_CLASS: Partial<Record<string, string>> = {
+    ConsoleMockup:
+      'relative block aspect-video w-full overflow-hidden rounded-(--shape-card) border border-(--border-default)',
+    NetworkMap:
+      'relative block aspect-[2/1] w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas)'
+  }
 
   const INLINE_BODY = new Set<Component>([DocCallout, DocItem, DocPrompt])
 
@@ -171,13 +218,6 @@
       ])
     ])
   }
-
-  const TABLE_CLASS =
-    'w-full border-separate border-spacing-0 overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default)'
-  const HEAD_CELL_CLASS =
-    'h-11 border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-start align-middle text-label-sm text-(--text-muted) data-[align=center]:text-center data-[align=end]:text-end'
-  const BODY_CELL_CLASS =
-    'h-12 border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-start align-middle text-label-md text-(--text-default) data-[align=center]:text-center data-[align=end]:text-end'
 
   const parsed = computed(() => readDocMarkdown(props.source, Object.keys(props.components)))
 
@@ -270,8 +310,27 @@
     )
   }
 
+  const PART_CODE_CLASS =
+    'rounded-(--shape-control) bg-(--bg-hover) px-(--spacing-2xs) text-label-code-sm text-(--text-default) inset-ring inset-ring-(--border-default) forced-colors:border'
+
+  const partInline = (text: string): VNodeChild[] =>
+    parseDocInline(text).map((token): VNodeChild => {
+      if (token.type === 'code') return h('code', { class: PART_CODE_CLASS }, token.value)
+      if (token.type === 'link') {
+        const external = EXTERNAL.test(token.href)
+        return h(Link, {
+          label: plainText(token.children),
+          href: token.href,
+          size: 'small',
+          target: external ? '_blank' : undefined
+        })
+      }
+      return renderTokens([token])
+    })
+
   const renderParts = (nodes: DocMarkdownNode[]): VNodeChild[] =>
     nodes.flatMap((child, index) => {
+      if (child.type === 'paragraph') return [h('span', { key: index }, partInline(child.text))]
       if (child.type !== 'component') return []
       const part = BLOCK_COMPONENTS[child.name]
       if (!part) return []
@@ -318,10 +377,25 @@
     }
     if (!override && CHROME_BLOCKS.has(component)) {
       const parts = renderParts(node.children)
+      const chromeSlots: Record<string, () => VNodeChild> = parts.length
+        ? { default: () => parts }
+        : {}
+      if (node.name === 'Carousel') {
+        chromeSlots['controls'] = () => [
+          h(CONTENT_TAGS.CarouselPrevious),
+          h(CONTENT_TAGS.CarouselNext)
+        ]
+      }
+      const frame = FRAMED_CLASS[node.name]
+      if (frame) {
+        return h('div', { key, 'data-doc-block': '', 'data-doc-chrome': '', class: frame }, [
+          h(component, values, chromeSlots)
+        ])
+      }
       return h(
         component,
         { key, 'data-doc-block': '', 'data-doc-chrome': '', ...values },
-        parts.length ? { default: () => parts } : undefined
+        Object.keys(chromeSlots).length ? chromeSlots : undefined
       )
     }
     const children = renderNodes(node.children, !override && INLINE_BODY.has(component))
@@ -356,44 +430,28 @@
           showLineNumbers: node.meta['lineNumbers'] === true
         })
       case 'table':
-        return h('div', { key, 'data-doc-block': '', class: 'w-full overflow-x-auto' }, [
-          h('table', { class: TABLE_CLASS }, [
-            h('thead', [
-              h(
-                'tr',
+        return h(
+          TableRoot,
+          { key, 'data-doc-block': '', 'data-doc-chrome': '', bordered: true, wrapLines: true },
+          () => [
+            h(TableHeader, null, () =>
+              h(TableRow, null, () =>
                 node.head.map((cell, index) =>
-                  h(
-                    'th',
-                    {
-                      key: index,
-                      scope: 'col',
-                      'data-align': node.align[index],
-                      class: HEAD_CELL_CLASS
-                    },
-                    inline(cell)
-                  )
+                  h(TableHeadCell, { key: index, align: node.align[index] }, () => partInline(cell))
                 )
               )
-            ]),
-            h(
-              'tbody',
-              { class: '[&>tr:last-child>td]:border-b-0' },
+            ),
+            h(TableBody, null, () =>
               node.rows.map((row, rowIndex) =>
-                h(
-                  'tr',
-                  { key: rowIndex },
+                h(TableRow, { key: rowIndex }, () =>
                   row.map((cell, index) =>
-                    h(
-                      'td',
-                      { key: index, 'data-align': node.align[index], class: BODY_CELL_CLASS },
-                      inline(cell)
-                    )
+                    h(TableCell, { key: index, align: node.align[index] }, () => partInline(cell))
                   )
                 )
               )
             )
-          ])
-        ])
+          ]
+        )
       case 'blockquote':
         return h('blockquote', { key }, renderNodes(node.children, false))
       case 'divider':

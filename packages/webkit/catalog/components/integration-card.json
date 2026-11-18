@@ -25,6 +25,8 @@
   "`featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain tile."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }
