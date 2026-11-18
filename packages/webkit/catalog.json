@@ -14317,20 +14317,6 @@
      "doc": "Size token of the trigger and the panel controls."
     },
     {
-     "name": "customRangeDisplay",
-     "type": "'row' | 'link' | 'inline'",
-     "default": "'row'",
-     "required": "false",
-     "doc": "Proposal, owner to pick: a Custom range row that opens a form, a link under the quick ranges that opens it, or the duration and unit always shown inline."
-    },
-    {
-     "name": "absoluteLayout",
-     "type": "'stacked' | 'compact' | 'fields-first' | 'side-by-side'",
-     "default": "'stacked'",
-     "required": "false",
-     "doc": "Proposal, owner to pick: today's stacked Absolute tab, a compact one, the fields first with the calendar on demand, or the fields beside the calendar."
-    },
-    {
      "name": "modelValue",
      "type": "DateRangeValue | null",
      "default": "null",

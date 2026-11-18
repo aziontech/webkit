@@ -362,6 +362,8 @@ export const dateRangePicker = {
   thisYear: 'This year',
   now: 'now',
   untilNow: 'End at now',
+  enterDates: 'Enter dates',
+  showCalendar: 'Show calendar',
   refreshEvery: 'Refresh every',
   refreshOff: 'Off',
   refreshSecond: {

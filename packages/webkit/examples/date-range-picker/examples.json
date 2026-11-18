@@ -4,17 +4,17 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel has two tabs, Relative and Absolute, and opens on Relative here because the value is relative (an absolute or `since` value opens Absolute). Relative lists the quick ranges and a **Custom range** row that opens a duration and unit form in their place (Back to quick ranges returns); Absolute shows the month grid first, with Month and Year selects between the arrows to jump far back, then the start and end date and time, typed or picked from a 30-minute list. Refresh every is on at 5 minutes by default, so the page handles `@refresh` by re-running its query. The panel is as thin as the calendar and commits nothing until Apply; the page states the time zone next to the picker (see the Events explorer block). Unset, `min` is five years ago and `max` the end of today. On a phone it opens as a full-width sheet from the bottom of the screen.",
+      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel has two tabs, Relative and Absolute, and opens on Relative here because the value is relative (an absolute or `since` value opens Absolute). Relative lists the quick ranges with a blue **Custom range** link right under them that opens a duration and unit form in their place (Back to quick ranges returns). Absolute opens on the month grid, only as many weeks as the month needs, with Month and Year selects between the arrows to jump far back; the blue **Enter dates** link swaps the grid for the Start and End date and time fields (typed, or picked from a 30-minute list), and **Show calendar** swaps back. **End at now** works in both views. Refresh every sits in the footer beside Cancel and Apply (`↻ 5 min`, on by default), so the page handles `@refresh` by re-running its query. The panel is as thin as the calendar and commits nothing until Apply; the page states the time zone next to the picker (see the Events explorer block). Unset, `min` is five years ago and `max` the end of today. On a phone it opens as a full-width sheet from the bottom of the screen.",
       "file": "default.vue"
     },
     {
       "name": "Absolute",
-      "summary": "`range-selector-mode=\"absolute-only\"` with a `max`: only the grid and the date and time fields, the trigger prints the range in the zone with its UTC offset, and Apply refuses an end before the start or past the limit with an inline message.",
+      "summary": "`range-selector-mode=\"absolute-only\"` with a `max`: the month grid first, and **Enter dates** for the typed date and time fields. The trigger prints the range in the zone with its UTC offset, and Apply refuses an end before the start or past the limit with an inline message.",
       "file": "absolute.vue"
     },
     {
       "name": "RelativeOnly",
-      "summary": "`range-selector-mode=\"relative-only\"` with the default quick ranges (Today to Last year) above the Custom range row, for a metrics interval that is always measured back from now.",
+      "summary": "`range-selector-mode=\"relative-only\"` with the default quick ranges (Today to Last year) and the blue Custom range link under them, for a metrics interval that is always measured back from now.",
       "file": "relative-only.vue"
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "name": "UntilNow",
-      "summary": "An absolute start that ends now: turn on **End at now** on the Absolute tab and the value becomes `{ type: 'since', start }`. The trigger reads `Nov 10, 2026, 9:30 – now`, the end moves with the clock on every query, and Next stays disabled.",
+      "summary": "An absolute start that ends now: tick **End at now** on the Absolute tab, under the calendar or under the typed fields, and the value becomes `{ type: 'since', start }` (the calendar then picks only the start day). The trigger reads `Nov 10, 2026, 9:30 – now`, the end moves with the clock on every query, and Next stays disabled.",
       "file": "until-now.vue"
     },
     {
       "name": "AutoRefresh",
-      "summary": "Refresh every is in the panel and on by default at 5 minutes (Off, 10 seconds … 1 hour); this page starts it at 1 minute. Bind `v-model:refresh-interval` (seconds, 0 is off) and run the query on `@refresh`, which fires on each tick while the page is visible; the trigger draws no refresh icon and says the interval to screen readers. A page that cannot re-run its query passes `:show-refresh=\"false\"`. The quick ranges start with **Today** and **This week**: options with `snap: true` begin at the start of the day or week in the time zone.",
+      "summary": "Refresh every sits in the panel footer beside Cancel and Apply (`↻ 1 min`) and is on by default at 5 minutes (Off, 10 sec … 1 hr); this page starts it at 1 minute. Bind `v-model:refresh-interval` (seconds, 0 is off) and run the query on `@refresh`, which fires on each tick while the page is visible; the trigger draws no refresh icon and says the interval to screen readers. A page that cannot re-run its query passes `:show-refresh=\"false\"`. The quick ranges start with **Today** and **This week**: options with `snap: true` begin at the start of the day or week in the time zone.",
       "file": "auto-refresh.vue"
     },
     {
@@ -51,36 +51,6 @@
       "name": "Disabled",
       "summary": "A disabled picker keeps its range visible; the trigger and the step buttons do not respond.",
       "file": "disabled.vue"
-    },
-    {
-      "name": "ProposalCustomLink",
-      "summary": "Proposal, owner to pick (custom range A): `custom-range-display=\"link\"`. The quick ranges end at a divider, and **Custom range** is a link-coloured button with a sliders icon under it, so it no longer reads as one more quick range. It opens the same Duration and Unit form; the chosen custom duration is printed beside the link.",
-      "file": "proposal-custom-link.vue"
-    },
-    {
-      "name": "ProposalCustomInline",
-      "summary": "Proposal, owner to pick (custom range B): `custom-range-display=\"inline\"`. Under the quick ranges, a **Custom range** group always shows the Duration and Unit fields on one line. Picking a quick range fills them in; typing a duration or picking a unit selects the custom range (a check mark beside its heading). No second screen and no Back button.",
-      "file": "proposal-custom-inline.vue"
-    },
-    {
-      "name": "ProposalAbsoluteCompact",
-      "summary": "Proposal, owner to pick (absolute A): `absolute-layout=\"compact\"`. The calendar keeps only the weeks the month needs (5 rows for most months), Start and End each sit on one line with the label before the date and time, End at now is a checkbox under them, and Refresh every moves into the footer as a small select beside Cancel and Apply.",
-      "file": "proposal-absolute-compact.vue"
-    },
-    {
-      "name": "ProposalAbsoluteFieldsFirst",
-      "summary": "Proposal, owner to pick (absolute B): `absolute-layout=\"fields-first\"`. The Start and End fields come first and the calendar is hidden until **Choose date** opens it below them (the Grafana and Kibana pattern), so typing a range needs the shortest panel. Refresh every sits in the footer.",
-      "file": "proposal-absolute-fields-first.vue"
-    },
-    {
-      "name": "ProposalAbsoluteSideBySide",
-      "summary": "Proposal, owner to pick (absolute C): `absolute-layout=\"side-by-side\"`. On a screen 640 px or wider the Start and End fields sit in a column beside the calendar, so the panel is wider but only as tall as the calendar; on a phone they stack. Refresh every sits in the footer.",
-      "file": "proposal-absolute-side-by-side.vue"
-    },
-    {
-      "name": "ProposalRecommended",
-      "summary": "Proposal, the recommended pair: the inline custom range with the fields beside the calendar (`custom-range-display=\"inline\"`, `absolute-layout=\"side-by-side\"`). On a wide panel the quick ranges read in three columns; on a phone everything stacks.",
-      "file": "proposal-recommended.vue"
     }
   ]
 }
