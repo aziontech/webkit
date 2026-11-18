@@ -3,11 +3,11 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 497039ce701c6099b96c127d541169a7ef2df4ce3b826d3736de9ec86ee6cc1b
-spec_version: 13
+checksum: faab361e621fc09833be489e8c98a1ebef38a7e4e8a4b8ac20aef0ceb29ffc6c
+spec_version: 14
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # Tree — Component Spec
@@ -92,17 +92,18 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 
 ## Props
 
-| Prop               | Type                        | Default | Required | JSDoc                                                                                                                                                                                           |
-| ------------------ | --------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`            | `TreeItem[]`                | `[]`    | false    | Nodes to render; each is `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. A node with a non-empty `children` array is a parent. |
-| `selectable`       | `boolean \| TreeSelectable` | `false` | false    | Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-keys`. Every treeitem then carries `aria-selected`.                   |
-| `editable`         | `boolean`                   | `false` | false    | Lets the user rename a node in place with F2, or through the exposed `startRename(id)`; the result arrives as the `rename` event.                                                               |
-| `loading`          | `boolean`                   | `false` | false    | Renders Skeleton rows in place of the tree and sets `aria-busy`.                                                                                                                                |
-| `emptyTitle`       | `string`                    | `''`    | false    | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`).                                                                                       |
-| `emptyDescription` | `string`                    | `''`    | false    | Supporting line under the empty title.                                                                                                                                                          |
-| `ariaLabel`        | `string`                    | `''`    | false    | Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name.                                                                        |
+| Prop               | Type                        | Default    | Required | JSDoc                                                                                                                                                                                           |
+| ------------------ | --------------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`            | `TreeItem[]`                | `[]`       | false    | Nodes to render; each is `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. A node with a non-empty `children` array is a parent. |
+| `selectable`       | `boolean \| TreeSelectable` | `false`    | false    | Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-keys`. Every treeitem then carries `aria-selected`.                   |
+| `editable`         | `boolean`                   | `false`    | false    | Lets the user rename a node in place with F2, or through the exposed `startRename(id)`; the result arrives as the `rename` event.                                                               |
+| `loading`          | `boolean`                   | `false`    | false    | Renders Skeleton rows in place of the tree and sets `aria-busy`.                                                                                                                                |
+| `size`             | `TreeSize`                  | `'medium'` | false    | Row density: `small` is 24px rows, `medium` 32px, `large` 40px. Height, padding, type, glyph size and indentation step together (see Tokens).                                                   |
+| `emptyTitle`       | `string`                    | `''`       | false    | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`).                                                                                       |
+| `emptyDescription` | `string`                    | `''`       | false    | Supporting line under the empty title.                                                                                                                                                          |
+| `ariaLabel`        | `string`                    | `''`       | false    | Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name.                                                                        |
 
-Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[]; lazy?: boolean; loading?: boolean }` — `lazy` makes a node a parent before its `children` exist, `loading` renders a loading row in place of the children while the node is expanded; `TreeSelectable` = `'single' | 'multiple'`; `TreeRenamePayload` = `{ item: TreeItem; label: string }`. `icon` is an icon class string (`az az-folder`, `az az-…`), the same convention `empty-state` uses.
+Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[]; lazy?: boolean; loading?: boolean }` — `lazy` makes a node a parent before its `children` exist, `loading` renders a loading row in place of the children while the node is expanded; `TreeSelectable` = `'single' | 'multiple'`; `TreeSize` = `'small' | 'medium' | 'large'`; `TreeRenamePayload` = `{ item: TreeItem; label: string }`. `icon` is an icon class string (`az az-folder`, `az az-…`), the same convention `empty-state` uses.
 
 ## v-model
 
@@ -139,7 +140,8 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 - Visual states: `default`; row `hover`, `focus-visible`, `selected`, `disabled`; parent `expanded` / `collapsed`; `loading` (Skeleton rows); `empty` (`EmptyState`).
 - Precedence: `loading` → Skeleton rows, else `items` empty → `empty` slot, else the tree.
 - `data-loading` on the root mirrors `loading`; `data-empty` on the root when `items` is empty and not loading.
-- `data-selectable` on the root while selection is on; `data-multiple` while `selectable="multiple"`.
+- `data-selectable` on the root while selection is on; `data-multiple` while `selectable="multiple"`; `data-size` on the root mirrors `size` and drives every density utility through the `group/tree` variant.
+- A click on a row while Shift, Ctrl or Cmd is held does not start a native text selection (the tree prevents the default of that `mousedown`), so a range or toggle selection never highlights the labels; a plain drag still selects label text for copying, and the rename field and the `actions` region are left alone.
 - Lazy loading: a `lazy` node is a parent (chevron, `aria-expanded`) even with no `children`; while it is expanded and `loading`, its group renders one loading row — a Skeleton bar plus a visually hidden `role="status"` reading the locale's `tree.loadingChildren` (`Loading`) — instead of the children, and carries `aria-busy="true"`. The loading row is not a treeitem and is not part of keyboard navigation (`<testId>__loading`).
 - Renaming: the label region of the node being renamed is a text field (`<testId>__rename`, `data-slot="tree-rename"`), focused with its text selected; the chevron, glyph slot and `actions` stay. One field at a time.
 - `data-state="open|closed"` on each parent row and its chevron (drives the rotation); absent on leaves. The tree is not an overlay, so this is disclosure state only.
@@ -147,7 +149,7 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 - Collapsed children are not rendered (`v-if`), so they cost nothing and are out of the accessibility tree.
 - A disabled node can still be focused (arrow keys) and, if it is a parent, expanded and collapsed; it cannot be selected, renamed, or emit `item-click` / `item-double-click`.
 - `data-testid`: the root falls back to `data-tree` (a consumer `data-testid` wins); parts derive from the resolved root id — `<testId>__item` on every treeitem, `<testId>__toggle` on every chevron. Each treeitem also carries `data-item-id="<item.id>"` so a test reaches one node without depending on DOM order.
-- Loading renders five Skeleton rows (`variant="rectangle"`, row height, descending widths) at top level.
+- Loading renders five Skeleton rows (`variant="rectangle"`, the row height of `size`, descending widths) at top level.
 
 ## Motion & Animations
 
@@ -161,23 +163,34 @@ The chevron transition names `rotate`, not `transform`: Tailwind v4 compiles `ro
 
 ## Tokens
 
-| Region                                             | Token (DESIGN.md)                        |
-| -------------------------------------------------- | ---------------------------------------- |
-| label                                              | `.text-label-md`, `var(--text-default)`  |
-| description                                        | `.text-label-sm`, `var(--text-muted)`    |
-| glyph (item icon) and chevron                      | `var(--text-muted)`                      |
-| disabled label, description, glyph                 | `var(--text-disabled)`                   |
-| row hover (ghost layer)                            | `var(--bg-hover)`                        |
-| row active (ghost layer)                           | `var(--bg-active)`                       |
-| row selected                                       | `var(--bg-selected)`                     |
-| row shape                                          | `var(--shape-control)`                   |
-| row padding-x, gap between chevron / glyph / label | `var(--spacing-xs)`                      |
-| gap between label and description                  | `var(--spacing-2xs)`                     |
-| indentation per level (nested group margin-start)  | `var(--spacing-md)`                      |
-| indent guide line (nested group border-start)      | `var(--border-muted)`                    |
-| focus ring / ring offset                           | `var(--ring-color)` / `var(--bg-canvas)` |
+| Region                                            | Token (DESIGN.md)                                                                                                                                   |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| label                                             | `.text-label-md` (`large`: `.text-label-lg`), `var(--text-default)`                                                                                 |
+| description                                       | `.text-label-sm` (`large`: `.text-label-md`), `var(--text-muted)`                                                                                   |
+| glyph (item icon) and chevron                     | `var(--text-muted)`; sized by the row's type class (`small`: `.text-label-md`, 14px; `medium` and `large`: `.text-label-lg`, 16px)                  |
+| disabled label, description, glyph                | `var(--text-disabled)`                                                                                                                              |
+| row hover (ghost layer)                           | `var(--bg-hover)`                                                                                                                                   |
+| row active (ghost layer)                          | `var(--bg-active)`                                                                                                                                  |
+| row selected                                      | `var(--bg-selected)`                                                                                                                                |
+| row shape                                         | `var(--shape-control)`                                                                                                                              |
+| row padding-x                                     | `small` `var(--spacing-2xs)`, `medium` `var(--spacing-xs)`, `large` `var(--spacing-sm)`                                                             |
+| gap between chevron / glyph / label               | `small` `var(--spacing-2xs)`, `medium` and `large` `var(--spacing-xs)`                                                                              |
+| gap between label and description                 | `var(--spacing-2xs)`                                                                                                                                |
+| indentation per level (nested group margin-start) | row padding-x plus half the 1rem chevron box: `small` `var(--spacing-sm)`, `medium` `var(--spacing-md)`, `large` `calc(var(--spacing-sm) + 0.5rem)` |
+| indent guide line (nested group border-start)     | `var(--border-muted)`                                                                                                                               |
+| focus indicator                                   | 1px `var(--ring-color)` border drawn inside the row (`after:` layer), no offset                                                                     |
 
-Layout: each row is `min-h-8` (32px), full width of its group. The chevron and the glyph each sit in a 1rem box; a leaf reserves the chevron box empty so labels align across siblings. Each nested `role="group"` is indented by `ms-(--spacing-md)` (the row's `--spacing-xs` inset plus half the 1rem chevron box), which puts its hairline guide (`border-s`, `var(--border-muted)`) under the center of the parent's chevron and steps every level by 1rem plus the guide's hairline; the guide sits in the gutter before the nested rows' box edge, never under their hover or selected surface; indentation accumulates through nesting, so no per-level arithmetic or inline style is needed. Label and description truncate with an ellipsis on one line.
+Sizes:
+
+| `size`   | Row height | Label            | Description      | Glyph and chevron | Padding-x / gap         | Indent step                    |
+| -------- | ---------- | ---------------- | ---------------- | ----------------- | ----------------------- | ------------------------------ |
+| `small`  | 24px       | `.text-label-md` | `.text-label-sm` | 14px              | `--spacing-2xs` / `2xs` | `--spacing-sm` (12px)          |
+| `medium` | 32px       | `.text-label-md` | `.text-label-sm` | 16px              | `--spacing-xs` / `xs`   | `--spacing-md` (16px)          |
+| `large`  | 40px       | `.text-label-lg` | `.text-label-md` | 16px              | `--spacing-sm` / `xs`   | `--spacing-sm` + 0.5rem (20px) |
+
+`medium` is the default (the house default for everything that is not an action). The three steps follow the market: Carbon's tree view (`xs` 24px / `sm` 32px), Fluent UI's tree (`small` / `medium`), the 22–24px rows of the VS Code and JetBrains explorers for `small`, and Primer's 32px rows (44px on coarse pointers) for `medium` / `large`.
+
+Layout: each row is the height of its `size` (24 / 32 / 40px), full width of its group, with a 1px transparent top and bottom border and `bg-clip-padding`, so the selected and hover surfaces of two adjacent rows are separated by a 2px gap (the Fluent, Linear and Primer pattern: each row is its own rounded surface; a run of selected rows reads as a stack, never as two surfaces touching or one merged block with a seam). The focus indicator is a 1px `var(--ring-color)` border on an `after:` layer inset in that surface, never a ring outside the row, so it cannot cover a neighbour or double a line. The chevron and the glyph each sit in a 1rem box; a leaf reserves the chevron box empty so labels align across siblings. Each nested `role="group"` is indented by the row's padding-x plus half the chevron box (see Sizes), which puts its hairline guide (`border-s`, `var(--border-muted)`) under the center of the parent's chevron; the guide sits in the gutter before the nested rows' box edge, never under their hover or selected surface; indentation accumulates through nesting, so no per-level arithmetic or inline style is needed. Label and description truncate with an ellipsis on one line. The rename field is 20 / 24 / 32px tall by size.
 
 ## Theme gaps
 
@@ -209,14 +222,14 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
   - In a row, `ArrowRight` / `ArrowLeft` move between the label cell and each `actions` control; `ArrowLeft` on the label cell, or `Escape` anywhere in the row, returns focus to the row. `ArrowDown` / `ArrowUp` move to the same cell of the next / previous visible row. `Enter` on the label cell activates the row; `Enter` / `Space` on a control are the control's own.
   - Without the `actions` slot the tree keeps the `tree` / `treeitem` / `group` structure above.
 - Chevron: a `<button type="button" tabindex="-1" aria-hidden="true">` that toggles the parent on click (pointer affordance; keyboard expansion is ArrowRight / ArrowLeft on the treeitem). It never receives focus and is not announced.
-- Visible focus: the ring is drawn on the focused node's own row (in the treegrid, on the focused row or cell), not around its whole subtree — `focus-visible:outline-none` on the treeitem and `ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` on its direct row child (an arbitrary variant scoped to `:focus-visible > row`).
+- Visible focus: the indicator is drawn on the focused node's own row (in the treegrid, on the focused row or cell), not around its whole subtree — `focus-visible:outline-none` on the treeitem and a 1px `var(--ring-color)` border on the row's `after:` layer, inset in the row (an arbitrary variant scoped to `:focus-visible > row`); the label cell of a treegrid row takes `ring-1 ring-inset`. `var(--ring-color)` against the canvas and `var(--bg-selected)` is at least 3:1 in both themes (dark gray-500 on black 5.3:1, on gray-750 3.4:1; light gray-600 on gray-100 5.3:1, on gray-200 4.6:1), so the 1px indicator meets WCAG 2.1 1.4.11.
 - Loading: the root carries `aria-busy="true"`; the Skeleton rows are `aria-hidden`, and no `role="tree"` is rendered without treeitems.
 - Glyphs (`item.icon`), the chevron and the indent guide are decorative (`aria-hidden="true"`).
 - The rename field is named `Rename <label>` (`tree.renameLabel`); the loading row announces `Loading` once through its polite status.
 - Double-click is never the only way: `item-double-click` duplicates an action the app also offers through `item-click`, `Enter` or the row actions.
 - Contrast ≥4.5:1 for label and description on the canvas, the hover fill and `var(--bg-selected)` in both themes; disabled text follows the disabled-token exemption.
 - `motion-reduce:transition-none` on the chevron and selection transitions; `motion-reduce:before:transition-none` on the hover layer.
-- Touch target: rows are 32px tall and full width (the same deviation as `bar-list`), justified by row density in file trees; the whole row is the activation target and the chevron box extends to the row height.
+- Touch target: rows are 24 / 32 / 40px tall by `size` and full width (the same deviation as `bar-list` below 40px), justified by row density in file trees; prefer `large` where touch is the main input. The whole row is the activation target and the chevron box extends to the row height.
 
 ## Right-to-left
 
@@ -228,6 +241,7 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
 ## Examples
 
 - Default — a bucket-like file tree (folders with nested files three levels deep, glyphs and size descriptions) with one folder seeded in `v-model:open-keys`.
+- Sizes — the same small tree at `small`, `medium` and `large`, each with one node selected, side by side.
 - Selectable — `selectable` with `v-model:selected-key` bound and the selected id shown beside the tree; justified because selection changes the row state, the ARIA (`aria-selected`) and the activation behavior.
 - Custom Item — the `item` slot rendering the label with a `Tag` (status) and the `actions` slot rendering an `IconButton` per row; justified because the two scoped slots are the component's only customization surface and need a worked, copy-paste example.
 - Loading — `loading`.
@@ -258,13 +272,13 @@ Decisions taken in this draft that a reviewer should confirm before approval:
 
 ## Responsive
 
-- The tree fills its container's width; rows stay 32 px tall at every width and long labels truncate.
+- The tree fills its container's width; rows keep the height of their `size` (24 / 32 / 40 px) at every width and long labels truncate.
 - Row actions stay visible on touch (no hover reveal); on narrow containers prefer a single `IconButton` that opens a `dropdown`.
 
 ## Performance
 
 - Collapsed children are not rendered, so the cost is the visible rows: the `tree-5k-collapsed` budget (5k nodes, two folders expanded) and `tree-5k-multi-select` (1k visible rows, select all 5k ids) in `perf-budgets.json`.
-- A tree of more than 300 nodes renders its visible rows flat, in chunks of 100 (`useLazyChunks`, as `card-list` and `conversation-history` do): the first chunk mounts, each later chunk is an `aria-hidden` placeholder of its estimated height (32 px a row) that mounts as it nears the viewport and then stays. The chunk holding the tab stop is always mounted, and a key that moves focus past the rendered rows (`ArrowDown`, `End`, type-ahead) mounts the target's chunk first. 1,000 expanded nodes mount about 100 rows (`tree-1k-expanded`); 5k expanded nodes, `tree-5k-expanded`. A tree of 300 nodes or fewer renders every visible row, nested.
+- A tree of more than 300 nodes renders its visible rows flat, in chunks of 100 (`useLazyChunks`, as `card-list` and `conversation-history` do): the first chunk mounts, each later chunk is an `aria-hidden` placeholder of its estimated height (the row height of `size`) that mounts as it nears the viewport and then stays. The chunk holding the tab stop is always mounted, and a key that moves focus past the rendered rows (`ArrowDown`, `End`, type-ahead) mounts the target's chunk first. 1,000 expanded nodes mount about 100 rows (`tree-1k-expanded`); 5k expanded nodes, `tree-5k-expanded`. A tree of 300 nodes or fewer renders every visible row, nested.
 - Multi-selection is a `Set` lookup per row; range selection walks the visible list once. A Shift+click across 1.2k visible nodes is covered by the component test.
 - The loading row and the rename field render only for the node that needs them.
 

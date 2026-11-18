@@ -954,7 +954,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "10.1 KB"
+    "limit": "10.35 KB"
   },
   {
     "name": "file-dropzone",

@@ -27,6 +27,9 @@
     loading?: boolean
   }
 
+  /** Row density: small is 24px rows, medium 32px, large 40px. */
+  export type TreeSize = 'small' | 'medium' | 'large'
+
   /** Selection model: single writes v-model:selected-key, multiple writes v-model:selected-keys. */
   export type TreeSelectable = 'single' | 'multiple'
 
@@ -42,6 +45,8 @@
     editable?: boolean
     /** Renders Skeleton rows in place of the tree and sets aria-busy. */
     loading?: boolean
+    /** Row density: small is 24px rows, medium 32px, large 40px. */
+    size?: TreeSize
     /** Title of the default empty state shown when items is empty. Empty uses the locale catalog (`No items`). */
     emptyTitle?: string
     /** Supporting line under the empty title. */
@@ -55,6 +60,7 @@
     selectable: false,
     editable: false,
     loading: false,
+    size: 'medium',
     emptyTitle: '',
     emptyDescription: '',
     ariaLabel: ''
@@ -119,10 +125,14 @@
 
   const FLAT_THRESHOLD = 300
   const CHUNK_SIZE = 100
-  const ROW_HEIGHT = 32
+  const ROW_HEIGHTS: Record<TreeSize, number> = { small: 24, medium: 32, large: 40 }
+
+  const rowHeight = computed(() => ROW_HEIGHTS[props.size] ?? ROW_HEIGHTS.medium)
 
   const { split, observe, reveal } = useLazyChunks({
-    rowHeight: ROW_HEIGHT,
+    get rowHeight() {
+      return rowHeight.value
+    },
     chunkSize: CHUNK_SIZE,
     threshold: FLAT_THRESHOLD
   })
@@ -446,6 +456,14 @@
     activate(event, id)
   }
 
+  function onMousedown(event: MouseEvent) {
+    if (!event.shiftKey && !event.ctrlKey && !event.metaKey) return
+    const target = event.target
+    if (!(target instanceof globalThis.Element)) return
+    if (target.closest('[data-slot="tree-actions"], [data-slot="tree-rename"]')) return
+    if (target.closest('[data-slot="tree-row"]')) event.preventDefault()
+  }
+
   function onDblclick(event: MouseEvent) {
     const target = event.target
     if (!(target instanceof globalThis.Element)) return
@@ -578,8 +596,9 @@
     :data-empty="isEmpty || null"
     :data-selectable="selectionOn || null"
     :data-multiple="multiple || null"
+    :data-size="size"
     :aria-busy="loading || undefined"
-    class="flex w-full min-w-0 flex-col"
+    class="group/tree flex w-full min-w-0 flex-col"
   >
     <div
       v-if="loading"
@@ -591,7 +610,7 @@
         :key="width"
         variant="rectangle"
         :width="width"
-        height="2rem"
+        :height="`${rowHeight / 16}rem`"
       />
     </div>
     <template v-else-if="isEmpty">
@@ -610,6 +629,7 @@
       :aria-label="ariaLabel || t('tree.label')"
       :aria-multiselectable="multiple || undefined"
       class="m-0 flex list-none flex-col p-0"
+      @mousedown="onMousedown"
       @click="onClick"
       @dblclick="onDblclick"
       @keydown="onKeydown"
@@ -655,13 +675,13 @@
               </span>
               <span class="flex min-w-0 flex-1 items-baseline gap-(--spacing-2xs)">
                 <span
-                  class="min-w-0 truncate text-label-md text-(--text-default) group-data-[disabled]/tree-row:text-(--text-disabled)"
+                  class="min-w-0 truncate text-label-md text-(--text-default) group-data-[disabled]/tree-row:text-(--text-disabled) group-data-[size=large]/tree:text-label-lg"
                 >
                   {{ scope.item.label }}
                 </span>
                 <span
                   v-if="scope.item.description"
-                  class="min-w-0 truncate text-label-sm text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
+                  class="min-w-0 truncate text-label-sm text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled) group-data-[size=large]/tree:text-label-md"
                 >
                   {{ scope.item.description }}
                 </span>
