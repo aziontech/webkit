@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: faab361e621fc09833be489e8c98a1ebef38a7e4e8a4b8ac20aef0ceb29ffc6c
+checksum: 162a4199578a2552162e3f45be20b37a1f9260d7dad02a4ecc5366698016516d
 spec_version: 14
 template: 2
 created: 2026-11-10
@@ -190,7 +190,7 @@ Sizes:
 
 `medium` is the default (the house default for everything that is not an action). The three steps follow the market: Carbon's tree view (`xs` 24px / `sm` 32px), Fluent UI's tree (`small` / `medium`), the 22–24px rows of the VS Code and JetBrains explorers for `small`, and Primer's 32px rows (44px on coarse pointers) for `medium` / `large`.
 
-Layout: each row is the height of its `size` (24 / 32 / 40px), full width of its group, with a 1px transparent top and bottom border and `bg-clip-padding`, so the selected and hover surfaces of two adjacent rows are separated by a 2px gap (the Fluent, Linear and Primer pattern: each row is its own rounded surface; a run of selected rows reads as a stack, never as two surfaces touching or one merged block with a seam). The focus indicator is a 1px `var(--ring-color)` border on an `after:` layer inset in that surface, never a ring outside the row, so it cannot cover a neighbour or double a line. The chevron and the glyph each sit in a 1rem box; a leaf reserves the chevron box empty so labels align across siblings. Each nested `role="group"` is indented by the row's padding-x plus half the chevron box (see Sizes), which puts its hairline guide (`border-s`, `var(--border-muted)`) under the center of the parent's chevron; the guide sits in the gutter before the nested rows' box edge, never under their hover or selected surface; indentation accumulates through nesting, so no per-level arithmetic or inline style is needed. Label and description truncate with an ellipsis on one line. The rename field is 20 / 24 / 32px tall by size.
+Layout: each row is the height of its `size` (24 / 32 / 40px), full width of its group, with a 1px transparent top and bottom border and `bg-clip-padding`, so the selected and hover surfaces of two adjacent rows are separated by a 2px gap (the Fluent, Linear and Primer pattern: each row is its own rounded surface; a run of selected rows reads as a stack, never as two surfaces touching or one merged block with a seam). Under forced colors the border is dropped (`forced-colors:border-y-0`), since the system paints a transparent border as a solid line. The focus indicator is a 1px `var(--ring-color)` border on an `after:` layer inset in that surface, never a ring outside the row, so it cannot cover a neighbour or double a line. The chevron and the glyph each sit in a 1rem box; a leaf reserves the chevron box empty so labels align across siblings. Each nested `role="group"` is indented by the row's padding-x plus half the chevron box (see Sizes), which puts its hairline guide (`border-s`, `var(--border-muted)`) under the center of the parent's chevron; the guide sits in the gutter before the nested rows' box edge, never under their hover or selected surface; indentation accumulates through nesting, so no per-level arithmetic or inline style is needed. Label and description truncate with an ellipsis on one line. The rename field is 20 / 24 / 32px tall by size.
 
 ## Theme gaps
 

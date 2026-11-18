@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "73.4 KB",
+    "limit": "73.5 KB",
     "entryOnly": true
   },
   {
@@ -18,12 +18,12 @@
   {
     "name": "site-layout",
     "path": "src/components/layout/site-layout/site-layout.vue",
-    "limit": "77.05 KB"
+    "limit": "77.15 KB"
   },
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "69.05 KB"
+    "limit": "69.15 KB"
   },
   {
     "name": "doc-markdown",
@@ -88,7 +88,7 @@
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "51.05 KB"
+    "limit": "52.05 KB"
   },
   {
     "name": "table-root",
@@ -478,13 +478,13 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "34.9 KB",
+    "limit": "34.95 KB",
     "entryOnly": true
   },
   {
     "name": "story-index-section",
     "path": "src/components/section/story-index-section/story-index-section.vue",
-    "limit": "33.35 KB",
+    "limit": "33.4 KB",
     "entryOnly": true
   },
   {
@@ -529,7 +529,7 @@
   {
     "name": "site-header-section",
     "path": "src/components/section/site-header-section/site-header-section.vue",
-    "limit": "57.5 KB"
+    "limit": "57.55 KB"
   },
   {
     "name": "competitor-comparison-section",
@@ -1921,7 +1921,7 @@
   {
     "name": "context-menu",
     "path": "src/components/navigation/context-menu/index.ts",
-    "limit": "10.3 KB"
+    "limit": "10.35 KB"
   },
   {
     "name": "context-menu-root",
@@ -2046,7 +2046,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "74.75 KB"
+    "limit": "74.85 KB"
   },
   {
     "name": "use-console-layout",
@@ -2166,7 +2166,7 @@
   {
     "name": "breadcrumb-root",
     "path": "src/components/navigation/breadcrumb/breadcrumb.vue",
-    "limit": "25.35 KB"
+    "limit": "25.4 KB"
   },
   {
     "name": "breadcrumb-item",

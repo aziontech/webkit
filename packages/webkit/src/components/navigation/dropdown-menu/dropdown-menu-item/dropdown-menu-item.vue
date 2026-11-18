@@ -143,7 +143,7 @@
       :data-selected="selected || null"
       :data-disabled="disabled || null"
       :data-ungrouped="inGroup ? null : ''"
-      class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-default) no-underline outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[type=default]:data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[ungrouped]:mx-(--spacing-2xs)"
+      class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) border-y border-transparent bg-clip-padding forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-default) no-underline outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[type=default]:data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[ungrouped]:mx-(--spacing-2xs)"
       @click="onClick"
       @keydown="onKeydown"
       @pointerenter="onPointerenter"

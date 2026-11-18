@@ -416,6 +416,7 @@ export const ptBR: Messages = {
     absolute: 'Absoluto',
     quickRanges: 'Intervalos rápidos',
     custom: 'Intervalo personalizado',
+    showQuickRanges: 'Voltar aos intervalos rápidos',
     amount: 'Duração',
     unit: 'Unidade',
     second: {
@@ -459,7 +460,6 @@ export const ptBR: Messages = {
     thisYear: 'Este ano',
     now: 'agora',
     untilNow: 'Terminar agora',
-    zoneNote: 'Horários em {zone}',
     refreshEvery: 'Atualizar a cada',
     refreshOff: 'Desligado',
     refreshSecond: {
@@ -481,6 +481,7 @@ export const ptBR: Messages = {
     incomplete: 'Escolha um início e um fim.',
     order: 'O fim precisa ser depois do início.',
     outOfBounds: 'Escolha um intervalo dentro das datas permitidas.',
+    tooLong: 'Escolha um intervalo de até {duration}.',
     invalidAmount: 'Informe um número inteiro maior que 0.'
   },
   dialog: {

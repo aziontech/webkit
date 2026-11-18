@@ -1,11 +1,11 @@
 # EventsExplorer (`view/events-explorer`)
 
-> The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.
+> The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, the time zone, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.
 
 - Surface: app
 - Source: `blocks/view/events-explorer/events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/events-explorer")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -38,7 +38,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
 
-A medium search `Input` across events, hosts, paths and addresses, then outlined medium `IconButton`s for Refresh and Download CSV, each named by a `Tooltip` and an `aria-label` with the same words.
+A medium search `Input` across events, hosts, paths and addresses, then the time zone, then outlined medium `IconButton`s for Refresh and Download CSV, each named by a `Tooltip` and an `aria-label` with the same words.
+
+**The time zone is always visible in the toolbar.** Every time on this page (the log, the chart axis, the document) is in one zone, so the toolbar says which one, beside the time controls, at every width: `Times in UTC` as muted text with a globe glyph when the zone is fixed, or a `Select` named Time zone that reads `UTC−03:00 · Sao Paulo` when the person can change it (Query variant). The `DateRangePicker` panel does not repeat it: the picker states the offset of an absolute range on its trigger and leaves the zone to the page. Use the same pattern on every page that shows metrics and logs together.
 
 ### C. Applied filters — `FilterMenu.ChipGroup` (optional)
 
@@ -64,9 +66,9 @@ The fields panel (D) is the `events-explorer#Fields` piece of the inventory; it 
 
 ### H. Query bar — `Tooltip`, `IconButton` (optional)
 
-Variant Query only; it adds `PropertyFilter` (`mode="query"`) and `DateRangePicker` to the page, in place of the Filter popover and the search field.
+Variant Query only; it adds `PropertyFilter` (`mode="query"`), `DateRangePicker` and `Select` to the page, in place of the Filter popover and the search field.
 
-For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
+For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. Beside it a `Select` named Time zone shows the zone at all times (`UTC+00:00`, `UTC−03:00 · Sao Paulo`) and changes it; the picker binds the same `v-model:time-zone`, so a typed range is read in that zone. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
 
 ### I. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Item`, `Tooltip` (optional)
 
@@ -228,7 +230,7 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - `Empty` — A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state.
 - `Loading` — The first load: Skeletons hold the Events, Errors and Avg request time values and the chart band, and the event table shows its loading rows.
 - `Error` — The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry.
-- `Query` — A typed query bar: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone.
+- `Query` — A typed query bar: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period beside an always-visible Time zone `Select`, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone.
 - `Sessions` — Several investigations open as tabs above the explorer, each keeping its own filters, search and period: API errors is active, with All traffic and Security blocks beside it. New investigation adds a tab (up to five, then a message says to close one); the actions menu renames (also F2 or a double click, with an inline field: Enter keeps, Escape cancels), duplicates or closes the active one (also Delete on the focused tab).
 - `EventDocument` — An error event selected with its document open beside the log. The document lists every field of the event with a Search in this event field that narrows and highlights the fields, a Filter by and an Exclude button per value that apply to the log (an exclusion shows as an is not chip), and Copy that copies the fields shown as JSON; the full JSON document follows.
 
@@ -1140,6 +1142,16 @@ Each variant is the same screen in another state: `get_block("view/events-explor
           </div>
         </div>
         <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+          <span
+            class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
+            data-testid="events-time-zone"
+          >
+            <i
+              class="az az-globe"
+              aria-hidden="true"
+            />
+            Times in UTC
+          </span>
           <Tooltip
             content="Refresh"
             class="shrink-0"

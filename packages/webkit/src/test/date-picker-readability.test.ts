@@ -179,7 +179,7 @@ describe('date pickers stay readable at every width', () => {
         }
         const quick = within(panel).getByTestId('date-range-picker__quick').getBoundingClientRect()
         const custom = within(panel)
-          .getByTestId('date-range-picker__custom')
+          .getByTestId('date-range-picker__custom-range')
           .getBoundingClientRect()
         expect(custom.top).toBeGreaterThanOrEqual(quick.bottom - 1)
         const apply = within(panel)
@@ -324,6 +324,9 @@ describe('the Unit and Refresh every selects line up', () => {
       await nextTick()
       await frame()
     }
+    await fireEvent.click(within(panel).getByTestId('date-range-picker__custom-range'))
+    await nextTick()
+    await frame()
     const unit = within(panel).getByTestId('date-range-picker__unit').getBoundingClientRect()
     const refresh = within(panel)
       .getByTestId('date-range-picker__refresh-interval')

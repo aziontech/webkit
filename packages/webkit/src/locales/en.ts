@@ -318,6 +318,7 @@ export const dateRangePicker = {
   absolute: 'Absolute',
   quickRanges: 'Quick ranges',
   custom: 'Custom range',
+  showQuickRanges: 'Back to quick ranges',
   amount: 'Duration',
   unit: 'Unit',
   second: {
@@ -361,7 +362,6 @@ export const dateRangePicker = {
   thisYear: 'This year',
   now: 'now',
   untilNow: 'End at now',
-  zoneNote: 'Times in {zone}',
   refreshEvery: 'Refresh every',
   refreshOff: 'Off',
   refreshSecond: {
@@ -383,6 +383,7 @@ export const dateRangePicker = {
   incomplete: 'Choose a start and an end.',
   order: 'The end must be after the start.',
   outOfBounds: 'Choose a range inside the allowed dates.',
+  tooLong: 'Choose a range of {duration} or less.',
   invalidAmount: 'Enter a whole number greater than 0.'
 } as const
 

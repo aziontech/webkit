@@ -61,6 +61,27 @@ just inside a container's frame.
   `-me-px` flush, a `ring-1` painted into the frame's pixel): the same pixel reads as one
   line, touching pixels read as two.
 
+## Two filled rows never touch
+
+In a list of rows (a select or combobox option, a menu item, a command item, a sidebar or tree row), the hover, highlighted, active and selected fills of two neighbouring rows are separated by a **2px gap**. The row keeps its full height, so the hit area and the touch target do not shrink; only the painted fill is inset, 1px from the top and 1px from the bottom edge. This is the market pattern (Radix and shadcn menus, Linear, Vercel Geist, Raycast): each highlighted row is its own rounded surface, and a selected row next to a highlighted one reads as two surfaces, never as one merged block.
+
+```html
+<!-- ❌ the selected row and the highlighted row below it fuse into one block -->
+<div role="option" class="h-8 rounded-(--shape-control) hover:bg-(--bg-hover) data-[selected]:bg-(--bg-selected)">…</div>
+
+<!-- ✅ the fill stops 1px inside each edge; the row is still 32px tall -->
+<div
+  role="option"
+  class="h-8 rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 hover:bg-(--bg-hover) data-[selected]:bg-(--bg-selected)"
+>…</div>
+```
+
+- **The pattern is the four utilities `border-y border-transparent bg-clip-padding forced-colors:border-y-0`** on the row, next to its `rounded-*`. A fill painted on a `before:` / `after:` layer with `inset-0` is inset too, because an absolute layer fills the padding box. An inset focus ring (`ring-inset`) sits inside the same box.
+- **`forced-colors:border-y-0` is required**: under Windows high contrast the system paints a transparent border as a solid line, which would rule every row. There are no fills in that mode, so the gap is not needed there.
+- **The list does not add a gap between rows**: the gap comes from the inset, so a list is exactly as tall as before, and a virtualized list keeps its fixed row height.
+- **A panel list whose focus ring sits outside the row keeps its list gap instead.** `TransferList`, `ConversationHistory`, `FilterMenu` and the `DateRangePicker` presets space their rows with `gap-(--spacing-2xs)`, which already separates the fills and leaves room for the offset ring; they do not add the inset as well.
+- **Rows that are not a list keep their own shape**: a calendar cell, a tab, a segmented control, a mega-menu entry and a table row follow their own components' rules.
+
 ## An inline chip is never taller than its line
 
 Inline code and any other inline chip (a background plus an outline on text that wraps)
