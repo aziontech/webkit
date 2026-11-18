@@ -1,5 +1,8 @@
+import '../../../test/reflow.css'
+
 import { fireEvent, render, type RenderOptions } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -22,6 +25,10 @@ const mount = (
   })
 
 describe('DonutChart', () => {
+  afterEach(async () => {
+    await page.viewport(414, 896)
+  })
+
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = mount()
     expect(fallback.getByTestId('donut-chart').tagName).toBe('FIGURE')
@@ -34,6 +41,22 @@ describe('DonutChart', () => {
     expect(root.getAttribute('data-type')).toBe('pie')
     expect(root.getAttribute('data-size')).toBe('large')
   })
+
+  it.each([
+    ['small', 0.66 * 128],
+    ['medium', 0.66 * 176],
+    ['large', 0.66 * 240]
+  ])(
+    'fits the center value inside the hole of the %s ring on a wide screen',
+    async (size, hole) => {
+      await page.viewport(1280, 900)
+      const view = mount({ size, series: [{ id: 'all', name: 'All', values: [126700] }] })
+      await document.fonts.ready
+      const value = view.getByTestId('donut-chart__center-value')
+      expect(value.textContent).toBe('126.7K')
+      expect(value.getBoundingClientRect().width).toBeLessThan(hole - 24)
+    }
+  )
 
   it('draws one slice per series, summing each series, in slot order', () => {
     const view = mount()

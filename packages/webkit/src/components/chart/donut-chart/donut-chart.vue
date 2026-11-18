@@ -397,7 +397,8 @@
         </svg>
         <div
           v-if="type === 'donut'"
-          class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-(--spacing-2xs) px-(--spacing-lg) text-center"
+          :data-size="size"
+          class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-(--spacing-2xs) px-(--spacing-lg) text-center data-[size=small]:px-(--spacing-md)"
           :data-testid="`${testId}__center`"
         >
           <slot
@@ -405,10 +406,17 @@
             :total="total"
             :active="active ? active.source : null"
           >
-            <span class="text-big-number-sm tabular-nums text-(--text-default)">{{
-              centerValue
-            }}</span>
-            <span class="line-clamp-2 text-body-sm text-(--text-muted)">{{ centerCaption }}</span>
+            <span
+              :data-size="size"
+              :data-testid="`${testId}__center-value`"
+              class="text-big-number-sm tabular-nums text-(--text-default) data-[size=small]:text-label-code-md"
+              >{{ centerValue }}</span
+            >
+            <span
+              :data-size="size"
+              class="line-clamp-2 text-body-sm text-(--text-muted) data-[size=small]:text-body-xs"
+              >{{ centerCaption }}</span
+            >
           </slot>
         </div>
       </div>

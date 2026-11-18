@@ -3,7 +3,7 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: implemented
-checksum: eaf56e38d6c8a308ac5de955c10129bc5b58f6cb80cde8bcb035b04bbf8cb7ce
+checksum: e04eafd27b6ef14e678ad87257714a2e0a9c5f5b6b3a8bd77e55e16673201f32
 spec_version: 4
 created: 2026-10-20
 last_updated: 2026-11-16
@@ -127,8 +127,8 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
 | slices                       | `var(--chart-series-1)` … `var(--chart-series-8)`, `var(--chart-series-other)`                                         |
 | status slices                | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)` |
 | slice gap                    | `var(--bg-surface)`                                                                                                    |
-| center value                 | `.text-big-number-sm`, `tabular-nums`                                                                                  |
-| center caption, legend names | `.text-body-sm`, `var(--text-muted)`, `var(--text-default)`                                                            |
+| center value                 | `.text-big-number-sm`, `tabular-nums`; the small ring steps down to `.text-label-code-md` so the value clears the ring  |
+| center caption, legend names | `.text-body-sm` (`.text-body-xs` in the small ring), `var(--text-muted)`, `var(--text-default)`                        |
 | legend values and shares     | `.text-label-code-md`, `tabular-nums`, `var(--text-muted)`                                                             |
 | spacing                      | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`                                                          |
 | focus                        | `var(--ring-color)`                                                                                                    |
