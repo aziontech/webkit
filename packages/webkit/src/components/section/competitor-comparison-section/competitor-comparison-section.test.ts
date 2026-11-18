@@ -108,6 +108,33 @@ describe('CompetitorComparisonSection', () => {
     expect(within(secondCells[1]).getByText('Not available')).toBeInTheDocument()
   })
 
+  it.each([
+    ['full', 'az-circle-check', 'text-(--success-mark)', 'Full support'],
+    ['partial', 'az-circle-half', 'text-(--text-muted)', 'Partial support'],
+    ['none', 'az-minus', 'text-(--text-muted)', 'Not available']
+  ])(
+    'draws %s support with its own glyph, a neutral or success token and its label',
+    (level, glyph, token, label) => {
+      const { container } = band()
+
+      const icon = container.querySelector(`i[data-support="${level}"]`)
+      expect(icon?.classList.contains(glyph)).toBe(true)
+      expect(icon?.className).toContain(`data-[support=${level}]:${token}`)
+      expect(icon?.className).not.toContain('--warning-')
+      expect(icon).toHaveAttribute('aria-hidden', 'true')
+      expect(within(icon?.closest('td') as HTMLElement).getByText(label)).toBeInTheDocument()
+    }
+  )
+
+  it('aligns the capability column head to the start and draws category heads in the brand orange', () => {
+    const { getByRole, getByText } = band()
+
+    expect(getByRole('columnheader', { name: 'Capability' }).classList.contains('text-start')).toBe(
+      true
+    )
+    expect(getByText('Security').className).toContain('var(--text-brand)')
+  })
+
   it('renders an info button only for a capability with a definition', () => {
     const { getByRole, queryByRole } = band()
 

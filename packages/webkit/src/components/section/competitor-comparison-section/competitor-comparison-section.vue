@@ -129,7 +129,7 @@
   const supportIcon: Record<CompetitorComparisonSectionSupport, string> = {
     full: 'az az-circle-check',
     partial: 'az az-circle-half',
-    none: 'az az-circle-minus'
+    none: 'az az-minus'
   }
 
   const labelOf = (level: CompetitorComparisonSectionSupport | undefined) =>
@@ -191,7 +191,7 @@
             <tr>
               <th
                 scope="col"
-                class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 sm:px-(--spacing-xl) align-middle font-normal h-(--competitor-comparison-section-head)"
+                class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 sm:px-(--spacing-xl) text-start align-middle font-normal h-(--competitor-comparison-section-head)"
               >
                 <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
               </th>
@@ -233,7 +233,10 @@
                 colspan="3"
                 class="sticky top-[calc(3.5rem+var(--competitor-comparison-section-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) sm:px-(--spacing-xl) text-start font-normal"
               >
-                <span class="text-overline-md text-(--text-primary)">{{ group.title }}</span>
+                <span
+                  class="text-overline-md text-[color:light-dark(var(--text-primary),var(--text-brand))]"
+                  >{{ group.title }}</span
+                >
               </th>
             </tr>
             <tr
@@ -282,7 +285,7 @@
                   <i
                     :data-support="item[platform] ?? 'none'"
                     :class="iconOf(item[platform])"
-                    class="text-body-md data-[support=full]:text-(--success-foreground) data-[support=none]:text-(--text-muted) data-[support=partial]:text-(--warning-foreground)"
+                    class="text-body-md data-[support=full]:text-(--success-mark) data-[support=none]:text-(--text-muted) data-[support=partial]:text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Tooltip>
