@@ -44,6 +44,25 @@
 
   const hasItems = computed(() => props.items.length > 0)
 
+  const glyphs = (text = '') => Array.from(text).length
+
+  const figureFit = computed(() => {
+    let characters = 1
+    let gaps = 0
+    for (const item of props.items) {
+      const parts = [item.prefix, item.value, item.suffix].filter(Boolean)
+      characters = Math.max(
+        characters,
+        parts.reduce((sum, part) => sum + glyphs(part), 0)
+      )
+      gaps = Math.max(gaps, parts.length - 1)
+    }
+    return {
+      '--text-big-number-characters': characters,
+      '--text-big-number-inset': `calc(${gaps} * var(--spacing-2xs))`
+    }
+  })
+
   const emptyCells = (count: number, columns: number) => (columns - (count % columns)) % columns
 
   const columns = computed<CardGridColumns>(() => {
@@ -66,6 +85,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
+    :style="figureFit"
     class="group"
   >
     <CardGrid
@@ -77,17 +97,18 @@
       <figure
         v-for="(item, index) in items"
         :key="`${item.label}-${index}`"
-        class="m-0 flex h-full flex-col justify-center gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl)"
+        class="@container/stats-figure m-0 flex h-full flex-col justify-start gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl)"
       >
         <div
-          class="flex min-w-0 flex-wrap items-end gap-(--spacing-2xs) group-data-[size=large]:text-big-number-lg group-data-[size=medium]:text-big-number-md group-data-[size=small]:text-big-number-sm"
+          :data-testid="`${testId}__figure`"
+          class="flex min-w-0 flex-nowrap items-baseline gap-(--spacing-2xs) group-data-[size=large]:text-big-number-lg group-data-[size=medium]:text-big-number-md group-data-[size=small]:text-big-number-sm"
         >
           <span
             v-if="item.prefix"
             class="text-(--text-brand)"
             >{{ item.prefix }}</span
           >
-          <span class="min-w-0 wrap-anywhere text-(--text-default)">{{ item.value }}</span>
+          <span class="text-(--text-default)">{{ item.value }}</span>
           <span
             v-if="item.suffix"
             class="text-(--text-muted)"

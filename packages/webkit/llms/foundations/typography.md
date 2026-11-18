@@ -11,9 +11,9 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 | `text-amount-lg` | `1.875rem` | sm: 3rem, md: 3.5rem | The largest price or amount. |
 | `text-amount-md` | `1rem` | sm: 1.25rem, md: 1.5rem | A price or amount in a card. |
 | `text-amount-sm` | `1rem` |  | A compact price or amount. |
-| `text-big-number-lg` | `1.5rem` | sm: 2.25rem, md: 3.5rem | The largest numeric display, such as a hero metric. |
-| `text-big-number-md` | `1.25rem` | sm: 1.5rem, md: 2.25rem | A numeric display in a stat card. |
-| `text-big-number-sm` | `1rem` | sm: 1.25rem | A compact numeric display. |
+| `text-big-number-lg` | `1.5rem` | sm: 2.25rem, md: 3.5rem | The largest numeric figure on one line, shrunk to fit its container. |
+| `text-big-number-md` | `1.25rem` | sm: 1.5rem, md: 2.25rem | A numeric figure in a stat card, on one line, shrunk to fit. |
+| `text-big-number-sm` | `1rem` | sm: 1.25rem | A compact numeric figure, on one line, shrunk to fit. |
 | `text-body-2xs` | `0.75rem` |  | The smallest body text, such as footnotes. |
 | `text-body-code-sm` | `0.75rem` |  | A monospace paragraph that wraps. |
 | `text-body-lg` | `1rem` | md: 1.125rem | Lead paragraphs. |

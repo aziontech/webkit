@@ -118,7 +118,7 @@ const typographyTokens = () =>
     const value = {}
     const breakpoints = {}
     for (const [prop, raw] of Object.entries(bundle)) {
-      if (prop === 'states') continue
+      if (prop === 'states' || prop === 'fontSizeFit') continue
       const { base, breakpoints: steps } = splitResponsive(raw)
       if (base != null) value[kebab(prop)] = base
       for (const [bp, v] of Object.entries(steps)) (breakpoints[bp] ||= {})[kebab(prop)] = v

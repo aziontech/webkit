@@ -22,6 +22,7 @@
 - Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.
 - Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.
 - Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`).
+- A figure never wraps. Each cell is a size container, and the big-number role sets the figure at the smaller of its `size` step and the width that fits the band's longest figure on one line: the band writes the glyph count of its longest figure (prefix, value and suffix) into `--text-big-number-characters` and the width of the gaps between those parts into `--text-big-number-inset`, so every figure in the band is set at the same size and sits on the same line. A long figure in a narrow column shrinks the whole band rather than breaking.
 
 ## Don’t
 
@@ -59,7 +60,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--text-brand)` (the logo orange `#F3652B` in both themes) is large text (about 3:1 light, 6.71:1 dark; the light pair is the accepted `--text-brand` exception). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
-- Reflow: the figure row wraps (`flex-wrap`), so the prefix and the suffix move under the value when a cell is narrow, and the value itself breaks (`wrap-anywhere`) rather than overflow at 200% zoom.
+- Reflow: a figure never breaks across lines; its prefix, value and suffix stay on one line, and the figure shrinks to fit its cell instead (see Best practices), so there is no horizontal scroll at 320 px or at 200% zoom.
 
 ## Examples
 
