@@ -1081,6 +1081,7 @@ inside a `DocSteps` to `<DocSteps.Step>` and swaps the import for `doc-steps`; i
 uses for the rail; the codemod rewrites the import, the tag and the `DocOnThisPage*` types. The rail's
 heading still reads "On this page". Its locale catalog key and test id moved with it: override
 `docTableOfContents.*` instead of `docOnThisPage.*`, and select `doc-table-of-contents`.
+`DocLayout`'s `outlineGroups` takes `DocTableOfContentsGroup[]` (was `DocOnThisPageGroup[]`); the codemod renames the type.
 
 `doc-pagination` is now `doc-previous-next` (`DocPreviousNext`); the codemod rewrites it. Its locale catalog
 key and test id moved with it: override `docPreviousNext.*` instead of `docPagination.*`, and select

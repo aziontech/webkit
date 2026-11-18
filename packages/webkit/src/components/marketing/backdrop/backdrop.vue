@@ -3,7 +3,7 @@
 
   import SpinningGlobe from '../../../assets/globe/spinning-globe.vue'
   import NetworkMap from '../../content/network-map/network-map.vue'
-  import Texture from '../texture/texture.vue'
+  import Texture from '../../content/texture/texture.vue'
 
   defineOptions({ name: 'Backdrop', inheritAttrs: false })
 

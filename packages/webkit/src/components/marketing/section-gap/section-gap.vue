@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Texture from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import Texture from '../texture/texture.vue'
 
   defineOptions({
     name: 'SectionGap',

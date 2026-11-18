@@ -4,7 +4,7 @@
   import CardGrid, {
     type CardGridColumns,
     type CardGridMobileColumns
-  } from '../card-grid/card-grid.vue'
+  } from '../../layout/card-grid/card-grid.vue'
 
   defineOptions({
     name: 'Stats',

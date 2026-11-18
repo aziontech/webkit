@@ -2,13 +2,13 @@
   import { computed, inject, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import { SectionStackInjectionKey } from '../section-stack/injection-key'
   import Texture, {
     type TextureFade,
     type TextureSize,
     type TextureVariant
-  } from '../texture/texture.vue'
+  } from '../../content/texture/texture.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { SectionStackInjectionKey } from '../section-stack/injection-key'
 
   defineOptions({
     name: 'MediaSplit',

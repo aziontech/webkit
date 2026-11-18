@@ -19,9 +19,9 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
+  import CardGrid from '../../layout/card-grid/card-grid.vue'
+  import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import CardGrid from '../card-grid/card-grid.vue'
-  import CardGridCell from '../card-grid/card-grid-cell/card-grid-cell.vue'
   import type { LogoWallShape } from '../logo-wall/logo-wall.vue'
   import Quote from '../quote/quote.vue'
 

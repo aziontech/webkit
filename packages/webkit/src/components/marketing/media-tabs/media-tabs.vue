@@ -5,12 +5,12 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Texture, {
     type TextureFade,
     type TextureSize,
     type TextureVariant
-  } from '../texture/texture.vue'
+  } from '../../content/texture/texture.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'MediaTabs',

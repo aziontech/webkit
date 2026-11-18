@@ -5,7 +5,7 @@
     type TextureFade,
     type TextureSize,
     type TextureVariant
-  } from '../texture/texture.vue'
+  } from '../../content/texture/texture.vue'
 
   const Marquee = defineAsyncComponent(() => import('../marquee/marquee.vue'))
 

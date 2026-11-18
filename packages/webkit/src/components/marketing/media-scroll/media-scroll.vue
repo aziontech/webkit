@@ -13,7 +13,7 @@
     watch
   } from 'vue'
 
-  import Texture from '../texture/texture.vue'
+  import Texture from '../../content/texture/texture.vue'
 
   defineOptions({
     name: 'MediaScroll',

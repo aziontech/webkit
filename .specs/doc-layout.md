@@ -3,7 +3,7 @@ name: doc-layout
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 checksum: 9e10e7685243bcfeae29f678a9f02e39e9b72af4dab1e3d9ea905b27e9a2d114
 created: 2026-11-12
