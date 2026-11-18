@@ -3,14 +3,14 @@ name: log-viewer
 category: code
 structure: composition
 status: implemented
-spec_version: 13
+spec_version: 14
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: c8ecb47248d9d6bd0944f63856ed69b4e3f4cf34b8d44d309940b6cc8b0b8e81
+checksum: fe4a59533e3c9b73cd74a826786fbd10b3e65d020cbc5212dc29682b0d72c42f
 created: 2026-05-26
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # Log View — Component Spec
@@ -171,7 +171,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 | `suffix`     | `string`                                                 | Optional highlight for `framework-version`.                                                                                   |
 | `level`      | `'debug' \| 'info' \| 'warn' \| 'error'`                 | Optional log level (`LogViewerLineLevel`): adds the level column, tints `warn` and `error` rows, and drives the level filter. |
 
-`time` is a label, so it holds a clock time (`13:47:33`) or a run offset (`120 ms`); an empty `time` drops the time column for that line.
+`time` is a label, so it holds a clock time (`13:47:33`) or a run offset (`120 ms`). The time and level are columns of the whole log: the time column is as wide as the longest `time` in `lines` (tabular numbers, aligned to the end) and the level column as wide as the longest `level`, so every message starts at the same x on every row, whatever the filter shows. A line with an empty `time` or no `level` keeps an empty cell; a log where no line has a `time` (or a `level`) drops that column.
 
 `LogViewerStep` (exported from `injection-key.ts`, read by `LogViewer.Steps`):
 
@@ -194,6 +194,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - `loading` state: LogViewerContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type` and `data-level` reflects `line.level`; `warn` rows take the warning tint, `error` rows the danger tint and danger text
 - Level toggles carry `data-level` and `data-active` (the chosen level); every toggle shows the count of lines at its level in the whole log
+- Log line columns: the time and level cells take their width from the longest value in the whole log (`--log-viewer-time-width`, `--log-viewer-level-width` on the line list, counted in `ch` plus the code letter-spacing), so the columns do not move while lines are filtered, appended or mounted in chunks.
 - Long logs: above 300 visible lines `LogViewerContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, the level filter, the line count and copy work on every line, mounted or not.
 
 ## Motion & Animations
