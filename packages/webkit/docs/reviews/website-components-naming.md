@@ -224,6 +224,23 @@ so the site's stored pages keep rendering untouched.
 | WN05 | Rename the two drifting page sections (`customer-use-cases-section`, `investor-marks-section`) with a page-data alias.        | not now: the site owns the ids   |
 | WN06 | Rename the console's `settings-section` so that `-section` means only a page band.                                            | not now: separate console change |
 
+## Results on this branch
+
+| Check                                                                                            | Result                                                                               |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| `pnpm --filter @aziontech/webkit run gates` (with a `!` PR title)                                | pass, every gate (naming, catalog, API diff, migrations, size, specs, toolkit tests) |
+| `pnpm lint:webkit`                                                                               | pass                                                                                 |
+| `pnpm typecheck:webkit`                                                                          | pass                                                                                 |
+| Vitest browser, 23 files: the renamed and moved components and every component that imports them | 677 of 678 pass                                                                      |
+| `pnpm build:docs`, `pnpm build:demos`                                                            | pass                                                                                 |
+
+Pre-existing failure, not caused here: `hero-title.test.ts` › "closes the eyebrow with the blinking
+cursor" expects an `.animate-blink` element that `hero-title.vue` no longer renders on the base
+commit `0dc12b196` either (the file is unchanged on this branch).
+
+Not run: the styled visual suite (`apps/visual`), whose baselines come only from the CI container.
+The two renamed examples' baselines were renamed, not regenerated.
+
 ## Inventory
 
 How to read the counts: "Blocks" and "Docs app" count the files that import the component by its
