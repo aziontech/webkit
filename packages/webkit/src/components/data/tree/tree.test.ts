@@ -746,6 +746,62 @@ describe('Tree', () => {
   })
 
   describe('feature examples', () => {
+    it('renames through the Rename example: the pencil and F2 open the field, Enter applies the label, Escape cancels', async () => {
+      const view = render(RenameExample)
+      await userEvent.click(view.getByRole('button', { name: 'Rename package.json' }))
+      const field = view.getByRole('textbox', { name: 'Rename package.json' })
+      expect(document.activeElement).toBe(field)
+      await userEvent.clear(field)
+      await userEvent.type(field, 'manifest.json{Enter}')
+      expect(view.queryByRole('textbox')).toBeNull()
+      expect(rowOf(view.container, 'package.json').textContent).toContain('manifest.json')
+      expect(view.getByRole('button', { name: 'Rename manifest.json' })).toBeTruthy()
+
+      rowOf(view.container, 'README.md').focus()
+      await userEvent.keyboard('{F2}')
+      await userEvent.type(view.getByRole('textbox', { name: 'Rename README.md' }), 'x{Escape}')
+      expect(view.queryByRole('textbox')).toBeNull()
+      expect(rowOf(view.container, 'README.md').textContent).toContain('README.md')
+      expect(rowOf(view.container, 'README.md').textContent).not.toContain('README.mdx')
+    })
+
+    it('emits rename with the item and the new label from a row-action pencil', async () => {
+      const onRename = vi.fn()
+      const view = render(
+        defineComponent({
+          setup() {
+            const treeEl = ref<{ startRename: (id: string) => void } | null>(null)
+            return () =>
+              h(
+                Tree,
+                { ref: treeEl, items: ITEMS, editable: true, ariaLabel: 'Files', onRename },
+                {
+                  actions: (scope: { item: TreeItem }) =>
+                    h('button', {
+                      type: 'button',
+                      'aria-label': `Rename ${scope.item.label}`,
+                      onClick: () => treeEl.value?.startRename(scope.item.id)
+                    })
+                }
+              )
+          }
+        })
+      )
+      await userEvent.click(view.getByRole('button', { name: 'Rename azion.config.js' }))
+      const field = view.getByRole('textbox', { name: 'Rename azion.config.js' })
+      expect(document.activeElement).toBe(field)
+      await userEvent.clear(field)
+      await userEvent.type(field, 'app.config.js{Enter}')
+      expect(onRename).toHaveBeenCalledTimes(1)
+      expect(onRename.mock.calls[0][0]).toBeInstanceOf(KeyboardEvent)
+      expect(onRename.mock.calls[0][1]).toEqual({ item: CONFIG, label: 'app.config.js' })
+
+      await userEvent.click(view.getByRole('button', { name: 'Rename azion.config.js' }))
+      await userEvent.type(view.getByRole('textbox'), 'x{Escape}')
+      expect(onRename).toHaveBeenCalledTimes(1)
+      expect(view.queryByRole('textbox')).toBeNull()
+    })
+
     it.each([
       ['LazyChildren', LazyChildren],
       ['Rename', RenameExample],
