@@ -774,6 +774,8 @@ describe('DateRangePicker', () => {
       expect(view.getByTestId(`${TEST_ID}__trigger`).getAttribute('aria-label')).toContain(
         'refreshes every 5 minutes'
       )
+      expect(view.queryByTestId(`${TEST_ID}__refreshing`)).toBeNull()
+      expect(view.getByTestId(`${TEST_ID}__trigger`).querySelector('.az-refresh')).toBeNull()
       vi.advanceTimersByTime(300_000)
       expect(view.emitted()['refresh']).toHaveLength(1)
       await view.rerender({ showRefresh: false })

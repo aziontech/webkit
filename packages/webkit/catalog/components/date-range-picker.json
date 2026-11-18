@@ -26,6 +26,6 @@
   "Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.",
   "Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.",
   "Name the picker after what it filters (`aria-label=\"Events time range\"`).",
-  "Always handle `@refresh`: the picker refreshes every 5 minutes unless the page turns it off, and the trigger shows the refresh icon, so a page that ignores the event shows a refresh that does nothing."
+  "Always handle `@refresh`: the picker refreshes every 5 minutes unless the page turns it off, so a page that ignores the event offers a refresh that does nothing."
  ]
 }

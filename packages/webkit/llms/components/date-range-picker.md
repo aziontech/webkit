@@ -22,7 +22,7 @@
 - Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.
 - Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.
 - Name the picker after what it filters (`aria-label="Events time range"`).
-- Always handle `@refresh`: the picker refreshes every 5 minutes unless the page turns it off, and the trigger shows the refresh icon, so a page that ignores the event shows a refresh that does nothing.
+- Always handle `@refresh`: the picker refreshes every 5 minutes unless the page turns it off, so a page that ignores the event offers a refresh that does nothing.
 
 ## Don’t
 
@@ -72,12 +72,12 @@
 
 ## v-model
 
-| Model                     | Type                     | Default     | Emits                    | Notes                                                                                                                                                                                                                         |
-| ------------------------- | ------------------------ | ----------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`                 | `DateRangeValue \| null` | `null`      | `update:modelValue`      | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range).                                          |
-| `v-model:timeZone`        | `string`                 | `''`        | `update:timeZone`        | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel.                                                                                         |
+| Model                     | Type                     | Default     | Emits                    | Notes                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------- | ------------------------ | ----------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`                 | `DateRangeValue \| null` | `null`      | `update:modelValue`      | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range).                                                                                                                                                            |
+| `v-model:timeZone`        | `string`                 | `''`        | `update:timeZone`        | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel.                                                                                                                                                                                                           |
 | `v-model:refreshInterval` | `number`                 | `300`       | `update:refreshInterval` | Auto-refresh interval in seconds; `0` is off. Set on Apply from the panel's Refresh every select (Off is 0; a bound value outside the list is kept as its own entry). While above 0 and Refresh every is offered (`showRefresh`, not `absolute-only`) the picker fires `refresh` on every tick; the default is 5 minutes, so handle `@refresh`. |
-| `v-model:open`            | `boolean`                | `undefined` | `update:open`            | Open state of the panel via `defineModel('open')`: the trigger, Apply, Cancel, `Esc` and an outside click update it. Unbound, the picker keeps it itself and starts at `defaultOpen`.                                         |
+| `v-model:open`            | `boolean`                | `undefined` | `update:open`            | Open state of the panel via `defineModel('open')`: the trigger, Apply, Cancel, `Esc` and an outside click update it. Unbound, the picker keeps it itself and starts at `defaultOpen`.                                                                                                                                                           |
 
 ## States
 
@@ -85,7 +85,7 @@
 - `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-invalid` on the root and the trigger shell (own `invalid` or the enclosing `Field`'s, with `aria-invalid` on the trigger and the danger border); `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
 - The Next button is disabled while the range ends now (relative or `since`) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
 - `data-selected` on the custom duration group when the draft is a custom duration (no quick range picked).
-- With an auto-refresh interval above 0 the trigger shows a refresh glyph and its accessible name ends with the interval (`…, refreshes every 30 seconds`).
+- With an auto-refresh interval above 0 the trigger's accessible name ends with the interval (`…, refreshes every 30 seconds`); the trigger draws no refresh glyph (owner 2026-11-18: the interval lives in the panel's Refresh every row).
 - `data-side` (`bottom` | `top`) and `data-align` (`start`) on the calendar panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility

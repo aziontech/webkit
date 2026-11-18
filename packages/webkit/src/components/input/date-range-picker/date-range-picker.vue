@@ -738,12 +738,6 @@
           ></span
         >
         <i
-          v-if="refreshText"
-          :data-testid="`${testId}__refreshing`"
-          class="az az-refresh shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
-          aria-hidden="true"
-        />
-        <i
           :data-state="isOpen ? 'open' : 'closed'"
           class="az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
           aria-hidden="true"

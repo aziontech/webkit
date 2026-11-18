@@ -29,7 +29,7 @@
     },
     {
       "name": "AutoRefresh",
-      "summary": "Refresh every is in the panel and on by default at 5 minutes (Off, 10 seconds … 1 hour); this page starts it at 1 minute. Bind `v-model:refresh-interval` (seconds, 0 is off) and run the query on `@refresh`, which fires on each tick while the page is visible; the trigger shows a refresh icon and says the interval to screen readers. A page that cannot re-run its query passes `:show-refresh=\"false\"`. The quick ranges start with **Today** and **This week**: options with `snap: true` begin at the start of the day or week in the time zone.",
+      "summary": "Refresh every is in the panel and on by default at 5 minutes (Off, 10 seconds … 1 hour); this page starts it at 1 minute. Bind `v-model:refresh-interval` (seconds, 0 is off) and run the query on `@refresh`, which fires on each tick while the page is visible; the trigger draws no refresh icon and says the interval to screen readers. A page that cannot re-run its query passes `:show-refresh=\"false\"`. The quick ranges start with **Today** and **This week**: options with `snap: true` begin at the start of the day or week in the time zone.",
       "file": "auto-refresh.vue"
     },
     {
