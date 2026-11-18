@@ -15447,7 +15447,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `LogViewer.Content`, `LogViewer.Footer`, `LogViewer.Steps`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-viewer-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
-- `log-viewer-header.vue` (`LogViewer.Header`) — Default 48px toolbar: line count, warning filter (a native button that toggles `level` between `warn` and every level, 32 px, 44 px on coarse pointers), the level filter…
+- `log-viewer-header.vue` (`LogViewer.Header`) — Default 48px toolbar: line count, warning filter (a native button that toggles `level` between `warn` and every level, 32 px, with a 44 px hit area on coarse pointers), t…
 - `log-viewer-content.vue` (`LogViewer.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), a…
 - `log-viewer-footer.vue` (`LogViewer.Footer`) — Optional footer region for actions (download, follow live, pagination).
 - `log-viewer-steps.vue` (`LogViewer.Steps`) — A run with known steps, standalone (it renders its own `LogViewer` per step and needs no parent `LogViewer`).
@@ -15481,7 +15481,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - The loading state uses `role="status"` with `aria-live="polite"`; the spinner is `aria-hidden` (from the Spinner component) and the `loadingLabel` text conveys status.
 - `motion-reduce:transition-none` on every motion-bearing class.
 - LogViewer.Steps: each step is an `Accordion` item (a button with `aria-expanded`); the status glyph is `aria-hidden` and the status is in the trigger's text (`sr-only`), so it is never colour or shape only; the view switch is a named `ToggleGroup`; the progress bar is a `progressbar` named `Run progress`.
-- Touch target: level toggles are 32 px high (44 px on `pointer: coarse`); the warning control is ≥40×40 px; the copy control uses CopyButton `size="small"` (28×28 px) to match CodeBlock — a justified deviation for the compact overlay.
+- Touch target: level toggles and the warning control stay 32 px high at every width, so the toolbar keeps its size on a phone; on `pointer: coarse` an invisible layer extends each one's hit area to 44 px tall; the copy control uses CopyButton `size="small"` (28×28 px) to match CodeBlock — a justified deviation for the compact overlay.
 
 ## Examples
 

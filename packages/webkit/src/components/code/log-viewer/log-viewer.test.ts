@@ -570,6 +570,19 @@ describe('LogViewer', () => {
         expect(getAllByTestId('log-viewer-header__level')).toHaveLength(4)
         await expectNoA11yViolations(container)
       })
+
+      it('keeps the level toggles 32 px on touch screens and widens only their hit area', () => {
+        const { getAllByTestId, getByTestId } = render(Levels)
+        const controls = [
+          ...getAllByTestId('log-viewer-header__level'),
+          getByTestId('log-viewer-header__warnings-filter')
+        ]
+        for (const control of controls) {
+          expect(control.classList.contains('h-8')).toBe(true)
+          expect(control.classList.contains('pointer-coarse:h-11')).toBe(false)
+          expect(control.classList.contains('pointer-coarse:before:-inset-y-1.5')).toBe(true)
+        }
+      })
     })
 
     describe('a11y (axe against styled, composed DOM)', () => {

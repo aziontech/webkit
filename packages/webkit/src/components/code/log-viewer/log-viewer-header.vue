@@ -49,7 +49,7 @@
           :data-testid="`${testId}__warnings-filter`"
           :aria-pressed="ctx.level.value === 'warn'"
           :disabled="ctx.disabled.value"
-          class="inline-flex h-8 min-w-8 items-center justify-center rounded-(--shape-control) p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 pointer-coarse:h-11"
+          class="inline-flex h-8 min-w-8 items-center justify-center rounded-(--shape-control) p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 relative before:absolute before:inset-0 before:content-[''] pointer-coarse:before:-inset-y-1.5"
           @click="ctx.toggleLevel('warn')"
         >
           <Tag
@@ -78,7 +78,7 @@
             "
             :disabled="ctx.disabled.value"
             :data-testid="`${testId}__level`"
-            class="inline-flex h-8 shrink-0 cursor-pointer items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) text-label-code-sm text-(--text-muted) transition-colors duration-150 ease-out hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 data-[active]:border-(--border-selected) data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default) motion-reduce:transition-none pointer-coarse:h-11"
+            class="inline-flex h-8 shrink-0 cursor-pointer items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) text-label-code-sm text-(--text-muted) transition-colors duration-150 ease-out hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 data-[active]:border-(--border-selected) data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default) motion-reduce:transition-none relative before:absolute before:inset-0 before:content-[''] pointer-coarse:before:-inset-y-1.5"
             @click="ctx.toggleLevel(name)"
           >
             <span
