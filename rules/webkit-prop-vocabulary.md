@@ -130,7 +130,6 @@ message string; `level` on a heading component; `label` on a group part.
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```ts
 // banner.vue — canonical vocabulary throughout
 interface Props {
@@ -149,7 +148,6 @@ const open = defineModel<boolean>('open')   // anything that opens: open
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```ts
 interface Props {
   kind?: 'outlined' | 'transparent'  // ❌ the look is `variant`: outline | ghost

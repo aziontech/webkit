@@ -79,7 +79,6 @@ is in `webkit-tokens.md` § "Chart palettes".
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```html
 <!-- compose around it: your markup, your classes; the text goes through its props -->
 <div class="flex items-center gap-(--spacing-xs)">
@@ -97,7 +96,6 @@ is in `webkit-tokens.md` § "Chart palettes".
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```html
 <Button class="p-8 bg-[#0a0a0a]" @click="submit">Create account</Button>
 <Dialog :style="{ width: '800px' }" />

@@ -72,7 +72,6 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <script setup>
 import { useId } from 'vue'
@@ -99,7 +98,6 @@ const hintId = useId() // stable id for the ARIA association
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```html
 <!-- clickable div: fake semantics, unreachable by keyboard -->
 <div role="button" @click="open">Open settings</div>

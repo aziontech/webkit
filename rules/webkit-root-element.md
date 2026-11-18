@@ -32,7 +32,6 @@ inside class strings is enforced separately by the stylelint config and the
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
@@ -67,7 +66,6 @@ inside class strings is enforced separately by the stylelint config and the
 </template>
 ```
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   import { ref } from 'vue'
@@ -81,7 +79,6 @@ inside class strings is enforced separately by the stylelint config and the
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   import { ref } from 'vue'

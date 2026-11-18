@@ -30,6 +30,13 @@
 
   const t = messages
 
+  const CODE_ONLY = /^<pre[\s>][\s\S]*<\/pre>$/
+
+  function codeOnly(html: string): boolean {
+    const trimmed = html.trim()
+    return CODE_ONLY.test(trimmed) && trimmed.indexOf('<pre', 1) === -1
+  }
+
   const heading = computed(() => `h${Math.min(Math.max(props.level, 2), 6)}`)
   const labels = computed(() => {
     if (props.type === 'usage') return { do: t.value.whenToUse, dont: t.value.whenNotToUse }
@@ -41,16 +48,18 @@
       {
         side: 'do',
         label: labels.value.do,
-        icon: 'az az-circle-check text-(--success)',
+        icon: 'az az-circle-check text-(--success-foreground)',
         html: props.doHtml,
-        items: props.doItems
+        items: props.doItems,
+        code: codeOnly(props.doHtml) && !props.doItems.length
       },
       {
         side: 'dont',
         label: labels.value.dont,
-        icon: 'az az-circle-x text-(--danger)',
+        icon: 'az az-circle-x text-(--danger-foreground)',
         html: props.dontHtml,
-        items: props.dontItems
+        items: props.dontItems,
+        code: codeOnly(props.dontHtml) && !props.dontItems.length
       }
     ].filter((column) => column.html || column.items.length)
   )
@@ -67,6 +76,10 @@
       v-for="column in columns"
       :key="column.side"
       :data-slot="column.side"
+      :data-code="column.code || null"
+      :padded="!column.code"
+      class="not-data-[type=usage]:border-t-2 not-data-[type=usage]:data-[slot=do]:border-t-(--success-mark) not-data-[type=usage]:data-[slot=dont]:border-t-(--danger-mark)"
+      :data-type="type"
     >
       <template #header>
         <component
@@ -81,7 +94,10 @@
           {{ column.label }}
         </component>
       </template>
-      <DocProse v-if="column.html">
+      <DocProse
+        v-if="column.html"
+        :class="column.code ? 'docs-pair-code' : undefined"
+      >
         <ul v-if="column.items.length">
           <RawHtml
             v-for="line in column.items"

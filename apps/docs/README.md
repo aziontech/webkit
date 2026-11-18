@@ -64,6 +64,19 @@ these shapes and the content pipeline (`plugins/content.ts`, `markdownParts`) bu
 | One example inside a rule                                                        | A list whose items start with a bold label: `- **Correct:** …` and `- **Incorrect:** …` (or `**Do:**` / `**Don't:**`). Other items of that list stay as a list above the pair.                        |
 | A component spec (`.specs/<name>.md`)                                            | `## Best practices` bullets fill the Do column; a bullet that starts with `**Don't**` (or `**Never**`, `**Avoid**`) moves to the Don't column, above `## Constraints — DO NOT`.                       |
 
+Each card follows the common Do/Don't pattern (Polaris, Atlassian, Primer, Carbon): a coloured top
+edge (`--success-mark` for Do, `--danger-mark` for Don't; none for When to use), the label with
+its check or cross icon in the header, then the example. A column that is only a fenced code block
+shows it flush, as the card's example area, with no second frame inside the card; a column with
+text keeps the padded body and a normal code block. Code inside a pair is an ordinary fenced
+block: write it as you would anywhere else, with no wrapper and no comment above it.
+
+Markdown on the site is rendered with raw HTML off, and a paragraph that is only an HTML comment
+(`<!-- … -->`) is dropped (`dropHtmlComments` in `plugins/content.ts`), so a comment never prints
+as text. Do not add tool comments above code fences: Prettier leaves code inside Markdown fences
+alone (`embeddedLanguageFormatting: "off"` for `*.md` in `.prettierrc.json`), so no
+`prettier-ignore` is needed.
+
 A block's `## Do` / `## Don't` and `## When to use` / `## When not to use` are read by name
 (`block-page.vue`) and must keep those headings. The visual suite checks the result on every page
 (`apps/visual/tests/do-dont.spec.ts`): at 1280 px each pair sits in two columns of equal height, at

@@ -153,6 +153,10 @@ Type coverage configuration enforcing a 95% type safety threshold (the `type-cov
 
 Prettier ignore files excluding generated/built files from formatting.
 
+Markdown is formatted, but the code inside its fences is not: `.prettierrc.json` sets
+`embeddedLanguageFormatting: "off"` for `*.md`, so a hand-aligned example keeps its layout without a
+`prettier-ignore` comment above the fence (the docs site would otherwise have to hide that comment).
+
 ### Reasoning
 
 | Pattern                     | Reason                                                                                                                                                                                 |
