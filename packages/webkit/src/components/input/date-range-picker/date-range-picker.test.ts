@@ -1111,4 +1111,108 @@ describe('DateRangePicker', () => {
       expect((getByTestId('date-range-picker__trigger') as HTMLButtonElement).disabled).toBe(true)
     })
   })
+
+  describe('proposal layouts (owner to pick)', () => {
+    const NOVEMBER = {
+      type: 'absolute' as const,
+      start: '2026-11-03T00:00:00.000Z',
+      end: '2026-11-05T23:59:00.000Z'
+    }
+
+    const weekRows = (popover: HTMLElement): number =>
+      within(within(popover).getByRole('grid')).getAllByRole('row').length - 1
+
+    it('custom-range-display="link": a link-styled Custom range under the quick ranges opens the form', async () => {
+      const view = render(DateRangePicker, {
+        props: { now: NOW, timeZone: 'UTC', customRangeDisplay: 'link' }
+      })
+      const popover = await openRelative(view.getByTestId)
+      const link = within(popover).getByTestId(`${TEST_ID}__custom-range`)
+      expect(link.getAttribute('data-variant')).toBe('link')
+      expect(link.textContent).toContain('Custom range')
+      const form = await openCustom(popover)
+      await fireEvent.update(within(form).getByLabelText('Duration'), '3')
+      await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
+      expect(lastValue(view.emitted())).toEqual({ type: 'relative', amount: 3, unit: 'day' })
+    })
+
+    it('custom-range-display="inline": the duration and unit are always shown and typing selects them', async () => {
+      const view = render(DateRangePicker, {
+        props: { now: NOW, timeZone: 'UTC', customRangeDisplay: 'inline' }
+      })
+      const popover = await openRelative(view.getByTestId)
+      expect(within(popover).queryByTestId(`${TEST_ID}__custom-range`)).toBeNull()
+      const group = within(popover).getByRole('group', { name: 'Custom range' })
+      const amount = within(group).getByLabelText('Duration') as HTMLInputElement
+      await fireEvent.click(within(popover).getByRole('radio', { name: 'Last 7 days' }))
+      expect(amount.value).toBe('7')
+      expect(group.hasAttribute('data-selected')).toBe(false)
+      await fireEvent.update(amount, '45')
+      expect(group.hasAttribute('data-selected')).toBe(true)
+      await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
+      expect(lastValue(view.emitted())).toEqual({ type: 'relative', amount: 45, unit: 'day' })
+    })
+
+    it('keeps six calendar rows by default and only the weeks the month needs in the new layouts', async () => {
+      const stacked = render(DateRangePicker, {
+        props: { now: NOW, timeZone: 'UTC', modelValue: NOVEMBER }
+      })
+      expect(weekRows(await open(stacked.getByTestId))).toBe(6)
+      stacked.unmount()
+      const compact = render(DateRangePicker, {
+        props: { now: NOW, timeZone: 'UTC', modelValue: NOVEMBER, absoluteLayout: 'compact' }
+      })
+      expect(weekRows(await open(compact.getByTestId))).toBe(5)
+    })
+
+    it('absolute-layout="compact": labels beside the fields, End at now as a checkbox, Refresh every in the footer', async () => {
+      const view = render(DateRangePicker, {
+        props: { now: NOW, timeZone: 'UTC', modelValue: NOVEMBER, absoluteLayout: 'compact' }
+      })
+      const popover = await open(view.getByTestId)
+      expect(within(popover).queryByTestId(`${TEST_ID}__refresh`)).toBeNull()
+      const refresh = within(popover).getByRole('combobox', { name: 'Refresh every' })
+      expect(shown(refresh)).toBe('5 min')
+      expect(
+        within(popover).getByTestId('date-picker__fields').hasAttribute('data-inline-labels')
+      ).toBe(true)
+      await fireEvent.click(within(popover).getByRole('checkbox', { name: 'End at now' }))
+      await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
+      expect(lastValue(view.emitted())).toEqual({ type: 'since', start: NOVEMBER.start })
+      await expectNoA11yViolations(document.body)
+    })
+
+    it('absolute-layout="fields-first": the calendar stays hidden until Choose date opens it', async () => {
+      const view = render(DateRangePicker, {
+        props: { now: NOW, timeZone: 'UTC', modelValue: NOVEMBER, absoluteLayout: 'fields-first' }
+      })
+      const popover = await open(view.getByTestId)
+      expect(within(popover).queryByTestId(`${TEST_ID}__calendar`)).toBeNull()
+      const toggle = within(popover).getByRole('button', { name: 'Choose date' })
+      expect(toggle.getAttribute('aria-expanded')).toBe('false')
+      await fireEvent.click(toggle)
+      const calendar = await waitFor(() => within(popover).getByTestId(`${TEST_ID}__calendar`))
+      expect(toggle.getAttribute('aria-expanded')).toBe('true')
+      expect(toggle.getAttribute('aria-controls')).toBe(calendar.id)
+      await expectNoA11yViolations(document.body)
+    })
+
+    it('absolute-layout="side-by-side": the calendar and the fields render side by side and apply a range', async () => {
+      const view = render(DateRangePicker, {
+        props: { now: NOW, timeZone: 'UTC', modelValue: NOVEMBER, absoluteLayout: 'side-by-side' }
+      })
+      const popover = await open(view.getByTestId)
+      const absolute = within(popover).getByTestId(`${TEST_ID}__absolute`)
+      expect(absolute.getAttribute('data-layout')).toBe('side-by-side')
+      expect(within(absolute).getByTestId(`${TEST_ID}__calendar`)).toBeTruthy()
+      await setField(within(popover).getByLabelText('End'), '11/7/2026')
+      await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
+      expect(lastValue(view.emitted())).toEqual({
+        type: 'absolute',
+        start: NOVEMBER.start,
+        end: '2026-11-07T23:59:00.000Z'
+      })
+      await expectNoA11yViolations(document.body)
+    })
+  })
 })

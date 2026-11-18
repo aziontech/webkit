@@ -14,6 +14,13 @@
     inheritAttrs: false
   })
 
+  interface DatePickerFieldsProps {
+    /** Puts each field's label before its date and time on the same row, instead of above them. */
+    inlineLabels?: boolean
+  }
+
+  withDefaults(defineProps<DatePickerFieldsProps>(), { inlineLabels: false })
+
   const { t, locale } = useTranslate({ datePicker: en.datePicker })
 
   const ctx = inject(DatePickerInjectionKey, null)
@@ -119,10 +126,11 @@
 
 <template>
   <div
-    class="flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)]"
+    :data-inline-labels="inlineLabels || null"
+    class="group/fields flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)] data-[inline-labels]:grid data-[inline-labels]:grid-cols-[max-content_minmax(0,1fr)] data-[inline-labels]:items-center data-[inline-labels]:gap-x-(--spacing-sm) data-[inline-labels]:gap-y-(--spacing-xs)"
     data-testid="date-picker__fields"
   >
-    <div class="flex flex-col gap-(--spacing-2xs)">
+    <div class="flex flex-col gap-(--spacing-2xs) group-data-[inline-labels]/fields:contents">
       <label
         :for="startDateId"
         class="text-label-sm text-(--text-muted)"
@@ -162,7 +170,7 @@
 
     <div
       v-if="mode === 'range'"
-      class="flex flex-col gap-(--spacing-2xs)"
+      class="flex flex-col gap-(--spacing-2xs) group-data-[inline-labels]/fields:contents"
     >
       <label
         :for="endDateId"

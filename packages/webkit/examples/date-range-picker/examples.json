@@ -51,6 +51,36 @@
       "name": "Disabled",
       "summary": "A disabled picker keeps its range visible; the trigger and the step buttons do not respond.",
       "file": "disabled.vue"
+    },
+    {
+      "name": "ProposalCustomLink",
+      "summary": "Proposal, owner to pick (custom range A): `custom-range-display=\"link\"`. The quick ranges end at a divider, and **Custom range** is a link-coloured button with a sliders icon under it, so it no longer reads as one more quick range. It opens the same Duration and Unit form; the chosen custom duration is printed beside the link.",
+      "file": "proposal-custom-link.vue"
+    },
+    {
+      "name": "ProposalCustomInline",
+      "summary": "Proposal, owner to pick (custom range B): `custom-range-display=\"inline\"`. Under the quick ranges, a **Custom range** group always shows the Duration and Unit fields on one line. Picking a quick range fills them in; typing a duration or picking a unit selects the custom range (a check mark beside its heading). No second screen and no Back button.",
+      "file": "proposal-custom-inline.vue"
+    },
+    {
+      "name": "ProposalAbsoluteCompact",
+      "summary": "Proposal, owner to pick (absolute A): `absolute-layout=\"compact\"`. The calendar keeps only the weeks the month needs (5 rows for most months), Start and End each sit on one line with the label before the date and time, End at now is a checkbox under them, and Refresh every moves into the footer as a small select beside Cancel and Apply.",
+      "file": "proposal-absolute-compact.vue"
+    },
+    {
+      "name": "ProposalAbsoluteFieldsFirst",
+      "summary": "Proposal, owner to pick (absolute B): `absolute-layout=\"fields-first\"`. The Start and End fields come first and the calendar is hidden until **Choose date** opens it below them (the Grafana and Kibana pattern), so typing a range needs the shortest panel. Refresh every sits in the footer.",
+      "file": "proposal-absolute-fields-first.vue"
+    },
+    {
+      "name": "ProposalAbsoluteSideBySide",
+      "summary": "Proposal, owner to pick (absolute C): `absolute-layout=\"side-by-side\"`. On a screen 640 px or wider the Start and End fields sit in a column beside the calendar, so the panel is wider but only as tall as the calendar; on a phone they stack. Refresh every sits in the footer.",
+      "file": "proposal-absolute-side-by-side.vue"
+    },
+    {
+      "name": "ProposalRecommended",
+      "summary": "Proposal, the recommended pair: the inline custom range with the fields beside the calendar (`custom-range-display=\"inline\"`, `absolute-layout=\"side-by-side\"`). On a wide panel the quick ranges read in three columns; on a phone everything stacks.",
+      "file": "proposal-recommended.vue"
     }
   ]
 }

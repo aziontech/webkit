@@ -183,8 +183,12 @@
     const firstOfMonth = new Date(year, month, 1)
     const gridStart = new Date(year, month, 1 - firstOfMonth.getDay())
     const rows: DatePickerDay[][] = []
+    const daysInMonth = new Date(year, month + 1, 0).getDate()
+    const rowCount = ctx?.trimWeeks?.value
+      ? Math.ceil((firstOfMonth.getDay() + daysInMonth) / 7)
+      : 6
 
-    for (let row = 0; row < 6; row += 1) {
+    for (let row = 0; row < rowCount; row += 1) {
       const cells: DatePickerDay[] = []
       for (let col = 0; col < 7; col += 1) {
         const date = new Date(

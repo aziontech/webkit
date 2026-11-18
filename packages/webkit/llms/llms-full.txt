@@ -23110,6 +23110,8 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | `invalid` | `boolean` | `false` | false | Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger and the panel controls. |
+| `customRangeDisplay` | `'row' \| 'link' \| 'inline'` | `'row'` | false | Proposal, owner to pick: a Custom range row that opens a form, a link under the quick ranges that opens it, or the duration and unit always shown inline. |
+| `absoluteLayout` | `'stacked' \| 'compact' \| 'fields-first' \| 'side-by-side'` | `'stacked'` | false | Proposal, owner to pick: today's stacked Absolute tab, a compact one, the fields first with the calendar on demand, or the fields beside the calendar. |
 | `modelValue` | `DateRangeValue \| null` | `null` | false | Two-way value (`v-model`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
@@ -23138,6 +23140,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - `data-view="quick|custom"` on the Relative tab body: `quick` lists the quick ranges and the Custom range row, `custom` shows the Duration and Unit fields in their place. `data-selected` on the Custom range row and on the custom duration group when the draft is a custom duration (no quick range picked); the row then also shows that duration (`Last 2 days`).
 - Limits: days, months and years outside `min`/`max` are disabled in the calendar; while a start day is picked and the end is not, the days further than `maxDuration` from it are disabled too; quick ranges that start before `min` or run longer than `maxDuration` are not listed.
 - With an auto-refresh interval above 0 the trigger's accessible name ends with the interval (`…, refreshes every 30 seconds`); the trigger draws no refresh glyph (owner 2026-11-18: the interval lives in the panel's Refresh every row).
+- `data-layout` on both tab bodies mirrors `absoluteLayout` (proposal); `data-inline-labels` on the date fields of the `compact` and `fields-first` layouts.
 - `data-side` (`bottom` | `top`) and `data-align` (`start`) on the calendar panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility

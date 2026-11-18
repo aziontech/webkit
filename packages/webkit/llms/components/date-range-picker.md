@@ -61,6 +61,8 @@
 | `invalid` | `boolean` | `false` | false | Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger and the panel controls. |
+| `customRangeDisplay` | `'row' \| 'link' \| 'inline'` | `'row'` | false | Proposal, owner to pick: a Custom range row that opens a form, a link under the quick ranges that opens it, or the duration and unit always shown inline. |
+| `absoluteLayout` | `'stacked' \| 'compact' \| 'fields-first' \| 'side-by-side'` | `'stacked'` | false | Proposal, owner to pick: today's stacked Absolute tab, a compact one, the fields first with the calendar on demand, or the fields beside the calendar. |
 | `modelValue` | `DateRangeValue \| null` | `null` | false | Two-way value (`v-model`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
@@ -89,6 +91,7 @@
 - `data-view="quick|custom"` on the Relative tab body: `quick` lists the quick ranges and the Custom range row, `custom` shows the Duration and Unit fields in their place. `data-selected` on the Custom range row and on the custom duration group when the draft is a custom duration (no quick range picked); the row then also shows that duration (`Last 2 days`).
 - Limits: days, months and years outside `min`/`max` are disabled in the calendar; while a start day is picked and the end is not, the days further than `maxDuration` from it are disabled too; quick ranges that start before `min` or run longer than `maxDuration` are not listed.
 - With an auto-refresh interval above 0 the trigger's accessible name ends with the interval (`…, refreshes every 30 seconds`); the trigger draws no refresh glyph (owner 2026-11-18: the interval lives in the panel's Refresh every row).
+- `data-layout` on both tab bodies mirrors `absoluteLayout` (proposal); `data-inline-labels` on the date fields of the `compact` and `fields-first` layouts.
 - `data-side` (`bottom` | `top`) and `data-align` (`start`) on the calendar panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility
@@ -148,7 +151,7 @@
 ## Responsive
 
 - No truncation at any width: the trigger is inline and capped at its container (`max-w-full`); its value wraps (`overflow-wrap: anywhere`) and the trigger grows taller (its height is a minimum), with the UTC offset kept on one line. The panel's labels, quick ranges and field values are never cut off (checked at 320, 390 and 1280 px in `src/test/date-picker-readability.test.ts`).
-- Container query: the quick ranges are one column below 15 rem of list width and two columns from there (`@container` on the fieldset); the two columns fill top to bottom, half the ranges each (rounded up in the first).
+- Container query: the quick ranges are one column below 15 rem of list width, two columns from there and three from 30 rem (only the `side-by-side` proposal is that wide) (`@container` on the fieldset); the columns fill top to bottom, the ranges split evenly (rounded up in the first).
 - Desktop (from 640 px): an anchored popover exactly as thin as the month grid on both tabs (seven day cells of the size token plus `--spacing-sm` on each side: 276 px at `medium`), capped at the viewport minus `--spacing-sm` on each side, scrolling inside itself when taller than the viewport. The Absolute/Relative switch and the refresh and Apply rows (and the zone selector with `showTimeZone`) stay fixed and only the tab body between them scrolls; on the Absolute tab the month grid comes first and the start and end fields follow it, so the tabs, the calendar, the zone and Apply are visible without scrolling on a 1280 × 720 laptop and a 390 × 664 phone, and the fields scroll into view under the calendar while Apply stays put (`src/test/date-picker-readability.test.ts`). The time list opens under its field as a `Combobox` list, so it never widens the panel (checked in `src/test/date-picker-readability.test.ts`).
 - Phone (below 640 px, `max-sm:`): a sheet — full width, attached to the bottom of the screen, at most 85 % of the viewport high, scrolling inside, padded for the home indicator (`safe-area-inset-bottom`), over a `--bg-backdrop` layer; Cancel and Apply share the footer width.
 - Touch: options, selects and step buttons are 44 px on `pointer: coarse`; nothing depends on hover.

@@ -23,6 +23,7 @@
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
+  import Checkbox from '../checkbox/checkbox.vue'
   import {
     asRange,
     formatValueLabel,
@@ -75,6 +76,11 @@
   } from './date-range'
 
   export type DateRangePickerSize = 'small' | 'medium' | 'large'
+  /** Proposal, owner to pick: how the Relative tab offers a custom duration. */
+  export type DateRangePickerCustomRangeDisplay = 'row' | 'link' | 'inline'
+  /** Proposal, owner to pick: how the Absolute tab lays out the calendar and the start and end fields. */
+  export type DateRangePickerAbsoluteLayout =
+    'stacked' | 'compact' | 'fields-first' | 'side-by-side'
   type RangeSelectorMode = 'default' | 'relative-only' | 'absolute-only'
   type PanelMode = 'relative' | 'absolute'
   type RelativeView = 'quick' | 'custom'
@@ -119,6 +125,10 @@
     defaultOpen?: boolean
     /** Size token of the trigger and the panel controls. */
     size?: DateRangePickerSize
+    /** Proposal, owner to pick: a Custom range row that opens a form, a link under the quick ranges that opens it, or the duration and unit always shown inline. */
+    customRangeDisplay?: DateRangePickerCustomRangeDisplay
+    /** Proposal, owner to pick: today's stacked Absolute tab, a compact one, the fields first with the calendar on demand, or the fields beside the calendar. */
+    absoluteLayout?: DateRangePickerAbsoluteLayout
   }
   const props = withDefaults(defineProps<DateRangePickerProps>(), {
     relativeOptions: () => DEFAULT_RELATIVE_OPTIONS,
@@ -137,7 +147,9 @@
     disabled: false,
     invalid: false,
     defaultOpen: false,
-    size: 'medium'
+    size: 'medium',
+    customRangeDisplay: 'row',
+    absoluteLayout: 'stacked'
   })
 
   const emit = defineEmits<{
@@ -181,6 +193,8 @@
   const untilNowLabelId = `${uid}-until-now`
   const refreshId = `${uid}-refresh`
   const customRangeId = `${uid}-custom-range`
+  const calendarId = `${uid}-calendar`
+  const untilNowCheckId = `${uid}-until-now-check`
 
   const mounted = ref(false)
   onMounted(() => {
@@ -294,7 +308,7 @@
     return new Intl.NumberFormat(locale.value, {
       style: 'unit',
       unit,
-      unitDisplay: 'long'
+      unitDisplay: compactFooter.value ? 'short' : 'long'
     }).format(seconds / UNIT_SECONDS[unit])
   }
 
@@ -352,6 +366,8 @@
   const showError = ref(false)
 
   const offersRefresh = computed(() => props.showRefresh && offersRelative.value)
+  const compactFooter = computed(() => props.absoluteLayout !== 'stacked')
+  const calendarShown = ref(false)
 
   const refreshChoices = computed<number[]>(() => {
     const current = draftRefresh.value
@@ -368,6 +384,9 @@
   const quickRows = computed<number>(() =>
     Math.max(1, Math.ceil(availableOptions.value.length / 2))
   )
+  const quickRowsWide = computed<number>(() =>
+    Math.max(1, Math.ceil(availableOptions.value.length / 3))
+  )
 
   const resetRefresh = (): void => {
     draftRefresh.value = refreshInterval.value > 0 ? refreshInterval.value : 0
@@ -380,6 +399,7 @@
     draftUntilNow.value = value?.type === 'since'
     resetRefresh()
     relativeView.value = 'quick'
+    calendarShown.value = false
     if (offersRelative.value && (!value || value.type === 'relative' || !offersAbsolute.value)) {
       panelMode.value = 'relative'
       const option = value
@@ -433,6 +453,15 @@
     relativeView.value = 'custom'
     showError.value = false
     focusIn(`#${CSS.escape(customAmountId)}`)
+  }
+
+  const markCustom = (): void => {
+    draftKey.value = CUSTOM
+    showError.value = false
+  }
+
+  const toggleCalendar = (): void => {
+    calendarShown.value = !calendarShown.value
   }
 
   const showQuick = (): void => {
@@ -698,6 +727,7 @@
     max: maxWall,
     showTime: computed(() => props.showTime),
     horizontal: computed(() => false),
+    trimWeeks: compactFooter,
     draft: computed<DatePickerDraft>(() =>
       draftUntilNow.value ? draftRange.value.start : draftRange.value
     ),
@@ -928,7 +958,8 @@
             v-if="panelMode === 'relative'"
             :data-size="size"
             :data-view="relativeView"
-            class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
+            :data-layout="absoluteLayout"
+            class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] sm:data-[layout=side-by-side]:data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm)_+_16rem)] sm:data-[layout=side-by-side]:data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm)_+_16rem)] sm:data-[layout=side-by-side]:data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm)_+_16rem)] max-sm:w-full!"
             :data-testid="`${testId}__relative`"
           >
             <template v-if="relativeView === 'quick'">
@@ -944,8 +975,11 @@
                   {{ t('dateRangePicker.quickRanges') }}
                 </legend>
                 <div
-                  :style="{ '--date-range-picker-quick-rows': quickRows }"
-                  class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-flow-col @[15rem]:grid-cols-2 @[15rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows),auto)]"
+                  :style="{
+                    '--date-range-picker-quick-rows': quickRows,
+                    '--date-range-picker-quick-rows-wide': quickRowsWide
+                  }"
+                  class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-flow-col @[15rem]:grid-cols-2 @[15rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows),auto)] @[30rem]:grid-cols-3 @[30rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows-wide),auto)]"
                 >
                   <label
                     v-for="option in availableOptions"
@@ -973,7 +1007,10 @@
                 </div>
               </fieldset>
 
-              <div class="shrink-0 px-(--spacing-2xs) pt-(--spacing-2xs) pb-(--spacing-xs)">
+              <div
+                v-if="customRangeDisplay === 'row'"
+                class="shrink-0 px-(--spacing-2xs) pt-(--spacing-2xs) pb-(--spacing-xs)"
+              >
                 <button
                   :id="customRangeId"
                   type="button"
@@ -997,6 +1034,85 @@
                   />
                 </button>
               </div>
+
+              <div
+                v-else-if="customRangeDisplay === 'link'"
+                class="flex shrink-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) border-t border-(--border-default) mt-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xs)"
+              >
+                <Button
+                  :id="customRangeId"
+                  variant="link"
+                  :label="t('dateRangePicker.custom')"
+                  icon="az az-sliders-horizontal"
+                  :size="size"
+                  :data-selected="draftKey === CUSTOM || null"
+                  :data-autofocus="(!offersAbsolute && draftKey === CUSTOM) || null"
+                  :data-testid="`${testId}__custom-range`"
+                  class="pointer-coarse:min-h-11"
+                  @click="showCustom"
+                />
+                <span
+                  v-if="draftKey === CUSTOM && parsedAmount"
+                  class="text-label-sm min-w-0 text-(--text-muted) [overflow-wrap:anywhere]"
+                  >{{ relativeText(parsedAmount, customUnit) }}</span
+                >
+              </div>
+
+              <fieldset
+                v-else
+                :data-selected="draftKey === CUSTOM || null"
+                :data-testid="`${testId}__custom-inline`"
+                class="m-0 flex min-w-0 shrink-0 flex-col gap-(--spacing-2xs) border-0 border-t border-(--border-default) mt-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs) pb-(--spacing-sm)"
+              >
+                <legend
+                  :id="customLabelId"
+                  class="text-label-sm float-start flex w-full items-center justify-between gap-(--spacing-xs) py-(--spacing-2xs) text-(--text-muted)"
+                >
+                  {{ t('dateRangePicker.custom') }}
+                  <i
+                    v-if="draftKey === CUSTOM"
+                    class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </legend>
+                <div
+                  class="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-x-(--spacing-xs)"
+                  @pointerdown="markCustom"
+                >
+                  <Input
+                    :id="customAmountId"
+                    :model-value="customAmount"
+                    type="number"
+                    :size="size"
+                    :aria-label="t('dateRangePicker.amount')"
+                    :invalid="showError && !!rangeError"
+                    :aria-describedby="showError && draftError ? errorId : undefined"
+                    :data-testid="`${testId}__amount`"
+                    @update:model-value="editCustomAmount"
+                  />
+                  <Select
+                    :model-value="customUnit"
+                    :size="size"
+                    :aria-label="t('dateRangePicker.unit')"
+                    :data-testid="`${testId}__unit-select`"
+                    @update:model-value="editCustomUnit"
+                  >
+                    <SelectTrigger
+                      :id="customUnitId"
+                      :data-testid="`${testId}__unit`"
+                      class="pointer-coarse:h-11"
+                    />
+                    <SelectContent :data-testid="`${testId}__unit-list`">
+                      <SelectItem
+                        v-for="unit in DATE_RANGE_UNITS"
+                        :key="unit"
+                        :value="unit"
+                        >{{ unitLabel(unit) }}</SelectItem
+                      >
+                    </SelectContent>
+                  </Select>
+                </div>
+              </fieldset>
             </template>
 
             <div
@@ -1079,43 +1195,139 @@
           <div
             v-else
             :data-size="size"
-            class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
+            :data-layout="absoluteLayout"
+            class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] sm:data-[layout=side-by-side]:data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm)_+_16rem)] sm:data-[layout=side-by-side]:data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm)_+_16rem)] sm:data-[layout=side-by-side]:data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm)_+_16rem)] max-sm:w-full!"
             :data-testid="`${testId}__absolute`"
           >
+            <template v-if="absoluteLayout === 'stacked'">
+              <div
+                class="p-(--spacing-sm)"
+                :data-testid="`${testId}__calendar`"
+              >
+                <div class="mx-auto w-fit">
+                  <DatePickerGrid />
+                </div>
+              </div>
+              <div
+                class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+                :data-testid="`${testId}__bounds`"
+              >
+                <DatePickerFields />
+                <div
+                  v-if="offersRelative"
+                  class="flex items-center gap-(--spacing-xs)"
+                >
+                  <Switch
+                    :model-value="draftUntilNow"
+                    :aria-labelledby="untilNowLabelId"
+                    :data-testid="`${testId}__until-now`"
+                    @update:model-value="setUntilNow"
+                  />
+                  <span
+                    :id="untilNowLabelId"
+                    class="text-label-sm text-(--text-default)"
+                    >{{ t('dateRangePicker.untilNow') }}</span
+                  >
+                </div>
+              </div>
+            </template>
+
             <div
-              class="p-(--spacing-sm)"
-              :data-testid="`${testId}__calendar`"
+              v-else-if="absoluteLayout === 'side-by-side'"
+              class="flex flex-col sm:flex-row"
             >
-              <div class="mx-auto w-fit">
-                <DatePickerGrid />
+              <div
+                class="shrink-0 p-(--spacing-sm)"
+                :data-testid="`${testId}__calendar`"
+              >
+                <div class="mx-auto w-fit">
+                  <DatePickerGrid />
+                </div>
+              </div>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm) sm:border-t-0 sm:border-s"
+                :data-testid="`${testId}__bounds`"
+              >
+                <DatePickerFields />
+                <div
+                  v-if="offersRelative"
+                  class="flex items-center gap-(--spacing-xs)"
+                >
+                  <Checkbox
+                    :id="untilNowCheckId"
+                    :model-value="draftUntilNow"
+                    :data-testid="`${testId}__until-now`"
+                    @update:model-value="setUntilNow(Boolean($event))"
+                  />
+                  <label
+                    :for="untilNowCheckId"
+                    class="text-label-sm cursor-pointer text-(--text-default)"
+                    >{{ t('dateRangePicker.untilNow') }}</label
+                  >
+                </div>
               </div>
             </div>
+
             <div
-              class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
-              :data-testid="`${testId}__bounds`"
+              v-else
+              class="flex flex-col"
             >
-              <DatePickerFields />
               <div
-                v-if="offersRelative"
-                class="flex items-center gap-(--spacing-xs)"
+                v-if="absoluteLayout === 'compact' || calendarShown"
+                :id="calendarId"
+                :data-layout="absoluteLayout"
+                class="p-(--spacing-sm) data-[layout=fields-first]:order-last data-[layout=fields-first]:border-t data-[layout=fields-first]:border-(--border-default)"
+                :data-testid="`${testId}__calendar`"
               >
-                <Switch
-                  :model-value="draftUntilNow"
-                  :aria-labelledby="untilNowLabelId"
-                  :data-testid="`${testId}__until-now`"
-                  @update:model-value="setUntilNow"
-                />
-                <span
-                  :id="untilNowLabelId"
-                  class="text-label-sm text-(--text-default)"
-                  >{{ t('dateRangePicker.untilNow') }}</span
+                <div class="mx-auto w-fit">
+                  <DatePickerGrid />
+                </div>
+              </div>
+              <div
+                :data-layout="absoluteLayout"
+                class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm) data-[layout=compact]:border-t data-[layout=compact]:border-(--border-default)"
+                :data-testid="`${testId}__bounds`"
+              >
+                <DatePickerFields inline-labels />
+                <div
+                  v-if="offersRelative || absoluteLayout === 'fields-first'"
+                  class="flex min-h-8 flex-wrap items-center justify-between gap-x-(--spacing-sm) gap-y-(--spacing-2xs)"
                 >
+                  <div
+                    v-if="offersRelative"
+                    class="flex items-center gap-(--spacing-xs)"
+                  >
+                    <Checkbox
+                      :id="untilNowCheckId"
+                      :model-value="draftUntilNow"
+                      :data-testid="`${testId}__until-now`"
+                      @update:model-value="setUntilNow(Boolean($event))"
+                    />
+                    <label
+                      :for="untilNowCheckId"
+                      class="text-label-sm cursor-pointer text-(--text-default)"
+                      >{{ t('dateRangePicker.untilNow') }}</label
+                    >
+                  </div>
+                  <Button
+                    v-if="absoluteLayout === 'fields-first'"
+                    variant="link"
+                    :label="t('datePicker.chooseDate')"
+                    :icon="calendarShown ? 'az az-chevron-up' : 'az az-calendar'"
+                    :size="size"
+                    :aria-expanded="calendarShown"
+                    :aria-controls="calendarShown ? calendarId : undefined"
+                    :data-testid="`${testId}__show-calendar`"
+                    class="ms-auto pointer-coarse:min-h-11"
+                    @click="toggleCalendar"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
           <div
-            v-if="offersRefresh"
+            v-if="offersRefresh && !compactFooter"
             class="grid shrink-0 grid-cols-[minmax(0,1fr)_minmax(0,2fr)] items-center gap-x-(--spacing-xs) border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
             :data-testid="`${testId}__refresh`"
           >
@@ -1161,8 +1373,40 @@
               {{ visibleError }}
             </p>
             <div
-              class="flex items-center justify-end gap-(--spacing-xs) max-sm:*:flex-1 max-sm:*:justify-center"
+              :data-layout="compactFooter ? 'compact' : null"
+              class="flex items-center justify-end gap-(--spacing-xs) not-data-[layout]:max-sm:*:flex-1 not-data-[layout]:max-sm:*:justify-center"
             >
+              <Select
+                v-if="offersRefresh && compactFooter"
+                :model-value="draftRefresh"
+                variant="ghost"
+                :size="size"
+                :aria-label="t('dateRangePicker.refreshEvery')"
+                :data-testid="`${testId}__refresh-select`"
+                class="me-auto min-w-0"
+                @update:model-value="editRefresh"
+              >
+                <SelectTrigger
+                  :id="refreshId"
+                  :data-testid="`${testId}__refresh-interval`"
+                  class="pointer-coarse:h-11"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-refresh shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </SelectTrigger>
+                <SelectContent :data-testid="`${testId}__refresh-list`">
+                  <SelectItem
+                    v-for="seconds in refreshChoices"
+                    :key="seconds"
+                    :value="seconds"
+                    >{{ intervalLabel(seconds) }}</SelectItem
+                  >
+                </SelectContent>
+              </Select>
               <Button
                 :label="t('dateRangePicker.cancel')"
                 variant="ghost"
