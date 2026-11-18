@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CopyText from '@aziontech/webkit/copy-text'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
@@ -10,6 +9,7 @@
   import { useRoute } from 'vue-router'
 
   import ApiTable from '../components/api-table.vue'
+  import DoDont from '../components/do-dont.vue'
   import ExampleCard from '../components/example-card.vue'
   import OnThisPage from '../components/on-this-page.vue'
   import RawHtml from '../components/raw-html.vue'
@@ -60,7 +60,7 @@
     }
     if (doc.value.props.length || doc.value.events.length || doc.value.slots.length)
       items.push({ id: 'api', text: t.value.api, depth: 2 })
-    if (doc.value.bestPractices.length || dont.value)
+    if (doc.value.bestPractices.length || doc.value.avoidPractices.length || dont.value)
       items.push({
         id: 'do-dont',
         text: `${t.value.bestPractices} / ${t.value.constraints}`,
@@ -146,44 +146,11 @@
         <DocProse>
           <RawHtml :html="doc.purpose" />
         </DocProse>
-        <div class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2">
-          <Card
-            key="use-when"
-            v-if="doc.useWhen.length"
-          >
-            <template #header>
-              <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
-                {{ t.whenToUse }}
-              </h2>
-            </template>
-            <ul class="flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-sm">
-              <RawHtml
-                v-for="line in doc.useWhen"
-                :key="line"
-                tag="li"
-                :html="line"
-              />
-            </ul>
-          </Card>
-          <Card
-            key="avoid-when"
-            v-if="doc.avoidWhen.length"
-          >
-            <template #header>
-              <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
-                {{ t.whenNotToUse }}
-              </h2>
-            </template>
-            <ul class="flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-sm">
-              <RawHtml
-                v-for="line in doc.avoidWhen"
-                :key="line"
-                tag="li"
-                :html="line"
-              />
-            </ul>
-          </Card>
-        </div>
+        <DoDont
+          type="usage"
+          :do-items="doc.useWhen"
+          :dont-items="doc.avoidWhen"
+        />
         <div
           v-if="doc.related.length"
           class="flex flex-col gap-(--spacing-xs)"
@@ -276,49 +243,15 @@
       </section>
 
       <section
-        v-if="doc.bestPractices.length || dont"
+        v-if="doc.bestPractices.length || doc.avoidPractices.length || dont"
         id="do-dont"
-        class="grid scroll-mt-20 grid-cols-1 gap-(--spacing-md) md:grid-cols-2"
+        class="scroll-mt-20"
       >
-        <Card
-          key="do"
-          v-if="doc.bestPractices.length"
-        >
-          <template #header>
-            <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
-              <i
-                class="az az-circle-check text-(--success)"
-                aria-hidden="true"
-              />
-              {{ t.bestPractices }}
-            </h2>
-          </template>
-          <ul class="flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-sm">
-            <RawHtml
-              v-for="line in doc.bestPractices"
-              :key="line"
-              tag="li"
-              :html="line"
-            />
-          </ul>
-        </Card>
-        <Card
-          key="dont"
-          v-if="dont"
-        >
-          <template #header>
-            <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
-              <i
-                class="az az-circle-x text-(--danger)"
-                aria-hidden="true"
-              />
-              {{ t.constraints }}
-            </h2>
-          </template>
-          <DocProse>
-            <RawHtml :html="dont" />
-          </DocProse>
-        </Card>
+        <DoDont
+          :do-items="doc.bestPractices"
+          :dont-items="doc.avoidPractices"
+          :dont-html="dont"
+        />
       </section>
 
       <section

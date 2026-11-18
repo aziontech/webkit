@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocProse from '@aziontech/webkit/doc-prose'
@@ -12,6 +11,8 @@
 
   import BlockFrame from '../components/block-frame.vue'
   import CodeView from '../components/code-view.vue'
+  import DoDont from '../components/do-dont.vue'
+  import MarkdownParts from '../components/markdown-parts.vue'
   import OnThisPage from '../components/on-this-page.vue'
   import RawHtml from '../components/raw-html.vue'
   import { blockMarkdown, copyText } from '../lib/copy'
@@ -203,34 +204,11 @@
         <DocProse v-if="guidelines?.intro">
           <RawHtml :html="guidelines.intro" />
         </DocProse>
-        <div class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2">
-          <Card
-            key="use-when"
-            v-if="useWhen"
-          >
-            <template #header>
-              <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
-                {{ t.whenToUse }}
-              </h2>
-            </template>
-            <DocProse>
-              <RawHtml :html="useWhen" />
-            </DocProse>
-          </Card>
-          <Card
-            key="avoid-when"
-            v-if="avoidWhen"
-          >
-            <template #header>
-              <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
-                {{ t.whenNotToUse }}
-              </h2>
-            </template>
-            <DocProse>
-              <RawHtml :html="avoidWhen" />
-            </DocProse>
-          </Card>
-        </div>
+        <DoDont
+          type="usage"
+          :do-html="useWhen"
+          :dont-html="avoidWhen"
+        />
         <div
           v-if="related"
           class="flex flex-col gap-(--spacing-xs)"
@@ -324,50 +302,18 @@
         class="flex scroll-mt-20 flex-col gap-(--spacing-sm)"
       >
         <h2 class="text-heading-md">{{ entry.heading }}</h2>
-        <DocProse>
-          <RawHtml :html="entry.html" />
-        </DocProse>
+        <MarkdownParts :parts="entry.parts" />
       </section>
 
       <section
         v-if="doList || dontList"
         id="do-dont"
-        class="grid scroll-mt-20 grid-cols-1 gap-(--spacing-md) md:grid-cols-2"
+        class="scroll-mt-20"
       >
-        <Card
-          key="do"
-          v-if="doList"
-        >
-          <template #header>
-            <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
-              <i
-                class="az az-circle-check text-(--success)"
-                aria-hidden="true"
-              />
-              {{ t.bestPractices }}
-            </h2>
-          </template>
-          <DocProse>
-            <RawHtml :html="doList" />
-          </DocProse>
-        </Card>
-        <Card
-          key="dont"
-          v-if="dontList"
-        >
-          <template #header>
-            <h2 class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)">
-              <i
-                class="az az-circle-x text-(--danger)"
-                aria-hidden="true"
-              />
-              {{ t.constraints }}
-            </h2>
-          </template>
-          <DocProse>
-            <RawHtml :html="dontList" />
-          </DocProse>
-        </Card>
+        <DoDont
+          :do-html="doList"
+          :dont-html="dontList"
+        />
       </section>
 
       <section

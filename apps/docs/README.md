@@ -27,7 +27,7 @@ Nothing is copied into this app. Add a file in the package and its page appears 
 | `/foundations/*`          | Token pages read `packages/theme/dist/globals.css` (the `@theme` block and the light and dark theme blocks), `catalog.json` `tokens`, the responsive steps of `packages/theme/src/tokens/semantic/spacings.data.js` and the job table of `rules/webkit-tokens.md` (the Usage column); the prose comes from `packages/webkit/README.md` and `rules/webkit-*.md`. Every token, class and value copies on select, with a toast. |
 | `/foundations/icon`       | `packages/webkit/catalog/assets/icons.json`: every Azion and colored class, searchable, copied on select.                                                                                                                                                                                                                                                                                                                    |
 | `/components`             | Every component grouped by category, each card rendering its first example live (loaded when it scrolls into view) with its name linking to its page.                                                                                                                                                                                                                                                                        |
-| `/assets`                 | The `Brand` lockups and every name in `packages/webkit/catalog/assets/illustrations.json` and `line-figures.json`, drawn with `Illustration` and `LineFigure`.                                                                                                                                                                                                                                                               |
+| `/assets`                 | The `Brand` lockups and every name in `packages/webkit/catalog/assets/illustrations.json`, drawn with `Illustration`.                                                                                                                                                                                                                                                                                                        |
 | Search (⌘K / Ctrl+K)      | A client-side index of every component, block and foundation page (title and summary), served by WebKit's `Command`.                                                                                                                                                                                                                                                                                                         |
 | Copy for AI               | Builds Markdown from the page data (summary, import, API tables, every example's source). When `packages/webkit/llms/` exists at build time, the matching `.md` there is copied instead and linked as "View as Markdown".                                                                                                                                                                                                    |
 
@@ -37,10 +37,11 @@ The data side is a Vite plugin, `plugins/docs-plugin.ts`:
 - `virtual:docs-component-loaders` / `virtual:docs-component:<name>` — one lazy chunk per component
   with the full catalog entry and the rendered spec sections.
 - `virtual:docs-tokens` — the token groups parsed from the theme.
-- `virtual:docs-assets` — the icon classes, illustration names and line figures from `packages/webkit/catalog/assets/`.
+- `virtual:docs-assets` — the icon classes and illustration names from `packages/webkit/catalog/assets/`.
 - `?highlight` — any file imported with it becomes `{ code, html }` (Shiki,
   `github-light-high-contrast` and `github-dark-high-contrast` through CSS variables, so the theme switch needs no re-highlighting).
-- `?markdown` — any Markdown file becomes `{ title, html }` (markdown-it + Shiki).
+- `?markdown` — any Markdown file becomes `{ title, parts }` (markdown-it + Shiki); a part is
+  prose HTML or a Do / Don't pair (see below).
 
 A router guard (`src/lib/data.ts`, `preloadRoute`) loads the chunks a route needs before it
 renders, so server rendering and hydration see the same data.
@@ -48,6 +49,26 @@ renders, so server rendering and hydration see the same data.
 Examples and blocks import every image they show from `@aziontech/webkit/assets/<file>`, so the docs
 site serves no media of its own and has no public folder. `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
 `/llms.txt`; component, block and foundation pages link their `.md` as "View as Markdown".
+
+## Do and Don't
+
+Every pair of guidance on the site renders through one structure,
+`src/components/do-dont.vue` (owner decision B28): two `Card`s side by side from `md`, the Do
+column first (and on top when they stack on a phone), labelled with the green check and the red
+cross, the same height. Never lay out a pair by hand in a page or in Markdown; write it in one of
+these shapes and the content pipeline (`plugins/content.ts`, `markdownParts`) builds the pair:
+
+| Where                                                                            | Write                                                                                                                                                                                                 |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A rule, skill or README rendered as a foundation page; a block's `guidelines.md` | Two **adjacent** headings of the same level: `## Do` then `## Don't` (or `Do not`, `Never`, `Avoid`), `## When to use` then `## When not to use`, `## Correct` then `## Wrong`. Nothing between them. |
+| One example inside a rule                                                        | A list whose items start with a bold label: `- **Correct:** …` and `- **Incorrect:** …` (or `**Do:**` / `**Don't:**`). Other items of that list stay as a list above the pair.                        |
+| A component spec (`.specs/<name>.md`)                                            | `## Best practices` bullets fill the Do column; a bullet that starts with `**Don't**` (or `**Never**`, `**Avoid**`) moves to the Don't column, above `## Constraints — DO NOT`.                       |
+
+A block's `## Do` / `## Don't` and `## When to use` / `## When not to use` are read by name
+(`block-page.vue`) and must keep those headings. The visual suite checks the result on every page
+(`apps/visual/tests/do-dont.spec.ts`): at 1280 px each pair sits in two columns of equal height, at
+390 px the Do column comes first, and a Do, Don't, Correct or Wrong label outside the structure
+fails the test.
 
 ## Build and deploy
 

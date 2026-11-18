@@ -5,7 +5,6 @@
   import CopyText from '@aziontech/webkit/copy-text'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import Illustration from '@aziontech/webkit/illustration'
-  import LineFigure from '@aziontech/webkit/line-figure'
   import { useHead } from '@unhead/vue'
   import assets from 'virtual:docs-assets'
   import { computed } from 'vue'
@@ -13,13 +12,7 @@
   import { index } from '../lib/data'
   import { messages } from '../lib/i18n'
 
-  type FigureName = NonNullable<InstanceType<typeof LineFigure>['$props']['name']>
-
   const t = messages
-  const figures = assets.lineFigures.map((figure) => ({
-    ...figure,
-    name: figure.name as FigureName
-  }))
   useHead({
     title: 'Assets — WebKit',
     meta: [{ name: 'description', content: computed(() => t.value.assetsLead) }]
@@ -128,56 +121,6 @@
                 />
               </div>
               <CopyText :value="name" />
-            </div>
-          </Card>
-        </li>
-      </ul>
-    </section>
-
-    <section
-      id="line-figures"
-      class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
-      aria-labelledby="line-figures-title"
-    >
-      <div class="flex flex-wrap items-end justify-between gap-(--spacing-sm)">
-        <div class="flex flex-col gap-(--spacing-2xs)">
-          <h2
-            id="line-figures-title"
-            class="flex items-baseline gap-(--spacing-xs) text-heading-md"
-          >
-            {{ t.lineFigures }}
-            <span class="text-body-sm text-(--text-muted)">{{ assets.lineFigures.length }}</span>
-          </h2>
-          <p class="max-w-3xl text-body-sm text-(--text-muted)">{{ t.lineFiguresLead }}</p>
-        </div>
-        <Button
-          v-if="llms('line-figures')"
-          :label="t.viewMarkdown"
-          variant="ghost"
-          size="medium"
-          icon="az az-file"
-          :href="llms('line-figures')"
-          target="_blank"
-        />
-      </div>
-      <ul class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-2 xl:grid-cols-3">
-        <li
-          v-for="figure in figures"
-          :key="figure.name"
-          class="flex"
-        >
-          <Card class="w-full">
-            <div class="flex flex-col gap-(--spacing-xs)">
-              <div
-                class="flex aspect-square items-center justify-center overflow-hidden rounded-(--shape-control) bg-(--bg-canvas) p-(--spacing-sm)"
-              >
-                <LineFigure
-                  :name="figure.name"
-                  class="h-full w-full"
-                />
-              </div>
-              <CopyText :value="figure.name" />
-              <p class="text-body-xs text-(--text-muted)">{{ figure.label }}</p>
             </div>
           </Card>
         </li>

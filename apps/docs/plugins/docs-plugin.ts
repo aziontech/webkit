@@ -19,7 +19,7 @@ import { CATALOG, LLMS, readCatalog, THEME, WEBKIT } from './paths.ts'
 const INDEX = 'virtual:docs-index'
 const TOKENS = 'virtual:docs-tokens'
 const ASSETS = 'virtual:docs-assets'
-const ASSET_LLMS = ['illustrations', 'line-figures', 'brand-marks']
+const ASSET_LLMS = ['illustrations', 'brand-marks']
 const LOADERS = 'virtual:docs-component-loaders'
 const COMPONENT = 'virtual:docs-component:'
 const HIGHLIGHT = '\0docs-highlight:'

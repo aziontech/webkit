@@ -21,6 +21,17 @@ always has a reduced-motion escape. This is the invariant behind the `/webkit-mo
 - For `data-state="open|closed"` overlay motion, read `duration` + `curve` from the tokens and emit
   the inline `transition` per phase; keep transform/opacity in classes, only timing inline.
 
+## Never
+
+- A hardcoded duration (`duration-[180ms]`, `transition: opacity 200ms`) or an inline
+  `ease-[cubic-bezier(...)]` — the values live in the theme tokens.
+- Animating layout props (`width`, `height`, `top`, `left`, `margin`, `padding`) — they thrash
+  layout (exception: the catalogued `animate-slide-down`).
+- A component-local `@keyframes`, or any external animation library (`gsap`, `framer-motion`,
+  `motion`, `@vueuse/motion`, `@formkit/auto-animate`, lottie, popmotion). Use the utilities above +
+  Vue `<Transition>` / `<TransitionGroup>`.
+- A motion class with no `motion-reduce:*` fallback.
+
 ## The panel recipe (sidebar / drawer / any v-if region)
 
 A conditionally rendered region never animates by itself — wrap the `v-if` in a Vue `Transition`
@@ -39,17 +50,6 @@ and hand the enter/leave phases to the catalogued utilities. For lateral panels 
 Content or backdrops appearing in place use `animate-fade-in` / `animate-fade-out` in the same
 shape; vertical disclosure uses `animate-slide-down`. Ask the webkit MCP
 (`list_tokens` with category `animations`) for every utility, its timing, and when to use it.
-
-## Never
-
-- A hardcoded duration (`duration-[180ms]`, `transition: opacity 200ms`) or an inline
-  `ease-[cubic-bezier(...)]` — the values live in the theme tokens.
-- Animating layout props (`width`, `height`, `top`, `left`, `margin`, `padding`) — they thrash
-  layout (exception: the catalogued `animate-slide-down`).
-- A component-local `@keyframes`, or any external animation library (`gsap`, `framer-motion`,
-  `motion`, `@vueuse/motion`, `@formkit/auto-animate`, lottie, popmotion). Use the utilities above +
-  Vue `<Transition>` / `<TransitionGroup>`.
-- A motion class with no `motion-reduce:*` fallback.
 
 ## Enforcement
 

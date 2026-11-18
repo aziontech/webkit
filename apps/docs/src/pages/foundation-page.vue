@@ -1,13 +1,12 @@
 <script setup lang="ts">
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
   import { useHead } from '@unhead/vue'
   import { computed } from 'vue'
   import { useRoute } from 'vue-router'
 
   import FoundationDemo from '../components/foundation-demo.vue'
   import IconsView from '../components/icons-view.vue'
-  import RawHtml from '../components/raw-html.vue'
+  import MarkdownParts from '../components/markdown-parts.vue'
   import TokensView from '../components/tokens-view.vue'
   import { cached, index, keys } from '../lib/data'
   import { FOUNDATIONS } from '../lib/foundations'
@@ -75,9 +74,7 @@
       >
         {{ doc.title }}
       </h2>
-      <DocProse>
-        <RawHtml :html="doc.html" />
-      </DocProse>
+      <MarkdownParts :parts="doc.parts" />
     </section>
   </div>
 </template>
