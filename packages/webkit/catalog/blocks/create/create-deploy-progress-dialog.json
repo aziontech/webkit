@@ -1,0 +1,24 @@
+{
+ "variants": [
+  {
+   "name": "Drop",
+   "summary": "The drop-to-deploy confirm: New production deployment, the service with a Production `Tag`, what the files replace, and the dropped folder with its file count, total size and a scrollable list of up to 100 paths (an 'and N more' line counts the rest) with sizes formatted by `Intl.NumberFormat`. Cancel closes; Deploy to Production opens the progress dialog and starts the run.",
+   "file": "blocks/create/create-deploy-progress-dialog/variants/drop.vue"
+  },
+  {
+   "name": "PartialError",
+   "summary": "Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeIcon`, staging-settings marked Failed with the reason, Retry failed beside Close, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.",
+   "file": "blocks/create/create-deploy-progress-dialog/variants/partial-error.vue"
+  },
+  {
+   "name": "Success",
+   "summary": "Every Deployment Setting deployed: a large animated success `OutcomeIcon` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises a success toast with Edit and Redeploy.",
+   "file": "blocks/create/create-deploy-progress-dialog/variants/success.vue"
+  }
+ ],
+ "sfcFile": "blocks/create/create-deploy-progress-dialog/create-deploy-progress-dialog.vue",
+ "guidelinesFile": "blocks/create/create-deploy-progress-dialog/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/create/create-deploy-progress-dialog/sample.ts"
+ }
+}

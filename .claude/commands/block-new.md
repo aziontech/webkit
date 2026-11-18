@@ -21,7 +21,10 @@ A screen built only from `@aziontech/webkit` components, which agents copy throu
 | `account`, `ai`, `auth`, `create`, `dashboard`, `detail`, `edit`, `settings`, `state`, `view`, `shell`, `top-bar` | `packages/webkit/blocks/<group>/<name>/` |
 
 The group is the job, never the surface: `block.json#surface` says where the screen lives (`app`,
-`docs` or `site`).
+`docs` or `site`). The `<name>` starts with the group word, once: `<group>-<what>`
+(`dashboard/dashboard-alerts`, `view/view-table`; `check:naming` rule `block-group-first`). The
+docs sidebar lists it without the group word ("Alerts" under Dashboard); see
+`.claude/rules/naming.md` § 3 and § 25.
 
 ```
 <folder>/
@@ -60,7 +63,7 @@ copies the `files` beside the SFC as `<stem>.<file>` and rewrites the local impo
 `get_block` returns them under `files`. `check:blocks` fails on a primary without props, a
 primary that holds records, and a variant that repeats 90 % or more of the primary
 (`scripts/blocks-data-baseline.json` freezes the legacy findings and only shrinks). The exemplar is
-`view/table-view`.
+`view/view-table`.
 
 The catalog (`build:catalog`), the MCP (`get_block` returns `guidelines.md` with the SFC),
 `check:blocks` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
@@ -89,7 +92,7 @@ present. Create the branch with `/branch-create new block <name> #<n>`.
 Write the brief to the run log: the draft `block.json` (no files in `blocks/` yet), one line per
 region naming the components that render it, the variant list from the issue's states, the sample
 content, and the draft `guidelines.md` in the shared format (see any
-`packages/webkit/blocks/view/table-view/guidelines.md`: `# <Block name>`, the purpose
+`packages/webkit/blocks/view/view-table/guidelines.md`: `# <Block name>`, the purpose
 paragraph, `## When to use`, `## When not to use`, `## Building blocks` with
 ``### A. <Element> — `Component` ``, `## Data`, `## Do`, `## Don't`, `## Copy`, `## Accessibility`,
 `## States`, `## Related`), written against the consumer skills the block lists. Every component named exists in `packages/webkit/package.json#exports` (check it

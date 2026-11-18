@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: e3f8726c99d1caeee62f4f4e5c084c01768b8c51e5e08d0530c2d1155348e2da
+checksum: 74d8ddd877308fc77a9a9bb0c0e8e5bdba8556175c0a72af7d482f2b124e926c
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -33,7 +33,7 @@ Key and value tags of one resource, after Cloudscape's tag editor, built on `Att
 - `attribute-editor` — the rows, Add, Remove, limit text, focus and announcements underneath.
 - `input` — key and value controls; suggestions come from a native `datalist`.
 - `tag` — how the saved tags read outside the editor.
-- `state/form-validation` (SectionRejected) — the rule for server errors passed through `errors`.
+- `state/state-form-validation` (SectionRejected) — the rule for server errors passed through `errors`.
 
 ## Best practices
 

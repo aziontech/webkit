@@ -360,3 +360,136 @@ Before this branch (names and folders as they were):
 | `story-index-section`            | Every success story of a company as one filterable library.                                                                               |      0 |              0 |        0 |                1 |
 | `subject-grid-section`           | A library of learning subjects in a divider grid:                                                                                         |      0 |              0 |        0 |                1 |
 | `template-gallery-section`       | The templates band of a solution page:                                                                                                    |      0 |              0 |        0 |                1 |
+
+## Group-first naming
+
+Added 2026-11-18, after the owner read the docs sidebar: under _Dashboard_ every block ended in
+"Dashboard" ("Alerts Dashboard", "Analytics Dashboard", …), and under _Page sections_ every name
+ended in "Section" ("ArchitectureTabsSection", …). The owner asked for names that start with the
+group word, applied to every group, and written down as a rule.
+
+### How other systems name items inside a group
+
+| System                                                                                                       | Group                       | Item names                                                                           | What it does with the group word                                                |
+| ------------------------------------------------------------------------------------------------------------ | --------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| shadcn blocks ([ui.shadcn.com/blocks](https://ui.shadcn.com/blocks))                                         | Sidebar, Login, Signup tabs | `dashboard-01`, `sidebar-07`, `login-03`                                             | id starts with the group; the tab shows the group once                          |
+| Tailwind Plus ([tailwindcss.com/plus/ui-blocks/marketing](https://tailwindcss.com/plus/ui-blocks/marketing)) | Marketing › Hero Sections   | "Simple centered", "Split with screenshot"                                           | the group word lives in the heading only                                        |
+| Cloudscape patterns ([cloudscape.design/patterns](https://cloudscape.design/patterns/))                      | General › Service Dashboard | "Static dashboard", "Configurable dashboard"; Create resource › "Single page create" | repeats the word last — the drift the owner flagged                             |
+| Cloudscape components ([cloudscape.design/components](https://cloudscape.design/components/))                | flat, by category           | "Button dropdown", "Toggle button", "Date range picker"                              | modifier first, noun last, no category word                                     |
+| Primer ([primer.style/product/components](https://primer.style/product/components/))                         | flat                        | `IconButton`, `ButtonGroup`, `ActionList`, `ActionMenu`                              | noun last; the family word (`Action`) first only where the items are one family |
+| Material 3 ([m3.material.io/components](https://m3.material.io/components))                                  | flat                        | "Icon buttons", "Segmented buttons", "FAB"                                           | noun last                                                                       |
+| Docusaurus / VitePress / Fumadocs                                                                            | docs theme                  | `DocItem`, `VPDoc`, `DocsPage`                                                       | family prefix (our `doc-`)                                                      |
+
+(Tailwind Plus and Material render their lists behind a login or with JavaScript; the item names
+above are the public ones those pages show.)
+
+Two habits come out of it: **copyable things carry their group first** (shadcn blocks, doc-theme
+parts), and **a list under a group heading never repeats the group** (Tailwind Plus). General
+components everywhere read modifier first, noun last.
+
+### Options compared
+
+| Family        | A. Group word first                                                                                                                                                                                                                                                                                                                              | B. Group word last (today)                                                                                                                                     | C. Bare name + display title                                                                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Blocks        | `dashboard/dashboard-alerts`: the id is already group-first, the copied file `dashboard-alerts.vue` and `DashboardAlerts` say what they are in an app; sorts by group in any flat list. **Chosen.**                                                                                                                                              | `dashboard/alerts-dashboard`: the word sits last in half the groups and is missing in the other half (`account/billing`, `shell/console`).                     | `dashboard/alerts`: shortest id, but `webkit add` copies `alerts.vue`, `console.vue`, `users.vue` into an app, and the route is `/alerts`. |
+| Page sections | `section-hero`: matches the owner's wording, but `section-` already starts the six frame pieces every band is built from (`section-container`, `section-module`, `section-gap`, `section-header`, `section-title`, `section-stack`), so whole bands and their parts would share one prefix; every `_id` changes (aliases needed for each of 46). | `hero-section`: unique, pairs with its piece (`hero` / `hero-section`), equals the stored `_id`; no data change. **Chosen**, with the list dropping "Section". | `hero`: taken by the marketing piece (`hero`, `faq`, `stats`, `newsletter`, …); impossible without renaming those.                         |
+| Docs pieces   | `doc-callout` (already, WN01/WN04). **Kept.**                                                                                                                                                                                                                                                                                                    | —                                                                                                                                                              | `callout`: collides with `callout`-like app components and the MDX tags.                                                                   |
+| Components    | `button-icon`, `card-pricing`: reads against English and every reference system; renames hundreds of imports.                                                                                                                                                                                                                                    | `icon-button`, `pricing-card`. **Recommended to keep (WN10, needs owner).**                                                                                    | —                                                                                                                                          |
+
+### The rule (naming.md § 3 and § 25)
+
+1. **The code name says its group once.** A block is `<group>/<group>-<what>`; a docs piece is
+   `doc-<thing>`; a page section is `<what>-section`. The `<what>` never repeats the group word or
+   its forms (`edit/edit-function`, not `edit-function-editor`; `top-bar/top-bar-auth`, not
+   `top-bar-auth-bar`).
+2. **A list under a group shows only the `<what>`.** The docs sidebar and the blocks index use
+   `labelInGroup` (`apps/docs/src/lib/nav.ts`): "Alerts" under _Dashboard_, "Architecture Tabs"
+   under _Page sections_, "Callout" under _Docs_. Page headings, search results and copyable code
+   keep the full name, because they are read out of the group.
+3. **Components** keep modifier first, noun last; their category is a folder and a heading only.
+
+Enforced by the new `block-group-first` rule in `check:naming` (and the write-time hook, same
+engine); `section-suffix` and `docs-prefix` already enforce the other two families.
+
+### Blocks renamed (60)
+
+The other 11 already started with their group and keep their id: `account/account-hierarchy`,
+`ai/ai-action-approval`, `ai/ai-chat`, `ai/ai-chat-drawer`, `create/create-drawer`,
+`create/create-hub`, `create/create-page`, `create/create-wizard`, `dashboard/dashboard-switcher`,
+`edit/edit-resource`, `settings/settings-form`.
+
+| Earlier 6.0 id                           | 6.0 id                                   |
+| ---------------------------------------- | ---------------------------------------- |
+| `account/activity-history`               | `account/account-activity-history`       |
+| `account/billing`                        | `account/account-billing`                |
+| `account/change-plan-drawer`             | `account/account-change-plan-drawer`     |
+| `account/deployment-settings`            | `account/account-deployment-settings`    |
+| `account/mfa-settings`                   | `account/account-mfa-settings`           |
+| `account/onboarding-form`                | `account/account-onboarding-form`        |
+| `account/payment-method-card`            | `account/account-payment-method-card`    |
+| `account/personal-tokens`                | `account/account-personal-tokens`        |
+| `account/team-permissions`               | `account/account-team-permissions`       |
+| `account/users`                          | `account/account-users`                  |
+| `auth/sign-in`                           | `auth/auth-sign-in`                      |
+| `create/deploy-drawer`                   | `create/create-deploy-drawer`            |
+| `create/deploy-progress-dialog`          | `create/create-deploy-progress-dialog`   |
+| `create/deploy-success`                  | `create/create-deploy-success`           |
+| `create/deploy-template`                 | `create/create-deploy-template`          |
+| `create/release-impact`                  | `create/create-release-impact`           |
+| `create/resource-picker`                 | `create/create-resource-picker`          |
+| `dashboard/alerts-dashboard`             | `dashboard/dashboard-alerts`             |
+| `dashboard/analytics-dashboard`          | `dashboard/dashboard-analytics`          |
+| `dashboard/breakdown-dashboard`          | `dashboard/dashboard-breakdown`          |
+| `dashboard/configurable-dashboard`       | `dashboard/dashboard-configurable`       |
+| `dashboard/executive-summary-dashboard`  | `dashboard/dashboard-executive-summary`  |
+| `dashboard/health-score-dashboard`       | `dashboard/dashboard-health-score`       |
+| `dashboard/home-dashboard`               | `dashboard/dashboard-home`               |
+| `dashboard/scan-results-dashboard`       | `dashboard/dashboard-scan-results`       |
+| `dashboard/security-dashboard`           | `dashboard/dashboard-security`           |
+| `dashboard/service-monitoring-dashboard` | `dashboard/dashboard-service-monitoring` |
+| `detail/deployment-logs`                 | `detail/detail-deployment-logs`          |
+| `detail/dns-zone-detail`                 | `detail/detail-dns-zone`                 |
+| `detail/domains-card`                    | `detail/detail-domains-card`             |
+| `detail/get-started`                     | `detail/detail-get-started`              |
+| `detail/invocations`                     | `detail/detail-invocations`              |
+| `detail/production-checklist`            | `detail/detail-production-checklist`     |
+| `detail/resource-detail`                 | `detail/detail-resource`                 |
+| `detail/version-detail`                  | `detail/detail-version`                  |
+| `edit/delete-dialog`                     | `edit/edit-delete-dialog`                |
+| `edit/function-editor`                   | `edit/edit-function`                     |
+| `edit/rule-builder`                      | `edit/edit-rule-builder`                 |
+| `edit/schema-editor`                     | `edit/edit-schema`                       |
+| `edit/variables`                         | `edit/edit-variables`                    |
+| `shell/console`                          | `shell/shell-console`                    |
+| `shell/docs`                             | `shell/shell-docs`                       |
+| `shell/site`                             | `shell/shell-site`                       |
+| `state/async-submit`                     | `state/state-async-submit`               |
+| `state/error-page`                       | `state/state-error-page`                 |
+| `state/first-use`                        | `state/state-first-use`                  |
+| `state/form-validation`                  | `state/state-form-validation`            |
+| `state/page-skeleton`                    | `state/state-page-skeleton`              |
+| `state/project-intake`                   | `state/state-project-intake`             |
+| `top-bar/auth-bar`                       | `top-bar/top-bar-auth`                   |
+| `top-bar/creation-bar`                   | `top-bar/top-bar-creation`               |
+| `view/card-view`                         | `view/view-card`                         |
+| `view/events-explorer`                   | `view/view-events-explorer`              |
+| `view/file-browser`                      | `view/view-file-browser`                 |
+| `view/marketplace`                       | `view/view-marketplace`                  |
+| `view/query-editor`                      | `view/view-query-editor`                 |
+| `view/rule-list`                         | `view/view-rule-list`                    |
+| `view/table-view`                        | `view/view-table`                        |
+| `view/template-browser`                  | `view/view-template-browser`             |
+| `view/waf-tuning`                        | `view/view-waf-tuning`                   |
+
+Every pair is in `src/cli/migrations/v6-blocks.json` (the 5.x ids now point straight at the new
+ones), so `webkit migrate v6` rewrites an app's `webkit.blocks.json` and `add <old id>` resolves
+with a note. `MIGRATION_V6.md` has the table. The demos app's manifest uses the new ids; its copied
+file names stay, as an app's would.
+
+### Page sections: what changed for `_id`s
+
+Nothing. Every section keeps its export, its `_id` and its page data; only the docs list shows
+"Hero Form" instead of "HeroFormSection". The alias mechanism (`sitePageSectionAliases`) is
+untouched and its tests still pass. If the owner prefers group-first `section-hero` (option A),
+the change is: rename 46 sections, add 46 page-data aliases, and rename the six `section-*` frame
+pieces so the prefix means one thing.

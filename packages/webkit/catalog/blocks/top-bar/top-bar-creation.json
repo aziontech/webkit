@@ -1,0 +1,19 @@
+{
+ "variants": [
+  {
+   "name": "CreateHub",
+   "summary": "The Creation Center header: the back control returns Home and the crumb is the single current page.",
+   "file": "blocks/top-bar/top-bar-creation/variants/create-hub.vue"
+  },
+  {
+   "name": "Terminal",
+   "summary": "A creation wizard once the last step is submitted: the provisioning and success screens keep only the brand and the avatar, with no back control and no crumb.",
+   "file": "blocks/top-bar/top-bar-creation/variants/terminal.vue"
+  }
+ ],
+ "sfcFile": "blocks/top-bar/top-bar-creation/top-bar-creation.vue",
+ "guidelinesFile": "blocks/top-bar/top-bar-creation/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/top-bar/top-bar-creation/sample.ts"
+ }
+}

@@ -84,7 +84,7 @@ Added (2)
 - apps/visual/baselines/examples/date-picker/default--light-1280.png
 - apps/visual/baselines/examples/date-picker/default--dark-1280.png
 Modified (1)
-- apps/visual/baselines/blocks/auth/sign-in/login--dark-1280.png
+- apps/visual/baselines/blocks/auth/auth-sign-in/login--dark-1280.png
 Removed (0)
 
 Why each change: <one line per group, tied to the branch's scope>

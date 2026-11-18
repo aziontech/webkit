@@ -1,0 +1,70 @@
+{
+  "id": "account/account-team-permissions",
+  "name": "AccountTeamPermissions",
+  "title": "Blocks/Account/AccountTeamPermissions",
+  "surface": "app",
+  "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, the view-table controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `Table` of teams (name as `TableCellLink` with a square `Avatar` and the description, permissions as `TableCellTags` with `+N`, members, `TableCellStatus`, and `TableCellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team. The list and its states are a page body for ConsoleLayout, rendered in its default slot; CreateTeam and EditTeam are full pages in the creation frame of `create/create-page` (a `AppHeader` with Back to Teams and permissions, no rail).",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "teams",
+    "teams and permissions",
+    "roles",
+    "roles and permissions",
+    "permission matrix",
+    "access control",
+    "rbac",
+    "create team",
+    "user groups",
+    "times e permissões",
+    "papéis e permissões",
+    "matriz de permissões",
+    "controle de acesso",
+    "criar time",
+    "edit team",
+    "team members",
+    "editar time",
+    "membros do time"
+  ],
+  "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy"
+  ],
+  "primary": {
+    "name": "Default",
+    "file": "account-team-permissions.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "CreateTeam",
+      "summary": "The Create Team page in the creation frame (a `AppHeader` with Back to Teams and permissions, the brand and a breadcrumb; no rail): name and description, the View and Edit permission matrix as a `Table` grouped by area with group checkboxes (a small `EmptyState` with Clear filter when the filter matches nothing), filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix.",
+      "file": "variants/create-team.vue"
+    },
+    {
+      "name": "EditTeam",
+      "summary": "The Edit Team page in the same creation frame: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and the same centered `SaveBar`, which offers Discard and Save changes only once something changed.",
+      "file": "variants/edit-team.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "No team yet: the heading and a flush EmptyState with Create Team replace the controls row and the table.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the controls row and the table's loading rows.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them.",
+      "file": "variants/error.vue"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 3351bb83ca6477eb4390f53bae4a1cf2339e8a3de4c14811963b0f8592583488
+checksum: 14a6816274637108ab4b3f9f751e683f9e762ef4ffdffd4127ed0d8416e2edc0
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -18,7 +18,7 @@ The frame every signed-in product page renders inside. It places named regions �
 header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns
 how they open, close, resize and remember their state. It responds to its **own** width, not the
 viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the
-split panel moves to the bottom. The regions are slots, so the shell (the `shell/console` block)
+split panel moves to the bottom. The regions are slots, so the shell (the `shell/shell-console` block)
 keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame to `AppLayout`.
 
 ## When to use
@@ -34,7 +34,7 @@ keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame t
 - A single resizable split inside a page, with no shell around it → use `resizable`.
 - A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.
 - A one-off overlay for a task (a create form, a detail preview) → use `drawer`.
-- Marketing and documentation pages → use the `shell/site` and `shell/docs` blocks.
+- Marketing and documentation pages → use the `shell/shell-site` and `shell/shell-docs` blocks.
 
 ## Related
 

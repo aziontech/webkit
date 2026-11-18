@@ -1,0 +1,19 @@
+{
+ "variants": [
+  {
+   "name": "Plan",
+   "summary": "Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer (the `account/account-change-plan-drawer#Checkout` form, What's included as a `PlanFeatureList`) and only selects once Upgrade is pressed.",
+   "file": "blocks/account/account-onboarding-form/variants/plan.vue"
+  },
+  {
+   "name": "Profile",
+   "summary": "Step 3 of 3: the usage and role questions, the onboarding-session switch and the Create Organization action, which asks for both answers first.",
+   "file": "blocks/account/account-onboarding-form/variants/profile.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-onboarding-form/account-onboarding-form.vue",
+ "guidelinesFile": "blocks/account/account-onboarding-form/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/account-onboarding-form/sample.ts"
+ }
+}

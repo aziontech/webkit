@@ -17,7 +17,7 @@
   "`template-gallery-section` — with `closing`, the closing band that lists deployable templates."
  ],
  "bestPractices": [
-  "Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.",
+  "Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.",
   "Set `anchor: 'contact'` so the page's contact links scroll to the close.",
   "Use `variant: 'frame'` (no copy) to close a page that ends on a band with its own actions (a listing, a legal page); `site-page` draws no gap before it.",
   "Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame.",

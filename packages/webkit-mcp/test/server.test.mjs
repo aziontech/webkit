@@ -159,7 +159,7 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
     (
       await server.request('tools/call', {
         name: 'get_block',
-        arguments: { id: 'dashboard/analytics-dashboard', sections: ['guidelines'] }
+        arguments: { id: 'dashboard/dashboard-analytics', sections: ['guidelines'] }
       })
     ).result.content[0].text
   )

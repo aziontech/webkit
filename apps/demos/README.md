@@ -16,19 +16,19 @@ pnpm preview:demos   # preview the build on http://localhost:4174
 
 ## Flows
 
-| Route                                | Screen (block)                                         | What it does                                                                                     |
-| ------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| `/resources`                         | `view/table-view` in `ConsoleLayout` (`shell/console`) | List with filters, preferences and row actions (View, Deploy, Delete)                            |
-| `/resources/new`                     | `create/create-page`                                   | Create with validation; Save adds the resource, toasts and opens its detail                      |
-| `/resources/:id`                     | `detail/resource-detail`                               | Detail of the resource; Resource actions → Copy URL, Settings (opens the edit page)              |
-| `/resources/:id/edit`                | `edit/edit-resource`                                   | Edit with the save bar; Save updates the store, toasts and returns to the detail                 |
-| `/resources/:id/delete`              | `edit/delete-dialog` over the list                     | Typed confirmation; Delete removes the row, toasts and closes                                    |
-| `/resources/:id/deploy`              | `state/async-submit`                                   | A deploy that runs outside the page: progress toast, then a toast with **Edit** and **Redeploy** |
-| `/settings`                          | `settings/settings-form`                               | Account settings with save all / per group / per card                                            |
-| `/onboarding` → `/plan` → `/profile` | `account/onboarding-form`                              | One wizard, its step bound to the route; creating the organization goes to the list              |
-| `/assistant`                         | `ai/ai-chat`                                           | AI assistant: prompt, streamed answer with reasoning and sources, suggestions                    |
+| Route                                | Screen (block)                                               | What it does                                                                                     |
+| ------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `/resources`                         | `view/view-table` in `ConsoleLayout` (`shell/shell-console`) | List with filters, preferences and row actions (View, Deploy, Delete)                            |
+| `/resources/new`                     | `create/create-page`                                         | Create with validation; Save adds the resource, toasts and opens its detail                      |
+| `/resources/:id`                     | `detail/detail-resource`                                     | Detail of the resource; Resource actions → Copy URL, Settings (opens the edit page)              |
+| `/resources/:id/edit`                | `edit/edit-resource`                                         | Edit with the save bar; Save updates the store, toasts and returns to the detail                 |
+| `/resources/:id/delete`              | `edit/edit-delete-dialog` over the list                      | Typed confirmation; Delete removes the row, toasts and closes                                    |
+| `/resources/:id/deploy`              | `state/state-async-submit`                                   | A deploy that runs outside the page: progress toast, then a toast with **Edit** and **Redeploy** |
+| `/settings`                          | `settings/settings-form`                                     | Account settings with save all / per group / per card                                            |
+| `/onboarding` → `/plan` → `/profile` | `account/account-onboarding-form`                            | One wizard, its step bound to the route; creating the organization goes to the list              |
+| `/assistant`                         | `ai/ai-chat`                                                 | AI assistant: prompt, streamed answer with reasoning and sources, suggestions                    |
 
-`src/app.vue` is the `shell/console` block: it composes `ConsoleLayout` once around `RouterView`
+`src/app.vue` is the `shell/shell-console` block: it composes `ConsoleLayout` once around `RouterView`
 with the demo's navigation (`src/lib/navigation.ts`), the breadcrumbs from the route meta, the ⌘K
 palette (recent resources, Create Resource, Switch theme) and the account menu. Every browse route
 (list, detail, edit, deploy, settings, assistant) renders only its page body in the layout's default
@@ -45,9 +45,9 @@ the URL: `?theme=light&dir=rtl&lang=pt-BR`.
 
 ```bash
 cd apps/demos
-node ../../packages/webkit/src/cli/cli.js add shell/console --dest src/app.vue
-node ../../packages/webkit/src/cli/cli.js add view/table-view --dest src/blocks
-node ../../packages/webkit/src/cli/cli.js add account/onboarding-form --dest src/blocks
+node ../../packages/webkit/src/cli/cli.js add shell/shell-console --dest src/app.vue
+node ../../packages/webkit/src/cli/cli.js add view/view-table --dest src/blocks
+node ../../packages/webkit/src/cli/cli.js add account/account-onboarding-form --dest src/blocks
 # … one `add` per block in the table above
 ```
 
@@ -57,7 +57,7 @@ events, so most copies are unchanged; a page such as `src/pages/table-view-page.
 `:resources` to the store and handles `@delete`. Three copies changed content only: `create-page`
 names the resource flow in its breadcrumb and title and wires its back button to `cancel`,
 `async-submit` takes the service `name` and leaves the toasts to `src/lib/deploy.ts` (so the run
-reports back after you leave the page), and `src/app.vue`, the `shell/console` shell, renders
+reports back after you leave the page), and `src/app.vue`, the `shell/shell-console` shell, renders
 `RouterView` with the demo's navigation.
 
 To update after a release, run `npx @aziontech/webkit check`; for each block it reports, look at

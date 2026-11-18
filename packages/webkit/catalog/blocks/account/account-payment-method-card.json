@@ -1,0 +1,19 @@
+{
+ "variants": [
+  {
+   "name": "Editing",
+   "summary": "After Change: cardholder, country, number, expiry and security code over the PCI notice, with Cancel and Update stacked below sm.",
+   "file": "blocks/account/account-payment-method-card/variants/editing.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "While the upgrade submits, the Change action is disabled.",
+   "file": "blocks/account/account-payment-method-card/variants/disabled.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-payment-method-card/account-payment-method-card.vue",
+ "guidelinesFile": "blocks/account/account-payment-method-card/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/account-payment-method-card/sample.ts"
+ }
+}

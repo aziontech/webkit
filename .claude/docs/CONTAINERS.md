@@ -6,8 +6,8 @@ hairlines. Nothing floats, nothing is rounded, and **no line is ever drawn twice
 the drawn-grid, technical-drawing look — the _industrial_ register of the Azion brand.
 
 Reference implementations live in
-the WebKit shells [`blocks/shell/site`](../../packages/webkit/blocks/shell/site/site.vue) and
-[`blocks/shell/docs`](../../packages/webkit/blocks/shell/docs/docs.vue), and the page sections in
+the WebKit shells [`blocks/shell/shell-site`](../../packages/webkit/blocks/shell/shell-site/shell-site.vue) and
+[`blocks/shell/shell-docs`](../../packages/webkit/blocks/shell/shell-docs/shell-docs.vue), and the page sections in
 [`src/components/section/`](../../packages/webkit/src/components/section/); the layout primitives —
 shared by Site, Hub and Docs — are in
 [`src/components/marketing/`](../../packages/webkit/src/components/marketing/) (`SectionContainer`, `SectionModule`, `CardGrid`, `Hero`)
@@ -66,9 +66,9 @@ The page renders inside `SiteLayout` (or `DocLayout`), composed once in `App.vue
 <!-- SiteLayout renders SiteFooterSection after the page; it owns border-t -->
 ```
 
-Live: [`website.vue:450-511`](../../packages/webkit/blocks/shell/site/site.vue#L450-L511) (the hero band and the framed
+Live: [`website.vue:450-511`](../../packages/webkit/blocks/shell/shell-site/shell-site.vue#L450-L511) (the hero band and the framed
 column inside `SiteLayout`, which adds the footer) and
-[`documentation.vue:154`](../../packages/webkit/blocks/shell/docs/docs.vue#L154) (the docs column inside `DocLayout`).
+[`documentation.vue:154`](../../packages/webkit/blocks/shell/shell-docs/shell-docs.vue#L154) (the docs column inside `DocLayout`).
 
 ---
 

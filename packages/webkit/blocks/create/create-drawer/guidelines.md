@@ -13,9 +13,9 @@ The right-side drawer that adds or edits something that only exists inside anoth
 ## When not to use
 
 - A resource the sidebar routes to: create it on a page with `create/create-page`, or `create/create-wizard` when it needs several pages.
-- A blocking yes or no question, or a destructive guard: use `edit/delete-dialog`.
-- Deploying what exists: use `create/deploy-drawer`, which commits a deployment rather than a record.
-- Binding a whole resource that may be reused or created in a create flow: use `create/resource-picker`.
+- A blocking yes or no question, or a destructive guard: use `edit/edit-delete-dialog`.
+- Deploying what exists: use `create/create-deploy-drawer`, which commits a deployment rather than a record.
+- Binding a whole resource that may be reused or created in a create flow: use `create/create-resource-picker`.
 - A missing resource whose creation takes several steps, such as a project imported from a repository: open its create page in a new tab and give the field a `Refresh` option.
 - Editing the settings of the resource itself: use `edit/edit-resource`.
 
@@ -139,7 +139,7 @@ Then delete `sample.ts` and its import.
 - Close the drawer on success and show the new item in the list behind it, with a toast that names it (every variant does).
 - On a failed save keep the drawer open with the values, release the fieldset and show a danger `Alert` with Retry above the footer (SaveError).
 - Stack a second, medium drawer for a missing item of the same resource, such as an origin for a rule, and select the new one back into the parent.
-- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so this page body never renders a `Toaster`.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -187,9 +187,9 @@ Then delete `sample.ts` and its import.
 
 ## Related
 
-- `view/table-view` — the list a create drawer usually opens over.
-- `detail/resource-detail` — where Add actions on a resource's tabs open this drawer.
+- `view/view-table` — the list a create drawer usually opens over.
+- `detail/detail-resource` — where Add actions on a resource's tabs open this drawer.
 - `create/create-page` — the page a first-level resource creates on instead.
-- `create/deploy-drawer` — the drawer that deploys rather than creates.
-- `state/form-validation` — the submit-time validation this drawer follows.
+- `create/create-deploy-drawer` — the drawer that deploys rather than creates.
+- `state/state-form-validation` — the submit-time validation this drawer follows.
 - `SettingsSection` — the band each section is built from; see `skills/webkit-form` for fields and validation.

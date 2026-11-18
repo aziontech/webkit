@@ -1383,7 +1383,7 @@
       "templates/onboarding-form": "template removed; copy the matching block from the catalog",
       "templates/plan-success": "template removed; copy the matching block from the catalog",
       "templates/platform-shell": "template removed; copy the matching block from the catalog",
-      "templates/sign-up-card": "template removed; copy auth/sign-in from the catalog",
+      "templates/sign-up-card": "template removed; copy auth/auth-sign-in from the catalog",
       "testimonials-carousel": "work-in-progress section; use the QuoteTabs component or a marketing block",
       "textarea": "PrimeVue Textarea; use Textarea",
       "timeline": "PrimeVue Timeline; no v6 timeline, use Stepper (vertical) or an Item list",

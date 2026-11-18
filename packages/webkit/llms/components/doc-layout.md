@@ -36,7 +36,7 @@
 - `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
 - `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
 - `SearchTrigger`, `Command` — the header search and the palette it opens.
-- `shell/docs` — the block that shows this layout with a sample docs tree.
+- `shell/shell-docs` — the block that shows this layout with a sample docs tree.
 
 ## Props
 

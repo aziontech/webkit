@@ -105,6 +105,14 @@ const FIXTURES = {
     pkg({ surface: 'product', title: 'Templates/Platform/Create/CreateHub' }),
     pkg({ surface: 'product', title: 'Blocks/Create/CreateHub' })
   ],
+  'block-group-first': [
+    [
+      'packages/webkit/blocks/dashboard/alerts-dashboard/block.json',
+      'packages/webkit/blocks/dashboard/dashboard-alerts/block.json'
+    ],
+    pkg({ surface: 'product' }),
+    pkg({ surface: 'product' })
+  ],
   'block-state': [
     'packages/webkit/blocks/create/create-hub/block.json',
     pkg({
@@ -434,7 +442,10 @@ test('section-suffix: every page section ends in -section, a bare name or a wrap
 test('docs-prefix: a docs component starts with doc-, and only docs components do', () => {
   const fired = (rel) => hits(rel, sfc(''), 'docs-prefix').map((x) => x.message)
   assert.match(fired(`${C}/docs/steps/steps.vue`)[0], /name it "doc-steps"/)
-  assert.match(fired(`${C}/content/doc-card/doc-card.vue`)[0], /only components in src\/components\/docs\//)
+  assert.match(
+    fired(`${C}/content/doc-card/doc-card.vue`)[0],
+    /only components in src\/components\/docs\//
+  )
   assert.deepEqual(fired(`${C}/docs/doc-steps/doc-steps.vue`), [])
   assert.deepEqual(fired(`${C}/docs/doc-steps/doc-steps-step.vue`), [])
   assert.deepEqual(fired(`${C}/navigation/tabs/tabs.vue`), [])

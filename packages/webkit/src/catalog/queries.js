@@ -603,7 +603,7 @@ export function searchComponents(catalog, query, { surface } = {}) {
       ...(wantedSurface ? { surface: wantedSurface } : {}),
       count: matches.length,
       matches,
-      hint: 'A marketing page is the shell/site block (get_block("shell/site")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
+      hint: 'A marketing page is the shell/shell-site block (get_block("shell/shell-site")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
     }
   }
   const aliases = aliasHits(catalog, q)

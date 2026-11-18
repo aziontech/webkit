@@ -1,0 +1,60 @@
+{
+  "id": "dashboard/dashboard-home",
+  "name": "DashboardHome",
+  "title": "Blocks/Dashboard/DashboardHome",
+  "surface": "app",
+  "summary": "The whole Home page body, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained by a `Hint` in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card (one whole-card `Item` link), and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a whole-row `Item` link to the resource, each panel heading a `Link` to its list, and an empty panel an `EmptyState`. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the layout’s palette (useConsoleLayout({ optional: true }), then layout?.openSearch()) on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). While either screen arrives, the PageWires Overview and Onboarding wires (`state/state-page-skeleton`) hold the page. Built from `StatTileGroup`, `StatTile`, `Hint`, `Card`, `Link`, `EmptyState`, `Alert`, `Tooltip`, `IconButton`, `Item`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. The populated root carries data-layout-fill and scrolls itself: from xl each resource panel scrolls its rows; below xl the page scrolls as one. The first-access screen does not fill.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "home",
+    "home page",
+    "home dashboard",
+    "console home",
+    "usage overview",
+    "página inicial",
+    "início do console",
+    "first access",
+    "home empty state",
+    "new account home",
+    "welcome screen",
+    "first run",
+    "brand-new account",
+    "getting started home",
+    "primeiro acesso",
+    "tela de boas-vindas",
+    "home vazia",
+    "classic overview",
+    "overview dashboard",
+    "account summary",
+    "recent activity",
+    "monthly usage",
+    "visão geral",
+    "account landing overview"
+  ],
+  "skills": ["webkit-layout", "webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "dashboard-home.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Empty",
+      "summary": "Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "Populated Home whose data could not load: the usage band and every resource panel show a danger `Alert` with Retry in place of their content; the greeting and the agent card stay.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "Summary",
+      "summary": "The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources DataTable card and a Recent activity DataTable card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.",
+      "file": "variants/summary.vue"
+    }
+  ]
+}

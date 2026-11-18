@@ -6,7 +6,7 @@ import { join } from 'node:path'
 import { lineDiff, unifiedDiff } from '../../src/cli/text-diff.js'
 import { cleanup, cli, cliJson, makeProject } from './lib/cli-project.mjs'
 
-const BLOCK = 'edit/delete-dialog'
+const BLOCK = 'edit/edit-delete-dialog'
 
 test('unifiedDiff renders hunks with context and line ranges', () => {
   const a = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'].join('\n')
@@ -44,23 +44,23 @@ test('diff reports identical copies with exit 0 and edits as a unified diff with
     assert.equal(same.code, 0, same.stderr)
     assert.match(same.stdout, /identical/)
 
-    const file = join(dir, 'src/views/delete-dialog.vue')
+    const file = join(dir, 'src/views/edit-delete-dialog.vue')
     const src = readFileSync(file, 'utf8')
     writeFileSync(file, src.replace('<template>', '<template>\n  <!-- local -->'))
-    const changed = cli(dir, 'diff', 'src/views/delete-dialog.vue')
+    const changed = cli(dir, 'diff', 'src/views/edit-delete-dialog.vue')
     assert.equal(changed.code, 1)
     assert.match(changed.stdout, /\+1 -0/)
     assert.match(changed.stdout, /^\+  <!-- local -->$/m)
     assert.ok(!changed.stdout.includes('\x1b['), 'no colour when not a TTY')
 
-    const json = cliJson(dir, 'diff', 'delete-dialog')
+    const json = cliJson(dir, 'diff', 'edit-delete-dialog')
     assert.equal(json.code, 1)
     assert.equal(json.json.differs, true)
-    const edited = json.json.files.find((f) => f.path === 'src/views/delete-dialog.vue')
+    const edited = json.json.files.find((f) => f.path === 'src/views/edit-delete-dialog.vue')
     assert.equal(edited.status, 'modified')
     assert.equal(edited.editedLocally, true)
     assert.equal(edited.upstreamChanged, false)
-    const sample = json.json.files.find((f) => f.path === 'src/views/delete-dialog.sample.ts')
+    const sample = json.json.files.find((f) => f.path === 'src/views/edit-delete-dialog.sample.ts')
     assert.equal(sample.status, 'identical')
   } finally {
     cleanup(dir)

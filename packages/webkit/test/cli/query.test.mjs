@@ -9,7 +9,7 @@ test('search returns blocks, components and examples', () => {
     const r = cliJson(dir, 'search', 'delete', 'confirmation')
     assert.equal(r.code, 0)
     assert.equal(r.json.query, 'delete confirmation')
-    assert.equal(r.json.blocks[0].id, 'edit/delete-dialog')
+    assert.equal(r.json.blocks[0].id, 'edit/edit-delete-dialog')
     assert.ok(r.json.components.some((c) => c.name === 'confirm-dialog'))
     const text = cli(dir, 'search', 'button')
     assert.match(text.stdout, /Components \(\d+\)\n {2}button /)

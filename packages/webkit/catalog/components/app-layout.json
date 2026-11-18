@@ -1,5 +1,5 @@
 {
- "purpose": "The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shell/console` block) keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame to `AppLayout`.",
+ "purpose": "The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shell/shell-console` block) keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame to `AppLayout`.",
  "useWhen": [
   "Use AppLayout only to build a signed-in app shell other than the console; the console uses ConsoleLayout.",
   "A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.",
@@ -11,7 +11,7 @@
   "A single resizable split inside a page, with no shell around it → use `resizable`.",
   "A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.",
   "A one-off overlay for a task (a create form, a detail preview) → use `drawer`.",
-  "Marketing and documentation pages → use the `shell/site` and `shell/docs` blocks."
+  "Marketing and documentation pages → use the `shell/shell-site` and `shell/shell-docs` blocks."
  ],
  "related": [
   "`sidebar` — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.",

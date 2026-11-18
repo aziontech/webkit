@@ -19,7 +19,7 @@ Pick the path by what you are about to do.
    rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
 2. The app's chrome is one layout, composed once in `App.vue` around `RouterView`: `ConsoleLayout`
    (console), `SiteLayout` (marketing site) or `DocLayout` (docs). Start it from its shell block
-   (`npx @aziontech/webkit add shell/console`, `shell/site`, `shell/docs`): `add` writes the block
+   (`npx @aziontech/webkit add shell/shell-console`, `shell/shell-site`, `shell/shell-docs`): `add` writes the block
    into your views folder and prints the path, so move that file to `src/App.vue` and replace the
    stand-in body with `<RouterView />`. Every screen below is only a page body in that
    layout's slot: no `<main>`, sidebar, header, footer or ⌘K palette of its own (a page opens the
@@ -206,7 +206,7 @@ The full pattern catalog — how to build a component by hand and how to use our
 ```bash
 npx @aziontech/webkit search delete confirmation   # blocks, components and examples
 npx @aziontech/webkit view button                   # a component's API, or a block's guidelines + SFC
-npx @aziontech/webkit add edit/delete-dialog   # copy a block into src/views
+npx @aziontech/webkit add edit/edit-delete-dialog   # copy a block into src/views
 npx @aziontech/webkit diff delete-dialog # your copy vs the canonical block
 npx @aziontech/webkit remove delete-dialog # delete the copy and its webkit.blocks.json entry
 npx @aziontech/webkit check    # CI gate: doctor + v5 names + imports + lint + block drift

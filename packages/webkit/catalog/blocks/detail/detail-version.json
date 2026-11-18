@@ -1,0 +1,59 @@
+{
+ "variants": [
+  {
+   "name": "Deployed",
+   "summary": "The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy.",
+   "file": "blocks/detail/detail-version/variants/deployed.vue"
+  },
+  {
+   "name": "VersionHistory",
+   "summary": "The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest.",
+   "file": "blocks/detail/detail-version/variants/version-history.vue"
+  },
+  {
+   "name": "Revert",
+   "summary": "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm emits `revert` with the version; while the parent runs it, `reverting` puts Revert in its loading state and the bar reads Reverting to AK7D0ZX4…, and the parent reports the outcome with one toast that carries Edit and Redeploy.",
+   "file": "blocks/detail/detail-version/variants/revert.vue"
+  },
+  {
+   "name": "EnvironmentCrumb",
+   "summary": "The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the page's `ConsoleLayout.Breadcrumb` from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`.",
+   "file": "blocks/detail/detail-version/variants/environment-crumb.vue"
+  },
+  {
+   "name": "Creating",
+   "summary": "A new version being copied from the deployed AEO25I38: the workspace is drawn as `Skeleton` wires (a heading band, then sectioned cards of rows with a trailing switch) inside a polite busy status, and the version bar shows a `Spinner`, reads Creating new version… and Copying AEO25I38 into a new draft., with Add Version loading and Redeploy disabled.",
+   "file": "blocks/detail/detail-version/variants/creating.vue"
+  },
+  {
+   "name": "NotFound",
+   "summary": "A version link that points nowhere: the trail ends on the missing version and the body is a bordered `EmptyState`, Version not found, saying the version may have been deleted, with View Versions back to the Versions tab.",
+   "file": "blocks/detail/detail-version/variants/not-found.vue"
+  },
+  {
+   "name": "Source",
+   "summary": "The draft on its Source tab: a small Source heading with Upload Files, the controls row (search in folder, Refresh, Download CSV, Columns and Open in Object Storage), a `Breadcrumb` of the folder path from the bucket, and the files table whose folders open in place and whose empty state offers Upload Files and Open Bucket.",
+   "file": "blocks/detail/detail-version/variants/source.vue"
+  },
+  {
+   "name": "DeviceGroups",
+   "summary": "The draft on its Device Groups tab: a small heading with Add Device Group, the controls row and the groups table (name, User-Agent match, last modified). A name opens the edit `Drawer`, the same one Add Device Group opens, with the Name and the User-Agent regular expression `Textarea`, validated on submit.",
+   "file": "blocks/detail/detail-version/variants/device-groups.vue"
+  },
+  {
+   "name": "CacheSettings",
+   "summary": "The draft on its Cache Settings tab: the cache settings table (browser cache, edge cache, a tiered cache `Tag`, last modified) and the add or edit `Drawer` that holds the cache-settings rows of Templates/Platform/Edit/EditResource: Browser cache, Edge cache with stale, large file and tiered cache, and a collapsible Advanced cache key that ends on Adaptive delivery and a Device groups `MultiSelect`.",
+   "file": "blocks/detail/detail-version/variants/cache-settings.vue"
+  },
+  {
+   "name": "FunctionsInstances",
+   "summary": "The draft on its Functions Instances tab: the instances table with the runtime glyph and a link to each function, its arguments and status, and the add or edit `Drawer` with the Name, a function `Select` whose footer is Create Function, and the arguments as a `SchemaForm` when the function declares a schema or a JSON `CodeEditor` when it does not.",
+   "file": "blocks/detail/detail-version/variants/functions-instances.vue"
+  }
+ ],
+ "sfcFile": "blocks/detail/detail-version/detail-version.vue",
+ "guidelinesFile": "blocks/detail/detail-version/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/detail/detail-version/sample.ts"
+ }
+}

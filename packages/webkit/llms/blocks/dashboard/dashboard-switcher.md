@@ -1,6 +1,6 @@
 # DashboardSwitcher (`dashboard/dashboard-switcher`)
 
-> The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a `FilterMenu` that sets the shared Period and counts it on its Filter button, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable chip in `FilterMenu.ChipGroup`. Under the controls, a placeholder body for the chosen dashboard (in an app, render the real dashboard block there, and `configurable-dashboard` for Custom): four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a `FilterMenu` that sets the shared Period and counts it on its Filter button, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable chip in `FilterMenu.ChipGroup`. Under the controls, a placeholder body for the chosen dashboard (in an app, render the real dashboard block there, and `dashboard-configurable` for Custom): four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/dashboard/dashboard-switcher/dashboard-switcher.vue` in `@aziontech/webkit`
@@ -14,7 +14,7 @@ dashboards; dashboard switcher; dashboards hub; dashboard picker; choose a dashb
 
 The dashboards hub. The reader comes here to look at one of several prepared views of the account (traffic, usage, edge health, threats, business figures, or a layout of their own) without hunting for each page in the navigation. One control picks the dashboard, one shared period scopes it, and the body under them is the chosen dashboard. Switching keeps the period, so comparing traffic and threats over the same 7 days is two clicks.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -24,27 +24,27 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When not to use
 
-- A single dashboard with its own page: use the dashboard block directly (`dashboard/analytics-dashboard`, `dashboard/security-dashboard`, and the rest of `dashboard`).
-- A dashboard the reader arranges by hand: use `dashboard/configurable-dashboard` (it is the body of the Custom entry).
-- An overview of the whole account with resources and recent activity: use `dashboard/home-dashboard`.
+- A single dashboard with its own page: use the dashboard block directly (`dashboard/dashboard-analytics`, `dashboard/dashboard-security`, and the rest of `dashboard`).
+- A dashboard the reader arranges by hand: use `dashboard/dashboard-configurable` (it is the body of the Custom entry).
+- An overview of the whole account with resources and recent activity: use `dashboard/dashboard-home`.
 
 ## Pick the dashboard by the shape of the data
 
 | Data shape                                                                 | Block                                         |
 | -------------------------------------------------------------------------- | --------------------------------------------- |
-| Traffic volume and quality over one period (requests, status codes, hosts) | `dashboard/analytics-dashboard`               |
-| Consumption per product or project against the previous period             | `dashboard/analytics-dashboard` (Usage)       |
-| Blocked vs allowed requests, attack categories, source IPs                 | `dashboard/security-dashboard`                |
-| Each request of known actors with the rule that decided it                 | `dashboard/security-dashboard` (ByActor)      |
-| Open alerts to triage by severity                                          | `dashboard/alerts-dashboard`                  |
-| Items waiting for a verdict from an asynchronous analysis                  | `dashboard/scan-results-dashboard`            |
-| One total split into categories over time                                  | `dashboard/breakdown-dashboard`               |
-| Many signals rolled up into one banded score                               | `dashboard/health-score-dashboard`            |
-| Real-user web vitals                                                       | `dashboard/health-score-dashboard` (RealUser) |
-| Latency percentiles, error rates and live state per service                | `dashboard/service-monitoring-dashboard`      |
-| Cards each reader rearranges and resizes                                   | `dashboard/configurable-dashboard`            |
-| The account's landing overview                                             | `dashboard/home-dashboard`                    |
-| A one-page roll-up of business KPIs for leadership                         | `dashboard/executive-summary-dashboard`       |
+| Traffic volume and quality over one period (requests, status codes, hosts) | `dashboard/dashboard-analytics`               |
+| Consumption per product or project against the previous period             | `dashboard/dashboard-analytics` (Usage)       |
+| Blocked vs allowed requests, attack categories, source IPs                 | `dashboard/dashboard-security`                |
+| Each request of known actors with the rule that decided it                 | `dashboard/dashboard-security` (ByActor)      |
+| Open alerts to triage by severity                                          | `dashboard/dashboard-alerts`                  |
+| Items waiting for a verdict from an asynchronous analysis                  | `dashboard/dashboard-scan-results`            |
+| One total split into categories over time                                  | `dashboard/dashboard-breakdown`               |
+| Many signals rolled up into one banded score                               | `dashboard/dashboard-health-score`            |
+| Real-user web vitals                                                       | `dashboard/dashboard-health-score` (RealUser) |
+| Latency percentiles, error rates and live state per service                | `dashboard/dashboard-service-monitoring`      |
+| Cards each reader rearranges and resizes                                   | `dashboard/dashboard-configurable`            |
+| The account's landing overview                                             | `dashboard/dashboard-home`                    |
+| A one-page roll-up of business KPIs for leadership                         | `dashboard/dashboard-executive-summary`       |
 | Several of these behind one picker and one shared period                   | `dashboard/dashboard-switcher`                |
 
 ## Building blocks
@@ -75,7 +75,7 @@ The applied period as a chip under the controls (`Period: Last 24 hours`), bound
 
 ### G. Dashboard body — `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `Alert` (required)
 
-The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. When the body fails to load, each card keeps its header and shows a danger `Alert` with Retry. Each body here is a placeholder with sample figures: in an app, render the matching dashboard block in its place (the bodies of `analytics-dashboard`, `security-dashboard`, `scan-results-dashboard`, `breakdown-dashboard` and the rest), and render `configurable-dashboard` for the Custom entry under Yours. Don't ship the placeholder bodies as the real dashboards.
+The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. When the body fails to load, each card keeps its header and shows a danger `Alert` with Retry. Each body here is a placeholder with sample figures: in an app, render the matching dashboard block in its place (the bodies of `dashboard-analytics`, `dashboard-security`, `dashboard-scan-results`, `dashboard-breakdown` and the rest), and render `dashboard-configurable` for the Custom entry under Yours. Don't ship the placeholder bodies as the real dashboards.
 
 ## Data
 
@@ -167,9 +167,9 @@ Then delete `sample.ts` and its import.
 
 ## Related
 
-- `dashboard/configurable-dashboard` — the Custom entry, laid out by the reader.
-- `dashboard/analytics-dashboard` (Default and Usage), `dashboard/security-dashboard` — the Traffic, Usage and Threats bodies on their own pages.
-- `dashboard/home-dashboard` — the account overview.
+- `dashboard/dashboard-configurable` — the Custom entry, laid out by the reader.
+- `dashboard/dashboard-analytics` (Default and Usage), `dashboard/dashboard-security` — the Traffic, Usage and Threats bodies on their own pages.
+- `dashboard/dashboard-home` — the account overview.
 
 ## Variants
 

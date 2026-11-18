@@ -6,7 +6,7 @@ status: implemented
 spec_version: 9
 created: 2026-11-05
 last_updated: 2026-11-17
-checksum: d3eb74f72efaaf988dd00485fcd454be1a6c40c274fba7c398d3df738fc48f8d
+checksum: 66e972bae89a27bc793c999b14f4e7c54eb98b68a4966548d9861a7c7586c44a
 template: 2
 ---
 
@@ -37,7 +37,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 - Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.
 - Keep `description` to one sentence; it is set as the large headline.
 - Write `form.invalidMessage` with an example address so the fix is obvious.
-- Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 
 ## Usage
 

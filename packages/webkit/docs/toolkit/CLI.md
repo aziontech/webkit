@@ -52,8 +52,8 @@ Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write ru
 
 ```bash
 npx @aziontech/webkit search delete confirmation          # blocks, components, examples
-npx @aziontech/webkit view edit/delete-dialog   # guidelines, variants, SFC
-npx @aziontech/webkit add edit/delete-dialog [--variant SettingsRow]
+npx @aziontech/webkit view edit/edit-delete-dialog   # guidelines, variants, SFC
+npx @aziontech/webkit add edit/edit-delete-dialog [--variant SettingsRow]
 npx @aziontech/webkit diff delete-dialog       # your copy vs the canonical block
 npx @aziontech/webkit remove delete-dialog [--dry-run]   # delete the copy and its record
 ```

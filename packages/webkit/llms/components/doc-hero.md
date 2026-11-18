@@ -9,7 +9,7 @@
 ## When to use
 
 - Use DocHero only on the documentation home; marketing page openings use HeroSection.
-- The top of a documentation home or a docs section landing (`shell/docs`, variant `Landing`).
+- The top of a documentation home or a docs section landing (`shell/shell-docs`, variant `Landing`).
 
 ## Do
 

@@ -1,8 +1,8 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import RulesReview from '../../../blocks/view/rule-list/variants/review-changes.vue'
-import WafAllow from '../../../blocks/view/waf-tuning/variants/allow.vue'
+import RulesReview from '../../../blocks/view/view-rule-list/variants/review-changes.vue'
+import WafAllow from '../../../blocks/view/view-waf-tuning/variants/allow.vue'
 import { expectNoA11yViolations } from '../axe'
 import { useToastRegion } from '../toast-region'
 
@@ -15,13 +15,13 @@ const buttonIn = (root: HTMLElement, text: string) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement
 describe('open dialogs of the firewall-rules blocks', () => {
-  it('rule-list review dialog has no axe violations', async () => {
+  it('view-rule-list review dialog has no axe violations', async () => {
     render(RulesReview)
     await waitFor(() => expect(dialog()).not.toBeNull())
     await expectNoA11yViolations(dialog() as HTMLElement)
   })
 
-  it('waf-tuning allow dialog flags the empty reason only after Allow rules, then has no axe violations', async () => {
+  it('view-waf-tuning allow dialog flags the empty reason only after Allow rules, then has no axe violations', async () => {
     render(WafAllow)
     await waitFor(() => expect(dialog()).not.toBeNull())
     const panel = dialog() as HTMLElement

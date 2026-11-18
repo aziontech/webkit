@@ -63,7 +63,7 @@
     },
     {
       "name": "CreateAndDeploy",
-      "summary": "A resource that is useless until it is bound and deployed (Create Service): step one binds the project it serves, an existing one from the paged list or a new one configured in place (cache settings, origin); step two reads the project back with Change, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), environment and certificate, the deployment the first release is cut against and a collapsed Advanced section. Next is gated on the project; the last action reads Create and deploy and shows its loading state, then the build logs (`detail/deployment-logs#InCreateFlow`) and `create/deploy-success` follow.",
+      "summary": "A resource that is useless until it is bound and deployed (Create Service): step one binds the project it serves, an existing one from the paged list or a new one configured in place (cache settings, origin); step two reads the project back with Change, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), environment and certificate, the deployment the first release is cut against and a collapsed Advanced section. Next is gated on the project; the last action reads Create and deploy and shows its loading state, then the build logs (`detail/detail-deployment-logs#InCreateFlow`) and `create/create-deploy-success` follow.",
       "file": "variants/create-and-deploy.vue"
     }
   ]

@@ -35,7 +35,7 @@
 
 - [code-block](code-block.md) — highlighted source code with a copy action, not a stream of typed log lines.
 - [cli-terminal-section](cli-terminal-section.md) — marketing band that plays a scripted terminal session.
-- `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
+- `create/create-deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Props
 

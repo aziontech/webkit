@@ -205,7 +205,7 @@ finds it:
 
 ```bash
 pnpm --filter @aziontech/webkit run usage-check -- date-picker "Let users pick the start and end of a billing period" --report usage-report.md
-pnpm --filter @aziontech/webkit run usage-check -- auth/sign-in "A sign-in screen for the console" --dry-run
+pnpm --filter @aziontech/webkit run usage-check -- auth/auth-sign-in "A sign-in screen for the console" --dry-run
 ```
 
 It packs the three packages, creates a clean Vite + Vue app in a temp dir, runs

@@ -43,6 +43,7 @@ export const RULES = {
     surface: 'block titles, MCP tools, catalog keys'
   },
   'block-state': { stage: 'staged', decision: 'N10', surface: 'block variant files' },
+  'block-group-first': { stage: 'staged', decision: 'WN07', surface: 'block folders and ids' },
   'part-word': { stage: 'staged', decision: 'N8', surface: 'sub-component folders' },
   'part-export': { stage: 'staged', decision: 'N8', surface: 'sub-component exports' },
   'section-suffix': { stage: 'staged', decision: 'N12', surface: 'marketing page sections' },
@@ -293,8 +294,8 @@ export const SYNONYMS = {
 
 export const NAME_WORD_EXEMPT = new Set([
   'template-gallery-section',
-  'deploy-template',
-  'template-browser'
+  'create-deploy-template',
+  'view-template-browser'
 ])
 
 export const PLURAL_ROOTS_ALLOWED = new Set(['tabs', 'steps', 'settings', 'stats', 'news'])
@@ -1500,6 +1501,9 @@ export function checkBlockFile(rel, text) {
   for (const seg of segs.slice(-1))
     for (const problem of nameWordProblems(seg))
       out.push(v('near-duplicate', rel, 1, `block "${seg}" uses ${problem} (${RULE_DOC}).`))
+  if (segs.length === 2)
+    for (const problem of blockGroupFirstProblems(segs[0], segs[1]))
+      out.push(v('block-group-first', rel, 1, `${problem} (${RULE_DOC}).`))
   let json
   try {
     json = JSON.parse(text)
@@ -1521,6 +1525,15 @@ export function checkBlockFile(rel, text) {
     out.push(...blockStateProblems(rel, stem))
   }
   return out
+}
+
+export function blockGroupFirstProblems(group, block) {
+  if (!block.startsWith(`${group}-`) || block === `${group}-`)
+    return [`block "${group}/${block}" must start with its group word: "${group}/${group}-…"`]
+  const rest = block.slice(group.length + 1)
+  if (`-${rest}-`.includes(`-${group}-`))
+    return [`block "${group}/${block}" says "${group}" twice; the group word comes once, first`]
+  return []
 }
 
 export function blockStateProblems(rel, stem) {

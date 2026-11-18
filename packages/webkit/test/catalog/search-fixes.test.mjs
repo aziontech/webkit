@@ -44,14 +44,14 @@ function fixture() {
       }
     },
     blocks: {
-      'view/table-view': {
+      'view/view-table': {
         name: 'TableView',
         summary: 'A list page.',
         intents: ['resource list page', 'checklist'],
         imports: [`${P}table`, `${P}bar-list`],
         source: 'x'
       },
-      'detail/production-checklist': {
+      'detail/detail-production-checklist': {
         name: 'ProductionChecklist',
         kind: 'fragment',
         summary: 'A go-live card.',
@@ -123,12 +123,12 @@ test('a v6 rename answers with the new export, a v6 removal with its replacement
 
 test('a fragment is labelled a card and left out when the request asks for a page', () => {
   const plain = searchBlocks(catalog, 'go-live checklist').matches
-  assert.equal(plain[0].id, 'detail/production-checklist')
+  assert.equal(plain[0].id, 'detail/detail-production-checklist')
   assert.equal(plain[0].kind, 'fragment')
   assert.match(plain[0].note, /A card, not a page/)
   const page = searchBlocks(catalog, 'checklist page').matches.map((m) => m.id)
-  assert.ok(!page.includes('detail/production-checklist'))
+  assert.ok(!page.includes('detail/detail-production-checklist'))
   const asked = searchBlocks(catalog, 'checklist page', { fragments: true }).matches
-  assert.ok(asked.some((m) => m.id === 'detail/production-checklist'))
-  assert.equal(getBlock(catalog, 'production-checklist').kind, 'fragment')
+  assert.ok(asked.some((m) => m.id === 'detail/detail-production-checklist'))
+  assert.equal(getBlock(catalog, 'detail-production-checklist').kind, 'fragment')
 })

@@ -1,0 +1,34 @@
+{
+ "variants": [
+  {
+   "name": "CreateTeam",
+   "summary": "The Create Team page in the creation frame (a `AppHeader` with Back to Teams and permissions, the brand and a breadcrumb; no rail): name and description, the View and Edit permission matrix as a `Table` grouped by area with group checkboxes (a small `EmptyState` with Clear filter when the filter matches nothing), filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix.",
+   "file": "blocks/account/account-team-permissions/variants/create-team.vue"
+  },
+  {
+   "name": "EditTeam",
+   "summary": "The Edit Team page in the same creation frame: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and the same centered `SaveBar`, which offers Discard and Save changes only once something changed.",
+   "file": "blocks/account/account-team-permissions/variants/edit-team.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "No team yet: the heading and a flush EmptyState with Create Team replace the controls row and the table.",
+   "file": "blocks/account/account-team-permissions/variants/empty.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The first load: the controls row and the table's loading rows.",
+   "file": "blocks/account/account-team-permissions/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them.",
+   "file": "blocks/account/account-team-permissions/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-team-permissions/account-team-permissions.vue",
+ "guidelinesFile": "blocks/account/account-team-permissions/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/account-team-permissions/sample.ts"
+ }
+}

@@ -48,18 +48,18 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   (`type: 'drill'`) opens in place and the rail's Back reads `Back to Docs` (`rootLabel` renames it);
   never add a hand-made Back row.
 
-The shell blocks (`shell/console`, `shell/site`, `shell/docs`) are these layouts with
+The shell blocks (`shell/shell-console`, `shell/shell-site`, `shell/shell-docs`) are these layouts with
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
-`npx @aziontech/webkit add shell/console` writes the block into your views folder and prints the
+`npx @aziontech/webkit add shell/shell-console` writes the block into your views folder and prints the
 path (`src/views/console.vue`): move that file to `src/App.vue`, and skip the route it suggests.
 A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeaderSection`,
 `SiteFooterSection` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
-create flow (`create/*`, headed by the `top-bar/creation-bar` bar) or a
-signed-out screen (`auth/sign-in`): route it outside the layout (a route meta `App.vue` reads), and
+create flow (`create/*`, headed by the `top-bar/top-bar-creation` bar) or a
+signed-out screen (`auth/auth-sign-in`): route it outside the layout (a route meta `App.vue` reads), and
 it keeps its own bar and `<main>` (`webkit-navigation`). An app with two surfaces (a marketing site
 and its docs) does the same: `App.vue` picks `SiteLayout` or `DocLayout` from a route meta
-(`meta: { layout: 'docs' }`) around one `RouterView`, and every page stays a body. The `shell/docs`
-variants are such bodies: `webkit add shell/docs --variant Article` copies the shell (your App.vue
+(`meta: { layout: 'docs' }`) around one `RouterView`, and every page stays a body. The `shell/shell-docs`
+variants are such bodies: `webkit add shell/shell-docs --variant Article` copies the shell (your App.vue
 or docs layout) and the page side by side.
 
 ## A screen begins from a block
@@ -95,7 +95,7 @@ props, so it imports the primary instead of copying it. A marketing band is a pa
   it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
   binds the shortcut. `ConsoleLayout`, `SiteLayout` and `DocLayout` already carry it, wired to
   their palette (rule `webkit-header-search`, lint `webkit/require-header-search`).
-- **A docs home is `shell/docs --variant Landing`.** It opens on `DocHero` (display
+- **A docs home is `shell/shell-docs --variant Landing`.** It opens on `DocHero` (display
   title with air above it, deck, `Get started` then `CopyPromptButton` — the dark "Copy prompt"
   chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section
   opens on `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the

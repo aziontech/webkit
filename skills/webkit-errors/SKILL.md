@@ -88,7 +88,7 @@ not go in a `Alert`.** The `Alert` is for what the **server** said.
 ## 2. Server rejection scoped to one field → a `Alert` in that section
 
 The standard is the design sample's `/forms/error-validation` screen, shipped as the block
-**`state/form-validation`** (states SectionRejected, SectionReloading, SectionReloaded). Start from it.
+**`state/state-form-validation`** (states SectionRejected, SectionReloading, SectionReloaded). Start from it.
 
 The case most apps get wrong. Two people work the same module: User 1 fills in a form and links a
 resource; User 2 deletes that resource through the API before User 1 saves. User 1's browser is never
@@ -256,7 +256,7 @@ page heading (`Idle`, `Deploying`, `Failed`, `Deployed`) and, once it ends, the 
 with the same two actions (a danger `Alert` with the reason over the stopped logs, or a success
 `Alert` naming where it is live). Use one toast id per run, so the progress toast turns into the
 outcome in place. The standard is the design sample's `/forms/async-deployment` screen, shipped as
-the block **`state/async-submit`**; every build and deploy screen follows it.
+the block **`state/state-async-submit`**; every build and deploy screen follows it.
 
 ## Severity, and the words
 
@@ -320,9 +320,9 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
   copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
   `closable`, `action`), the `@aziontech/webkit/field` compound + `/field-error` (the field's own
   invalid state and its message).
-- **Blocks:** `state/form-validation` (rows 1 and 3 on a short form; row 2, the section `Alert` with
-  its recovery action, in SectionRejected), `auth/sign-in` (row 4),
-  `state/async-submit` (row 5, Edit and Redeploy).
+- **Blocks:** `state/state-form-validation` (rows 1 and 3 on a short form; row 2, the section `Alert` with
+  its recovery action, in SectionRejected), `auth/auth-sign-in` (row 4),
+  `state/state-async-submit` (row 5, Edit and Redeploy).
 - **Companion skills:** `/webkit-form` (the field triad, submit-time validation, the locked scope),
   `/webkit-ui-states` (the full loading / empty / partial / error surface and async behaviour),
   `/webkit-microcopy` (what the words are), `/webkit-navigation` (which shell the failing page sits

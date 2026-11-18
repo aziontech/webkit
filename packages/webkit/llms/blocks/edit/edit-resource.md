@@ -25,9 +25,9 @@ The settings page of one existing resource. The user comes here to change how th
 
 - Creating the resource for the first time: use `create/create-page`, which shares this field list.
 - Account or organization settings outside one resource (profile, preferences, notifications): use `settings/settings-form`.
-- A resource whose content is code or a document: use `edit/function-editor`.
-- Deleting the resource: the Danger zone action opens `edit/delete-dialog`.
-- A short list of attached records inside a section: use `detail/domains-card` as that section's body.
+- A resource whose content is code or a document: use `edit/edit-function`.
+- Deleting the resource: the Danger zone action opens `edit/edit-delete-dialog`.
+- A short list of attached records inside a section: use `detail/detail-domains-card` as that section's body.
 
 ## Building blocks
 
@@ -61,7 +61,7 @@ A setting whose value is a document (a JSON data set) gets a stacked row, under 
 
 ### H. Section warnings and server errors — `SettingsSection`, `Button` (optional)
 
-A setting with a side effect beyond this resource carries a warning `Alert` above its section's `Card` while it is on (`Saving a stream with sampling on turns off every other data stream in this account.`). A server rejection scoped to one section follows the form-validation rule (`state/form-validation`, SectionRejected): one danger `Alert` above that section that says what happened and that nothing else was lost, with the recovery action on it (`Send test record`); the field it concerns turns invalid with its own one-line reason and takes the focus. Never a toast, never a summary at the top of the page. Saving a settings page is not a build or deploy, so the async-submit toast with Edit and Redeploy does not apply here.
+A setting with a side effect beyond this resource carries a warning `Alert` above its section's `Card` while it is on (`Saving a stream with sampling on turns off every other data stream in this account.`). A server rejection scoped to one section follows the state-form-validation rule (`state/state-form-validation`, SectionRejected): one danger `Alert` above that section that says what happened and that nothing else was lost, with the recovery action on it (`Send test record`); the field it concerns turns invalid with its own one-line reason and takes the focus. Never a toast, never a summary at the top of the page. Saving a settings page is not a build or deploy, so the state-async-submit toast with Edit and Redeploy does not apply here.
 
 ### I. Leave guard — `Tabs`, `SaveBar` (optional)
 
@@ -69,11 +69,11 @@ A setting with a side effect beyond this resource carries a warning `Alert` abov
 
 ### J. Changed elsewhere — `Button`, `SaveBar` (optional)
 
-When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the form-validation rule (`state/form-validation`, SectionRejected) applied to an edit: one message above the form, the recovery action on it.
+When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the state-form-validation rule (`state/state-form-validation`, SectionRejected) applied to an edit: one message above the form, the recovery action on it.
 
 ### K. Danger zone — `SettingsSection`, `Card`, `SettingsRow`, `Button`, `Input` (optional)
 
-The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingsRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link (a plain anchor with the `text-link` class, since it sits inside the sentence), then "To confirm, type" the name in a `text-label-code-sm` chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `edit/delete-dialog`.
+The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingsRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link (a plain anchor with the `text-link` class, since it sits inside the sentence), then "To confirm, type" the name in a `text-label-code-sm` chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `edit/edit-delete-dialog`.
 
 ## Data
 
@@ -130,7 +130,7 @@ Then delete `sample.ts` and its import.
 - Say when the record changed elsewhere as soon as it is known, and ask before Save overwrites it.
 - Keep the edits on screen after a reload with an Undo, so a stale form never loses work silently.
 - Ask for the resource name before a delete, with a copy button beside the name.
-- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so this page body never renders a `Toaster`.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -177,17 +177,17 @@ Then delete `sample.ts` and its import.
 ## States
 
 - ProjectSettings: a project's Settings tab with General, Modules and Subscription modules from `resource` (the sample when left out); the save bar is hidden until an edit. Save emits `submit`; `loading` locks the fieldset and spins Save, and `error` set when it ends raises the error toast with Retry.
-- DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced settings and the Danger zone, whose Delete resource opens the type-to-confirm `ConfirmDialog` of `edit/delete-dialog`.
+- DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced settings and the Danger zone, whose Delete resource opens the type-to-confirm `ConfirmDialog` of `edit/edit-delete-dialog`.
 - PolicySettings: a security policy's Settings tab with General, Modules with one locked on, Debug rules and Status.
 - WafSettings: a WAF rule set's Main Settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; Save is loading and Discard is disabled.
-- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-validation rule.
+- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
-- CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingsRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the async-submit toast with Edit and Redeploy.
-- Protocols: the protocol settings of a workload; ports per protocol, TLS version and cipher suite, then Mutual authentication. Mutual authentication stays off, with a helper line saying why, until HTTPS is on; once on it shows the mode as `Field` choice cards, the trusted CA picker (search, expiry beside each certificate, Upload certificate in its footer opening a `Drawer`) and the revocation lists. Save checks a port per protocol and a CA, then deploys through the async-submit toast with Edit and Redeploy.
+- CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingsRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the state-async-submit toast with Edit and Redeploy.
+- Protocols: the protocol settings of a workload; ports per protocol, TLS version and cipher suite, then Mutual authentication. Mutual authentication stays off, with a helper line saying why, until HTTPS is on; once on it shows the mode as `Field` choice cards, the trusted CA picker (search, expiry beside each certificate, Upload certificate in its footer opening a `Drawer`) and the revocation lists. Save checks a port per protocol and a CA, then deploys through the state-async-submit toast with Edit and Redeploy.
 - UnsavedChanges (leave guard): the Settings tab carries the dirty dot, and switching tabs while dirty opens the Unsaved changes dialog.
 
 ## Settings that deploy
@@ -195,20 +195,20 @@ Then delete `sample.ts` and its import.
 Some settings only take effect once the resource is deployed (cache settings of an application, protocols of a workload). For those:
 
 - Say so in the save bar hint, e.g. "Saving deploys storefront to Production."
-- On Save, validate first (field errors per the form-validation rule), then run the deploy on its own: a loading toast while it runs, then the async-submit toast with **Edit** (back to the form, focus on its first field) and **Redeploy**. Never offer View deployments.
+- On Save, validate first (field errors per the state-form-validation rule), then run the deploy on its own: a loading toast while it runs, then the state-async-submit toast with **Edit** (back to the form, focus on its first field) and **Redeploy**. Never offer View deployments.
 - Keep the form usable while it runs; the baseline moves to the saved values only when the deploy succeeds.
 - Keep switches that depend on each other consistent in both directions, e.g. HTTP/3 turns HTTPS on and HTTPS off turns HTTP/3 and mutual authentication off.
 
 ## Related
 
-- `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumb` (the module and the resource as `items`, a `Select` with `variant="ghost"` and `size="small"` in its slot).
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumb` (the module and the resource as `items`, a `Select` with `variant="ghost"` and `size="small"` in its slot).
 - `create/create-page` — the create page that shares this field list.
-- `detail/domains-card` — the Domains section body in DeployableSettings.
-- `edit/delete-dialog` — the dialog behind the Danger zone action.
+- `detail/detail-domains-card` — the Domains section body in DeployableSettings.
+- `edit/edit-delete-dialog` — the dialog behind the Danger zone action.
 - `settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
-- `state/form-validation` (SectionRejected) — the section-scoped server error DataStream and the changed-elsewhere notice follow.
-- `dashboard/analytics-dashboard` (Metrics) — where the records a stream sends are counted.
+- `state/state-form-validation` (SectionRejected) — the section-scoped server error DataStream and the changed-elsewhere notice follow.
+- `dashboard/dashboard-analytics` (Metrics) — where the records a stream sends are counted.
 - `useUnsavedChanges` — the dirty baseline and leave guard behind the save bar, the tab mark and the leave dialog.
 
 ## Variants
@@ -223,8 +223,8 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - `DataStream` — The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a CodeEditor and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays.
 - `StaleRecord` — The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo.
 - `DangerZone` — The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.
-- `CacheSettings` — One cache setting of an application at /applications/:id/cache-settings/:name: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy.
-- `Protocols` — The protocol settings of a workload: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy.
+- `CacheSettings` — One cache setting of an application at /applications/:id/cache-settings/:name: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the state-async-submit toast with Edit and Redeploy.
+- `Protocols` — The protocol settings of a workload: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the state-async-submit toast with Edit and Redeploy.
 
 Each variant is the same screen in another state: `get_block("edit/edit-resource", { variant })`, or the file under `blocks/edit/edit-resource/variants/`.
 

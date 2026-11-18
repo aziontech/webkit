@@ -22,7 +22,7 @@
 
 ## Don’t
 
-- A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `dashboard/analytics-dashboard` block).
+- A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `dashboard/dashboard-analytics` block).
 - Two or three panes whose boundary the reader drags → use `resizable`.
 - Reordering the rows of a list or a table → use the table's reorderable rows or `transfer-list`.
 - A grid of resources the reader selects, not arranges → use `card-list`.

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-05
 last_updated: 2026-11-17
-checksum: 2130bab9e497e3dc4203766b141c8d47889e766dbcb5430377b29e50e90f7df6
+checksum: fa75365b7f7450bcd4780fbf58d3ea14235de26b839cdb181205385113cb12f4
 template: 2
 ---
 
@@ -37,7 +37,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 
 ## Best practices
 
-- Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 - Set `anchor: 'contact'` so the page's contact links scroll to the close.
 - Use `variant: 'frame'` (no copy) to close a page that ends on a band with its own actions (a listing, a legal page); `site-page` draws no gap before it.
 - Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame.

@@ -30,8 +30,10 @@ same on the issue (`gh issue comment`), and do nothing else.
 1. `gh issue view <n> --json number,title,body,labels,url`. Parse the form fields: proposed
    name, Figma URL (optional), intent, benchmark links, where it is used, surface, acceptance
    criteria, notes.
-2. Exit condition: every required field is present and the name is kebab-case. Otherwise stop
-   and ask, on the issue, for the missing field.
+2. Exit condition: every required field is present and the name is kebab-case and follows
+   `.claude/rules/naming.md` (modifier first, noun last: `icon-button`; a `docs/` piece starts
+   with `doc-`; a page section ends in `-section`; § 25 for how the docs list shows it).
+   Otherwise stop and ask, on the issue, for the missing field.
 3. Create the branch with `/branch-create new component <name> #<n>`.
 
 ## Step 2 — Research and reuse

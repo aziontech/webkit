@@ -84,9 +84,12 @@ test('every repository link in llms/ points at a file that exists', () => {
   const repo = 'https://github.com/aziontech/webkit/blob/main/'
   const dead = new Set()
   for (const [file, text] of Object.entries(files)) {
-    for (const m of prose(text).matchAll(/\]\((https:\/\/github\.com\/aziontech\/webkit\/blob\/main\/[^)\s#]+)/g)) {
+    for (const m of prose(text).matchAll(
+      /\]\((https:\/\/github\.com\/aziontech\/webkit\/blob\/main\/[^)\s#]+)/g
+    )) {
       const path = m[1].slice(repo.length)
-      if (!existsSync(new URL(`../../../../${path}`, import.meta.url))) dead.add(`${file} → ${path}`)
+      if (!existsSync(new URL(`../../../../${path}`, import.meta.url)))
+        dead.add(`${file} → ${path}`)
     }
   }
   assert.deepEqual([...dead], [])
@@ -134,7 +137,7 @@ test('a component page carries the API, guidance, accessibility and code', () =>
 })
 
 test('a block page carries guidelines, variants and the primary SFC', () => {
-  const page = files['blocks/auth/sign-in.md']
+  const page = files['blocks/auth/auth-sign-in.md']
   assert.match(page, /## When to use/)
   assert.match(page, /## Variants/)
   assert.match(page, /## Code \(`Login`\)\n\n```vue\n<script setup( lang="ts")?>/)
@@ -176,12 +179,12 @@ test('llms-full.txt cuts repeats and detail, the per-page files keep them', () =
   assert.ok((files[multi].match(/```vue\n/g) || []).length > 1, multi)
   assert.equal((entry(multi).match(/```vue\n/g) || []).length, 1, multi)
 
-  const auth = entry('blocks/auth/sign-in.md')
-  assert.match(files['blocks/auth/sign-in.md'], /^### A\. Signed-out bar/m)
+  const auth = entry('blocks/auth/auth-sign-in.md')
+  assert.match(files['blocks/auth/auth-sign-in.md'], /^### A\. Signed-out bar/m)
   assert.match(auth, /^- A\. Signed-out bar — `AppHeader` \(required\)$/m)
   assert.doesNotMatch(auth, /^### /m)
   assert.doesNotMatch(auth, /```vue/)
-  assert.match(files['blocks/auth/sign-in.md'], /## Code \(`Login`\)/)
+  assert.match(files['blocks/auth/auth-sign-in.md'], /## Code \(`Login`\)/)
 
   for (const m of full.matchAll(/\]\(([^)\s]+\.(?:md|json))\)/g)) {
     if (/^https?:/.test(m[1])) continue
@@ -255,9 +258,18 @@ test('every composable export has an llms page built from its typed options', ()
   assert.match(page, /^# useCollection\n/)
   assert.match(page, /import \{ useCollection[^}]*\} from '@aziontech\/webkit\/use-collection'/)
   assert.match(page, /```ts\nfunction useCollection<[^\n]*\(options: UseCollectionOptions<T, C>\)/)
-  assert.match(page, /## `UseCollectionOptions<T extends object, C extends CollectionColumn = CollectionColumn>`/)
-  assert.match(page, /\| `items` \| `MaybeRefOrGetter<readonly T\[\]>` \| no \| Client mode: every item/)
-  assert.match(page, /\| `pagination` \| `\{ pageSize\?: number; pageSizeOptions\?: number\[\] \}` \| no \|/)
+  assert.match(
+    page,
+    /## `UseCollectionOptions<T extends object, C extends CollectionColumn = CollectionColumn>`/
+  )
+  assert.match(
+    page,
+    /\| `items` \| `MaybeRefOrGetter<readonly T\[\]>` \| no \| Client mode: every item/
+  )
+  assert.match(
+    page,
+    /\| `pagination` \| `\{ pageSize\?: number; pageSizeOptions\?: number\[\] \}` \| no \|/
+  )
   assert.ok(page.indexOf('## `useCollection`') < page.indexOf('## `UseCollectionOptions'))
   assert.ok(page.indexOf('## `UseCollectionOptions') < page.indexOf('## `UseCollectionReturn'))
 })

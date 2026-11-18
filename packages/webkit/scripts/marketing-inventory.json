@@ -158,11 +158,13 @@
     "site-header": "site-header-section",
     "story-index": "story-index-section",
     "subject-grid": "subject-grid-section",
-    "template-gallery": "template-gallery-section"
+    "template-gallery": "template-gallery-section",
+    "block:shell/docs": "block:shell/shell-docs",
+    "block:shell/site": "block:shell/shell-site"
   },
   "removed": {
-    "block:headers/docs-header": "DocLayout already renders the documentation bar; the shell/docs block shows it (dup plan BL-8)",
-    "block:headers/site-header": "SiteLayout and SiteHeaderSection already render the marketing bar; the shell/site block shows it (dup plan BL-8)",
+    "block:headers/docs-header": "DocLayout already renders the documentation bar; the shell/shell-docs block shows it (dup plan BL-8)",
+    "block:headers/site-header": "SiteLayout and SiteHeaderSection already render the marketing bar; the shell/shell-site block shows it (dup plan BL-8)",
     "doc-tooltip": "HoverCard; DocMarkdown renders the MDX <Tooltip> tag as one (dup plan DO-1)",
     "sample:shared/ui/banners/map-framing": "the deck slide crop; decks are product tooling and are not ported (m2.9-inventory section 6)",
     "sample:shared/ui/line-figure/LineFigureBench": "a development bench for tuning figures; the line-figure examples (default, play, gallery) replace it"

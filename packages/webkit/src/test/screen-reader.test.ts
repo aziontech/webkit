@@ -11,7 +11,7 @@ import type { Component } from 'vue'
 import { nextTick } from 'vue'
 
 import SinglePageCreate from '../../blocks/create/create-page/create-page.vue'
-import FormValidationSectionRejected from '../../blocks/state/form-validation/variants/section-rejected.vue'
+import FormValidationSectionRejected from '../../blocks/state/state-form-validation/variants/section-rejected.vue'
 import CommandDefault from '../../examples/command/default.vue'
 import DialogDefault from '../../examples/dialog/default.vue'
 import DrawerDefault from '../../examples/drawer/default.vue'

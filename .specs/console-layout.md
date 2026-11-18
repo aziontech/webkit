@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: 8f4f5a50b5b6b1487bb2ea5c43dc3a9b772794c5d8388ea393c7c9a09c978b6b
+checksum: 9de12ea77b209537adc934229f7e8de6a0c18c1cb95025388132e87125347364
 created: 2026-11-12
 last_updated: 2026-11-17
 ---
@@ -34,7 +34,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
 - `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`); while compact, only a page's control crumbs.
-- `shell/console` — the block that shows this layout with sample console navigation.
+- `shell/shell-console` — the block that shows this layout with sample console navigation.
 
 ## Best practices
 
@@ -148,7 +148,7 @@ packages/webkit/src/components/layout/console-layout/
 | ------------------- | ------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `navigation`        | `ConsoleLayoutNavGroup[]` | `[]`        | false    | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
 | `activeId`          | `string`                  | `''`        | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                             |
-| `breadcrumbs`       | `BreadcrumbItemData[]`    | `[]`        | false    | The trail shown in the header on wide layouts (hidden while compact); each is `{ label, href? }` and the last one is the current page.                                                               |
+| `breadcrumbs`       | `BreadcrumbItemData[]`    | `[]`        | false    | The trail shown in the header on wide layouts (hidden while compact); each is `{ label, href? }` and the last one is the current page.                                        |
 | `home`              | `string`                  | `'/'`       | false    | Where the brand mark links.                                                                                                                                                   |
 | `account`           | `ConsoleLayoutAccount`    | `undefined` | false    | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent.                                     |
 | `ariaLabel`         | `string`                  | `''`        | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`).                                                                                |

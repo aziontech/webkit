@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 958e3895906d6cf05340be71d9d0217734e3f0989a6b3a044b260a47633279ec
+checksum: ed9ecae2b56357757b987c0fec6412dd1f7c0352397fe0b0933cecfbe3067881
 created: 2026-11-16
 last_updated: 2026-11-17
 ---
@@ -18,7 +18,7 @@ The preview of one stored file in a storage or object browser: a header with the
 
 ## When to use
 
-- The detail pane or drawer of a file browser when a row is opened (`view/file-browser`, an Edge Storage bucket, a KV value).
+- The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Edge Storage bucket, a KV value).
 - Showing an uploaded object before it is published or replaced.
 - Any screen that shows one file and needs a type-aware fallback for files it cannot draw.
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: 0d202424d530b2f61d55441be363d6611efce9301c755113be9402e3e9316742
+checksum: 135f3254d06baa6cef1a9e1ae216abc3a6ef5f278e03e74043f6d57bc7cfa53e
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -32,7 +32,7 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 - `flow-diagram` — the connector engine and anchors this component reuses.
 - `tree` — hierarchical data without connectors.
 - `dropdown-menu` — the bind control's menu.
-- `detail/resource-detail` — the page whose topology tab holds it.
+- `detail/detail-resource` — the page whose topology tab holds it.
 
 ## Best practices
 

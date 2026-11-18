@@ -190,30 +190,30 @@ test('add rejects an unknown block or variant with suggestions', () => {
 
 test('add copies the block data files beside the SFC and points every local import at the copies', () => {
   const dir = makeProject()
-  const shipped = (file) => readFileSync(join(PKG_ROOT, 'blocks/view/table-view', file), 'utf8')
+  const shipped = (file) => readFileSync(join(PKG_ROOT, 'blocks/view/view-table', file), 'utf8')
   try {
-    const r = cli(dir, 'add', 'view/table-view', '--variant', 'Empty')
+    const r = cli(dir, 'add', 'view/view-table', '--variant', 'Empty')
     assert.equal(r.code, 0, r.stderr)
-    const primary = readFileSync(join(dir, 'src/views/table-view.vue'), 'utf8')
-    assert.match(primary, /from '\.\/table-view\.sample'/)
-    assert.equal(primary, shipped('table-view.vue').replace("'./sample'", "'./table-view.sample'"))
+    const primary = readFileSync(join(dir, 'src/views/view-table.vue'), 'utf8')
+    assert.match(primary, /from '\.\/view-table\.sample'/)
+    assert.equal(primary, shipped('view-table.vue').replace("'./sample'", "'./view-table.sample'"))
     assert.equal(
-      readFileSync(join(dir, 'src/views/table-view.sample.ts'), 'utf8'),
+      readFileSync(join(dir, 'src/views/view-table.sample.ts'), 'utf8'),
       shipped('sample.ts')
     )
-    const variant = readFileSync(join(dir, 'src/views/table-view-empty.vue'), 'utf8')
-    assert.match(variant, /import TableView from '\.\/table-view\.vue'/)
+    const variant = readFileSync(join(dir, 'src/views/view-table-empty.vue'), 'utf8')
+    assert.match(variant, /import ViewTable from '\.\/view-table\.vue'/)
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
-    const files = manifest.blocks['view/table-view'].files
+    const files = manifest.blocks['view/view-table'].files
     assert.deepEqual(
       files.map((f) => [f.path, f.variant, f.imports]),
       [
-        ['src/views/table-view-empty.vue', 'Empty', { '../table-view.vue': './table-view.vue' }],
-        ['src/views/table-view.sample.ts', 'Data', undefined],
-        ['src/views/table-view.vue', 'Default', { './sample': './table-view.sample' }]
+        ['src/views/view-table-empty.vue', 'Empty', { '../view-table.vue': './view-table.vue' }],
+        ['src/views/view-table.sample.ts', 'Data', undefined],
+        ['src/views/view-table.vue', 'Default', { './sample': './view-table.sample' }]
       ]
     )
-    const diff = cliJson(dir, 'diff', 'view/table-view')
+    const diff = cliJson(dir, 'diff', 'view/view-table')
     assert.equal(diff.code, 0, diff.stderr)
     assert.ok(diff.json.files.every((f) => f.status === 'identical'))
   } finally {
@@ -227,7 +227,7 @@ test('add renames the data files after a --dest name', () => {
     const r = cliJson(
       dir,
       'add',
-      'view/table-view',
+      'view/view-table',
       '--dest',
       'src/screens/Resources.vue',
       '--dry-run'
@@ -238,7 +238,7 @@ test('add renames the data files after a --dest name', () => {
       ['src/screens/Resources.vue', 'src/screens/Resources.sample.ts']
     )
     assert.deepEqual(r.json.files[0].imports, { './sample': './Resources.sample' })
-    assert.deepEqual(r.json.files[1].imports, { './table-view.vue': './Resources.vue' })
+    assert.deepEqual(r.json.files[1].imports, { './view-table.vue': './Resources.vue' })
   } finally {
     cleanup(dir)
   }
@@ -247,12 +247,12 @@ test('add renames the data files after a --dest name', () => {
 test('add copies a shared SFC from the block files with a variant that renders it', () => {
   const dir = makeProject()
   try {
-    const r = cli(dir, 'add', 'auth/sign-in', '--variant', 'RejectedToken')
+    const r = cli(dir, 'add', 'auth/auth-sign-in', '--variant', 'RejectedToken')
     assert.equal(r.code, 0, r.stderr)
-    const card = join(dir, 'src/views/sign-in.token-sign-in.vue')
+    const card = join(dir, 'src/views/auth-sign-in.token-sign-in.vue')
     assert.ok(existsSync(card))
-    const variant = readFileSync(join(dir, 'src/views/sign-in-rejected-token.vue'), 'utf8')
-    assert.match(variant, /from '\.\/sign-in\.token-sign-in\.vue'/)
+    const variant = readFileSync(join(dir, 'src/views/auth-sign-in-rejected-token.vue'), 'utf8')
+    assert.match(variant, /from '\.\/auth-sign-in\.token-sign-in\.vue'/)
     assert.match(variant, /error="rejected"/)
   } finally {
     cleanup(dir)

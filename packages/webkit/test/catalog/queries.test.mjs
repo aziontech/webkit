@@ -362,7 +362,7 @@ test('validateUsage with a component flags classes outside the layout utilities'
   assert.deepEqual(problem.classes, ['p-4'])
 })
 
-test('searchBlocks ranks auth/sign-in first for login and sign-up intents in EN and PT', () => {
+test('searchBlocks ranks auth/auth-sign-in first for login and sign-up intents in EN and PT', () => {
   for (const q of [
     'login',
     'sign in',
@@ -372,7 +372,7 @@ test('searchBlocks ranks auth/sign-in first for login and sign-up intents in EN 
     'criar conta'
   ]) {
     const res = searchBlocks(catalog, q)
-    assert.equal(res.matches[0].id, 'auth/sign-in', q)
+    assert.equal(res.matches[0].id, 'auth/auth-sign-in', q)
   }
 })
 
@@ -382,7 +382,7 @@ test('searchBlocks with an empty query lists every block', () => {
 })
 
 test('getBlock returns the SFC, components, skills and steps; variants by name', () => {
-  const p = getBlock(catalog, 'auth/sign-in')
+  const p = getBlock(catalog, 'auth/auth-sign-in')
   assert.equal(p.found, true)
   assert.equal(p.variant, 'Login')
   assert.match(p.sfc, /<script setup( lang="ts")?>/)
@@ -390,28 +390,28 @@ test('getBlock returns the SFC, components, skills and steps; variants by name',
   assert.ok(p.components.includes('Input'))
   assert.deepEqual(p.steps, ['email', 'password', 'reset', 'sent', 'new-password'])
   assert.ok(p.skills.includes('webkit-errors'))
-  const v = getBlock(catalog, 'auth/sign-in', { variant: 'IncorrectCredentials' })
+  const v = getBlock(catalog, 'auth/auth-sign-in', { variant: 'IncorrectCredentials' })
   assert.equal(v.variant, 'IncorrectCredentials')
   assert.match(v.sfc, /error="bad-credentials"/)
   assert.match(p.sfc, /Incorrect email or password/)
-  assert.equal(getBlock(catalog, 'auth/sign-in', { variant: 'SignUp' }).variant, 'SignUp')
-  assert.equal(getBlock(catalog, 'auth').id, 'auth/sign-in')
+  assert.equal(getBlock(catalog, 'auth/auth-sign-in', { variant: 'SignUp' }).variant, 'SignUp')
+  assert.equal(getBlock(catalog, 'auth').id, 'auth/auth-sign-in')
   assert.equal(getBlock(catalog, 'nope-nope').found, false)
 })
 
 test('getBlock returns the guidelines and tells the agent to read them first', () => {
-  const p = getBlock(catalog, 'view/table-view')
+  const p = getBlock(catalog, 'view/view-table')
   assert.match(p.guidelines, /^# Table view/)
   for (const section of ['## When to use', '## Building blocks', '## Copy', '## Accessibility'])
     assert.ok(p.guidelines.includes(section), section)
   assert.match(p.howToUse, /^Read `guidelines` first/)
-  const v = getBlock(catalog, 'view/table-view', { variant: 'Empty' })
+  const v = getBlock(catalog, 'view/view-table', { variant: 'Empty' })
   assert.equal(v.guidelines, p.guidelines)
 })
 
 test('searchBlocks cards carry the guidelines purpose as guidelinesSummary', () => {
   const card = searchBlocks(catalog, 'resource list').matches.find(
-    (m) => m.id === 'view/table-view'
+    (m) => m.id === 'view/view-table'
   )
   assert.ok(card.guidelinesSummary.length > 40)
   assert.equal(card.guidelinesSummary.includes('##'), false)
@@ -437,9 +437,9 @@ test('a block without guidelines keeps the plain howToUse and no guidelines fiel
 test('getBlock resolves a v6 block id through catalog.blockAliases with a note', () => {
   const moved = getBlock(catalog, 'platform/lists/table-view')
   assert.equal(moved.found, true)
-  assert.equal(moved.id, 'view/table-view')
+  assert.equal(moved.id, 'view/view-table')
   assert.equal(moved.movedFrom, 'platform/lists/table-view')
-  assert.match(moved.note, /view\/table-view/)
+  assert.match(moved.note, /view\/view-table/)
   assert.equal(
     getBlock(catalog, 'platform/lists/table-view', { variant: 'Empty' }).variant,
     'Empty'
@@ -457,8 +457,8 @@ test('getBlock resolves a v6 block id through catalog.blockAliases with a note',
     'ImportFromGit'
   )
   assert.equal(getBlock(catalog, 'platform/forms/save-all-groups').variant, 'SaveAll')
-  assert.equal(getBlock(catalog, 'details-page-with-tabs').id, 'detail/resource-detail')
-  assert.equal(getBlock(catalog, 'auth/sign-in').note, undefined)
+  assert.equal(getBlock(catalog, 'details-page-with-tabs').id, 'detail/detail-resource')
+  assert.equal(getBlock(catalog, 'auth/auth-sign-in').note, undefined)
 
   for (const [from, to] of Object.entries(catalog.blockAliases)) {
     const [id, variant] = to.split('#')
@@ -471,10 +471,10 @@ test('getBlock resolves a v6 block id through catalog.blockAliases with a note',
 
 test('searchBlocks lands each task on its v6 category block', () => {
   for (const [q, id] of [
-    ['delete confirmation', 'edit/delete-dialog'],
+    ['delete confirmation', 'edit/edit-delete-dialog'],
     ['create in drawer', 'create/create-drawer'],
-    ['list page', 'view/table-view'],
-    ['details page', 'detail/resource-detail'],
+    ['list page', 'view/view-table'],
+    ['details page', 'detail/detail-resource'],
     ['resource settings', 'edit/edit-resource'],
     ['save per card', 'settings/settings-form'],
     ['account settings', 'settings/settings-form']
@@ -486,7 +486,7 @@ test('searchBlocks lands each task on its v6 category block', () => {
 test('suggestComponent returns the block first for a screen and the section for a marketing band', () => {
   const screen = suggestComponent(catalog, 'login page')
   assert.equal(screen.recommendation, 'block')
-  assert.equal(screen.block.id, 'auth/sign-in')
+  assert.equal(screen.block.id, 'auth/auth-sign-in')
   const band = suggestComponent(catalog, 'pricing page')
   assert.equal(band.recommendation, 'section')
   assert.equal(band.best.name, 'pricing-plans-section')
@@ -690,7 +690,7 @@ test('get_component points a consuming component at its asset list', () => {
 
 test('a marketing page query ranks the website shell and the page sections first', () => {
   for (const q of ['product page', 'solution page', 'landing page', 'página de produto']) {
-    assert.equal(searchBlocks(catalog, q).matches[0].id, 'shell/site', q)
+    assert.equal(searchBlocks(catalog, q).matches[0].id, 'shell/shell-site', q)
     const sections = searchComponents(catalog, q).matches
     assert.ok(sections.length > 0, q)
     assert.ok(
@@ -698,17 +698,17 @@ test('a marketing page query ranks the website shell and the page sections first
       `${q}: ${sections.map((m) => m.name).join(', ')}`
     )
   }
-  assert.equal(searchBlocks(catalog, 'docs landing page').matches[0].id, 'shell/docs')
+  assert.equal(searchBlocks(catalog, 'docs landing page').matches[0].id, 'shell/shell-docs')
 })
 
 test('getBlock takes a variant by its file name or its PascalCase name', () => {
-  const byFile = getBlock(catalog, 'view/table-view', { variant: 'error' })
-  const byName = getBlock(catalog, 'view/table-view', { variant: 'Error' })
+  const byFile = getBlock(catalog, 'view/view-table', { variant: 'error' })
+  const byName = getBlock(catalog, 'view/view-table', { variant: 'Error' })
   assert.equal(byFile.found, true)
   assert.equal(byFile.variant, 'Error')
   assert.equal(byName.sfc, byFile.sfc)
   const moved = getBlock(catalog, 'platform/view/table-view', { variant: 'Failed' })
-  assert.equal(moved.id, 'view/table-view')
+  assert.equal(moved.id, 'view/view-table')
   assert.equal(moved.variant, 'Error')
 })
 
@@ -717,8 +717,8 @@ test('every block carries one surface of catalog.surfaces', () => {
   const surfaces = Object.keys(raw.surfaces)
   assert.deepEqual(surfaces, ['app', 'site', 'docs'])
   for (const [id, p] of Object.entries(catalog.blocks)) assert.ok(surfaces.includes(p.surface), id)
-  assert.equal(catalog.block('shell/site').surface, 'site')
-  assert.equal(catalog.block('shell/docs').surface, 'docs')
+  assert.equal(catalog.block('shell/shell-site').surface, 'site')
+  assert.equal(catalog.block('shell/shell-docs').surface, 'docs')
 })
 
 test('searchBlocks cards are summary-first: one sentence and the first intents, get_block has the rest', () => {
@@ -739,12 +739,12 @@ test('listComponents pages with limit and cursor', () => {
 })
 
 test('getBlock returns only the sections asked for and names the rest', () => {
-  const only = getBlock(catalog, 'view/table-view', { sections: ['guidelines'] })
+  const only = getBlock(catalog, 'view/view-table', { sections: ['guidelines'] })
   assert.equal('sfc' in only, false)
   assert.ok(only.guidelines)
   assert.deepEqual(only.omitted, ['sfc'])
-  const sfc = getBlock(catalog, 'view/table-view', { sections: ['sfc'] })
+  const sfc = getBlock(catalog, 'view/view-table', { sections: ['sfc'] })
   assert.equal('guidelines' in sfc, false)
   assert.match(sfc.sfc, /<template>/)
-  assert.equal('omitted' in getBlock(catalog, 'view/table-view'), false)
+  assert.equal('omitted' in getBlock(catalog, 'view/view-table'), false)
 })

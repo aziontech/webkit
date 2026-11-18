@@ -63,7 +63,7 @@ const SFC = [
 function guide({ blocks, states, drop, empty } = {}) {
   const body = {
     'When to use': '- A list of resources.',
-    'When not to use': '- One record: use `detail/resource-detail`.',
+    'When not to use': '- One record: use `detail/detail-resource`.',
     'Building blocks':
       blocks ??
       [
@@ -94,8 +94,8 @@ const block = (guidelines) => ({
 })
 
 test('block ids come from the block title, kebab-cased, without "Blocks/"', () => {
-  assert.equal(blockIdFromTitle('Blocks/Auth/SignIn'), 'auth/sign-in')
-  assert.equal(blockIdFromTitle('Blocks/TopBar/CreationBar'), 'top-bar/creation-bar')
+  assert.equal(blockIdFromTitle('Blocks/Auth/AuthSignIn'), 'auth/auth-sign-in')
+  assert.equal(blockIdFromTitle('Blocks/TopBar/TopBarCreation'), 'top-bar/top-bar-creation')
   assert.equal(blockIdFromTitle('Blocks/AI/AiChat'), 'ai/ai-chat')
   assert.equal(blockIdFromTitle('Templates/Auth/SignIn'), 'templates/auth/sign-in')
   assert.equal(kebab('SQLDatabase'), 'sql-database')
@@ -132,35 +132,35 @@ test('importsOf leaves out type-only imports, which render nothing', () => {
 test('readBlocks builds a block from block.json, the primary SFC and every variant file', () => {
   const pkg = mkdtempSync(join(tmpdir(), 'blocks-'))
   try {
-    const dir = join(pkg, 'blocks/auth/sign-in')
+    const dir = join(pkg, 'blocks/auth/auth-sign-in')
     mkdirSync(join(dir, 'variants'), { recursive: true })
     const sfc = (tag) =>
       `<script setup>\nimport ${tag} from '@aziontech/webkit/${tag.toLowerCase()}'\n</script>\n<template>\n  <${tag} />\n</template>\n`
-    writeFileSync(join(dir, 'sign-in.vue'), sfc('Button'))
+    writeFileSync(join(dir, 'auth-sign-in.vue'), sfc('Button'))
     writeFileSync(join(dir, 'variants/password.vue'), sfc('Separator'))
     writeFileSync(
       join(dir, 'block.json'),
       JSON.stringify({
-        id: 'auth/sign-in',
-        name: 'SignIn',
-        title: 'Blocks/Auth/SignIn',
+        id: 'auth/auth-sign-in',
+        name: 'AuthSignIn',
+        title: 'Blocks/Auth/AuthSignIn',
         summary: 'Sign in.',
         intents: ['login'],
         skills: ['webkit-form'],
         steps: ['email', 'password'],
-        primary: { name: 'Email', file: 'sign-in.vue' },
+        primary: { name: 'Email', file: 'auth-sign-in.vue' },
         variants: [{ name: 'Password', summary: '', file: 'variants/password.vue' }]
       })
     )
-    assert.equal('guidelines' in readBlocks(pkg)['auth/sign-in'], false)
+    assert.equal('guidelines' in readBlocks(pkg)['auth/auth-sign-in'], false)
     writeFileSync(
       join(dir, 'guidelines.md'),
       '# Sign in\nGet back into the account.\n\n## Do\n- x\n'
     )
-    const entry = readBlocks(pkg)['auth/sign-in']
+    const entry = readBlocks(pkg)['auth/auth-sign-in']
     assert.match(entry.guidelines, /^# Sign in/)
     assert.equal(entry.guidelinesSummary, 'Get back into the account.')
-    assert.equal(entry.source, 'blocks/auth/sign-in/sign-in.vue')
+    assert.equal(entry.source, 'blocks/auth/auth-sign-in/auth-sign-in.vue')
     assert.equal(entry.surface, 'app')
     assert.deepEqual(entry.intents, ['login'])
     assert.deepEqual(entry.steps, ['email', 'password'])
@@ -368,7 +368,7 @@ test('checkToastRegion flags a page body that renders a Toaster and allows an ap
     /^blocks\/platform\/view\/x \(Saved\): renders a `Toaster` in a page body/
   )
   assert.match(errors[0], /ToastPlugin/)
-  assert.deepEqual(checkToastRegion('shell/console', toastBlock), [])
+  assert.deepEqual(checkToastRegion('shell/shell-console', toastBlock), [])
   assert.deepEqual(checkToastRegion('platform/view/x', { ...toastBlock, variants: [] }), [])
 })
 
@@ -656,7 +656,7 @@ test('every block with "files" ships them and reads them into the catalog entry'
       )
     }
   }
-  assert.ok(blocks['view/table-view'].files['sample.ts'].includes('sampleResources'))
-  assert.ok(blocks['auth/sign-in'].files['token-sign-in.vue'].includes("'sign-in'"))
-  assert.ok(blocks['auth/sign-in'].components.includes('Checkbox'))
+  assert.ok(blocks['view/view-table'].files['sample.ts'].includes('sampleResources'))
+  assert.ok(blocks['auth/auth-sign-in'].files['token-sign-in.vue'].includes("'sign-in'"))
+  assert.ok(blocks['auth/auth-sign-in'].components.includes('Checkbox'))
 })

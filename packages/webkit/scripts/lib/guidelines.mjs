@@ -181,6 +181,6 @@ export function checkToastRegion(id, block) {
     .filter((v) => rendersToastRegion(v.sfc))
     .map(
       (v) =>
-        `blocks/${id} (${v.name}): renders a \`Toaster\` in a page body. Only the first Toaster to mount is active and it gives the role up when it unmounts, so a page's copy is inert or silences every toast once the user leaves. Call \`toast\` only; the app mounts the one region (ToastPlugin, or one Toaster at its root, as blocks/shell/console does).`
+        `blocks/${id} (${v.name}): renders a \`Toaster\` in a page body. Only the first Toaster to mount is active and it gives the role up when it unmounts, so a page's copy is inert or silences every toast once the user leaves. Call \`toast\` only; the app mounts the one region (ToastPlugin, or one Toaster at its root, as blocks/shell/shell-console does).`
     )
 }

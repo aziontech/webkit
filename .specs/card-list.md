@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 4a4a1533949252b258ae1a3f33f421030abc1bcb383468d7af35e5985f4bb792
+checksum: a96a0ddec849a949fa943364c338d4c8bde302b0187197f9ab3558248a40a0cf
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -21,7 +21,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 ## When to use
 
 - Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).
-- The card form of a list page (`view/card-view`), filtered and paged by `useCollection`.
+- The card form of a list page (`view/view-card`), filtered and paged by `useCollection`.
 
 ## When NOT to use
 
@@ -65,13 +65,13 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 
 ## Props
 
-| Prop            | Type                            | Default  | Required | JSDoc                                                                  |
-| --------------- | ------------------------------- | -------- | -------- | ---------------------------------------------------------------------- |
-| `items`         | `TItem[]`                       | `[]`     | false    | The items, one card each.                                              |
-| `itemKey`       | `string`                        | `'id'`   | false    | Field that identifies an item; selection keys read it.                 |
+| Prop            | Type                               | Default  | Required | JSDoc                                                                  |
+| --------------- | ---------------------------------- | -------- | -------- | ---------------------------------------------------------------------- |
+| `items`         | `TItem[]`                          | `[]`     | false    | The items, one card each.                                              |
+| `itemKey`       | `string`                           | `'id'`   | false    | Field that identifies an item; selection keys read it.                 |
 | `selectionMode` | `'none' \| 'single' \| 'multiple'` | `'none'` | false    | No selection, one card, or several cards with a select-all above them. |
-| `loading`       | `boolean`                       | `false`  | false    | Shows placeholder cards and sets aria-busy while true.                 |
-| `ariaLabel`     | `string`                        | `''`     | false    | Accessible name of the list. Empty uses the locale catalog.            |
+| `loading`       | `boolean`                          | `false`  | false    | Shows placeholder cards and sets aria-busy while true.                 |
+| `ariaLabel`     | `string`                           | `''`     | false    | Accessible name of the list. Empty uses the locale catalog.            |
 
 The component is generic over the item: `TItem extends object`, inferred from `items` (default `Record<string, unknown>`), so the `header` and `default` slots receive `item` typed as the consumer's own interface. Types (exported from `@aziontech/webkit/card-list`): `CardListSelectionMode = 'none' | 'single' | 'multiple'`; `CardListItemSlotProps<TItem> = { item: TItem; index: number; selected: boolean }`.
 

@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: 'Component export (date-picker) or block id (auth/sign-in)'
+        description: 'Component export (date-picker) or block id (auth/auth-sign-in)'
         required: true
         type: string
       prompt:

@@ -43,7 +43,7 @@ const navigation: ConsoleLayoutNavGroup[] = [
             label: 'Settings',
             items: [
               { id: 'settings-general', label: 'General', href: '/account' },
-              { id: 'settings-users', label: 'Users management', href: '/account/users' }
+              { id: 'settings-users', label: 'Users management', href: '/account/account-users' }
             ]
           }
         ]
@@ -124,7 +124,7 @@ describe('ConsoleLayout', () => {
     })
 
     it('opens the drill level that holds the current row', async () => {
-      const router = fakeRouter('/account/users')
+      const router = fakeRouter('/account/account-users')
       const { findByRole } = mount({}, { router })
       const row = await findByRole('link', { name: 'Users management' })
       expect(row.getAttribute('aria-current')).toBe('page')
@@ -242,7 +242,7 @@ describe('ConsoleLayout', () => {
       const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
       await userEvent.click(within(dialog).getByText('Users management'))
       expect(onNavigate.mock.calls[0]![1].id).toBe('settings-users')
-      expect(router.push).toHaveBeenCalledWith('/account/users')
+      expect(router.push).toHaveBeenCalledWith('/account/account-users')
     })
 
     it('lets a page open the palette through useConsoleLayout', async () => {
@@ -1100,17 +1100,17 @@ describe('ConsoleLayout', () => {
     it('warns once per route when a page SidebarMenu repeats a navigation row', async () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
       try {
-        const router = fakeRouter('/account/users')
+        const router = fakeRouter('/account/account-users')
         const { getByRole } = mount(
           {},
           { router },
-          { default: () => pageMenu('/account/users?tab=2#list') }
+          { default: () => pageMenu('/account/account-users?tab=2#list') }
         )
         await waitFor(() => expect(duplicateWarnings(warn)).toHaveLength(1))
         const [message] = duplicateWarnings(warn)
         expect(message).toContain('"Team members" (page SidebarMenu)')
         expect(message).toContain('"Users management" (navigation)')
-        expect(message).toContain('/account/users')
+        expect(message).toContain('/account/account-users')
         expect(message).not.toContain('Profile')
         getByRole('main').append(document.createElement('span'))
         await nextTick()
@@ -1124,7 +1124,7 @@ describe('ConsoleLayout', () => {
     it('stays silent when the page SidebarMenu shares no route with the navigation', async () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
       try {
-        const router = fakeRouter('/account/users')
+        const router = fakeRouter('/account/account-users')
         const { getByRole } = mount({}, { router }, { default: () => pageMenu('/team') })
         await waitFor(() => expect(getByRole('main').querySelector('a[href="/team"]')).toBeTruthy())
         await nextTick()
@@ -1138,9 +1138,13 @@ describe('ConsoleLayout', () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
       try {
         const router = fakeRouter('/workloads')
-        const { getByRole } = mount({}, { router }, { default: () => pageMenu('/account/users') })
+        const { getByRole } = mount(
+          {},
+          { router },
+          { default: () => pageMenu('/account/account-users') }
+        )
         await waitFor(() =>
-          expect(getByRole('main').querySelector('a[href="/account/users"]')).toBeTruthy()
+          expect(getByRole('main').querySelector('a[href="/account/account-users"]')).toBeTruthy()
         )
         await nextTick()
         await new Promise((resolve) => setTimeout(resolve, 0))

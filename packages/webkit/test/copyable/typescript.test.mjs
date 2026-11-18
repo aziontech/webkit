@@ -23,7 +23,7 @@ const TYPESCRIPT_FOLDERS = [
   'blocks/shells',
   'blocks/account',
   'blocks/ai',
-  'blocks/auth/sign-in',
+  'blocks/auth/auth-sign-in',
   'blocks/create',
   'blocks/dashboard',
   'blocks/edit',

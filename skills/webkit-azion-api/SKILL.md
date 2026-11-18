@@ -1,6 +1,6 @@
 ---
 name: webkit-azion-api
-description: Calling the Azion API from a browser app built on @aziontech/webkit — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin edge function proxy for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to a webkit state. Use when an app signs in with a personal token (auth/sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
+description: Calling the Azion API from a browser app built on @aziontech/webkit — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin edge function proxy for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to a webkit state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
 status: active
 last_updated: 2026-11-16
 scope: general
@@ -98,7 +98,7 @@ export default {
 
 ## Where the token lives
 
-The person pastes the token into `auth/sign-in` (`PersonalToken`, the `token-sign-in.vue` card), which emits `sign-in` with `(event, token)` and stores nothing. Your app checks it with one API call, passes `loading` while it waits, and answers with `error`: `rejected` (401), `no-access` (403), `rate-limited` (429), `unreachable` (no answer) or a message. The card's Remember for this tab option (`v-model:remember`, off by default) tells your app where the token goes:
+The person pastes the token into `auth/auth-sign-in` (`PersonalToken`, the `token-sign-in.vue` card), which emits `sign-in` with `(event, token)` and stores nothing. Your app checks it with one API call, passes `loading` while it waits, and answers with `error`: `rejected` (401), `no-access` (403), `rate-limited` (429), `unreachable` (no answer) or a message. The card's Remember for this tab option (`v-model:remember`, off by default) tells your app where the token goes:
 
 | Place                                | Use it                             | Why                                                                      |
 | ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------ |

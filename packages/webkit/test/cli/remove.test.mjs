@@ -85,7 +85,7 @@ test('remove of a block that was never copied fails and names what is recorded',
   const dir = makeProject()
   try {
     assert.equal(cli(dir, 'add', BLOCK).code, 0)
-    const r = cli(dir, 'remove', 'auth/sign-in')
+    const r = cli(dir, 'remove', 'auth/auth-sign-in')
     assert.equal(r.code, 1)
     assert.match(r.stderr, /not recorded in webkit\.blocks\.json \(recorded: create\/create-hub\)/)
   } finally {

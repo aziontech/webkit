@@ -25,7 +25,7 @@ The moment an assistant needs permission. The reader asked for something that ch
 
 - Read-only calls (listing, reading metrics): record them with `ToolCall` and continue without asking.
 - Tools the reader already allowed for this conversation: record the call, do not ask again.
-- A destructive action the reader started from the UI, not the assistant: use `ConfirmDialog` (see `edit/delete-dialog`).
+- A destructive action the reader started from the UI, not the assistant: use `ConfirmDialog` (see `edit/edit-delete-dialog`).
 - Several fields to fill before acting: link to the create or edit page; the card only approves or denies.
 
 ## Building blocks
@@ -145,7 +145,7 @@ Then delete `sample.ts` and its import.
 
 - `ai/ai-chat` — the conversation this card lives in.
 - `ai/ai-chat-drawer` — the same flow in a drawer over a resource page.
-- `edit/delete-dialog` — confirming a destructive action the reader started.
+- `edit/edit-delete-dialog` — confirming a destructive action the reader started.
 - `skills/webkit-ai-surfaces` — when to ask, what to show and how to record the outcome.
 
 ## Variants

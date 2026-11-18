@@ -369,7 +369,7 @@ field** (→ a `Alert` in that field's own section + the field's `invalid` state
 failure that arrives **after** the user left the screen — is the one that _must_ be a toast, and a
 permanent, closable one. The full table lives in **`/webkit-errors`**.
 
-## Async actions — the run that outlives its screen (`state/async-submit`)
+## Async actions — the run that outlives its screen (`state/state-async-submit`)
 
 The design sample's `/forms/async-deployment` screen is the standard for every build, deploy,
 redeploy, import or provisioning screen: an action that runs on its own for tens of seconds starts,
@@ -408,7 +408,7 @@ if you leave.' })`, not closable, no action. The failure is `toast.error` with `
   / `Spinner` exist — resolve them via the MCP/catalog.
 - Field validation is inline (`Field` + `message`), never in this matrix and never a toast.
 - A build or deploy run reports through one toast per run, on success and failure, and its outcome
-  toasts carry **Edit** and **Redeploy**, never _View deployments_ (`state/async-submit`).
+  toasts carry **Edit** and **Redeploy**, never _View deployments_ (`state/state-async-submit`).
 
 ## Review output
 

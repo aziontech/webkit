@@ -1,0 +1,90 @@
+{
+  "id": "view/view-table",
+  "name": "ViewTable",
+  "title": "Blocks/View/ViewTable",
+  "surface": "app",
+  "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary large Create Resource, the page's only large control (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the edit-delete-dialog pattern: a warning `Alert` and an `Input` that must match the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create Resource and a small outlined Documentation on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "list",
+    "list page",
+    "resource list",
+    "module list",
+    "index page",
+    "resources index",
+    "list with filters",
+    "workloads list",
+    "listagem",
+    "lista de recursos",
+    "página de listagem",
+    "resource table",
+    "data table",
+    "table",
+    "sortable table",
+    "paginated table",
+    "table with copy id",
+    "listing table",
+    "tabela de listagem",
+    "tabela",
+    "tabela de recursos",
+    "tabela paginada",
+    "list controls",
+    "filter bar",
+    "search and filter",
+    "table toolbar",
+    "filter chips",
+    "column visibility",
+    "filtros",
+    "barra de filtros",
+    "busca e filtro",
+    "table view",
+    "index table",
+    "visualização em tabela",
+    "property filter",
+    "filter tokens",
+    "collection preferences",
+    "table preferences",
+    "saved preferences",
+    "filters in the url",
+    "shareable filters",
+    "use collection",
+    "filtro por propriedade",
+    "preferências da tabela",
+    "filtros na url",
+    "deployments list",
+    "deployment history",
+    "lista de deploys",
+    "histórico de deploys"
+  ],
+  "skills": ["webkit-lists", "webkit-tables", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "view-table.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Empty",
+      "summary": "Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Documentation button.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the heading stays, the PropertyFilter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows under the column header.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The resources could not load: the heading and the disabled controls row stay, and a danger Alert with Retry takes the table's place, as the primary does when `useCollection` reports `error`.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "Deployments",
+      "summary": "The deployments list, the same page with its own columns: a PropertyFilter over Version, Status, Project, Environment and Author with Refresh, Download CSV and preferences; Version with a Current `Tag`, a hidden ID, Status as a `StatusIndicator` (a spinner while Building) with the run's duration, the project as a `TableCellLink`, the environment as a rounded `Tag` and the author avatar with the relative time. Clicking a row opens the deployment; its menu holds View details, Redeploy and Promote to production (disabled unless the run is Ready and not already in Production). Refresh shows the table's loading state, a filter with no match shows No matching deployments, and an account with no deployments shows the flush empty card. The detail-resource Deployments tabs reuse this table without the page heading.",
+      "file": "variants/deployments.vue"
+    }
+  ]
+}

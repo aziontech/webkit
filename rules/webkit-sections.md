@@ -25,7 +25,7 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
 - Compose the site chrome once: `SiteLayout` (`@aziontech/webkit/site-layout`) in `App.vue`, with
   the `SiteHeaderSection` data as `navigation` and the `SiteFooterSection` data as `footer`, around `RouterView`. It
   places `SiteHeaderSection` first and `SiteFooterSection` last, unwrapped, and opens the ⌘K palette from the bar's
-  search. A page is only its sections, in the layout's slot. The `shell/site` block is this
+  search. A page is only its sections, in the layout's slot. The `shell/shell-site` block is this
   layout with the azion.com data: copy it as the app shell, never per page.
   `SiteHeaderSection` drops Login from the bar on a phone, as azion.com does; leave
   `secondaryActionOnPhones` off. `SiteFooterSection` draws its own top rule, frame and closing bottom rule.
@@ -35,7 +35,7 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
 - End the page column on a closing section (`ClosingCallToActionSection` and its `-newsletter`,
   `-agents`, `-templates` variants) with nothing after it: it draws the hatched closing frame
   itself. A page that ends on any other band closes with `SectionGap hatch` + the closing
-  `RegistrationFrame` of `shell/site`.
+  `RegistrationFrame` of `shell/shell-site`.
 - Reach for the section's own switches before anything else: `ClientQuotesSection` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlightSection` `v-model`, `CapabilityGridSection` `titleAlign`,
   `MediaSplitSection` action `variant` (`ghost` for a quiet "Learn more" text button), `SiteFooterSection` link

@@ -1,0 +1,81 @@
+{
+  "id": "create/create-deploy-template",
+  "name": "CreateDeployTemplate",
+  "title": "Blocks/Create/CreateDeployTemplate",
+  "surface": "app",
+  "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider bordered EmptyState; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the InCreateFlow state of the DeploymentLogs template) and then to the success screen (the DeploySuccess template). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. WhereItRuns opens the flow on the service the project deploys to: a search over the services, six at a time, an inline Create Service row and a way to continue without one, before the Git step. InstallIntegration is the same page for an integration template (Origin Proxy): no Git and no build, its settings with the required origin, What gets added previewing the origin record, the request-phase rule and its behaviors on the service, and Add to the service. Built from `AppHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton`, `Item`, `Tag` and `Button`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "deploy template",
+    "clone template",
+    "template deploy page",
+    "connect git provider",
+    "deploy from template",
+    "one click deploy",
+    "start from a template",
+    "implantar template",
+    "clonar template",
+    "conectar git",
+    "deploy uploaded project",
+    "deploy imported repository",
+    "implantar projeto enviado",
+    "import from git form",
+    "import from git",
+    "importar do git",
+    "where it runs",
+    "select a service",
+    "choose service to deploy to",
+    "install integration template",
+    "integration template",
+    "add integration to service",
+    "origin proxy template",
+    "instalar integração"
+  ],
+  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
+  "steps": ["where-it-runs", "connect-git", "form"],
+  "primary": {
+    "name": "ConnectGit",
+    "file": "create-deploy-template.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "WhereItRuns",
+      "summary": "The first step, before Git: Where it runs, a search over the services with six rows at a time and an 'N more' line, an inline Create Service row that opens a New service name field with focus in it (Enter on a search with no match opens it prefilled), and Continue without a service. Picking one answers the step and shows the Connect a Git provider step naming the service it deploys to.",
+      "file": "variants/where-it-runs.vue"
+    },
+    {
+      "name": "Form",
+      "summary": "GitHub connected: the jane-doe scope and the nuxt-ecommerce repository name, public by default, over the store domain setting, then two collapsible groups in bordered frames: Build and output settings (root directory and install command, filled with their defaults) and Environment variables, open because the access token is required, each variable a locked Key row over a Value row with a show or hide control and a locked Secret checkbox. Deploy checks the form and shows each missing required value under its field, opening the group that holds it.",
+      "file": "variants/form.vue"
+    },
+    {
+      "name": "BuildSettings",
+      "summary": "Deploy was pressed with the access token empty: both groups open, Build and output settings led by a Build preset `Select` on the detected Nuxt preset with its helper, and the required NUXT_STORE_ACCESS_TOKEN value showing its error.",
+      "file": "variants/build-settings.vue"
+    },
+    {
+      "name": "SettingsLoading",
+      "summary": "The template settings are still loading: scope and repository name are ready, three `Skeleton` field bands stand in for the settings in an `aria-busy` region with a status line, and Deploy is disabled.",
+      "file": "variants/settings-loading.vue"
+    },
+    {
+      "name": "ImportFromGit",
+      "summary": "Reached from Import from Git: the crumb and preview card name the acme-web repository it imports from GitHub, the form keeps the scope and repository name and trims the settings to one collapsed Build and output settings group with the detected Vite preset; no template settings, no variables.",
+      "file": "variants/import-from-git.vue"
+    },
+    {
+      "name": "Upload",
+      "summary": "Reached from a dropped folder: no Git and no repository, the project name and an empty Build preset `Select` side by side, then Project files, a card with the folder summary (file count and total size, formatted from the files) and a scrollable, keyboard-focusable list of up to 100 files with their glyph, monospace path and size (an 'and N more' line counts the rest), and, because the static project has no index.html, a required Root (/) `Select` of the top-level files; Deploy waits for it.",
+      "file": "variants/upload.vue"
+    },
+    {
+      "name": "InstallIntegration",
+      "summary": "An integration template (Origin Proxy) on service-01: the preview card says what it adds to, Configure Origin Proxy asks for the required Origin address and the optional Host header, What gets added previews the origin record, the Proxy every path rule tagged Request phase and the behaviors, and Add to service-01 checks the form and shows the required message under the empty origin.",
+      "file": "variants/install-integration.vue"
+    }
+  ]
+}

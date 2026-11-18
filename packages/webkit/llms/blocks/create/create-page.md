@@ -25,7 +25,7 @@ The page a first-level resource is created on when everything it needs fits on o
 
 - The fields split into steps that unlock in order, or one answer adds a step: use `create/create-wizard`.
 - The resource binds another one and then deploys: use `create/create-wizard` (CreateAndDeploy).
-- Deploying a repository, a template or an uploaded folder: start at `create/create-hub` and deploy with `create/deploy-template` (ImportFromGit covers a Git import).
+- Deploying a repository, a template or an uploaded folder: start at `create/create-hub` and deploy with `create/create-deploy-template` (ImportFromGit covers a Git import).
 - The thing is created inside another resource (a record in a zone, a rule in an application): use `create/create-drawer`.
 - The settings page of an existing resource, with the save bar that mounts only after a change: use `edit/edit-resource`.
 - Never put a create form in a dialog.
@@ -148,8 +148,8 @@ To go live, render the block from a page that owns the request:
 - `create/create-wizard` — the same job split into steps.
 - `create/create-drawer` — create inside a resource without leaving it.
 - `settings/settings-form` — the edit page that reuses these sections.
-- `state/form-validation` — required and invalid states on submit.
-- `view/table-view` — the list whose `Create <Object>` button opens this page.
+- `state/state-form-validation` — required and invalid states on submit.
+- `view/view-table` — the list whose `Create <Object>` button opens this page.
 - `SettingsRow` — the field row every section is built from; see `skills/webkit-form`.
 
 ## Variants

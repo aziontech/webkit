@@ -32,7 +32,7 @@
   },
   {
    "name": "Profile",
-   "summary": "The profile page of a signed-in account: a small page heading over seven stacked `SettingsSection`s (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each a flush `Card` of rows, with the `SaveBar` that rises once a saved field changes. Account name comes filled; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `account/mfa-settings`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed. A save that fails with no field to blame raises an error toast with Retry and keeps the changes.",
+   "summary": "The profile page of a signed-in account: a small page heading over seven stacked `SettingsSection`s (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each a flush `Card` of rows, with the `SaveBar` that rises once a saved field changes. Account name comes filled; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `account/account-mfa-settings`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed. A save that fails with no field to blame raises an error toast with Retry and keeps the changes.",
    "file": "blocks/settings/settings-form/variants/profile.vue"
   },
   {

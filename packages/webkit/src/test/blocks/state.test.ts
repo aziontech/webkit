@@ -1,14 +1,14 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import AsyncSubmit from '../../../blocks/state/async-submit/async-submit.vue'
-import FormValidation from '../../../blocks/state/form-validation/form-validation.vue'
-import { sampleReloadedOrigins } from '../../../blocks/state/form-validation/sample'
-import SectionRejected from '../../../blocks/state/form-validation/variants/section-rejected.vue'
-import PageSkeleton from '../../../blocks/state/page-skeleton/page-skeleton.vue'
+import AsyncSubmit from '../../../blocks/state/state-async-submit/state-async-submit.vue'
+import { sampleReloadedOrigins } from '../../../blocks/state/state-form-validation/sample'
+import FormValidation from '../../../blocks/state/state-form-validation/state-form-validation.vue'
+import SectionRejected from '../../../blocks/state/state-form-validation/variants/section-rejected.vue'
+import PageSkeleton from '../../../blocks/state/state-page-skeleton/state-page-skeleton.vue'
 
 afterEach(() => cleanup())
-describe('state async-submit and form-validation', () => {
+describe('state state-async-submit and state-form-validation', () => {
   it('async-submit: no simulation panel, Deploy emits deploy and loading shows the run', async () => {
     const view = render(AsyncSubmit)
     expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()
@@ -103,7 +103,7 @@ describe('state async-submit and form-validation', () => {
     expect(view.getAllByTestId('field-error')).toHaveLength(2)
   })
 
-  it('form-validation SectionRejected: Reload origins emits, and a reloaded list flags the origin', async () => {
+  it('state-form-validation SectionRejected: Reload origins emits, and a reloaded list flags the origin', async () => {
     const view = render(SectionRejected)
     expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()
     expect(view.getByRole('link', { name: 'Services' })).toBeTruthy()

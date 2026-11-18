@@ -180,7 +180,7 @@ a rise is bad.
 
 ### KPI strips — one card, `StatTileGroup`
 
-An overview's usage row, and a dashboard's KPI row over its charts (`dashboard/analytics-dashboard`),
+An overview's usage row, and a dashboard's KPI row over its charts (`dashboard/dashboard-analytics`),
 reads as **one card split into cells**, not as separate tiles. Put the tiles in a `StatTileGroup`: it
 draws the card and the dividers, stacks the cells in a narrow box and puts them in one row in a wide
 one, keeps every cell of a row the same height when one tile has no change figure or no sparkline, and

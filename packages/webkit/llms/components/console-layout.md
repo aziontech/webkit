@@ -44,7 +44,7 @@
 - `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
 - `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`); while compact, only a page's control crumbs.
-- `shell/console` — the block that shows this layout with sample console navigation.
+- `shell/shell-console` — the block that shows this layout with sample console navigation.
 
 ## Props
 

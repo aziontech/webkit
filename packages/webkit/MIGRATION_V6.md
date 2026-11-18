@@ -1095,8 +1095,8 @@ rail, and the `aside` slot with it, now renders only on a page that has an outli
 joins the rail with `useHeadingOutline(el, { id, text, depth })` from `use-heading-navigation`. The
 codemod lists `outline` as `MANUAL`.
 
-The `shell/docs` variants (Article, Reference, Landing, AgentSetup, AgentGuide) are page bodies: only
-the `<article>`, with no `DocLayout`, header, rail or footer. Keep the shell (`shell/docs`, the
+The `shell/shell-docs` variants (Article, Reference, Landing, AgentSetup, AgentGuide) are page bodies: only
+the `<article>`, with no `DocLayout`, header, rail or footer. Keep the shell (`shell/shell-docs`, the
 primary) as `App.vue` with `<RouterView />` in its slot and route to the copied page; a page copied
 from an earlier version that still renders its own `DocLayout` keeps only its `<article>`. The
 Landing headings carry no `anchor`, so the docs home shows no outline rail.
@@ -1479,31 +1479,107 @@ Blocks are grouped by job, one folder level under `blocks/`: `account/*`, `ai/*`
 is `block.json#surface` (`app`, `docs` or `site`), and the catalog and the MCP `surface` filter
 use the same words (`product` → `app`, `marketing` → `site`).
 
-Every 5.x id moved up one level (`platform/view/table-view` → `view/table-view`,
-`platform/states/*` → `state/*`, `shells/*` → `shell/*`, `top-bars/*` → `top-bar/*`). These were
-also renamed:
+Every 5.x id moved up one level (`platform/states/*` → `state/*`, `shells/*` → `shell/*`,
+`top-bars/*` → `top-bar/*`), and every block name now starts with its group word, once
+(`platform/view/table-view` → `view/view-table`, `dashboard/alerts-dashboard` →
+`dashboard/dashboard-alerts`; see "Block names start with their group" below). These were also
+renamed:
 
-| 5.x id                                     | 6.0 id                          |
-| ------------------------------------------ | ------------------------------- |
-| `platform/auth`                            | `auth/sign-in`                  |
-| `platform/account/build-deployment`        | `account/deployment-settings`   |
-| `platform/account/mfa-management`          | `account/mfa-settings`          |
-| `platform/account/manage-resources`        | `account/account-hierarchy`     |
-| `platform/account/tokens`                  | `account/personal-tokens`       |
-| `platform/create/create-in-drawer`         | `create/create-drawer`          |
-| `platform/create/multipage-create`         | `create/create-wizard`          |
-| `platform/create/single-page-create`       | `create/create-page`            |
-| `platform/dashboard/composition-dashboard` | `dashboard/breakdown-dashboard` |
-| `platform/delete/delete-with-confirmation` | `edit/delete-dialog`            |
-| `platform/detail/details-page`             | `detail/resource-detail`        |
-| `platform/detail/record-table`             | `detail/dns-zone-detail`        |
-| `platform/detail/attached-resources`       | `detail/domains-card`           |
-| `platform/states/not-found`                | `state/error-page`              |
-| `platform/states/page-wires`               | `state/page-skeleton`           |
-| `platform/view/rules-list`                 | `view/rule-list`                |
-| `platform/view/split-view`                 | `view/events-explorer`          |
-| `shells/documentation`                     | `shell/docs`                    |
-| `shells/website`                           | `shell/site`                    |
+| 5.x id                                     | 6.0 id                                |
+| ------------------------------------------ | ------------------------------------- |
+| `platform/auth`                            | `auth/auth-sign-in`                   |
+| `platform/account/build-deployment`        | `account/account-deployment-settings` |
+| `platform/account/mfa-management`          | `account/account-mfa-settings`        |
+| `platform/account/manage-resources`        | `account/account-hierarchy`           |
+| `platform/account/tokens`                  | `account/account-personal-tokens`     |
+| `platform/create/create-in-drawer`         | `create/create-drawer`                |
+| `platform/create/multipage-create`         | `create/create-wizard`                |
+| `platform/create/single-page-create`       | `create/create-page`                  |
+| `platform/dashboard/composition-dashboard` | `dashboard/dashboard-breakdown`       |
+| `platform/delete/delete-with-confirmation` | `edit/edit-delete-dialog`             |
+| `platform/detail/details-page`             | `detail/detail-resource`              |
+| `platform/detail/record-table`             | `detail/detail-dns-zone`              |
+| `platform/detail/attached-resources`       | `detail/detail-domains-card`          |
+| `platform/states/not-found`                | `state/state-error-page`              |
+| `platform/states/page-wires`               | `state/state-page-skeleton`           |
+| `platform/view/rules-list`                 | `view/view-rule-list`                 |
+| `platform/view/split-view`                 | `view/view-events-explorer`           |
+| `shells/documentation`                     | `shell/shell-docs`                    |
+| `shells/website`                           | `shell/shell-site`                    |
+
+### Block names start with their group
+
+A block's name says its group once, first: `<group>/<group>-<what>`. The name is what `add`
+copies into your app (`dashboard-alerts.vue`, `DashboardAlerts`, route `/dashboard-alerts`), so it
+keeps the group word; the docs list shows it without the word ("Alerts" under Dashboard). Blocks
+that already started with their group (`create/create-hub`, `ai/ai-chat`,
+`settings/settings-form`, `account/account-hierarchy`, `dashboard/dashboard-switcher`,
+`edit/edit-resource`) keep their id. `webkit migrate v6` rewrites the ids in `webkit.blocks.json`
+and keeps your copied file names; `add <old id>` resolves an old id with a note. The map is
+`src/cli/migrations/v6-blocks.json`.
+
+| Earlier 6.0 id                           | 6.0 id                                   |
+| ---------------------------------------- | ---------------------------------------- |
+| `account/activity-history`               | `account/account-activity-history`       |
+| `account/billing`                        | `account/account-billing`                |
+| `account/change-plan-drawer`             | `account/account-change-plan-drawer`     |
+| `account/deployment-settings`            | `account/account-deployment-settings`    |
+| `account/mfa-settings`                   | `account/account-mfa-settings`           |
+| `account/onboarding-form`                | `account/account-onboarding-form`        |
+| `account/payment-method-card`            | `account/account-payment-method-card`    |
+| `account/personal-tokens`                | `account/account-personal-tokens`        |
+| `account/team-permissions`               | `account/account-team-permissions`       |
+| `account/users`                          | `account/account-users`                  |
+| `auth/sign-in`                           | `auth/auth-sign-in`                      |
+| `create/deploy-drawer`                   | `create/create-deploy-drawer`            |
+| `create/deploy-progress-dialog`          | `create/create-deploy-progress-dialog`   |
+| `create/deploy-success`                  | `create/create-deploy-success`           |
+| `create/deploy-template`                 | `create/create-deploy-template`          |
+| `create/release-impact`                  | `create/create-release-impact`           |
+| `create/resource-picker`                 | `create/create-resource-picker`          |
+| `dashboard/alerts-dashboard`             | `dashboard/dashboard-alerts`             |
+| `dashboard/analytics-dashboard`          | `dashboard/dashboard-analytics`          |
+| `dashboard/breakdown-dashboard`          | `dashboard/dashboard-breakdown`          |
+| `dashboard/configurable-dashboard`       | `dashboard/dashboard-configurable`       |
+| `dashboard/executive-summary-dashboard`  | `dashboard/dashboard-executive-summary`  |
+| `dashboard/health-score-dashboard`       | `dashboard/dashboard-health-score`       |
+| `dashboard/home-dashboard`               | `dashboard/dashboard-home`               |
+| `dashboard/scan-results-dashboard`       | `dashboard/dashboard-scan-results`       |
+| `dashboard/security-dashboard`           | `dashboard/dashboard-security`           |
+| `dashboard/service-monitoring-dashboard` | `dashboard/dashboard-service-monitoring` |
+| `detail/deployment-logs`                 | `detail/detail-deployment-logs`          |
+| `detail/dns-zone-detail`                 | `detail/detail-dns-zone`                 |
+| `detail/domains-card`                    | `detail/detail-domains-card`             |
+| `detail/get-started`                     | `detail/detail-get-started`              |
+| `detail/invocations`                     | `detail/detail-invocations`              |
+| `detail/production-checklist`            | `detail/detail-production-checklist`     |
+| `detail/resource-detail`                 | `detail/detail-resource`                 |
+| `detail/version-detail`                  | `detail/detail-version`                  |
+| `edit/delete-dialog`                     | `edit/edit-delete-dialog`                |
+| `edit/function-editor`                   | `edit/edit-function`                     |
+| `edit/rule-builder`                      | `edit/edit-rule-builder`                 |
+| `edit/schema-editor`                     | `edit/edit-schema`                       |
+| `edit/variables`                         | `edit/edit-variables`                    |
+| `shell/console`                          | `shell/shell-console`                    |
+| `shell/docs`                             | `shell/shell-docs`                       |
+| `shell/site`                             | `shell/shell-site`                       |
+| `state/async-submit`                     | `state/state-async-submit`               |
+| `state/error-page`                       | `state/state-error-page`                 |
+| `state/first-use`                        | `state/state-first-use`                  |
+| `state/form-validation`                  | `state/state-form-validation`            |
+| `state/page-skeleton`                    | `state/state-page-skeleton`              |
+| `state/project-intake`                   | `state/state-project-intake`             |
+| `top-bar/auth-bar`                       | `top-bar/top-bar-auth`                   |
+| `top-bar/creation-bar`                   | `top-bar/top-bar-creation`               |
+| `view/card-view`                         | `view/view-card`                         |
+| `view/events-explorer`                   | `view/view-events-explorer`              |
+| `view/file-browser`                      | `view/view-file-browser`                 |
+| `view/marketplace`                       | `view/view-marketplace`                  |
+| `view/query-editor`                      | `view/view-query-editor`                 |
+| `view/rule-list`                         | `view/view-rule-list`                    |
+| `view/table-view`                        | `view/view-table`                        |
+| `view/template-browser`                  | `view/view-template-browser`             |
+| `view/waf-tuning`                        | `view/view-waf-tuning`                   |
 
 Variant states use one word set, `loading`, `empty`, `error`, `success`, written
 `<subject>-<state>`: `Failed` → `Error`, `<Subject>Failed` → `<Subject>Error` (`LoadFailed` →
@@ -1512,7 +1588,7 @@ Variant states use one word set, `loading`, `empty`, `error`, `success`, written
 `RepositoriesLoading`, `LoadingSettings` → `SettingsLoading`, query-editor's `EmptyDatabase` →
 `NoTables`, production-checklist's `Complete` → `Success` and delete-dialog's `LabelledField` →
 `SettingsRow`. A `#variant` fragment and `add --variant` take the variant file name
-(`view/table-view#error`); the PascalCase name still works. Your `webkit.blocks.json` keeps the old
+(`view/view-table#error`); the PascalCase name still works. Your `webkit.blocks.json` keeps the old
 ids: `add <old id>` resolves them with a note. `add` now writes kebab-case files named after the
 block: `create-hub.vue`, and `create-hub-connected.vue` for a variant (was `CreateHub.vue` and
 `CreateHubConnected.vue`); a PascalCase `--dest` file keeps its casing.
@@ -1520,15 +1596,15 @@ block: `create-hub.vue`, and `create-hub-connected.vue` for a variant (was `Crea
 Blocks that did the same job
 are one block whose states are variants: the drawer forms are `create/create-drawer`,
 the save strategies are `settings/settings-form`, the two details pages are
-`detail/resource-detail`, the labelled delete dialog is a variant of
-`edit/delete-dialog`, the server rejection is a variant of
-`state/form-validation` and the sectioned Import from Git form is a variant of
-`create/deploy-template`.
+`detail/detail-resource`, the labelled delete dialog is a variant of
+`edit/edit-delete-dialog`, the server rejection is a variant of
+`state/state-form-validation` and the sectioned Import from Git form is a variant of
+`create/create-deploy-template`.
 
 One block per job (6.0):
 
 - Starting a project is one flow, `create/create-hub` then
-  `create/deploy-template`. `source-wizard` is removed: its Where it runs chooser and
+  `create/create-deploy-template`. `source-wizard` is removed: its Where it runs chooser and
   its integration install step are the deploy-template variants `WhereItRuns` and
   `InstallIntegration`; create-page drops `ImportFromGit` and `ImportFromGitSubmitted`
   (deploy-template's `ImportFromGit`).
@@ -1540,19 +1616,19 @@ One block per job (6.0):
   `SectionReloading` and `SectionReloaded`.
 - `platform/create/deployment-flow` is the deployment-logs variants `InCreateFlow` and
   `InCreateFlowError`; resource-detail's `DeploymentDetail`, `DeploymentError` and
-  `DeploymentQueued` moved to `detail/deployment-logs`, and its `Invocation` variant is
-  `detail/invocations`. Every phased deploy log composes `LogViewer.Steps`.
-- `view/marketplace` lists integrations only (its `Integrations` state is now the
-  default); templates live in `view/template-browser`, and its `TemplatesNoMatch` and
+  `DeploymentQueued` moved to `detail/detail-deployment-logs`, and its `Invocation` variant is
+  `detail/detail-invocations`. Every phased deploy log composes `LogViewer.Steps`.
+- `view/view-marketplace` lists integrations only (its `Integrations` state is now the
+  default); templates live in `view/view-template-browser`, and its `TemplatesNoMatch` and
   `TemplatePage` variants are template-browser's `NoMatch` and deploy-template's `Form`.
 - `data-dashboard` is analytics-dashboard's `Usage` (its RealUser page is health-score-dashboard's
   `RealUser`); `activity-outcomes-dashboard` is security-dashboard's `ByActor`;
   `project-status-dashboard` and `funnel-cohort-dashboard` are removed (off-domain for the console).
 - `headers/site-header-section`, `headers/docs-header` and `headers/resource-header` are removed: SiteLayout,
   DocLayout and ConsoleLayout already draw those bars (`shell/*`). The other two are renamed:
-  `headers/auth-header` → `top-bar/auth-bar`, `headers/creation-header` → `top-bar/creation-bar`.
-- `platform/edit/attribute-editor` → `edit/variables` and `platform/edit/code-editor` →
-  `edit/function-editor` (the names belonged to the components they compose).
+  `headers/auth-header` → `top-bar/top-bar-auth`, `headers/creation-header` → `top-bar/top-bar-creation`.
+- `platform/edit/attribute-editor` → `edit/edit-variables` and `platform/edit/code-editor` →
+  `edit/edit-function` (the names belonged to the components they compose).
 - `resource-picker`, `payment-method-card`, `get-started`, `production-checklist` and
   `domains-card` carry `kind: "fragment"`: cards placed inside a page, not screens.
 
@@ -1751,8 +1827,8 @@ split view or a card these change:
   rather than writing a raw `@min-[…]:`. Width utilities (`max-w-md`, `w-2xl`,
   `max-w-(--container-md)`) already read the theme values and do not change. In WebKit itself
   `Hero.Title` keeps its actions in a row from `@2xs`, the wide `Diagram` layout now starts at
-  `@5xl` and `CardList` shows four columns from `@6xl`; the `get-started` steps (`detail/get-started`, the Overview of
-  `detail/resource-detail`) sit side by side from `@4xl` (1024 px), so a 1280 px console
+  `@5xl` and `CardList` shows four columns from `@6xl`; the `get-started` steps (`detail/detail-get-started`, the Overview of
+  `detail/detail-resource`) sit side by side from `@4xl` (1024 px), so a 1280 px console
   window stacks them.
 
 - **Stacked table (opt-in).** A data-driven `Table` keeps its horizontally scrolling grid at
@@ -2129,8 +2205,8 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 - `Table` keeps its API. It gains `density`, `wrapLines`, `striped`, `virtual` and
   `estimateRowHeight` (all off by default), and in the stacked layout its select-all is a visible
   checkbox above the rows instead of a screen-reader-only header cell.
-- The `view/table-view` block runs on `useCollection` with `PropertyFilter` and
-  `CollectionPreferences`; `view/card-view` is new. Copy them again through the MCP
+- The `view/view-table` block runs on `useCollection` with `PropertyFilter` and
+  `CollectionPreferences`; `view/view-card` is new. Copy them again through the MCP
   (`get_block`) to pick the change up.
 
 ## 7. Unchanged

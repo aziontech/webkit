@@ -753,16 +753,16 @@ test('migrateBlockManifest moves 5.x block ids, sources and renamed variants', (
   assert.deepEqual(Object.keys(manifest.blocks), [
     'my/own',
     'platform/account/profile',
-    'view/rule-list'
+    'view/view-rule-list'
   ])
   assert.deepEqual(
-    manifest.blocks['view/rule-list'].files.map((f) => [f.source, f.variant]),
+    manifest.blocks['view/view-rule-list'].files.map((f) => [f.source, f.variant]),
     [
-      ['blocks/view/rule-list/rule-list.vue', 'Application'],
-      ['blocks/view/rule-list/variants/save-error.vue', 'SaveError']
+      ['blocks/view/view-rule-list/view-rule-list.vue', 'Application'],
+      ['blocks/view/view-rule-list/variants/save-error.vue', 'SaveError']
     ]
   )
-  assert.deepEqual(changes, ['webkit.blocks.json: platform/view/rules-list → view/rule-list'])
+  assert.deepEqual(changes, ['webkit.blocks.json: platform/view/rules-list → view/view-rule-list'])
   assert.match(warnings[0], /platform\/account\/profile is now settings\/settings-form#profile/)
 })
 

@@ -2,13 +2,13 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import Analytics from '../../../blocks/dashboard/analytics-dashboard/analytics-dashboard.vue'
-import AnalyticsMetrics from '../../../blocks/dashboard/analytics-dashboard/variants/metrics.vue'
-import AnalyticsUsage from '../../../blocks/dashboard/analytics-dashboard/variants/usage.vue'
-import Composition from '../../../blocks/dashboard/breakdown-dashboard/breakdown-dashboard.vue'
-import CompositionEmpty from '../../../blocks/dashboard/breakdown-dashboard/variants/empty.vue'
-import Executive from '../../../blocks/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue'
-import Security from '../../../blocks/dashboard/security-dashboard/security-dashboard.vue'
+import Analytics from '../../../blocks/dashboard/dashboard-analytics/dashboard-analytics.vue'
+import AnalyticsMetrics from '../../../blocks/dashboard/dashboard-analytics/variants/metrics.vue'
+import AnalyticsUsage from '../../../blocks/dashboard/dashboard-analytics/variants/usage.vue'
+import Composition from '../../../blocks/dashboard/dashboard-breakdown/dashboard-breakdown.vue'
+import CompositionEmpty from '../../../blocks/dashboard/dashboard-breakdown/variants/empty.vue'
+import Executive from '../../../blocks/dashboard/dashboard-executive-summary/dashboard-executive-summary.vue'
+import Security from '../../../blocks/dashboard/dashboard-security/dashboard-security.vue'
 import { useToastRegion } from '../toast-region'
 
 useToastRegion()
@@ -38,14 +38,14 @@ describe('dashboard blocks', () => {
       'funnel-cohort-dashboard'
     ])
       expect(ids).not.toContain(removed)
-    expect(ids).toContain('analytics-dashboard')
+    expect(ids).toContain('dashboard-analytics')
   })
 })
 
 describe.each([
-  ['analytics-dashboard', Analytics],
-  ['analytics-dashboard#Usage', AnalyticsUsage],
-  ['security-dashboard', Security]
+  ['dashboard-analytics', Analytics],
+  ['dashboard-analytics#Usage', AnalyticsUsage],
+  ['dashboard-security', Security]
 ])('dashboard/%s period', (_name, Block) => {
   it('drives the delta comparison from the Period Select in the header', async () => {
     const view = render(Block)
@@ -65,7 +65,7 @@ describe.each([
 })
 
 describe('dashboard exports', () => {
-  it.each([['breakdown-dashboard', Composition, 'More options for Current split']])(
+  it.each([['dashboard-breakdown', Composition, 'More options for Current split']])(
     '%s exports a card as CSV from its menu',
     async (_name, Block, trigger) => {
       const view = render(Block)
@@ -96,7 +96,7 @@ describe('dashboard exports', () => {
   })
 })
 
-describe('dashboard/analytics-dashboard data', () => {
+describe('dashboard/dashboard-analytics data', () => {
   it('renders the hosts and figures it is given instead of the sample', async () => {
     const view = render(Analytics, {
       props: {
@@ -144,7 +144,7 @@ describe('dashboard/analytics-dashboard data', () => {
   })
 })
 
-describe('dashboard/analytics-dashboard Copy query', () => {
+describe('dashboard/dashboard-analytics Copy query', () => {
   const copied = async (Block: object, trigger: string, props = {}) => {
     const write = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined)
     const view = render(Block, { props })
@@ -187,7 +187,7 @@ describe('dashboard/analytics-dashboard Copy query', () => {
   })
 })
 
-describe('dashboard/analytics-dashboard data shapes', () => {
+describe('dashboard/dashboard-analytics data shapes', () => {
   it('keeps the figures while refetching and marks every chart as refetching', async () => {
     const view = render(Analytics, {
       props: {

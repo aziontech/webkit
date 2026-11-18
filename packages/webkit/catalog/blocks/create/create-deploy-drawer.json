@@ -1,0 +1,49 @@
+{
+ "variants": [
+  {
+   "name": "Building",
+   "summary": "Deploy without a pinned version: the drawer opens as Build and deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects impacted sections stay faded and inert, with Deploy disabled, until the build lands.",
+   "file": "blocks/create/create-deploy-drawer/variants/building.vue"
+  },
+  {
+   "name": "ServiceProjectFirst",
+   "summary": "The project-first flow: the same Resources card, a Project card with the last used project, its domain and a Change popover of the projects serving the service, then every environment as a radio block.",
+   "file": "blocks/create/create-deploy-drawer/variants/service-project-first.vue"
+  },
+  {
+   "name": "Project",
+   "summary": "Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09.",
+   "file": "blocks/create/create-deploy-drawer/variants/project.vue"
+  },
+  {
+   "name": "Environment",
+   "summary": "The environment decision at its edges: Staging is locked by Strict Deployment Settings (a disabled choice card with a Strict tag and the reason), Preview is tagged Also deploys because Production's shared settings reach it, an info Alert says the deploy replaces legacy-web on the chosen project and a warning Alert says it goes live in two environments at once. Projects impacted are grouped per environment with a heading and a count, and switching environment reloads them with Skeleton rows, aria-busy and a status line. Deploy closes the drawer and reports through one toast that turns from Deploying… into the outcome with Edit and Redeploy.",
+   "file": "blocks/create/create-deploy-drawer/variants/environment.vue"
+  },
+  {
+   "name": "Dependencies",
+   "summary": "The Dependencies disclosure open: each module and integration with its own version and Change version menu, auth-gateway tagged Shared with a Tooltip naming the services that also reference it and one info Alert saying a shared dependency deploys at one version, payments-api not versioned (a note instead of the menu), and geo-redirect with no ready version, which disables Deploy with the reason in the footer. Changing the service version reloads the dependencies with Skeleton rows, aria-busy and a status line; a second resource that references nothing says so. The first run fails and its toast carries Edit and Redeploy; Redeploy succeeds.",
+   "file": "blocks/create/create-deploy-drawer/variants/dependencies.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The drawer resolving what it deploys: Skeleton blocks stand in for the Resources card and the two environment choice cards under their real section titles, the region is aria-busy with one status line, and Deploy stays disabled until they land.",
+   "file": "blocks/create/create-deploy-drawer/variants/loading.vue"
+  },
+  {
+   "name": "LoadError",
+   "summary": "The deploy targets could not be loaded: a danger Alert says so in place of the sections, with an outlined Retry that reloads them as Skeletons; Deploy stays disabled.",
+   "file": "blocks/create/create-deploy-drawer/variants/load-error.vue"
+  },
+  {
+   "name": "NoEnvironment",
+   "summary": "A project with nothing bound and no environment: the Resources card says nothing is bound yet, the Environment section is a bordered EmptyState with Add environment, and Deploy is disabled with the reason beside it in the footer.",
+   "file": "blocks/create/create-deploy-drawer/variants/no-environment.vue"
+  }
+ ],
+ "sfcFile": "blocks/create/create-deploy-drawer/create-deploy-drawer.vue",
+ "guidelinesFile": "blocks/create/create-deploy-drawer/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/create/create-deploy-drawer/sample.ts"
+ }
+}

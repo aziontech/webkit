@@ -32,7 +32,7 @@
 - [flow-diagram](flow-diagram.md) — the connector engine and anchors this component reuses.
 - [tree](tree.md) — hierarchical data without connectors.
 - [dropdown-menu](dropdown-menu.md) — the bind control's menu.
-- `detail/resource-detail` — the page whose topology tab holds it.
+- `detail/detail-resource` — the page whose topology tab holds it.
 
 ## Props
 

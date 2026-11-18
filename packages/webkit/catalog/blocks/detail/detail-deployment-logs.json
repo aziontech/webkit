@@ -1,0 +1,54 @@
+{
+ "variants": [
+  {
+   "name": "Success",
+   "summary": "A run that went live: every step checked, the last one open, a Completed Tag with Deployed in 42s and the view switch in the Logs row, and copy on every step log.",
+   "file": "blocks/detail/detail-deployment-logs/variants/success.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "A run whose routing rules were rejected: that step is open on its error output with a Failed Tag and the reason in full, the steps behind it read Skipped, and the Logs row names the failed step beside the view switch.",
+   "file": "blocks/detail/detail-deployment-logs/variants/error.vue"
+  },
+  {
+   "name": "ContinuousLog",
+   "summary": "The Complete view of a finished run: every line the pipeline printed as one continuous LogViewer with its copy button.",
+   "file": "blocks/detail/detail-deployment-logs/variants/continuous-log.vue"
+  },
+  {
+   "name": "ContinuousLogError",
+   "summary": "The Complete view of the failed run: the lines up to the error, as one LogViewer, nothing from the steps that never ran.",
+   "file": "blocks/detail/detail-deployment-logs/variants/continuous-log-error.vue"
+  },
+  {
+   "name": "InCreateFlow",
+   "summary": "Deploy was just pressed in a create flow: the Deployment Card with a Cloning StatusIndicator in its header, opening on the cloning splash (the Git provider tile, a dashed connector marching toward a large destination tile, still under reduced motion) with one polite screen-reader line naming the repository and the scope; the steps replace the splash as the first one starts.",
+   "file": "blocks/detail/detail-deployment-logs/variants/in-create-flow.vue"
+  },
+  {
+   "name": "InCreateFlowError",
+   "summary": "The create-flow card after the routing rules were rejected: the Deployment header swaps the status for the Phased or Complete switch, the Logs row names the failed step, that step is open on its error output with a Failed Tag, the steps behind it read Skipped, and the card footer offers Edit (back to the form, values kept) and Redeploy.",
+   "file": "blocks/detail/detail-deployment-logs/variants/in-create-flow-error.vue"
+  },
+  {
+   "name": "DeploymentDetail",
+   "summary": "A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the steps.",
+   "file": "blocks/detail/detail-deployment-logs/variants/deployment-detail.vue"
+  },
+  {
+   "name": "DeploymentError",
+   "summary": "A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped.",
+   "file": "blocks/detail/detail-deployment-logs/variants/deployment-error.vue"
+  },
+  {
+   "name": "DeploymentQueued",
+   "summary": "A deployment waiting for a runner: the info banner, Visit disabled until the deployment is live, the Deployment details card with Queued as its status and Not started as its duration, and the Deployment logs card with a Queued `StatusIndicator` in its header and a not-started `EmptyState` in place of the steps, with no Phased or Complete switch.",
+   "file": "blocks/detail/detail-deployment-logs/variants/deployment-queued.vue"
+  }
+ ],
+ "sfcFile": "blocks/detail/detail-deployment-logs/detail-deployment-logs.vue",
+ "guidelinesFile": "blocks/detail/detail-deployment-logs/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/detail/detail-deployment-logs/sample.ts"
+ }
+}

@@ -14,15 +14,15 @@ The page a first-level resource is created on one step at a time. It is the `Wiz
 
 - Everything fits on one screen without order: use `create/create-page`.
 - The resource is created inside another one: use `create/create-drawer`.
-- A new project from a code source (Git, a template, an upload): start at `create/create-hub` and deploy with `create/deploy-template`.
-- Binding an existing or new resource inside a form step: use `create/resource-picker`.
-- Deploying an existing package from inside a resource: use `create/deploy-drawer`.
+- A new project from a code source (Git, a template, an upload): start at `create/create-hub` and deploy with `create/create-deploy-template`.
+- Binding an existing or new resource inside a form step: use `create/create-resource-picker`.
+- Deploying an existing package from inside a resource: use `create/create-deploy-drawer`.
 
 ## Building blocks
 
 ### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-The `top-bar/creation-bar` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
+The `top-bar/top-bar-creation` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -60,9 +60,9 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
 
-- **Project.** The `create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingsRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
+- **Project.** The `create/create-resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingsRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
 - **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
-- **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/deployment-logs` (InCreateFlow) and ends on `create/deploy-success`.
+- **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/detail-deployment-logs` (InCreateFlow) and ends on `create/create-deploy-success`.
 
 ## Data
 
@@ -117,7 +117,7 @@ Then delete `sample.ts` and its import.
 - Keep the create action on the last step only; every step before it says Next.
 - Keep the chosen host visible in the chooser even when it falls outside the first six.
 - Label the final action with every act it performs: "Create and deploy" when it also deploys.
-- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so this page body never renders a `Toaster`.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -168,9 +168,9 @@ Then delete `sample.ts` and its import.
 
 - `Wizard` — the component this block is built on; see `skills/webkit-form`.
 - `create/create-page` — the same job when the fields fit one screen.
-- `create/create-hub` and `create/deploy-template` — a new project from Git, a template or an upload.
-- `create/resource-picker` — the Existing or New band CreateAndDeploy binds its project with.
-- `detail/deployment-logs` — the build log Create and deploy hands the column to (InCreateFlow).
-- `create/deploy-success` — the screen a create-and-deploy ends on.
-- `edit/function-editor` — the editor a code resource can use as one step.
-- `state/form-validation` — required and invalid states on Next.
+- `create/create-hub` and `create/create-deploy-template` — a new project from Git, a template or an upload.
+- `create/create-resource-picker` — the Existing or New band CreateAndDeploy binds its project with.
+- `detail/detail-deployment-logs` — the build log Create and deploy hands the column to (InCreateFlow).
+- `create/create-deploy-success` — the screen a create-and-deploy ends on.
+- `edit/edit-function` — the editor a code resource can use as one step.
+- `state/state-form-validation` — required and invalid states on Next.

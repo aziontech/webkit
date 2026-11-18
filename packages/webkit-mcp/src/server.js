@@ -291,7 +291,7 @@ async function main() {
         '`sections: ["sfc"]` after. A pre-v6 id (e.g. ' +
         '"platform/lists/table-view") resolves to its new block and carries a `note`.',
       inputSchema: {
-        id: z.string().describe('Block id from search_blocks, e.g. "view/table-view".'),
+        id: z.string().describe('Block id from search_blocks, e.g. "view/view-table".'),
         variant: z
           .string()
           .optional()

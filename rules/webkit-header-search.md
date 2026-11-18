@@ -60,7 +60,7 @@ groups go in their `search` slot; a page opens the console palette with
   (`<SiteHeaderSection @search="searchOpen = true" />`) and mount the `Command` beside it.
 - Without a `Command` on the page, `@open` still fires on `⌘K` / `Ctrl K`, so a custom search
   dialog gets the shortcut for free.
-- Start from a shell block (`shell/console`, `shell/docs`, `shell/site`): each
+- Start from a shell block (`shell/shell-console`, `shell/shell-docs`, `shell/shell-site`): each
   layout already renders its header with the trigger and the palette.
 
 ## Do not

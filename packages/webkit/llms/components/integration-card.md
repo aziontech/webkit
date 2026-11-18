@@ -33,7 +33,7 @@
 - [card](card.md) — the content box this tile was split from; shares its surface tokens.
 - [tag](tag.md) — renders the badges and the Installed state.
 - [card-list](card-list.md) — the resource list in card form, with selection.
-- `view/marketplace` — the block that lays these tiles out in a filtered grid.
+- `view/view-marketplace` — the block that lays these tiles out in a filtered grid.
 
 ## Props
 

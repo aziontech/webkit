@@ -9,7 +9,7 @@
 ## When to use
 
 - Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).
-- The card form of a list page (`view/card-view`), filtered and paged by `useCollection`.
+- The card form of a list page (`view/view-card`), filtered and paged by `useCollection`.
 
 ## Do
 

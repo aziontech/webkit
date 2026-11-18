@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 9e10e7685243bcfeae29f678a9f02e39e9b72af4dab1e3d9ea905b27e9a2d114
+checksum: f3efd9155650a1fbf3a76d2815ac79b914e333a557ab5e1369309c6828ff2637
 created: 2026-11-12
 last_updated: 2026-11-18
 ---
@@ -35,7 +35,7 @@ The documentation chrome, composed once in the app: a sticky header (at the inli
 - `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
 - `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
 - `SearchTrigger`, `Command` — the header search and the palette it opens.
-- `shell/docs` — the block that shows this layout with a sample docs tree.
+- `shell/shell-docs` — the block that shows this layout with a sample docs tree.
 
 ## Best practices
 
@@ -90,15 +90,15 @@ A page (the route's component) is only its article; its anchored headings fill t
 
 ## Props
 
-| Prop            | Type                   | Default | Required | JSDoc                                                                                                                                                                            |
-| --------------- | ---------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigation`    | `DocLayoutNavGroup[]`  | `[]`    | false    | The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router.           |
-| `activeId`      | `string`               | `''`    | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                                |
-| `sections`      | `DocLayoutSection[]`   | `[]`    | false    | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`.                                                                                    |
-| `home`          | `string`               | `'/'`   | false    | Where the Azion Docs mark links.                                                                                                                                                 |
+| Prop            | Type                        | Default | Required | JSDoc                                                                                                                                                                            |
+| --------------- | --------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigation`    | `DocLayoutNavGroup[]`       | `[]`    | false    | The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router.           |
+| `activeId`      | `string`                    | `''`    | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                                |
+| `sections`      | `DocLayoutSection[]`        | `[]`    | false    | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`.                                                                                    |
+| `home`          | `string`                    | `'/'`   | false    | Where the Azion Docs mark links.                                                                                                                                                 |
 | `outlineGroups` | `DocTableOfContentsGroup[]` | `[]`    | false    | Complementary link groups under the outline (GitHub, Community).                                                                                                                 |
-| `ariaLabel`     | `string`               | `''`    | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`).                                                                                     |
-| `rootLabel`     | `string`               | `''`    | false    | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
+| `ariaLabel`     | `string`                    | `''`    | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`).                                                                                     |
+| `rootLabel`     | `string`                    | `''`    | false    | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
 
 ## v-model
 
@@ -134,12 +134,12 @@ A page (the route's component) is only its article; its anchored headings fill t
 
 ## Motion & Animations
 
-| Trigger                       | Animation / Transition                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                       |
-| ----------------------------- | ------------------------------------- | ------------------------------------------------- | --------------------------------------------- |
-| rail collapse, expand, resize | `Sidebar` rail width and panel slide  | component                                         | handled by `Sidebar`                          |
-| outline jump                  | smooth window scroll                  | browser                                           | instant scroll under `prefers-reduced-motion` |
+| Trigger                       | Animation / Transition                             | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                       |
+| ----------------------------- | -------------------------------------------------- | ------------------------------------------------- | --------------------------------------------- |
+| rail collapse, expand, resize | `Sidebar` rail width and panel slide               | component                                         | handled by `Sidebar`                          |
+| outline jump                  | smooth window scroll                               | browser                                           | instant scroll under `prefers-reduced-motion` |
 | brand hover                   | `transition-opacity` on the `AppHeader.Brand` link | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none`               |
-| drawer, palette               | `Drawer`, `Command`                   | component                                         | handled by those components                   |
+| drawer, palette               | `Drawer`, `Command`                                | component                                         | handled by those components                   |
 
 ## Tokens
 

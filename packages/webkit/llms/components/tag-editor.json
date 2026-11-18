@@ -24,7 +24,7 @@
   "`attribute-editor` — the rows, Add, Remove, limit text, focus and announcements underneath.",
   "`input` — key and value controls; suggestions come from a native `datalist`.",
   "`tag` — how the saved tags read outside the editor.",
-  "`state/form-validation` (SectionRejected) — the rule for server errors passed through `errors`."
+  "`state/state-form-validation` (SectionRejected) — the rule for server errors passed through `errors`."
  ],
  "bestPractices": [
   "Mark saved tags with `existing: true`: their key is read-only, and Remove marks them `markedForRemoval` (Undo puts them back) so the save request knows what to delete.",

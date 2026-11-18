@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: ff01e1da7ea1e42795ec2cd9ed8fdf399b9bef1305f22f8c310d11763170a01b
+checksum: 168041c7f6153c3b504e8400d791184b2e370e9b9db437246b8ceaf9988b4cef
 created: 2026-11-16
 last_updated: 2026-11-16
 ---
@@ -36,7 +36,7 @@ A catalog tile laid out from props: a logo mark, the item name, its vendor, a sh
 - `card` — the content box this tile was split from; shares its surface tokens.
 - `tag` — renders the badges and the Installed state.
 - `card-list` — the resource list in card form, with selection.
-- `view/marketplace` — the block that lays these tiles out in a filtered grid.
+- `view/view-marketplace` — the block that lays these tiles out in a filtered grid.
 
 ## Best practices
 

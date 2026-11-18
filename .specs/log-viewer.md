@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: c8ecb47248d9d6bd0944f63856ed69b4e3f4cf34b8d44d309940b6cc8b0b8e81
+checksum: 5155a185a9561b7827ac609435839e9af0bae0d301ab49021c425d7e21fadf8d
 created: 2026-05-26
 last_updated: 2026-11-17
 ---
@@ -39,7 +39,7 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 
 - `code-block` — highlighted source code with a copy action, not a stream of typed log lines.
 - `cli-terminal-section` — marketing band that plays a scripted terminal session.
-- `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
+- `create/create-deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Best practices
 

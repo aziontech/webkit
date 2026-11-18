@@ -13,7 +13,7 @@
 // (the Table graph alone takes about 1.1 s on an idle machine and several times that under CPU
 // steal or parallel lanes), while render and axe stay under a second. A filtered run puts that
 // first compile on whichever block comes first, which timed out at the 15 s default
-// (account/activity-history, M2.10 row 38), so every case gets CASE_TIMEOUT instead.
+// (account/account-activity-history, M2.10 row 38), so every case gets CASE_TIMEOUT instead.
 import './reflow.css'
 
 import { render } from '@testing-library/vue'

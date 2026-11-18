@@ -19,26 +19,26 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 - Use create-hub as the first screen of every new project, where the user picks Git, a template or an upload.
 - The entry point of every new project, before the user has decided where the code comes from.
 - The user may import an existing repository, start from a framework or starter template, or upload local files.
-- The choice leads to a focused flow outside the console shell, such as `create/deploy-template`.
+- The choice leads to a focused flow outside the console shell, such as `create/create-deploy-template`.
 
 ## When not to use
 
 - Creating a first-level resource that has no source code: use `create/create-page`.
-- Configuring and deploying once the source is known: use `create/deploy-template`.
+- Configuring and deploying once the source is known: use `create/create-deploy-template`.
 - A first-level resource created in ordered steps: use `create/create-wizard`.
 - Adding something inside an existing resource: use `create/create-drawer`.
-- The drop target and upload progress after a folder is dropped: those are `state/project-intake`.
-- Teaching a module to a new account: use `state/first-use`.
+- The drop target and upload progress after a folder is dropped: those are `state/state-project-intake`.
+- Teaching a module to a new account: use `state/state-first-use`.
 
 ## Building blocks
 
 ### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-The creation header from `top-bar/creation-bar`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
+The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
 
 ### B. Page heading — `PageHeader` (required)
 
-`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker (a hidden file input, and one with `webkitdirectory` for a folder). Picking hands the files to the Upload a project flow (`create/deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
+`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker (a hidden file input, and one with `webkitdirectory` for a folder). Picking hands the files to the Upload a project flow (`create/create-deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/state-project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
 
 ### C. Git connect — `EmptyState`, `Button`, `Alert`, `Link` (required until connected)
 
@@ -54,7 +54,7 @@ A flush `Card` with an `Item` list, one small row per repository: glyph, name, i
 
 ### F. Template gallery — `Input`, `ScrollArea`, `Card`, `IntegrationCard`, `EmptyState` (required)
 
-Beside the Start from template heading, a medium search `Input` that filters the templates by name and description, then a faded `ScrollArea` with an `aria-label`. A search with no match shows a small `EmptyState` with Clear search. For the full gallery with property filters, preview and loading or failed states, link to `view/template-browser`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. The starter and framework tiles are `IntegrationCard` with `href`: the title is a link stretched over the tile, with the glyph, the vendor and one sentence. A Recommended card keeps its own glow markup, and its title is a link stretched over the card in the same way; no tile carries `role="button"`. A Recommended card shows its framework mark in grey until it is hovered or focused, then in colour, and lights a soft glow from its top start corner drawn from the mark: an `aria-hidden` span under the content (the `Card` carries `isolate`) holds a scaled, blurred, faded copy of the mark, so a colour mark glows in its own colours and a one-colour mark in `text-(--primary)`.
+Beside the Start from template heading, a medium search `Input` that filters the templates by name and description, then a faded `ScrollArea` with an `aria-label`. A search with no match shows a small `EmptyState` with Clear search. For the full gallery with property filters, preview and loading or failed states, link to `view/view-template-browser`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. The starter and framework tiles are `IntegrationCard` with `href`: the title is a link stretched over the tile, with the glyph, the vendor and one sentence. A Recommended card keeps its own glow markup, and its title is a link stretched over the card in the same way; no tile carries `role="button"`. A Recommended card shows its framework mark in grey until it is hovered or focused, then in colour, and lights a soft glow from its top start corner drawn from the mark: an `aria-hidden` span under the content (the `Card` carries `isolate`) holds a scaled, blurred, faded copy of the mark, so a colour mark glows in its own colours and a one-colour mark in `text-(--primary)`.
 
 ## Data
 
@@ -158,10 +158,10 @@ Then delete the sample imports. Pass `templates` from the template catalog, or k
 
 ## Related
 
-- `create/deploy-template` — where a template card or Import leads.
-- `state/project-intake` — the drop target and upload overlay for a dropped folder.
-- `top-bar/creation-bar` — the header this page uses.
-- `dashboard/home-dashboard` — Home, where the back control returns.
+- `create/create-deploy-template` — where a template card or Import leads.
+- `state/state-project-intake` — the drop target and upload overlay for a dropped folder.
+- `top-bar/top-bar-creation` — the header this page uses.
+- `dashboard/dashboard-home` — Home, where the back control returns.
 
 ## Variants
 

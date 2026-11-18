@@ -1,0 +1,48 @@
+{
+  "id": "account/account-activity-history",
+  "name": "AccountActivityHistory",
+  "title": "Blocks/Account/AccountActivityHistory",
+  "surface": "app",
+  "summary": "The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `DataTable` of events, newest first: Event, Category as a `Tag`, User, IP address with a `CopyButton`, and Date as `TableCellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "activity history",
+    "audit log",
+    "audit trail",
+    "account activity",
+    "security log",
+    "who did what",
+    "user activity",
+    "event history",
+    "histórico de atividades",
+    "log de auditoria",
+    "trilha de auditoria",
+    "atividade da conta"
+  ],
+  "skills": ["webkit-lists", "webkit-tables", "webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "account-activity-history.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Empty",
+      "summary": "No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers the next longer period, Show the last hour.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the controls and the table's loading rows.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The log did not load: a danger Alert with Retry replaces the table; Retry loads the events.",
+      "file": "variants/error.vue"
+    }
+  ]
+}

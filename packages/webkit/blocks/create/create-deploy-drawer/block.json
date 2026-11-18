@@ -1,0 +1,70 @@
+{
+  "id": "create/create-deploy-drawer",
+  "name": "CreateDeployDrawer",
+  "title": "Blocks/Create/CreateDeployDrawer",
+  "surface": "app",
+  "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant=\"card\"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "deploy drawer",
+    "deploy panel",
+    "deploy service",
+    "choose versions to deploy",
+    "dependencies before deploy",
+    "release drawer",
+    "gaveta de deploy",
+    "implantar serviço",
+    "escolher versão"
+  ],
+  "skills": ["webkit-create-surface", "webkit-navigation", "webkit-form", "webkit-ui-states"],
+  "primary": {
+    "name": "Service",
+    "file": "create-deploy-drawer.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Building",
+      "summary": "Deploy without a pinned version: the drawer opens as Build and deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects impacted sections stay faded and inert, with Deploy disabled, until the build lands.",
+      "file": "variants/building.vue"
+    },
+    {
+      "name": "ServiceProjectFirst",
+      "summary": "The project-first flow: the same Resources card, a Project card with the last used project, its domain and a Change popover of the projects serving the service, then every environment as a radio block.",
+      "file": "variants/service-project-first.vue"
+    },
+    {
+      "name": "Project",
+      "summary": "Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09.",
+      "file": "variants/project.vue"
+    },
+    {
+      "name": "Environment",
+      "summary": "The environment decision at its edges: Staging is locked by Strict Deployment Settings (a disabled choice card with a Strict tag and the reason), Preview is tagged Also deploys because Production's shared settings reach it, an info Alert says the deploy replaces legacy-web on the chosen project and a warning Alert says it goes live in two environments at once. Projects impacted are grouped per environment with a heading and a count, and switching environment reloads them with Skeleton rows, aria-busy and a status line. Deploy closes the drawer and reports through one toast that turns from Deploying… into the outcome with Edit and Redeploy.",
+      "file": "variants/environment.vue"
+    },
+    {
+      "name": "Dependencies",
+      "summary": "The Dependencies disclosure open: each module and integration with its own version and Change version menu, auth-gateway tagged Shared with a Tooltip naming the services that also reference it and one info Alert saying a shared dependency deploys at one version, payments-api not versioned (a note instead of the menu), and geo-redirect with no ready version, which disables Deploy with the reason in the footer. Changing the service version reloads the dependencies with Skeleton rows, aria-busy and a status line; a second resource that references nothing says so. The first run fails and its toast carries Edit and Redeploy; Redeploy succeeds.",
+      "file": "variants/dependencies.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The drawer resolving what it deploys: Skeleton blocks stand in for the Resources card and the two environment choice cards under their real section titles, the region is aria-busy with one status line, and Deploy stays disabled until they land.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "LoadError",
+      "summary": "The deploy targets could not be loaded: a danger Alert says so in place of the sections, with an outlined Retry that reloads them as Skeletons; Deploy stays disabled.",
+      "file": "variants/load-error.vue"
+    },
+    {
+      "name": "NoEnvironment",
+      "summary": "A project with nothing bound and no environment: the Resources card says nothing is bound yet, the Environment section is a bordered EmptyState with Add environment, and Deploy is disabled with the reason beside it in the footer.",
+      "file": "variants/no-environment.vue"
+    }
+  ]
+}

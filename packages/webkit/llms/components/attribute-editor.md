@@ -31,7 +31,7 @@
 - A fixed set of named settings on one resource → use `field` controls in a form.
 - Many records the user browses, filters and acts on → use `data-table` with row actions.
 - Many cells of many records edited in place, spreadsheet-style → use `data-grid`.
-- An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `edit/rule-builder` block.
+- An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `edit/edit-rule-builder` block.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -41,7 +41,7 @@
 - [input](input.md) — the default control of a cell; any control can replace it through `cell-<key>`.
 - [button](button.md), `icon-button` — Add and Remove.
 - [separator](separator.md) — the "or" between groups in grouped mode.
-- `edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
+- `edit/edit-rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
 
 ## Props
 

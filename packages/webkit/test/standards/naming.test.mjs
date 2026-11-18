@@ -59,9 +59,9 @@ test('a locale entry keeps its BCP 47 tag only under locales/', () => {
 })
 
 test('a block id must match its folder', () => {
-  const errors = run({ blocks: [{ folder: 'auth/sign-in', id: 'platform/login' }] })
+  const errors = run({ blocks: [{ folder: 'auth/auth-sign-in', id: 'platform/login' }] })
   assert.deepEqual(errors, [
-    'blocks/auth/sign-in/block.json: id "platform/login" does not match its folder'
+    'blocks/auth/auth-sign-in/block.json: id "platform/login" does not match its folder'
   ])
 })
 

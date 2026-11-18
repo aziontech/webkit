@@ -159,5 +159,5 @@ Then delete `sample.ts` and its import.
 - `artifact-canvas` — the side panel of the Artifact variant; `artifact-preview` — its card in the message.
 - `ai/ai-chat-drawer` — the same conversation in a drawer over a resource page.
 - `ai/ai-action-approval` — when a response proposes a change the reader must authorize.
-- `state/async-submit` — long-running work outside a conversation.
+- `state/state-async-submit` — long-running work outside a conversation.
 - `skills/webkit-ai-surfaces` — the rules this block follows: loading stages, streaming, citations, feedback, authorization.

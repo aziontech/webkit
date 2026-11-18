@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: 975a6d308a732a9438be78ea755ce1974e0ef94d76de9b5e511b17acafe6b360
+checksum: 06a05e5e0c202eb3435e8cd4fd4da8582a71e36dc5165942e7ec99463de32e27
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ item, on top of the existing `ChartCard` handles.
 
 ## When NOT to use
 
-- A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `dashboard/analytics-dashboard` block).
+- A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `dashboard/dashboard-analytics` block).
 - Two or three panes whose boundary the reader drags → use `resizable`.
 - Reordering the rows of a list or a table → use the table's reorderable rows or `transfer-list`.
 - A grid of resources the reader selects, not arranges → use `card-list`.

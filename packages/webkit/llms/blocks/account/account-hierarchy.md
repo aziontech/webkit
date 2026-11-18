@@ -21,10 +21,10 @@ Where an account admin arranges the account's hierarchy. Workspaces sit under gr
 
 ## When not to use
 
-- A flat list of one resource type: use `view/table-view`.
-- Switching the current account: use the account switcher in `shell/console`.
-- Editing who belongs to a team: use `account/team-permissions`.
-- A read-only file or folder browser: use `view/file-browser`.
+- A flat list of one resource type: use `view/view-table`.
+- Switching the current account: use the account switcher in `shell/shell-console`.
+- Editing who belongs to a team: use `account/account-team-permissions`.
+- A read-only file or folder browser: use `view/view-file-browser`.
 
 ## Building blocks
 
@@ -66,7 +66,7 @@ No resource: a flush `EmptyState` with Create Workspace replaces the table. Load
 
 ### Outcomes — through `toast`
 
-Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -162,10 +162,10 @@ Then delete `sample.ts` and its import.
 
 ## Related
 
-- `account/team-permissions` — what a role binding grants.
-- `account/users` — who the members of a binding are.
-- `view/table-view` — the flat list page this one extends with tree rows.
-- `view/file-browser` — moving objects between folders with the same Move dialog pattern.
+- `account/account-team-permissions` — what a role binding grants.
+- `account/account-users` — who the members of a binding are.
+- `view/view-table` — the flat list page this one extends with tree rows.
+- `view/view-file-browser` — moving objects between folders with the same Move dialog pattern.
 
 ## Variants
 

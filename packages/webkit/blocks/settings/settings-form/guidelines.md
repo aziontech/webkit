@@ -13,10 +13,10 @@ The place the user goes to change how an account or a project behaves. They scan
 ## When not to use
 
 - The settings tab or settings page of one resource, with anchored sections and an unsaved-changes bar: use `edit/edit-resource`.
-- Changing the plan: use `account/change-plan-drawer`.
+- Changing the plan: use `account/account-change-plan-drawer`.
 - Creating a resource: use `create/create-page` or `create/create-drawer`.
-- Walking every submit outcome (invalid fields, server rejection): use `state/form-validation`.
-- Deleting the account or a resource from a settings page: open `edit/delete-dialog` (its SettingsRow variant) from an outlined row.
+- Walking every submit outcome (invalid fields, server rejection): use `state/state-form-validation`.
+- Deleting the account or a resource from a settings page: open `edit/edit-delete-dialog` (its SettingsRow variant) from an outlined row.
 
 ## Building blocks
 
@@ -40,7 +40,7 @@ SaveAll ends with one full-bleed sticky `SaveBar variant="plain"` holding an out
 
 The Profile variant adds `SettingsSection`, `Textarea`, `Tag`, `ConfirmDialog`, `Skeleton` and `Alert` to these parts.
 
-The Profile variant stacks one `SettingsSection` per group (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each with a `hint` and an `anchor` over a flush `Card` whose `Item.List` holds the rows. Client ID is a `readonly` `Input`; Billing emails is a three-row `Textarea` that starts empty (an editable contact field never carries sample data) and is required; address rows use `postal-code`, `address-line1` and `address-line2` autocomplete. Requiring MFA is not a switch here: `account/mfa-settings` owns it, and the Multi-factor authentication row links there with `Manage MFA`. Source-control providers are `Item`s with `Item.Media`, a success `Tag` (`Active`) when connected, and `Manage` or `Connect` opening the provider in a new tab. The unsaved-changes `SaveBar` rises with a motion-reduced transition once the form differs from the saved copy. The danger Delete account opens a `variant="danger"` `ConfirmDialog` with a warning `Alert` and `Type <account name> to confirm.` over an `Input`; its confirm stays disabled until the typed name matches. ProfileLoading puts three `Card`s of `Skeleton` rows in place of the sections (`aria-busy`); ProfileError puts a danger `Alert` with Retry there; the heading stays in both.
+The Profile variant stacks one `SettingsSection` per group (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each with a `hint` and an `anchor` over a flush `Card` whose `Item.List` holds the rows. Client ID is a `readonly` `Input`; Billing emails is a three-row `Textarea` that starts empty (an editable contact field never carries sample data) and is required; address rows use `postal-code`, `address-line1` and `address-line2` autocomplete. Requiring MFA is not a switch here: `account/account-mfa-settings` owns it, and the Multi-factor authentication row links there with `Manage MFA`. Source-control providers are `Item`s with `Item.Media`, a success `Tag` (`Active`) when connected, and `Manage` or `Connect` opening the provider in a new tab. The unsaved-changes `SaveBar` rises with a motion-reduced transition once the form differs from the saved copy. The danger Delete account opens a `variant="danger"` `ConfirmDialog` with a warning `Alert` and `Type <account name> to confirm.` over an `Input`; its confirm stays disabled until the typed name matches. ProfileLoading puts three `Card`s of `Skeleton` rows in place of the sections (`aria-busy`); ProfileError puts a danger `Alert` with Retry there; the heading stays in both.
 
 ## Data
 
@@ -152,8 +152,8 @@ Then delete `sample.ts` and its import.
 ## Related
 
 - `edit/edit-resource` — settings of one resource, with anchored sections.
-- `account/mfa-settings` — where Profile's Manage MFA row leads.
-- `state/form-validation` — every outcome of a submit.
-- `state/async-submit` — a save that runs long and reports back later.
-- `edit/delete-dialog` — the delete row a settings page can end with.
+- `account/account-mfa-settings` — where Profile's Manage MFA row leads.
+- `state/state-form-validation` — every outcome of a submit.
+- `state/state-async-submit` — a save that runs long and reports back later.
+- `edit/edit-delete-dialog` — the delete row a settings page can end with.
 - `SettingsRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.

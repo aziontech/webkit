@@ -156,7 +156,7 @@ common version of this page done wrong.
 **The card is unpadded and the table is unbordered** (`:padded="false"` + `:bordered="false"`), so the card
 frames the table edge to edge.
 
-The canonical blocks are `view/table-view` (rows) and `view/card-view` (cards): copy
+The canonical blocks are `view/view-table` (rows) and `view/view-card` (cards): copy
 one of them before writing a list from scratch.
 
 ---
@@ -350,7 +350,7 @@ Close with `List sound` or `N gaps — fix before polish`.
 - `/webkit-navigation` — the shell the page sits in and how its nav row is activated.
 - `/webkit-ui-states` — the loading skeleton, the error alert, and the empty vs no-match states.
 - `/webkit-microcopy` — property labels, the empty-state sentences, the filter placeholder.
-- Blocks: `view/table-view` (rows) and `view/card-view` (cards).
+- Blocks: `view/view-table` (rows) and `view/view-card` (cards).
 - Resolvable through the MCP or the catalog: `useCollection`, `PropertyFilter`, `CollectionPreferences`,
   `Table`, `CardList`, `Pagination`, `Card`, `EmptyState`, `Button`.
 

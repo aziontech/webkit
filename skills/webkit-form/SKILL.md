@@ -213,13 +213,13 @@ card**, each locking off its own `submitting` flag (the `/webkit-ui-states` cont
 
 Each form type has its pattern in the `webkit` MCP (`get_block`): the Drawer form and the Nested
 drawer are `create/create-drawer` (variant `NestedDrawer` for the stacked child); the
-Dialog form is `edit/delete-dialog` (variant `SettingsRow` for the labelled
+Dialog form is `edit/edit-delete-dialog` (variant `SettingsRow` for the labelled
 typed confirmation); ItemGroup settings and Card with independent saves are
 `settings/settings-form`, whose primary `SaveAll` is the default one-save model and whose
 `SavePerGroup` and `SavePerCard` variants are the split ones. A resource's own settings tab is
-`edit/edit-resource`; every submit state is `state/form-validation`; a server
+`edit/edit-resource`; every submit state is `state/state-form-validation`; a server
 rejection that one section owns is its SectionRejected variant; a save that starts a long run (build,
-deploy) is `state/async-submit`.
+deploy) is `state/state-async-submit`.
 
 ### Example — Card with its own save
 
@@ -978,7 +978,7 @@ Rules:
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
 
-### Form errors — the server rejects one section (`state/form-validation`, SectionRejected)
+### Form errors — the server rejects one section (`state/state-form-validation`, SectionRejected)
 
 The design sample's `/forms/error-validation` screen is the standard. When the server rejects the save
 because of one section (a linked resource another user deleted, a value only that section owns), the

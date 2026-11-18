@@ -51,14 +51,14 @@ for (const block of blocks()) {
 }
 
 for (const mode of DOCS_MODES) {
-  test(`block shell/docs landing agent card ${label(mode)}`, async ({ page }) => {
+  test(`block shell/shell-docs landing agent card ${label(mode)}`, async ({ page }) => {
     await prepare(page, mode)
-    await page.goto(`${DOCS}/frame/block/shell/docs/landing${query(mode)}`)
+    await page.goto(`${DOCS}/frame/block/shell/shell-docs/landing${query(mode)}`)
     await settle(page)
     await page.getByTestId('doc-agent-card').scrollIntoViewIfNeeded()
     await settle(page)
     await expect(page).toHaveScreenshot(
-      shot(`blocks/shell/docs/landing-agent-card--${label(mode)}.png`)
+      shot(`blocks/shell/shell-docs/landing-agent-card--${label(mode)}.png`)
     )
   })
 }

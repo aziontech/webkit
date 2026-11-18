@@ -1,0 +1,34 @@
+{
+ "variants": [
+  {
+   "name": "Arguments",
+   "summary": "The Arguments document of image-optimizer: its form schema in the left pane and its two fields on the right, defaultFormat expanded into its settings and Choices and quality collapsed. The handle resizes the editor and collapses it past its minimum.",
+   "file": "blocks/edit/edit-function/variants/arguments.vue"
+  },
+  {
+   "name": "NoArguments",
+   "summary": "The Arguments document of auth-handler, a service with no form: the empty schema on the left and the This form has no fields empty state on the right.",
+   "file": "blocks/edit/edit-function/variants/no-arguments.vue"
+  },
+  {
+   "name": "Settings",
+   "summary": "The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar.",
+   "file": "blocks/edit/edit-function/variants/settings.vue"
+  },
+  {
+   "name": "TestRun",
+   "summary": "The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogViewer`. Run test again shows the running state until the run finishes.",
+   "file": "blocks/edit/edit-function/variants/test-run.vue"
+  },
+  {
+   "name": "Saving",
+   "summary": "The Code document of image-optimizer while a change is being saved: the save bar stays up, Save shows its loading state, Discard and the fields are disabled and the editors are read-only until the request ends.",
+   "file": "blocks/edit/edit-function/variants/saving.vue"
+  }
+ ],
+ "sfcFile": "blocks/edit/edit-function/edit-function.vue",
+ "guidelinesFile": "blocks/edit/edit-function/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/edit/edit-function/sample.ts"
+ }
+}

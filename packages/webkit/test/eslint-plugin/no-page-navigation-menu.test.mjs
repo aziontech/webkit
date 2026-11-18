@@ -87,7 +87,7 @@ test('no-page-navigation-menu', () => {
       },
       {
         code: sfc(`${MENU}\n${PAGE_TABS}`, '<div><PageTabs /><SidebarMenu /></div>'),
-        filename: 'packages/webkit/blocks/detail/resource-detail/resource-detail.vue',
+        filename: 'packages/webkit/blocks/detail/detail-resource/detail-resource.vue',
         errors: [{ messageId: 'pageMenu' }]
       },
       {

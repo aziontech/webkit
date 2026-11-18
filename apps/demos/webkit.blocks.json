@@ -1,18 +1,18 @@
 {
   "package": "@aziontech/webkit",
   "blocks": {
-    "account/onboarding-form": {
+    "account/account-onboarding-form": {
       "version": "5.12.3",
       "files": [
         {
           "path": "src/blocks/onboarding-form.sample.ts",
-          "source": "blocks/account/onboarding-form/sample.ts",
+          "source": "blocks/account/account-onboarding-form/sample.ts",
           "variant": "Data",
           "checksum": "sha256:eb48717f6f8ec0e8c8618833a35d5ca275fab738b5ad41ce0a4adb437f1256e9"
         },
         {
           "path": "src/blocks/onboarding-form.vue",
-          "source": "blocks/account/onboarding-form/onboarding-form.vue",
+          "source": "blocks/account/account-onboarding-form/account-onboarding-form.vue",
           "variant": "Organization",
           "imports": {
             "./sample": "./onboarding-form.sample"
@@ -52,18 +52,18 @@
         }
       ]
     },
-    "detail/resource-detail": {
+    "detail/detail-resource": {
       "version": "5.12.3",
       "files": [
         {
           "path": "src/blocks/resource-detail.sample.ts",
-          "source": "blocks/detail/resource-detail/sample.ts",
+          "source": "blocks/detail/detail-resource/sample.ts",
           "variant": "Data",
           "checksum": "sha256:4f9cf43bce0d149c169e5a6139b42f7348b90f299ab30ea1181c4c7e6b4aae5f"
         },
         {
           "path": "src/blocks/resource-detail.vue",
-          "source": "blocks/detail/resource-detail/resource-detail.vue",
+          "source": "blocks/detail/detail-resource/detail-resource.vue",
           "variant": "ResourceOverview",
           "imports": {
             "./sample": "./resource-detail.sample"
@@ -72,18 +72,18 @@
         }
       ]
     },
-    "edit/delete-dialog": {
+    "edit/edit-delete-dialog": {
       "version": "5.12.3",
       "files": [
         {
           "path": "src/blocks/delete-dialog.sample.ts",
-          "source": "blocks/edit/delete-dialog/sample.ts",
+          "source": "blocks/edit/edit-delete-dialog/sample.ts",
           "variant": "Data",
           "checksum": "sha256:95c9d17fd788ce6a3c6db8eb8f121ecab240bee031191f599eeac1cf1315d55a"
         },
         {
           "path": "src/blocks/delete-dialog.vue",
-          "source": "blocks/edit/delete-dialog/delete-dialog.vue",
+          "source": "blocks/edit/edit-delete-dialog/edit-delete-dialog.vue",
           "variant": "Default",
           "imports": {
             "./sample": "./delete-dialog.sample"
@@ -132,46 +132,46 @@
         }
       ]
     },
-    "shell/console": {
+    "shell/shell-console": {
       "version": "5.12.3",
       "files": [
         {
           "path": "src/app.vue",
-          "source": "blocks/shell/console/console.vue",
+          "source": "blocks/shell/shell-console/shell-console.vue",
           "variant": "ListPage",
           "checksum": "sha256:e15e69eecad367b652801d1d9754d4199b29b09f2647fc4e2be964faa3c3d8fb"
         }
       ]
     },
-    "state/async-submit": {
+    "state/state-async-submit": {
       "version": "5.12.3",
       "files": [
         {
           "path": "src/blocks/async-submit.sample.ts",
-          "source": "blocks/state/async-submit/sample.ts",
+          "source": "blocks/state/state-async-submit/sample.ts",
           "variant": "Data",
           "checksum": "sha256:ebfc11bc642519dc855a4adb1c8f4172e9ed70583fb7841c6025a3253ae322b7"
         },
         {
           "path": "src/blocks/async-submit.vue",
-          "source": "blocks/state/async-submit/async-submit.vue",
+          "source": "blocks/state/state-async-submit/state-async-submit.vue",
           "variant": "Idle",
           "checksum": "sha256:04d6fe9610f6cc451b0dc5792e24f043d89aaf9c3fc15ead9aac8697384a1d0e"
         }
       ]
     },
-    "view/table-view": {
+    "view/view-table": {
       "version": "5.12.3",
       "files": [
         {
           "path": "src/blocks/table-view.sample.ts",
-          "source": "blocks/view/table-view/sample.ts",
+          "source": "blocks/view/view-table/sample.ts",
           "variant": "Data",
           "checksum": "sha256:99988b184bdf06b0db8c96e132316a6e7cedb144d4a6b8ff15a0d2b96bed1909"
         },
         {
           "path": "src/blocks/table-view.vue",
-          "source": "blocks/view/table-view/table-view.vue",
+          "source": "blocks/view/view-table/view-table.vue",
           "variant": "Default",
           "imports": {
             "./sample": "./table-view.sample"

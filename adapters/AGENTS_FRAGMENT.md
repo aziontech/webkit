@@ -25,16 +25,16 @@ The chrome of an app is one layout component, composed once in the app's root (`
 | Marketing site              | `SiteLayout` (`@aziontech/webkit/site-layout`)       | `SiteHeaderSection` + `SiteFooterSection` from data, the ⌘K palette, the dark canvas painted to the end                                                                                                                                                                                                                                                  |
 | Documentation               | `DocLayout` (`@aziontech/webkit/doc-layout`)         | sticky header, docs rail (drawer on phones), the "On this page" rail tracking the reading position; the document scrolls                                                                                                                                                                                                                                 |
 
-Start the layout from its shell block (`npx @aziontech/webkit add shell/console`,
-`shell/site`, `shell/docs`): the block is the `App.vue`, with the real navigation data. `add`
+Start the layout from its shell block (`npx @aziontech/webkit add shell/shell-console`,
+`shell/shell-site`, `shell/shell-docs`): the block is the `App.vue`, with the real navigation data. `add`
 writes it into your views folder and prints the path; move that file to `src/App.vue` (no route)
 and replace its stand-in body with `<RouterView />`. Every other block is then **only the page body**
 that renders inside the layout's default slot: it renders no `<main>`, `AppLayout`, `Sidebar`,
 `AppHeader`, `SiteHeaderSection`, `SiteFooterSection`, `Command` or navigation data of its own. If a block you
 copied still carries an inline shell (some platform blocks wrap their body in a `AppHeader` and a
 rail), keep only what is inside its `<main>` and drop the rest. The one exception is a screen with
-no rail — a create flow (`create/*`, headed by `top-bar/creation-bar`) or
-a signed-out screen (`auth/sign-in`): route it outside the layout; it keeps its own bar and `<main>`.
+no rail — a create flow (`create/*`, headed by `top-bar/top-bar-creation`) or
+a signed-out screen (`auth/auth-sign-in`): route it outside the layout; it keeps its own bar and `<main>`.
 
 ### Start every screen from a block
 
@@ -48,7 +48,7 @@ routed page that owns the request instead of rewriting it, and delete its `.samp
 data flows. Change only the content (copy, handlers); keep the components, their order, the props and the
 classes. Block ids are grouped by job (`create/…`, `view/…`,
 `detail/…`, `edit/…`, `edit/…`, `settings/…`,
-`state/…`, `dashboard/…`, `account/…`, `auth/sign-in`); each is one job
+`state/…`, `dashboard/…`, `account/…`, `auth/auth-sign-in`); each is one job
 whose states are its variants (`add --variant <state>`, or `variant` on `get_block`). Use `suggest_component` / `get_component` only for pieces the pattern does
 not cover. A marketing band is a page section: `suggest_component` returns it (rule `webkit-sections`).
 Every export and block carries a `surface`: `app` (console and apps), `site` (the azion.com site) or
@@ -131,7 +131,7 @@ runs axe + screenshots), and taste is a review concern.
   `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette (`⌘K` / `Ctrl K`);
   never a hand-rolled field or a bare magnifier button. Lint: `webkit/require-header-search`
   (rule `webkit-header-search`).
-- **Docs home.** Start from `shell/docs` variant `Landing`: `DocHero` with `Get started`
+- **Docs home.** Start from `shell/shell-docs` variant `Landing`: `DocHero` with `Get started`
   and `CopyPromptButton` (the "Copy prompt" chip with the AI-agent marks), then `DocAgentCard`
   above the Console / CLI / API cards — never `DocPageHeader` + `DocPrompt` on the home.
 - **Page layout.** One container class per band (`.layout-column`, `-form`, `-focused`,

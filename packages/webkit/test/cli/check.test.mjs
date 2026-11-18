@@ -219,28 +219,28 @@ test('check passes a wired project and enforces --max-warnings', () => {
 test('check warns when a copied block drifted from the canonical one', () => {
   const dir = initialised({ 'src/main.ts': "import './webkit.css'\n" })
   try {
-    assert.equal(cli(dir, 'add', 'top-bar/auth-bar').code, 0)
+    assert.equal(cli(dir, 'add', 'top-bar/top-bar-auth').code, 0)
     const manifestPath = join(dir, 'webkit.blocks.json')
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
-    manifest.blocks['top-bar/auth-bar'].files[0].checksum = 'sha256:old'
-    manifest.blocks['top-bar/auth-bar'].files.push({
+    manifest.blocks['top-bar/top-bar-auth'].files[0].checksum = 'sha256:old'
+    manifest.blocks['top-bar/top-bar-auth'].files.push({
       path: 'src/views/Gone.vue',
-      source: 'blocks/top-bar/auth-bar/auth-bar.vue',
+      source: 'blocks/top-bar/top-bar-auth/top-bar-auth.vue',
       variant: 'Default',
       checksum: 'sha256:x'
     })
     writeFileSync(manifestPath, JSON.stringify(manifest))
     const r = cliJson(dir, 'check', '--no-lint')
     const drift = by(r.json, 'blocks')
-    const changed = drift.find((f) => f.file === 'src/views/auth-bar.vue')
+    const changed = drift.find((f) => f.file === 'src/views/top-bar-auth.vue')
     assert.match(changed.message, /differs from the copy recorded at the same version/)
     assert.doesNotMatch(changed.message, /copied from (\S+) to \1/)
-    manifest.blocks['top-bar/auth-bar'].version = '0.0.1'
+    manifest.blocks['top-bar/top-bar-auth'].version = '0.0.1'
     writeFileSync(manifestPath, JSON.stringify(manifest))
     const older = by(cliJson(dir, 'check', '--no-lint').json, 'blocks')
     assert.ok(
       older.some(
-        (f) => f.file === 'src/views/auth-bar.vue' && /copied from 0\.0\.1 to /.test(f.message)
+        (f) => f.file === 'src/views/top-bar-auth.vue' && /copied from 0\.0\.1 to /.test(f.message)
       )
     )
     assert.ok(drift.some((f) => f.file === 'src/views/Gone.vue' && /file is gone/.test(f.message)))

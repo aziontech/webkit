@@ -25,7 +25,7 @@
   "`card` — the content box this tile was split from; shares its surface tokens.",
   "`tag` — renders the badges and the Installed state.",
   "`card-list` — the resource list in card form, with selection.",
-  "`view/marketplace` — the block that lays these tiles out in a filtered grid."
+  "`view/view-marketplace` — the block that lays these tiles out in a filtered grid."
  ],
  "bestPractices": [
   "The tile is laid out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole tile so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.",

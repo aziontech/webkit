@@ -62,10 +62,10 @@ test('resolveTarget finds a component export and a block by id, suffix or name',
     id: 'button',
     expected: ['button']
   })
-  const block = resolveTarget('auth/sign-in')
+  const block = resolveTarget('auth/auth-sign-in')
   assert.equal(block.kind, 'block')
   assert.ok(block.expected.includes('button'))
-  assert.equal(resolveTarget('sign-in').id, 'auth/sign-in')
+  assert.equal(resolveTarget('auth-sign-in').id, 'auth/auth-sign-in')
   assert.throws(() => resolveTarget('no-such-thing-anywhere'), /neither a package export/)
 })
 
