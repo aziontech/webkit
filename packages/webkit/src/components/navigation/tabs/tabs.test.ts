@@ -1,6 +1,8 @@
+import '../../../test/reflow.css'
+
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { userEvent as keyboardUser } from 'vitest/browser'
+import { commands, userEvent as keyboardUser } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Centered from '../../../../examples/tabs/centered.vue'
@@ -661,6 +663,136 @@ describe('Tabs', () => {
     it('renders an empty label by default instead of placeholder text', () => {
       const { getByTestId } = render(TabsTrigger)
       expect(getByTestId('tabs-trigger__label').textContent?.trim()).toBe('')
+    })
+  })
+
+  describe('active indicator motion', () => {
+    const indicatorOf = (container: Element) =>
+      container.querySelector('[data-testid="tabs-list__indicator"]') as HTMLElement
+
+    it('slides between tabs with the catalog motion and sets no inline transition', () => {
+      const { container } = render(Default)
+      const indicator = indicatorOf(container)
+      expect(indicator.style.transition).toBe('')
+      expect(getComputedStyle(indicator).transitionProperty).toContain('transform')
+    })
+
+    it('does not slide when the user asks for reduced motion', async () => {
+      await commands.emulateMedia({ reducedMotion: 'reduce' })
+      try {
+        const { container } = render(Default)
+        const style = getComputedStyle(indicatorOf(container))
+        expect(['none', 'all']).toContain(style.transitionProperty)
+        expect(parseFloat(style.transitionDuration)).toBeLessThan(0.001)
+      } finally {
+        await commands.emulateMedia({ reducedMotion: null })
+      }
+    })
+  })
+
+  describe('active indicator geometry', () => {
+    const settle = async () => {
+      await nextTick()
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      for (const animation of document.getAnimations()) animation.finish()
+    }
+
+    const expectIndicatorOnTab = (container: Element, tabName: string) => {
+      const indicator = container.querySelector('[data-testid="tabs-list__indicator"]')
+      const tab = [...container.querySelectorAll('[role="tab"]')].find(
+        (el) => el.textContent?.trim() === tabName
+      )
+      expect(indicator).not.toBeNull()
+      expect(tab?.getAttribute('aria-selected')).toBe('true')
+      const box = indicator!.getBoundingClientRect()
+      const target = tab!.getBoundingClientRect()
+      expect(Math.abs(box.left - target.left)).toBeLessThan(1)
+      expect(Math.abs(box.top - target.top)).toBeLessThan(1)
+      expect(Math.abs(box.width - target.width)).toBeLessThan(1)
+      expect(Math.abs(box.height - target.height)).toBeLessThan(1)
+    }
+
+    const Row = defineComponent({
+      components: { Tabs, TabsList, TabsTrigger },
+      props: {
+        value: { type: String, default: 'trace' },
+        pathLabel: { type: String, default: 'Request path' }
+      },
+      template: `
+        <Tabs :model-value="value">
+          <TabsList>
+            <TabsTrigger value="trace" label="Trace" />
+            <TabsTrigger value="logs" label="Logs" />
+            <TabsTrigger value="path" :label="pathLabel" />
+          </TabsList>
+        </Tabs>
+      `
+    })
+
+    it.each([0.5, 1.6])('sits on the active tab inside a container scaled by %s', async (scale) => {
+      const value = ref('trace')
+      const { container } = render(
+        defineComponent({
+          components: { Row },
+          setup: () => ({ value, scale }),
+          template: `
+              <div :style="{ width: '760px', transform: 'scale(' + scale + ')', transformOrigin: '0 0' }">
+                <Row :value="value" />
+              </div>
+            `
+        })
+      )
+      for (const [key, name] of [
+        ['trace', 'Trace'],
+        ['logs', 'Logs'],
+        ['path', 'Request path']
+      ]) {
+        value.value = key
+        await settle()
+        expectIndicatorOnTab(container, name)
+      }
+    })
+
+    it('re-measures when the active tab changes size', async () => {
+      const label = ref('Path')
+      const { container } = render(
+        defineComponent({
+          components: { Row },
+          setup: () => ({ label }),
+          template: `<div style="width: 760px"><Row value="path" :path-label="label" /></div>`
+        })
+      )
+      await settle()
+      expectIndicatorOnTab(container, 'Path')
+      label.value = 'Request path through every service'
+      await settle()
+      await settle()
+      expectIndicatorOnTab(container, 'Request path through every service')
+    })
+
+    it('sits on the active tab of a scrolled right-to-left list', async () => {
+      const value = ref('t0')
+      const { container } = render(
+        defineComponent({
+          components: { Tabs, TabsList, TabsTrigger },
+          setup: () => ({ value, keys: Array.from({ length: 12 }, (_, index) => index) }),
+          template: `
+            <div dir="rtl" style="width: 240px; transform: scale(0.75)">
+              <Tabs :model-value="value">
+                <TabsList>
+                  <TabsTrigger v-for="key in keys" :key="key" :value="'t' + key" :label="'Tab ' + key" />
+                </TabsList>
+              </Tabs>
+            </div>
+          `
+        })
+      )
+      value.value = 't10'
+      const list = container.querySelector<HTMLElement>('[role="tablist"]')!
+      list.scrollLeft = -list.scrollWidth
+      await settle()
+      expect(list.scrollLeft).toBeLessThan(0)
+      expectIndicatorOnTab(container, 'Tab 10')
     })
   })
 })

@@ -3,7 +3,6 @@
 
   import { cn } from '../../../utils/cn'
   import { type TabsContext, TabsInjectionKey, type TabsValue } from './injection-key'
-  import { getTabViewIndicatorTransitionStyle } from './presets/transitions'
 
   defineOptions({
     name: 'TabsList',
@@ -44,8 +43,6 @@
 
   const indicatorTarget = computed<TabsValue | null>(() => context.value.value)
 
-  const indicatorTransitionStyle = computed(() => getTabViewIndicatorTransitionStyle())
-
   const indicatorTransformStyle = computed(() => ({
     left: '0',
     width: `${indicatorWidth.value}px`,
@@ -61,8 +58,18 @@
     canScrollEnd.value = Math.ceil(scrolled + el.clientWidth) < el.scrollWidth - 1
   }
 
+  let resizeObserver: ResizeObserver | null = null
+
   const LIST_CLASS =
     'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden data-[align=center]:justify-center-safe'
+
+  const scheduleIndicatorSync = () => {
+    nextTick(() => {
+      observeSizes()
+      syncIndicator()
+      updateScrollAffordance()
+    })
+  }
 
   const syncIndicator = () => {
     const list = listEl.value
@@ -83,22 +90,25 @@
 
     const listRect = list.getBoundingClientRect()
     const tabRect = tabEl.getBoundingClientRect()
+    const layoutWidth = Number.parseFloat(getComputedStyle(list).width)
+    const scale = layoutWidth > 0 && listRect.width > 0 ? listRect.width / layoutWidth : 1
 
-    indicatorWidth.value = tabRect.width
-    indicatorHeight.value = tabRect.height
-    indicatorOffsetX.value = tabRect.left - listRect.left + list.scrollLeft
-    indicatorOffsetY.value = tabRect.top - listRect.top + list.scrollTop
+    indicatorWidth.value = tabRect.width / scale
+    indicatorHeight.value = tabRect.height / scale
+    indicatorOffsetX.value =
+      (tabRect.left - listRect.left) / scale - list.clientLeft + list.scrollLeft
+    indicatorOffsetY.value = (tabRect.top - listRect.top) / scale - list.clientTop + list.scrollTop
     indicatorVisible.value = true
   }
 
-  const scheduleIndicatorSync = () => {
-    nextTick(() => {
-      syncIndicator()
-      updateScrollAffordance()
-    })
+  const observeSizes = () => {
+    if (!resizeObserver || !listEl.value) return
+    resizeObserver.disconnect()
+    resizeObserver.observe(listEl.value)
+    for (const tab of context.tabs.value) {
+      if (tab.el.value) resizeObserver.observe(tab.el.value)
+    }
   }
-
-  let resizeObserver: ResizeObserver | null = null
 
   onMounted(() => {
     scheduleIndicatorSync()
@@ -109,7 +119,7 @@
         syncIndicator()
         updateScrollAffordance()
       })
-      resizeObserver.observe(listEl.value)
+      observeSizes()
     }
   })
 
@@ -137,8 +147,8 @@
     >
       <span
         v-show="indicatorVisible"
-        class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--secondary-mask) border-(length:--border-width-default) border-(--border-muted) shadow-(--shadow-xs) motion-reduce:transition-none"
-        :style="[indicatorTransitionStyle, indicatorTransformStyle]"
+        class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--secondary-mask) border-(length:--border-width-default) border-(--border-muted) shadow-(--shadow-xs) transition-[transform,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+        :style="indicatorTransformStyle"
         :data-testid="`${testId}__indicator`"
         aria-hidden="true"
       />
