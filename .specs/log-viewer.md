@@ -3,12 +3,12 @@ name: log-viewer
 category: code
 structure: composition
 status: implemented
-spec_version: 14
+spec_version: 15
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 49175a1dcae6b0b46ac4e0e7679eb66ced51c06f7c8cf30a577c3092018346d1
+checksum: 3f6de4bfcfcca20ba3a71d32f22381d19f83335565bf765a1d5bbc25c373e31f
 created: 2026-05-26
 last_updated: 2026-11-18
 ---
@@ -47,7 +47,7 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 
 ## Best practices
 
-- Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`); the type drives the line's rendering. A warning is a `text` line with `level: 'warn'`; `level` drives the warnings filter and the level toggles.
+- Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`); the type drives the line's rendering. A warning is a `text` line with `level: 'warn'`; `level` drives the level toggles; the `warn` toggle is the warnings shortcut.
 - For a run log, give each line a `level` and put the run offset (`120 ms`, `1.24 s`) in `time`; pass the levels the run can print as `levels` so every level is offered even when it has no line yet. Bind `v-model:level` when the app needs the chosen level.
 - Bind `v-model:search` and `v-model:level` when the app needs the filter state; otherwise leave them unbound and the header manages them.
 - Set `:bordered="false"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).
@@ -121,7 +121,7 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 
 LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `LogViewer.Content`, `LogViewer.Footer`, `LogViewer.Steps`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-viewer-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
-- `log-viewer-header.vue` (`LogViewer.Header`) — Default 48px toolbar: line count, warning filter (a native button that toggles `level` between `warn` and every level, 32 px, with a 44 px hit area on coarse pointers), the level filter (one toggle per entry of `levels`, with its line count) and a search field. Slots: `start`, `end`, `search`.
+- `log-viewer-header.vue` (`LogViewer.Header`) — Default 48px toolbar: line count, the level filter and a search field. The level filter is one toggle per entry of `levels` (a dot in the level colour, the level name, its line count); with `levels` empty it offers the `warn` toggle alone while the log has a warning line, so the warnings shortcut is the same control, never a second one. Every toggle is the same native button: 32 px tall with a 44 px hit area on coarse pointers, `.text-label-sm`, the count in tabular numbers; the line count uses the same font. The line count and the toggles sit on one row that scrolls sideways (no visible scrollbar) when it does not fit, so a phone never wraps them into a second row. Slots: `start`, `end`, `search`.
 - `log-viewer-content.vue` (`LogViewer.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `copyable` is set; while it shows, `data-copyable` keeps the body at least as tall as the button and its two insets, so a one-line log never pushes the button onto the frame's bottom rule). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
 - `log-viewer-footer.vue` (`LogViewer.Footer`) — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
 - `log-viewer-steps.vue` (`LogViewer.Steps`) — A run with known steps, standalone (it renders its own `LogViewer` per step and needs no parent `LogViewer`). An optional toolbar row (`__toolbar`, shown when the `header` slot is filled or `viewSwitch` is on) holds the `header` slot at the start and, with `viewSwitch`, a `ToggleGroup` (`__view-switch`, named `Log view`) switching **Phased** and **Complete** at the end. Phased renders an `Accordion` (`type="single"`, collapsible) with one item per step (`__step`, `data-status`): the trigger shows the status glyph (success: a success check; error: a danger cross; skipped: a muted minus; running: a `Spinner`; pending: a dashed circle), the status in words for assistive technology (`sr-only`), the title, the `step-meta` slot, the description (danger text on error, a shimmer while running) and the duration; the panel holds a borderless `LogViewer` + `LogViewer.Content` over the step's lines, loading with `Waiting to start…` while the step is pending, and the `step-empty` slot in place of the empty state (a skipped step defaults to `Never ran.`). Complete renders every step's lines as one borderless `LogViewer` (`__complete`; line ids are prefixed with the step id). With `progress`, a flush, small, flat `Progress` (`__progress`, named `Run progress`) sits on the bottom edge; its value is the share of steps that succeeded. Props: `steps?: LogViewerStep[]` (default `[]`), `copyable?: boolean` (default `true`, forwarded to each log), `viewSwitch?: boolean` (default `true`), `progress?: boolean` (default `false`). Models: `v-model:view` (`LogViewerStepsView` = `'phased' | 'complete'`, default `'phased'`), `v-model:open-step` (`string`, the id of the open step; unbound, the running step opens, else the one in error, else none). Slots: `header`, `step-meta({ step })`, `step-empty({ step })`. Test ids: `log-viewer-steps` (a consumer `data-testid` wins) and `__toolbar`, `__view-switch`, `__step`, `__complete`, `__progress` under it.
@@ -192,7 +192,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 
 - Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`, `loading`, `error`, `empty`
 - `data-disabled` / `data-level` / `data-loading` / `data-error` / `data-bordered` on the LogViewer root
-- `level` is the one severity axis: the warnings filter, the warning count and the level toggles all read `level`; the warning filter is the `warn` level toggle (it sets and clears `v-model:level`)
+- `level` is the one severity axis: the level toggles read and write `level`; the warnings shortcut is the `warn` level toggle (it sets and clears `v-model:level`), offered alone when `levels` is empty
 - `error` state: LogViewerContent renders a danger `Alert` with the message in place of the log body; copy is hidden
 - `empty` state: the package `EmptyState` (see LogViewerContent above)
 - `loading` state: LogViewerContent renders a centered spinner + `loadingLabel` in place of the log body
@@ -212,7 +212,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 
 | Region                                               | Token (DESIGN.md)                                                                                                              |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| typography (header label)                            | `.text-label-code-sm`                                                                                                          |
+| typography (header line count and level toggles)     | `.text-label-sm`, counts `tabular-nums`                                                                                        |
 | typography (log lines)                               | `.text-label-code-sm`                                                                                                          |
 | surface (header/footer)                              | `var(--bg-surface)`                                                                                                            |
 | surface (log canvas)                                 | `var(--bg-canvas)`                                                                                                             |
@@ -254,11 +254,11 @@ the height of a single row the moment the root stopped stretching.
 - Visible focus on the interactive controls in the header/footer.
 - LogViewerContent carries a visually hidden `role="log"` region (`aria-live="polite"`) that holds only the lines appended to `lines` since the last update (filtered by the current search and level). The scrolling log body is not a live region, so the lines already present at mount and the chunks that mount on scroll are never announced; replacing `lines` with a different log clears the region.
 - The level filter is a `role="group"` named `Log levels`; each toggle is a button with `aria-pressed` named with its level and line count (`warn, 3 lines`), the level also in visible text, so the state is never colour only.
-- The warning filter exposes `aria-pressed`; the copy control (a CopyButton in LogViewerContent) uses `aria-label="Copy logs"` at rest, switching to `"Copied logs"` after a successful copy.
+- The copy control (a CopyButton in LogViewerContent) uses `aria-label="Copy logs"` at rest, switching to `"Copied logs"` after a successful copy.
 - The loading state uses `role="status"` with `aria-live="polite"`; the spinner is `aria-hidden` (from the Spinner component) and the `loadingLabel` text conveys status.
 - `motion-reduce:transition-none` on every motion-bearing class.
 - LogViewer.Steps: each step is an `Accordion` item (a button with `aria-expanded`); the status glyph is `aria-hidden` and the status is in the trigger's text (`sr-only`), so it is never colour or shape only; the view switch is a named `ToggleGroup`; the progress bar is a `progressbar` named `Run progress`.
-- Touch target: level toggles and the warning control stay 32 px high at every width, so the toolbar keeps its size on a phone; on `pointer: coarse` an invisible layer extends each one's hit area to 44 px tall; the copy control uses CopyButton `size="small"` (28×28 px) to match CodeBlock — a justified deviation for the compact overlay.
+- Touch target: level toggles (the `warn` shortcut included) stay 32 px high at every width, so the toolbar keeps its size on a phone; on `pointer: coarse` an invisible layer extends each one's hit area to 44 px tall; the copy control uses CopyButton `size="small"` (28×28 px) to match CodeBlock — a justified deviation for the compact overlay.
 
 ## Internationalization
 
@@ -268,8 +268,6 @@ the height of a single row the moment the root stopped stretching.
 | `logViewer.search`            | Search logs                                             | —                   |
 | `logViewer.loading`           | Loading…                                                | `loadingLabel`      |
 | `logViewer.lines`             | {count} line / {count} lines (plural)                   | —                   |
-| `logViewer.warnings`          | Warnings                                                | —                   |
-| `logViewer.warningCount`      | {count} warning / {count} warnings (plural)             | —                   |
 | `logViewer.gzip`              | gzip:                                                   | —                   |
 | `logViewer.empty`             | No log lines match the current filters.                 | `empty` slot        |
 | `logViewer.noLines`           | No log lines yet.                                       | `empty` slot        |
@@ -302,9 +300,9 @@ the height of a single row the moment the root stopped stretching.
 
 ## Responsive
 
-- Container queries: none; the header stacks below `sm` and sits in one 48 px row from `sm`; the left group (line count, warning filter, level toggles) wraps.
+- Container queries: none; the header stacks below `sm` and sits in one 48 px row from `sm`; the left group (line count, level toggles) stays on one row and scrolls sideways when it does not fit.
 - Narrow: log lines stop wrapping and the body scrolls horizontally inside the ScrollArea; the page never does.
-- Touch: level toggles and the warning control keep their 32 px look and get a 44 px hit area on `pointer: coarse`; line hover is decoration only.
+- Touch: level toggles keep their 32 px look and get a 44 px hit area on `pointer: coarse`; line hover is decoration only.
 - Reflow: no horizontal page scroll at 320 px; the log body scrolls in both axes inside its frame.
 
 ## Performance

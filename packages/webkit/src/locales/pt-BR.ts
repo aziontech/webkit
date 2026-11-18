@@ -717,8 +717,6 @@ export const ptBR: Messages = {
     search: 'Buscar logs',
     loading: 'Carregando…',
     lines: { one: '{count} linha', other: '{count} linhas' },
-    warnings: 'Avisos',
-    warningCount: { one: '{count} aviso', other: '{count} avisos' },
     gzip: 'gzip:',
     empty: 'Nenhuma linha de log corresponde aos filtros atuais.',
     noLines: 'Ainda não há linhas de log.',

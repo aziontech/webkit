@@ -82,10 +82,6 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'log-viewer')
 
-  const warningCount = computed(
-    () => props.lines.filter((line) => lineLevel(line) === 'warn').length
-  )
-
   const levelCounts = computed(() => {
     const counts: Record<LogViewerLineLevel, number> = { debug: 0, info: 0, warn: 0, error: 0 }
     for (const line of props.lines) {
@@ -132,12 +128,6 @@
   })
 
   const lineCountLabel = computed(() => t('logViewer.lines', { count: filteredLines.value.length }))
-
-  const warningTagLabel = computed(() => {
-    const count = warningCount.value
-
-    return count > 0 ? t('logViewer.warningCount', { count }) : t('logViewer.warnings')
-  })
 
   const copyLines = new WeakMap<LogViewerLine, { message: string; text: string }>()
 
@@ -188,9 +178,7 @@
     loadingLabel: computed(() => props.loadingLabel || t('logViewer.loading')),
     error: computed(() => props.error),
     searchPlaceholder: computed(() => props.searchPlaceholder || t('logViewer.searchPlaceholder')),
-    warningCount,
     lineCountLabel,
-    warningTagLabel,
     canCopy,
     copyText,
     setSearch,

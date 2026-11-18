@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "`LogViewer.Header` + `LogViewer.Content` over a realistic deploy log. Search filters lines and highlights matches in the body.",
+   "summary": "`LogViewer.Header` + `LogViewer.Content` over a realistic deploy log. Search filters lines and highlights matches in the body; with no `levels` set, the header offers the `warn` toggle alone, with its count, while the log has a warning.",
    "file": "examples/log-viewer/default.vue"
   },
   {

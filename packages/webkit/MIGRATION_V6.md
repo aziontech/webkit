@@ -1363,20 +1363,21 @@ the prop renames of section 3 (`skeleton` `kind="shape"`, `progress` `shape`, `b
 `severity="default"`, `overline` `showCursor`, `pricing-card` `planTitle`, `flow-diagram-anchor` `type`, `toast-item` `type`) and the type names; the rest need a
 hand edit.
 
-| Component             | Removed                                                 | Use instead                                                   |
-| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
-| `toast-item`          | `type` (and the value `error`)                          | `severity` (`danger`)                                         |
-| `toast`               | `ToastType`, store entry `type`, `data-type`            | `ToastSeverity`, entry `severity`, `data-severity`            |
-| `progress`            | `shape`, `ProgressShape`, `data-shape`                  | `variant`, `ProgressVariant`, `data-variant`                  |
-| `skeleton`            | `kind="shape"`                                          | `variant="rectangle"`                                         |
-| `badge`               | `severity="default"`                                    | `severity="neutral"`                                          |
-| `overline`            | `showCursor`                                            | `cursor`                                                      |
-| `pricing-card`        | `planTitle` (and its built-in `Pro`)                    | `title`, set on every card                                    |
-| `flow-diagram-anchor` | `type`, `FlowDiagramAnchorType`                         | `side`, `FlowDiagramAnchorSide`                               |
-| `log-viewer`          | `v-model:warnings-only`, `data-warnings-only`           | `v-model:level` set to `'warn'`                               |
-| `log-viewer`          | line `type: 'warning'`                                  | line `type: 'text', level: 'warn'`                            |
-| `gauge-chart`         | threshold `color`, `GaugeChartThreshold`, `data-status` | threshold `severity`, `ChartThreshold`, `data-severity`       |
-| `chart-reference`     | `ChartReferenceSeverity`                                | `ChartThresholdSeverity` (now also takes the findings levels) |
+| Component             | Removed                                                                                 | Use instead                                                                                    |
+| --------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `toast-item`          | `type` (and the value `error`)                                                          | `severity` (`danger`)                                                                          |
+| `toast`               | `ToastType`, store entry `type`, `data-type`                                            | `ToastSeverity`, entry `severity`, `data-severity`                                             |
+| `progress`            | `shape`, `ProgressShape`, `data-shape`                                                  | `variant`, `ProgressVariant`, `data-variant`                                                   |
+| `skeleton`            | `kind="shape"`                                                                          | `variant="rectangle"`                                                                          |
+| `badge`               | `severity="default"`                                                                    | `severity="neutral"`                                                                           |
+| `overline`            | `showCursor`                                                                            | `cursor`                                                                                       |
+| `pricing-card`        | `planTitle` (and its built-in `Pro`)                                                    | `title`, set on every card                                                                     |
+| `flow-diagram-anchor` | `type`, `FlowDiagramAnchorType`                                                         | `side`, `FlowDiagramAnchorSide`                                                                |
+| `log-viewer`          | `v-model:warnings-only`, `data-warnings-only`                                           | `v-model:level` set to `'warn'`                                                                |
+| `log-viewer`          | line `type: 'warning'`                                                                  | line `type: 'text', level: 'warn'`                                                             |
+| `log-viewer-header`   | test id `__warnings-filter`, locale keys `logViewer.warnings`, `logViewer.warningCount` | the `warn` level toggle (`__level`, `data-level="warn"`), offered alone when `levels` is empty |
+| `gauge-chart`         | threshold `color`, `GaugeChartThreshold`, `data-status`                                 | threshold `severity`, `ChartThreshold`, `data-severity`                                        |
+| `chart-reference`     | `ChartReferenceSeverity`                                                                | `ChartThresholdSeverity` (now also takes the findings levels)                                  |
 
 `Badge` is for counts only (`12`, `99+`): a status word goes to `StatusIndicator` (the state of a
 resource) or `Tag` (a category or outcome word). `CodeEditor`'s plain diff mode now marks added and
