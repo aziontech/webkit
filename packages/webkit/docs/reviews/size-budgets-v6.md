@@ -416,6 +416,12 @@ Budget-raise: use-time-range 0.9 KB → 1.4 KB (measured 1.37 KB): `useTimeRange
 Budget-raise: filter-menu 36.05 KB → 36.2 KB (measured 36.11 KB): its custom range is a `DateRangePicker`, which grew (2026-11-18).
 Budget-raise: filter-menu-root 32.3 KB → 32.45 KB (measured 32.38 KB): the same `DateRangePicker` growth (2026-11-18).
 Budget-raise: date-picker 17.95 KB → 18.1 KB (measured 18.05 KB): the same wrapping trigger and phone sheet (2026-11-18).
+Budget-raise: date-range-picker 37.55 KB → 44.85 KB (measured 44.72 KB): round 2 of the time range proposal — each time field is now the existing `Combobox` (a typed time or a pick from a 30-minute list that opens under the field), so the panel stays as thin as the calendar; reusing Combobox instead of a new time list costs its code once (2026-11-18).
+Budget-raise: date-picker 18.1 KB → 24.6 KB (measured 24.47 KB): the same `Combobox` time field, shared with DateRangePicker through the date fields part (2026-11-18).
+Budget-raise: date-picker-root 17.9 KB → 24.4 KB (measured 24.24 KB): the same `Combobox` time field (2026-11-18).
+Budget-raise: combobox 13.05 KB → 13.15 KB (measured 13.09 KB): the list opens scrolled to the committed option, and an `icon` prop lets a time field show a clock instead of the search glass, so a 48-entry time list shows the current time (2026-11-18).
+Budget-raise: schema-form 60.8 KB → 61 KB (measured 60.89 KB): it renders `Combobox`, which grew by the scroll-to-current change (2026-11-18).
+Budget-raise: table-filter 6.35 KB → 6.45 KB (measured 6.42 KB): the same `Combobox` growth (2026-11-18).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.
 

@@ -302,7 +302,9 @@ export const datePicker = {
   startTime: 'Start time',
   endTime: 'End time',
   timezone: 'Timezone',
-  localTimezone: 'Local'
+  localTimezone: 'Local',
+  example: 'e.g. {value}',
+  timePlaceholder: 'hh:mm'
 } as const
 
 export const dateRangePicker = {
@@ -357,6 +359,7 @@ export const dateRangePicker = {
   thisYear: 'This year',
   now: 'now',
   untilNow: 'End at now',
+  zoneNote: 'Times in {zone}',
   refreshEvery: 'Refresh every',
   refreshAmount: 'Refresh interval',
   refreshUnit: 'Refresh interval unit',

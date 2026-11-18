@@ -3,6 +3,7 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -216,10 +217,11 @@
   })
 
   useFocusTrap(panelEl, isOpenRef)
+  const { isInsideHigherLayer } = useOverlayLayer(isOpenRef, { element: panelEl })
 
   const onDocumentMousedown = (event: globalThis.MouseEvent) => {
     const target = event.target as globalThis.Node | null
-    if (!target) {
+    if (!target || isInsideHigherLayer(target)) {
       return
     }
     if (isOpen.value && !triggerEl.value?.contains(target) && !panelEl.value?.contains(target)) {

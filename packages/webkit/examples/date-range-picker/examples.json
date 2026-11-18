@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The Relative tab has a custom duration and unit on top and the quick ranges below (two columns when there is room); the Absolute tab has the month grid with start and end date and time; the time zone sits under both. Nothing commits until Apply. On a phone the panel opens as a full-width sheet from the bottom of the screen.",
+      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The Relative tab has a custom duration and unit on top and the quick ranges below (two columns when there is room); the Absolute tab has the month grid with start and end date and time (type a time or pick one from the 30-minute list under the field); the panel is as thin as the calendar and names the zone in a read-only line. Nothing commits until Apply. On a phone the panel opens as a full-width sheet from the bottom of the screen.",
       "file": "default.vue"
     },
     {
@@ -34,7 +34,7 @@
     },
     {
       "name": "TimeZone",
-      "summary": "`v-model:time-zone` with a short list of zones: the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker.",
+      "summary": "`v-model:time-zone` and `show-time-zone` with a short list of zones: the zone selector appears in the panel, the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker.",
       "file": "time-zone.vue"
     },
     {

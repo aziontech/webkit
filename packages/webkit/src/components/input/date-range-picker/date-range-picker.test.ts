@@ -43,6 +43,7 @@ const lastValue = (emitted: Record<string, unknown[][]>): DateRangeValue | undef
 
 const setField = async (input: HTMLElement, text: string): Promise<void> => {
   await fireEvent.update(input, text)
+  await fireEvent.keyDown(input, { key: 'Enter' })
   await fireEvent.change(input)
 }
 
@@ -255,6 +256,108 @@ describe('DateRangePicker', () => {
     expect(panel()).toBeTruthy()
   })
 
+  it('lists the times in 30-minute steps under a time field and keeps the panel open on a pick', async () => {
+    const view = render(DateRangePicker, {
+      props: {
+        now: NOW,
+        timeZone: 'UTC',
+        modelValue: {
+          type: 'absolute',
+          start: '2026-11-03T10:00:00.000Z',
+          end: '2026-11-03T12:00:00.000Z'
+        }
+      }
+    })
+    const popover = await open(view.getByTestId)
+    const input = within(popover).getByTestId('date-picker__start-time__input')
+    await fireEvent.focus(input)
+    const list = await waitFor(() => {
+      const found = document.body.querySelector<HTMLElement>(
+        '[data-testid="date-picker__start-time__listbox"]'
+      )
+      expect(found?.style.display).not.toBe('none')
+      return found as HTMLElement
+    })
+    const times = within(list).getAllByRole('option')
+    expect(times).toHaveLength(48)
+    expect(times[1]?.textContent?.trim()).toBe('00:30')
+    const current = within(list).getByRole('option', { selected: true })
+    expect(current.textContent?.trim()).toBe('10:00')
+    await fireEvent.mouseDown(within(list).getByRole('option', { name: '09:30' }))
+    await fireEvent.click(within(list).getByRole('option', { name: '09:30' }))
+    await nextTick()
+    expect(panel()).toBeTruthy()
+    expect((input as HTMLInputElement).value).toBe('09:30')
+    await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
+    expect(lastValue(view.emitted())).toEqual({
+      type: 'absolute',
+      start: '2026-11-03T09:30:00.000Z',
+      end: '2026-11-03T12:00:00.000Z'
+    })
+  })
+
+  it('puts a time between two steps in the list, so it opens on it', async () => {
+    const view = render(DateRangePicker, {
+      props: {
+        now: NOW,
+        timeZone: 'UTC',
+        modelValue: {
+          type: 'absolute',
+          start: '2026-11-03T07:32:00.000Z',
+          end: '2026-11-03T12:00:00.000Z'
+        }
+      }
+    })
+    const popover = await open(view.getByTestId)
+    await fireEvent.focus(within(popover).getByTestId('date-picker__start-time__input'))
+    const list = await waitFor(() => {
+      const found = document.body.querySelector<HTMLElement>(
+        '[data-testid="date-picker__start-time__listbox"]'
+      )
+      expect(found?.style.display).not.toBe('none')
+      return found as HTMLElement
+    })
+    const times = within(list)
+      .getAllByRole('option')
+      .map((el) => el.textContent?.trim())
+    expect(times).toHaveLength(49)
+    expect(times.slice(15, 18)).toEqual(['07:30', '07:32', '08:00'])
+    expect(within(list).getByRole('option', { selected: true }).textContent?.trim()).toBe('07:32')
+  })
+
+  it('flags an end before the start as soon as it is typed', async () => {
+    const view = render(DateRangePicker, {
+      props: {
+        now: NOW,
+        timeZone: 'UTC',
+        modelValue: {
+          type: 'absolute',
+          start: '2026-11-05T10:00:00.000Z',
+          end: '2026-11-05T12:00:00.000Z'
+        }
+      }
+    })
+    const popover = await open(view.getByTestId)
+    expect(within(popover).queryByRole('alert')).toBeNull()
+    await setField(within(popover).getByLabelText('End'), '6/30/2026')
+    expect(within(popover).getByRole('alert').textContent).toContain(
+      'The end must be after the start.'
+    )
+  })
+
+  it('shows date and time placeholders as hints, never as a value', async () => {
+    const view = render(DateRangePicker, {
+      props: { now: NOW, timeZone: 'UTC', rangeSelectorMode: 'absolute-only' }
+    })
+    const popover = await open(view.getByTestId)
+    const end = within(popover).getByLabelText('End') as HTMLInputElement
+    expect(end.value).toBe('')
+    expect(end.placeholder).toMatch(/^e\.g\. /)
+    expect(
+      (within(popover).getByTestId('date-picker__end-time__input') as HTMLInputElement).placeholder
+    ).toBe('hh:mm')
+  })
+
   it('re-labels an absolute range when the time zone changes', async () => {
     const view = render(DateRangePicker, {
       props: {
@@ -277,12 +380,28 @@ describe('DateRangePicker', () => {
     expect(trigger.textContent).toContain('UTC+09:00')
   })
 
+  it('names the zone in a read-only line unless show-time-zone asks for the selector', async () => {
+    const view = render(DateRangePicker, {
+      props: { now: NOW, timeZone: 'America/New_York', rangeSelectorMode: 'absolute-only' }
+    })
+    const popover = await open(view.getByTestId)
+    expect(within(popover).queryByLabelText('Timezone')).toBeNull()
+    expect(within(popover).getByTestId(`${TEST_ID}__zone`).textContent?.trim()).toBe(
+      'Times in UTC−05:00 · New York'
+    )
+    await view.rerender({ showTimeZone: true })
+    await nextTick()
+    expect(within(popover).getByLabelText('Timezone')).toBeTruthy()
+    expect(within(popover).queryByTestId(`${TEST_ID}__zone`)).toBeNull()
+  })
+
   it('keeps the instants when the zone changes in the panel and emits the zone on Apply', async () => {
     const view = render(DateRangePicker, {
       props: {
         now: NOW,
         timeZone: 'UTC',
         timeZones: ['UTC', 'Asia/Tokyo'],
+        showTimeZone: true,
         modelValue: {
           type: 'absolute',
           start: '2026-11-10T12:00:00.000Z',

@@ -113,6 +113,10 @@ describe('date pickers stay readable at every width', () => {
       if (width < 640) {
         expect(Math.round(rect.left)).toBe(0)
         expect(Math.round(rect.right)).toBe(width)
+        for (const part of ['relative', 'absolute']) {
+          const body = panel.querySelector(`[data-testid="date-range-picker__${part}"]`)
+          if (body) expect(Math.round(body.getBoundingClientRect().width)).toBe(width)
+        }
         expect(Math.round(rect.bottom)).toBe(window.innerHeight)
         expect(rect.height).toBeLessThanOrEqual(window.innerHeight * 0.85 + 1)
         expect(getComputedStyle(backdrop as Element).display).not.toBe('none')
@@ -125,6 +129,22 @@ describe('date pickers stay readable at every width', () => {
       }
       expect(cutOff(panel)).toEqual([])
       expect(outside(panel, width)).toEqual([])
+    })
+
+    it('DateRangePicker: both tabs are as thin as the calendar', async () => {
+      if (width < 640) return
+      await atWidth(width)
+      const view = mount(WithStep)
+      const panel = await openPanel(view, 'date-range-picker')
+      const grid = within(panel).getByRole('grid').getBoundingClientRect().width
+      const gutter = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) * 2
+      const thin = grid + gutter + 4
+      expect(panel.getBoundingClientRect().width).toBeLessThanOrEqual(thin)
+      await fireEvent.click(within(panel).getAllByRole('radio')[0] as HTMLElement)
+      await nextTick()
+      await frame()
+      expect(within(panel).getByTestId('date-range-picker__relative')).toBeTruthy()
+      expect(panel.getBoundingClientRect().width).toBeLessThanOrEqual(thin)
     })
 
     it('DateRangePicker until now: the open end reads in full', async () => {

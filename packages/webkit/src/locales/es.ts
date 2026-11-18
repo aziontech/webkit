@@ -401,7 +401,9 @@ export const es: Messages = {
     startTime: 'Hora de inicio',
     endTime: 'Hora de fin',
     timezone: 'Zona horaria',
-    localTimezone: 'Local'
+    localTimezone: 'Local',
+    example: 'p. ej.: {value}',
+    timePlaceholder: 'hh:mm'
   },
   dateRangePicker: {
     label: 'Intervalo de tiempo',
@@ -455,6 +457,7 @@ export const es: Messages = {
     thisYear: 'Este año',
     now: 'ahora',
     untilNow: 'Terminar ahora',
+    zoneNote: 'Horas en {zone}',
     refreshEvery: 'Actualizar cada',
     refreshAmount: 'Intervalo de actualización',
     refreshUnit: 'Unidad del intervalo de actualización',

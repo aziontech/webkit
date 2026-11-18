@@ -401,7 +401,9 @@ export const ptBR: Messages = {
     startTime: 'Hora de início',
     endTime: 'Hora de término',
     timezone: 'Fuso horário',
-    localTimezone: 'Local'
+    localTimezone: 'Local',
+    example: 'ex.: {value}',
+    timePlaceholder: 'hh:mm'
   },
   dateRangePicker: {
     label: 'Intervalo de tempo',
@@ -455,6 +457,7 @@ export const ptBR: Messages = {
     thisYear: 'Este ano',
     now: 'agora',
     untilNow: 'Terminar agora',
+    zoneNote: 'Horários em {zone}',
     refreshEvery: 'Atualizar a cada',
     refreshAmount: 'Intervalo de atualização',
     refreshUnit: 'Unidade do intervalo de atualização',

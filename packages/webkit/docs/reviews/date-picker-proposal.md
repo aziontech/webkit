@@ -167,8 +167,8 @@ Now is a switch on Absolute. Two short tabs fit a 320 px phone in every language
    Proposed as a follow-up only if a product needs "from 2 hours ago until 1 hour ago".
 2. **Next N units** (ranges in the future, the Console's `Last ▾ / Next`). Rare in observability;
    left out.
-3. **Scrolling list of times** next to the calendar (Console Absolute tab). WebKit keeps the typed
-   time field (faster with a keyboard, works on phones); a list can be added to the shared grid part.
+3. **Scrolling list of times** next to the calendar (Console Absolute tab). Answered in round 2
+   (section 7.3): the typed field stays and gains a 30-minute list that opens under it.
 4. **"Account" time zone entry** (`Account (UTC-08:00)`): needs the account zone from the app; can be
    passed today through `time-zones` and `v-model:time-zone`.
 5. **Week start.** This week starts on Sunday, like the month grid; a Monday start (ISO, most of
@@ -179,3 +179,108 @@ Now is a switch on Absolute. Two short tabs fit a 320 px phone in every language
 7. **The `since` value is new in the union.** TypeScript code that assumed "not absolute means
    relative" must handle it; the two blocks that did (`activity-history`, `events-explorer` query)
    are fixed here. It is unreleased 6.0 API, so no codemod is needed.
+
+## 7. Round 2 — owner review, 2026-11-18
+
+Owner feedback on the Absolute tab (`:4432/components/date-range-picker`):
+
+- "Make it ideally as thin as the calendar" — the panel was 24 rem (384 px) wide, wider than the
+  month grid it is built around.
+- "Check best practices for hour selection, perhaps similar to the one we have" — the Azion Console
+  shows a scrolling list of times in 30-minute steps beside its calendar.
+- "Is the time zone selector needed at all?"
+- The screenshot showed Start Nov 5, 2026 and End **Jun 30, 2026** — an end before the start.
+
+### 7.1 What the End "Jun 30, 2026" really was
+
+It was not a value. The End field was **empty**, and its placeholder was a real-looking date
+(`Jun 30, 2026`, time `23:59`). A placeholder that looks like data reads as data. Fixed two ways:
+
+- Placeholders are now hints, never bare values: `e.g. Jan 31, 2026` (pt-BR `ex.: 31 de jan. de
+2026`, es `p. ej.: …`) for dates and `hh:mm` for times.
+- An end that is not after the start is flagged **as soon as it is typed or picked** (`role="alert"`
+  under the fields), instead of only after Apply. Apply still refuses it. Picking a day in the grid
+  before the start already swaps the two ends, so a reversed range can only come from typing.
+
+### 7.2 Hour selection — what others do
+
+| System                                           | Time control                                                                                                    | Panel width                            |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| Azion Console (reference)                        | Scrolling list, 30-minute steps, **beside** the calendar; the start also as one typed text field                | calendar + list column (wider)         |
+| Elastic EUI (`EuiSuperDatePicker`, absolute tab) | Same as the Console: a time list beside the calendar plus a typed field — the Console copies it                 | calendar + list column                 |
+| AWS Cloudscape `DateRangePicker`                 | Typed time input (`hh:mm:ss`) under each date; no list                                                          | calendar width (two months on desktop) |
+| Grafana time picker                              | Typed `From` / `To` fields (a date-time or `now-6h`); the calendar picks days only                              | fields + calendar                      |
+| Datadog                                          | Typed time frame (`Nov 10 9:30 – Nov 10 17:00`), calendar for days                                              | —                                      |
+| Google Calendar                                  | Typed time field with a **list of 15/30-minute steps that opens under the field**, scrolled to the current time | the field                              |
+| MUI X `DesktopTimePicker` (digital clock)        | A single scrolling list of times (30-minute default step) in a popover under the field                          | the field                              |
+| Ant Design `TimePicker`                          | Hour / minute columns that scroll, in a dropdown under the field                                                | the field                              |
+| Apple Calendar                                   | Typed hour and minute segments                                                                                  | the field                              |
+
+What they agree on: (1) keep a **typed** time (fast with a keyboard, any minute, works with
+assistive tech); (2) offer **common times as a list** so a mouse or touch user does not type; (3)
+the list opens **under the field** in every system that keeps the panel narrow — only EUI and the
+Console put it beside the calendar, which is exactly what makes them wide.
+
+### 7.3 Decision: the time field becomes the existing `Combobox`
+
+Each time field (Start, End, and DatePicker's single time) is now WebKit's own **`Combobox`** with
+`allow-custom`: type any time (`14:37`, `2:37 pm`), or focus the field and pick from the day in
+**30-minute steps** (48 entries), in a list that opens **under the field**, scrolled to the current
+time like the Console's list. Why:
+
+- **Thin.** The list floats under the field, so the panel stays exactly as wide as the month grid.
+  A column beside the calendar (Console/EUI) would make it about 90 px wider — the opposite of
+  what was asked.
+- **Reuse, not a new control.** WebKit has no time picker; the catalog has `Combobox` (typed value
+  plus a suggestion list), whose keyboard map, screen-reader wiring (`role="combobox"`,
+  `aria-activedescendant`) and nested-overlay handling are already tested. A new list part would
+  duplicate all of it.
+- **Keyboard users keep typing.** The typed field stays the primary way in; `ArrowDown` opens the
+  list, `Enter` takes the highlighted time, `Escape` closes only the list (the picker stays open).
+- **The same in both pickers.** The fields part is shared, so `DatePicker show-time` gets the same
+  list.
+
+Small supporting changes: `Combobox` opens its list scrolled so the committed option sits in the
+middle (useful for any long list); both pickers register their panel on the shared overlay layer
+stack, so a click in the time list does not count as a click outside the picker.
+
+Cost: the two date pickers now include `Combobox` (+6.4 KB gzip each; `Budget-raise:` lines with
+the reason in `size-budgets-v6.md`). The alternative — load the list lazily — saves the bytes but
+flashes on first open; not worth it for a control that is always opened to be used.
+
+### 7.4 Thin panel
+
+Both tabs are now exactly as wide as the month grid: seven day cells of the size token plus
+`--spacing-sm` on each side (276 px at `medium`, was 384 px). Start and End keep date and time on
+one row (the time field is 88 px), the quick ranges keep two columns (container query lowered from
+18 rem to 15 rem), the refresh row and the footer wrap when needed. On a phone the panel is still the
+full-width bottom sheet. `src/test/date-picker-readability.test.ts` checks the width on both tabs
+and that no word is cut off at 320, 390 and 1280 px in English and Portuguese.
+
+### 7.5 Time zone selector: hidden by default, the zone always stated
+
+| System         | Zone in the picker?                                                                                   |
+| -------------- | ----------------------------------------------------------------------------------------------------- |
+| Grafana        | Stated in the panel footer (`Browser Time … UTC−05:00`); changing it is behind "Change time settings" |
+| Datadog        | Not in the picker; set in the user's or the dashboard's settings                                      |
+| AWS CloudWatch | A small `UTC` / `Local` switch in the custom range panel                                              |
+| Cloudscape     | No selector; the offset is printed with the range (an app passes the offset)                          |
+| Elastic EUI    | Not in the picker; an advanced setting                                                                |
+| Azion Console  | Shown at the bottom of every tab (`UTC: America/Los_Angeles`, offset select)                          |
+
+Most keep the zone **visible but out of the way**; picking a zone is usually a per-user or
+per-page setting, not something done every time a range is picked. Decision:
+
+- `showTimeZone` now **defaults to `false`**. The panel then names the zone in one read-only line
+  (`Times in UTC−08:00 · Los Angeles`), and the trigger keeps its UTC offset, so the zone is never
+  ambiguous.
+- A page that really lets people switch zones (a log explorer comparing regions) passes
+  `show-time-zone` and gets the selector, as before (the TimeZone example does).
+- `DateRangePicker` is new in 6.0 (5.13 does not have it), so changing the default breaks no
+  released app and needs no codemod.
+
+### 7.6 Still open for the owner
+
+1. Is a 30-minute step right, or 15 minutes (Google Calendar's default)? It is one constant.
+2. Should the Console's "Account" zone become the default zone when an app knows it? (Pass it
+   through `ConfigProvider` `timeZone` today.)

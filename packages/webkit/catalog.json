@@ -14107,9 +14107,9 @@
     {
      "name": "showTimeZone",
      "type": "boolean",
-     "default": "true",
+     "default": "false",
      "required": "false",
-     "doc": "Shows the time zone selector in the panel."
+     "doc": "Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line."
     },
     {
      "name": "showTime",
@@ -30109,6 +30109,13 @@
      "doc": "Placeholder of the field."
     },
     {
+     "name": "icon",
+     "type": "string",
+     "default": "'az az-search'",
+     "required": "false",
+     "doc": "Leading icon of the field. Empty shows none (a time field passes `az az-clock`)."
+    },
+    {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
@@ -30706,6 +30713,7 @@
     "artifact-preview",
     "avatar",
     "button",
+    "combobox",
     "doc-card",
     "doc-item",
     "doc-prompt",

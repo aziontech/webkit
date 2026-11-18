@@ -3,9 +3,9 @@ name: combobox
 category: input
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 3633837d6e2a382b8122a7ea91e868b42cc682b25efff79479d92ff8f9e9f8af
+checksum: 9ba0e0d51cc02bc55eb82bfba0f3e63cdb65a041a622ad27cfff0f6cc32f8bad
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -85,22 +85,23 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 ## Props
 
-| Prop          | Type                             | Default    | Required | JSDoc                                                                                                                            |
-| ------------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `options`     | `ComboboxOption[]`               | `[]`       | false    | Suggestions: `{ value, label?, description?, group?, disabled? }`.                                                               |
-| `placeholder` | `string`                         | `''`       | false    | Placeholder of the field.                                                                                                        |
-| `ariaLabel`   | `string`                         | `''`       | false    | Accessible name when no `Field` label names the field.                                                                           |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token, as `Input`: 28 / 32 / 40 px.                                                                                         |
-| `allowCustom` | `boolean`                        | `true`     | false    | Accepts a typed value that matches no option, offered as `Use "…"`.                                                              |
-| `filter`      | `boolean`                        | `true`     | false    | Filters `options` by the typed text. Turn off when the server filters on `search`.                                               |
-| `clearable`   | `boolean`                        | `false`    | false    | Shows a clear button while the field has a value.                                                                                |
-| `loading`     | `boolean`                        | `false`    | false    | Shows a spinner and the loading row while options are fetched.                                                                   |
-| `emptyTitle`  | `string`                         | `''`       | false    | Text of the list when nothing matches. Empty uses the locale catalog. Same name as `table`, `select` and the other empty states. |
-| `disabled`    | `boolean`                        | `false`    | false    | Disables the field.                                                                                                              |
-| `readonly`    | `boolean`                        | `false`    | false    | Shows the value without the list or editing.                                                                                     |
-| `required`    | `boolean`                        | `false`    | false    | Marks the field required (`aria-required`).                                                                                      |
-| `invalid`     | `boolean`                        | `false`    | false    | Marks the field invalid (`aria-invalid`, danger border).                                                                         |
-| `defaultOpen` | `boolean`                        | `false`    | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                   |
+| Prop          | Type                             | Default          | Required | JSDoc                                                                                                                            |
+| ------------- | -------------------------------- | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `options`     | `ComboboxOption[]`               | `[]`             | false    | Suggestions: `{ value, label?, description?, group?, disabled? }`.                                                               |
+| `placeholder` | `string`                         | `''`             | false    | Placeholder of the field.                                                                                                        |
+| `icon`        | `string`                         | `'az az-search'` | false    | Leading icon of the field. Empty shows none (a time field passes `az az-clock`).                                                 |
+| `ariaLabel`   | `string`                         | `''`             | false    | Accessible name when no `Field` label names the field.                                                                           |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`       | false    | Size token, as `Input`: 28 / 32 / 40 px.                                                                                         |
+| `allowCustom` | `boolean`                        | `true`           | false    | Accepts a typed value that matches no option, offered as `Use "…"`.                                                              |
+| `filter`      | `boolean`                        | `true`           | false    | Filters `options` by the typed text. Turn off when the server filters on `search`.                                               |
+| `clearable`   | `boolean`                        | `false`          | false    | Shows a clear button while the field has a value.                                                                                |
+| `loading`     | `boolean`                        | `false`          | false    | Shows a spinner and the loading row while options are fetched.                                                                   |
+| `emptyTitle`  | `string`                         | `''`             | false    | Text of the list when nothing matches. Empty uses the locale catalog. Same name as `table`, `select` and the other empty states. |
+| `disabled`    | `boolean`                        | `false`          | false    | Disables the field.                                                                                                              |
+| `readonly`    | `boolean`                        | `false`          | false    | Shows the value without the list or editing.                                                                                     |
+| `required`    | `boolean`                        | `false`          | false    | Marks the field required (`aria-required`).                                                                                      |
+| `invalid`     | `boolean`                        | `false`          | false    | Marks the field invalid (`aria-invalid`, danger border).                                                                         |
+| `defaultOpen` | `boolean`                        | `false`          | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                   |
 
 `ComboboxOption`: `value: string` (committed and matched), `label?: string` (shown instead of the value), `description?: string` (muted, at the end of the row), `group?: string` (rows with the same group sit under one title, in first-seen order), `disabled?: boolean`.
 
@@ -165,7 +166,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 ## Accessibility (WCAG 2.1 AA)
 
 - ARIA 1.2 combobox: the `<input>` has `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` (the listbox id) and `aria-activedescendant` (the highlighted option); the list is `role="listbox"`, rows are `role="option"` with `aria-selected` and `aria-disabled`; grouped rows sit in `role="group"` named by their title (`aria-labelledby`).
-- Keyboard map: focus or `ArrowDown` opens the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
+- Keyboard map: focus or `ArrowDown` opens the list, scrolled so the committed option (when the value is one of the options) sits in the middle of the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
 - Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (focus stays in the input), so inside a `Popover`, `Dialog` or `Drawer` picking a suggestion or pressing `Escape` closes only the list; the host overlay stays open.
 - Focus stays in the input the whole time; pointer clicks on rows do not move focus (`mousedown.prevent`).
 - A polite status region announces the number of options after each change of the typed text ("3 options"), "No matches" and "Loading options"; it is visually hidden.

@@ -46,6 +46,8 @@
     options?: ComboboxOption[]
     /** Placeholder of the field. */
     placeholder?: string
+    /** Leading icon of the field. Empty shows none. */
+    icon?: string
     /** Accessible name when no `Field` label names the field. */
     ariaLabel?: string
     /** Size token, as `Input`: 28 / 32 / 40 px. */
@@ -74,6 +76,7 @@
   const props = withDefaults(defineProps<ComboboxProps>(), {
     options: () => [],
     placeholder: '',
+    icon: 'az az-search',
     ariaLabel: '',
     size: 'medium',
     allowCustom: true,
@@ -325,6 +328,25 @@
     })
   }
 
+  const revealSelected = () => {
+    const row = rows.value.find(
+      (item) => item.kind === 'option' && item.option.value === model.value
+    )
+    if (!row) return
+    lazyLists.forEach((list) => list.revealAll())
+    nextTick(() => {
+      const list = panelEl.value
+      const item = globalThis.document?.getElementById(row.id)
+      if (!list || !item) return
+      const offset = item.getBoundingClientRect().top - list.getBoundingClientRect().top
+      list.scrollTop += offset - (list.clientHeight - item.offsetHeight) / 2
+    })
+  }
+
+  watch(expanded, (isExpanded) => {
+    if (isExpanded && !typing.value) revealSelected()
+  })
+
   const moveTo = (start: number, step: 1 | -1) => {
     const total = rows.value.length
     if (!total) return
@@ -470,9 +492,13 @@
         @blur="onBlur"
         @keydown="onKeydown"
       >
-        <template #leading>
+        <template
+          v-if="icon"
+          #leading
+        >
           <i
-            class="az az-search text-(--text-muted)"
+            :class="icon"
+            class="text-(--text-muted)"
             aria-hidden="true"
           />
         </template>

@@ -2062,7 +2062,7 @@ yout, objects, git) and External (frameworks, AI models, developer tools, langua
 
 483 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
-Used by: Alert, ArtifactPreview, Avatar, Button, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsSection, SplitButton, Tag.
+Used by: Alert, ArtifactPreview, Avatar, Button, Combobox, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsSection, SplitButton, Tag.
 
 ## Names
 
@@ -23088,6 +23088,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | --- | --- | --- | --- | --- |
 | `options` | `ComboboxOption[]` | `[]` | false | Suggestions: `{ value, label?, description?, group?, disabled? }`. |
 | `placeholder` | `string` | `''` | false | Placeholder of the field. |
+| `icon` | `string` | `'az az-search'` | false | Leading icon of the field. Empty shows none (a time field passes `az az-clock`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names the field. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token, as `Input`: 28 / 32 / 40 px. |
 | `allowCustom` | `boolean` | `true` | false | Accepts a typed value that matches no option, offered as `Use "…"`. |
@@ -23116,6 +23117,10 @@ The imperative API is backed by a small reactive store composable, declared here
 | --- | --- | --- |
 | `option` | { option: ComboboxOption, active: boolean, selected: boolean } | Replaces the content of one option row. |
 
+## Assets
+
+- Icons: every valid name is in icons.md (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## Sub-components
 
 _none_ — one `.vue` file. The list is rendered by the component itself (teleported to `body`, positioned with `usePlacement`); options are data, rendered through the optional `option` slot.
@@ -23139,7 +23144,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 ## Accessibility
 
 - ARIA 1.2 combobox: the `<input>` has `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` (the listbox id) and `aria-activedescendant` (the highlighted option); the list is `role="listbox"`, rows are `role="option"` with `aria-selected` and `aria-disabled`; grouped rows sit in `role="group"` named by their title (`aria-labelledby`).
-- Keyboard map: focus or `ArrowDown` opens the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
+- Keyboard map: focus or `ArrowDown` opens the list, scrolled so the committed option (when the value is one of the options) sits in the middle of the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
 - Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (focus stays in the input), so inside a `Popover`, `Dialog` or `Drawer` picking a suggestion or pressing `Escape` closes only the list; the host overlay stays open.
 - Focus stays in the input the whole time; pointer clicks on rows do not move focus (`mousedown.prevent`).
 - A polite status region announces the number of options after each change of the typed text ("3 options"), "No matches" and "Loading options"; it is visually hidden.
@@ -23221,6 +23226,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 - `date-range-picker` — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time="false"`. It is built on this component's grid, fields and time zone selector.
 - `timestamp` — shows a moment in time in the app's time zone.
 - `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
+- `combobox` — the time field: a typed time or a pick from the 30-minute list, which opens under the field so the panel stays as thin as the grid.
 - `input` — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side.
 
 ## Props
@@ -23267,7 +23273,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 - `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection.
 
-Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
+Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
 
 ## v-model
 
@@ -23332,7 +23338,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 # Date Range Picker
 
-> A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, a custom duration, absolute range with times, a range that ends now, previous and next, auto refresh, the time zone) and Cloudscape's date range picker. The value is one of three shapes: - **relative** — `{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving. With `snap: true` the start is rounded down to the start of the unit in the time zone: `{ amount: 1, unit: 'day', snap: true }` is **Today** (midnight to now), `unit: 'week'` is **This week** (from Sunday, like the month grid). - **absolute** — `{ type: 'absolute', start, end }`, two ISO 8601 instants. - **since** — `{ type: 'since', start }`, an ISO 8601 start and an end that is always now ("from the incident until now"). The trigger prints `Last 15 minutes`, `Today`, the absolute range in the selected time zone with its UTC offset (`Nov 10, 16:00 – 17:00 (UTC+00:00)`; the date is printed once when both ends are on the same day), or `Nov 10, 2026, 9:30 – now`. It never cuts the text off: a long value wraps onto a second line. The panel switches between Relative (a custom duration and unit, then the quick ranges, two columns when there is room) and Absolute (the `DatePicker` month grid, start and end date and time fields — the times hidden with `showTime` off — and, when the picker also offers relative ranges, an **End at now** switch that makes a `since` range). The time zone selector sits under both tabs; with `showRefresh`, an auto-refresh switch and interval sit above it. The panel commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. On a phone (below 640 px) the panel is a full-width sheet at the bottom of the screen. Date math uses `Intl` and the native `Date` only.
+> A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, a custom duration, absolute range with times, a range that ends now, previous and next, auto refresh, the time zone) and Cloudscape's date range picker. The value is one of three shapes: - **relative** — `{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving. With `snap: true` the start is rounded down to the start of the unit in the time zone: `{ amount: 1, unit: 'day', snap: true }` is **Today** (midnight to now), `unit: 'week'` is **This week** (from Sunday, like the month grid). - **absolute** — `{ type: 'absolute', start, end }`, two ISO 8601 instants. - **since** — `{ type: 'since', start }`, an ISO 8601 start and an end that is always now ("from the incident until now"). The trigger prints `Last 15 minutes`, `Today`, the absolute range in the selected time zone with its UTC offset (`Nov 10, 16:00 – 17:00 (UTC+00:00)`; the date is printed once when both ends are on the same day), or `Nov 10, 2026, 9:30 – now`. It never cuts the text off: a long value wraps onto a second line. The panel switches between Relative (a custom duration and unit, then the quick ranges, two columns when there is room) and Absolute (the `DatePicker` month grid, start and end date and time fields — each time field a `Combobox` that takes a typed time or lists the day in 30-minute steps (plus the current time when it falls between two), opened under the field and scrolled to the current time; the times hidden with `showTime` off — and, when the picker also offers relative ranges, an **End at now** switch that makes a `since` range). Under both tabs the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`), or, with `showTimeZone`, shows the time zone selector there instead; with `showRefresh`, an auto-refresh switch and interval sit above it. The panel commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. On a phone (below 640 px) the panel is a full-width sheet at the bottom of the screen. Date math uses `Intl` and the native `Date` only.
 
 - Import: `import DateRangePicker from '@aziontech/webkit/date-range-picker'`
 - Category: input · Surface: app · Structure: monolithic
@@ -23374,7 +23380,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | --- | --- | --- | --- | --- |
 | `relativeOptions` | `RelativeOption[]` | `5m, 15m, 1h, 6h, 24h, 7d, 30d` | false | Quick ranges listed on the Relative tab. |
 | `timeZones` | `string[]` | `[]` | false | Zones offered by the selector. Empty falls back to the zones `Intl` supports. |
-| `showTimeZone` | `boolean` | `true` | false | Shows the time zone selector in the panel. |
+| `showTimeZone` | `boolean` | `false` | false | Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line. |
 | `showTime` | `boolean` | `true` | false | Shows the start and end time fields of an absolute range. Off, a range covers whole days (a report or billing period). |
 | `showStep` | `boolean` | `false` | false | Shows Previous and Next buttons that move the range back or forward by its own length. |
 | `showRefresh` | `boolean` | `false` | false | Shows the auto-refresh switch and interval in the panel; bind v-model:refresh-interval and listen to refresh. |
@@ -23410,7 +23416,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy.
+- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy, and at once (without waiting for Apply) when both ends of an absolute range are set and the end is not after the start.
 - `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-invalid` on the root and the trigger shell (own `invalid` or the enclosing `Field`'s, with `aria-invalid` on the trigger and the danger border); `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
 - The Next button is disabled while the range ends now (relative or `since`) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
 - `data-selected` on the custom duration group when the draft is a custom duration (no quick range picked).
@@ -23420,7 +23426,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 ## Accessibility
 
 - Visible focus: a 2 px `--ring-color` ring inset on each trigger segment; the quick ranges ring their row when the radio inside has focus.
-- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select, in reading order across the two columns); the End at now and Refresh every switches toggle with `Space`/`Enter`; the grid keeps the `date-picker` keyboard map; `Escape` closes without committing and returns focus to the trigger. On a phone a tap on the backdrop closes the sheet like Cancel.
+- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select, in reading order across the two columns); the End at now and Refresh every switches toggle with `Space`/`Enter`; the grid keeps the `date-picker` keyboard map; a time field keeps the `combobox` keyboard map (focus or `ArrowDown` opens the 30-minute list, `Enter` takes the highlighted time or the typed one, `Escape` closes only the list); `Escape` closes without committing and returns focus to the trigger. On a phone a tap on the backdrop closes the sheet like Cancel.
 - ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range and, with auto refresh on, the interval (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the custom duration is a `group` named "Custom range" whose duration and unit have visible labels; the quick ranges are a `fieldset` with a `legend`; End at now and Refresh every are `switch`es named by their visible text; the refresh amount and unit have accessible names; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons; the sheet backdrop is `aria-hidden`.
 - Targets: options are 32 px high (44 px on `pointer: coarse`); the selects are 44 px high and the step buttons 44 px wide on `pointer: coarse`.
 - Contrast ≥4.5:1 from the semantic text tokens.

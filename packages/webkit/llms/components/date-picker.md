@@ -32,6 +32,7 @@
 - [date-range-picker](date-range-picker.md) — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time="false"`. It is built on this component's grid, fields and time zone selector.
 - [timestamp](timestamp.md) — shows a moment in time in the app's time zone.
 - [field](field.md) — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
+- [combobox](combobox.md) — the time field: a typed time or a pick from the 30-minute list, which opens under the field so the panel stays as thin as the grid.
 - [input](input.md) — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side.
 
 ## Props
@@ -78,7 +79,7 @@
 
 - `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection. Placed in the `footer` slot.
 
-Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
+Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
 
 ## v-model
 
@@ -129,7 +130,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - Every built-in string comes from the `datePicker` group of the locale catalog (`useLocale`): trigger placeholder (`Select a date`), Date / Time labels, Apply, Clear, the month navigation labels.
 - The active locale is the nearest `ConfigProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
 - What the person sends stays unambiguous: `v-model` is a `Date` whatever the display format, so an app sends `toISOString()` (or the ISO date `2026-11-15`) to its server, never the printed label.
-- Printed text uses `Intl` in the active locale: the trigger label, the field value and its placeholder (`Jun 1, 2026` in `en`, `1 de jun. de 2026` in `pt-BR`), the time field, weekday and month names.
+- Printed text uses `Intl` in the active locale: the trigger label, the field value and its placeholder, a hint and never a bare date (`e.g. Jan 31, 2026` in `en`, `ex.: 31 de jan. de 2026` in `pt-BR`; the time field reads `hh:mm`), the time field and its 30-minute list, weekday and month names.
 - Typing is parsed in the active locale with English always accepted as well: month names (long and short, accents optional), numeric dates in the locale's day/month order (`1/2/2026` is 2 January in `en`, 1 February in `pt-BR`) and ISO `2026-01-05`. Times accept `14:30`, `14h30` and `2:30 pm`.
 
 ## Responsive

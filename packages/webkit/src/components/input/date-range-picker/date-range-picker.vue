@@ -13,6 +13,7 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import {
     useLocaleContext,
@@ -24,6 +25,7 @@
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import {
     asRange,
+    cityName,
     formatValueLabel,
     localTimezone,
     startOfDay,
@@ -77,7 +79,7 @@
     relativeOptions?: RelativeOption[]
     /** Zones offered by the selector. Empty falls back to the zones `Intl` supports. */
     timeZones?: string[]
-    /** Shows the time zone selector in the panel. */
+    /** Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line. */
     showTimeZone?: boolean
     /** Shows the start and end time fields of an absolute range. Off, a range covers whole days (a report or billing period). */
     showTime?: boolean
@@ -109,7 +111,7 @@
   const props = withDefaults(defineProps<DateRangePickerProps>(), {
     relativeOptions: () => DEFAULT_RELATIVE_OPTIONS,
     timeZones: () => [],
-    showTimeZone: true,
+    showTimeZone: false,
     showTime: true,
     showStep: false,
     showRefresh: false,
@@ -441,6 +443,23 @@
     () => rangeError.value || (refreshError.value ? t('dateRangePicker.invalidAmount') : '')
   )
 
+  const zoneNote = computed<string>(() => {
+    const offset = zoneOffsetLabel(draftZone.value, clock())
+    const city = cityName(draftZone.value)
+    return city === draftZone.value && !draftZone.value.includes('/')
+      ? offset
+      : `${offset} · ${city}`
+  })
+
+  const visibleError = computed<string>(() => {
+    if (showError.value) return draftError.value
+    return panelMode.value === 'absolute' &&
+      draftValue.value &&
+      rangeError.value === t('dateRangePicker.order')
+      ? rangeError.value
+      : ''
+  })
+
   const apply = (): void => {
     if (draftError.value || !draftValue.value) {
       showError.value = true
@@ -590,10 +609,11 @@
   })
 
   useFocusTrap(panelEl, isOpenRef)
+  const { isInsideHigherLayer } = useOverlayLayer(isOpenRef, { element: panelEl })
 
   const onDocumentMousedown = (event: MouseEvent): void => {
     const target = event.target as Node | null
-    if (!target || !isOpen.value) return
+    if (!target || !isOpen.value || isInsideHigherLayer(target)) return
     if (!triggerEl.value?.contains(target) && !panelEl.value?.contains(target)) setOpen(false)
   }
 
@@ -761,7 +781,7 @@
           :data-align="resolvedAlign"
           :data-size="size"
           :style="panelStyle"
-          class="flex w-(--container-sm) max-w-[calc(100vw-2*var(--spacing-sm))] flex-col overflow-x-hidden overflow-y-auto overscroll-contain rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)] max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:rounded-b-none max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]"
+          class="flex w-min max-w-[calc(100vw-2*var(--spacing-sm))] flex-col overflow-x-hidden overflow-y-auto overscroll-contain rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)] max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:rounded-b-none max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]"
           @keydown="onPanelKeydown"
         >
           <div
@@ -781,7 +801,8 @@
 
           <div
             v-if="panelMode === 'relative'"
-            class="flex flex-col"
+            :data-size="size"
+            class="flex flex-col data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
             :data-testid="`${testId}__relative`"
           >
             <div
@@ -856,7 +877,7 @@
               >
                 {{ t('dateRangePicker.quickRanges') }}
               </legend>
-              <div class="grid grid-cols-1 gap-(--spacing-2xs) @[18rem]:grid-cols-2">
+              <div class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-cols-2">
                 <label
                   v-for="option in relativeOptions"
                   :key="option.key"
@@ -885,7 +906,8 @@
 
           <div
             v-else
-            class="flex flex-col"
+            :data-size="size"
+            class="flex flex-col data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
             :data-testid="`${testId}__absolute`"
           >
             <div class="p-(--spacing-sm)">
@@ -975,13 +997,20 @@
           >
             <DatePickerTimezone v-if="showTimeZone" />
             <p
-              v-if="showError && draftError"
+              v-else
+              :data-testid="`${testId}__zone`"
+              class="text-label-sm m-0 text-(--text-muted)"
+            >
+              {{ t('dateRangePicker.zoneNote', { zone: zoneNote }) }}
+            </p>
+            <p
+              v-if="visibleError"
               :id="errorId"
               role="alert"
               :data-testid="`${testId}__error`"
               class="text-body-sm m-0 text-(--danger-foreground)"
             >
-              {{ draftError }}
+              {{ visibleError }}
             </p>
             <div
               class="flex items-center justify-end gap-(--spacing-xs) max-sm:*:flex-1 max-sm:*:justify-center"

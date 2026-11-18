@@ -1908,6 +1908,10 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `{ type: 'absolute', start, end }` with ISO instants instead of `{ start, end }` Dates.
   `DateRangePicker` now formats in `ConfigProvider`'s `time-zone` when its own is unbound. The
   locale catalog group `calendar` is renamed `datePicker`, and its placeholder reads "Select a date".
+- **`DateRangePicker` hides its time zone selector by default.** `showTimeZone` now defaults to
+  `false`: the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`). A page
+  that lets people switch zones adds `show-time-zone` (with `v-model:time-zone`). The start and end
+  time fields also list the day in 30-minute steps; typing a time still works.
 - **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
   `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
   `v-model`: `<RadioGroup v-model="plan"><RadioGroup.Item value="pro">Pro</RadioGroup.Item></RadioGroup>`.
