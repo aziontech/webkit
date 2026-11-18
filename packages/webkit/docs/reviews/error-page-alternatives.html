@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error page alternatives</title>
+<style>
+:root, :root[data-theme="light"] {
+  --bg-canvas:#F5F5F5; --bg-surface:#FFFFFF; --bg-surface-raised:#FFFFFF; --bg-mask:#00000005; --bg-hover:#00000014; --bg-selected:#E5E5E5;
+  --border-default:#D1D1D1; --border-muted:#DADADA; --border-strong:#000000; --border-input:#D1D1D1;
+  --text-default:#141414; --text-muted:#535353; --text-link:#005FCC; --text-brand:#F3652B;
+  --primary:#F3652B; --primary-foreground:#000000;
+  --warning:#FAD76B; --warning-foreground:#312602; --warning-mark:#947105;
+  --danger:#F3A5A5; --danger-foreground:#2E0606; --danger-border:#E74B4B; --danger-mark:#E51A1A;
+  --success:#78EDA2; --success-foreground:#0A2916; --success-mark:#16833F;
+  --info-mark:#0072F5; --accent:#005FCC; --ring-color:#666666;
+  --shadow-sm:0 1px 2px 0 rgb(0 0 0 / 0.08);
+  --shape-card:8px; --shape-button:6px; --shape-control:6px;
+  --spacing-2xs:4px; --spacing-xs:8px; --spacing-sm:12px; --spacing-md:16px; --spacing-lg:24px; --spacing-xl:32px; --spacing-2xl:48px;
+  --font-sans:Rubik, ui-sans-serif, system-ui, sans-serif; --font-mono:ui-monospace, 'SF Mono', Menlo, monospace;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg-canvas:#000000; --bg-surface:#0A0A0A; --bg-surface-raised:#141414; --bg-mask:#FFFFFF0D; --bg-hover:#FFFFFF1A; --bg-selected:#2B2B2B;
+  --border-default:#2B2B2B; --border-muted:#242424; --border-strong:#FFFFFF; --border-input:#535353;
+  --text-default:#FAFAFA; --text-muted:#B2B2B2; --text-link:#99C9FF;
+  --warning:#312602; --warning-foreground:#F7BD08; --warning-mark:#C59707;
+  --danger:#5B0B0B; --danger-foreground:#F9D2D2; --danger-mark:#ED7878;
+  --success:#0A2916; --success-foreground:#52E086; --success-mark:#18B452;
+  --info-mark:#3392FF; --accent:#99C9FF; --ring-color:#808080;
+  --shadow-sm:0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg-canvas); color:var(--text-default); font:15px/1.5 var(--font-sans); }
+.doc { max-width:1440px; margin:0 auto; padding:var(--spacing-lg) var(--spacing-md) 80px; }
+.doc > header { display:flex; flex-wrap:wrap; gap:var(--spacing-md); align-items:flex-start; justify-content:space-between; }
+h1 { font-size:1.875rem; font-weight:400; margin:0 0 var(--spacing-xs); }
+h2 { font-size:1.5rem; font-weight:400; margin:0; }
+h3 { font-size:0.875rem; font-weight:500; margin:var(--spacing-md) 0 var(--spacing-xs); color:var(--text-default); }
+.lead, .doc p { color:var(--text-muted); max-width:85ch; margin:0 0 var(--spacing-sm); }
+.toggle { display:inline-flex; gap:2px; padding:2px; border:1px solid var(--border-default); border-radius:var(--shape-control); background:var(--bg-surface); }
+.toggle button { font:inherit; font-size:0.75rem; border:0; background:transparent; color:var(--text-muted); padding:4px 12px; border-radius:4px; cursor:pointer; }
+.toggle button[aria-pressed="true"] { background:var(--bg-selected); color:var(--text-default); }
+.toggle button:focus-visible { outline:2px solid var(--ring-color); outline-offset:2px; }
+table.bench { width:100%; border-collapse:collapse; font-size:0.8125rem; margin:var(--spacing-sm) 0 var(--spacing-lg); }
+table.bench th, table.bench td { text-align:start; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--border-default); }
+table.bench th { color:var(--text-muted); font-weight:500; }
+.bench-wrap { overflow-x:auto; }
+.alt { border:1px solid var(--border-default); border-radius:var(--shape-card); background:var(--bg-surface); padding:var(--spacing-md); margin:var(--spacing-lg) 0; }
+.alt-head { display:flex; flex-wrap:wrap; gap:var(--spacing-xs) var(--spacing-md); align-items:baseline; }
+.alt-head .num { font:500 0.75rem var(--font-mono); color:var(--text-brand); }
+.based { font-size:0.8125rem; color:var(--text-muted); margin:4px 0 var(--spacing-md); }
+.frames { display:grid; grid-template-columns:minmax(0,1fr) 375px; gap:var(--spacing-md); align-items:start; }
+.frame { container-type:inline-size; border:1px solid var(--border-default); border-radius:var(--shape-card); overflow:hidden; background:var(--bg-canvas); }
+.frame-bar { display:flex; align-items:center; gap:6px; height:28px; padding:0 10px; border-bottom:1px solid var(--border-default); background:var(--bg-surface); font:0.6875rem var(--font-mono); color:var(--text-muted); }
+.frame-bar i { width:8px; height:8px; border-radius:50%; background:var(--border-default); display:inline-block; }
+.frame-bar span { margin-inline-start:auto; }
+.screen { min-height:560px; display:flex; flex-direction:column; }
+.frame.mobile .screen { min-height:700px; }
+.notes { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:var(--spacing-md); margin-top:var(--spacing-md); font-size:0.8125rem; }
+.notes ul { margin:0; padding-inline-start:18px; color:var(--text-muted); }
+.notes li { margin-bottom:4px; }
+.notes code, .doc p code, td code { font:0.75rem var(--font-mono); color:var(--text-default); }
+.rec { border:1px solid var(--primary); border-radius:var(--shape-card); padding:var(--spacing-md); background:var(--bg-surface); }
+.rec ol { color:var(--text-muted); max-width:90ch; padding-inline-start:20px; }
+.rec li { margin-bottom:6px; }
+.rec strong, .notes strong { color:var(--text-default); font-weight:500; }
+.cmp-legend { font-size:0.75rem; color:var(--text-muted); }
+@media (max-width: 1000px) { .frames { grid-template-columns:1fr; } .frame.mobile { max-width:375px; } .notes { grid-template-columns:1fr; } }
+
+/* ---------- WebKit parts, drawn with the classes and tokens of their .vue sources ---------- */
+.ic { width:1em; height:1em; display:inline-block; vertical-align:-0.125em; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+.console { display:flex; flex:1; min-height:inherit; }
+.rail { width:48px; border-inline-end:1px solid var(--border-default); background:var(--bg-surface); display:flex; flex-direction:column; align-items:center; gap:12px; padding-top:12px; }
+.rail b { width:20px; height:20px; border-radius:4px; background:var(--bg-hover); display:block; }
+.rail b:first-child { background:var(--primary); }
+.main { flex:1; display:flex; flex-direction:column; min-width:0; }
+.topbar { height:44px; border-bottom:1px solid var(--border-default); background:var(--bg-surface); display:flex; align-items:center; padding:0 var(--spacing-md); gap:var(--spacing-xs); font-size:0.75rem; color:var(--text-muted); }
+.topbar .sp { flex:1; }
+@container (max-width: 520px) { .rail { display:none; } }
+
+.btn { position:relative; display:inline-flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap; border-radius:var(--shape-button); height:32px; min-width:64px; padding:0 var(--spacing-sm); font:0.75rem/1.25 var(--font-sans); border:1px solid transparent; text-decoration:none; cursor:pointer; }
+.btn[data-variant="primary"] { background:var(--primary); color:var(--primary-foreground); }
+.btn[data-variant="outline"] { background:var(--bg-surface); color:var(--text-default); border-color:var(--border-default); }
+.btn[data-variant="ghost"] { background:transparent; color:var(--text-default); }
+.btn[data-variant="link"] { background:transparent; color:var(--text-link); font-size:0.875rem; padding:0; min-width:0; height:auto; }
+.btn[data-size="small"] { height:28px; min-width:56px; padding:0 var(--spacing-xs); }
+.icon-btn { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--shape-button); color:var(--text-muted); border:0; background:transparent; }
+.tag { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 var(--spacing-xs); border:1px solid transparent; border-radius:var(--shape-control); font:500 0.75rem/1 var(--font-mono); }
+.tag[data-severity="neutral"] { background:var(--bg-canvas); border-color:var(--border-default); color:var(--text-muted); }
+.tag[data-severity="warning"] { background:var(--warning); color:var(--warning-foreground); }
+.tag[data-severity="danger"] { background:var(--danger); color:var(--danger-foreground); }
+.tag[data-size="small"] { height:20px; padding:0 var(--spacing-2xs); font-size:0.6875rem; }
+.status { display:inline-flex; align-items:center; gap:6px; font-size:0.875rem; color:var(--text-default); }
+.status i { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.status i[data-severity="success"] { background:var(--success-mark); }
+.status i[data-severity="warning"] { background:var(--warning-mark); }
+.status i[data-severity="danger"] { background:var(--danger-mark); }
+.status i[data-severity="neutral"] { background:var(--text-muted); }
+.kbd { display:inline-flex; align-items:center; justify-content:center; height:20px; min-width:20px; padding:0 6px; border:1px solid var(--border-default); border-bottom-width:2px; border-radius:var(--shape-control); background:var(--bg-surface); color:var(--text-default); box-shadow:var(--shadow-sm); font:500 0.625rem/1 var(--font-sans); letter-spacing:.04em; }
+.empty { display:flex; flex-direction:column; align-items:center; text-align:center; gap:24px; padding:48px 32px; width:100%; }
+.empty-title { font-size:1.125rem; color:var(--text-default); margin:0; }
+.empty-desc { font-size:0.875rem; line-height:1.375; color:var(--text-muted); margin:0; max-width:46ch; }
+.empty-text { display:flex; flex-direction:column; gap:8px; align-items:center; }
+.tile { position:relative; width:40px; height:40px; display:flex; align-items:center; justify-content:center; }
+.tile::before, .tile::after { content:''; position:absolute; inset:50% auto auto 50%; translate:-50% -50%; border:1px solid var(--border-strong); border-radius:var(--shape-card); background:var(--bg-canvas); }
+.tile::before { width:56px; height:56px; opacity:.05; }
+.tile::after { width:48px; height:48px; opacity:.1; }
+.tile span { position:relative; z-index:1; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border-default); border-radius:var(--shape-control); background:var(--bg-surface); color:var(--text-default); font-size:16px; }
+.row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.ref { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 8px; font-size:0.75rem; color:var(--text-muted); }
+.ref bdi { font:0.75rem var(--font-mono); color:var(--text-default); }
+.ref .dot { opacity:.5; }
+.search { display:flex; align-items:center; gap:8px; height:32px; width:100%; max-width:420px; padding:0 var(--spacing-sm); border:1px solid var(--border-default); border-radius:var(--shape-control); background:var(--bg-surface); color:var(--text-muted); font-size:0.875rem; text-align:start; }
+.search span.grow { flex:1; }
+.items { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; width:100%; max-width:560px; }
+@container (max-width: 520px) { .items { grid-template-columns:1fr; } }
+.item { display:flex; align-items:center; gap:12px; padding:12px 16px; border:1px solid var(--border-muted); border-radius:var(--shape-card); background:var(--bg-surface); text-align:start; }
+.item .media { width:32px; height:32px; border-radius:var(--shape-control); background:var(--bg-hover); display:flex; align-items:center; justify-content:center; color:var(--text-default); font-size:15px; flex-shrink:0; }
+.item .t { font-size:0.875rem; color:var(--text-default); }
+.item .d { font-size:0.75rem; color:var(--text-muted); }
+.item .go { margin-inline-start:auto; color:var(--text-muted); }
+.overline { font:500 0.6875rem/1 var(--font-sans); letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); }
+.flow { display:flex; align-items:center; justify-content:center; gap:0; width:100%; }
+.node { position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-height:40px; padding:12px 16px; border:1px solid var(--border-default); border-radius:var(--shape-button); background:var(--bg-surface-raised); font-size:0.8125rem; color:var(--text-default); white-space:nowrap; }
+.node small { font-size:0.75rem; color:var(--text-muted); }
+.node::before, .node::after { content:''; position:absolute; top:50%; width:8px; height:8px; translate:0 -50%; border:1px solid var(--border-muted); border-radius:2px; background:var(--accent); }
+.node::before { inset-inline-start:-5px; } .node::after { inset-inline-end:-5px; }
+.node:first-child::before, .node:last-child::after { display:none; }
+.wire { flex:1; min-width:24px; max-width:96px; height:0; border-top:1px dashed var(--accent); }
+.wire[data-faded] { opacity:.5; }
+@container (max-width: 520px) { .flow { flex-direction:column; align-items:stretch; } .wire { min-height:20px; max-width:none; width:0; border-top:0; border-inline-start:1px dashed var(--accent); align-self:center; } .node { flex-direction:row; justify-content:space-between; align-items:center; } .node::before, .node::after { display:none; } }
+.cols { display:grid; grid-template-columns:1fr 1fr; gap:24px; width:100%; text-align:start; }
+@container (max-width: 520px) { .cols { grid-template-columns:1fr; } }
+.cols h4 { margin:0 0 6px; font-size:0.875rem; font-weight:400; color:var(--text-default); }
+.cols p { margin:0; font-size:0.8125rem; color:var(--text-muted); }
+.kv { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px 24px; width:100%; text-align:start; }
+@container (max-width: 520px) { .kv { grid-template-columns:1fr; gap:12px; } }
+.kv dt { font-size:0.75rem; color:var(--text-muted); margin-bottom:2px; }
+.kv dd { margin:0; font:0.8125rem var(--font-mono); color:var(--text-default); display:flex; align-items:center; gap:4px; }
+.sep { width:100%; height:1px; background:var(--border-default); }
+.codeblock { width:100%; border:1px solid var(--border-default); border-radius:var(--shape-card); background:var(--bg-surface); overflow:hidden; text-align:start; }
+.codeblock .head { display:flex; align-items:center; gap:8px; height:40px; padding:0 var(--spacing-sm); border-bottom:1px solid var(--border-default); font:0.75rem var(--font-mono); color:var(--text-muted); }
+.codeblock .head .grow { flex:1; }
+.codeblock pre { margin:0; padding:var(--spacing-sm) var(--spacing-md); font:0.75rem/1.6 var(--font-mono); color:var(--text-default); overflow-x:auto; background:var(--bg-canvas); }
+.codeblock .k { color:var(--text-muted); } .codeblock .s { color:var(--text-link); }
+.split { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:32px; width:100%; max-width:880px; align-items:start; }
+@container (max-width: 640px) { .split { grid-template-columns:1fr; } }
+.left { display:flex; flex-direction:column; gap:16px; align-items:flex-start; text-align:start; }
+.left .row { justify-content:flex-start; }
+.left .ref { justify-content:flex-start; }
+.card { border:1px solid var(--border-default); border-radius:var(--shape-card); background:var(--bg-surface); overflow:hidden; }
+.card-head { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border-default); font-size:0.875rem; }
+.card-body { padding:4px 16px; }
+.card-body .line { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border-default); font-size:0.8125rem; color:var(--text-muted); }
+.card-body .line:last-child { border-bottom:0; }
+.card-foot { padding:10px 16px; border-top:1px solid var(--border-default); font-size:0.75rem; color:var(--text-muted); display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+.content { flex:1; display:flex; flex-direction:column; align-items:center; padding:var(--spacing-lg) var(--spacing-md); }
+.content.top { justify-content:flex-start; padding-top:12cqh; }
+.content.center { justify-content:center; }
+.edge-page { flex:1; display:flex; flex-direction:column; align-items:center; gap:28px; padding:48px var(--spacing-md); max-width:880px; margin:0 auto; width:100%; }
+.edge-page .empty-title { font-size:1.5rem; }
+.brandline { display:flex; justify-content:space-between; width:100%; font-size:0.75rem; color:var(--text-muted); }
+.err404 { width:100%; max-width:120px; height:auto; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5"/><path d="M20 19v3H6.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/></symbol>
+  <symbol id="i-fn" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-logs" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h10"/></symbol>
+</svg>
+
+<main class="doc">
+<header>
+  <div>
+    <h1>Error page: five alternatives</h1>
+    <p class="lead">The <code>state/error-page</code> block today shows a faint 404 numeral, a title, one sentence and two buttons, centred in a mostly empty screen. Below are five ways to make it more useful, each based on how strong developer and cloud products build theirs. Every element is a real WebKit component in a variant it has, coloured with the tokens its <code>.vue</code> source uses. Each alternative is drawn twice: desktop (inside the console shell) and phone (375 px).</p>
+  </div>
+  <div class="toggle" role="group" aria-label="Theme">
+    <button type="button" data-set-theme="dark" aria-pressed="true">Dark</button>
+    <button type="button" data-set-theme="light" aria-pressed="false">Light</button>
+  </div>
+</header>
+
+<h2 style="margin-top:var(--spacing-lg)">What the benchmarks show</h2>
+<div class="bench-wrap">
+<table class="bench">
+  <thead><tr><th>Product</th><th>What its error page shows</th><th>What we take from it</th></tr></thead>
+  <tbody>
+    <tr><td>Vercel</td><td><code>404: NOT_FOUND</code>, then a <em>Code</em> and an <em>ID</em> (the request ID) and a link to a docs page per error code.</td><td>A machine-readable error code and a request ID on every error page; docs link per code.</td></tr>
+    <tr><td>Cloudflare</td><td>5xx pages: <em>Error 522</em>, a three-step path (Browser → Cloudflare → Host) marking which hop failed, <em>What happened?</em> / <em>What can I do?</em>, and the Ray ID and time at the bottom.</td><td>Say who is at fault. For an edge platform this is the single most useful thing an error can say.</td></tr>
+    <tr><td>Railway</td><td><em>Application failed to respond</em> (502) with a <code>request_id</code>; support asks for the request ID and the UTC time window.</td><td>Request ID plus UTC time is what support needs.</td></tr>
+    <tr><td>Fastly</td><td><em>Error 503 Service Unavailable</em> with a transaction ID (XID) to quote.</td><td>Even the most bare-bones page carries a traceable ID.</td></tr>
+    <tr><td>GitHub</td><td>A playful 404 illustration, a search field, and links to status and contact; 500 shows a status link.</td><td>Turn a dead end into a search; link the status page on server errors.</td></tr>
+    <tr><td>Stripe</td><td>Docs 404 lists popular destinations; API errors carry <code>request_id</code> and a <code>doc_url</code>.</td><td>Offer the places people most likely wanted; give developers the raw error object.</td></tr>
+    <tr><td>Supabase, Linear, Netlify, Render</td><td>Short, calm copy: what happened in one line, one way back (<em>Head back</em>, <em>Back to our site</em>), small brand mark, no stack trace.</td><td>Keep the tone calm and the copy short; one primary way out.</td></tr>
+    <tr><td>Google Cloud</td><td><em>404. That's an error.</em> plus a short explanation; Cloud console errors point to the Service Health dashboard.</td><td>Point to live service health when the failure may be on our side.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="cmp-legend">Sources: <a href="https://vercel.com/docs/errors/NOT_FOUND" style="color:var(--text-link)">Vercel NOT_FOUND</a>, <a href="https://vercel.com/kb/guide/how-to-debug-404-errors" style="color:var(--text-link)">Vercel: debugging 404 errors</a>, <a href="https://kinsta.com/docs/wordpress-hosting/wordpress-troubleshooting/cloudflare-errors/" style="color:var(--text-link)">Cloudflare errors (Kinsta guide)</a>, <a href="https://station.railway.com/questions/application-failed-to-respond-8b06744f" style="color:var(--text-link)">Railway: Application failed to respond</a>; the rest from the live pages as of November 2026.</p>
+
+<!-- 1 -->
+<section class="alt" id="alt-1">
+  <div class="alt-head"><span class="num">01</span><h2>Quiet and traceable</h2></div>
+  <p class="based">Based on Vercel, Linear, Fastly. The smallest change: same message, no giant numeral, raised into the upper third, with the error code and a copyable request ID under the actions.</p>
+  <div class="frames" data-tpl="t1"></div>
+  <div class="notes">
+    <div><h3>Pros</h3><ul><li>Smallest change to the block; same four variants.</li><li>Every error gets a request ID and time support can trace (Vercel, Railway, Fastly).</li><li>No more empty void: content sits in the upper third where the eye lands.</li></ul></div>
+    <div><h3>Cons</h3><ul><li>Still a dead end: it does not help the user find what they wanted.</li><li>Plain; the page does not feel like Azion.</li></ul></div>
+    <div><h3>WebKit pieces</h3><ul><li><code>EmptyState</code> (title, description, actions), <code>StatusCode</code> 404 (warning), <code>Button</code> primary + outline, <code>CopyButton</code>, <code>Timestamp</code>.</li><li><strong>New:</strong> nothing. Only the block's layout and a <code>requestId</code> prop.</li></ul></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="alt" id="alt-2">
+  <div class="alt-head"><span class="num">02</span><h2>Find your way</h2></div>
+  <p class="based">Based on GitHub (search on the 404), Stripe docs (popular destinations), Supabase (one calm way back). The 404 becomes navigation: search the console, or jump to the four places people go most.</p>
+  <div class="frames" data-tpl="t2"></div>
+  <div class="notes">
+    <div><h3>Pros</h3><ul><li>Turns a dead end into a next step; fills the empty space with something useful.</li><li>Search opens the existing <code>Command</code> palette, so ⌘K works the same as everywhere.</li><li>Keeps the Azion 404 art, smaller.</li></ul></div>
+    <div><h3>Cons</h3><ul><li>The app has to pass its destinations (props), and keep them current.</li><li>Longer on a phone (the list stacks).</li><li>Makes sense for 404 / 403 / missing resource, less for 500.</li></ul></div>
+    <div><h3>WebKit pieces</h3><ul><li><code>svg/error-404</code>, <code>EmptyState</code>, <code>SearchTrigger</code> + <code>Kbd</code> (opens <code>Command</code>), <code>Item</code> variant outline in an <code>ItemGroup</code>, <code>Button</code>, <code>CopyButton</code>.</li><li><strong>New:</strong> nothing. A <code>destinations</code> prop on the block.</li></ul></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="alt" id="alt-3">
+  <div class="alt-head"><span class="num">03</span><h2>Request path</h2></div>
+  <p class="based">Based on Cloudflare's 5xx pages and Fastly. For errors a <em>visitor of a customer's site</em> sees when Azion cannot reach the origin: shows the hop that failed, what happened, what to do, and the request details.</p>
+  <div class="frames" data-tpl="t3" data-host="www.example.com"></div>
+  <div class="notes">
+    <div><h3>Pros</h3><ul><li>Answers "whose fault is it?" at a glance; that is what an edge platform's error must say.</li><li>Fewer support tickets: the site owner learns the origin is down, not Azion.</li><li>Request ID, edge location and UTC time are what support asks for.</li></ul></div>
+    <div><h3>Cons</h3><ul><li>Only for proxy errors (502, 504, origin timeouts); not for the console's 404.</li><li>It is a different surface (Azion's own error pages served for customer sites), so it would be a new block, not a variant.</li><li><code>FlowDiagram</code> is horizontal; on a phone the hops have to stack (drawn here as a vertical list).</li></ul></div>
+    <div><h3>WebKit pieces</h3><ul><li><code>StatusCode</code> 502 (danger), <code>FlowDiagram</code> + nodes, <code>StatusIndicator</code> (success, danger), <code>KeyValueList</code>, <code>CopyButton</code>, <code>Timestamp</code>, <code>Button</code>.</li><li><strong>New:</strong> a new block <code>state/edge-error-page</code>; FlowDiagram would need a vertical layout for phones.</li></ul></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="alt" id="alt-4">
+  <div class="alt-head"><span class="num">04</span><h2>Developer details</h2></div>
+  <p class="based">Based on Railway (JSON body with <code>request_id</code>), Stripe (error object with <code>doc_url</code>) and Vercel (an error code with its own docs page). For a 500 in the console: plain-words message on top, the raw error response below, one click to copy it all.</p>
+  <div class="frames" data-tpl="t4"></div>
+  <div class="notes">
+    <div><h3>Pros</h3><ul><li>Developers get exactly what support needs, in one copy.</li><li>A link to the matching request in Real-Time Events closes the loop.</li><li>Error codes link to a docs page each (Vercel pattern).</li></ul></div>
+    <div><h3>Cons</h3><ul><li>Intimidating for non-developer users (billing, account owners).</li><li>The API must expose a curated error body; never a stack trace.</li><li>Needs docs pages per error code to be worth it.</li></ul></div>
+    <div><h3>WebKit pieces</h3><ul><li><code>StatusCode</code> 500 (danger), <code>EmptyState</code> icon tile, <code>Button</code> primary + outline + link, <code>CodeBlock</code> (JSON, with its copy button).</li><li><strong>New:</strong> nothing in WebKit; an error-code docs section on the product side.</li></ul></div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="alt" id="alt-5">
+  <div class="alt-head"><span class="num">05</span><h2>Split with live status</h2></div>
+  <p class="based">Based on GitHub (status link on the unicorn page), Google Cloud (Service Health), Netlify and Render (calm copy). The message on the left; on the right a card with the live health of the services, so the user knows at once whether it is them or us.</p>
+  <div class="frames" data-tpl="t5"></div>
+  <div class="notes">
+    <div><h3>Pros</h3><ul><li>During an incident, users stop retrying and stop opening tickets.</li><li>Uses the full width on desktop; stacks cleanly on a phone.</li></ul></div>
+    <div><h3>Cons</h3><ul><li>Needs a live status feed; a stale "Operational" next to an error is worse than nothing.</li><li>Only meaningful for 5xx; a 404 has nothing to do with service health.</li></ul></div>
+    <div><h3>WebKit pieces</h3><ul><li><code>StatusCode</code> 503 (danger), <code>Button</code>, <code>Card</code> with header and footer, <code>StatusIndicator</code> (success, warning), <code>Timestamp</code>, <code>CopyButton</code>.</li><li><strong>New:</strong> nothing in WebKit; a status feed in the app.</li></ul></div>
+  </div>
+</section>
+
+<section class="rec">
+  <h2>Recommendation</h2>
+  <p>Keep one block and give each error the layout that helps most. In plain words: a missing page should help you find the right page; a broken server should tell you it is not your fault and give support what it needs.</p>
+  <ol>
+    <li><strong>Every variant gets the reference line from 01</strong> (error code, request ID with copy, UTC time). Cheap, and it is what support asks for first.</li>
+    <li><strong>404, 403 and missing resource use 02, Find your way.</strong> Search plus four popular destinations instead of the empty void. Nothing new in WebKit, only a <code>destinations</code> prop.</li>
+    <li><strong>500 keeps today's Retry + System status, and adds a collapsed "Details" with the JSON from 04</strong> once the API returns a curated error body.</li>
+    <li><strong>03, Request path, becomes its own block later</strong> (<code>state/edge-error-page</code>) for the pages Azion serves to visitors of customer sites. It is the strongest idea here, but it is a different surface from the console.</li>
+    <li><strong>05 waits</strong> until a reliable status feed exists.</li>
+  </ol>
+  <p>Owner to pick: go with this mix, or choose one alternative for every variant.</p>
+</section>
+</main>
+
+<template id="t1">
+  <div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main">
+    <div class="topbar">Acme Inc. <span class="sp"></span></div>
+    <div class="content top">
+      <div class="empty" data-cmp="EmptyState" style="max-width:520px;padding-top:0">
+        <span class="tag" data-cmp="StatusCode 404 (warning)" data-severity="warning">404</span>
+        <div class="empty-text"><p class="empty-title">Page not found</p><p class="empty-desc">There is nothing at this address. Check the URL or head back to the start.</p></div>
+        <div class="row"><a class="btn" data-cmp="Button primary" data-variant="primary">Go to home</a><a class="btn" data-cmp="Button outline" data-variant="outline"><svg class="ic"><use href="#i-book"/></svg>Docs</a></div>
+        <div class="ref" data-cmp="reference line">Code <bdi>NOT_FOUND</bdi><span class="dot">·</span>ID <bdi>req_7f3c91ab</bdi><button class="icon-btn" data-cmp="CopyButton small" aria-label="Copy the request ID"><svg class="ic"><use href="#i-copy"/></svg></button><span class="dot">·</span><time data-cmp="Timestamp">Nov 18, 2026, 14:02 UTC</time></div>
+      </div>
+    </div>
+  </div></div>
+</template>
+
+<template id="t2">
+  <div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main">
+    <div class="topbar">Acme Inc. <span class="sp"></span></div>
+    <div class="content top" style="padding-top:8cqh">
+      <div class="empty" data-cmp="EmptyState" style="padding-top:0;gap:20px">
+        <svg class="err404" data-cmp="svg/error-404" viewBox="0 0 158 71" aria-hidden="true"><path opacity="0.3" d="M49.7969 47.0312V54.1562H0.484375V49.0469L31.0469 1.75H38.125L30.5312 15.4375L10.3281 47.0312H49.7969ZM40.2812 1.75V70H31.6094V1.75H40.2812ZM100.516 30.4375V40.8438C100.516 46.4375 100.016 51.1562 99.0156 55C98.0156 58.8438 96.5781 61.9375 94.7031 64.2812C92.8281 66.625 90.5625 68.3281 87.9062 69.3906C85.2812 70.4219 82.3125 70.9375 79 70.9375C76.375 70.9375 73.9531 70.6094 71.7344 69.9531C69.5156 69.2969 67.5156 68.25 65.7344 66.8125C63.9844 65.3438 62.4844 63.4375 61.2344 61.0938C59.9844 58.75 59.0312 55.9062 58.375 52.5625C57.7188 49.2188 57.3906 45.3125 57.3906 40.8438V30.4375C57.3906 24.8438 57.8906 20.1562 58.8906 16.375C59.9219 12.5937 61.375 9.5625 63.25 7.28125C65.125 4.96875 67.375 3.3125 70 2.3125C72.6562 1.3125 75.625 0.8125 78.9062 0.8125C81.5625 0.8125 84 1.14062 86.2188 1.79688C88.4688 2.42187 90.4688 3.4375 92.2188 4.84375C93.9688 6.21875 95.4531 8.0625 96.6719 10.375C97.9219 12.6563 98.875 15.4531 99.5312 18.7656C100.188 22.0781 100.516 25.9688 100.516 30.4375ZM91.7969 42.25V28.9844C91.7969 25.9219 91.6094 23.2344 91.2344 20.9219C90.8906 18.5781 90.375 16.5781 89.6875 14.9219C89 13.2656 88.125 11.9219 87.0625 10.8906C86.0312 9.85938 84.8281 9.10938 83.4531 8.64062C82.1094 8.14062 80.5938 7.89062 78.9062 7.89062C76.8438 7.89062 75.0156 8.28125 73.4219 9.0625C71.8281 9.8125 70.4844 11.0156 69.3906 12.6719C68.3281 14.3281 67.5156 16.5 66.9531 19.1875C66.3906 21.875 66.1094 25.1406 66.1094 28.9844V42.25C66.1094 45.3125 66.2812 48.0156 66.625 50.3594C67 52.7031 67.5469 54.7344 68.2656 56.4531C68.9844 58.1406 69.8594 59.5312 70.8906 60.625C71.9219 61.7188 73.1094 62.5312 74.4531 63.0625C75.8281 63.5625 77.3438 63.8125 79 63.8125C81.125 63.8125 82.9844 63.4062 84.5781 62.5938C86.1719 61.7812 87.5 60.5156 88.5625 58.7969C89.6562 57.0469 90.4688 54.8125 91 52.0938C91.5312 49.3438 91.7969 46.0625 91.7969 42.25ZM157.797 47.0312V54.1562H108.484V49.0469L139.047 1.75H146.125L138.531 15.4375L118.328 47.0312H157.797ZM148.281 1.75V70H139.609V1.75H148.281Z" fill="url(#paint0_linear_4357_91145)" /> <defs> <linearGradient id="paint0_linear_4357_91145" x1="79" y1="-41.8571" x2="79" y2="101" gradientUnits="userSpaceOnUse" > <stop stop-color="#F3652B" /> <stop offset="1" stop-color="#D95C2A" stop-opacity="0.1" /> </linearGradient> </defs></svg>
+        <div class="empty-text"><p class="empty-title">Page not found</p><p class="empty-desc">This address leads nowhere. Search the console, or pick one of the places people go most.</p></div>
+        <button class="search" data-cmp="SearchTrigger"><svg class="ic"><use href="#i-search"/></svg><span class="grow">Search Azion Console</span><span class="kbd" data-cmp="Kbd">⌘ K</span></button>
+        <div class="items" data-cmp="ItemGroup">
+          <a class="item" data-cmp="Item outline"><span class="media"><svg class="ic"><use href="#i-layers"/></svg></span><span><span class="t">Workloads</span><br><span class="d">Domains and deployments</span></span><svg class="ic go"><use href="#i-chev"/></svg></a>
+          <a class="item" data-cmp="Item outline"><span class="media"><svg class="ic"><use href="#i-box"/></svg></span><span><span class="t">Applications</span><br><span class="d">Rules, cache and origins</span></span><svg class="ic go"><use href="#i-chev"/></svg></a>
+          <a class="item" data-cmp="Item outline"><span class="media"><svg class="ic"><use href="#i-fn"/></svg></span><span><span class="t">Functions</span><br><span class="d">Code that runs at the edge</span></span><svg class="ic go"><use href="#i-chev"/></svg></a>
+          <a class="item" data-cmp="Item outline"><span class="media"><svg class="ic"><use href="#i-book"/></svg></span><span><span class="t">Docs</span><br><span class="d">Guides and API reference</span></span><svg class="ic go"><use href="#i-chev"/></svg></a>
+        </div>
+        <div class="row"><a class="btn" data-cmp="Button primary" data-variant="primary"><svg class="ic"><use href="#i-home"/></svg>Go to home</a></div>
+        <div class="ref" data-cmp="reference line">ID <bdi>req_7f3c91ab</bdi><button class="icon-btn" data-cmp="CopyButton small" aria-label="Copy the request ID"><svg class="ic"><use href="#i-copy"/></svg></button></div>
+      </div>
+    </div>
+  </div></div>
+</template>
+
+<template id="t3">
+  <div class="edge-page">
+    <div class="brandline"><span style="color:var(--text-default)">www.example.com</span><span>Served by Azion</span></div>
+    <div class="empty-text" style="gap:12px;text-align:center">
+      <span class="tag" data-cmp="StatusCode 502 (danger)" data-severity="danger">502</span>
+      <p class="empty-title">The origin did not respond</p>
+      <p class="empty-desc">Your browser reached Azion, and Azion is working, but the server behind www.example.com did not answer in time.</p>
+    </div>
+    <div class="flow" data-cmp="FlowDiagram">
+      <div class="node" data-cmp="FlowDiagramNode"><span>You</span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></div>
+      <div class="wire"></div>
+      <div class="node" data-cmp="FlowDiagramNode"><span>Azion edge <small>IAD</small></span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></div>
+      <div class="wire" data-faded></div>
+      <div class="node" data-cmp="FlowDiagramNode"><span>Origin <small>origin.example.com</small></span><span class="status" data-cmp="StatusIndicator danger"><i data-severity="danger"></i>Error</span></div>
+    </div>
+    <div class="cols">
+      <div><h4>What happened?</h4><p>The origin server took longer than 60 seconds to answer, so the request was closed.</p></div>
+      <div><h4>What can I do?</h4><p><strong style="color:var(--text-default);font-weight:400">Visitor:</strong> try again in a few minutes. <strong style="color:var(--text-default);font-weight:400">Site owner:</strong> check that the origin is up and accepts connections from Azion.</p></div>
+    </div>
+    <div class="row" style="justify-content:flex-start;width:100%"><a class="btn" data-cmp="Button primary" data-variant="primary"><svg class="ic"><use href="#i-refresh"/></svg>Try again</a><a class="btn" data-cmp="Button outline" data-variant="outline"><svg class="ic"><use href="#i-book"/></svg>Troubleshoot 502</a></div>
+    <div class="sep"></div>
+    <dl class="kv" data-cmp="KeyValueList columns=3">
+      <div><dt>Request ID</dt><dd>req_7f3c91ab<button class="icon-btn" data-cmp="CopyButton small" aria-label="Copy the request ID"><svg class="ic"><use href="#i-copy"/></svg></button></dd></div>
+      <div><dt>Edge location</dt><dd>IAD</dd></div>
+      <div><dt>Time</dt><dd data-cmp="Timestamp">2026-11-18 14:02:11 UTC</dd></div>
+    </dl>
+  </div>
+</template>
+
+<template id="t4">
+  <div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main">
+    <div class="topbar">Acme Inc. <span class="sp"></span></div>
+    <div class="content top" style="padding-top:6cqh">
+      <div class="empty" data-cmp="EmptyState" style="max-width:640px;padding-top:0;gap:20px">
+        <span class="tile" data-cmp="EmptyState icon tile"><span><svg class="ic"><use href="#i-alert"/></svg></span></span>
+        <div class="empty-text"><p class="empty-title">Something went wrong on our side</p><p class="empty-desc">This page could not load. Nothing you saved was lost. Retry in a moment; if it keeps failing, send the details below to support.</p></div>
+        <div class="row"><a class="btn" data-cmp="Button primary" data-variant="primary"><svg class="ic"><use href="#i-refresh"/></svg>Retry</a><a class="btn" data-cmp="Button outline" data-variant="outline"><svg class="ic"><use href="#i-ext"/></svg>System status</a></div>
+        <div class="codeblock" data-cmp="CodeBlock (json)">
+          <div class="head"><span class="tag" data-size="small" data-cmp="StatusCode 500 (danger)" data-severity="danger">GET 500</span><span class="grow">Response</span><button class="icon-btn" aria-label="Copy the response"><svg class="ic"><use href="#i-copy"/></svg></button></div>
+<pre>{
+  <span class="k">"status"</span>: 500,
+  <span class="k">"code"</span>: <span class="s">"INTERNAL_ERROR"</span>,
+  <span class="k">"message"</span>: <span class="s">"The workloads list could not be loaded."</span>,
+  <span class="k">"request_id"</span>: <span class="s">"req_7f3c91ab"</span>,
+  <span class="k">"time"</span>: <span class="s">"2026-11-18T14:02:11Z"</span>,
+  <span class="k">"doc_url"</span>: <span class="s">"https://example.com/docs/errors/INTERNAL_ERROR"</span>
+}</pre>
+        </div>
+        <div class="row"><a class="btn" data-cmp="Button link" data-variant="link"><svg class="ic"><use href="#i-logs"/></svg>Open this request in Real-Time Events</a></div>
+      </div>
+    </div>
+  </div></div>
+</template>
+
+<template id="t5">
+  <div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main">
+    <div class="topbar">Acme Inc. <span class="sp"></span></div>
+    <div class="content top" style="padding-top:10cqh">
+      <div class="split">
+        <div class="left">
+          <span class="tag" data-cmp="StatusCode 503 (danger)" data-severity="danger">503</span>
+          <div style="display:flex;flex-direction:column;gap:8px"><p class="empty-title" style="font-size:1.5rem">The console is having trouble</p><p class="empty-desc">Some requests are failing on our side. Your applications keep serving traffic; only the console is affected. We are working on it.</p></div>
+          <div class="row"><a class="btn" data-cmp="Button primary" data-variant="primary"><svg class="ic"><use href="#i-refresh"/></svg>Retry</a><a class="btn" data-cmp="Button outline" data-variant="outline"><svg class="ic"><use href="#i-ext"/></svg>Status page</a></div>
+          <div class="ref" data-cmp="reference line">ID <bdi>req_7f3c91ab</bdi><button class="icon-btn" data-cmp="CopyButton small" aria-label="Copy the request ID"><svg class="ic"><use href="#i-copy"/></svg></button><span class="dot">·</span><time data-cmp="Timestamp">14:02 UTC</time></div>
+        </div>
+        <div class="card" data-cmp="Card">
+          <div class="card-head"><span>Azion status</span><span class="status" data-cmp="StatusIndicator warning"><i data-severity="warning"></i>Degraded</span></div>
+          <div class="card-body">
+            <div class="line"><span>Console</span><span class="status" data-cmp="StatusIndicator warning"><i data-severity="warning"></i>Degraded</span></div>
+            <div class="line"><span>Applications</span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Operational</span></div>
+            <div class="line"><span>Functions</span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Operational</span></div>
+            <div class="line"><span>Edge DNS</span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Operational</span></div>
+          </div>
+          <div class="card-foot"><time data-cmp="Timestamp">Updated 2 minutes ago</time><span style="color:var(--text-link)">status.example.com</span></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</template>
+
+<script>
+  document.querySelectorAll('[data-tpl]').forEach(function (host) {
+    var tpl = document.getElementById(host.getAttribute('data-tpl'));
+    var hostName = host.getAttribute('data-host') || 'console.example.com';
+    [['desktop', 'Desktop · ' + hostName], ['mobile', 'Phone · 375 px']].forEach(function (pair) {
+      var frame = document.createElement('div');
+      frame.className = 'frame ' + pair[0];
+      frame.innerHTML = '<div class="frame-bar"><i></i><i></i><i></i><span>' + pair[1] + '</span></div><div class="screen"></div>';
+      frame.querySelector('.screen').appendChild(tpl.content.cloneNode(true));
+      host.appendChild(frame);
+    });
+  });
+  var buttons = document.querySelectorAll('[data-set-theme]');
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-theme') === theme)); });
+    try { localStorage.setItem('error-pages-theme', theme); } catch (e) {}
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { setTheme(b.getAttribute('data-set-theme')); }); });
+  try { var saved = localStorage.getItem('error-pages-theme'); if (saved) setTheme(saved); } catch (e) {}
+</script>
+</body>
+</html>
