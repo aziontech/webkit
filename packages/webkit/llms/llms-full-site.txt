@@ -172,7 +172,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 </template>
 ```
 
-1 more example(s) in [components/doc-accordion-group.md](components/doc-accordion-group.md).
+2 more example(s) in [components/doc-accordion-group.md](components/doc-accordion-group.md).
 
 ---
 

@@ -99,6 +99,27 @@ describe('DocMarkdown', () => {
     expect(getByText('CLI')).toBeTruthy()
   })
 
+  it('renders an AccordionGroup tag as DocAccordionGroup whose items open and close', async () => {
+    const user = userEvent.setup()
+    const { container, findByRole, findByTestId } = mount(
+      [
+        '<AccordionGroup>',
+        '  <Accordion title="Is there a free tier?">Yes, with every product.</Accordion>',
+        '  <Accordion title="Can I purge one path?">Purge by URL.</Accordion>',
+        '</AccordionGroup>'
+      ].join('\n')
+    )
+    expect(await findByTestId('doc-accordion-group')).toBeTruthy()
+    const trigger = await findByRole('button', { name: 'Is there a free tier?' })
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    await user.click(trigger)
+    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    expect(await findByRole('region', { name: 'Is there a free tier?' })).toBeTruthy()
+    await user.click(trigger)
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    await expectNoA11yViolations(container)
+  })
+
   it('renders a Tabs tag as Tabs with one tab and panel per Tab title', async () => {
     const user = userEvent.setup()
     const { container, findByRole, getByRole } = mount(

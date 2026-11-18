@@ -9,6 +9,11 @@
    "name": "Multiple",
    "summary": "`type=\"multiple\"` lets the reader keep several answers open to compare them.",
    "file": "examples/doc-accordion-group/multiple.vue"
+  },
+  {
+   "name": "Markdown",
+   "summary": "The same group written in a Markdown page: `DocMarkdown` turns an `<AccordionGroup>` with `<Accordion title>` items into `DocAccordionGroup` and `DocAccordion`, so docs authors write the tags and never import the components.",
+   "file": "examples/doc-accordion-group/markdown.vue"
   }
  ]
 }
