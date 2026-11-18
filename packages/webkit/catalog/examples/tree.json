@@ -6,14 +6,14 @@
    "file": "examples/tree/default.vue"
   },
   {
+   "name": "Sizes",
+   "summary": "`size` sets the row density: `small` is 24px rows for dense file explorers, `medium` (the default) 32px, `large` 40px for touch or roomy panels. Height, padding, label type and indentation step together.",
+   "file": "examples/tree/sizes.vue"
+  },
+  {
    "name": "Selectable",
    "summary": "With `selectable`, activating a node writes its id to `v-model:selected-key`, marks the row selected and sets `aria-selected`. The bound id is shown under the tree.",
    "file": "examples/tree/selectable.vue"
-  },
-  {
-   "name": "CustomItem",
-   "summary": "The `item` slot replaces the label region of every row, here adding a status `Tag`; the `actions` slot adds an end-aligned `IconButton` per row that opens a `DropdownMenu` of row actions (Download, Copy path, Delete); the last one picked is shown under the tree. The chevron, indentation and row states stay owned by the tree.",
-   "file": "examples/tree/custom-item.vue"
   }
  ]
 }

@@ -12181,6 +12181,13 @@
      "doc": "Renders Skeleton rows in place of the tree and sets `aria-busy`."
     },
     {
+     "name": "size",
+     "type": "TreeSize",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Row density: `small` is 24px rows, `medium` 32px, `large` 40px. Height, padding, type, glyph size and indentation step together (see Tokens)."
+    },
+    {
      "name": "emptyTitle",
      "type": "string",
      "default": "''",
