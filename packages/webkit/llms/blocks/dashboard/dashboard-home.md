@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-home/dashboard-home.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-home")`
-- Components: [Alert](../../components/alert.md), `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [CompanyLogo](../../components/company-logo.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Illustration](../../components/illustration.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [Popover](../../components/popover.md), [SearchTrigger](../../components/search-trigger.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), `TableCellActions`, `TableCellLink`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-console-layout`
+- Components: [Alert](../../components/alert.md), `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Illustration](../../components/illustration.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [Popover](../../components/popover.md), [SearchTrigger](../../components/search-trigger.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), `TableCellActions`, `TableCellLink`, `TableCellTime`, [Tag](../../components/tag.md), [ThirdPartyLogo](../../components/third-party-logo.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -55,10 +55,10 @@ in the aside slot that explains the metric (`Share of traffic served from cache 
 the dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest
 belongs on a dashboard.
 
-### D. Agent onboarding — `Card`, `Item`, `CompanyLogo` (optional)
+### D. Agent onboarding — `Card`, `Item`, `ThirdPartyLogo` (optional)
 
 A whole-card link (`Item` with `href` to the agent setup page): the agent marks, `Set up your coding agent` and one sentence. Each mark is a
-decorative `CompanyLogo` at `size="small"` in a bordered tile; a mono mark takes `variant="current"` and the
+decorative `ThirdPartyLogo` at `size="small"` in a bordered tile; a mono mark takes `variant="current"` and the
 tile's text colour, a coloured one `variant="color"`. Its dismiss `IconButton` sits outside the button
 so the two controls never nest.
 
@@ -245,7 +245,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -259,6 +258,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import Spinner from '@aziontech/webkit/spinner'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
   import { computed, onScopeDispose, reactive, ref, watch } from 'vue'
@@ -562,7 +562,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
                         :key="agent.name"
                         class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
                       >
-                        <CompanyLogo
+                        <ThirdPartyLogo
                           :name="agent.name"
                           :src="agent.src"
                           :variant="agent.mono ? 'current' : 'color'"

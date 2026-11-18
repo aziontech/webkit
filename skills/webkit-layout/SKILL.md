@@ -222,7 +222,7 @@ it names the group in the markup.
 are already direct siblings of the page stack, where adding a wrapper is the wrong answer.
 
 A tab strip and its panel are one band too: the panel starts one group step below the strip.
-`Tabs.Content` carries that top padding itself (`DocTabs` inherits it), so never add a margin or a
+`Tabs.Content` carries that top padding itself (a Markdown `<Tabs>` in `DocMarkdown` renders on it too), so never add a margin or a
 `gap` between `Tabs.List` and the panels.
 
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.

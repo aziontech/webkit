@@ -17,6 +17,7 @@
       v-model="range"
       v-model:time-zone="timeZone"
       :time-zones="zones"
+      show-time-zone
       aria-label="Log window"
     />
     <p class="text-body-sm text-(--text-muted) tabular-nums">{{ range.start }} – {{ range.end }}</p>

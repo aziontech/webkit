@@ -28,7 +28,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "28.1 KB",
+    "limit": "28.25 KB",
     "entryOnly": true
   },
   {
@@ -83,12 +83,12 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "17.75 KB"
+    "limit": "24.4 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "34.6 KB"
+    "limit": "44.85 KB"
   },
   {
     "name": "table-root",
@@ -247,16 +247,6 @@
     "limit": "1.2 KB"
   },
   {
-    "name": "doc-tab",
-    "path": "src/components/docs/doc-tab/doc-tab.vue",
-    "limit": "0.5 KB"
-  },
-  {
-    "name": "doc-tabs",
-    "path": "src/components/docs/doc-tabs/doc-tabs.vue",
-    "limit": "17 KB"
-  },
-  {
     "name": "doc-prompt",
     "path": "src/components/docs/doc-prompt/doc-prompt.vue",
     "limit": "12.3 KB",
@@ -398,8 +388,8 @@
     "entryOnly": true
   },
   {
-    "name": "company-logo",
-    "path": "src/components/content/company-logo/company-logo.vue",
+    "name": "third-party-logo",
+    "path": "src/components/content/third-party-logo/third-party-logo.vue",
     "limit": "1.5 KB"
   },
   {
@@ -954,7 +944,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "10.1 KB"
+    "limit": "10.35 KB"
   },
   {
     "name": "file-dropzone",
@@ -1080,17 +1070,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "11.35 KB"
+    "limit": "11.5 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "10.55 KB"
+    "limit": "10.7 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "10.65 KB"
+    "limit": "10.85 KB"
   },
   {
     "name": "phone-input",
@@ -1289,7 +1279,7 @@
   {
     "name": "combobox",
     "path": "src/components/input/combobox/combobox.vue",
-    "limit": "13.05 KB"
+    "limit": "13.15 KB"
   },
   {
     "name": "tag-editor",
@@ -1299,7 +1289,7 @@
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "60.8 KB"
+    "limit": "61 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1314,7 +1304,7 @@
   {
     "name": "use-time-range",
     "path": "src/composables/use-time-range/index.ts",
-    "limit": "0.9 KB"
+    "limit": "1.4 KB"
   },
   {
     "name": "file-preview",
@@ -1382,13 +1372,13 @@
   {
     "name": "filter-menu",
     "path": "src/components/data/filter-menu/index.ts",
-    "limit": "36.05 KB",
+    "limit": "36.2 KB",
     "entryOnly": true
   },
   {
     "name": "filter-menu-root",
     "path": "src/components/data/filter-menu/filter-menu.vue",
-    "limit": "32.3 KB",
+    "limit": "32.45 KB",
     "entryOnly": true
   },
   {
@@ -1673,7 +1663,7 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "6.35 KB",
+    "limit": "6.45 KB",
     "entryOnly": true
   },
   {
@@ -1829,7 +1819,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "17.95 KB"
+    "limit": "24.6 KB"
   },
   {
     "name": "date-picker-clear",

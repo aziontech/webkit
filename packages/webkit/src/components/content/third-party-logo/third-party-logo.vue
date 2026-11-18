@@ -2,21 +2,21 @@
   import { computed, normalizeClass, useAttrs } from 'vue'
 
   defineOptions({
-    name: 'CompanyLogo',
+    name: 'ThirdPartyLogo',
     inheritAttrs: false
   })
 
   /** The ink a single file is drawn in: `light` art is inverted on the light theme, `dark` art on the dark theme, `color` is kept as is. */
-  export type CompanyLogoArtwork = 'color' | 'light' | 'dark'
+  export type ThirdPartyLogoArtwork = 'color' | 'light' | 'dark'
 
   /** How the mark is inked: its own colours, one theme silhouette, the surrounding text colour, or black pinned for a coloured fill. */
-  export type CompanyLogoVariant = 'color' | 'monochrome' | 'current' | 'knockout'
+  export type ThirdPartyLogoVariant = 'color' | 'monochrome' | 'current' | 'knockout'
 
   /** How a section inks a client mark: its own colours, one theme silhouette, or black pinned for a coloured fill (the `color`, `monochrome` and `knockout` looks of the mark). */
-  export type CompanyLogoTreatment = 'color' | 'monochrome' | 'knockout'
+  export type ThirdPartyLogoTreatment = 'color' | 'monochrome' | 'knockout'
 
   /** A client's mark as sections list it: the client's name (the alternative text) and the URL of its logo. */
-  export type CompanyLogoMark = {
+  export type ThirdPartyLogoMark = {
     /** The client's name, the mark's alternative text. */
     name: string
     /** URL of the client's logo, drawn in one ink that follows the theme. */
@@ -24,9 +24,9 @@
   }
 
   /** Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px. */
-  export type CompanyLogoSize = 'small' | 'medium' | 'large'
+  export type ThirdPartyLogoSize = 'small' | 'medium' | 'large'
 
-  export interface CompanyLogoProps {
+  export interface ThirdPartyLogoProps {
     /** The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set. */
     name: string
     /** URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark. */
@@ -34,18 +34,18 @@
     /** URL of the light-theme file; with `src` both files render and the theme reveals one. */
     srcLight?: string
     /** The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`. */
-    artwork?: CompanyLogoArtwork
+    artwork?: ThirdPartyLogoArtwork
     /** Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. */
-    variant?: CompanyLogoVariant
+    variant?: ThirdPartyLogoVariant
     /** Accessible name when it should differ from `name`. */
     ariaLabel?: string
     /** Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. */
-    size?: CompanyLogoSize
+    size?: ThirdPartyLogoSize
     /** Hides the mark from assistive technology when the text beside it already names the company. */
     decorative?: boolean
   }
 
-  const props = withDefaults(defineProps<CompanyLogoProps>(), {
+  const props = withDefaults(defineProps<ThirdPartyLogoProps>(), {
     src: '',
     srcLight: '',
     artwork: 'color',
@@ -57,7 +57,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'company-logo')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'third-party-logo')
 
   const file = computed(() => props.src || props.srcLight)
 
@@ -72,7 +72,7 @@
   const cssUrl = (value: string) =>
     `url("${value.replace(/[\\"]/g, '\\$&').replace(/\n/g, '\\a ')}")`
 
-  const maskStyle = computed(() => ({ '--company-logo-mask': cssUrl(file.value) }))
+  const maskStyle = computed(() => ({ '--third-party-logo-mask': cssUrl(file.value) }))
 </script>
 
 <template>
@@ -122,7 +122,7 @@
         aria-hidden="true"
         data-ink-layer=""
         :style="maskStyle"
-        class="absolute inset-0 bg-current mask-(--company-logo-mask) mask-contain mask-center mask-no-repeat forced-colors:bg-[CanvasText]"
+        class="absolute inset-0 bg-current mask-(--third-party-logo-mask) mask-contain mask-center mask-no-repeat forced-colors:bg-[CanvasText]"
       />
     </template>
     <span

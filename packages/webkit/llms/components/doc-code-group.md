@@ -25,13 +25,13 @@
 ## Don’t
 
 - For unrelated snippets — use one `CodeBlock` each.
-- For prose that differs per platform — use `DocTabs`.
+- For prose that differs per platform — use `Tabs`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - `CodeBlock` — the surface it renders on.
-- `DocTabs` — alternatives that are prose, not code.
+- `Tabs` — alternatives that are prose, not code.
 
 ## Props
 

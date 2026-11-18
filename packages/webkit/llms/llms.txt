@@ -192,7 +192,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
 - [Card](components/card.md): Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard.
 - [Carousel](components/carousel.md): A horizontally scrollable track of cards with snap points and a pair of step controls.
-- [CompanyLogo](components/company-logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
 - [ConsoleMockup](components/console-mockup.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketin…
 - [CopyText](components/copy-text.md): CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies…
 - [CurrencyAmount](components/currency-amount.md): Use CurrencyAmount to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
@@ -215,6 +214,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [StatusCode](components/status-code.md): Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag.
 - [Tag](components/tag.md): Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state.
 - [Texture](components/texture.md): The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it.
+- [ThirdPartyLogo](components/third-party-logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
 - [Timestamp](components/timestamp.md): Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates e…
 - [TutorialPanel](components/tutorial-panel.md): The guide that runs tutorials beside the real product.
 
@@ -256,9 +256,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocPrompt](components/doc-prompt.md): DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is "say this to your agent".
 - [DocProse](components/doc-prose.md): The typography contract every documentation page inherits.
 - [DocSteps](components/doc-steps.md): The ordered walkthrough from the docs frame: a column of `DocSteps.Step` children joined by a rail.
-- [DocTab](components/doc-tab.md): One panel inside `DocTabs`.
 - [DocTableOfContents](components/doc-table-of-contents.md): The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community).
-- [DocTabs](components/doc-tabs.md): Alternative paths through the same instruction ("macOS / Linux / Windows", "Console / CLI").
 
 ## Components: Feedback
 

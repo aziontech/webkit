@@ -5,7 +5,9 @@
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
-  import CompanyLogo, { type CompanyLogoArtwork } from '../../content/company-logo/company-logo.vue'
+  import ThirdPartyLogo, {
+    type ThirdPartyLogoArtwork
+  } from '../../content/third-party-logo/third-party-logo.vue'
   import Module from '../../layout/module/module.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
@@ -33,7 +35,7 @@
     /** Logo file for the light theme. */
     logoLight?: string
     /** The ink a single logo file is drawn in, as the registries record it: `light` art is inverted on the light theme, `dark` art on the dark theme. */
-    artwork?: CompanyLogoArtwork
+    artwork?: ThirdPartyLogoArtwork
   }
 
   /** One capability, rendered as a table row. */
@@ -212,7 +214,7 @@
                 :aria-label="competitor.name"
                 class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
               >
-                <CompanyLogo
+                <ThirdPartyLogo
                   :name="competitorMark.name"
                   :src="competitorMark.logo"
                   :src-light="competitorMark.logoLight"

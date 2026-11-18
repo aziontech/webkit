@@ -20,7 +20,7 @@
  "related": [
   "`plan-comparison-section` — the plan-by-plan matrix of Pricing.",
   "`tooltip` — names each support glyph on hover and focus.",
-  "`company-logo` — draws the competitor's mark right on both themes."
+  "`third-party-logo` — draws the competitor's mark right on both themes."
  ],
  "bestPractices": [
   "Give every row a `definition`; the info popover is where a reader learns what the capability means.",

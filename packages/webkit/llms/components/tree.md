@@ -50,6 +50,7 @@
 | `selectable` | `boolean \| TreeSelectable` | `false` | false | Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-keys`. Every treeitem then carries `aria-selected`. |
 | `editable` | `boolean` | `false` | false | Lets the user rename a node in place with F2, or through the exposed `startRename(id)`; the result arrives as the `rename` event. |
 | `loading` | `boolean` | `false` | false | Renders Skeleton rows in place of the tree and sets `aria-busy`. |
+| `size` | `TreeSize` | `'medium'` | false | Row density: `small` is 24px rows, `medium` 32px, `large` 40px. Height, padding, type, glyph size and indentation step together (see Tokens). |
 | `emptyTitle` | `string` | `''` | false | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`). |
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name. |
@@ -86,7 +87,8 @@
 - Visual states: `default`; row `hover`, `focus-visible`, `selected`, `disabled`; parent `expanded` / `collapsed`; `loading` (Skeleton rows); `empty` (`EmptyState`).
 - Precedence: `loading` → Skeleton rows, else `items` empty → `empty` slot, else the tree.
 - `data-loading` on the root mirrors `loading`; `data-empty` on the root when `items` is empty and not loading.
-- `data-selectable` on the root while selection is on; `data-multiple` while `selectable="multiple"`.
+- `data-selectable` on the root while selection is on; `data-multiple` while `selectable="multiple"`; `data-size` on the root mirrors `size` and drives every density utility through the `group/tree` variant.
+- A click on a row while Shift, Ctrl or Cmd is held does not start a native text selection (the tree prevents the default of that `mousedown`), so a range or toggle selection never highlights the labels; a plain drag still selects label text for copying, and the rename field and the `actions` region are left alone.
 - Lazy loading: a `lazy` node is a parent (chevron, `aria-expanded`) even with no `children`; while it is expanded and `loading`, its group renders one loading row — a Skeleton bar plus a visually hidden `role="status"` reading the locale's `tree.loadingChildren` (`Loading`) — instead of the children, and carries `aria-busy="true"`. The loading row is not a treeitem and is not part of keyboard navigation (`<testId>__loading`).
 - Renaming: the label region of the node being renamed is a text field (`<testId>__rename`, `data-slot="tree-rename"`), focused with its text selected; the chevron, glyph slot and `actions` stay. One field at a time.
 - `data-state="open|closed"` on each parent row and its chevron (drives the rotation); absent on leaves. The tree is not an overlay, so this is disclosure state only.
@@ -94,7 +96,7 @@
 - Collapsed children are not rendered (`v-if`), so they cost nothing and are out of the accessibility tree.
 - A disabled node can still be focused (arrow keys) and, if it is a parent, expanded and collapsed; it cannot be selected, renamed, or emit `item-click` / `item-double-click`.
 - `data-testid`: the root falls back to `data-tree` (a consumer `data-testid` wins); parts derive from the resolved root id — `<testId>__item` on every treeitem, `<testId>__toggle` on every chevron. Each treeitem also carries `data-item-id="<item.id>"` so a test reaches one node without depending on DOM order.
-- Loading renders five Skeleton rows (`variant="rectangle"`, row height, descending widths) at top level.
+- Loading renders five Skeleton rows (`variant="rectangle"`, the row height of `size`, descending widths) at top level.
 
 ## Accessibility
 
@@ -120,14 +122,14 @@
   - In a row, `ArrowRight` / `ArrowLeft` move between the label cell and each `actions` control; `ArrowLeft` on the label cell, or `Escape` anywhere in the row, returns focus to the row. `ArrowDown` / `ArrowUp` move to the same cell of the next / previous visible row. `Enter` on the label cell activates the row; `Enter` / `Space` on a control are the control's own.
   - Without the `actions` slot the tree keeps the `tree` / `treeitem` / `group` structure above.
 - Chevron: a `<button type="button" tabindex="-1" aria-hidden="true">` that toggles the parent on click (pointer affordance; keyboard expansion is ArrowRight / ArrowLeft on the treeitem). It never receives focus and is not announced.
-- Visible focus: the ring is drawn on the focused node's own row (in the treegrid, on the focused row or cell), not around its whole subtree — `focus-visible:outline-none` on the treeitem and `ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` on its direct row child (an arbitrary variant scoped to `:focus-visible > row`).
+- Visible focus: the indicator is drawn on the focused node's own row (in the treegrid, on the focused row or cell), not around its whole subtree — `focus-visible:outline-none` on the treeitem and a 1px `var(--ring-color)` border on the row's `after:` layer, inset in the row (an arbitrary variant scoped to `:focus-visible > row`); the label cell of a treegrid row takes `ring-1 ring-inset`. `var(--ring-color)` against the canvas and `var(--bg-selected)` is at least 3:1 in both themes (dark gray-500 on black 5.3:1, on gray-750 3.4:1; light gray-600 on gray-100 5.3:1, on gray-200 4.6:1), so the 1px indicator meets WCAG 2.1 1.4.11.
 - Loading: the root carries `aria-busy="true"`; the Skeleton rows are `aria-hidden`, and no `role="tree"` is rendered without treeitems.
 - Glyphs (`item.icon`), the chevron and the indent guide are decorative (`aria-hidden="true"`).
 - The rename field is named `Rename <label>` (`tree.renameLabel`); the loading row announces `Loading` once through its polite status.
 - Double-click is never the only way: `item-double-click` duplicates an action the app also offers through `item-click`, `Enter` or the row actions.
 - Contrast ≥4.5:1 for label and description on the canvas, the hover fill and `var(--bg-selected)` in both themes; disabled text follows the disabled-token exemption.
 - `motion-reduce:transition-none` on the chevron and selection transitions; `motion-reduce:before:transition-none` on the hover layer.
-- Touch target: rows are 32px tall and full width (the same deviation as `bar-list`), justified by row density in file trees; the whole row is the activation target and the chevron box extends to the row height.
+- Touch target: rows are 24 / 32 / 40px tall by `size` and full width (the same deviation as `bar-list` below 40px), justified by row density in file trees; prefer `large` where touch is the main input. The whole row is the activation target and the chevron box extends to the row height.
 
 ## Right-to-left
 
@@ -143,7 +145,7 @@
 
 ## Responsive
 
-- The tree fills its container's width; rows stay 32 px tall at every width and long labels truncate.
+- The tree fills its container's width; rows keep the height of their `size` (24 / 32 / 40 px) at every width and long labels truncate.
 - Row actions stay visible on touch (no hover reveal); on narrow containers prefer a single `IconButton` that opens a `dropdown`.
 
 ## Examples
@@ -248,6 +250,56 @@
 </template>
 ```
 
+### Sizes
+
+```vue
+<script setup>
+  import Tree from '@aziontech/webkit/tree'
+  import { ref } from 'vue'
+
+  const items = [
+    {
+      id: 'assets',
+      label: 'assets',
+      icon: 'az az-folder',
+      children: [
+        { id: 'assets/hero.webp', label: 'hero.webp', icon: 'az az-image', description: '248 KB' },
+        { id: 'assets/logo.svg', label: 'logo.svg', icon: 'az az-image', description: '12 KB' }
+      ]
+    },
+    { id: 'index.html', label: 'index.html', icon: 'az az-file', description: '4 KB' }
+  ]
+
+  const sizes = ['small', 'medium', 'large']
+  const expanded = ref({ small: ['assets'], medium: ['assets'], large: ['assets'] })
+  const selected = ref({
+    small: 'assets/logo.svg',
+    medium: 'assets/logo.svg',
+    large: 'assets/logo.svg'
+  })
+</script>
+
+<template>
+  <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-lg)">
+    <div
+      v-for="size in sizes"
+      :key="size"
+      class="flex min-w-0 flex-col gap-(--spacing-xs)"
+    >
+      <p class="text-label-sm text-(--text-muted)">{{ size }}</p>
+      <Tree
+        v-model:open-keys="expanded[size]"
+        v-model:selected-key="selected[size]"
+        :items="items"
+        :size="size"
+        selectable
+        :aria-label="`Bucket objects, ${size}`"
+      />
+    </div>
+  </div>
+</template>
+```
+
 ### Selectable
 
 ```vue
@@ -348,190 +400,6 @@
       aria-label="Bucket objects"
     />
     <p class="text-body-sm text-(--text-muted)">Selected: {{ selected || 'none' }}</p>
-  </div>
-</template>
-```
-
-### CustomItem
-
-```vue
-<script setup>
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tag from '@aziontech/webkit/tag'
-  import Tree from '@aziontech/webkit/tree'
-  import { ref } from 'vue'
-
-  const items = [
-    {
-      id: 'assets',
-      label: 'assets',
-      icon: 'az az-folder',
-      children: [
-        {
-          id: 'assets/images',
-          label: 'images',
-          icon: 'az az-folder',
-          children: [
-            {
-              id: 'assets/images/hero.webp',
-              label: 'hero.webp',
-              icon: 'az az-file',
-              description: '248 KB'
-            },
-            {
-              id: 'assets/images/logo.svg',
-              label: 'logo.svg',
-              icon: 'az az-file',
-              description: '12 KB'
-            }
-          ]
-        },
-        {
-          id: 'assets/fonts',
-          label: 'fonts',
-          icon: 'az az-folder',
-          children: [
-            {
-              id: 'assets/fonts/rubik.woff2',
-              label: 'rubik.woff2',
-              icon: 'az az-file',
-              description: '64 KB'
-            }
-          ]
-        },
-        {
-          id: 'assets/styles.css',
-          label: 'styles.css',
-          icon: 'az az-file',
-          description: '18 KB'
-        }
-      ]
-    },
-    {
-      id: 'reports',
-      label: 'reports',
-      icon: 'az az-folder',
-      children: [
-        {
-          id: 'reports/2026-10.csv',
-          label: '2026-10.csv',
-          icon: 'az az-file',
-          description: '1.2 MB'
-        },
-        {
-          id: 'reports/2026-11.csv',
-          label: '2026-11.csv',
-          icon: 'az az-file',
-          description: '840 KB'
-        }
-      ]
-    },
-    {
-      id: 'index.html',
-      label: 'index.html',
-      icon: 'az az-file',
-      description: '4 KB'
-    },
-    {
-      id: 'robots.txt',
-      label: 'robots.txt',
-      icon: 'az az-file',
-      description: '1 KB'
-    }
-  ]
-
-  const expanded = ref(['assets', 'assets/images'])
-
-  const lastAction = ref('')
-
-  const actionLabels = {
-    download: 'Downloaded',
-    'copy-path': 'Copied the path of',
-    delete: 'Deleted'
-  }
-
-  function onAction(item, value) {
-    lastAction.value = `${actionLabels[value]} ${item.label}`
-  }
-
-  const statuses = {
-    'assets/styles.css': {
-      label: 'Modified',
-      severity: 'warning'
-    },
-    'index.html': {
-      label: 'Published',
-      severity: 'success'
-    },
-    'robots.txt': {
-      label: 'Draft',
-      severity: 'neutral'
-    }
-  }
-</script>
-
-<template>
-  <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-md)">
-    <Tree
-      v-model:open-keys="expanded"
-      :items="items"
-      aria-label="Bucket objects"
-    >
-      <template #item="{ item }">
-        <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
-          <i
-            :class="item.icon"
-            aria-hidden="true"
-          />
-          <span class="min-w-0 truncate text-label-md text-(--text-default)">{{ item.label }}</span>
-          <Tag
-            v-if="statuses[item.id]"
-            :label="statuses[item.id].label"
-            :severity="statuses[item.id].severity"
-            size="small"
-          />
-        </span>
-      </template>
-      <template #actions="{ item }">
-        <DropdownMenuRoot
-          align="end"
-          @select="(event, value) => onAction(item, value)"
-        >
-          <DropdownMenuTrigger>
-            <IconButton
-              icon="az az-ellipsis"
-              variant="ghost"
-              size="small"
-              :aria-label="'More actions for ' + item.label"
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuGroup>
-            <DropdownMenuItem
-              value="download"
-              label="Download"
-            />
-            <DropdownMenuItem
-              value="copy-path"
-              label="Copy path"
-            />
-            <DropdownMenuItem
-              value="delete"
-              label="Delete"
-            />
-          </DropdownMenuGroup>
-        </DropdownMenuRoot>
-      </template>
-    </Tree>
-    <p
-      class="text-body-sm text-(--text-muted)"
-      aria-live="polite"
-    >
-      Last action: {{ lastAction || 'none' }}
-    </p>
   </div>
 </template>
 ```

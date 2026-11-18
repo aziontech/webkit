@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: 12dbc7cf27dcfd85f91f80f955173b26ee31abbf805b226b80ff8f0ba9a0fd95
+checksum: cdd26cd8d372d021f0863a847abba132377e63d64bc18b712b2b8ae28c74ba09
 created: 2026-07-13
 last_updated: 2026-11-18
 ---
@@ -27,7 +27,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 
 ## When NOT to use
 
-- A customer, partner or competitor logo → use `company-logo` (one mark) or `logo-wall` (a grid of them).
+- A customer, partner or competitor logo → use `third-party-logo` (one mark) or `logo-wall` (a grid of them).
 - A person's or organization's picture → use `avatar`.
 - A decorative product graphic → use `illustration`.
 
@@ -35,7 +35,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 
 - `site-header-section` and `site-footer-section` — compose Brand for the site chrome.
 - `avatar` — the picture or initials of a user, not the product mark.
-- `company-logo` — another company's mark; `Brand` is only Azion's own.
+- `third-party-logo` — another company's mark; `Brand` is only Azion's own.
 - `logo-wall` — a grid of other companies' marks.
 
 ## Best practices
@@ -100,7 +100,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `CompanyLogo` has; `Brand` is the Azion house mark, `CompanyLogo` any other company's mark).
+- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `ThirdPartyLogo` has; `Brand` is the Azion house mark, `ThirdPartyLogo` any other company's mark).
 - Non-interactive: the logo is not focusable and emits no events; the inner SVG is presentational.
 - Contrast ≥3:1 for the brand mark against its background (large graphic).
 - `motion-reduce` not applicable — the component is static.

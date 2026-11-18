@@ -379,16 +379,16 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `AppliedFilter`                        | `TableAppliedFilter`                           |
 | `ArchitectureTabsAction`               | `ModuleHeaderAction`                           |
 | `ArticleBodyCrumb`                     | `BreadcrumbItemData`                           |
-| `ArticleCardsMark`                     | `CompanyLogoMark`                              |
+| `ArticleCardsMark`                     | `ThirdPartyLogoMark`                           |
 | `ArticleIndexBlogAuthor`               | `ArticleIndexSectionAuthor`                    |
 | `ArticleIndexBlogEmpty`                | `ArticleIndexSectionEmpty`                     |
-| `ArticleIndexBlogMark`                 | `CompanyLogoMark`                              |
+| `ArticleIndexBlogMark`                 | `ThirdPartyLogoMark`                           |
 | `ArticleIndexBlogRowKind`              | `ArticleIndexSectionRowKind`                   |
 | `ArticleIndexBlogSearch`               | `ArticleIndexSectionSearch`                    |
 | `ArticleIndexResourceHubEmpty`         | `ArticleIndexSectionEmpty`                     |
 | `ArticleIndexResourceHubFacet`         | `ArticleIndexSectionFacet`                     |
 | `ArticleIndexResourceHubItem`          | `ArticleIndexSectionItem`                      |
-| `ArticleIndexResourceHubMark`          | `CompanyLogoMark`                              |
+| `ArticleIndexResourceHubMark`          | `ThirdPartyLogoMark`                           |
 | `ArticleIndexResourceHubRowKind`       | `ArticleIndexSectionRowKind`                   |
 | `BoxGridSelectionItem`                 | `RadioGroupOption`                             |
 | `CalendarMonth`                        | `DatePickerMonth`                              |
@@ -398,8 +398,8 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `CalendarValue`                        | `DatePickerValue`                              |
 | `CardsItemSlotProps`                   | `CardListItemSlotProps`                        |
 | `CardsSelectionMode`                   | `CardListSelectionMode`                        |
-| `ClientMosaicColumnsLogoTreatment`     | `CompanyLogoTreatment`                         |
-| `ClientMosaicLogoTreatment`            | `CompanyLogoTreatment`                         |
+| `ClientMosaicColumnsLogoTreatment`     | `ThirdPartyLogoTreatment`                      |
+| `ClientMosaicLogoTreatment`            | `ThirdPartyLogoTreatment`                      |
 | `ClientQuotesAction`                   | `ModuleHeaderAction`                           |
 | `CliTerminalAction`                    | `ModuleHeaderAction`                           |
 | `ClosingCallToActionAction`            | `ModuleHeaderAction`                           |
@@ -454,12 +454,12 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `InputTextType`                        | `InputType`                                    |
 | `ListingTableAction`                   | `ModuleHeaderAction`                           |
 | `LogoWallQuoteAction`                  | `ModuleHeaderAction`                           |
-| `LogoWallQuoteLogoTreatment`           | `CompanyLogoTreatment`                         |
+| `LogoWallQuoteLogoTreatment`           | `ThirdPartyLogoTreatment`                      |
 | `MediaSplitStackAction`                | `ModuleHeaderAction`                           |
 | `MessageSeverity`                      | `AlertSeverity`                                |
 | `MessageSize`                          | `AlertSize`                                    |
 | `MoveDirection`                        | `TransferListMoveDirection`                    |
-| `NetworkSectionLogoTreatment`          | `CompanyLogoTreatment`                         |
+| `NetworkSectionLogoTreatment`          | `ThirdPartyLogoTreatment`                      |
 | `PaginatorContext`                     | `PaginationContext`                            |
 | `PasswordRequirement`                  | `PasswordRequirementsRule`                     |
 | `PhoneNumber`                          | `PhoneInputValue`                              |
@@ -482,7 +482,7 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `StickyScrollCodeActionKind`           | `FeatureScrollSectionActionKind`               |
 | `StickyScrollCodeItem`                 | `FeatureScrollSectionItem`                     |
 | `StickyScrollCodeSample`               | `FeatureScrollSectionCode`                     |
-| `StoryLibraryClient`                   | `CompanyLogoMark`                              |
+| `StoryLibraryClient`                   | `ThirdPartyLogoMark`                           |
 | `SubjectLibraryAction`                 | `ModuleHeaderAction`                           |
 | `TabViewContext`                       | `TabsContext`                                  |
 | `TabViewSlideDirection`                | `TabsSlideDirection`                           |
@@ -496,9 +496,9 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 Every exported type starts with its component's name, and a shape several components shared is one
 type now, exported by the component that owns it: a section's `primaryAction` / `secondaryAction`
 is `ModuleHeaderAction` (`@aziontech/webkit/module-header`), a breadcrumb entry is
-`BreadcrumbItemData`, a client mark `{ name, logo }` is `CompanyLogoMark` and a mark's ink is
-`CompanyLogoTreatment` (`@aziontech/webkit/company-logo`). Each section still re-exports the shared type, so an
-import the codemod rewrote keeps its path. `CompanyLogoTreatment` uses the `CompanyLogo` words: `as-is` is
+`BreadcrumbItemData`, a client mark `{ name, logo }` is `ThirdPartyLogoMark` and a mark's ink is
+`ThirdPartyLogoTreatment` (`@aziontech/webkit/third-party-logo`). Each section still re-exports the shared type, so an
+import the codemod rewrote keeps its path. `ThirdPartyLogoTreatment` uses the `ThirdPartyLogo` words: `as-is` is
 `color`, and `logoTreatment: 'invert-light'` on a `LogoWallSection` mark is `artwork: 'light'`
 (change those values by hand). The overlay position types are `TooltipSide`, `PopoverSide`,
 `HoverCardSide`, `DropdownMenuSide` and `HintSide`, with `*Align` beside them (see "Overlays:
@@ -1102,6 +1102,14 @@ renders the `<Tooltip tip title linkLabel href>` tag as one, so Markdown sources
 an SFC, compose `<HoverCard><HoverCard.Trigger>…</HoverCard.Trigger><HoverCard.Content>…</HoverCard.Content></HoverCard>`.
 The codemod lists the import as `MANUAL`.
 
+`doc-tabs` and `doc-tab` are removed: they drew the same strip as `Tabs` and added no behaviour.
+In MDX, `DocMarkdown` renders the `<Tabs><Tab title>` tags as `Tabs`, so Markdown sources need no
+change. In an SFC, give each old `DocTab` a value and write
+`<Tabs default-value="console"><Tabs.List><Tabs.Trigger value="console" label="Console" /></Tabs.List><Tabs.Content value="console">…</Tabs.Content></Tabs>`;
+inside `DocProse`, put `data-doc-block` on `Tabs`. The test ids
+are `tabs`, `tabs-list`, `tabs-trigger` and `tabs-content` (were `doc-tabs` and `doc-tab`). The
+codemod lists the imports as `MANUAL`.
+
 `DocStep` is now `DocSteps.Step`: `@aziontech/webkit/doc-steps` is a compound and `doc-step` has
 no standalone export, since a step only renders inside `DocSteps`. Drop the `doc-step` import and
 write `<DocSteps.Step title>`; Markdown sources (`<Steps><Step>`) need no change. The step's test id
@@ -1370,7 +1378,7 @@ as `MANUAL`.
 The two lockups with the "Move to the Edge" tagline are retired: remove them, or use
 `<Brand variant="extended" />` (AZION technologies) where a tagline lockup stood. The codemod
 rewrites `svg/azion/default` to `Brand` and lists the other imports as `MANUAL`. Another company's
-mark (a client, a competitor, a coding agent) is `CompanyLogo` (`@aziontech/webkit/company-logo`),
+mark (a client, a competitor, a coding agent) is `ThirdPartyLogo` (`@aziontech/webkit/third-party-logo`),
 never `Brand`.
 
 ### Removed in 6.0: feedback, content, code and chart names
@@ -2065,6 +2073,16 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `{ type: 'absolute', start, end }` with ISO instants instead of `{ start, end }` Dates.
   `DateRangePicker` now formats in `ConfigProvider`'s `time-zone` when its own is unbound. The
   locale catalog group `calendar` is renamed `datePicker`, and its placeholder reads "Select a date".
+- **`DateRangePicker` hides its time zone selector by default.** `showTimeZone` now defaults to
+  `false`: the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`). A page
+  that lets people switch zones adds `show-time-zone` (with `v-model:time-zone`). The start and end
+  time fields also list the day in 30-minute steps; typing a time still works.
+- **`DateRangePicker` opens on Absolute, calendar first, and offers Refresh every.** The tabs read
+  `Absolute` then `Relative`; the panel opens on Absolute unless the value is relative. The Absolute
+  tab shows the month grid before the start and end fields. `showRefresh` now defaults to `true`:
+  a Refresh every select (Off, 10 seconds … 1 hour) sets `v-model:refresh-interval`, and the picker
+  fires `@refresh` on each tick. Run your query on `@refresh`, or pass `:show-refresh="false"` where
+  the page cannot re-run it. (DateRangePicker is new in 6.0, so no 5.x app needs a change.)
 - **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
   `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
   `v-model`: `<RadioGroup v-model="plan"><RadioGroup.Item value="pro">Pro</RadioGroup.Item></RadioGroup>`.

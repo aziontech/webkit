@@ -401,15 +401,17 @@ export const ptBR: Messages = {
     startTime: 'Hora de início',
     endTime: 'Hora de término',
     timezone: 'Fuso horário',
-    localTimezone: 'Local'
+    localTimezone: 'Local',
+    example: 'ex.: {value}',
+    timePlaceholder: 'hh:mm'
   },
   dateRangePicker: {
     label: 'Intervalo de tempo',
     placeholder: 'Selecione um intervalo de tempo',
     dialog: 'Escolha um intervalo de tempo',
     rangeType: 'Tipo de intervalo',
-    relative: 'Intervalo relativo',
-    absolute: 'Intervalo absoluto',
+    relative: 'Relativo',
+    absolute: 'Absoluto',
     quickRanges: 'Intervalos rápidos',
     custom: 'Intervalo personalizado',
     amount: 'Duração',
@@ -449,6 +451,27 @@ export const ptBR: Messages = {
     unitWeek: 'Semanas',
     unitMonth: 'Meses',
     unitYear: 'Anos',
+    today: 'Hoje',
+    thisWeek: 'Esta semana',
+    thisMonth: 'Este mês',
+    thisYear: 'Este ano',
+    now: 'agora',
+    untilNow: 'Terminar agora',
+    zoneNote: 'Horários em {zone}',
+    refreshEvery: 'Atualizar a cada',
+    refreshOff: 'Desligado',
+    refreshSecond: {
+      one: 'atualiza a cada segundo',
+      other: 'atualiza a cada {count} segundos'
+    },
+    refreshMinute: {
+      one: 'atualiza a cada minuto',
+      other: 'atualiza a cada {count} minutos'
+    },
+    refreshHour: {
+      one: 'atualiza a cada hora',
+      other: 'atualiza a cada {count} horas'
+    },
     apply: 'Aplicar',
     cancel: 'Cancelar',
     previous: 'Intervalo anterior',

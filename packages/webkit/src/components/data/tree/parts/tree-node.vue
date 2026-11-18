@@ -47,7 +47,8 @@
 
   const labelId = useId()
 
-  const INDENT_CLASS = 'ms-(--spacing-md) border-s border-(--border-muted)'
+  const INDENT_CLASS =
+    'ms-(--spacing-md) border-s border-(--border-muted) group-data-[size=small]/tree:ms-(--spacing-sm) group-data-[size=large]/tree:ms-[calc(var(--spacing-sm)+0.5rem)]'
 
   const Indent: FunctionalComponent<{ depth: number }> = (indent, { slots }) =>
     indent.depth > 0
@@ -156,13 +157,13 @@
         :data-state="state"
         :data-selected="selected || null"
         :data-disabled="item.disabled || null"
-        class="group/tree-row relative isolate flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 active:before:bg-(--bg-active) motion-reduce:before:transition-none data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-default [:focus-visible>&]:ring-2 [:focus-visible>&]:ring-(--ring-color) [:focus-visible>&]:ring-offset-1 [:focus-visible>&]:ring-offset-(--bg-canvas) [:focus-visible>[data-tree-indent]_&]:ring-2 [:focus-visible>[data-tree-indent]_&]:ring-(--ring-color) [:focus-visible>[data-tree-indent]_&]:ring-offset-1 [:focus-visible>[data-tree-indent]_&]:ring-offset-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+        class="group/tree-row relative isolate flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) border-y border-transparent bg-clip-padding px-(--spacing-xs) text-label-lg transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 active:before:bg-(--bg-active) motion-reduce:before:transition-none after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:border after:border-(--ring-color) after:opacity-0 after:content-[''] data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-default focus-visible:outline-none focus-visible:after:opacity-100 [:focus-visible>&]:after:opacity-100 [:focus-visible>[data-tree-indent]_&]:after:opacity-100 group-data-[size=small]/tree:min-h-6 group-data-[size=small]/tree:gap-(--spacing-2xs) group-data-[size=small]/tree:px-(--spacing-2xs) group-data-[size=small]/tree:text-label-md group-data-[size=large]/tree:min-h-10 group-data-[size=large]/tree:px-(--spacing-sm)"
       >
         <span
           :role="grid ? 'gridcell' : undefined"
           :tabindex="grid ? -1 : undefined"
           data-slot="tree-cell"
-          class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-(--ring-color) group-data-[size=small]/tree:gap-(--spacing-2xs)"
         >
           <span class="flex w-4 shrink-0 items-center justify-center self-stretch">
             <button
@@ -185,7 +186,7 @@
           </span>
           <span
             :id="labelId"
-            class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+            class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) group-data-[size=small]/tree:gap-(--spacing-2xs)"
           >
             <input
               v-if="renaming"
@@ -195,7 +196,7 @@
               :data-testid="`${ctx.testId.value}__rename`"
               :value="item.label"
               :aria-label="ctx.renameLabel(item.label)"
-              class="h-6 min-w-0 flex-1 rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+              class="h-6 min-w-0 flex-1 rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-label-md text-(--text-default) outline-none focus-visible:border-(--ring-color) group-data-[size=small]/tree:h-5 group-data-[size=large]/tree:h-8 group-data-[size=large]/tree:text-label-lg"
               @keydown="onRenameKeydown"
               @blur="commitRename"
             />
@@ -227,13 +228,13 @@
         v-if="expanded && (!flat || item.loading)"
         :role="grid ? 'none' : 'group'"
         :aria-busy="(!grid && item.loading) || undefined"
-        class="m-0 ms-(--spacing-md) list-none border-s border-(--border-muted) p-0"
+        class="m-0 ms-(--spacing-md) list-none border-s border-(--border-muted) p-0 group-data-[size=small]/tree:ms-(--spacing-sm) group-data-[size=large]/tree:ms-[calc(var(--spacing-sm)+0.5rem)]"
       >
         <li
           v-if="item.loading"
           role="none"
           :data-testid="`${ctx.testId.value}__loading`"
-          class="m-0 flex min-h-8 list-none items-center gap-(--spacing-xs) px-(--spacing-xs) ps-[calc(var(--spacing-xs)+1rem+var(--spacing-xs))]"
+          class="m-0 flex min-h-8 list-none items-center gap-(--spacing-xs) px-(--spacing-xs) ps-[calc(var(--spacing-xs)+1rem+var(--spacing-xs))] group-data-[size=small]/tree:min-h-6 group-data-[size=small]/tree:ps-[calc(var(--spacing-2xs)+1rem+var(--spacing-2xs))] group-data-[size=large]/tree:min-h-10 group-data-[size=large]/tree:ps-[calc(var(--spacing-sm)+1rem+var(--spacing-xs))]"
         >
           <span
             :role="grid ? 'row' : undefined"

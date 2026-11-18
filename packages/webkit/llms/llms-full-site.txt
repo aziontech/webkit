@@ -430,7 +430,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Don’t
 
 - For steps the reader must follow in order — use `DocSteps`.
-- For alternative paths through the same instruction — use `DocTabs`.
+- For alternative paths through the same instruction — use `Tabs`.
 - Inside an application screen — use `Accordion` directly.
 
 ## Related
@@ -1069,12 +1069,12 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Don’t
 
 - For unrelated snippets — use one `CodeBlock` each.
-- For prose that differs per platform — use `DocTabs`.
+- For prose that differs per platform — use `Tabs`.
 
 ## Related
 
 - `CodeBlock` — the surface it renders on.
-- `DocTabs` — alternatives that are prose, not code.
+- `Tabs` — alternatives that are prose, not code.
 
 ## Props
 
@@ -1712,7 +1712,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 # Doc Markdown
 
-> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `Tabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
 - Import: `import DocMarkdown from '@aziontech/webkit/doc-markdown'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -1744,7 +1744,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - `DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.
 - `DocLayout` — its outline lists the rendered `DocHeading`s with no wiring. `DocTableOfContents` — takes `parseDocMarkdown(source).headings` as `items` when used without the layout.
 - `DocPageHeader` — takes the frontmatter's `title` and `description`.
-- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.
+- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `Tabs` (a `<Tabs>` tag renders `Tabs` with one `Tabs.Trigger` and `Tabs.Content` per `<Tab title>` child), `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.
 - `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
 - `RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
 - `StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have.
@@ -2324,75 +2324,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ---
 
-<!-- components/doc-tab.md -->
-
-# Doc Tab
-
-> One panel inside `DocTabs`. It carries its title and its body only; `DocTabs` reads the title to build the strip. Rendered on its own it is a `display: contents` wrapper around its body.
-
-- Import: `import DocTab from '@aziontech/webkit/doc-tab'`
-- Category: docs · Surface: docs · Structure: monolithic
-
-## When to use
-
-- As a direct child of `DocTabs`.
-
-## Do
-
-- A short title: the platform or tool name.
-
-## Don’t
-
-- Outside `DocTabs` — it renders no tab of its own.
-
-## Related
-
-- `DocTabs`.
-
-## Props
-
-| Prop | Type | Default | Required | Description |
-| --- | --- | --- | --- | --- |
-| `title` | `string` | `''` | false | The tab label; `DocTabs` reads it to build the strip. |
-
-## Slots
-
-| Slot | Scope | Notes |
-| --- | --- | --- |
-| `default` | — | The panel body. |
-
-## States
-
-- Visual states: `default` (`DocTabs` owns selection).
-
-## Accessibility
-
-- No role of its own; `DocTabs` renders the tab and the tabpanel.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import DocTab from '@aziontech/webkit/doc-tab'
-  import DocTabs from '@aziontech/webkit/doc-tabs'
-</script>
-
-<template>
-  <DocTabs>
-    <DocTab title="Console">
-      <p>Open the application, then Settings, then Domains.</p>
-    </DocTab>
-    <DocTab title="CLI">
-      <p>Run the link command from the project folder.</p>
-    </DocTab>
-  </DocTabs>
-</template>
-```
-
----
-
 <!-- components/doc-table-of-contents.md -->
 
 # Doc Table Of Contents
@@ -2487,80 +2418,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ```
 
 1 more example(s) in [components/doc-table-of-contents.md](components/doc-table-of-contents.md).
-
----
-
-<!-- components/doc-tabs.md -->
-
-# Doc Tabs
-
-> Alternative paths through the same instruction ("macOS / Linux / Windows", "Console / CLI"). It reads the `title` of each `DocTab` child to build the strip and renders each child body in its panel, on `Tabs`, so the strip, the indicator and the keyboard model are the design system's.
-
-- Import: `import DocTabs from '@aziontech/webkit/doc-tabs'`
-- Category: docs · Surface: docs · Structure: monolithic
-
-## When to use
-
-- Use DocTabs only in documentation prose for alternative paths through one instruction (macOS / Linux); product UI uses Tabs.
-- The same procedure that differs per platform or per tool.
-
-## Do
-
-- Two to five tabs; put the most common path first.
-- Keep the panels parallel so switching compares like with like.
-
-## Don’t
-
-- For code-only alternatives — use `DocCodeGroup`.
-- For page navigation — use links or `DocCardGroup`.
-
-## Related
-
-- `DocTab` — the panel it reads.
-- `Tabs` — the surface it renders on.
-- `DocCodeGroup`.
-
-## Slots
-
-| Slot | Scope | Notes |
-| --- | --- | --- |
-| `default` | — | The `DocTab` children, in strip order. A child without a `title` is labelled by its position. |
-
-## States
-
-- The first tab is selected on render; selection state comes from `Tabs`.
-- `data-doc-block` on the root; the strip carries `data-doc-chrome`.
-- The panel text starts one group step (`--layout-group-gap`, 16 px) below the strip, from `Tabs.Content`; DocTabs adds no spacing of its own.
-
-## Accessibility
-
-- `tablist`, `tab` and `tabpanel` roles and the arrow-key model come from `Tabs`.
-- Panels have no padding of their own; the first block in a panel carries the prose rhythm.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import DocTab from '@aziontech/webkit/doc-tab'
-  import DocTabs from '@aziontech/webkit/doc-tabs'
-</script>
-
-<template>
-  <DocTabs>
-    <DocTab title="macOS">
-      <p>Install the CLI with Homebrew, then run it once to sign in.</p>
-    </DocTab>
-    <DocTab title="Linux">
-      <p>Download the binary for your architecture and put it on your path.</p>
-    </DocTab>
-    <DocTab title="Windows">
-      <p>Run the installer, then open a new terminal so the path is picked up.</p>
-    </DocTab>
-  </DocTabs>
-</template>
-```
 
 ---
 
@@ -4579,10 +4436,10 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import Quote from '@aziontech/webkit/quote'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
 </script>
 
 <template>
@@ -4620,7 +4477,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           job-title="CTO at Acme Inc."
         >
           <template #mark>
-            <CompanyLogo
+            <ThirdPartyLogo
               name="Acme Inc."
               size="large"
             />
@@ -5356,8 +5213,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import Quote from '@aziontech/webkit/quote'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
 </script>
 
 <template>
@@ -5367,7 +5224,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     job-title="CTO at Acme Inc."
   >
     <template #mark>
-      <CompanyLogo
+      <ThirdPartyLogo
         name="Acme Inc."
         size="large"
       />
@@ -6855,7 +6712,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - `bento-grid` — the grid the cells are laid in.
 - `client-story-columns-section` — the three-column sibling with brand-coloured faces.
-- `company-logo` — draws every client mark in the ink its fill needs.
+- `third-party-logo` — draws every client mark in the ink its fill needs.
 
 ## Props
 
@@ -6865,13 +6722,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `linkLabel` | `string` | `''` | false | Label of the link under every story. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `stories` | `ClientMosaicSectionStory[]` | `[]` | false | The story cells, in order; each is `{ logo, logoAlt, photo?, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows. |
-| `logos` | `ClientMosaicSectionLogo[]` | `[]` | false | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`). |
+| `logos` | `ClientMosaicSectionLogo[]` | `[]` | false | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `ThirdPartyLogoTreatment`). |
 | `cells` | `ClientMosaicSectionCell[]` | `[]` | false | The cells in placement order, story and mark cells interleaved; each is `{ logo, logoAlt, href, text?, photo?, span?, rows?, fill?, logoTreatment?, stacked? }` where a cell with `text` is a story cell, `span` and `rows` are `'1'` (default) or `'2'`, and `fill` defaults to `canvas`. When set it replaces `stories` and `logos`. |
 
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` on each cell
-- `data-cell` (`story` or `logo`), `data-span` and `data-rows` on every grid cell; `data-fill` on every cell face drives its fill; every mark is a `CompanyLogo` with `data-treatment` and `data-variant` for its ink and `data-stacked` for a stacked lockup; `data-lead` sets the larger text of the first story (from `stories`) or of a story spanning two columns (from `cells`)
+- `data-cell` (`story` or `logo`), `data-span` and `data-rows` on every grid cell; `data-fill` on every cell face drives its fill; every mark is a `ThirdPartyLogo` with `data-treatment` and `data-variant` for its ink and `data-stacked` for a stacked lockup; `data-lead` sets the larger text of the first story (from `stories`) or of a story spanning two columns (from `cells`)
 - Empty: when `cells`, `stories` and `logos` are all empty the band renders nothing
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 
@@ -6879,7 +6736,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visible focus: every mark cell is a link with `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the story link is a `link` with its own ring.
 - Keyboard map: `Tab` moves between mark links and story links; `Enter` follows.
-- ARIA: the band is a `<section>` named by `ariaLabel`; the photo of a story is decorative (`alt=""`, `aria-hidden`); every mark is a `CompanyLogo` (`role="img"`) named by `logoAlt`; the story text is a paragraph and its link is named by `linkLabel`.
+- ARIA: the band is a `<section>` named by `ariaLabel`; the photo of a story is decorative (`alt=""`, `aria-hidden`); every mark is a `ThirdPartyLogo` (`role="img"`) named by `logoAlt`; the story text is a paragraph and its link is named by `linkLabel`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): story text `var(--text-default)` over the canvas gradient; marks are inked to their fill through `logoTreatment`.
 - `motion-reduce:transition-none` on the fill transition.
 - Touch target ≥40×40 px — each mark cell is a full grid cell.
@@ -7153,7 +7010,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of stories. |
 | `linkLabel` | `string` | `''` | false | Label the mark face reveals on hover and the link's accessible name. |
-| `cells` | `ClientStoryColumnsSectionCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`), and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
+| `cells` | `ClientStoryColumnsSectionCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `ThirdPartyLogoTreatment`), and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
 | `reveal` | `ClientStoryColumnsSectionReveal` | `'always'` | false | When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint. |
 
 ## States
@@ -7371,7 +7228,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - `plan-comparison-section` — the plan-by-plan matrix of Pricing.
 - `tooltip` — names each support glyph on hover and focus.
-- `company-logo` — draws the competitor's mark right on both themes.
+- `third-party-logo` — draws the competitor's mark right on both themes.
 
 ## Props
 
@@ -7401,7 +7258,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
   Partial support is a property of the platform, not a problem that needs action, so it never takes the warning colour; an unsupported capability is a quiet dash, not a red cross.
 
-- The competitor head is a `CompanyLogo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
+- The competitor head is a `ThirdPartyLogo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 
@@ -7411,7 +7268,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `Logo` named by the platform, inside a head cell that carries the same name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface` are `--text-brand`, the logo orange in both themes: Lc 44.1 / 6.32:1 in dark, and about 3:1 in light, the accepted `--text-brand` pairs of `rules/webkit-tokens.md` (owner decision 2026-11-18, superseding the darker light-theme orange).
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `CompanyLogo` named by the platform, inside a head cell that carries the same name.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `ThirdPartyLogo` named by the platform, inside a head cell that carries the same name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface`: `--text-primary` Lc 79.0 / 6.01:1 in light; `--text-brand` Lc 44.1 / 6.32:1 in dark, the accepted dark `--text-brand` pair of `rules/webkit-tokens.md`.
 - Never colour alone: each level has its own glyph and its label as tooltip and `sr-only` text.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
@@ -9731,7 +9588,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - Eight or nine logos fill the rectangle wall beside the aside.
-- Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `CompanyLogo`.
+- Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `ThirdPartyLogo`.
 - Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `knockout` for a black mark on a coloured fill, `color` for a colour mark, and `artwork: 'light'` for a reversed mark that must flip on the light theme; give a `logoLight` file instead when the light theme needs a different drawing.
 - Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.
 - Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`.
@@ -9744,7 +9601,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Related
 
 - `logo-wall` — the wall the marks are laid in, with the quote in its aside.
-- `company-logo` — draws every mark (the wall's and the quote's) right on both themes.
+- `third-party-logo` — draws every mark (the wall's and the quote's) right on both themes.
 
 ## Props
 
@@ -9756,7 +9613,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the logo wall. |
-| `logos` | `LogoWallSectionLogo[]` | `[]` | false | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `CompanyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `CompanyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
+| `logos` | `LogoWallSectionLogo[]` | `[]` | false | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `ThirdPartyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `ThirdPartyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
 | `quote` | `LogoWallSectionQuote` | `undefined` | false | The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt, logoLight?, artwork? }`. Omitted when absent. |
 | `primaryAction` | `ModuleHeaderAction` | `undefined` | false | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `secondaryAction` | `ModuleHeaderAction` | `undefined` | false | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
@@ -9765,14 +9622,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`
 - Empty: when `logos` is empty the band renders nothing
-- Each mark is a `CompanyLogo` carrying `data-treatment` (the `logoTreatment`, default `color`), `data-variant`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
+- Each mark is a `ThirdPartyLogo` carrying `data-treatment` (the `logoTreatment`, default `color`), `data-variant`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 
 ## Accessibility
 
 - Visible focus: owned by `logo-wall` (each mark link) and `button`.
 - Keyboard map: `Tab` moves between mark links and the action; `Enter` follows.
-- ARIA: the band is a `<section>` named by its title (`aria-label`); the wall is `logo-wall`'s own list named by `ariaLabel`; every mark is a `CompanyLogo` (`role="img"`) named by the client `name`, announced once even when a light/dark pair renders; the quote is a `blockquote` signed by its author.
+- ARIA: the band is a `<section>` named by its title (`aria-label`); the wall is `logo-wall`'s own list named by `ariaLabel`; every mark is a `ThirdPartyLogo` (`role="img"`) named by the client `name`, announced once even when a light/dark pair renders; the quote is a `blockquote` signed by its author.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components; marks follow the theme through their treatment.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — each mark link spans its wall cell.
@@ -10168,7 +10025,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `title` | `string` | `''` | false | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. |
 | `claimsEyebrow` | `string` | `''` | false | Eyebrow-set line above the claims. |
 | `claims` | `(string \| NetworkSectionClaim)[]` | `[]` | false | Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. |
-| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`CompanyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent. |
+| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`ThirdPartyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent. |
 | `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon }`, rendered as a topic led by its glyph whose title is an `h3`. |
 | `stats` | `NetworkSectionStat[]` | `[]` | false | Figures for the `stats` floor, in order, rendered by `stats`; each is `{ value, label, prefix?, suffix? }`. |
 

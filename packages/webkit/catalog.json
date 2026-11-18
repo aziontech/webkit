@@ -3962,6 +3962,8 @@
   "command-palette": "command",
   "cta": "call-to-action",
   "datatable": "data-table",
+  "doc-tab": "tabs",
+  "doc-tabs": "tabs",
   "feature-grid": "capability-grid-section",
   "file-viewer": "file-preview",
   "image-viewer": "file-preview",
@@ -4095,7 +4097,7 @@
   "listing-index": "listing-index-section",
   "listing-table": "listing-table-section",
   "log-view": "log-viewer",
-  "logo": "company-logo",
+  "logo": "third-party-logo",
   "logo-wall-quote": "logo-wall-section",
   "media-split-band": "media-split-section",
   "media-split-stack": "media-split-stack-section",
@@ -4165,6 +4167,8 @@
   "dialog-portal": "delete the <DialogPortal> wrapper (keep its children): DialogContent renders the portal and the overlay itself",
   "doc-cta": "use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action=\"{ label, href }\", secondary-label and secondary-href become :secondary-action=\"{ label, href }\"",
   "doc-step": "import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound",
+  "doc-tab": "a Tabs.Trigger (value, label = the old title) plus a Tabs.Content with the same value, inside one Tabs",
+  "doc-tabs": "Tabs from @aziontech/webkit/tabs: <Tabs default-value=\"<first value>\"><Tabs.List><Tabs.Trigger value label /></Tabs.List><Tabs.Content value>…</Tabs.Content></Tabs> (DocMarkdown renders the MDX <Tabs><Tab title> tags as one)",
   "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
   "drawer-overlay": "delete the <DrawerOverlay /> element: DrawerContent renders the portal and the overlay itself",
   "drawer-portal": "delete the <DrawerPortal> wrapper (keep its children): DrawerContent renders the portal and the overlay itself",
@@ -6090,7 +6094,7 @@
      "type": "CopyPromptButtonAgent[]",
      "default": "Claude, ChatGPT, Gemini, Cursor",
      "required": "false",
-     "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `CompanyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
+     "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `ThirdPartyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
     },
     {
      "name": "disabled",
@@ -9459,11 +9463,11 @@
    "examplesFile": "catalog/examples/illustration.json",
    "docsFile": "catalog/components/illustration.json"
   },
-  "company-logo": {
-   "import": "@aziontech/webkit/company-logo",
-   "target": "./src/components/content/company-logo/company-logo.vue",
+  "third-party-logo": {
+   "import": "@aziontech/webkit/third-party-logo",
+   "target": "./src/components/content/third-party-logo/third-party-logo.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/company-logo",
+   "treeShakeableImport": "@aziontech/webkit/third-party-logo",
    "category": "content",
    "structure": "monolithic",
    "props": [
@@ -9525,8 +9529,8 @@
     }
    ],
    "surface": "app",
-   "examplesFile": "catalog/examples/company-logo.json",
-   "docsFile": "catalog/components/company-logo.json"
+   "examplesFile": "catalog/examples/third-party-logo.json",
+   "docsFile": "catalog/components/third-party-logo.json"
   },
   "console-mockup": {
    "import": "@aziontech/webkit/console-mockup",
@@ -12191,6 +12195,13 @@
      "doc": "Renders Skeleton rows in place of the tree and sets `aria-busy`."
     },
     {
+     "name": "size",
+     "type": "TreeSize",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Row density: `small` is 24px rows, `medium` 32px, `large` 40px. Height, padding, type, glyph size and indentation step together (see Tokens)."
+    },
+    {
      "name": "emptyTitle",
      "type": "string",
      "default": "''",
@@ -13345,51 +13356,6 @@
    "examplesFile": "catalog/examples/doc-heading.json",
    "docsFile": "catalog/components/doc-heading.json"
   },
-  "doc-tab": {
-   "import": "@aziontech/webkit/doc-tab",
-   "target": "./src/components/docs/doc-tab/doc-tab.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-tab",
-   "category": "docs",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The tab label; `DocTabs` reads it to build the strip."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The panel body."
-    }
-   ],
-   "surface": "docs",
-   "examplesFile": "catalog/examples/doc-tab.json",
-   "docsFile": "catalog/components/doc-tab.json"
-  },
-  "doc-tabs": {
-   "import": "@aziontech/webkit/doc-tabs",
-   "target": "./src/components/docs/doc-tabs/doc-tabs.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-tabs",
-   "category": "docs",
-   "structure": "monolithic",
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The `DocTab` children, in strip order. A child without a `title` is labelled by its position."
-    }
-   ],
-   "surface": "docs",
-   "examplesFile": "catalog/examples/doc-tabs.json",
-   "docsFile": "catalog/components/doc-tabs.json"
-  },
   "alert": {
    "import": "@aziontech/webkit/alert",
    "target": "./src/components/feedback/alert/alert.vue",
@@ -14029,7 +13995,8 @@
    "models": [
     "modelValue",
     "timeZone",
-    "open"
+    "open",
+    "refreshInterval"
    ],
    "category": "input",
    "structure": "monolithic",
@@ -14051,9 +14018,9 @@
     {
      "name": "showTimeZone",
      "type": "boolean",
-     "default": "true",
+     "default": "false",
      "required": "false",
-     "doc": "Shows the time zone selector in the panel."
+     "doc": "Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line."
     },
     {
      "name": "showTime",
@@ -14068,6 +14035,13 @@
      "default": "false",
      "required": "false",
      "doc": "Shows Previous and Next buttons that move the range back or forward by its own length."
+    },
+    {
+     "name": "showRefresh",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows the Refresh every selector in the panel while it offers relative ranges; bind v-model:refresh-interval and run the query on refresh."
     },
     {
      "name": "rangeSelectorMode",
@@ -14159,6 +14133,20 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
+    },
+    {
+     "name": "refreshInterval",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model:refreshInterval`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "refresh",
+     "payload": "()",
+     "notes": "On every auto-refresh tick while `refreshInterval` is above 0, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event."
     }
    ],
    "surface": "app",
@@ -26158,7 +26146,7 @@
      "type": "ClientMosaicSectionLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`)."
+     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `ThirdPartyLogoTreatment`)."
     },
     {
      "name": "cells",
@@ -26206,7 +26194,7 @@
      "type": "ClientStoryColumnsSectionCell[]",
      "default": "[]",
      "required": "false",
-     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
+     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `ThirdPartyLogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
     },
     {
      "name": "reveal",
@@ -28039,7 +28027,7 @@
      "type": "LogoWallSectionLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `CompanyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `CompanyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
+     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `ThirdPartyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `ThirdPartyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
     },
     {
      "name": "quote",
@@ -28281,7 +28269,7 @@
      "type": "NetworkSectionOutcome[]",
      "default": "[]",
      "required": "false",
-     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`CompanyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
+     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`ThirdPartyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
     },
     {
      "name": "benefits",
@@ -30008,6 +29996,13 @@
      "doc": "Placeholder of the field."
     },
     {
+     "name": "icon",
+     "type": "string",
+     "default": "'az az-search'",
+     "required": "false",
+     "doc": "Leading icon of the field. Empty shows none (a time field passes `az az-clock`)."
+    },
+    {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
@@ -30594,6 +30589,7 @@
     "artifact-preview",
     "avatar",
     "button",
+    "combobox",
     "doc-card",
     "doc-item",
     "doc-prompt",
@@ -33842,7 +33838,6 @@
     "geminiMark",
     "Button",
     "Card",
-    "CompanyLogo",
     "DataTable",
     "DropdownMenuGroup",
     "DropdownMenuItem",
@@ -33863,6 +33858,7 @@
     "TableCellLink",
     "TableCellTime",
     "Tag",
+    "ThirdPartyLogo",
     "toast",
     "Tooltip",
     "use-console-layout"
@@ -33875,7 +33871,6 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-item",
@@ -33896,6 +33891,7 @@
     "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/table-cell-time",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/third-party-logo",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-console-layout"
@@ -36066,7 +36062,7 @@
    "title": "Blocks/Shell/ShellDocs",
    "source": "blocks/shell/shell-docs/shell-docs.vue",
    "surface": "docs",
-   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion ShellDocs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, then one bottom bar with the brand and the social links at the start and the status and language at the end, stacked below `md`, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
+   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion ShellDocs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, then one bottom bar with the brand and the social links at the start and the status and language at the end, stacked below `md`, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `Tabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -36129,7 +36125,6 @@
     "Brand",
     "Button",
     "CodeBlock",
-    "CompanyLogo",
     "CopyPromptButton",
     "DataTable",
     "Diagram",
@@ -36152,16 +36147,16 @@
     "DocPrompt",
     "DocProse",
     "DocSteps",
-    "DocTab",
-    "DocTabs",
     "Footer",
     "IconButton",
     "ItemList",
     "RegistrationFrame",
     "Select",
     "StatusIndicator",
+    "Tabs",
     "Tag",
     "ThemeSwitcher",
+    "ThirdPartyLogo",
     "use-color-mode"
    ],
    "imports": [
@@ -36174,7 +36169,6 @@
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/code-block",
-    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/copy-prompt-button",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/diagram",
@@ -36197,16 +36191,16 @@
     "@aziontech/webkit/doc-prompt",
     "@aziontech/webkit/doc-prose",
     "@aziontech/webkit/doc-steps",
-    "@aziontech/webkit/doc-tab",
-    "@aziontech/webkit/doc-tabs",
     "@aziontech/webkit/footer",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/item-list",
     "@aziontech/webkit/registration-frame",
     "@aziontech/webkit/select",
     "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/third-party-logo",
     "@aziontech/webkit/use-color-mode"
    ],
    "primary": "Default",
@@ -36429,14 +36423,14 @@
     "geminiMark",
     "Button",
     "Card",
-    "CompanyLogo",
     "CopyButton",
     "EmptyState",
     "Input",
     "InputGroupRoot",
     "Item",
     "Link",
-    "Skeleton"
+    "Skeleton",
+    "ThirdPartyLogo"
    ],
    "imports": [
     "@aziontech/webkit/assets/claude-symbol-color.svg",
@@ -36445,14 +36439,14 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/skeleton"
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/third-party-logo"
    ],
    "primary": "Default",
    "guidelinesSummary": "What a first-level list shows before the account owns any resource of that kind. The user's job is to create the first one, so the block replaces the empty table with a short explanation and every way to get started on the same screen: the methods to create one (import, CLI, from scratch), then the promotions that shortcut it (a Catalog template, a coding agent). Every list that is still empty renders this block with its own nouns, methods and promos. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.",

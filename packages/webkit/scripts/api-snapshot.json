@@ -461,7 +461,6 @@
     "command-page",
     "command-root",
     "command-separator",
-    "company-logo",
     "competitor-comparison-section",
     "compliance-logos-section",
     "config-provider",
@@ -472,6 +471,7 @@
     "console-mockup",
     "console-showcase-section",
     "contact-hub-section",
+    "container",
     "context-menu",
     "context-menu-root",
     "context-menu-trigger",
@@ -524,9 +524,7 @@
     "doc-prose",
     "doc-steps",
     "doc-steps-root",
-    "doc-tab",
     "doc-table-of-contents",
-    "doc-tabs",
     "docs/STYLEGUIDE.md",
     "donut-chart",
     "drawer",
@@ -655,6 +653,8 @@
     "media-split-stack-section",
     "media-tabs",
     "media-tile",
+    "module",
+    "module-header",
     "multi-select",
     "multi-select-content",
     "multi-select-group",
@@ -737,12 +737,6 @@
     "schema-form",
     "scroll-area",
     "search-trigger",
-    "container",
-    "spacer",
-    "subheader",
-    "module",
-    "split-stack",
-    "module-header",
     "select",
     "select-content",
     "select-group",
@@ -750,8 +744,8 @@
     "select-root",
     "select-trigger",
     "separator",
-    "settings-row",
     "settings-group",
+    "settings-row",
     "severity-tag",
     "sidebar",
     "sidebar-footer",
@@ -773,9 +767,11 @@
     "skip-link",
     "slider",
     "sources",
+    "spacer",
     "spark-chart",
     "spinner",
     "split-button",
+    "split-stack",
     "stat-tile",
     "stat-tile-group",
     "stats",
@@ -791,6 +787,7 @@
     "styles",
     "styles/all",
     "styles/country-flags",
+    "subheader",
     "subject-grid-section",
     "suggestion-group",
     "svg/error-403",
@@ -830,6 +827,7 @@
     "textarea",
     "texture",
     "theme-switcher",
+    "third-party-logo",
     "timestamp",
     "toast",
     "toast-action",
@@ -1801,7 +1799,7 @@
       "ariaLabel": null,
       "name": null
     },
-    "company-logo": {
+    "third-party-logo": {
       "ariaLabel": null,
       "artwork": [
         "color",
@@ -2307,7 +2305,8 @@
       "openKeys": null,
       "selectable": null,
       "selectedKey": null,
-      "selectedKeys": null
+      "selectedKeys": null,
+      "size": null
     },
     "doc-call-to-action": {
       "label": null,
@@ -2447,9 +2446,6 @@
       "label": null,
       "level": null
     },
-    "doc-tab": {
-      "title": null
-    },
     "alert": {
       "actionLabel": null,
       "closable": null,
@@ -2581,7 +2577,9 @@
         "default",
         "relative-only"
       ],
+      "refreshInterval": null,
       "relativeOptions": null,
+      "showRefresh": null,
       "showStep": null,
       "showTime": null,
       "showTimeZone": null,
@@ -3221,8 +3219,8 @@
       "collapsible": null,
       "hint": null,
       "icon": null,
-      "open": null,
-      "title": null
+      "label": null,
+      "open": null
     },
     "settings-row": {
       "depth": null,
@@ -4402,6 +4400,7 @@
       "disabled": null,
       "emptyTitle": null,
       "filter": null,
+      "icon": null,
       "invalid": null,
       "loading": null,
       "modelValue": null,

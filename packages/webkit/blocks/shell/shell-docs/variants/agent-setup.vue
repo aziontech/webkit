@@ -5,7 +5,6 @@
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import DataTable from '@aziontech/webkit/data-table'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
@@ -14,9 +13,9 @@
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
-  import DocTab from '@aziontech/webkit/doc-tab'
-  import DocTabs from '@aziontech/webkit/doc-tabs'
+  import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
 
   type Workflow = 'Terminal' | 'IDE' | 'Extension'
 
@@ -304,11 +303,22 @@
         >Pick your agent</DocHeading
       >
       <p>Select an agent to get step-by-step setup instructions.</p>
-      <DocTabs>
-        <DocTab
+      <Tabs
+        data-doc-block
+        default-value="All"
+      >
+        <Tabs.List>
+          <Tabs.Trigger
+            v-for="grid in grids"
+            :key="grid.filter"
+            :value="grid.filter"
+            :label="grid.filter"
+          />
+        </Tabs.List>
+        <Tabs.Content
           v-for="grid in grids"
           :key="grid.filter"
-          :title="grid.filter"
+          :value="grid.filter"
         >
           <DocCardGroup :columns="3">
             <DocCard
@@ -324,7 +334,7 @@
                 #icon
               >
                 <span class="flex text-(--text-default)">
-                  <CompanyLogo
+                  <ThirdPartyLogo
                     :name="agent.name"
                     :src="agent.logo"
                     :variant="agent.mono ? 'current' : 'color'"
@@ -335,8 +345,8 @@
               {{ agent.description }}
             </DocCard>
           </DocCardGroup>
-        </DocTab>
-      </DocTabs>
+        </Tabs.Content>
+      </Tabs>
       <p>
         Using another client that speaks MCP? The server is one HTTP endpoint: point your client at
         <code>mcp.azion.com</code> with a Personal Token and the nine tools show up.
@@ -362,7 +372,7 @@
               :href="row.href"
               class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-flat) text-label-md text-(--text-default) no-underline hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
             >
-              <CompanyLogo
+              <ThirdPartyLogo
                 v-if="row.logo"
                 :name="row.agent"
                 :src="row.logo"

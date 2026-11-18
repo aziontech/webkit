@@ -407,6 +407,21 @@ Budget-raise: console-trace-scene 70.1 KB → 73.9 KB (measured 73.82 KB): the s
 Budget-raise: config-provider 11.25 KB → 11.35 KB (measured 11.31 KB): the English catalog it carries gained the trace's view, critical path and self time messages (2026-11-17).
 Budget-raise: locales-pt-BR 10.45 KB → 10.5 KB (measured 10.49 KB): the same trace messages (2026-11-17).
 Budget-raise: locales-es 10.6 KB → 10.65 KB (measured 10.62 KB): the same trace messages (2026-11-17).
+Budget-raise: date-picker-root 17.75 KB → 17.9 KB (measured 17.84 KB): the trigger wraps a long value instead of cutting it off, and on a phone the panel opens as a full-width bottom sheet over a backdrop (owner request, 2026-11-18).
+Budget-raise: date-range-picker 34.6 KB → 37.55 KB (measured 37.48 KB): the time range picker gains the Console parity features the owner asked for: Today and This week (ranges rounded to the start of the day or week in the zone), End at now (`since` ranges), auto refresh (`Switch`, interval, `refresh` event), the always-visible custom duration, the two-column quick ranges and the phone sheet (2026-11-18).
+Budget-raise: config-provider 11.35 KB → 11.5 KB (measured 11.44 KB): the English catalog it carries gained the time range picker’s Today, This week, End at now and auto-refresh messages (2026-11-18).
+Budget-raise: locales-pt-BR 10.5 KB → 10.7 KB (measured 10.62 KB): the same time range picker messages (2026-11-18).
+Budget-raise: locales-es 10.65 KB → 10.8 KB (measured 10.74 KB): the same time range picker messages (2026-11-18).
+Budget-raise: use-time-range 0.9 KB → 1.4 KB (measured 1.37 KB): `useTimeRange` rounds Today and This week in the time zone (option `timeZone`, else the ConfigProvider zone), which brings the wall-clock zone conversion it skipped before (2026-11-18).
+Budget-raise: filter-menu 36.05 KB → 36.2 KB (measured 36.11 KB): its custom range is a `DateRangePicker`, which grew (2026-11-18).
+Budget-raise: filter-menu-root 32.3 KB → 32.45 KB (measured 32.38 KB): the same `DateRangePicker` growth (2026-11-18).
+Budget-raise: date-picker 17.95 KB → 18.1 KB (measured 18.05 KB): the same wrapping trigger and phone sheet (2026-11-18).
+Budget-raise: date-range-picker 37.55 KB → 44.85 KB (measured 44.72 KB): round 2 of the time range proposal — each time field is now the existing `Combobox` (a typed time or a pick from a 30-minute list that opens under the field), so the panel stays as thin as the calendar; reusing Combobox instead of a new time list costs its code once (2026-11-18).
+Budget-raise: date-picker 18.1 KB → 24.6 KB (measured 24.47 KB): the same `Combobox` time field, shared with DateRangePicker through the date fields part (2026-11-18).
+Budget-raise: date-picker-root 17.9 KB → 24.4 KB (measured 24.24 KB): the same `Combobox` time field (2026-11-18).
+Budget-raise: combobox 13.05 KB → 13.15 KB (measured 13.09 KB): the list opens scrolled to the committed option, and an `icon` prop lets a time field show a clock instead of the search glass, so a 48-entry time list shows the current time (2026-11-18).
+Budget-raise: schema-form 60.8 KB → 61 KB (measured 60.89 KB): it renders `Combobox`, which grew by the scroll-to-current change (2026-11-18).
+Budget-raise: table-filter 6.35 KB → 6.45 KB (measured 6.42 KB): the same `Combobox` growth (2026-11-18).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.
 
@@ -438,3 +453,6 @@ Budget-raise: client-quotes-section 26.6 KB → 26.7 KB (measured 26.63 KB): WN-
 Budget-raise: photo-marquee-section 7.25 KB → 7.3 KB (measured 7.25 KB): WN-S02 moved the page frame (`container`, `spacer`, `module`, `module-header`) from `marketing/` to `layout/`; the import sort that follows reorders the bundled modules, which gzips slightly worse. No new code.
 Budget-raise: template-gallery-section 28.45 KB → 28.65 KB (measured 28.58 KB): WN-S02 moved the page frame (`container`, `spacer`, `module`, `module-header`) from `marketing/` to `layout/`; the import sort that follows reorders the bundled modules, which gzips slightly worse. No new code.
 Budget-raise: recognition-marquee-section 21.15 KB → 21.35 KB (measured 21.31 KB): WN-S02 moved the page frame (`container`, `spacer`, `module`, `module-header`) from `marketing/` to `layout/`; the import sort that follows reorders the bundled modules, which gzips slightly worse. No new code.
+Budget-raise: tree 10.1 KB → 10.35 KB (measured 10.28 KB): owner report 2026-11-18 (RV-T1, RV-T2), the new `size` prop (small, medium, large rows with their padding, type and indent steps), the inset 1px focus border and the guard that keeps Shift and Ctrl+click from selecting label text.
+Budget-raise: doc-markdown 28.1 KB → 28.25 KB (measured 28.10 KB): RV-M1, DocTabs and DocTab are removed and DocMarkdown renders the MDX `<Tabs><Tab title>` tags straight onto the four `Tabs` parts (four lazy imports and the panel mapping instead of two lazy DocTabs imports).
+Budget-raise: locales-es 10.8 KB → 10.85 KB (measured 10.80 KB): merging the website naming review with the owner review fixes of 2026-11-18 puts the renamed `docTableOfContents` group and the new date picker and tree messages in one catalog.

@@ -43,6 +43,7 @@ describe('TIME_RANGE_PRESETS', () => {
     })
     await userEvent.click(view.getByTestId('date-range-picker__trigger'))
     const popover = await waitFor(() => view.getByTestId('date-range-picker__popover'))
+    await userEvent.click(within(popover).getByRole('radio', { name: 'Relative' }))
     for (const name of ['Last hour', 'Last 24 hours', 'Last 7 days', 'Last 30 days']) {
       expect(within(popover).getByRole('radio', { name })).toBeTruthy()
     }
@@ -111,5 +112,16 @@ describe('useTimeRange', () => {
       slots: { default: () => h(Probe) }
     })
     expect(view.getByTestId('probe').textContent).toBe(NOW.toISOString())
+  })
+
+  it('starts calendar ranges in the given time zone', () => {
+    const scope = effectScope()
+    const today = { type: 'relative', amount: 1, unit: 'day', snap: true } as const
+    const utc = scope.run(() => useTimeRange(today, { now: NOW, timeZone: 'UTC' }))
+    const tokyo = scope.run(() => useTimeRange(today, { now: NOW, timeZone: 'Asia/Tokyo' }))
+    expect(utc?.to.value?.toISOString()).toBe(NOW.toISOString())
+    expect(utc?.from.value?.getUTCHours()).toBe(0)
+    expect(tokyo?.from.value?.getUTCHours()).toBe(15)
+    scope.stop()
   })
 })

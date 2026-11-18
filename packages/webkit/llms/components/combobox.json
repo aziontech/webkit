@@ -55,6 +55,13 @@
    "doc": "Placeholder of the field."
   },
   {
+   "name": "icon",
+   "type": "string",
+   "default": "'az az-search'",
+   "required": "false",
+   "doc": "Leading icon of the field. Empty shows none (a time field passes `az az-clock`)."
+  },
+  {
    "name": "ariaLabel",
    "type": "string",
    "default": "''",
@@ -173,7 +180,12 @@
   }
  ],
  "styleSeam": false,
- "assets": [],
+ "assets": [
+  {
+   "kind": "icons",
+   "page": "foundations/icons.md"
+  }
+ ],
  "examples": [
   {
    "name": "Default",

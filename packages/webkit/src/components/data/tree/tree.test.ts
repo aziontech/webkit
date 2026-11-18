@@ -3,12 +3,14 @@ import '../../../test/reflow.css'
 import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
+import { userEvent as browserUser } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import CustomItemExample from '../../../../examples/tree/custom-item.vue'
 import LazyChildren from '../../../../examples/tree/lazy-children.vue'
 import MultiSelect from '../../../../examples/tree/multi-select.vue'
 import RenameExample from '../../../../examples/tree/rename.vue'
+import SizesExample from '../../../../examples/tree/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tree, { type TreeItem } from './tree.vue'
 
@@ -628,6 +630,42 @@ describe('Tree', () => {
       await expectNoA11yViolations(view.container)
     })
 
+    it('does not select the label text on a Shift+click or Ctrl+click range', async () => {
+      const view = render(MultiSelect)
+      const row = (id: string) =>
+        view.container.querySelector<HTMLElement>(
+          `[data-item-id="${id}"] [data-slot="tree-row"], [data-item-id="${id}"][data-slot="tree-row"]`
+        )!
+      window.getSelection()?.removeAllRanges()
+      await browserUser.click(row('assets/hero.webp'))
+      await browserUser.click(row('reports/2026-10.csv'), { modifiers: ['Shift'] })
+      expect(String(window.getSelection())).toBe('')
+      await browserUser.click(row('index.html'), { modifiers: ['ControlOrMeta'] })
+      expect(String(window.getSelection())).toBe('')
+      expect(
+        view.container.querySelectorAll('[role="treeitem"][aria-selected="true"]')
+      ).toHaveLength(6)
+    })
+
+    it('draws the focus indicator inside the row, so it never covers a neighbour', async () => {
+      const view = render(MultiSelect)
+      const first = view.container.querySelector<HTMLElement>(
+        '[data-item-id="assets/hero.webp"] [data-slot="tree-row"]'
+      )!
+      const second = view.container.querySelector<HTMLElement>(
+        '[data-item-id="assets/logo.svg"] [data-slot="tree-row"]'
+      )!
+      await browserUser.click(second)
+      await browserUser.keyboard('{ArrowUp}')
+      const ring = getComputedStyle(first, '::after')
+      expect(ring.opacity).toBe('1')
+      expect(ring.borderTopWidth).toBe('1px')
+      expect(getComputedStyle(first).boxShadow).toBe('none')
+      const gap = second.getBoundingClientRect().top - first.getBoundingClientRect().bottom
+      const inset = parseFloat(getComputedStyle(first).borderBottomWidth)
+      expect(gap + 2 * inset).toBeGreaterThanOrEqual(2)
+    })
+
     it('handles multi-select over 1k visible nodes', async () => {
       const big: TreeItem[] = Array.from({ length: 1200 }, (_, i) => ({
         id: `n${i}`,
@@ -824,6 +862,44 @@ describe('Tree', () => {
     ])('renders the %s example without axe violations', async (_, example) => {
       const view = render(example)
       expect(view.queryByRole('tree') ?? view.getByRole('treegrid')).toBeTruthy()
+      await expectNoA11yViolations(view.container)
+    })
+  })
+
+  describe('size', () => {
+    it('defaults to medium and mirrors the size on data-size', () => {
+      const view = mount()
+      expect(view.getByTestId('tree').dataset['size']).toBe('medium')
+    })
+
+    it.each([
+      ['small', 24],
+      ['medium', 32],
+      ['large', 40]
+    ] as const)('renders %s rows %ipx tall', (size, height) => {
+      const view = render(SizesExample)
+      const tree = view.getByRole('tree', { name: `Bucket objects, ${size}` })
+      const root = tree.closest<HTMLElement>('[data-testid="tree"]')!
+      expect(root.dataset['size']).toBe(size)
+      const rows = Array.from(tree.querySelectorAll<HTMLElement>('[data-slot="tree-row"]'))
+      expect(rows.length).toBeGreaterThan(0)
+      for (const row of rows) expect(row.getBoundingClientRect().height).toBe(height)
+    })
+
+    it('steps the indentation so each guide sits under its parent chevron', () => {
+      const view = render(SizesExample)
+      for (const size of ['small', 'medium', 'large']) {
+        const tree = view.getByRole('tree', { name: `Bucket objects, ${size}` })
+        const chevron = tree.querySelector<HTMLElement>('[data-slot="tree-toggle"]')!
+        const group = tree.querySelector<HTMLElement>('[role="group"]')!
+        const box = chevron.getBoundingClientRect()
+        const guide = group.getBoundingClientRect().left
+        expect(Math.abs(guide + 0.5 - (box.left + box.width / 2))).toBeLessThanOrEqual(1)
+      }
+    })
+
+    it('has no a11y violations at any size', async () => {
+      const view = render(SizesExample)
       await expectNoA11yViolations(view.container)
     })
   })

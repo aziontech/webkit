@@ -68,7 +68,7 @@ In the footer's language slot, trigger labelled `Language`.
 - Put everything under `DocPageHeader` in one `DocProse`.
 - Give every navigation row an `id` and an `href` (an in-app path is followed with the router); keep the rail scoped to the current product; the header section links switch products.
 - Build a docs home from the Landing variant: `DocHero` with `CopyPromptButton`, then `DocAgentCard` above the Console / CLI / API cards; its headings carry no `anchor`, so the page shows no outline rail.
-- Build an index of peers (agents, SDKs, integrations) from AgentSetup: pick (a `DocTabs` filter over a `DocCardGroup`), compare (a `Table`), understand (glossary `DocCard`s). Give each peer its own page from AgentGuide.
+- Build an index of peers (agents, SDKs, integrations) from AgentSetup: pick (a `Tabs` filter over a `DocCardGroup`, with `data-doc-block` on `Tabs` inside `DocProse`), compare (a `Table`), understand (glossary `DocCard`s). Give each peer its own page from AgentGuide.
 - Render copy authored as Markdown with MDX tags (a content file, a CMS field, a sentence in data) with `DocMarkdown` inside `DocProse`; the headings it renders are `DocHeading`s with slug ids and join the outline on their own. AgentGuide uses it for its step bodies and accordion answers.
 - Show a comparison of peers or a list of tools as a `DataTable` (`bordered`, imported from `data-table`) inside an element with `data-doc-block data-doc-chrome`, so the prose rules stay off it; a yes/no cell is a check or minus glyph with a visually hidden `Yes` / `No`, a category cell a `Tag` with `severity="neutral"`.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocSteps.Step`, with its command as a `CodeBlock` inside the same step.

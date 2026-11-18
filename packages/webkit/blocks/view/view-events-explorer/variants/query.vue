@@ -527,6 +527,7 @@
     if (value.type === 'relative') {
       return { start: new Date(referenceNow - value.amount * unitMs[value.unit]), end: rangeNow }
     }
+    if (value.type === 'since') return { start: new Date(value.start), end: rangeNow }
     return { start: new Date(value.start), end: new Date(value.end) }
   })
 
@@ -559,6 +560,7 @@
   })
 
   const loading = ref(false)
+  const refreshInterval = ref(0)
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
@@ -913,6 +915,7 @@
             <DateRangePicker
               v-model="range"
               v-model:time-zone="timeZone"
+              v-model:refresh-interval="refreshInterval"
               :relative-options="relativeOptions"
               :time-zones="timeZones"
               :now="rangeNow"
@@ -921,6 +924,7 @@
               show-step
               aria-label="Events time range"
               data-testid="events-range"
+              @refresh="refresh"
             />
           </div>
           <div class="flex min-w-36 grow basis-(--container-xs)">

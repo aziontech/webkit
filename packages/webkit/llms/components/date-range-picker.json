@@ -8,14 +8,15 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, absolute range with times, previous and next) and Cloudscape's date range picker. The value is either **relative** (`{ type: 'relative', amount: 15, unit: 'minute' }`, read as \"the last 15 minutes\" and re-resolved against the clock on every query, so a live view keeps moving) or **absolute** (`{ type: 'absolute', start, end }`, two ISO 8601 instants). The trigger prints `Last 15 minutes` or the absolute range in the selected time zone with its UTC offset. The panel switches between Relative range (the quick ranges and a custom duration) and Absolute range (the `DatePicker` month grid, start and end date and time fields — the times hidden with `showTime` off — and the time zone selector) and commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. Date math uses `Intl` and the native `Date` only.",
+ "purpose": "A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, a custom duration, absolute range with times, a range that ends now, previous and next, auto refresh, the time zone) and Cloudscape's date range picker. The value is one of three shapes: - **relative** — `{ type: 'relative', amount: 15, unit: 'minute' }`, read as \"the last 15 minutes\" and re-resolved against the clock on every query, so a live view keeps moving. With `snap: true` the start is rounded down to the start of the unit in the time zone: `{ amount: 1, unit: 'day', snap: true }` is **Today** (midnight to now), `unit: 'week'` is **This week** (from Sunday, like the month grid). - **absolute** — `{ type: 'absolute', start, end }`, two ISO 8601 instants. - **since** — `{ type: 'since', start }`, an ISO 8601 start and an end that is always now (\"from the incident until now\"). The trigger prints `Last 15 minutes`, `Today`, the absolute range in the selected time zone with its UTC offset (`Nov 10, 16:00 – 17:00 (UTC+00:00)`; the date is printed once when both ends are on the same day), or `Nov 10, 2026, 9:30 – now`. It never cuts the text off: a long value wraps onto a second line. The panel switches between Absolute (first) and Relative. Absolute shows the `DatePicker` month grid **first** (click a start day and an end day), then the start and end date and time fields that the grid fills in and that can also be typed (each time field a `Combobox` that takes a typed time or lists the day in 30-minute steps, plus the current time when it falls between two, opened under the field and scrolled to the current time; the times are hidden with `showTime` off), then, when the picker also offers relative ranges, an **End at now** switch that makes a `since` range. Relative shows a custom duration and unit, then the quick ranges, two columns when there is room. The panel opens on Absolute unless the committed value is relative. Under both tabs the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`), or, with `showTimeZone`, shows the time zone selector there instead; above it a **Refresh every** select (Off, 10 seconds … 1 hour) sets the auto-refresh interval whenever the panel offers relative ranges (`showRefresh` turns it off). The panel commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. On a phone (below 640 px) the panel is a full-width sheet at the bottom of the screen. Date math uses `Intl` and the native `Date` only.",
  "setup": null,
  "useWhen": [
   "Use DateRangePicker for any start–end range: relative ('last 24 hours') or absolute, with or without times; turn times off for whole-day reports and billing periods. For one date use DatePicker; to display a moment in time use Timestamp.",
   "Filtering events, logs, traces or metrics by time, where \"the last N minutes\" must stay relative.",
   "Any range that needs times of day and a time zone, not only dates.",
   "Investigations that page through time window by window (`show-step`).",
-  "Whole-day ranges for a report or a billing period: `range-selector-mode=\"absolute-only\"` with `:show-time=\"false\"`."
+  "Whole-day ranges for a report or a billing period: `range-selector-mode=\"absolute-only\"` with `:show-time=\"false\"`.",
+  "Dashboards and live logs that re-run their query on a timer (`v-model:refresh-interval`, `@refresh`); pass `:show-refresh=\"false\"` where the page cannot re-run its query."
  ],
  "avoidWhen": [
   "A single date or a date and time → use `date-picker`.",
@@ -30,7 +31,7 @@
   "`chart` — the histogram whose brush usually writes an absolute range back into this picker."
  ],
  "bestPractices": [
-  "Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them. `useTimeRange(value)` from `@aziontech/webkit/use-time-range` returns `from` and `to` and holds the window until `refresh()`; its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.",
+  "Keep relative and `since` values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`, or `start` to `now`), never when the user picks them. `useTimeRange(value, { timeZone })` from `@aziontech/webkit/use-time-range` returns `from` and `to`, rounds `snap` ranges in the zone, and holds the window until `refresh()`; call that `refresh()` from `@refresh`. Its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.",
   "Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `ConfigProvider` covers every picker below it; the `now` prop overrides it for one picker.",
   "Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.",
   "Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.",
@@ -54,9 +55,9 @@
   {
    "name": "showTimeZone",
    "type": "boolean",
-   "default": "true",
+   "default": "false",
    "required": "false",
-   "doc": "Shows the time zone selector in the panel."
+   "doc": "Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line."
   },
   {
    "name": "showTime",
@@ -71,6 +72,13 @@
    "default": "false",
    "required": "false",
    "doc": "Shows Previous and Next buttons that move the range back or forward by its own length."
+  },
+  {
+   "name": "showRefresh",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the Refresh every selector in the panel while it offers relative ranges; bind v-model:refresh-interval and run the query on refresh."
   },
   {
    "name": "rangeSelectorMode",
@@ -162,9 +170,22 @@
    "default": "undefined as never",
    "required": "false",
    "doc": "Two-way value (`v-model:open`)."
+  },
+  {
+   "name": "refreshInterval",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model:refreshInterval`)."
   }
  ],
- "events": [],
+ "events": [
+  {
+   "name": "refresh",
+   "payload": "()",
+   "notes": "On every auto-refresh tick while `refreshInterval` is above 0, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event."
+  }
+ ],
  "slots": [],
  "styleSeam": false,
  "assets": [],

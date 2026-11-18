@@ -3,169 +3,177 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Error page alternatives</title>
+<title>Error page options</title>
 <style>
 :root, :root[data-theme="light"] {
-  --bg-canvas:#F5F5F5; --bg-surface:#FFFFFF; --bg-surface-raised:#FFFFFF; --bg-mask:#00000005; --bg-hover:#00000014; --bg-selected:#E5E5E5;
+  --bg-canvas:#F5F5F5; --bg-surface:#FFFFFF; --bg-surface-raised:#FFFFFF; --bg-mask:#00000005; --bg-hover:#00000014; --bg-selected:#E5E5E5; --bg-placeholder:#00000014;
   --border-default:#D1D1D1; --border-muted:#DADADA; --border-strong:#000000; --border-input:#D1D1D1;
-  --text-default:#141414; --text-muted:#535353; --text-link:#005FCC; --text-brand:#F3652B;
+  --text-default:#141414; --text-muted:#535353; --text-disabled:#999999; --text-link:#005FCC; --text-brand:#F3652B;
   --primary:#F3652B; --primary-foreground:#000000;
-  --warning:#FAD76B; --warning-foreground:#312602; --warning-mark:#947105;
+  --warning:#FAD76B; --warning-foreground:#312602; --warning-border:#F7BD0880; --warning-mark:#947105;
   --danger:#F3A5A5; --danger-foreground:#2E0606; --danger-border:#E74B4B; --danger-mark:#E51A1A;
-  --success:#78EDA2; --success-foreground:#0A2916; --success-mark:#16833F;
-  --info-mark:#0072F5; --accent:#005FCC; --ring-color:#666666;
+  --success-mark:#16833F;
+  --info:#99C9FF; --info-foreground:#003066; --info-border:#0072F566; --info-mark:#0072F5;
+  --accent:#005FCC; --ring-color:#666666;
   --shadow-sm:0 1px 2px 0 rgb(0 0 0 / 0.08);
   --shape-card:8px; --shape-button:6px; --shape-control:6px;
-  --spacing-2xs:4px; --spacing-xs:8px; --spacing-sm:12px; --spacing-md:16px; --spacing-lg:24px; --spacing-xl:32px; --spacing-2xl:48px;
+  --spacing-2xs:4px; --spacing-xs:8px; --spacing-sm:12px; --spacing-md:16px; --spacing-lg:24px; --spacing-xl:32px;
   --font-sans:Rubik, ui-sans-serif, system-ui, sans-serif; --font-mono:ui-monospace, 'SF Mono', Menlo, monospace;
   color-scheme: light;
 }
 :root[data-theme="dark"] {
-  --bg-canvas:#000000; --bg-surface:#0A0A0A; --bg-surface-raised:#141414; --bg-mask:#FFFFFF0D; --bg-hover:#FFFFFF1A; --bg-selected:#2B2B2B;
+  --bg-canvas:#000000; --bg-surface:#0A0A0A; --bg-surface-raised:#141414; --bg-mask:#FFFFFF0D; --bg-hover:#FFFFFF1A; --bg-selected:#2B2B2B; --bg-placeholder:#FFFFFF1A;
   --border-default:#2B2B2B; --border-muted:#242424; --border-strong:#FFFFFF; --border-input:#535353;
-  --text-default:#FAFAFA; --text-muted:#B2B2B2; --text-link:#99C9FF;
+  --text-default:#FAFAFA; --text-muted:#B2B2B2; --text-disabled:#4D4D4D; --text-link:#99C9FF;
   --warning:#312602; --warning-foreground:#F7BD08; --warning-mark:#C59707;
   --danger:#5B0B0B; --danger-foreground:#F9D2D2; --danger-mark:#ED7878;
-  --success:#0A2916; --success-foreground:#52E086; --success-mark:#18B452;
-  --info-mark:#3392FF; --accent:#99C9FF; --ring-color:#808080;
+  --success-mark:#18B452;
+  --info:#001833; --info-foreground:#99C9FF; --info-mark:#3392FF;
+  --accent:#99C9FF; --ring-color:#808080;
   --shadow-sm:0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.6);
   color-scheme: dark;
 }
 * { box-sizing:border-box; }
 body { margin:0; background:var(--bg-canvas); color:var(--text-default); font:15px/1.5 var(--font-sans); }
-.doc { max-width:1440px; margin:0 auto; padding:var(--spacing-lg) var(--spacing-md) 80px; }
+.doc { max-width:1600px; margin:0 auto; padding:var(--spacing-lg) var(--spacing-md) 80px; }
 .doc > header { display:flex; flex-wrap:wrap; gap:var(--spacing-md); align-items:flex-start; justify-content:space-between; }
+.controls { display:flex; flex-wrap:wrap; gap:var(--spacing-xs); }
 h1 { font-size:1.875rem; font-weight:400; margin:0 0 var(--spacing-xs); }
 h2 { font-size:1.5rem; font-weight:400; margin:0; }
-h3 { font-size:0.875rem; font-weight:500; margin:var(--spacing-md) 0 var(--spacing-xs); color:var(--text-default); }
-.lead, .doc p { color:var(--text-muted); max-width:85ch; margin:0 0 var(--spacing-sm); }
+h3 { font-size:0.875rem; font-weight:500; margin:var(--spacing-md) 0 var(--spacing-xs); }
+.doc p.lead, .doc .intro p { color:var(--text-muted); max-width:90ch; margin:0 0 var(--spacing-sm); }
+.doc code { font:0.75rem var(--font-mono); color:var(--text-default); }
+.doc a { color:var(--text-link); }
 .toggle { display:inline-flex; gap:2px; padding:2px; border:1px solid var(--border-default); border-radius:var(--shape-control); background:var(--bg-surface); }
 .toggle button { font:inherit; font-size:0.75rem; border:0; background:transparent; color:var(--text-muted); padding:4px 12px; border-radius:4px; cursor:pointer; }
 .toggle button[aria-pressed="true"] { background:var(--bg-selected); color:var(--text-default); }
 .toggle button:focus-visible { outline:2px solid var(--ring-color); outline-offset:2px; }
-table.bench { width:100%; border-collapse:collapse; font-size:0.8125rem; margin:var(--spacing-sm) 0 var(--spacing-lg); }
-table.bench th, table.bench td { text-align:start; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--border-default); }
-table.bench th { color:var(--text-muted); font-weight:500; }
 .bench-wrap { overflow-x:auto; }
-.alt { border:1px solid var(--border-default); border-radius:var(--shape-card); background:var(--bg-surface); padding:var(--spacing-md); margin:var(--spacing-lg) 0; }
-.alt-head { display:flex; flex-wrap:wrap; gap:var(--spacing-xs) var(--spacing-md); align-items:baseline; }
-.alt-head .num { font:500 0.75rem var(--font-mono); color:var(--text-brand); }
-.based { font-size:0.8125rem; color:var(--text-muted); margin:4px 0 var(--spacing-md); }
-.frames { display:grid; grid-template-columns:minmax(0,1fr) 375px; gap:var(--spacing-md); align-items:start; }
-.frame { container-type:inline-size; border:1px solid var(--border-default); border-radius:var(--shape-card); overflow:hidden; background:var(--bg-canvas); }
+table.bench { width:100%; border-collapse:collapse; font-size:0.8125rem; margin:var(--spacing-sm) 0; }
+table.bench th, table.bench td { text-align:start; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--border-default); }
+table.bench th { color:var(--text-muted); font-weight:500; white-space:nowrap; }
+.option { border:1px solid var(--border-default); border-radius:var(--shape-card); background:var(--bg-surface); padding:var(--spacing-md); margin:var(--spacing-lg) 0; }
+.opt-head { display:flex; flex-wrap:wrap; gap:var(--spacing-xs) var(--spacing-md); align-items:baseline; }
+.opt-head .num { font:500 0.75rem var(--font-mono); color:var(--text-brand); }
+.opt-sub { font-size:0.875rem; color:var(--text-muted); margin:4px 0 var(--spacing-md); max-width:100ch; }
+.pages { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 720px), 1fr)); gap:var(--spacing-md); }
+.page-card { border:1px solid var(--border-default); border-radius:var(--shape-card); padding:var(--spacing-sm); background:var(--bg-canvas); min-width:0; overflow-x:auto; }
+.page-label { display:flex; align-items:center; gap:var(--spacing-xs); margin-bottom:var(--spacing-xs); font-size:0.875rem; }
+.page-label .why { color:var(--text-muted); font-size:0.75rem; }
+.views { display:flex; gap:var(--spacing-sm); align-items:flex-start; }
+.zoom { zoom:0.5; flex-shrink:0; }
+body[data-scale="actual"] .zoom { zoom:1; }
+body[data-scale="actual"] .pages { grid-template-columns:1fr; }
+body[data-scale="actual"] .views { flex-wrap:wrap; }
+.frame { border:1px solid var(--border-default); border-radius:var(--shape-card); overflow:hidden; background:var(--bg-canvas); }
 .frame-bar { display:flex; align-items:center; gap:6px; height:28px; padding:0 10px; border-bottom:1px solid var(--border-default); background:var(--bg-surface); font:0.6875rem var(--font-mono); color:var(--text-muted); }
-.frame-bar i { width:8px; height:8px; border-radius:50%; background:var(--border-default); display:inline-block; }
+.frame-bar i { width:8px; height:8px; border-radius:50%; background:var(--border-default); }
 .frame-bar span { margin-inline-start:auto; }
-.screen { min-height:560px; display:flex; flex-direction:column; }
-.frame.mobile .screen { min-height:700px; }
+.screen { container-type:inline-size; display:flex; flex-direction:column; }
+.desktop .screen { width:1024px; height:600px; }
+.mobile .screen { width:375px; height:700px; }
 .notes { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:var(--spacing-md); margin-top:var(--spacing-md); font-size:0.8125rem; }
 .notes ul { margin:0; padding-inline-start:18px; color:var(--text-muted); }
 .notes li { margin-bottom:4px; }
-.notes code, .doc p code, td code { font:0.75rem var(--font-mono); color:var(--text-default); }
+.notes strong { color:var(--text-default); font-weight:500; }
 .rec { border:1px solid var(--primary); border-radius:var(--shape-card); padding:var(--spacing-md); background:var(--bg-surface); }
-.rec ol { color:var(--text-muted); max-width:90ch; padding-inline-start:20px; }
+.rec ol { color:var(--text-muted); max-width:100ch; padding-inline-start:20px; }
 .rec li { margin-bottom:6px; }
-.rec strong, .notes strong { color:var(--text-default); font-weight:500; }
-.cmp-legend { font-size:0.75rem; color:var(--text-muted); }
-@media (max-width: 1000px) { .frames { grid-template-columns:1fr; } .frame.mobile { max-width:375px; } .notes { grid-template-columns:1fr; } }
+.rec strong { color:var(--text-default); font-weight:500; }
+@media (max-width: 900px) { .notes { grid-template-columns:1fr; } }
 
-/* ---------- WebKit parts, drawn with the classes and tokens of their .vue sources ---------- */
+/* WebKit parts, drawn with the classes and tokens of their .vue sources */
 .ic { width:1em; height:1em; display:inline-block; vertical-align:-0.125em; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-.console { display:flex; flex:1; min-height:inherit; }
+.console { display:flex; flex:1; min-height:0; }
 .rail { width:48px; border-inline-end:1px solid var(--border-default); background:var(--bg-surface); display:flex; flex-direction:column; align-items:center; gap:12px; padding-top:12px; }
 .rail b { width:20px; height:20px; border-radius:4px; background:var(--bg-hover); display:block; }
 .rail b:first-child { background:var(--primary); }
 .main { flex:1; display:flex; flex-direction:column; min-width:0; }
-.topbar { height:44px; border-bottom:1px solid var(--border-default); background:var(--bg-surface); display:flex; align-items:center; padding:0 var(--spacing-md); gap:var(--spacing-xs); font-size:0.75rem; color:var(--text-muted); }
-.topbar .sp { flex:1; }
+.topbar { height:44px; flex-shrink:0; border-bottom:1px solid var(--border-default); background:var(--bg-surface); display:flex; align-items:center; padding:0 var(--spacing-md); font-size:0.75rem; color:var(--text-muted); }
 @container (max-width: 520px) { .rail { display:none; } }
+.body { flex:1; display:flex; flex-direction:column; align-items:center; padding:72px var(--spacing-md) var(--spacing-lg); overflow:hidden; }
+@container (max-width: 520px) { .body { padding-top:40px; } }
+.body.start { align-items:stretch; padding-inline:48px; padding-top:56px; }
+@container (max-width: 520px) { .body.start { padding-inline:var(--spacing-md); padding-top:32px; } }
 
-.btn { position:relative; display:inline-flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap; border-radius:var(--shape-button); height:32px; min-width:64px; padding:0 var(--spacing-sm); font:0.75rem/1.25 var(--font-sans); border:1px solid transparent; text-decoration:none; cursor:pointer; }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap; border-radius:var(--shape-button); height:32px; min-width:64px; padding:0 var(--spacing-sm); font:0.75rem/1.25 var(--font-sans); border:1px solid transparent; }
 .btn[data-variant="primary"] { background:var(--primary); color:var(--primary-foreground); }
 .btn[data-variant="outline"] { background:var(--bg-surface); color:var(--text-default); border-color:var(--border-default); }
 .btn[data-variant="ghost"] { background:transparent; color:var(--text-default); }
 .btn[data-variant="link"] { background:transparent; color:var(--text-link); font-size:0.875rem; padding:0; min-width:0; height:auto; }
-.btn[data-size="small"] { height:28px; min-width:56px; padding:0 var(--spacing-xs); }
-.icon-btn { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--shape-button); color:var(--text-muted); border:0; background:transparent; }
-.tag { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 var(--spacing-xs); border:1px solid transparent; border-radius:var(--shape-control); font:500 0.75rem/1 var(--font-mono); }
+.btn[data-disabled] { background:var(--bg-placeholder); color:var(--text-disabled); border-color:transparent; }
+.icon-btn { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:var(--shape-button); color:var(--text-muted); border:0; background:transparent; font-size:13px; padding:0; }
+.tag { display:inline-flex; align-items:center; gap:6px; height:24px; padding:0 var(--spacing-xs); border:1px solid transparent; border-radius:var(--shape-control); font:500 0.75rem/1 var(--font-mono); white-space:nowrap; }
 .tag[data-severity="neutral"] { background:var(--bg-canvas); border-color:var(--border-default); color:var(--text-muted); }
 .tag[data-severity="warning"] { background:var(--warning); color:var(--warning-foreground); }
 .tag[data-severity="danger"] { background:var(--danger); color:var(--danger-foreground); }
-.tag[data-size="small"] { height:20px; padding:0 var(--spacing-2xs); font-size:0.6875rem; }
-.status { display:inline-flex; align-items:center; gap:6px; font-size:0.875rem; color:var(--text-default); }
+.tag .m { opacity:.75; }
+.status { display:inline-flex; align-items:center; gap:6px; font-size:0.8125rem; color:var(--text-default); white-space:nowrap; }
 .status i { width:8px; height:8px; border-radius:50%; display:inline-block; }
 .status i[data-severity="success"] { background:var(--success-mark); }
 .status i[data-severity="warning"] { background:var(--warning-mark); }
 .status i[data-severity="danger"] { background:var(--danger-mark); }
-.status i[data-severity="neutral"] { background:var(--text-muted); }
-.kbd { display:inline-flex; align-items:center; justify-content:center; height:20px; min-width:20px; padding:0 6px; border:1px solid var(--border-default); border-bottom-width:2px; border-radius:var(--shape-control); background:var(--bg-surface); color:var(--text-default); box-shadow:var(--shadow-sm); font:500 0.625rem/1 var(--font-sans); letter-spacing:.04em; }
-.empty { display:flex; flex-direction:column; align-items:center; text-align:center; gap:24px; padding:48px 32px; width:100%; }
-.empty-title { font-size:1.125rem; color:var(--text-default); margin:0; }
-.empty-desc { font-size:0.875rem; line-height:1.375; color:var(--text-muted); margin:0; max-width:46ch; }
-.empty-text { display:flex; flex-direction:column; gap:8px; align-items:center; }
+.status i[data-severity="info"] { background:var(--info-mark); }
+.kbd { display:inline-flex; align-items:center; justify-content:center; height:20px; min-width:20px; padding:0 6px; border:1px solid var(--border-default); border-bottom-width:2px; border-radius:var(--shape-control); background:var(--bg-surface); color:var(--text-default); box-shadow:var(--shadow-sm); font:500 0.625rem/1 var(--font-sans); }
+.stack { display:flex; flex-direction:column; align-items:center; text-align:center; gap:20px; width:100%; max-width:520px; }
+.title { font-size:1.125rem; color:var(--text-default); margin:0; font-weight:400; }
+.title.lg { font-size:1.5rem; }
+.desc { font-size:0.875rem; line-height:1.375; color:var(--text-muted); margin:0; max-width:48ch; }
+.text { display:flex; flex-direction:column; gap:8px; align-items:inherit; }
+.row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.ref { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:2px 8px; font-size:0.75rem; color:var(--text-muted); }
+.ref bdi { font:0.75rem var(--font-mono); color:var(--text-default); }
+.ref .dot { opacity:.5; }
 .tile { position:relative; width:40px; height:40px; display:flex; align-items:center; justify-content:center; }
 .tile::before, .tile::after { content:''; position:absolute; inset:50% auto auto 50%; translate:-50% -50%; border:1px solid var(--border-strong); border-radius:var(--shape-card); background:var(--bg-canvas); }
 .tile::before { width:56px; height:56px; opacity:.05; }
 .tile::after { width:48px; height:48px; opacity:.1; }
 .tile span { position:relative; z-index:1; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border-default); border-radius:var(--shape-control); background:var(--bg-surface); color:var(--text-default); font-size:16px; }
-.row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
-.ref { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 8px; font-size:0.75rem; color:var(--text-muted); }
-.ref bdi { font:0.75rem var(--font-mono); color:var(--text-default); }
-.ref .dot { opacity:.5; }
+.art { width:120px; height:auto; }
 .search { display:flex; align-items:center; gap:8px; height:32px; width:100%; max-width:420px; padding:0 var(--spacing-sm); border:1px solid var(--border-default); border-radius:var(--shape-control); background:var(--bg-surface); color:var(--text-muted); font-size:0.875rem; text-align:start; }
-.search span.grow { flex:1; }
-.items { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; width:100%; max-width:560px; }
+.search .grow { flex:1; }
+.items { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; width:100%; }
 @container (max-width: 520px) { .items { grid-template-columns:1fr; } }
-.item { display:flex; align-items:center; gap:12px; padding:12px 16px; border:1px solid var(--border-muted); border-radius:var(--shape-card); background:var(--bg-surface); text-align:start; }
+.item { display:flex; align-items:center; gap:12px; padding:10px 14px; border:1px solid var(--border-muted); border-radius:var(--shape-card); background:var(--bg-surface); text-align:start; width:100%; }
 .item .media { width:32px; height:32px; border-radius:var(--shape-control); background:var(--bg-hover); display:flex; align-items:center; justify-content:center; color:var(--text-default); font-size:15px; flex-shrink:0; }
-.item .t { font-size:0.875rem; color:var(--text-default); }
-.item .d { font-size:0.75rem; color:var(--text-muted); }
-.item .go { margin-inline-start:auto; color:var(--text-muted); }
-.overline { font:500 0.6875rem/1 var(--font-sans); letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); }
-.flow { display:flex; align-items:center; justify-content:center; gap:0; width:100%; }
-.node { position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-height:40px; padding:12px 16px; border:1px solid var(--border-default); border-radius:var(--shape-button); background:var(--bg-surface-raised); font-size:0.8125rem; color:var(--text-default); white-space:nowrap; }
-.node small { font-size:0.75rem; color:var(--text-muted); }
+.item .t { font-size:0.875rem; color:var(--text-default); display:block; }
+.item .d { font-size:0.75rem; color:var(--text-muted); display:block; }
+.item .end { margin-inline-start:auto; color:var(--text-muted); display:flex; align-items:center; }
+.avatar { width:32px; height:32px; border-radius:50%; background:var(--bg-surface-raised); border:1px solid var(--border-default); color:var(--text-default); display:flex; align-items:center; justify-content:center; font:500 0.6875rem var(--font-sans); text-transform:uppercase; flex-shrink:0; }
+.alert { display:flex; align-items:flex-start; gap:12px; width:100%; padding:8px 12px; border:1px solid; border-radius:var(--shape-button); font-size:0.8125rem; text-align:start; }
+.alert[data-severity="info"] { background:var(--info); border-color:var(--info-border); color:var(--info-foreground); }
+.alert[data-severity="warning"] { background:var(--warning); border-color:var(--warning-border); color:var(--warning-foreground); }
+.alert .ic { margin-top:3px; }
+.progress { position:relative; width:100%; height:8px; border-radius:var(--shape-control); background:var(--bg-placeholder); overflow:hidden; }
+.progress span { position:absolute; inset:0 auto 0 0; border-radius:inherit; background:var(--primary); }
+.meter { display:flex; flex-direction:column; gap:8px; width:100%; max-width:360px; }
+.meter .lbl { display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); }
+.meter .lbl b { font-weight:400; color:var(--text-default); font-family:var(--font-mono); }
+.head3 { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.head3 .code { font:0.75rem var(--font-mono); color:var(--text-muted); }
+.cols { display:grid; grid-template-columns:1fr 1fr; gap:24px; width:100%; text-align:start; }
+@container (max-width: 520px) { .cols { grid-template-columns:1fr; gap:16px; } }
+.cols h4 { margin:0 0 6px; font-size:0.875rem; font-weight:400; color:var(--text-default); }
+.cols p { margin:0; font-size:0.8125rem; color:var(--text-muted); line-height:1.45; }
+.sep { width:100%; height:1px; background:var(--border-default); flex-shrink:0; }
+.kv { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px 24px; width:100%; text-align:start; margin:0; }
+@container (max-width: 520px) { .kv { grid-template-columns:1fr 1fr; gap:12px 16px; } }
+.kv dt { font-size:0.75rem; color:var(--text-muted); margin-bottom:2px; }
+.kv dd { margin:0; font:0.8125rem var(--font-mono); color:var(--text-default); display:flex; align-items:center; gap:2px; overflow-wrap:anywhere; }
+.d3 { display:flex; flex-direction:column; gap:24px; width:100%; max-width:860px; }
+.d3 .row { justify-content:flex-start; }
+.flow { display:flex; align-items:center; width:100%; }
+.node { position:relative; display:flex; flex-direction:column; gap:6px; padding:10px 14px; border:1px solid var(--border-default); border-radius:var(--shape-button); background:var(--bg-surface-raised); font-size:0.8125rem; color:var(--text-default); white-space:nowrap; }
+.node small { color:var(--text-muted); font-size:0.75rem; }
 .node::before, .node::after { content:''; position:absolute; top:50%; width:8px; height:8px; translate:0 -50%; border:1px solid var(--border-muted); border-radius:2px; background:var(--accent); }
 .node::before { inset-inline-start:-5px; } .node::after { inset-inline-end:-5px; }
 .node:first-child::before, .node:last-child::after { display:none; }
-.wire { flex:1; min-width:24px; max-width:96px; height:0; border-top:1px dashed var(--accent); }
+.wire { flex:1; min-width:24px; max-width:80px; border-top:1px dashed var(--accent); }
 .wire[data-faded] { opacity:.5; }
-@container (max-width: 520px) { .flow { flex-direction:column; align-items:stretch; } .wire { min-height:20px; max-width:none; width:0; border-top:0; border-inline-start:1px dashed var(--accent); align-self:center; } .node { flex-direction:row; justify-content:space-between; align-items:center; } .node::before, .node::after { display:none; } }
-.cols { display:grid; grid-template-columns:1fr 1fr; gap:24px; width:100%; text-align:start; }
-@container (max-width: 520px) { .cols { grid-template-columns:1fr; } }
-.cols h4 { margin:0 0 6px; font-size:0.875rem; font-weight:400; color:var(--text-default); }
-.cols p { margin:0; font-size:0.8125rem; color:var(--text-muted); }
-.kv { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px 24px; width:100%; text-align:start; }
-@container (max-width: 520px) { .kv { grid-template-columns:1fr; gap:12px; } }
-.kv dt { font-size:0.75rem; color:var(--text-muted); margin-bottom:2px; }
-.kv dd { margin:0; font:0.8125rem var(--font-mono); color:var(--text-default); display:flex; align-items:center; gap:4px; }
-.sep { width:100%; height:1px; background:var(--border-default); }
-.codeblock { width:100%; border:1px solid var(--border-default); border-radius:var(--shape-card); background:var(--bg-surface); overflow:hidden; text-align:start; }
-.codeblock .head { display:flex; align-items:center; gap:8px; height:40px; padding:0 var(--spacing-sm); border-bottom:1px solid var(--border-default); font:0.75rem var(--font-mono); color:var(--text-muted); }
-.codeblock .head .grow { flex:1; }
-.codeblock pre { margin:0; padding:var(--spacing-sm) var(--spacing-md); font:0.75rem/1.6 var(--font-mono); color:var(--text-default); overflow-x:auto; background:var(--bg-canvas); }
-.codeblock .k { color:var(--text-muted); } .codeblock .s { color:var(--text-link); }
-.split { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:32px; width:100%; max-width:880px; align-items:start; }
-@container (max-width: 640px) { .split { grid-template-columns:1fr; } }
-.left { display:flex; flex-direction:column; gap:16px; align-items:flex-start; text-align:start; }
-.left .row { justify-content:flex-start; }
-.left .ref { justify-content:flex-start; }
-.card { border:1px solid var(--border-default); border-radius:var(--shape-card); background:var(--bg-surface); overflow:hidden; }
-.card-head { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border-default); font-size:0.875rem; }
-.card-body { padding:4px 16px; }
-.card-body .line { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border-default); font-size:0.8125rem; color:var(--text-muted); }
-.card-body .line:last-child { border-bottom:0; }
-.card-foot { padding:10px 16px; border-top:1px solid var(--border-default); font-size:0.75rem; color:var(--text-muted); display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; }
-.content { flex:1; display:flex; flex-direction:column; align-items:center; padding:var(--spacing-lg) var(--spacing-md); }
-.content.top { justify-content:flex-start; padding-top:12cqh; }
-.content.center { justify-content:center; }
-.edge-page { flex:1; display:flex; flex-direction:column; align-items:center; gap:28px; padding:48px var(--spacing-md); max-width:880px; margin:0 auto; width:100%; }
-.edge-page .empty-title { font-size:1.5rem; }
-.brandline { display:flex; justify-content:space-between; width:100%; font-size:0.75rem; color:var(--text-muted); }
-.err404 { width:100%; max-width:120px; height:auto; }
+@container (max-width: 520px) { .flow { display:none; } }
 </style>
 </head>
-<body>
+<body data-scale="fit">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5"/><path d="M20 19v3H6.5"/></symbol>
@@ -175,252 +183,186 @@ table.bench th { color:var(--text-muted); font-weight:500; }
   <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
   <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/></symbol>
   <symbol id="i-fn" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></symbol>
-  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></symbol>
   <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
   <symbol id="i-logs" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h10"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5L22 14l-8 8-2.3-2.3a4 4 0 0 0-5-5L4 12l2.7-2.7a4 4 0 0 0 5-5L14 2z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M16 3.5a4 4 0 0 1 0 8"/><path d="M22 21a7 7 0 0 0-5-6.7"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
 </svg>
+<script type="text/plain" id="art-404"><path opacity="0.3" d="M49.7969 47.0312V54.1562H0.484375V49.0469L31.0469 1.75H38.125L30.5312 15.4375L10.3281 47.0312H49.7969ZM40.2812 1.75V70H31.6094V1.75H40.2812ZM100.516 30.4375V40.8438C100.516 46.4375 100.016 51.1562 99.0156 55C98.0156 58.8438 96.5781 61.9375 94.7031 64.2812C92.8281 66.625 90.5625 68.3281 87.9062 69.3906C85.2812 70.4219 82.3125 70.9375 79 70.9375C76.375 70.9375 73.9531 70.6094 71.7344 69.9531C69.5156 69.2969 67.5156 68.25 65.7344 66.8125C63.9844 65.3438 62.4844 63.4375 61.2344 61.0938C59.9844 58.75 59.0312 55.9062 58.375 52.5625C57.7188 49.2188 57.3906 45.3125 57.3906 40.8438V30.4375C57.3906 24.8438 57.8906 20.1562 58.8906 16.375C59.9219 12.5937 61.375 9.5625 63.25 7.28125C65.125 4.96875 67.375 3.3125 70 2.3125C72.6562 1.3125 75.625 0.8125 78.9062 0.8125C81.5625 0.8125 84 1.14062 86.2188 1.79688C88.4688 2.42187 90.4688 3.4375 92.2188 4.84375C93.9688 6.21875 95.4531 8.0625 96.6719 10.375C97.9219 12.6563 98.875 15.4531 99.5312 18.7656C100.188 22.0781 100.516 25.9688 100.516 30.4375ZM91.7969 42.25V28.9844C91.7969 25.9219 91.6094 23.2344 91.2344 20.9219C90.8906 18.5781 90.375 16.5781 89.6875 14.9219C89 13.2656 88.125 11.9219 87.0625 10.8906C86.0312 9.85938 84.8281 9.10938 83.4531 8.64062C82.1094 8.14062 80.5938 7.89062 78.9062 7.89062C76.8438 7.89062 75.0156 8.28125 73.4219 9.0625C71.8281 9.8125 70.4844 11.0156 69.3906 12.6719C68.3281 14.3281 67.5156 16.5 66.9531 19.1875C66.3906 21.875 66.1094 25.1406 66.1094 28.9844V42.25C66.1094 45.3125 66.2812 48.0156 66.625 50.3594C67 52.7031 67.5469 54.7344 68.2656 56.4531C68.9844 58.1406 69.8594 59.5312 70.8906 60.625C71.9219 61.7188 73.1094 62.5312 74.4531 63.0625C75.8281 63.5625 77.3438 63.8125 79 63.8125C81.125 63.8125 82.9844 63.4062 84.5781 62.5938C86.1719 61.7812 87.5 60.5156 88.5625 58.7969C89.6562 57.0469 90.4688 54.8125 91 52.0938C91.5312 49.3438 91.7969 46.0625 91.7969 42.25ZM157.797 47.0312V54.1562H108.484V49.0469L139.047 1.75H146.125L138.531 15.4375L118.328 47.0312H157.797ZM148.281 1.75V70H139.609V1.75H148.281Z" fill="url(#paint0_linear_4357_91145)" /> <defs> <linearGradient id="paint0_linear_4357_91145" x1="79" y1="-41.8571" x2="79" y2="101" gradientUnits="userSpaceOnUse" > <stop stop-color="#F3652B" /> <stop offset="1" stop-color="#D95C2A" stop-opacity="0.1" /> </linearGradient> </defs></script>
+<script type="text/plain" id="art-403"><path opacity="0.3" d="M49.7969 47.0312V54.1562H0.484375V49.0469L31.0469 1.75H38.125L30.5312 15.4375L10.3281 47.0312H49.7969ZM40.2812 1.75V70H31.6094V1.75H40.2812ZM100.516 30.4375V40.8438C100.516 46.4375 100.016 51.1562 99.0156 55C98.0156 58.8438 96.5781 61.9375 94.7031 64.2812C92.8281 66.625 90.5625 68.3281 87.9062 69.3906C85.2812 70.4219 82.3125 70.9375 79 70.9375C76.375 70.9375 73.9531 70.6094 71.7344 69.9531C69.5156 69.2969 67.5156 68.25 65.7344 66.8125C63.9844 65.3438 62.4844 63.4375 61.2344 61.0938C59.9844 58.75 59.0312 55.9062 58.375 52.5625C57.7188 49.2188 57.3906 45.3125 57.3906 40.8438V30.4375C57.3906 24.8438 57.8906 20.1562 58.8906 16.375C59.9219 12.5937 61.375 9.5625 63.25 7.28125C65.125 4.96875 67.375 3.3125 70 2.3125C72.6562 1.3125 75.625 0.8125 78.9062 0.8125C81.5625 0.8125 84 1.14062 86.2188 1.79688C88.4688 2.42187 90.4688 3.4375 92.2188 4.84375C93.9688 6.21875 95.4531 8.0625 96.6719 10.375C97.9219 12.6563 98.875 15.4531 99.5312 18.7656C100.188 22.0781 100.516 25.9688 100.516 30.4375ZM91.7969 42.25V28.9844C91.7969 25.9219 91.6094 23.2344 91.2344 20.9219C90.8906 18.5781 90.375 16.5781 89.6875 14.9219C89 13.2656 88.125 11.9219 87.0625 10.8906C86.0312 9.85938 84.8281 9.10938 83.4531 8.64062C82.1094 8.14062 80.5938 7.89062 78.9062 7.89062C76.8438 7.89062 75.0156 8.28125 73.4219 9.0625C71.8281 9.8125 70.4844 11.0156 69.3906 12.6719C68.3281 14.3281 67.5156 16.5 66.9531 19.1875C66.3906 21.875 66.1094 25.1406 66.1094 28.9844V42.25C66.1094 45.3125 66.2812 48.0156 66.625 50.3594C67 52.7031 67.5469 54.7344 68.2656 56.4531C68.9844 58.1406 69.8594 59.5312 70.8906 60.625C71.9219 61.7188 73.1094 62.5312 74.4531 63.0625C75.8281 63.5625 77.3438 63.8125 79 63.8125C81.125 63.8125 82.9844 63.4062 84.5781 62.5938C86.1719 61.7812 87.5 60.5156 88.5625 58.7969C89.6562 57.0469 90.4688 54.8125 91 52.0938C91.5312 49.3438 91.7969 46.0625 91.7969 42.25ZM124.328 31.6094H130.516C133.547 31.6094 136.047 31.1094 138.016 30.1094C140.016 29.0781 141.5 27.6875 142.469 25.9375C143.469 24.1562 143.969 22.1562 143.969 19.9375C143.969 17.3125 143.531 15.1094 142.656 13.3281C141.781 11.5469 140.469 10.2031 138.719 9.29688C136.969 8.39063 134.75 7.9375 132.062 7.9375C129.625 7.9375 127.469 8.42187 125.594 9.39062C123.75 10.3281 122.297 11.6719 121.234 13.4219C120.203 15.1719 119.688 17.2344 119.688 19.6094H111.016C111.016 16.1406 111.891 12.9844 113.641 10.1406C115.391 7.29687 117.844 5.03125 121 3.34375C124.188 1.65625 127.875 0.8125 132.062 0.8125C136.188 0.8125 139.797 1.54688 142.891 3.01562C145.984 4.45313 148.391 6.60938 150.109 9.48438C151.828 12.3281 152.688 15.875 152.688 20.125C152.688 21.8438 152.281 23.6875 151.469 25.6562C150.688 27.5938 149.453 29.4062 147.766 31.0938C146.109 32.7812 143.953 34.1719 141.297 35.2656C138.641 36.3281 135.453 36.8594 131.734 36.8594H124.328V31.6094ZM124.328 38.7344V33.5312H131.734C136.078 33.5312 139.672 34.0469 142.516 35.0781C145.359 36.1094 147.594 37.4844 149.219 39.2031C150.875 40.9219 152.031 42.8125 152.688 44.875C153.375 46.9062 153.719 48.9375 153.719 50.9688C153.719 54.1562 153.172 56.9844 152.078 59.4531C151.016 61.9219 149.5 64.0156 147.531 65.7344C145.594 67.4531 143.312 68.75 140.688 69.625C138.062 70.5 135.203 70.9375 132.109 70.9375C129.141 70.9375 126.344 70.5156 123.719 69.6719C121.125 68.8281 118.828 67.6094 116.828 66.0156C114.828 64.3906 113.266 62.4062 112.141 60.0625C111.016 57.6875 110.453 54.9844 110.453 51.9531H119.125C119.125 54.3281 119.641 56.4062 120.672 58.1875C121.734 59.9688 123.234 61.3594 125.172 62.3594C127.141 63.3281 129.453 63.8125 132.109 63.8125C134.766 63.8125 137.047 63.3594 138.953 62.4531C140.891 61.5156 142.375 60.1094 143.406 58.2344C144.469 56.3594 145 54 145 51.1562C145 48.3125 144.406 45.9844 143.219 44.1719C142.031 42.3281 140.344 40.9688 138.156 40.0938C136 39.1875 133.453 38.7344 130.516 38.7344H124.328Z" fill="url(#paint0_linear_4434_149213)" /> <defs> <linearGradient id="paint0_linear_4434_149213" x1="79" y1="-41.8571" x2="79" y2="101" gradientUnits="userSpaceOnUse" > <stop stop-color="#F3652B" /> <stop offset="1" stop-color="#D95C2A" stop-opacity="0.1" /> </linearGradient> </defs></script>
 
 <main class="doc">
 <header>
   <div>
-    <h1>Error page: five alternatives</h1>
-    <p class="lead">The <code>state/error-page</code> block today shows a faint 404 numeral, a title, one sentence and two buttons, centred in a mostly empty screen. Below are five ways to make it more useful, each based on how strong developer and cloud products build theirs. Every element is a real WebKit component in a variant it has, coloured with the tokens its <code>.vue</code> source uses. Each alternative is drawn twice: desktop (inside the console shell) and phone (375 px).</p>
+    <h1>Error pages: three options</h1>
+    <p class="lead">The owner asked for one consistent style across every common error, not one page. Each option below is a single visual style applied to the same six pages: <strong>404</strong> not found, <strong>401</strong> sign-in required, <strong>403</strong> no access, <strong>429</strong> too many requests, <strong>500</strong> server error and <strong>503</strong> maintenance. Every page is shown on desktop (inside the console shell) and on a 375 px phone. Everything drawn is a real WebKit component in a variant it has, with the colour tokens its source uses; the only orange is the logo orange (<code>--primary</code>).</p>
   </div>
-  <div class="toggle" role="group" aria-label="Theme">
-    <button type="button" data-set-theme="dark" aria-pressed="true">Dark</button>
-    <button type="button" data-set-theme="light" aria-pressed="false">Light</button>
+  <div class="controls">
+    <div class="toggle" role="group" aria-label="Theme"><button type="button" data-theme-set="dark" aria-pressed="true">Dark</button><button type="button" data-theme-set="light" aria-pressed="false">Light</button></div>
+    <div class="toggle" role="group" aria-label="Scale"><button type="button" data-scale-set="fit" aria-pressed="true">Fit (50%)</button><button type="button" data-scale-set="actual" aria-pressed="false">Actual size</button></div>
   </div>
 </header>
 
-<h2 style="margin-top:var(--spacing-lg)">What the benchmarks show</h2>
-<div class="bench-wrap">
-<table class="bench">
-  <thead><tr><th>Product</th><th>What its error page shows</th><th>What we take from it</th></tr></thead>
+<h2 style="margin-top:var(--spacing-lg)">Which errors, and what the benchmarks do for each</h2>
+<div class="bench-wrap"><table class="bench">
+  <thead><tr><th>Page</th><th>Why people see it</th><th>What strong products show</th><th>What our page does</th></tr></thead>
   <tbody>
-    <tr><td>Vercel</td><td><code>404: NOT_FOUND</code>, then a <em>Code</em> and an <em>ID</em> (the request ID) and a link to a docs page per error code.</td><td>A machine-readable error code and a request ID on every error page; docs link per code.</td></tr>
-    <tr><td>Cloudflare</td><td>5xx pages: <em>Error 522</em>, a three-step path (Browser → Cloudflare → Host) marking which hop failed, <em>What happened?</em> / <em>What can I do?</em>, and the Ray ID and time at the bottom.</td><td>Say who is at fault. For an edge platform this is the single most useful thing an error can say.</td></tr>
-    <tr><td>Railway</td><td><em>Application failed to respond</em> (502) with a <code>request_id</code>; support asks for the request ID and the UTC time window.</td><td>Request ID plus UTC time is what support needs.</td></tr>
-    <tr><td>Fastly</td><td><em>Error 503 Service Unavailable</em> with a transaction ID (XID) to quote.</td><td>Even the most bare-bones page carries a traceable ID.</td></tr>
-    <tr><td>GitHub</td><td>A playful 404 illustration, a search field, and links to status and contact; 500 shows a status link.</td><td>Turn a dead end into a search; link the status page on server errors.</td></tr>
-    <tr><td>Stripe</td><td>Docs 404 lists popular destinations; API errors carry <code>request_id</code> and a <code>doc_url</code>.</td><td>Offer the places people most likely wanted; give developers the raw error object.</td></tr>
-    <tr><td>Supabase, Linear, Netlify, Render</td><td>Short, calm copy: what happened in one line, one way back (<em>Head back</em>, <em>Back to our site</em>), small brand mark, no stack trace.</td><td>Keep the tone calm and the copy short; one primary way out.</td></tr>
-    <tr><td>Google Cloud</td><td><em>404. That's an error.</em> plus a short explanation; Cloud console errors point to the Service Health dashboard.</td><td>Point to live service health when the failure may be on our side.</td></tr>
+    <tr><td>404 Not found</td><td>Typo, old bookmark, deleted resource.</td><td>GitHub: search on the 404. Stripe docs: popular destinations. Vercel: <code>NOT_FOUND</code> code + request ID. Supabase, Linear: one calm way back.</td><td>Say the address leads nowhere; offer search or the main places; Go to home.</td></tr>
+    <tr><td>401 Sign in required</td><td>Session expired, or a link opened while signed out.</td><td>GitHub, Vercel, Google: send to sign-in and come back to the same page after; say the session expired for security.</td><td>Sign in again, return to the same address.</td></tr>
+    <tr><td>403 No access</td><td>The role or account does not include the page.</td><td>Google Drive: "You need access", Request access, Switch account, shows which account you are signed in as. GitHub hides private pages behind a 404.</td><td>Show who you are signed in as; Request access from an admin; Switch account.</td></tr>
+    <tr><td>429 Too many requests</td><td>Rate limit hit (scripts, retries, API clients).</td><td>Cloudflare 1015 "You are being rate limited" with Ray ID; GitHub API: limit, remaining and reset time in headers; <code>Retry-After</code>.</td><td>Say how long to wait; disable Retry until then; show the limit.</td></tr>
+    <tr><td>500 Server error</td><td>A failure on our side.</td><td>GitHub unicorn + status link; Vercel <code>INTERNAL_*</code> codes with ID; Railway: request ID and UTC time; Cloudflare: which hop failed.</td><td>Not your fault, nothing lost; Retry; System status; request ID to quote.</td></tr>
+    <tr><td>503 Maintenance / unavailable</td><td>Planned maintenance or overload.</td><td>Status pages with a scheduled window (GitHub, Cloudflare); <code>Retry-After</code>; "back at 15:00 UTC".</td><td>When it will be back; status page; Retry.</td></tr>
   </tbody>
-</table>
-</div>
-<p class="cmp-legend">Sources: <a href="https://vercel.com/docs/errors/NOT_FOUND" style="color:var(--text-link)">Vercel NOT_FOUND</a>, <a href="https://vercel.com/kb/guide/how-to-debug-404-errors" style="color:var(--text-link)">Vercel: debugging 404 errors</a>, <a href="https://kinsta.com/docs/wordpress-hosting/wordpress-troubleshooting/cloudflare-errors/" style="color:var(--text-link)">Cloudflare errors (Kinsta guide)</a>, <a href="https://station.railway.com/questions/application-failed-to-respond-8b06744f" style="color:var(--text-link)">Railway: Application failed to respond</a>; the rest from the live pages as of November 2026.</p>
+</table></div>
+<p class="lead" style="font-size:0.75rem">Sources checked: <a href="https://vercel.com/docs/errors/NOT_FOUND">Vercel NOT_FOUND</a>, <a href="https://vercel.com/kb/guide/how-to-debug-404-errors">Vercel: debugging 404 errors</a>, <a href="https://kinsta.com/docs/wordpress-hosting/wordpress-troubleshooting/cloudflare-errors/">Cloudflare errors</a>, <a href="https://station.railway.com/questions/application-failed-to-respond-8b06744f">Railway: Application failed to respond</a>. The others from the products as known in November 2026. 502 and 504 (gateway) are not in the set: inside the console they read the same as 500; for the pages Azion serves to visitors of customer sites, Option 3's request path is the answer.</p>
 
-<!-- 1 -->
-<section class="alt" id="alt-1">
-  <div class="alt-head"><span class="num">01</span><h2>Quiet and traceable</h2></div>
-  <p class="based">Based on Vercel, Linear, Fastly. The smallest change: same message, no giant numeral, raised into the upper third, with the error code and a copyable request ID under the actions.</p>
-  <div class="frames" data-tpl="t1"></div>
+<section class="option" id="option-1">
+  <div class="opt-head"><span class="num">OPTION 1</span><h2>Quiet and traceable</h2></div>
+  <p class="opt-sub">Based on Vercel, Linear, Supabase and Fastly. One short centred column in the upper third: the HTTP code as a <code>StatusCode</code> pill, a title in plain words, one sentence, up to two actions, and a reference line (error code, request ID with copy, UTC time) on every page. Only the words and the actions change from page to page.</p>
+  <div class="pages" data-option="1"></div>
   <div class="notes">
-    <div><h3>Pros</h3><ul><li>Smallest change to the block; same four variants.</li><li>Every error gets a request ID and time support can trace (Vercel, Railway, Fastly).</li><li>No more empty void: content sits in the upper third where the eye lands.</li></ul></div>
-    <div><h3>Cons</h3><ul><li>Still a dead end: it does not help the user find what they wanted.</li><li>Plain; the page does not feel like Azion.</li></ul></div>
-    <div><h3>WebKit pieces</h3><ul><li><code>EmptyState</code> (title, description, actions), <code>StatusCode</code> 404 (warning), <code>Button</code> primary + outline, <code>CopyButton</code>, <code>Timestamp</code>.</li><li><strong>New:</strong> nothing. Only the block's layout and a <code>requestId</code> prop.</li></ul></div>
+    <div><h3>Pros</h3><ul><li>Smallest change from today; one layout for every error, easy to keep consistent.</li><li>Every page carries the request ID and time support asks for.</li><li>Calm; reads well on a phone.</li></ul></div>
+    <div><h3>Cons</h3><ul><li>A 404 is still a dead end (no search, no destinations).</li><li>A 429 or 503 says when to come back only in words.</li><li>Plain; little that says Azion.</li></ul></div>
+    <div><h3>Reused vs new</h3><ul><li><strong>Reused:</strong> <code>EmptyState</code> (title, description, actions), <code>StatusCode</code>, <code>Button</code> primary + outline, <code>CopyButton</code>, <code>Timestamp</code>.</li><li><strong>New:</strong> no component. The block gets <code>code</code> and <code>requestId</code> props and three new variants (401, 429, 503).</li></ul></div>
   </div>
 </section>
 
-<!-- 2 -->
-<section class="alt" id="alt-2">
-  <div class="alt-head"><span class="num">02</span><h2>Find your way</h2></div>
-  <p class="based">Based on GitHub (search on the 404), Stripe docs (popular destinations), Supabase (one calm way back). The 404 becomes navigation: search the console, or jump to the four places people go most.</p>
-  <div class="frames" data-tpl="t2"></div>
+<section class="option" id="option-2">
+  <div class="opt-head"><span class="num">OPTION 2</span><h2>Guided recovery</h2></div>
+  <p class="opt-sub">Based on GitHub (search on the 404), Stripe (popular destinations), Google Drive (Request access, Switch account, signed in as) and status pages with a maintenance window. The same centred style, with the 404 / 403 numeral art or the EmptyState icon tile, and under the message one panel built for that reason: search and destinations, who you are signed in as, a wait meter, a maintenance window.</p>
+  <div class="pages" data-option="2"></div>
   <div class="notes">
-    <div><h3>Pros</h3><ul><li>Turns a dead end into a next step; fills the empty space with something useful.</li><li>Search opens the existing <code>Command</code> palette, so ⌘K works the same as everywhere.</li><li>Keeps the Azion 404 art, smaller.</li></ul></div>
-    <div><h3>Cons</h3><ul><li>The app has to pass its destinations (props), and keep them current.</li><li>Longer on a phone (the list stacks).</li><li>Makes sense for 404 / 403 / missing resource, less for 500.</li></ul></div>
-    <div><h3>WebKit pieces</h3><ul><li><code>svg/error-404</code>, <code>EmptyState</code>, <code>SearchTrigger</code> + <code>Kbd</code> (opens <code>Command</code>), <code>Item</code> variant outline in an <code>ItemGroup</code>, <code>Button</code>, <code>CopyButton</code>.</li><li><strong>New:</strong> nothing. A <code>destinations</code> prop on the block.</li></ul></div>
+    <div><h3>Pros</h3><ul><li>Every page gives a real next step, not only "go home".</li><li>403 and 401 name the account, the most common cause of both.</li><li>429 and 503 show when to come back; Retry is disabled until then.</li></ul></div>
+    <div><h3>Cons</h3><ul><li>The app must pass data: destinations, the signed-in account, the admin, the reset time, the maintenance window.</li><li>Six different panels to keep consistent.</li><li>Longer pages on a phone.</li></ul></div>
+    <div><h3>Reused vs new</h3><ul><li><strong>Reused:</strong> <code>EmptyState</code>, <code>svg/error-404</code>, <code>svg/error-403</code>, <code>SearchTrigger</code> + <code>Kbd</code> (opens <code>Command</code>), <code>Item</code> outline, <code>Avatar</code>, <code>Alert</code> info, <code>Progress</code>, <code>Button</code> (incl. disabled), <code>Timestamp</code>, <code>CopyButton</code>.</li><li><strong>New:</strong> no component. New 401, 429 and 503 variants and props for the data above.</li></ul></div>
   </div>
 </section>
 
-<!-- 3 -->
-<section class="alt" id="alt-3">
-  <div class="alt-head"><span class="num">03</span><h2>Request path</h2></div>
-  <p class="based">Based on Cloudflare's 5xx pages and Fastly. For errors a <em>visitor of a customer's site</em> sees when Azion cannot reach the origin: shows the hop that failed, what happened, what to do, and the request details.</p>
-  <div class="frames" data-tpl="t3" data-host="www.example.com"></div>
+<section class="option" id="option-3">
+  <div class="opt-head"><span class="num">OPTION 3</span><h2>Diagnostic</h2></div>
+  <p class="opt-sub">Based on Cloudflare (which hop failed; What happened / What can I do; Ray ID), Railway and Stripe (request ID, error object), GitHub API (limit, remaining, reset). Left-aligned, the method and code as one <code>StatusCode</code> pill next to a machine-readable error code, two columns that separate what happened from what to do, the actions, then the request facts in a <code>KeyValueList</code>. Server errors show the request path.</p>
+  <div class="pages" data-option="3"></div>
   <div class="notes">
-    <div><h3>Pros</h3><ul><li>Answers "whose fault is it?" at a glance; that is what an edge platform's error must say.</li><li>Fewer support tickets: the site owner learns the origin is down, not Azion.</li><li>Request ID, edge location and UTC time are what support asks for.</li></ul></div>
-    <div><h3>Cons</h3><ul><li>Only for proxy errors (502, 504, origin timeouts); not for the console's 404.</li><li>It is a different surface (Azion's own error pages served for customer sites), so it would be a new block, not a variant.</li><li><code>FlowDiagram</code> is horizontal; on a phone the hops have to stack (drawn here as a vertical list).</li></ul></div>
-    <div><h3>WebKit pieces</h3><ul><li><code>StatusCode</code> 502 (danger), <code>FlowDiagram</code> + nodes, <code>StatusIndicator</code> (success, danger), <code>KeyValueList</code>, <code>CopyButton</code>, <code>Timestamp</code>, <code>Button</code>.</li><li><strong>New:</strong> a new block <code>state/edge-error-page</code>; FlowDiagram would need a vertical layout for phones.</li></ul></div>
-  </div>
-</section>
-
-<!-- 4 -->
-<section class="alt" id="alt-4">
-  <div class="alt-head"><span class="num">04</span><h2>Developer details</h2></div>
-  <p class="based">Based on Railway (JSON body with <code>request_id</code>), Stripe (error object with <code>doc_url</code>) and Vercel (an error code with its own docs page). For a 500 in the console: plain-words message on top, the raw error response below, one click to copy it all.</p>
-  <div class="frames" data-tpl="t4"></div>
-  <div class="notes">
-    <div><h3>Pros</h3><ul><li>Developers get exactly what support needs, in one copy.</li><li>A link to the matching request in Real-Time Events closes the loop.</li><li>Error codes link to a docs page each (Vercel pattern).</li></ul></div>
-    <div><h3>Cons</h3><ul><li>Intimidating for non-developer users (billing, account owners).</li><li>The API must expose a curated error body; never a stack trace.</li><li>Needs docs pages per error code to be worth it.</li></ul></div>
-    <div><h3>WebKit pieces</h3><ul><li><code>StatusCode</code> 500 (danger), <code>EmptyState</code> icon tile, <code>Button</code> primary + outline + link, <code>CodeBlock</code> (JSON, with its copy button).</li><li><strong>New:</strong> nothing in WebKit; an error-code docs section on the product side.</li></ul></div>
-  </div>
-</section>
-
-<!-- 5 -->
-<section class="alt" id="alt-5">
-  <div class="alt-head"><span class="num">05</span><h2>Split with live status</h2></div>
-  <p class="based">Based on GitHub (status link on the unicorn page), Google Cloud (Service Health), Netlify and Render (calm copy). The message on the left; on the right a card with the live health of the services, so the user knows at once whether it is them or us.</p>
-  <div class="frames" data-tpl="t5"></div>
-  <div class="notes">
-    <div><h3>Pros</h3><ul><li>During an incident, users stop retrying and stop opening tickets.</li><li>Uses the full width on desktop; stacks cleanly on a phone.</li></ul></div>
-    <div><h3>Cons</h3><ul><li>Needs a live status feed; a stale "Operational" next to an error is worse than nothing.</li><li>Only meaningful for 5xx; a 404 has nothing to do with service health.</li></ul></div>
-    <div><h3>WebKit pieces</h3><ul><li><code>StatusCode</code> 503 (danger), <code>Button</code>, <code>Card</code> with header and footer, <code>StatusIndicator</code> (success, warning), <code>Timestamp</code>, <code>CopyButton</code>.</li><li><strong>New:</strong> nothing in WebKit; a status feed in the app.</li></ul></div>
+    <div><h3>Pros</h3><ul><li>Answers "whose fault is it, and what do I do?" on every page, the way an edge platform should.</li><li>The facts support needs (request ID, path, time, limit, Retry-After) are always in the same place.</li><li>The same style works for Azion's own pages served to visitors of customer sites.</li></ul></div>
+    <div><h3>Cons</h3><ul><li>Technical; heavier for non-developer users (billing, account owners).</li><li>Machine error codes must exist and be documented.</li><li>The request path diagram does not fit a phone, so it is left out there.</li></ul></div>
+    <div><h3>Reused vs new</h3><ul><li><strong>Reused:</strong> <code>StatusCode</code> (method + code), <code>Button</code>, <code>KeyValueList</code> 4 columns, <code>CopyButton</code>, <code>Timestamp</code>, <code>FlowDiagram</code> + nodes, <code>StatusIndicator</code>.</li><li><strong>New:</strong> no component. New block variants; a docs page per error code on the product side.</li></ul></div>
   </div>
 </section>
 
 <section class="rec">
   <h2>Recommendation</h2>
-  <p>Keep one block and give each error the layout that helps most. In plain words: a missing page should help you find the right page; a broken server should tell you it is not your fault and give support what it needs.</p>
+  <p class="lead">Go with <strong>Option 2, Guided recovery</strong>, and add Option 1's reference line (code, request ID, time) to every page of it.</p>
   <ol>
-    <li><strong>Every variant gets the reference line from 01</strong> (error code, request ID with copy, UTC time). Cheap, and it is what support asks for first.</li>
-    <li><strong>404, 403 and missing resource use 02, Find your way.</strong> Search plus four popular destinations instead of the empty void. Nothing new in WebKit, only a <code>destinations</code> prop.</li>
-    <li><strong>500 keeps today's Retry + System status, and adds a collapsed "Details" with the JSON from 04</strong> once the API returns a curated error body.</li>
-    <li><strong>03, Request path, becomes its own block later</strong> (<code>state/edge-error-page</code>) for the pages Azion serves to visitors of customer sites. It is the strongest idea here, but it is a different surface from the console.</li>
-    <li><strong>05 waits</strong> until a reliable status feed exists.</li>
+    <li><strong>Why 2:</strong> it is the only option where every error page gives a real next step: search on a 404, the signed-in account on 401 and 403, a wait meter on 429, the maintenance window on 503. It keeps the look the console already has (EmptyState, the Azion 404 and 403 art) and needs no new component.</li>
+    <li><strong>Why not 1:</strong> consistent and cheap, but the 404 stays a dead end, which is what the owner disliked in today's page.</li>
+    <li><strong>Why not 3 for the console:</strong> too technical for people who manage billing or teams. Keep it for later as the style of the error pages Azion serves to visitors of customer sites (502, 504, origin timeouts), where "whose fault is it" matters most.</li>
+    <li><strong>What it costs:</strong> three new block variants (401, 429, 503) and props for the data each panel needs; the existing 404, 403, 500 and missing-resource variants are reworked in the same style.</li>
   </ol>
-  <p>Owner to pick: go with this mix, or choose one alternative for every variant.</p>
+  <p class="lead">Owner to pick: Option 1, 2 or 3 (or 2 with 3 kept for the edge pages).</p>
 </section>
 </main>
 
-<template id="t1">
-  <div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main">
-    <div class="topbar">Acme Inc. <span class="sp"></span></div>
-    <div class="content top">
-      <div class="empty" data-cmp="EmptyState" style="max-width:520px;padding-top:0">
-        <span class="tag" data-cmp="StatusCode 404 (warning)" data-severity="warning">404</span>
-        <div class="empty-text"><p class="empty-title">Page not found</p><p class="empty-desc">There is nothing at this address. Check the URL or head back to the start.</p></div>
-        <div class="row"><a class="btn" data-cmp="Button primary" data-variant="primary">Go to home</a><a class="btn" data-cmp="Button outline" data-variant="outline"><svg class="ic"><use href="#i-book"/></svg>Docs</a></div>
-        <div class="ref" data-cmp="reference line">Code <bdi>NOT_FOUND</bdi><span class="dot">·</span>ID <bdi>req_7f3c91ab</bdi><button class="icon-btn" data-cmp="CopyButton small" aria-label="Copy the request ID"><svg class="ic"><use href="#i-copy"/></svg></button><span class="dot">·</span><time data-cmp="Timestamp">Nov 18, 2026, 14:02 UTC</time></div>
-      </div>
-    </div>
-  </div></div>
-</template>
-
-<template id="t2">
-  <div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main">
-    <div class="topbar">Acme Inc. <span class="sp"></span></div>
-    <div class="content top" style="padding-top:8cqh">
-      <div class="empty" data-cmp="EmptyState" style="padding-top:0;gap:20px">
-        <svg class="err404" data-cmp="svg/error-404" viewBox="0 0 158 71" aria-hidden="true"><path opacity="0.3" d="M49.7969 47.0312V54.1562H0.484375V49.0469L31.0469 1.75H38.125L30.5312 15.4375L10.3281 47.0312H49.7969ZM40.2812 1.75V70H31.6094V1.75H40.2812ZM100.516 30.4375V40.8438C100.516 46.4375 100.016 51.1562 99.0156 55C98.0156 58.8438 96.5781 61.9375 94.7031 64.2812C92.8281 66.625 90.5625 68.3281 87.9062 69.3906C85.2812 70.4219 82.3125 70.9375 79 70.9375C76.375 70.9375 73.9531 70.6094 71.7344 69.9531C69.5156 69.2969 67.5156 68.25 65.7344 66.8125C63.9844 65.3438 62.4844 63.4375 61.2344 61.0938C59.9844 58.75 59.0312 55.9062 58.375 52.5625C57.7188 49.2188 57.3906 45.3125 57.3906 40.8438V30.4375C57.3906 24.8438 57.8906 20.1562 58.8906 16.375C59.9219 12.5937 61.375 9.5625 63.25 7.28125C65.125 4.96875 67.375 3.3125 70 2.3125C72.6562 1.3125 75.625 0.8125 78.9062 0.8125C81.5625 0.8125 84 1.14062 86.2188 1.79688C88.4688 2.42187 90.4688 3.4375 92.2188 4.84375C93.9688 6.21875 95.4531 8.0625 96.6719 10.375C97.9219 12.6563 98.875 15.4531 99.5312 18.7656C100.188 22.0781 100.516 25.9688 100.516 30.4375ZM91.7969 42.25V28.9844C91.7969 25.9219 91.6094 23.2344 91.2344 20.9219C90.8906 18.5781 90.375 16.5781 89.6875 14.9219C89 13.2656 88.125 11.9219 87.0625 10.8906C86.0312 9.85938 84.8281 9.10938 83.4531 8.64062C82.1094 8.14062 80.5938 7.89062 78.9062 7.89062C76.8438 7.89062 75.0156 8.28125 73.4219 9.0625C71.8281 9.8125 70.4844 11.0156 69.3906 12.6719C68.3281 14.3281 67.5156 16.5 66.9531 19.1875C66.3906 21.875 66.1094 25.1406 66.1094 28.9844V42.25C66.1094 45.3125 66.2812 48.0156 66.625 50.3594C67 52.7031 67.5469 54.7344 68.2656 56.4531C68.9844 58.1406 69.8594 59.5312 70.8906 60.625C71.9219 61.7188 73.1094 62.5312 74.4531 63.0625C75.8281 63.5625 77.3438 63.8125 79 63.8125C81.125 63.8125 82.9844 63.4062 84.5781 62.5938C86.1719 61.7812 87.5 60.5156 88.5625 58.7969C89.6562 57.0469 90.4688 54.8125 91 52.0938C91.5312 49.3438 91.7969 46.0625 91.7969 42.25ZM157.797 47.0312V54.1562H108.484V49.0469L139.047 1.75H146.125L138.531 15.4375L118.328 47.0312H157.797ZM148.281 1.75V70H139.609V1.75H148.281Z" fill="url(#paint0_linear_4357_91145)" /> <defs> <linearGradient id="paint0_linear_4357_91145" x1="79" y1="-41.8571" x2="79" y2="101" gradientUnits="userSpaceOnUse" > <stop stop-color="#F3652B" /> <stop offset="1" stop-color="#D95C2A" stop-opacity="0.1" /> </linearGradient> </defs></svg>
-        <div class="empty-text"><p class="empty-title">Page not found</p><p class="empty-desc">This address leads nowhere. Search the console, or pick one of the places people go most.</p></div>
-        <button class="search" data-cmp="SearchTrigger"><svg class="ic"><use href="#i-search"/></svg><span class="grow">Search Azion Console</span><span class="kbd" data-cmp="Kbd">⌘ K</span></button>
-        <div class="items" data-cmp="ItemGroup">
-          <a class="item" data-cmp="Item outline"><span class="media"><svg class="ic"><use href="#i-layers"/></svg></span><span><span class="t">Workloads</span><br><span class="d">Domains and deployments</span></span><svg class="ic go"><use href="#i-chev"/></svg></a>
-          <a class="item" data-cmp="Item outline"><span class="media"><svg class="ic"><use href="#i-box"/></svg></span><span><span class="t">Applications</span><br><span class="d">Rules, cache and origins</span></span><svg class="ic go"><use href="#i-chev"/></svg></a>
-          <a class="item" data-cmp="Item outline"><span class="media"><svg class="ic"><use href="#i-fn"/></svg></span><span><span class="t">Functions</span><br><span class="d">Code that runs at the edge</span></span><svg class="ic go"><use href="#i-chev"/></svg></a>
-          <a class="item" data-cmp="Item outline"><span class="media"><svg class="ic"><use href="#i-book"/></svg></span><span><span class="t">Docs</span><br><span class="d">Guides and API reference</span></span><svg class="ic go"><use href="#i-chev"/></svg></a>
-        </div>
-        <div class="row"><a class="btn" data-cmp="Button primary" data-variant="primary"><svg class="ic"><use href="#i-home"/></svg>Go to home</a></div>
-        <div class="ref" data-cmp="reference line">ID <bdi>req_7f3c91ab</bdi><button class="icon-btn" data-cmp="CopyButton small" aria-label="Copy the request ID"><svg class="ic"><use href="#i-copy"/></svg></button></div>
-      </div>
-    </div>
-  </div></div>
-</template>
-
-<template id="t3">
-  <div class="edge-page">
-    <div class="brandline"><span style="color:var(--text-default)">www.example.com</span><span>Served by Azion</span></div>
-    <div class="empty-text" style="gap:12px;text-align:center">
-      <span class="tag" data-cmp="StatusCode 502 (danger)" data-severity="danger">502</span>
-      <p class="empty-title">The origin did not respond</p>
-      <p class="empty-desc">Your browser reached Azion, and Azion is working, but the server behind www.example.com did not answer in time.</p>
-    </div>
-    <div class="flow" data-cmp="FlowDiagram">
-      <div class="node" data-cmp="FlowDiagramNode"><span>You</span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></div>
-      <div class="wire"></div>
-      <div class="node" data-cmp="FlowDiagramNode"><span>Azion edge <small>IAD</small></span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></div>
-      <div class="wire" data-faded></div>
-      <div class="node" data-cmp="FlowDiagramNode"><span>Origin <small>origin.example.com</small></span><span class="status" data-cmp="StatusIndicator danger"><i data-severity="danger"></i>Error</span></div>
-    </div>
-    <div class="cols">
-      <div><h4>What happened?</h4><p>The origin server took longer than 60 seconds to answer, so the request was closed.</p></div>
-      <div><h4>What can I do?</h4><p><strong style="color:var(--text-default);font-weight:400">Visitor:</strong> try again in a few minutes. <strong style="color:var(--text-default);font-weight:400">Site owner:</strong> check that the origin is up and accepts connections from Azion.</p></div>
-    </div>
-    <div class="row" style="justify-content:flex-start;width:100%"><a class="btn" data-cmp="Button primary" data-variant="primary"><svg class="ic"><use href="#i-refresh"/></svg>Try again</a><a class="btn" data-cmp="Button outline" data-variant="outline"><svg class="ic"><use href="#i-book"/></svg>Troubleshoot 502</a></div>
-    <div class="sep"></div>
-    <dl class="kv" data-cmp="KeyValueList columns=3">
-      <div><dt>Request ID</dt><dd>req_7f3c91ab<button class="icon-btn" data-cmp="CopyButton small" aria-label="Copy the request ID"><svg class="ic"><use href="#i-copy"/></svg></button></dd></div>
-      <div><dt>Edge location</dt><dd>IAD</dd></div>
-      <div><dt>Time</dt><dd data-cmp="Timestamp">2026-11-18 14:02:11 UTC</dd></div>
-    </dl>
-  </div>
-</template>
-
-<template id="t4">
-  <div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main">
-    <div class="topbar">Acme Inc. <span class="sp"></span></div>
-    <div class="content top" style="padding-top:6cqh">
-      <div class="empty" data-cmp="EmptyState" style="max-width:640px;padding-top:0;gap:20px">
-        <span class="tile" data-cmp="EmptyState icon tile"><span><svg class="ic"><use href="#i-alert"/></svg></span></span>
-        <div class="empty-text"><p class="empty-title">Something went wrong on our side</p><p class="empty-desc">This page could not load. Nothing you saved was lost. Retry in a moment; if it keeps failing, send the details below to support.</p></div>
-        <div class="row"><a class="btn" data-cmp="Button primary" data-variant="primary"><svg class="ic"><use href="#i-refresh"/></svg>Retry</a><a class="btn" data-cmp="Button outline" data-variant="outline"><svg class="ic"><use href="#i-ext"/></svg>System status</a></div>
-        <div class="codeblock" data-cmp="CodeBlock (json)">
-          <div class="head"><span class="tag" data-size="small" data-cmp="StatusCode 500 (danger)" data-severity="danger">GET 500</span><span class="grow">Response</span><button class="icon-btn" aria-label="Copy the response"><svg class="ic"><use href="#i-copy"/></svg></button></div>
-<pre>{
-  <span class="k">"status"</span>: 500,
-  <span class="k">"code"</span>: <span class="s">"INTERNAL_ERROR"</span>,
-  <span class="k">"message"</span>: <span class="s">"The workloads list could not be loaded."</span>,
-  <span class="k">"request_id"</span>: <span class="s">"req_7f3c91ab"</span>,
-  <span class="k">"time"</span>: <span class="s">"2026-11-18T14:02:11Z"</span>,
-  <span class="k">"doc_url"</span>: <span class="s">"https://example.com/docs/errors/INTERNAL_ERROR"</span>
-}</pre>
-        </div>
-        <div class="row"><a class="btn" data-cmp="Button link" data-variant="link"><svg class="ic"><use href="#i-logs"/></svg>Open this request in Real-Time Events</a></div>
-      </div>
-    </div>
-  </div></div>
-</template>
-
-<template id="t5">
-  <div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main">
-    <div class="topbar">Acme Inc. <span class="sp"></span></div>
-    <div class="content top" style="padding-top:10cqh">
-      <div class="split">
-        <div class="left">
-          <span class="tag" data-cmp="StatusCode 503 (danger)" data-severity="danger">503</span>
-          <div style="display:flex;flex-direction:column;gap:8px"><p class="empty-title" style="font-size:1.5rem">The console is having trouble</p><p class="empty-desc">Some requests are failing on our side. Your applications keep serving traffic; only the console is affected. We are working on it.</p></div>
-          <div class="row"><a class="btn" data-cmp="Button primary" data-variant="primary"><svg class="ic"><use href="#i-refresh"/></svg>Retry</a><a class="btn" data-cmp="Button outline" data-variant="outline"><svg class="ic"><use href="#i-ext"/></svg>Status page</a></div>
-          <div class="ref" data-cmp="reference line">ID <bdi>req_7f3c91ab</bdi><button class="icon-btn" data-cmp="CopyButton small" aria-label="Copy the request ID"><svg class="ic"><use href="#i-copy"/></svg></button><span class="dot">·</span><time data-cmp="Timestamp">14:02 UTC</time></div>
-        </div>
-        <div class="card" data-cmp="Card">
-          <div class="card-head"><span>Azion status</span><span class="status" data-cmp="StatusIndicator warning"><i data-severity="warning"></i>Degraded</span></div>
-          <div class="card-body">
-            <div class="line"><span>Console</span><span class="status" data-cmp="StatusIndicator warning"><i data-severity="warning"></i>Degraded</span></div>
-            <div class="line"><span>Applications</span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Operational</span></div>
-            <div class="line"><span>Functions</span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Operational</span></div>
-            <div class="line"><span>Edge DNS</span><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Operational</span></div>
-          </div>
-          <div class="card-foot"><time data-cmp="Timestamp">Updated 2 minutes ago</time><span style="color:var(--text-link)">status.example.com</span></div>
-        </div>
-      </div>
-    </div>
-  </div></div>
-</template>
-
 <script>
-  document.querySelectorAll('[data-tpl]').forEach(function (host) {
-    var tpl = document.getElementById(host.getAttribute('data-tpl'));
-    var hostName = host.getAttribute('data-host') || 'console.example.com';
-    [['desktop', 'Desktop · ' + hostName], ['mobile', 'Phone · 375 px']].forEach(function (pair) {
-      var frame = document.createElement('div');
-      frame.className = 'frame ' + pair[0];
-      frame.innerHTML = '<div class="frame-bar"><i></i><i></i><i></i><span>' + pair[1] + '</span></div><div class="screen"></div>';
-      frame.querySelector('.screen').appendChild(tpl.content.cloneNode(true));
-      host.appendChild(frame);
+(function () {
+  function ic(id) { return '<svg class="ic"><use href="#i-' + id + '"/></svg>'; }
+  function btn(label, variant, icon, extra) { return '<span class="btn" data-cmp="Button ' + variant + (extra ? ' ' + extra : '') + '" data-variant="' + variant + '"' + (extra === 'disabled' ? ' data-disabled' : '') + '>' + (icon ? ic(icon) : '') + label + '</span>'; }
+  function tag(text, sev) { return '<span class="tag" data-cmp="StatusCode" data-severity="' + sev + '">' + text + '</span>'; }
+  function copy(what) { return '<span class="icon-btn" data-cmp="CopyButton small" role="img" aria-label="Copy the ' + what + '">' + ic('copy') + '</span>'; }
+  function ref(p, withCode) { return '<div class="ref" data-cmp="reference line">' + (withCode ? 'Code <bdi>' + p.err + '</bdi><span class="dot">·</span>' : '') + 'ID <bdi>req_7f3c91ab</bdi>' + copy('request ID') + '<span class="dot">·</span><time data-cmp="Timestamp">Nov 18, 2026, 14:02 UTC</time></div>'; }
+  function tile(icon) { return '<span class="tile" data-cmp="EmptyState icon tile"><span>' + ic(icon) + '</span></span>'; }
+  function art(code) { return '<svg class="art" data-cmp="svg/error-' + code + '" viewBox="0 0 ' + (code === '404' ? '158' : '154') + ' 71" aria-hidden="true">' + document.getElementById('art-' + code).textContent + '</svg>'; }
+  function item(icon, t, d, end) { return '<span class="item" data-cmp="Item outline"><span class="media">' + icon + '</span><span><span class="t">' + t + '</span><span class="d">' + d + '</span></span>' + (end === undefined ? '<span class="end">' + ic('chev') + '</span>' : end ? '<span class="end">' + end + '</span>' : '') + '</span>'; }
+  function shell(inner, start) { return '<div class="console"><div class="rail"><b></b><b></b><b></b><b></b></div><div class="main"><div class="topbar">Acme Inc.</div><div class="body' + (start ? ' start' : '') + '">' + inner + '</div></div></div>'; }
+  function signedOut(inner, start) { return '<div class="main"><div class="topbar">Azion Console</div><div class="body' + (start ? ' start' : '') + '">' + inner + '</div></div>'; }
+
+  var pages = [
+    { code: '404', sev: 'warning', method: 'GET', err: 'NOT_FOUND', reason: 'Not found', why: 'typo, old link, deleted resource', title: 'Page not found', desc: 'There is nothing at this address. Check the URL or head back to the start.', actions: [['Go to home', 'primary', 'home'], ['Docs', 'outline', 'book']], path: '/workloads/12345' },
+    { code: '401', sev: 'warning', method: 'GET', err: 'SESSION_EXPIRED', reason: 'Sign in required', why: 'session expired', signedOut: true, title: 'Your session expired', desc: 'For your security you were signed out after 12 hours. Sign in again to go back to this page.', actions: [['Sign in', 'primary', 'login']], path: '/applications' },
+    { code: '403', sev: 'warning', method: 'GET', err: 'FORBIDDEN', reason: 'No access', why: 'role does not include the page', title: "You don't have access to this page", desc: 'Your role in Acme Inc. does not include billing. Ask an admin for access, or switch to an account that has it.', actions: [['Request access', 'primary', 'mail'], ['Switch account', 'outline', 'users']], path: '/billing' },
+    { code: '429', sev: 'warning', method: 'POST', err: 'RATE_LIMITED', reason: 'Too many requests', why: 'rate limit reached', title: 'Too many requests', desc: 'This account sent more requests than the limit allows. Wait a moment and try again; nothing was lost.', actions: [['Try again in 24 s', 'primary', 'clock', 'disabled'], ['About rate limits', 'outline', 'book']], path: '/api/v4/purge' },
+    { code: '500', sev: 'danger', method: 'GET', err: 'INTERNAL_ERROR', reason: 'Server error', why: 'failure on our side', title: 'Something went wrong on our side', desc: 'This page could not load. Nothing you saved was lost. Retry in a moment; if it keeps failing, check the system status.', actions: [['Retry', 'primary', 'refresh'], ['System status', 'outline', 'ext']], path: '/workloads' },
+    { code: '503', sev: 'danger', method: 'GET', err: 'MAINTENANCE', reason: 'Maintenance', why: 'planned maintenance or overload', title: 'Back soon: scheduled maintenance', desc: 'The console is being updated. Your applications keep serving traffic; only the console is paused.', actions: [['Retry', 'primary', 'refresh'], ['Status page', 'outline', 'ext']], path: '/workloads' }
+  ];
+
+  function actions(p, justify) { return '<div class="row"' + (justify ? ' style="justify-content:' + justify + '"' : '') + '>' + p.actions.map(function (a) { return btn(a[0], a[1], a[2], a[3]); }).join('') + '</div>'; }
+  function text(p, lg) { return '<div class="text"><p class="title' + (lg ? ' lg' : '') + '">' + p.title + '</p><p class="desc">' + p.desc + '</p></div>'; }
+  function wrap(p, inner, start) { return p.signedOut ? signedOut(inner, start) : shell(inner, start); }
+
+  function option1(p) {
+    var copy503 = p.code === '503' ? 'The console is being updated until 15:00 UTC. Your applications keep serving traffic.' : null;
+    var q = copy503 ? Object.assign({}, p, { desc: copy503 }) : p;
+    return wrap(p, '<div class="stack" data-cmp="EmptyState">' + tag(p.code, p.sev) + text(q) + actions(p) + ref(p, true) + '</div>');
+  }
+
+  function panel2(p) {
+    if (p.code === '404') return '<span class="search" data-cmp="SearchTrigger">' + ic('search') + '<span class="grow">Search Azion Console</span><span class="kbd" data-cmp="Kbd">⌘ K</span></span><div class="items" data-cmp="ItemGroup">' + item(ic('layers'), 'Workloads', 'Domains and deployments') + item(ic('box'), 'Applications', 'Rules, cache and origins') + item(ic('fn'), 'Functions', 'Code that runs at the edge') + item(ic('book'), 'Docs', 'Guides and API reference') + '</div>';
+    if (p.code === '401') return '<div class="items" style="grid-template-columns:1fr;max-width:380px">' + item('<span class="avatar" data-cmp="Avatar">JD</span>', 'Jane Doe', 'jane.doe@example.com', '<span style="font-size:0.75rem">Signed out</span>') + '</div>';
+    if (p.code === '403') return '<div class="items" style="grid-template-columns:1fr;max-width:420px">' + item('<span class="avatar" data-cmp="Avatar">AM</span>', 'Signed in as Alex Morgan', 'alex.morgan@example.com · Developer', '') + item('<span class="avatar" data-cmp="Avatar">JD</span>', 'Account admin: Jane Doe', 'Can change your role', '') + '</div>';
+    if (p.code === '429') return '<div class="meter" data-cmp="Progress"><div class="lbl"><span>Requests this minute</span><b>100 / 100</b></div><div class="progress"><span style="width:100%"></span></div><div class="lbl"><span>Limit resets in</span><b>24 s</b></div></div>';
+    if (p.code === '500') return '';
+    if (p.code === '503') return '<div class="alert" data-severity="info" data-cmp="Alert info" style="max-width:440px">' + ic('info') + '<span>Scheduled maintenance from <b style="font-weight:500">14:00 to 15:00 UTC</b>. This page reloads by itself when the console is back.</span></div>';
+    return '';
+  }
+  function figure2(p) {
+    if (p.code === '404' || p.code === '403') return art(p.code);
+    return tile({ '401': 'lock', '429': 'clock', '500': 'alert', '503': 'wrench' }[p.code]);
+  }
+  function option2(p) {
+    var a = p.code === '401' ? '<div class="row">' + btn('Sign in again', 'primary', 'login') + btn('Use another account', 'outline', 'users') + '</div>' : actions(p);
+    return wrap(p, '<div class="stack" data-cmp="EmptyState" style="max-width:560px">' + figure2(p) + text(p) + panel2(p) + a + ref(p, false) + '</div>');
+  }
+
+  var detail3 = {
+    '404': ['The address /workloads/12345 matches no page. The workload may have been deleted, or the link is old.', 'Check the address, search the console, or go back to the list of workloads.', [['Path', '/workloads/12345']]],
+    '401': ['Your session ended after 12 hours, so the request carried no valid sign-in.', 'Sign in again; you return to this page afterwards.', [['Session', 'expired 14:01 UTC']]],
+    '403': ['You are signed in as alex.morgan@example.com (Developer). This page needs the Billing permission.', 'Ask an account admin (Jane Doe) to add the permission, or switch to an account that has it.', [['Requires', 'billing:read']]],
+    '429': ['This account sent 100 requests in one minute, the limit for this API.', 'Wait until the limit resets, then retry. Scripts should read the Retry-After header.', [['Limit', '100 / min'], ['Retry-After', '24 s']]],
+    '500': ['The edge reached the console, but the console API failed while building this page.', 'Retry in a moment. If it keeps failing, check the status page and send the request ID to support.', [['Hop', 'console API']]],
+    '503': ['The console is in scheduled maintenance from 14:00 to 15:00 UTC.', 'Your applications keep serving traffic. Come back after 15:00 UTC, or follow the status page.', [['Retry-After', '3600 s']]]
+  };
+  function option3(p) {
+    var d = detail3[p.code];
+    var facts = [['Request ID', 'req_7f3c91ab' + copy('request ID')]].concat(d[2]).concat([['Time', '14:02:11 UTC']]);
+    var flow = (p.code === '500' || p.code === '503') ? '<div class="flow" data-cmp="FlowDiagram"><span class="node" data-cmp="FlowDiagramNode">You<span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></span><span class="wire"></span><span class="node" data-cmp="FlowDiagramNode">Azion edge <small>IAD</small><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></span><span class="wire" data-faded></span><span class="node" data-cmp="FlowDiagramNode">Console API' + (p.code === '500' ? '<span class="status" data-cmp="StatusIndicator danger"><i data-severity="danger"></i>Error</span>' : '<span class="status" data-cmp="StatusIndicator info"><i data-severity="info"></i>Maintenance</span>') + '</span></div>' : '';
+    var inner = '<div class="d3">' +
+      '<div class="head3">' + '<span class="tag" data-cmp="StatusCode with method" data-severity="' + p.sev + '"><span class="m">' + p.method + '</span>' + p.code + '</span><span class="code">' + p.err + '</span></div>' +
+      '<p class="title lg" style="margin:0">' + p.title + '</p>' + flow +
+      '<div class="cols"><div><h4>What happened?</h4><p>' + d[0] + '</p></div><div><h4>What can I do?</h4><p>' + d[1] + '</p></div></div>' +
+      actions(p, 'flex-start') + '<div class="sep"></div>' +
+      '<dl class="kv" data-cmp="KeyValueList columns=4">' + facts.map(function (f) { return '<div><dt>' + f[0] + '</dt><dd>' + f[1] + '</dd></div>'; }).join('') + '</dl></div>';
+    return wrap(p, inner, true);
+  }
+
+  var renderers = { '1': option1, '2': option2, '3': option3 };
+  document.querySelectorAll('[data-option]').forEach(function (host) {
+    var render = renderers[host.getAttribute('data-option')];
+    pages.forEach(function (p) {
+      var card = document.createElement('div');
+      card.className = 'page-card';
+      card.innerHTML = '<div class="page-label">' + tag(p.code, p.sev) + '<span>' + p.reason + '</span><span class="why">' + p.why + '</span></div><div class="views">' +
+        ['desktop', 'mobile'].map(function (v) {
+          var url = p.signedOut ? 'console.example.com/sign-in' : 'console.example.com' + p.path;
+          return '<div class="zoom"><div class="frame ' + v + '"><div class="frame-bar"><i></i><i></i><i></i><span>' + (v === 'desktop' ? url : 'Phone · 375 px') + '</span></div><div class="screen">' + render(p) + '</div></div></div>';
+        }).join('') + '</div>';
+      host.appendChild(card);
     });
   });
-  var buttons = document.querySelectorAll('[data-set-theme]');
-  function setTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-theme') === theme)); });
-    try { localStorage.setItem('error-pages-theme', theme); } catch (e) {}
-  }
-  buttons.forEach(function (b) { b.addEventListener('click', function () { setTheme(b.getAttribute('data-set-theme')); }); });
+
+  function press(attr, value) { document.querySelectorAll('[' + attr + ']').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute(attr) === value)); }); }
+  function setTheme(t) { document.documentElement.setAttribute('data-theme', t); press('data-theme-set', t); try { localStorage.setItem('error-pages-theme', t); } catch (e) {} }
+  function setScale(s) { document.body.setAttribute('data-scale', s); press('data-scale-set', s); }
+  document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.addEventListener('click', function () { setTheme(b.getAttribute('data-theme-set')); }); });
+  document.querySelectorAll('[data-scale-set]').forEach(function (b) { b.addEventListener('click', function () { setScale(b.getAttribute('data-scale-set')); }); });
   try { var saved = localStorage.getItem('error-pages-theme'); if (saved) setTheme(saved); } catch (e) {}
+})();
 </script>
 </body>
 </html>

@@ -611,9 +611,9 @@
       "types": "./types/components/content/illustration/illustration.vue.d.ts",
       "default": "./src/components/content/illustration/illustration.vue"
     },
-    "./company-logo": {
-      "types": "./types/components/content/company-logo/company-logo.vue.d.ts",
-      "default": "./src/components/content/company-logo/company-logo.vue"
+    "./third-party-logo": {
+      "types": "./types/components/content/third-party-logo/third-party-logo.vue.d.ts",
+      "default": "./src/components/content/third-party-logo/third-party-logo.vue"
     },
     "./console-mockup": {
       "types": "./types/components/content/console-mockup/console-mockup.vue.d.ts",
@@ -950,14 +950,6 @@
     "./doc-heading": {
       "types": "./types/components/docs/doc-heading/doc-heading.vue.d.ts",
       "default": "./src/components/docs/doc-heading/doc-heading.vue"
-    },
-    "./doc-tab": {
-      "types": "./types/components/docs/doc-tab/doc-tab.vue.d.ts",
-      "default": "./src/components/docs/doc-tab/doc-tab.vue"
-    },
-    "./doc-tabs": {
-      "types": "./types/components/docs/doc-tabs/doc-tabs.vue.d.ts",
-      "default": "./src/components/docs/doc-tabs/doc-tabs.vue"
     },
     "./alert": {
       "types": "./types/components/feedback/alert/alert.vue.d.ts",
@@ -2914,8 +2906,8 @@
       "illustration": [
         "./types/components/content/illustration/illustration.vue.d.ts"
       ],
-      "company-logo": [
-        "./types/components/content/company-logo/company-logo.vue.d.ts"
+      "third-party-logo": [
+        "./types/components/content/third-party-logo/third-party-logo.vue.d.ts"
       ],
       "console-mockup": [
         "./types/components/content/console-mockup/console-mockup.vue.d.ts"
@@ -3168,12 +3160,6 @@
       ],
       "doc-heading": [
         "./types/components/docs/doc-heading/doc-heading.vue.d.ts"
-      ],
-      "doc-tab": [
-        "./types/components/docs/doc-tab/doc-tab.vue.d.ts"
-      ],
-      "doc-tabs": [
-        "./types/components/docs/doc-tabs/doc-tabs.vue.d.ts"
       ],
       "alert": [
         "./types/components/feedback/alert/alert.vue.d.ts"

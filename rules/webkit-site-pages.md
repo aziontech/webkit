@@ -437,7 +437,7 @@ them (rule `webkit-sections`).
 
 ### SD-14 · Brand marks in colour first
 
-A brand mark uses its colour version (`CompanyLogo` `variant="color"`). Without one: in a marquee or logo
+A brand mark uses its colour version (`ThirdPartyLogo` `variant="color"`). Without one: in a marquee or logo
 wall, the muted text tone (`variant="current"` under muted text); elsewhere the default text tone
 (`current`), then `monochrome`.
 

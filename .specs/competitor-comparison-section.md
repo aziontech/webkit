@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: a9fcd44afc58204bf895ae467b7982ba68a44870931be514c9907b73ba11e96c
+checksum: f640f4dcb9298620f2cb62ab0cf451c42fd675a1da752ae8b6bf1d3adc8b1188
 ---
 
 # CompetitorComparisonSection — Component Spec
@@ -29,7 +29,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
 - `plan-comparison-section` — the plan-by-plan matrix of Pricing.
 - `tooltip` — names each support glyph on hover and focus.
-- `company-logo` — draws the competitor's mark right on both themes.
+- `third-party-logo` — draws the competitor's mark right on both themes.
 
 ## Best practices
 
@@ -110,7 +110,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
   Partial support is a property of the platform, not a problem that needs action, so it never takes the warning colour; an unsupported capability is a quiet dash, not a red cross.
 
-- The competitor head is a `CompanyLogo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
+- The competitor head is a `ThirdPartyLogo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 
@@ -145,7 +145,7 @@ _none_
 - Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `Logo` named by the platform, inside a head cell that carries the same name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface` are `--text-brand`, the logo orange in both themes: Lc 44.1 / 6.32:1 in dark, and about 3:1 in light, the accepted `--text-brand` pairs of `rules/webkit-tokens.md` (owner decision 2026-11-18, superseding the darker light-theme orange).
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `CompanyLogo` named by the platform, inside a head cell that carries the same name.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `ThirdPartyLogo` named by the platform, inside a head cell that carries the same name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface`: `--text-primary` Lc 79.0 / 6.01:1 in light; `--text-brand` Lc 44.1 / 6.32:1 in dark, the accepted dark `--text-brand` pair of `rules/webkit-tokens.md`.
 - Never colour alone: each level has its own glyph and its label as tooltip and `sr-only` text.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
@@ -165,7 +165,7 @@ _none_
 - Layout: logical utilities only (`border-s`, `ps-`/`pe-`); the Azion and competitor columns follow the reading direction.
 - Icons: the support glyphs and the info glyph are not mirrored; logos are never mirrored.
 - Keyboard: `Tab` order follows the DOM.
-- User data: the competitor name drawn as a wordmark is wrapped in `dir="auto"` by `CompanyLogo`.
+- User data: the competitor name drawn as a wordmark is wrapped in `dir="auto"` by `ThirdPartyLogo`.
 
 ## Responsive
 

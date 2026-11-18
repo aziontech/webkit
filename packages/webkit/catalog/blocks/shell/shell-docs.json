@@ -17,7 +17,7 @@
   },
   {
    "name": "AgentSetup",
-   "summary": "The index of agent setup pages as a page body for the docs layout: a DocTabs picker that filters the coding-agent DocCards by workflow, a comparison Table with check marks and Tags, a legend DocCallout, and Workflow, Key concepts and Common tradeoffs DocCard grids; its h2 and h3 sections fill the layout's outline.",
+   "summary": "The index of agent setup pages as a page body for the docs layout: a Tabs picker that filters the coding-agent DocCards by workflow, a comparison Table with check marks and Tags, a legend DocCallout, and Workflow, Key concepts and Common tradeoffs DocCard grids; its h2 and h3 sections fill the layout's outline.",
    "file": "blocks/shell/shell-docs/variants/agent-setup.vue"
   },
   {
