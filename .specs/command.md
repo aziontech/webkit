@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: e25139390c5ee72c68dbe6bdacff2e7052e29ac260bffc5b2e7dca0960b7d5ce
+checksum: fe9340ab5374f266333b9fb95159dff3ef8593e81ea64cc2292d6a39e279c2f7
 created: 2026-07-23
 last_updated: 2026-11-17
 ---
@@ -237,6 +237,7 @@ The palette panel's open/close scale animation is owned by the wrapped `Dialog` 
 | list spacing.x / spacing.y                                | `var(--spacing-2xs)` / `var(--spacing-xs)` — the vertical seam is one step up from the row inset, matching the DropdownMenu panel                       |
 | item active surface                                       | `var(--bg-selected)`                                                                                                                                    |
 | item hover surface                                        | `var(--bg-hover)`                                                                                                                                       |
+| row fill inset (2px gap)                                  | `border-y border-transparent bg-clip-padding`                                                                                                           |
 | item disabled text                                        | `var(--text-disabled)`                                                                                                                                  |
 | item match highlight                                      | `font-semibold` on a transparent `<mark>`, `text-inherit` (inherits the row's color)                                                                    |
 | item page chevron                                         | `az az-chevron-right` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                      |

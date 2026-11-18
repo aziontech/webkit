@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: 5b728502b132c05b0a29d6eef15c12c8d3eeee7855dad8702834afed99d87816
+checksum: b30969c0fabf95d50fd5d933bcd45e7923f7c0ef0f0853dfd4c936809c571b18
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -320,16 +320,17 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 ## Tokens
 
-| Region           | Token                                                                                                                 |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------- |
-| container        | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`; focus `var(--border-strong)` + `var(--ring-color)` |
-| invalid border   | `var(--danger-border)`                                                                                                |
-| disabled surface | `var(--bg-disabled)`                                                                                                  |
-| drop panel       | `var(--bg-selected)`, dashed `var(--border-selected)`, `.text-label-md`, `var(--text-default)`                        |
-| text             | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`                                               |
-| counter, hint    | `.text-body-xs`, `var(--text-muted)`; over limit and rejected files `var(--danger-foreground)`                        |
-| mode label       | `var(--text-muted)` inside the model `Button`                                                                         |
-| padding / gaps   | `var(--spacing-xs)`, `var(--spacing-2xs)`, `var(--spacing-sm)`                                                        |
+| Region                   | Token                                                                                                                 |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| container                | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`; focus `var(--border-strong)` + `var(--ring-color)` |
+| invalid border           | `var(--danger-border)`                                                                                                |
+| disabled surface         | `var(--bg-disabled)`                                                                                                  |
+| drop panel               | `var(--bg-selected)`, dashed `var(--border-selected)`, `.text-label-md`, `var(--text-default)`                        |
+| text                     | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`                                               |
+| counter, hint            | `.text-body-xs`, `var(--text-muted)`; over limit and rejected files `var(--danger-foreground)`                        |
+| mode label               | `var(--text-muted)` inside the model `Button`                                                                         |
+| padding / gaps           | `var(--spacing-xs)`, `var(--spacing-2xs)`, `var(--spacing-sm)`                                                        |
+| row fill inset (2px gap) | `border-y border-transparent bg-clip-padding`                                                                         |
 
 ## Theme gaps
 

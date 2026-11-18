@@ -450,7 +450,7 @@
           role="option"
           :aria-selected="index === activeIndex"
           :data-active="index === activeIndex || null"
-          class="flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected)"
+          class="flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected)"
           @mousedown.prevent
           @click="choose(option)"
           @keydown.enter.prevent="choose(option)"

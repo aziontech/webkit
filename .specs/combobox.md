@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 9ba0e0d51cc02bc55eb82bfba0f3e63cdb65a041a622ad27cfff0f6cc32f8bad
+checksum: 27ccddfa219e5ac3e8cd092f664ce2442e26782d5bfa79d6ac7cc1adf0acab11
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -150,10 +150,11 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | field                       | the `Input` tokens (surface, border, ring, sizes)                       |
 | list surface                | `var(--bg-surface-raised)`, `var(--border-default)`, `var(--shadow-xs)` |
 | list shape                  | `var(--shape-control)`                                                  |
-| list padding / row gap      | `var(--spacing-2xs)`                                                    |
+| list padding / section gap  | `var(--spacing-2xs)`                                                    |
 | option text                 | `.text-label-sm`, `var(--text-default)`                                 |
 | option description          | `.text-body-sm`, `var(--text-muted)`                                    |
 | option active / selected    | `var(--bg-hover)` / `var(--bg-selected)`                                |
+| row fill inset (2px gap)    | `border-y border-transparent bg-clip-padding`                           |
 | group title, empty, loading | `.text-label-sm` / `.text-body-sm`, `var(--text-muted)`                 |
 | layer                       | `var(--z-control-overlay)`                                              |
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 2188c35da939a195771ec95228d1f005c5ef6c7e0124283a31997a89f9eee68d
+checksum: c09da8179b25a1d6697880dea45196a6ad148c91ae9a635dd5eb5e5b23a21e0c
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -184,21 +184,22 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 
 ## Tokens
 
-| Region              | Token (DESIGN.md)                                                 |
-| ------------------- | ----------------------------------------------------------------- |
-| suggestions surface | `var(--bg-surface-raised)`                                        |
-| suggestions border  | `var(--border-default)`                                           |
-| suggestions shadow  | `var(--shadow-xs)`                                                |
-| active option       | `var(--bg-hover)`                                                 |
-| muted text          | `var(--text-muted)`                                               |
-| gaps                | `var(--spacing-xs)`                                               |
-| shape               | `var(--shape-control)`                                            |
-| group border        | `var(--border-default)`                                           |
-| group padding       | `var(--spacing-2xs)` / `var(--spacing-xs)`                        |
-| value count         | `.text-label-sm` + `var(--text-muted)`, `tabular-nums`            |
-| section heading     | `.text-label-sm` + `var(--text-muted)`                            |
-| error row icon      | `var(--danger)`                                                   |
-| value editor        | `var(--border-default)`, `var(--bg-surface)`, `var(--spacing-xs)` |
+| Region                   | Token (DESIGN.md)                                                 |
+| ------------------------ | ----------------------------------------------------------------- |
+| suggestions surface      | `var(--bg-surface-raised)`                                        |
+| suggestions border       | `var(--border-default)`                                           |
+| suggestions shadow       | `var(--shadow-xs)`                                                |
+| active option            | `var(--bg-hover)`                                                 |
+| row fill inset (2px gap) | `border-y border-transparent bg-clip-padding`                     |
+| muted text               | `var(--text-muted)`                                               |
+| gaps                     | `var(--spacing-xs)`                                               |
+| shape                    | `var(--shape-control)`                                            |
+| group border             | `var(--border-default)`                                           |
+| group padding            | `var(--spacing-2xs)` / `var(--spacing-xs)`                        |
+| value count              | `.text-label-sm` + `var(--text-muted)`, `tabular-nums`            |
+| section heading          | `.text-label-sm` + `var(--text-muted)`                            |
+| error row icon           | `var(--danger)`                                                   |
+| value editor             | `var(--border-default)`, `var(--bg-surface)`, `var(--spacing-xs)` |
 
 ## Theme gaps
 

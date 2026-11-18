@@ -7,7 +7,7 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: fe47d454b18eb14ff92d22d8c6d4a5e32d272ea42493825a6f7849f5f6dc6479
+checksum: cd9f8df96ed0d92010b3c9964a70cc9875ba86603d81f33a0f91da4644d06016
 created: 2026-08-03
 last_updated: 2026-11-17
 ---
@@ -438,23 +438,24 @@ both are load-bearing:
 
 ## Tokens
 
-| Region                                                                        | Token                                            |
-| ----------------------------------------------------------------------------- | ------------------------------------------------ |
-| typography (first-level group title)                                          | `.text-label-sm`                                 |
-| typography (every row: Item, SubTrigger, Back)                                | `.text-label-md`                                 |
-| surface (row hover)                                                           | `var(--bg-hover)`                                |
-| surface (row selected)                                                        | `var(--bg-selected)`                             |
-| border (selected row, connector rail)                                         | `var(--border-default)`                          |
-| text (row label)                                                              | `var(--text-default)`                            |
-| text (group label, idle icon)                                                 | `var(--text-muted)`                              |
-| text (disabled row)                                                           | `var(--text-disabled)`                           |
-| icon (selected row)                                                           | `var(--primary)`                                 |
-| shape (row, rail elbow)                                                       | `var(--shape-control)`                           |
-| spacing (row padding-x, icon-to-label gap, group-label margin-y, rail column) | `var(--spacing-sm)`                              |
-| surface (row pressed, `::after` ghost)                                        | `var(--bg-active)`                               |
-| ring                                                                          | `var(--ring-color)`                              |
-| ring offset                                                                   | `var(--bg-canvas)` (host-overridable, see below) |
-| surface while sliding                                                         | `var(--sidebar-menu-slide-surface, var(--bg-surface))`   |
+| Region                                                                        | Token                                                  |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------ |
+| typography (first-level group title)                                          | `.text-label-sm`                                       |
+| typography (every row: Item, SubTrigger, Back)                                | `.text-label-md`                                       |
+| surface (row hover)                                                           | `var(--bg-hover)`                                      |
+| surface (row selected)                                                        | `var(--bg-selected)`                                   |
+| row fill inset (2px gap)                                                      | `border-y border-transparent bg-clip-padding`          |
+| border (selected row, connector rail)                                         | `var(--border-default)`                                |
+| text (row label)                                                              | `var(--text-default)`                                  |
+| text (group label, idle icon)                                                 | `var(--text-muted)`                                    |
+| text (disabled row)                                                           | `var(--text-disabled)`                                 |
+| icon (selected row)                                                           | `var(--primary)`                                       |
+| shape (row, rail elbow)                                                       | `var(--shape-control)`                                 |
+| spacing (row padding-x, icon-to-label gap, group-label margin-y, rail column) | `var(--spacing-sm)`                                    |
+| surface (row pressed, `::after` ghost)                                        | `var(--bg-active)`                                     |
+| ring                                                                          | `var(--ring-color)`                                    |
+| ring offset                                                                   | `var(--bg-canvas)` (host-overridable, see below)       |
+| surface while sliding                                                         | `var(--sidebar-menu-slide-surface, var(--bg-surface))` |
 
 Geometry — the Kumo box model re-expressed in our tokens. Every Kumo value in the middle column is
 something the token rules forbid in a webkit component (arbitrary `p-*`/`gap-*` where a

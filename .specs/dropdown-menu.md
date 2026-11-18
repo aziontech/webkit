@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 7513190cbe9c9f46f086c56131df86df12d71e0e22a2b913e693803fe720eeae
+checksum: 680daa003c74385bda004925f895120d2ad0987d7b17fae1f4b4c61d0f2db029
 created: 2026-06-26
 last_updated: 2026-11-17
 ---
@@ -262,6 +262,7 @@ Sub-menus and checkable options:
 | option gap                      | `var(--spacing-xs)`                                                                                                             |
 | option hover surface            | `var(--bg-hover)`                                                                                                               |
 | option selected surface         | `var(--bg-selected)`                                                                                                            |
+| row fill inset (2px gap)        | `border-y border-transparent bg-clip-padding`                                                                                   |
 | option disabled text            | `var(--text-disabled)`                                                                                                          |
 | option command text             | `text-(--text-muted)`                                                                                                           |
 | checkable indicator             | `az az-check` / a `size-1.5` `rounded-full` `bg-current` dot in `text-(--text-default)`, in a `size-4` column                   |
@@ -272,7 +273,7 @@ Sub-menus and checkable options:
 | group divider spacing.below     | `var(--spacing-xs)`                                                                                                             |
 | group content inset.x           | `var(--spacing-2xs)`                                                                                                            |
 | panel spacing.y                 | `var(--spacing-xs)` — the vertical seam is one step up from the row inset so the first/last row does not crowd the panel border |
-| focus ring                      | `var(--ring-color)`                                                                                                             |
+| focus ring                      | `var(--ring-color)`, 2px, inset in the row                                                                                      |
 | popup origin                    | `var(--popup-origin)`                                                                                                           |
 
 ## Theme gaps
